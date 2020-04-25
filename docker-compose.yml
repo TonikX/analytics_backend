@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+    db:
+        image: postgres
+        ports:
+            - "5435:5432"
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=analytics_db
+        volumes:
+            - ./dbs/postgres-data:/var/lib/postgresql
+#    mysql:
+#        image: mysql
+#        ports:
+#            - "3309:3306"
+#        restart: always
+#        environment:
+#            - MYSQL_ROOT_PASSWORD=admin
+#            - MYSQL_DATABASE=setupdb
+#            - MYSQL_USER=admin
+#            - MYSQL_PASSWORD=admin
+#        volumes:
+#            - ./dbs/mysql-data:/var/lib/mysql
+    web:
+        container_name: analytics_web
+        build: ./application
+        command: bash -c "
+                python manage.py makemigrations && python manage.py migrate &&
+                python manage.py runserver --insecure 0.0.0.0:8000";
+                
+        volumes:
+             - ./application:/application
+        ports:
+            - "8003:8000"
+        depends_on:
+            - db
+            
