@@ -5,7 +5,9 @@ from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, W
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
 from .views import TopicList, TopicPost, TopicPostUpdate
-from .views import PrerequisitesUpdate, OutcomesUpdate, upload_file, FieldOfStudyWPListView, IndicatorListView, IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndListView, DeleteIndicatorFromCompetenceView, AddIndicatorToCompetenceView
+from .views import PrerequisitesUpdate, OutcomesUpdate, upload_file, FieldOfStudyWPListView, IndicatorListView, \
+    IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, \
+    DeleteIndicatorFromCompetenceView, AddIndicatorToCompetenceView
 
 
 
@@ -16,10 +18,10 @@ urlpatterns = [
     url(r'^uploadcsv/$', upload_file, name = 'uploadcsv'),
     url(r'^fswplist/$', FieldOfStudyWPListView.as_view(), name = 'fswp'),
     path('indicator/', IndicatorListView.as_view(), name='indicator'),
-    path('indicator/<int:number>', IndicatorUpdateView.as_view(), name='indicator_update'),
+    path('indicator/<int:pk>', IndicatorUpdateView.as_view(), name='indicator_update'),
     path('competence/', CompetenceListView.as_view(), name='comptence'),
-    path('competence/<int:number>', CompetenceUpdateView.as_view(), name='comptence_update'),
-    path('competenceindicator/<int:number>', CompetenceIndListView.as_view(), name='comptenceindicator'),
+    path('competence/<int:pk>', CompetenceUpdateView.as_view(), name='comptence_update'),
+    path('competenceindicator/<int:pk>', CompetenceIndicatorDetailView.as_view(), name='comptenceindicator'),
     path('competenceindicator/indicator/delete', DeleteIndicatorFromCompetenceView.as_view(), name='DeleteIndicatorFromCompetenceView'),
     path('competenceindicator/indicator/add', AddIndicatorToCompetenceView.as_view(), name="AddIndicatorFromCompetenceView"),
 

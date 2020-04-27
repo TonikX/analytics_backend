@@ -15,16 +15,17 @@ class IndicatorSerializer(serializers.ModelSerializer):
     """Сериализатор Индикаторов"""
     class Meta:
         model = Indicator
-        fields = ['number', 'name']
+        fields = ['id','number', 'name']
 
 class CompetenceSerializer(serializers.ModelSerializer):
     """Сериализатор Компетенций"""
     class Meta:
         model = Competence
-        fields = ['number', 'name']
+        fields = ['id','number', 'name']
 
 class CompetenceIndicatorSerializer(serializers.ModelSerializer):
+    """Сериализатор компетенции вмести с индикаторами"""
     indicators = IndicatorSerializer(many=True)
     class Meta:
         model = Competence
-        fields = ['number','name', 'indicators']
+        fields = ['id','number','name', 'indicators']

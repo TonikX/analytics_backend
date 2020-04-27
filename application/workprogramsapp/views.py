@@ -416,13 +416,13 @@ class IndicatorUpdateView(APIView):
     """
         Редактирование (обновление) индикатора
     """
-    def get(self, request, number):
-        indicator = get_object_or_404(Indicator, number=number)
+    def get(self, request, pk):
+        indicator = get_object_or_404(Indicator, pk=pk)
         serializer = IndicatorSerializer(indicator)
         return Response(serializer.data)
 
-    def put(self, request, number):
-        indicator = get_object_or_404(Indicator, number=number)
+    def put(self, request, pk):
+        indicator = get_object_or_404(Indicator, pk=pk)
         serializer = IndicatorSerializer(indicator, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -442,25 +442,33 @@ class CompetenceUpdateView(APIView):
     """
         Редактирование (обновление) компетенции
     """
-    def get(self, request, number):
-        competence = get_object_or_404(Competence, number=number)
+    def get(self, request, pk):
+        competence = get_object_or_404(Competence, pk=pk)
         serializer = CompetenceSerializer(competence)
         return Response(serializer.data)
 
-    def put(self, request, number):
-        competence = get_object_or_404(Competence, number=number)
+    def put(self, request, pk):
+        competence = get_object_or_404(Competence, pk=pk)
         serializer = CompetenceSerializer(competence, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, pk):
+        competence = get_object_or_404(Competence, pk=pk)
+        try:
+            competence.delete()
+            return Response(status=200)
+        except:
+            return Response(status=400)
 
-class CompetenceIndListView(APIView):
+
+class CompetenceIndicatorDetailView(APIView):
     """
-       Компетенция и ее классы.
+       Компетенция и ее индикаторы.
     """
-    def get(self, request, number):
-        comptences = get_object_or_404(Competence, number=number)
+    def get(self, request, pk):
+        comptences = get_object_or_404(Competence, pk=pk)
         serializer = CompetenceIndicatorSerializer(comptences)
         return Response(serializer.data)
 
@@ -470,10 +478,10 @@ class DeleteIndicatorFromCompetenceView(APIView):
         Удаление индикатора из компетенции
     """
     def post(self, request):
-        competence_number = request.data.get("competence_number")
-        indicator_number = request.data.get("indicator_number")
+        competence_pk = request.data.get("competence_pk")
+        indicator_pk = request.data.get("indicator_pk")
         try:
-            competenceIndicator = CompetenceIndicator.objects.get(competence__number=competence_number, indicator__number=indicator_number)
+            competenceIndicator = CompetenceIndicator.objects.get(competence__pk=competence_pk, indicator__pk=indicator_pk)
             competenceIndicator.delete()
             return Response(status=200)
         except:
@@ -484,12 +492,12 @@ class AddIndicatorToCompetenceView(APIView):
         Добавление индикатора из компетенции
     """
     def post(self, request):
-        competence_number = request.data.get("competence_number")
-        indicator_number = request.data.get("indicator_number")
+        competence_pk = request.data.get("competence_pk")
+        indicator_pk = request.data.get("indicator_pk")
         field_of_study_number = request.data.get("field_of_study_number")
         try:
-            competence = Competence.objects.get(number=competence_number)
-            indicator = Indicator.objects.get(number=indicator_number)
+            competence = Competence.objects.get(pk=competence_pk)
+            indicator = Indicator.objects.get(pk=indicator_pk)
             field_of_study = FieldOfStudy.objects.get(number=field_of_study_number)
             competenceIndicator = CompetenceIndicator.objects.create(competence=competence,
                                                                      indicator=indicator,
