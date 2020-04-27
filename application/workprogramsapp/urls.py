@@ -5,7 +5,9 @@ from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, W
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
 from .views import TopicList, TopicPost, TopicPostUpdate
-from .views import PrerequisitesUpdate, OutcomesUpdate, upload_file, FieldOfStudyWPListView
+from .views import PrerequisitesUpdate, OutcomesUpdate, upload_file, FieldOfStudyWPListView, IndicatorListView, \
+    IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, \
+    DeleteIndicatorFromCompetenceView, AddIndicatorToCompetenceView
 
 
 
@@ -15,6 +17,14 @@ urlpatterns = [
     path('workprograms/newbinding', WorkProgramsPost.as_view(), name='author_update'),
     url(r'^uploadcsv/$', upload_file, name = 'uploadcsv'),
     url(r'^fswplist/$', FieldOfStudyWPListView.as_view(), name = 'fswp'),
+    path('indicator/', IndicatorListView.as_view(), name='indicator'),
+    path('indicator/<int:pk>', IndicatorUpdateView.as_view(), name='indicator_update'),
+    path('competence/', CompetenceListView.as_view(), name='comptence'),
+    path('competence/<int:pk>', CompetenceUpdateView.as_view(), name='comptence_update'),
+    path('competenceindicator/<int:pk>', CompetenceIndicatorDetailView.as_view(), name='comptenceindicator'),
+    path('competenceindicator/indicator/delete', DeleteIndicatorFromCompetenceView.as_view(), name='DeleteIndicatorFromCompetenceView'),
+    path('competenceindicator/indicator/add', AddIndicatorToCompetenceView.as_view(), name="AddIndicatorFromCompetenceView"),
+
 
     #ToDo: сделать нормально.
     #re_path(r'^workprograms/(?P<pk>)/update/', WorkProgramsPostUpdate.as_view(), name='workprograms_update'),
