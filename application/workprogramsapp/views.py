@@ -1,24 +1,22 @@
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from .models import WorkProgram, FieldOfStudy, FieldOfStudyWorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm, DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm, PrerequisitesOfWorkProgramForm, UploadFileForm
-from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, CompetenceIndicator
-from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
+from .models import WorkProgram, FieldOfStudy, FieldOfStudyWorkProgram,OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, CompetenceIndicator
 from .serializers import IndicatorSerializer, CompetenceSerializer, CompetenceIndicatorSerializer
-from django.contrib.auth.decorators import login_required
+from .serializers import WorkProgramSerializer, EvaluationToolSerializer, TopicSerializer, SectionSerializer
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import WorkProgramSerializer
-from dataprocessing.models import Items
-
+from django.contrib.auth.decorators import login_required
 from dataprocessing.models import Items
 import itertools, pandas, os
 from django.core.paginator import Paginator
 from django_tables2.paginators import LazyPaginator
 from django_tables2 import SingleTableView, RequestConfig
 from .tables import FieldOfStudyWPTable
+
 # Create your views here.
 def upload_file(request):
     try:
@@ -79,6 +77,9 @@ def upload_file(request):
     return redirect('/workprogramslist/')
 
 def handle_uploaded_file(file, filename):
+    """
+        Обработка csv-файла с информацией об ОП. Функция возвращает датафрейм.
+    """
     if not os.path.exists('upload/'):
         os.mkdir('upload/')
     path = 'upload/' + filename
@@ -262,7 +263,47 @@ class OutcomesUpdate(View):
             outcomes = OutcomesPrerequisites(instance=o_obj)
         return render(request, 'workprograms/OutcomesOfWorkProgramEdit.html', {'form': outcomes})
 
+class EvaluationToolView(ListModelMixin, CreateModelMixin, GenericAPIView):
+    """CRUD для ФОС"""
+    queryset = EvaluationTool.objects.all()
+    serializer_class = EvaluationToolSerializer
 
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, *kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class TopicView(ListModelMixin, CreateModelMixin, GenericAPIView):
+    """CRUD для тем"""
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+
+    def perform_create(self, serializer):
+        discipline_section = get_object_or_404(DisciplineSection, id=self.request.data.get('discipline_section'))
+        return serializer.save(discipline_section=discipline_section)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, *kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+class DisciplineSectionView(ListModelMixin, CreateModelMixin, GenericAPIView):
+    """CRUD для разделов"""
+    
+    queryset = DisciplineSection.objects.all()
+    serializer_class = SectionSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, *kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+'''
+Версия с использованием Django Forms + Templates
 class EvaluationToolList(View):
 
     def get(self, request):
@@ -402,6 +443,7 @@ class TopicPostUpdate(View):
         else:
             topic = Topic(instance=t_obj)
         return render(request, 'workprograms/TopicEdit.html', {'form': topic})
+'''
 
 class IndicatorListView(APIView):
     """
