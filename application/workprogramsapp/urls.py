@@ -8,7 +8,7 @@ from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, W
 from .views import PrerequisitesUpdate, OutcomesUpdate, upload_file, FieldOfStudyWPListView, IndicatorListView, \
     IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, \
     DeleteIndicatorFromCompetenceView, AddIndicatorToCompetenceView
-from .views import EvaluationToolView, DisciplineSectionView, TopicView
+from .views import EvaluationToolList, EvaluationToolDetail, DisciplineSectionList, DisciplineSectionDetail, TopicsList, TopicDetail 
 
 
 
@@ -25,11 +25,13 @@ urlpatterns = [
     path('competenceindicator/<int:pk>', CompetenceIndicatorDetailView.as_view(), name='comptenceindicator'),
     path('competenceindicator/indicator/delete', DeleteIndicatorFromCompetenceView.as_view(), name='DeleteIndicatorFromCompetenceView'),
     path('competenceindicator/indicator/add', AddIndicatorToCompetenceView.as_view(), name="AddIndicatorFromCompetenceView"),
-    path('tools/', EvaluationToolView.as_view(), name='tools'),
-    path('sections/', DisciplineSection.as_view(), name='section'),
-    path('topics/', TopicView.as_view(), name='topic'),
+    path('tools/', EvaluationToolList.as_view(), name='tools'),
+    path('tools/<int:pk>', EvaluationToolDetail.as_view(), name='tool_detail'),
+    path('sections/', DisciplineSectionList.as_view(), name='sections'),
+    path('sections/<int:pk>', DisciplineSectionDetail.as_view(), name='section_detail'),
+    path('topics/', TopicList.as_view(), name='topics'),
+    path('topics/<int:pk>', TopicDetail.as_view(), name='topic_detail'),
     
-
     #ToDo: сделать нормально.
     #re_path(r'^workprograms/(?P<pk>)/update/', WorkProgramsPostUpdate.as_view(), name='workprograms_update'),
     url(r'^workprograms/(?P<pk>\d+)/update/$', WorkProgramsPostUpdate.as_view(), name='workprograms_update'),

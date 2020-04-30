@@ -41,10 +41,11 @@ class TopicSerializer(serializers.ModelSerializer):
     """Сериализатор Тем"""
     class Meta:
         model = Topic
-        fields = ('id', 'number', 'description', 'discipline_section')
+        fields = "__all__"
 
 class SectionSerializer(serializers.ModelSerializer):
     """Сериализатор Разделов"""
+ 
     class Meta:
         model = DisciplineSection
         fields = "__all__"

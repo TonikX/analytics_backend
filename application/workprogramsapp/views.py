@@ -4,8 +4,7 @@ from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramF
 from .models import WorkProgram, FieldOfStudy, FieldOfStudyWorkProgram,OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, CompetenceIndicator
 from .serializers import IndicatorSerializer, CompetenceSerializer, CompetenceIndicatorSerializer
 from .serializers import WorkProgramSerializer, EvaluationToolSerializer, TopicSerializer, SectionSerializer
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin
+from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -263,44 +262,49 @@ class OutcomesUpdate(View):
             outcomes = OutcomesPrerequisites(instance=o_obj)
         return render(request, 'workprograms/OutcomesOfWorkProgramEdit.html', {'form': outcomes})
 
-class EvaluationToolView(ListModelMixin, CreateModelMixin, GenericAPIView):
-    """CRUD для ФОС"""
-    queryset = EvaluationTool.objects.all()
-    serializer_class = EvaluationToolSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, *kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-
-class TopicView(ListModelMixin, CreateModelMixin, GenericAPIView):
-    """CRUD для тем"""
+class TopicList(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Topics.
+    """
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
 
-    def perform_create(self, serializer):
-        discipline_section = get_object_or_404(DisciplineSection, id=self.request.data.get('discipline_section'))
-        return serializer.save(discipline_section=discipline_section)
+class TopicDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Topic.
+    """
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, *kwargs)
+class EvaluationToolList(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Evaluation Tools.
+    """
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+class EvaluationToolDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Evaluation Tool.
+    """
+    queryset = EvaluationTool.objects.all()
+    serializer_class = EvaluationToolSerializer
 
-class DisciplineSectionView(ListModelMixin, CreateModelMixin, GenericAPIView):
-    """CRUD для разделов"""
-    
+
+class DisciplineSectionList(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Discipline Sections.
+    """
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, *kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+class DisciplineSectionDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Discipline Section.
+    """
+    queryset = DisciplineSection.objects.all()
+    serializer_class = SectionSerializer
 
 '''
 Версия с использованием Django Forms + Templates
