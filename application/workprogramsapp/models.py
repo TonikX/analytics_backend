@@ -32,6 +32,9 @@ class WorkProgram(models.Model):
         (SPECIALIST, 'Specialist'),
         (MASTER, 'Master')
     )
+
+    discipline_code = models.CharField(max_length=1024, blank=True, null=True)
+    prerequisites = models.ManyToManyField(Items, related_name='WorkProgramPrerequisites',)
     qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank=True, null=True)
     prerequisites = models.ManyToManyField(Items, related_name='WorkProgramPrerequisites',
                                            through='PrerequisitesOfWorkProgram', blank=True, null=True, verbose_name = "Пререквизиты")
