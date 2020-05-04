@@ -104,7 +104,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'goals', 'result_goals', 'discipline_sections']
+        fields = ['prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections']
 
 
 
