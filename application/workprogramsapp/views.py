@@ -5,7 +5,7 @@ from .models import WorkProgram, FieldOfStudy, FieldOfStudyWorkProgram, Outcomes
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm, DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm, PrerequisitesOfWorkProgramForm, UploadFileForm
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, CompetenceIndicator
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
-from .serializers import IndicatorSerializer, CompetenceSerializer, CompetenceIndicatorSerializer
+from .serializers import IndicatorSerializer, CompetenceSerializer, CompetenceIndicatorSerializer, OutcomesOfWorkProgramSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -19,8 +19,15 @@ from django.core.paginator import Paginator
 from django_tables2.paginators import LazyPaginator
 from django_tables2 import SingleTableView, RequestConfig
 from .tables import FieldOfStudyWPTable
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+
+
 # Create your views here.
 def upload_file(request):
+    """
+    Функция добавления данных об РПД из файлов
+    """
     try:
         if request.method == 'POST':
             data = handle_uploaded_file(request.FILES['file'], str(request.FILES['file']))
@@ -79,6 +86,9 @@ def upload_file(request):
     return redirect('/workprogramslist/')
 
 def handle_uploaded_file(file, filename):
+    """
+    ???
+    """
     if not os.path.exists('upload/'):
         os.mkdir('upload/')
     path = 'upload/' + filename
@@ -403,6 +413,15 @@ class TopicPostUpdate(View):
             topic = Topic(instance=t_obj)
         return render(request, 'workprograms/TopicEdit.html', {'form': topic})
 
+
+
+
+
+
+"""Блок реализации API"""
+
+
+
 class IndicatorListView(APIView):
     """
        Список индикаторов.
@@ -454,6 +473,7 @@ class CompetenceUpdateView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
     def delete(self, request, pk):
         competence = get_object_or_404(Competence, pk=pk)
         try:
@@ -506,3 +526,73 @@ class AddIndicatorToCompetenceView(APIView):
             return Response(status=200)
         except:
             return Response(status=400)
+
+
+class AddIndicatorToCompetenceView(APIView):
+    """
+        Добавление индикатора из компетенции
+    """
+    def post(self, request):
+        competence_pk = request.data.get("competence_pk")
+        indicator_pk = request.data.get("indicator_pk")
+        field_of_study_number = request.data.get("field_of_study_number")
+        try:
+            competence = Competence.objects.get(pk=competence_pk)
+            indicator = Indicator.objects.get(pk=indicator_pk)
+            field_of_study = FieldOfStudy.objects.get(number=field_of_study_number)
+            competenceIndicator = CompetenceIndicator.objects.create(competence=competence,
+                                                                     indicator=indicator,
+                                                                     field_of_study=field_of_study)
+            competenceIndicator.save()
+            return Response(status=200)
+        except:
+            return Response(status=400)
+
+
+class OutcomesOfWorkProgramList(generics.ListAPIView):
+    serializer_class = OutcomesOfWorkProgramSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, **kwargs):
+        """
+        Вывод всех результатов для одной рабочей программы по id
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = OutcomesOfWorkProgram.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        serializer = OutcomesOfWorkProgramSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class WorkProgramsListApi(APIView):
+    """
+    Список рабочих программ для апи.
+    """
+    def get(self, request, format=None):
+        WorkPrograms = WorkProgram.objects.all()
+        serializer = WorkProgramSerializer(WorkPrograms, many=True)
+        return Response(serializer.data)
+
+
+class WorkProgramAPIView(APIView):
+    """
+    Вывод одной рабочей программы
+    """
+    # serializer_class = WorkProgramSerializer
+    # lookup_field = 'id'
+    # queryset = WorkProgram.objects.all()
+
+
+    def get(self, request, **kwargs):
+        WorkPrograms = WorkProgram.objects.filter(id=self.kwargs['id'])
+        serializer = WorkProgramSerializer(WorkPrograms, many=True)
+        serializer.data.dfdf = 4
+        return Response(serializer.data)
+    #
+    # def list(self, request, **kwargs):
+    #         """
+    #         Вывод всех результатов для одной рабочей программы по id
+    #         """
+    #     # Note the use of `get_queryset()` instead of `self.queryset`
+    #     queryset = OutcomesOfWorkProgram.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+    #     serializer = OutcomesOfWorkProgramSerializer(queryset, many=True)
+    #     return Response(serializer.data)
