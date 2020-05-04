@@ -1,6 +1,6 @@
 from rest_framework import serializers, viewsets
 
-from .models import WorkProgram, Indicator, Competence, CompetenceIndicator, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram
+from .models import WorkProgram, Indicator, Competence, CompetenceIndicator, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification
 
 from dataprocessing.serializers import ItemSerializer
 
@@ -92,6 +92,14 @@ class DisciplineSectionSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'topics', 'evaluation_tools', 'contact_work', 'lecture_classes', 'laboratory', 'practical_lessons', 'SRO', 'total_hours']
 
 
+class CertificationSerializer(serializers.ModelSerializer):
+    """Сериализатор аттестации"""
+
+    class Meta:
+        model = Certification
+        fields = "__all__"
+
+
 class WorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор рабочих программ"""
     #prerequisites = serializers.StringRelatedField(many=True)
@@ -100,11 +108,12 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
     #discipline_sections = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
     discipline_sections = DisciplineSectionSerializer(many = True)
+    discipline_certification = CertificationSerializer(many = True)
 
 
     class Meta:
         model = WorkProgram
-        fields = ['prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections']
+        fields = ['prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification']
 
 
 

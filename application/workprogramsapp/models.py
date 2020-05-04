@@ -20,6 +20,19 @@ class WorkProgram(models.Model):
     '''
     Модель для рабочей программы
     '''
+    PRIMARY_VOCATIONAL_EDUCATION = 'primary_vocational_education'
+    SECONADARY_VOCATIONAL_EDUCATION = 'secondary_vocational_education'
+    BACHELOR = 'bachelor'
+    SPECIALIST = 'specialist'
+    MASTER = 'master'
+    QUALIFICATION_CHOICES = (
+        (PRIMARY_VOCATIONAL_EDUCATION, 'Primary vocational education'),
+        (SECONADARY_VOCATIONAL_EDUCATION, 'Secondary vocational education'),
+        (BACHELOR, 'Bachelor'),
+        (SPECIALIST, 'Specialist'),
+        (MASTER, 'Master')
+    )
+    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank=True, null=True)
     prerequisites = models.ManyToManyField(Items, related_name='WorkProgramPrerequisites',
                                            through='PrerequisitesOfWorkProgram', blank=True, null=True, verbose_name = "Пререквизиты")
     outcomes = models.ManyToManyField(Items, related_name='WorkProgramOutcomes', through='OutcomesOfWorkProgram', verbose_name = "Постреквизиты")
@@ -55,8 +68,8 @@ class PrerequisitesOfWorkProgram(models.Model):
         choices=MasterylevelChoices,
         default=1, verbose_name = "Уровень"
     )
-    def __str__(self):
-        return self.item
+    # def __str__(self):
+    #     return self.item
 
 class OutcomesOfWorkProgram(models.Model):
     '''
@@ -263,4 +276,4 @@ class Certification(models.Model):
     semestr = models.IntegerField(blank=True, null=True)
     description = models.CharField(max_length=1024, verbose_name = "Описание", blank = True, null = True)
     deadline = models.IntegerField(verbose_name = "Срок сдачи в неделях", blank = True, null = True)
-    work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE)
+    work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name='discipline_certification')
