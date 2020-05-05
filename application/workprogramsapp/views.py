@@ -5,11 +5,11 @@ from .models import WorkProgram, FieldOfStudy, FieldOfStudyWorkProgram, Outcomes
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm, DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm, PrerequisitesOfWorkProgramForm, UploadFileForm
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, CompetenceIndicator
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
-from .serializers import IndicatorSerializer, CompetenceSerializer, CompetenceIndicatorSerializer, OutcomesOfWorkProgramSerializer
+from .serializers import IndicatorSerializer, CompetenceSerializer, CompetenceIndicatorSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
 from .serializers import WorkProgramSerializer
 from dataprocessing.models import Items
 
@@ -563,36 +563,24 @@ class OutcomesOfWorkProgramList(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class WorkProgramsListApi(APIView):
-    """
-    Список рабочих программ для апи.
-    """
-    def get(self, request, format=None):
-        WorkPrograms = WorkProgram.objects.all()
-        serializer = WorkProgramSerializer(WorkPrograms, many=True)
-        return Response(serializer.data)
+
+class WorkProgramCreateAPIView(generics.CreateAPIView):
+    serializer_class = WorkProgramCreateSerializer
+    queryset = WorkProgram.objects.all()
 
 
-class WorkProgramAPIView(APIView):
-    """
-    Вывод одной рабочей программы
-    """
-    # serializer_class = WorkProgramSerializer
-    # lookup_field = 'id'
-    # queryset = WorkProgram.objects.all()
+class WorkProgramDestroyView(generics.DestroyAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramSerializer
 
 
-    def get(self, request, **kwargs):
-        WorkPrograms = WorkProgram.objects.filter(id=self.kwargs['id'])
-        serializer = WorkProgramSerializer(WorkPrograms, many=True)
-        serializer.data.dfdf = 4
-        return Response(serializer.data)
-    #
-    # def list(self, request, **kwargs):
-    #         """
-    #         Вывод всех результатов для одной рабочей программы по id
-    #         """
-    #     # Note the use of `get_queryset()` instead of `self.queryset`
-    #     queryset = OutcomesOfWorkProgram.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
-    #     serializer = OutcomesOfWorkProgramSerializer(queryset, many=True)
-    #     return Response(serializer.data)
+class WorkProgramUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramCreateSerializer
+
+
+class WorkProgramDetailsView(generics.RetrieveAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramSerializer
+
+

@@ -10,10 +10,10 @@ class FieldOfStudyWorkProgram(models.Model):
     '''
     field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE, verbose_name = 'Образовательная программа')
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, verbose_name = 'Рабочая программа')
-    competence = models.ForeignKey('Competence',null=True,  on_delete=models.CASCADE, verbose_name = 'Компетенции')
+    #competence = models.ForeignKey('Competence',null=True,  on_delete=models.CASCADE, verbose_name = 'Компетенции')
 
     class Meta:
-        unique_together = ('competence', 'work_program', 'field_of_study')
+        unique_together = ('work_program', 'field_of_study')
 
 
 class WorkProgram(models.Model):
@@ -131,8 +131,10 @@ class FieldOfStudy(models.Model):
         (INTERNAL, 'Internal'),
         (EXTRAMURAL, 'Extramural'),
     )
-    number = models.CharField(unique=True, max_length=1024, verbose_name = 'Шифр и название ОП')
+    number = models.CharField(unique=True, max_length=1024, verbose_name = 'Шифр ОП')
+    title = models.CharField(unique=True, max_length=1024, verbose_name = 'Название ОП', blank = True, null = True)
     qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация')
+    educational_profile = models.CharField(unique=True, max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
     education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения')
 
     def __str__(self):
