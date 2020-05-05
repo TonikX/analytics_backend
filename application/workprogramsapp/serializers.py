@@ -18,13 +18,6 @@ class CompetenceSerializer(serializers.ModelSerializer):
         model = Competence
         fields = ['id','number', 'name']
 
-# class CompetenceIndicatorSerializer(serializers.ModelSerializer):
-#     """Сериализатор компетенции вмести с индикаторами"""
-#     indicators = IndicatorSerializer(many=True)
-#     class Meta:
-#         model = Competence
-#         fields = ['id','number','name', 'indicators']
-
 
 class OutcomesOfWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор создания результата обучения"""
