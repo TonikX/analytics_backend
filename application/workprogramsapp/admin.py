@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (
-    WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, CompetenceIndicator,
+    WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy,
     Competence, IndicatorWorkProgram, Indicator, EvaluationTool, FieldOfStudyWorkProgram, DisciplineSection, Topic,
     RouteComposition, Route, Certification
 )
@@ -11,7 +11,7 @@ admin.site.register(OutcomesOfWorkProgram)
 admin.site.register(PrerequisitesOfWorkProgram)
 
 admin.site.register(FieldOfStudy)
-admin.site.register(CompetenceIndicator)
+# admin.site.register(CompetenceIndicator)
 admin.site.register(Competence)
 admin.site.register(IndicatorWorkProgram)
 admin.site.register(Indicator)

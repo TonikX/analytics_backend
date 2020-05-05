@@ -141,16 +141,16 @@ class FieldOfStudy(models.Model):
         return self.number
 
 
-class CompetenceIndicator(models.Model):
-    '''
-    Модель для связи компетенций и индикаторов
-    '''
-    competence = models.ForeignKey('Competence', on_delete=models.CASCADE)
-    indicator = models.ForeignKey('Indicator', on_delete=models.CASCADE)
-    #field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('competence', 'indicator')
+# class CompetenceIndicator(models.Model):
+#     '''
+#     Модель для связи компетенций и индикаторов
+#     '''
+#     competence = models.ForeignKey('Competence', on_delete=models.CASCADE)
+#     indicator = models.ForeignKey('Indicator', on_delete=models.CASCADE)
+#     #field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE)
+#
+#     class Meta:
+#         unique_together = ('competence', 'indicator')
 
 
 class Competence(models.Model):
@@ -161,7 +161,7 @@ class Competence(models.Model):
     name = models.CharField(unique=True, max_length=1024)
     field_of_study = models.ManyToManyField('FieldOfStudy')
     work_program = models.ManyToManyField('WorkProgram')
-    indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
+    # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
 
     def __str__(self):
         return self.name
@@ -191,6 +191,7 @@ class Indicator(models.Model):
     number = models.CharField(unique=True, max_length=1024)
     name = models.CharField(max_length=1024)
     work_programs = models.ManyToManyField('WorkProgram', through=IndicatorWorkProgram)
+    competence = models.ForeignKey('Competence', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
