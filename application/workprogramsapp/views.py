@@ -3,9 +3,9 @@ from django.shortcuts import redirect
 from django.views import View
 from .models import WorkProgram, FieldOfStudy, FieldOfStudyWorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm, DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm, PrerequisitesOfWorkProgramForm, UploadFileForm
-from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, CompetenceIndicator
+from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
-from .serializers import IndicatorSerializer, CompetenceSerializer, CompetenceIndicatorSerializer, OutcomesOfWorkProgramSerializer
+from .serializers import OutcomesOfWorkProgramSerializer, CompetenceSerializer, IndicatorSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -430,7 +430,7 @@ class IndicatorListView(APIView):
         indicators = Indicator.objects.all()
         serializer = IndicatorSerializer(indicators, many=True)
         return Response(serializer.data)
-    # def put(self, request, pl=None):
+
 class IndicatorUpdateView(APIView):
     """
         Редактирование (обновление) индикатора
@@ -473,7 +473,7 @@ class CompetenceUpdateView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def delete(self, request, pk):
         competence = get_object_or_404(Competence, pk=pk)
         try:
@@ -482,17 +482,14 @@ class CompetenceUpdateView(APIView):
         except:
             return Response(status=400)
 
-
 class CompetenceIndicatorDetailView(APIView):
     """
-       Компетенция и ее индикаторы.
+       Индикаторы компетенции.
     """
     def get(self, request, pk):
-        comptences = get_object_or_404(Competence, pk=pk)
-        serializer = CompetenceIndicatorSerializer(comptences)
+        indicators = Indicator.objects.filter(competence=pk)
+        serializer = IndicatorSerializer(indicators, many=True)
         return Response(serializer.data)
-
-
 class DeleteIndicatorFromCompetenceView(APIView):
     """
         Удаление индикатора из компетенции
@@ -501,49 +498,24 @@ class DeleteIndicatorFromCompetenceView(APIView):
         competence_pk = request.data.get("competence_pk")
         indicator_pk = request.data.get("indicator_pk")
         try:
-            competenceIndicator = CompetenceIndicator.objects.get(competence__pk=competence_pk, indicator__pk=indicator_pk)
-            competenceIndicator.delete()
+            indicator = Indicator.objects.get(pk=indicator_pk, competence=competence_pk)
+            indicator.delete()
             return Response(status=200)
         except:
             return Response(status=400)
 
 class AddIndicatorToCompetenceView(APIView):
     """
-        Добавление индикатора из компетенции
+        Добавление индикатора в компетенцию (Создание индикатора)
     """
     def post(self, request):
-        competence_pk = request.data.get("competence_pk")
-        indicator_pk = request.data.get("indicator_pk")
-        field_of_study_number = request.data.get("field_of_study_number")
+        number = request.data.get("number")
+        name = request.data.get("name")
+        competence = request.data.get("competence")
         try:
-            competence = Competence.objects.get(pk=competence_pk)
-            indicator = Indicator.objects.get(pk=indicator_pk)
-            field_of_study = FieldOfStudy.objects.get(number=field_of_study_number)
-            competenceIndicator = CompetenceIndicator.objects.create(competence=competence,
-                                                                     indicator=indicator,
-                                                                    field_of_study=field_of_study)
-            competenceIndicator.save()
-            return Response(status=200)
-        except:
-            return Response(status=400)
-
-
-class AddIndicatorToCompetenceView(APIView):
-    """
-        Добавление индикатора из компетенции
-    """
-    def post(self, request):
-        competence_pk = request.data.get("competence_pk")
-        indicator_pk = request.data.get("indicator_pk")
-        field_of_study_number = request.data.get("field_of_study_number")
-        try:
-            competence = Competence.objects.get(pk=competence_pk)
-            indicator = Indicator.objects.get(pk=indicator_pk)
-            field_of_study = FieldOfStudy.objects.get(number=field_of_study_number)
-            competenceIndicator = CompetenceIndicator.objects.create(competence=competence,
-                                                                     indicator=indicator,
-                                                                     field_of_study=field_of_study)
-            competenceIndicator.save()
+            competence = Competence.objects.get(pk=competence)
+            indicator = Indicator.objects.create(number=number, name=name, competence=competence)
+            indicator.save()
             return Response(status=200)
         except:
             return Response(status=400)

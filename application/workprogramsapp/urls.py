@@ -6,8 +6,8 @@ from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpd
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
 from .views import TopicList, TopicPost, TopicPostUpdate
 from .views import PrerequisitesUpdate, OutcomesUpdate, upload_file, FieldOfStudyWPListView, IndicatorListView, \
-    IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, \
-    DeleteIndicatorFromCompetenceView, AddIndicatorToCompetenceView, OutcomesOfWorkProgramList, WorkProgramAPIView
+    IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, DeleteIndicatorFromCompetenceView, \
+    AddIndicatorToCompetenceView,OutcomesOfWorkProgramList, WorkProgramAPIView
 
 
 
