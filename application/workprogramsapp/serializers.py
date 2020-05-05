@@ -103,9 +103,29 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     discipline_certification = CertificationSerializer(many = True)
 
 
+
     class Meta:
         model = WorkProgram
         fields = ['discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification']
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Snippet` instance, given the validated data.
+        """
+        return WorkProgram.objects.create(**validated_data)
+
+class WorkProgramCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания рабочих программ"""
+
+    class Meta:
+        model = WorkProgram
+        fields = ['discipline_code', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester']
+
+
+
+
+
+
 
 
 

@@ -7,7 +7,9 @@ from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectio
 from .views import TopicList, TopicPost, TopicPostUpdate
 from .views import PrerequisitesUpdate, OutcomesUpdate, upload_file, FieldOfStudyWPListView, IndicatorListView, \
     IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, DeleteIndicatorFromCompetenceView, \
-    AddIndicatorToCompetenceView,OutcomesOfWorkProgramList, WorkProgramAPIView
+    AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
+from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView
+
 
 
 
@@ -50,8 +52,14 @@ urlpatterns = [
     path('api/competenceindicator/<int:pk>', CompetenceIndicatorDetailView.as_view(), name='comptenceindicator'),
     path('api/competenceindicator/indicator/delete', DeleteIndicatorFromCompetenceView.as_view(), name='DeleteIndicatorFromCompetenceView'),
     path('api/competenceindicator/indicator/add', AddIndicatorToCompetenceView.as_view(), name="AddIndicatorFromCompetenceView"),
-    path('api/outcomesofworkprogram/<int:workprogram_id>', OutcomesOfWorkProgramList.as_view(), name="AddIndicatorFromCompetenceView"),
-    path('api/thisworkprogram/<int:id>', WorkProgramAPIView.as_view(), name="AddIndicatorFromCompetenceView"),
+
+    path('api/outcomesofworkprogram/<int:workprogram_id>', OutcomesOfWorkProgramList.as_view()),
+
+    #Рабочая программа
+    path('api/workprogram/create', WorkProgramCreateAPIView.as_view()),
+    path('api/workprogram/detail/<int:pk>', WorkProgramDetailsView.as_view()),
+    path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
+    path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
 
 
 ]
