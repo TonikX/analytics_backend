@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='fieldofstudyworkprogram',
-            unique_together={('work_program', 'field_of_study')},
+            unique_together={('field_of_study', 'work_program',)},
         ),
         migrations.RemoveField(
             model_name='fieldofstudyworkprogram',

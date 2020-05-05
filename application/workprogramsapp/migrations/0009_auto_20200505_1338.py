@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='indicator',
             name='competence',
-            field=models.ForeignKey(default=0, on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.Competence'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.Competence'),
             preserve_default=False,
         ),
         migrations.DeleteModel(

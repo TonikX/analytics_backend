@@ -190,7 +190,7 @@ class Indicator(models.Model):
     '''
     number = models.CharField(unique=True, max_length=1024)
     name = models.CharField(max_length=1024)
-    work_programs = models.ManyToManyField('WorkProgram', through=IndicatorWorkProgram)
+    work_programs = models.ManyToManyField('WorkProgram', through=IndicatorWorkProgram, blank=True, null=True)
     competence = models.ForeignKey('Competence', on_delete=models.CASCADE)
 
     def __str__(self):
