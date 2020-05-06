@@ -20,8 +20,15 @@ class CompetenceSerializer(serializers.ModelSerializer):
 
 
 class OutcomesOfWorkProgramSerializer(serializers.ModelSerializer):
-    """Сериализатор создания результата обучения"""
+    """Сериализатор работы с результатом обучения"""
     item  = ItemSerializer()
+    class Meta:
+        model = OutcomesOfWorkProgram
+        fields = ['item', 'workprogram', 'masterylevel']
+
+
+class OutcomesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор создания результата обучения"""
     class Meta:
         model = OutcomesOfWorkProgram
         fields = ['item', 'workprogram', 'masterylevel']
@@ -57,7 +64,7 @@ class TopicSerializer(serializers.ModelSerializer):
     """Сериализатор Тем"""
     class Meta:
         model = Topic
-        fields = ['number', 'description', 'online_course']
+        fields = ['discipline_section','number', 'description', 'online_course']
 
 
 class EvaluationToolSerializer(serializers.ModelSerializer):
@@ -81,7 +88,7 @@ class DisciplineSectionSerializer(serializers.ModelSerializer):
     evaluation_tools = EvaluationToolSerializer(many = True)
     class Meta:
         model = DisciplineSection
-        fields = ['id', 'name', 'topics', 'evaluation_tools', 'contact_work', 'lecture_classes', 'laboratory', 'practical_lessons', 'SRO', 'total_hours']
+        fields = ['id', 'ordinal_number', 'name', 'topics', 'evaluation_tools', 'contact_work', 'lecture_classes', 'laboratory', 'practical_lessons', 'SRO', 'total_hours']
 
 
 class CertificationSerializer(serializers.ModelSerializer):

@@ -5,7 +5,9 @@ from .models import WorkProgram, FieldOfStudy, FieldOfStudyWorkProgram, Outcomes
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm, DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm, PrerequisitesOfWorkProgramForm, UploadFileForm
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
-from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer
+from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
+from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer
+from .serializers import OutcomesOfWorkProgramCreateSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -535,6 +537,50 @@ class OutcomesOfWorkProgramList(generics.ListAPIView):
         return Response(serializer.data)
 
 
+class OutcomesOfWorkProgramCreateAPIView(generics.CreateAPIView):
+    serializer_class = OutcomesOfWorkProgramCreateSerializer
+    queryset = OutcomesOfWorkProgram.objects.all()
+
+
+class OutcomesOfWorkProgramDestroyView(generics.DestroyAPIView):
+    queryset = OutcomesOfWorkProgram.objects.all()
+    serializer_class = OutcomesOfWorkProgramSerializer
+
+
+class OutcomesOfWorkProgramUpdateView(generics.UpdateAPIView):
+    queryset = OutcomesOfWorkProgram.objects.all()
+    serializer_class = OutcomesOfWorkProgramSerializer
+
+
+class PrerequisitesOfWorkProgramList(generics.ListAPIView):
+        serializer_class = PrerequisitesOfWorkProgramSerializer
+        permission_classes = [IsAuthenticated]
+
+        def list(self, request, **kwargs):
+            """
+            Вывод всех результатов для одной рабочей программы по id
+            """
+            # Note the use of `get_queryset()` instead of `self.queryset`
+            queryset = PrerequisitesOfWorkProgram.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+            serializer = PrerequisitesOfWorkProgramSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+
+class PrerequisitesOfWorkProgramCreateAPIView(generics.CreateAPIView):
+    serializer_class = PrerequisitesOfWorkProgramSerializer
+    queryset = PrerequisitesOfWorkProgram.objects.all()
+
+
+class PrerequisitesOfWorkProgramDestroyView(generics.DestroyAPIView):
+    queryset = PrerequisitesOfWorkProgram.objects.all()
+    serializer_class = PrerequisitesOfWorkProgramSerializer
+
+
+class PrerequisitesOfWorkProgramUpdateView(generics.UpdateAPIView):
+    queryset = PrerequisitesOfWorkProgram.objects.all()
+    serializer_class = PrerequisitesOfWorkProgramSerializer
+
+
 
 class WorkProgramCreateAPIView(generics.CreateAPIView):
     serializer_class = WorkProgramCreateSerializer
@@ -554,5 +600,49 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
 class WorkProgramDetailsView(generics.RetrieveAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
+
+
+class TopicsListAPI(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Topics.
+    """
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+
+class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Topic.
+    """
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+
+class EvaluationToolListAPI(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Evaluation Tools.
+    """
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+
+class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Evaluation Tool.
+    """
+    queryset = EvaluationTool.objects.all()
+    serializer_class = EvaluationToolSerializer
+
+
+class DisciplineSectionListAPI(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Discipline Sections.
+    """
+    queryset = DisciplineSection.objects.all()
+    serializer_class = SectionSerializer
+
+class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Discipline Section.
+    """
+    queryset = DisciplineSection.objects.all()
+    serializer_class = SectionSerializer
 
 

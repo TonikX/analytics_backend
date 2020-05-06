@@ -218,6 +218,8 @@ class DisciplineSection(models.Model):
     '''
     Модель для разделов дисциплин
     '''
+
+    ordinal_number = models.IntegerField(max_length=1024, verbose_name = "номер раздела")
     name = models.CharField(max_length=1024, verbose_name = "Раздел")
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
     evaluation_tools = models.ManyToManyField('EvaluationTool', verbose_name='Фонды оценочных средств', blank = True, null = True, related_name='evaluation_tools')
@@ -231,6 +233,10 @@ class DisciplineSection(models.Model):
 
     def __str__(self):
         return self.name
+
+
+    class Meta:
+        ordering = ['ordinal_number']
 
 
 class Topic(models.Model):

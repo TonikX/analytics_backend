@@ -9,6 +9,9 @@ from .views import PrerequisitesUpdate, OutcomesUpdate, upload_file, FieldOfStud
     IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, DeleteIndicatorFromCompetenceView, \
     AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
 from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView
+from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, TopicsListAPI, TopicDetailAPI
+from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
+from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
 
 
 
@@ -42,9 +45,9 @@ urlpatterns = [
 
 
     #Блок реализации API
-
-
     path('api/wplist/', WorkProgramsListApi.as_view()),
+
+    #Компетенции индикаторы
     path('api/indicator/', IndicatorListView.as_view(), name='indicator'),
     path('api/indicator/<int:pk>', IndicatorUpdateView.as_view(), name='indicator_update'),
     path('api/competence/', CompetenceListView.as_view(), name='comptence'),
@@ -60,6 +63,26 @@ urlpatterns = [
     path('api/workprogram/detail/<int:pk>', WorkProgramDetailsView.as_view()),
     path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
+
+    #Работы с темами и разделами
+    path('api/tools/', EvaluationToolListAPI.as_view(), name='tools'),
+    path('api/tools/<int:pk>', EvaluationToolDetailAPI.as_view(), name='tool_detail'),
+    path('api/sections/', DisciplineSectionListAPI.as_view(), name='sections'),
+    path('api/sections/<int:pk>', DisciplineSectionDetailAPI.as_view(), name='section_detail'),
+    path('api/topics/', TopicsListAPI.as_view(), name='topics'),
+    path('api/topics/<int:pk>', TopicDetailAPI.as_view(), name='topic_detail'),
+
+    #Работа с результатами
+    path('api/outcomesofworkprogram/<int:workprogram_id>', OutcomesOfWorkProgramList.as_view()),
+    path('api/outcomesofworkprogram/create', OutcomesOfWorkProgramCreateAPIView.as_view()),
+    path('api/outcomesofworkprogram/delete/<int:pk>', OutcomesOfWorkProgramDestroyView.as_view()),
+    path('api/outcomesofworkprogram/update/<int:pk>', OutcomesOfWorkProgramUpdateView.as_view()),
+
+    #Работа с пререквизитами
+    path('api/prerequisitesofworkprogram/<int:workprogram_id>', PrerequisitesOfWorkProgramList.as_view()),
+    path('api/prerequisitesofworkprogram/create', PrerequisitesOfWorkProgramCreateAPIView.as_view()),
+    path('api/prerequisitesofworkprogram/delete/<int:pk>', PrerequisitesOfWorkProgramDestroyView.as_view()),
+    path('api/prerequisitesofworkprogram/update/<int:pk>', PrerequisitesOfWorkProgramUpdateView.as_view()),
 
 
 ]
