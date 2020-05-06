@@ -21,8 +21,8 @@ class Migration(migrations.Migration):
             name='work_programs',
             field=models.ManyToManyField(blank=True, null=True, through='workprogramsapp.IndicatorWorkProgram', to='workprogramsapp.WorkProgram'),
         ),
-        migrations.AlterUniqueTogether(
-            name='fieldofstudyworkprogram',
-            unique_together={('work_program', 'field_of_study')},
-        ),
+        # migrations.AlterUniqueTogether(
+        #     name='fieldofstudyworkprogram',
+        #     unique_together={('work_program', 'field_of_study')},
+        # ),
     ]
