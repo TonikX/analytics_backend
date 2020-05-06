@@ -1,6 +1,6 @@
 from rest_framework import serializers, viewsets
 
-from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification
+from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification, FieldOfStudy
 
 from dataprocessing.serializers import ItemSerializer
 
@@ -128,11 +128,10 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
         model = WorkProgram
         fields = ['discipline_code', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester']
 
-
-
-
-
-
-
-
-
+class FieldOfStudySerializer(serializers.ModelSerializer):
+    """
+        Сериализатор образовательных программ (направлений)
+    """
+    class Meta:
+        model = FieldOfStudy
+        fields = "__all__"

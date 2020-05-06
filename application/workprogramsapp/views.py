@@ -6,7 +6,7 @@ from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramF
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
-from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer
+from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, FieldOfStudySerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
@@ -645,4 +645,16 @@ class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
 
+class FieldOfStudyDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    """
+        Удаление, редактирование, просмотр образовательной программы (направления) по id
+    """
+    queryset = FieldOfStudy.objects.all()
+    serializer_class = FieldOfStudySerializer
 
+class FieldOfStudyListCreateView(generics.ListCreateAPIView):
+    """
+        Отображение списка ОП(направлений), создание образовательной программы (напрвления)
+    """
+    queryset = FieldOfStudy.objects.all()
+    serializer_class = FieldOfStudySerializer
