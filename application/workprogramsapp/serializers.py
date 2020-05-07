@@ -64,7 +64,7 @@ class TopicSerializer(serializers.ModelSerializer):
     """Сериализатор Тем"""
     class Meta:
         model = Topic
-        fields = ['discipline_section','number', 'description', 'online_course']
+        fields = ['discipline_section','number', 'description', 'url_online_course']
 
 
 class EvaluationToolSerializer(serializers.ModelSerializer):
