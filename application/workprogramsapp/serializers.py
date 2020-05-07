@@ -1,6 +1,6 @@
 from rest_framework import serializers, viewsets
 
-from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification
+from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification, OnlineCourse
 
 from dataprocessing.serializers import ItemSerializer
 
@@ -64,7 +64,7 @@ class TopicSerializer(serializers.ModelSerializer):
     """Сериализатор Тем"""
     class Meta:
         model = Topic
-        fields = ['discipline_section','number', 'description', 'online_course']
+        fields = ['discipline_section','number', 'description', 'url_online_course']
 
 
 class EvaluationToolSerializer(serializers.ModelSerializer):
@@ -96,6 +96,14 @@ class CertificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Certification
+        fields = "__all__"
+
+
+class OnlineCourseSerializer(serializers.ModelSerializer):
+    """Сериализатор онлайн курсов"""
+
+    class Meta:
+        model = OnlineCourse
         fields = "__all__"
 
 
