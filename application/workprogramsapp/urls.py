@@ -9,7 +9,7 @@ from .views import PrerequisitesUpdate, OutcomesUpdate, upload_file, FieldOfStud
     IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, DeleteIndicatorFromCompetenceView, \
     AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
 from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView
-from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, TopicsListAPI, TopicDetailAPI
+from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, TopicsListAPI, TopicDetailAPI, NewOrdinalNumbersForDesciplineSectionAPI
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
 
@@ -67,8 +67,12 @@ urlpatterns = [
     #Работы с темами и разделами
     path('api/tools/', EvaluationToolListAPI.as_view(), name='tools'),
     path('api/tools/<int:pk>', EvaluationToolDetailAPI.as_view(), name='tool_detail'),
+
     path('api/sections/', DisciplineSectionListAPI.as_view(), name='sections'),
     path('api/sections/<int:pk>', DisciplineSectionDetailAPI.as_view(), name='section_detail'),
+    #path('api/sections/NewOrdinalNumbers', NewOrdinalNumbersForDesciplineSectionAPI.as_view()),
+    path('api/sections/NewOrdinalNumbers', NewOrdinalNumbersForDesciplineSectionAPI),
+
     path('api/topics/', TopicsListAPI.as_view(), name='topics'),
     path('api/topics/<int:pk>', TopicDetailAPI.as_view(), name='topic_detail'),
 
@@ -83,6 +87,12 @@ urlpatterns = [
     path('api/prerequisitesofworkprogram/create', PrerequisitesOfWorkProgramCreateAPIView.as_view()),
     path('api/prerequisitesofworkprogram/delete/<int:pk>', PrerequisitesOfWorkProgramDestroyView.as_view()),
     path('api/prerequisitesofworkprogram/update/<int:pk>', PrerequisitesOfWorkProgramUpdateView.as_view()),
+
+    #Онлайн курс
+    path('api/workprogram/create', OnlineCourseCreateAPIView.as_view()),
+    path('api/workprogram/detail/<int:pk>', OnlineCourseDetailsView.as_view()),
+    path('api/workprogram/delete/<int:pk>', OnlineCourseDestroyView.as_view()),
+    path('api/workprogram/update/<int:pk>', OnlineCourseUpdateView.as_view()),
 
 
 ]

@@ -23,6 +23,7 @@ from django_tables2 import SingleTableView, RequestConfig
 from .tables import FieldOfStudyWPTable
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 
 
 # Create your views here.
@@ -580,7 +581,7 @@ class PrerequisitesOfWorkProgramUpdateView(generics.UpdateAPIView):
     queryset = PrerequisitesOfWorkProgram.objects.all()
     serializer_class = PrerequisitesOfWorkProgramSerializer
 
-
+#Блок эндпоинтов рабочей программы
 
 class WorkProgramCreateAPIView(generics.CreateAPIView):
     serializer_class = WorkProgramCreateSerializer
@@ -601,6 +602,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
 
+#Конец блока ендпоинтов рабочей программы
+
 
 class TopicsListAPI(generics.ListCreateAPIView):
     """
@@ -609,6 +612,7 @@ class TopicsListAPI(generics.ListCreateAPIView):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
 
+
 class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     API endpoint that represents a single Topic.
@@ -616,12 +620,14 @@ class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
 
+
 class EvaluationToolListAPI(generics.ListCreateAPIView):
     """
     API endpoint that represents a list of Evaluation Tools.
     """
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
+
 
 class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -638,11 +644,68 @@ class DisciplineSectionListAPI(generics.ListCreateAPIView):
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
 
+
 class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     API endpoint that represents a single Discipline Section.
     """
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
+
+
+# class NewOrdinalNumbersForDesciplineSectionAPI(APIView):
+#
+#
+#     def get_object(self, pk, request):
+#
+#         print (request)
+#         return DisciplineSection.objects.filter(id = 1)
+#
+#
+#     def post(self, request, *args, **kwargs):
+#         descipline_section = self.get_object(request.data.get('descipline_section'))
+#         #old_ordinal_number = self.get_object(request.data.get('old_ordinal_number'))
+#         new_ordinal_number = self.get_object(request.data.get('new_ordinal_number'))
+#
+#         DisciplineSection.new_ordinal_number(self, descipline_section, new_ordinal_number)
+#
+#         return Response('ok')
+
+
+@api_view(['GET', 'POST'])
+def NewOrdinalNumbersForDesciplineSectionAPI(request):
+    descipline_section = request.data.get('descipline_section')
+    new_ordinal_number = request.data.get('new_ordinal_number')
+    try:
+        DisciplineSection.new_ordinal_number(descipline_section, new_ordinal_number)
+        return Response(status=200)
+    except:
+        return Response(status=400)
+
+
+#Блок эндпоинтов рабочей программы
+
+class OnlineCourseCreateAPIView(generics.CreateAPIView):
+    serializer_class = WorkProgramCreateSerializer
+    queryset = WorkProgram.objects.all()
+
+
+class OnlineCourseDestroyView(generics.DestroyAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramSerializer
+
+
+class OnlineCourseUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramCreateSerializer
+
+
+class OnlineCourseDetailsView(generics.RetrieveAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramSerializer
+
+#Конец блока ендпоинтов рабочей программы
+
+
 
 

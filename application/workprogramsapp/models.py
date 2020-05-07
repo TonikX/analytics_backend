@@ -235,8 +235,39 @@ class DisciplineSection(models.Model):
         return self.name
 
 
+    def new_ordinal_number(descipline_section, new_ordinal_number):
+        new_ordinal_number = int(new_ordinal_number)
+        section = DisciplineSection.objects.get(pk = descipline_section)
+        if int(section.ordinal_number) > int(new_ordinal_number):
+            section.ordinal_number = new_ordinal_number
+            section.save()
+            sections = DisciplineSection.objects.filter(work_program = section.work_program, ordinal_number__gte=new_ordinal_number).exclude(pk = descipline_section).order_by('ordinal_number')
+            for sec in sections:
+                sec.ordinal_number = new_ordinal_number+1
+                sec.save()
+                new_ordinal_number +=1
+        else:
+            section.ordinal_number = new_ordinal_number
+            section.save()
+            sections = DisciplineSection.objects.filter(work_program = section.work_program, ordinal_number__lte=new_ordinal_number).exclude(pk = descipline_section).order_by('ordinal_number')
+            for sec in sections:
+                sec.ordinal_number = new_ordinal_number-1
+                sec.save()
+                new_ordinal_number -=1
+
+
     class Meta:
         ordering = ['ordinal_number']
+
+
+class OnlineCourse(models.Model):
+    '''
+    Модель описания онлайн курса
+    '''
+    title = models.CharField(max_length=512, verbose_name = "Описание")
+    platform = models.CharField(max_length=512, verbose_name = "Описание", blank = True, null = True)
+    description = models.CharField(max_length=5000, verbose_name = "Описание", blank = True, null = True)
+    course_url = models.URLField()
 
 
 class Topic(models.Model):
@@ -247,6 +278,7 @@ class Topic(models.Model):
     number = models.CharField(unique=True, max_length=1024, verbose_name = "Номер")
     description = models.CharField(max_length=1024, verbose_name = "Описание", blank = True, null = True)
     online_course = models.CharField(max_length=1024, verbose_name = "Реализация раздела дисциплины с помощью онлайн-курса", blank = True, null = True)
+    online_course = models.ForeignKey('OnlineCourse', verbose_name='Онлайн курс', blank = True, null = True, related_name='topic_with_online_course')
 
     def __str__(self):
         return (self.number + self.description)
@@ -289,3 +321,4 @@ class Certification(models.Model):
     description = models.CharField(max_length=1024, verbose_name = "Описание", blank = True, null = True)
     deadline = models.IntegerField(verbose_name = "Срок сдачи в неделях", blank = True, null = True)
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name='discipline_certification')
+
