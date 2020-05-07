@@ -47,7 +47,7 @@ const saveWorkProgram = createLogic({
         service.saveWorkProgram(destination, value, workProgramId)
             .then((res) => {
                 // @ts-ignore
-                dispatch(workProgramActions.setWorkProgram(res.data));
+                dispatch(workProgramActions.setWorkProgramPart(res.data));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -94,6 +94,33 @@ const saveSection = createLogic({
     }
 });
 
+
+const changeSectionNumber = createLogic({
+    type: workProgramActions.changeSectionNumber.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+        const {newNumber, sectionId} = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_SECTION_NUMBER}));
+
+        service.changeSectionNumber(newNumber, sectionId)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram(workProgramId));
+                // @ts-ignore
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_SECTION_NUMBER}));
+                return done();
+            });
+    }
+});
+
 const deleteSection = createLogic({
     type: workProgramActions.deleteSection.type,
     latest: true,
@@ -125,4 +152,5 @@ export default [
     saveWorkProgram,
     saveSection,
     deleteSection,
+    changeSectionNumber,
 ];

@@ -46,6 +46,17 @@ class WorkProgramService extends BaseService{
         return this.post(`/api/sections/`, formData);
     }
 
+    changeSectionNumber(newNumber: ReactText, sectionId: ReactText){
+        const formData = new FormData();
+
+        // @ts-ignore
+        formData.append('new_ordinal_number', newNumber);
+        // @ts-ignore
+        formData.append('descipline_section', sectionId);
+
+        return this.post(`/api/sections/NewOrdinalNumbers`, formData);
+    }
+
     deleteSection(id: ReactText){
         return this.delete(`/api/sections/${id}`);
     }

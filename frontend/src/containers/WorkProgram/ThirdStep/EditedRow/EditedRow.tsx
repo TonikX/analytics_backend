@@ -17,7 +17,8 @@ import {workProgramSectionFields} from '../../enum';
 
 import connect from './EditedRow.connect';
 import styles from './EditedRow.styles';
-
+import {shallowEqual} from "recompose";
+//todo: add shouldcomponentupdate
 class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     constructor(props: EditedRowProps) {
         super(props);
@@ -28,6 +29,13 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
         };
     }
 
+    componentDidUpdate(prevProps: Readonly<EditedRowProps>, prevState: Readonly<EditedRowState>, snapshot?: any) {
+        if (!shallowEqual(prevProps.section, this.props.section)){
+            this.setState({
+                section: this.props.section
+            })
+        }
+    }
 
     setEditModeTrue = () => {
         this.setState({isEditMode: true});

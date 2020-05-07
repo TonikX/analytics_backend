@@ -23,18 +23,12 @@ import {ThirdStepProps} from './types';
 
 import connect from './ThirdStep.connect';
 import styles from './ThirdStep.styles';
-import {workProgramSectionFields} from "../enum";
-import Select from "@material-ui/core/Select";
 
-class ThirdStep extends React.Component<ThirdStepProps> {
+//todo: add shouldcomponentupdate
+
+class ThirdStep extends React.PureComponent<ThirdStepProps> {
     state = {
         createNewSectionMode: false
-    }
-
-    componentDidUpdate(prevProps: Readonly<ThirdStepProps>, prevState: Readonly<{}>, snapshot?: any) {
-        if (!shallowEqual(this.props.sections, prevProps.sections)){
-            this.setState({sections: this.props.sections});
-        }
     }
 
     getNewSection = () => ({
@@ -63,11 +57,8 @@ class ThirdStep extends React.Component<ThirdStepProps> {
 
     onSortEnd = ({oldIndex, newIndex}: any) => {
         const {sections} = this.props;
-        let currentSection = {...sections[oldIndex]};
 
-        currentSection[workProgramSectionFields.ORDINAL_NUMBER] = newIndex + 1;
-
-        this.props.actions.saveSection(currentSection);
+        this.props.actions.changeSectionNumber({sectionId: sections[oldIndex].id, newNumber: newIndex + 1});
     }
 
     render() {
@@ -127,7 +118,7 @@ class ThirdStep extends React.Component<ThirdStepProps> {
     }
 }
 
-const DragHandle = SortableHandle(() => <DragIndicatorIcon />);
+const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}}/>);
 
 // @ts-ignore
 const SortableItem = SortableElement(({section, removeNewSection}) =>
@@ -143,7 +134,7 @@ const SortableItem = SortableElement(({section, removeNewSection}) =>
 const SortableList = SortableContainer(({sections, removeNewSection}) => {
     return (<TableBody>
             {sections.map((value: any, index: number) => (
-                <SortableItem key={`item-${index}`}
+                <SortableItem key={`item-${value.id}`}
                               index={index}
                               section={value}
                               removeNewSection={removeNewSection}

@@ -53,7 +53,7 @@ class FourthStep extends React.PureComponent<FourthStepProps> {
             <div className={classes.topicsSection}>
                 <div className={classes.topicsList}>
                     {sections.map(section =>
-                        <Paper className={classes.paper}>
+                        <Paper className={classes.paper} key={`4-part-section-${section.id}`}>
                             <List>
                                 <ListItemText className={classes.headItem} primary={`
                                 ${section[workProgramSectionFields.ORDINAL_NUMBER]}. ${section[workProgramSectionFields.NAME]}
@@ -61,7 +61,7 @@ class FourthStep extends React.PureComponent<FourthStepProps> {
                                 <Divider />
                                 {section[workProgramSectionFields.TOPICS].map(topic =>
                                     <>
-                                        <div className={classes.item}>
+                                        <div className={classes.item} key={`4-part-section-${section}-topic-${topic.id}`}>
                                             <div>
                                                 <Typography>
                                                     {section[workProgramSectionFields.ORDINAL_NUMBER]}.

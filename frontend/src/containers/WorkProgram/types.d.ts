@@ -3,10 +3,12 @@ import {fields} from './enum';
 export interface WorkProgramActions {
     getWorkProgram: any;
     setWorkProgram: any;
+    setWorkProgramPart: any;
     saveWorkProgram: any;
     setWorkProgramId: any;
     deleteSection: any;
     saveSection: any;
+    changeSectionNumber: any;
 }
 
 export interface workProgramState {
@@ -35,4 +37,5 @@ export type Topic = {
     description: string;
     online_course: string;
     number: string;
+    id: string;
 }
