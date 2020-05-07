@@ -5,10 +5,6 @@ export interface ThirdStepProps {
     sections: Array<Section>;
 }
 
-export interface ThirdStepState {
-    sections: Array<Section>;
-}
-
 export type Section = {
     id: number;
     ordinal_number: number;

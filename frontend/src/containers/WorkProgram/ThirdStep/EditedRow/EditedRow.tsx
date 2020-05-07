@@ -41,7 +41,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
         if (this.props.section.id){
             this.props.actions.deleteSection(this.props.section.id);
         } else {
-            this.props.removeNewSection(this.props.count);
+            this.props.removeNewSection();
         }
     }
 

@@ -19,18 +19,14 @@ import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 
 import EditedRow from "./EditedRow";
 
-import {ThirdStepProps, ThirdStepState} from './types';
+import {ThirdStepProps} from './types';
 
 import connect from './ThirdStep.connect';
 import styles from './ThirdStep.styles';
 
-class ThirdStep extends React.Component<ThirdStepProps, ThirdStepState> {
-    constructor(props: ThirdStepProps) {
-        super(props);
-
-        this.state = {
-            sections: props.sections
-        };
+class ThirdStep extends React.Component<ThirdStepProps> {
+    state = {
+        createNewSectionMode: false
     }
 
     componentDidUpdate(prevProps: Readonly<ThirdStepProps>, prevState: Readonly<{}>, snapshot?: any) {
@@ -51,31 +47,22 @@ class ThirdStep extends React.Component<ThirdStepProps, ThirdStepState> {
     })
 
     handleCreateNewSection = () => {
-        const {sections} = this.state;
-
-        // @ts-ignore
         this.setState({
-            sections: [
-                ...sections,
-                this.getNewSection()
-            ]
+            createNewSectionMode: true,
         });
 
     };
 
     removeNewSection = (index: number) => {
-        const {sections} = this.state;
-
-        // @ts-ignore
         this.setState({
-            sections: sections.filter((item, itemIndex) => itemIndex !== index)
+            createNewSectionMode: false,
         });
     }
 
     render() {
         // @ts-ignore
-        const {classes} = this.props;
-        const {sections} = this.state;
+        const {classes, sections} = this.props;
+        const {createNewSectionMode} = this.state;
 
         return (
             <div className={classes.thirdStep}>
@@ -97,11 +84,20 @@ class ThirdStep extends React.Component<ThirdStepProps, ThirdStepState> {
                                 <TableCell className={classes.headerCell}>Всего часов</TableCell>
                             </TableRow>
                         </TableHead>
-                        <SortableList sections={sections}
-                                      useDragHandle={true}
-                                      hideSortableGhost={false}
-                                      removeNewSection={this.removeNewSection}
-                        />
+
+                        <TableBody>
+                            <SortableList sections={sections}
+                                          useDragHandle={true}
+                                          hideSortableGhost={false}
+                                          removeNewSection={this.removeNewSection}
+                            />
+                            {createNewSectionMode &&
+                                <TableRow>
+                                    <TableCell />
+                                    <EditedRow section={this.getNewSection()} removeNewSection={this.removeNewSection}/>
+                                </TableRow>
+                            }
+                        </TableBody>
                     </Table>
                 </TableContainer>
 
@@ -129,18 +125,16 @@ const SortableItem = SortableElement(({section, removeNewSection, count}) =>
 
 // @ts-ignore
 const SortableList = SortableContainer(({sections, removeNewSection}) => {
-    return (
-        <TableBody>
+    return (<>
             {sections.map((value: any, index: number) => (
                 <SortableItem key={`item-${index}`}
                               index={index}
                               count={index}
                               section={value}
                               removeNewSection={removeNewSection}
-                              disabled={!value.id}
                 />
             ))}
-        </TableBody>
+        </>
     );
 });
 
