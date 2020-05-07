@@ -1,6 +1,6 @@
 import {ReactText} from "react";
 import BaseService from "../../service/base-service";
-import {Section} from "./ThirdStep/types";
+import {Section} from "./types";
 
 class WorkProgramService extends BaseService{
     getWorkProgram(id: string){

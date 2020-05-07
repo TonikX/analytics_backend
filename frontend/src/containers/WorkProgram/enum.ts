@@ -7,7 +7,7 @@ export enum fields {
     WORK_PROGRAM_SECTIONS = 'discipline_sections',
 }
 
-export enum workProgramFields {
+export enum workProgramSectionFields {
     ORDINAL_NUMBER = 'ordinal_number',
     NAME = 'name',
     SPO = 'SRO',
@@ -16,6 +16,12 @@ export enum workProgramFields {
     PRACTICAL_LESSONS = 'practical_lessons',
     LABORATORY = 'laboratory',
     TOTAL_HOURS = 'total_hours',
+    TOPICS = 'topics',
+}
+
+export enum workProgramTopicFields {
+    DESCRIPTION = 'description',
+    NUMBER = 'number'
 }
 
 export enum fetchingTypes {

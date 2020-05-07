@@ -24,7 +24,6 @@ class SecondStep extends React.PureComponent<SecondStepProps> {
     };
 
     render() {
-        // @ts-ignore
         const {classes, isFetching, value} = this.props;
 
         return (
@@ -32,7 +31,6 @@ class SecondStep extends React.PureComponent<SecondStepProps> {
                 <FormControl>
                     <Select
                         placeholder="Место дисциплины"
-                        labelId="specialization-selector-label"
                         className={classes.specializationSelector}
                         variant="outlined"
                         disabled={isFetching}

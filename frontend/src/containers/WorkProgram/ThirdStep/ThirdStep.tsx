@@ -12,7 +12,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 
 import Paper from "@material-ui/core/Paper";
-import Fab from '@material-ui/core/Fab';
+import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import withStyles from '@material-ui/core/styles/withStyles';
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
@@ -23,7 +23,8 @@ import {ThirdStepProps} from './types';
 
 import connect from './ThirdStep.connect';
 import styles from './ThirdStep.styles';
-import {workProgramFields} from "../enum";
+import {workProgramSectionFields} from "../enum";
+import Select from "@material-ui/core/Select";
 
 class ThirdStep extends React.Component<ThirdStepProps> {
     state = {
@@ -64,7 +65,7 @@ class ThirdStep extends React.Component<ThirdStepProps> {
         const {sections} = this.props;
         let currentSection = {...sections[oldIndex]};
 
-        currentSection[workProgramFields.ORDINAL_NUMBER] = newIndex + 1;
+        currentSection[workProgramSectionFields.ORDINAL_NUMBER] = newIndex + 1;
 
         this.props.actions.saveSection(currentSection);
     }
@@ -112,9 +113,14 @@ class ThirdStep extends React.Component<ThirdStepProps> {
                 </TableContainer>
 
                 {!createNewSectionMode
-                    && <Fab color="primary" className={classes.addIcon} onClick={this.handleCreateNewSection}>
+                    && <Button color="primary"
+                               variant="outlined"
+                               className={classes.addIcon}
+                               onClick={this.handleCreateNewSection}
+                        >
                         <AddIcon/>
-                    </Fab>
+                        Добавить раздел
+                    </Button>
                 }
             </div>
         );

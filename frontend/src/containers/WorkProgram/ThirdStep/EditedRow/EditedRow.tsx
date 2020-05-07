@@ -13,7 +13,7 @@ import SuccessIcon from '@material-ui/icons/CheckOutlined';
 
 import {EditedRowProps, EditedRowState} from './types';
 
-import {workProgramFields} from '../../enum';
+import {workProgramSectionFields} from '../../enum';
 
 import connect from './EditedRow.connect';
 import styles from './EditedRow.styles';
@@ -50,7 +50,9 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
 
         this.props.actions.saveSection(this.state.section);
 
-        this.props.removeNewSection();
+        if (!this.props.section.id){
+            this.props.removeNewSection();
+        }
     }
 
     handleClickCancel = () => {
@@ -82,9 +84,9 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     {isEditMode ?
                         <TextField variant="outlined"
                                    size="small"
-                                   defaultValue={section[workProgramFields.NAME]}
+                                   defaultValue={section[workProgramSectionFields.NAME]}
                                    className={classes.largeInput}
-                                   onChange={this.handleChangeField(workProgramFields.NAME)}
+                                   onChange={this.handleChangeField(workProgramSectionFields.NAME)}
                         />
                         :
                         <>{section.name}</>
@@ -94,10 +96,10 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     {isEditMode ?
                         <TextField variant="outlined"
                                    size="small"
-                                   defaultValue={section[workProgramFields.CONTACT_WORK]}
+                                   defaultValue={section[workProgramSectionFields.CONTACT_WORK]}
                                    className={classes.smallInput}
                                    type="number"
-                                   onChange={this.handleChangeField(workProgramFields.CONTACT_WORK)}
+                                   onChange={this.handleChangeField(workProgramSectionFields.CONTACT_WORK)}
                         />
                         :
                         <>{section.contact_work}</>
@@ -107,10 +109,10 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     {isEditMode ?
                         <TextField variant="outlined"
                                    size="small"
-                                   defaultValue={section[workProgramFields.LECTURE_CLASSES]}
+                                   defaultValue={section[workProgramSectionFields.LECTURE_CLASSES]}
                                    className={classes.smallInput}
                                    type="number"
-                                   onChange={this.handleChangeField(workProgramFields.LECTURE_CLASSES)}
+                                   onChange={this.handleChangeField(workProgramSectionFields.LECTURE_CLASSES)}
                         />
                         :
                         <>{section.lecture_classes}</>
@@ -120,10 +122,10 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     {isEditMode ?
                         <TextField variant="outlined"
                                    size="small"
-                                   defaultValue={section[workProgramFields.LABORATORY]}
+                                   defaultValue={section[workProgramSectionFields.LABORATORY]}
                                    className={classes.smallInput}
                                    type="number"
-                                   onChange={this.handleChangeField(workProgramFields.LABORATORY)}
+                                   onChange={this.handleChangeField(workProgramSectionFields.LABORATORY)}
                         />
                         :
                         <>{section.laboratory}</>
@@ -134,10 +136,10 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     {isEditMode ?
                         <TextField variant="outlined"
                                    size="small"
-                                   defaultValue={section[workProgramFields.PRACTICAL_LESSONS]}
+                                   defaultValue={section[workProgramSectionFields.PRACTICAL_LESSONS]}
                                    className={classes.smallInput}
                                    type="number"
-                                   onChange={this.handleChangeField(workProgramFields.PRACTICAL_LESSONS)}
+                                   onChange={this.handleChangeField(workProgramSectionFields.PRACTICAL_LESSONS)}
                         />
                         :
                         <>{section.practical_lessons}</>
@@ -147,10 +149,10 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     {isEditMode ?
                         <TextField variant="outlined"
                                    size="small"
-                                   defaultValue={section[workProgramFields.SPO]}
+                                   defaultValue={section[workProgramSectionFields.SPO]}
                                    className={classes.smallInput}
                                    type="number"
-                                   onChange={this.handleChangeField(workProgramFields.SPO)}
+                                   onChange={this.handleChangeField(workProgramSectionFields.SPO)}
                         />
                         :
                         <>{section.SRO}</>
@@ -160,10 +162,10 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     {isEditMode ?
                         <TextField variant="outlined"
                                    size="small"
-                                   defaultValue={section[workProgramFields.TOTAL_HOURS]}
+                                   defaultValue={section[workProgramSectionFields.TOTAL_HOURS]}
                                    className={classes.smallInput}
                                    type="number"
-                                   onChange={this.handleChangeField(workProgramFields.TOTAL_HOURS)}
+                                   onChange={this.handleChangeField(workProgramSectionFields.TOTAL_HOURS)}
                         />
                         :
                         <>{section.total_hours}</>
@@ -172,11 +174,11 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                 <TableCell className={classes.centerCell}>
                 {!isEditMode ?
                     <>
-                        <IconButton onClick={this.setEditModeTrue}>
-                            <EditIcon />
-                        </IconButton>
                         <IconButton onClick={this.handleClickDelete}>
                             <DeleteIcon />
+                        </IconButton>
+                        <IconButton onClick={this.setEditModeTrue}>
+                            <EditIcon />
                         </IconButton>
                     </>
                         :

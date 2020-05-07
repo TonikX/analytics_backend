@@ -12,6 +12,7 @@ import {WorkProgramProps} from './types';
 
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
+import FourthStep from "./FourthStep";
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     componentDidMount() {
@@ -49,6 +50,14 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                     </Typography>
 
                     <ThirdStep />
+                </div>
+
+                <div className={classes.subItem}>
+                    <Typography className={classes.subTitle}>
+                        4. Содержание дисциплины
+                    </Typography>
+
+                    <FourthStep />
                 </div>
             </>
         );
