@@ -23,6 +23,7 @@ import {ThirdStepProps} from './types';
 
 import connect from './ThirdStep.connect';
 import styles from './ThirdStep.styles';
+import {workProgramFields} from "../enum";
 
 class ThirdStep extends React.Component<ThirdStepProps> {
     state = {
@@ -53,10 +54,19 @@ class ThirdStep extends React.Component<ThirdStepProps> {
 
     };
 
-    removeNewSection = (index: number) => {
+    removeNewSection = () => {
         this.setState({
             createNewSectionMode: false,
         });
+    }
+
+    onSortEnd = ({oldIndex, newIndex}: any) => {
+        const {sections} = this.props;
+        let currentSection = {...sections[oldIndex]};
+
+        currentSection[workProgramFields.ORDINAL_NUMBER] = newIndex + 1;
+
+        this.props.actions.saveSection(currentSection);
     }
 
     render() {
@@ -85,23 +95,23 @@ class ThirdStep extends React.Component<ThirdStepProps> {
                             </TableRow>
                         </TableHead>
 
-                        <TableBody>
-                            <SortableList sections={sections}
-                                          useDragHandle={true}
-                                          hideSortableGhost={false}
-                                          removeNewSection={this.removeNewSection}
-                            />
-                            {createNewSectionMode &&
-                                <TableRow>
-                                    <TableCell />
-                                    <EditedRow section={this.getNewSection()} removeNewSection={this.removeNewSection}/>
-                                </TableRow>
-                            }
-                        </TableBody>
+                        <SortableList sections={sections}
+                                      useDragHandle={true}
+                                      hideSortableGhost={false}
+                                      removeNewSection={this.removeNewSection}
+                                      onSortEnd={this.onSortEnd}
+                        />
+
+                        {createNewSectionMode &&
+                            <TableRow>
+                                <TableCell />
+                                <EditedRow section={this.getNewSection()} removeNewSection={this.removeNewSection}/>
+                            </TableRow>
+                        }
                     </Table>
                 </TableContainer>
 
-                {!sections.some(section => !section.id)
+                {!createNewSectionMode
                     && <Fab color="primary" className={classes.addIcon} onClick={this.handleCreateNewSection}>
                         <AddIcon/>
                     </Fab>
@@ -114,27 +124,26 @@ class ThirdStep extends React.Component<ThirdStepProps> {
 const DragHandle = SortableHandle(() => <DragIndicatorIcon />);
 
 // @ts-ignore
-const SortableItem = SortableElement(({section, removeNewSection, count}) =>
+const SortableItem = SortableElement(({section, removeNewSection}) =>
     <TableRow>
         <TableCell style={{backgroundColor: '#fff'}} >
             <DragHandle />
         </TableCell>
-        <EditedRow section={section} removeNewSection={removeNewSection} count={count}/>
+        <EditedRow section={section} removeNewSection={removeNewSection}/>
     </TableRow>
 );
 
 // @ts-ignore
 const SortableList = SortableContainer(({sections, removeNewSection}) => {
-    return (<>
+    return (<TableBody>
             {sections.map((value: any, index: number) => (
                 <SortableItem key={`item-${index}`}
                               index={index}
-                              count={index}
                               section={value}
                               removeNewSection={removeNewSection}
                 />
             ))}
-        </>
+        </TableBody>
     );
 });
 

@@ -49,6 +49,8 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
         this.setEditModeFalse();
 
         this.props.actions.saveSection(this.state.section);
+
+        this.props.removeNewSection();
     }
 
     handleClickCancel = () => {

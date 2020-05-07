@@ -21,7 +21,10 @@ class WorkProgramService extends BaseService{
         Object.keys(section).forEach((key: string) => {
             if (key !== 'topics' && key !== 'evaluation_tools'){
                 // @ts-ignore
-                formData.append(key, section[key]);
+                if (section[key]){
+                    // @ts-ignore
+                    formData.append(key, section[key]);
+                }
             }
         })
 

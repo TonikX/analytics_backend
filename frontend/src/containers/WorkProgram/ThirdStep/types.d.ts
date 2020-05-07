@@ -1,7 +1,7 @@
 import {WorkProgramActions} from '../types';
 
 export interface ThirdStepProps {
-    actions?: WorkProgramActions;
+    actions: WorkProgramActions;
     sections: Array<Section>;
 }
 
