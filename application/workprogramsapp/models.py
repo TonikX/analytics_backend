@@ -12,8 +12,8 @@ class FieldOfStudyWorkProgram(models.Model):
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, verbose_name = 'Рабочая программа')
     #competence = models.ForeignKey('Competence',null=True,  on_delete=models.CASCADE, verbose_name = 'Компетенции')
 
-    class Meta:
-        unique_together = ('work_program', 'field_of_study')
+    # class Meta:
+    #     unique_together = ('work_program', 'field_of_study')
 
 
 class WorkProgram(models.Model):
@@ -277,8 +277,8 @@ class Topic(models.Model):
     discipline_section = models.ForeignKey('DisciplineSection', on_delete=models.CASCADE, verbose_name = "Раздел", related_name = "topics")
     number = models.CharField(unique=True, max_length=1024, verbose_name = "Номер")
     description = models.CharField(max_length=1024, verbose_name = "Описание", blank = True, null = True)
-    online_course = models.CharField(max_length=1024, verbose_name = "Реализация раздела дисциплины с помощью онлайн-курса", blank = True, null = True)
-    online_course = models.ForeignKey('OnlineCourse', verbose_name='Онлайн курс', blank = True, null = True, related_name='topic_with_online_course')
+    #online_course = models.CharField(max_length=1024, verbose_name = "Реализация раздела дисциплины с помощью онлайн-курса", blank = True, null = True)
+    url_online_course = models.ForeignKey('OnlineCourse', on_delete=models.CASCADE, verbose_name='Онлайн курс', blank = True, null = True, related_name='topic_with_online_course')
 
     def __str__(self):
         return (self.number + self.description)

@@ -12,6 +12,7 @@ from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgram
 from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, TopicsListAPI, TopicDetailAPI, NewOrdinalNumbersForDesciplineSectionAPI
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
+from .views import OnlineCourseCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView
 
 
 
@@ -89,10 +90,10 @@ urlpatterns = [
     path('api/prerequisitesofworkprogram/update/<int:pk>', PrerequisitesOfWorkProgramUpdateView.as_view()),
 
     #Онлайн курс
-    path('api/workprogram/create', OnlineCourseCreateAPIView.as_view()),
-    path('api/workprogram/detail/<int:pk>', OnlineCourseDetailsView.as_view()),
-    path('api/workprogram/delete/<int:pk>', OnlineCourseDestroyView.as_view()),
-    path('api/workprogram/update/<int:pk>', OnlineCourseUpdateView.as_view()),
+    path('api/onlinecourse/create', OnlineCourseCreateAPIView.as_view()),
+    path('api/onlinecourse/detail/<int:pk>', OnlineCourseDetailsView.as_view()),
+    path('api/onlinecourse/delete/<int:pk>', OnlineCourseDestroyView.as_view()),
+    path('api/onlinecourse/update/<int:pk>', OnlineCourseUpdateView.as_view()),
 
 
 ]
