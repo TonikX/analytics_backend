@@ -11,13 +11,13 @@ import StepButton from '@material-ui/core/StepButton';
 
 import FirstStep from "./FirstStep";
 import SecondStep from "./FirstStep/Selector";
-import ThirdStep from "./ThirdStep";
+import ThirdStep from "./SecondStep";
 
 import {WorkProgramProps} from './types';
 
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
-import FourthStep from "./FourthStep";
+import FourthStep from "./ThirdStep";
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
