@@ -7,11 +7,13 @@ export default (theme: Theme) => createStyles({
     },
     topicsSection: {
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        height: '100%'
     },
     topicsList: {
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        flex: 1
     },
     onlineCourseItem: {
         padding: '5px 35px',

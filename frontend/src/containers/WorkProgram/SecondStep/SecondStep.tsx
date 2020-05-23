@@ -1,6 +1,6 @@
 import React from 'react';
 import get from 'lodash/get';
-import {shallowEqual} from "recompose";
+import Scrollbars from "react-custom-scrollbars";
 
 import {SortableContainer, SortableElement, SortableHandle} from 'react-sortable-hoc';
 
@@ -11,7 +11,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 
-import Paper from "@material-ui/core/Paper";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -23,10 +22,13 @@ import {SecondStepProps} from './types';
 
 import connect from './SecondStep.connect';
 import styles from './SecondStep.styles';
+import {workProgramSectionFields} from "../enum";
 
 //todo: add shouldcomponentupdate
 
 class SecondStep extends React.PureComponent<SecondStepProps> {
+    scrollBar: any = null;
+
     state = {
         createNewSectionMode: false
     }
@@ -46,7 +48,7 @@ class SecondStep extends React.PureComponent<SecondStepProps> {
         this.setState({
             createNewSectionMode: true,
         });
-
+        this.scrollBar.scrollToBottom();
     };
 
     removeNewSection = () => {
@@ -61,46 +63,75 @@ class SecondStep extends React.PureComponent<SecondStepProps> {
         this.props.actions.changeSectionNumber({sectionId: sections[oldIndex].id, newNumber: newIndex + 1});
     }
 
+    getTotalHours = (field: string) => {
+        const {sections} = this.props;
+
+        return sections.reduce((count, section) => {
+            // @ts-ignore
+            return count + section[field];
+        }, 0)
+    };
+
     render() {
         // @ts-ignore
         const {classes, sections} = this.props;
         const {createNewSectionMode} = this.state;
 
+        const totalContactWorkHours = this.getTotalHours(workProgramSectionFields.CONTACT_WORK);
+        const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES);
+        const totalLaboratoryClassesHours = this.getTotalHours(workProgramSectionFields.LABORATORY);
+        const totalPracticalClassesHours = this.getTotalHours(workProgramSectionFields.PRACTICAL_LESSONS);
+        const totalSPOHours = this.getTotalHours(workProgramSectionFields.SPO);
+        const totalTotalHours = this.getTotalHours(workProgramSectionFields.TOTAL_HOURS);
+
         return (
-            <div className={classes.thirdStep}>
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell className={classes.headerCell} rowSpan={2} colSpan={2}> № раздела </TableCell>
-                                <TableCell className={classes.headerCell} rowSpan={2}>Наименование раздела дисциплины</TableCell>
-                                <TableCell className={classes.headerCell} colSpan={6}>Распределение часов по дисциплине</TableCell>
-                                <TableCell className={classes.headerCell} rowSpan={2}> </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell className={classes.headerCell}>Контактная работа</TableCell>
-                                <TableCell className={classes.headerCell}>Занятия лекционного типа</TableCell>
-                                <TableCell className={classes.headerCell}>Лабораторные занятия</TableCell>
-                                <TableCell className={classes.headerCell}>Практические занятия</TableCell>
-                                <TableCell className={classes.headerCell}>СРО</TableCell>
-                                <TableCell className={classes.headerCell}>Всего часов</TableCell>
-                            </TableRow>
-                        </TableHead>
+            <div className={classes.secondStep}>
+                <TableContainer className={classes.table}>
+                    <Scrollbars ref={(el) => {this.scrollBar = el}}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell className={classes.headerCell} rowSpan={2} colSpan={2}> № раздела </TableCell>
+                                    <TableCell className={classes.headerCell} rowSpan={2}>Наименование раздела дисциплины</TableCell>
+                                    <TableCell className={classes.headerCell} colSpan={6}>Распределение часов по дисциплине</TableCell>
+                                    <TableCell className={classes.headerCell} rowSpan={2}> </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell className={classes.headerCell}>Контактная работа</TableCell>
+                                    <TableCell className={classes.headerCell}>Занятия лекционного типа</TableCell>
+                                    <TableCell className={classes.headerCell}>Лабораторные занятия</TableCell>
+                                    <TableCell className={classes.headerCell}>Практические занятия</TableCell>
+                                    <TableCell className={classes.headerCell}>СРО</TableCell>
+                                    <TableCell className={classes.headerCell}>Всего часов</TableCell>
+                                </TableRow>
+                            </TableHead>
 
-                        <SortableList sections={sections}
-                                      useDragHandle={true}
-                                      hideSortableGhost={false}
-                                      removeNewSection={this.removeNewSection}
-                                      onSortEnd={this.onSortEnd}
-                        />
+                            <SortableList sections={sections}
+                                          useDragHandle={true}
+                                          hideSortableGhost={false}
+                                          removeNewSection={this.removeNewSection}
+                                          onSortEnd={this.onSortEnd}
+                            />
 
-                        {createNewSectionMode &&
+                            {createNewSectionMode &&
+                                <TableRow>
+                                    <TableCell style={{border: '1px solid rgba(224, 224, 224, 1'}}/>
+                                    <EditedRow section={this.getNewSection()} removeNewSection={this.removeNewSection}/>
+                                </TableRow>
+                            }
+
                             <TableRow>
-                                <TableCell />
-                                <EditedRow section={this.getNewSection()} removeNewSection={this.removeNewSection}/>
+                                <TableCell className={classes.headerCell} colSpan={3}> Всего </TableCell>
+                                <TableCell className={classes.headerCell}>{totalContactWorkHours}</TableCell>
+                                <TableCell className={classes.headerCell}>{totalLectureClassesHours}</TableCell>
+                                <TableCell className={classes.headerCell}>{totalLaboratoryClassesHours}</TableCell>
+                                <TableCell className={classes.headerCell}>{totalPracticalClassesHours}</TableCell>
+                                <TableCell className={classes.headerCell}>{totalSPOHours}</TableCell>
+                                <TableCell className={classes.headerCell}>{totalTotalHours}</TableCell>
+                                <TableCell className={classes.headerCell}></TableCell>
                             </TableRow>
-                        }
-                    </Table>
+                        </Table>
+                    </Scrollbars>
                 </TableContainer>
 
                 {!createNewSectionMode

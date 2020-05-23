@@ -26,6 +26,8 @@ import EditIcon from "@material-ui/icons/EditOutlined";
 import ThemeCreateModal from "./ThemeCreateModal";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import Fab from "@material-ui/core/Fab";
+import Scrollbars from "react-custom-scrollbars";
+import TableContainer from "@material-ui/core/TableContainer";
 
 class ThirdStep extends React.PureComponent<FourthStepProps> {
     handleCreateNewTopic = () => {
@@ -48,7 +50,8 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
         const {classes, sections} = this.props;
         return (
             <div className={classes.topicsSection}>
-                <div className={classes.topicsList}>
+                <Scrollbars>
+                    <div className={classes.topicsList}>
                     {sections.map(section => (
                         <div className={classes.sectionItem}>
                             <Typography className={classes.sectionTitle}>
@@ -99,6 +102,7 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
                         </div>
                     ))}
                 </div>
+                </Scrollbars>
 
                 <Fab color="secondary"
                      className={classes.addIcon}

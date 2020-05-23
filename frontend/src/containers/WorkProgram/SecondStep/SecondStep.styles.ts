@@ -1,9 +1,10 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
-    thirdStep: {
+    secondStep: {
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        height: '100%'
     },
     headerCell: {
         border: '1px solid rgba(224, 224, 224, 1)',
@@ -14,4 +15,9 @@ export default (theme: Theme) => createStyles({
         marginTop: '30px',
         marginLeft: 'auto'
     },
+    table: {
+        height: '100%',
+        maxHeight: '600px',
+        flex: 1
+    }
 });

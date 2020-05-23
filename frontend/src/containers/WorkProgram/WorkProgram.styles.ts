@@ -26,6 +26,7 @@ export default (theme: Theme) => createStyles({
     },
     subItem: {
         marginBottom: '20px',
+        height: '80%'
     },
     specializationSelector: {
         width: '465px'
