@@ -16,16 +16,16 @@ const saveTopic = createLogic({
     process({getState, action}: any, dispatch, done) {
         const state = getState();
         const workProgramId = getWorkProgramId(state);
-        const section = action.payload;
+        const topic = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_TOPIC}));
-
+        debugger
         let promise;
 
-        if (section.id) {
-            promise = service.saveTopic(section);
+        if (topic.id) {
+            promise = service.saveTopic(topic);
         } else {
-            promise = service.createNewTopic(section, workProgramId);
+            promise = service.createNewTopic(topic, workProgramId);
         }
 
         promise

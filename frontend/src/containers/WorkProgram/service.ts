@@ -80,7 +80,7 @@ class WorkProgramService extends BaseService{
 
         Object.keys(topic).forEach((key: string) => {
             // @ts-ignore
-            formData.append(key, section[key]);
+            formData.append(key, topic[key]);
         })
 
         // @ts-ignore

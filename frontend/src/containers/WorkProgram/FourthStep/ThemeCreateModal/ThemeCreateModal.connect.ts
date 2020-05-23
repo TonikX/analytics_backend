@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "../../actions";
-import {getWorkProgramField} from '../../getters';
+import {getAllSectionsForSelect, isOpenDialog, getDialogData} from '../../getters';
 import {WorkProgramActions} from "../../types";
 
 import {rootState} from "../../../../store/reducers";
@@ -21,6 +21,9 @@ const mapStateToProps = (state: rootState) => {
             value: '3',
             label: 'course 3'
         }],
+        sections: getAllSectionsForSelect(state),
+        isOpen: isOpenDialog(state, fields.CREATE_NEW_TOPIC_DIALOG),
+        topic: getDialogData(state, fields.CREATE_NEW_TOPIC_DIALOG),
     };
 };
 

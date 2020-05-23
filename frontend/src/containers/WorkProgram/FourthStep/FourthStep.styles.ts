@@ -34,7 +34,9 @@ export default (theme: Theme) => createStyles({
         borderBottom: '1px solid #ccc',
         //@ts-ignore
         fontWeight: '500',
-        color: theme.palette.primary.main
+        color: theme.palette.primary.main,
+        display: "flex",
+        alignItems: 'center'
     },
     topicsSectionList: {
 
@@ -50,5 +52,9 @@ export default (theme: Theme) => createStyles({
     topicName: {
         width: '40%',
         minWidth: '300px'
+    },
+    sectionAddTopicIcon: {
+        marginLeft: '10px',
+        cursor: 'pointer'
     }
 });

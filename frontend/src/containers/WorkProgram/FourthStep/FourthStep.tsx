@@ -13,9 +13,10 @@ import Typography from "@material-ui/core/Typography";
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import AddIcon from "@material-ui/icons/Add";
+import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
 
 import {FourthStepProps} from './types';
-import {workProgramSectionFields, workProgramTopicFields} from "../enum";
+import {fields, workProgramSectionFields, workProgramTopicFields} from "../enum";
 
 import connect from './FourthStep.connect';
 import styles from './FourthStep.styles';
@@ -27,30 +28,24 @@ import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import Fab from "@material-ui/core/Fab";
 
 class FourthStep extends React.PureComponent<FourthStepProps> {
-    state = {
-        isOpenCreateModal: false
-    };
-
     handleCreateNewTopic = () => {
-        this.setState({isOpenCreateModal: true});
+        this.props.actions.openDialog({dialogType: fields.CREATE_NEW_TOPIC_DIALOG, data: {}});
     };
 
-    closeCreateNewTopicModal = () => {
-        this.setState({isOpenCreateModal: false});
+    handleCreateNewTopicOnSection = (sectionId: number) => () => {
+        this.props.actions.openDialog({dialogType: fields.CREATE_NEW_TOPIC_DIALOG, data: {[workProgramTopicFields.SECTION]: sectionId}});
     };
 
-    handleClickDelete = () => {
-
+    handleClickDelete = (id: string) => () => {
+        this.props.actions.deleteTopic(id);
     };
 
-    handleClickEdit = () => {
-
+    handleClickEdit = (topic: any) => () => {
+        this.props.actions.openDialog({dialogType: fields.CREATE_NEW_TOPIC_DIALOG, data: topic});
     };
 
     render() {
         const {classes, sections} = this.props;
-        const {isOpenCreateModal} = this.state;
-
         return (
             <div className={classes.topicsSection}>
                 <div className={classes.topicsList}>
@@ -58,6 +53,10 @@ class FourthStep extends React.PureComponent<FourthStepProps> {
                         <div className={classes.sectionItem}>
                             <Typography className={classes.sectionTitle}>
                                 {section[workProgramSectionFields.ORDINAL_NUMBER]}. {section[workProgramSectionFields.NAME]}
+
+                                <AddCircleIcon className={classes.sectionAddTopicIcon}
+                                               onClick={this.handleCreateNewTopicOnSection(section[workProgramSectionFields.ID])}
+                                />
                             </Typography>
 
                             <div className={classes.topicsSectionList}>
@@ -87,10 +86,10 @@ class FourthStep extends React.PureComponent<FourthStepProps> {
                                         </div>
 
                                         <div className={classes.actions}>
-                                            <IconButton onClick={this.handleClickDelete}>
+                                            <IconButton onClick={this.handleClickDelete(topic[workProgramTopicFields.ID])}>
                                                 <DeleteIcon />
                                             </IconButton>
-                                            <IconButton onClick={this.handleClickEdit}>
+                                            <IconButton onClick={this.handleClickEdit(topic)}>
                                                 <EditIcon />
                                             </IconButton>
                                         </div>
@@ -108,7 +107,7 @@ class FourthStep extends React.PureComponent<FourthStepProps> {
                     <AddIcon/>
                 </Fab>
 
-                <ThemeCreateModal isOpen={isOpenCreateModal} handleClose={this.closeCreateNewTopicModal} />
+                <ThemeCreateModal />
             </div>
         );
     }

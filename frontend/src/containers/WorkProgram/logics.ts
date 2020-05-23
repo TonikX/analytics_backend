@@ -9,7 +9,7 @@ import {getWorkProgramId} from './getters';
 import {fetchingTypes} from "./enum";
 
 import sectionLogics from './logics/sections.logics';
-import themeLogics from './logics/topics.logics';
+import topicLogics from './logics/topics.logics';
 
 const service = new Service();
 
@@ -64,7 +64,7 @@ const saveWorkProgram = createLogic({
 
 export default [
     ...sectionLogics,
-    ...themeLogics,
+    ...topicLogics,
     getWorkProgram,
     saveWorkProgram,
 ];

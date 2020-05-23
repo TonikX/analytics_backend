@@ -16,11 +16,19 @@ export interface WorkProgramActions {
     saveTopic: any;
     deleteTopic: any;
     changeTopicNumber: any;
+
+    openDialog: any;
+    closeDialog: any;
 }
 
 export interface workProgramState {
     [fields.WORK_PROGRAM]: any;
     [fields.WORK_PROGRAM_ID]: string;
+    [fields.DIALOGS]: {
+        [fields.CREATE_NEW_TOPIC_DIALOG]: {
+
+        }
+    };
 }
 
 export interface WorkProgramProps extends WithStyles<typeof styles> {

@@ -19,6 +19,13 @@ class FirstStep extends React.Component<FirstStepProps> {
         title: '',
     };
 
+    componentDidMount() {
+        this.setState({
+            title: this.props.title,
+            code: this.props.code,
+        })
+    }
+
     componentDidUpdate(prevProps: Readonly<FirstStepProps>, prevState: Readonly<{}>, snapshot?: any) {
         if (prevProps.title !== this.props.title || prevProps.code !== this.props.code){
             this.setState({
@@ -29,10 +36,14 @@ class FirstStep extends React.Component<FirstStepProps> {
     }
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
-        this.props.actions.saveWorkProgram({
-            destination: field,
-            value: get(e, 'target.value')
-        });
+        const value = get(e, 'target.value');
+
+        if (value.length !== 0){
+            this.props.actions.saveWorkProgram({
+                destination: field,
+                value: get(e, 'target.value')
+            });
+        }
     };
 
     changeCode = (e: React.ChangeEvent) => {

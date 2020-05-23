@@ -4,7 +4,7 @@ import {rootState} from '../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 
-import {fields} from './enum';
+import {fields, workProgramSectionFields} from './enum';
 
 import {workProgramState} from './types';
 
@@ -12,3 +12,17 @@ const getStateData = (state: rootState): workProgramState => get(state, GENERAL_
 export const getWorkProgram = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM, {});
 export const getWorkProgramId = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_ID, '');
 export const getWorkProgramField = (state: rootState, field: string) => get(getWorkProgram(state), field);
+
+export const getDialogs = (state: rootState) => get(getStateData(state), fields.DIALOGS, {});
+
+export const isOpenDialog = (state: rootState, dialog: string) => get(getDialogs(state), [dialog, fields.IS_OPEN_DIALOG], false);
+export const getDialogData = (state: rootState, dialog: string) => get(getDialogs(state), [dialog, fields.DIALOG_DATA], {});
+
+export const getAllSectionsForSelect = (state: rootState) => {
+    const allSections = getWorkProgramField(state, fields.WORK_PROGRAM_SECTIONS);
+
+    return allSections.map((section: any) => ({
+        label: section[workProgramSectionFields.NAME],
+        value: section[workProgramSectionFields.ID],
+    }))
+};

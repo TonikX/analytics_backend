@@ -16,7 +16,7 @@ export default (theme: Theme) => createStyles({
         width: '70px'
     },
     largeInput: {
-        width: '300px'
+        width: '240px'
     },
     saveIcon: {
         color: 'green'
