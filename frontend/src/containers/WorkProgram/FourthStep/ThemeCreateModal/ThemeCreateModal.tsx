@@ -38,60 +38,67 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
         const {isOpen, classes, courses} = this.props;
 
         return (
-            <div>
-                <Dialog
-                    open={isOpen}
-                    onClose={this.handleClose}
-                >
-                    <DialogTitle> Создать тему</DialogTitle>
-                    <DialogContent>
-                        <TextField label="Название темы"
-                                   onChange={this.saveField}
-                                   variant="outlined"
-                                   className={classes.input}
-                                   fullWidth
-                        />
-                        <FormControl>
-                            <InputLabel shrink id="online-course-label">
-                                Онлайн курс
-                            </InputLabel>
-                            <Select
-                                variant="outlined"
-                                className={classes.selector}
-                                // @ts-ignore
-                                onChange={this.saveField}
-                                fullWidth
-                                displayEmpty
-                                input={
-                                    <OutlinedInput
-                                        notched
-                                        labelWidth={100}
-                                        name="course"
-                                        id="online-course-label"
-                                    />
-                                }
-                            >
-                                {courses.map(item =>
-                                    <MenuItem value={item.value} key={`group-${item.value}`}>
-                                        {item.label}
-                                    </MenuItem>
-                                )}
-                            </Select>
-                        </FormControl>
-                    </DialogContent>
-                    <DialogActions className={classes.actions}>
-                        <Button onClick={this.handleClose}
-                                variant="outlined">
-                            Отмена
-                        </Button>
-                        <Button onClick={this.handleSave}
-                                variant="outlined"
-                                color="primary">
-                            Сохранить
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
+            <Dialog
+                open={isOpen}
+                onClose={this.handleClose}
+                classes={{
+                    paper: classes.dialog
+                }}
+            >
+                <DialogTitle> Создать тему</DialogTitle>
+                <DialogContent>
+                    <TextField label="Название темы"
+                               onChange={this.saveField}
+                               variant="outlined"
+                               className={classes.input}
+                               fullWidth
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}
+                    />
+                    <FormControl className={classes.courseSelector}>
+                        <InputLabel shrink id="online-course-label">
+                            Онлайн курс
+                        </InputLabel>
+                        <Select
+                            variant="outlined"
+                            className={classes.selector}
+                            // @ts-ignore
+                            onChange={this.saveField}
+                            fullWidth
+                            displayEmpty
+                            input={
+                                <OutlinedInput
+                                    notched
+                                    labelWidth={100}
+                                    name="course"
+                                    id="online-course-label"
+                                />
+                            }
+                        >
+                            <MenuItem value="" key={`group-0`}>
+                                Нет курса
+                            </MenuItem>
+                            {courses.map(item =>
+                                <MenuItem value={item.value} key={`group-${item.value}`}>
+                                    {item.label}
+                                </MenuItem>
+                            )}
+                        </Select>
+                    </FormControl>
+                </DialogContent>
+                <DialogActions className={classes.actions}>
+                    <Button onClick={this.handleClose}
+                            variant="text">
+                        Отмена
+                    </Button>
+                    <Button onClick={this.handleSave}
+                            variant="contained"
+                            color="primary">
+                        Сохранить
+                    </Button>
+                </DialogActions>
+            </Dialog>
         );
     }
 }

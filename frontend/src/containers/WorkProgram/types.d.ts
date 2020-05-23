@@ -1,4 +1,6 @@
 import {fields} from './enum';
+import {WithStyles} from "@material-ui/core";
+import styles from "./WorkProgram.styles";
 
 export interface WorkProgramActions {
     getWorkProgram: any;
@@ -16,7 +18,7 @@ export interface workProgramState {
     [fields.WORK_PROGRAM_ID]: string;
 }
 
-export interface WorkProgramProps {
+export interface WorkProgramProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
 }
 

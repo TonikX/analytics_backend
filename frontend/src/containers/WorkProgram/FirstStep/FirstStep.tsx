@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import InputsLoader from '../../../components/InputsLoader';
+import Selector from './Selector';
 
 import {FirstStepProps} from './types';
 import {fields} from "../enum";
@@ -51,33 +52,34 @@ class FirstStep extends React.Component<FirstStepProps> {
         const {title, code} = this.state;
 
         return (
-            <div className={classes.wrap}>
-                <div className={classes.marginRight}>
-                    <InputsLoader loading={fetchingCode}>
-                        <TextField type="number"
-                                   variant="outlined"
-                                   placeholder="Код программы"
-                                   size="small"
-                                   className={classes.programInput}
-                                   value={code}
-                                   onBlur={this.saveField(fields.WORK_PROGRAM_CODE)}
-                                   onChange={this.changeCode}
-                                   disabled={fetchingCode}
-                        />
-                    </InputsLoader>
-                </div>
+            <>
+                <InputsLoader loading={fetchingCode}>
+                    <TextField type="number"
+                               variant="outlined"
+                               label="Код программы"
+                               className={classes.input}
+                               value={code}
+                               onBlur={this.saveField(fields.WORK_PROGRAM_CODE)}
+                               onChange={this.changeCode}
+                               disabled={fetchingCode}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}
+                    />
+                </InputsLoader>
                 <InputsLoader loading={fetchingTitle}>
                     <TextField variant="outlined"
-                               placeholder="Название дисциплины"
-                               size="small"
+                               label="Название дисциплины"
                                value={title}
-                               className={classes.titleInput}
+                               className={classes.input}
                                onBlur={this.saveField(fields.WORK_PROGRAM_TITLE)}
                                onChange={this.changeTitle}
                                disabled={fetchingTitle}
                     />
                 </InputsLoader>
-            </div>
+
+                <Selector />
+            </>
         );
     }
 }

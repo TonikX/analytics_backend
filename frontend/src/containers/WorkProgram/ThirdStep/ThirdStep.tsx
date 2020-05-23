@@ -12,7 +12,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 
 import Paper from "@material-ui/core/Paper";
-import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import withStyles from '@material-ui/core/styles/withStyles';
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
@@ -68,7 +68,7 @@ class ThirdStep extends React.PureComponent<ThirdStepProps> {
 
         return (
             <div className={classes.thirdStep}>
-                <TableContainer component={Paper}>
+                <TableContainer>
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -104,14 +104,12 @@ class ThirdStep extends React.PureComponent<ThirdStepProps> {
                 </TableContainer>
 
                 {!createNewSectionMode
-                    && <Button color="primary"
-                               variant="outlined"
-                               className={classes.addIcon}
-                               onClick={this.handleCreateNewSection}
+                    && <Fab color="secondary"
+                            className={classes.addIcon}
+                            onClick={this.handleCreateNewSection}
                         >
                         <AddIcon/>
-                        Добавить раздел
-                    </Button>
+                    </Fab>
                 }
             </div>
         );
@@ -123,7 +121,7 @@ const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "poin
 // @ts-ignore
 const SortableItem = SortableElement(({section, removeNewSection}) =>
     <TableRow>
-        <TableCell style={{backgroundColor: '#fff'}} >
+        <TableCell style={{backgroundColor: '#fff', border: '1px solid rgba(224, 224, 224, 1)'}} >
             <DragHandle />
         </TableCell>
         <EditedRow section={section} removeNewSection={removeNewSection}/>

@@ -14,8 +14,9 @@ const muiTheme = createMuiTheme({
     typography: {
         useNextVariants: true,
         fontFamily: [
-            'Open Sans',
-            'sans-serif'
+            'Montserrat',
+            'Roboto Slab',
+            'Source Sans Pro'
         ].join(','),
         fontSize: 15
     },
@@ -35,7 +36,25 @@ const muiTheme = createMuiTheme({
             primary: TEXT_COLOR,
         },
     },
-    appBarHeight: 64
+    overrides: {
+        MuiStepIcon: {
+            root: {
+                '&$completed': {
+                    color: SECONDARY,
+                },
+                '&$active': {
+                    color: SECONDARY,
+                },
+            },
+            active: {},
+            completed: {},
+        },
+        MuiButton: {
+            root: {
+                padding: '5px 25px !important'
+            },
+        },
+    }
 });
 
 export default muiTheme;

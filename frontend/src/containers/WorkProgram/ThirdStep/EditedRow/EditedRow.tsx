@@ -181,16 +181,16 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                 </TableCell>
                 <TableCell className={classes.centerCell}>
                 {!isEditMode ?
-                    <>
+                    <div className={classes.actions}>
                         <IconButton onClick={this.handleClickDelete}>
                             <DeleteIcon />
                         </IconButton>
                         <IconButton onClick={this.setEditModeTrue}>
                             <EditIcon />
                         </IconButton>
-                    </>
+                    </div>
                         :
-                        <>
+                    <div className={classes.actions}>
                             {section.id ?
                                 <IconButton onClick={this.handleClickCancel}>
                                     <CancelIcon/>
@@ -203,7 +203,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                             <IconButton onClick={this.handleClickSave}>
                                 <SuccessIcon className={classes.saveIcon} />
                             </IconButton>
-                        </>
+                        </div>
                     }
 
                 </TableCell>

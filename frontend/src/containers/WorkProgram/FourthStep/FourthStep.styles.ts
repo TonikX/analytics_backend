@@ -2,7 +2,7 @@ import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
     addIcon: {
-        marginTop: '-15px',
+        marginTop: '30px',
         marginLeft: 'auto',
     },
     topicsSection: {
@@ -11,23 +11,7 @@ export default (theme: Theme) => createStyles({
     },
     topicsList: {
         display: 'flex',
-        flexWrap: 'wrap',
-    },
-    paper: {
-        marginLeft: '25px',
-        marginBottom: '25px',
-        width: '700px',
-    },
-    headItem: {
-        padding: '5px 20px',
-        '& span': {
-            fontWeight: "bold"
-        }
-    },
-    item: {
-        padding: '5px 20px',
-        display: 'flex',
-        justifyContent: "space-between"
+        flexDirection: 'column'
     },
     onlineCourseItem: {
         padding: '5px 35px',
@@ -39,6 +23,32 @@ export default (theme: Theme) => createStyles({
     },
     actions: {
         display: 'flex',
-        height: 'fit-content'
+        height: 'fit-content',
+        marginLeft: 'auto'
+    },
+    sectionItem: {
+
+    },
+    sectionTitle: {
+        padding: '10px',
+        borderBottom: '1px solid #ccc',
+        //@ts-ignore
+        fontWeight: '500',
+        color: theme.palette.primary.main
+    },
+    topicsSectionList: {
+
+    },
+    topic: {
+        display: 'flex',
+        borderBottom: '1px solid #ccc',
+        alignItems: 'center',
+        padding: '0 0 0 20px',
+        boxSizing: 'border-box',
+        height: '50px'
+    },
+    topicName: {
+        width: '40%',
+        minWidth: '300px'
     }
 });

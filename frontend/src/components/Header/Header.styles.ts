@@ -8,8 +8,8 @@ export default (theme: Theme) => createStyles({
     header: {
         zIndex: 10000
     },
-    // @ts-ignore
     popper: {
+        // @ts-ignore
         zIndex: '10000 !important'
     },
     link: {

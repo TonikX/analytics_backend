@@ -11,7 +11,7 @@ export default (theme: Theme) => createStyles({
         fontWeight: 'bold'
     },
     addIcon: {
-        marginTop: '10px',
+        marginTop: '30px',
         marginLeft: 'auto'
     },
 });

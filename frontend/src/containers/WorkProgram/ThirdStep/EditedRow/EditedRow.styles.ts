@@ -6,7 +6,8 @@ export default (theme: Theme) => createStyles({
     },
     centerCell: {
         textAlign: 'center',
-        background: '#fff'
+        background: '#fff',
+        border: '1px solid rgba(224, 224, 224, 1)'
     },
     cell: {
         background: '#fff'
@@ -19,5 +20,8 @@ export default (theme: Theme) => createStyles({
     },
     saveIcon: {
         color: 'green'
+    },
+    actions: {
+        display: 'flex'
     }
 });

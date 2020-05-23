@@ -23,6 +23,8 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import ThemeCreateModal from "./ThemeCreateModal";
+import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
+import Fab from "@material-ui/core/Fab";
 
 class FourthStep extends React.PureComponent<FourthStepProps> {
     state = {
@@ -52,59 +54,59 @@ class FourthStep extends React.PureComponent<FourthStepProps> {
         return (
             <div className={classes.topicsSection}>
                 <div className={classes.topicsList}>
-                    {sections.map(section =>
-                        <Paper className={classes.paper} key={`4-part-section-${section.id}`}>
-                            <List>
-                                <ListItemText className={classes.headItem} primary={`
-                                ${section[workProgramSectionFields.ORDINAL_NUMBER]}. ${section[workProgramSectionFields.NAME]}
-                            `} />
-                                <Divider />
-                                {section[workProgramSectionFields.TOPICS].map(topic =>
-                                    <>
-                                        <div className={classes.item} key={`4-part-section-${section}-topic-${topic.id}`}>
-                                            <div>
-                                                <Typography>
-                                                    {section[workProgramSectionFields.ORDINAL_NUMBER]}.
-                                                    {topic[workProgramTopicFields.NUMBER]}. {topic[workProgramTopicFields.DESCRIPTION]}
-                                                </Typography>
+                    {sections.map(section => (
+                        <div className={classes.sectionItem}>
+                            <Typography className={classes.sectionTitle}>
+                                {section[workProgramSectionFields.ORDINAL_NUMBER]}. {section[workProgramSectionFields.NAME]}
+                            </Typography>
 
-                                                <div className={classes.onlineCourseItem}>
-                                                    <Typography>Онлайн курс: </Typography>&nbsp;
-                                                    <Link to={"/"} className={classes.link}>
-                                                        <Typography> название курса </Typography>
-                                                    </Link>
-                                                </div>
-                                            </div>
-
-                                            <div className={classes.actions}>
-                                                <IconButton onClick={this.handleClickDelete}>
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                                <IconButton onClick={this.handleClickEdit}>
-                                                    <EditIcon />
-                                                </IconButton>
-                                            </div>
-                                        </div>
-                                    </>
-                                )}
+                            <div className={classes.topicsSectionList}>
                                 {section[workProgramSectionFields.TOPICS].length === 0 &&
-                                    <div className={classes.item}>
-                                        <Typography> В разделе пока нет тем</Typography>
+                                    <div>
+                                        <div className={classes.topic}>
+                                            <Typography className={classes.topicName}>
+                                                В этом разделе пока не создано тем
+                                            </Typography>
+                                        </div>
                                     </div>
                                 }
-                            </List>
-                        </Paper>
-                    )}
+                                {section[workProgramSectionFields.TOPICS].map(topic =>
+                                    <div className={classes.topic}>
+                                        <DragIndicatorIcon style={{cursor: "pointer"}}/>
+
+                                        <Typography className={classes.topicName}>
+                                            {section[workProgramSectionFields.ORDINAL_NUMBER]}.
+                                            {topic[workProgramTopicFields.NUMBER]}. {topic[workProgramTopicFields.DESCRIPTION]}
+                                        </Typography>
+
+                                        <div className={classes.onlineCourseItem}>
+                                            <Typography>Онлайн курс: </Typography>&nbsp;
+                                            <Link to={"/"} className={classes.link}>
+                                                <Typography> название курса </Typography>
+                                            </Link>
+                                        </div>
+
+                                        <div className={classes.actions}>
+                                            <IconButton onClick={this.handleClickDelete}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                            <IconButton onClick={this.handleClickEdit}>
+                                                <EditIcon />
+                                            </IconButton>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
-                <Button color="primary"
-                        variant="outlined"
-                        className={classes.addIcon}
-                        onClick={this.handleCreateNewTopic}
+                <Fab color="secondary"
+                     className={classes.addIcon}
+                     onClick={this.handleCreateNewTopic}
                 >
                     <AddIcon/>
-                    Добавить тему
-                </Button>
+                </Fab>
 
                 <ThemeCreateModal isOpen={isOpenCreateModal} handleClose={this.closeCreateNewTopicModal} />
             </div>

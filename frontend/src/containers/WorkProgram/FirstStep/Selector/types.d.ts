@@ -1,5 +1,5 @@
 import {WithStyles} from "@material-ui/core";
-import styles from "./SecondStep.styles";
+import styles from "./Selector.styles";
 
 export interface SecondStepProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
