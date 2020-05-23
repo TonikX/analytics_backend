@@ -7,19 +7,16 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-
-import withStyles from '@material-ui/core/styles/withStyles';
-
-import connect from './ThemeCreateModal.connect';
-import styles from './ThemeCreateModal.styles';
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputLabel from "@material-ui/core/InputLabel";
-import {fields} from "../../enum";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
-import InputsLoader from "../../../../components/InputsLoader/InputsLoader";
+import withStyles from '@material-ui/core/styles/withStyles';
+
+import connect from './ThemeCreateModal.connect';
+import styles from './ThemeCreateModal.styles';
 
 class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
     handleClose = () => {
@@ -31,7 +28,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
     }
 
     saveField = () => {
-
+        this.props.actions.saveNewTheme();
     }
 
     render() {

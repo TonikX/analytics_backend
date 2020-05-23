@@ -12,6 +12,10 @@ const saveSection = createAction<string>('SAVE_SECTION');
 const deleteSection = createAction<string>('DELETE_SECTION');
 const changeSectionNumber = createAction<string>('CHANGE_SECTION_NUMBER');
 
+const saveTopic = createAction<string>('SAVE_TOPIC');
+const deleteTopic = createAction<string>('DELETE_TOPIC');
+const changeTopicNumber = createAction<string>('CHANGE_TOPIC_NUMBER');
+
 const actions: WorkProgramActions = {
     getWorkProgram,
     setWorkProgram,
@@ -21,6 +25,9 @@ const actions: WorkProgramActions = {
     saveSection,
     deleteSection,
     changeSectionNumber,
+    saveTopic,
+    deleteTopic,
+    changeTopicNumber,
 }
 
 export default actions;

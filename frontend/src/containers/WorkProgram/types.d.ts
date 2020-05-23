@@ -8,9 +8,14 @@ export interface WorkProgramActions {
     setWorkProgramPart: any;
     saveWorkProgram: any;
     setWorkProgramId: any;
+
     deleteSection: any;
     saveSection: any;
     changeSectionNumber: any;
+
+    saveTopic: any;
+    deleteTopic: any;
+    changeTopicNumber: any;
 }
 
 export interface workProgramState {
