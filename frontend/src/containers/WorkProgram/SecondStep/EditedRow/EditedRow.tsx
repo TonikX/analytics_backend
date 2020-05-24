@@ -37,6 +37,15 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
         }
     }
 
+    calculateTotalHours = () => {
+        const {section} = this.state;
+
+        const totalHours = section[workProgramSectionFields.CONTACT_WORK] + section[workProgramSectionFields.LECTURE_CLASSES] +
+            section[workProgramSectionFields.PRACTICAL_LESSONS] + section[workProgramSectionFields.TOTAL_HOURS];
+
+        return totalHours;
+    }
+
     setEditModeTrue = () => {
         this.setState({isEditMode: true});
     }
@@ -56,7 +65,10 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     handleClickSave = () => {
         this.setEditModeFalse();
 
-        this.props.actions.saveSection(this.state.section);
+        this.props.actions.saveSection({
+            ...this.state.section,
+            [workProgramSectionFields.TOTAL_HOURS] : this.calculateTotalHours()
+        });
 
         if (!this.props.section.id){
             this.props.removeNewSection();
@@ -167,30 +179,20 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     }
                 </TableCell>
                 <TableCell className={classes.centerCell}>
-                    {isEditMode ?
-                        <TextField variant="outlined"
-                                   size="small"
-                                   defaultValue={section[workProgramSectionFields.TOTAL_HOURS]}
-                                   className={classes.smallInput}
-                                   type="number"
-                                   onChange={this.handleChangeField(workProgramSectionFields.TOTAL_HOURS)}
-                        />
-                        :
-                        <>{section.total_hours}</>
-                    }
+                    <>{section.total_hours}</>
                 </TableCell>
                 <TableCell className={classes.centerCell}>
                 {!isEditMode ?
-                    <>
+                    <div className={classes.actions}>
                         <IconButton onClick={this.handleClickDelete}>
                             <DeleteIcon />
                         </IconButton>
                         <IconButton onClick={this.setEditModeTrue}>
                             <EditIcon />
                         </IconButton>
-                    </>
+                    </div>
                         :
-                        <>
+                    <div className={classes.actions}>
                             {section.id ?
                                 <IconButton onClick={this.handleClickCancel}>
                                     <CancelIcon/>
@@ -203,7 +205,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                             <IconButton onClick={this.handleClickSave}>
                                 <SuccessIcon className={classes.saveIcon} />
                             </IconButton>
-                        </>
+                        </div>
                     }
 
                 </TableCell>

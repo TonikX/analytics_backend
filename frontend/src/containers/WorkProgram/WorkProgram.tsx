@@ -2,19 +2,28 @@ import React from 'react';
 import get from 'lodash/get';
 
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
 
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepButton from '@material-ui/core/StepButton';
+
 import FirstStep from "./FirstStep";
-import SecondStep from "./SecondStep";
-import ThirdStep from "./ThirdStep";
+import SecondStep from "./FirstStep/Selector";
+import ThirdStep from "./SecondStep";
 
 import {WorkProgramProps} from './types';
 
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
-import FourthStep from "./FourthStep";
+import FourthStep from "./ThirdStep";
 
 class WorkProgram extends React.Component<WorkProgramProps> {
+    state = {
+        activeStep: 2
+    };
+
     componentDidMount() {
         const workProgramId = get(this, 'props.match.params.id');
 
@@ -22,44 +31,74 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         this.props.actions.setWorkProgramId(workProgramId);
     }
 
-    render() {
-        // @ts-ignore
+    handleStep = (number: number) => () => {
+        this.setState({activeStep: number})
+    };
+
+    renderContent = () => {
         const {classes} = this.props;
+        const {activeStep} = this.state;
 
-        return (
-            <>
-                <Typography className={classes.title}>Описание рабочей программы дисциплины</Typography>
-
-                <div className={classes.subItem}>
-                    <Typography className={classes.subTitle}>1. Введите код программы и название дисциплины </Typography>
-
-                    <FirstStep />
-                </div>
-
-                <div className={classes.subItem}>
+        switch (activeStep) {
+            case 0:
+                return <>
+                    <div className={classes.subItem}>
+                        <FirstStep />
+                    </div>
+                </>;
+            case 1:
+                return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
-                        2. Место дисциплины в структуре образовательной программы высшего образования (ОП ВО)
-                    </Typography>
-
-                    <SecondStep />
-                </div>
-
-                <div className={classes.subItem}>
-                    <Typography className={classes.subTitle}>
-                        3. Разделы
+                        Разделы
                     </Typography>
 
                     <ThirdStep />
-                </div>
-
-                <div className={classes.subItem}>
+                </div>;
+            case 2:
+                return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
-                        4. Содержание дисциплины
+                        Содержание дисциплины
                     </Typography>
 
                     <FourthStep />
+                </div>;
+        }
+    }
+
+    render() {
+        const {classes} = this.props;
+        const {activeStep} = this.state;
+
+        const steps = ['Главное', 'Разделы', "Темы", "Содержание", "Оценочные средства", "Пререквизиты", "Результаты обучения"];
+
+        return (
+            <Paper className={classes.root}>
+                <Stepper activeStep={activeStep}
+                         orientation="vertical"
+                         nonLinear
+                         className={classes.stepper}
+                >
+                    {steps.map((label, index) => {
+
+                        return (
+                            <Step key={label}>
+                                <StepButton onClick={this.handleStep(index)}
+                                            completed={index === 1 || index === 0}
+                                >
+                                    {label}
+                                </StepButton>
+                            </Step>
+                        );
+                    })}
+                </Stepper>
+
+                <div className={classes.content}>
+                    <Typography className={classes.title}>Описание рабочей программы дисциплины</Typography>
+
+                    {this.renderContent()}
                 </div>
-            </>
+
+            </Paper>
         );
     }
 }

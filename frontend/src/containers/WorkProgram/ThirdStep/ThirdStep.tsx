@@ -1,148 +1,120 @@
 import React from 'react';
-import get from 'lodash/get';
-import {shallowEqual} from "recompose";
 
-import {SortableContainer, SortableElement, SortableHandle} from 'react-sortable-hoc';
+// @ts-ignore
+import Link from "react-router-dom/Link";
 
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-
+import List from "@material-ui/core/List";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItem from "@material-ui/core/ListItem";
+import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
+import Typography from "@material-ui/core/Typography";
 import withStyles from '@material-ui/core/styles/withStyles';
-import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 
-import EditedRow from "./EditedRow";
+import AddIcon from "@material-ui/icons/Add";
+import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
 
-import {ThirdStepProps} from './types';
+import {FourthStepProps} from './types';
+import {fields, workProgramSectionFields, workProgramTopicFields} from "../enum";
 
 import connect from './ThirdStep.connect';
 import styles from './ThirdStep.styles';
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import EditIcon from "@material-ui/icons/EditOutlined";
+import ThemeCreateModal from "./ThemeCreateModal";
+import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
+import Fab from "@material-ui/core/Fab";
+import Scrollbars from "react-custom-scrollbars";
+import TableContainer from "@material-ui/core/TableContainer";
 
-//todo: add shouldcomponentupdate
-
-class ThirdStep extends React.PureComponent<ThirdStepProps> {
-    state = {
-        createNewSectionMode: false
-    }
-
-    getNewSection = () => ({
-        name: '',
-        SRO: '',
-        contact_work: '',
-        lecture_classes: '',
-        practical_lessons: '',
-        total_hours: '',
-        laboratory: '',
-        ordinal_number: get(this, 'props.sections.length', 0) + 1 ,
-    })
-
-    handleCreateNewSection = () => {
-        this.setState({
-            createNewSectionMode: true,
-        });
-
+class ThirdStep extends React.PureComponent<FourthStepProps> {
+    handleCreateNewTopic = () => {
+        this.props.actions.openDialog({dialogType: fields.CREATE_NEW_TOPIC_DIALOG, data: {}});
     };
 
-    removeNewSection = () => {
-        this.setState({
-            createNewSectionMode: false,
-        });
-    }
+    handleCreateNewTopicOnSection = (sectionId: number) => () => {
+        this.props.actions.openDialog({dialogType: fields.CREATE_NEW_TOPIC_DIALOG, data: {[workProgramTopicFields.SECTION]: sectionId}});
+    };
 
-    onSortEnd = ({oldIndex, newIndex}: any) => {
-        const {sections} = this.props;
+    handleClickDelete = (id: string) => () => {
+        this.props.actions.deleteTopic(id);
+    };
 
-        this.props.actions.changeSectionNumber({sectionId: sections[oldIndex].id, newNumber: newIndex + 1});
-    }
+    handleClickEdit = (topic: any) => () => {
+        this.props.actions.openDialog({dialogType: fields.CREATE_NEW_TOPIC_DIALOG, data: topic});
+    };
 
     render() {
-        // @ts-ignore
         const {classes, sections} = this.props;
-        const {createNewSectionMode} = this.state;
-
         return (
-            <div className={classes.thirdStep}>
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell className={classes.headerCell} rowSpan={2} colSpan={2}> № раздела </TableCell>
-                                <TableCell className={classes.headerCell} rowSpan={2}>Наименование раздела дисциплины</TableCell>
-                                <TableCell className={classes.headerCell} colSpan={6}>Распределение часов по дисциплине</TableCell>
-                                <TableCell className={classes.headerCell} rowSpan={2}> </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell className={classes.headerCell}>Контактная работа</TableCell>
-                                <TableCell className={classes.headerCell}>Занятия лекционного типа</TableCell>
-                                <TableCell className={classes.headerCell}>Лабораторные занятия</TableCell>
-                                <TableCell className={classes.headerCell}>Практические занятия</TableCell>
-                                <TableCell className={classes.headerCell}>СРО</TableCell>
-                                <TableCell className={classes.headerCell}>Всего часов</TableCell>
-                            </TableRow>
-                        </TableHead>
+            <div className={classes.topicsSection}>
+                <Scrollbars>
+                    <div className={classes.topicsList}>
+                    {sections.map(section => (
+                        <div className={classes.sectionItem}>
+                            <Typography className={classes.sectionTitle}>
+                                {section[workProgramSectionFields.ORDINAL_NUMBER]}. {section[workProgramSectionFields.NAME]}
 
-                        <SortableList sections={sections}
-                                      useDragHandle={true}
-                                      hideSortableGhost={false}
-                                      removeNewSection={this.removeNewSection}
-                                      onSortEnd={this.onSortEnd}
-                        />
+                                <AddCircleIcon className={classes.sectionAddTopicIcon}
+                                               onClick={this.handleCreateNewTopicOnSection(section[workProgramSectionFields.ID])}
+                                />
+                            </Typography>
 
-                        {createNewSectionMode &&
-                            <TableRow>
-                                <TableCell />
-                                <EditedRow section={this.getNewSection()} removeNewSection={this.removeNewSection}/>
-                            </TableRow>
-                        }
-                    </Table>
-                </TableContainer>
+                            <div className={classes.topicsSectionList}>
+                                {section[workProgramSectionFields.TOPICS].length === 0 &&
+                                    <div>
+                                        <div className={classes.topic}>
+                                            <Typography className={classes.topicName}>
+                                                В этом разделе пока не создано тем
+                                            </Typography>
+                                        </div>
+                                    </div>
+                                }
+                                {section[workProgramSectionFields.TOPICS].map(topic =>
+                                    <div className={classes.topic}>
+                                        <DragIndicatorIcon style={{cursor: "pointer"}}/>
 
-                {!createNewSectionMode
-                    && <Button color="primary"
-                               variant="outlined"
-                               className={classes.addIcon}
-                               onClick={this.handleCreateNewSection}
-                        >
-                        <AddIcon/>
-                        Добавить раздел
-                    </Button>
-                }
+                                        <Typography className={classes.topicName}>
+                                            {section[workProgramSectionFields.ORDINAL_NUMBER]}.
+                                            {topic[workProgramTopicFields.NUMBER]}. {topic[workProgramTopicFields.DESCRIPTION]}
+                                        </Typography>
+
+                                        <div className={classes.onlineCourseItem}>
+                                            <Typography>Онлайн курс: </Typography>&nbsp;
+                                            <Link to={"/"} className={classes.link}>
+                                                <Typography> название курса </Typography>
+                                            </Link>
+                                        </div>
+
+                                        <div className={classes.actions}>
+                                            <IconButton onClick={this.handleClickDelete(topic[workProgramTopicFields.ID])}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                            <IconButton onClick={this.handleClickEdit(topic)}>
+                                                <EditIcon />
+                                            </IconButton>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                </Scrollbars>
+
+                <Fab color="secondary"
+                     className={classes.addIcon}
+                     onClick={this.handleCreateNewTopic}
+                >
+                    <AddIcon/>
+                </Fab>
+
+                <ThemeCreateModal />
             </div>
         );
     }
 }
 
-const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}}/>);
-
-// @ts-ignore
-const SortableItem = SortableElement(({section, removeNewSection}) =>
-    <TableRow>
-        <TableCell style={{backgroundColor: '#fff'}} >
-            <DragHandle />
-        </TableCell>
-        <EditedRow section={section} removeNewSection={removeNewSection}/>
-    </TableRow>
-);
-
-// @ts-ignore
-const SortableList = SortableContainer(({sections, removeNewSection}) => {
-    return (<TableBody>
-            {sections.map((value: any, index: number) => (
-                <SortableItem key={`item-${value.id}`}
-                              index={index}
-                              section={value}
-                              removeNewSection={removeNewSection}
-                />
-            ))}
-        </TableBody>
-    );
-});
-
-// @ts-ignore
 export default connect(withStyles(styles)(ThirdStep));

@@ -4,10 +4,10 @@ import {bindActionCreators} from "redux";
 
 import actions from "../actions";
 import {getWorkProgramField} from '../getters';
+import {fields} from "../enum";
 import {WorkProgramActions} from "../types";
 
 import {rootState} from "../../../store/reducers";
-import {fields} from "../enum";
 
 const mapStateToProps = (state:rootState) => {
     return {

@@ -4,16 +4,14 @@ import {bindActionCreators} from "redux";
 
 import actions from "../actions";
 import {getWorkProgramField} from '../getters';
-import {fields} from "../enum";
 import {WorkProgramActions} from "../types";
 
-import {isFetchingComponentByKey} from "../../../layout/getters";
 import {rootState} from "../../../store/reducers";
+import {fields} from "../enum";
 
 const mapStateToProps = (state:rootState) => {
     return {
-        value: getWorkProgramField(state, fields.WORK_PROGRAM_QUALIFICATION),
-        isFetching: isFetchingComponentByKey(state, fields.WORK_PROGRAM_QUALIFICATION),
+        sections: getWorkProgramField(state, fields.WORK_PROGRAM_SECTIONS),
     };
 };
 

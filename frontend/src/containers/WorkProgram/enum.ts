@@ -5,9 +5,14 @@ export enum fields {
     WORK_PROGRAM_CODE = 'discipline_code',
     WORK_PROGRAM_QUALIFICATION = 'qualification',
     WORK_PROGRAM_SECTIONS = 'discipline_sections',
+    DIALOGS = 'DIALOGS',
+    CREATE_NEW_TOPIC_DIALOG = 'CREATE_NEW_TOPIC_DIALOG',
+    IS_OPEN_DIALOG = 'IS_OPEN_DIALOG',
+    DIALOG_DATA = 'DIALOG_DATA',
 }
 
 export enum workProgramSectionFields {
+    ID = 'id',
     ORDINAL_NUMBER = 'ordinal_number',
     NAME = 'name',
     SPO = 'SRO',
@@ -20,7 +25,9 @@ export enum workProgramSectionFields {
 }
 
 export enum workProgramTopicFields {
+    ID = 'id',
     DESCRIPTION = 'description',
+    SECTION = 'discipline_section',
     NUMBER = 'number'
 }
 
@@ -29,4 +36,7 @@ export enum fetchingTypes {
     SAVE_SECTION = 'SAVE_SECTION',
     DELETE_SECTION = 'DELETE_SECTION',
     CHANGE_SECTION_NUMBER = 'CHANGE_SECTION_NUMBER',
+    SAVE_TOPIC = 'SAVE_TOPIC',
+    DELETE_TOPIC = 'DELETE_TOPIC',
+    CHANGE_TOPIC_NUMBER = 'CHANGE_TOPIC_NUMBER',
 }

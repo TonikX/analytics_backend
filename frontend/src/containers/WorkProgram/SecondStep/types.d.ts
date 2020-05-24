@@ -1,8 +1,9 @@
-import {WithStyles} from "@material-ui/core";
-import styles from "./SecondStep.styles";
+import {WorkProgramActions} from '../types';
+import {Section} from '../types';
 
-export interface SecondStepProps extends WithStyles<typeof styles> {
+export interface SecondStepProps {
     actions: WorkProgramActions;
-    isFetching: boolean;
-    value: string;
+    sections: Array<Section>;
 }
+
+

@@ -1,11 +1,11 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
-    input: {
-        width: '400px',
-        marginBottom: '20px'
+    specializationSelector: {
+        width: '465px'
     },
-    marginRight: {
-        marginRight: '20px'
+    label: {
+        fontSize: '14px',
+        marginBottom: 10
     }
 });

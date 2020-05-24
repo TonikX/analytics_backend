@@ -1,7 +1,23 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
-    specializationSelector: {
-        width: '465px'
+    secondStep: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%'
+    },
+    headerCell: {
+        border: '1px solid rgba(224, 224, 224, 1)',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+    addIcon: {
+        marginTop: '30px',
+        marginLeft: 'auto'
+    },
+    table: {
+        height: '100%',
+        maxHeight: '600px',
+        flex: 1
     }
 });

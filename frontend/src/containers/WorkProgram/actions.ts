@@ -12,15 +12,30 @@ const saveSection = createAction<string>('SAVE_SECTION');
 const deleteSection = createAction<string>('DELETE_SECTION');
 const changeSectionNumber = createAction<string>('CHANGE_SECTION_NUMBER');
 
+const saveTopic = createAction<string>('SAVE_TOPIC');
+const deleteTopic = createAction<string>('DELETE_TOPIC');
+const changeTopicNumber = createAction<string>('CHANGE_TOPIC_NUMBER');
+
+const openDialog = createAction<string>('OPEN_DIALOG');
+const closeDialog = createAction<string>('CLOSE_DIALOG');
+
 const actions: WorkProgramActions = {
     getWorkProgram,
     setWorkProgram,
     setWorkProgramId,
     setWorkProgramPart,
     saveWorkProgram,
+
     saveSection,
     deleteSection,
     changeSectionNumber,
+
+    saveTopic,
+    deleteTopic,
+    changeTopicNumber,
+
+    openDialog,
+    closeDialog,
 }
 
 export default actions;

@@ -1,6 +1,6 @@
 import {ReactText} from "react";
 import BaseService from "../../service/base-service";
-import {Section} from "./types";
+import {Section, Topic} from "./types";
 
 class WorkProgramService extends BaseService{
     getWorkProgram(id: string){
@@ -59,6 +59,49 @@ class WorkProgramService extends BaseService{
 
     deleteSection(id: ReactText){
         return this.delete(`/api/sections/${id}`);
+    }
+
+    saveTopic(topic: Topic){
+        const formData = new FormData();
+
+        Object.keys(topic).forEach((key: string) => {
+            // @ts-ignore
+            if (section[key]){
+                // @ts-ignore
+                formData.append(key, section[key]);
+            }
+        })
+
+        return this.patch(`/api/topics/${topic.id}`, formData);
+    }
+
+    createNewTopic(topic: Topic, workProgramId: ReactText){
+        const formData = new FormData();
+
+        Object.keys(topic).forEach((key: string) => {
+            // @ts-ignore
+            formData.append(key, topic[key]);
+        })
+
+        // @ts-ignore
+        formData.append('work_program', workProgramId);
+
+        return this.post(`/api/topics/`, formData);
+    }
+
+    changeTopicNumber(newNumber: ReactText, topicId: ReactText){
+        const formData = new FormData();
+
+        // @ts-ignore
+        formData.append('new_ordinal_number', newNumber);
+        // @ts-ignore
+        formData.append('descipline_section', topicId);
+
+        return this.post(`/api/topics/NewOrdinalNumbers`, formData);
+    }
+
+    deleteTopic(id: ReactText){
+        return this.delete(`/api/topics/${id}`);
     }
 }
 
