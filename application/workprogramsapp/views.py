@@ -25,6 +25,8 @@ from .tables import FieldOfStudyWPTable
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 
 # Create your views here.
@@ -689,6 +691,8 @@ def NewOrdinalNumbersForDesciplineSectionAPI(request):
 class OnlineCourseListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = OnlineCourseSerializer
     queryset = OnlineCourse.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title','platform']
 
 
 class OnlineCourseDestroyView(generics.DestroyAPIView):
