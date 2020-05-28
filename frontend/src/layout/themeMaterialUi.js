@@ -1,4 +1,5 @@
 import {createMuiTheme} from '@material-ui/core/styles';
+import { ruRU } from '@material-ui/core/locale';
 
 export const PRIMARY = '#1d51a3';
 export const PRIMARY_HOVERED = '#163ea4';
@@ -55,6 +56,6 @@ const muiTheme = createMuiTheme({
             },
         },
     }
-});
+}, ruRU);
 
 export default muiTheme;

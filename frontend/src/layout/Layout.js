@@ -59,7 +59,7 @@ class Layout extends React.Component {
 
     render() {
         const {openMenu} = this.state;
-        const {classes, fetching, errors, successMessages, auth, myCourses} = this.props;
+        const {classes, fetching, errors, successMessages, auth} = this.props;
         const isAuth = userService.isAuth() && auth;
 
         return (
@@ -74,7 +74,7 @@ class Layout extends React.Component {
                             logout={this.logout}
                     />
                     <div className={classes.root}>
-                        {/**isAuth && <Menu isOpen={openMenu} myCourses={myCourses} />**/}
+                        {isAuth && <Menu isOpen={openMenu} />}
                         <div className={className(classes.content, {[classes.contentShift]: openMenu})}>
                             {this.props.children}
                         </div>

@@ -26,7 +26,8 @@ export default (theme: Theme) => createStyles({
     actions: {
         display: 'flex',
         height: 'fit-content',
-        marginLeft: 'auto'
+        marginLeft: 'auto',
+        padding: '0px 20px'
     },
     sectionItem: {
 

@@ -66,14 +66,15 @@ class Header extends React.PureComponent<HeaderProps>{
         return(
             <AppBar position="fixed" className={classes.header}>
                 <Toolbar>
-                    {/**isAuth &&
+                    {isAuth &&
                         <IconButton edge="start"
                                     color="inherit"
                                     aria-label="menu"
+                                    className={classes.menuIcon}
                                     onClick={this.handleGeneralMenuButtonClick}>
                             {openGeneralMenu ? <CloseIcon /> : <MenuIcon />}
                         </IconButton>
-                    **/}
+                    }
                     <Typography variant="h6">
                         Учебная аналитика
                     </Typography>

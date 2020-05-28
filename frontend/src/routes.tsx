@@ -5,6 +5,7 @@ import Layout from './layout';
 import SignIn from './containers/SignIn';
 import SignUp from './containers/SignUp';
 import WorkProgram from './containers/WorkProgram';
+import Courses from './containers/Courses';
 
 import RouterService from './service/router-service';
 
@@ -19,6 +20,9 @@ export default () => (
                 </Route>
                 <Route path={routerService.getSignUpRoute()}>
                     <SignUp />
+                </Route>
+                <Route path={routerService.getCoursesRoute()}>
+                    <Courses />
                 </Route>
                 <Route path={routerService.getWorkProgramRoute()}
                        children={() => (

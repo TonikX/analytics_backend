@@ -6,7 +6,10 @@ import {GENERAL_PATH as signUpPath, reducer as signUpReducer, signUpState} from 
 import {GENERAL_PATH as layoutPath, reducer as LayoutReducer} from "../layout/reducer";
 import {layoutState} from "../layout/types";
 
-import {GENERAL_PATH as workProgramPath, reducer as workProgramReducer,} from "../containers/WorkProgram/reducer";
+import {GENERAL_PATH as coursesPath, reducer as CoursesReducer} from "../containers/Courses/reducer";
+import {coursesState} from "../containers/Courses/types";
+
+import {GENERAL_PATH as workProgramPath, reducer as workProgramReducer} from "../containers/WorkProgram/reducer";
 import {workProgramState} from "../containers/WorkProgram/types";
 
 export interface rootState {
@@ -14,6 +17,7 @@ export interface rootState {
     [signUpPath]: signUpState,
     [workProgramPath]: workProgramState,
     [layoutPath]: layoutState,
+    [coursesPath]: coursesState,
 }
 
 export default combineReducers({
@@ -21,4 +25,5 @@ export default combineReducers({
     [signUpPath]: signUpReducer,
     [workProgramPath]: workProgramReducer,
     [layoutPath]: LayoutReducer,
+    [coursesPath]: CoursesReducer,
 });

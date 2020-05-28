@@ -18,5 +18,8 @@ export default (theme: Theme) => createStyles({
         '&:hover': {
             color: theme.palette.text.primary
         }
+    },
+    menuIcon: {
+        marginRight: '20px'
     }
 });
