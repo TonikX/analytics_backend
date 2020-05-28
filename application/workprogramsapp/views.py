@@ -3,11 +3,12 @@ from django.shortcuts import redirect
 from django.views import View
 from .models import WorkProgram, FieldOfStudy, FieldOfStudyWorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm, DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm, PrerequisitesOfWorkProgramForm, UploadFileForm
-from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence
+from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, OnlineCourse
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer
+from .serializers import OnlineCourseSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -24,6 +25,8 @@ from .tables import FieldOfStudyWPTable
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 
 # Create your views here.
@@ -685,24 +688,26 @@ def NewOrdinalNumbersForDesciplineSectionAPI(request):
 
 #Блок эндпоинтов рабочей программы
 
-class OnlineCourseCreateAPIView(generics.CreateAPIView):
-    serializer_class = WorkProgramCreateSerializer
-    queryset = WorkProgram.objects.all()
+class OnlineCourseListCreateAPIView(generics.ListCreateAPIView):
+    serializer_class = OnlineCourseSerializer
+    queryset = OnlineCourse.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title','platform']
 
 
 class OnlineCourseDestroyView(generics.DestroyAPIView):
-    queryset = WorkProgram.objects.all()
-    serializer_class = WorkProgramSerializer
+    queryset = OnlineCourse.objects.all()
+    serializer_class = OnlineCourseSerializer
 
 
 class OnlineCourseUpdateView(generics.UpdateAPIView):
-    queryset = WorkProgram.objects.all()
-    serializer_class = WorkProgramCreateSerializer
+    queryset = OnlineCourse.objects.all()
+    serializer_class = OnlineCourseSerializer
 
 
 class OnlineCourseDetailsView(generics.RetrieveAPIView):
-    queryset = WorkProgram.objects.all()
-    serializer_class = WorkProgramSerializer
+    queryset = OnlineCourse.objects.all()
+    serializer_class = OnlineCourseSerializer
 
 #Конец блока ендпоинтов рабочей программы
 
