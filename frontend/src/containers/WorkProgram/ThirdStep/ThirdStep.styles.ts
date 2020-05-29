@@ -32,6 +32,7 @@ export default (theme: Theme) => createStyles({
     sectionItem: {
 
     },
+    //@ts-ignore
     sectionTitle: {
         padding: '10px',
         borderBottom: '1px solid #ccc',
