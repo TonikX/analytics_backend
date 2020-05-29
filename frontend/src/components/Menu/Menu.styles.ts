@@ -22,6 +22,7 @@ export default (theme: Theme) => createStyles({
     menuList: {
         padding: 0
     },
+    // @ts-ignore
     menuItem: {
         // @ts-ignore
         whiteSpace: 'normal !important',
