@@ -686,12 +686,23 @@ def NewOrdinalNumbersForDesciplineSectionAPI(request):
         return Response(status=400)
 
 
+@api_view(['GET', 'POST'])
+def NewOrdinalNumbersForTopicAPI(request):
+    topic = request.data.get('topic')
+    new_ordinal_number = request.data.get('new_ordinal_number')
+    try:
+        Topic.new_ordinal_number(topic, new_ordinal_number)
+        return Response(status=200)
+    except:
+        return Response(status=400)
+
+
 #Блок эндпоинтов рабочей программы
 
 class OnlineCourseListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = OnlineCourseSerializer
     queryset = OnlineCourse.objects.all()
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title','platform']
 
 

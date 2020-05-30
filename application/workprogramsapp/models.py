@@ -264,10 +264,10 @@ class OnlineCourse(models.Model):
     '''
     Модель описания онлайн курса
     '''
-    title = models.CharField(max_length=512, verbose_name = "Описание")
-    platform = models.CharField(max_length=512, verbose_name = "Описание", blank = True, null = True)
+    title = models.CharField(max_length=512, verbose_name = "Название курсу")
+    platform = models.CharField(max_length=512, verbose_name = "Платформа", blank = True, null = True)
     description = models.CharField(max_length=5000, verbose_name = "Описание", blank = True, null = True)
-    course_url = models.URLField()
+    course_url = models.URLField(verbose_name = "Ссылка на курс")
 
 
 class Topic(models.Model):
@@ -275,13 +275,40 @@ class Topic(models.Model):
     Модель для темы
     '''
     discipline_section = models.ForeignKey('DisciplineSection', on_delete=models.CASCADE, verbose_name = "Раздел", related_name = "topics")
-    number = models.CharField(unique=True, max_length=1024, verbose_name = "Номер")
+    number = models.IntegerField(max_length=1024, verbose_name = "номер темы в разделе")
     description = models.CharField(max_length=1024, verbose_name = "Описание", blank = True, null = True)
     #online_course = models.CharField(max_length=1024, verbose_name = "Реализация раздела дисциплины с помощью онлайн-курса", blank = True, null = True)
     url_online_course = models.ForeignKey('OnlineCourse', on_delete=models.CASCADE, verbose_name='Онлайн курс', blank = True, null = True, related_name='topic_with_online_course')
 
+
+    def new_ordinal_number(topic, new_ordinal_number):
+        new_ordinal_number = int(new_ordinal_number)
+        section = Topic.objects.get(pk = topic)
+        print("ид темы", section)
+        print("новый номер темы", new_ordinal_number)
+        if int(section.number) > int(new_ordinal_number):
+            section.number = new_ordinal_number
+            section.save()
+            sections = Topic.objects.filter(discipline_section  = section.discipline_section, number__gte=new_ordinal_number).exclude(pk = topic).order_by('number')
+            for sec in sections:
+                sec.number = new_ordinal_number+1
+                sec.save()
+                new_ordinal_number +=1
+        else:
+            section.number = new_ordinal_number
+            section.save()
+            sections = Topic.objects.filter(discipline_section  = section.discipline_section, number__lte=new_ordinal_number).exclude(pk = topic).order_by('number')
+            for sec in sections:
+                sec.number = new_ordinal_number-1
+                sec.save()
+                new_ordinal_number -=1
+
+
+    class Meta:
+        ordering = ['number']
+
     def __str__(self):
-        return (self.number + self.description)
+        return (self.description)
 
 
 class RouteComposition(models.Model):
