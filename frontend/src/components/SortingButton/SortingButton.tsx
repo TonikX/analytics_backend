@@ -9,36 +9,32 @@ import IconButton from "@material-ui/core/IconButton";
 
 import styles from './SortingButton.styles';
 
-import {SortingButtonProps, SortingEnumTypes} from './sortingEnumTypes';
+import {SortingButtonProps, Types} from './types';
 
-class SortingButton extends React.Component<SortingButtonProps> {
-    render(){
-        const {classes, changeMode, mode} = this.props;
+const SortingButton = ({classes, changeMode, mode}: SortingButtonProps) => {
+    const changeModeHandler = () => {
+        switch (mode) {
+            case Types.ASC:
+                changeMode(Types.DESC);
+                break;
+            case Types.DESC:
+                changeMode('');
+                break;
+            case '':
+                changeMode(Types.ASC);
+                break;
+        }
+    };
 
-        const changeModeHandler = () => {
-            switch (mode) {
-                case SortingEnumTypes.ASC:
-                    changeMode(SortingEnumTypes.DESC);
-                    break;
-                case SortingEnumTypes.DESC:
-                    changeMode('');
-                    break;
-                case '':
-                    changeMode(SortingEnumTypes.ASC);
-                    break;
-            }
-        };
-
-        return <IconButton className={classes.button}
-                           onClick={changeModeHandler}
-                >
-            <div className={classes.iconsContainer}>
-                <ArrowUp className={classNames(classes.topIcon, {[classes.selectedSort]: mode === SortingEnumTypes.ASC})}
-                />
-                <ArrowDown className={classNames(classes.bottomIcon, {[classes.selectedSort]: mode === SortingEnumTypes.DESC})}/>
-            </div>
-        </IconButton>
-    }
+    return <IconButton className={classes.button}
+                       onClick={changeModeHandler}
+    >
+        <div className={classes.iconsContainer}>
+            <ArrowUp className={classNames(classes.topIcon, {[classes.selectedSort]: mode === Types.ASC})}
+            />
+            <ArrowDown className={classNames(classes.bottomIcon, {[classes.selectedSort]: mode === Types.DESC})}/>
+        </div>
+    </IconButton>;
 }
 
 export default withStyles(styles)(SortingButton);

@@ -4,12 +4,19 @@ import {rootState} from '../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 
-import {fields} from './enum';
+import {CourseFields, fields} from './enum';
 
-import {coursesState} from './types';
+import {coursesState, CourseType} from './types';
+import {SelectorListType} from "../../components/MultipleSearchSelector/types";
 
 const getStateData = (state: rootState): coursesState => get(state, GENERAL_PATH);
-export const getCourses = (state: rootState) => get(getStateData(state), fields.COURSES_LIST, []);
+export const getCourses = (state: rootState): Array<CourseType> => get(getStateData(state), fields.COURSES_LIST, []);
+
+export const getCoursesForSelector = (state: rootState): SelectorListType =>
+    getCourses(state).map((course: CourseType) => ({
+        value: course[CourseFields.ID],
+        label: course[CourseFields.TITLE],
+    }))
 
 export const getCourseDialog = (state: rootState) => get(getStateData(state), fields.COURSE_DIALOG, {});
 

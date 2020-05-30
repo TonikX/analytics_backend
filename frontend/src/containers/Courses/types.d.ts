@@ -2,7 +2,7 @@ import {fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {CourseFields} from './enum';
-import {SortingType} from "../../components/SortingButton/sortingEnumTypes";
+import {SortingType} from "../../components/SortingButton/types";
 
 export interface CoursesActions {
     changeSearchQuery: any;
@@ -33,7 +33,7 @@ export interface coursesState {
     };
 }
 
-type CourseType = {
+export type CourseType = {
     [CourseFields.ID]: number,
     [CourseFields.DESCRIPTION]: string,
     [CourseFields.TITLE]: string,

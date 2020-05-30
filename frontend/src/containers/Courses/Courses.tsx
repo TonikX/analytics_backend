@@ -24,7 +24,7 @@ import SearchOutlined from "@material-ui/icons/SearchOutlined";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
 import CourseCreateModal from "./CourseCreateModal";
-import {SortingType} from "../../components/SortingButton/sortingEnumTypes";
+import {SortingType} from "../../components/SortingButton/types";
 
 import {CoursesProps, CourseType} from './types';
 import {CourseFields} from './enum';

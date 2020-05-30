@@ -6,7 +6,7 @@ import workProgramActions from '../actions';
 import Service from '../service';
 import {getWorkProgramId} from '../getters';
 
-import {fetchingTypes} from "../enum";
+import {fetchingTypes, fields, workProgramTopicFields} from "../enum";
 
 const service = new Service();
 
@@ -19,10 +19,10 @@ const saveTopic = createLogic({
         const topic = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_TOPIC}));
-        debugger
+
         let promise;
 
-        if (topic.id) {
+        if (topic[workProgramTopicFields.ID].length) {
             promise = service.saveTopic(topic);
         } else {
             promise = service.createNewTopic(topic, workProgramId);
@@ -33,6 +33,7 @@ const saveTopic = createLogic({
                 dispatch(workProgramActions.getWorkProgram(workProgramId));
                 // @ts-ignore
                 dispatch(actions.fetchingSuccess());
+                dispatch(workProgramActions.closeDialog(fields.CREATE_NEW_TOPIC_DIALOG));
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));

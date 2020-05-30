@@ -34,7 +34,8 @@ export default (theme: Theme) => createStyles({
     stepper: {
         width: '250px',
         height: 'fit-content',
-        padding: 0
+        padding: 0,
+        minWidth: '210px'
     },
     step: {
         background: theme.palette.secondary.main

@@ -1,9 +1,9 @@
 import {WithStyles} from "@material-ui/core";
 import styles from "./SortingButton.styles";
 
-export type SortingType = SortingEnumTypes.ASC | SortingEnumTypes.DESC | '';
+export type SortingType = Types.ASC | Types.DESC | '';
 
-export enum SortingEnumTypes {
+export enum Types {
     ASC = 'asc',
     DESC = 'desc'
 }

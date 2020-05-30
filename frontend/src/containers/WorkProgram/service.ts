@@ -1,6 +1,7 @@
 import {ReactText} from "react";
 import BaseService from "../../service/base-service";
 import {Section, Topic} from "./types";
+import {workProgramTopicFields} from "./enum";
 
 class WorkProgramService extends BaseService{
     getWorkProgram(id: string){
@@ -64,15 +65,21 @@ class WorkProgramService extends BaseService{
     saveTopic(topic: Topic){
         const formData = new FormData();
 
+        formData.append(workProgramTopicFields.DESCRIPTION, topic[workProgramTopicFields.DESCRIPTION]);
+        formData.append(workProgramTopicFields.SECTION, topic[workProgramTopicFields.SECTION]);
+
+        if (topic[workProgramTopicFields.COURSE].length){
+            formData.append(workProgramTopicFields.COURSE, topic[workProgramTopicFields.COURSE]);
+        }
+
         Object.keys(topic).forEach((key: string) => {
             // @ts-ignore
-            if (section[key]){
+            if (topic[key]){
                 // @ts-ignore
-                formData.append(key, section[key]);
             }
         })
 
-        return this.patch(`/api/topics/${topic.id}`, formData);
+        return this.patch(`/api/topics/${topic[workProgramTopicFields.ID]}`, formData);
     }
 
     createNewTopic(topic: Topic, workProgramId: ReactText){

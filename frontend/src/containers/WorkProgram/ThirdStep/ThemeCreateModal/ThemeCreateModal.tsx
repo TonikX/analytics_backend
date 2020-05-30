@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactText} from 'react';
 import get from "lodash/get";
 
 import {ThemeCreateModalProps} from './types';
@@ -16,6 +16,7 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import withStyles from '@material-ui/core/styles/withStyles';
 
+import MultipleSearchSelector from '../../../../components/MultipleSearchSelector';
 import {workProgramTopicFields, fields} from '../../enum';
 
 import connect from './ThemeCreateModal.connect';
@@ -27,8 +28,13 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
         topic: {
             [workProgramTopicFields.DESCRIPTION]: '',
             [workProgramTopicFields.SECTION]: '',
+            [workProgramTopicFields.COURSE]: '',
         }
     };
+
+    componentDidMount() {
+        this.props.coursesActions.getCourses();
+    }
 
     componentDidUpdate(prevProps: Readonly<ThemeCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {topic} = this.props;
@@ -39,6 +45,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                     [workProgramTopicFields.DESCRIPTION]: get(topic, workProgramTopicFields.DESCRIPTION, ''),
                     [workProgramTopicFields.SECTION]: get(topic, workProgramTopicFields.SECTION, ''),
                     [workProgramTopicFields.ID]: get(topic, workProgramTopicFields.ID, ''),
+                    [workProgramTopicFields.COURSE]: get(topic, workProgramTopicFields.COURSE, ''),
                 }
             });
         }
@@ -63,8 +70,24 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
         })
     }
 
+    saveCourseField = (value: ReactText) => {
+        const {topic} = this.state;
+
+        this.setState({
+            topic: {
+                ...topic,
+                [workProgramTopicFields.COURSE]: value
+            }
+        })
+    }
+
+    handleChangeCourseSearchText = (searchText: string) => {
+        this.props.coursesActions.changeSearchQuery(searchText);
+        this.props.coursesActions.getCourses();
+    }
+
     render() {
-        const {isOpen, classes, courses, sections} = this.props;
+        const {isOpen, classes, courses, sections, coursesList} = this.props;
         const {topic} = this.state;
 
         const disableButton = topic[workProgramTopicFields.DESCRIPTION].length === 0 || topic[workProgramTopicFields.SECTION].length === 0;
@@ -117,36 +140,12 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                                    shrink: true,
                                }}
                     />
-                    <FormControl className={classes.courseSelector}>
-                        <InputLabel shrink id="online-course-label">
-                            Онлайн курс
-                        </InputLabel>
-                        <Select
-                            variant="outlined"
-                            className={classes.selector}
-                            // @ts-ignore
-                            onChange={this.saveField(workProgramTopicFields.SECTION)}
-                            fullWidth
-                            displayEmpty
-                            input={
-                                <OutlinedInput
-                                    notched
-                                    labelWidth={100}
-                                    name="course"
-                                    id="online-course-label"
-                                />
-                            }
-                        >
-                            <MenuItem value="" key={`group-0`}>
-                                Нет курса
-                            </MenuItem>
-                            {courses.map(item =>
-                                <MenuItem value={item.value} key={`group-${item.value}`}>
-                                    {item.label}
-                                </MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
+                    <MultipleSearchSelector label="Онлайн курс"
+                                            changeSearchText={this.handleChangeCourseSearchText}
+                                            list={coursesList}
+                                            changeItem={this.saveCourseField}
+                                            value={topic[workProgramTopicFields.COURSE]}
+                    />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={this.handleClose}

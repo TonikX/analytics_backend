@@ -51,6 +51,8 @@ export type Section = {
 export type Topic = {
     description: string;
     online_course: string;
+    url_online_course: string;
+    discipline_section: string;
     number: string;
     id: string;
 }
