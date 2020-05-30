@@ -6,6 +6,9 @@ export enum fields {
     SEARCH_QUERY = 'SEARCH_QUERY',
     CURRENT_PAGE = 'CURRENT_PAGE',
     ALL_COUNT = 'ALL_COUNT',
+    SORTING = 'SORTING',
+    SORTING_FIELD = 'SORTING_FIELD',
+    SORTING_MODE = 'SORTING_MODE',
 }
 
 export enum fetchingTypes {

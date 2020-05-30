@@ -21,14 +21,16 @@ import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
+import ConfirmDialog from "../../components/ConfirmDialog";
+import SortingButton from "../../components/SortingButton";
 import CourseCreateModal from "./CourseCreateModal";
+import {SortingType} from "../../components/SortingButton/sortingEnumTypes";
 
 import {CoursesProps, CourseType} from './types';
 import {CourseFields} from './enum';
 
 import connect from './Courses.connect';
 import styles from './Courses.styles';
-import ConfirmDialog from "../../components/ConfirmDialog";
 
 class Courses extends React.Component<CoursesProps> {
     state = {
@@ -80,8 +82,13 @@ class Courses extends React.Component<CoursesProps> {
         this.props.actions.getCourses();
     }
 
+    changeSorting = (field: string) => (mode: SortingType)=> {
+        this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
+        this.props.actions.getCourses();
+    }
+
     render() {
-        const {classes, courses, allCount, currentPage} = this.props;
+        const {classes, courses, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
@@ -103,10 +110,30 @@ class Courses extends React.Component<CoursesProps> {
 
                 <div className={classes.courseTableWrap}>
                     <div className={classNames(classes.course, classes.header)}>
-                        <Typography className={classNames(classes.marginRight, classes.courseTitle)}> Название курса </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.courseLink)}> Ссылка на курс </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.coursePlatform)}> Платформа </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.courseDescription)}> Описание </Typography>
+                        <Typography className={classNames(classes.marginRight, classes.courseTitle)}>
+                            Название курса
+                            <SortingButton changeMode={this.changeSorting(CourseFields.TITLE)}
+                                           mode={sortingField === CourseFields.TITLE ? sortingMode : ''}
+                            />
+                        </Typography>
+                        <Typography className={classNames(classes.marginRight, classes.courseLink)}>
+                            Ссылка на курс
+                            <SortingButton changeMode={this.changeSorting(CourseFields.COURSE_URL)}
+                                           mode={sortingField === CourseFields.COURSE_URL ? sortingMode : ''}
+                            />
+                        </Typography>
+                        <Typography className={classNames(classes.marginRight, classes.coursePlatform)}>
+                            Платформа
+                            <SortingButton changeMode={this.changeSorting(CourseFields.PLATFORM)}
+                                           mode={sortingField === CourseFields.PLATFORM ? sortingMode : ''}
+                            />
+                        </Typography>
+                        <Typography className={classNames(classes.marginRight, classes.courseDescription)}>
+                            Описание
+                            <SortingButton changeMode={this.changeSorting(CourseFields.DESCRIPTION)}
+                                           mode={sortingField === CourseFields.DESCRIPTION ? sortingMode : ''}
+                            />
+                        </Typography>
                     </div>
 
                     <div className={classes.courseList}>
