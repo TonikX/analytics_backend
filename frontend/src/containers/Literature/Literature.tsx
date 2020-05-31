@@ -161,9 +161,9 @@ class Literature extends React.Component<LiteratureProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены что хотите удалить литературу?'}
+                               confirmText={'Вы точно уверены что хотите удалить источник?'}
                                isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить литературу'}
+                               dialogTitle={'Удалить источник'}
                                confirmButtonText={'Удалить'}
                 />
             </Paper>

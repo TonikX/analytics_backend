@@ -33,3 +33,5 @@ export default class UserService {
         return this.getToken() !== null && this.getToken() !== undefined;
     }
 }
+
+export const userService = UserService.factory();

@@ -1,6 +1,8 @@
 import React from "react";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
+import AuthRoute from './hoc/AuthRoute'
+
 import Layout from './layout';
 import SignIn from './containers/SignIn';
 import SignUp from './containers/SignUp';
@@ -22,13 +24,13 @@ export default () => (
                 <Route path={routerService.getSignUpRoute()}>
                     <SignUp />
                 </Route>
-                <Route path={routerService.getCoursesRoute()}>
+                <AuthRoute path={routerService.getCoursesRoute()}>
                     <Courses />
-                </Route>
-                <Route path={routerService.getLiteratureRoute()}>
+                </AuthRoute>
+                <AuthRoute path={routerService.getLiteratureRoute()}>
                     <Literature />
-                </Route>
-                <Route path={routerService.getWorkProgramRoute()}
+                </AuthRoute>
+                <AuthRoute path={routerService.getWorkProgramRoute()}
                        children={() => (
                            <Route
                                render={({match}) => (

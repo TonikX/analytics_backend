@@ -10,14 +10,11 @@ import Typography  from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {appRouter} from '../../service/router-service';
-import UserService from "../../service/user-service";
 
 import * as Enum from './enum';
 
 import connect from './SignIn.connect';
 import styles from './SignIn.styles';
-
-const userService = UserService.factory();
 
 class SignIn extends React.PureComponent{
     componentWillUnmount() {
@@ -33,17 +30,24 @@ class SignIn extends React.PureComponent{
     };
 
     clickButtonHandler = () => {
-        this.props.actions.signIn();
     };
+
+    handleKeyPress = (event) => {
+        const {disableButton} = this.props;
+
+        if (event.charCode === 13 && !disableButton) {
+            this.props.actions.signIn();
+        }
+    }
 
     render() {
         const {classes, disableButton, auth} = this.props;
-        const isAuth = userService.isAuth() && auth;
 
-        if (isAuth) return <Redirect to={'work-program/2'} />;
+        if (auth) return <Redirect to={'work-program/2'} />;
 
         return(
-            <div className={classes.root}>
+            <div className={classes.root}
+                 onKeyPress={this.handleKeyPress}>
                 <div className={classes.form}>
                     <TextField label="Логин"
                                className={classes.textField}
