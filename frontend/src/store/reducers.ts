@@ -1,4 +1,4 @@
-import {combineReducers, createStore } from "redux";
+import {combineReducers } from "redux";
 
 import {GENERAL_PATH as signInPath, reducer as signInReducer, signInState} from "../containers/SignIn/reducer";
 import {GENERAL_PATH as signUpPath, reducer as signUpReducer, signUpState} from "../containers/SignUp/reducer";

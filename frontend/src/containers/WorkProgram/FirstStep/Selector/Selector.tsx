@@ -4,7 +4,6 @@ import get from "lodash/get";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputLabel from '@material-ui/core/InputLabel';
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -16,7 +15,6 @@ import {specialization} from "../../data";
 
 import connect from './Selector.connect';
 import styles from './Selector.styles';
-import Typography from "@material-ui/core/Typography";
 
 class Selector extends React.PureComponent<SecondStepProps> {
     saveField = (e: React.ChangeEvent) => {

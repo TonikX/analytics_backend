@@ -1,33 +1,29 @@
 import React from 'react';
 
+import Scrollbars from "react-custom-scrollbars";
+
 // @ts-ignore
 import Link from "react-router-dom/Link";
 
-import List from "@material-ui/core/List";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItem from "@material-ui/core/ListItem";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from '@material-ui/core/styles/withStyles';
+import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
+import Fab from "@material-ui/core/Fab";
 
 import AddIcon from "@material-ui/icons/Add";
 import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
-
-import {FourthStepProps} from './types';
-import {fields, workProgramSectionFields, workProgramTopicFields} from "../enum";
-
-import connect from './ThirdStep.connect';
-import styles from './ThirdStep.styles';
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
+
+import {FourthStepProps} from './types';
+import {fields, workProgramSectionFields, workProgramTopicFields} from "../enum";
+import {CourseFields} from "../../Courses/enum";
+
 import ThemeCreateModal from "./ThemeCreateModal";
-import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
-import Fab from "@material-ui/core/Fab";
-import Scrollbars from "react-custom-scrollbars";
-import TableContainer from "@material-ui/core/TableContainer";
+
+import connect from './ThirdStep.connect';
+import styles from './ThirdStep.styles';
 
 class ThirdStep extends React.PureComponent<FourthStepProps> {
     handleCreateNewTopic = () => {
@@ -82,10 +78,12 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
                                         </Typography>
 
                                         <div className={classes.onlineCourseItem}>
-                                            <Typography>Онлайн курс: </Typography>&nbsp;
-                                            <Link to={"/"} className={classes.link}>
-                                                <Typography> название курса </Typography>
-                                            </Link>
+                                            {topic[workProgramTopicFields.COURSE] && <>
+                                                <Typography>Онлайн курс: </Typography>&nbsp;
+                                                <Link to={topic[workProgramTopicFields.COURSE][CourseFields.COURSE_URL]} className={classes.link}>
+                                                    <Typography> {topic[workProgramTopicFields.COURSE][CourseFields.TITLE]} </Typography>
+                                                </Link>
+                                            </>}
                                         </div>
 
                                         <div className={classes.actions}>

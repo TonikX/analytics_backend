@@ -23,7 +23,7 @@ class MultipleSearchSelector extends React.Component<MultipleSearchSelectorProps
     };
 
     componentDidMount() {
-        this.setState({searchText: this.props.value});
+        this.setState({searchText: this.getLabelForValue(this.props.value)});
     }
 
     changeSearchText = (event: React.ChangeEvent) => {
