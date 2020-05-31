@@ -60,11 +60,20 @@ class PrerequisitesOfWorkProgramInWorkProgramSerializer(serializers.ModelSeriali
         fields = ['item_id', 'item_name', 'masterylevel']
 
 
+class OnlineCourseSerializer(serializers.ModelSerializer):
+    """Сериализатор онлайн курсов"""
+
+    class Meta:
+        model = OnlineCourse
+        fields = "__all__"
+
+
 class TopicSerializer(serializers.ModelSerializer):
     """Сериализатор Тем"""
+    url_online_course = OnlineCourseSerializer(required=False)
     class Meta:
         model = Topic
-        fields = ['discipline_section','number', 'description', 'url_online_course']
+        fields = ['id', 'discipline_section', 'number', 'description', 'url_online_course']
 
 
 class EvaluationToolSerializer(serializers.ModelSerializer):
@@ -96,14 +105,6 @@ class CertificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Certification
-        fields = "__all__"
-
-
-class OnlineCourseSerializer(serializers.ModelSerializer):
-    """Сериализатор онлайн курсов"""
-
-    class Meta:
-        model = OnlineCourse
         fields = "__all__"
 
 
