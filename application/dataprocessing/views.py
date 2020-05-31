@@ -1,15 +1,12 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import User
 from django.shortcuts import render, render_to_response,redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.http.response import HttpResponse,Http404
-from .models import User, Domain, Items, Relation
+from .models import User, Domain, Items, Relation, Connection
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.context_processors import csrf
 from django.utils import timezone
 from django.views import View,generic
-from .forms import UserRegistrationForm, DomainForm, ItemsForm, RelationForm, UploadFileForm
+from .forms import UserRegistrationForm, DomainForm, ItemsForm, RelationForm
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import logout as auth_logout
 from django.urls import reverse
@@ -20,42 +17,59 @@ from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django_tables2.paginators import LazyPaginator
 from django_tables2 import SingleTableView, RequestConfig
 from .tables import DomainTable, RelationTable, ItemsTable
-''' 
-    ItemsListView, RelationListView, DomainListView, DataListView 
-    classes to generate a list items views 
-'''
+from .filters import RelationFilter, DomainFilter, ItemsFilter
+from django_filters.views import FilterView
+from django_tables2.views import SingleTableMixin
+
 class ItemsListView(View):
+    ''' 
+        Generate a list items views 
+    '''
     model = Items
 
     def get(self,request):
         #items_list = Items.objects.order_by('name').all()
-        table = ItemsTable(Items.objects.all(), order_by="name")
         #table.paginate(page=request.GET.get("page", 1), per_page=25)
+        
+        items = Items.objects.all()
+        filter_set = ItemsFilter(request.GET, queryset  = items)
+        table = ItemsTable(filter_set.qs, order_by="name")
         domain_list = Domain.objects.all()
         RequestConfig(request, paginate={"paginator_class": LazyPaginator, "per_page": 10}).configure(
-            table)
-        return render(request, 'dataprocessing/items_list.html', {"table": table, 'domain_list': domain_list})
+                                                table)
+        return render(request, 'dataprocessing/items_list.html', {"table": table,"filter_set":filter_set,  'domain_list': domain_list})
 
-class RelationListView(SingleTableView):
+def detail_item(request, pk):
+    # Render the HTML template 
+    item = get_object_or_404(Items, pk=pk)
+    relation = Relation.objects.filter(item1 = pk)
+    print(relation)
+    return render(request, 'dataprocessing/detail_items.html', {'item': item, 'relation':relation})
+
+def item_delete(request, pk):
+        items = Items.objects.get (pk = pk)
+        items.delete()
+        return redirect('/items/')
+
+
+class RelationListView(SingleTableMixin, FilterView):
+    """ Generate a table of relations"""
     model = Relation
     table_class = RelationTable
     template_name = 'dataprocessing/relation_list.html'
-    #def get_queryset(self):
-    #    return Relation.objects.all()
+    filterset_class = RelationFilter
 
-class DomainListView(SingleTableView):
+class DomainListView(SingleTableMixin, FilterView):
+    """ Generate a table of domains"""
+
     model = Domain
     table_class = DomainTable
     template_name = 'dataprocessing/domain_list.html'
-    #def get_queryset(self):
-    #    return Domain.objects.all()
+    filterset_class = DomainFilter
 
-'''
-    index to render the main page  
-'''
-@login_required
+
 def index(request):
-    # Render the HTML template index.html with the data in the context variable
+    """Render the HTML template index.html with the data in the context variable"""
     domain_list = Domain.objects.filter(user=request.user)
     num_domain = Domain.objects.all().count()
     num_relation = Relation.objects.all().count()
@@ -66,138 +80,175 @@ def index(request):
         context={'num_domain':num_domain,'num_items':num_items,'num_relation':num_relation,'domain_list':domain_list}
     )
 
-''' 
-    Relation Block
-    post and edit relation views  
-'''
-@login_required
-def edit_relation(request, pk):
-    # Render the HTML template to edit relations
-    relation = get_object_or_404(Relation, pk=pk)
-    if request.method == "POST":
-        form = RelationForm(request.POST, instance=relation)
 
-        if form.is_valid():
-            relation = form.save(commit=False)
-            form.save()
-            return redirect('/relation/')
-    else:
-        form = RelationForm(instance=relation)
-    return render(request, 'dataprocessing/edit_relation.html', {'form': form})
 
-def same_parent_relation(form):
-    try:
-        if form.cleaned_data['relation'] == '1':
-            items_same_parent = list(form.cleaned_data['item2'])
-            for item in items_same_parent:
-                q = form.cleaned_data['item2'].exclude(name = item)
-                item_id = Items.objects.get(name = item).id
-                relation = Relation(item1 = Items.objects.get(pk = item_id), relation = '6')
-                relation.save()
-                relation.item2.set(q)
-    except:
-        pass
-
-@login_required
-def post_relation(request):
-    # Render the HTML template to post relations
-    if request.method == "POST":
-        form = RelationForm(request.POST)
-        if form.is_valid():
-            same_parent_relation(form)
-            relation = form.save(commit=False)
-            form.save()
-            item = Items.objects.get(id = relation.item1.id)
-            value = item.value
-            item.value = int(value) + relation.item2.all().count()
-            item.save()
-            return redirect('/relation/')
-    else:
+class RelationPost(View):
+    """Render the HTML template to post relations"""
+    
+    def get(self, request):
         form = RelationForm()
-    return render(request, 'dataprocessing/edit_relation.html', {'form': form})
-'''
-    Domain Block
-    post and edit domain views  
-'''
-@login_required
-@permission_required('is_staff')
-def post_domain(request):
-    # Render the HTML template for superuser to create domain
-    if request.method == "POST":
-        form = DomainForm(request.POST)
-        if form.is_valid():
-            domain = form.save(commit=False)
-            form.save()
-            return redirect('/domain/')
-    else:
-        form = DomainForm()
+        return render(request, 'dataprocessing/edit_relation.html', {'form': form})
 
-    return render(request, 'dataprocessing/edit_domain.html', {'form': form})
-
-@login_required
-@permission_required('is_staff')
-def edit_domain(request, pk):
-    # Render the HTML template to edit domain
-    domain = get_object_or_404(Domain, pk=pk)
-    if request.method == "POST":
-        form = DomainForm(request.POST, instance=domain)
-        if form.is_valid():
-            domain = form.save(commit=False)
-            form.save()
-            return redirect('/domain/')
-    else:
-        form = DomainForm(instance = domain)
-    return render(request, 'dataprocessing/edit_domain.html', {'form': form})
-
-''' 
-    Items Block
-    post and edit item views  
-'''
-
-@login_required
-def post_item(request):
-    # Render the HTML template to post items
-    if request.method == "POST":
-        form = ItemsForm(request.POST)
-        if form.is_valid():
-            #Duplicate check
-            if not Items.objects.filter(name = form.cleaned_data['name']).exists():
-                items = form.save(commit=False)
-                items.author = request.user
+    def post(self, request):
+        if request.method == "POST":
+            form = RelationForm(request.POST)
+            if form.is_valid():
+                if Relation.objects.filter(item1 = form.cleaned_data['item1'], relation = form.cleaned_data['relation']).exists():
+                    rel = Relation.objects.get(item1 = form.cleaned_data['item1'], relation = form.cleaned_data['relation'])
+                    existed_items = rel.item2.all()
+                    new_items = form.cleaned_data['item2']
+    
+                    for i in new_items:
+                        if i in existed_items:
+                            #Подсчет веса ребра
+                            conn = Connection.objects.get(relation=rel, items=i)
+                            value = conn.count
+                            conn.count = int(value) + 1
+                            conn.save()
+                        else:
+                            conn = Connection(relation_id = rel.id, items_id = i.id)
+                            conn.save()
+                            
+                            if form.cleaned_data['relation'] == '1':
+                                set_relation_linear(new_items,'2')
+                    #Подсчет  вершины
+                    item = Items.objects.get(id = rel.item1.id)
+                    value = item.value
+                    item.value = int(value) + new_items.count()
+                    item.save()
+                    return redirect('/relation/')
+               
+                relation = form.save(commit=False)
                 form.save()
 
-            return redirect('/items/')
+                if relation.relation == '1':
+                    set_relation_linear(relation.item2.all(),'2')
+                
+                item = Items.objects.get(id = relation.item1.id)
+                value = item.value
+                item.value = int(value) + relation.item2.all().count()
+                item.save()
 
-    else:
+                return redirect('/relation/')
+        else:
+            form = RelationForm()
+        return render(request, 'dataprocessing/edit_relation.html', {'form': form})
+
+class RelationPostUpdate(View):
+    """ Render the HTML template to edit relations """
+    def get(self, request, pk):
+        relation = get_object_or_404(Relation, id=pk)
+        form = RelationForm(instance=relation)
+        return render(request, 'dataprocessing/edit_relation.html', {'form': form})
+
+
+    def post(self, request, pk):
+        relation = get_object_or_404(Relation, pk=pk)
+        
+        if request.method == "POST":
+            form = RelationForm(request.POST, instance=relation)
+            if form.is_valid():
+                to_set = form.cleaned_data['item2']
+                relation = form.save(commit=False)
+                form.save()
+               
+                if relation.relation == '1':
+                    set_relation_linear(to_set,'2')
+               
+                item = Items.objects.get(id = relation.item1.id)
+                value = item.value
+                item.value = int(value) + to_set.count()
+                item.save()
+
+                return redirect('/relation/')
+        else:
+            form = RelationForm(instance=relation)
+        return render(request, 'dataprocessing/edit_relation.html', {'form': form})
+
+
+class DomainPost(View):
+    """ Render the HTML template for superuser to create domain"""
+    def get(self, request):
+        form = DomainForm()
+        return render(request, 'dataprocessing/edit_domain.html', {'form': form})
+
+    def post(self, request):
+        if request.method == "POST":
+            form = DomainForm(request.POST)
+            if form.is_valid():
+                domain = form.save(commit=False)
+                form.save()
+                return redirect('/domain/')
+        else:
+            form = DomainForm()
+
+        return render(request, 'dataprocessing/edit_domain.html', {'form': form})
+
+
+class DomainPostUpdate(View):
+    """Render the HTML template to edit domain"""
+    def get(self, request, pk):
+        domain = get_object_or_404(Domain, pk=pk)
+        form = DomainForm(instance=domain)
+        return render(request, 'dataprocessing/edit_domain.html', {'form': form})
+
+    def post(self, request, pk):
+        domain = get_object_or_404(Domain, pk=pk)
+        if request.method == "POST":
+            form = DomainForm(request.POST, instance=domain)
+            if form.is_valid():
+                domain = form.save(commit=False)
+                form.save()
+                return redirect('/domain/')
+        else:
+            form = DomainForm(instance = domain)
+        return render(request, 'dataprocessing/edit_domain.html', {'form': form})
+
+
+class ItemPost(View):
+    """
+        Render the HTML template to post items
+    """
+    def get(self, request):
         form = ItemsForm()
-    return render(request, 'dataprocessing/edit_items.html', {'form': form})
+        return render(request, 'dataprocessing/edit_items.html', {'form': form})
 
-@login_required
-def edit_item(request, pk):
-    # Render the HTML template to edit items
-    items = get_object_or_404(Items, pk=pk)
-    if request.method == "POST":
-        form = ItemsForm(request.POST, instance=items)
-        if form.is_valid():
-            items = form.save(commit=False)
-            form.save()
-            return redirect('/items/')
-    else:
-        form = ItemsForm(instance = items)
-    return render(request, 'dataprocessing/edit_items.html', {'form': form})
-@login_required
-def detail_item(request, pk):
-    # Render the HTML template to edit items
-    item = get_object_or_404(Items, pk=pk)
-    relation = Relation.objects.filter(item1 = pk)
-    print(relation)
-    return render(request, 'dataprocessing/detail_items.html', {'item': item, 'relation':relation})
+    def post(self, request):
+        if request.method == "POST":
+            form = ItemsForm(request.POST)
+            if form.is_valid():
+                #Duplicate check
+                if not Items.objects.filter(name = form.cleaned_data['name']).exists():
+                    items = form.save(commit=False)
+                    items.author = request.user
+                    form.save()
+                return redirect('/items/')
+        else:
+            form = ItemsForm()
+        return render(request, 'dataprocessing/edit_items.html', {'form': form})
 
-@login_required
-def item_delete(request, pk):
-    items = Items.objects.get (pk = pk)
-    items.delete()
-    return redirect('/items/')
+class ItemPostUpdate(View):
+    """ 
+        Render the HTML template to edit items
+    """
+    def get(self, request, pk):
+        item = get_object_or_404(Items, pk=pk)
+        form = ItemsForm(instance=item)
+        return render(request, 'dataprocessing/edit_items.html', {'form': form})
+
+    def post(self, request, pk):
+        items = get_object_or_404(Items, pk=pk)
+        if request.method == "POST":
+            form = ItemsForm(request.POST, instance=items)
+            if form.is_valid():
+                items = form.save(commit=False)
+                form.save()
+                return redirect('/items/')
+        else:
+            form = ItemsForm(instance = items)
+        return render(request, 'dataprocessing/edit_items.html', {'form': form})
+
+
 
 def register(request):
     # Render the HTML template to register
@@ -231,43 +282,71 @@ def change_password(request):
 
         args = {'form': form}
         return render(request, 'accounts/change_password.html', args)
-''' 
-    File Upload Block
-    views for uploading keywords via txt file
-'''
+
 
 def upload(request):
+    ''' 
+        Функция обрабработки txt-файла. 
+        Запись связей между сущностями:
+            '0' – 'неопределенное'
+            '1' – 'включает в себя'
+            '2' – 'является частью одного раздела'
+            '4' – 'имеет пререквизит'
+            '5' – 'тождество'
+            '7' – 'отсутствует' 
+    '''
     try:
         if request.method == 'POST':
-            data = handle_uploaded_file(request.FILES['file'], str(request.FILES['file'])).splitlines()
+            file = handle_uploaded_file(request.FILES['file'], str(request.FILES['file'])).splitlines()
             items_list = []
-
-            for i in data:
+            for i in file:
                 items_list.extend(i.strip().split(', '))
 
             domain_id = Domain.objects.get(name = request.POST.get("domain")).id
-
+            
             for i in items_list:
                 if Items.objects.filter(name = i).exists():
                     continue;
                 else:
                     item = Items(name = i, domain = Domain.objects.get(pk=domain_id),
-                                 author = request.user, source = 'uploaded')
+                        author = request.user, source = 'uploaded')
                     item.save()
+            
+            type_relation = str(request.POST.get("relation"))
+            print(file)
+            course = file[0]
+            file.remove(file[0])        
+            
+            if type_relation in ['1','4']:
+                data = dict(zip(file[::2],file[1::2]))
+                data.update(dict(zip(course,file[::2])))
+                set_relation_hierarchy(data, type_relation)   
+           
+            else:
+                data = {course:file}
+                items_query = [Items.objects.get(name = i) for i in items_list]
+                items_query = Items.objects.filter(name__in = items_query)
+                items_query = items_query.exclude(name = course)
+                #Создаем связь верхнего уровня для дисциплины и связанных с ней эелементов
+                try:
+                    set_relation_hierarchy(data, '1')
+                except:
+                    print('response 400')
+                #Создаем линейные связи между элементами
+                set_relation_linear(items_query,type_relation)  
 
-            if request.POST.get("hierarchy"):
-                print('hi')
-                set_relation(data,"1")
-            return redirect('/items/')
+
+            return redirect('/relation/')
     except:
-        HttpResponse("Что-то не так")
-    return redirect('/items/')
+        HttpResponse("Ошибка при обработке файла")
+    return redirect('/relation/')
 
-"""
-Функция обработчик загружаемого файла
-"""
+
 import os
 def handle_uploaded_file(file, filename):
+    """
+        Функция обработчик загружаемого файла
+    """
     if not os.path.exists('upload/'):
         os.mkdir('upload/')
     with open('upload/' + filename, 'wb+') as destination:
@@ -277,61 +356,285 @@ def handle_uploaded_file(file, filename):
         data=f.read()
     return data
 
-def set_relation(file, type_relation):
-    course = file[0]
-    file.remove(file[0])
-    section = file[::2]
-    print(course, section)
-    for t in section:
-        print(Items.objects.get(name = t))
-    new_items = [ Items.objects.get(name = t) for t in section ]
-    #check whether relation already exist
-    print(new_items)
-    item_id = Items.objects.get(name = course).id
-    print(item_id)
-    rel = Relation(item1 = Items.objects.get(pk=item_id) , relation = type_relation)
-    rel.save()
-    print(rel)
-    rel.item2.set(new_items)
-    print('OK')
-    items_same_parent = rel.item2.all()
-    print('OK-1')
-    same_parent_relation_2(items_same_parent)
-    print('OK-2')
 
-    data = dict(zip(file[::2],file[1::2]))
+def set_relation_hierarchy(items_query, type_relation):
+    """
+        Запись иерархических связей и пререквизитов
+    """
+    print(items_query)
+    for key,value in items_query.items():
+        items_set = [Items.objects.get(name = i) for i in value.split(', ')]
+        item_id = Items.objects.get(name = key)
+        #Проверяем, если связь существует, то добавляем новые сущности
+        if Relation.objects.filter(item1 = item_id, relation = type_relation).exists():
+            relation = Relation.objects.get(item1 = item_id, relation = type_relation)
+            to_check = relation.item2.all()
+            saved = len(to_check)
+            for i in items_set:
+                if i in to_check:
+                    #Подсчет веса ребра
+                    conn = Connection.objects.get(relation=relation, items=i)
+                    value = conn.count
+                    conn.count = int(value) + 1
+                    conn.save()
+                    saved = saved - 1
+                else:
+                    conn = Connection(relation_id = relation.id, items_id = i.id)
+                    conn.save()
 
-    for key,value in data.items():
-
-        items_list = value.split(', ')
-        items_query = [ Items.objects.get(name = i) for i in items_list]
-        #check whether relation already exist
-
-        item_id = Items.objects.get(name = key).id
-        relation = Relation(item1 = Items.objects.get(pk=item_id) , relation = type_relation)
-        relation.save()
-        relation.item2.set(items_query)
-        items_same_parent = relation.item2.all()
-        same_parent_relation_2(items_same_parent)
-        same_parent_relation_2(items_query)
-
-
-"""
-Функция, которая создает связь является частью одного раздела
-пока не учитывает выбор на форме
-плюс надо добавить обработчик других связей
-"""
-
-def same_parent_relation_2(items_same_parent):
-
-    for item in items_same_parent:
-        try:
-            q = items_same_parent.exclude(name = item)
-            item_id = Items.objects.get(name = item).id
-            relation = Relation(item1 = Items.objects.get(pk = item_id), relation = '6')
+            #Подсчет значения вершины графа
+            item = Items.objects.get(id = relation.item1.id)
+            value = item.value
+            item.value = int(value) + saved
+            item.save()
+        else:
+            #Иначе создаем новую запись в бд
+            relation = Relation(item1 = item_id , relation = type_relation)
             relation.save()
-            print('ok')
-            relation.item2.set(q)
+            for i in items_set:
+                try:
+                    conn = Connection(relation_id = relation.id, items_id = i.id)
+                    conn.save()
+                except:
+                    print('eerr')
+    
+            #Подсчет значения вершины графа
+            item = Items.objects.get(id = relation.item1.id)
+            value = item.value
+            item.value = int(value) + relation.item2.all().count()
+            item.save()
+        
+        if type_relation == '1':
+            try:
+                set_relation_linear(relation.item2.all(),type_relation)  
+            except:
+                print('next')   
+                
+def set_relation_linear(items_query, type_relation):
+    """
+        Запись линейных связей
+    """
+    #print(items_query)
+    try:
+        for item in items_query:
+            q = items_query.exclude(name = item)
+            item_id = Items.objects.get(name = item)
+            if Relation.objects.filter(item1 = item_id, relation = type_relation).exists():
+                relation = Relation.objects.get(item1 = item_id, relation = type_relation)
+                to_check = relation.item2.all()
+                saved = len(to_check)
+                for i in q:
+                    if i in to_check:
+                        #Подсчет веса ребра
+                        conn = Connection.objects.get(relation=relation, items=i)
+                        value = conn.count
+                        conn.count = int(value) + 1
+                        conn.save()
+                        saved = saved - 1
+                    else:
+                        conn = Connection(relation_id = relation.id, items_id = i.id)
+                        conn.save()
+
+                #Подсчет значения вершины графа
+                item = Items.objects.get(id = relation.item1.id)
+                value = item.value
+                item.value = int(value) + saved
+                item.save()
+            else:
+                if type_relation == '1':
+                    relation = Relation(item1 = item_id, relation = '2')
+                else:
+                    relation = Relation(item1 = item_id, relation = type_relation)
+                relation.save()
+                for i in q:
+                    conn = Connection(relation_id = relation.id, items_id = i.id)
+                    conn.save()
+            
+                #Подсчет значения вершины графа
+                item = Items.objects.get(id = relation.item1.id)
+                value = item.value
+                item.value = int(value) + relation.item2.all().count()
+                item.save()
+    except:
+        print('not-added')
+        #relation.item2.set(q)#to change
+
+
+from .serializers import DomainSerializer, ItemSerializer, RelationSerializer, RelationCreateSerializer
+from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.parsers import FileUploadParser
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
+class DomainListCreateAPIView(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Domains.
+    """
+    queryset = Domain.objects.all()
+    serializer_class = DomainSerializer
+
+    #def get_queryset(self):
+    #    user = self.request.user
+    #    return Domain.objects.filter(user=user)
+
+
+class DomainDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Domain.
+    """
+    queryset = Domain.objects.all()
+    serializer_class = DomainSerializer
+
+class ItemsListCreateAPIView(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Items.
+    """
+    queryset = Items.objects.all()
+    serializer_class = ItemSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    filterset_fields = ['domain']
+
+class ItemsListAPIView(generics.ListAPIView):
+    """
+    API endpoint that represents a list of Items.
+    """
+    queryset = Items.objects.all()
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        domain = self.kwargs['domain_id']
+        return Items.objects.filter(domain__id=domain)
+
+class ItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Item.
+    """
+    queryset = Items.objects.all()
+    serializer_class = ItemSerializer
+
+#GET api/relation/ - Список связей (ответ JSON)
+class RelationListCreateAPIView(generics.ListAPIView):
+    """
+    API endpoint that represents a list of Relations.
+    """
+    queryset = Relation.objects.all()
+    serializer_class = RelationSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['item1', 'relation', 'item2']
+    
+#GET api/relation/{domain_id} - Список связей по домену (ответ JSON)
+class RelationListAPIView(generics.ListAPIView):
+    """
+    API endpoint that represents a list of Relations.
+    """
+    queryset = Relation.objects.all()
+    serializer_class = RelationSerializer
+    
+    def get_queryset(self):
+        item1 = self.kwargs['item1_id']
+        return Relation.objects.filter(item1__id=item1)
+
+#GET api/relation/detail/{id} - Получить связь с определенным id (ответ JSON)
+#DELETE api/relation/detail/{id} - Удалить связь с конкретным id  
+class RelationRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
+    """
+        API endpoint that represents a single Relation.
+    """
+    queryset = Relation.objects.all()
+    serializer_class = RelationSerializer
+
+#PUT api/relation/update/{id} - Редактирование темы
+        #body: json(*) с измененными параметрами
+class RelationUpdateAPIView(generics.RetrieveUpdateAPIView):
+    queryset = Relation.objects.all()
+    serializer_class = RelationCreateSerializer
+    
+    '''
+    def put(self, request, pk):
+        relation = get_object_or_404(Relation, pk=pk)
+        serializer = RelationCreateSerializer(relation, data=request.data)
+        if serializer.is_valid():
+            to_set = request.data.get('item2')
+            items = [Items.objects.get(id = i) for i in to_set]
+            print(to_set)
+            print(relation.item2.all().filter(name__in = items))
+
+            #if relation.relation == '1':
+            #        set_relation_linear(to_set,'2')
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    '''
+
+#POST api/relation/new - Создание новой связи
+class RelationPostAPIView(APIView):
+    """Render the HTML template to post relations"""
+    def post(self, request):
+        item1 = request.data.get("item1")
+        relation = request.data.get("relation")
+        item2 = request.data.get("item2") 
+        
+        item1 = Items.objects.get(pk = item1)
+        new_items = [Items.objects.get(pk = i) for i in item2]
+
+        try:
+            if Relation.objects.filter(item1 = item1, relation = relation).exists():
+                rel = Relation.objects.get(item1 = item1, relation = relation)
+                existed_items = rel.item2.all()
+
+                for i in new_items:
+                    if i in existed_items:
+                        #Подсчет веса ребра
+
+                        conn = Connection.objects.get(relation=rel, items=i)
+                        value = conn.count
+
+                        conn.count = int(value) + 1
+                        conn.save()
+
+                    else:
+                        print(i)
+                        conn = Connection(relation_id = rel.id, items_id = i.id)
+                        conn.save()
+
+                q = rel.item2.all()
+                q = q.filter(name__in = new_items)
+                
+                if relation == '1':
+                    set_relation_linear(q,'2')
+       
+                #Подсчет  вершины
+                item = Items.objects.get(id = rel.item1.id)
+                value = item.value
+                item.value = int(value) + len(new_items)
+                item.save()
+                
+            else:
+
+                rel = Relation(item1 = item1, relation = relation)
+                rel.save()
+   
+                for i in new_items:
+
+                    conn = Connection(relation_id = rel.id, items_id=i.id)
+                    conn.save()
+                try:
+                    if relation == '1':
+                        set_relation_linear(rel.item2.all(),'2')
+                except:
+                    print('not-ok')
+                
+                item = Items.objects.get(id = rel.item1.id)
+                value = item.value
+                item.value = int(value) + rel.item2.all().count()
+                item.save()
+                
+            return Response(status=200)
         except:
-            print(item)
+            return Response(status=400)
 
