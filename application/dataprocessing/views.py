@@ -466,6 +466,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import FileUploadParser
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 class DomainListCreateAPIView(generics.ListCreateAPIView):
     """
@@ -492,8 +494,9 @@ class ItemsListCreateAPIView(generics.ListCreateAPIView):
     """
     queryset = Items.objects.all()
     serializer_class = ItemSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name']
+    filterset_fields = ['domain']
 
 class ItemsListAPIView(generics.ListAPIView):
     """
@@ -520,8 +523,8 @@ class RelationListCreateAPIView(generics.ListAPIView):
     """
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['item1']
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['item1', 'relation', 'item2']
     
 #GET api/relation/{domain_id} - Список связей по домену (ответ JSON)
 class RelationListAPIView(generics.ListAPIView):
