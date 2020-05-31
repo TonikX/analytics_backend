@@ -1,6 +1,7 @@
 import {fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
+import {CourseType} from "../Courses/types";
 
 export interface WorkProgramActions {
     getWorkProgram: any;
@@ -51,7 +52,7 @@ export type Section = {
 export type Topic = {
     description: string;
     online_course: string;
-    url_online_course: string;
+    url_online_course: CourseType;
     discipline_section: string;
     number: string;
     id: string;

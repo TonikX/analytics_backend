@@ -22,7 +22,7 @@ const saveTopic = createLogic({
 
         let promise;
 
-        if (topic[workProgramTopicFields.ID].length) {
+        if (topic[workProgramTopicFields.ID]) {
             promise = service.saveTopic(topic);
         } else {
             promise = service.createNewTopic(topic, workProgramId);

@@ -27,17 +27,10 @@ const setWorkProgramPart = (state: workProgramState, {payload}: any): workProgra
     }
 });
 
-const setWorkProgram = (state: workProgramState, {payload}: any): workProgramState => {
-    console.log('payload', payload);
-    console.log('state', ({
-        ...state,
-        [fields.WORK_PROGRAM]: payload
-    }));
-    return ({
-        ...state,
-        [fields.WORK_PROGRAM]: payload
-    });
-}
+const setWorkProgram = (state: workProgramState, {payload}: any): workProgramState => ({
+    ...state,
+    [fields.WORK_PROGRAM]: payload
+});
 
 const setWorkProgramId = (state: workProgramState, {payload}: any): workProgramState => ({
     ...state,

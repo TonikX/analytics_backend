@@ -22,13 +22,16 @@ import {workProgramTopicFields, fields} from '../../enum';
 import connect from './ThemeCreateModal.connect';
 import styles from './ThemeCreateModal.styles';
 import {shallowEqual} from "recompose";
+import {CourseFields} from "../../../Courses/enum";
 
 class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
     state = {
         topic: {
             [workProgramTopicFields.DESCRIPTION]: '',
             [workProgramTopicFields.SECTION]: '',
-            [workProgramTopicFields.COURSE]: '',
+            [workProgramTopicFields.COURSE]: {
+                [CourseFields.ID]: ''
+            },
         }
     };
 
@@ -46,6 +49,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                     [workProgramTopicFields.SECTION]: get(topic, workProgramTopicFields.SECTION, ''),
                     [workProgramTopicFields.ID]: get(topic, workProgramTopicFields.ID, ''),
                     [workProgramTopicFields.COURSE]: get(topic, workProgramTopicFields.COURSE, ''),
+                    [workProgramTopicFields.NUMBER]: get(topic, workProgramTopicFields.NUMBER, ''),
                 }
             });
         }
@@ -76,7 +80,9 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
         this.setState({
             topic: {
                 ...topic,
-                [workProgramTopicFields.COURSE]: value
+                [workProgramTopicFields.COURSE]: {
+                    [CourseFields.ID]: value
+                }
             }
         })
     }
@@ -87,7 +93,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
     }
 
     render() {
-        const {isOpen, classes, courses, sections, coursesList} = this.props;
+        const {isOpen, classes, sections, coursesList} = this.props;
         const {topic} = this.state;
 
         const disableButton = topic[workProgramTopicFields.DESCRIPTION].length === 0 || topic[workProgramTopicFields.SECTION].length === 0;
@@ -144,7 +150,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                                             changeSearchText={this.handleChangeCourseSearchText}
                                             list={coursesList}
                                             changeItem={this.saveCourseField}
-                                            value={topic[workProgramTopicFields.COURSE]}
+                                            value={get(topic, [workProgramTopicFields.COURSE, CourseFields.ID], '')}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>

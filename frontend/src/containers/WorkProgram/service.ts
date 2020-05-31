@@ -2,6 +2,7 @@ import {ReactText} from "react";
 import BaseService from "../../service/base-service";
 import {Section, Topic} from "./types";
 import {workProgramTopicFields} from "./enum";
+import {CourseFields} from "../Courses/enum";
 
 class WorkProgramService extends BaseService{
     getWorkProgram(id: string){
@@ -67,9 +68,11 @@ class WorkProgramService extends BaseService{
 
         formData.append(workProgramTopicFields.DESCRIPTION, topic[workProgramTopicFields.DESCRIPTION]);
         formData.append(workProgramTopicFields.SECTION, topic[workProgramTopicFields.SECTION]);
+        formData.append(workProgramTopicFields.NUMBER, topic[workProgramTopicFields.NUMBER]);
 
-        if (topic[workProgramTopicFields.COURSE].length){
-            formData.append(workProgramTopicFields.COURSE, topic[workProgramTopicFields.COURSE]);
+        if (topic[workProgramTopicFields.COURSE]){
+            // @ts-ignore
+            formData.append(workProgramTopicFields.COURSE, topic[workProgramTopicFields.COURSE][CourseFields.ID]);
         }
 
         Object.keys(topic).forEach((key: string) => {
