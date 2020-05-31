@@ -76,5 +76,17 @@ export default (theme: Theme) => createStyles({
     },
     courseDescription: {
         whiteSpace: 'nowrap'
-    }
+    },
+    iconsContainer: {
+        display: 'flex',
+        flexDirection: 'column' as 'column',
+    },
+    topIcon: {
+        marginBottom: -8,
+        color: '#fff'
+    },
+    bottomIcon: {
+        marginTop: -8,
+        color: '#9f9f9f'
+    },
 });

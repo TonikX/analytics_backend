@@ -15,6 +15,7 @@ const closeDialog = createAction<string>('CLOSE_COURSE_DIALOG');
 const changeSearchQuery = createAction<string>('CHANGE_SEARCH_QUERY');
 const changeCurrentPage = createAction<string>('CHANGE_CURRENT_PAGE');
 const changeAllCount = createAction<string>('CHANGE_ALL_COUNT');
+const changeSorting = createAction<string>('CHANGE_SORTING');
 
 const actions: CoursesActions = {
     getCourses,
@@ -27,6 +28,7 @@ const actions: CoursesActions = {
     changeSearchQuery,
     changeCurrentPage,
     changeAllCount,
+    changeSorting,
 }
 
 export default actions;

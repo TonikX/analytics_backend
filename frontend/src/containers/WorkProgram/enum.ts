@@ -1,5 +1,5 @@
 export enum fields {
-    WORK_PROGRAM_ID = 'FETCHING',
+    WORK_PROGRAM_ID = 'WORK_PROGRAM_ID',
     WORK_PROGRAM = 'WORK_PROGRAM',
     WORK_PROGRAM_TITLE = 'title',
     WORK_PROGRAM_CODE = 'discipline_code',
@@ -26,9 +26,10 @@ export enum workProgramSectionFields {
 
 export enum workProgramTopicFields {
     ID = 'id',
+    NUMBER = 'number',
     DESCRIPTION = 'description',
     SECTION = 'discipline_section',
-    NUMBER = 'number'
+    COURSE = 'url_online_course',
 }
 
 export enum fetchingTypes {

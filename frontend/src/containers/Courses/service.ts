@@ -1,9 +1,12 @@
 import BaseService from "../../service/base-service";
 import {CourseFields} from "./enum";
+import {SortingType, Types} from "../../components/SortingButton/types";
 
 class CoursesServices extends BaseService{
-    getCourses(currentPage: number, searchQuery: string){
-        return this.get(`/api/onlinecourse?page=${currentPage}&search=${searchQuery}`);
+    getCourses(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
+        const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
+
+        return this.get(`/api/onlinecourse?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
     deleteCourse(courseId: number){

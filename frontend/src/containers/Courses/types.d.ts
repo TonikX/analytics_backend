@@ -2,6 +2,7 @@ import {fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {CourseFields} from './enum';
+import {SortingType} from "../../components/SortingButton/types";
 
 export interface CoursesActions {
     changeSearchQuery: any;
@@ -14,9 +15,14 @@ export interface CoursesActions {
     closeDialog: any;
     changeCurrentPage: any;
     changeAllCount: any;
+    changeSorting: any;
 }
 
 export interface coursesState {
+    [fields.SORTING]: {
+        [fields.SORTING_FIELD]: string,
+        [fields.SORTING_MODE]: SortingType;
+    };
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
@@ -27,7 +33,7 @@ export interface coursesState {
     };
 }
 
-type CourseType = {
+export type CourseType = {
     [CourseFields.ID]: number,
     [CourseFields.DESCRIPTION]: string,
     [CourseFields.TITLE]: string,
@@ -41,4 +47,6 @@ export interface CoursesProps extends WithStyles<typeof styles> {
     currentPage: number;
     searchQuery: string;
     allCount: number;
+    sortingField: string;
+    sortingMode: SortingType;
 }
