@@ -11,19 +11,20 @@ class userProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ItemSerializer(serializers.ModelSerializer):
-    """Сериализатор Ключевого слова"""
-    class Meta:
-        model = Items
-        fields = ('name','domain')
-
-
 class DomainSerializer(serializers.ModelSerializer):
     """Сериализатор для предметной области"""
  
     class Meta:
         model = Domain
-        fields = ('name','user')
+        fields = ('id', 'name','user')
+
+
+class ItemSerializer(serializers.ModelSerializer):
+    """Сериализатор Ключевого слова"""
+
+    class Meta:
+        model = Items
+        fields = ('id', 'name', 'domain', 'value')
 
 
 class ConnectionSerializer(serializers.ModelSerializer):
