@@ -51,7 +51,8 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center',
         padding: '0 0 0 20px',
         boxSizing: 'border-box',
-        height: '50px'
+        height: '50px',
+        background: '#fff'
     },
     topicName: {
         width: '40%',

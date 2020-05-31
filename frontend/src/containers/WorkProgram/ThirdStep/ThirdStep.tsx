@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {SortableContainer, SortableElement, SortableHandle} from "react-sortable-hoc";
 import Scrollbars from "react-custom-scrollbars";
 
 // @ts-ignore
@@ -38,6 +39,15 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
         this.props.actions.deleteTopic(id);
     };
 
+    onSortEnd = (sectionIndex: number) => ({newIndex, oldIndex}: any) => {
+        const {sections} = this.props;
+        const currentSection = sections[sectionIndex];
+        const sectionTopics = currentSection[workProgramSectionFields.TOPICS];
+        const currentTopic = sectionTopics[oldIndex];
+
+        this.props.actions.changeTopicNumber({topicId: currentTopic[workProgramTopicFields.ID], newNumber: newIndex + 1});
+    }
+
     handleClickEdit = (topic: any) => () => {
         this.props.actions.openDialog({dialogType: fields.CREATE_NEW_TOPIC_DIALOG, data: topic});
     };
@@ -48,7 +58,7 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
             <div className={classes.topicsSection}>
                 <Scrollbars>
                     <div className={classes.topicsList}>
-                    {sections.map(section => (
+                    {sections.map((section, index: number) => (
                         <div className={classes.sectionItem}>
                             <Typography className={classes.sectionTitle}>
                                 {section[workProgramSectionFields.ORDINAL_NUMBER]}. {section[workProgramSectionFields.NAME]}
@@ -68,34 +78,14 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
                                         </div>
                                     </div>
                                 }
-                                {section[workProgramSectionFields.TOPICS].map(topic =>
-                                    <div className={classes.topic}>
-                                        <DragIndicatorIcon style={{cursor: "pointer"}}/>
-
-                                        <Typography className={classes.topicName}>
-                                            {section[workProgramSectionFields.ORDINAL_NUMBER]}.
-                                            {topic[workProgramTopicFields.NUMBER]}. {topic[workProgramTopicFields.DESCRIPTION]}
-                                        </Typography>
-
-                                        <div className={classes.onlineCourseItem}>
-                                            {topic[workProgramTopicFields.COURSE] && <>
-                                                <Typography>Онлайн курс: </Typography>&nbsp;
-                                                <Link to={topic[workProgramTopicFields.COURSE][CourseFields.COURSE_URL]} className={classes.link}>
-                                                    <Typography> {topic[workProgramTopicFields.COURSE][CourseFields.TITLE]} </Typography>
-                                                </Link>
-                                            </>}
-                                        </div>
-
-                                        <div className={classes.actions}>
-                                            <IconButton onClick={this.handleClickDelete(topic[workProgramTopicFields.ID])}>
-                                                <DeleteIcon />
-                                            </IconButton>
-                                            <IconButton onClick={this.handleClickEdit(topic)}>
-                                                <EditIcon />
-                                            </IconButton>
-                                        </div>
-                                    </div>
-                                )}
+                                <SortableList section={section}
+                                              useDragHandle={true}
+                                              hideSortableGhost={false}
+                                              onSortEnd={this.onSortEnd(index)}
+                                              handleClickDelete={this.handleClickDelete}
+                                              handleClickEdit={this.handleClickEdit}
+                                              classes={classes}
+                                />
                             </div>
                         </div>
                     ))}
@@ -114,5 +104,56 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
         );
     }
 }
+
+
+const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}}/>);
+
+// @ts-ignore
+const SortableItem = SortableElement(({topic, section, classes, handleClickDelete, handleClickEdit}) =>
+    <div className={classes.topic}>
+        <DragHandle />
+
+        <Typography className={classes.topicName}>
+            {section[workProgramSectionFields.ORDINAL_NUMBER]}.
+            {topic[workProgramTopicFields.NUMBER]}. {topic[workProgramTopicFields.DESCRIPTION]}
+        </Typography>
+
+        <div className={classes.onlineCourseItem}>
+            {topic[workProgramTopicFields.COURSE] && <>
+                <Typography>Онлайн курс: </Typography>&nbsp;
+                <Link to={topic[workProgramTopicFields.COURSE][CourseFields.COURSE_URL]} className={classes.link}>
+                    <Typography> {topic[workProgramTopicFields.COURSE][CourseFields.TITLE]} </Typography>
+                </Link>
+            </>}
+        </div>
+
+        <div className={classes.actions}>
+            <IconButton onClick={handleClickDelete(topic[workProgramTopicFields.ID])}>
+                <DeleteIcon />
+            </IconButton>
+            <IconButton onClick={handleClickEdit(topic)}>
+                <EditIcon />
+            </IconButton>
+        </div>
+    </div>
+);
+
+// @ts-ignore
+const SortableList = SortableContainer(({section, classes, handleClickDelete, handleClickEdit}) => {
+    return (<div>
+                {section[workProgramSectionFields.TOPICS].map((topic: any, index: number) =>
+                    <SortableItem key={`item-${topic.id}`}
+                                  index={index}
+                                  topic={topic}
+                                  section={section}
+                                  classes={classes}
+                                  handleClickDelete={handleClickDelete}
+                                  handleClickEdit={handleClickEdit}
+                    />
+                )}
+            </div>
+    );
+});
+
 
 export default connect(withStyles(styles)(ThirdStep));

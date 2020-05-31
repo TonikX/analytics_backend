@@ -105,7 +105,7 @@ class WorkProgramService extends BaseService{
         // @ts-ignore
         formData.append('new_ordinal_number', newNumber);
         // @ts-ignore
-        formData.append('descipline_section', topicId);
+        formData.append('topic', topicId);
 
         return this.post(`/api/topics/NewOrdinalNumbers`, formData);
     }

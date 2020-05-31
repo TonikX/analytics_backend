@@ -128,7 +128,7 @@ class SecondStep extends React.PureComponent<SecondStepProps> {
                                 <TableCell className={classes.headerCell}>{totalPracticalClassesHours}</TableCell>
                                 <TableCell className={classes.headerCell}>{totalSPOHours}</TableCell>
                                 <TableCell className={classes.headerCell}>{totalTotalHours}</TableCell>
-                                <TableCell className={classes.headerCell}></TableCell>
+                                <TableCell className={classes.headerCell} />
                             </TableRow>
                         </Table>
                     </Scrollbars>

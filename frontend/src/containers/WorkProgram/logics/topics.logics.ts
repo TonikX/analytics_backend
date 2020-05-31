@@ -52,11 +52,11 @@ const changeTopicNumber = createLogic({
     process({getState, action}: any, dispatch, done) {
         const state = getState();
         const workProgramId = getWorkProgramId(state);
-        const {newNumber, sectionId} = action.payload;
+        const {newNumber, topicId} = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_TOPIC_NUMBER}));
 
-        service.changeSectionNumber(newNumber, sectionId)
+        service.changeTopicNumber(newNumber, topicId)
             .then((res) => {
                 dispatch(workProgramActions.getWorkProgram(workProgramId));
                 // @ts-ignore
