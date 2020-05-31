@@ -45,6 +45,7 @@ class RelationCreateSerializer(serializers.ModelSerializer):
         model = Relation
         fields = ('item1','relation','item2') 
 
+
 class RelationSerializer(serializers.ModelSerializer):
     item2 = ConnectionSerializer(source = 'connection_set', many=True)
     item1 = ItemSerializer()
