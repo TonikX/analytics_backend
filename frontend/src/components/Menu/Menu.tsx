@@ -10,6 +10,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import {WithStyles} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import HomeIcon from '@material-ui/icons/HomeOutlined';
+import BookIcon from '@material-ui/icons/BookOutlined';
 
 import {appRouter} from "../../service/router-service";
 
@@ -46,6 +47,19 @@ class Menu extends React.PureComponent<MenuProps>{
                             <HomeIcon className={classes.icon} />
                             &nbsp;Онлайн курсы
                         </MenuItem>
+                    </Link>
+
+                    <Link to={appRouter.getLiteratureRoute()} className={classes.link}>
+                            <MenuItem
+                                selected={pathname === appRouter.getLiteratureRoute()}
+                                classes={{
+                                    selected: classes.selectedMenuItem,
+                                    root: classes.menuItem,
+                                }}
+                            >
+                                <BookIcon className={classes.icon} />
+                                &nbsp;Источники
+                            </MenuItem>
                     </Link>
                 </List>
 

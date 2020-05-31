@@ -13,7 +13,7 @@ export default (theme: Theme) => createStyles({
     selectedMenuItem: {
         color: `${theme.palette.secondary.main} !important`,
         backgroundColor: 'transparent !important',
-        borderLeft: `4px solid ${theme.palette.secondary.main}`,
+        borderLeft: `4px solid ${theme.palette.secondary.main} !important`,
         padding: '10px 16px',
         '&:hover': {
             backgroundColor: '#f4f4f4 !important'
@@ -30,6 +30,7 @@ export default (theme: Theme) => createStyles({
         margin: '5px 2px',
         padding: '10px 16px',
         color: theme.palette.text.primary,
+        borderLeft: `4px solid transparent`,
         '&:hover': {
             backgroundColor: '#f4f4f4 !important',
             color: `${theme.palette.secondary.main} !important`,

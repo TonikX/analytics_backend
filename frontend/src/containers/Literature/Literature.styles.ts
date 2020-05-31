@@ -15,14 +15,14 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         justifyContent: 'space-between'
     },
-    courseList: {
+    list: {
         width: '100%',
         height: 'calc(100% - 50px)'
     },
-    courseTableWrap: {
+    tableWrap: {
         height: 'calc(100% - 200px)'
     },
-    course: {
+    listItem: {
         width: '100%',
         display: 'flex',
         borderBottom: '1px solid #ccc',
@@ -30,20 +30,6 @@ export default (theme: Theme) => createStyles({
         padding: '0 0 0 20px',
         boxSizing: 'border-box',
         minHeight: '50px'
-    },
-    courseTitle: {
-        minWidth: 200,
-        width: '20%'
-    },
-    courseLink: {
-        minWidth: 200,
-        width: 200,
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        '&: a': {
-            textDecoration: 'none'
-        }
     },
     actions: {
         display: 'flex',
@@ -69,12 +55,5 @@ export default (theme: Theme) => createStyles({
     },
     marginRight: {
         marginRight: 20
-    },
-    coursePlatform: {
-        minWidth: 200,
-        width: '10%'
-    },
-    courseDescription: {
-        whiteSpace: 'nowrap'
     },
 });
