@@ -52,6 +52,10 @@ class RelationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Relation
         fields = ('item1','relation','item2') 
+        
+class FileUploadSerializer(serializers.Serializer):
+    file = serializers.FileField(use_url=False)
+
 
 '''
 class RelationWithItemSerializer(serializers.ModelSerializer):
