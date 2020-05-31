@@ -361,54 +361,57 @@ def set_relation_hierarchy(items_query, type_relation):
     """
         Запись иерархических связей и пререквизитов
     """
-    print(items_query)
-    for key,value in items_query.items():
-        items_set = [Items.objects.get(name = i) for i in value.split(', ')]
-        item_id = Items.objects.get(name = key)
-        #Проверяем, если связь существует, то добавляем новые сущности
-        if Relation.objects.filter(item1 = item_id, relation = type_relation).exists():
-            relation = Relation.objects.get(item1 = item_id, relation = type_relation)
-            to_check = relation.item2.all()
-            saved = len(to_check)
-            for i in items_set:
-                if i in to_check:
-                    #Подсчет веса ребра
-                    conn = Connection.objects.get(relation=relation, items=i)
-                    value = conn.count
-                    conn.count = int(value) + 1
-                    conn.save()
-                    saved = saved - 1
-                else:
-                    conn = Connection(relation_id = relation.id, items_id = i.id)
-                    conn.save()
+    try:
+        for key,value in items_query.items():
+            items_set = [Items.objects.get(name = i) for i in value.split(', ')]
+            item_id = Items.objects.get(name = key)
+            #Проверяем, если связь существует, то добавляем новые сущности
+            if Relation.objects.filter(item1 = item_id, relation = type_relation).exists():
+                relation = Relation.objects.get(item1 = item_id, relation = type_relation)
+                to_check = relation.item2.all()
+                saved = len(to_check)
+                for i in items_set:
+                    if i in to_check:
+                        #Подсчет веса ребра
+                        conn = Connection.objects.get(relation=relation, items=i)
+                        value = conn.count
+                        conn.count = int(value) + 1
+                        conn.save()
+                        saved = saved - 1
+                    else:
+                        conn = Connection(relation_id = relation.id, items_id = i.id)
+                        conn.save()
 
-            #Подсчет значения вершины графа
-            item = Items.objects.get(id = relation.item1.id)
-            value = item.value
-            item.value = int(value) + saved
-            item.save()
-        else:
-            #Иначе создаем новую запись в бд
-            relation = Relation(item1 = item_id , relation = type_relation)
-            relation.save()
-            for i in items_set:
-                try:
-                    conn = Connection(relation_id = relation.id, items_id = i.id)
-                    conn.save()
-                except:
-                    print('eerr')
-    
-            #Подсчет значения вершины графа
-            item = Items.objects.get(id = relation.item1.id)
-            value = item.value
-            item.value = int(value) + relation.item2.all().count()
-            item.save()
+                #Подсчет значения вершины графа
+                item = Items.objects.get(id = relation.item1.id)
+                value = item.value
+                item.value = int(value) + saved
+                item.save()
+            else:
+                #Иначе создаем новую запись в бд
+                relation = Relation(item1 = item_id , relation = type_relation)
+                relation.save()
+                for i in items_set:
+                    try:
+                        conn = Connection(relation_id = relation.id, items_id = i.id)
+                        conn.save()
+                    except:
+                        print('eerr')
         
-        if type_relation == '1':
-            try:
-                set_relation_linear(relation.item2.all(),type_relation)  
-            except:
-                print('next')   
+                #Подсчет значения вершины графа
+                item = Items.objects.get(id = relation.item1.id)
+                value = item.value
+                item.value = int(value) + relation.item2.all().count()
+                item.save()
+            
+            if type_relation == '1':
+                try:
+                    set_relation_linear(relation.item2.all(),type_relation)  
+                except:
+                    print('next')
+        return Response(status=200)
+    except:
+        return Response(status=400)   
                 
 def set_relation_linear(items_query, type_relation):
     """
@@ -455,9 +458,9 @@ def set_relation_linear(items_query, type_relation):
                 value = item.value
                 item.value = int(value) + relation.item2.all().count()
                 item.save()
+        return Response(status=200)
     except:
-        print('not-added')
-        #relation.item2.set(q)#to change
+        return Response(status=400)
 
 
 from .serializers import DomainSerializer, ItemSerializer, RelationSerializer, RelationCreateSerializer
@@ -637,4 +640,60 @@ class RelationPostAPIView(APIView):
             return Response(status=200)
         except:
             return Response(status=400)
+
+from .serializers import FileUploadSerializer
+#POST api/upload/
+#body: 
+#{
+#    domain:str
+#    relation:int
+#}
+class FileUploadAPIView(APIView):
+    def post(self, request):
+
+        serializer = FileUploadSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        # once validated, grab the file from the request itself
+        try:
+            file = handle_uploaded_file(request.FILES['file'], str(request.FILES['file'])).splitlines()
+            items_list = []
+            
+            for i in file:
+                items_list.extend(i.strip().split(', '))
+
+            domain_id = Domain.objects.get(name = request.data.get("domain")).id
+
+            for i in items_list:
+                if Items.objects.filter(name = i).exists():
+                    continue;
+                else:
+                    item = Items(name = i, domain = Domain.objects.get(pk=domain_id),
+                        author = request.user, source = 'uploaded')
+                    item.save()
+            
+            type_relation = str(request.data.get("relation"))
+            print(type_relation)
+            course = file[0]
+            file.remove(file[0])  
+            print('123456789')      
+            if type_relation in ['1','4']:
+                data = dict(zip(file[::2],file[1::2]))
+                data.update({course:file[::2]})
+                set_relation_hierarchy(data, type_relation)   
+           
+            else:
+                data = {course:file}
+                items_query = [Items.objects.get(name = i) for i in items_list]
+                items_query = Items.objects.filter(name__in = items_query)
+                items_query = items_query.exclude(name = course)
+                #Создаем связь верхнего уровня для дисциплины и связанных с ней эелементов
+                set_relation_hierarchy(data, '1')
+                #Создаем линейные связи между элементами
+                set_relation_linear(items_query,type_relation)
+
+            return Response(status=200)  
+        except:
+            return Response(status=400)
+
+
 
