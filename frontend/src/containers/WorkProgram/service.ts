@@ -96,7 +96,7 @@ class WorkProgramService extends BaseService{
         // @ts-ignore
         formData.append('work_program', workProgramId);
 
-        return this.post(`/api/topics/`, formData);
+        return this.post(`/api/topics/create`, formData);
     }
 
     changeTopicNumber(newNumber: ReactText, topicId: ReactText){

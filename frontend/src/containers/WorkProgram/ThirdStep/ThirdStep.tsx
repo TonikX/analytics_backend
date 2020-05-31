@@ -3,9 +3,6 @@ import React from 'react';
 import {SortableContainer, SortableElement, SortableHandle} from "react-sortable-hoc";
 import Scrollbars from "react-custom-scrollbars";
 
-// @ts-ignore
-import Link from "react-router-dom/Link";
-
 import Typography from "@material-ui/core/Typography";
 import withStyles from '@material-ui/core/styles/withStyles';
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
@@ -32,7 +29,9 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
     };
 
     handleCreateNewTopicOnSection = (sectionId: number) => () => {
-        this.props.actions.openDialog({dialogType: fields.CREATE_NEW_TOPIC_DIALOG, data: {[workProgramTopicFields.SECTION]: sectionId}});
+        this.props.actions.openDialog({dialogType: fields.CREATE_NEW_TOPIC_DIALOG, data: {
+            [workProgramTopicFields.SECTION]: sectionId
+        }});
     };
 
     handleClickDelete = (id: string) => () => {
@@ -58,8 +57,8 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
             <div className={classes.topicsSection}>
                 <Scrollbars>
                     <div className={classes.topicsList}>
-                    {sections.map((section, index: number) => (
-                        <div className={classes.sectionItem}>
+                    {sections.map((section, index) => (
+                        <div key={`section-${section.id}`} className={classes.sectionItem}>
                             <Typography className={classes.sectionTitle}>
                                 {section[workProgramSectionFields.ORDINAL_NUMBER]}. {section[workProgramSectionFields.NAME]}
 
@@ -121,9 +120,10 @@ const SortableItem = SortableElement(({topic, section, classes, handleClickDelet
         <div className={classes.onlineCourseItem}>
             {topic[workProgramTopicFields.COURSE] && <>
                 <Typography>Онлайн курс: </Typography>&nbsp;
-                <Link to={topic[workProgramTopicFields.COURSE][CourseFields.COURSE_URL]} className={classes.link}>
+                {/* eslint-disable-next-line*/}
+                <a target="_blank" href={topic[workProgramTopicFields.COURSE][CourseFields.COURSE_URL]} className={classes.link}>
                     <Typography> {topic[workProgramTopicFields.COURSE][CourseFields.TITLE]} </Typography>
-                </Link>
+                </a>
             </>}
         </div>
 

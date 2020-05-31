@@ -47,18 +47,21 @@ class MultipleSearchSelector extends React.Component<MultipleSearchSelectorProps
         this.setState({
             anchorEl: null,
         });
-
-        this.props.changeSearchText('');
     };
 
     handleOnClickAway = (): void => {
         this.closeMenu();
-        this.setState({searchText: this.getLabelForValue(this.props.value)});
+        debugger
+        if (this.state.searchText.length === 0){
+            this.props.changeItem('');
+        } else {
+            this.setState({searchText: this.getLabelForValue(this.props.value)});
+        }
     };
 
     setItem = (value: ReactText) => (e: React.MouseEvent) => {
-        this.props.changeItem(value);
         this.setState({searchText: this.getLabelForValue(value)});
+        this.props.changeItem(value);
     }
 
     getLabelForValue = (value: ReactText) => {
