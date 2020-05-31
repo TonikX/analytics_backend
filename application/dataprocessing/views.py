@@ -492,6 +492,8 @@ class ItemsListCreateAPIView(generics.ListCreateAPIView):
     """
     queryset = Items.objects.all()
     serializer_class = ItemSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
 
 class ItemsListAPIView(generics.ListAPIView):
     """
@@ -518,6 +520,8 @@ class RelationListCreateAPIView(generics.ListAPIView):
     """
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['item1']
     
 #GET api/relation/{domain_id} - Список связей по домену (ответ JSON)
 class RelationListAPIView(generics.ListAPIView):
