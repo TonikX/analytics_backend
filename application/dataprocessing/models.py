@@ -47,6 +47,9 @@ class Items(models.Model):
     value = models.IntegerField(blank=True, null = True, default = 0, verbose_name='Значение')
     source = models.CharField(max_length=200, blank=True, verbose_name='Источник')    
     #date_created = models.DateField(auto_now_add = True)
+    relation_with_item = models.ManyToManyField('Items', verbose_name='Связи айтима', through='Relation')
+
+
     def __str__(self):
         return self.name
 
@@ -83,9 +86,9 @@ class Connection(models.Model):
     '''
         Модель для связей
     '''
- 
-    class Meta:
-        auto_created = True
+    #
+    # class Meta:
+    #     auto_created = True
 
     relation = models.ForeignKey(Relation,on_delete=models.CASCADE, verbose_name='Связь')
     items = models.ForeignKey(Items, on_delete=models.CASCADE, related_name = 'item', verbose_name='Учебная сущность')

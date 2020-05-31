@@ -70,7 +70,7 @@ class OnlineCourseSerializer(serializers.ModelSerializer):
 
 class TopicSerializer(serializers.ModelSerializer):
     """Сериализатор Тем"""
-    url_online_course = OnlineCourseSerializer()
+    url_online_course = OnlineCourseSerializer(required=False)
     class Meta:
         model = Topic
         fields = ['id', 'discipline_section', 'number', 'description', 'url_online_course']
