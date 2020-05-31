@@ -74,9 +74,10 @@ class Relation(models.Model):
         (NO, 'отсутствует'),
     )
 
-    item1 = models.ForeignKey(Items,on_delete=models.CASCADE, related_name = 'item1', verbose_name='Элемент РПД')
+    item1 = models.ForeignKey('Items',on_delete=models.CASCADE, related_name = 'item1', verbose_name='Элемент РПД')
     relation = models.CharField(choices=STATUS_CHOICES, max_length=10, default=HIERARCHY, verbose_name='Связь')
-    item2 = models.ManyToManyField(Items, related_name = 'item2', through='Connection', verbose_name='Элемент РПД')
+    item2 = models.ForeignKey('Items',on_delete=models.CASCADE, related_name = 'item2', verbose_name='Элемент РПД', default = 0)
+    count = models.IntegerField(null = True, blank = True, default = 0, verbose_name='Повторения')
     
     def __str__(self):
         return self.item1.name

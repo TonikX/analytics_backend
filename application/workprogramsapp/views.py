@@ -6,7 +6,7 @@ from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramF
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, OnlineCourse
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
-from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer
+from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer
 from django.contrib.auth.decorators import login_required
@@ -608,7 +608,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
 #Конец блока ендпоинтов рабочей программы
 
 
-class TopicsListAPI(generics.ListCreateAPIView):
+class TopicsListAPI(generics.ListAPIView):
     """
     API endpoint that represents a list of Topics.
     """
@@ -616,12 +616,20 @@ class TopicsListAPI(generics.ListCreateAPIView):
     serializer_class = TopicSerializer
 
 
+class TopicCreateAPI(generics.CreateAPIView):
+    """
+    API endpoint that represents a list of Topics.
+    """
+    queryset = Topic.objects.all()
+    serializer_class = TopicCreateSerializer
+
+
 class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     API endpoint that represents a single Topic.
     """
     queryset = Topic.objects.all()
-    serializer_class = TopicSerializer
+    serializer_class = TopicCreateSerializer
 
 
 class EvaluationToolListAPI(generics.ListCreateAPIView):

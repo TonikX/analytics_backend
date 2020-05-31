@@ -76,6 +76,13 @@ class TopicSerializer(serializers.ModelSerializer):
         fields = ['id', 'discipline_section', 'number', 'description', 'url_online_course']
 
 
+class TopicCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор Тем"""
+    class Meta:
+        model = Topic
+        fields = ['id', 'discipline_section', 'number', 'description', 'url_online_course']
+
+
 class EvaluationToolSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
     class Meta:

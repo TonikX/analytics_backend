@@ -12,8 +12,7 @@ from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgram
 from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, TopicsListAPI, TopicDetailAPI, NewOrdinalNumbersForDesciplineSectionAPI
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
-from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI
-
+from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 
 
 
@@ -75,6 +74,7 @@ urlpatterns = [
     path('api/sections/NewOrdinalNumbers', NewOrdinalNumbersForDesciplineSectionAPI),
 
     path('api/topics/', TopicsListAPI.as_view(), name='topics'),
+    path('api/topics/create', TopicCreateAPI.as_view()),
     path('api/topics/<int:pk>', TopicDetailAPI.as_view(), name='topic_detail'),
     path('api/topics/NewOrdinalNumbers', NewOrdinalNumbersForTopicAPI),
 
