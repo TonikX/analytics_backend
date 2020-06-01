@@ -1,6 +1,6 @@
 from rest_framework import serializers, viewsets
 
-from .models import User, Items, Domain, Relation, Connection
+from .models import User, Items, Domain, Relation
 
 class userProfileSerializer(serializers.ModelSerializer):
     """Сериализатор для работы с акканутами"""
@@ -19,60 +19,41 @@ class DomainSerializer(serializers.ModelSerializer):
         fields = ('id', 'name','user')
 
 
+class ItemCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор Ключевого слова"""
+    class Meta:
+        model = Items
+        fields = ('id','name','domain')
+
+class RelationInItemsSerializer(serializers.ModelSerializer):
+    """Сериализатор для отоброжения связей в таблице сущностей"""
+    item2 = ItemCreateSerializer()
+
+    class Meta:
+        model = Relation
+        fields = ('id','relation','item2', 'count') 
+
 class ItemSerializer(serializers.ModelSerializer):
     """Сериализатор Ключевого слова"""
+    relation_with_item = RelationInItemsSerializer(many=True)
 
     class Meta:
         model = Items
-        fields = ('id', 'name', 'domain', 'value')
+        fields = ('id','name','domain','value','relation_with_item')
 
-
-class ConnectionSerializer(serializers.ModelSerializer):
-    """Сериализатор для связей"""
-    #def to_representation(self, value):
-    #     return value.items.name
-    items = ItemSerializer()
-
-    class Meta:
-        model = Connection
-        fields = ('relation','items','count')
-
-
-class RelationCreateSerializer(serializers.ModelSerializer):
+        
+class RelationSerializer(serializers.ModelSerializer):
     """Сериализатор для создания связей"""
-    
+    item1 = ItemCreateSerializer()
+    item2 = ItemCreateSerializer()
     class Meta:
         model = Relation
-        fields = ('item1','relation','item2') 
+        fields = ('item1','relation','item2', 'count') 
 
 
-class RelationSerializer(serializers.ModelSerializer):
-    item2 = ConnectionSerializer(source = 'connection_set', many=True)
-    item1 = ItemSerializer()
+class FileUploadSerializer(serializers.Serializer):
+    file = serializers.FileField(use_url=False)
 
-    class Meta:
-        model = Relation
-        fields = ('item1','relation','item2') 
-
-'''
-class RelationWithItemSerializer(serializers.ModelSerializer):
-    """Сериализатор для связей"""
-    item2 = ConnectionSerializer(source = 'connection_set',many=True)
-    item = serializers.CharField(source='item1')
-    class Meta:
-        model = Relation
-        fields = ('id','item','relation','item2') 
-
-'''
-'''
-class RelationSerializer(serializers.ModelSerializer):
-    """Сериализатор cоздания связей"""
-    item = serializers.CharField(source='item1')
-    item2 = ConnectionSerializer(many=True)
-    class Meta:
-        model = Relation
-        fields = ('item','relation','item2') 
-'''
 
 
 

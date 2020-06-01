@@ -38,8 +38,6 @@ class Items(models.Model):
     '''
         Модель для сущностей
     '''
-    class Meta:
-        verbose_name_plural = 'Учебные сущности'
  
     name = models.CharField(max_length=200, blank=True, verbose_name='Название')
     domain = models.ForeignKey(Domain, null = True, blank = True, help_text='Укажите область', verbose_name='Область знаний',on_delete=models.CASCADE,)
@@ -48,8 +46,7 @@ class Items(models.Model):
     source = models.CharField(max_length=200, blank=True, verbose_name='Источник')    
     #date_created = models.DateField(auto_now_add = True)
     relation_with_item = models.ManyToManyField('Items', verbose_name='Связи айтима', through='Relation')
-
-
+    
     def __str__(self):
         return self.name
 
@@ -81,19 +78,3 @@ class Relation(models.Model):
     
     def __str__(self):
         return self.item1.name
-
-
-class Connection(models.Model):
-    '''
-        Модель для связей
-    '''
-    #
-    # class Meta:
-    #     auto_created = True
-
-    relation = models.ForeignKey(Relation,on_delete=models.CASCADE, verbose_name='Связь')
-    items = models.ForeignKey(Items, on_delete=models.CASCADE, related_name = 'item', verbose_name='Учебная сущность')
-    count = models.IntegerField(null = True, blank = True, default = 0, verbose_name='Повторения')
-
-    def __str__(self):
-        return self.items.name
