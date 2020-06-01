@@ -435,7 +435,7 @@ def set_relation_linear(items_query, type_relation):
         return Response(status=400)
         
         
-from .serializers import DomainSerializer, ItemSerializer, ItemCreateSerializer, RelationSerializer
+from .serializers import DomainSerializer, ItemSerializer, ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -523,7 +523,7 @@ class RelationRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
         #body: json(*) с измененными параметрами
 class RelationUpdateAPIView(generics.RetrieveUpdateAPIView):
     queryset = Relation.objects.all()
-    serializer_class = RelationSerializer
+    serializer_class = RelationUpdateSerializer
     
     '''
     def put(self, request, pk):

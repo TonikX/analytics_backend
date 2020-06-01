@@ -31,11 +31,18 @@ class RelationInItemsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Relation
-        fields = ('id','relation','item2', 'count') 
+        fields = ('id','relation','item2', 'count')
+
+
+class RecursiveField(serializers.Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
 
 class ItemSerializer(serializers.ModelSerializer):
     """Сериализатор Ключевого слова"""
-    relation_with_item = RelationInItemsSerializer(many=True)
+    relation_with_item = RecursiveField(many=True)
 
     class Meta:
         model = Items
@@ -48,7 +55,15 @@ class RelationSerializer(serializers.ModelSerializer):
     item2 = ItemCreateSerializer()
     class Meta:
         model = Relation
-        fields = ('item1','relation','item2', 'count') 
+        fields = ('item1','relation','item2', 'count')
+
+
+class RelationUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для обновления связей"""
+
+    class Meta:
+        model = Relation
+        fields = ('item1','relation','item2', 'count')
 
 
 class FileUploadSerializer(serializers.Serializer):
