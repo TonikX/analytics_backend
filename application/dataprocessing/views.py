@@ -81,7 +81,7 @@ def index(request):
     )
 
 
-
+'''
 class RelationPost(View):
     """Render the HTML template to post relations"""
     
@@ -165,7 +165,7 @@ class RelationPostUpdate(View):
             form = RelationForm(instance=relation)
         return render(request, 'dataprocessing/edit_relation.html', {'form': form})
 
-
+'''
 class DomainPost(View):
     """ Render the HTML template for superuser to create domain"""
     def get(self, request):
@@ -319,11 +319,11 @@ def upload(request):
             
             if type_relation in ['1','4']:
                 data = dict(zip(file[::2],file[1::2]))
-                data.update(dict(zip(course,file[::2])))
+                data.update({course:', '.join(file[::2])})
                 set_relation_hierarchy(data, type_relation)   
            
             else:
-                data = {course:file}
+                data = {course:', '.join(file)}
                 items_query = [Items.objects.get(name = i) for i in items_list]
                 items_query = Items.objects.filter(name__in = items_query)
                 items_query = items_query.exclude(name = course)
@@ -356,6 +356,57 @@ def handle_uploaded_file(file, filename):
         data=f.read()
     return data
 
+def set_relation(item1, items_set, type_relation):
+    print('set_relation')
+    list_of_items = []
+    
+    if Relation.objects.filter(item1 = item1, relation = type_relation).exists():
+        #existed_query = Relation.objects.filter(item1 = item1, relation = type_relation)
+        saved = len(items_set)
+        for item2 in items_set:
+            #item2 = Items.objects.get(name = i)
+            if Relation.objects.filter(item1 = item1, relation = type_relation, item2=item2).exists():
+                #Если связь с i уже существует, то увеличиваем count
+                #Подсчет веса ребра
+                relation = Relation.objects.get(item1 = item1, relation = type_relation, item2=item2)
+                value = relation.count
+                relation.count = int(value) + 1
+                relation.save()
+                saved = saved - 1
+            else:
+                #Если нет, то добавляем новую запись
+                relation = Relation(item1 = item1, relation = type_relation, item2 = item2)
+                relation.save()
+                list_of_items.append(relation.item2)
+        #Подсчет значения вершины графа
+        item = Items.objects.get(name = item1)
+        value = item.value
+        item.value = int(value) + saved
+        item.save()
+        print('ok-1')
+
+    else:
+        for item2 in items_set:
+            print(item2)
+            #item2 = Items.objects.get(name = i)
+            relation = Relation(item1 = item1 , relation = type_relation, item2 = item2)
+            relation.save()
+            list_of_items.append(relation.item2)
+
+        #Подсчет значения вершины графа
+        item = Items.objects.get(id = item1.id)
+        value = item.value
+        item.value = int(value) + len(items_set)
+        item.save()
+        print('ok-2')
+
+    if type_relation == '1':
+        query = Items.objects.filter(name__in = list_of_items)
+        set_relation_linear(query,'2')
+        
+    print('ok-3')
+
+
 
 def set_relation_hierarchy(items_query, type_relation):
     """
@@ -363,52 +414,11 @@ def set_relation_hierarchy(items_query, type_relation):
     """
     try:
         for key,value in items_query.items():
-            items_set = [Items.objects.get(name = i) for i in value.split(', ')]
-            item_id = Items.objects.get(name = key)
-            #Проверяем, если связь существует, то добавляем новые сущности
-            if Relation.objects.filter(item1 = item_id, relation = type_relation).exists():
-                relation = Relation.objects.get(item1 = item_id, relation = type_relation)
-                to_check = relation.item2.all()
-                saved = len(to_check)
-                for i in items_set:
-                    if i in to_check:
-                        #Подсчет веса ребра
-                        conn = Connection.objects.get(relation=relation, items=i)
-                        value = conn.count
-                        conn.count = int(value) + 1
-                        conn.save()
-                        saved = saved - 1
-                    else:
-                        conn = Connection(relation_id = relation.id, items_id = i.id)
-                        conn.save()
 
-                #Подсчет значения вершины графа
-                item = Items.objects.get(id = relation.item1.id)
-                value = item.value
-                item.value = int(value) + saved
-                item.save()
-            else:
-                #Иначе создаем новую запись в бд
-                relation = Relation(item1 = item_id , relation = type_relation)
-                relation.save()
-                for i in items_set:
-                    try:
-                        conn = Connection(relation_id = relation.id, items_id = i.id)
-                        conn.save()
-                    except:
-                        print('eerr')
-        
-                #Подсчет значения вершины графа
-                item = Items.objects.get(id = relation.item1.id)
-                value = item.value
-                item.value = int(value) + relation.item2.all().count()
-                item.save()
-            
-            if type_relation == '1':
-                try:
-                    set_relation_linear(relation.item2.all(),type_relation)  
-                except:
-                    print('next')
+            names = value.split(', ')
+            items_set = Items.objects.filter(name__in = names)
+            item1 = Items.objects.get(name = key)
+            set_relation(item1, items_set, type_relation)
         return Response(status=200)
     except:
         return Response(status=400)   
@@ -417,50 +427,18 @@ def set_relation_linear(items_query, type_relation):
     """
         Запись линейных связей
     """
-    #print(items_query)
+    print('set_linear')
     try:
         for item in items_query:
-            q = items_query.exclude(name = item)
-            item_id = Items.objects.get(name = item)
-            if Relation.objects.filter(item1 = item_id, relation = type_relation).exists():
-                relation = Relation.objects.get(item1 = item_id, relation = type_relation)
-                to_check = relation.item2.all()
-                saved = len(to_check)
-                for i in q:
-                    if i in to_check:
-                        #Подсчет веса ребра
-                        conn = Connection.objects.get(relation=relation, items=i)
-                        value = conn.count
-                        conn.count = int(value) + 1
-                        conn.save()
-                        saved = saved - 1
-                    else:
-                        conn = Connection(relation_id = relation.id, items_id = i.id)
-                        conn.save()
 
-                #Подсчет значения вершины графа
-                item = Items.objects.get(id = relation.item1.id)
-                value = item.value
-                item.value = int(value) + saved
-                item.save()
-            else:
-                if type_relation == '1':
-                    relation = Relation(item1 = item_id, relation = '2')
-                else:
-                    relation = Relation(item1 = item_id, relation = type_relation)
-                relation.save()
-                for i in q:
-                    conn = Connection(relation_id = relation.id, items_id = i.id)
-                    conn.save()
-            
-                #Подсчет значения вершины графа
-                item = Items.objects.get(id = relation.item1.id)
-                value = item.value
-                item.value = int(value) + relation.item2.all().count()
-                item.save()
+            items_set = items_query.exclude(name = item)
+            item1 = Items.objects.get(name = item)
+            set_relation(item1, items_set, type_relation)
+
         return Response(status=200)
     except:
         return Response(status=400)
+        
 
 
 from .serializers import DomainSerializer, ItemSerializer, RelationSerializer, RelationCreateSerializer
@@ -496,7 +474,7 @@ class ItemsListCreateAPIView(generics.ListCreateAPIView):
     API endpoint that represents a list of Items.
     """
     queryset = Items.objects.all()
-    serializer_class = ItemSerializer
+    serializer_class = ItemCreateSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name']
     filterset_fields = ['domain']
@@ -508,16 +486,13 @@ class ItemsListAPIView(generics.ListAPIView):
     queryset = Items.objects.all()
     serializer_class = ItemSerializer
 
-    def get_queryset(self):
-        domain = self.kwargs['domain_id']
-        return Items.objects.filter(domain__id=domain)
 
 class ItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     """
     API endpoint that represents a single Item.
     """
     queryset = Items.objects.all()
-    serializer_class = ItemSerializer
+    serializer_class = ItemCreateSerializer
 
 #GET api/relation/ - Список связей (ответ JSON)
 class RelationListCreateAPIView(generics.ListAPIView):
@@ -554,7 +529,7 @@ class RelationRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
         #body: json(*) с измененными параметрами
 class RelationUpdateAPIView(generics.RetrieveUpdateAPIView):
     queryset = Relation.objects.all()
-    serializer_class = RelationCreateSerializer
+    serializer_class = RelationSerializer
     
     '''
     def put(self, request, pk):
@@ -573,74 +548,6 @@ class RelationUpdateAPIView(generics.RetrieveUpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     '''
-
-#POST api/relation/new - Создание новой связи
-class RelationPostAPIView(APIView):
-    """Render the HTML template to post relations"""
-    def post(self, request):
-        item1 = request.data.get("item1")
-        relation = request.data.get("relation")
-        item2 = request.data.get("item2") 
-        
-        item1 = Items.objects.get(pk = item1)
-        new_items = [Items.objects.get(pk = i) for i in item2]
-
-        try:
-            if Relation.objects.filter(item1 = item1, relation = relation).exists():
-                rel = Relation.objects.get(item1 = item1, relation = relation)
-                existed_items = rel.item2.all()
-
-                for i in new_items:
-                    if i in existed_items:
-                        #Подсчет веса ребра
-
-                        conn = Connection.objects.get(relation=rel, items=i)
-                        value = conn.count
-
-                        conn.count = int(value) + 1
-                        conn.save()
-
-                    else:
-                        print(i)
-                        conn = Connection(relation_id = rel.id, items_id = i.id)
-                        conn.save()
-
-                q = rel.item2.all()
-                q = q.filter(name__in = new_items)
-                
-                if relation == '1':
-                    set_relation_linear(q,'2')
-       
-                #Подсчет  вершины
-                item = Items.objects.get(id = rel.item1.id)
-                value = item.value
-                item.value = int(value) + len(new_items)
-                item.save()
-                
-            else:
-
-                rel = Relation(item1 = item1, relation = relation)
-                rel.save()
-   
-                for i in new_items:
-
-                    conn = Connection(relation_id = rel.id, items_id=i.id)
-                    conn.save()
-                try:
-                    if relation == '1':
-                        set_relation_linear(rel.item2.all(),'2')
-                except:
-                    print('not-ok')
-                
-                item = Items.objects.get(id = rel.item1.id)
-                value = item.value
-                item.value = int(value) + rel.item2.all().count()
-                item.save()
-                
-            return Response(status=200)
-        except:
-            return Response(status=400)
-
 from .serializers import FileUploadSerializer
 #POST api/upload/
 #body: 
@@ -672,28 +579,44 @@ class FileUploadAPIView(APIView):
                     item.save()
             
             type_relation = str(request.data.get("relation"))
-            print(type_relation)
+            
             course = file[0]
             file.remove(file[0])  
-            print('123456789')      
             if type_relation in ['1','4']:
                 data = dict(zip(file[::2],file[1::2]))
-                data.update({course:file[::2]})
-                set_relation_hierarchy(data, type_relation)   
-           
+                data.update({course:', '.join(file[::2])})
+                set_relation_hierarchy(data, type_relation)
+  
             else:
-                data = {course:file}
+                data = {course:', '.join(file)}
                 items_query = [Items.objects.get(name = i) for i in items_list]
                 items_query = Items.objects.filter(name__in = items_query)
                 items_query = items_query.exclude(name = course)
                 #Создаем связь верхнего уровня для дисциплины и связанных с ней эелементов
                 set_relation_hierarchy(data, '1')
                 #Создаем линейные связи между элементами
-                set_relation_linear(items_query,type_relation)
-
+                set_relation_linear(items_query,type_relation) 
             return Response(status=200)  
         except:
             return Response(status=400)
 
 
+
+#POST api/relation/new - Создание новой связи
+class RelationPostAPIView(APIView):
+    """Render the HTML template to post relations"""
+    def post(self, request):
+        try:
+            item1 = request.data.get("item1")
+            relation = request.data.get("relation")
+            item2 = request.data.get("item2") 
+            
+            item1 = Items.objects.get(pk = item1)
+            new_items = [Items.objects.get(pk = i) for i in item2]
+
+            set_relation(item1, new_items, relation)
+
+            return Response(status=200)
+        except:
+            return Response(status=400)
 
