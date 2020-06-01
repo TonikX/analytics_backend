@@ -59,9 +59,6 @@ urlpatterns = [
     path('api/upload/', views.FileUploadAPIView.as_view(), ),
 
     
-    
-    path('api/upload/', views.FileUploadAPIView.as_view(), ),
-    
 
 
 ]
