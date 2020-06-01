@@ -13,7 +13,7 @@ from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSec
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
 from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
-
+from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, BibliographicReferenceUpdateView
 
 
 urlpatterns = [
@@ -97,5 +97,11 @@ urlpatterns = [
     path('api/onlinecourse/delete/<int:pk>', OnlineCourseDestroyView.as_view()),
     path('api/onlinecourse/update/<int:pk>', OnlineCourseUpdateView.as_view()),
 
+    #Библиогшрафическая ссылкуа
+    path('api/BibliographicReference', BibliographicReferenceListCreateAPIView.as_view()),
+    path('api/BibliographicReference/create', BibliographicReferenceListCreateAPIView.as_view()),
+    path('api/BibliographicReference/detail/<int:pk>', BibliographicReferenceDetailsView.as_view()),
+    path('api/BibliographicReference/delete/<int:pk>', BibliographicReferenceDestroyView.as_view()),
+    path('api/BibliographicReference/update/<int:pk>', BibliographicReferenceUpdateView.as_view()),
 
 ]

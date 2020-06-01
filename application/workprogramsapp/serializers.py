@@ -1,6 +1,6 @@
 from rest_framework import serializers, viewsets
 
-from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification, OnlineCourse
+from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference
 
 from dataprocessing.serializers import ItemSerializer
 
@@ -98,6 +98,14 @@ class SectionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class BibliographicReferenceSerializer(serializers.ModelSerializer):
+    """Сериализатор Разделов"""
+
+    class Meta:
+        model = BibliographicReference
+        fields = "__all__"
+
+
 class DisciplineSectionSerializer(serializers.ModelSerializer):
     """Сериализатор Разделов"""
     topics = TopicSerializer(many = True)
@@ -124,12 +132,12 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     #discipline_sections = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
     discipline_sections = DisciplineSectionSerializer(many = True)
     discipline_certification = CertificationSerializer(many = True)
-
+    bibliographic_reference = BibliographicReferenceSerializer(many = True)
 
 
     class Meta:
         model = WorkProgram
-        fields = ['discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification']
+        fields = ['discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference']
 
     def create(self, validated_data):
         """
