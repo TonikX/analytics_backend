@@ -41,7 +41,7 @@ class ItemSerializer(serializers.ModelSerializer):
         model = Items
         fields = ('id','name','domain','value','relation_with_item')
 
-
+        
 class RelationSerializer(serializers.ModelSerializer):
     """Сериализатор для создания связей"""
     item1 = ItemCreateSerializer()
