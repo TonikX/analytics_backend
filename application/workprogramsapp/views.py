@@ -636,8 +636,8 @@ class EvaluationToolListAPI(generics.ListCreateAPIView):
     """
     API endpoint that represents a list of Evaluation Tools.
     """
-    queryset = Topic.objects.all()
-    serializer_class = TopicSerializer
+    queryset = EvaluationTool.objects.all()
+    serializer_class = EvaluationToolSerializer
 
 
 class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):

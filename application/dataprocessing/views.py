@@ -497,6 +497,17 @@ class RelationListCreateAPIView(generics.ListAPIView):
     serializer_class = RelationSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['item1', 'relation', 'item2']
+
+
+class RelationListCreateGroupsAPIView(generics.ListAPIView):
+    """
+    API endpoint that represents a list of Relations.
+    """
+    queryset = Relation.objects.all()
+    serializer_class = RelationSerializer
+    #filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    #filterset_fields = ['item1', 'relation', 'item2']    
+
     
 #GET api/relation/{domain_id} - Список связей по домену (ответ JSON)
 class RelationListAPIView(generics.ListAPIView):

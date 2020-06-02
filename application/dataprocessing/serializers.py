@@ -1,5 +1,6 @@
 from rest_framework import serializers, viewsets
 
+
 from .models import User, Items, Domain, Relation
 
 class userProfileSerializer(serializers.ModelSerializer):
@@ -42,11 +43,12 @@ class RecursiveField(serializers.Serializer):
 
 class ItemSerializer(serializers.ModelSerializer):
     """Сериализатор Ключевого слова"""
-    relation_with_item = RecursiveField(many=True)
+    #relation_with_item = RecursiveField(many=True)
 
     class Meta:
         model = Items
         fields = ('id','name','domain','value','relation_with_item')
+        depth = 1
 
         
 class RelationSerializer(serializers.ModelSerializer):
