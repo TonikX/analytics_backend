@@ -435,7 +435,7 @@ def set_relation_linear(items_query, type_relation):
         return Response(status=400)
         
         
-from .serializers import DomainSerializer, ItemSerializer, ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer
+from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -465,7 +465,7 @@ class DomainDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 class ItemsListCreateAPIView(generics.ListCreateAPIView):
     """
-    API endpoint that represents a list of Items.
+    Эндпоинт для создания сущностей
     """
     queryset = Items.objects.all()
     serializer_class = ItemCreateSerializer
@@ -475,10 +475,20 @@ class ItemsListCreateAPIView(generics.ListCreateAPIView):
 
 class ItemsListAPIView(generics.ListAPIView):
     """
-    API endpoint that represents a list of Items.
+    API endpoint список всех сущностей
     """
     queryset = Items.objects.all()
     serializer_class = ItemSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    filterset_fields = ['domain']
+
+class ItemsWithRelationListAPIView(generics.ListAPIView):
+    """
+    API endpoint список всех сущностей со связями
+    """
+    queryset = Items.objects.all()
+    serializer_class = ItemWithRelationSerializer
 
 
 class ItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -509,7 +519,7 @@ class RelationListCreateGroupsAPIView(generics.ListAPIView):
     #filterset_fields = ['item1', 'relation', 'item2']    
 
     
-#GET api/relation/{domain_id} - Список связей по домену (ответ JSON)
+#GET api/relation/{item1_id} - Список связей по домену (ответ JSON)
 class RelationListAPIView(generics.ListAPIView):
     """
     API endpoint that represents a list of Relations.
@@ -535,24 +545,7 @@ class RelationRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
 class RelationUpdateAPIView(generics.RetrieveUpdateAPIView):
     queryset = Relation.objects.all()
     serializer_class = RelationUpdateSerializer
-    
-    '''
-    def put(self, request, pk):
-        relation = get_object_or_404(Relation, pk=pk)
-        serializer = RelationCreateSerializer(relation, data=request.data)
-        if serializer.is_valid():
-            to_set = request.data.get('item2')
-            items = [Items.objects.get(id = i) for i in to_set]
-            print(to_set)
-            print(relation.item2.all().filter(name__in = items))
 
-            #if relation.relation == '1':
-            #        set_relation_linear(to_set,'2')
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    '''
 
 #POST api/upload/
 #body: 
