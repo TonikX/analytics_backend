@@ -26,31 +26,50 @@ class ItemCreateSerializer(serializers.ModelSerializer):
         model = Items
         fields = ('id','name','domain')
 
-class RelationInItemsSerializer(serializers.ModelSerializer):
-    """Сериализатор для отоброжения связей в таблице сущностей"""
-    item2 = ItemCreateSerializer()
-
-    class Meta:
-        model = Relation
-        fields = ('id','relation','item2', 'count')
-
 
 class RecursiveField(serializers.Serializer):
     def to_representation(self, value):
         serializer = self.parent.parent.__class__(value, context=self.context)
         return serializer.data
 
-
 class ItemSerializer(serializers.ModelSerializer):
     """Сериализатор Ключевого слова"""
-    #relation_with_item = RecursiveField(many=True)
-
+     
     class Meta:
         model = Items
-        fields = ('id','name','domain','value','relation_with_item')
+        fields = ('id','name','domain','value',)
         depth = 1
 
-        
+    
+class ItemWithRelationSerializer(serializers.ModelSerializer):
+    """Сериализатор Ключевого слова"""
+    #relation_with_item = RecursiveField(many=True)
+    relation_with_item = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Items
+        fields = ('id','name','domain','value','relation_with_item',)
+        depth = 1
+
+    def get_relation_with_item(self, obj):
+        "obj is a Items instance. Returns list of dicts"""
+        qset = Relation.objects.filter(item1=obj)
+        return [RelationInSerializer(i).data for i in qset]
+
+
+class RelationInSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания связей"""
+    
+    def to_representation(self,obj):  
+        rep= super(RelationInSerializer,self).to_representation(obj)  
+        rep['items']= [ ItemCreateSerializer(relation.item2).data for relation in Relation.objects.filter(item1 = obj.item1, relation=obj.relation).distinct()]  
+        return rep  
+    
+    class Meta:
+        model = Relation
+        fields = ('relation',)
+
+
 class RelationSerializer(serializers.ModelSerializer):
     """Сериализатор для создания связей"""
     item1 = ItemCreateSerializer()
