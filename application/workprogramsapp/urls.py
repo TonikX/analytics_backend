@@ -45,7 +45,7 @@ urlpatterns = [
 
 
     #Блок реализации API
-    path('api/wplist/', WorkProgramsListApi.as_view()),
+    path('api/workprograms/', WorkProgramsListApi.as_view()),
 
     #Компетенции индикаторы
     path('api/indicator/', IndicatorListView.as_view(), name='indicator'),

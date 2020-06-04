@@ -38,7 +38,7 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Items
         fields = ('id','name','domain','value',)
-        depth = 1
+        depth = 0
 
     
 class ItemWithRelationSerializer(serializers.ModelSerializer):
@@ -52,7 +52,7 @@ class ItemWithRelationSerializer(serializers.ModelSerializer):
         depth = 1
 
     def get_relation_with_item(self, obj):
-        "obj is a Items instance. Returns list of dicts"""
+        """"obj is a Items instance. Returns list of dicts"""
         qset = Relation.objects.filter(item1=obj)
         return [RelationInSerializer(i).data for i in qset]
 
