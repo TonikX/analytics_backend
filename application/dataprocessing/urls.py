@@ -48,6 +48,7 @@ urlpatterns = [
     
     path('api/item/create', views.ItemsListCreateAPIView.as_view(),),
     path('api/item/', views.ItemsListAPIView.as_view(),),
+    path('api/item/relation', views.ItemsWithRelationListAPIView.as_view(),),
     path('api/item/detail/<int:pk>', views.ItemDetailAPIView.as_view(),),
     
     path('api/relation/', views.RelationListCreateAPIView.as_view(),),
