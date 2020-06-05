@@ -32,9 +32,18 @@ class RecursiveField(serializers.Serializer):
         serializer = self.parent.parent.__class__(value, context=self.context)
         return serializer.data
 
+
+class DomainForItemSerializer(serializers.ModelSerializer):
+    """Сериализатор для предметной области"""
+
+    class Meta:
+        model = Domain
+        fields = ('id', 'name')
+
+
 class ItemSerializer(serializers.ModelSerializer):
     """Сериализатор Ключевого слова"""
-    domain = serializers.StringRelatedField()
+    domain = DomainForItemSerializer()
      
     class Meta:
         model = Items
