@@ -450,6 +450,9 @@ class DomainListCreateAPIView(generics.ListCreateAPIView):
     """
     queryset = Domain.objects.all()
     serializer_class = DomainSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    filterset_fields = ['name','user']
 
     #def get_queryset(self):
     #    user = self.request.user
