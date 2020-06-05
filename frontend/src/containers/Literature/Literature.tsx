@@ -22,7 +22,7 @@ import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
-import CourseCreateModal from "./LiteratureCreateModal";
+import LiteratureCreateModal from "./LiteratureCreateModal";
 import {SortingType} from "../../components/SortingButton/types";
 
 import {LiteratureProps, LiteratureType} from './types';
@@ -59,11 +59,11 @@ class Literature extends React.Component<LiteratureProps> {
         });
     }
 
-    handleClickEdit = (course: LiteratureType) => () => {
-        this.props.actions.openDialog(course);
+    handleClickEdit = (item: LiteratureType) => () => {
+        this.props.actions.openDialog(item);
     }
 
-    handleCreateNewCourse = () => {
+    handleCreate = () => {
         this.props.actions.openDialog();
     }
 
@@ -151,13 +151,13 @@ class Literature extends React.Component<LiteratureProps> {
                          classes={{
                              root: classes.addIcon
                          }}
-                         onClick={this.handleCreateNewCourse}
+                         onClick={this.handleCreate}
                     >
                         <AddIcon/>
                     </Fab>
                 </div>
 
-                <CourseCreateModal />
+                <LiteratureCreateModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

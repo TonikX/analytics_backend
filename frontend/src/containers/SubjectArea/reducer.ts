@@ -21,7 +21,7 @@ export const initialState: subjectAreaState = {
     }
 };
 
-const setCourses = (state: subjectAreaState, {payload}: any): subjectAreaState => ({
+const setData = (state: subjectAreaState, {payload}: any): subjectAreaState => ({
     ...state,
     [fields.SUBJECT_AREA_LIST]: payload,
 });
@@ -66,7 +66,7 @@ const changeSorting = (state: subjectAreaState, {payload}: any): subjectAreaStat
 });
 
 export const reducer = createReducer(initialState, {
-    [actions.setSubjectArea.type]: setCourses,
+    [actions.setSubjectArea.type]: setData,
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
     [actions.changeSearchQuery.type]: changeSearchQuery,

@@ -22,22 +22,23 @@ import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
-import SubjectAreaCreateModal from "./SubjectAreaCreateModal";
+import TrainingEntitiesCreateModal from "./TrainingEntitiesCreateModal";
 import {SortingType} from "../../components/SortingButton/types";
 
-import {SubjectAreaProps, SubjectAreaType} from './types';
-import {SubjectAreaFields} from './enum';
+import {TrainingEntitiesProps, TrainingEntitityType} from './types';
+import {TrainingEntitiesFields} from './enum';
 
-import connect from './SubjectArea.connect';
-import styles from './SubjectArea.styles';
+import connect from './TrainingEntities.connect';
+import styles from './TrainingEntities.styles';
+import {SubjectAreaFields} from "../SubjectArea/enum";
 
-class SubjectArea extends React.Component<SubjectAreaProps> {
+class TrainingEntities extends React.Component<TrainingEntitiesProps> {
     state = {
         deleteConfirmId: null
     }
 
     componentDidMount() {
-        this.props.actions.getSubjectArea();
+        this.props.actions.getTrainingEntities();
     }
 
     handleClickDelete = (id: number) => () => {
@@ -49,7 +50,7 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
     handleConfirmDeleteDialog = () => {
         const {deleteConfirmId} = this.state;
 
-        this.props.actions.deleteSubjectArea(deleteConfirmId);
+        this.props.actions.deleteTrainingEntities(deleteConfirmId);
         this.closeConfirmDeleteDialog();
     }
 
@@ -59,7 +60,7 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
         });
     }
 
-    handleClickEdit = (item: SubjectAreaType) => () => {
+    handleClickEdit = (item: TrainingEntitityType) => () => {
         this.props.actions.openDialog(item);
     }
 
@@ -73,27 +74,27 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
 
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
-        this.props.actions.getSubjectArea();
+        this.props.actions.getTrainingEntities();
     }, 300);
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
         this.props.actions.changeCurrentPage(page + 1);
-        this.props.actions.getSubjectArea();
+        this.props.actions.getTrainingEntities();
     }
 
     changeSorting = (field: string) => (mode: SortingType)=> {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getSubjectArea();
+        this.props.actions.getTrainingEntities();
     }
 
     render() {
-        const {classes, subjectArea, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, trainingEntities, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Предметная область
+                    Учебная сущность
 
                     <TextField placeholder="Поиск"
                                variant="outlined"
@@ -109,23 +110,33 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
 
                 <div className={classes.tableWrap}>
                     <div className={classNames(classes.listItem, classes.header)}>
-                        <Typography className={classNames(classes.marginRight, classes.courseTitle)}>
+                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                             Название
-                            <SortingButton changeMode={this.changeSorting(SubjectAreaFields.TITLE)}
-                                           mode={sortingField === SubjectAreaFields.TITLE ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(TrainingEntitiesFields.TITLE)}
+                                           mode={sortingField === TrainingEntitiesFields.TITLE ? sortingMode : ''}
+                            />
+                        </Typography>
+
+                        <Typography className={classNames(classes.marginRight)}>
+                            Предметная область
+                            <SortingButton changeMode={this.changeSorting(TrainingEntitiesFields.SUBJECT_AREA)}
+                                           mode={sortingField === TrainingEntitiesFields.SUBJECT_AREA ? sortingMode : ''}
                             />
                         </Typography>
                     </div>
 
                     <div className={classes.list}>
                         <Scrollbars>
-                            {subjectArea.map(item =>
-                                <div className={classes.listItem} key={item[SubjectAreaFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.courseTitle)}>
-                                        {item[SubjectAreaFields.TITLE]}
+                            {trainingEntities.map(item =>
+                                <div className={classes.listItem} key={item[TrainingEntitiesFields.ID]}>
+                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                                        {item[TrainingEntitiesFields.TITLE]}
+                                    </Typography>
+                                    <Typography className={classNames(classes.marginRight)}>
+                                        {item[TrainingEntitiesFields.SUBJECT_AREA][SubjectAreaFields.TITLE]}
                                     </Typography>
                                     <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(item[SubjectAreaFields.ID])}>
+                                        <IconButton onClick={this.handleClickDelete(item[TrainingEntitiesFields.ID])}>
                                             <DeleteIcon />
                                         </IconButton>
                                         <IconButton onClick={this.handleClickEdit(item)}>
@@ -159,13 +170,13 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
                     </Fab>
                 </div>
 
-                <SubjectAreaCreateModal />
+                <TrainingEntitiesCreateModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены что хотите удалить предметную область?'}
+                               confirmText={'Вы точно уверены что хотите удалить учебную сущность?'}
                                isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить предметную область'}
+                               dialogTitle={'Удалить учебную сущность'}
                                confirmButtonText={'Удалить'}
                 />
             </Paper>
@@ -173,4 +184,4 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
     }
 }
 
-export default connect(withStyles(styles)(SubjectArea));
+export default connect(withStyles(styles)(TrainingEntities));

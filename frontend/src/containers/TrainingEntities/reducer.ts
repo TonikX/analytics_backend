@@ -2,11 +2,11 @@ import createReducer from "../../store/createReducer";
 import {fields} from './enum';
 import actions from "./actions";
 
-import {literatureState} from "./types";
+import {trainingEntitiesState} from "./types";
 
-export const GENERAL_PATH = 'literature';
+export const GENERAL_PATH = 'trainingEntities';
 
-export const initialState: literatureState = {
+export const initialState: trainingEntitiesState = {
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: '',
         [fields.SORTING_MODE]: ''
@@ -14,50 +14,50 @@ export const initialState: literatureState = {
     [fields.CURRENT_PAGE]: 1,
     [fields.ALL_COUNT]: 1,
     [fields.SEARCH_QUERY]: '',
-    [fields.LITERATURE_LIST]: [],
-    [fields.LITERATURE_DIALOG]: {
+    [fields.TRAINING_ENTITIES_LIST]: [],
+    [fields.TRAINING_ENTITIES_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
     }
 };
 
-const setData = (state: literatureState, {payload}: any): literatureState => ({
+const setData = (state: trainingEntitiesState, {payload}: any): trainingEntitiesState => ({
     ...state,
-    [fields.LITERATURE_LIST]: payload,
+    [fields.TRAINING_ENTITIES_LIST]: payload,
 });
 
-const changeSearchQuery = (state: literatureState, {payload}: any): literatureState => ({
+const changeSearchQuery = (state: trainingEntitiesState, {payload}: any): trainingEntitiesState => ({
     ...state,
     [fields.SEARCH_QUERY]: payload,
 });
 
-const changeCurrentPage = (state: literatureState, {payload}: any): literatureState => ({
+const changeCurrentPage = (state: trainingEntitiesState, {payload}: any): trainingEntitiesState => ({
     ...state,
     [fields.CURRENT_PAGE]: payload,
 });
 
-const changeAllCount = (state: literatureState, {payload}: any): literatureState => ({
+const changeAllCount = (state: trainingEntitiesState, {payload}: any): trainingEntitiesState => ({
     ...state,
     [fields.ALL_COUNT]: payload,
 });
 
-const openDialog = (state: literatureState, {payload}: any): literatureState => ({
+const openDialog = (state: trainingEntitiesState, {payload}: any): trainingEntitiesState => ({
     ...state,
-    [fields.LITERATURE_DIALOG]: {
+    [fields.TRAINING_ENTITIES_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: true,
         [fields.DIALOG_DATA]: payload
     }
 });
 
-const closeDialog = (state: literatureState): literatureState => ({
+const closeDialog = (state: trainingEntitiesState): trainingEntitiesState => ({
     ...state,
-    [fields.LITERATURE_DIALOG]: {
+    [fields.TRAINING_ENTITIES_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
     }
 });
 
-const changeSorting = (state: literatureState, {payload}: any): literatureState => ({
+const changeSorting = (state: trainingEntitiesState, {payload}: any): trainingEntitiesState => ({
     ...state,
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: payload.field,
@@ -66,7 +66,7 @@ const changeSorting = (state: literatureState, {payload}: any): literatureState 
 });
 
 export const reducer = createReducer(initialState, {
-    [actions.setLiterature.type]: setData,
+    [actions.setTrainingEntities.type]: setData,
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
     [actions.changeSearchQuery.type]: changeSearchQuery,

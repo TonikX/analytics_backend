@@ -4,12 +4,21 @@ import {rootState} from '../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 
-import {fields} from './enum';
+import {fields, SubjectAreaFields} from './enum';
 
 import {subjectAreaState, SubjectAreaType} from './types';
 
 const getStateData = (state: rootState): subjectAreaState => get(state, GENERAL_PATH);
 export const getSubjectAreaList = (state: rootState): Array<SubjectAreaType> => get(getStateData(state), fields.SUBJECT_AREA_LIST, []);
+
+export const getSubjectAreaListForSelect = (state: rootState) => {
+    const allSubjectArea = getSubjectAreaList(state);
+
+    return allSubjectArea.map((area: any) => ({
+        label: area[SubjectAreaFields.TITLE],
+        value: area[SubjectAreaFields.ID],
+    }))
+};
 
 export const getSubjectAreaDialog = (state: rootState) => get(getStateData(state), fields.SUBJECT_AREA_DIALOG, {});
 
