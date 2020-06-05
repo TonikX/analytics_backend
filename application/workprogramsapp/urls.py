@@ -13,7 +13,8 @@ from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSec
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
 from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
-from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, BibliographicReferenceUpdateView
+from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
+    BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView
 
 
 urlpatterns = [
@@ -63,6 +64,7 @@ urlpatterns = [
     path('api/workprogram/detail/<int:pk>', WorkProgramDetailsView.as_view()),
     path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
+    path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
 
     #Работы с темами и разделами
     path('api/tools/', EvaluationToolListAPI.as_view(), name='tools'),

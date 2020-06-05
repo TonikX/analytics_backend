@@ -43,6 +43,13 @@ class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
         fields = ['item_id', 'item_name', 'masterylevel']
 
 
+class PrerequisitesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор создания пререквизита обучения"""
+    class Meta:
+        model = PrerequisitesOfWorkProgram
+        fields = ['item', 'workprogram', 'masterylevel']
+
+
 class PrerequisitesOfWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор создания пререквизита обучения"""
     item  = ItemSerializer()
@@ -153,6 +160,31 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
         fields = ['discipline_code', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference']
 
 
+class WorkProgramBibliographicReferenceUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания рабочих программ"""
+    #ibliographic_reference = BibliographicReferenceSerializer(many=True, read_only=False)
+    # bibliographic_reference = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=BibliographicReference.objects.all(), source='bibrefs_set')
+
+    class Meta:
+        model = WorkProgram
+        fields = ['bibliographic_reference']
+
+    # def update(self, instance, validated_data):
+    #     tags_data = validated_data.pop('bibliographic_reference')
+    #     print (tags_data)
+    #     instance = super(WorkProgramBibliographicReferenceUpdateSerializer, self).update(instance, validated_data)
+    #
+    #     for tag_data in tags_data:
+    #         tag_qs = BibliographicReference.objects.filter(name__iexact=tag_data['bibliographic_reference'])
+    #
+    #         if tag_qs.exists():
+    #             tag = tag_qs.first()
+    #         else:
+    #             tag = BibliographicReferenceSerializer.objects.create(**tag_data)
+    #
+    #         instance.bibliographic_reference.add(tag)
+    #
+    #     return instance
 
 
 

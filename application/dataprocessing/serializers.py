@@ -34,11 +34,12 @@ class RecursiveField(serializers.Serializer):
 
 class ItemSerializer(serializers.ModelSerializer):
     """Сериализатор Ключевого слова"""
+    domain = serializers.StringRelatedField()
      
     class Meta:
         model = Items
         fields = ('id','name','domain','value',)
-        depth = 0
+        #depth = 1
 
     
 class ItemWithRelationSerializer(serializers.ModelSerializer):

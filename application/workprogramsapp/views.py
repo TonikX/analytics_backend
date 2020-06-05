@@ -8,7 +8,8 @@ from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramF
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer
-from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer
+from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
+    PrerequisitesOfWorkProgramCreateSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -548,12 +549,12 @@ class OutcomesOfWorkProgramCreateAPIView(generics.CreateAPIView):
 
 class OutcomesOfWorkProgramDestroyView(generics.DestroyAPIView):
     queryset = OutcomesOfWorkProgram.objects.all()
-    serializer_class = OutcomesOfWorkProgramSerializer
+    serializer_class = OutcomesOfWorkProgramCreateSerializer
 
 
 class OutcomesOfWorkProgramUpdateView(generics.UpdateAPIView):
     queryset = OutcomesOfWorkProgram.objects.all()
-    serializer_class = OutcomesOfWorkProgramSerializer
+    serializer_class = OutcomesOfWorkProgramCreateSerializer
 
 
 class PrerequisitesOfWorkProgramList(generics.ListAPIView):
@@ -571,18 +572,18 @@ class PrerequisitesOfWorkProgramList(generics.ListAPIView):
 
 
 class PrerequisitesOfWorkProgramCreateAPIView(generics.CreateAPIView):
-    serializer_class = PrerequisitesOfWorkProgramSerializer
+    serializer_class = PrerequisitesOfWorkProgramCreateSerializer
     queryset = PrerequisitesOfWorkProgram.objects.all()
 
 
 class PrerequisitesOfWorkProgramDestroyView(generics.DestroyAPIView):
     queryset = PrerequisitesOfWorkProgram.objects.all()
-    serializer_class = PrerequisitesOfWorkProgramSerializer
+    serializer_class = PrerequisitesOfWorkProgramCreateSerializer
 
 
 class PrerequisitesOfWorkProgramUpdateView(generics.UpdateAPIView):
     queryset = PrerequisitesOfWorkProgram.objects.all()
-    serializer_class = PrerequisitesOfWorkProgramSerializer
+    serializer_class = PrerequisitesOfWorkProgramCreateSerializer
 
 #Блок эндпоинтов рабочей программы
 
@@ -749,6 +750,13 @@ class BibliographicReferenceUpdateView(generics.UpdateAPIView):
 class BibliographicReferenceDetailsView(generics.RetrieveAPIView):
     queryset = BibliographicReference.objects.all()
     serializer_class = BibliographicReferenceSerializer
+
+
+class WorkProgramBibliographicReferenceUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramBibliographicReferenceUpdateSerializer
+
+
 #Конец блока ендпоинтов рабочей программы
 
 

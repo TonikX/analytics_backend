@@ -45,7 +45,7 @@ class WorkProgram(models.Model):
     #goals = models.CharField(max_length=1024, verbose_name = "Цели освоения" )
     #result_goals = models.CharField(max_length=1024, verbose_name = "Результаты освоения" )
     field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram, verbose_name = "Предметная область")
-    bibliographic_reference = models.ManyToManyField('BibliographicReference', verbose_name='Библиогравическая_ссылка')
+    bibliographic_reference = models.ManyToManyField('BibliographicReference', verbose_name='Библиогравическая_ссылка', related_name='bibrefs')
     #evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
 
     # list_of_references = models.TextField(blank=True, null=True)
