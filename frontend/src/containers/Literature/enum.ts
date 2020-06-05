@@ -18,7 +18,7 @@ export enum fetchingTypes {
     CREATE_LITERATURE = 'CREATE_LITERATURE',
 }
 
-export enum LiteratureFields {
+export enum literatureFields {
     ID = 'id',
     DESCRIPTION = 'description',
 }

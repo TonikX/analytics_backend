@@ -113,6 +113,18 @@ class WorkProgramService extends BaseService{
     deleteTopic(id: ReactText){
         return this.delete(`/api/topics/${id}`);
     }
+
+    updateLiterature(literature: Array<number>, workProgramId: ReactText){
+        const formData = new FormData();
+
+        // literature.forEach((id, index) => {
+        //     formData.append(`bibliographic_reference[${index}]`, id.toString());
+        // })
+
+        formData.append(`bibliographic_reference`, `[${literature.join(',')}]`);
+
+        return this.patch(`/api/workprogram/update/${workProgramId}`, formData);
+    }
 }
 
 export default WorkProgramService;

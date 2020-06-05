@@ -1,4 +1,4 @@
-import {fields} from './enum';
+import {fields, literatureFields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {CourseType} from "../Courses/types";
@@ -17,6 +17,9 @@ export interface WorkProgramActions {
     saveTopic: any;
     deleteTopic: any;
     changeTopicNumber: any;
+
+    deleteLiterature: any;
+    addLiterature: any;
 
     openDialog: any;
     closeDialog: any;

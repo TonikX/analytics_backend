@@ -10,6 +10,7 @@ import {fetchingTypes} from "./enum";
 
 import sectionLogics from './logics/sections.logics';
 import topicLogics from './logics/topics.logics';
+import literatureLogics from './logics/literature.logics';
 
 const service = new Service();
 
@@ -65,6 +66,7 @@ const saveWorkProgram = createLogic({
 export default [
     ...sectionLogics,
     ...topicLogics,
+    ...literatureLogics,
     getWorkProgram,
     saveWorkProgram,
 ];

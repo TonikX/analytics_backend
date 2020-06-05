@@ -10,17 +10,17 @@ import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 
 import FirstStep from "./FirstStep";
-import ThirdStep from "./SecondStep";
+import SecondStep from "./SecondStep";
+import ThirdStep from "./ThirdStep";
+import ForthStep from "./ForthStep";
 
 import {WorkProgramProps} from './types';
-
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
-import FourthStep from "./ThirdStep";
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
-        activeStep: 2
+        activeStep: 3
     };
 
     componentDidMount() {
@@ -51,7 +51,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         Разделы
                     </Typography>
 
-                    <ThirdStep />
+                    <SecondStep />
                 </div>;
             case 2:
                 return <div className={classes.subItem}>
@@ -59,7 +59,15 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         Содержание дисциплины
                     </Typography>
 
-                    <FourthStep />
+                    <ThirdStep />
+                </div>;
+            case 3:
+                return <div className={classes.subItem}>
+                    <Typography className={classes.subTitle}>
+                        Источники
+                    </Typography>
+
+                    <ForthStep />
                 </div>;
         }
     }

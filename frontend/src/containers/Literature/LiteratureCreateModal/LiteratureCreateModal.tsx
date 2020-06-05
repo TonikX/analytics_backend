@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import {LiteratureFields} from '../enum';
+import {literatureFields} from '../enum';
 
 import connect from './LiteratureCreateModal.connect';
 import styles from './LiteratureCreateModal.styles';
@@ -20,8 +20,8 @@ import styles from './LiteratureCreateModal.styles';
 class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalProps> {
     state = {
         literature: {
-            [LiteratureFields.ID]: null,
-            [LiteratureFields.DESCRIPTION]: '',
+            [literatureFields.ID]: null,
+            [literatureFields.DESCRIPTION]: '',
         },
         courseUrlFieldIsFocused: false
     };
@@ -31,9 +31,9 @@ class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalPro
 
         if (!shallowEqual(literature, prevProps.literature)){
             this.setState({
-                course: {
-                    [LiteratureFields.ID]: get(literature, LiteratureFields.ID),
-                    [LiteratureFields.DESCRIPTION]: get(literature, LiteratureFields.DESCRIPTION, ''),
+                literature: {
+                    [literatureFields.ID]: get(literature, literatureFields.ID),
+                    [literatureFields.DESCRIPTION]: get(literature, literatureFields.DESCRIPTION, ''),
                 }
             });
         }
@@ -46,7 +46,7 @@ class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalPro
     handleSave = () => {
         const {literature} = this.state;
 
-        if (literature[LiteratureFields.ID]){
+        if (literature[literatureFields.ID]){
             this.props.actions.changeLiterature(literature);
         } else {
             this.props.actions.createNewLiterature(literature);
@@ -57,7 +57,7 @@ class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalPro
         const {literature} = this.state;
 
         this.setState({
-            course: {
+            literature: {
                 ...literature,
                 [field]: get(e, 'target.value')
             }
@@ -68,7 +68,7 @@ class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalPro
         const {isOpen, classes} = this.props;
         const {literature} = this.state;
 
-        const disableButton = literature[LiteratureFields.DESCRIPTION].length === 0;
+        const disableButton = literature[literatureFields.DESCRIPTION].length === 0;
 
         return (
             <Dialog
@@ -81,15 +81,15 @@ class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalPro
                 <DialogTitle> Создать учебно-методическое обеспечение</DialogTitle>
                 <DialogContent>
                     <TextField label="Описание библиографической ссылки *"
-                               onChange={this.saveField(LiteratureFields.DESCRIPTION)}
+                               onChange={this.saveField(literatureFields.DESCRIPTION)}
                                variant="outlined"
                                className={classes.input}
                                fullWidth
-                               value={literature[LiteratureFields.DESCRIPTION]}
+                               value={literature[literatureFields.DESCRIPTION]}
                                InputLabelProps={{
                                    shrink: true,
                                }}
-                               rows={4}
+                               rows={10}
                                multiline
                     />
                 </DialogContent>
