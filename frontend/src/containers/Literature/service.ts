@@ -9,24 +9,24 @@ class LiteratureServices extends BaseService{
         return this.get(`/api/BibliographicReference?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
-    deleteLiterature(courseId: number){
-        return this.delete(`/api/BibliographicReference/delete/${courseId}`);
+    deleteLiterature(literatureId: number){
+        return this.delete(`/api/BibliographicReference/delete/${literatureId}`);
     }
 
-    createLiterature(course: any){
+    createLiterature(literature: any){
         const formData = new FormData();
 
-        formData.append(literatureFields.DESCRIPTION, course[literatureFields.DESCRIPTION]);
+        formData.append(literatureFields.DESCRIPTION, literature[literatureFields.DESCRIPTION]);
         return this.post(`/api/BibliographicReference/create`, formData);
     }
 
-    updateLiterature(course: any){
+    updateLiterature(literature: any){
         const formData = new FormData();
-        const courseId = course[literatureFields.ID];
+        const literatureId = literature[literatureFields.ID];
 
-        formData.append(literatureFields.DESCRIPTION, course[literatureFields.DESCRIPTION]);
+        formData.append(literatureFields.DESCRIPTION, literature[literatureFields.DESCRIPTION]);
 
-        return this.patch(`/api/BibliographicReference/update/${courseId}`, formData);
+        return this.patch(`/api/BibliographicReference/update/${literatureId}`, formData);
     }
 }
 

@@ -12,10 +12,10 @@ const deleteCourse = createAction<string>('DELETE_COURSE');
 const openDialog = createAction<string>('OPEN_COURSE_DIALOG');
 const closeDialog = createAction<string>('CLOSE_COURSE_DIALOG');
 
-const changeSearchQuery = createAction<string>('CHANGE_SEARCH_QUERY');
-const changeCurrentPage = createAction<string>('CHANGE_CURRENT_PAGE');
-const changeAllCount = createAction<string>('CHANGE_ALL_COUNT');
-const changeSorting = createAction<string>('CHANGE_SORTING');
+const changeSearchQuery = createAction<string>('COURSES_CHANGE_SEARCH_QUERY');
+const changeCurrentPage = createAction<string>('COURSES_CHANGE_CURRENT_PAGE');
+const changeAllCount = createAction<string>('COURSES_CHANGE_ALL_COUNT');
+const changeSorting = createAction<string>('COURSES_CHANGE_SORTING');
 
 const actions: CoursesActions = {
     getCourses,

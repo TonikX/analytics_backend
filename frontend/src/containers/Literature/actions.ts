@@ -12,10 +12,10 @@ const deleteLiterature = createAction<string>('DELETE_LITERATURE');
 const openDialog = createAction<string>('OPEN_LITERATURE_DIALOG');
 const closeDialog = createAction<string>('CLOSE_LITERATURE_DIALOG');
 
-const changeSearchQuery = createAction<string>('CHANGE_SEARCH_QUERY');
-const changeCurrentPage = createAction<string>('CHANGE_CURRENT_PAGE');
-const changeAllCount = createAction<string>('CHANGE_ALL_COUNT');
-const changeSorting = createAction<string>('CHANGE_SORTING');
+const changeSearchQuery = createAction<string>('LITERATURE_CHANGE_SEARCH_QUERY');
+const changeCurrentPage = createAction<string>('LITERATURE_CHANGE_CURRENT_PAGE');
+const changeAllCount = createAction<string>('LITERATURE_CHANGE_ALL_COUNT');
+const changeSorting = createAction<string>('LITERATURE_CHANGE_SORTING');
 
 const actions: LiteratureActions = {
     getLiterature,

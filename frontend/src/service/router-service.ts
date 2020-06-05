@@ -2,6 +2,7 @@ const SIGN_IN = 'sign-in';
 const SIGN_UP = 'sign-up';
 const COURSES = 'courses';
 const LITERATURE = 'literature';
+const SUBJECT_AREA = 'subject-area';
 const WORK_PROGRAM = 'work-program';
 
 const SEPARATOR = '/';
@@ -34,6 +35,10 @@ export default class RouterService {
 
     getLiteratureRoute = () => {
         return SEPARATOR + LITERATURE;
+    };
+
+    getSubjectAreaRoute = () => {
+        return SEPARATOR + SUBJECT_AREA;
     };
 
     getWorkProgramRoute = () => {

@@ -6,7 +6,7 @@ import {userService} from "../../service/user-service";
 
 const AuthRoute = (props: any) => {
     const isAuth = userService.isAuth();
-    console.log('userService.isAuth()', userService.isAuth());
+
     if (!isAuth) return <Redirect to={appRouter.getSignInRoute()} />;
 
     return <Route {...props} />;
