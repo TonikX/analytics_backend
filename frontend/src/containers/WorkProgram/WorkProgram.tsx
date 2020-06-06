@@ -13,6 +13,7 @@ import FirstStep from "./FirstStep";
 import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
 import ForthStep from "./ForthStep";
+import SixthStep from "./SixthStep";
 
 import {WorkProgramProps} from './types';
 import connect from './WorkProgram.connect';
@@ -20,7 +21,7 @@ import styles from './WorkProgram.styles';
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
-        activeStep: 3
+        activeStep: 5
     };
 
     componentDidMount() {
@@ -68,6 +69,14 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                     </Typography>
 
                     <ForthStep />
+                </div>;
+            case 5:
+                return <div className={classes.subItem}>
+                    <Typography className={classes.subTitle}>
+                        Пререквизиты
+                    </Typography>
+
+                    <SixthStep />
                 </div>;
         }
     }

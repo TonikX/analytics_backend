@@ -1,7 +1,8 @@
-import {fields, literatureFields} from './enum';
+import {fields, PrerequisiteFields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {CourseType} from "../Courses/types";
+import {TrainingEntitityType} from "../TrainingEntities/types";
 
 export interface WorkProgramActions {
     getWorkProgram: any;
@@ -20,6 +21,10 @@ export interface WorkProgramActions {
 
     deleteLiterature: any;
     addLiterature: any;
+
+    deletePrerequisite: any;
+    addPrerequisite: any;
+    changePrerequisite: any;
 
     openDialog: any;
     closeDialog: any;
@@ -59,4 +64,11 @@ export type Topic = {
     discipline_section: string;
     number: string;
     id: string;
+}
+
+
+export type PrerequisiteType = {
+    [PrerequisiteFields.ID]: number;
+    [PrerequisiteFields.MASTER_LEVEL]: string;
+    [PrerequisiteFields.ITEM]: TrainingEntitityType;
 }

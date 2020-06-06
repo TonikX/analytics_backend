@@ -51,7 +51,7 @@ class MultipleSearchSelector extends React.Component<MultipleSearchSelectorProps
 
     handleOnClickAway = (): void => {
         this.closeMenu();
-        debugger
+
         if (this.state.searchText.length === 0){
             this.props.changeItem('');
         } else {

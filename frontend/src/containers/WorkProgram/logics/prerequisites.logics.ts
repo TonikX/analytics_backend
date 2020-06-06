@@ -6,83 +6,76 @@ import workProgramActions from '../actions';
 import Service from '../service';
 import {getWorkProgramId} from '../getters';
 
-import {fetchingTypes, fields, workProgramTopicFields} from "../enum";
+import {fetchingTypes, fields} from "../enum";
 
 const service = new Service();
 
-const saveTopic = createLogic({
-    type: workProgramActions.saveTopic.type,
+const addPrerequisite = createLogic({
+    type: workProgramActions.addPrerequisite.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState();
         const workProgramId = getWorkProgramId(state);
-        const topic = action.payload;
+        const prerequisite = action.payload;
 
-        dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_TOPIC}));
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_PREREQUISITES}));
 
-        let promise;
-
-        if (topic[workProgramTopicFields.ID]) {
-            promise = service.saveTopic(topic);
-        } else {
-            promise = service.createNewTopic(topic, workProgramId);
-        }
-
-        promise
+        service.addPrerequisites(prerequisite, workProgramId)
             .then((res) => {
                 dispatch(workProgramActions.getWorkProgram(workProgramId));
                 // @ts-ignore
                 dispatch(actions.fetchingSuccess());
-                dispatch(workProgramActions.closeDialog(fields.CREATE_NEW_TOPIC_DIALOG));
+                dispatch(workProgramActions.closeDialog(fields.ADD_NEW_PREREQUISITES));
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
             })
             .then(() => {
-                dispatch(actions.fetchingFalse({destination: fetchingTypes.SAVE_TOPIC}));
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.ADD_PREREQUISITES}));
+                return done();
+            });
+    }
+});
+
+const changePrerequisite = createLogic({
+    type: workProgramActions.changePrerequisite.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+        const prerequisite = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_PREREQUISITES}));
+
+        service.addPrerequisites(prerequisite, workProgramId)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram(workProgramId));
+                // @ts-ignore
+                dispatch(actions.fetchingSuccess());
+                dispatch(workProgramActions.closeDialog(fields.ADD_NEW_PREREQUISITES));
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_PREREQUISITES}));
                 return done();
             });
     }
 });
 
 
-const changeTopicNumber = createLogic({
-    type: workProgramActions.changeTopicNumber.type,
-    latest: true,
-    process({getState, action}: any, dispatch, done) {
-        const state = getState();
-        const workProgramId = getWorkProgramId(state);
-        const {newNumber, topicId} = action.payload;
-
-        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_TOPIC_NUMBER}));
-
-        service.changeTopicNumber(newNumber, topicId)
-            .then((res) => {
-                dispatch(workProgramActions.getWorkProgram(workProgramId));
-                // @ts-ignore
-                dispatch(actions.fetchingSuccess());
-            })
-            .catch((err) => {
-                dispatch(actions.fetchingFailed(err));
-            })
-            .then(() => {
-                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_TOPIC_NUMBER}));
-                return done();
-            });
-    }
-});
-
-const deleteTopic = createLogic({
-    type: workProgramActions.deleteTopic.type,
+const deletePrerequisite = createLogic({
+    type: workProgramActions.deletePrerequisite.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState();
         const workProgramId = getWorkProgramId(state);
         const id = action.payload;
 
-        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_TOPIC}));
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_PREREQUISITES}));
 
-        service.deleteTopic(id)
+        service.deletePrerequisite(id)
             .then((res) => {
                 dispatch(workProgramActions.getWorkProgram(workProgramId));
                 // @ts-ignore
@@ -92,14 +85,14 @@ const deleteTopic = createLogic({
                 dispatch(actions.fetchingFailed(err));
             })
             .then(() => {
-                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_TOPIC}));
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_PREREQUISITES}));
                 return done();
             });
     }
 });
 
 export default [
-    saveTopic,
-    deleteTopic,
-    changeTopicNumber,
+    addPrerequisite,
+    deletePrerequisite,
+    changePrerequisite,
 ];

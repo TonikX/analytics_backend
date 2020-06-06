@@ -1,8 +1,9 @@
 import {ReactText} from "react";
 import BaseService from "../../service/base-service";
 import {Section, Topic} from "./types";
-import {workProgramTopicFields} from "./enum";
+import {PrerequisiteFields, workProgramTopicFields} from "./enum";
 import {CourseFields} from "../Courses/enum";
+import {TrainingEntitiesFields} from "../TrainingEntities/enum";
 
 class WorkProgramService extends BaseService{
     getWorkProgram(id: string){
@@ -63,6 +64,10 @@ class WorkProgramService extends BaseService{
         return this.delete(`/api/sections/${id}`);
     }
 
+    changePrerequisites(prerequisite: any){
+
+    }
+
     saveTopic(topic: Topic){
         const formData = new FormData();
 
@@ -99,6 +104,18 @@ class WorkProgramService extends BaseService{
         return this.post(`/api/topics/create`, formData);
     }
 
+    addPrerequisites(prerequisite: any, workProgramId: ReactText){
+        const formData = new FormData();
+
+        // @ts-ignore
+        formData.append('workprogram', workProgramId);
+
+        formData.append(PrerequisiteFields.MASTER_LEVEL, prerequisite[PrerequisiteFields.MASTER_LEVEL]);
+        formData.append(PrerequisiteFields.ITEM, prerequisite[PrerequisiteFields.ITEM][TrainingEntitiesFields.ID]);
+
+        return this.post(`/api/prerequisitesofworkprogram/create`, formData);
+    }
+
     changeTopicNumber(newNumber: ReactText, topicId: ReactText){
         const formData = new FormData();
 
@@ -114,14 +131,16 @@ class WorkProgramService extends BaseService{
         return this.delete(`/api/topics/${id}`);
     }
 
+    deletePrerequisite(id: ReactText){
+        return this.delete(`/api/prerequisitesofworkprogram/${id}`);
+    }
+
     updateLiterature(literature: Array<number>, workProgramId: ReactText){
         const formData = new FormData();
 
-        // literature.forEach((id, index) => {
-        //     formData.append(`bibliographic_reference[${index}]`, id.toString());
-        // })
-
-        formData.append(`bibliographic_reference`, `[${literature.join(',')}]`);
+        literature.forEach((id, index) => {
+            formData.append(`bibliographic_reference[${index}]`, id.toString());
+        })
 
         return this.patch(`/api/workprogram/update/${workProgramId}`, formData);
     }

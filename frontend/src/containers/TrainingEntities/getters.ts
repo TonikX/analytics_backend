@@ -4,14 +4,25 @@ import {rootState} from '../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 
-import {fields} from './enum';
+import {fields, TrainingEntitiesFields} from './enum';
 
 import {trainingEntitiesState, TrainingEntitityType} from './types';
+
+import {SubjectAreaFields} from "../SubjectArea/enum";
 
 const getStateData = (state: rootState): trainingEntitiesState => get(state, GENERAL_PATH);
 export const getTrainingEntitiesList = (state: rootState): Array<TrainingEntitityType> => get(getStateData(state), fields.TRAINING_ENTITIES_LIST, []);
 
 export const getTrainingEntitiesDialog = (state: rootState) => get(getStateData(state), fields.TRAINING_ENTITIES_DIALOG, {});
+
+export const getTrainingEntitiesForSelect = (state: rootState) => {
+    const allTrainingEntities = getTrainingEntitiesList(state);
+
+    return allTrainingEntities.map((item: any) => ({
+        label: `${item[TrainingEntitiesFields.SUBJECT_AREA][SubjectAreaFields.TITLE]}: ${item[TrainingEntitiesFields.TITLE]}`,
+        value: item[TrainingEntitiesFields.ID]
+    }))
+}
 
 export const isOpenDialog = (state: rootState) => get(getTrainingEntitiesDialog(state), fields.IS_OPEN_DIALOG, false);
 export const getDialogData = (state: rootState) => get(getTrainingEntitiesDialog(state), fields.DIALOG_DATA, false);

@@ -22,7 +22,15 @@ const closeDialog = createAction<string>('WORK_PROGRAM_CLOSE_DIALOG')
 const deleteLiterature = createAction<string>('WORK_PROGRAM_DELETE_LITERATURE');
 const addLiterature = createAction<string>('WORK_PROGRAM_ADD_LITERATURE');
 
+const deletePrerequisite = createAction<string>('WORK_PROGRAM_DELETE_PREREQUISITE');
+const addPrerequisite = createAction<string>('WORK_PROGRAM_ADD_PREREQUISITE');
+const changePrerequisite = createAction<string>('WORK_PROGRAM_CHANGE_PREREQUISITE');
+
 const actions: WorkProgramActions = {
+    deletePrerequisite,
+    addPrerequisite,
+    changePrerequisite,
+
     getWorkProgram,
     setWorkProgram,
     setWorkProgramId,
