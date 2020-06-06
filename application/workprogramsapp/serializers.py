@@ -36,11 +36,13 @@ class OutcomesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
 
 class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор вывода результата обучения для вывода результата в рабочей программе"""
-    item_name  = serializers.ReadOnlyField(source='item.name')
-    item_id  = serializers.ReadOnlyField(source='item.id')
+    # item_name  = serializers.ReadOnlyField(source='item.name')
+    # item_id  = serializers.ReadOnlyField(source='item.id')
+    item  = ItemSerializer()
+
     class Meta:
         model = OutcomesOfWorkProgram
-        fields = ['item_id', 'item_name', 'masterylevel']
+        fields = ['item', 'masterylevel']
 
 
 class PrerequisitesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
@@ -60,11 +62,12 @@ class PrerequisitesOfWorkProgramSerializer(serializers.ModelSerializer):
 
 class PrerequisitesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор вывода пререквизита обучения для вывода пререквизита в рабочей программе"""
-    item_name  = serializers.ReadOnlyField(source='item.name')
-    item_id  = serializers.ReadOnlyField(source='item.id')
+    # item_name  = serializers.ReadOnlyField(source='item.name')
+    # item_id  = serializers.ReadOnlyField(source='item.id')
+    item  = ItemSerializer()
     class Meta:
         model = PrerequisitesOfWorkProgram
-        fields = ['item_id', 'item_name', 'masterylevel']
+        fields = ['id', 'item', 'masterylevel']
 
 
 class OnlineCourseSerializer(serializers.ModelSerializer):
