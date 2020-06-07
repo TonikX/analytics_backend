@@ -275,7 +275,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                         <TextField label="Максимальное значение"
                                                    onChange={this.saveField(EvaluationToolFields.MAX)}
                                                    variant="outlined"
-                                                   className={classes.numberInput}
                                                    fullWidth
                                                    InputLabelProps={{
                                                        shrink: true,

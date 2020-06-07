@@ -41,7 +41,6 @@ export default (theme: Theme) => createStyles({
     },
     leftSide: {
         width: '40%',
-        maxWidth: '500px',
         flex: 'none'
     },
     row: {
@@ -49,7 +48,7 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between'
     },
     numberInput: {
-        width: '230px'
+        marginRight: '20px'
     },
     marginBottom30: {
         marginBottom: '30px',
