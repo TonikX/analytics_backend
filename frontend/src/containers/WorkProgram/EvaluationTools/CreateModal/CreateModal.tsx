@@ -23,7 +23,13 @@ import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 
 import MultipleSearchSelector from '../../../../components/MultipleSearchSelector';
 
-import {EvaluationToolFields, fields, PrerequisiteFields, workProgramTopicFields} from '../../enum';
+import {
+    EvaluationToolFields,
+    fields,
+    PrerequisiteFields,
+    workProgramSectionFields,
+    workProgramTopicFields
+} from '../../enum';
 import {TrainingEntitiesFields} from "../../../TrainingEntities/enum";
 
 import connect from './CreateModal.connect';
@@ -56,7 +62,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [EvaluationToolFields.DESCRIPTION]: '',
             [EvaluationToolFields.SECTIONS]: [],
             [EvaluationToolFields.MIN]: '',
+            [EvaluationToolFields.NAME]: '',
             [EvaluationToolFields.MAX]: '',
+            [EvaluationToolFields.TYPE]: '',
             [EvaluationToolFields.DEADLINE]: 1,
             [EvaluationToolFields.CHECK_POINT]: false,
         }
@@ -73,11 +81,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             this.setState({
                 evaluationTool: {
                     [EvaluationToolFields.ID]: get(evaluationTool, EvaluationToolFields.ID, ''),
+                    [EvaluationToolFields.NAME]: get(evaluationTool, EvaluationToolFields.NAME, ''),
                     [EvaluationToolFields.DESCRIPTION]: get(evaluationTool, EvaluationToolFields.DESCRIPTION, ''),
                     [EvaluationToolFields.SECTIONS]: get(evaluationTool, EvaluationToolFields.SECTIONS, []),
                     [EvaluationToolFields.MIN]: get(evaluationTool, EvaluationToolFields.MIN, ''),
                     [EvaluationToolFields.MAX]: get(evaluationTool, EvaluationToolFields.MAX, ''),
                     [EvaluationToolFields.DEADLINE]: get(evaluationTool, EvaluationToolFields.DEADLINE, 1),
+                    [EvaluationToolFields.TYPE]: get(evaluationTool, EvaluationToolFields.TYPE, ''),
                     [EvaluationToolFields.CHECK_POINT]: get(evaluationTool, EvaluationToolFields.CHECK_POINT, false),
                 }
             });
@@ -85,7 +95,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     handleClose = () => {
-        this.props.actions.closeDialog(fields.CREATE_NEW_VALUATION_TOOLS);
+        this.props.actions.closeDialog(fields.CREATE_NEW_EVALUATION_TOOLS);
     }
 
     handleSave = () => {
@@ -158,6 +168,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                    InputLabelProps={{
                                        shrink: true,
                                    }}
+                                   value={evaluationTool[EvaluationToolFields.NAME]}
                         />
                         <FormControl className={classes.sectionSelector}>
                             <InputLabel shrink id="section-label">
@@ -169,7 +180,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 className={classes.selector}
                                 // @ts-ignore
                                 onChange={this.saveField(EvaluationToolFields.SECTIONS)}
-                                value={evaluationTool[EvaluationToolFields.SECTIONS]}
+                                value={evaluationTool[EvaluationToolFields.SECTIONS].map(item => item[workProgramSectionFields.ID])}
                                 fullWidth
                                 displayEmpty
                                 input={
@@ -198,7 +209,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 className={classes.selector}
                                 // @ts-ignore
                                 onChange={this.saveField(EvaluationToolFields.TYPE)}
-                                // @ts-ignore
                                 value={evaluationTool[EvaluationToolFields.TYPE]}
                                 fullWidth
                                 displayEmpty
@@ -228,6 +238,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                            shrink: true,
                                        }}
                                        type="number"
+                                       value={evaluationTool[EvaluationToolFields.MIN]}
                             />
                             <TextField label="Максимальное значение"
                                        onChange={this.saveField(EvaluationToolFields.MAX)}
@@ -238,11 +249,12 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                            shrink: true,
                                        }}
                                        type="number"
+                                       value={evaluationTool[EvaluationToolFields.MAX]}
                             />
                         </div>
 
                         <FormControlLabel
-                            control={<Checkbox />}
+                            control={<Checkbox checked={evaluationTool[EvaluationToolFields.CHECK_POINT]}/>}
                             label="Контрольная точка"
                             className={classes.marginBottom30}
                         />
@@ -258,6 +270,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 min={1}
                                 max={56}
                                 valueLabelDisplay="on"
+                                value={evaluationTool[EvaluationToolFields.DEADLINE]}
                             />
                         </div>
                     </div>
@@ -271,7 +284,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             //@ts-ignore
                             editor={ DecoupledEditor  }
                             //@ts-ignore
-                            data=""
+                            data={evaluationTool[EvaluationToolFields.DESCRIPTION] ? evaluationTool[EvaluationToolFields.DESCRIPTION] : ''}
                             //@ts-ignore
                             onInit={ editor => {
                                 // Add the toolbar to the container

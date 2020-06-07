@@ -17,8 +17,8 @@ const mapStateToProps = (state: rootState) => {
     return {
         trainingEntities: getTrainingEntitiesForSelect(state),
         sections: getAllSectionsForSelect(state),
-        isOpen: isOpenDialog(state, fields.CREATE_NEW_VALUATION_TOOLS),
-        prerequisite: getDialogData(state, fields.CREATE_NEW_VALUATION_TOOLS),
+        isOpen: isOpenDialog(state, fields.CREATE_NEW_EVALUATION_TOOLS),
+        evaluationTool: getDialogData(state, fields.CREATE_NEW_EVALUATION_TOOLS),
         types: [
             'Дебаты / Дскуссия / Круглый стол',
             'Деловая (ролевая) игра',

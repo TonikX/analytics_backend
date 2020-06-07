@@ -32,7 +32,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
     }
 
     handleCreateNew = () => {
-        this.props.actions.openDialog({dialogType: fields.CREATE_NEW_VALUATION_TOOLS, data: {}});
+        this.props.actions.openDialog({dialogType: fields.CREATE_NEW_EVALUATION_TOOLS, data: {}});
     };
 
     handleClickDelete = (id: number) => () => {
@@ -40,7 +40,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
     };
 
     handleClickEdit = (evaluationTool: EvaluationToolType) => () => {
-        this.props.actions.openDialog({dialogType: fields.CREATE_NEW_VALUATION_TOOLS, data: evaluationTool});
+        this.props.actions.openDialog({dialogType: fields.CREATE_NEW_EVALUATION_TOOLS, data: evaluationTool});
     };
 
     handleClickShowDescription = (description: string) => () => {

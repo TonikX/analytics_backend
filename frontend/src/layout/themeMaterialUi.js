@@ -68,6 +68,11 @@ const muiTheme = createMuiTheme({
                 padding: '5px 25px !important'
             },
         },
+        MuiTableCell: {
+            root: {
+                padding: '10px !important'
+            }
+        }
     }
 }, ruRU);
 

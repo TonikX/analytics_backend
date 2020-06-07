@@ -10,7 +10,7 @@ import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 
 import FirstStep from "./FirstStep";
-import SecondStep from "./SecondStep";
+import SecondStep from "./Sections";
 import ThirdStep from "./ThirdStep";
 import ForthStep from "./ForthStep";
 import FifthStep from "./EvaluationTools";
