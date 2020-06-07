@@ -37,7 +37,8 @@ export default (theme: Theme) => createStyles({
     },
     dialogContent: {
         display: 'flex',
-        padding: 48
+        padding: 48,
+        justifyContent: 'space-between'
     },
     leftSide: {
         width: '40%',
@@ -57,9 +58,7 @@ export default (theme: Theme) => createStyles({
         marginBottom: '50px'
     },
     rightSide: {
-        width: '60%',
-        paddingLeft: '30px',
-        boxSizing: 'border-box'
+        width: '55%',
     },
     sectionSelector: {
         '& .MuiInputLabel-shrink': {
