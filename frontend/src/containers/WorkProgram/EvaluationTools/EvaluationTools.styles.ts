@@ -42,12 +42,14 @@ export default (theme: Theme) => createStyles({
         padding: '0px 20px'
     },
     title: {
-        width: '35%'
+        width: '30%',
+        flex: 'none'
     },
     type: {
         width: '20%',
         paddingLeft: '10px',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        flex: 'none'
     },
     min: {
         width: '50px',
