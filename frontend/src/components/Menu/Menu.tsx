@@ -91,7 +91,7 @@ class Menu extends React.PureComponent<MenuProps>{
 
                     <Link to={appRouter.getWorkProgramLink(5)} className={classes.link}>
                         <MenuItem
-                            selected={pathname === appRouter.getPrerequisitesRoute()}
+                            selected={pathname === appRouter.getWorkProgramLink(5)}
                             classes={{
                                 selected: classes.selectedMenuItem,
                                 root: classes.menuItem,
