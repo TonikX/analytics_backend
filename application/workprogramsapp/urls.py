@@ -109,7 +109,7 @@ urlpatterns = [
     path('api/BibliographicReference/update/<int:pk>', BibliographicReferenceUpdateView.as_view()),
     path('api/bibliographicreferenceinworkprogram/<int:workprogram_id>', BibliographicReferenceInWorkProgramList.as_view()),
 
-    path('api/upload/test', FileUploadWorkProgramAPIView.as_view()),
-    path('api/upload/test', FileUploadOnlineCoursesAPIView.as_view()),
+    path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
+    path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
 
 ]
