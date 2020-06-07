@@ -9,12 +9,12 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 
-import FirstStep from "./FirstStep";
+import FirstStep from "./General";
 import SecondStep from "./Sections";
-import ThirdStep from "./ThirdStep";
-import ForthStep from "./ForthStep";
+import ThirdStep from "./Topics";
+import ForthStep from "./Literature";
 import FifthStep from "./EvaluationTools";
-import SixthStep from "./SixthStep";
+import SixthStep from "./Prerequisites";
 
 import {WorkProgramProps} from './types';
 import connect from './WorkProgram.connect';

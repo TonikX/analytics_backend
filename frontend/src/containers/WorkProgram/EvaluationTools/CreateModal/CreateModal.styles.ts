@@ -58,8 +58,9 @@ export default (theme: Theme) => createStyles({
         marginBottom: '50px'
     },
     rightSide: {
-        width: '100%',
-        marginLeft: '100px'
+        width: '60%',
+        paddingLeft: '30px',
+        boxSizing: 'border-box'
     },
     sectionSelector: {
         '& .MuiInputLabel-shrink': {
