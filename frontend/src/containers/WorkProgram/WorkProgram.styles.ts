@@ -2,7 +2,7 @@ import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
     content: {
-        marginLeft: '100px',
+        marginLeft: '10px',
         width: '100%'
     },
     root: {

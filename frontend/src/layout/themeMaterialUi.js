@@ -15,11 +15,23 @@ const muiTheme = createMuiTheme({
     typography: {
         useNextVariants: true,
         fontFamily: [
-            'Montserrat',
-            'Roboto Slab',
-            'Source Sans Pro',
             '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
         ].join(','),
+        // fontFamily: [
+        //     'Montserrat',
+        //     'Roboto Slab',
+        //     'Source Sans Pro',
+        //     '-apple-system',
+        // ].join(','),
         fontSize: 15
     },
     palette: {

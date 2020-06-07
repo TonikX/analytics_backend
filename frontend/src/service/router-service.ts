@@ -1,3 +1,5 @@
+import {ReactText} from "react";
+
 const SIGN_IN = 'sign-in';
 const SIGN_UP = 'sign-up';
 const COURSES = 'courses';
@@ -48,6 +50,10 @@ export default class RouterService {
 
     getWorkProgramRoute = () => {
         return SEPARATOR + WORK_PROGRAM + SEPARATOR + ':id';
+    };
+
+    getWorkProgramLink = (id: ReactText) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id;
     };
 }
 

@@ -87,6 +87,20 @@ class Menu extends React.PureComponent<MenuProps>{
                                 Учебные сущности
                             </MenuItem>
                     </Link>
+
+
+                    <Link to={appRouter.getWorkProgramLink(5)} className={classes.link}>
+                        <MenuItem
+                            selected={pathname === appRouter.getPrerequisitesRoute()}
+                            classes={{
+                                selected: classes.selectedMenuItem,
+                                root: classes.menuItem,
+                            }}
+                        >
+                            <BookIcon className={classes.icon} />
+                            Рабочая программа
+                        </MenuItem>
+                    </Link>
                 </List>
 
             </Drawer>
