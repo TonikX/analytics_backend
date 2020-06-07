@@ -163,18 +163,38 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
         fields = ['discipline_code', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference']
 
 
+class BibliographicReferenceForWorkProgramSerializer(serializers.ModelSerializer):
+    """Сериализатор Разделов"""
+
+    class Meta:
+        model = BibliographicReference
+        fields = ['id']
+
+
+class Geeks(object):
+    def __init__(self, dictonary):
+        self.dict = bibliographic_references
+
+
 class WorkProgramBibliographicReferenceUpdateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания рабочих программ"""
-    #ibliographic_reference = BibliographicReferenceSerializer(many=True, read_only=False)
-    # bibliographic_reference = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=BibliographicReference.objects.all(), source='bibrefs_set')
+    #bibliographic_reference = BibliographicReferenceForWorkProgramSerializer(many=True, read_only=False)
+    #bibliographic_reference = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=BibliographicReference.objects.all())
+    # bibliographic_references = serializers.DictField(
+    #     child = serializers.CharField())
+    # , source='bibrefs_set'
+    #bibrefs = BibliographicReferenceForWorkProgramSerializer(many=True, read_only=True)
 
     class Meta:
         model = WorkProgram
         fields = ['bibliographic_reference']
-
+    #
     # def update(self, instance, validated_data):
-    #     tags_data = validated_data.pop('bibliographic_reference')
-    #     print (tags_data)
+    #     tags_data = validated_data.pop('bibliographic_references')
+    #     print (validated_data('bibliographic_references'))
+    #     for tag_data in tags_data:
+    #         print(tags_data)
+        #print (tags_data[0])
     #     instance = super(WorkProgramBibliographicReferenceUpdateSerializer, self).update(instance, validated_data)
     #
     #     for tag_data in tags_data:
@@ -189,6 +209,21 @@ class WorkProgramBibliographicReferenceUpdateSerializer(serializers.ModelSeriali
     #
     #     return instance
 
+class DisciplineSectionForEvaluationToolsSerializer(serializers.ModelSerializer):
+    """Сериализатор Разделов для оценочных средств"""
+    class Meta:
+        model = DisciplineSection
+        fields = ['id', 'ordinal_number', 'name']
+
+
+class EvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
+    """Сериализатор ФОСов"""
+    #descipline_sections = serializers.StringRelatedField(many=True, source='evaluation_tools')
+    descipline_sections = DisciplineSectionForEvaluationToolsSerializer(many=True, source='evaluation_tools')
+
+    class Meta:
+        model = EvaluationTool
+        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections']
 
 
 

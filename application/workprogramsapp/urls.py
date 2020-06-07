@@ -14,7 +14,7 @@ from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreate
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
 from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
-    BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView
+    BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList
 
 
 urlpatterns = [
@@ -69,6 +69,7 @@ urlpatterns = [
     #Работы с темами и разделами
     path('api/tools/', EvaluationToolListAPI.as_view(), name='tools'),
     path('api/tools/<int:pk>', EvaluationToolDetailAPI.as_view(), name='tool_detail'),
+    path('api/toolsinworkprogram/<int:workprogram_id>', EvaluationToolInWorkProgramList.as_view()),
 
     path('api/sections/', DisciplineSectionListAPI.as_view(), name='sections'),
     path('api/sections/<int:pk>', DisciplineSectionDetailAPI.as_view(), name='section_detail'),
@@ -105,5 +106,6 @@ urlpatterns = [
     path('api/BibliographicReference/detail/<int:pk>', BibliographicReferenceDetailsView.as_view()),
     path('api/BibliographicReference/delete/<int:pk>', BibliographicReferenceDestroyView.as_view()),
     path('api/BibliographicReference/update/<int:pk>', BibliographicReferenceUpdateView.as_view()),
+    path('api/bibliographicreferenceinworkprogram/<int:workprogram_id>', BibliographicReferenceInWorkProgramList.as_view()),
 
 ]
