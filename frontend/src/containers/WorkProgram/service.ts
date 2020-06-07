@@ -10,6 +10,10 @@ class WorkProgramService extends BaseService{
         return this.get(`/api/workprogram/detail/${id}`);
     }
 
+    getWorkProgramEvaluationTools(id: string){
+        return this.get(`/api/toolsinworkprogram/${id}`);
+    }
+
     saveWorkProgram(destination: string, value: string, id: string){
         const formData = new FormData();
 
@@ -145,13 +149,9 @@ class WorkProgramService extends BaseService{
     }
 
     updateLiterature(literature: Array<number>, workProgramId: ReactText){
-        const formData = new FormData();
-
-        literature.forEach((id, index) => {
-            formData.append(`bibliographic_reference[${index}]`, id.toString());
-        })
-
-        return this.patch(`/api/workprogram/update/${workProgramId}`, formData);
+        return this.patch(`/api/workprogram/update/${workProgramId}`, {
+            bibliographic_reference: literature
+        });
     }
 }
 

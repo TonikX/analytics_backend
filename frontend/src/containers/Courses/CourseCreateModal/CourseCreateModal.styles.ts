@@ -8,8 +8,6 @@ export default (theme: Theme) => createStyles({
     lastInput: {
         width: '550px',
     },
-    marginBottom30: {
-    },
     selector: {
         width: '550px'
     },

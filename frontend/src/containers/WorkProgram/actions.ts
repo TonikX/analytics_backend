@@ -26,7 +26,12 @@ const deletePrerequisite = createAction<string>('WORK_PROGRAM_DELETE_PREREQUISIT
 const addPrerequisite = createAction<string>('WORK_PROGRAM_ADD_PREREQUISITE');
 const changePrerequisite = createAction<string>('WORK_PROGRAM_CHANGE_PREREQUISITE');
 
+const getWorkProgramEvaluationTools = createAction<string>('GET_WORK_PROGRAM_EVALUATION_TOOLS');
+const setWorkProgramEvaluationTools = createAction<string>('SET_WORK_PROGRAM_EVALUATION_TOOLS');
+
 const actions: WorkProgramActions = {
+    getWorkProgramEvaluationTools,
+    setWorkProgramEvaluationTools,
     deletePrerequisite,
     addPrerequisite,
     changePrerequisite,

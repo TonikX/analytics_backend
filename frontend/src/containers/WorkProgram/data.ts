@@ -7,7 +7,7 @@ const MASTER = 'master';
 export const specialization = [
     {
         value: PRIMARY_VOCATIONAL_EDUCATION,
-        label: 'Начальное профессиональное образование'
+        label: 'Среднее профессиональное образование'
     },
     {
         value: SECONDARY_VOCATIONAL_EDUCATION,
