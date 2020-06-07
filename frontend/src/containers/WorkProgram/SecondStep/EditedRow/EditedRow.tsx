@@ -40,10 +40,14 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     calculateTotalHours = () => {
         const {section} = this.state;
 
-        const totalHours = section[workProgramSectionFields.CONTACT_WORK] + section[workProgramSectionFields.LECTURE_CLASSES] +
-            section[workProgramSectionFields.PRACTICAL_LESSONS] + section[workProgramSectionFields.TOTAL_HOURS];
+        const contactWork = parseInt(section[workProgramSectionFields.CONTACT_WORK]);
+        const lectureClasses = parseInt(section[workProgramSectionFields.LECTURE_CLASSES]);
+        const practicalLessons = parseInt(section[workProgramSectionFields.PRACTICAL_LESSONS]);
+        const laboratory = parseInt(section[workProgramSectionFields.LABORATORY]);
+        const spo = parseInt(section[workProgramSectionFields.SPO]);
 
-        return totalHours;
+        return (contactWork ? contactWork : 0) + (lectureClasses ? lectureClasses : 0) +
+            (practicalLessons ? practicalLessons : 0) + (laboratory ? laboratory : 0) + (spo ? spo : 0);
     }
 
     setEditModeTrue = () => {

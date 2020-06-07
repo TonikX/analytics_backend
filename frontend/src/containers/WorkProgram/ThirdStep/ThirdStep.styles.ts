@@ -52,12 +52,15 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center',
         padding: '0 0 0 20px',
         boxSizing: 'border-box',
-        height: '50px',
+        minHeight: '50px',
         background: '#fff'
     },
     topicName: {
-        width: '40%',
+        width: '50%',
         minWidth: '300px'
+    },
+    bigTopicName: {
+        width: 'calc(100% - 150px)'
     },
     sectionAddTopicIcon: {
         marginLeft: '10px',

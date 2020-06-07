@@ -68,7 +68,9 @@ class SecondStep extends React.PureComponent<SecondStepProps> {
 
         return sections.reduce((count, section) => {
             // @ts-ignore
-            return count + section[field];
+            const intCount = parseInt(count);
+            // @ts-ignore
+            return (parseInt(count) ? intCount : 0) + section[field];
         }, 0)
     };
 

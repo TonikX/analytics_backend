@@ -38,6 +38,30 @@ const getWorkProgram = createLogic({
     }
 });
 
+const getWorkProgramEvaluationTools = createLogic({
+    type: workProgramActions.getWorkProgramEvaluationTools.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_WORK_PROGRAM_EVALUATION_TOOLS}));
+
+        service.getWorkProgramEvaluationTools(workProgramId)
+            .then((res) => {
+                dispatch(workProgramActions.setWorkProgramEvaluationTools(res.data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_WORK_PROGRAM_EVALUATION_TOOLS}));
+                return done();
+            });
+    }
+});
+
 const saveWorkProgram = createLogic({
     type: workProgramActions.saveWorkProgram.type,
     latest: true,
@@ -71,4 +95,5 @@ export default [
     ...prerequisitesLogics,
     getWorkProgram,
     saveWorkProgram,
+    getWorkProgramEvaluationTools,
 ];

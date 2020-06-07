@@ -17,7 +17,8 @@ const muiTheme = createMuiTheme({
         fontFamily: [
             'Montserrat',
             'Roboto Slab',
-            'Source Sans Pro'
+            'Source Sans Pro',
+            '-apple-system',
         ].join(','),
         fontSize: 15
     },

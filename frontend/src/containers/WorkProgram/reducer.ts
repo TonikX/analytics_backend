@@ -11,6 +11,7 @@ export const initialState: workProgramState = {
         [fields.WORK_PROGRAM_SECTIONS]: []
     },
     [fields.WORK_PROGRAM_ID]: '',
+    [fields.WORK_PROGRAM_EVALUATION_TOOLS]: [],
     [fields.DIALOGS]: {
         [fields.CREATE_NEW_TOPIC_DIALOG]: {
             [fields.IS_OPEN_DIALOG]: false,
@@ -35,6 +36,11 @@ const setWorkProgram = (state: workProgramState, {payload}: any): workProgramSta
 const setWorkProgramId = (state: workProgramState, {payload}: any): workProgramState => ({
     ...state,
     [fields.WORK_PROGRAM_ID]: payload
+});
+
+const setWorkProgramEvaluationTools = (state: workProgramState, {payload}: any): workProgramState => ({
+    ...state,
+    [fields.WORK_PROGRAM_EVALUATION_TOOLS]: payload
 });
 
 const openDialog = (state: workProgramState, {payload}: any): workProgramState => ({
@@ -66,4 +72,6 @@ export const reducer = createReducer(initialState, {
 
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
+
+    [actions.setWorkProgramEvaluationTools.type]: setWorkProgramEvaluationTools,
 });

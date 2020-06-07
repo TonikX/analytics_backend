@@ -65,8 +65,7 @@ class FirstStep extends React.Component<FirstStepProps> {
         return (
             <>
                 <InputsLoader loading={fetchingCode}>
-                    <TextField type="number"
-                               variant="outlined"
+                    <TextField variant="outlined"
                                label="Код программы"
                                className={classes.input}
                                value={code}

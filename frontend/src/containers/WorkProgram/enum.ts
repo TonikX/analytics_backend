@@ -10,10 +10,11 @@ export enum fields {
     DIALOGS = 'DIALOGS',
     CREATE_NEW_TOPIC_DIALOG = 'CREATE_NEW_TOPIC_DIALOG',
     ADD_NEW_LITERATURE = 'ADD_NEW_LITERATURE',
-    ADD_NEW_TRAINING_ENTITIES = 'ADD_NEW_TRAINING_ENTITIES',
     ADD_NEW_PREREQUISITES = 'ADD_NEW_PREREQUISITES',
+    CREATE_NEW_VALUATION_TOOLS = 'CREATE_NEW_VALUATION_TOOLS',
     IS_OPEN_DIALOG = 'IS_OPEN_DIALOG',
     DIALOG_DATA = 'DIALOG_DATA',
+    WORK_PROGRAM_EVALUATION_TOOLS = 'WORK_PROGRAM_EVALUATION_TOOLS',
 }
 
 export enum workProgramSectionFields {
@@ -39,6 +40,7 @@ export enum workProgramTopicFields {
 
 export enum fetchingTypes {
     GET_WORK_PROGRAM = 'GET_WORK_PROGRAM',
+    GET_WORK_PROGRAM_EVALUATION_TOOLS = 'GET_WORK_PROGRAM_EVALUATION_TOOLS',
 
     SAVE_SECTION = 'SAVE_SECTION',
     DELETE_SECTION = 'DELETE_SECTION',
@@ -60,4 +62,16 @@ export enum PrerequisiteFields {
     ID = 'id',
     MASTER_LEVEL = 'masterylevel',
     ITEM = 'item',
+}
+
+export enum EvaluationToolFields {
+    ID = 'id',
+    NAME = 'name',
+    MIN = 'min',
+    MAX = 'max',
+    TYPE = 'type',
+    DEADLINE = 'deadline',
+    DESCRIPTION = 'description',
+    CHECK_POINT = 'check_point',
+    SECTIONS = 'descipline_sections',
 }

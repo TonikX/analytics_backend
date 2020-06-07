@@ -10,6 +10,7 @@ import {workProgramState} from './types';
 
 const getStateData = (state: rootState): workProgramState => get(state, GENERAL_PATH);
 export const getWorkProgram = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM, {});
+export const getWorkProgramEvaluationToolsList = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_EVALUATION_TOOLS, []);
 export const getWorkProgramId = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_ID, '');
 export const getWorkProgramField = (state: rootState, field: string) => get(getWorkProgram(state), field);
 

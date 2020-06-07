@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import {SortableContainer, SortableElement, SortableHandle} from "react-sortable-hoc";
 import Scrollbars from "react-custom-scrollbars";
@@ -112,18 +113,19 @@ const SortableItem = SortableElement(({topic, section, classes, handleClickDelet
     <div className={classes.topic}>
         <DragHandle />
 
-        <Typography className={classes.topicName}>
+        <Typography className={classNames(classes.topicName, {[classes.bigTopicName]: !topic[workProgramTopicFields.COURSE]})}>
             {section[workProgramSectionFields.ORDINAL_NUMBER]}.
             {topic[workProgramTopicFields.NUMBER]}. {topic[workProgramTopicFields.DESCRIPTION]}
         </Typography>
 
         <div className={classes.onlineCourseItem}>
             {topic[workProgramTopicFields.COURSE] && <>
-                <Typography>Онлайн курс: </Typography>&nbsp;
-                {/* eslint-disable-next-line*/}
-                <a target="_blank" href={topic[workProgramTopicFields.COURSE][CourseFields.COURSE_URL]} className={classes.link}>
-                    <Typography> {topic[workProgramTopicFields.COURSE][CourseFields.TITLE]} </Typography>
-                </a>
+                <Typography>Онлайн курс: &nbsp;
+                    {/* eslint-disable-next-line*/}
+                    <a target="_blank" href={topic[workProgramTopicFields.COURSE][CourseFields.COURSE_URL]} className={classes.link}>
+                        <Typography> {topic[workProgramTopicFields.COURSE][CourseFields.TITLE]} </Typography>
+                    </a>
+                </Typography>
             </>}
         </div>
 

@@ -13,6 +13,7 @@ import FirstStep from "./FirstStep";
 import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
 import ForthStep from "./ForthStep";
+import FifthStep from "./FifthStep";
 import SixthStep from "./SixthStep";
 
 import {WorkProgramProps} from './types';
@@ -21,7 +22,7 @@ import styles from './WorkProgram.styles';
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
-        activeStep: 5
+        activeStep: 0
     };
 
     componentDidMount() {
@@ -48,13 +49,22 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                 </>;
             case 1:
                 return <div className={classes.subItem}>
+
+                    <Typography className={classes.subTitle}>
+                        Пререквизиты
+                    </Typography>
+
+                    <SixthStep />
+                </div>;
+            case 2:
+                return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
                         Разделы
                     </Typography>
 
                     <SecondStep />
                 </div>;
-            case 2:
+            case 3:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
                         Содержание дисциплины
@@ -62,7 +72,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
                     <ThirdStep />
                 </div>;
-            case 3:
+            case 4:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
                         Источники
@@ -73,10 +83,10 @@ class WorkProgram extends React.Component<WorkProgramProps> {
             case 5:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
-                        Пререквизиты
+                        Оценочные средства
                     </Typography>
 
-                    <SixthStep />
+                    <FifthStep />
                 </div>;
         }
     }
@@ -85,7 +95,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         const {classes} = this.props;
         const {activeStep} = this.state;
 
-        const steps = ['Главное', 'Разделы', "Темы", "Содержание", "Оценочные средства", "Пререквизиты", "Результаты обучения"];
+        const steps = ['Главное',  "Пререквизиты", 'Разделы', "Темы", "Источники", "Оценочные средства", "Результаты обучения"];
 
         return (
             <Paper className={classes.root}>
@@ -99,7 +109,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         return (
                             <Step key={label}>
                                 <StepButton onClick={this.handleStep(index)}
-                                            completed={index === 1 || index === 0}
+                                            completed={false}
                                 >
                                     {label}
                                 </StepButton>
