@@ -30,6 +30,7 @@ class SignIn extends React.PureComponent{
     };
 
     clickButtonHandler = () => {
+        this.props.actions.signIn();
     };
 
     handleKeyPress = (event) => {

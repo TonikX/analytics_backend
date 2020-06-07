@@ -23,10 +23,10 @@ import {TrainingEntitiesFields} from "../../TrainingEntities/enum";
 import CreateModal from "./CreateModal";
 import {EvaluationToolType, PrerequisiteType} from "../types";
 
-import connect from './SixthStep.connect';
-import styles from './SixthStep.styles';
+import connect from './EvaluationTools.connect';
+import styles from './EvaluationTools.styles';
 
-class SixthStep extends React.PureComponent<SixthStepProps> {
+class EvaluationTools extends React.PureComponent<SixthStepProps> {
     componentDidMount() {
         this.props.actions.getWorkProgramEvaluationTools();
     }
@@ -146,4 +146,4 @@ class SixthStep extends React.PureComponent<SixthStepProps> {
     }
 }
 
-export default connect(withStyles(styles)(SixthStep));
+export default connect(withStyles(styles)(EvaluationTools));

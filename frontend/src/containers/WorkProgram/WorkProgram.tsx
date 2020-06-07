@@ -13,7 +13,7 @@ import FirstStep from "./FirstStep";
 import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
 import ForthStep from "./ForthStep";
-import FifthStep from "./FifthStep";
+import FifthStep from "./EvaluationTools";
 import SixthStep from "./SixthStep";
 
 import {WorkProgramProps} from './types';

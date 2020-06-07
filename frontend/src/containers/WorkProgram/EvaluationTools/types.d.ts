@@ -2,7 +2,7 @@ import {WithStyles} from "@material-ui/core";
 import {WorkProgramActions} from '../types';
 import {EvaluationToolType} from "../types";
 
-import styles from "./SixthStep.styles";
+import styles from "./EvaluationTools.styles";
 
 export interface SixthStepProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
