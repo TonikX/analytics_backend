@@ -206,7 +206,7 @@ class EvaluationTool(models.Model):
     '''
     type = models.CharField(max_length=1024, verbose_name = "Тип оценочного средства")
     name = models.CharField(unique=True, max_length=1024, verbose_name = "Наименование оценочного средства")
-    description = models.CharField(max_length=1024, verbose_name = "Описание", blank = True, null = True)
+    description = models.CharField(max_length=50000, verbose_name = "Описание", blank = True, null = True)
     check_point = models.BooleanField(verbose_name = "Контрольная точка", blank = True, null = True)
     deadline = models.IntegerField(verbose_name = "Срок сдачи в неделях", blank = True, null = True)
     min = models.IntegerField(verbose_name = "Максимальное значение", blank = True, null = True)
@@ -269,7 +269,7 @@ class OnlineCourse(models.Model):
     '''
     title = models.CharField(max_length=512, verbose_name = "Название курсу")
     platform = models.CharField(max_length=512, verbose_name = "Платформа", blank = True, null = True)
-    description = models.CharField(max_length=5000, verbose_name = "Описание", blank = True, null = True)
+    description = models.CharField(max_length=50000, verbose_name = "Описание", blank = True, null = True)
     course_url = models.URLField(verbose_name = "Ссылка на курс")
 
 
