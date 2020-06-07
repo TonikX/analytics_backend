@@ -82,7 +82,7 @@ const deleteTopic = createLogic({
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_TOPIC}));
 
-        service.deleteSection(id)
+        service.deleteTopic(id)
             .then((res) => {
                 dispatch(workProgramActions.getWorkProgram(workProgramId));
                 // @ts-ignore

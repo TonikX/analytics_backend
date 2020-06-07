@@ -22,11 +22,11 @@ import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
-import CourseCreateModal from "./LiteratureCreateModal";
+import LiteratureCreateModal from "./LiteratureCreateModal";
 import {SortingType} from "../../components/SortingButton/types";
 
 import {LiteratureProps, LiteratureType} from './types';
-import {LiteratureFields} from './enum';
+import {literatureFields} from './enum';
 
 import connect from './Literature.connect';
 import styles from './Literature.styles';
@@ -59,11 +59,11 @@ class Literature extends React.Component<LiteratureProps> {
         });
     }
 
-    handleClickEdit = (course: LiteratureType) => () => {
-        this.props.actions.openDialog(course);
+    handleClickEdit = (item: LiteratureType) => () => {
+        this.props.actions.openDialog(item);
     }
 
-    handleCreateNewCourse = () => {
+    handleCreate = () => {
         this.props.actions.openDialog();
     }
 
@@ -111,8 +111,8 @@ class Literature extends React.Component<LiteratureProps> {
                     <div className={classNames(classes.listItem, classes.header)}>
                         <Typography className={classNames(classes.marginRight, classes.courseTitle)}>
                             Литература
-                            <SortingButton changeMode={this.changeSorting(LiteratureFields.DESCRIPTION)}
-                                           mode={sortingField === LiteratureFields.DESCRIPTION ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(literatureFields.DESCRIPTION)}
+                                           mode={sortingField === literatureFields.DESCRIPTION ? sortingMode : ''}
                             />
                         </Typography>
                     </div>
@@ -120,10 +120,10 @@ class Literature extends React.Component<LiteratureProps> {
                     <div className={classes.list}>
                         <Scrollbars>
                             {literature.map(course =>
-                                <div className={classes.listItem} key={course[LiteratureFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.courseTitle)}> {course[LiteratureFields.DESCRIPTION]} </Typography>
+                                <div className={classes.listItem} key={course[literatureFields.ID]}>
+                                    <Typography className={classNames(classes.marginRight, classes.courseTitle)}> {course[literatureFields.DESCRIPTION]} </Typography>
                                     <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(course[LiteratureFields.ID])}>
+                                        <IconButton onClick={this.handleClickDelete(course[literatureFields.ID])}>
                                             <DeleteIcon />
                                         </IconButton>
                                         <IconButton onClick={this.handleClickEdit(course)}>
@@ -151,13 +151,13 @@ class Literature extends React.Component<LiteratureProps> {
                          classes={{
                              root: classes.addIcon
                          }}
-                         onClick={this.handleCreateNewCourse}
+                         onClick={this.handleCreate}
                     >
                         <AddIcon/>
                     </Fab>
                 </div>
 
-                <CourseCreateModal />
+                <LiteratureCreateModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

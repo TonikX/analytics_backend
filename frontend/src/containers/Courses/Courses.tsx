@@ -64,7 +64,7 @@ class Courses extends React.Component<CoursesProps> {
         this.props.actions.openDialog(course);
     }
 
-    handleCreateNewCourse = () => {
+    handleCreate = () => {
         this.props.actions.openDialog();
     }
 
@@ -181,7 +181,7 @@ class Courses extends React.Component<CoursesProps> {
                          classes={{
                              root: classes.addIcon
                          }}
-                         onClick={this.handleCreateNewCourse}
+                         onClick={this.handleCreate}
                     >
                         <AddIcon/>
                     </Fab>

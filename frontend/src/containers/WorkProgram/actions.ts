@@ -8,18 +8,29 @@ const setWorkProgramId = createAction<string>('SET_WORK_PROGRAM_ID');
 const saveWorkProgram = createAction<string>('SAVE_WORK_PROGRAM');
 const setWorkProgramPart = createAction<string>('SET_WORK_PROGRAM_PART');
 
-const saveSection = createAction<string>('SAVE_SECTION');
-const deleteSection = createAction<string>('DELETE_SECTION');
-const changeSectionNumber = createAction<string>('CHANGE_SECTION_NUMBER');
+const saveSection = createAction<string>('WORK_PROGRAM_SAVE_SECTION');
+const deleteSection = createAction<string>('WORK_PROGRAM_DELETE_SECTION');
+const changeSectionNumber = createAction<string>('WORK_PROGRAM_CHANGE_SECTION_NUMBER');
 
-const saveTopic = createAction<string>('SAVE_TOPIC');
-const deleteTopic = createAction<string>('DELETE_TOPIC');
-const changeTopicNumber = createAction<string>('CHANGE_TOPIC_NUMBER');
+const saveTopic = createAction<string>('WORK_PROGRAM_SAVE_TOPIC');
+const deleteTopic = createAction<string>('WORK_PROGRAM_DELETE_TOPIC');
+const changeTopicNumber = createAction<string>('WORK_PROGRAM_CHANGE_TOPIC_NUMBER');
 
-const openDialog = createAction<string>('OPEN_DIALOG');
-const closeDialog = createAction<string>('CLOSE_DIALOG');
+const openDialog = createAction<string>('WORK_PROGRAM_OPEN_DIALOG');
+const closeDialog = createAction<string>('WORK_PROGRAM_CLOSE_DIALOG')
+
+const deleteLiterature = createAction<string>('WORK_PROGRAM_DELETE_LITERATURE');
+const addLiterature = createAction<string>('WORK_PROGRAM_ADD_LITERATURE');
+
+const deletePrerequisite = createAction<string>('WORK_PROGRAM_DELETE_PREREQUISITE');
+const addPrerequisite = createAction<string>('WORK_PROGRAM_ADD_PREREQUISITE');
+const changePrerequisite = createAction<string>('WORK_PROGRAM_CHANGE_PREREQUISITE');
 
 const actions: WorkProgramActions = {
+    deletePrerequisite,
+    addPrerequisite,
+    changePrerequisite,
+
     getWorkProgram,
     setWorkProgram,
     setWorkProgramId,
@@ -36,6 +47,9 @@ const actions: WorkProgramActions = {
 
     openDialog,
     closeDialog,
+
+    deleteLiterature,
+    addLiterature,
 }
 
 export default actions;

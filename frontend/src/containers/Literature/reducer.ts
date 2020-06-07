@@ -21,7 +21,7 @@ export const initialState: literatureState = {
     }
 };
 
-const setCourses = (state: literatureState, {payload}: any): literatureState => ({
+const setData = (state: literatureState, {payload}: any): literatureState => ({
     ...state,
     [fields.LITERATURE_LIST]: payload,
 });
@@ -66,7 +66,7 @@ const changeSorting = (state: literatureState, {payload}: any): literatureState 
 });
 
 export const reducer = createReducer(initialState, {
-    [actions.setLiterature.type]: setCourses,
+    [actions.setLiterature.type]: setData,
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
     [actions.changeSearchQuery.type]: changeSearchQuery,

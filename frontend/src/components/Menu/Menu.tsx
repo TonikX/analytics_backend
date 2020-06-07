@@ -45,7 +45,7 @@ class Menu extends React.PureComponent<MenuProps>{
                             }}
                         >
                             <HomeIcon className={classes.icon} />
-                            &nbsp;Онлайн курсы
+                            Онлайн курсы
                         </MenuItem>
                     </Link>
 
@@ -58,7 +58,33 @@ class Menu extends React.PureComponent<MenuProps>{
                                 }}
                             >
                                 <BookIcon className={classes.icon} />
-                                &nbsp;Источники
+                                Источники
+                            </MenuItem>
+                    </Link>
+
+                    <Link to={appRouter.getSubjectAreaRoute()} className={classes.link}>
+                            <MenuItem
+                                selected={pathname === appRouter.getSubjectAreaRoute()}
+                                classes={{
+                                    selected: classes.selectedMenuItem,
+                                    root: classes.menuItem,
+                                }}
+                            >
+                                <BookIcon className={classes.icon} />
+                                Предметная область
+                            </MenuItem>
+                    </Link>
+
+                    <Link to={appRouter.getPrerequisitesRoute()} className={classes.link}>
+                            <MenuItem
+                                selected={pathname === appRouter.getPrerequisitesRoute()}
+                                classes={{
+                                    selected: classes.selectedMenuItem,
+                                    root: classes.menuItem,
+                                }}
+                            >
+                                <BookIcon className={classes.icon} />
+                                Учебные сущности
                             </MenuItem>
                     </Link>
                 </List>

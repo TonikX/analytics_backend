@@ -8,6 +8,9 @@ import SignIn from './containers/SignIn';
 import SignUp from './containers/SignUp';
 import WorkProgram from './containers/WorkProgram';
 import Courses from './containers/Courses';
+import SubjectArea from './containers/SubjectArea';
+import Prerequisites from './containers/TrainingEntities';
+
 import Literature from './containers/Literature';
 
 import RouterService from './service/router-service';
@@ -29,6 +32,12 @@ export default () => (
                 </AuthRoute>
                 <AuthRoute path={routerService.getLiteratureRoute()}>
                     <Literature />
+                </AuthRoute>
+                <AuthRoute path={routerService.getSubjectAreaRoute()}>
+                    <SubjectArea />
+                </AuthRoute>
+                <AuthRoute path={routerService.getPrerequisitesRoute()}>
+                    <Prerequisites />
                 </AuthRoute>
                 <AuthRoute path={routerService.getWorkProgramRoute()}
                        children={() => (

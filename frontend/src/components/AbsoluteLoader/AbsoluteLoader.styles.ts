@@ -13,7 +13,7 @@ export default (theme: Theme) => createStyles({
         left: 0,
     },
     showLoader: {
-        zIndex: 1000,
+        zIndex: 100000000,
         backgroundColor: '#ffffff8f',
         transition: '0.4s all ease-out',
     },

@@ -1,7 +1,7 @@
 import {fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
-import {LiteratureFields} from './enum';
+import {literatureFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
 
 export interface LiteratureActions {
@@ -34,8 +34,8 @@ export interface literatureState {
 }
 
 export type LiteratureType = {
-    [LiteratureFields.ID]: number,
-    [LiteratureFields.DESCRIPTION]: string,
+    [literatureFields.ID]: number,
+    [literatureFields.DESCRIPTION]: string,
 };
 
 export interface LiteratureProps extends WithStyles<typeof styles> {
