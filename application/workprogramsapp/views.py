@@ -9,7 +9,7 @@ from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWo
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
-    PrerequisitesOfWorkProgramCreateSerializer
+    PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -28,6 +28,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from rest_framework import mixins
 
 
 # Create your views here.
@@ -755,6 +756,71 @@ class BibliographicReferenceDetailsView(generics.RetrieveAPIView):
 class WorkProgramBibliographicReferenceUpdateView(generics.UpdateAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramBibliographicReferenceUpdateSerializer
+
+#
+# class WorkProgramBibliographicReferenceUpdateView(mixins.CreateModelMixin, generics.GenericAPIView):
+#     def post(self, request, format=None):
+#         is_many = isinstance(request.data, list)
+#
+#         if is_many:
+#             serializer = WorkProgramBibliographicReferenceUpdateSerializer(data=request.data, many=True)
+#             if serializer.is_valid():
+#                 serializer.save()
+#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#         else:
+#             serializer = WorkProgramBibliographicReferenceUpdateSerializer(data=request.data)
+#             if serializer.is_valid():
+#                 serializer.save()
+#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BibliographicReferenceInWorkProgramList(generics.ListAPIView):
+    serializer_class = BibliographicReferenceSerializer
+
+    def list(self, request, **kwargs):
+        """
+        Вывод всех результатов для одной рабочей программы по id
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        #queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        queryset = WorkProgram.objects.get(id=self.kwargs['workprogram_id']).bibliographic_reference.all()
+        serializer = BibliographicReferenceSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class EvaluationToolInWorkProgramList(generics.ListAPIView):
+    serializer_class = EvaluationToolForWorkProgramSerializer
+
+    def list(self, request, **kwargs):
+        """
+        Вывод всех результатов для одной рабочей программы по id
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        #queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        # print (self.kwargs['workprogram_id'])
+        # print (DisciplineSection.objects.get(work_program__id=self.kwargs['workprogram_id']))
+        # print (DisciplineSection.objects.get(work_program__id=self.kwargs['workprogram_id']).evaluation_tools.all())
+        # queryset = DisciplineSection.objects.get(work_program__id=self.kwargs['workprogram_id']).evaluation_tools.all()
+        # print (queryset)
+        # alltools =[]
+        # print (DisciplineSection.objects.filter(work_program__id=self.kwargs['workprogram_id']))
+        # for tools in DisciplineSection.objects.filter(work_program__id=self.kwargs['workprogram_id']):
+        #     print (tools.evaluation_tools.all())
+        #     if tools.evaluation_tools.all():
+        #         alltools.append(tools.evaluation_tools.all())
+        # print (alltools)
+        # #queryset = EvaluationTool.objects.all()
+
+        try:
+            queryset = EvaluationTool.objects.filter(evaluation_tools__in=DisciplineSection.objects.filter(work_program__id=self.kwargs['workprogram_id'])).distinct()
+            serializer = EvaluationToolForWorkProgramSerializer(queryset, many=True)
+            return Response(serializer.data)
+        except:
+            return Response(status=400)
+
 
 
 #Конец блока ендпоинтов рабочей программы
