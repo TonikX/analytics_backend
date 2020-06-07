@@ -1,14 +1,15 @@
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 from django.views import View
-from .models import WorkProgram, FieldOfStudy, FieldOfStudyWorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic
+from .models import WorkProgram, FieldOfStudy, FieldOfStudyWorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, BibliographicReference
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm, DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm, PrerequisitesOfWorkProgramForm, UploadFileForm
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, OnlineCourse
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer
-from .serializers import OnlineCourseSerializer
+from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
+    PrerequisitesOfWorkProgramCreateSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -548,12 +549,12 @@ class OutcomesOfWorkProgramCreateAPIView(generics.CreateAPIView):
 
 class OutcomesOfWorkProgramDestroyView(generics.DestroyAPIView):
     queryset = OutcomesOfWorkProgram.objects.all()
-    serializer_class = OutcomesOfWorkProgramSerializer
+    serializer_class = OutcomesOfWorkProgramCreateSerializer
 
 
 class OutcomesOfWorkProgramUpdateView(generics.UpdateAPIView):
     queryset = OutcomesOfWorkProgram.objects.all()
-    serializer_class = OutcomesOfWorkProgramSerializer
+    serializer_class = OutcomesOfWorkProgramCreateSerializer
 
 
 class PrerequisitesOfWorkProgramList(generics.ListAPIView):
@@ -571,18 +572,18 @@ class PrerequisitesOfWorkProgramList(generics.ListAPIView):
 
 
 class PrerequisitesOfWorkProgramCreateAPIView(generics.CreateAPIView):
-    serializer_class = PrerequisitesOfWorkProgramSerializer
+    serializer_class = PrerequisitesOfWorkProgramCreateSerializer
     queryset = PrerequisitesOfWorkProgram.objects.all()
 
 
 class PrerequisitesOfWorkProgramDestroyView(generics.DestroyAPIView):
     queryset = PrerequisitesOfWorkProgram.objects.all()
-    serializer_class = PrerequisitesOfWorkProgramSerializer
+    serializer_class = PrerequisitesOfWorkProgramCreateSerializer
 
 
 class PrerequisitesOfWorkProgramUpdateView(generics.UpdateAPIView):
     queryset = PrerequisitesOfWorkProgram.objects.all()
-    serializer_class = PrerequisitesOfWorkProgramSerializer
+    serializer_class = PrerequisitesOfWorkProgramCreateSerializer
 
 #Блок эндпоинтов рабочей программы
 
@@ -636,8 +637,8 @@ class EvaluationToolListAPI(generics.ListCreateAPIView):
     """
     API endpoint that represents a list of Evaluation Tools.
     """
-    queryset = Topic.objects.all()
-    serializer_class = TopicSerializer
+    queryset = EvaluationTool.objects.all()
+    serializer_class = EvaluationToolSerializer
 
 
 class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -727,6 +728,34 @@ class OnlineCourseUpdateView(generics.UpdateAPIView):
 class OnlineCourseDetailsView(generics.RetrieveAPIView):
     queryset = OnlineCourse.objects.all()
     serializer_class = OnlineCourseSerializer
+
+
+class BibliographicReferenceListCreateAPIView(generics.ListCreateAPIView):
+    serializer_class = BibliographicReferenceSerializer
+    queryset = BibliographicReference.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['description']
+
+
+class BibliographicReferenceDestroyView(generics.DestroyAPIView):
+    queryset = BibliographicReference.objects.all()
+    serializer_class = BibliographicReferenceSerializer
+
+
+class BibliographicReferenceUpdateView(generics.UpdateAPIView):
+    queryset = BibliographicReference.objects.all()
+    serializer_class = BibliographicReferenceSerializer
+
+
+class BibliographicReferenceDetailsView(generics.RetrieveAPIView):
+    queryset = BibliographicReference.objects.all()
+    serializer_class = BibliographicReferenceSerializer
+
+
+class WorkProgramBibliographicReferenceUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramBibliographicReferenceUpdateSerializer
+
 
 #Конец блока ендпоинтов рабочей программы
 

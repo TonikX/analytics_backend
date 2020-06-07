@@ -13,7 +13,8 @@ from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSec
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
 from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
-
+from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
+    BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView
 
 
 urlpatterns = [
@@ -45,7 +46,7 @@ urlpatterns = [
 
 
     #Блок реализации API
-    path('api/wplist/', WorkProgramsListApi.as_view()),
+    path('api/workprograms/', WorkProgramsListApi.as_view()),
 
     #Компетенции индикаторы
     path('api/indicator/', IndicatorListView.as_view(), name='indicator'),
@@ -63,6 +64,7 @@ urlpatterns = [
     path('api/workprogram/detail/<int:pk>', WorkProgramDetailsView.as_view()),
     path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
+    path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
 
     #Работы с темами и разделами
     path('api/tools/', EvaluationToolListAPI.as_view(), name='tools'),
@@ -97,5 +99,11 @@ urlpatterns = [
     path('api/onlinecourse/delete/<int:pk>', OnlineCourseDestroyView.as_view()),
     path('api/onlinecourse/update/<int:pk>', OnlineCourseUpdateView.as_view()),
 
+    #Библиогшрафическая ссылкуа
+    path('api/BibliographicReference', BibliographicReferenceListCreateAPIView.as_view()),
+    path('api/BibliographicReference/create', BibliographicReferenceListCreateAPIView.as_view()),
+    path('api/BibliographicReference/detail/<int:pk>', BibliographicReferenceDetailsView.as_view()),
+    path('api/BibliographicReference/delete/<int:pk>', BibliographicReferenceDestroyView.as_view()),
+    path('api/BibliographicReference/update/<int:pk>', BibliographicReferenceUpdateView.as_view()),
 
 ]

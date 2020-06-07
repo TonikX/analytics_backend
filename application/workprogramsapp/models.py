@@ -45,6 +45,9 @@ class WorkProgram(models.Model):
     #goals = models.CharField(max_length=1024, verbose_name = "Цели освоения" )
     #result_goals = models.CharField(max_length=1024, verbose_name = "Результаты освоения" )
     field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram, verbose_name = "Предметная область")
+    bibliographic_reference = models.ManyToManyField('BibliographicReference', verbose_name='Библиогравическая_ссылка', related_name='bibrefs')
+    #evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
+
     # list_of_references = models.TextField(blank=True, null=True)
     # guidelines = models.TextField(blank=True, null=True)
 
@@ -268,6 +271,14 @@ class OnlineCourse(models.Model):
     platform = models.CharField(max_length=512, verbose_name = "Платформа", blank = True, null = True)
     description = models.CharField(max_length=5000, verbose_name = "Описание", blank = True, null = True)
     course_url = models.URLField(verbose_name = "Ссылка на курс")
+
+
+class BibliographicReference(models.Model):
+    '''
+    Модель описания онлайн курса
+    '''
+    description = models.CharField(max_length=5000, verbose_name = "Описание", blank = True, null = True)
+    #work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
 
 class Topic(models.Model):

@@ -1,6 +1,6 @@
 from rest_framework import serializers, viewsets
 
-from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification, OnlineCourse
+from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference
 
 from dataprocessing.serializers import ItemSerializer
 
@@ -36,11 +36,20 @@ class OutcomesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
 
 class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор вывода результата обучения для вывода результата в рабочей программе"""
-    item_name  = serializers.ReadOnlyField(source='item.name')
-    item_id  = serializers.ReadOnlyField(source='item.id')
+    # item_name  = serializers.ReadOnlyField(source='item.name')
+    # item_id  = serializers.ReadOnlyField(source='item.id')
+    item  = ItemSerializer()
+
     class Meta:
         model = OutcomesOfWorkProgram
-        fields = ['item_id', 'item_name', 'masterylevel']
+        fields = ['item', 'masterylevel']
+
+
+class PrerequisitesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор создания пререквизита обучения"""
+    class Meta:
+        model = PrerequisitesOfWorkProgram
+        fields = ['item', 'workprogram', 'masterylevel']
 
 
 class PrerequisitesOfWorkProgramSerializer(serializers.ModelSerializer):
@@ -53,11 +62,12 @@ class PrerequisitesOfWorkProgramSerializer(serializers.ModelSerializer):
 
 class PrerequisitesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор вывода пререквизита обучения для вывода пререквизита в рабочей программе"""
-    item_name  = serializers.ReadOnlyField(source='item.name')
-    item_id  = serializers.ReadOnlyField(source='item.id')
+    # item_name  = serializers.ReadOnlyField(source='item.name')
+    # item_id  = serializers.ReadOnlyField(source='item.id')
+    item  = ItemSerializer()
     class Meta:
         model = PrerequisitesOfWorkProgram
-        fields = ['item_id', 'item_name', 'masterylevel']
+        fields = ['id', 'item', 'masterylevel']
 
 
 class OnlineCourseSerializer(serializers.ModelSerializer):
@@ -98,6 +108,14 @@ class SectionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class BibliographicReferenceSerializer(serializers.ModelSerializer):
+    """Сериализатор Разделов"""
+
+    class Meta:
+        model = BibliographicReference
+        fields = "__all__"
+
+
 class DisciplineSectionSerializer(serializers.ModelSerializer):
     """Сериализатор Разделов"""
     topics = TopicSerializer(many = True)
@@ -124,12 +142,12 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     #discipline_sections = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
     discipline_sections = DisciplineSectionSerializer(many = True)
     discipline_certification = CertificationSerializer(many = True)
-
+    bibliographic_reference = BibliographicReferenceSerializer(many = True)
 
 
     class Meta:
         model = WorkProgram
-        fields = ['discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification']
+        fields = ['discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference']
 
     def create(self, validated_data):
         """
@@ -142,9 +160,34 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['discipline_code', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester']
+        fields = ['discipline_code', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference']
 
 
+class WorkProgramBibliographicReferenceUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания рабочих программ"""
+    #ibliographic_reference = BibliographicReferenceSerializer(many=True, read_only=False)
+    # bibliographic_reference = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=BibliographicReference.objects.all(), source='bibrefs_set')
+
+    class Meta:
+        model = WorkProgram
+        fields = ['bibliographic_reference']
+
+    # def update(self, instance, validated_data):
+    #     tags_data = validated_data.pop('bibliographic_reference')
+    #     print (tags_data)
+    #     instance = super(WorkProgramBibliographicReferenceUpdateSerializer, self).update(instance, validated_data)
+    #
+    #     for tag_data in tags_data:
+    #         tag_qs = BibliographicReference.objects.filter(name__iexact=tag_data['bibliographic_reference'])
+    #
+    #         if tag_qs.exists():
+    #             tag = tag_qs.first()
+    #         else:
+    #             tag = BibliographicReferenceSerializer.objects.create(**tag_data)
+    #
+    #         instance.bibliographic_reference.add(tag)
+    #
+    #     return instance
 
 
 
