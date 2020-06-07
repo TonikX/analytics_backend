@@ -136,9 +136,9 @@ class FieldOfStudy(models.Model):
     )
     number = models.CharField(unique=True, max_length=1024, verbose_name = 'Шифр ОП')
     title = models.CharField(unique=True, max_length=1024, verbose_name = 'Название ОП', blank = True, null = True)
-    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация')
+    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank = True, null = True)
     educational_profile = models.CharField(unique=True, max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
-    education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения')
+    education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
 
     def __str__(self):
         return self.number

@@ -5,7 +5,7 @@ from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, W
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
 from .views import TopicList, TopicPost, TopicPostUpdate
-from .views import PrerequisitesUpdate, OutcomesUpdate, upload_file, FieldOfStudyWPListView, IndicatorListView, \
+from .views import PrerequisitesUpdate, OutcomesUpdate, FieldOfStudyWPListView, IndicatorListView, \
     IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, DeleteIndicatorFromCompetenceView, \
     AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
 from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView
@@ -14,7 +14,8 @@ from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreate
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
 from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
-    BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList
+    BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
+    FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView
 
 
 urlpatterns = [
@@ -41,7 +42,7 @@ urlpatterns = [
     path('workprogramslist/', WorkProgramsList.as_view(), name='workprograms'),
     url(r'^workprogram/(?P<pk>\d+)/$', WorkProgramView.as_view(), name='workprogram'),
     path('workprograms/newbinding', WorkProgramsPost.as_view(), name='author_update'),
-    url(r'^uploadcsv/$', upload_file, name = 'uploadcsv'),
+    #url(r'^uploadcsv/$', upload_file, name = 'uploadcsv'),
     url(r'^fswplist/$', FieldOfStudyWPListView.as_view(), name = 'fswp'),
 
 
@@ -107,5 +108,8 @@ urlpatterns = [
     path('api/BibliographicReference/delete/<int:pk>', BibliographicReferenceDestroyView.as_view()),
     path('api/BibliographicReference/update/<int:pk>', BibliographicReferenceUpdateView.as_view()),
     path('api/bibliographicreferenceinworkprogram/<int:workprogram_id>', BibliographicReferenceInWorkProgramList.as_view()),
+
+    path('api/upload/test', FileUploadWorkProgramAPIView.as_view()),
+    path('api/upload/test', FileUploadOnlineCoursesAPIView.as_view()),
 
 ]
