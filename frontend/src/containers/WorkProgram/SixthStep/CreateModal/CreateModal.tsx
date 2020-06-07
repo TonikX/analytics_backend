@@ -27,6 +27,7 @@ import styles from './CreateModal.styles';
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
         prerequisite: {
+            [PrerequisiteFields.ID]: null,
             [PrerequisiteFields.MASTER_LEVEL]: '1',
             [PrerequisiteFields.ITEM]: {
                 [TrainingEntitiesFields.ID]: ''
@@ -46,6 +47,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 prerequisite: {
                     [PrerequisiteFields.MASTER_LEVEL]: get(prerequisite, PrerequisiteFields.MASTER_LEVEL, ''),
                     [PrerequisiteFields.ITEM]: get(prerequisite, PrerequisiteFields.ITEM, {}),
+                    [PrerequisiteFields.ID]: get(prerequisite, PrerequisiteFields.ID, null),
                 }
             });
         }
@@ -56,7 +58,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     handleSave = () => {
-        this.props.actions.changePrerequisite(this.state.prerequisite);
+        const {prerequisite} = this.state;
+
+        if (prerequisite[PrerequisiteFields.ID]){
+            this.props.actions.changePrerequisite(this.state.prerequisite);
+        } else {
+            this.props.actions.addPrerequisite(this.state.prerequisite);
+        }
     }
 
     changeMasterLevelField = (e: React.ChangeEvent) => {
@@ -92,7 +100,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {isOpen, classes, trainingEntities} = this.props;
         const {prerequisite} = this.state;
 
-        const disableButton = prerequisite[PrerequisiteFields.ITEM][TrainingEntitiesFields.ID].length === 0;
+        const disableButton = get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.ID], '').length === 0;
 
         return (
             <Dialog

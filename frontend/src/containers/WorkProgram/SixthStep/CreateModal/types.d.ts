@@ -1,5 +1,5 @@
 import {WithStyles} from "@material-ui/core";
-import {PrerequisiteType, WorkProgramActions} from '../types';
+import {PrerequisiteType, WorkProgramActions} from '../../types';
 import {SelectorListType} from "../../../../components/MultipleSearchSelector/types";
 
 import styles from "./CreateModal.styles";

@@ -18,7 +18,7 @@ const mapStateToProps = (state: rootState) => {
         trainingEntities: getTrainingEntitiesForSelect(state),
         sections: getAllSectionsForSelect(state),
         isOpen: isOpenDialog(state, fields.ADD_NEW_PREREQUISITES),
-        topic: getDialogData(state, fields.ADD_NEW_PREREQUISITES),
+        prerequisite: getDialogData(state, fields.ADD_NEW_PREREQUISITES),
     };
 };
 

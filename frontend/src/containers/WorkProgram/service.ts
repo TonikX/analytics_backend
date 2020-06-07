@@ -64,8 +64,17 @@ class WorkProgramService extends BaseService{
         return this.delete(`/api/sections/${id}`);
     }
 
-    changePrerequisites(prerequisite: any){
+    changePrerequisites(prerequisite: any, workProgramId: ReactText){
+        const formData = new FormData();
+        const id = prerequisite[PrerequisiteFields.ID];
 
+        // @ts-ignore
+        formData.append('workprogram', workProgramId);
+
+        formData.append(PrerequisiteFields.MASTER_LEVEL, prerequisite[PrerequisiteFields.MASTER_LEVEL]);
+        formData.append(PrerequisiteFields.ITEM, prerequisite[PrerequisiteFields.ITEM][TrainingEntitiesFields.ID]);
+
+        return this.patch(`/api/prerequisitesofworkprogram/update/${id}`, formData);
     }
 
     saveTopic(topic: Topic){

@@ -13,7 +13,8 @@ export default (theme: Theme) => createStyles({
     },
     addIcon: {
         marginTop: '30px',
-        marginLeft: 'auto'
+        marginLeft: 'auto',
+        flex: 'none',
     },
     table: {
         height: '100%',

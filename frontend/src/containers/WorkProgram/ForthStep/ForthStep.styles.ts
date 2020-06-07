@@ -9,6 +9,7 @@ export default (theme: Theme) => createStyles({
     addIcon: {
         marginTop: '30px',
         marginLeft: 'auto',
+        flex: 'none',
     },
     list: {
         height: '100%',

@@ -9,14 +9,16 @@ export default (theme: Theme) => createStyles({
     addIcon: {
         marginTop: '30px',
         marginLeft: 'auto',
+        flex: 'none',
     },
     list: {
         height: '100%',
     },
     item: {
         borderBottom: '1px solid #ccc',
-        padding: '10px',
+        padding: '0px 10px',
         display: 'flex',
+        alignItems: 'center'
     },
     actions: {
         display: 'flex',
@@ -25,7 +27,15 @@ export default (theme: Theme) => createStyles({
         padding: '0px 20px'
     },
     title: {
-        display: "flex",
-        alignItems: 'center'
+        width: '50%'
     },
+    level: {
+
+    },
+    header: {
+        background: theme.palette.primary.main,
+        color: '#fff',
+        display: 'flex',
+        padding: '10px'
+    }
 });

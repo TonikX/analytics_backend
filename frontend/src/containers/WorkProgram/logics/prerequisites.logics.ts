@@ -47,7 +47,7 @@ const changePrerequisite = createLogic({
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_PREREQUISITES}));
 
-        service.addPrerequisites(prerequisite, workProgramId)
+        service.changePrerequisites(prerequisite, workProgramId)
             .then((res) => {
                 dispatch(workProgramActions.getWorkProgram(workProgramId));
                 // @ts-ignore

@@ -1,6 +1,8 @@
 import React from 'react';
 import Scrollbars from "react-custom-scrollbars";
 
+import classNames from "classnames";
+
 import Typography from "@material-ui/core/Typography";
 import withStyles from '@material-ui/core/styles/withStyles';
 import Fab from "@material-ui/core/Fab";
@@ -12,6 +14,7 @@ import EditIcon from "@material-ui/icons/EditOutlined";
 
 import {SixthStepProps} from './types';
 import {fields, PrerequisiteFields} from "../enum";
+import {TrainingEntitiesFields} from "../../TrainingEntities/enum";
 
 import CreateModal from "./CreateModal";
 import {PrerequisiteType} from "../types";
@@ -37,12 +40,27 @@ class SixthStep extends React.PureComponent<SixthStepProps> {
 
         return (
             <div className={classes.root}>
+                <div className={classNames(classes.header, classes.item)}>
+                    <Typography className={classes.title}>
+                        Учебная сущность
+                    </Typography>
+                    <Typography className={classes.level}>
+                        Уровень освоения
+                    </Typography>
+                </div>
                 <Scrollbars>
                     <div className={classes.list}>
                         {prerequisitesList.map((prerequisite) => (
                             <div className={classes.item}>
                                 <Typography className={classes.title}>
-                                    {prerequisite[PrerequisiteFields.MASTER_LEVEL]}
+                                    {prerequisite[PrerequisiteFields.ITEM][TrainingEntitiesFields.TITLE]}
+                                </Typography>
+
+                                <Typography className={classes.level}>
+                                    {prerequisite[PrerequisiteFields.MASTER_LEVEL] === '1' ? 'Низкий'
+                                    : prerequisite[PrerequisiteFields.MASTER_LEVEL] === '2' ? 'Средний'
+                                    : 'Высокий'
+                                    }
                                 </Typography>
 
                                 <div className={classes.actions}>

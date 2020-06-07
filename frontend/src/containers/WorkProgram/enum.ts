@@ -58,6 +58,6 @@ export enum fetchingTypes {
 
 export enum PrerequisiteFields {
     ID = 'id',
-    MASTER_LEVEL = 'master_level',
+    MASTER_LEVEL = 'masterylevel',
     ITEM = 'item',
 }
