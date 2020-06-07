@@ -813,9 +813,15 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
         #         alltools.append(tools.evaluation_tools.all())
         # print (alltools)
         # #queryset = EvaluationTool.objects.all()
-        queryset = EvaluationTool.objects.filter(evaluation_tools__in=DisciplineSection.objects.filter(work_program__id=self.kwargs['workprogram_id'])).distinct()
-        serializer = EvaluationToolForWorkProgramSerializer(queryset, many=True)
-        return Response(serializer.data)
+
+        try:
+            queryset = EvaluationTool.objects.filter(evaluation_tools__in=DisciplineSection.objects.filter(work_program__id=self.kwargs['workprogram_id'])).distinct()
+            serializer = EvaluationToolForWorkProgramSerializer(queryset, many=True)
+            return Response(serializer.data)
+        except:
+            return Response(status=400)
+
+
 
 #Конец блока ендпоинтов рабочей программы
 
