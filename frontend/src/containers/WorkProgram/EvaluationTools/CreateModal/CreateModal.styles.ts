@@ -37,8 +37,9 @@ export default (theme: Theme) => createStyles({
     },
     dialogContent: {
         display: 'flex',
-        padding: 48,
-        justifyContent: 'space-between'
+        padding: '20px 48px',
+        justifyContent: 'space-between',
+        overflowX: 'hidden'
     },
     leftSide: {
         width: '40%',
