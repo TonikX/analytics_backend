@@ -84,7 +84,8 @@ class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
         const {isOpen, classes} = this.props;
         const {course, courseUrlFieldIsFocused} = this.state;
 
-        const checkCourseUrl = courseUrlFieldIsFocused || course[CourseFields.COURSE_URL].length === 0 || checkUrl(course[CourseFields.COURSE_URL]);
+        const checkCourseUrl = courseUrlFieldIsFocused || course[CourseFields.COURSE_URL].length === 0;
+        // const checkCourseUrl = courseUrlFieldIsFocused || course[CourseFields.COURSE_URL].length === 0 || checkUrl(course[CourseFields.COURSE_URL]);
 
         const disableButton = course[CourseFields.TITLE].length === 0 || course[CourseFields.COURSE_URL].length === 0;
 
@@ -117,7 +118,7 @@ class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
                                InputLabelProps={{
                                    shrink: true,
                                }}
-                               error={!checkCourseUrl}
+                               //error={!checkCourseUrl}
                                onFocus={this.courseUrlFieldFocus}
                                onBlur={this.courseUrlFieldBlur}
                     />
@@ -138,7 +139,7 @@ class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
                                className={classes.lastInput}
                                fullWidth
                                multiline
-                               rows={3}
+                               rows={5}
                                value={course[CourseFields.DESCRIPTION]}
                                InputLabelProps={{
                                    shrink: true,
