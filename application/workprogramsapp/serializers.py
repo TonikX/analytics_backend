@@ -223,7 +223,7 @@ class EvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EvaluationTool
-        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections']
+        fields = ['id', 'type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections']
 
 
 
