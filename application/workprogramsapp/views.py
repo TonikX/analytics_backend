@@ -30,7 +30,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins
 
-
+'''
 # Create your views here.
 def upload_file(request):
     """
@@ -106,7 +106,7 @@ def handle_uploaded_file(file, filename):
     df = pandas.read_csv(path, sep=';', encoding = 'windows-1251')
     df = df.drop(df.columns[[0]], axis=1)
     return df
-
+'''
 class FieldOfStudyWPListView(View):
     model = FieldOfStudyWorkProgram
 
@@ -821,9 +821,170 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
         except:
             return Response(status=400)
 
+from dataprocessing.serializers import FileUploadSerializer
 
+def handle_uploaded_file(file, filename):
+    """
+    Обработка файла
+    """
+    if not os.path.exists('upload/'):
+        os.mkdir('upload/')
+    path = 'upload/' + filename
+    
+    with open(path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    
+    df = pandas.read_csv(path, sep=',', encoding = 'utf-8')
+    df.dropna(subset=['Направления подготовки'], inplace = True)
+    df = df.drop(['Unnamed: 0'], axis=1)
+    return df
+
+class FileUploadWorkProgramAPIView(APIView):
+    
+    def post(self, request):
+
+        serializer = FileUploadSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        data = handle_uploaded_file(request.FILES['file'], str(request.FILES['file']))
+        data.fillna('не задано', inplace=True)
+        for i in range(len(data)):
+            try:
+            
+                #получаем список всех объектов-пререквизитов для дисциплины
+                prerequisite = data['Ключевые слова-пререквизиты'][i].split(', ')
+                prerequisite_items = []
+
+                for p in prerequisite:
+                    p = p.capitalize()
+                    if Items.objects.filter(name = p).exists():
+                        prerequisite_items.append(Items.objects.get(name = p))
+                    else:
+                        item = Items(name = p)
+                        item.save()
+                        prerequisite_items.append(item)
+
+                prerequisite_items = Items.objects.filter(name__in = prerequisite_items)
+                print("Pre--",prerequisite_items)
+                
+                #получаем список всех объектов-результатов для дисциплины
+                outcomes = data['Ключевые слова содержания'][i].split(', ')
+                outcomes_items = []
+
+                for o in outcomes:
+                    o = o.capitalize()
+
+                    if Items.objects.filter(name = o).exists():
+                        outcomes_items.append(Items.objects.get(name = o))
+                    else:
+                        item = Items(name = o)
+                        item.save()
+                        outcomes_items.append(item)
+
+                outcomes_items = Items.objects.filter(name__in = outcomes_items)
+                print("Outcomes--", outcomes_items)
+
+                #получаем список всех направленний для дисциплины
+                field_of_study = data['Направления подготовки'][i].split('                                         ')
+                field_of_study.remove(field_of_study[len(field_of_study )-1])
+                fs_list = []
+                for f in field_of_study:
+                    number,title,empty = re.split('.([А-Я][^А-Я]*)', f)
+                    print(number,'--', title)
+                    if FieldOfStudy.objects.filter(number = number, title = title).exists():
+                        fs_list.append(FieldOfStudy.objects.get(number = number, title = title))
+                    else:
+                        fs_obj = FieldOfStudy(number = number, title = title )
+                        fs_obj.save()
+                        fs_list.append(fs_obj)
+
+                fs_list = FieldOfStudy.objects.filter(number__in = fs_list)
+                print(fs_list)
+
+                if WorkProgram.objects.filter(title = data['Название курса'][i]).exists():
+                    # если запись уже есть то апдейтим
+                    wp_obj = WorkProgram.objects.get(title = data['Название курса'][i])
+                    if len(prerequisite_items) !=0:
+                        for item in prerequisite_items:
+                            prereq_obj = PrerequisitesOfWorkProgram(item = item, workprogram = wp_obj)
+                            prereq_obj.save()
+                            print('ok-1')
+                    if len(outcomes_items) !=0:
+                        for item in outcomes_items:
+                            out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj)
+                            out_obj.save()
+                            print('ok-2')
+                    
+                    for fs in fs_list:
+                        fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs, work_program = wp_obj)
+                        fswp_obj.save()
+                        print('ok-3')
+
+                else:
+
+                    # если нет, то записываем в БД и апдейтим
+                    wp_obj = WorkProgram(title = data['Название курса'][i])
+                    wp_obj.save()
+                    if len(prerequisite_items) !=0:
+                        for item in prerequisite_items:
+                            prereq_obj = PrerequisitesOfWorkProgram(item = item, workprogram = wp_obj)
+                            prereq_obj.save()
+                            print('ok-1')
+                    
+                    if len(outcomes_items) !=0:
+                        for item in outcomes_items:
+                            out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj)
+                            out_obj.save()
+                            print('ok-2')
+
+                    for fs in fs_list:
+                        fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs, work_program = wp_obj)
+                        fswp_obj.save()
+                        print('ok-3')
+
+                
+            except:
+                print(i)
+                continue;
+        return Response(status=200)  
+
+class FileUploadOnlineCoursesAPIView(APIView):
+    
+    def post(self, request):
+
+        serializer = FileUploadSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        data = handle_uploaded_file(request.FILES['file'], str(request.FILES['file']))
+        data.fillna('', inplace=True)
+        
+        for i in range(len(data)):
+            try:
+                #получаем список всех объектов-пререквизитов для дисциплины
+                if OnlineCourse.objects.filter(title = data['Название курса'][i]).exists():
+                    # если запись уже есть то апдейтим
+                    oc_obj = OnlineCourse.objects.get(title = data['Название курса'][i])
+                    oc_obj.platform = 'online.edu.ru'
+                    oc_obj.description = data['Содержание курса'][i]
+                    oc_obj.course_url = data['URL'][i]
+
+                else:
+
+                    # если нет, то записываем в БД и апдейтим
+                    oc_obj = OnlineCourse(title = data['Название курса'][i],
+                                        platform = 'online.edu.ru',
+                                        description = data['Содержание курса'][i],
+                                        course_url = data['URL'][i])
+                    oc_obj.save()
+            except:
+                print(i)
+                continue;
+        return Response(status=200)  
 
 #Конец блока ендпоинтов рабочей программы
+
+
 
 
 
