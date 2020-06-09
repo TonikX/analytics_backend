@@ -57,7 +57,7 @@ class PrerequisitesOfWorkProgramSerializer(serializers.ModelSerializer):
     item  = ItemSerializer()
     class Meta:
         model = PrerequisitesOfWorkProgram
-        fields = ['item', 'workprogram', 'masterylevel']
+        fields = ['id', 'item', 'workprogram', 'masterylevel']
 
 
 class PrerequisitesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
@@ -224,6 +224,16 @@ class EvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = EvaluationTool
         fields = ['id', 'type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections']
+
+
+class EvaluationToolCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор ФОСов"""
+    descipline_sections = serializers.PrimaryKeyRelatedField(many=True, source='evaluation_tools', queryset=DisciplineSection.objects.all())
+    #descipline_sections = DisciplineSectionForEvaluationToolsSerializer(many=True, source='evaluation_tools')
+
+    class Meta:
+        model = EvaluationTool
+        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections']
 
 
 
