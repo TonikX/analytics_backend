@@ -9,7 +9,7 @@ from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWo
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
-    PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer
+    PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -639,7 +639,7 @@ class EvaluationToolListAPI(generics.ListCreateAPIView):
     API endpoint that represents a list of Evaluation Tools.
     """
     queryset = EvaluationTool.objects.all()
-    serializer_class = EvaluationToolSerializer
+    serializer_class = EvaluationToolCreateSerializer
 
 
 class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -647,7 +647,7 @@ class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     API endpoint that represents a single Evaluation Tool.
     """
     queryset = EvaluationTool.objects.all()
-    serializer_class = EvaluationToolSerializer
+    serializer_class = EvaluationToolCreateSerializer
 
 
 class DisciplineSectionListAPI(generics.ListCreateAPIView):
