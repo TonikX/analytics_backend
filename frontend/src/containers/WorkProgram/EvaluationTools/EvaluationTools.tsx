@@ -17,14 +17,14 @@ import CheckIcon from "@material-ui/icons/CheckOutlined";
 import Chip from '@material-ui/core/Chip';
 
 import {SixthStepProps} from './types';
-import {EvaluationToolFields, fields, PrerequisiteFields, workProgramSectionFields} from "../enum";
-import {TrainingEntitiesFields} from "../../TrainingEntities/enum";
+import {EvaluationToolFields, fields, workProgramSectionFields} from "../enum";
 
 import CreateModal from "./CreateModal";
-import {EvaluationToolType, PrerequisiteType} from "../types";
+import {EvaluationToolType} from "../types";
 
 import connect from './EvaluationTools.connect';
 import styles from './EvaluationTools.styles';
+import DescriptionModal from "./DescriptionModal";
 
 class EvaluationTools extends React.PureComponent<SixthStepProps> {
     componentDidMount() {
@@ -36,7 +36,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
     };
 
     handleClickDelete = (id: number) => () => {
-        this.props.actions.deletePrerequisite(id);
+        this.props.actions.deleteEvaluationTool(id);
     };
 
     handleClickEdit = (evaluationTool: EvaluationToolType) => () => {
@@ -44,7 +44,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
     };
 
     handleClickShowDescription = (description: string) => () => {
-
+        this.props.actions.openDialog({dialogType: fields.SHOW_EVALUATION_TOOLS_DESCRIPTION, data: description});
     };
 
     render() {
@@ -141,6 +141,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                 </Fab>
 
                 <CreateModal />
+                <DescriptionModal />
             </div>
         );
     }

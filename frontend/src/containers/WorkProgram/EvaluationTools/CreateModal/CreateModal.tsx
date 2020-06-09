@@ -1,4 +1,4 @@
-import React, {ReactText} from 'react';
+import React from 'react';
 import get from "lodash/get";
 import {shallowEqual} from "recompose";
 import classNames from 'classnames';
@@ -8,11 +8,7 @@ import {CreateModalProps} from './types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import FormLabel from "@material-ui/core/FormLabel";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -21,16 +17,11 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 //@ts-ignore
 import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 
-import MultipleSearchSelector from '../../../../components/MultipleSearchSelector';
-
 import {
     EvaluationToolFields,
     fields,
-    PrerequisiteFields,
     workProgramSectionFields,
-    workProgramTopicFields
 } from '../../enum';
-import {TrainingEntitiesFields} from "../../../TrainingEntities/enum";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
@@ -48,7 +39,6 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import {AutoSizer} from "react-virtualized";
-import Popper from "@material-ui/core/Popper";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -71,10 +61,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [EvaluationToolFields.CHECK_POINT]: false,
         }
     };
-
-    componentDidMount() {
-
-    }
 
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {evaluationTool} = this.props;
@@ -105,9 +91,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {evaluationTool} = this.state;
 
         if (evaluationTool[EvaluationToolFields.ID]){
-
+            this.props.actions.changeEvaluationTool(evaluationTool);
         } else {
-
+            this.props.actions.addEvaluationTool(evaluationTool);
         }
     }
 
@@ -144,11 +130,29 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
+    changeDescription = (event: React.ChangeEvent<HTMLInputElement>, editor: any) => {
+        const {evaluationTool} = this.state;
+        const data = editor.getData();
+
+        this.setState({
+            evaluationTool: {
+                ...evaluationTool,
+                [EvaluationToolFields.DESCRIPTION]: data
+            }
+        })
+    }
+
     render() {
         const {isOpen, classes, sections, types} = this.props;
         const {evaluationTool} = this.state;
 
-        const disableButton = true;
+        const disableButton = evaluationTool[EvaluationToolFields.NAME].length === 0
+                            ||evaluationTool[EvaluationToolFields.DESCRIPTION].length === 0
+                            ||evaluationTool[EvaluationToolFields.MIN].length === 0
+                            ||evaluationTool[EvaluationToolFields.MAX].length === 0
+                            ||evaluationTool[EvaluationToolFields.SECTIONS].length === 0
+                            ||evaluationTool[EvaluationToolFields.TYPE].length === 0
+        ;
 
         return (
             <Dialog
@@ -189,7 +193,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         <AutoSizer style={{width: '100%'}}>
                             {({width}) => (
                                 <>
-                                    <TextField label="Название оценочного средства"
+                                    <TextField label="Название оценочного средства *"
                                                onChange={this.saveField(EvaluationToolFields.NAME)}
                                                variant="outlined"
                                                className={classNames(classes.input, classes.marginBottom30, classes.nameInput)}
@@ -202,7 +206,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                                     <FormControl className={classes.sectionSelector}>
                                         <InputLabel shrink id="section-label">
-                                            Раздел
+                                            Раздел *
                                         </InputLabel>
                                         <Select
                                             variant="outlined"
@@ -233,7 +237,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                                     <FormControl className={classes.typeSelector}>
                                         <InputLabel shrink id="section-label">
-                                            Тип
+                                            Тип *
                                         </InputLabel>
                                         <Select
                                             variant="outlined"
@@ -261,7 +265,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                         </Select>
                                     </FormControl>
                                     <div className={classNames(classes.row, classes.marginBottom30)}>
-                                        <TextField label="Минимальное значение"
+                                        <TextField label="Минимальное значение *"
                                                    onChange={this.saveField(EvaluationToolFields.MIN)}
                                                    variant="outlined"
                                                    className={classes.numberInput}
@@ -272,7 +276,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                    type="number"
                                                    value={evaluationTool[EvaluationToolFields.MIN]}
                                         />
-                                        <TextField label="Максимальное значение"
+                                        <TextField label="Максимальное значение *"
                                                    onChange={this.saveField(EvaluationToolFields.MAX)}
                                                    variant="outlined"
                                                    fullWidth
@@ -292,7 +296,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                                     <div>
                                         <Typography className={classes.weekTitle}>
-                                            Срок контроля в неделях
+                                            Срок контроля в неделях *
                                         </Typography>
                                         <Slider
                                             defaultValue={1}
@@ -311,7 +315,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     </div>
 
                     <div className={classes.rightSide}>
-                        <InputLabel className={classes.label}> Описание </InputLabel>
+                        <InputLabel className={classes.label}> Описание * </InputLabel>
 
                         <div id="toolbar-container"></div>
 
@@ -329,9 +333,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                                 //@ts-ignore
                                 window.editor = editor;
-                                // You can store the "editor" and use when it is needed.
-                                console.log( 'Editor is ready to use!', editor );
-                            } }
+                            }}
+                            onChange={this.changeDescription}
                             id={'editor'}
                         />
                     </div>

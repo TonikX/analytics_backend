@@ -9,6 +9,7 @@ export enum fields {
     SORTING = 'SORTING',
     SORTING_FIELD = 'SORTING_FIELD',
     SORTING_MODE = 'SORTING_MODE',
+    SUBJECT_ID = 'SUBJECT_ID',
 }
 
 export enum fetchingTypes {

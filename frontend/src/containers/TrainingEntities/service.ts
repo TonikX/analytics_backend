@@ -4,10 +4,10 @@ import {SortingType, Types} from "../../components/SortingButton/types";
 import {SubjectAreaFields} from "../SubjectArea/enum";
 
 class TrainingEntitiesServices extends BaseService{
-    getTrainingEntities(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
+    getTrainingEntities(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType, domainId: number|null){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
-        return this.get(`/api/item?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+        return this.get(`/api/item?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&domain=${domainId || ''}`);
     }
 
     deleteTrainingEntities(itemId: number){

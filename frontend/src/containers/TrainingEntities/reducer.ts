@@ -14,6 +14,7 @@ export const initialState: trainingEntitiesState = {
     [fields.CURRENT_PAGE]: 1,
     [fields.ALL_COUNT]: 1,
     [fields.SEARCH_QUERY]: '',
+    [fields.SUBJECT_ID]: null,
     [fields.TRAINING_ENTITIES_LIST]: [],
     [fields.TRAINING_ENTITIES_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
@@ -39,6 +40,11 @@ const changeCurrentPage = (state: trainingEntitiesState, {payload}: any): traini
 const changeAllCount = (state: trainingEntitiesState, {payload}: any): trainingEntitiesState => ({
     ...state,
     [fields.ALL_COUNT]: payload,
+});
+
+const changeSubjectId = (state: trainingEntitiesState, {payload}: any): trainingEntitiesState => ({
+    ...state,
+    [fields.SUBJECT_ID]: payload,
 });
 
 const openDialog = (state: trainingEntitiesState, {payload}: any): trainingEntitiesState => ({
@@ -73,4 +79,5 @@ export const reducer = createReducer(initialState, {
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
+    [actions.changeSubjectId.type]: changeSubjectId,
 });

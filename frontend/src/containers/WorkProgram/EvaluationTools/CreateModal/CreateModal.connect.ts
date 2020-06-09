@@ -9,13 +9,8 @@ import {getAllSectionsForSelect, isOpenDialog, getDialogData} from '../../getter
 import {WorkProgramActions} from "../../types";
 import {fields} from "../../enum";
 
-import trainingEntitiesActions from '../../../TrainingEntities/actions';
-import {TrainingEntitiesActions} from '../../../TrainingEntities/types';
-import {getTrainingEntitiesForSelect} from "../../../TrainingEntities/getters";
-
 const mapStateToProps = (state: rootState) => {
     return {
-        trainingEntities: getTrainingEntitiesForSelect(state),
         sections: getAllSectionsForSelect(state),
         isOpen: isOpenDialog(state, fields.CREATE_NEW_EVALUATION_TOOLS),
         evaluationTool: getDialogData(state, fields.CREATE_NEW_EVALUATION_TOOLS),
@@ -40,11 +35,9 @@ const mapStateToProps = (state: rootState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<WorkProgramActions|TrainingEntitiesActions>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<WorkProgramActions>) => ({
     // @ts-ignore
     actions: bindActionCreators(actions, dispatch),
-    // @ts-ignore
-    trainingEntitiesActions: bindActionCreators(trainingEntitiesActions, dispatch),
 });
 
 // @ts-ignore

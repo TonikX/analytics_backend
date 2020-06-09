@@ -121,6 +121,7 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
                                             list={subjectAreaList}
                                             changeItem={this.saveSubjectAreaField}
                                             value={get(trainingEntity, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '')}
+                                            valueLabel={get(trainingEntity, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.TITLE], '')}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
