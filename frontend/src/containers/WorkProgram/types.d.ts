@@ -1,10 +1,14 @@
-import {fields, PrerequisiteFields, EvaluationToolFields} from './enum';
+import {fields, PrerequisiteFields, EvaluationToolFields, ResultsFields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {CourseType} from "../Courses/types";
 import {TrainingEntitityType} from "../TrainingEntities/types";
 
 export interface WorkProgramActions {
+    deleteResult: any;
+    addResult: any;
+    changeResult: any;
+
     getWorkProgram: any;
     setWorkProgram: any;
     setWorkProgramPart: any;
@@ -75,6 +79,13 @@ export type PrerequisiteType = {
     [PrerequisiteFields.ID]: number;
     [PrerequisiteFields.MASTER_LEVEL]: string;
     [PrerequisiteFields.ITEM]: TrainingEntitityType;
+}
+
+export type ResultsType = {
+    [ResultsFields.ID]: number;
+    [ResultsFields.MASTER_LEVEL]: string;
+    [ResultsFields.ITEM]: TrainingEntitityType;
+    [ResultsFields.EVALUATION_TOOLS]: Array<EvaluationToolType>;
 }
 
 export type EvaluationToolType = {

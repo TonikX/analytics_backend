@@ -9,12 +9,13 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 
-import FirstStep from "./General";
-import SecondStep from "./Sections";
-import ThirdStep from "./Topics";
-import ForthStep from "./Literature";
-import FifthStep from "./EvaluationTools";
-import SixthStep from "./Prerequisites";
+import General from "./General";
+import Sections from "./Sections";
+import Topics from "./Topics";
+import Literature from "./Literature";
+import EvaluationTools from "./EvaluationTools";
+import Prerequisites from "./Prerequisites";
+import Results from "./Results";
 
 import {WorkProgramProps} from './types';
 import connect from './WorkProgram.connect';
@@ -44,7 +45,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
             case 0:
                 return <>
                     <div className={classes.subItem}>
-                        <FirstStep />
+                        <General />
                     </div>
                 </>;
             case 1:
@@ -54,7 +55,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         Пререквизиты
                     </Typography>
 
-                    <SixthStep />
+                    <Prerequisites />
                 </div>;
             case 2:
                 return <div className={classes.subItem}>
@@ -62,7 +63,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         Разделы
                     </Typography>
 
-                    <SecondStep />
+                    <Sections />
                 </div>;
             case 3:
                 return <div className={classes.subItem}>
@@ -70,7 +71,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         Содержание дисциплины
                     </Typography>
 
-                    <ThirdStep />
+                    <Topics />
                 </div>;
             case 4:
                 return <div className={classes.subItem}>
@@ -78,7 +79,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         Источники
                     </Typography>
 
-                    <ForthStep />
+                    <Literature />
                 </div>;
             case 5:
                 return <div className={classes.subItem}>
@@ -86,7 +87,15 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         Оценочные средства
                     </Typography>
 
-                    <FifthStep />
+                    <EvaluationTools />
+                </div>;
+            case 6:
+                return <div className={classes.subItem}>
+                    <Typography className={classes.subTitle}>
+                        Результаты обучения
+                    </Typography>
+
+                    <Results />
                 </div>;
         }
     }

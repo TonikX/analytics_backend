@@ -7,7 +7,7 @@ import {GENERAL_PATH} from "./reducer";
 import {CourseFields, fields} from './enum';
 
 import {coursesState, CourseType} from './types';
-import {SelectorListType} from "../../components/MultipleSearchSelector/types";
+import {SelectorListType} from "../../components/SearchSelector/types";
 
 const getStateData = (state: rootState): coursesState => get(state, GENERAL_PATH);
 export const getCourses = (state: rootState): Array<CourseType> => get(getStateData(state), fields.COURSES_LIST, []);

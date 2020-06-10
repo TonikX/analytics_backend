@@ -1,7 +1,8 @@
 import {ReactText} from "react";
+import get from 'lodash/get';
 import BaseService from "../../service/base-service";
 import {Section, Topic} from "./types";
-import {EvaluationToolFields, PrerequisiteFields, workProgramTopicFields} from "./enum";
+import {EvaluationToolFields, PrerequisiteFields, ResultsFields, workProgramTopicFields} from "./enum";
 import {CourseFields} from "../Courses/enum";
 import {TrainingEntitiesFields} from "../TrainingEntities/enum";
 
@@ -133,10 +134,27 @@ class WorkProgramService extends BaseService{
         return this.post(`/api/tools/`, evaluationTool);
     }
 
-    changeEvaluationTool(evaluationTool: any, workProgramId: ReactText){
+    addResult(result: any, workProgramId: ReactText){
+        return this.post(`/api/outcomesofworkprogram/create`, {
+            ...result,
+            workprogram: workProgramId,
+            item: get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID])
+        });
+    }
+
+    changeEvaluationTool(evaluationTool: any){
         const id = evaluationTool[EvaluationToolFields.ID];
 
         return this.patch(`/api/tools/${id}`, evaluationTool);
+    }
+
+    changeResult(result: any){
+        const id = result[ResultsFields.ID];
+
+        return this.patch(`/api/outcomesofworkprogram/update/${id}`, {
+            ...result,
+            item: get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID])
+        });
     }
 
     changeTopicNumber(newNumber: ReactText, topicId: ReactText){
@@ -160,6 +178,10 @@ class WorkProgramService extends BaseService{
 
     deleteEvaluationTool(id: ReactText){
         return this.delete(`/api/tools/${id}`);
+    }
+
+    deleteResult(id: ReactText){
+        return this.delete(`/api/outcomesofworkprogram/delete/${id}`);
     }
 
     updateLiterature(literature: Array<number>, workProgramId: ReactText){

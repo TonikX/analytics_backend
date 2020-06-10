@@ -16,7 +16,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import MultipleSearchSelector from '../../../../components/MultipleSearchSelector';
+import MultipleSearchSelector from '../../../../components/SearchSelector';
 
 import {fields, PrerequisiteFields} from '../../enum';
 import {TrainingEntitiesFields} from "../../../TrainingEntities/enum";
@@ -132,8 +132,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {prerequisite} = this.state;
 
         const disableButton = get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.ID], '').length === 0;
-        console.log('prerequisite', prerequisite);
-        console.log('trainingEntities', trainingEntities);
+
         return (
             <Dialog
                 open={isOpen}
@@ -156,7 +155,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         </RadioGroup>
                     </FormControl>
 
-                    <MultipleSearchSelector label="Предметная область"
+                    <MultipleSearchSelector label="Предметная область *"
                                             changeSearchText={this.handleChangeSubjectAreaSearch}
                                             list={subjectArea}
                                             changeItem={this.changeSubjectAreaField}
@@ -171,6 +170,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             changeItem={this.saveTrainingEntityField}
                                             value={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.ID], '')}
                                             valueLabel={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.TITLE], '')}
+                                            disabled={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '') === ''}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>

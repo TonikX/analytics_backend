@@ -1,8 +1,8 @@
 import {WithStyles} from "@material-ui/core";
-import styles from "./MultipleSearchSelector.styles";
+import styles from "./SearchSelector.styles";
 import {ReactText} from "react";
 
-export interface MultipleSearchSelectorProps extends WithStyles<typeof styles> {
+export interface SearchSelectorProps extends WithStyles<typeof styles> {
     changeSearchText: Function;
     changeItem: Function;
     label: string;
@@ -10,6 +10,7 @@ export interface MultipleSearchSelectorProps extends WithStyles<typeof styles> {
     valueLabel: string;
     list: SelectorListType;
     className?: string;
+    disabled?: boolean;
 }
 
 export type SelectorListType = Array<SelectorItemType>;

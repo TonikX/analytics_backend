@@ -2,7 +2,7 @@ import {WithStyles} from "@material-ui/core";
 import {CoursesActions} from "../../../Courses/types";
 import {WorkProgramActions} from '../types';
 import {Topic} from "../types";
-import {SelectorListType} from "../../../../components/MultipleSearchSelector/types";
+import {SelectorListType} from "../../../../components/SearchSelector/types";
 
 import styles from "./ThemeCreateModal.styles";
 

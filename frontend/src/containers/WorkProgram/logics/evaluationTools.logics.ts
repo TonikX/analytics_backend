@@ -4,7 +4,6 @@ import actions from '../../../layout/actions';
 import workProgramActions from '../actions';
 
 import Service from '../service';
-import {getWorkProgramId} from '../getters';
 
 import {fetchingTypes, fields} from "../enum";
 
@@ -39,13 +38,11 @@ const changeEvaluationTool = createLogic({
     type: workProgramActions.changeEvaluationTool.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const state = getState();
-        const workProgramId = getWorkProgramId(state);
         const evaluationTool = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_EVALUATION_TOOL}));
 
-        service.changeEvaluationTool(evaluationTool, workProgramId)
+        service.changeEvaluationTool(evaluationTool)
             .then((res) => {
                 dispatch(workProgramActions.getWorkProgramEvaluationTools());
                 // @ts-ignore
