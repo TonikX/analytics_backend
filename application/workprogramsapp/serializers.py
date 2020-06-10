@@ -34,11 +34,26 @@ class OutcomesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
         fields = ['item', 'workprogram', 'masterylevel', 'evaluation_tool']
 
 
+class EvaluationToolSerializer(serializers.ModelSerializer):
+    """Сериализатор ФОСов"""
+    class Meta:
+        model = EvaluationTool
+        fields = "__all__"
+
+
+class EvaluationToolForOutcomsSerializer(serializers.ModelSerializer):
+    """Сериализатор ФОСов"""
+    class Meta:
+        model = EvaluationTool
+        fields = ['id', 'type', 'name']
+
+
 class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор вывода результата обучения для вывода результата в рабочей программе"""
     # item_name  = serializers.ReadOnlyField(source='item.name')
     # item_id  = serializers.ReadOnlyField(source='item.id')
     item  = ItemSerializer()
+    evaluation_tool = EvaluationToolForOutcomsSerializer(many=True)
 
     class Meta:
         model = OutcomesOfWorkProgram
@@ -94,13 +109,6 @@ class TopicCreateSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'number': {'required': False}
         }
-
-
-class EvaluationToolSerializer(serializers.ModelSerializer):
-    """Сериализатор ФОСов"""
-    class Meta:
-        model = EvaluationTool
-        fields = "__all__"
 
 
 class SectionSerializer(serializers.ModelSerializer):
