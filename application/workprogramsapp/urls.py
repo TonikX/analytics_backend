@@ -16,7 +16,7 @@ from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateVie
 from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
-    FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView
+    FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView, CompetenceCreateView
 
 
 urlpatterns = [
@@ -53,6 +53,7 @@ urlpatterns = [
     #Компетенции индикаторы
     path('api/indicator/', IndicatorListView.as_view(), name='indicator'),
     path('api/indicator/<int:pk>', IndicatorUpdateView.as_view(), name='indicator_update'),
+    path('api/competence/create', CompetenceCreateView.as_view(), name='comptence'),
     path('api/competence/', CompetenceListView.as_view(), name='comptence'),
     path('api/competence/<int:pk>', CompetenceUpdateView.as_view(), name='comptence_update'),
     path('api/competenceindicator/<int:pk>', CompetenceIndicatorDetailView.as_view(), name='comptenceindicator'),

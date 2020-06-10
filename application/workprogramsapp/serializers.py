@@ -1,6 +1,6 @@
 from rest_framework import serializers, viewsets
 
-from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference
+from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy
 
 from dataprocessing.serializers import ItemSerializer
 

@@ -457,6 +457,12 @@ class IndicatorUpdateView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class CompetenceCreateView(generics.CreateAPIView):
+    serializer_class = CompetenceSerializer
+    queryset = Competence.objects.all()
+
+
 class CompetenceListView(APIView):
     """
        Список компетеций.
