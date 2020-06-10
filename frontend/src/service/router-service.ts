@@ -7,6 +7,7 @@ const LITERATURE = 'literature';
 const SUBJECT_AREA = 'subject-area';
 const WORK_PROGRAM = 'work-program';
 const PREREQUISITES = 'prerequisites';
+const COMPETENCES = 'competences';
 
 const SEPARATOR = '/';
 
@@ -46,6 +47,10 @@ export default class RouterService {
 
     getPrerequisitesRoute = () => {
         return SEPARATOR + PREREQUISITES;
+    };
+
+    getCompetencesRoute = () => {
+        return SEPARATOR + COMPETENCES;
     };
 
     getWorkProgramRoute = () => {

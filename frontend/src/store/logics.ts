@@ -5,6 +5,7 @@ import CoursesLogic from '../containers/Courses/logics';
 import LiteratureLogic from '../containers/Literature/logics';
 import SubjectAreaLogic from '../containers/SubjectArea/logics';
 import PrerequisitesLogic from '../containers/TrainingEntities/logics';
+import CompetenceLogic from '../containers/Competences/logics';
 
 export default [
     ...SignInLogic,
@@ -14,4 +15,5 @@ export default [
     ...LiteratureLogic,
     ...SubjectAreaLogic,
     ...PrerequisitesLogic,
+    ...CompetenceLogic,
 ];
