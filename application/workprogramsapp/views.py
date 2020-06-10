@@ -625,6 +625,10 @@ class TopicCreateAPI(generics.CreateAPIView):
     queryset = Topic.objects.all()
     serializer_class = TopicCreateSerializer
 
+    def perform_create(self, serializer):
+        # print (Topic.objects.filter(discipline_section = serializer.validated_data['discipline_section']).count()+1)
+        serializer.save(number = Topic.objects.filter(discipline_section = serializer.validated_data['discipline_section']).count()+1)
+
 
 class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """

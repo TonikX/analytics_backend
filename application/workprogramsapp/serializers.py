@@ -31,7 +31,7 @@ class OutcomesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
     """Сериализатор создания результата обучения"""
     class Meta:
         model = OutcomesOfWorkProgram
-        fields = ['item', 'workprogram', 'masterylevel']
+        fields = ['item', 'workprogram', 'masterylevel', 'evaluation_tool']
 
 
 class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
@@ -91,6 +91,9 @@ class TopicCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
         fields = ['id', 'discipline_section', 'number', 'description', 'url_online_course']
+        extra_kwargs = {
+            'number': {'required': False}
+        }
 
 
 class EvaluationToolSerializer(serializers.ModelSerializer):

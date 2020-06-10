@@ -14,10 +14,16 @@ class userProfileSerializer(serializers.ModelSerializer):
 
 class DomainSerializer(serializers.ModelSerializer):
     """Сериализатор для предметной области"""
+    user=serializers.PrimaryKeyRelatedField(required= False, many=True, queryset=User.objects.all())
  
     class Meta:
         model = Domain
         fields = ('id', 'name','user')
+        extra_kwargs = {
+            'user': {'required': False}
+        }
+        # read_only_fields = ('user',)
+
 
 
 class ItemCreateSerializer(serializers.ModelSerializer):

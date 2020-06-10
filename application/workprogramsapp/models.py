@@ -96,6 +96,7 @@ class OutcomesOfWorkProgram(models.Model):
         choices=MasterylevelChoices,
         default=1, verbose_name = "Уровень"
     )
+    evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочные средства', related_name='evaluation_tool_of_outcomes')
 
 #
 # class User(AbstractUser):
@@ -290,6 +291,7 @@ class Topic(models.Model):
     description = models.CharField(max_length=1024, verbose_name = "Описание", blank = True, null = True)
     #online_course = models.CharField(max_length=1024, verbose_name = "Реализация раздела дисциплины с помощью онлайн-курса", blank = True, null = True)
     url_online_course = models.ForeignKey('OnlineCourse', on_delete=models.CASCADE, verbose_name='Онлайн курс', blank = True, null = True, related_name='topic_with_online_course')
+
 
 
     def new_ordinal_number(topic, new_ordinal_number):
