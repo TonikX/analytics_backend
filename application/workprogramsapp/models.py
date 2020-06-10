@@ -12,8 +12,8 @@ class FieldOfStudyWorkProgram(models.Model):
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, verbose_name = 'Рабочая программа')
     #competence = models.ForeignKey('Competence',null=True,  on_delete=models.CASCADE, verbose_name = 'Компетенции')
 
-    class Meta:
-        unique_together = ('work_program', 'field_of_study')
+    # class Meta:
+    #     unique_together = ('work_program', 'field_of_study')
 
 
 class WorkProgram(models.Model):
@@ -45,6 +45,9 @@ class WorkProgram(models.Model):
     #goals = models.CharField(max_length=1024, verbose_name = "Цели освоения" )
     #result_goals = models.CharField(max_length=1024, verbose_name = "Результаты освоения" )
     field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram, verbose_name = "Предметная область")
+    bibliographic_reference = models.ManyToManyField('BibliographicReference', verbose_name='Библиогравическая_ссылка', related_name='bibrefs')
+    #evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
+
     # list_of_references = models.TextField(blank=True, null=True)
     # guidelines = models.TextField(blank=True, null=True)
 
@@ -93,6 +96,7 @@ class OutcomesOfWorkProgram(models.Model):
         choices=MasterylevelChoices,
         default=1, verbose_name = "Уровень"
     )
+    evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочные средства', related_name='evaluation_tool_of_outcomes')
 
 #
 # class User(AbstractUser):
@@ -133,11 +137,12 @@ class FieldOfStudy(models.Model):
     )
     number = models.CharField(unique=True, max_length=1024, verbose_name = 'Шифр ОП')
     title = models.CharField(unique=True, max_length=1024, verbose_name = 'Название ОП', blank = True, null = True)
-    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация')
+    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank = True, null = True)
     educational_profile = models.CharField(unique=True, max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
-    education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения')
     faculty = models.CharField(max_length=150, verbose_name = 'Факультет (Структурное подразделение)', null=True)
+    education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
 
+    
     def __str__(self):
         return self.number
 
@@ -204,7 +209,7 @@ class EvaluationTool(models.Model):
     '''
     type = models.CharField(max_length=1024, verbose_name = "Тип оценочного средства")
     name = models.CharField(unique=True, max_length=1024, verbose_name = "Наименование оценочного средства")
-    description = models.CharField(max_length=1024, verbose_name = "Описание", blank = True, null = True)
+    description = models.CharField(max_length=50000, verbose_name = "Описание", blank = True, null = True)
     check_point = models.BooleanField(verbose_name = "Контрольная точка", blank = True, null = True)
     deadline = models.IntegerField(verbose_name = "Срок сдачи в неделях", blank = True, null = True)
     min = models.IntegerField(verbose_name = "Максимальное значение", blank = True, null = True)
@@ -236,8 +241,47 @@ class DisciplineSection(models.Model):
         return self.name
 
 
+    def new_ordinal_number(descipline_section, new_ordinal_number):
+        new_ordinal_number = int(new_ordinal_number)
+        section = DisciplineSection.objects.get(pk = descipline_section)
+        if int(section.ordinal_number) > int(new_ordinal_number):
+            section.ordinal_number = new_ordinal_number
+            section.save()
+            sections = DisciplineSection.objects.filter(work_program = section.work_program, ordinal_number__gte=new_ordinal_number).exclude(pk = descipline_section).order_by('ordinal_number')
+            for sec in sections:
+                sec.ordinal_number = new_ordinal_number+1
+                sec.save()
+                new_ordinal_number +=1
+        else:
+            section.ordinal_number = new_ordinal_number
+            section.save()
+            sections = DisciplineSection.objects.filter(work_program = section.work_program, ordinal_number__lte=new_ordinal_number).exclude(pk = descipline_section).order_by('ordinal_number')
+            for sec in sections:
+                sec.ordinal_number = new_ordinal_number-1
+                sec.save()
+                new_ordinal_number -=1
+
+
     class Meta:
         ordering = ['ordinal_number']
+
+
+class OnlineCourse(models.Model):
+    '''
+    Модель описания онлайн курса
+    '''
+    title = models.CharField(max_length=512, verbose_name = "Название курсу")
+    platform = models.CharField(max_length=512, verbose_name = "Платформа", blank = True, null = True)
+    description = models.CharField(max_length=50000, verbose_name = "Описание", blank = True, null = True)
+    course_url = models.URLField(verbose_name = "Ссылка на курс")
+
+
+class BibliographicReference(models.Model):
+    '''
+    Модель описания онлайн курса
+    '''
+    description = models.CharField(max_length=5000, verbose_name = "Описание", blank = True, null = True)
+    #work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
 
 class Topic(models.Model):
@@ -245,12 +289,41 @@ class Topic(models.Model):
     Модель для темы
     '''
     discipline_section = models.ForeignKey('DisciplineSection', on_delete=models.CASCADE, verbose_name = "Раздел", related_name = "topics")
-    number = models.CharField(unique=True, max_length=1024, verbose_name = "Номер")
+    number = models.IntegerField(max_length=1024, verbose_name = "номер темы в разделе")
     description = models.CharField(max_length=1024, verbose_name = "Описание", blank = True, null = True)
-    online_course = models.CharField(max_length=1024, verbose_name = "Реализация раздела дисциплины с помощью онлайн-курса", blank = True, null = True)
+    #online_course = models.CharField(max_length=1024, verbose_name = "Реализация раздела дисциплины с помощью онлайн-курса", blank = True, null = True)
+    url_online_course = models.ForeignKey('OnlineCourse', on_delete=models.CASCADE, verbose_name='Онлайн курс', blank = True, null = True, related_name='topic_with_online_course')
+
+
+
+    def new_ordinal_number(topic, new_ordinal_number):
+        new_ordinal_number = int(new_ordinal_number)
+        section = Topic.objects.get(pk = topic)
+        print("ид темы", section)
+        print("новый номер темы", new_ordinal_number)
+        if int(section.number) > int(new_ordinal_number):
+            section.number = new_ordinal_number
+            section.save()
+            sections = Topic.objects.filter(discipline_section  = section.discipline_section, number__gte=new_ordinal_number).exclude(pk = topic).order_by('number')
+            for sec in sections:
+                sec.number = new_ordinal_number+1
+                sec.save()
+                new_ordinal_number +=1
+        else:
+            section.number = new_ordinal_number
+            section.save()
+            sections = Topic.objects.filter(discipline_section  = section.discipline_section, number__lte=new_ordinal_number).exclude(pk = topic).order_by('number')
+            for sec in sections:
+                sec.number = new_ordinal_number-1
+                sec.save()
+                new_ordinal_number -=1
+
+
+    class Meta:
+        ordering = ['number']
 
     def __str__(self):
-        return (self.number + self.description)
+        return (self.description)
 
 
 class RouteComposition(models.Model):
@@ -290,3 +363,4 @@ class Certification(models.Model):
     description = models.CharField(max_length=1024, verbose_name = "Описание", blank = True, null = True)
     deadline = models.IntegerField(verbose_name = "Срок сдачи в неделях", blank = True, null = True)
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name='discipline_certification')
+

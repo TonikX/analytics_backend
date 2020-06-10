@@ -29,6 +29,7 @@ services:
         command: bash -c "
                 python manage.py makemigrations && python manage.py migrate &&
                 python manage.py runserver --insecure 0.0.0.0:8000";
+ #       "python manage.py makemigrations --merge --noinput";
                 
         volumes:
              - ./application:/application
@@ -36,4 +37,25 @@ services:
             - "8003:8000"
         depends_on:
             - db
+    frontend:
+        stdin_open: true
+        tty: true
+        container_name: analytics_frontend
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        volumes:
+            - ./frontend:/app
+            - node-modules:/app/node_modules
+        ports:
+            - "3002:3000"
+        environment:
+            - REACT_APP_API_HOST=learnsql.ru
+            - REACT_APP_API_SCHEMA=http
+            - REACT_APP_API_PORT=8003
+            - PORT=3000
+
+volumes:
+    node-modules:
+
             

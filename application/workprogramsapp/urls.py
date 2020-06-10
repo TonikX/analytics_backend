@@ -5,15 +5,18 @@ from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, W
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
 from .views import TopicList, TopicPost, TopicPostUpdate
-from .views import PrerequisitesUpdate, OutcomesUpdate, upload_file, FieldOfStudyWPListView, IndicatorListView, \
+from .views import PrerequisitesUpdate, OutcomesUpdate, FieldOfStudyWPListView, IndicatorListView, \
     IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, DeleteIndicatorFromCompetenceView, \
     AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
 from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView
-from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, TopicsListAPI, TopicDetailAPI
+from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, TopicsListAPI, TopicDetailAPI, NewOrdinalNumbersForDesciplineSectionAPI
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
 from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateView
-
+from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
+from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
+    BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
+    FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView
 
 
 urlpatterns = [
@@ -40,12 +43,12 @@ urlpatterns = [
     path('workprogramslist/', WorkProgramsList.as_view(), name='workprograms'),
     url(r'^workprogram/(?P<pk>\d+)/$', WorkProgramView.as_view(), name='workprogram'),
     path('workprograms/newbinding', WorkProgramsPost.as_view(), name='author_update'),
-    url(r'^uploadcsv/$', upload_file, name = 'uploadcsv'),
+    #url(r'^uploadcsv/$', upload_file, name = 'uploadcsv'),
     url(r'^fswplist/$', FieldOfStudyWPListView.as_view(), name = 'fswp'),
 
 
     #Блок реализации API
-    path('api/wplist/', WorkProgramsListApi.as_view()),
+    path('api/workprograms/', WorkProgramsListApi.as_view()),
 
     #Компетенции индикаторы
     path('api/indicator/', IndicatorListView.as_view(), name='indicator'),
@@ -63,14 +66,22 @@ urlpatterns = [
     path('api/workprogram/detail/<int:pk>', WorkProgramDetailsView.as_view()),
     path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
+    path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
 
     #Работы с темами и разделами
     path('api/tools/', EvaluationToolListAPI.as_view(), name='tools'),
     path('api/tools/<int:pk>', EvaluationToolDetailAPI.as_view(), name='tool_detail'),
+    path('api/toolsinworkprogram/<int:workprogram_id>', EvaluationToolInWorkProgramList.as_view()),
+
     path('api/sections/', DisciplineSectionListAPI.as_view(), name='sections'),
     path('api/sections/<int:pk>', DisciplineSectionDetailAPI.as_view(), name='section_detail'),
+    #path('api/sections/NewOrdinalNumbers', NewOrdinalNumbersForDesciplineSectionAPI.as_view()),
+    path('api/sections/NewOrdinalNumbers', NewOrdinalNumbersForDesciplineSectionAPI),
+
     path('api/topics/', TopicsListAPI.as_view(), name='topics'),
+    path('api/topics/create', TopicCreateAPI.as_view()),
     path('api/topics/<int:pk>', TopicDetailAPI.as_view(), name='topic_detail'),
+    path('api/topics/NewOrdinalNumbers', NewOrdinalNumbersForTopicAPI),
 
     #Работа с результатами
     path('api/outcomesofworkprogram/<int:workprogram_id>', OutcomesOfWorkProgramList.as_view()),
@@ -87,4 +98,23 @@ urlpatterns = [
     #Работа с образовательными программами
     path('api/fieldofstudy/', FieldOfStudyListCreateView.as_view()),
     path('api/fieldofstudy/<int:pk>', FieldOfStudyDetailUpdateDeleteView.as_view()),
+  
+    #Онлайн курс
+    path('api/onlinecourse', OnlineCourseListCreateAPIView.as_view()),
+    path('api/onlinecourse/create', OnlineCourseListCreateAPIView.as_view()),
+    path('api/onlinecourse/detail/<int:pk>', OnlineCourseDetailsView.as_view()),
+    path('api/onlinecourse/delete/<int:pk>', OnlineCourseDestroyView.as_view()),
+    path('api/onlinecourse/update/<int:pk>', OnlineCourseUpdateView.as_view()),
+
+    #Библиогшрафическая ссылкуа
+    path('api/BibliographicReference', BibliographicReferenceListCreateAPIView.as_view()),
+    path('api/BibliographicReference/create', BibliographicReferenceListCreateAPIView.as_view()),
+    path('api/BibliographicReference/detail/<int:pk>', BibliographicReferenceDetailsView.as_view()),
+    path('api/BibliographicReference/delete/<int:pk>', BibliographicReferenceDestroyView.as_view()),
+    path('api/BibliographicReference/update/<int:pk>', BibliographicReferenceUpdateView.as_view()),
+    path('api/bibliographicreferenceinworkprogram/<int:workprogram_id>', BibliographicReferenceInWorkProgramList.as_view()),
+
+    path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
+    path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
+
 ]
