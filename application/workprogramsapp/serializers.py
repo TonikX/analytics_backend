@@ -227,6 +227,15 @@ class DisciplineSectionForEvaluationToolsSerializer(serializers.ModelSerializer)
         fields = ['id', 'ordinal_number', 'name']
 
 
+class FieldOfStudySerializer(serializers.ModelSerializer):
+    """
+        Сериализатор образовательных программ (направлений)
+    """
+    class Meta:
+        model = FieldOfStudy
+        fields = "__all__"
+
+        
 class EvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
     #descipline_sections = serializers.StringRelatedField(many=True, source='evaluation_tools')

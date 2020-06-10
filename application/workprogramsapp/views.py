@@ -6,6 +6,7 @@ from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramF
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, OnlineCourse
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
+from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, FieldOfStudySerializer
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
@@ -669,7 +670,22 @@ class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
 
+class FieldOfStudyDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    """
+        Удаление, редактирование, просмотр образовательной программы (направления) по id
+    """
+    queryset = FieldOfStudy.objects.all()
+    serializer_class = FieldOfStudySerializer
 
+
+class FieldOfStudyListCreateView(generics.ListCreateAPIView):
+    """
+        Отображение списка ОП(направлений), создание образовательной программы (напрвления)
+    """
+    queryset = FieldOfStudy.objects.all()
+    serializer_class = FieldOfStudySerializer
+    
+    
 # class NewOrdinalNumbersForDesciplineSectionAPI(APIView):
 #
 #
@@ -987,9 +1003,4 @@ class FileUploadOnlineCoursesAPIView(APIView):
         return Response(status=200)  
 
 #Конец блока ендпоинтов рабочей программы
-
-
-
-
-
 
