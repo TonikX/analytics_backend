@@ -57,7 +57,7 @@ class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OutcomesOfWorkProgram
-        fields = ['item', 'masterylevel', 'evaluation_tool']
+        fields = ['id', 'item', 'masterylevel', 'evaluation_tool']
 
 
 class PrerequisitesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
