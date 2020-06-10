@@ -1,7 +1,7 @@
 import {ReactText} from "react";
 import BaseService from "../../service/base-service";
 import {Section, Topic} from "./types";
-import {PrerequisiteFields, workProgramTopicFields} from "./enum";
+import {EvaluationToolFields, PrerequisiteFields, workProgramTopicFields} from "./enum";
 import {CourseFields} from "../Courses/enum";
 import {TrainingEntitiesFields} from "../TrainingEntities/enum";
 
@@ -129,6 +129,16 @@ class WorkProgramService extends BaseService{
         return this.post(`/api/prerequisitesofworkprogram/create`, formData);
     }
 
+    addEvaluationTool(evaluationTool: any){
+        return this.post(`/api/tools/`, evaluationTool);
+    }
+
+    changeEvaluationTool(evaluationTool: any, workProgramId: ReactText){
+        const id = evaluationTool[EvaluationToolFields.ID];
+
+        return this.patch(`/api/tools/${id}`, evaluationTool);
+    }
+
     changeTopicNumber(newNumber: ReactText, topicId: ReactText){
         const formData = new FormData();
 
@@ -146,6 +156,10 @@ class WorkProgramService extends BaseService{
 
     deletePrerequisite(id: ReactText){
         return this.delete(`/api/prerequisitesofworkprogram/${id}`);
+    }
+
+    deleteEvaluationTool(id: ReactText){
+        return this.delete(`/api/tools/${id}`);
     }
 
     updateLiterature(literature: Array<number>, workProgramId: ReactText){

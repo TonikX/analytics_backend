@@ -110,7 +110,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                 <DialogContent>
                     <FormControl className={classes.sectionSelector}>
                         <InputLabel shrink id="section-label">
-                            Раздел
+                            Раздел *
                         </InputLabel>
                         <Select
                             variant="outlined"
@@ -136,7 +136,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                             )}
                         </Select>
                     </FormControl>
-                    <TextField label="Название темы"
+                    <TextField label="Название темы *"
                                onChange={this.saveField(workProgramTopicFields.DESCRIPTION)}
                                variant="outlined"
                                className={classes.input}
@@ -151,6 +151,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                                             list={coursesList}
                                             changeItem={this.saveCourseField}
                                             value={get(topic, [workProgramTopicFields.COURSE, CourseFields.ID], '')}
+                                            valueLabel={get(topic, [workProgramTopicFields.COURSE, CourseFields.TITLE], '')}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>

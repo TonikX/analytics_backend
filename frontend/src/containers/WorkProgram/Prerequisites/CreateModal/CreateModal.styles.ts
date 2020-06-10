@@ -12,5 +12,8 @@ export default (theme: Theme) => createStyles({
         flexDirection: 'row',
         marginBottom: '30px',
         width: '550px'
+    },
+    marginBottom30: {
+        marginBottom: '30px'
     }
 });

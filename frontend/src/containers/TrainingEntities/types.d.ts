@@ -17,6 +17,7 @@ export interface TrainingEntitiesActions {
     changeCurrentPage: any;
     changeAllCount: any;
     changeSorting: any;
+    changeSubjectId: any;
 }
 
 export interface trainingEntitiesState {
@@ -27,6 +28,7 @@ export interface trainingEntitiesState {
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
+    [fields.SUBJECT_ID]: number|null;
     [fields.TRAINING_ENTITIES_LIST]: Array<TrainingEntitityType>;
     [fields.TRAINING_ENTITIES_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;

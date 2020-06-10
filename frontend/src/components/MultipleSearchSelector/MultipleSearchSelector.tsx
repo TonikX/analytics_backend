@@ -23,7 +23,9 @@ class MultipleSearchSelector extends React.Component<MultipleSearchSelectorProps
     };
 
     componentDidMount() {
-        this.setState({searchText: this.getLabelForValue(this.props.value)});
+        const {valueLabel} = this.props;
+
+        this.setState({searchText: valueLabel});
     }
 
     changeSearchText = (event: React.ChangeEvent) => {
@@ -72,13 +74,13 @@ class MultipleSearchSelector extends React.Component<MultipleSearchSelectorProps
     }
 
     render(): any {
-        const {classes, label, list, value} = this.props;
+        const {classes, label, list, value, ...rest} = this.props;
         const {anchorEl, searchText} = this.state;
         const open = Boolean(anchorEl);
 
         return (
             <ClickAwayListener onClickAway={this.handleOnClickAway} mouseEvent={'onMouseDown'}>
-                <div>
+                <div {...rest}>
                     <TextField onChange={this.changeSearchText}
                                label={label}
                                variant='outlined'

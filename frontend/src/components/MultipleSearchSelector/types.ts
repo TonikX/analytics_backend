@@ -7,7 +7,9 @@ export interface MultipleSearchSelectorProps extends WithStyles<typeof styles> {
     changeItem: Function;
     label: string;
     value: string;
+    valueLabel: string;
     list: SelectorListType;
+    className?: string;
 }
 
 export type SelectorListType = Array<SelectorItemType>;

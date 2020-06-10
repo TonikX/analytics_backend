@@ -19,10 +19,10 @@ import {TrainingEntitiesFields} from "../../TrainingEntities/enum";
 import CreateModal from "./CreateModal";
 import {PrerequisiteType} from "../types";
 
-import connect from './SixthStep.connect';
-import styles from './SixthStep.styles';
+import connect from './Prerequisites.connect';
+import styles from './Prerequisites.styles';
 
-class SixthStep extends React.PureComponent<SixthStepProps> {
+class Prerequisites extends React.PureComponent<SixthStepProps> {
     handleCreateNew = () => {
         this.props.actions.openDialog({dialogType: fields.ADD_NEW_PREREQUISITES, data: {}});
     };
@@ -89,4 +89,4 @@ class SixthStep extends React.PureComponent<SixthStepProps> {
     }
 }
 
-export default connect(withStyles(styles)(SixthStep));
+export default connect(withStyles(styles)(Prerequisites));

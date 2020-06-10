@@ -31,6 +31,10 @@ export interface WorkProgramActions {
 
     getWorkProgramEvaluationTools: any;
     setWorkProgramEvaluationTools: any;
+
+    deleteEvaluationTool: any;
+    addEvaluationTool: any;
+    changeEvaluationTool: any;
 }
 
 export interface workProgramState {
