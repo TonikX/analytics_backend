@@ -13,6 +13,7 @@ import topicLogics from './logics/topics.logics';
 import literatureLogics from './logics/literature.logics';
 import prerequisitesLogics from './logics/prerequisites.logics';
 import evaluationToolsLogics from './logics/evaluationTools.logics';
+import resultsLogics from './logics/results.logics';
 
 const service = new Service();
 
@@ -95,6 +96,7 @@ export default [
     ...literatureLogics,
     ...prerequisitesLogics,
     ...evaluationToolsLogics,
+    ...resultsLogics,
     getWorkProgram,
     saveWorkProgram,
     getWorkProgramEvaluationTools,

@@ -4,7 +4,7 @@ import {rootState} from '../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 
-import {fields, workProgramSectionFields} from './enum';
+import {EvaluationToolFields, fields, workProgramSectionFields} from './enum';
 
 import {workProgramState} from './types';
 
@@ -25,5 +25,14 @@ export const getAllSectionsForSelect = (state: rootState) => {
     return allSections.map((section: any) => ({
         label: section[workProgramSectionFields.NAME],
         value: section[workProgramSectionFields.ID],
+    }))
+};
+
+export const getEvaluationToolsForSelect = (state: rootState) => {
+    const evaluationToolsList = getWorkProgramEvaluationToolsList(state);
+    //@ts-ignore
+    return evaluationToolsList.map((evaluationTool: any) => ({
+        label: evaluationTool[EvaluationToolFields.NAME],
+        value: evaluationTool[EvaluationToolFields.ID],
     }))
 };

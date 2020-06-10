@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import MultipleSearchSelector from "../../../components/MultipleSearchSelector/MultipleSearchSelector";
+import MultipleSearchSelector from "../../../components/SearchSelector/SearchSelector";
 import {SubjectAreaFields} from "../../SubjectArea/enum";
 import {TrainingEntitiesFields} from '../enum';
 

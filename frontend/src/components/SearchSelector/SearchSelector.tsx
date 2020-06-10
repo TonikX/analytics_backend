@@ -12,11 +12,11 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from "@material-ui/core/MenuItem";
 
-import {MultipleSearchSelectorProps, SelectorItemType} from './types';
+import {SearchSelectorProps, SelectorItemType} from './types';
 
-import styles from './MultipleSearchSelector.styles';
+import styles from './SearchSelector.styles';
 
-class MultipleSearchSelector extends React.Component<MultipleSearchSelectorProps> {
+class SearchSelector extends React.Component<SearchSelectorProps> {
     state = {
         anchorEl: null,
         searchText: ''
@@ -52,12 +52,17 @@ class MultipleSearchSelector extends React.Component<MultipleSearchSelectorProps
     };
 
     handleOnClickAway = (): void => {
-        this.closeMenu();
+        const {anchorEl} = this.state;
+        const open = Boolean(anchorEl);
 
-        if (this.state.searchText.length === 0){
-            this.props.changeItem('');
-        } else {
-            this.setState({searchText: this.getLabelForValue(this.props.value)});
+        if (open){
+            this.closeMenu();
+
+            if (this.state.searchText.length === 0){
+                this.props.changeItem('');
+            } else {
+                this.setState({searchText: this.getLabelForValue(this.props.value)});
+            }
         }
     };
 
@@ -74,7 +79,7 @@ class MultipleSearchSelector extends React.Component<MultipleSearchSelectorProps
     }
 
     render(): any {
-        const {classes, label, list, value, ...rest} = this.props;
+        const {classes, label, list, value, disabled, ...rest} = this.props;
         const {anchorEl, searchText} = this.state;
         const open = Boolean(anchorEl);
 
@@ -91,6 +96,7 @@ class MultipleSearchSelector extends React.Component<MultipleSearchSelectorProps
                                onFocus={this.openMenu}
                                onBlur={this.closeMenu}
                                value={searchText}
+                               disabled={disabled}
                     />
                     <AutoSizer style={{width: '100%'}}>
                         {({width}) => (
@@ -123,4 +129,4 @@ class MultipleSearchSelector extends React.Component<MultipleSearchSelectorProps
     }
 }
 
-export default withStyles(styles)(MultipleSearchSelector);
+export default withStyles(styles)(SearchSelector);

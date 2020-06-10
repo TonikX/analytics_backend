@@ -1,5 +1,5 @@
 import {WithStyles} from "@material-ui/core";
-import {PrerequisiteType, WorkProgramActions} from '../../types';
+import {PrerequisiteType, ResultsType, WorkProgramActions} from '../../types';
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 
 import styles from "./CreateModal.styles";
@@ -14,6 +14,7 @@ export interface CreateModalProps extends WithStyles<typeof styles> {
     handleClose: Function;
     trainingEntities: Array<{value: string, label: string}>;
     subjectArea: Array<{value: string, label: string}>;
+    evaluationTools: Array<{value: string, label: string}>;
     coursesList: SelectorListType;
-    prerequisite: PrerequisiteType;
+    result: ResultsType;
 }
