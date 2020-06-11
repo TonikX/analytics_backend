@@ -10,7 +10,7 @@ class FieldOfStudyWorkProgram(models.Model):
     '''
     field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE, verbose_name = 'Образовательная программа')
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, verbose_name = 'Рабочая программа')
-    #competence = models.ForeignKey('Competence',null=True,  on_delete=models.CASCADE, verbose_name = 'Компетенции')
+    #competence = models.ForeignKey('Competences',null=True,  on_delete=models.CASCADE, verbose_name = 'Компетенции')
 
     # class Meta:
     #     unique_together = ('work_program', 'field_of_study')
@@ -148,7 +148,7 @@ class FieldOfStudy(models.Model):
 #     '''
 #     Модель для связи компетенций и индикаторов
 #     '''
-#     competence = models.ForeignKey('Competence', on_delete=models.CASCADE)
+#     competence = models.ForeignKey('Competences', on_delete=models.CASCADE)
 #     indicator = models.ForeignKey('Indicator', on_delete=models.CASCADE)
 #     #field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE)
 #
@@ -156,7 +156,7 @@ class FieldOfStudy(models.Model):
 #         unique_together = ('competence', 'indicator')
 
 
-class Competence(models.Model):
+class Competences(models.Model):
     '''
     Модель для компетенций
     '''
@@ -176,7 +176,7 @@ class IndicatorWorkProgram(models.Model):
     '''
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE)
     indicator = models.ForeignKey('Indicator', on_delete=models.CASCADE)
-    #competence = models.ForeignKey('Competence', on_delete=models.CASCADE)
+    #competence = models.ForeignKey('Competences', on_delete=models.CASCADE)
     knowledge = models.CharField(max_length=1024)
     skills = models.CharField(max_length=1024)
     proficiency = models.CharField(max_length=1024)
@@ -194,7 +194,7 @@ class Indicator(models.Model):
     number = models.CharField(unique=True, max_length=1024)
     name = models.CharField(max_length=1024)
     work_programs = models.ManyToManyField('WorkProgram', through=IndicatorWorkProgram, blank=True, null=True)
-    competence = models.ForeignKey('Competence', on_delete=models.CASCADE)
+    competence = models.ForeignKey('Competences', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

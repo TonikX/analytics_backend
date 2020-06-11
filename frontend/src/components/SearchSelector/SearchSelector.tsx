@@ -79,13 +79,13 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
     }
 
     render(): any {
-        const {classes, label, list, value, disabled, ...rest} = this.props;
+        const {classes, label, list, value, disabled, className} = this.props;
         const {anchorEl, searchText} = this.state;
         const open = Boolean(anchorEl);
 
         return (
             <ClickAwayListener onClickAway={this.handleOnClickAway} mouseEvent={'onMouseDown'}>
-                <div {...rest}>
+                <div className={className}>
                     <TextField onChange={this.changeSearchText}
                                label={label}
                                variant='outlined'

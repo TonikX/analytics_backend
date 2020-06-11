@@ -69,6 +69,8 @@ class SubjectAreaCreateModal extends React.PureComponent<SubjectAreaCreateModalP
 
         const disableButton = subjectArea[SubjectAreaFields.TITLE].length === 0;
 
+        const isEditMode = Boolean(subjectArea[SubjectAreaFields.ID]);
+
         return (
             <Dialog
                 open={isOpen}
@@ -77,7 +79,7 @@ class SubjectAreaCreateModal extends React.PureComponent<SubjectAreaCreateModalP
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> Создать предметную область</DialogTitle>
+                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} предметную область</DialogTitle>
                 <DialogContent>
                     <TextField label="Название *"
                                onChange={this.saveField(SubjectAreaFields.TITLE)}

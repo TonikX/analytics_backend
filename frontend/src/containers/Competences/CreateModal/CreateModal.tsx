@@ -16,6 +16,7 @@ import {CompetenceFields} from '../enum';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
+import classNames from "classnames";
 
 class CreateModal extends React.PureComponent<CourseCreateModalProps> {
     state = {
@@ -71,6 +72,8 @@ class CreateModal extends React.PureComponent<CourseCreateModalProps> {
 
         const disableButton = competence[CompetenceFields.TITLE].length === 0 || competence[CompetenceFields.NUMBER].length === 0;
 
+        const isEditMode = Boolean(competence[CompetenceFields.ID]);
+
         return (
             <Dialog
                 open={isOpen}
@@ -79,12 +82,12 @@ class CreateModal extends React.PureComponent<CourseCreateModalProps> {
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> Создать компетенцию</DialogTitle>
+                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} компетенцию</DialogTitle>
                 <DialogContent>
                     <TextField label="Название компетенции *"
                                onChange={this.saveField(CompetenceFields.TITLE)}
                                variant="outlined"
-                               className={classes.input}
+                               className={classNames(classes.input, classes.marginBottom30)}
                                fullWidth
                                value={competence[CompetenceFields.TITLE]}
                                InputLabelProps={{

@@ -16,7 +16,7 @@ export default (theme: Theme) => createStyles({
     },
     courseSelector: {
         '& .MuiInputLabel-shrink': {
-            transform: 'translate(11px, -6.5px) scale(0.75) !important',
+            transform: 'translate(14px, -6.5px) scale(0.75) !important',
         },
         '& .MuiOutlinedInput-notchedOutline legend': {
             width: '90px !important'
@@ -24,11 +24,16 @@ export default (theme: Theme) => createStyles({
     },
     sectionSelector: {
         '& .MuiInputLabel-shrink': {
-            transform: 'translate(11px, -6.5px) scale(0.75) !important',
+            transform: 'translate(13px, -6.5px) scale(0.75) !important',
         },
         '& .MuiOutlinedInput-notchedOutline legend': {
-            width: '52px !important'
+            width: '57px !important'
         },
         marginBottom: '30px',
+    },
+    link: {
+        marginRight: 'auto',
+        textDecoration: 'none',
+        color: theme.palette.primary.main,
     }
 });

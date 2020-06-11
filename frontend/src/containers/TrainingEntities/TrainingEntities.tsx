@@ -74,6 +74,7 @@ class TrainingEntities extends React.Component<TrainingEntitiesProps> {
 
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
+        this.props.actions.changeCurrentPage(1);
         this.props.actions.getTrainingEntities();
     }, 300);
 

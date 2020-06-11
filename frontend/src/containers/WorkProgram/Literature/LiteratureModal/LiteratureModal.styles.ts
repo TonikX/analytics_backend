@@ -43,10 +43,18 @@ export default (theme: Theme) => createStyles({
         marginLeft: theme.spacing(2),
         flex: 1,
     },
-    disabledButton: {
-        color: '#fff !important'
+    linkButton: {
+        display: 'flex',
+        alignItems: 'center'
     },
     saveButton: {
         marginLeft: 8
-    }
+    },
+    link: {
+        display: 'flex',
+        alignItems: 'center',
+        marginRight: 'auto',
+        textDecoration: 'none',
+        color: '#fff',
+    },
 });

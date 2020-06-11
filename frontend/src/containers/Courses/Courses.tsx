@@ -74,6 +74,7 @@ class Courses extends React.Component<CoursesProps> {
 
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
+        this.props.actions.changeCurrentPage(1);
         this.props.actions.getCourses();
     }, 300);
 

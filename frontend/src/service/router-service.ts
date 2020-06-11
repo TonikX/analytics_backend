@@ -6,7 +6,7 @@ const COURSES = 'courses';
 const LITERATURE = 'literature';
 const SUBJECT_AREA = 'subject-area';
 const WORK_PROGRAM = 'work-program';
-const PREREQUISITES = 'prerequisites';
+const TRAINING_ENTITIES = 'training-entities';
 const COMPETENCES = 'competences';
 
 const SEPARATOR = '/';
@@ -45,8 +45,8 @@ export default class RouterService {
         return SEPARATOR + SUBJECT_AREA;
     };
 
-    getPrerequisitesRoute = () => {
-        return SEPARATOR + PREREQUISITES;
+    getTrainingEntitiesRoute = () => {
+        return SEPARATOR + TRAINING_ENTITIES;
     };
 
     getCompetencesRoute = () => {

@@ -24,6 +24,9 @@ import {TrainingEntitiesFields} from "../../../TrainingEntities/enum";
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import {SubjectAreaFields} from "../../../SubjectArea/enum";
+import {Link} from "react-router-dom";
+import {appRouter} from "../../../../service/router-service";
+import Typography from "@material-ui/core/Typography";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -133,6 +136,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const disableButton = get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.ID], '').length === 0;
 
+        const isEditMode = Boolean(get(prerequisite, PrerequisiteFields.ID));
+
         return (
             <Dialog
                 open={isOpen}
@@ -141,7 +146,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> Добавить пререквизит </DialogTitle>
+                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} пререквизит </DialogTitle>
                 <DialogContent>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Уровень *</FormLabel>
@@ -174,6 +179,15 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
+                    <Link to={appRouter.getTrainingEntitiesRoute()}
+                          className={classes.link}
+                          target="_blank"
+                    >
+                        <Typography>
+                            Создать учебную сущность
+                        </Typography>
+                    </Link>
+
                     <Button onClick={this.handleClose}
                             variant="text">
                         Отмена

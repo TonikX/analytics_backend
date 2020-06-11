@@ -20,6 +20,6 @@ export enum fetchingTypes {
 
 export enum CompetenceFields {
     ID = 'id',
-    TITLE = 'title',
+    TITLE = 'name',
     NUMBER = 'number',
 }

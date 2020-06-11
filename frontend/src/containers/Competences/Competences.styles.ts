@@ -33,12 +33,11 @@ export default (theme: Theme) => createStyles({
     },
     titleCell: {
         minWidth: 200,
-        width: '50%',
+        width: '70%',
         flex: 'none'
     },
     numberCell: {
-        minWidth: 200,
-        width: '40%',
+        width: 115,
         flex: 'none'
     },
     actions: {

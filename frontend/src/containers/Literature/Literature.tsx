@@ -73,6 +73,7 @@ class Literature extends React.Component<LiteratureProps> {
 
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
+        this.props.actions.changeCurrentPage(1);
         this.props.actions.getLiterature();
     }, 300);
 

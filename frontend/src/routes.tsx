@@ -37,7 +37,7 @@ export default () => (
                 <AuthRoute path={routerService.getSubjectAreaRoute()}>
                     <SubjectArea />
                 </AuthRoute>
-                <AuthRoute path={routerService.getPrerequisitesRoute()}>
+                <AuthRoute path={routerService.getTrainingEntitiesRoute()}>
                     <Prerequisites />
                 </AuthRoute>
                 <AuthRoute path={routerService.getCompetencesRoute()}>

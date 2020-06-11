@@ -89,6 +89,8 @@ class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
 
         const disableButton = course[CourseFields.TITLE].length === 0 || course[CourseFields.COURSE_URL].length === 0;
 
+        const isEditMode = Boolean(course[CourseFields.ID]);
+
         return (
             <Dialog
                 open={isOpen}
@@ -97,7 +99,7 @@ class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> Создать онлайн курс</DialogTitle>
+                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} онлайн курс</DialogTitle>
                 <DialogContent>
                     <TextField label="Название курса *"
                                onChange={this.saveField(CourseFields.TITLE)}

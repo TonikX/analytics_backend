@@ -3,7 +3,6 @@ import {createStyles, Theme} from "@material-ui/core";
 export default (theme: Theme) => createStyles({
     input: {
         width: '550px',
-        marginBottom: '30px',
     },
     lastInput: {
         width: '550px',
@@ -16,5 +15,8 @@ export default (theme: Theme) => createStyles({
     },
     dialog: {
         padding: 20,
+    },
+    marginBottom30: {
+        marginBottom: '30px'
     },
 });

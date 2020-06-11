@@ -6,7 +6,7 @@ class CompetenceService extends BaseService{
     getCompetences(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
-        return this.get(`/api/competence?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+        return this.get(`/api/competences?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
     deleteCompetence(id: number){
@@ -19,7 +19,7 @@ class CompetenceService extends BaseService{
         formData.append(CompetenceFields.TITLE, competence[CompetenceFields.TITLE]);
         formData.append(CompetenceFields.NUMBER, competence[CompetenceFields.NUMBER]);
 
-        return this.post(`/api/competence/`, formData);
+        return this.post(`/api/competence/create`, formData);
     }
 
     updateCourse(competence: any){
@@ -29,7 +29,7 @@ class CompetenceService extends BaseService{
         formData.append(CompetenceFields.TITLE, competence[CompetenceFields.TITLE]);
         formData.append(CompetenceFields.NUMBER, competence[CompetenceFields.NUMBER]);
 
-        return this.patch(`/api/competence/${id}`, formData);
+        return this.put(`/api/competence/${id}`, formData);
     }
 }
 

@@ -23,10 +23,14 @@ import connect from './ThemeCreateModal.connect';
 import styles from './ThemeCreateModal.styles';
 import {shallowEqual} from "recompose";
 import {CourseFields} from "../../../Courses/enum";
+import {Link} from "react-router-dom";
+import {appRouter} from "../../../../service/router-service";
+import Typography from "@material-ui/core/Typography";
 
 class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
     state = {
         topic: {
+            [workProgramTopicFields.ID]: null,
             [workProgramTopicFields.DESCRIPTION]: '',
             [workProgramTopicFields.SECTION]: '',
             [workProgramTopicFields.COURSE]: {
@@ -47,7 +51,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                 topic: {
                     [workProgramTopicFields.DESCRIPTION]: get(topic, workProgramTopicFields.DESCRIPTION, ''),
                     [workProgramTopicFields.SECTION]: get(topic, workProgramTopicFields.SECTION, ''),
-                    [workProgramTopicFields.ID]: get(topic, workProgramTopicFields.ID, ''),
+                    [workProgramTopicFields.ID]: get(topic, workProgramTopicFields.ID, null),
                     [workProgramTopicFields.COURSE]: get(topic, workProgramTopicFields.COURSE, ''),
                     [workProgramTopicFields.NUMBER]: get(topic, workProgramTopicFields.NUMBER, ''),
                 }
@@ -98,6 +102,8 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
 
         const disableButton = topic[workProgramTopicFields.DESCRIPTION].length === 0 || topic[workProgramTopicFields.SECTION].length === 0;
 
+        const isEditMode = Boolean(topic[workProgramTopicFields.ID]);
+
         return (
             <Dialog
                 open={isOpen}
@@ -106,7 +112,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> Создать тему</DialogTitle>
+                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} тему</DialogTitle>
                 <DialogContent>
                     <FormControl className={classes.sectionSelector}>
                         <InputLabel shrink id="section-label">
@@ -155,6 +161,14 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
+                    <Link to={appRouter.getCoursesRoute()}
+                          className={classes.link}
+                          target="_blank"
+                    >
+                        <Typography>
+                            Создать онлайн курс
+                        </Typography>
+                    </Link>
                     <Button onClick={this.handleClose}
                             variant="text">
                         Отмена

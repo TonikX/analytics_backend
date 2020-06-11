@@ -73,6 +73,7 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
 
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
+        this.props.actions.changeCurrentPage(1);
         this.props.actions.getSubjectArea();
     }, 300);
 

@@ -22,6 +22,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import AddIcon from "@material-ui/icons/Add";
 
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
@@ -32,6 +33,8 @@ import {LiteratureType} from "../../../Literature/types";
 
 import connect from './LiteratureModal.connect';
 import styles from './LiteratureModal.styles';
+import {Link} from "react-router-dom";
+import {appRouter} from "../../../../service/router-service";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -112,16 +115,17 @@ class LiteratureModal extends React.PureComponent<LiteratureModalProps> {
                         <Typography variant="h6" className={classes.title}>
                             Добавить источник
                         </Typography>
-                        <Button autoFocus
-                                color="inherit"
-                                onClick={this.handleSave}
-                                disabled={disableButton}
-                                classes={{
-                                    disabled: classes.disabledButton
-                                }}
+                        <Link to={appRouter.getLiteratureRoute()}
+                              target="_blank"
+                              className={classes.link}
                         >
-                            Сохранить
-                        </Button>
+                            <Button autoFocus
+                                    color="inherit"
+                            >
+                                <AddIcon />
+                                Создать источник литературы
+                            </Button>
+                        </Link>
                     </Toolbar>
                 </AppBar>
 

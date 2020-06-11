@@ -73,6 +73,7 @@ class Competences extends React.Component<CompetenceProps> {
 
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
+        this.props.actions.changeCurrentPage(1);
         this.props.actions.getCompetences();
     }, 300);
 
@@ -126,7 +127,7 @@ class Competences extends React.Component<CompetenceProps> {
                     <div className={classes.list}>
                         <Scrollbars>
                             {competences.map(competence =>
-                                <div className={classes.competence} key={competence[CompetenceFields.ID]}>
+                                <div className={classes.row} key={competence[CompetenceFields.ID]}>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}> {competence[CompetenceFields.TITLE]} </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.numberCell)}> {competence[CompetenceFields.NUMBER]} </Typography>
                                     <div className={classes.actions}>
@@ -168,9 +169,9 @@ class Competences extends React.Component<CompetenceProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены что хотите удалить курс?'}
+                               confirmText={'Вы точно уверены что хотите удалить компетенцию?'}
                                isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить онлайн курс'}
+                               dialogTitle={'Удалить компетенцию'}
                                confirmButtonText={'Удалить'}
                 />
             </Paper>

@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.views import View
 from .models import WorkProgram, FieldOfStudy, FieldOfStudyWorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, BibliographicReference
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm, DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm, PrerequisitesOfWorkProgramForm, UploadFileForm
-from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, OnlineCourse
+from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competences, OnlineCourse
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, TopicCreateSerializer
@@ -461,7 +461,7 @@ class CompetenceListView(APIView):
        Список компетеций.
     """
     def get(self, request):
-        competences = Competence.objects.all()
+        competences = Competences.objects.all()
         serializer = CompetenceSerializer(competences, many=True)
         return Response(serializer.data)
 
@@ -470,12 +470,12 @@ class CompetenceUpdateView(APIView):
         Редактирование (обновление) компетенции
     """
     def get(self, request, pk):
-        competence = get_object_or_404(Competence, pk=pk)
+        competence = get_object_or_404(Competences, pk=pk)
         serializer = CompetenceSerializer(competence)
         return Response(serializer.data)
 
     def put(self, request, pk):
-        competence = get_object_or_404(Competence, pk=pk)
+        competence = get_object_or_404(Competences, pk=pk)
         serializer = CompetenceSerializer(competence, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -483,7 +483,7 @@ class CompetenceUpdateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        competence = get_object_or_404(Competence, pk=pk)
+        competence = get_object_or_404(Competences, pk=pk)
         try:
             competence.delete()
             return Response(status=200)
@@ -521,7 +521,7 @@ class AddIndicatorToCompetenceView(APIView):
         name = request.data.get("name")
         competence = request.data.get("competence")
         try:
-            competence = Competence.objects.get(pk=competence)
+            competence = Competences.objects.get(pk=competence)
             indicator = Indicator.objects.create(number=number, name=name, competence=competence)
             indicator.save()
             return Response(status=200)
