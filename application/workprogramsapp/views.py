@@ -689,6 +689,8 @@ class FieldOfStudyDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = FieldOfStudy.objects.all()
     serializer_class = FieldOfStudySerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title','number', 'faculty', 'educational_profile']
 
 
 class FieldOfStudyListCreateView(generics.ListCreateAPIView):
