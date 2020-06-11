@@ -1,6 +1,6 @@
 from rest_framework import serializers, viewsets
 
-from .models import WorkProgram, Indicator, Competences, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference
+from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference
 
 from dataprocessing.serializers import ItemSerializer
 
@@ -15,7 +15,7 @@ class IndicatorSerializer(serializers.ModelSerializer):
 class CompetenceSerializer(serializers.ModelSerializer):
     """Сериализатор Компетенций"""
     class Meta:
-        model = Competences
+        model = Competence
         fields = ['id','number', 'name']
 
 

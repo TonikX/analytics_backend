@@ -10,7 +10,7 @@ class FieldOfStudyWorkProgram(models.Model):
     '''
     field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE, verbose_name = 'Образовательная программа')
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, verbose_name = 'Рабочая программа')
-    #competence = models.ForeignKey('Competences',null=True,  on_delete=models.CASCADE, verbose_name = 'Компетенции')
+    #competence = models.ForeignKey('Competence',null=True,  on_delete=models.CASCADE, verbose_name = 'Компетенции')
 
     # class Meta:
     #     unique_together = ('work_program', 'field_of_study')
