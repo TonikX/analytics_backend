@@ -463,6 +463,13 @@ class CompetenceCreateView(generics.CreateAPIView):
     queryset = Competence.objects.all()
 
 
+class CompetencesListView(generics.ListAPIView):
+    serializer_class = CompetenceSerializer
+    queryset = Competence.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name','number']
+
+
 class CompetenceListView(APIView):
     """
        Список компетеций.
