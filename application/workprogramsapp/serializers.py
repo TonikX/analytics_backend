@@ -19,6 +19,15 @@ class CompetenceSerializer(serializers.ModelSerializer):
         fields = ['id','number', 'name']
 
 
+class IndicatorListSerializer(serializers.ModelSerializer):
+    competence = CompetenceSerializer()
+
+    class Meta:
+        model = Indicator
+        fields = ['id','number', 'name', 'competence']
+
+
+
 class OutcomesOfWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор работы с результатом обучения"""
     item  = ItemSerializer()

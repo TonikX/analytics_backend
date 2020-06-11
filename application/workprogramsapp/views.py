@@ -10,7 +10,7 @@ from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSeria
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
-    PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer
+    PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -459,7 +459,7 @@ class TopicPostUpdate(View):
 
 
 class IndicatorListAPIView(generics.ListAPIView):
-    serializer_class = IndicatorSerializer
+    serializer_class = IndicatorListSerializer
     queryset = Indicator.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['number', 'name', 'competence']
@@ -482,7 +482,7 @@ class IndicatorUpdateView(generics.UpdateAPIView):
 
 class IndicatorDetailsView(generics.RetrieveAPIView):
     queryset = Indicator.objects.all()
-    serializer_class = IndicatorSerializer
+    serializer_class = IndicatorListSerializer
 
 
 
