@@ -84,10 +84,9 @@ class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
         const {isOpen, classes} = this.props;
         const {course, courseUrlFieldIsFocused} = this.state;
 
-        const checkCourseUrl = courseUrlFieldIsFocused || course[CourseFields.COURSE_URL].length === 0;
-        // const checkCourseUrl = courseUrlFieldIsFocused || course[CourseFields.COURSE_URL].length === 0 || checkUrl(course[CourseFields.COURSE_URL]);
+        const checkCourseUrl = courseUrlFieldIsFocused || course[CourseFields.COURSE_URL].length === 0 || checkUrl(course[CourseFields.COURSE_URL]);
 
-        const disableButton = course[CourseFields.TITLE].length === 0 || course[CourseFields.COURSE_URL].length === 0;
+        const disableButton = course[CourseFields.TITLE].length === 0 || course[CourseFields.COURSE_URL].length === 0 || !checkCourseUrl;
 
         const isEditMode = Boolean(course[CourseFields.ID]);
 
@@ -120,7 +119,7 @@ class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
                                InputLabelProps={{
                                    shrink: true,
                                }}
-                               //error={!checkCourseUrl}
+                               error={!checkCourseUrl}
                                onFocus={this.courseUrlFieldFocus}
                                onBlur={this.courseUrlFieldBlur}
                     />
