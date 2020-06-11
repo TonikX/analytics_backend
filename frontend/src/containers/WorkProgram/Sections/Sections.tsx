@@ -19,14 +19,12 @@ import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import EditedRow from "./EditedRow";
 
 import {SecondStepProps} from './types';
-
-import connect from './SecondStep.connect';
-import styles from './SecondStep.styles';
 import {workProgramSectionFields} from "../enum";
 
-//todo: add shouldcomponentupdate
+import connect from './Sections.connect';
+import styles from './Sections.styles';
 
-class SecondStep extends React.PureComponent<SecondStepProps> {
+class Sections extends React.PureComponent<SecondStepProps> {
     scrollBar: any = null;
 
     state = {
@@ -176,4 +174,4 @@ const SortableList = SortableContainer(({sections, removeNewSection}) => {
 });
 
 // @ts-ignore
-export default connect(withStyles(styles)(SecondStep));
+export default connect(withStyles(styles)(Sections));

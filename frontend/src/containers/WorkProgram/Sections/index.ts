@@ -1,1 +1,1 @@
-export {default} from './SecondStep';
+export {default} from './Sections';
