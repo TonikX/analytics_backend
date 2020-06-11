@@ -5,7 +5,7 @@ from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, W
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
 from .views import TopicList, TopicPost, TopicPostUpdate
-from .views import PrerequisitesUpdate, OutcomesUpdate, FieldOfStudyWPListView, IndicatorListView, \
+from .views import PrerequisitesUpdate, OutcomesUpdate, FieldOfStudyWPListView, \
     IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, DeleteIndicatorFromCompetenceView, \
     AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
 from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView
@@ -17,6 +17,7 @@ from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, Onlin
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
     FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView, CompetenceCreateView, CompetencesListView
+from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, IndicatorUpdateView
 
 
 urlpatterns = [
@@ -51,8 +52,8 @@ urlpatterns = [
     path('api/workprograms/', WorkProgramsListApi.as_view()),
 
     #Компетенции индикаторы
-    path('api/indicator/', IndicatorListView.as_view(), name='indicator'),
-    path('api/indicator/<int:pk>', IndicatorUpdateView.as_view(), name='indicator_update'),
+    # path('api/indicator/', IndicatorListView.as_view(), name='indicator'),
+    # path('api/indicator/<int:pk>', IndicatorUpdateView.as_view(), name='indicator_update'),
     path('api/competences', CompetencesListView.as_view(), name='comptence'),
     path('api/competence/create', CompetenceCreateView.as_view(), name='comptence'),
     path('api/competence/', CompetenceListView.as_view(), name='comptence'),
@@ -60,6 +61,12 @@ urlpatterns = [
     path('api/competenceindicator/<int:pk>', CompetenceIndicatorDetailView.as_view(), name='comptenceindicator'),
     path('api/competenceindicator/indicator/delete', DeleteIndicatorFromCompetenceView.as_view(), name='DeleteIndicatorFromCompetenceView'),
     path('api/competenceindicator/indicator/add', AddIndicatorToCompetenceView.as_view(), name="AddIndicatorFromCompetenceView"),
+
+    path('api/indicator', IndicatorListAPIView.as_view()),
+    path('api/indicator/create', IndicatorCreateAPIView.as_view()),
+    path('api/indicator/detail/<int:pk>', IndicatorDetailsView.as_view()),
+    path('api/indicator/delete/<int:pk>', IndicatorDestroyView.as_view()),
+    path('api/indicator/update/<int:pk>', IndicatorUpdateView.as_view()),
 
     path('api/outcomesofworkprogram/<int:workprogram_id>', OutcomesOfWorkProgramList.as_view()),
 

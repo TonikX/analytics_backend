@@ -431,31 +431,59 @@ class TopicPostUpdate(View):
 
 
 
-class IndicatorListView(APIView):
-    """
-       Список индикаторов.
-    """
-    def get(self, request):
-        indicators = Indicator.objects.all()
-        serializer = IndicatorSerializer(indicators, many=True)
-        return Response(serializer.data)
+# class IndicatorListView(APIView):
+#     """
+#        Список индикаторов.
+#     """
+#     def get(self, request):
+#         indicators = Indicator.objects.all()
+#         serializer = IndicatorSerializer(indicators, many=True)
+#         return Response(serializer.data)
+#
+# class IndicatorUpdateView(APIView):
+#     """
+#         Редактирование (обновление) индикатора
+#     """
+#     def get(self, request, pk):
+#         indicator = get_object_or_404(Indicator, pk=pk)
+#         serializer = IndicatorSerializer(indicator)
+#         return Response(serializer.data)
+#
+#     def put(self, request, pk):
+#         indicator = get_object_or_404(Indicator, pk=pk)
+#         serializer = IndicatorSerializer(indicator, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class IndicatorUpdateView(APIView):
-    """
-        Редактирование (обновление) индикатора
-    """
-    def get(self, request, pk):
-        indicator = get_object_or_404(Indicator, pk=pk)
-        serializer = IndicatorSerializer(indicator)
-        return Response(serializer.data)
 
-    def put(self, request, pk):
-        indicator = get_object_or_404(Indicator, pk=pk)
-        serializer = IndicatorSerializer(indicator, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class IndicatorListAPIView(generics.ListAPIView):
+    serializer_class = IndicatorSerializer
+    queryset = Indicator.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['number', 'name', 'competence']
+
+
+class IndicatorCreateAPIView(generics.CreateAPIView):
+    serializer_class = IndicatorSerializer
+    queryset = Indicator.objects.all()
+
+
+class IndicatorDestroyView(generics.DestroyAPIView):
+    queryset = Indicator.objects.all()
+    serializer_class = IndicatorSerializer
+
+
+class IndicatorUpdateView(generics.UpdateAPIView):
+    queryset = Indicator.objects.all()
+    serializer_class = IndicatorSerializer
+
+
+class IndicatorDetailsView(generics.RetrieveAPIView):
+    queryset = Indicator.objects.all()
+    serializer_class = IndicatorSerializer
+
 
 
 class CompetenceCreateView(generics.CreateAPIView):
