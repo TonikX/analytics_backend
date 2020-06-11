@@ -24,6 +24,9 @@ import {workProgramState} from "../containers/WorkProgram/types";
 import {GENERAL_PATH as competencePath, reducer as competenceReducer} from "../containers/Competences/reducer";
 import {competenceState} from "../containers/Competences/types";
 
+import {GENERAL_PATH as educationalProgramPath, reducer as educationalProgramReducer} from "../containers/EducationalProgram/reducer";
+import {educationalProgramState} from "../containers/EducationalProgram/types";
+
 export interface rootState {
     [signInPath]: signInState,
     [signUpPath]: signUpState,
@@ -35,6 +38,7 @@ export interface rootState {
     [subjectAreaPath]: subjectAreaState,
     [trainingEntitiesPath]: trainingEntitiesState,
     [competencePath]: competenceState,
+    [educationalProgramPath]: educationalProgramState,
 }
 
 export default combineReducers({
@@ -47,4 +51,5 @@ export default combineReducers({
     [subjectAreaPath]: SubjectAreaReducer,
     [trainingEntitiesPath]: TrainingEntitiesReducer,
     [competencePath]: competenceReducer,
+    [educationalProgramPath]: educationalProgramReducer,
 });

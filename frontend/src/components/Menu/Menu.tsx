@@ -101,6 +101,19 @@ class Menu extends React.PureComponent<MenuProps>{
                             </MenuItem>
                     </Link>
 
+                    <Link to={appRouter.getEducationalProgramRoute()} className={classes.link}>
+                            <MenuItem
+                                selected={pathname === appRouter.getEducationalProgramRoute()}
+                                classes={{
+                                    selected: classes.selectedMenuItem,
+                                    root: classes.menuItem,
+                                }}
+                            >
+                                <BookIcon className={classes.icon} />
+                                Образовательные программы
+                            </MenuItem>
+                    </Link>
+
 
                     <Link to={appRouter.getWorkProgramLink(5)} className={classes.link}>
                         <MenuItem
