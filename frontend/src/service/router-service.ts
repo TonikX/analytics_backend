@@ -9,6 +9,7 @@ const WORK_PROGRAM = 'work-program';
 const TRAINING_ENTITIES = 'training-entities';
 const COMPETENCES = 'competences';
 const EDUCATIONAL_PROGRAM = 'educational-program';
+const INDICATORS = 'indicators';
 
 const SEPARATOR = '/';
 
@@ -56,6 +57,10 @@ export default class RouterService {
 
     getEducationalProgramRoute = () => {
         return SEPARATOR + EDUCATIONAL_PROGRAM;
+    };
+
+    getIndicatorsRoute = () => {
+        return SEPARATOR + INDICATORS;
     };
 
     getWorkProgramRoute = () => {

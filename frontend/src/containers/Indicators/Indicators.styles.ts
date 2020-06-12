@@ -32,29 +32,11 @@ export default (theme: Theme) => createStyles({
         minHeight: '50px'
     },
     titleCell: {
-        width: '20%',
+        width: '45%',
         flex: 'none'
     },
-    qualificationCell: {
-        width: '15%',
-        flex: 'none'
-    },
-    facultyCell: {
-        width: '15%',
-        flex: 'none',
-        maxWidth: '195px'
-    },
-    educationFormCell: {
-        width: '15%',
-        flex: 'none',
-        maxWidth: '195px'
-    },
-    profileCell: {
-        flex: 'none'
-    },
-    numberCell: {
-        width: '10%',
-        flex: 'none'
+    competenceCell: {
+        width: '45%',
     },
     actions: {
         display: 'flex',

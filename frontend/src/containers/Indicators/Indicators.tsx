@@ -25,20 +25,20 @@ import SortingButton from "../../components/SortingButton";
 import CourseCreateModal from "./CreateModal";
 import {SortingType} from "../../components/SortingButton/types";
 
-import {EducationalProgramProps, EducationalProgramType} from './types';
-import {EducationalProgramFields} from './enum';
+import {IndicatorProps, IndicatorType} from './types';
+import {IndicatorsFields} from './enum';
+import {CompetenceFields} from "../Competences/enum";
 
-import connect from './EducationalProgram.connect';
-import styles from './EducationalProgram.styles';
-import {specialization} from "../WorkProgram/data";
+import connect from './Indicators.connect';
+import styles from './Indicators.styles';
 
-class EducationalProgram extends React.Component<EducationalProgramProps> {
+class Indicators extends React.Component<IndicatorProps> {
     state = {
         deleteConfirmId: null
     }
 
     componentDidMount() {
-        this.props.actions.getEducationalProgram();
+        this.props.actions.getIndicators();
     }
 
     handleClickDelete = (id: number) => () => {
@@ -50,7 +50,7 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
     handleConfirmDeleteDialog = () => {
         const {deleteConfirmId} = this.state;
 
-        this.props.actions.deleteEducationalProgram(deleteConfirmId);
+        this.props.actions.deleteIndicator(deleteConfirmId);
         this.closeConfirmDeleteDialog();
     }
 
@@ -60,7 +60,7 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
         });
     }
 
-    handleClickEdit = (competence: EducationalProgramType) => () => {
+    handleClickEdit = (competence: IndicatorType) => () => {
         this.props.actions.openDialog(competence);
     }
 
@@ -75,17 +75,17 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
         this.props.actions.changeCurrentPage(1);
-        this.props.actions.getEducationalProgram();
+        this.props.actions.getIndicators();
     }, 300);
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
         this.props.actions.changeCurrentPage(page + 1);
-        this.props.actions.getEducationalProgram();
+        this.props.actions.getIndicators();
     }
 
     changeSorting = (field: string) => (mode: SortingType)=> {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getEducationalProgram();
+        this.props.actions.getIndicators();
     }
 
     render() {
@@ -95,7 +95,7 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Направления
+                    Индикаторы
 
                     <TextField placeholder="Поиск"
                                variant="outlined"
@@ -112,43 +112,16 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                 <div className={classes.tableWrap}>
                     <div className={classNames(classes.row, classes.header)}>
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Название
-                            <SortingButton changeMode={this.changeSorting(EducationalProgramFields.TITLE)}
-                                           mode={sortingField === EducationalProgramFields.TITLE ? sortingMode : ''}
-                            />
-                        </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.numberCell)}>
-                            Номер
-                            <SortingButton changeMode={this.changeSorting(EducationalProgramFields.NUMBER)}
-                                           mode={sortingField === EducationalProgramFields.NUMBER ? sortingMode : ''}
+                            Индикатор
+                            <SortingButton changeMode={this.changeSorting(IndicatorsFields.NUMBER)}
+                                           mode={sortingField === IndicatorsFields.NUMBER ? sortingMode : ''}
                             />
                         </Typography>
 
-                        <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
-                            Квалификация
-                            <SortingButton changeMode={this.changeSorting(EducationalProgramFields.QUALIFICATION)}
-                                           mode={sortingField === EducationalProgramFields.QUALIFICATION ? sortingMode : ''}
-                            />
-                        </Typography>
-
-                        <Typography className={classNames(classes.marginRight, classes.facultyCell)}>
-                            Факультет
-                            <SortingButton changeMode={this.changeSorting(EducationalProgramFields.FACULTY)}
-                                           mode={sortingField === EducationalProgramFields.FACULTY ? sortingMode : ''}
-                            />
-                        </Typography>
-
-                        <Typography className={classNames(classes.marginRight, classes.educationFormCell)}>
-                            Форма обучения
-                            <SortingButton changeMode={this.changeSorting(EducationalProgramFields.EDUCATION_FORM)}
-                                           mode={sortingField === EducationalProgramFields.EDUCATION_FORM ? sortingMode : ''}
-                            />
-                        </Typography>
-
-                        <Typography className={classNames(classes.marginRight, classes.profileCell)}>
-                            Профиль
-                            <SortingButton changeMode={this.changeSorting(EducationalProgramFields.EDUCATIONAL_PROFILE)}
-                                           mode={sortingField === EducationalProgramFields.EDUCATIONAL_PROFILE ? sortingMode : ''}
+                        <Typography className={classNames(classes.marginRight, classes.competenceCell)}>
+                            Компетенция
+                            <SortingButton changeMode={this.changeSorting(IndicatorsFields.COMPETENCE)}
+                                           mode={sortingField === IndicatorsFields.COMPETENCE ? sortingMode : ''}
                             />
                         </Typography>
                     </div>
@@ -156,19 +129,15 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                     <div className={classes.list}>
                         <Scrollbars>
                             {educationalProgram.map(competence =>
-                                <div className={classes.row} key={competence[EducationalProgramFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}> {competence[EducationalProgramFields.TITLE]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.numberCell)}> {competence[EducationalProgramFields.NUMBER]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
-                                        {get(specialization.find(item => item.value === competence[EducationalProgramFields.QUALIFICATION]), 'label', '')}
+                                <div className={classes.row} key={competence[IndicatorsFields.ID]}>
+                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                                        {competence[IndicatorsFields.NUMBER]} {competence[IndicatorsFields.TITLE]}
                                     </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.facultyCell)}> {competence[EducationalProgramFields.FACULTY]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.educationFormCell)}>
-                                        {competence[EducationalProgramFields.EDUCATION_FORM] === 'extramural' ? 'Заочная' : 'Очная'}
+                                    <Typography className={classNames(classes.marginRight, classes.competenceCell)}>
+                                        {competence[IndicatorsFields.COMPETENCE][CompetenceFields.NUMBER]} {competence[IndicatorsFields.COMPETENCE][CompetenceFields.TITLE]}
                                     </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.profileCell)}> {competence[EducationalProgramFields.EDUCATIONAL_PROFILE]} </Typography>
                                     <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(competence[EducationalProgramFields.ID])}>
+                                        <IconButton onClick={this.handleClickDelete(competence[IndicatorsFields.ID])}>
                                             <DeleteIcon />
                                         </IconButton>
                                         <IconButton onClick={this.handleClickEdit(competence)}>
@@ -206,9 +175,9 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены что хотите удалить направление?'}
+                               confirmText={'Вы точно уверены что хотите удалить индикатор?'}
                                isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить направление'}
+                               dialogTitle={'Удалить индикатор'}
                                confirmButtonText={'Удалить'}
                 />
             </Paper>
@@ -216,4 +185,4 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
     }
 }
 
-export default connect(withStyles(styles)(EducationalProgram));
+export default connect(withStyles(styles)(Indicators));

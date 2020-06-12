@@ -110,7 +110,7 @@ class Menu extends React.PureComponent<MenuProps>{
                                 }}
                             >
                                 <BookIcon className={classes.icon} />
-                                Образовательные программы
+                                Направления
                             </MenuItem>
                     </Link>
 
@@ -125,6 +125,19 @@ class Menu extends React.PureComponent<MenuProps>{
                         >
                             <BookIcon className={classes.icon} />
                             Рабочая программа
+                        </MenuItem>
+                    </Link>
+
+                    <Link to={appRouter.getIndicatorsRoute()} className={classes.link}>
+                        <MenuItem
+                            selected={pathname === appRouter.getIndicatorsRoute()}
+                            classes={{
+                                selected: classes.selectedMenuItem,
+                                root: classes.menuItem,
+                            }}
+                        >
+                            <BookIcon className={classes.icon} />
+                            Индикаторы
                         </MenuItem>
                     </Link>
                 </List>
