@@ -1,6 +1,8 @@
 from rest_framework import serializers, viewsets
 
-from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy
+from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool,\
+    PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
+    ImplementationAcademicPlan, AcademicPlan
 
 from dataprocessing.serializers import ItemSerializer
 
@@ -26,6 +28,19 @@ class IndicatorListSerializer(serializers.ModelSerializer):
         model = Indicator
         fields = ['id','number', 'name', 'competence']
 
+
+class AcademicPlanSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AcademicPlan
+        fields = "__all__"
+
+
+class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = "__all__"
 
 
 class OutcomesOfWorkProgramSerializer(serializers.ModelSerializer):

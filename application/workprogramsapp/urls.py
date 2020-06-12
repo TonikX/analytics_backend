@@ -18,6 +18,7 @@ from .views import BibliographicReferenceListCreateAPIView, BibliographicReferen
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
     FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView, CompetenceCreateView, CompetencesListView
 from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, IndicatorUpdateView
+from .views import AcademicPlanListCreateAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
 
 
 urlpatterns = [
@@ -125,5 +126,13 @@ urlpatterns = [
 
     path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
     path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
+
+    path('api/academicplan', AcademicPlanListCreateAPIView.as_view()),
+    path('api/academicplan/create', AcademicPlanListCreateAPIView.as_view()),
+    path('api/academicplan/detail/<int:pk>', AcademicPlanDetailsView.as_view()),
+    path('api/academicplan/delete/<int:pk>', AcademicPlanDestroyView.as_view()),
+    path('api/academicplan/update/<int:pk>', AcademicPlanUpdateView.as_view()),
+
+    path('api/academicplan/implemention', ImplementationAcademicPlanAPIView.as_view()),
 
 ]

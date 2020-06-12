@@ -2,6 +2,8 @@ from django.db import models
 from dataprocessing.models import Items
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+import datetime
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class FieldOfStudyWorkProgram(models.Model):
@@ -157,6 +159,79 @@ class FieldOfStudy(models.Model):
 #
 #     class Meta:
 #         unique_together = ('competence', 'indicator')
+
+
+
+class AcademicPlan(models.Model):
+    '''
+    Модель учебного плана
+    '''
+    educational_profile = models.CharField(unique=True, max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
+    field_of_study = models.ManyToManyField('FieldOfStudy', through='ImplementationAcademicPlan', blank = True, null = True)
+
+    def __str__(self):
+        return (self.educational_profile)
+
+
+def current_year():
+    return datetime.date.today().year
+
+
+def max_value_current_year(value):
+    return MaxValueValidator(current_year())(value)
+
+
+class ImplementationAcademicPlan(models.Model):
+    '''
+    Модель приминения учебного плана в направлении
+    '''
+    academic_plan = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план')
+    field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE, verbose_name = 'Направление подготовки')
+    year = models.PositiveIntegerField(
+        default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
+
+    def __str__(self):
+        return (self.academic_plan + self.field_of_study + self.year)
+
+
+    def new_descipline_blocks(iap):
+        blocks = ['Блок 1', 'Блок 2', 'Блок 3']
+        print (iap.id)
+
+        for block in blocks:
+            db = DisciplineBlock.objects.get()
+            db.save()
+        #
+        # section = DisciplineSection.objects.get(pk = descipline_section)
+        # if int(section.ordinal_number) > int(new_ordinal_number):
+        #     section.ordinal_number = new_ordinal_number
+        #     section.save()
+        #     sections = DisciplineSection.objects.filter(work_program = section.work_program, ordinal_number__gte=new_ordinal_number).exclude(pk = descipline_section).order_by('ordinal_number')
+        #     for sec in sections:
+        #         sec.ordinal_number = new_ordinal_number+1
+        #         sec.save()
+        #         new_ordinal_number +=1
+        # else:
+        #     section.ordinal_number = new_ordinal_number
+        #     section.save()
+        #     sections = DisciplineSection.objects.filter(work_program = section.work_program, ordinal_number__lte=new_ordinal_number).exclude(pk = descipline_section).order_by('ordinal_number')
+        #     for sec in sections:
+        #         sec.ordinal_number = new_ordinal_number-1
+        #         sec.save()
+        #         new_ordinal_number -=1
+
+
+
+class DisciplineBlock(models.Model):
+    '''
+    Модель блока дисциплин
+    '''
+    name = models.CharField(unique=True, max_length=1024)
+    implementation_academic_plan = models.ForeignKey('ImplementationAcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план в направлении', blank=True, null=True)
+    work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа")
+
+    def __str__(self):
+        return (self.name + self.implementation_academic_plan + self.work_program)
 
 
 class Competence(models.Model):

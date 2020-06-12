@@ -11,6 +11,7 @@ from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSeria
 from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
+from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -30,6 +31,8 @@ from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins
+from .models import AcademicPlan, ImplementationAcademicPlan
+
 
 '''
 # Create your views here.
@@ -431,7 +434,7 @@ class TopicPostUpdate(View):
 
 
 
-# class IndicatorListView(APIView):
+# class IndicatorListView(APIView):new_
 #     """
 #        Список индикаторов.
 #     """
@@ -1043,7 +1046,43 @@ class FileUploadOnlineCoursesAPIView(APIView):
             except:
                 print(i)
                 continue;
-        return Response(status=200)  
+        return Response(status=200)
+
+
+class AcademicPlanListCreateAPIView(generics.ListCreateAPIView):
+    serializer_class = AcademicPlanSerializer
+    queryset = AcademicPlan.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['educational_profile']
+
+
+class AcademicPlanDestroyView(generics.DestroyAPIView):
+    queryset = AcademicPlan.objects.all()
+    serializer_class = AcademicPlanSerializer
+
+
+class AcademicPlanUpdateView(generics.UpdateAPIView):
+    queryset = AcademicPlan.objects.all()
+    serializer_class = AcademicPlanSerializer
+
+
+class AcademicPlanDetailsView(generics.RetrieveAPIView):
+    queryset = AcademicPlan.objects.all()
+    serializer_class = AcademicPlanSerializer
+
+
+class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
+    """
+    API endpoint that represents a list of Topics.
+    """
+    queryset = ImplementationAcademicPlan.objects.all()
+    serializer_class = ImplementationAcademicPlanSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+        print(serializer.data)
+        print(self)
+        ImplementationAcademicPlan.new_descipline_blocks(self)
 
 #Конец блока ендпоинтов рабочей программы
 
