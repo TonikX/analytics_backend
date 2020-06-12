@@ -161,24 +161,26 @@ class FieldOfStudy(models.Model):
 #         unique_together = ('competence', 'indicator')
 
 
-
-class AcademicPlan(models.Model):
-    '''
-    Модель учебного плана
-    '''
-    educational_profile = models.CharField(unique=True, max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
-    field_of_study = models.ManyToManyField('FieldOfStudy', through='ImplementationAcademicPlan', blank = True, null = True)
-
-    def __str__(self):
-        return (self.educational_profile)
-
-
 def current_year():
     return datetime.date.today().year
 
 
 def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
+
+
+class AcademicPlan(models.Model):
+    '''
+    Модель учебного плана
+    '''
+    educational_profile = models.CharField(unique=True, max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
+    number = models.CharField(unique=True, max_length=1024, verbose_name = 'Номер учебного плана', blank = True, null = True)
+    field_of_study = models.ManyToManyField('FieldOfStudy', through='ImplementationAcademicPlan', blank = True, null = True)
+    approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
+
+    def __str__(self):
+        return (self.educational_profile)
+
 
 
 class ImplementationAcademicPlan(models.Model):
