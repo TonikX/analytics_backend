@@ -12,6 +12,7 @@ import SubjectArea from './containers/SubjectArea';
 import Prerequisites from './containers/TrainingEntities';
 import Competences from './containers/Competences';
 import EducationalProgram from './containers/EducationalProgram';
+import EducationalPlan from './containers/EducationalPlan';
 import Indicators from './containers/Indicators';
 
 import Literature from './containers/Literature';
@@ -50,6 +51,9 @@ export default () => (
                 </AuthRoute>
                 <AuthRoute path={routerService.getIndicatorsRoute()}>
                     <Indicators />
+                </AuthRoute>
+                <AuthRoute path={routerService.getEducationPlanRoute()}>
+                    <EducationalPlan />
                 </AuthRoute>
                 <AuthRoute path={routerService.getWorkProgramRoute()}
                        children={() => (

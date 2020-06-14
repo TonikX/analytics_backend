@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from "prop-types";
 import className from 'classnames';
 
+import MomentUtils from '@date-io/moment';
 import {SnackbarProvider} from 'notistack';
+import "moment/locale/ru";
 
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import withStyles from '@material-ui/core/styles/withStyles';
+import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 
 import UserService from '../service/user-service';
 
@@ -63,24 +66,26 @@ class Layout extends React.Component {
         const isAuth = userService.isAuth() && auth;
 
         return (
-            <SnackbarProvider maxSnack={3}>
-                <MuiThemeProvider theme={theme}>
-                    <AbsoluteLoader isFetching={fetching} />
-                    <Notificator errors={errors} successMessages={successMessages} />
-                    <Header handleOpenMenu={this.handleOpenMenu}
-                            handleCloseMenu={this.handleCloseMenu}
-                            openGeneralMenu={openMenu}
-                            isAuth={isAuth}
-                            logout={this.logout}
-                    />
-                    <div className={classes.root}>
-                        {isAuth && <Menu isOpen={openMenu} />}
-                        <div className={className(classes.content, {[classes.contentShift]: openMenu})}>
-                            {this.props.children}
+            <MuiPickersUtilsProvider utils={MomentUtils}>
+                <SnackbarProvider maxSnack={3}>
+                    <MuiThemeProvider theme={theme}>
+                        <AbsoluteLoader isFetching={fetching} />
+                        <Notificator errors={errors} successMessages={successMessages} />
+                        <Header handleOpenMenu={this.handleOpenMenu}
+                                handleCloseMenu={this.handleCloseMenu}
+                                openGeneralMenu={openMenu}
+                                isAuth={isAuth}
+                                logout={this.logout}
+                        />
+                        <div className={classes.root}>
+                            {isAuth && <Menu isOpen={openMenu} />}
+                            <div className={className(classes.content, {[classes.contentShift]: openMenu})}>
+                                {this.props.children}
+                            </div>
                         </div>
-                    </div>
-                </MuiThemeProvider>
-            </SnackbarProvider>
+                    </MuiThemeProvider>
+                </SnackbarProvider>
+            </MuiPickersUtilsProvider>
         );
     }
 }

@@ -8,6 +8,7 @@ import PrerequisitesLogic from '../containers/TrainingEntities/logics';
 import CompetenceLogic from '../containers/Competences/logics';
 import EducationalProgramLogic from '../containers/EducationalProgram/logics';
 import IndicatorsLogic from '../containers/Indicators/logics';
+import EducationalPlanLogic from '../containers/EducationalPlan/logics';
 
 export default [
     ...SignInLogic,
@@ -20,4 +21,5 @@ export default [
     ...CompetenceLogic,
     ...EducationalProgramLogic,
     ...IndicatorsLogic,
+    ...EducationalPlanLogic,
 ];

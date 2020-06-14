@@ -30,6 +30,9 @@ import {educationalProgramState} from "../containers/EducationalProgram/types";
 import {GENERAL_PATH as indicatorsPath, reducer as indicatorsReducer} from "../containers/Indicators/reducer";
 import {indicatorsState} from "../containers/Indicators/types";
 
+import {GENERAL_PATH as educationalPlanPath, reducer as educationalPlanReducer} from "../containers/EducationalPlan/reducer";
+import {educationalPlanState} from "../containers/EducationalPlan/types";
+
 export interface rootState {
     [signInPath]: signInState,
     [signUpPath]: signUpState,
@@ -43,6 +46,7 @@ export interface rootState {
     [competencePath]: competenceState,
     [educationalProgramPath]: educationalProgramState,
     [indicatorsPath]: indicatorsState,
+    [educationalPlanPath]: educationalPlanState,
 }
 
 export default combineReducers({
@@ -57,4 +61,5 @@ export default combineReducers({
     [competencePath]: competenceReducer,
     [educationalProgramPath]: educationalProgramReducer,
     [indicatorsPath]: indicatorsReducer,
+    [educationalPlanPath]: educationalPlanReducer,
 });
