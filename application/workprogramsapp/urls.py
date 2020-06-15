@@ -109,7 +109,7 @@ urlpatterns = [
     #Работа с образовательными программами
     path('api/fieldofstudy/', FieldOfStudyListCreateView.as_view()),
     path('api/fieldofstudy/<int:pk>', FieldOfStudyDetailUpdateDeleteView.as_view()),
-  
+
     #Онлайн курс
     path('api/onlinecourse', OnlineCourseListCreateAPIView.as_view()),
     path('api/onlinecourse/create', OnlineCourseListCreateAPIView.as_view()),
