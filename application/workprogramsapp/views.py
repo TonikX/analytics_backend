@@ -236,14 +236,21 @@ class WorkProgramsPostUpdate(View):
         return render(request, 'workprograms/WorkProgramOutcomesPrerequisitesEdit.html', {'form': WorkProgramOP})
 
 
-class WorkProgramsListApi(APIView):
-    """
-    Список рабочих программ для апи.
-    """
-    def get(self, request, format=None):
-        WorkPrograms = WorkProgram.objects.all()
-        serializer = WorkProgramSerializer(WorkPrograms, many=True)
-        return Response(serializer.data)
+# class WorkProgramsListApi(APIView):
+# #     """
+# #     Список рабочих программ для апи.
+# #     """
+# #     def get(self, request, format=None):
+# #         WorkPrograms = WorkProgram.objects.all()
+# #         serializer = WorkProgramSerializer(WorkPrograms, many=True)
+# #         return Response(serializer.data)
+
+
+class WorkProgramsListApi(generics.ListAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['discipline_code', 'title']
 
 
 class PrerequisitesUpdate(View):
