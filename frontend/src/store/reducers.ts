@@ -36,6 +36,9 @@ import {educationalPlanState} from "../containers/EducationalPlan/types";
 import {GENERAL_PATH as educationPlanInDirectionPath, reducer as educationPlanInDirectionReducer} from "../containers/EduationPlanInDirection/reducer";
 import {educationalPlanInDirectionState} from "../containers/EduationPlanInDirection/types";
 
+import {GENERAL_PATH as workProgramListPath, reducer as workProgramListReducer} from "../containers/WorkProgramList/reducer";
+import {workProgramListState} from "../containers/WorkProgramList/types";
+
 export interface rootState {
     [signInPath]: signInState,
     [signUpPath]: signUpState,
@@ -51,6 +54,7 @@ export interface rootState {
     [indicatorsPath]: indicatorsState,
     [educationalPlanPath]: educationalPlanState,
     [educationPlanInDirectionPath]: educationalPlanInDirectionState,
+    [workProgramListPath]: workProgramListState,
 }
 
 export default combineReducers({
@@ -67,4 +71,5 @@ export default combineReducers({
     [indicatorsPath]: indicatorsReducer,
     [educationalPlanPath]: educationalPlanReducer,
     [educationPlanInDirectionPath]: educationPlanInDirectionReducer,
+    [workProgramListPath]: workProgramListReducer,
 });

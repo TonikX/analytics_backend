@@ -1,8 +1,9 @@
-import {fields, PrerequisiteFields, EvaluationToolFields, ResultsFields} from './enum';
+import {fields, PrerequisiteFields, EvaluationToolFields, ResultsFields, WorkProgramGeneralFields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {CourseType} from "../Courses/types";
 import {TrainingEntitityType} from "../TrainingEntities/types";
+import {ReactText} from "react";
 
 export interface WorkProgramActions {
     deleteResult: any;
@@ -47,6 +48,13 @@ export interface workProgramState {
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: Array<any>;
     [fields.DIALOGS]: {};
 }
+
+export type WorkProgramGeneralType = {
+    [WorkProgramGeneralFields.ID]: number;
+    [WorkProgramGeneralFields.TITLE]: string;
+    [WorkProgramGeneralFields.CODE]: string;
+    [WorkProgramGeneralFields.QUALIFICATION]: string;
+};
 
 export interface WorkProgramProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;

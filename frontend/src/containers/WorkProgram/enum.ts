@@ -21,6 +21,13 @@ export enum fields {
     DIALOG_DATA = 'DIALOG_DATA',
 }
 
+export enum WorkProgramGeneralFields {
+    ID = 'id',
+    TITLE = 'title',
+    CODE = 'discipline_code',
+    QUALIFICATION = 'qualification',
+}
+
 export enum workProgramSectionFields {
     ID = 'id',
     ORDINAL_NUMBER = 'ordinal_number',

@@ -15,6 +15,7 @@ import EducationalProgram from './containers/Direction';
 import EducationalPlan from './containers/EducationalPlan';
 import EducationPlanInDirection from './containers/EduationPlanInDirection';
 import Indicators from './containers/Indicators';
+import WorkProgramList from "./containers/WorkProgramList";
 
 import Literature from './containers/Literature';
 
@@ -58,6 +59,9 @@ export default () => (
                 </AuthRoute>
                 <AuthRoute path={routerService.getEducationPlanInDirectionRoute()}>
                     <EducationPlanInDirection />
+                </AuthRoute>
+                <AuthRoute path={routerService.getWorkProgramListRoute()}>
+                    <WorkProgramList />
                 </AuthRoute>
                 <AuthRoute path={routerService.getWorkProgramRoute()}
                        children={() => (

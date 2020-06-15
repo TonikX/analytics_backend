@@ -12,6 +12,7 @@ const EDUCATIONAL_PROGRAM = 'educational-program';
 const EDUCATIONAL_PLAN = 'educational-plan';
 const INDICATORS = 'indicators';
 const EDUCATIONAL_PLAN_IN_DIRECTION = 'educational-plan-in-direction';
+const WORK_PROGRAM_LIST = 'work-programs';
 
 const SEPARATOR = '/';
 
@@ -67,6 +68,10 @@ export default class RouterService {
 
     getEducationPlanInDirectionRoute = () => {
         return SEPARATOR + EDUCATIONAL_PLAN_IN_DIRECTION;
+    };
+
+    getWorkProgramListRoute = () => {
+        return SEPARATOR + WORK_PROGRAM_LIST;
     };
 
     getEducationPlanRoute = () => {

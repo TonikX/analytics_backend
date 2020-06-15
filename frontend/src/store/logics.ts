@@ -9,7 +9,8 @@ import CompetenceLogic from '../containers/Competences/logics';
 import EducationalProgramLogic from '../containers/Direction/logics';
 import IndicatorsLogic from '../containers/Indicators/logics';
 import EducationalPlanLogic from '../containers/EducationalPlan/logics';
-import EduationPlanInDirection from '../containers/EduationPlanInDirection/logics';
+import EducationPlanInDirection from '../containers/EduationPlanInDirection/logics';
+import WorkProgramList from '../containers/WorkProgramList/logics';
 
 export default [
     ...SignInLogic,
@@ -23,5 +24,6 @@ export default [
     ...EducationalProgramLogic,
     ...IndicatorsLogic,
     ...EducationalPlanLogic,
-    ...EduationPlanInDirection,
+    ...EducationPlanInDirection,
+    ...WorkProgramList,
 ];
