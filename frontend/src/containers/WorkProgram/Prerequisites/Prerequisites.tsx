@@ -51,7 +51,7 @@ class Prerequisites extends React.PureComponent<SixthStepProps> {
                 <Scrollbars>
                     <div className={classes.list}>
                         {prerequisitesList.map((prerequisite) => (
-                            <div className={classes.item}>
+                            <div className={classes.item} key={prerequisite[PrerequisiteFields.ID]}>
                                 <Typography className={classes.title}>
                                     {prerequisite[PrerequisiteFields.ITEM][TrainingEntitiesFields.TITLE]}
                                 </Typography>

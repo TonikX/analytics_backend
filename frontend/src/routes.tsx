@@ -10,6 +10,12 @@ import WorkProgram from './containers/WorkProgram';
 import Courses from './containers/Courses';
 import SubjectArea from './containers/SubjectArea';
 import Prerequisites from './containers/TrainingEntities';
+import Competences from './containers/Competences';
+import EducationalProgram from './containers/Direction';
+import EducationalPlan from './containers/EducationalPlan';
+import EducationPlanInDirection from './containers/EduationPlanInDirection';
+import Indicators from './containers/Indicators';
+import WorkProgramList from "./containers/WorkProgramList";
 
 import Literature from './containers/Literature';
 
@@ -36,8 +42,26 @@ export default () => (
                 <AuthRoute path={routerService.getSubjectAreaRoute()}>
                     <SubjectArea />
                 </AuthRoute>
-                <AuthRoute path={routerService.getPrerequisitesRoute()}>
+                <AuthRoute path={routerService.getTrainingEntitiesRoute()}>
                     <Prerequisites />
+                </AuthRoute>
+                <AuthRoute path={routerService.getCompetencesRoute()}>
+                    <Competences />
+                </AuthRoute>
+                <AuthRoute path={routerService.getEducationalProgramRoute()}>
+                    <EducationalProgram />
+                </AuthRoute>
+                <AuthRoute path={routerService.getIndicatorsRoute()}>
+                    <Indicators />
+                </AuthRoute>
+                <AuthRoute path={routerService.getEducationPlanRoute()}>
+                    <EducationalPlan />
+                </AuthRoute>
+                <AuthRoute path={routerService.getEducationPlanInDirectionRoute()}>
+                    <EducationPlanInDirection />
+                </AuthRoute>
+                <AuthRoute path={routerService.getWorkProgramListRoute()}>
+                    <WorkProgramList />
                 </AuthRoute>
                 <AuthRoute path={routerService.getWorkProgramRoute()}
                        children={() => (

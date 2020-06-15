@@ -63,19 +63,19 @@ export default (theme: Theme) => createStyles({
     },
     sectionSelector: {
         '& .MuiInputLabel-shrink': {
-            transform: 'translate(11px, -6.5px) scale(0.75) !important',
+            transform: 'translate(13px, -6.5px) scale(0.75) !important',
         },
         '& .MuiOutlinedInput-notchedOutline legend': {
-            width: '52px !important'
+            width: '58px !important'
         },
         marginBottom: '30px',
     },
     typeSelector: {
         '& .MuiInputLabel-shrink': {
-            transform: 'translate(11px, -6.5px) scale(0.75) !important',
+            transform: 'translate(13px, -6.5px) scale(0.75) !important',
         },
         '& .MuiOutlinedInput-notchedOutline legend': {
-            width: '28px !important'
+            width: '38px !important'
         },
         marginBottom: '30px',
     },

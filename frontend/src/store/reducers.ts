@@ -21,6 +21,24 @@ import {trainingEntitiesState} from "../containers/TrainingEntities/types";
 import {GENERAL_PATH as workProgramPath, reducer as workProgramReducer} from "../containers/WorkProgram/reducer";
 import {workProgramState} from "../containers/WorkProgram/types";
 
+import {GENERAL_PATH as competencePath, reducer as competenceReducer} from "../containers/Competences/reducer";
+import {competenceState} from "../containers/Competences/types";
+
+import {GENERAL_PATH as educationalProgramPath, reducer as educationalProgramReducer} from "../containers/Direction/reducer";
+import {educationalProgramState} from "../containers/Direction/types";
+
+import {GENERAL_PATH as indicatorsPath, reducer as indicatorsReducer} from "../containers/Indicators/reducer";
+import {indicatorsState} from "../containers/Indicators/types";
+
+import {GENERAL_PATH as educationalPlanPath, reducer as educationalPlanReducer} from "../containers/EducationalPlan/reducer";
+import {educationalPlanState} from "../containers/EducationalPlan/types";
+
+import {GENERAL_PATH as educationPlanInDirectionPath, reducer as educationPlanInDirectionReducer} from "../containers/EduationPlanInDirection/reducer";
+import {educationalPlanInDirectionState} from "../containers/EduationPlanInDirection/types";
+
+import {GENERAL_PATH as workProgramListPath, reducer as workProgramListReducer} from "../containers/WorkProgramList/reducer";
+import {workProgramListState} from "../containers/WorkProgramList/types";
+
 export interface rootState {
     [signInPath]: signInState,
     [signUpPath]: signUpState,
@@ -31,6 +49,12 @@ export interface rootState {
     [subjectAreaPath]: subjectAreaState,
     [subjectAreaPath]: subjectAreaState,
     [trainingEntitiesPath]: trainingEntitiesState,
+    [competencePath]: competenceState,
+    [educationalProgramPath]: educationalProgramState,
+    [indicatorsPath]: indicatorsState,
+    [educationalPlanPath]: educationalPlanState,
+    [educationPlanInDirectionPath]: educationalPlanInDirectionState,
+    [workProgramListPath]: workProgramListState,
 }
 
 export default combineReducers({
@@ -42,4 +66,10 @@ export default combineReducers({
     [literaturePath]: LiteratureReducer,
     [subjectAreaPath]: SubjectAreaReducer,
     [trainingEntitiesPath]: TrainingEntitiesReducer,
+    [competencePath]: competenceReducer,
+    [educationalProgramPath]: educationalProgramReducer,
+    [indicatorsPath]: indicatorsReducer,
+    [educationalPlanPath]: educationalPlanReducer,
+    [educationPlanInDirectionPath]: educationPlanInDirectionReducer,
+    [workProgramListPath]: workProgramListReducer,
 });

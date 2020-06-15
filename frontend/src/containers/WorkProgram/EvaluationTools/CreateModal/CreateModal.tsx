@@ -68,7 +68,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         if (!shallowEqual(evaluationTool, prevProps.evaluationTool)){
             this.setState({
                 evaluationTool: {
-                    [EvaluationToolFields.ID]: get(evaluationTool, EvaluationToolFields.ID, ''),
+                    [EvaluationToolFields.ID]: get(evaluationTool, EvaluationToolFields.ID, null),
                     [EvaluationToolFields.NAME]: get(evaluationTool, EvaluationToolFields.NAME, ''),
                     [EvaluationToolFields.DESCRIPTION]: get(evaluationTool, EvaluationToolFields.DESCRIPTION, ''),
                     //@ts-ignore
@@ -153,6 +153,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             ||evaluationTool[EvaluationToolFields.SECTIONS].length === 0
                             ||evaluationTool[EvaluationToolFields.TYPE].length === 0
         ;
+        const isEditMode = Boolean(evaluationTool[EvaluationToolFields.ID]);
 
         return (
             <Dialog
@@ -172,7 +173,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             <CloseIcon />
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
-                            Добавить оценочное средство
+                            {isEditMode ? 'Редактировать' : 'Создать'} оценочное средство
                         </Typography>
                         <Button autoFocus
                                 color="inherit"

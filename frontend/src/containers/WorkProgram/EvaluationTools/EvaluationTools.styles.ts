@@ -55,21 +55,18 @@ export default (theme: Theme) => createStyles({
         width: '50px',
         paddingLeft: '10px',
         boxSizing: 'border-box',
-        cursor: 'pointer'
     },
     max: {
         width: '60px',
         paddingLeft: '10px',
         boxSizing: 'border-box',
         textAlign: 'center',
-        cursor: 'pointer'
     },
     deadline: {
         width: '10%',
         paddingLeft: '10px',
         boxSizing: 'border-box',
         textAlign: 'center',
-        cursor: 'pointer'
     },
     checkpoint: {
         width: '10%',

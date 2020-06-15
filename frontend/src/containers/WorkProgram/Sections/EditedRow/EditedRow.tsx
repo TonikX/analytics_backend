@@ -18,7 +18,7 @@ import {workProgramSectionFields} from '../../enum';
 import connect from './EditedRow.connect';
 import styles from './EditedRow.styles';
 import {shallowEqual} from "recompose";
-//todo: add shouldcomponentupdate
+
 class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     constructor(props: EditedRowProps) {
         super(props);

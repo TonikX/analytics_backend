@@ -70,6 +70,8 @@ class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalPro
 
         const disableButton = literature[literatureFields.DESCRIPTION].length === 0;
 
+        const isEditMode = Boolean(literature[literatureFields.ID]);
+
         return (
             <Dialog
                 open={isOpen}
@@ -78,7 +80,7 @@ class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalPro
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> Создать учебно-методическое обеспечение</DialogTitle>
+                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} учебно-методическое обеспечение</DialogTitle>
                 <DialogContent>
                     <TextField label="Описание библиографической ссылки *"
                                onChange={this.saveField(literatureFields.DESCRIPTION)}

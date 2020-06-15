@@ -74,6 +74,7 @@ class TrainingEntities extends React.Component<TrainingEntitiesProps> {
 
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
+        this.props.actions.changeCurrentPage(1);
         this.props.actions.getTrainingEntities();
     }, 300);
 
@@ -174,7 +175,7 @@ class TrainingEntities extends React.Component<TrainingEntitiesProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены что хотите удалить учебную сущность?'}
+                               confirmText={'Вы точно уверены, что хотите удалить учебную сущность?'}
                                isOpen={Boolean(deleteConfirmId)}
                                dialogTitle={'Удалить учебную сущность'}
                                confirmButtonText={'Удалить'}

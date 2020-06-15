@@ -28,6 +28,9 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import MenuItem from "@material-ui/core/MenuItem";
+import {Link} from "react-router-dom";
+import {appRouter} from "../../../../service/router-service";
+import Typography from "@material-ui/core/Typography";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -151,7 +154,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {result} = this.state;
 
         const disableButton = get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID], '').length === 0;
-        
+
+        const isEditMode = Boolean(ResultsFields.ID);
+
         return (
             <Dialog
                 open={isOpen}
@@ -160,7 +165,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> Добавить результат </DialogTitle>
+                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} результат </DialogTitle>
                 <DialogContent>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Уровень *</FormLabel>
@@ -223,6 +228,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     </FormControl>
                 </DialogContent>
                 <DialogActions className={classes.actions}>
+                    <Link to={appRouter.getTrainingEntitiesRoute()}
+                          className={classes.link}
+                          target="_blank"
+                    >
+                        <Typography>
+                            Создать учебную сущность
+                        </Typography>
+                    </Link>
                     <Button onClick={this.handleClose}
                             variant="text">
                         Отмена

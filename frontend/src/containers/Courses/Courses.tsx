@@ -74,6 +74,7 @@ class Courses extends React.Component<CoursesProps> {
 
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
+        this.props.actions.changeCurrentPage(1);
         this.props.actions.getCourses();
     }, 300);
 
@@ -191,7 +192,7 @@ class Courses extends React.Component<CoursesProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены что хотите удалить курс?'}
+                               confirmText={'Вы точно уверены, что хотите удалить курс?'}
                                isOpen={Boolean(deleteConfirmId)}
                                dialogTitle={'Удалить онлайн курс'}
                                confirmButtonText={'Удалить'}

@@ -10,7 +10,8 @@ export default (theme: Theme) => createStyles({
     },
     menuItem: {
         width: '100%',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        whiteSpace: 'break-spaces'
     },
     popper: {
         zIndex: 100000,

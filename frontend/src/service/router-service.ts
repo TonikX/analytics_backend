@@ -6,7 +6,13 @@ const COURSES = 'courses';
 const LITERATURE = 'literature';
 const SUBJECT_AREA = 'subject-area';
 const WORK_PROGRAM = 'work-program';
-const PREREQUISITES = 'prerequisites';
+const TRAINING_ENTITIES = 'training-entities';
+const COMPETENCES = 'competences';
+const EDUCATIONAL_PROGRAM = 'educational-program';
+const EDUCATIONAL_PLAN = 'educational-plan';
+const INDICATORS = 'indicators';
+const EDUCATIONAL_PLAN_IN_DIRECTION = 'educational-plan-in-direction';
+const WORK_PROGRAM_LIST = 'work-programs';
 
 const SEPARATOR = '/';
 
@@ -44,8 +50,32 @@ export default class RouterService {
         return SEPARATOR + SUBJECT_AREA;
     };
 
-    getPrerequisitesRoute = () => {
-        return SEPARATOR + PREREQUISITES;
+    getTrainingEntitiesRoute = () => {
+        return SEPARATOR + TRAINING_ENTITIES;
+    };
+
+    getCompetencesRoute = () => {
+        return SEPARATOR + COMPETENCES;
+    };
+
+    getEducationalProgramRoute = () => {
+        return SEPARATOR + EDUCATIONAL_PROGRAM;
+    };
+
+    getIndicatorsRoute = () => {
+        return SEPARATOR + INDICATORS;
+    };
+
+    getEducationPlanInDirectionRoute = () => {
+        return SEPARATOR + EDUCATIONAL_PLAN_IN_DIRECTION;
+    };
+
+    getWorkProgramListRoute = () => {
+        return SEPARATOR + WORK_PROGRAM_LIST;
+    };
+
+    getEducationPlanRoute = () => {
+        return SEPARATOR + EDUCATIONAL_PLAN;
     };
 
     getWorkProgramRoute = () => {

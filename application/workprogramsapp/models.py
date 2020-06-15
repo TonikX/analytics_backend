@@ -144,7 +144,7 @@ class FieldOfStudy(models.Model):
     faculty = models.CharField(max_length=150, verbose_name = 'Факультет (Структурное подразделение)', null=True)
     education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
 
-    
+
     def __str__(self):
         return self.number
 

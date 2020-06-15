@@ -75,9 +75,9 @@ class Menu extends React.PureComponent<MenuProps>{
                             </MenuItem>
                     </Link>
 
-                    <Link to={appRouter.getPrerequisitesRoute()} className={classes.link}>
+                    <Link to={appRouter.getTrainingEntitiesRoute()} className={classes.link}>
                             <MenuItem
-                                selected={pathname === appRouter.getPrerequisitesRoute()}
+                                selected={pathname === appRouter.getTrainingEntitiesRoute()}
                                 classes={{
                                     selected: classes.selectedMenuItem,
                                     root: classes.menuItem,
@@ -85,6 +85,32 @@ class Menu extends React.PureComponent<MenuProps>{
                             >
                                 <BookIcon className={classes.icon} />
                                 Учебные сущности
+                            </MenuItem>
+                    </Link>
+
+                    <Link to={appRouter.getCompetencesRoute()} className={classes.link}>
+                            <MenuItem
+                                selected={pathname === appRouter.getCompetencesRoute()}
+                                classes={{
+                                    selected: classes.selectedMenuItem,
+                                    root: classes.menuItem,
+                                }}
+                            >
+                                <BookIcon className={classes.icon} />
+                                Компетенции
+                            </MenuItem>
+                    </Link>
+
+                    <Link to={appRouter.getEducationalProgramRoute()} className={classes.link}>
+                            <MenuItem
+                                selected={pathname === appRouter.getEducationalProgramRoute()}
+                                classes={{
+                                    selected: classes.selectedMenuItem,
+                                    root: classes.menuItem,
+                                }}
+                            >
+                                <BookIcon className={classes.icon} />
+                                Направления
                             </MenuItem>
                     </Link>
 
@@ -99,6 +125,57 @@ class Menu extends React.PureComponent<MenuProps>{
                         >
                             <BookIcon className={classes.icon} />
                             Рабочая программа
+                        </MenuItem>
+                    </Link>
+
+                    <Link to={appRouter.getIndicatorsRoute()} className={classes.link}>
+                        <MenuItem
+                            selected={pathname === appRouter.getIndicatorsRoute()}
+                            classes={{
+                                selected: classes.selectedMenuItem,
+                                root: classes.menuItem,
+                            }}
+                        >
+                            <BookIcon className={classes.icon} />
+                            Индикаторы
+                        </MenuItem>
+                    </Link>
+
+                    <Link to={appRouter.getEducationPlanRoute()} className={classes.link}>
+                        <MenuItem
+                            selected={pathname === appRouter.getEducationPlanRoute()}
+                            classes={{
+                                selected: classes.selectedMenuItem,
+                                root: classes.menuItem,
+                            }}
+                        >
+                            <BookIcon className={classes.icon} />
+                            Учебный план
+                        </MenuItem>
+                    </Link>
+
+                    <Link to={appRouter.getEducationPlanInDirectionRoute()} className={classes.link}>
+                        <MenuItem
+                            selected={pathname === appRouter.getEducationPlanInDirectionRoute()}
+                            classes={{
+                                selected: classes.selectedMenuItem,
+                                root: classes.menuItem,
+                            }}
+                        >
+                            <BookIcon className={classes.icon} />
+                            Учебный план в направлении
+                        </MenuItem>
+                    </Link>
+                    <Link to={appRouter.getWorkProgramListRoute()} className={classes.link}>
+                        <MenuItem
+                            selected={pathname === appRouter.getWorkProgramListRoute()}
+                            classes={{
+                                selected: classes.selectedMenuItem,
+                                root: classes.menuItem,
+                            }}
+                        >
+                            <BookIcon className={classes.icon} />
+                            Рабочие программы
                         </MenuItem>
                     </Link>
                 </List>

@@ -18,6 +18,9 @@ import {TrainingEntitiesFields} from '../enum';
 
 import connect from './TrainingEntitiesCreateModal.connect';
 import styles from './TrainingEntitiesCreateModal.styles';
+import {Link} from "react-router-dom";
+import {appRouter} from "../../../service/router-service";
+import Typography from "@material-ui/core/Typography";
 
 
 class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCreateModalProps> {
@@ -96,6 +99,8 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
 
         const disableButton = trainingEntity[TrainingEntitiesFields.TITLE].length === 0;
 
+        const isEditMode = trainingEntity[TrainingEntitiesFields.ID];
+
         return (
             <Dialog
                 open={isOpen}
@@ -104,7 +109,7 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> Создать учебную сущность </DialogTitle>
+                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} учебную сущность </DialogTitle>
                 <DialogContent>
                     <TextField label="Название *"
                                onChange={this.saveField(TrainingEntitiesFields.TITLE)}
@@ -125,6 +130,14 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
+                    <Link to={appRouter.getSubjectAreaRoute()}
+                          className={classes.link}
+                          target="_blank"
+                    >
+                        <Typography>
+                            Создать предметную область
+                        </Typography>
+                    </Link>
                     <Button onClick={this.handleClose}
                             variant="text">
                         Отмена

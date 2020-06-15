@@ -17,4 +17,9 @@ export default (theme: Theme) => createStyles({
     dialog: {
         padding: 20,
     },
+    link: {
+        marginRight: 'auto',
+        textDecoration: 'none',
+        color: theme.palette.primary.main,
+    }
 });

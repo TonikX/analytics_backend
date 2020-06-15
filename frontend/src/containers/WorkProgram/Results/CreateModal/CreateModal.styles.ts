@@ -28,4 +28,9 @@ export default (theme: Theme) => createStyles({
     selector: {
         width: '550px'
     },
+    link: {
+        marginRight: 'auto',
+        textDecoration: 'none',
+        color: theme.palette.primary.main,
+    }
 });

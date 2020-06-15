@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
             name='FieldOfStudyWorkProgram',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('competence', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.Competence', verbose_name='Компетенции')),
+                ('competence', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.Competences', verbose_name='Компетенции')),
                 ('field_of_study', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.FieldOfStudy', verbose_name='Образовательная программа')),
             ],
         ),
@@ -147,7 +147,7 @@ class Migration(migrations.Migration):
                 ('knowledge', models.CharField(max_length=1024)),
                 ('skills', models.CharField(max_length=1024)),
                 ('proficiency', models.CharField(max_length=1024)),
-                ('competence', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.Competence')),
+                ('competence', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.Competences')),
                 ('indicator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.Indicator')),
                 ('work_program', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.WorkProgram')),
             ],
@@ -179,7 +179,7 @@ class Migration(migrations.Migration):
             name='CompetenceIndicator',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('competence', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.Competence')),
+                ('competence', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.Competences')),
                 ('field_of_study', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.FieldOfStudy')),
                 ('indicator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.Indicator')),
             ],
