@@ -1063,6 +1063,11 @@ class AcademicPlanListCreateAPIView(generics.ListCreateAPIView):
     search_fields = ['educational_profile']
 
 
+    def perform_create(self, serializer):
+        serializer.save()
+        AcademicPlan.new_descipline_blocks(self, serializer)
+
+
 class AcademicPlanDestroyView(generics.DestroyAPIView):
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlanSerializer
@@ -1084,10 +1089,6 @@ class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
     """
     queryset = ImplementationAcademicPlan.objects.all()
     serializer_class = ImplementationAcademicPlanCreateSerializer
-
-    def perform_create(self, serializer):
-        serializer.save()
-        ImplementationAcademicPlan.new_descipline_blocks(self, serializer)
 
 
 class ImplementationAcademicPlanListAPIView(generics.ListAPIView):

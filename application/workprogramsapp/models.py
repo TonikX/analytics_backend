@@ -182,6 +182,16 @@ class AcademicPlan(models.Model):
         return (self.educational_profile)
 
 
+    def new_descipline_blocks(iap, siap):
+        blocks = ['Блок 1', 'Блок 2', 'Блок 3']
+        print (siap.data.get("id"))
+
+        for block in blocks:
+            db = DisciplineBlock()
+            db.name = block
+            db.academic_plan_id = siap.data.get("id")
+            db.save()
+
 
 class ImplementationAcademicPlan(models.Model):
     '''
@@ -196,47 +206,16 @@ class ImplementationAcademicPlan(models.Model):
         return str(self.academic_plan)
 
 
-    def new_descipline_blocks(iap, siap):
-        blocks = ['Блок 1', 'Блок 2', 'Блок 3']
-        print (siap.data.get("id"))
-
-        for block in blocks:
-            db = DisciplineBlock()
-            db.name = block
-            db.implementation_academic_plan_id = siap.data.get("id")
-
-            db.save()
-        #
-        # section = DisciplineSection.objects.get(pk = descipline_section)
-        # if int(section.ordinal_number) > int(new_ordinal_number):
-        #     section.ordinal_number = new_ordinal_number
-        #     section.save()
-        #     sections = DisciplineSection.objects.filter(work_program = section.work_program, ordinal_number__gte=new_ordinal_number).exclude(pk = descipline_section).order_by('ordinal_number')
-        #     for sec in sections:
-        #         sec.ordinal_number = new_ordinal_number+1
-        #         sec.save()
-        #         new_ordinal_number +=1
-        # else:
-        #     section.ordinal_number = new_ordinal_number
-        #     section.save()
-        #     sections = DisciplineSection.objects.filter(work_program = section.work_program, ordinal_number__lte=new_ordinal_number).exclude(pk = descipline_section).order_by('ordinal_number')
-        #     for sec in sections:
-        #         sec.ordinal_number = new_ordinal_number-1
-        #         sec.save()
-        #         new_ordinal_number -=1
-
-
-
 class DisciplineBlock(models.Model):
     '''
     Модель блока дисциплин
     '''
     name = models.CharField(max_length=1024)
-    implementation_academic_plan = models.ForeignKey('ImplementationAcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план в направлении', blank=True, null=True)
+    academic_plan = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план в направлении', blank=True, null=True)
     work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
 
     def __str__(self):
-        return (str(self.name) + str(self.implementation_academic_plan) + str(self.work_program))
+        return (str(self.name) + str(self.academic_plan) + str(self.work_program))
 
 
 class Competence(models.Model):
