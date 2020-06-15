@@ -1097,7 +1097,7 @@ class ImplementationAcademicPlanDestroyView(generics.DestroyAPIView):
 
 class ImplementationAcademicPlanUpdateView(generics.UpdateAPIView):
     queryset = ImplementationAcademicPlan.objects.all()
-    serializer_class = ImplementationAcademicPlanSerializer
+    serializer_class = ImplementationAcademicPlanCreateSerializer
 
 
 class ImplementationAcademicPlanDetailsView(generics.RetrieveAPIView):
