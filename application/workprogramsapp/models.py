@@ -193,15 +193,18 @@ class ImplementationAcademicPlan(models.Model):
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
 
     def __str__(self):
-        return (self.academic_plan + self.field_of_study + self.year)
+        return str(self.academic_plan)
 
 
-    def new_descipline_blocks(iap):
+    def new_descipline_blocks(iap, siap):
         blocks = ['Блок 1', 'Блок 2', 'Блок 3']
-        print (iap.id)
+        print (siap.data.get("id"))
 
         for block in blocks:
-            db = DisciplineBlock.objects.get()
+            db = DisciplineBlock()
+            db.name = block
+            db.implementation_academic_plan_id = siap.data.get("id")
+
             db.save()
         #
         # section = DisciplineSection.objects.get(pk = descipline_section)
@@ -228,12 +231,12 @@ class DisciplineBlock(models.Model):
     '''
     Модель блока дисциплин
     '''
-    name = models.CharField(unique=True, max_length=1024)
+    name = models.CharField(max_length=1024)
     implementation_academic_plan = models.ForeignKey('ImplementationAcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план в направлении', blank=True, null=True)
-    work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа")
+    work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
 
     def __str__(self):
-        return (self.name + self.implementation_academic_plan + self.work_program)
+        return (str(self.name) + str(self.implementation_academic_plan) + str(self.work_program))
 
 
 class Competence(models.Model):

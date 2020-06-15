@@ -36,7 +36,33 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class FieldOfStudyImplementationSerializer(serializers.ModelSerializer):
+    """
+        Сериализатор образовательных программ (направлений)
+    """
+    class Meta:
+        model = FieldOfStudy
+        fields = ['id', 'title', 'number', 'qualification', 'educational_profile', 'faculty']
+
+
+class AcademicPlanInImplementationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id', 'educational_profile', 'number', 'approval_date']
+
+
 class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
+    academic_plan = AcademicPlanInImplementationSerializer()
+    field_of_study = FieldOfStudyImplementationSerializer()
+    #academic_plan = AcademicPlanSerializer()
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = ['id','academic_plan', 'field_of_study', 'year']
+
+
+class ImplementationAcademicPlanCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ImplementationAcademicPlan

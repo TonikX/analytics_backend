@@ -11,7 +11,7 @@ from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSeria
 from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
-from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer
+from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -1076,13 +1076,34 @@ class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
     API endpoint that represents a list of Topics.
     """
     queryset = ImplementationAcademicPlan.objects.all()
-    serializer_class = ImplementationAcademicPlanSerializer
+    serializer_class = ImplementationAcademicPlanCreateSerializer
 
     def perform_create(self, serializer):
         serializer.save()
-        print(serializer.data)
-        print(self)
-        ImplementationAcademicPlan.new_descipline_blocks(self)
+        ImplementationAcademicPlan.new_descipline_blocks(self, serializer)
+
+
+class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
+    serializer_class = ImplementationAcademicPlanSerializer
+    queryset = ImplementationAcademicPlan.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['educational_profile']
+
+
+class ImplementationAcademicPlanDestroyView(generics.DestroyAPIView):
+    queryset = ImplementationAcademicPlan.objects.all()
+    serializer_class = ImplementationAcademicPlanSerializer
+
+
+class ImplementationAcademicPlanUpdateView(generics.UpdateAPIView):
+    queryset = ImplementationAcademicPlan.objects.all()
+    serializer_class = ImplementationAcademicPlanSerializer
+
+
+class ImplementationAcademicPlanDetailsView(generics.RetrieveAPIView):
+    queryset = ImplementationAcademicPlan.objects.all()
+    serializer_class = ImplementationAcademicPlanSerializer
+
 
 #Конец блока ендпоинтов рабочей программы
 
