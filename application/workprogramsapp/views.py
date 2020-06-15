@@ -501,7 +501,7 @@ class CompetenceCreateView(generics.CreateAPIView):
     queryset = Competence.objects.all()
 
 
-class CompetencesListView(generics.ListAPIView):
+class CompetenceListView(generics.ListAPIView):
     serializer_class = CompetenceSerializer
     queryset = Competence.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
@@ -513,7 +513,7 @@ class CompetenceListView(APIView):
        Список компетеций.
     """
     def get(self, request):
-        competences = Competences.objects.all()
+        competences = Competence.objects.all()
         serializer = CompetenceSerializer(competences, many=True)
         return Response(serializer.data)
 
@@ -522,12 +522,12 @@ class CompetenceUpdateView(APIView):
         Редактирование (обновление) компетенции
     """
     def get(self, request, pk):
-        competence = get_object_or_404(Competences, pk=pk)
+        competence = get_object_or_404(Competence, pk=pk)
         serializer = CompetenceSerializer(competence)
         return Response(serializer.data)
 
     def put(self, request, pk):
-        competence = get_object_or_404(Competences, pk=pk)
+        competence = get_object_or_404(Competence, pk=pk)
         serializer = CompetenceSerializer(competence, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -535,7 +535,7 @@ class CompetenceUpdateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        competence = get_object_or_404(Competences, pk=pk)
+        competence = get_object_or_404(Competence, pk=pk)
         try:
             competence.delete()
             return Response(status=200)
@@ -573,7 +573,7 @@ class AddIndicatorToCompetenceView(APIView):
         name = request.data.get("name")
         competence = request.data.get("competence")
         try:
-            competence = Competences.objects.get(pk=competence)
+            competence = Competence.objects.get(pk=competence)
             indicator = Indicator.objects.create(number=number, name=name, competence=competence)
             indicator.save()
             return Response(status=200)
