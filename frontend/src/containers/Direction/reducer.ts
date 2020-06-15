@@ -66,7 +66,7 @@ const changeSorting = (state: educationalProgramState, {payload}: any): educatio
 });
 
 export const reducer = createReducer(initialState, {
-    [actions.setEducationalProgram.type]: setEducationalProgram,
+    [actions.setDirections.type]: setEducationalProgram,
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
     [actions.changeSearchQuery.type]: changeSearchQuery,

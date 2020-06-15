@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 
 import actions from "../actions";
 import {isOpenDialog, getDialogData} from '../getters';
-import {EducationalProgramActions} from "../types";
+import {DirectionActions} from "../types";
 
 import {rootState} from "../../../store/reducers";
 
@@ -15,7 +15,7 @@ const mapStateToProps = (state: rootState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<EducationalProgramActions>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<DirectionActions>) => ({
     // @ts-ignore
     actions: bindActionCreators(actions, dispatch),
 });

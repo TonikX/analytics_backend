@@ -24,14 +24,17 @@ import {workProgramState} from "../containers/WorkProgram/types";
 import {GENERAL_PATH as competencePath, reducer as competenceReducer} from "../containers/Competences/reducer";
 import {competenceState} from "../containers/Competences/types";
 
-import {GENERAL_PATH as educationalProgramPath, reducer as educationalProgramReducer} from "../containers/EducationalProgram/reducer";
-import {educationalProgramState} from "../containers/EducationalProgram/types";
+import {GENERAL_PATH as educationalProgramPath, reducer as educationalProgramReducer} from "../containers/Direction/reducer";
+import {educationalProgramState} from "../containers/Direction/types";
 
 import {GENERAL_PATH as indicatorsPath, reducer as indicatorsReducer} from "../containers/Indicators/reducer";
 import {indicatorsState} from "../containers/Indicators/types";
 
 import {GENERAL_PATH as educationalPlanPath, reducer as educationalPlanReducer} from "../containers/EducationalPlan/reducer";
 import {educationalPlanState} from "../containers/EducationalPlan/types";
+
+import {GENERAL_PATH as educationPlanInDirectionPath, reducer as educationPlanInDirectionReducer} from "../containers/EduationPlanInDirection/reducer";
+import {educationalPlanInDirectionState} from "../containers/EduationPlanInDirection/types";
 
 export interface rootState {
     [signInPath]: signInState,
@@ -47,6 +50,7 @@ export interface rootState {
     [educationalProgramPath]: educationalProgramState,
     [indicatorsPath]: indicatorsState,
     [educationalPlanPath]: educationalPlanState,
+    [educationPlanInDirectionPath]: educationalPlanInDirectionState,
 }
 
 export default combineReducers({
@@ -62,4 +66,5 @@ export default combineReducers({
     [educationalProgramPath]: educationalProgramReducer,
     [indicatorsPath]: indicatorsReducer,
     [educationalPlanPath]: educationalPlanReducer,
+    [educationPlanInDirectionPath]: educationPlanInDirectionReducer,
 });

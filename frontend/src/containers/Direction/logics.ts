@@ -12,7 +12,7 @@ import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from ".
 const service = new Service();
 
 const getEducationalProgram = createLogic({
-    type: competencesActions.getEducationalProgram.type,
+    type: competencesActions.getDirections.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState();
@@ -29,7 +29,7 @@ const getEducationalProgram = createLogic({
                 const courses = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));
 
-                dispatch(competencesActions.setEducationalProgram(courses));
+                dispatch(competencesActions.setDirections(courses));
                 dispatch(competencesActions.changeAllCount(allPages));
                 dispatch(actions.fetchingSuccess());
             })
@@ -44,7 +44,7 @@ const getEducationalProgram = createLogic({
 });
 
 const deleteEducationalProgram = createLogic({
-    type: competencesActions.deleteEducationalProgram.type,
+    type: competencesActions.deleteDirection.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const courseId = action.payload;
@@ -53,7 +53,7 @@ const deleteEducationalProgram = createLogic({
 
         service.deleteEducationalProgram(courseId)
             .then((res) => {
-                dispatch(competencesActions.getEducationalProgram());
+                dispatch(competencesActions.getDirections());
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -67,7 +67,7 @@ const deleteEducationalProgram = createLogic({
 });
 
 const createNewEducationalProgram = createLogic({
-    type: competencesActions.createNewEducationalProgram.type,
+    type: competencesActions.createNewDirection.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const course = action.payload;
@@ -76,7 +76,7 @@ const createNewEducationalProgram = createLogic({
 
         service.createEducationalProgram(course)
             .then((res) => {
-                dispatch(competencesActions.getEducationalProgram());
+                dispatch(competencesActions.getDirections());
                 dispatch(actions.fetchingSuccess());
                 dispatch(competencesActions.closeDialog());
             })
@@ -91,7 +91,7 @@ const createNewEducationalProgram = createLogic({
 });
 
 const changeEducationalProgram = createLogic({
-    type: competencesActions.changeEducationalProgram.type,
+    type: competencesActions.changeDirection.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const course = action.payload;
@@ -100,7 +100,7 @@ const changeEducationalProgram = createLogic({
 
         service.updateEducationalProgram(course)
             .then((res) => {
-                dispatch(competencesActions.getEducationalProgram());
+                dispatch(competencesActions.getDirections());
                 dispatch(actions.fetchingSuccess());
                 dispatch(competencesActions.closeDialog());
             })

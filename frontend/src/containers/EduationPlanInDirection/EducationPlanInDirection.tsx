@@ -1,7 +1,6 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
-import moment from 'moment';
 // @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
 
@@ -23,22 +22,25 @@ import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
-import CourseCreateModal from "./CreateModal";
 import {SortingType} from "../../components/SortingButton/types";
+import CourseCreateModal from "./CreateModal";
 
-import {EducationalPlanProps, EducationalPlanType} from './types';
-import {EducationalPlanFields} from './enum';
+import {DirectionFields} from "../Direction/enum";
+import {EducationalPlanFields} from "../EducationalPlan/enum";
+import {EducationPlanInDirectionFields} from './enum';
 
-import connect from './EducationalPlan.connect';
-import styles from './EducationalPlan.styles';
+import {EducationalPlanInDirectionProps, EducationalPlanInDirectionType} from './types';
 
-class EducationalPlan extends React.Component<EducationalPlanProps> {
+import connect from './EducationPlanInDirection.connect';
+import styles from './EducationPlanInDirection.styles';
+
+class EducationPlanInDirection extends React.Component<EducationalPlanInDirectionProps> {
     state = {
         deleteConfirmId: null
     }
 
     componentDidMount() {
-        this.props.actions.getEducationalPlan();
+        this.props.actions.getEducationalPlansInDirection();
     }
 
     handleClickDelete = (id: number) => () => {
@@ -50,7 +52,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
     handleConfirmDeleteDialog = () => {
         const {deleteConfirmId} = this.state;
 
-        this.props.actions.deleteEducationalPlan(deleteConfirmId);
+        this.props.actions.deleteEducationalPlanInDirection(deleteConfirmId);
         this.closeConfirmDeleteDialog();
     }
 
@@ -60,8 +62,8 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
         });
     }
 
-    handleClickEdit = (plan: EducationalPlanType) => () => {
-        this.props.actions.openDialog(plan);
+    handleClickEdit = (competence: EducationalPlanInDirectionType) => () => {
+        this.props.actions.openDialog(competence);
     }
 
     handleCreate = () => {
@@ -75,27 +77,27 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
         this.props.actions.changeCurrentPage(1);
-        this.props.actions.getEducationalPlan();
+        this.props.actions.getEducationalPlansInDirection();
     }, 300);
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
         this.props.actions.changeCurrentPage(page + 1);
-        this.props.actions.getEducationalPlan();
+        this.props.actions.getEducationalPlansInDirection();
     }
 
     changeSorting = (field: string) => (mode: SortingType)=> {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getEducationalPlan();
+        this.props.actions.getEducationalPlansInDirection();
     }
 
     render() {
-        const {classes, educationalPlan, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, educationalPlansInDirection, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Учебный план
+                    Реализация учебного плана в направлении
 
                     <TextField placeholder="Поиск"
                                variant="outlined"
@@ -111,41 +113,46 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
 
                 <div className={classes.tableWrap}>
                     <div className={classNames(classes.row, classes.header)}>
-                        <Typography className={classNames(classes.marginRight, classes.numberCell)}>
-                            Номер
-                            <SortingButton changeMode={this.changeSorting(EducationalPlanFields.NUMBER)}
-                                           mode={sortingField === EducationalPlanFields.NUMBER ? sortingMode : ''}
-                            />
-                        </Typography>
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Профиль
-                            <SortingButton changeMode={this.changeSorting(EducationalPlanFields.PROFILE)}
-                                           mode={sortingField === EducationalPlanFields.PROFILE ? sortingMode : ''}
+                            Направление
+                            <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.DIRECTION)}
+                                           mode={sortingField === EducationPlanInDirectionFields.DIRECTION ? sortingMode : ''}
                             />
                         </Typography>
 
-                        <Typography className={classNames(classes.marginRight, classes.dateCell)}>
-                            Дата согласования
-                            <SortingButton changeMode={this.changeSorting(EducationalPlanFields.PROFILE)}
-                                           mode={sortingField === EducationalPlanFields.PROFILE ? sortingMode : ''}
+                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                            Учебный план
+                            <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.EDUCATION_PLAN)}
+                                           mode={sortingField === EducationPlanInDirectionFields.EDUCATION_PLAN ? sortingMode : ''}
+                            />
+                        </Typography>
+
+                        <Typography className={classNames(classes.marginRight, classes.yearCell)}>
+                            Год
+                            <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.YEAR)}
+                                           mode={sortingField === EducationPlanInDirectionFields.YEAR ? sortingMode : ''}
                             />
                         </Typography>
                     </div>
 
                     <div className={classes.list}>
                         <Scrollbars>
-                            {educationalPlan.map(plan =>
-                                <div className={classes.row} key={plan[EducationalPlanFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.numberCell)}> {plan[EducationalPlanFields.NUMBER]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}> {plan[EducationalPlanFields.PROFILE]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.dateCell)}>
-                                        {moment(plan[EducationalPlanFields.APPROVAL_DATE]).format('DD.MM.YYYY')}
+                            {educationalPlansInDirection.map(educationalPlanInDirection =>
+                                <div className={classes.row} key={educationalPlanInDirection[EducationPlanInDirectionFields.ID]}>
+                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                                        {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.TITLE]}
+                                    </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                                        {educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]}
+                                    </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.yearCell)}>
+                                        {educationalPlanInDirection[EducationPlanInDirectionFields.YEAR]}
                                     </Typography>
                                     <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(plan[EducationalPlanFields.ID])}>
+                                        <IconButton onClick={this.handleClickDelete(educationalPlanInDirection[EducationPlanInDirectionFields.ID])}>
                                             <DeleteIcon />
                                         </IconButton>
-                                        <IconButton onClick={this.handleClickEdit(plan)}>
+                                        <IconButton onClick={this.handleClickEdit(educationalPlanInDirection)}>
                                             <EditIcon />
                                         </IconButton>
                                     </div>
@@ -180,9 +187,9 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены, что хотите удалить учебный план?'}
+                               confirmText={'Вы точно уверены, что хотите удалить реализацию учебного плана?'}
                                isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить учебный план'}
+                               dialogTitle={'Удалить реализацию учебного плана'}
                                confirmButtonText={'Удалить'}
                 />
             </Paper>
@@ -190,4 +197,4 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
     }
 }
 
-export default connect(withStyles(styles)(EducationalPlan));
+export default connect(withStyles(styles)(EducationPlanInDirection));

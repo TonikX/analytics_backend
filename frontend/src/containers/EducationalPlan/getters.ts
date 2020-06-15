@@ -12,10 +12,10 @@ import {SelectorListType} from "../../components/SearchSelector/types";
 const getStateData = (state: rootState): educationalPlanState => get(state, GENERAL_PATH);
 export const getEducationalPlan = (state: rootState): Array<EducationalPlanType> => get(getStateData(state), fields.EDUCATIONAL_PLAN_LIST, []);
 
-export const getEducationalPlanSelector = (state: rootState): SelectorListType =>
+export const getEducationalPlanForSelector = (state: rootState): SelectorListType =>
     getEducationalPlan(state).map((competence: EducationalPlanType) => ({
         value: competence[EducationalPlanFields.ID],
-        label: competence[EducationalPlanFields.PROFILE],
+        label: `${competence[EducationalPlanFields.NUMBER]} ${competence[EducationalPlanFields.PROFILE]}`,
     }))
 
 export const getEducationalPlanDialog = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_PLAN_DIALOG, {});

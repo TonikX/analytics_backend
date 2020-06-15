@@ -25,8 +25,8 @@ import SortingButton from "../../components/SortingButton";
 import CourseCreateModal from "./CreateModal";
 import {SortingType} from "../../components/SortingButton/types";
 
-import {EducationalProgramProps, EducationalProgramType} from './types';
-import {EducationalProgramFields} from './enum';
+import {EducationalProgramProps, DirectionType} from './types';
+import {DirectionFields} from './enum';
 
 import connect from './EducationalProgram.connect';
 import styles from './EducationalProgram.styles';
@@ -38,7 +38,7 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
     }
 
     componentDidMount() {
-        this.props.actions.getEducationalProgram();
+        this.props.actions.getDirections();
     }
 
     handleClickDelete = (id: number) => () => {
@@ -50,7 +50,7 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
     handleConfirmDeleteDialog = () => {
         const {deleteConfirmId} = this.state;
 
-        this.props.actions.deleteEducationalProgram(deleteConfirmId);
+        this.props.actions.deleteDirection(deleteConfirmId);
         this.closeConfirmDeleteDialog();
     }
 
@@ -60,7 +60,7 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
         });
     }
 
-    handleClickEdit = (competence: EducationalProgramType) => () => {
+    handleClickEdit = (competence: DirectionType) => () => {
         this.props.actions.openDialog(competence);
     }
 
@@ -75,17 +75,17 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
         this.props.actions.changeCurrentPage(1);
-        this.props.actions.getEducationalProgram();
+        this.props.actions.getDirections();
     }, 300);
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
         this.props.actions.changeCurrentPage(page + 1);
-        this.props.actions.getEducationalProgram();
+        this.props.actions.getDirections();
     }
 
     changeSorting = (field: string) => (mode: SortingType)=> {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getEducationalProgram();
+        this.props.actions.getDirections();
     }
 
     render() {
@@ -113,42 +113,42 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                     <div className={classNames(classes.row, classes.header)}>
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                             Название
-                            <SortingButton changeMode={this.changeSorting(EducationalProgramFields.TITLE)}
-                                           mode={sortingField === EducationalProgramFields.TITLE ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(DirectionFields.TITLE)}
+                                           mode={sortingField === DirectionFields.TITLE ? sortingMode : ''}
                             />
                         </Typography>
                         <Typography className={classNames(classes.marginRight, classes.numberCell)}>
                             Номер
-                            <SortingButton changeMode={this.changeSorting(EducationalProgramFields.NUMBER)}
-                                           mode={sortingField === EducationalProgramFields.NUMBER ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(DirectionFields.NUMBER)}
+                                           mode={sortingField === DirectionFields.NUMBER ? sortingMode : ''}
                             />
                         </Typography>
 
                         <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
                             Квалификация
-                            <SortingButton changeMode={this.changeSorting(EducationalProgramFields.QUALIFICATION)}
-                                           mode={sortingField === EducationalProgramFields.QUALIFICATION ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(DirectionFields.QUALIFICATION)}
+                                           mode={sortingField === DirectionFields.QUALIFICATION ? sortingMode : ''}
                             />
                         </Typography>
 
                         <Typography className={classNames(classes.marginRight, classes.facultyCell)}>
                             Факультет
-                            <SortingButton changeMode={this.changeSorting(EducationalProgramFields.FACULTY)}
-                                           mode={sortingField === EducationalProgramFields.FACULTY ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(DirectionFields.FACULTY)}
+                                           mode={sortingField === DirectionFields.FACULTY ? sortingMode : ''}
                             />
                         </Typography>
 
                         <Typography className={classNames(classes.marginRight, classes.educationFormCell)}>
                             Форма обучения
-                            <SortingButton changeMode={this.changeSorting(EducationalProgramFields.EDUCATION_FORM)}
-                                           mode={sortingField === EducationalProgramFields.EDUCATION_FORM ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(DirectionFields.EDUCATION_FORM)}
+                                           mode={sortingField === DirectionFields.EDUCATION_FORM ? sortingMode : ''}
                             />
                         </Typography>
 
                         <Typography className={classNames(classes.marginRight, classes.profileCell)}>
                             Профиль
-                            <SortingButton changeMode={this.changeSorting(EducationalProgramFields.EDUCATIONAL_PROFILE)}
-                                           mode={sortingField === EducationalProgramFields.EDUCATIONAL_PROFILE ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(DirectionFields.EDUCATIONAL_PROFILE)}
+                                           mode={sortingField === DirectionFields.EDUCATIONAL_PROFILE ? sortingMode : ''}
                             />
                         </Typography>
                     </div>
@@ -156,19 +156,19 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                     <div className={classes.list}>
                         <Scrollbars>
                             {educationalProgram.map(competence =>
-                                <div className={classes.row} key={competence[EducationalProgramFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}> {competence[EducationalProgramFields.TITLE]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.numberCell)}> {competence[EducationalProgramFields.NUMBER]} </Typography>
+                                <div className={classes.row} key={competence[DirectionFields.ID]}>
+                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}> {competence[DirectionFields.TITLE]} </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.numberCell)}> {competence[DirectionFields.NUMBER]} </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
-                                        {get(specialization.find(item => item.value === competence[EducationalProgramFields.QUALIFICATION]), 'label', '')}
+                                        {get(specialization.find(item => item.value === competence[DirectionFields.QUALIFICATION]), 'label', '')}
                                     </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.facultyCell)}> {competence[EducationalProgramFields.FACULTY]} </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.facultyCell)}> {competence[DirectionFields.FACULTY]} </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.educationFormCell)}>
-                                        {competence[EducationalProgramFields.EDUCATION_FORM] === 'extramural' ? 'Заочная' : 'Очная'}
+                                        {competence[DirectionFields.EDUCATION_FORM] === 'extramural' ? 'Заочная' : 'Очная'}
                                     </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.profileCell)}> {competence[EducationalProgramFields.EDUCATIONAL_PROFILE]} </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.profileCell)}> {competence[DirectionFields.EDUCATIONAL_PROFILE]} </Typography>
                                     <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(competence[EducationalProgramFields.ID])}>
+                                        <IconButton onClick={this.handleClickDelete(competence[DirectionFields.ID])}>
                                             <DeleteIcon />
                                         </IconButton>
                                         <IconButton onClick={this.handleClickEdit(competence)}>
@@ -206,7 +206,7 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены что хотите удалить направление?'}
+                               confirmText={'Вы точно уверены, что хотите удалить направление?'}
                                isOpen={Boolean(deleteConfirmId)}
                                dialogTitle={'Удалить направление'}
                                confirmButtonText={'Удалить'}

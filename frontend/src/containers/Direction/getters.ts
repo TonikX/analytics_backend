@@ -4,18 +4,18 @@ import {rootState} from '../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 
-import {EducationalProgramFields, fields} from './enum';
+import {DirectionFields, fields} from './enum';
 
-import {educationalProgramState, EducationalProgramType} from './types';
+import {educationalProgramState, DirectionType} from './types';
 import {SelectorListType} from "../../components/SearchSelector/types";
 
 const getStateData = (state: rootState): educationalProgramState => get(state, GENERAL_PATH);
-export const getEducationalProgram = (state: rootState): Array<EducationalProgramType> => get(getStateData(state), fields.EDUCATIONAL_PROGRAM_LIST, []);
+export const getEducationalProgram = (state: rootState): Array<DirectionType> => get(getStateData(state), fields.EDUCATIONAL_PROGRAM_LIST, []);
 
-export const getEducationalProgramSelector = (state: rootState): SelectorListType =>
-    getEducationalProgram(state).map((competence: EducationalProgramType) => ({
-        value: competence[EducationalProgramFields.ID],
-        label: competence[EducationalProgramFields.TITLE],
+export const getDirectionsForSelector = (state: rootState): SelectorListType =>
+    getEducationalProgram(state).map((competence: DirectionType) => ({
+        value: competence[DirectionFields.ID],
+        label: competence[DirectionFields.TITLE],
     }))
 
 export const getEducationalProgramDialog = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_PROGRAM_DIALOG, {});

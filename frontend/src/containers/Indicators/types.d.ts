@@ -43,7 +43,7 @@ export type IndicatorType = {
 
 export interface IndicatorProps extends WithStyles<typeof styles> {
     actions: IndicatorProgramActions;
-    educationalProgram: Array<IndicatorType>;
+    indicators: Array<IndicatorType>;
     currentPage: number;
     searchQuery: string;
     allCount: number;

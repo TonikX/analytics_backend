@@ -1,16 +1,16 @@
 import {fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
-import {EducationalProgramFields} from './enum';
+import {DirectionFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
 
-export interface EducationalProgramActions {
+export interface DirectionActions {
     changeSearchQuery: any;
-    getEducationalProgram: any;
-    setEducationalProgram: any;
-    createNewEducationalProgram: any;
-    changeEducationalProgram: any;
-    deleteEducationalProgram: any;
+    getDirections: any;
+    setDirections: any;
+    createNewDirection: any;
+    changeDirection: any;
+    deleteDirection: any;
     openDialog: any;
     closeDialog: any;
     changeCurrentPage: any;
@@ -26,26 +26,26 @@ export interface educationalProgramState {
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
-    [fields.EDUCATIONAL_PROGRAM_LIST]: Array<EducationalProgramType>;
+    [fields.EDUCATIONAL_PROGRAM_LIST]: Array<DirectionType>;
     [fields.EDUCATIONAL_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;
-        [fields.DIALOG_DATA]: EducationalProgramType|{};
+        [fields.DIALOG_DATA]: DirectionType|{};
     };
 }
 
-export type EducationalProgramType = {
-    [EducationalProgramFields.ID]: number,
-    [EducationalProgramFields.TITLE]: string,
-    [EducationalProgramFields.NUMBER]: string,
-    [EducationalProgramFields.QUALIFICATION]: string,
-    [EducationalProgramFields.EDUCATIONAL_PROFILE]: string,
-    [EducationalProgramFields.FACULTY]: string,
-    [EducationalProgramFields.EDUCATION_FORM]: string,
+export type DirectionType = {
+    [DirectionFields.ID]: number,
+    [DirectionFields.TITLE]: string,
+    [DirectionFields.NUMBER]: string,
+    [DirectionFields.QUALIFICATION]: string,
+    [DirectionFields.EDUCATIONAL_PROFILE]: string,
+    [DirectionFields.FACULTY]: string,
+    [DirectionFields.EDUCATION_FORM]: string,
 };
 
 export interface EducationalProgramProps extends WithStyles<typeof styles> {
-    actions: EducationalProgramActions;
-    educationalProgram: Array<EducationalProgramType>;
+    actions: DirectionActions;
+    educationalProgram: Array<DirectionType>;
     currentPage: number;
     searchQuery: string;
     allCount: number;

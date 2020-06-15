@@ -169,7 +169,7 @@ class Competences extends React.Component<CompetenceProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены что хотите удалить компетенцию?'}
+                               confirmText={'Вы точно уверены, что хотите удалить компетенцию?'}
                                isOpen={Boolean(deleteConfirmId)}
                                dialogTitle={'Удалить компетенцию'}
                                confirmButtonText={'Удалить'}

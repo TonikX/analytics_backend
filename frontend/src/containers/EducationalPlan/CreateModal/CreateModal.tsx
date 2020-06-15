@@ -136,6 +136,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         inputVariant="outlined"
                         className={classes.datePicker}
                         format={'DD.MM.YYYY'}
+                        label={'Дата согласования'}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>

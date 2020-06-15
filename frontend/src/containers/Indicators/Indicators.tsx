@@ -89,7 +89,7 @@ class Indicators extends React.Component<IndicatorProps> {
     }
 
     render() {
-        const {classes, educationalProgram, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, indicators, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
@@ -128,7 +128,7 @@ class Indicators extends React.Component<IndicatorProps> {
 
                     <div className={classes.list}>
                         <Scrollbars>
-                            {educationalProgram.map(competence =>
+                            {indicators.map(competence =>
                                 <div className={classes.row} key={competence[IndicatorsFields.ID]}>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                                         {competence[IndicatorsFields.NUMBER]} {competence[IndicatorsFields.TITLE]}
@@ -175,7 +175,7 @@ class Indicators extends React.Component<IndicatorProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены что хотите удалить индикатор?'}
+                               confirmText={'Вы точно уверены, что хотите удалить индикатор?'}
                                isOpen={Boolean(deleteConfirmId)}
                                dialogTitle={'Удалить индикатор'}
                                confirmButtonText={'Удалить'}

@@ -24,7 +24,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 
 import {specialization} from '../../WorkProgram/data';
 
-import {EducationalProgramFields} from '../enum';
+import {DirectionFields} from '../enum';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
@@ -32,13 +32,13 @@ import styles from './CreateModal.styles';
 class CreateModal extends React.PureComponent<CourseCreateModalProps> {
     state = {
         educationalProgram: {
-            [EducationalProgramFields.ID]: null,
-            [EducationalProgramFields.TITLE]: '',
-            [EducationalProgramFields.NUMBER]: '',
-            [EducationalProgramFields.QUALIFICATION]: '',
-            [EducationalProgramFields.EDUCATIONAL_PROFILE]: '',
-            [EducationalProgramFields.FACULTY]: '',
-            [EducationalProgramFields.EDUCATION_FORM]: 'internal',
+            [DirectionFields.ID]: null,
+            [DirectionFields.TITLE]: '',
+            [DirectionFields.NUMBER]: '',
+            [DirectionFields.QUALIFICATION]: '',
+            [DirectionFields.EDUCATIONAL_PROFILE]: '',
+            [DirectionFields.FACULTY]: '',
+            [DirectionFields.EDUCATION_FORM]: 'internal',
         },
     };
 
@@ -48,13 +48,13 @@ class CreateModal extends React.PureComponent<CourseCreateModalProps> {
         if (!shallowEqual(educationalProgram, prevProps.educationalProgram)){
             this.setState({
                 educationalProgram: {
-                    [EducationalProgramFields.ID]: get(educationalProgram, EducationalProgramFields.ID),
-                    [EducationalProgramFields.TITLE]: get(educationalProgram, EducationalProgramFields.TITLE, ''),
-                    [EducationalProgramFields.NUMBER]: get(educationalProgram, EducationalProgramFields.NUMBER, ''),
-                    [EducationalProgramFields.QUALIFICATION]: get(educationalProgram, EducationalProgramFields.QUALIFICATION, ''),
-                    [EducationalProgramFields.EDUCATIONAL_PROFILE]: get(educationalProgram, EducationalProgramFields.EDUCATIONAL_PROFILE, ''),
-                    [EducationalProgramFields.FACULTY]: get(educationalProgram, EducationalProgramFields.FACULTY, ''),
-                    [EducationalProgramFields.EDUCATION_FORM]: get(educationalProgram, EducationalProgramFields.EDUCATION_FORM, ''),
+                    [DirectionFields.ID]: get(educationalProgram, DirectionFields.ID),
+                    [DirectionFields.TITLE]: get(educationalProgram, DirectionFields.TITLE, ''),
+                    [DirectionFields.NUMBER]: get(educationalProgram, DirectionFields.NUMBER, ''),
+                    [DirectionFields.QUALIFICATION]: get(educationalProgram, DirectionFields.QUALIFICATION, ''),
+                    [DirectionFields.EDUCATIONAL_PROFILE]: get(educationalProgram, DirectionFields.EDUCATIONAL_PROFILE, ''),
+                    [DirectionFields.FACULTY]: get(educationalProgram, DirectionFields.FACULTY, ''),
+                    [DirectionFields.EDUCATION_FORM]: get(educationalProgram, DirectionFields.EDUCATION_FORM, ''),
                 }
             });
         }
@@ -67,10 +67,10 @@ class CreateModal extends React.PureComponent<CourseCreateModalProps> {
     handleSave = () => {
         const {educationalProgram} = this.state;
 
-        if (educationalProgram[EducationalProgramFields.ID]){
-            this.props.actions.changeEducationalProgram(educationalProgram);
+        if (educationalProgram[DirectionFields.ID]){
+            this.props.actions.changeDirection(educationalProgram);
         } else {
-            this.props.actions.createNewEducationalProgram(educationalProgram);
+            this.props.actions.createNewDirection(educationalProgram);
         }
     }
 
@@ -89,15 +89,15 @@ class CreateModal extends React.PureComponent<CourseCreateModalProps> {
         const {isOpen, classes} = this.props;
         const {educationalProgram} = this.state;
 
-        const disableButton = educationalProgram[EducationalProgramFields.TITLE].length === 0
-            || educationalProgram[EducationalProgramFields.NUMBER].length === 0
-            || educationalProgram[EducationalProgramFields.QUALIFICATION].length === 0
-            || educationalProgram[EducationalProgramFields.EDUCATION_FORM].length === 0
-            || educationalProgram[EducationalProgramFields.FACULTY].length === 0
-            || educationalProgram[EducationalProgramFields.EDUCATIONAL_PROFILE].length === 0
+        const disableButton = educationalProgram[DirectionFields.TITLE].length === 0
+            || educationalProgram[DirectionFields.NUMBER].length === 0
+            || educationalProgram[DirectionFields.QUALIFICATION].length === 0
+            || educationalProgram[DirectionFields.EDUCATION_FORM].length === 0
+            || educationalProgram[DirectionFields.FACULTY].length === 0
+            || educationalProgram[DirectionFields.EDUCATIONAL_PROFILE].length === 0
         ;
 
-        const isEditMode = Boolean(educationalProgram[EducationalProgramFields.ID]);
+        const isEditMode = Boolean(educationalProgram[DirectionFields.ID]);
 
         return (
             <Dialog
@@ -110,41 +110,41 @@ class CreateModal extends React.PureComponent<CourseCreateModalProps> {
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} направление</DialogTitle>
                 <DialogContent>
                     <TextField label="Название *"
-                               onChange={this.saveField(EducationalProgramFields.TITLE)}
+                               onChange={this.saveField(DirectionFields.TITLE)}
                                variant="outlined"
                                className={classNames(classes.input, classes.marginBottom30)}
                                fullWidth
-                               value={educationalProgram[EducationalProgramFields.TITLE]}
+                               value={educationalProgram[DirectionFields.TITLE]}
                                InputLabelProps={{
                                    shrink: true,
                                }}
                     />
                     <TextField label="Номер программы *"
-                               onChange={this.saveField(EducationalProgramFields.NUMBER)}
+                               onChange={this.saveField(DirectionFields.NUMBER)}
                                variant="outlined"
                                className={classNames(classes.input, classes.marginBottom30)}
                                fullWidth
-                               value={educationalProgram[EducationalProgramFields.NUMBER]}
+                               value={educationalProgram[DirectionFields.NUMBER]}
                                InputLabelProps={{
                                    shrink: true,
                                }}
                     />
                     <TextField label="Факультет *"
-                               onChange={this.saveField(EducationalProgramFields.FACULTY)}
+                               onChange={this.saveField(DirectionFields.FACULTY)}
                                variant="outlined"
                                className={classNames(classes.input, classes.marginBottom30)}
                                fullWidth
-                               value={educationalProgram[EducationalProgramFields.FACULTY]}
+                               value={educationalProgram[DirectionFields.FACULTY]}
                                InputLabelProps={{
                                    shrink: true,
                                }}
                     />
                     <TextField label="Профиль *"
-                               onChange={this.saveField(EducationalProgramFields.EDUCATIONAL_PROFILE)}
+                               onChange={this.saveField(DirectionFields.EDUCATIONAL_PROFILE)}
                                variant="outlined"
                                className={classNames(classes.input, classes.marginBottom30)}
                                fullWidth
-                               value={educationalProgram[EducationalProgramFields.EDUCATIONAL_PROFILE]}
+                               value={educationalProgram[DirectionFields.EDUCATIONAL_PROFILE]}
                                InputLabelProps={{
                                    shrink: true,
                                }}
@@ -157,8 +157,8 @@ class CreateModal extends React.PureComponent<CourseCreateModalProps> {
                             variant="outlined"
                             className={classes.selector}
                             // @ts-ignore
-                            onChange={this.saveField(EducationalProgramFields.QUALIFICATION)}
-                            value={educationalProgram[EducationalProgramFields.QUALIFICATION]}
+                            onChange={this.saveField(DirectionFields.QUALIFICATION)}
+                            value={educationalProgram[DirectionFields.QUALIFICATION]}
                             fullWidth
                             displayEmpty
                             input={
@@ -180,15 +180,15 @@ class CreateModal extends React.PureComponent<CourseCreateModalProps> {
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Форма обучения *</FormLabel>
                         <RadioGroup className={classes.radioGroup}
-                                    onChange={this.saveField(EducationalProgramFields.EDUCATION_FORM)}
-                                    value={educationalProgram[EducationalProgramFields.EDUCATION_FORM]}
+                                    onChange={this.saveField(DirectionFields.EDUCATION_FORM)}
+                                    value={educationalProgram[DirectionFields.EDUCATION_FORM]}
                         >
                             <FormControlLabel value="internal"
-                                              control={<Radio checked={educationalProgram[EducationalProgramFields.EDUCATION_FORM] === 'internal'} />}
+                                              control={<Radio checked={educationalProgram[DirectionFields.EDUCATION_FORM] === 'internal'} />}
                                               label="Очная"
                             />
                             <FormControlLabel value="extramural"
-                                              control={<Radio checked={educationalProgram[EducationalProgramFields.EDUCATION_FORM] === 'extramural'} />}
+                                              control={<Radio checked={educationalProgram[DirectionFields.EDUCATION_FORM] === 'extramural'} />}
                                               label="Заочная"
                             />
                         </RadioGroup>

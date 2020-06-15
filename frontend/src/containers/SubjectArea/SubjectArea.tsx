@@ -164,7 +164,7 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены что хотите удалить предметную область?'}
+                               confirmText={'Вы точно уверены, что хотите удалить предметную область?'}
                                isOpen={Boolean(deleteConfirmId)}
                                dialogTitle={'Удалить предметную область'}
                                confirmButtonText={'Удалить'}

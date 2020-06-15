@@ -3,14 +3,14 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "./actions";
-import {getIndicators, getCurrentPage, getSearchQuery, getAllCount, getSortingMode, getSortingField} from './getters';
-import {IndicatorProgramActions} from "./types";
+import {getEducationalPlanInDirection, getCurrentPage, getSearchQuery, getAllCount, getSortingMode, getSortingField} from './getters';
+import {EducationalPlanInDirectionActions} from "./types";
 
 import {rootState} from "../../store/reducers";
 
 const mapStateToProps = (state: rootState) => {
     return {
-        indicators: getIndicators(state),
+        educationalPlansInDirection: getEducationalPlanInDirection(state),
         currentPage: getCurrentPage(state),
         searchQuery: getSearchQuery(state),
         allCount: getAllCount(state),
@@ -19,7 +19,7 @@ const mapStateToProps = (state: rootState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IndicatorProgramActions>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<EducationalPlanInDirectionActions>) => ({
     // @ts-ignore
     actions: bindActionCreators(actions, dispatch),
 });

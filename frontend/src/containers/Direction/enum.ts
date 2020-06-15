@@ -18,7 +18,7 @@ export enum fetchingTypes {
     CREATE_EDUCATIONAL_PROGRAM = 'CREATE_EDUCATIONAL_PROGRAM',
 }
 
-export enum EducationalProgramFields {
+export enum DirectionFields {
     ID = 'id',
     TITLE = 'title',
     NUMBER = 'number',
