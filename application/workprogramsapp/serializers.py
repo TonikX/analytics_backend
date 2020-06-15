@@ -208,7 +208,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference']
+        fields = ['id', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference']
 
     def create(self, validated_data):
         """
