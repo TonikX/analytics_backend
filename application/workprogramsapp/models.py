@@ -191,6 +191,8 @@ class AcademicPlan(models.Model):
             db.name = block
             db.academic_plan_id = siap.data.get("id")
             db.save()
+            print (db.id)
+            DisciplineBlock.new_descipline_block_modules(db.id)
 
 
 class ImplementationAcademicPlan(models.Model):
@@ -211,11 +213,57 @@ class DisciplineBlock(models.Model):
     Модель блока дисциплин
     '''
     name = models.CharField(max_length=1024)
-    academic_plan = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план в направлении', blank=True, null=True)
+    academic_plan = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план в направлении', related_name="discipline_blocks_in_academic_plan", blank=True, null=True)
+    #work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
+
+    def __str__(self):
+        return (str(self.name) + str(self.academic_plan))
+
+
+    def new_descipline_block_modules(id):
+        blocks = ['Модуль 1', 'Модуль 2', 'Модуль 3']
+        print ('id for modules', id)
+
+        for block in blocks:
+            db = DisciplineBlockModule()
+            db.name = block
+            db.descipline_block_id = id
+            db.save()
+
+
+# class DisciplineBlockModule(models.Model):
+#     '''
+#     Модель блока дисциплин
+#     '''
+#     name = models.CharField(max_length=1024)
+#     descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="modules_in_discipline_block", blank=True, null=True)
+#     work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
+#
+#     def __str__(self):
+#         return (str(self.name) + str(self.descipline_block))
+
+
+class DisciplineBlockModule(models.Model):
+    '''
+    Модель модуля блока дисциплин
+    '''
+    name = models.CharField(max_length=1024)
+    descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="modules_in_discipline_block", blank=True, null=True)
+    #work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
+
+    def __str__(self):
+        return (str(self.name) + str(self.descipline_block))
+
+
+class WorkProgramChangeInDisciplineBlockModule(models.Model):
+    '''
+    Модель хранения блоков выбора в модуле
+    '''
+    discipline_block_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="change_blocks_of_work_programs_in_modules", blank=True, null=True)
     work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
 
     def __str__(self):
-        return (str(self.name) + str(self.academic_plan) + str(self.work_program))
+        return (str(self.discipline_block_module) + str(self.work_program))
 
 
 class Competence(models.Model):

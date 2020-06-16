@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy,
     Competence, IndicatorWorkProgram, Indicator, EvaluationTool, FieldOfStudyWorkProgram, DisciplineSection, Topic,
-    RouteComposition, Route, Certification, OnlineCourse, BibliographicReference, AcademicPlan, ImplementationAcademicPlan, DisciplineBlock
+    RouteComposition, Route, Certification, OnlineCourse, BibliographicReference, AcademicPlan, ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
 )
 
 
@@ -27,3 +27,5 @@ admin.site.register(BibliographicReference)
 admin.site.register(AcademicPlan)
 admin.site.register(DisciplineBlock)
 admin.site.register(ImplementationAcademicPlan)
+admin.site.register(DisciplineBlockModule)
+admin.site.register(WorkProgramChangeInDisciplineBlockModule)

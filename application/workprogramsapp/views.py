@@ -11,7 +11,7 @@ from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSeria
 from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
-from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer
+from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -1056,11 +1056,16 @@ class FileUploadOnlineCoursesAPIView(APIView):
         return Response(status=200)
 
 
-class AcademicPlanListCreateAPIView(generics.ListCreateAPIView):
+class AcademicPlanListAPIView(generics.ListAPIView):
     serializer_class = AcademicPlanSerializer
     queryset = AcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['educational_profile']
+
+
+class AcademicPlanCreateAPIView(generics.CreateAPIView):
+    serializer_class = AcademicPlanCreateSerializer
+    queryset = AcademicPlan.objects.all()
 
 
     def perform_create(self, serializer):
