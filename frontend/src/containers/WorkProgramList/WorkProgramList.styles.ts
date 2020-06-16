@@ -37,10 +37,10 @@ export default (theme: Theme) => createStyles({
     },
     titleCell: {
         width: '50%',
-        flex: 'none'
     },
     qualificationCell: {
         width: '40%',
+        flex: 'none'
     },
     actions: {
         display: 'flex',

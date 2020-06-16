@@ -34,10 +34,7 @@ const signIn = createLogic({
                 dispatch(actions.setAuthTrue());
             })
             .catch((err) => {
-                dispatch(actions.fetchingFailed({
-                    message: get(err, 'message', ''),
-                    errors: get(err, 'errors', [])
-                }));
+                dispatch(actions.fetchingFailed(err));
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: Enum.SIGN_IN_FETCHING}));

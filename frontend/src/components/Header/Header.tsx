@@ -1,6 +1,7 @@
 import React, {SyntheticEvent} from 'react';
 // @ts-ignore
 import Link from "react-router-dom/Link";
+import {useHistory} from "react-router-dom";
 
 import {WithStyles} from "@material-ui/core";
 import AppBar from '@material-ui/core/AppBar';
@@ -53,9 +54,13 @@ class Header extends React.PureComponent<HeaderProps>{
     };
 
     handleLogout = () => {
+        let history = useHistory();
+
         userService.logout();
         this.handleClose();
         this.props.logout();
+
+        history.push(appRouter.getSignInRoute());
     };
 
     render() {

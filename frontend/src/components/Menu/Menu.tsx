@@ -71,7 +71,7 @@ class Menu extends React.PureComponent<MenuProps>{
                                 }}
                             >
                                 <BookIcon className={classes.icon} />
-                                Предметная область
+                                Предметные области
                             </MenuItem>
                     </Link>
 
@@ -114,20 +114,6 @@ class Menu extends React.PureComponent<MenuProps>{
                             </MenuItem>
                     </Link>
 
-
-                    <Link to={appRouter.getWorkProgramLink(5)} className={classes.link}>
-                        <MenuItem
-                            selected={pathname === appRouter.getWorkProgramLink(5)}
-                            classes={{
-                                selected: classes.selectedMenuItem,
-                                root: classes.menuItem,
-                            }}
-                        >
-                            <BookIcon className={classes.icon} />
-                            Рабочая программа
-                        </MenuItem>
-                    </Link>
-
                     <Link to={appRouter.getIndicatorsRoute()} className={classes.link}>
                         <MenuItem
                             selected={pathname === appRouter.getIndicatorsRoute()}
@@ -150,7 +136,7 @@ class Menu extends React.PureComponent<MenuProps>{
                             }}
                         >
                             <BookIcon className={classes.icon} />
-                            Учебный план
+                            Учебные планы
                         </MenuItem>
                     </Link>
 
@@ -163,7 +149,7 @@ class Menu extends React.PureComponent<MenuProps>{
                             }}
                         >
                             <BookIcon className={classes.icon} />
-                            Учебный план в направлении
+                            Учебные планы в направлении
                         </MenuItem>
                     </Link>
                     <Link to={appRouter.getWorkProgramListRoute()} className={classes.link}>
