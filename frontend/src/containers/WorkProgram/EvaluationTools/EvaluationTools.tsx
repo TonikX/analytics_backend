@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {SyntheticEvent} from 'react';
 import Scrollbars from "react-custom-scrollbars";
 
 import classNames from "classnames";
@@ -7,14 +7,19 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import withStyles from '@material-ui/core/styles/withStyles';
 import Fab from "@material-ui/core/Fab";
+import Chip from '@material-ui/core/Chip';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import AddIcon from "@material-ui/icons/Add";
+import SettingsIcon from "@material-ui/icons/MoreVert";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import EyeIcon from '@material-ui/icons/VisibilityOutlined';
 import CheckIcon from "@material-ui/icons/CheckOutlined";
-import Chip from '@material-ui/core/Chip';
+
+import DescriptionModal from "./DescriptionModal";
 
 import {SixthStepProps} from './types';
 import {EvaluationToolFields, fields, workProgramSectionFields} from "../enum";
@@ -24,9 +29,13 @@ import {EvaluationToolType} from "../types";
 
 import connect from './EvaluationTools.connect';
 import styles from './EvaluationTools.styles';
-import DescriptionModal from "./DescriptionModal";
+
 
 class EvaluationTools extends React.PureComponent<SixthStepProps> {
+    state = {
+        anchorEl: null
+    };
+
     componentDidMount() {
         this.props.actions.getWorkProgramEvaluationTools();
     }
@@ -47,8 +56,19 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
         this.props.actions.openDialog({dialogType: fields.SHOW_EVALUATION_TOOLS_DESCRIPTION, data: description});
     };
 
+    handleMenu = (event: SyntheticEvent): void => {
+        this.setState({anchorEl: event.currentTarget});
+    };
+
+    handleClose = () => {
+        this.setState({anchorEl: null});
+    };
+
     render() {
         const {classes, evaluationToolsList} = this.props;
+        const {anchorEl} = this.state;
+
+        const isOpenEditMenu = Boolean(anchorEl);
 
         return (
             <div className={classes.root}>
@@ -103,18 +123,46 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                     </Typography>
 
                                     <div className={classes.actions}>
+                                        <IconButton
+                                            aria-haspopup="true"
+                                            onClick={this.handleMenu}
+                                            color="inherit"
+                                        >
+                                            <SettingsIcon />
+                                        </IconButton>
+                                        <Menu
+                                            anchorEl={anchorEl}
+                                            anchorOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'right',
+                                            }}
+                                            keepMounted
+                                            transformOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'right',
+                                            }}
+                                            open={isOpenEditMenu}
+                                            onClose={this.handleClose}
+                                            PopoverClasses={{
+                                                root: classes.popper,
+                                                paper: classes.menuPaper
+                                            }}
+                                        >
+                                            <MenuItem onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}>
+                                                <EyeIcon className={classes.menuIcon}/>
+                                                Смотреть описание
+                                            </MenuItem>
 
-                                        <Tooltip title="Смотреть описание">
-                                            <IconButton onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}>
-                                                <EyeIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                        <IconButton onClick={this.handleClickDelete(evaluationTool[EvaluationToolFields.ID])}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        <IconButton onClick={this.handleClickEdit(evaluationTool)}>
-                                            <EditIcon />
-                                        </IconButton>
+                                            <MenuItem onClick={this.handleClickEdit(evaluationTool)}>
+                                                <EditIcon className={classes.menuIcon} />
+                                                Редактировать
+                                            </MenuItem>
+
+                                            <MenuItem onClick={this.handleClickDelete(evaluationTool[EvaluationToolFields.ID])}>
+                                                <DeleteIcon className={classes.menuIcon} />
+                                                Удалить
+                                            </MenuItem>
+                                        </Menu>
                                     </div>
                                 </div>
 

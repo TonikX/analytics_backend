@@ -69,10 +69,10 @@ export default (theme: Theme) => createStyles({
         textAlign: 'center',
     },
     checkpoint: {
-        width: '10%',
         paddingLeft: '10px',
         boxSizing: 'border-box',
-        textAlign: 'center'
+        textAlign: 'center',
+        width: '110px'
     },
     header: {
         background: theme.palette.primary.main,
@@ -83,4 +83,16 @@ export default (theme: Theme) => createStyles({
     sectionsTitle: {
         fontWeight: 500,
     },
+    // @ts-ignore
+    popper: {
+        // @ts-ignore
+        zIndex: '10000 !important',
+    },
+    menuPaper: {
+        boxShadow: '0px 0px 20px -2px rgba(160, 159, 159, 0.42)'
+    },
+    menuIcon: {
+        marginRight: '10px',
+        fill: 'rgba(0, 0, 0, 0.54)'
+    }
 });
