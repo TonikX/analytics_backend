@@ -36,12 +36,11 @@ export default (theme: Theme) => createStyles({
         flex: 'none'
     },
     dateCell: {
-        width: 250,
+        width: 210,
         flex: 'none'
     },
     titleCell: {
         width: '50%',
-        flex: 'none'
     },
     actions: {
         display: 'flex',

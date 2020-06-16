@@ -20,7 +20,7 @@ class WorkProgramListService extends BaseService{
         formData.append(WorkProgramGeneralFields.CODE, workProgram[WorkProgramGeneralFields.CODE]);
         formData.append(WorkProgramGeneralFields.QUALIFICATION, workProgram[WorkProgramGeneralFields.QUALIFICATION]);
 
-        return this.post(`/api/workprogram`, formData);
+        return this.post(`/api/workprogram/create`, formData);
     }
 }
 

@@ -110,16 +110,16 @@ class Competences extends React.Component<CompetenceProps> {
 
                 <div className={classes.tableWrap}>
                     <div className={classNames(classes.row, classes.header)}>
-                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Название компетенции
-                            <SortingButton changeMode={this.changeSorting(CompetenceFields.TITLE)}
-                                           mode={sortingField === CompetenceFields.TITLE ? sortingMode : ''}
-                            />
-                        </Typography>
                         <Typography className={classNames(classes.marginRight, classes.numberCell)}>
                             Номер
                             <SortingButton changeMode={this.changeSorting(CompetenceFields.NUMBER)}
                                            mode={sortingField === CompetenceFields.NUMBER ? sortingMode : ''}
+                            />
+                        </Typography>
+                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                            Название компетенции
+                            <SortingButton changeMode={this.changeSorting(CompetenceFields.TITLE)}
+                                           mode={sortingField === CompetenceFields.TITLE ? sortingMode : ''}
                             />
                         </Typography>
                     </div>
@@ -128,8 +128,8 @@ class Competences extends React.Component<CompetenceProps> {
                         <Scrollbars>
                             {competences.map(competence =>
                                 <div className={classes.row} key={competence[CompetenceFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}> {competence[CompetenceFields.TITLE]} </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.numberCell)}> {competence[CompetenceFields.NUMBER]} </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}> {competence[CompetenceFields.TITLE]} </Typography>
                                     <div className={classes.actions}>
                                         <IconButton onClick={this.handleClickDelete(competence[CompetenceFields.ID])}>
                                             <DeleteIcon />

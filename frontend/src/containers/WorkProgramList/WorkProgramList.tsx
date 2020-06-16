@@ -29,11 +29,12 @@ import {SortingType} from "../../components/SortingButton/types";
 
 import {WorkProgramListProps} from './types';
 import {WorkProgramGeneralFields} from '../WorkProgram/enum';
-import {WorkProgramGeneralType} from '../WorkProgram/types';
 
 import connect from './WorkProgramList.connect';
 import styles from './WorkProgramList.styles';
 import {appRouter} from "../../service/router-service";
+import CreateModal from "./CreateModal";
+import {specialization} from "../WorkProgram/data";
 
 class WorkProgramList extends React.Component<WorkProgramListProps> {
     state = {
@@ -61,10 +62,6 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         this.setState({
             deleteConfirmId: null
         });
-    }
-
-    handleClickEdit = (workProgram: WorkProgramGeneralType) => () => {
-        this.props.actions.openDialog(workProgram);
     }
 
     handleCreate = () => {
@@ -114,6 +111,13 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
 
                 <div className={classes.tableWrap}>
                     <div className={classNames(classes.row, classes.header)}>
+                        <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
+                            Квалификация
+                            <SortingButton changeMode={this.changeSorting(WorkProgramGeneralFields.QUALIFICATION)}
+                                           mode={sortingField === WorkProgramGeneralFields.QUALIFICATION ? sortingMode : ''}
+                            />
+                        </Typography>
+
                         <Typography className={classNames(classes.marginRight, classes.numberCell)}>
                             Код
                             <SortingButton changeMode={this.changeSorting(WorkProgramGeneralFields.CODE)}
@@ -126,34 +130,27 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                            mode={sortingField === WorkProgramGeneralFields.TITLE ? sortingMode : ''}
                             />
                         </Typography>
-
-                        <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
-                            Квалификация
-                            <SortingButton changeMode={this.changeSorting(WorkProgramGeneralFields.QUALIFICATION)}
-                                           mode={sortingField === WorkProgramGeneralFields.QUALIFICATION ? sortingMode : ''}
-                            />
-                        </Typography>
                     </div>
 
                     <div className={classes.list}>
                         <Scrollbars>
                             {workProgramList.map(workProgram =>
                                 <div className={classes.row} key={workProgram[WorkProgramGeneralFields.ID]}>
+                                    <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
+                                        {get(specialization.find(el => el.value === workProgram[WorkProgramGeneralFields.QUALIFICATION]), 'label', '')}
+                                    </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.numberCell)}>
                                         {workProgram[WorkProgramGeneralFields.CODE]}
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                                         {workProgram[WorkProgramGeneralFields.TITLE]}
                                     </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
-                                        {workProgram[WorkProgramGeneralFields.QUALIFICATION]}
-                                    </Typography>
                                     <div className={classes.actions}>
                                         <IconButton onClick={this.handleClickDelete(workProgram[WorkProgramGeneralFields.ID])}>
                                             <DeleteIcon />
                                         </IconButton>
                                         <Link to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.ID])} className={classes.link}>
-                                            <IconButton onClick={this.handleClickEdit(workProgram)}>
+                                            <IconButton>
                                                 <EditIcon />
                                             </IconButton>
                                         </Link>
@@ -192,6 +189,8 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                dialogTitle={'Удалить учебную программу'}
                                confirmButtonText={'Удалить'}
                 />
+
+                <CreateModal />
             </Paper>
         );
     }

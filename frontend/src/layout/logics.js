@@ -22,10 +22,7 @@ const getUserData = createLogic({
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
-                dispatch(actions.fetchingFailed({
-                    message: get(err, 'message', ''),
-                    errors: get(err, 'errors', [])
-                }));
+                dispatch(actions.fetchingFailed(err));
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: Enum.USER_DATA_FETCHING}));

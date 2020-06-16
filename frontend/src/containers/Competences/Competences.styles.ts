@@ -34,7 +34,6 @@ export default (theme: Theme) => createStyles({
     titleCell: {
         minWidth: 200,
         width: '70%',
-        flex: 'none'
     },
     numberCell: {
         width: 115,
