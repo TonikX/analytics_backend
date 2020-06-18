@@ -2,8 +2,11 @@ import {createAction} from "@reduxjs/toolkit";
 
 import {EducationalPlanActions} from './types';
 
-const getEducationalPlan = createAction<string>('GET_EDUCATIONAL_PLANS');
-const setEducationalPlan = createAction<string>('SET_EDUCATIONAL_PLANS');
+const getEducationalPlans = createAction<string>('GET_EDUCATIONAL_PLANS');
+const setEducationalPlans = createAction<string>('SET_EDUCATIONAL_PLANS');
+
+const getEducationalDetail = createAction<string>('GET_EDUCATIONAL_PLAN_DETAIL');
+const setEducationalDetail = createAction<string>('SET_EDUCATIONAL_PLAN_DETAIL');
 
 const createNewEducationalPlan = createAction<string>('CREATE_NEW_EDUCATIONAL_PLAN');
 const changeEducationalPlan = createAction<string>('CHANGE_EDUCATIONAL_PLAN');
@@ -18,8 +21,10 @@ const changeAllCount = createAction<string>('EDUCATIONAL_PLAN_CHANGE_ALL_COUNT')
 const changeSorting = createAction<string>('EDUCATIONAL_PLAN_CHANGE_SORTING');
 
 const actions: EducationalPlanActions = {
-    getEducationalPlan,
-    setEducationalPlan,
+    getEducationalDetail,
+    setEducationalDetail,
+    getEducationalPlans,
+    setEducationalPlans,
     createNewEducationalPlan,
     changeEducationalPlan,
     deleteEducationalPlan,

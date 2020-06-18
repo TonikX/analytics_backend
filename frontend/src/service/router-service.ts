@@ -82,8 +82,16 @@ export default class RouterService {
         return SEPARATOR + WORK_PROGRAM + SEPARATOR + ':id';
     };
 
+    getEducationPlanDetailRoute = () => {
+        return SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + ':id';
+    };
+
     getWorkProgramLink = (id: ReactText) => {
         return SEPARATOR + WORK_PROGRAM + SEPARATOR + id;
+    };
+
+    getPlanDetailLink = (id: ReactText) => {
+        return SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + id;
     };
 }
 

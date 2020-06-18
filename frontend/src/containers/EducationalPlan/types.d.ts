@@ -5,9 +5,11 @@ import {EducationalPlanFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
 
 export interface EducationalPlanActions {
+    setEducationalDetail: any;
+    getEducationalDetail: any;
     changeSearchQuery: any;
-    getEducationalPlan: any;
-    setEducationalPlan: any;
+    getEducationalPlans: any;
+    setEducationalPlans: any;
     createNewEducationalPlan: any;
     changeEducationalPlan: any;
     deleteEducationalPlan: any;
@@ -26,6 +28,7 @@ export interface educationalPlanState {
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
+    [fields.DETAIL_PLAN]: EducationalPlanType|{};
     [fields.EDUCATIONAL_PLAN_LIST]: Array<EducationalPlanType>;
     [fields.EDUCATIONAL_PLAN_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;

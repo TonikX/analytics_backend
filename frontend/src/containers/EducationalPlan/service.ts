@@ -9,6 +9,10 @@ class EducationalPlanService extends BaseService{
         return this.get(`/api/academicplan?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
+    getEducationalPlanDetail(id: number){
+        return this.get(`/api/academicplan/detail/${id}`);
+    }
+
     deleteEducationalPlan(id: number){
         return this.delete(`/api/academicplan/delete/${id}`);
     }

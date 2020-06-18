@@ -63,7 +63,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     componentDidMount() {
         this.props.directionActions.getDirections();
-        this.props.educationalPlanActions.getEducationalPlan();
+        this.props.educationalPlanActions.getEducationalPlans();
     }
 
     handleClose = () => {
@@ -93,7 +93,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     handleChangeEducationPlanSearchText = (searchText: string) => {
         this.props.educationalPlanActions.changeSearchQuery(searchText);
-        this.props.educationalPlanActions.getEducationalPlan();
+        this.props.educationalPlanActions.getEducationalPlans();
     }
 
     handleChangeDirectionSearchText = (searchText: string) => {

@@ -11,6 +11,7 @@ import {SelectorListType} from "../../components/SearchSelector/types";
 
 const getStateData = (state: rootState): educationalPlanState => get(state, GENERAL_PATH);
 export const getEducationalPlan = (state: rootState): Array<EducationalPlanType> => get(getStateData(state), fields.EDUCATIONAL_PLAN_LIST, []);
+export const getEducationalPlanDetail = (state: rootState): EducationalPlanType|{} => get(getStateData(state), fields.DETAIL_PLAN, {});
 
 export const getEducationalPlanForSelector = (state: rootState): SelectorListType =>
     getEducationalPlan(state).map((competence: EducationalPlanType) => ({
