@@ -28,7 +28,7 @@ import Menu from "@material-ui/core/Menu";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
-import CourseCreateModal from "./CreateModal";
+import CreateModal from "./CreateModal";
 import {SortingType} from "../../components/SortingButton/types";
 
 import {EducationalPlanProps, EducationalPlanType} from './types';
@@ -238,7 +238,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                     </Fab>
                 </div>
 
-                <CourseCreateModal />
+                <CreateModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

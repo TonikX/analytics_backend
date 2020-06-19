@@ -3,14 +3,16 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "../actions";
-import {getEducationalPlanDetail} from '../getters';
+import {getEducationalPlanDetail, getEducationalPlanDetailBlocks} from '../getters';
 import {EducationalPlanActions} from "../types";
 
 import {rootState} from "../../../store/reducers";
 
 const mapStateToProps = (state: rootState) => {
     return {
-        detailPlan: getEducationalPlanDetail(state)
+        detailPlan: getEducationalPlanDetail(state),
+        blocks: getEducationalPlanDetailBlocks(state),
+        types: getEducationalPlanDetailBlocks(state),
     };
 };
 

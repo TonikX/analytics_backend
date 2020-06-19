@@ -26,10 +26,10 @@ const getEducationalPlans = createLogic({
 
         service.getEducationalPlan(currentPage, searchQuery, sortingField, sortingMode)
             .then((res) => {
-                const courses = get(res, 'data.results', []);
+                const educationalPlans = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));
 
-                dispatch(planActions.setEducationalPlans(courses));
+                dispatch(planActions.setEducationalPlans(educationalPlans));
                 dispatch(planActions.changeAllCount(allPages));
                 dispatch(actions.fetchingSuccess());
             })
@@ -73,11 +73,11 @@ const deleteEducationalPlan = createLogic({
     type: planActions.deleteEducationalPlan.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const courseId = action.payload;
+        const planId = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_EDUCATIONAL_PLAN}));
 
-        service.deleteEducationalPlan(courseId)
+        service.deleteEducationalPlan(planId)
             .then((res) => {
                 dispatch(planActions.getEducationalPlans());
                 dispatch(actions.fetchingSuccess());
@@ -96,11 +96,11 @@ const createNewEducationalPlan = createLogic({
     type: planActions.createNewEducationalPlan.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const course = action.payload;
+        const educationalPlan = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_EDUCATIONAL_PLAN}));
 
-        service.createEducationalPlan(course)
+        service.createEducationalPlan(educationalPlan)
             .then((res) => {
                 dispatch(planActions.getEducationalPlans());
                 dispatch(actions.fetchingSuccess());
@@ -120,11 +120,11 @@ const changeEducationalPlan = createLogic({
     type: planActions.changeEducationalPlan.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const course = action.payload;
+        const educationalPlan = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_EDUCATIONAL_PLAN}));
 
-        service.updateEducationalPlan(course)
+        service.updateEducationalPlan(educationalPlan)
             .then((res) => {
                 dispatch(planActions.getEducationalPlans());
                 dispatch(actions.fetchingSuccess());

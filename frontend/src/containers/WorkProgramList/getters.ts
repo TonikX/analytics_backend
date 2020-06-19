@@ -9,9 +9,17 @@ import {fields} from './enum';
 import {workProgramListState} from './types';
 
 import {WorkProgramGeneralType} from '../WorkProgram/types';
+import {SelectorListType} from "../../components/SearchSelector/types";
+import {WorkProgramGeneralFields} from "../WorkProgram/enum";
 
 const getStateData = (state: rootState): workProgramListState => get(state, GENERAL_PATH);
 export const getWorkProgramList = (state: rootState): Array<WorkProgramGeneralType> => get(getStateData(state), fields.WORK_PROGRAM_LIST, []);
+
+export const getWorkProgramsListForSelector = (state: rootState): SelectorListType =>
+    getWorkProgramList(state).map((workProgram: WorkProgramGeneralType) => ({
+        value: workProgram[WorkProgramGeneralFields.ID],
+        label: workProgram[WorkProgramGeneralFields.TITLE],
+    }))
 
 export const getWorkProgramDialog = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_DIALOG, {});
 

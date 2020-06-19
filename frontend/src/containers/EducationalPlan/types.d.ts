@@ -1,10 +1,13 @@
 import {fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
-import {EducationalPlanFields} from './enum';
+import {EducationalPlanFields, EducationalPlanBlockFields, ModuleFields, BlocksOfWorkProgramsFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
+import {WorkProgramGeneralType} from "../WorkProgram/types";
 
 export interface EducationalPlanActions {
+    openDetailDialog: any;
+    closeDetailDialog: any;
     setEducationalDetail: any;
     getEducationalDetail: any;
     changeSearchQuery: any;
@@ -34,6 +37,10 @@ export interface educationalPlanState {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: EducationalPlanType|{};
     };
+    [fields.EDUCATIONAL_PLAN_DETAIL_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: boolean;
+        [fields.DIALOG_DATA]: EducationalPlanType|{};
+    };
 }
 
 export type EducationalPlanType = {
@@ -41,6 +48,24 @@ export type EducationalPlanType = {
     [EducationalPlanFields.PROFILE]: string,
     [EducationalPlanFields.NUMBER]: string,
     [EducationalPlanFields.APPROVAL_DATE]: string,
+    [EducationalPlanFields.DISCIPLINE_BLOCKS]: Array<DisciplineBlockType>,
+};
+
+export type DisciplineBlockType = {
+    [EducationalPlanBlockFields.ID]: number;
+    [EducationalPlanBlockFields.NAME]: string;
+    [EducationalPlanBlockFields.MODULES]: Array<ModuleType>;
+};
+
+export type ModuleType = {
+    [ModuleFields.ID]: number;
+    [ModuleFields.NAME]: string;
+    [ModuleFields.BLOCKS_OF_WORK_PROGRAMS]: Array<BlocksOfWorkProgramsType>;
+};
+
+export type BlocksOfWorkProgramsType = {
+    [BlocksOfWorkProgramsFields.ID]: number;
+    [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: Array<WorkProgramGeneralType>;
 };
 
 export interface EducationalPlanProps extends WithStyles<typeof styles> {

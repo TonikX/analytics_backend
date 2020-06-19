@@ -15,12 +15,17 @@ const deleteEducationalPlan = createAction<string>('DELETE_EDUCATIONAL_PLAN');
 const openDialog = createAction<string>('OPEN_EDUCATIONAL_PLAN_DIALOG');
 const closeDialog = createAction<string>('CLOSE_EDUCATIONAL_PLAN_DIALOG');
 
+const openDetailDialog = createAction<string>('OPEN_DETAIL_EDUCATIONAL_PLAN_DIALOG');
+const closeDetailDialog = createAction<string>('CLOSE_DETAIL_EDUCATIONAL_PLAN_DIALOG');
+
 const changeSearchQuery = createAction<string>('EDUCATIONAL_PLAN_CHANGE_SEARCH_QUERY');
 const changeCurrentPage = createAction<string>('EDUCATIONAL_PLAN_CHANGE_CURRENT_PAGE');
 const changeAllCount = createAction<string>('EDUCATIONAL_PLAN_CHANGE_ALL_COUNT');
 const changeSorting = createAction<string>('EDUCATIONAL_PLAN_CHANGE_SORTING');
 
 const actions: EducationalPlanActions = {
+    openDetailDialog,
+    closeDetailDialog,
     getEducationalDetail,
     setEducationalDetail,
     getEducationalPlans,

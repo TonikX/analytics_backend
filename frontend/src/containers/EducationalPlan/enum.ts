@@ -1,6 +1,7 @@
 export enum fields {
     EDUCATIONAL_PLAN_LIST = 'EDUCATIONAL_PLAN_LIST',
     EDUCATIONAL_PLAN_DIALOG = 'EDUCATIONAL_PLAN_DIALOG',
+    EDUCATIONAL_PLAN_DETAIL_DIALOG = 'EDUCATIONAL_PLAN_DETAIL_DIALOG',
     IS_OPEN_DIALOG = 'IS_OPEN_DIALOG',
     DIALOG_DATA = 'DIALOG_DATA',
     SEARCH_QUERY = 'SEARCH_QUERY',
@@ -25,4 +26,22 @@ export enum EducationalPlanFields {
     PROFILE = 'educational_profile',
     APPROVAL_DATE = 'approval_date',
     NUMBER = 'number',
+    DISCIPLINE_BLOCKS = 'discipline_blocks_in_academic_plan',
+}
+
+export enum EducationalPlanBlockFields {
+    ID = 'id',
+    NAME = 'name',
+    MODULES = 'modules_in_discipline_block',
+}
+
+export enum ModuleFields {
+    ID = 'id',
+    NAME = 'name',
+    BLOCKS_OF_WORK_PROGRAMS = 'change_blocks_of_work_programs_in_modules',
+}
+
+export enum BlocksOfWorkProgramsFields {
+    ID = 'id',
+    WORK_PROGRAMS = 'work_program',
 }
