@@ -2,7 +2,7 @@ from rest_framework import serializers, viewsets
 
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool,\
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
-    ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule
+    ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
 
 from dataprocessing.serializers import ItemSerializer
 
@@ -354,5 +354,12 @@ class AcademicPlanCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlan
         fields = ['id', 'educational_profile', 'number', 'approval_date']
+
+
+class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = WorkProgramChangeInDisciplineBlockModule
+        fields = "__all__"
 
 

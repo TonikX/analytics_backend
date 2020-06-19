@@ -11,7 +11,8 @@ from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSeria
 from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
-from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer
+from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
+    WorkProgramChangeInDisciplineBlockModuleSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -31,7 +32,7 @@ from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins
-from .models import AcademicPlan, ImplementationAcademicPlan
+from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule
 
 
 '''
@@ -1117,6 +1118,32 @@ class ImplementationAcademicPlanDetailsView(generics.RetrieveAPIView):
     queryset = ImplementationAcademicPlan.objects.all()
     serializer_class = ImplementationAcademicPlanSerializer
 
+
+class WorkProgramChangeInDisciplineBlockModuleListAPIView(generics.ListAPIView):
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+    queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['educational_profile']
+
+
+class WorkProgramChangeInDisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+    queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
+
+
+class WorkProgramChangeInDisciplineBlockModuleDestroyView(generics.DestroyAPIView):
+    queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+
+
+class WorkProgramChangeInDisciplineBlockModuleDetailsView(generics.RetrieveAPIView):
+    queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+
+
+class WorkProgramChangeInDisciplineBlockModuleUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
 
 #Конец блока ендпоинтов рабочей программы
 

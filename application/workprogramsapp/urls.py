@@ -20,6 +20,7 @@ from .views import BibliographicReferenceListCreateAPIView, BibliographicReferen
 from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, IndicatorUpdateView
 from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlanDetailsView, ImplementationAcademicPlanDestroyView, ImplementationAcademicPlanUpdateView, ImplementationAcademicPlanListAPIView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
+from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView, WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView
 
 
 urlpatterns = [
@@ -141,5 +142,11 @@ urlpatterns = [
     path('api/implementationacademicplan/update/<int:pk>', ImplementationAcademicPlanUpdateView.as_view()),
 
     path('api/academicplan/implemention', ImplementationAcademicPlanAPIView.as_view()),
+
+    path('api/workprogramchangeindisciplineblockmodule', WorkProgramChangeInDisciplineBlockModuleListAPIView.as_view()),
+    path('api/workprogramchangeindisciplineblockmodule/create', WorkProgramChangeInDisciplineBlockModuleCreateAPIView.as_view()),
+    path('api/workprogramchangeindisciplineblockmodule/detail/<int:pk>', WorkProgramChangeInDisciplineBlockModuleDetailsView.as_view()),
+    path('api/workprogramchangeindisciplineblockmodule/delete/<int:pk>', WorkProgramChangeInDisciplineBlockModuleDestroyView.as_view()),
+    path('api/workprogramchangeindisciplineblockmodule/update/<int:pk>', WorkProgramChangeInDisciplineBlockModuleUpdateView.as_view()),
 
 ]

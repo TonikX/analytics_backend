@@ -259,6 +259,23 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
     '''
     Модель хранения блоков выбора в модуле
     '''
+    REQUIRED = 'Required'
+    OPTIONALLY = 'Optionally'
+    OGNP_SET = 'OGNP_set'
+    SET_SPECIALIZATION = 'Set_specialization'
+    FACULTATIV = 'Facultativ'
+
+    CHANGE_CHOICES = (
+        (REQUIRED, 'Required'),
+        (OPTIONALLY, 'Optionally'),
+        (OGNP_SET, 'OGNP_set'),
+        (SET_SPECIALIZATION, 'Set_specialization'),
+        (FACULTATIV, 'Facultativ'),
+
+    )
+
+    semester_hour = models.CharField(max_length=1024, blank=True, null=True)
+    change_type = models.CharField(choices=CHANGE_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
     discipline_block_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="change_blocks_of_work_programs_in_modules", blank=True, null=True)
     work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
 
