@@ -19,6 +19,14 @@ class FieldOfStudyWorkProgram(models.Model):
     #     unique_together = ('work_program', 'field_of_study')
 
 
+def current_year():
+    return datetime.date.today().year
+
+
+def max_value_current_year(value):
+    return MaxValueValidator(current_year())(value)
+
+
 class WorkProgram(models.Model):
     '''
     Модель для рабочей программы
@@ -36,7 +44,9 @@ class WorkProgram(models.Model):
         (MASTER, 'Master')
     )
 
+    approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     discipline_code = models.CharField(max_length=1024, blank=True, null=True)
+    authors = models.CharField(max_length=1024, blank=True, null=True)
     prerequisites = models.ManyToManyField(Items, related_name='WorkProgramPrerequisites',)
     qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank=True, null=True)
     prerequisites = models.ManyToManyField(Items, related_name='WorkProgramPrerequisites',

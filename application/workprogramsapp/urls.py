@@ -20,7 +20,8 @@ from .views import BibliographicReferenceListCreateAPIView, BibliographicReferen
 from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, IndicatorUpdateView
 from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlanDetailsView, ImplementationAcademicPlanDestroyView, ImplementationAcademicPlanUpdateView, ImplementationAcademicPlanListAPIView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
-from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView, WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView
+from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
+    WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView
 
 
 urlpatterns = [
@@ -148,5 +149,9 @@ urlpatterns = [
     path('api/workprogramchangeindisciplineblockmodule/detail/<int:pk>', WorkProgramChangeInDisciplineBlockModuleDetailsView.as_view()),
     path('api/workprogramchangeindisciplineblockmodule/delete/<int:pk>', WorkProgramChangeInDisciplineBlockModuleDestroyView.as_view()),
     path('api/workprogramchangeindisciplineblockmodule/update/<int:pk>', WorkProgramChangeInDisciplineBlockModuleUpdateView.as_view()),
+
+    path('api/disciplineblockmodule/create', DisciplineBlockModuleCreateAPIView.as_view()),
+    path('api/disciplineblockmodule/delete/<int:pk>', DisciplineBlockModuleDestroyView.as_view()),
+    path('api/disciplineblockmodule/update/<int:pk>', DisciplineBlockModuleUpdateView.as_view()),
 
 ]
