@@ -35,6 +35,7 @@ services:
              - ./application:/application
         ports:
             - "8003:8000"
+        restart: always
         depends_on:
             - db
     frontend:
