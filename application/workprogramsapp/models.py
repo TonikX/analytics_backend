@@ -184,7 +184,7 @@ class AcademicPlan(models.Model):
 
 
     def clone_descipline_blocks(id, siap):
-        DisciplineBlocks = DisciplineBlock.objects.filter(academic_plan_educational_profile = 'Экспертный профиль')
+        DisciplineBlocks = DisciplineBlock.objects.filter(academic_plan__educational_profile = 'Экспертный профиль')
         for Block in DisciplineBlocks:
             block_clone = Block.make_clone(attrs={'academic_plan_id': siap.data.get("id")})
             print (Block.modules_in_discipline_block.all())
