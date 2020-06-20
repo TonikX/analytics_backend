@@ -1071,7 +1071,8 @@ class AcademicPlanCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save()
-        AcademicPlan.new_descipline_blocks(self, serializer)
+        # AcademicPlan.new_descipline_blocks(self, serializer)
+        AcademicPlan.clone_descipline_blocks(self, serializer)
 
 
 class AcademicPlanDestroyView(generics.DestroyAPIView):

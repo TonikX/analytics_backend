@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
+from model_clone import CloneMixin
 
 
 class FieldOfStudyWorkProgram(models.Model):
@@ -182,6 +183,17 @@ class AcademicPlan(models.Model):
         return (self.educational_profile)
 
 
+    def clone_descipline_blocks(id, siap):
+        DisciplineBlocks = DisciplineBlock.objects.filter(academic_plan_id = 24)
+        for Block in DisciplineBlocks:
+            block_clone = Block.make_clone(attrs={'academic_plan_id': siap.data.get("id")})
+            print (Block.modules_in_discipline_block.all())
+            for Module in Block.modules_in_discipline_block.all():
+                module_clone = Module.make_clone(attrs={'descipline_block_id': block_clone.id})
+
+        print (block_clone)
+
+
     def new_descipline_blocks(iap, siap):
         blocks = ['Блок 1', 'Блок 2', 'Блок 3']
         print (siap.data.get("id"))
@@ -208,7 +220,7 @@ class ImplementationAcademicPlan(models.Model):
         return str(self.academic_plan)
 
 
-class DisciplineBlock(models.Model):
+class DisciplineBlock(CloneMixin, models.Model):
     '''
     Модель блока дисциплин
     '''
@@ -219,6 +231,11 @@ class DisciplineBlock(models.Model):
     def __str__(self):
         return (str(self.name) + str(self.academic_plan))
 
+
+    def clone_descipline_block_modules(id):
+        DisciplineBlockModules = DisciplineBlockModule.objects.all()
+        clone = DisciplineBlockModules.make_clone(attrs={'academic_plan': id})
+        print (clone)
 
     def new_descipline_block_modules(id):
         blocks = ['Модуль 1', 'Модуль 2', 'Модуль 3']
@@ -243,7 +260,7 @@ class DisciplineBlock(models.Model):
 #         return (str(self.name) + str(self.descipline_block))
 
 
-class DisciplineBlockModule(models.Model):
+class DisciplineBlockModule(CloneMixin, models.Model):
     '''
     Модель модуля блока дисциплин
     '''
