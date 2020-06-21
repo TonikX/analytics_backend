@@ -71,7 +71,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 };
             });
 
-            const mappedSemesterHours = semesterHours && semesterHours.toArray ? semesterHours.toArray() : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
             this.setState({
                 blockOfWorkPrograms: {

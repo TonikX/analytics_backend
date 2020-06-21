@@ -26,6 +26,7 @@ import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
+import {typeOfWorkProgramInPlan} from "../data";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -86,8 +87,26 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                 </Typography>
 
                 <div className={classes.tableWrap}>
-                    <div className={classNames(classes.row, classes.header)}>
-
+                    <div className={classes.headerWrap}>
+                        <div className={classNames(classes.row, classes.header)}>
+                            <Typography className={classNames(classes.titleCell, classes.marginRight)}>Название</Typography>
+                            <div className={classes.semesterHeaderList}>
+                                <Typography> Количество часов в семестрах </Typography>
+                                <div className={classes.semesterHeaderCells}>
+                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>1</Typography>
+                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>2</Typography>
+                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>3</Typography>
+                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>4</Typography>
+                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>5</Typography>
+                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>6</Typography>
+                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>7</Typography>
+                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>8</Typography>
+                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>9</Typography>
+                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>10</Typography>
+                                </div>
+                            </div>
+                            <Typography className={classNames(classes.typeCell, classes.marginRight)}>Тип</Typography>
+                        </div>
                     </div>
 
                     <div className={classes.list}>
@@ -109,22 +128,35 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                         />
                                                     </Typography>
                                                     {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map(blockOfWorkProgram => {
-                                                        return <div className={classes.moduleWorkProgramWrap}>
+                                                        const semesterHours = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.SEMESTER_HOUR);
 
-                                                            <div className={classes.moduleWorkProgramList}>
-                                                                {blockOfWorkProgram[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map(workProgram =>
-                                                                    <Typography className={classes.workProgramRow}> {workProgram[WorkProgramGeneralFields.TITLE]} </Typography>
+                                                        const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+                                                        return <div className={classes.moduleWorkProgramList}>
+                                                                <div className={classNames(classes.titleCell, classes.marginRight)}>
+                                                                    {blockOfWorkProgram[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map(workProgram =>
+                                                                        <Typography>
+                                                                            {workProgram[WorkProgramGeneralFields.TITLE]}
+                                                                        </Typography>
+                                                                    )}
+                                                                </div>
+                                                                {mappedSemesterHours.map((semesterHour: string) =>
+                                                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}> {semesterHour} </Typography>
                                                                 )}
-                                                            </div>
+                                                                <Typography className={classNames(classes.typeCell, classes.marginRight)}>
+                                                                    {get(typeOfWorkProgramInPlan.find(item =>
+                                                                        item.value === blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
+                                                                    ), 'label', '')}
+                                                                </Typography>
 
-                                                            <div className={classes.moduleWorkProgramWrapActions}>
-                                                                <IconButton onClick={this.handleClickDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID])}>
-                                                                    <DeleteIcon />
-                                                                </IconButton>
-                                                                <IconButton onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}>
-                                                                    <EditIcon />
-                                                                </IconButton>
-                                                            </div>
+                                                                <div className={classes.moduleWorkProgramWrapActions}>
+                                                                    <IconButton onClick={this.handleClickDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID])}>
+                                                                        <DeleteIcon />
+                                                                    </IconButton>
+                                                                    <IconButton onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}>
+                                                                        <EditIcon />
+                                                                    </IconButton>
+                                                                </div>
                                                         </div>;
                                                     })}
                                                 </>

@@ -17,7 +17,10 @@ export default (theme: Theme) => createStyles({
     },
     moduleWorkProgramWrapActions: {
         display: 'flex',
-        marginRight: '10px'
+        marginRight: '10px',
+        width: '100px',
+        flex: 'none',
+        marginLeft: 'auto'
     },
     title: {
         fontSize: '24px',
@@ -42,15 +45,13 @@ export default (theme: Theme) => createStyles({
         minHeight: '50px'
     },
     moduleWorkProgramList: {
-        width: '100%',
-    },
-    workProgramRow: {
-        width: '100%',
         display: 'flex',
         alignItems: 'center',
+        width: '100%',
         padding: '0 0 0 20px',
+        flex: 'none',
         boxSizing: 'border-box',
-        minHeight: '50px'
+        borderBottom: '1px solid #ccc',
     },
     blockRow: {
         background: '#eeeeee',
@@ -66,25 +67,29 @@ export default (theme: Theme) => createStyles({
         color: theme.palette.primary.main,
         fontWeight: 500,
     },
-    numberCell: {
-        width: 200,
-        flex: 'none'
+    semesterHeaderList: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
-    dateCell: {
-        width: 210,
-        flex: 'none'
+    semesterHeaderCells: {
+        display: 'flex'
     },
     titleCell: {
-        width: '50%',
-    },
-    actions: {
+        width: '40%',
+        maxWidth: '400px',
         display: 'flex',
-        height: 'fit-content',
-        marginLeft: 'auto',
-        padding: '0px 20px'
+        flexDirection: 'column',
+        flex: 'none'
     },
-    searchInput: {
-        height: '40px'
+    typeCell: {
+        width: '200px',
+    },
+    semesterHoursCell: {
+        width: '35px',
+        textAlign: 'center',
+        flex: 'none'
     },
     addIcon: {
         marginLeft: 'auto',
@@ -95,27 +100,17 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center',
         marginTop: '10px'
     },
-    header: {
+    headerWrap: {
         background: theme.palette.primary.main,
-        color: '#fff'
+        color: '#fff',
+        padding: '10px 0px',
+        border: 'none',
+    },
+    header: {
+        width: '100%',
+        border: 'none'
     },
     marginRight: {
         marginRight: 20
     },
-    // @ts-ignore
-    popper: {
-        // @ts-ignore
-        zIndex: '10000 !important',
-    },
-    menuPaper: {
-        boxShadow: '0px 0px 20px -2px rgba(160, 159, 159, 0.42)'
-    },
-    menuIcon: {
-        marginRight: '10px',
-        fill: 'rgba(0, 0, 0, 0.54)'
-    },
-    menuLink: {
-        color: 'rgb(51, 51, 51) !important',
-        textDecoration: 'none'
-    }
 });
