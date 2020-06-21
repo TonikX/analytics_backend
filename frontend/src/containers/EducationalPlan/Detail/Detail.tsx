@@ -3,13 +3,16 @@ import get from 'lodash/get';
 // @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
 
-import classNames from 'classnames';
-
 import Paper from '@material-ui/core/Paper';
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 import withStyles from '@material-ui/core/styles/withStyles';
 import IconButton from "@material-ui/core/IconButton";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import TableBody from "@material-ui/core/TableBody";
 
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
@@ -21,12 +24,14 @@ import ChangePlanModal from '../CreateModal';
 
 import {BlocksOfWorkProgramsType, EducationalPlanType} from '../types';
 import {EducationalPlanDetailProps} from './types';
+
 import {EducationalPlanBlockFields, ModuleFields, BlocksOfWorkProgramsFields} from "../enum";
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
 
+import {typeOfWorkProgramInPlan} from "../data";
+
 import connect from './Detail.connect';
 import styles from './Detail.styles';
-import {typeOfWorkProgramInPlan} from "../data";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -86,88 +91,101 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                     Учебный план
                 </Typography>
 
-                <div className={classes.tableWrap}>
-                    <div className={classes.headerWrap}>
-                        <div className={classNames(classes.row, classes.header)}>
-                            <Typography className={classNames(classes.titleCell, classes.marginRight)}>Название</Typography>
-                            <div className={classes.semesterHeaderList}>
-                                <Typography> Количество часов в семестрах </Typography>
-                                <div className={classes.semesterHeaderCells}>
-                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>1</Typography>
-                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>2</Typography>
-                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>3</Typography>
-                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>4</Typography>
-                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>5</Typography>
-                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>6</Typography>
-                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>7</Typography>
-                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>8</Typography>
-                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>9</Typography>
-                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}>10</Typography>
-                                </div>
-                            </div>
-                            <Typography className={classNames(classes.typeCell, classes.marginRight)}>Тип</Typography>
-                        </div>
-                    </div>
 
-                    <div className={classes.list}>
-                        <Scrollbars>
-                            {blocks.map(block => {
-                                return (
-                                    <>
-                                        <div className={classNames(classes.row, classes.blockRow)}>
-                                            <Typography className={classes.titleCell}>{block[EducationalPlanBlockFields.NAME]}</Typography>
-                                        </div>
-                                        {block[EducationalPlanBlockFields.MODULES].map(module => {
-                                            return (
-                                                <>
-                                                    <Typography className={classNames(classes.row, classes.moduleRow)}>
-                                                        {module[ModuleFields.NAME]}
-                                                        <AddCircleIcon className={classes.addProgramIcon}
-                                                                       color="primary"
-                                                                       onClick={this.handleOpenDetailModal({}, module[ModuleFields.ID])}
-                                                        />
-                                                    </Typography>
-                                                    {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map(blockOfWorkProgram => {
-                                                        const semesterHours = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.SEMESTER_HOUR);
+                <Scrollbars>
+                    <div className={classes.tableWrap}>
+                        <Table size='small' className={classes.table}>
+                            <TableHead className={classes.header}>
+                                <TableRow>
+                                    <TableCell rowSpan={2}>
+                                        Название
+                                    </TableCell>
+                                    <TableCell colSpan={10} className={classes.headerTextHoursCount}>
+                                        Количество часов в семестрах
+                                    </TableCell>
+                                    <TableCell rowSpan={2}> Тип </TableCell>
+                                    <TableCell rowSpan={2}/>
+                                </TableRow>
 
-                                                        const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                                <TableRow>
+                                    <TableCell>1</TableCell>
+                                    <TableCell>2</TableCell>
+                                    <TableCell>3</TableCell>
+                                    <TableCell>4</TableCell>
+                                    <TableCell>5</TableCell>
+                                    <TableCell>6</TableCell>
+                                    <TableCell>7</TableCell>
+                                    <TableCell>8</TableCell>
+                                    <TableCell>9</TableCell>
+                                    <TableCell>10</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {blocks.map(block => {
+                                    return (
+                                        <>
+                                            <TableRow className={classes.blockRow}>
+                                                <TableCell colSpan={13}>
+                                                    <Typography>{block[EducationalPlanBlockFields.NAME]}</Typography>
+                                                </TableCell>
+                                            </TableRow>
+                                            {block[EducationalPlanBlockFields.MODULES].map(module => {
+                                                return (
+                                                    <>
+                                                        <TableRow>
+                                                            <TableCell colSpan={13}>
+                                                                <div className={classes.rowModule}>
+                                                                    {module[ModuleFields.NAME]}
+                                                                    <AddCircleIcon className={classes.addProgramIcon}
+                                                                                   color="primary"
+                                                                                   onClick={this.handleOpenDetailModal({}, module[ModuleFields.ID])}
+                                                                    />
+                                                                </div>
+                                                            </TableCell>
+                                                        </TableRow>
 
-                                                        return <div className={classes.moduleWorkProgramList}>
-                                                                <div className={classNames(classes.titleCell, classes.marginRight)}>
+                                                        {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map(blockOfWorkProgram => {
+                                                            const semesterHours = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.SEMESTER_HOUR);
+
+                                                            const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+                                                            return <TableRow>
+                                                                <TableCell>
                                                                     {blockOfWorkProgram[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map(workProgram =>
                                                                         <Typography>
                                                                             {workProgram[WorkProgramGeneralFields.TITLE]}
                                                                         </Typography>
                                                                     )}
-                                                                </div>
+                                                                </TableCell>
                                                                 {mappedSemesterHours.map((semesterHour: string) =>
-                                                                    <Typography className={classNames(classes.semesterHoursCell, classes.marginRight)}> {semesterHour} </Typography>
+                                                                    <TableCell> {semesterHour} </TableCell>
                                                                 )}
-                                                                <Typography className={classNames(classes.typeCell, classes.marginRight)}>
+                                                                <TableCell>
                                                                     {get(typeOfWorkProgramInPlan.find(item =>
                                                                         item.value === blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
                                                                     ), 'label', '')}
-                                                                </Typography>
+                                                                </TableCell>
 
-                                                                <div className={classes.moduleWorkProgramWrapActions}>
+                                                                <TableCell className={classes.moduleWorkProgramWrapActions}>
                                                                     <IconButton onClick={this.handleClickDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID])}>
                                                                         <DeleteIcon />
                                                                     </IconButton>
                                                                     <IconButton onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}>
                                                                         <EditIcon />
                                                                     </IconButton>
-                                                                </div>
-                                                        </div>;
-                                                    })}
-                                                </>
-                                            )
-                                        })}
-                                    </>
-                                )
-                            })}
-                        </Scrollbars>
+                                                                </TableCell>
+                                                            </TableRow>;
+                                                        })}
+                                                    </>
+                                                )
+                                            })}
+                                        </>
+                                    )
+                                })}
+                            </TableBody>
+                        </Table>
                     </div>
-                </div>
+                </Scrollbars>
 
                 <div className={classes.footer}>
                     <Fab color="secondary"
