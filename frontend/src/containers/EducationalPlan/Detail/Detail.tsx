@@ -22,7 +22,7 @@ import ConfirmDialog from "../../../components/ConfirmDialog";
 import CreateModal from "./CreateModal";
 import ChangePlanModal from '../CreateModal';
 
-import {BlocksOfWorkProgramsType, EducationalPlanType} from '../types';
+import {BlocksOfWorkProgramsType, EducationalPlanType, ModuleType} from '../types';
 import {EducationalPlanDetailProps} from './types';
 
 import {EducationalPlanBlockFields, ModuleFields, BlocksOfWorkProgramsFields} from "../enum";
@@ -32,11 +32,13 @@ import {typeOfWorkProgramInPlan} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
+import Tooltip from "@material-ui/core/Tooltip";
+import ModuleModal from "./ModuleModal";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
-        deleteConfirmId: null,
-        anchorEl: null
+        deleteBlockConfirmId: null,
+        deleteModuleConfirmId: null,
     }
 
     componentDidMount() {
@@ -45,22 +47,37 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         this.props.actions.getEducationalDetail(workProgramId);
     }
 
-    handleClickDelete = (id: number) => () => {
+    handleClickBlockDelete = (id: number) => () => {
         this.setState({
-            deleteConfirmId: id
+            deleteBlockConfirmId: id
         });
     }
 
-    handleConfirmDeleteDialog = () => {
-        const {deleteConfirmId} = this.state;
+    handleConfirmBlockDeleteDialog = () => {
+        const {deleteBlockConfirmId} = this.state;
 
-        this.props.actions.deleteBlockOfWorkPrograms(deleteConfirmId);
+        this.props.actions.deleteBlockOfWorkPrograms(deleteBlockConfirmId);
+        this.closeConfirmDeleteDialog();
+    }
+
+    handleConfirmModuleDeleteDialog = () => {
+        const {deleteModuleConfirmId} = this.state;
+
+        this.props.actions.deleteModule(deleteModuleConfirmId);
+
         this.closeConfirmDeleteDialog();
     }
 
     closeConfirmDeleteDialog = () => {
         this.setState({
-            deleteConfirmId: null
+            deleteBlockConfirmId: null,
+            deleteModuleConfirmId: null,
+        });
+    }
+    
+    handleClickDeleteModule = (id: number) => () => {
+        this.setState({
+            deleteModuleConfirmId: id
         });
     }
 
@@ -71,7 +88,14 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     handleOpenDetailModal = (block: BlocksOfWorkProgramsType|{}, moduleId: number) => () => {
         this.props.actions.openDetailDialog({
             ...block,
-            moduleId: moduleId
+            moduleId
+        });
+    }
+
+    handleOpenCreateModuleModal = (module: ModuleType|{}, blockId: number) => () => {
+        this.props.actions.openModuleDialog({
+            ...module,
+            blockId
         });
     }
 
@@ -83,7 +107,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
     render() {
         const {classes, blocks} = this.props;
-        const {deleteConfirmId} = this.state;
+        const {deleteBlockConfirmId, deleteModuleConfirmId} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -126,21 +150,44 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                         <>
                                             <TableRow className={classes.blockRow}>
                                                 <TableCell colSpan={13}>
-                                                    <Typography>{block[EducationalPlanBlockFields.NAME]}</Typography>
+                                                    <Typography>
+                                                        <div className={classes.rowBlock}>
+                                                            {block[EducationalPlanBlockFields.NAME]}
+                                                            <Tooltip title="Создать модуль в данном блоке">
+                                                                <AddCircleIcon className={classes.smallAddIcon}
+                                                                               onClick={this.handleOpenCreateModuleModal({}, block[EducationalPlanBlockFields.ID])}
+                                                                />
+                                                            </Tooltip>
+                                                        </div>
+                                                    </Typography>
                                                 </TableCell>
                                             </TableRow>
                                             {block[EducationalPlanBlockFields.MODULES].map(module => {
                                                 return (
                                                     <>
                                                         <TableRow>
-                                                            <TableCell colSpan={13}>
+                                                            <TableCell colSpan={12}>
                                                                 <div className={classes.rowModule}>
                                                                     {module[ModuleFields.NAME]}
-                                                                    <AddCircleIcon className={classes.addProgramIcon}
-                                                                                   color="primary"
-                                                                                   onClick={this.handleOpenDetailModal({}, module[ModuleFields.ID])}
-                                                                    />
+                                                                    <Tooltip title="Создать блок рабочих программ">
+                                                                        <AddCircleIcon className={classes.smallAddIcon}
+                                                                                       color="primary"
+                                                                                       onClick={this.handleOpenDetailModal({}, module[ModuleFields.ID])}
+                                                                        />
+                                                                    </Tooltip>
                                                                 </div>
+                                                            </TableCell>
+                                                            <TableCell className={classes.actions}>
+                                                                <Tooltip title="Удалить модуль">
+                                                                    <IconButton onClick={this.handleClickDeleteModule(module[ModuleFields.ID])}>
+                                                                        <DeleteIcon color="primary" />
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                                <Tooltip title="Изменить модуль">
+                                                                    <IconButton onClick={this.handleOpenCreateModuleModal(module, block[EducationalPlanBlockFields.ID])}>
+                                                                        <EditIcon color="primary" />
+                                                                    </IconButton>
+                                                                </Tooltip>
                                                             </TableCell>
                                                         </TableRow>
 
@@ -166,13 +213,17 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                     ), 'label', '')}
                                                                 </TableCell>
 
-                                                                <TableCell className={classes.moduleWorkProgramWrapActions}>
-                                                                    <IconButton onClick={this.handleClickDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID])}>
-                                                                        <DeleteIcon />
-                                                                    </IconButton>
-                                                                    <IconButton onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}>
-                                                                        <EditIcon />
-                                                                    </IconButton>
+                                                                <TableCell className={classes.actions}>
+                                                                    <Tooltip title="Удалить блок рабочих программ">
+                                                                        <IconButton onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID])}>
+                                                                            <DeleteIcon />
+                                                                        </IconButton>
+                                                                    </Tooltip>
+                                                                    <Tooltip title="Изменить блок рабочих программ">
+                                                                        <IconButton onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}>
+                                                                            <EditIcon />
+                                                                        </IconButton>
+                                                                    </Tooltip>
                                                                 </TableCell>
                                                             </TableRow>;
                                                         })}
@@ -200,11 +251,19 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
                 <CreateModal />
                 <ChangePlanModal />
+                <ModuleModal />
 
-                <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
+                <ConfirmDialog onConfirm={this.handleConfirmModuleDeleteDialog}
+                               onDismiss={this.closeConfirmDeleteDialog}
+                               confirmText={'Вы точно уверены, что хотите удалить модуль?'}
+                               isOpen={Boolean(deleteModuleConfirmId)}
+                               dialogTitle={'Удалить модуль'}
+                               confirmButtonText={'Удалить'}
+                />
+                <ConfirmDialog onConfirm={this.handleConfirmBlockDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
                                confirmText={'Вы точно уверены, что хотите удалить блок?'}
-                               isOpen={Boolean(deleteConfirmId)}
+                               isOpen={Boolean(deleteBlockConfirmId)}
                                dialogTitle={'Удалить блок'}
                                confirmButtonText={'Удалить'}
                 />

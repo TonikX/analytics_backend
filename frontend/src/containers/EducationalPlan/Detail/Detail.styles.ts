@@ -19,6 +19,10 @@ export default (theme: Theme) => createStyles({
         color: theme.palette.primary.main,
         fontWeight: 500
     },
+    rowBlock: {
+        display: 'flex',
+        alignItems: 'center',
+    },
     root: {
         padding: '50px',
         boxShadow: '0px 0px 6px 1px rgba(194,194,194,0.3)',
@@ -31,7 +35,7 @@ export default (theme: Theme) => createStyles({
         border: 'none',
         textAlign: 'center'
     },
-    moduleWorkProgramWrapActions: {
+    actions: {
         textAlign: 'end'
     },
     header: {
@@ -54,7 +58,7 @@ export default (theme: Theme) => createStyles({
             fontWeight: '500'
         }
     },
-    addProgramIcon: {
+    smallAddIcon: {
         marginLeft: '10px',
         cursor: 'pointer'
     },

@@ -6,6 +6,8 @@ import {SortingType} from "../../components/SortingButton/types";
 import {WorkProgramGeneralType} from "../WorkProgram/types";
 
 export interface EducationalPlanActions {
+    closeModuleDialog: any;
+    openModuleDialog: any;
     createModule: any;
     changeModule: any;
     deleteModule: any;
@@ -42,6 +44,10 @@ export interface educationalPlanState {
     [fields.EDUCATIONAL_PLAN_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: EducationalPlanType|{};
+    };
+    [fields.EDUCATIONAL_PLAN_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: boolean;
+        [fields.DIALOG_DATA]: ModuleType|{};
     };
     [fields.EDUCATIONAL_PLAN_DETAIL_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;

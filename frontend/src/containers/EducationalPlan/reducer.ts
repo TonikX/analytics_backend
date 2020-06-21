@@ -23,6 +23,10 @@ export const initialState: educationalPlanState = {
     [fields.EDUCATIONAL_PLAN_DETAIL_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
+    },
+    [fields.EDUCATIONAL_PLAN_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
     }
 };
 
@@ -67,6 +71,22 @@ const openDetailDialog = (state: educationalPlanState, {payload}: any): educatio
     }
 });
 
+const openModuleDialog = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.EDUCATIONAL_PLAN_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: true,
+        [fields.DIALOG_DATA]: payload
+    }
+});
+
+const closeModuleDialog = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.EDUCATIONAL_PLAN_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: payload
+    }
+});
+
 const closeDialog = (state: educationalPlanState): educationalPlanState => ({
     ...state,
     [fields.EDUCATIONAL_PLAN_DIALOG]: {
@@ -94,10 +114,16 @@ const changeSorting = (state: educationalPlanState, {payload}: any): educational
 export const reducer = createReducer(initialState, {
     [actions.setEducationalPlans.type]: setEducationalPlans,
     [actions.setEducationalDetail.type]: setEducationalPlanDetail,
+
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
+
     [actions.openDetailDialog.type]: openDetailDialog,
     [actions.closeDetailDialog.type]: closeDetailDialog,
+
+    [actions.openModuleDialog.type]: openModuleDialog,
+    [actions.closeModuleDialog.type]: closeModuleDialog,
+
     [actions.changeSearchQuery.type]: changeSearchQuery,
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,

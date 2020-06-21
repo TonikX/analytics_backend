@@ -15,6 +15,9 @@ const deleteEducationalPlan = createAction<string>('DELETE_EDUCATIONAL_PLAN');
 const openDialog = createAction<string>('OPEN_EDUCATIONAL_PLAN_DIALOG');
 const closeDialog = createAction<string>('CLOSE_EDUCATIONAL_PLAN_DIALOG');
 
+const openModuleDialog = createAction<string>('OPEN_EDUCATIONAL_PLAN_MODULE_DIALOG');
+const closeModuleDialog = createAction<string>('CLOSE_EDUCATIONAL_PLAN_MODULE_DIALOG');
+
 const openDetailDialog = createAction<string>('OPEN_DETAIL_EDUCATIONAL_PLAN_DIALOG');
 const closeDetailDialog = createAction<string>('CLOSE_DETAIL_EDUCATIONAL_PLAN_DIALOG');
 
@@ -32,6 +35,8 @@ const changeModule = createAction<string>('EDUCATIONAL_PLAN_CHANGE_MODULE');
 const deleteModule = createAction<string>('EDUCATIONAL_PLAN_DELETE_MODULE');
 
 const actions: EducationalPlanActions = {
+    openModuleDialog,
+    closeModuleDialog,
     createModule,
     changeModule,
     deleteModule,

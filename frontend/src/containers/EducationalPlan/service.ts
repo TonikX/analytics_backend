@@ -1,5 +1,5 @@
 import BaseService from "../../service/base-service";
-import {BlocksOfWorkProgramsFields, EducationalPlanFields} from "./enum";
+import {BlocksOfWorkProgramsFields, EducationalPlanBlockFields, EducationalPlanFields, ModuleFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
 class EducationalPlanService extends BaseService{
@@ -47,6 +47,24 @@ class EducationalPlanService extends BaseService{
 
     deleteBlockOfWorkPrograms(id: number){
         return this.delete(`/api/workprogramchangeindisciplineblockmodule/delete/${id}`);
+    }
+
+    createModule(moduleWithBlocks: any){
+        return this.post(`/api/disciplineblockmodule/create`, {
+            'descipline_block': moduleWithBlocks.blockId,
+            [ModuleFields.NAME]: moduleWithBlocks[ModuleFields.NAME],
+        });
+    }
+
+    changeModule(moduleWithBlocks: any){
+        return this.patch(`/api/disciplineblockmodule/update/${moduleWithBlocks[EducationalPlanBlockFields.ID]}`, {
+            'descipline_block': moduleWithBlocks.blockId,
+            [ModuleFields.NAME]: moduleWithBlocks[ModuleFields.NAME],
+        });
+    }
+
+    deleteModule(id: number){
+        return this.delete(`/api/disciplineblockmodule/delete/${id}`);
     }
 
     updateEducationalPlan(competence: any){

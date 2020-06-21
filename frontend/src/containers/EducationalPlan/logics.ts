@@ -215,7 +215,86 @@ const deleteBlockOfWorkPrograms = createLogic({
     }
 });
 
+
+const createModule = createLogic({
+    type: planActions.createModule.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const moduleWithBlocks = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_MODULE}));
+
+        service.createModule(moduleWithBlocks)
+            .then((res) => {
+                const planId = getEducationalPlanDetailId(getState());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+                dispatch(planActions.closeModuleDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_MODULE}));
+                return done();
+            });
+    }
+});
+
+const changeModule = createLogic({
+    type: planActions.changeModule.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const moduleWithBlocks = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_MODULE}));
+
+        service.changeModule(moduleWithBlocks)
+            .then((res) => {
+                const planId = getEducationalPlanDetailId(getState());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+                dispatch(planActions.closeModuleDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_MODULE}));
+                return done();
+            });
+    }
+});
+
+const deleteModule = createLogic({
+    type: planActions.deleteModule.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const moduleId = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_MODULE}));
+
+        service.deleteModule(moduleId)
+            .then((res) => {
+                const planId = getEducationalPlanDetailId(getState());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+                dispatch(planActions.closeModuleDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_MODULE}));
+                return done();
+            });
+    }
+});
+
 export default [
+    deleteModule,
+    changeModule,
+    createModule,
     getEducationalPlans,
     deleteEducationalPlan,
     createNewEducationalPlan,

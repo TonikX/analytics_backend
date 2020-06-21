@@ -32,6 +32,10 @@ export const getEducationalPlanDetailDialog = (state: rootState) => get(getState
 export const isOpenDetailDialog = (state: rootState) => get(getEducationalPlanDetailDialog(state), fields.IS_OPEN_DIALOG, false);
 export const getDetailDialogData = (state: rootState) => get(getEducationalPlanDetailDialog(state), fields.DIALOG_DATA, false);
 
+export const getEducationalPlanModuleDialog = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_PLAN_MODULE_DIALOG, {});
+export const isOpenModuleDialog = (state: rootState) => get(getEducationalPlanModuleDialog(state), fields.IS_OPEN_DIALOG, false);
+export const getModuleDialogData = (state: rootState) => get(getEducationalPlanModuleDialog(state), fields.DIALOG_DATA, false);
+
 export const getAllCount = (state: rootState) => get(getStateData(state), fields.ALL_COUNT, 1);
 export const getCurrentPage = (state: rootState) => get(getStateData(state), fields.CURRENT_PAGE, 1);
 export const getSearchQuery = (state: rootState) => get(getStateData(state), fields.SEARCH_QUERY, '');
