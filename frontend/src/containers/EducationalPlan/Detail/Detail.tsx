@@ -7,7 +7,6 @@ import Paper from '@material-ui/core/Paper';
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 import withStyles from '@material-ui/core/styles/withStyles';
-import IconButton from "@material-ui/core/IconButton";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -179,14 +178,13 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                             </TableCell>
                                                             <TableCell className={classes.actions}>
                                                                 <Tooltip title="Удалить модуль">
-                                                                    <IconButton onClick={this.handleClickDeleteModule(module[ModuleFields.ID])}>
-                                                                        <DeleteIcon color="primary" />
-                                                                    </IconButton>
+                                                                    <DeleteIcon className={classes.marginRight}
+                                                                                color="primary"
+                                                                                onClick={this.handleClickDeleteModule(module[ModuleFields.ID])}
+                                                                    />
                                                                 </Tooltip>
                                                                 <Tooltip title="Изменить модуль">
-                                                                    <IconButton onClick={this.handleOpenCreateModuleModal(module, block[EducationalPlanBlockFields.ID])}>
-                                                                        <EditIcon color="primary" />
-                                                                    </IconButton>
+                                                                    <EditIcon color="primary" onClick={this.handleOpenCreateModuleModal(module, block[EducationalPlanBlockFields.ID])}/>
                                                                 </Tooltip>
                                                             </TableCell>
                                                         </TableRow>
@@ -215,14 +213,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
                                                                 <TableCell className={classes.actions}>
                                                                     <Tooltip title="Удалить блок рабочих программ">
-                                                                        <IconButton onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID])}>
-                                                                            <DeleteIcon />
-                                                                        </IconButton>
+                                                                        <DeleteIcon className={classes.marginRight}
+                                                                                    onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID])}
+                                                                        />
                                                                     </Tooltip>
                                                                     <Tooltip title="Изменить блок рабочих программ">
-                                                                        <IconButton onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}>
-                                                                            <EditIcon />
-                                                                        </IconButton>
+                                                                        <EditIcon onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}/>
                                                                     </Tooltip>
                                                                 </TableCell>
                                                             </TableRow>;

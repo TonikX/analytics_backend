@@ -4,6 +4,9 @@ export default (theme: Theme) => createStyles({
     tableWrap: {
         height: 'calc(100% - 200px)',
         maxHeight: 'calc(100% - 200px)',
+        '& td': {
+            padding: '5px 10px !important'
+        }
     },
     rowModule: {
         display: 'flex',
@@ -39,7 +42,7 @@ export default (theme: Theme) => createStyles({
         '& th': {
             color: '#fff',
             background: theme.palette.primary.main,
-            fontWeight: '400'
+            fontWeight: '400',
         }
     },
     title: {
