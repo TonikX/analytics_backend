@@ -1,6 +1,7 @@
 import React, {ReactText} from 'react';
 import {shallowEqual} from "recompose";
 import get from "lodash/get";
+import moment, {Moment} from "moment";
 
 import {CreateModalProps} from './types';
 
@@ -10,19 +11,19 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-
-import MultipleSearchSelector from "../../../components/SearchSelector/SearchSelector";
-
-import {EducationPlanInDirectionFields} from '../enum';
-
-import connect from './CreateModal.connect';
-import styles from './CreateModal.styles';
-import {EducationalPlanFields} from "../../EducationalPlan/enum";
-import {DirectionFields} from "../../Direction/enum";
 import {IconButton} from "@material-ui/core";
 import DateIcon from "@material-ui/icons/DateRange";
 import {DatePicker} from "@material-ui/pickers";
-import moment, {Moment} from "moment";
+
+import SearchSelector from "../../../components/SearchSelector/SearchSelector";
+
+import {EducationPlanInDirectionFields} from '../enum';
+import {EducationalPlanFields} from "../../EducationalPlan/enum";
+import {DirectionFields} from "../../Direction/enum";
+
+import connect from './CreateModal.connect';
+import styles from './CreateModal.styles';
+import {YEAR_DATE_FORMAT} from "../../../common/utils";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -63,7 +64,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     componentDidMount() {
         this.props.directionActions.getDirections();
-        this.props.educationalPlanActions.getEducationalPlan();
+        this.props.educationalPlanActions.getEducationalPlans();
     }
 
     handleClose = () => {
@@ -93,7 +94,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     handleChangeEducationPlanSearchText = (searchText: string) => {
         this.props.educationalPlanActions.changeSearchQuery(searchText);
-        this.props.educationalPlanActions.getEducationalPlan();
+        this.props.educationalPlanActions.getEducationalPlans();
     }
 
     handleChangeDirectionSearchText = (searchText: string) => {
@@ -150,7 +151,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} учебный план в направлении</DialogTitle>
                 <DialogContent>
-                    <MultipleSearchSelector label="Учебный план * "
+                    <SearchSelector label="Учебный план * "
                                             changeSearchText={this.handleChangeEducationPlanSearchText}
                                             list={educationalPlanList}
                                             changeItem={this.saveEducationalPlanField}
@@ -159,7 +160,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             valueLabel={get(educationalPlansInDirection, [EducationPlanInDirectionFields.EDUCATION_PLAN, EducationalPlanFields.PROFILE], '')}
                     />
 
-                    <MultipleSearchSelector label="Направление * "
+                    <SearchSelector label="Направление * "
                                             changeSearchText={this.handleChangeDirectionSearchText}
                                             list={directionList}
                                             changeItem={this.saveDirectionField}
@@ -180,7 +181,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         }}
                         inputVariant="outlined"
                         className={classes.datePicker}
-                        format={'YYYY'}
+                        format={YEAR_DATE_FORMAT}
                         views={["year"]}
                         label={'Год реализации'}
                     />

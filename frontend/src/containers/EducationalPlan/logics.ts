@@ -2,17 +2,17 @@ import {createLogic} from "redux-logic";
 import get from 'lodash/get';
 
 import actions from '../../layout/actions';
-import competencesActions from './actions';
+import planActions from './actions';
 
 import Service from './service';
 
 import {fetchingTypes} from "./enum";
-import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {getCurrentPage, getEducationalPlanDetailId, getSearchQuery, getSortingField, getSortingMode} from "./getters";
 
 const service = new Service();
 
-const getEducationalPlan = createLogic({
-    type: competencesActions.getEducationalPlan.type,
+const getEducationalPlans = createLogic({
+    type: planActions.getEducationalPlans.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState();
@@ -22,38 +22,64 @@ const getEducationalPlan = createLogic({
         const sortingField = getSortingField(state);
         const sortingMode = getSortingMode(state);
 
-        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EDUCATIONAL_PLAN}));
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EDUCATIONAL_PLANS}));
 
         service.getEducationalPlan(currentPage, searchQuery, sortingField, sortingMode)
             .then((res) => {
-                const courses = get(res, 'data.results', []);
+                const educationalPlans = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));
 
-                dispatch(competencesActions.setEducationalPlan(courses));
-                dispatch(competencesActions.changeAllCount(allPages));
+                dispatch(planActions.setEducationalPlans(educationalPlans));
+                dispatch(planActions.changeAllCount(allPages));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
             })
             .then(() => {
-                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_EDUCATIONAL_PLAN}));
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_EDUCATIONAL_PLANS}));
+                return done();
+            });
+    }
+});
+
+const getEducationalPlanDetail = createLogic({
+    type: planActions.getEducationalDetail.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        //@ts-ignore
+        const planId = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EDUCATIONAL_PLAN_DETAIL}));
+
+        service.getEducationalPlanDetail(planId)
+            .then((res) => {
+                const plan = get(res, 'data', {});
+
+                dispatch(planActions.setEducationalDetail(plan));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_EDUCATIONAL_PLAN_DETAIL}));
                 return done();
             });
     }
 });
 
 const deleteEducationalPlan = createLogic({
-    type: competencesActions.deleteEducationalPlan.type,
+    type: planActions.deleteEducationalPlan.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const courseId = action.payload;
+        const planId = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_EDUCATIONAL_PLAN}));
 
-        service.deleteEducationalPlan(courseId)
+        service.deleteEducationalPlan(planId)
             .then((res) => {
-                dispatch(competencesActions.getEducationalPlan());
+                dispatch(planActions.getEducationalPlans());
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -67,18 +93,18 @@ const deleteEducationalPlan = createLogic({
 });
 
 const createNewEducationalPlan = createLogic({
-    type: competencesActions.createNewEducationalPlan.type,
+    type: planActions.createNewEducationalPlan.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const course = action.payload;
+        const educationalPlan = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_EDUCATIONAL_PLAN}));
 
-        service.createEducationalPlan(course)
+        service.createEducationalPlan(educationalPlan)
             .then((res) => {
-                dispatch(competencesActions.getEducationalPlan());
+                dispatch(planActions.getEducationalPlans());
                 dispatch(actions.fetchingSuccess());
-                dispatch(competencesActions.closeDialog());
+                dispatch(planActions.closeDialog());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
@@ -91,18 +117,18 @@ const createNewEducationalPlan = createLogic({
 });
 
 const changeEducationalPlan = createLogic({
-    type: competencesActions.changeEducationalPlan.type,
+    type: planActions.changeEducationalPlan.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const course = action.payload;
+        const educationalPlan = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_EDUCATIONAL_PLAN}));
 
-        service.updateEducationalPlan(course)
+        service.updateEducationalPlan(educationalPlan)
             .then((res) => {
-                dispatch(competencesActions.getEducationalPlan());
+                dispatch(planActions.getEducationalPlans());
                 dispatch(actions.fetchingSuccess());
-                dispatch(competencesActions.closeDialog());
+                dispatch(planActions.closeDialog());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
@@ -114,9 +140,88 @@ const changeEducationalPlan = createLogic({
     }
 });
 
+const createBlockOfWorkPrograms = createLogic({
+    type: planActions.createBlockOfWorkPrograms.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const moduleWithBlocks = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_BLOCK_OF_WORK_PROGRAMS}));
+
+        service.createBlockOfWorkPrograms(moduleWithBlocks)
+            .then((res) => {
+                const planId = getEducationalPlanDetailId(getState());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+                dispatch(planActions.closeDetailDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_BLOCK_OF_WORK_PROGRAMS}));
+                return done();
+            });
+    }
+});
+
+const changeBlockOfWorkPrograms = createLogic({
+    type: planActions.changeBlockOfWorkPrograms.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const moduleWithBlocks = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_BLOCK_OF_WORK_PROGRAMS}));
+
+        service.changeBlockOfWorkPrograms(moduleWithBlocks)
+            .then((res) => {
+                const planId = getEducationalPlanDetailId(getState());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+                dispatch(planActions.closeDetailDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_BLOCK_OF_WORK_PROGRAMS}));
+                return done();
+            });
+    }
+});
+
+const deleteBlockOfWorkPrograms = createLogic({
+    type: planActions.deleteBlockOfWorkPrograms.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const blockId = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_BLOCK_OF_WORK_PROGRAMS}));
+
+        service.deleteBlockOfWorkPrograms(blockId)
+            .then((res) => {
+                const planId = getEducationalPlanDetailId(getState());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+                dispatch(planActions.closeDetailDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_BLOCK_OF_WORK_PROGRAMS}));
+                return done();
+            });
+    }
+});
+
 export default [
-    getEducationalPlan,
+    getEducationalPlans,
     deleteEducationalPlan,
     createNewEducationalPlan,
     changeEducationalPlan,
+    getEducationalPlanDetail,
+    createBlockOfWorkPrograms,
+    changeBlockOfWorkPrograms,
+    deleteBlockOfWorkPrograms,
 ];

@@ -1,5 +1,5 @@
 import BaseService from "../../service/base-service";
-import {EducationalPlanFields} from "./enum";
+import {BlocksOfWorkProgramsFields, EducationalPlanFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
 class EducationalPlanService extends BaseService{
@@ -7,6 +7,10 @@ class EducationalPlanService extends BaseService{
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
         return this.get(`/api/academicplan?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+    }
+
+    getEducationalPlanDetail(id: number){
+        return this.get(`/api/academicplan/detail/${id}`);
     }
 
     deleteEducationalPlan(id: number){
@@ -21,6 +25,28 @@ class EducationalPlanService extends BaseService{
         formData.append(EducationalPlanFields.APPROVAL_DATE, competence[EducationalPlanFields.APPROVAL_DATE]);
 
         return this.post(`/api/academicplan`, formData);
+    }
+
+    createBlockOfWorkPrograms(moduleWithBlocks: any){
+        return this.post(`/api/workprogramchangeindisciplineblockmodule/create`, {
+            'discipline_block_module': moduleWithBlocks.moduleId,
+            [BlocksOfWorkProgramsFields.TYPE]: moduleWithBlocks[BlocksOfWorkProgramsFields.TYPE],
+            [BlocksOfWorkProgramsFields.SEMESTER_HOUR]: moduleWithBlocks[BlocksOfWorkProgramsFields.SEMESTER_HOUR].toString(),
+            [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: moduleWithBlocks[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((item: { value: any; }) => item.value),
+        });
+    }
+
+    changeBlockOfWorkPrograms(moduleWithBlocks: any){
+        return this.patch(`/api/workprogramchangeindisciplineblockmodule/update/${moduleWithBlocks[BlocksOfWorkProgramsFields.ID]}`, {
+            'discipline_block_module': moduleWithBlocks.moduleId,
+            [BlocksOfWorkProgramsFields.TYPE]: moduleWithBlocks[BlocksOfWorkProgramsFields.TYPE],
+            [BlocksOfWorkProgramsFields.SEMESTER_HOUR]: moduleWithBlocks[BlocksOfWorkProgramsFields.SEMESTER_HOUR].toString(),
+            [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: moduleWithBlocks[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((item: { value: any; }) => item.value),
+        });
+    }
+
+    deleteBlockOfWorkPrograms(id: number){
+        return this.delete(`/api/workprogramchangeindisciplineblockmodule/delete/${id}`);
     }
 
     updateEducationalPlan(competence: any){

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import moment from 'moment';
-// @ts-ignore
+import {withRouter} from 'react-router-dom'
+
 import Scrollbars from "react-custom-scrollbars";
 
 import classNames from 'classnames';
@@ -20,31 +21,40 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import MenuItem from "@material-ui/core/MenuItem";
+import EyeIcon from "@material-ui/icons/VisibilityOutlined";
+import SettingsIcon from "@material-ui/icons/MoreVert";
+import Menu from "@material-ui/core/Menu";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
-import CourseCreateModal from "./CreateModal";
+import CreateModal from "./CreateModal";
 import {SortingType} from "../../components/SortingButton/types";
 
 import {EducationalPlanProps, EducationalPlanType} from './types';
 import {EducationalPlanFields} from './enum';
 
+import {appRouter} from "../../service/router-service";
+
 import connect from './EducationalPlan.connect';
 import styles from './EducationalPlan.styles';
+import {FULL_DATE_FORMAT} from "../../common/utils";
 
 class EducationalPlan extends React.Component<EducationalPlanProps> {
     state = {
-        deleteConfirmId: null
+        deleteConfirmId: null,
+        anchorsEl: {}
     }
 
     componentDidMount() {
-        this.props.actions.getEducationalPlan();
+        this.props.actions.getEducationalPlans();
     }
 
     handleClickDelete = (id: number) => () => {
         this.setState({
             deleteConfirmId: id
         });
+        this.handleCloseMenu();
     }
 
     handleConfirmDeleteDialog = () => {
@@ -62,6 +72,14 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
 
     handleClickEdit = (plan: EducationalPlanType) => () => {
         this.props.actions.openDialog(plan);
+        this.handleCloseMenu();
+    }
+
+    goToDetailView = (id: number) => () => {
+        // @ts-ignore
+        let {history} = this.props;
+
+        history.push(appRouter.getPlanDetailLink(id));
     }
 
     handleCreate = () => {
@@ -75,22 +93,36 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
         this.props.actions.changeCurrentPage(1);
-        this.props.actions.getEducationalPlan();
+        this.props.actions.getEducationalPlans();
     }, 300);
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
         this.props.actions.changeCurrentPage(page + 1);
-        this.props.actions.getEducationalPlan();
+        this.props.actions.getEducationalPlans();
     }
 
     changeSorting = (field: string) => (mode: SortingType)=> {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getEducationalPlan();
+        this.props.actions.getEducationalPlans();
     }
+
+    handleMenu = (id: number) => (event: SyntheticEvent): void => {
+        this.setState({
+            anchorsEl: {
+                [id]: event.currentTarget
+            }
+        });
+    };
+
+    handleCloseMenu = () => {
+        this.setState({anchorsEl: {}});
+    };
 
     render() {
         const {classes, educationalPlan, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
+
+        const {anchorsEl} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -138,18 +170,52 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                             {educationalPlan.map(plan =>
                                 <div className={classes.row} key={plan[EducationalPlanFields.ID]}>
                                     <Typography className={classNames(classes.marginRight, classes.dateCell)}>
-                                        {moment(plan[EducationalPlanFields.APPROVAL_DATE]).format('DD.MM.YYYY')}
+                                        {moment(plan[EducationalPlanFields.APPROVAL_DATE]).format(FULL_DATE_FORMAT)}
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.numberCell)}> {plan[EducationalPlanFields.NUMBER]} </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}> {plan[EducationalPlanFields.PROFILE]} </Typography>
 
                                     <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(plan[EducationalPlanFields.ID])}>
-                                            <DeleteIcon />
+                                        <IconButton
+                                            aria-haspopup="true"
+                                            onClick={this.handleMenu(plan[EducationalPlanFields.ID])}
+                                            color="inherit"
+                                        >
+                                            <SettingsIcon />
                                         </IconButton>
-                                        <IconButton onClick={this.handleClickEdit(plan)}>
-                                            <EditIcon />
-                                        </IconButton>
+                                        <Menu
+                                            anchorEl={get(anchorsEl, `${plan[EducationalPlanFields.ID]}`)}
+                                            anchorOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'right',
+                                            }}
+                                            keepMounted
+                                            transformOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'right',
+                                            }}
+                                            open={Boolean(get(anchorsEl, `${plan[EducationalPlanFields.ID]}`))}
+                                            onClose={this.handleCloseMenu}
+                                            PopoverClasses={{
+                                                root: classes.popper,
+                                                paper: classes.menuPaper
+                                            }}
+                                        >
+                                            <MenuItem onClick={this.goToDetailView(plan[EducationalPlanFields.ID])}>
+                                                <EyeIcon className={classes.menuIcon}/>
+                                                Смотреть детально
+                                            </MenuItem>
+
+                                            <MenuItem onClick={this.handleClickEdit(plan)}>
+                                                <EditIcon className={classes.menuIcon} />
+                                                Редактировать
+                                            </MenuItem>
+
+                                            <MenuItem onClick={this.handleClickDelete(plan[EducationalPlanFields.ID])}>
+                                                <DeleteIcon className={classes.menuIcon} />
+                                                Удалить
+                                            </MenuItem>
+                                        </Menu>
                                     </div>
                                 </div>
                             )}
@@ -178,7 +244,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                     </Fab>
                 </div>
 
-                <CourseCreateModal />
+                <CreateModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
@@ -192,4 +258,5 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
     }
 }
 
-export default connect(withStyles(styles)(EducationalPlan));
+// @ts-ignore
+export default connect(withStyles(styles)(withRouter(EducationalPlan)));

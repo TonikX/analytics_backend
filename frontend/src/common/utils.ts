@@ -7,3 +7,6 @@ export const checkUrl = (url: string) => {
         return false;
     }
 }
+
+export const FULL_DATE_FORMAT = 'DD.MM.YYYY';
+export const YEAR_DATE_FORMAT = 'YYYY';

@@ -16,7 +16,7 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import MultipleSearchSelector from '../../../../components/SearchSelector';
+import SearchSelector from '../../../../components/SearchSelector';
 import {workProgramTopicFields, fields} from '../../enum';
 
 import connect from './ThemeCreateModal.connect';
@@ -152,7 +152,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                                    shrink: true,
                                }}
                     />
-                    <MultipleSearchSelector label="Онлайн курс"
+                    <SearchSelector label="Онлайн курс"
                                             changeSearchText={this.handleChangeCourseSearchText}
                                             list={coursesList}
                                             changeItem={this.saveCourseField}

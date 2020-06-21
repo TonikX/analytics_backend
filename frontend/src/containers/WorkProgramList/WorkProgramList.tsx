@@ -1,6 +1,7 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
+import moment from 'moment';
 // @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
 
@@ -35,6 +36,8 @@ import styles from './WorkProgramList.styles';
 import {appRouter} from "../../service/router-service";
 import CreateModal from "./CreateModal";
 import {specialization} from "../WorkProgram/data";
+import {FULL_DATE_FORMAT} from "../../common/utils";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class WorkProgramList extends React.Component<WorkProgramListProps> {
     state = {
@@ -117,7 +120,22 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                            mode={sortingField === WorkProgramGeneralFields.QUALIFICATION ? sortingMode : ''}
                             />
                         </Typography>
-
+                        <Typography className={classNames(classes.marginRight, classes.authorCell)}>
+                            Авторский состав
+                            <SortingButton changeMode={this.changeSorting(WorkProgramGeneralFields.AUTHORS)}
+                                           mode={sortingField === WorkProgramGeneralFields.AUTHORS ? sortingMode : ''}
+                            />
+                        </Typography>
+                        <Typography className={classNames(classes.marginRight, classes.dateCell)}>
+                            <Tooltip title="Дата создания">
+                                <Typography>
+                                    Дата
+                                    <SortingButton changeMode={this.changeSorting(WorkProgramGeneralFields.APPROVAL_DATE)}
+                                                   mode={sortingField === WorkProgramGeneralFields.APPROVAL_DATE ? sortingMode : ''}
+                                    />
+                                </Typography>
+                            </Tooltip>
+                        </Typography>
                         <Typography className={classNames(classes.marginRight, classes.numberCell)}>
                             Код
                             <SortingButton changeMode={this.changeSorting(WorkProgramGeneralFields.CODE)}
@@ -138,6 +156,12 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                 <div className={classes.row} key={workProgram[WorkProgramGeneralFields.ID]}>
                                     <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
                                         {get(specialization.find(el => el.value === workProgram[WorkProgramGeneralFields.QUALIFICATION]), 'label', '')}
+                                    </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.authorCell)}>
+                                        {workProgram[WorkProgramGeneralFields.AUTHORS]}
+                                    </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.dateCell)}>
+                                        {moment(workProgram[WorkProgramGeneralFields.APPROVAL_DATE]).format(FULL_DATE_FORMAT)}
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.numberCell)}>
                                         {workProgram[WorkProgramGeneralFields.CODE]}

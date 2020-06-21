@@ -15,15 +15,25 @@ export const initialState: educationalPlanState = {
     [fields.ALL_COUNT]: 1,
     [fields.SEARCH_QUERY]: '',
     [fields.EDUCATIONAL_PLAN_LIST]: [],
+    [fields.DETAIL_PLAN]: {},
     [fields.EDUCATIONAL_PLAN_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
+    },
+    [fields.EDUCATIONAL_PLAN_DETAIL_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
     }
 };
 
-const setEducationalPlan = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+const setEducationalPlans = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
     ...state,
     [fields.EDUCATIONAL_PLAN_LIST]: payload,
+});
+
+const setEducationalPlanDetail = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.DETAIL_PLAN]: payload,
 });
 
 const changeSearchQuery = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
@@ -49,9 +59,25 @@ const openDialog = (state: educationalPlanState, {payload}: any): educationalPla
     }
 });
 
+const openDetailDialog = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.EDUCATIONAL_PLAN_DETAIL_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: true,
+        [fields.DIALOG_DATA]: payload
+    }
+});
+
 const closeDialog = (state: educationalPlanState): educationalPlanState => ({
     ...state,
     [fields.EDUCATIONAL_PLAN_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
+    }
+});
+
+const closeDetailDialog = (state: educationalPlanState): educationalPlanState => ({
+    ...state,
+    [fields.EDUCATIONAL_PLAN_DETAIL_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
     }
@@ -66,9 +92,12 @@ const changeSorting = (state: educationalPlanState, {payload}: any): educational
 });
 
 export const reducer = createReducer(initialState, {
-    [actions.setEducationalPlan.type]: setEducationalPlan,
+    [actions.setEducationalPlans.type]: setEducationalPlans,
+    [actions.setEducationalDetail.type]: setEducationalPlanDetail,
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
+    [actions.openDetailDialog.type]: openDetailDialog,
+    [actions.closeDetailDialog.type]: closeDetailDialog,
     [actions.changeSearchQuery.type]: changeSearchQuery,
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,

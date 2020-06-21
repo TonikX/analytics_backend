@@ -19,6 +19,11 @@ import {specialization} from "../../WorkProgram/data";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
+import {DatePicker} from "@material-ui/pickers";
+import moment, {Moment} from "moment";
+import {IconButton} from "@material-ui/core";
+import DateIcon from "@material-ui/icons/DateRange";
+import {FULL_DATE_FORMAT} from "../../../common/utils";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -26,6 +31,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [WorkProgramGeneralFields.TITLE]: '',
             [WorkProgramGeneralFields.CODE]: '',
             [WorkProgramGeneralFields.QUALIFICATION]: '',
+            [WorkProgramGeneralFields.AUTHORS]: '',
+            [WorkProgramGeneralFields.APPROVAL_DATE]: moment().format(),
         },
     };
 
@@ -50,13 +57,25 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
+    saveYear = (date: Moment) => {
+        const {workProgram} = this.state;
+
+        this.setState({
+            workProgram: {
+                ...workProgram,
+                [WorkProgramGeneralFields.APPROVAL_DATE]: date.format()
+            }
+        })
+    }
+
     render() {
         const {isOpen, classes} = this.props;
         const {workProgram} = this.state;
         
         const disableButton = workProgram[WorkProgramGeneralFields.TITLE].length === 0 
             || workProgram[WorkProgramGeneralFields.QUALIFICATION].length === 0 
-            || workProgram[WorkProgramGeneralFields.CODE].length === 0;
+            || workProgram[WorkProgramGeneralFields.CODE].length === 0
+        ;
 
         return (
             <Dialog
@@ -88,9 +107,33 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                    shrink: true,
                                }}
                     />
-
+                    <TextField label="Авторский состав"
+                               onChange={this.saveField(WorkProgramGeneralFields.AUTHORS)}
+                               variant="outlined"
+                               className={classes.input}
+                               fullWidth
+                               value={workProgram[WorkProgramGeneralFields.AUTHORS]}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}
+                    />
+                    <DatePicker
+                        value={moment(workProgram[WorkProgramGeneralFields.APPROVAL_DATE])}
+                        onChange={(date: any) => this.saveYear(date)}
+                        InputProps={{
+                            endAdornment: (
+                                <IconButton>
+                                    <DateIcon />
+                                </IconButton>
+                            ),
+                        }}
+                        inputVariant="outlined"
+                        className={classes.datePicker}
+                        format={FULL_DATE_FORMAT}
+                        label={'Дата создания *'}
+                    />
                     <div>
-                        <InputLabel className={classes.label}> Место дисциплины в структуре образовательной программы высшего образования (ОП ВО) </InputLabel>
+                        <InputLabel className={classes.label}> Место дисциплины в структуре образовательной программы высшего образования (ОП ВО) * </InputLabel>
                         <Select
                             className={classes.specializationSelector}
                             value={workProgram[WorkProgramGeneralFields.QUALIFICATION]}

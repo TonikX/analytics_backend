@@ -9,6 +9,16 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         flexDirection: 'column'
     },
+    moduleWorkProgramWrap: {
+        borderBottom: '1px solid #ccc',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    moduleWorkProgramWrapActions: {
+        display: 'flex',
+        marginRight: '10px'
+    },
     title: {
         fontSize: '24px',
         marginBottom: '50px',
@@ -30,6 +40,31 @@ export default (theme: Theme) => createStyles({
         padding: '0 0 0 20px',
         boxSizing: 'border-box',
         minHeight: '50px'
+    },
+    moduleWorkProgramList: {
+        width: '100%',
+    },
+    workProgramRow: {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 0 0 20px',
+        boxSizing: 'border-box',
+        minHeight: '50px'
+    },
+    blockRow: {
+        background: '#eeeeee',
+        '&: div': {
+            fontWeight: '500'
+        }
+    },
+    addProgramIcon: {
+        marginLeft: '10px',
+        cursor: 'pointer'
+    },
+    moduleRow: {
+        color: theme.palette.primary.main,
+        fontWeight: 500,
     },
     numberCell: {
         width: 200,

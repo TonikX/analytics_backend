@@ -33,12 +33,10 @@ export default (theme: Theme) => createStyles({
     sectionItem: {
 
     },
-    //@ts-ignore
     sectionTitle: {
         padding: '10px',
         borderBottom: '1px solid #ccc',
-        //@ts-ignore
-        fontWeight: '500',
+        fontWeight: 500,
         color: theme.palette.primary.main,
         display: "flex",
         alignItems: 'center'

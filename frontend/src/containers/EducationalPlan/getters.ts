@@ -11,6 +11,12 @@ import {SelectorListType} from "../../components/SearchSelector/types";
 
 const getStateData = (state: rootState): educationalPlanState => get(state, GENERAL_PATH);
 export const getEducationalPlan = (state: rootState): Array<EducationalPlanType> => get(getStateData(state), fields.EDUCATIONAL_PLAN_LIST, []);
+export const getEducationalPlanDetail = (state: rootState): EducationalPlanType|{} => get(getStateData(state), fields.DETAIL_PLAN, {});
+
+export const getEducationalPlanDetailBlocks = (state: rootState): Array<EducationalPlanType> =>
+    get(getEducationalPlanDetail(state), EducationalPlanFields.DISCIPLINE_BLOCKS, []);
+export const getEducationalPlanDetailId = (state: rootState): Array<EducationalPlanType> =>
+    get(getEducationalPlanDetail(state), EducationalPlanFields.ID, '');
 
 export const getEducationalPlanForSelector = (state: rootState): SelectorListType =>
     getEducationalPlan(state).map((competence: EducationalPlanType) => ({
@@ -19,9 +25,12 @@ export const getEducationalPlanForSelector = (state: rootState): SelectorListTyp
     }))
 
 export const getEducationalPlanDialog = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_PLAN_DIALOG, {});
-
 export const isOpenDialog = (state: rootState) => get(getEducationalPlanDialog(state), fields.IS_OPEN_DIALOG, false);
 export const getDialogData = (state: rootState) => get(getEducationalPlanDialog(state), fields.DIALOG_DATA, false);
+
+export const getEducationalPlanDetailDialog = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_PLAN_DETAIL_DIALOG, {});
+export const isOpenDetailDialog = (state: rootState) => get(getEducationalPlanDetailDialog(state), fields.IS_OPEN_DIALOG, false);
+export const getDetailDialogData = (state: rootState) => get(getEducationalPlanDetailDialog(state), fields.DIALOG_DATA, false);
 
 export const getAllCount = (state: rootState) => get(getStateData(state), fields.ALL_COUNT, 1);
 export const getCurrentPage = (state: rootState) => get(getStateData(state), fields.CURRENT_PAGE, 1);
