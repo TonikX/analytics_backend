@@ -1,4 +1,5 @@
 import React, {SyntheticEvent} from 'react';
+import get from 'lodash/get';
 import Scrollbars from "react-custom-scrollbars";
 
 import classNames from "classnames";
@@ -33,7 +34,7 @@ import styles from './EvaluationTools.styles';
 
 class EvaluationTools extends React.PureComponent<SixthStepProps> {
     state = {
-        anchorEl: null
+        anchorsEl: {}
     };
 
     componentDidMount() {
@@ -42,33 +43,39 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
 
     handleCreateNew = () => {
         this.props.actions.openDialog({dialogType: fields.CREATE_NEW_EVALUATION_TOOLS, data: {}});
+        this.handleCloseItemMenu();
     };
 
     handleClickDelete = (id: number) => () => {
         this.props.actions.deleteEvaluationTool(id);
+        this.handleCloseItemMenu();
     };
 
     handleClickEdit = (evaluationTool: EvaluationToolType) => () => {
         this.props.actions.openDialog({dialogType: fields.CREATE_NEW_EVALUATION_TOOLS, data: evaluationTool});
+        this.handleCloseItemMenu();
     };
 
     handleClickShowDescription = (description: string) => () => {
         this.props.actions.openDialog({dialogType: fields.SHOW_EVALUATION_TOOLS_DESCRIPTION, data: description});
+        this.handleCloseItemMenu();
     };
 
-    handleMenu = (event: SyntheticEvent): void => {
-        this.setState({anchorEl: event.currentTarget});
+    handleMenu = (id: number) => (event: SyntheticEvent): void => {
+        this.setState({
+            anchorsEl: {
+                [id]: event.currentTarget
+            }
+        });
     };
 
-    handleClose = () => {
-        this.setState({anchorEl: null});
+    handleCloseItemMenu = () => {
+        this.setState({anchorsEl: {}});
     };
 
     render() {
         const {classes, evaluationToolsList} = this.props;
-        const {anchorEl} = this.state;
-
-        const isOpenEditMenu = Boolean(anchorEl);
+        const {anchorsEl} = this.state;
 
         return (
             <div className={classes.root}>
@@ -125,13 +132,13 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                     <div className={classes.actions}>
                                         <IconButton
                                             aria-haspopup="true"
-                                            onClick={this.handleMenu}
+                                            onClick={this.handleMenu(evaluationTool[EvaluationToolFields.ID])}
                                             color="inherit"
                                         >
                                             <SettingsIcon />
                                         </IconButton>
                                         <Menu
-                                            anchorEl={anchorEl}
+                                            anchorEl={get(anchorsEl, evaluationTool[EvaluationToolFields.ID])}
                                             anchorOrigin={{
                                                 vertical: 'top',
                                                 horizontal: 'right',
@@ -141,8 +148,8 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                                 vertical: 'top',
                                                 horizontal: 'right',
                                             }}
-                                            open={isOpenEditMenu}
-                                            onClose={this.handleClose}
+                                            open={Boolean(get(anchorsEl, evaluationTool[EvaluationToolFields.ID]))}
+                                            onClose={this.handleCloseItemMenu}
                                             PopoverClasses={{
                                                 root: classes.popper,
                                                 paper: classes.menuPaper

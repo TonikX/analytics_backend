@@ -184,7 +184,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                             <SettingsIcon />
                                         </IconButton>
                                         <Menu
-                                            anchorEl={get(anchorsEl, `${plan[EducationalPlanFields.ID]}`)}
+                                            anchorEl={get(anchorsEl, plan[EducationalPlanFields.ID])}
                                             anchorOrigin={{
                                                 vertical: 'top',
                                                 horizontal: 'right',
@@ -194,7 +194,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                 vertical: 'top',
                                                 horizontal: 'right',
                                             }}
-                                            open={Boolean(get(anchorsEl, `${plan[EducationalPlanFields.ID]}`))}
+                                            open={Boolean(get(anchorsEl, plan[EducationalPlanFields.ID]))}
                                             onClose={this.handleCloseMenu}
                                             PopoverClasses={{
                                                 root: classes.popper,
