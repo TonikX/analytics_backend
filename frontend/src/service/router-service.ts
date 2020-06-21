@@ -75,7 +75,7 @@ export default class RouterService {
     };
 
     getEducationPlanRoute = () => {
-        return SEPARATOR + EDUCATIONAL_PLAN;
+        return SEPARATOR;
     };
 
     getWorkProgramRoute = () => {

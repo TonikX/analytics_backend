@@ -127,7 +127,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Учебный план
+                    Учебные планы
 
                     <TextField placeholder="Поиск"
                                variant="outlined"

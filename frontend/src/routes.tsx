@@ -64,9 +64,6 @@ export default () => (
                                />
                            )}
                 />
-                <AuthRoute path={routerService.getEducationPlanRoute()}>
-                    <EducationalPlan />
-                </AuthRoute>
                 <AuthRoute path={routerService.getEducationPlanInDirectionRoute()}>
                     <EducationPlanInDirection />
                 </AuthRoute>
@@ -82,6 +79,9 @@ export default () => (
                                />
                            )}
                 />
+                <AuthRoute path={routerService.getEducationPlanRoute()}>
+                    <EducationalPlan />
+                </AuthRoute>
             </Switch>
         </Layout>
     </Router>

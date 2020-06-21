@@ -9,10 +9,9 @@ import List from '@material-ui/core/List';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {WithStyles} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
-import HomeIcon from '@material-ui/icons/HomeOutlined';
-import BookIcon from '@material-ui/icons/BookOutlined';
+import Divider from "@material-ui/core/Divider";
 
-import {appRouter} from "../../service/router-service";
+import MenuList from "./MenuList";
 
 import styles from './Menu.styles';
 
@@ -36,134 +35,27 @@ class Menu extends React.PureComponent<MenuProps>{
             >
 
                 <List className={classes.menuList}>
-                    <Link to={appRouter.getCoursesRoute()} className={classes.link}>
-                        <MenuItem
-                            selected={pathname === appRouter.getCoursesRoute()}
-                            classes={{
-                                selected: classes.selectedMenuItem,
-                                root: classes.menuItem,
-                            }}
-                        >
-                            <HomeIcon className={classes.icon} />
-                            Онлайн курсы
-                        </MenuItem>
-                    </Link>
-
-                    <Link to={appRouter.getLiteratureRoute()} className={classes.link}>
-                            <MenuItem
-                                selected={pathname === appRouter.getLiteratureRoute()}
-                                classes={{
-                                    selected: classes.selectedMenuItem,
-                                    root: classes.menuItem,
-                                }}
-                            >
-                                <BookIcon className={classes.icon} />
-                                Источники
-                            </MenuItem>
-                    </Link>
-
-                    <Link to={appRouter.getSubjectAreaRoute()} className={classes.link}>
-                            <MenuItem
-                                selected={pathname === appRouter.getSubjectAreaRoute()}
-                                classes={{
-                                    selected: classes.selectedMenuItem,
-                                    root: classes.menuItem,
-                                }}
-                            >
-                                <BookIcon className={classes.icon} />
-                                Предметные области
-                            </MenuItem>
-                    </Link>
-
-                    <Link to={appRouter.getTrainingEntitiesRoute()} className={classes.link}>
-                            <MenuItem
-                                selected={pathname === appRouter.getTrainingEntitiesRoute()}
-                                classes={{
-                                    selected: classes.selectedMenuItem,
-                                    root: classes.menuItem,
-                                }}
-                            >
-                                <BookIcon className={classes.icon} />
-                                Учебные сущности
-                            </MenuItem>
-                    </Link>
-
-                    <Link to={appRouter.getCompetencesRoute()} className={classes.link}>
-                            <MenuItem
-                                selected={pathname === appRouter.getCompetencesRoute()}
-                                classes={{
-                                    selected: classes.selectedMenuItem,
-                                    root: classes.menuItem,
-                                }}
-                            >
-                                <BookIcon className={classes.icon} />
-                                Компетенции
-                            </MenuItem>
-                    </Link>
-
-                    <Link to={appRouter.getEducationalProgramRoute()} className={classes.link}>
-                            <MenuItem
-                                selected={pathname === appRouter.getEducationalProgramRoute()}
-                                classes={{
-                                    selected: classes.selectedMenuItem,
-                                    root: classes.menuItem,
-                                }}
-                            >
-                                <BookIcon className={classes.icon} />
-                                Направления
-                            </MenuItem>
-                    </Link>
-
-                    <Link to={appRouter.getIndicatorsRoute()} className={classes.link}>
-                        <MenuItem
-                            selected={pathname === appRouter.getIndicatorsRoute()}
-                            classes={{
-                                selected: classes.selectedMenuItem,
-                                root: classes.menuItem,
-                            }}
-                        >
-                            <BookIcon className={classes.icon} />
-                            Индикаторы
-                        </MenuItem>
-                    </Link>
-
-                    <Link to={appRouter.getEducationPlanRoute()} className={classes.link}>
-                        <MenuItem
-                            selected={pathname === appRouter.getEducationPlanRoute()}
-                            classes={{
-                                selected: classes.selectedMenuItem,
-                                root: classes.menuItem,
-                            }}
-                        >
-                            <BookIcon className={classes.icon} />
-                            Учебные планы
-                        </MenuItem>
-                    </Link>
-
-                    <Link to={appRouter.getEducationPlanInDirectionRoute()} className={classes.link}>
-                        <MenuItem
-                            selected={pathname === appRouter.getEducationPlanInDirectionRoute()}
-                            classes={{
-                                selected: classes.selectedMenuItem,
-                                root: classes.menuItem,
-                            }}
-                        >
-                            <BookIcon className={classes.icon} />
-                            Учебные планы в направлении
-                        </MenuItem>
-                    </Link>
-                    <Link to={appRouter.getWorkProgramListRoute()} className={classes.link}>
-                        <MenuItem
-                            selected={pathname === appRouter.getWorkProgramListRoute()}
-                            classes={{
-                                selected: classes.selectedMenuItem,
-                                root: classes.menuItem,
-                            }}
-                        >
-                            <BookIcon className={classes.icon} />
-                            Рабочие программы
-                        </MenuItem>
-                    </Link>
+                    {MenuList.map(group =>
+                        <>
+                            {group.map(item =>
+                                <Link to={item.link}
+                                      className={classes.link}
+                                >
+                                    <MenuItem
+                                        selected={pathname === item.link}
+                                        classes={{
+                                            selected: classes.selectedMenuItem,
+                                            root: classes.menuItem,
+                                        }}
+                                    >
+                                        <img src={pathname === item.link ? item.selectedIcon : item.icon} className={classes.icon} alt="" />
+                                        {item.title}
+                                    </MenuItem>
+                                </Link>
+                            )}
+                            <Divider />
+                        </>
+                    )}
                 </List>
 
             </Drawer>
