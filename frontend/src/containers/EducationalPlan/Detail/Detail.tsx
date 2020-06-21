@@ -37,6 +37,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
         deleteBlockConfirmId: null,
         deleteModuleConfirmId: null,
+        deletedWorkProgramsLength: 0,
     }
 
     componentDidMount() {
@@ -45,9 +46,10 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         this.props.actions.getEducationalDetail(workProgramId);
     }
 
-    handleClickBlockDelete = (id: number) => () => {
+    handleClickBlockDelete = (id: number, length: number) => () => {
         this.setState({
-            deleteBlockConfirmId: id
+            deleteBlockConfirmId: id,
+            deletedWorkProgramsLength: length
         });
     }
 
@@ -70,6 +72,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         this.setState({
             deleteBlockConfirmId: null,
             deleteModuleConfirmId: null,
+            deletedWorkProgramsLength: 0,
         });
     }
     
@@ -105,7 +108,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
     render() {
         const {classes, blocks} = this.props;
-        const {deleteBlockConfirmId, deleteModuleConfirmId} = this.state;
+        const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -193,12 +196,13 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
                                                         {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map(blockOfWorkProgram => {
                                                             const semesterHours = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.SEMESTER_HOUR);
+                                                            const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
 
                                                             const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
                                                             return <TableRow>
                                                                 <TableCell>
-                                                                    {blockOfWorkProgram[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map(workProgram =>
+                                                                    {workPrograms.map(workProgram =>
                                                                         <Typography>
                                                                             {workProgram[WorkProgramGeneralFields.TITLE]}
                                                                         </Typography>
@@ -214,12 +218,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                 </TableCell>
 
                                                                 <TableCell className={classes.actions}>
-                                                                    <Tooltip title="Удалить блок рабочих программ">
+                                                                    <Tooltip title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу' }`}>
                                                                         <DeleteIcon className={classes.marginRight}
-                                                                                    onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID])}
+                                                                                    onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
                                                                         />
                                                                     </Tooltip>
-                                                                    <Tooltip title="Изменить блок рабочих программ">
+                                                                    <Tooltip title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
                                                                         <EditIcon onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}/>
                                                                     </Tooltip>
                                                                 </TableCell>
@@ -249,9 +253,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                 />
                 <ConfirmDialog onConfirm={this.handleConfirmBlockDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены, что хотите удалить блок?'}
+                               confirmText={`Вы точно уверены, что хотите ${deletedWorkProgramsLength > 1 ? 'комлект рабочих программ' : 'рабочую программу'}?`}
                                isOpen={Boolean(deleteBlockConfirmId)}
-                               dialogTitle={'Удалить блок'}
+                               dialogTitle={`Удалить ${deletedWorkProgramsLength > 1 ? 'комлект рабочих программ' : 'рабочую программу'}`}
                                confirmButtonText={'Удалить'}
                 />
             </Paper>
