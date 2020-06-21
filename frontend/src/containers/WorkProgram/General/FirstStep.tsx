@@ -124,6 +124,9 @@ class FirstStep extends React.Component<FirstStepProps> {
                                onBlur={this.saveField(WorkProgramGeneralFields.AUTHORS)}
                                onChange={this.changeAuthors}
                                disabled={fetchingAuthors}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}
                     />
                 </InputsLoader>
                 <InputsLoader loading={fetchingDate}>

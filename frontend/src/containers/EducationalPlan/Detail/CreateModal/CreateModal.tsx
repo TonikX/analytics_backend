@@ -2,7 +2,6 @@ import React from 'react';
 import {shallowEqual} from "recompose";
 import get from "lodash/get";
 import classNames from "classnames";
-import moment, {Moment} from 'moment';
 
 import {CreateModalProps} from './types';
 
@@ -11,37 +10,42 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import TextField from "@material-ui/core/TextField";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
 import withStyles from '@material-ui/core/styles/withStyles';
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
 
-import DateIcon from "@material-ui/icons/DateRange";
-import {IconButton} from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 
-import {DatePicker} from '@material-ui/pickers';
+import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
+import {typeOfWorkProgramInPlan, OPTIONALLY as optionalTypeOfWorkProgram} from '../../data';
 
-import {EducationalPlanFields} from '../../enum';
+import {BlocksOfWorkProgramsFields, ModuleFields} from '../../enum';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-import {EducationPlanInDirectionFields} from "../../../EduationPlanInDirection/enum";
-import {DirectionFields} from "../../../Direction/enum";
-import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
-import {typeOfWorkProgramInPlan} from '../../data';
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import {specialization} from "../../../WorkProgram/data";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
+import {WorkProgramGeneralType} from "../../../WorkProgram/types";
+import {WorkProgramGeneralFields} from "../../../WorkProgram/enum";
+import moment from "moment";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
-        educationalPlan: {
-            [EducationalPlanFields.ID]: null,
-            [EducationalPlanFields.PROFILE]: '',
-            [EducationalPlanFields.APPROVAL_DATE]: moment().format(),
-            [EducationalPlanFields.NUMBER]: '',
+        module: {
+            [ModuleFields.ID]: '',
         },
+        blockOfWorkPrograms: {
+            [BlocksOfWorkProgramsFields.ID]: null,
+            [BlocksOfWorkProgramsFields.TYPE]: '',
+            [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: [],
+            [BlocksOfWorkProgramsFields.SEMESTER_HOUR]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        },
+        showWorkProgramSelector: false,
+        showAddWorkProgramButton: true,
     };
 
     componentDidMount() {
@@ -49,47 +53,151 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
-        const {educationalPlan} = this.props;
+        const {blockOfWorkPrograms} = this.props;
 
-        if (!shallowEqual(educationalPlan, prevProps.educationalPlan)){
+        if (!shallowEqual(blockOfWorkPrograms, prevProps.blockOfWorkPrograms)){
+            const workProgram = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.WORK_PROGRAMS) || [];
+            const semesterHours = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.SEMESTER_HOUR);
+
+            const mappedWorkProgram = workProgram.map((program: WorkProgramGeneralType) => {
+                const date = moment(program[WorkProgramGeneralFields.APPROVAL_DATE]).isValid() ?
+                    moment(program[WorkProgramGeneralFields.APPROVAL_DATE]).format('YYYY') : '';
+
+                const authors = program[WorkProgramGeneralFields.AUTHORS] || '';
+
+                return {
+                    label: `${program[WorkProgramGeneralFields.TITLE]} ${date} ${authors}`,
+                    value: program[WorkProgramGeneralFields.ID]
+                };
+            });
+
+            const mappedSemesterHours = semesterHours && semesterHours.toArray ? semesterHours.toArray() : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
             this.setState({
-                educationalPlan: {
-                    [EducationalPlanFields.ID]: get(educationalPlan, EducationalPlanFields.ID),
-                    [EducationalPlanFields.PROFILE]: get(educationalPlan, EducationalPlanFields.PROFILE, ''),
-                    [EducationalPlanFields.NUMBER]: get(educationalPlan, EducationalPlanFields.NUMBER, ''),
-                    [EducationalPlanFields.APPROVAL_DATE]: get(educationalPlan, EducationalPlanFields.APPROVAL_DATE, moment().format()),
-                }
+                blockOfWorkPrograms: {
+                    [BlocksOfWorkProgramsFields.ID]: get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.ID),
+                    [BlocksOfWorkProgramsFields.TYPE]: get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.TYPE, ''),
+                    [BlocksOfWorkProgramsFields.SEMESTER_HOUR]: mappedSemesterHours,
+                    [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: mappedWorkProgram,
+                },
+                module: {
+                    [ModuleFields.ID]: get(blockOfWorkPrograms, 'moduleId'),
+                },
             });
         }
     }
 
+    handleShowAddWorkProgramButton = () => {
+        this.setState({showAddWorkProgramButton: true});
+    }
+
+    handleHideAddWorkProgramButton = () => {
+        this.setState({showAddWorkProgramButton: false});
+    }
+
+    handleShowWorkProgramSelector = () => {
+        this.setState({showWorkProgramSelector: true});
+        this.handleHideAddWorkProgramButton();
+    }
+
+    handleHideWorkProgramSelector = () => {
+        this.setState({showWorkProgramSelector: false});
+    }
+
     handleClose = () => {
-        this.props.actions.closeDialog();
+        this.props.actions.closeDetailDialog();
     }
 
     handleSave = () => {
-        const {educationalPlan} = this.state;
+        const {blockOfWorkPrograms, module} = this.state;
 
-        if (educationalPlan[EducationalPlanFields.ID]){
-            this.props.actions.changeEducationalPlan(educationalPlan);
+        if (blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID]){
+            this.props.actions.changeBlockOfWorkPrograms({...blockOfWorkPrograms, moduleId: module[ModuleFields.ID]});
         } else {
-            this.props.actions.createNewEducationalPlan(educationalPlan);
+            this.props.actions.createBlockOfWorkPrograms({...blockOfWorkPrograms, moduleId: module[ModuleFields.ID]});
         }
     }
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
-        const {educationalPlan} = this.state;
+        const {blockOfWorkPrograms} = this.state;
 
         this.setState({
-            educationalPlan: {
-                ...educationalPlan,
+            blockOfWorkPrograms: {
+                ...blockOfWorkPrograms,
                 [field]: get(e, 'target.value')
             }
         })
     }
 
-    saveWorkProgramList = (value: string) => {
+    changeType = (e: React.ChangeEvent) => {
+        const {blockOfWorkPrograms} = this.state;
+        const value = get(e, 'target.value');
+        let workPrograms = blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS];
 
+        if (value !== optionalTypeOfWorkProgram && get(workPrograms, 'length', 0) > 1){
+            workPrograms = [workPrograms[0]];
+        }
+
+        this.setState({
+            blockOfWorkPrograms: {
+                ...blockOfWorkPrograms,
+                [BlocksOfWorkProgramsFields.TYPE]: get(e, 'target.value'),
+                [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: workPrograms
+            }
+        })
+    }
+
+    saveWorkProgramList = (value: string) => {
+        if (value === '') return;
+
+        const {blockOfWorkPrograms} = this.state;
+        const {workProgramList} = this.props;
+
+        const workProgram = workProgramList.find(el => el.value === value);
+
+        this.setState({
+            blockOfWorkPrograms: {
+                ...blockOfWorkPrograms,
+                [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: [
+                    ...blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS],
+                    {
+                        value,
+                        label: workProgram ? workProgram.label : ''
+                    }
+                ]
+            }
+        });
+
+        this.handleHideWorkProgramSelector();
+        this.handleShowAddWorkProgramButton();
+    }
+
+    handleRemoveWorkProgram = (value: string) => () => {
+        const {blockOfWorkPrograms} = this.state;
+
+        // @ts-ignore
+        const filteredWorkPrograms = blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS].filter(item => item.value !== value);
+
+        this.setState({
+            blockOfWorkPrograms: {
+                ...blockOfWorkPrograms,
+                [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: filteredWorkPrograms
+            }
+        });
+    }
+
+    handleChangeHours = (index: number) => (e: React.ChangeEvent) => {
+        const {blockOfWorkPrograms} = this.state;
+        const hours = blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_HOUR];
+
+        hours[index] = get(e, 'target.value', 0);
+
+        this.setState({
+            blockOfWorkPrograms: {
+                ...blockOfWorkPrograms,
+                [BlocksOfWorkProgramsFields.SEMESTER_HOUR]: hours
+            }
+        });
     }
 
     handleChangeSearchText = (searchText: string) => {
@@ -99,12 +207,15 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     render() {
         const {isOpen, classes, workProgramList} = this.props;
-        const {educationalPlan} = this.state;
+        const {blockOfWorkPrograms, showAddWorkProgramButton, showWorkProgramSelector} = this.state;
 
-        const disableButton = true;
-        // const disableButton = educationalPlan[EducationalPlanFields.PROFILE].length === 0 || get(educationalPlan[EducationalPlanFields.NUMBER], 'length', 0) === 0;
+        const canAddMoreWorkProgram = get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0) === 0 ||
+            blockOfWorkPrograms[BlocksOfWorkProgramsFields.TYPE] === optionalTypeOfWorkProgram;
 
-        const isEditMode = Boolean(educationalPlan[EducationalPlanFields.ID]);
+        const disableButton = get(blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS], 'length', 0) === 0 ||
+            get(blockOfWorkPrograms[BlocksOfWorkProgramsFields.TYPE], 'length', 0) === 0;
+
+        const isEditMode = Boolean(blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID]);
 
         return (
             <Dialog
@@ -114,17 +225,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} учебный план</DialogTitle>
+                <DialogTitle> {isEditMode ? 'Редактировать' : 'Добавить'} блок рабочих программ</DialogTitle>
                 <DialogContent>
-
-                    <SearchSelector label="Рабочая программа * "
-                                    changeSearchText={this.handleChangeSearchText}
-                                    list={workProgramList}
-                                    changeItem={this.saveWorkProgramList}
-                                    className={classes.marginBottom30}
-                                    value={''}
-                                    valueLabel={''}
-                    />
                     <FormControl className={classNames(classes.selectorWrap, classes.marginBottom30)}>
                         <InputLabel shrink id="section-label">
                             Тип *
@@ -133,8 +235,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             variant="outlined"
                             className={classes.selector}
                             // @ts-ignore
-                            onChange={this.saveField(DirectionFields.QUALIFICATION)}
-                            value={''}
+                            onChange={this.changeType}
+                            value={blockOfWorkPrograms[BlocksOfWorkProgramsFields.TYPE]}
                             fullWidth
                             displayEmpty
                             input={
@@ -152,6 +254,54 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             )}
                         </Select>
                     </FormControl>
+
+                    <div className={classes.workProgramBlock}>
+                        <Typography className={classes.label}> Рабочие программы </Typography>
+                        {blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map(item =>{
+                            //@ts-ignore
+                            return <Typography className={classes.workProgramItem}>{item.label} <DeleteIcon onClick={this.handleRemoveWorkProgram(item.value)}/> </Typography>
+                        })}
+                        {get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0) === 0 ?
+                            <Typography> Рабочих программ пока не добавлено</Typography>
+                            : <></>
+                        }
+                    </div>
+
+                    {showWorkProgramSelector &&
+                        <SearchSelector label="Рабочая программа * "
+                                        changeSearchText={this.handleChangeSearchText}
+                                        list={workProgramList}
+                                        changeItem={this.saveWorkProgramList}
+                                        className={classes.marginBottom30}
+                                        value={''}
+                                        valueLabel={''}
+                        />
+                    }
+
+                    <div className={classes.addWorkProgramButtonWrap}>
+                        {showAddWorkProgramButton && canAddMoreWorkProgram &&
+                            <Button size="small"
+                                    onClick={this.handleShowWorkProgramSelector}
+                                    className={classes.addWorkProgramButton}
+                                    variant="text"
+                            ><AddIcon/> Добавить рабочую программу</Button>
+                        }
+                    </div>
+
+                    <div className={classes.semesterBlock}>
+                        <Typography className={classes.label}> Количество часов в семестрах </Typography>
+                        <div className={classes.semesterList}>
+                            {blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_HOUR].map((item, index) =>
+                                <TextField className={classes.semesterField}
+                                           label={`${index} семестр`}
+                                           variant='outlined'
+                                           value={item}
+                                           onChange={this.handleChangeHours(index)}
+                                           type="number"
+                                />
+                            )}
+                        </div>
+                    </div>
 
                 </DialogContent>
                 <DialogActions className={classes.actions}>

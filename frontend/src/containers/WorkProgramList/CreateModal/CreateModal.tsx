@@ -74,7 +74,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         
         const disableButton = workProgram[WorkProgramGeneralFields.TITLE].length === 0 
             || workProgram[WorkProgramGeneralFields.QUALIFICATION].length === 0 
-            || workProgram[WorkProgramGeneralFields.CODE].length === 0;
+            || workProgram[WorkProgramGeneralFields.CODE].length === 0
+        ;
 
         return (
             <Dialog

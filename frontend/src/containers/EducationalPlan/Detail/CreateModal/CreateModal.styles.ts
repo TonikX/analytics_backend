@@ -1,6 +1,52 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
+    label: {
+        fontSize: '14px',
+        marginBottom: 10
+    },
+    addWorkProgramButton: {
+        marginLeft: 'auto',
+        padding: 0,
+        '&:hover': {
+            background: 'none'
+        }
+    },
+    semesterField: {
+        width: '100px',
+        marginBottom: '10px',
+        '& .MuiInputLabel-outlined': {
+            fontSize: '13px'
+        },
+        '& .MuiOutlinedInput-notchedOutline legend': {
+            width: '55px !important'
+        }
+    },
+    semesterBlock: {
+
+    },
+    semesterList: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap'
+    },
+    workProgramBlock: {
+        marginBottom: 30
+    },
+    addWorkProgramButtonWrap: {
+        display: 'flex'
+    },
+    workProgramItem: {
+        display: 'flex',
+        marginTop: 5,
+        marginBottom: 5,
+        '& svg': {
+            cursor: 'pointer',
+            '&:hover': {
+                color: theme.palette.primary.main
+            }
+        }
+    },
     input: {
         width: '550px',
     },

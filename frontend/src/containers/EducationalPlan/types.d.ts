@@ -6,6 +6,12 @@ import {SortingType} from "../../components/SortingButton/types";
 import {WorkProgramGeneralType} from "../WorkProgram/types";
 
 export interface EducationalPlanActions {
+    createModule: any;
+    changeModule: any;
+    deleteModule: any;
+    changeBlockOfWorkPrograms: any;
+    deleteBlockOfWorkPrograms: any;
+    createBlockOfWorkPrograms: any;
     openDetailDialog: any;
     closeDetailDialog: any;
     setEducationalDetail: any;
@@ -65,6 +71,7 @@ export type ModuleType = {
 
 export type BlocksOfWorkProgramsType = {
     [BlocksOfWorkProgramsFields.ID]: number;
+    [BlocksOfWorkProgramsFields.TYPE]: string;
     [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: Array<WorkProgramGeneralType>;
 };
 

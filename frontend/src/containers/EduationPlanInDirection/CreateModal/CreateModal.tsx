@@ -23,6 +23,7 @@ import {DirectionFields} from "../../Direction/enum";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
+import {YEAR_DATE_FORMAT} from "../../../common/utils";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -180,7 +181,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         }}
                         inputVariant="outlined"
                         className={classes.datePicker}
-                        format={'YYYY'}
+                        format={YEAR_DATE_FORMAT}
                         views={["year"]}
                         label={'Год реализации'}
                     />

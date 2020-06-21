@@ -1,5 +1,5 @@
 import {WithStyles} from "@material-ui/core";
-import {EducationalPlanActions} from '../types';
+import {BlocksOfWorkProgramsType, EducationalPlanActions} from '../../types';
 import {WorkProgramListActions} from "../../../WorkProgramList/types";
 
 import styles from "./CreateModal.styles";
@@ -11,4 +11,5 @@ export interface CreateModalProps extends WithStyles<typeof styles> {
     educationalPlan: any;
     workProgramActions: WorkProgramListActions;
     workProgramList: SelectorListType;
+    blockOfWorkPrograms: BlocksOfWorkProgramsType;
 }

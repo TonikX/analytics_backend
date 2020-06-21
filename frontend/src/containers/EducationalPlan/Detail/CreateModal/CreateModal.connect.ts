@@ -15,7 +15,7 @@ import {getWorkProgramsListForSelector} from "../../../WorkProgramList/getters";
 const mapStateToProps = (state: rootState) => {
     return {
         isOpen: isOpenDetailDialog(state),
-        educationalPlan: getDetailDialogData(state),
+        blockOfWorkPrograms: getDetailDialogData(state),
         workProgramList: getWorkProgramsListForSelector(state),
     };
 };

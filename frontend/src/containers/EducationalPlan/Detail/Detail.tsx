@@ -1,6 +1,5 @@
-import React, {SyntheticEvent} from 'react';
+import React from 'react';
 import get from 'lodash/get';
-import moment from 'moment';
 // @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
 
@@ -9,15 +8,12 @@ import classNames from 'classnames';
 import Paper from '@material-ui/core/Paper';
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
-
 import withStyles from '@material-ui/core/styles/withStyles';
-
 import IconButton from "@material-ui/core/IconButton";
+
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
-import MenuItem from "@material-ui/core/MenuItem";
-import SettingsIcon from "@material-ui/icons/MoreVert";
-import Menu from "@material-ui/core/Menu";
+import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
 
 import ConfirmDialog from "../../../components/ConfirmDialog";
 import CreateModal from "./CreateModal";
@@ -25,12 +21,11 @@ import ChangePlanModal from '../CreateModal';
 
 import {BlocksOfWorkProgramsType, EducationalPlanType} from '../types';
 import {EducationalPlanDetailProps} from './types';
+import {EducationalPlanBlockFields, ModuleFields, BlocksOfWorkProgramsFields} from "../enum";
+import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
-import {EducationalPlanBlockFields, ModuleFields, BlocksOfWorkProgramsFields} from "../enum";
-import {WorkProgramGeneralFields, workProgramSectionFields} from "../../WorkProgram/enum";
-import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -48,13 +43,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         this.setState({
             deleteConfirmId: id
         });
-        this.handleCloseMenu();
     }
 
     handleConfirmDeleteDialog = () => {
         const {deleteConfirmId} = this.state;
 
-        this.props.actions.deleteEducationalPlan(deleteConfirmId);
+        this.props.actions.deleteBlockOfWorkPrograms(deleteConfirmId);
         this.closeConfirmDeleteDialog();
     }
 
@@ -66,16 +60,14 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
     handleClickEdit = (plan: EducationalPlanType) => () => {
         this.props.actions.openDialog(plan);
-        this.handleCloseMenu();
     }
 
-    handleOpenDetailModal = () => {
-        this.props.actions.openDetailDialog();
+    handleOpenDetailModal = (block: BlocksOfWorkProgramsType|{}, moduleId: number) => () => {
+        this.props.actions.openDetailDialog({
+            ...block,
+            moduleId: moduleId
+        });
     }
-
-    handleMenu = (event: SyntheticEvent): void => {
-        this.setState({anchorEl: event.currentTarget});
-    };
 
     handleChangePlan = () => {
         const {detailPlan} = this.props;
@@ -83,18 +75,10 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         this.props.actions.openDialog(detailPlan);
     }
 
-    handleCloseMenu = () => {
-        this.setState({anchorEl: null});
-    };
-
     render() {
         const {classes, blocks} = this.props;
         const {deleteConfirmId} = this.state;
 
-        const {anchorEl} = this.state;
-
-        const isOpenEditMenu = Boolean(anchorEl);
-        console.log('blocks', blocks);
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
@@ -121,13 +105,27 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                         {module[ModuleFields.NAME]}
                                                         <AddCircleIcon className={classes.addProgramIcon}
                                                                        color="primary"
-                                                                       onClick={this.handleOpenDetailModal}
+                                                                       onClick={this.handleOpenDetailModal({}, module[ModuleFields.ID])}
                                                         />
                                                     </Typography>
                                                     {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map(blockOfWorkProgram => {
-                                                        return blockOfWorkProgram[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map(workProgram =>
-                                                            <Typography className={classes.row}> {workProgram[WorkProgramGeneralFields.TITLE]} </Typography>
-                                                        );
+                                                        return <div className={classes.moduleWorkProgramWrap}>
+
+                                                            <div className={classes.moduleWorkProgramList}>
+                                                                {blockOfWorkProgram[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map(workProgram =>
+                                                                    <Typography className={classes.workProgramRow}> {workProgram[WorkProgramGeneralFields.TITLE]} </Typography>
+                                                                )}
+                                                            </div>
+
+                                                            <div className={classes.moduleWorkProgramWrapActions}>
+                                                                <IconButton onClick={this.handleClickDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID])}>
+                                                                    <DeleteIcon />
+                                                                </IconButton>
+                                                                <IconButton onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}>
+                                                                    <EditIcon />
+                                                                </IconButton>
+                                                            </div>
+                                                        </div>;
                                                     })}
                                                 </>
                                             )
@@ -155,9 +153,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены, что хотите удалить привязанную рабочую программу?'}
+                               confirmText={'Вы точно уверены, что хотите удалить блок?'}
                                isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить привязку'}
+                               dialogTitle={'Удалить блок'}
                                confirmButtonText={'Удалить'}
                 />
             </Paper>

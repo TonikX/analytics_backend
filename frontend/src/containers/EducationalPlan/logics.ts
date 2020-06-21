@@ -7,7 +7,7 @@ import planActions from './actions';
 import Service from './service';
 
 import {fetchingTypes} from "./enum";
-import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {getCurrentPage, getEducationalPlanDetailId, getSearchQuery, getSortingField, getSortingMode} from "./getters";
 
 const service = new Service();
 
@@ -140,10 +140,88 @@ const changeEducationalPlan = createLogic({
     }
 });
 
+const createBlockOfWorkPrograms = createLogic({
+    type: planActions.createBlockOfWorkPrograms.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const moduleWithBlocks = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_BLOCK_OF_WORK_PROGRAMS}));
+
+        service.createBlockOfWorkPrograms(moduleWithBlocks)
+            .then((res) => {
+                const planId = getEducationalPlanDetailId(getState());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+                dispatch(planActions.closeDetailDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_BLOCK_OF_WORK_PROGRAMS}));
+                return done();
+            });
+    }
+});
+
+const changeBlockOfWorkPrograms = createLogic({
+    type: planActions.changeBlockOfWorkPrograms.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const moduleWithBlocks = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_BLOCK_OF_WORK_PROGRAMS}));
+
+        service.changeBlockOfWorkPrograms(moduleWithBlocks)
+            .then((res) => {
+                const planId = getEducationalPlanDetailId(getState());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+                dispatch(planActions.closeDetailDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_BLOCK_OF_WORK_PROGRAMS}));
+                return done();
+            });
+    }
+});
+
+const deleteBlockOfWorkPrograms = createLogic({
+    type: planActions.deleteBlockOfWorkPrograms.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const blockId = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_BLOCK_OF_WORK_PROGRAMS}));
+
+        service.deleteBlockOfWorkPrograms(blockId)
+            .then((res) => {
+                const planId = getEducationalPlanDetailId(getState());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+                dispatch(planActions.closeDetailDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_BLOCK_OF_WORK_PROGRAMS}));
+                return done();
+            });
+    }
+});
+
 export default [
     getEducationalPlans,
     deleteEducationalPlan,
     createNewEducationalPlan,
     changeEducationalPlan,
     getEducationalPlanDetail,
+    createBlockOfWorkPrograms,
+    changeBlockOfWorkPrograms,
+    deleteBlockOfWorkPrograms,
 ];

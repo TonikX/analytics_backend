@@ -19,6 +19,9 @@ export enum fetchingTypes {
     DELETE_EDUCATIONAL_PLAN = 'DELETE_EDUCATIONAL_PLAN',
     UPDATE_EDUCATIONAL_PLAN = 'UPDATE_EDUCATIONAL_PLAN',
     CREATE_EDUCATIONAL_PLAN = 'CREATE_EDUCATIONAL_PLAN',
+    CREATE_BLOCK_OF_WORK_PROGRAMS = 'CREATE_BLOCK_OF_WORK_PROGRAMS',
+    CHANGE_BLOCK_OF_WORK_PROGRAMS = 'CHANGE_BLOCK_OF_WORK_PROGRAMS',
+    DELETE_BLOCK_OF_WORK_PROGRAMS = 'DELETE_BLOCK_OF_WORK_PROGRAMS',
 }
 
 export enum EducationalPlanFields {
@@ -44,4 +47,6 @@ export enum ModuleFields {
 export enum BlocksOfWorkProgramsFields {
     ID = 'id',
     WORK_PROGRAMS = 'work_program',
+    SEMESTER_HOUR = 'semester_hour',
+    TYPE = 'change_type',
 }

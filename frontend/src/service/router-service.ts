@@ -8,10 +8,10 @@ const SUBJECT_AREA = 'subject-area';
 const WORK_PROGRAM = 'work-program';
 const TRAINING_ENTITIES = 'training-entities';
 const COMPETENCES = 'competences';
-const EDUCATIONAL_PROGRAM = 'educational-program';
-const EDUCATIONAL_PLAN = 'educational-plan';
+const EDUCATIONAL_PROGRAM = 'educational-programs';
+const EDUCATIONAL_PLAN = 'educational-plans';
 const INDICATORS = 'indicators';
-const EDUCATIONAL_PLAN_IN_DIRECTION = 'educational-plan-in-direction';
+const EDUCATIONAL_PLAN_IN_DIRECTION = 'educational-plans-in-direction';
 const WORK_PROGRAM_LIST = 'work-programs';
 
 const SEPARATOR = '/';

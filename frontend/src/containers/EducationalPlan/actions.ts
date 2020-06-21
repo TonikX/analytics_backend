@@ -23,7 +23,21 @@ const changeCurrentPage = createAction<string>('EDUCATIONAL_PLAN_CHANGE_CURRENT_
 const changeAllCount = createAction<string>('EDUCATIONAL_PLAN_CHANGE_ALL_COUNT');
 const changeSorting = createAction<string>('EDUCATIONAL_PLAN_CHANGE_SORTING');
 
+const createBlockOfWorkPrograms = createAction<string>('CREATE_BLOCK_OF_WORK_PROGRAM');
+const changeBlockOfWorkPrograms = createAction<string>('CHANGE_BLOCK_OF_WORK_PROGRAM');
+const deleteBlockOfWorkPrograms = createAction<string>('DELETE_BLOCK_OF_WORK_PROGRAM');
+
+const createModule = createAction<string>('EDUCATIONAL_PLAN_CREATE_MODULE');
+const changeModule = createAction<string>('EDUCATIONAL_PLAN_CHANGE_MODULE');
+const deleteModule = createAction<string>('EDUCATIONAL_PLAN_DELETE_MODULE');
+
 const actions: EducationalPlanActions = {
+    createModule,
+    changeModule,
+    deleteModule,
+    createBlockOfWorkPrograms,
+    changeBlockOfWorkPrograms,
+    deleteBlockOfWorkPrograms,
     openDetailDialog,
     closeDetailDialog,
     getEducationalDetail,

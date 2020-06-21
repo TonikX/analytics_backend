@@ -1,19 +1,28 @@
-//todo: add constants
+const REQUIRED = 'Required';
+export const OPTIONALLY = 'Optionally';
+const OGNP_SET = 'OGNP_set';
+const SET_SPECIALIZATION = 'Set_specialization';
+const FACULTATIV = 'Facultativ';
+
 export const typeOfWorkProgramInPlan = [
     {
-        value: '1',
+        value: OPTIONALLY,
         label: 'Дициплина по выбору',
     },
     {
-        value: '2',
+        value: REQUIRED,
         label: 'Обязательная',
     },
     {
-        value: '3',
+        value: SET_SPECIALIZATION,
         label: 'Часть специализации',
     },
     {
-        value: '4',
+        value: FACULTATIV,
         label: 'Факультативная',
+    },
+    {
+        value: OGNP_SET,
+        label: 'ОГНП',
     }
 ];

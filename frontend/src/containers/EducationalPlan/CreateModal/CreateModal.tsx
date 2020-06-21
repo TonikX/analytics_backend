@@ -23,6 +23,7 @@ import {EducationalPlanFields} from '../enum';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
+import {FULL_DATE_FORMAT} from "../../../common/utils";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -135,7 +136,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         }}
                         inputVariant="outlined"
                         className={classes.datePicker}
-                        format={'DD.MM.YYYY'}
+                        format={FULL_DATE_FORMAT}
                         label={'Дата согласования'}
                     />
                 </DialogContent>

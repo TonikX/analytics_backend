@@ -2,8 +2,8 @@ import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import moment from 'moment';
-// @ts-ignore
-import Link from "react-router-dom/Link";
+import {withRouter} from 'react-router-dom'
+
 import Scrollbars from "react-custom-scrollbars";
 
 import classNames from 'classnames';
@@ -38,11 +38,12 @@ import {appRouter} from "../../service/router-service";
 
 import connect from './EducationalPlan.connect';
 import styles from './EducationalPlan.styles';
+import {FULL_DATE_FORMAT} from "../../common/utils";
 
 class EducationalPlan extends React.Component<EducationalPlanProps> {
     state = {
         deleteConfirmId: null,
-        anchorEl: null
+        anchorsEl: {}
     }
 
     componentDidMount() {
@@ -74,6 +75,13 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
         this.handleCloseMenu();
     }
 
+    goToDetailView = (id: number) => () => {
+        // @ts-ignore
+        let {history} = this.props;
+
+        history.push(appRouter.getPlanDetailLink(id));
+    }
+
     handleCreate = () => {
         this.props.actions.openDialog();
     }
@@ -98,21 +106,23 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
         this.props.actions.getEducationalPlans();
     }
 
-    handleMenu = (event: SyntheticEvent): void => {
-        this.setState({anchorEl: event.currentTarget});
+    handleMenu = (id: number) => (event: SyntheticEvent): void => {
+        this.setState({
+            anchorsEl: {
+                [id]: event.currentTarget
+            }
+        });
     };
 
     handleCloseMenu = () => {
-        this.setState({anchorEl: null});
+        this.setState({anchorsEl: {}});
     };
 
     render() {
         const {classes, educationalPlan, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
-        const {anchorEl} = this.state;
-
-        const isOpenEditMenu = Boolean(anchorEl);
+        const {anchorsEl} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -160,7 +170,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                             {educationalPlan.map(plan =>
                                 <div className={classes.row} key={plan[EducationalPlanFields.ID]}>
                                     <Typography className={classNames(classes.marginRight, classes.dateCell)}>
-                                        {moment(plan[EducationalPlanFields.APPROVAL_DATE]).format('DD.MM.YYYY')}
+                                        {moment(plan[EducationalPlanFields.APPROVAL_DATE]).format(FULL_DATE_FORMAT)}
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.numberCell)}> {plan[EducationalPlanFields.NUMBER]} </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}> {plan[EducationalPlanFields.PROFILE]} </Typography>
@@ -168,13 +178,13 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                     <div className={classes.actions}>
                                         <IconButton
                                             aria-haspopup="true"
-                                            onClick={this.handleMenu}
+                                            onClick={this.handleMenu(plan[EducationalPlanFields.ID])}
                                             color="inherit"
                                         >
                                             <SettingsIcon />
                                         </IconButton>
                                         <Menu
-                                            anchorEl={anchorEl}
+                                            anchorEl={get(anchorsEl, `${plan[EducationalPlanFields.ID]}`)}
                                             anchorOrigin={{
                                                 vertical: 'top',
                                                 horizontal: 'right',
@@ -184,21 +194,17 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                 vertical: 'top',
                                                 horizontal: 'right',
                                             }}
-                                            open={isOpenEditMenu}
+                                            open={Boolean(get(anchorsEl, `${plan[EducationalPlanFields.ID]}`))}
                                             onClose={this.handleCloseMenu}
                                             PopoverClasses={{
                                                 root: classes.popper,
                                                 paper: classes.menuPaper
                                             }}
                                         >
-                                            <Link to={appRouter.getPlanDetailLink(plan[EducationalPlanFields.ID])}
-                                                  className={classes.menuLink}
-                                            >
-                                                <MenuItem>
-                                                    <EyeIcon className={classes.menuIcon}/>
-                                                    Смотреть детально
-                                                </MenuItem>
-                                            </Link>
+                                            <MenuItem onClick={this.goToDetailView(plan[EducationalPlanFields.ID])}>
+                                                <EyeIcon className={classes.menuIcon}/>
+                                                Смотреть детально
+                                            </MenuItem>
 
                                             <MenuItem onClick={this.handleClickEdit(plan)}>
                                                 <EditIcon className={classes.menuIcon} />
@@ -252,4 +258,5 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
     }
 }
 
-export default connect(withStyles(styles)(EducationalPlan));
+// @ts-ignore
+export default connect(withStyles(styles)(withRouter(EducationalPlan)));
