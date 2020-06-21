@@ -54,6 +54,8 @@ export type WorkProgramGeneralType = {
     [WorkProgramGeneralFields.TITLE]: string;
     [WorkProgramGeneralFields.CODE]: string;
     [WorkProgramGeneralFields.QUALIFICATION]: string;
+    [WorkProgramGeneralFields.APPROVAL_DATE]: string;
+    [WorkProgramGeneralFields.AUTHORS]: string;
 };
 
 export interface WorkProgramProps extends WithStyles<typeof styles> {

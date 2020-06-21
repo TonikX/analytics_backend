@@ -23,5 +23,9 @@ export default (theme: Theme) => createStyles({
     label: {
         fontSize: '14px',
         marginBottom: 10
+    },
+    datePicker: {
+        width: '100%',
+        marginBottom: '30px',
     }
 });

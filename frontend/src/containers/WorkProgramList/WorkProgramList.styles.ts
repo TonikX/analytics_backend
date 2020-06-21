@@ -32,14 +32,23 @@ export default (theme: Theme) => createStyles({
         minHeight: '50px'
     },
     numberCell: {
-        width: 200,
+        width: 100,
         flex: 'none'
     },
     titleCell: {
-        width: '50%',
+        width: '30%',
+    },
+    dateCell: {
+        width: 100,
+        flex: 'none'
     },
     qualificationCell: {
-        width: '40%',
+        width: '20%',
+        flex: 'none',
+        maxWidth: '350px'
+    },
+    authorCell: {
+        width: '20%',
         flex: 'none'
     },
     actions: {

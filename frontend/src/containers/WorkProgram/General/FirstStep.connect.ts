@@ -2,7 +2,7 @@ import {Dispatch} from "react";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
-import {fields} from "../enum";
+import {WorkProgramGeneralFields} from "../enum";
 import actions from "../actions";
 import {getWorkProgramField} from '../getters';
 import {WorkProgramActions} from "../types";
@@ -13,10 +13,14 @@ import {rootState} from "../../../store/reducers";
 
 const mapStateToProps = (state:rootState) => {
     return {
-        title: getWorkProgramField(state, fields.WORK_PROGRAM_TITLE),
-        code: getWorkProgramField(state, fields.WORK_PROGRAM_CODE),
-        fetchingCode: isFetchingComponentByKey(state, fields.WORK_PROGRAM_CODE),
-        fetchingTitle: isFetchingComponentByKey(state, fields.WORK_PROGRAM_TITLE),
+        title: getWorkProgramField(state, WorkProgramGeneralFields.TITLE),
+        code: getWorkProgramField(state, WorkProgramGeneralFields.CODE),
+        authors: getWorkProgramField(state, WorkProgramGeneralFields.AUTHORS),
+        date: getWorkProgramField(state, WorkProgramGeneralFields.APPROVAL_DATE),
+        fetchingCode: isFetchingComponentByKey(state, WorkProgramGeneralFields.TITLE),
+        fetchingTitle: isFetchingComponentByKey(state, WorkProgramGeneralFields.CODE),
+        fetchingDate: isFetchingComponentByKey(state, WorkProgramGeneralFields.APPROVAL_DATE),
+        fetchingAuthors: isFetchingComponentByKey(state, WorkProgramGeneralFields.AUTHORS),
     };
 };
 
