@@ -4,7 +4,6 @@ import get from 'lodash/get';
 import Scrollbars from "react-custom-scrollbars";
 
 import Paper from '@material-ui/core/Paper';
-import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 import withStyles from '@material-ui/core/styles/withStyles';
 import Table from "@material-ui/core/Table";
@@ -12,6 +11,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
@@ -20,6 +20,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
 import ConfirmDialog from "../../../components/ConfirmDialog";
 import CreateModal from "./CreateModal";
 import ChangePlanModal from '../CreateModal';
+import ModuleModal from "./ModuleModal";
 
 import {BlocksOfWorkProgramsType, EducationalPlanType, ModuleType} from '../types';
 import {EducationalPlanDetailProps} from './types';
@@ -31,8 +32,6 @@ import {typeOfWorkProgramInPlan} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
-import Tooltip from "@material-ui/core/Tooltip";
-import ModuleModal from "./ModuleModal";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -112,8 +111,11 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
                     Учебный план
-                </Typography>
 
+                    <Tooltip title="Изменить учебный план">
+                        <EditIcon className={classes.titleIcon} color="primary" onClick={this.handleChangePlan}/>
+                    </Tooltip>
+                </Typography>
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>
@@ -233,17 +235,6 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                         </Table>
                     </div>
                 </Scrollbars>
-
-                <div className={classes.footer}>
-                    <Fab color="secondary"
-                         classes={{
-                             root: classes.addIcon
-                         }}
-                         onClick={this.handleChangePlan}
-                    >
-                        <EditIcon />
-                    </Fab>
-                </div>
 
                 <CreateModal />
                 <ChangePlanModal />

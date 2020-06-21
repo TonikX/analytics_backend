@@ -19,7 +19,7 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center',
     },
     root: {
-        padding: '50px',
+        padding: '20px 50px 40px 50px',
         boxShadow: '0px 0px 6px 1px rgba(194,194,194,0.3)',
         height: '100%',
         boxSizing: 'border-box',
@@ -32,7 +32,10 @@ export default (theme: Theme) => createStyles({
     },
     actions: {
         textAlign: 'end',
-        width: '100px'
+        width: '100px',
+        '& svg': {
+            cursor: 'pointer'
+        }
     },
     hourCell: {
         width: '30px'
@@ -47,9 +50,13 @@ export default (theme: Theme) => createStyles({
     },
     title: {
         fontSize: '24px',
-        marginBottom: '50px',
+        marginBottom: '20px',
         display: 'flex',
-        justifyContent: 'space-between'
+        alignItems: 'center'
+    },
+    titleIcon: {
+        marginLeft: '10px',
+        cursor: 'pointer'
     },
     blockRow: {
         background: '#eeeeee',
