@@ -132,16 +132,16 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                 </TableRow>
 
                                 <TableRow>
-                                    <TableCell style={{top: '45px'}}>1</TableCell>
-                                    <TableCell style={{top: '45px'}}>2</TableCell>
-                                    <TableCell style={{top: '45px'}}>3</TableCell>
-                                    <TableCell style={{top: '45px'}}>4</TableCell>
-                                    <TableCell style={{top: '45px'}}>5</TableCell>
-                                    <TableCell style={{top: '45px'}}>6</TableCell>
-                                    <TableCell style={{top: '45px'}}>7</TableCell>
-                                    <TableCell style={{top: '45px'}}>8</TableCell>
-                                    <TableCell style={{top: '45px'}}>9</TableCell>
-                                    <TableCell style={{top: '45px'}}>10</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">1</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">2</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">3</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">4</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">5</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">6</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">7</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">8</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">9</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">10</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -205,7 +205,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                     )}
                                                                 </TableCell>
                                                                 {mappedSemesterHours.map((semesterHour: string) =>
-                                                                    <TableCell> {semesterHour} </TableCell>
+                                                                    <TableCell align="center" className={classes.hourCell} > {semesterHour} </TableCell>
                                                                 )}
                                                                 <TableCell>
                                                                     {get(typeOfWorkProgramInPlan.find(item =>

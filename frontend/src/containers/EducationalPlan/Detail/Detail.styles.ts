@@ -28,7 +28,11 @@ export default (theme: Theme) => createStyles({
         textAlign: 'center'
     },
     actions: {
-        textAlign: 'end'
+        textAlign: 'end',
+        width: '100px'
+    },
+    hourCell: {
+        width: '30px'
     },
     header: {
         background: theme.palette.primary.main,
