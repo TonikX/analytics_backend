@@ -1,14 +1,6 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
-    table: {
-        '& tbody tr': {
-            borderBottom: '1px solid #ccc',
-        },
-        '& tbody td': {
-            border: 'none',
-        },
-    },
     tableWrap: {
         height: 'calc(100% - 200px)',
         maxHeight: 'calc(100% - 200px)',

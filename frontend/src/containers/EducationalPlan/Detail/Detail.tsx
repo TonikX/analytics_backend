@@ -118,7 +118,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>
-                        <Table size='small' className={classes.table}>
+                        <Table stickyHeader size='small'>
                             <TableHead className={classes.header}>
                                 <TableRow>
                                     <TableCell rowSpan={2}>
@@ -132,16 +132,16 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                 </TableRow>
 
                                 <TableRow>
-                                    <TableCell>1</TableCell>
-                                    <TableCell>2</TableCell>
-                                    <TableCell>3</TableCell>
-                                    <TableCell>4</TableCell>
-                                    <TableCell>5</TableCell>
-                                    <TableCell>6</TableCell>
-                                    <TableCell>7</TableCell>
-                                    <TableCell>8</TableCell>
-                                    <TableCell>9</TableCell>
-                                    <TableCell>10</TableCell>
+                                    <TableCell style={{top: '45px'}}>1</TableCell>
+                                    <TableCell style={{top: '45px'}}>2</TableCell>
+                                    <TableCell style={{top: '45px'}}>3</TableCell>
+                                    <TableCell style={{top: '45px'}}>4</TableCell>
+                                    <TableCell style={{top: '45px'}}>5</TableCell>
+                                    <TableCell style={{top: '45px'}}>6</TableCell>
+                                    <TableCell style={{top: '45px'}}>7</TableCell>
+                                    <TableCell style={{top: '45px'}}>8</TableCell>
+                                    <TableCell style={{top: '45px'}}>9</TableCell>
+                                    <TableCell style={{top: '45px'}}>10</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
