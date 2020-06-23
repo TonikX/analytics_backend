@@ -12,6 +12,8 @@ import sectionLogics from './logics/sections.logics';
 import topicLogics from './logics/topics.logics';
 import literatureLogics from './logics/literature.logics';
 import prerequisitesLogics from './logics/prerequisites.logics';
+import evaluationToolsLogics from './logics/evaluationTools.logics';
+import resultsLogics from './logics/results.logics';
 
 const service = new Service();
 
@@ -33,6 +35,30 @@ const getWorkProgram = createLogic({
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_WORK_PROGRAM}));
+                return done();
+            });
+    }
+});
+
+const getWorkProgramEvaluationTools = createLogic({
+    type: workProgramActions.getWorkProgramEvaluationTools.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_WORK_PROGRAM_EVALUATION_TOOLS}));
+
+        service.getWorkProgramEvaluationTools(workProgramId)
+            .then((res) => {
+                dispatch(workProgramActions.setWorkProgramEvaluationTools(res.data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_WORK_PROGRAM_EVALUATION_TOOLS}));
                 return done();
             });
     }
@@ -69,6 +95,9 @@ export default [
     ...topicLogics,
     ...literatureLogics,
     ...prerequisitesLogics,
+    ...evaluationToolsLogics,
+    ...resultsLogics,
     getWorkProgram,
     saveWorkProgram,
+    getWorkProgramEvaluationTools,
 ];

@@ -1,0 +1,33 @@
+import {Dispatch} from "react";
+import {connect} from 'react-redux';
+import {bindActionCreators} from "redux";
+
+import {WorkProgramGeneralFields} from "../enum";
+import actions from "../actions";
+import {getWorkProgramField} from '../getters';
+import {WorkProgramActions} from "../types";
+
+import {isFetchingComponentByKey} from "../../../layout/getters";
+
+import {rootState} from "../../../store/reducers";
+
+const mapStateToProps = (state:rootState) => {
+    return {
+        title: getWorkProgramField(state, WorkProgramGeneralFields.TITLE),
+        code: getWorkProgramField(state, WorkProgramGeneralFields.CODE),
+        authors: getWorkProgramField(state, WorkProgramGeneralFields.AUTHORS),
+        date: getWorkProgramField(state, WorkProgramGeneralFields.APPROVAL_DATE),
+        fetchingCode: isFetchingComponentByKey(state, WorkProgramGeneralFields.TITLE),
+        fetchingTitle: isFetchingComponentByKey(state, WorkProgramGeneralFields.CODE),
+        fetchingDate: isFetchingComponentByKey(state, WorkProgramGeneralFields.APPROVAL_DATE),
+        fetchingAuthors: isFetchingComponentByKey(state, WorkProgramGeneralFields.AUTHORS),
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<WorkProgramActions>) => ({
+    // @ts-ignore
+    actions: bindActionCreators(actions, dispatch),
+});
+
+// @ts-ignore
+export default connect(mapStateToProps, mapDispatchToProps);

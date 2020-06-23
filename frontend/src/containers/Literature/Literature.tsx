@@ -73,6 +73,7 @@ class Literature extends React.Component<LiteratureProps> {
 
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
+        this.props.actions.changeCurrentPage(1);
         this.props.actions.getLiterature();
     }, 300);
 
@@ -161,7 +162,7 @@ class Literature extends React.Component<LiteratureProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены что хотите удалить источник?'}
+                               confirmText={'Вы точно уверены, что хотите удалить источник?'}
                                isOpen={Boolean(deleteConfirmId)}
                                dialogTitle={'Удалить источник'}
                                confirmButtonText={'Удалить'}

@@ -16,8 +16,10 @@ const changeSearchQuery = createAction<string>('TRAINING_ENTITIES_CHANGE_SEARCH_
 const changeCurrentPage = createAction<string>('TRAINING_ENTITIES_CHANGE_CURRENT_PAGE');
 const changeAllCount = createAction<string>('TRAINING_ENTITIES_CHANGE_ALL_COUNT');
 const changeSorting = createAction<string>('TRAINING_ENTITIES_CHANGE_SORTING');
+const changeSubjectId = createAction<string>('TRAINING_ENTITIES_CHANGE_SUBJECT_ID');
 
 const actions: TrainingEntitiesActions = {
+    changeSubjectId,
     getTrainingEntities,
     setTrainingEntities,
     createNewTrainingEntities,

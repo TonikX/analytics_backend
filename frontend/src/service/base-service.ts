@@ -48,6 +48,7 @@ export default class BaseService {
 
     interceptFailResponse = (error: any) => {
         const errors = get(error, 'response.data', {});
+
         const errorsArray = Object.keys(errors).map(key => errors[key]);
 
         return Promise.reject(errorsArray);

@@ -458,6 +458,12 @@ class DomainListCreateAPIView(generics.ListCreateAPIView):
     #    user = self.request.user
     #    return Domain.objects.filter(user=user)
 
+    def perform_create(self, serializer):
+        # print (Topic.objects.filter(discipline_section = serializer.validated_data['discipline_section']).count()+1)
+        print (self.request.user)
+        serializer.save(user=[self.request.user])
+
+
 
 class DomainDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     """

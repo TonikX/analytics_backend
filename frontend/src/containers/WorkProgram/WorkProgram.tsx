@@ -9,11 +9,13 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 
-import FirstStep from "./FirstStep";
-import SecondStep from "./SecondStep";
-import ThirdStep from "./ThirdStep";
-import ForthStep from "./ForthStep";
-import SixthStep from "./SixthStep";
+import General from "./General";
+import Sections from "./Sections";
+import Topics from "./Topics";
+import Literature from "./Literature";
+import EvaluationTools from "./EvaluationTools";
+import Prerequisites from "./Prerequisites";
+import Results from "./Results";
 
 import {WorkProgramProps} from './types';
 import connect from './WorkProgram.connect';
@@ -21,7 +23,7 @@ import styles from './WorkProgram.styles';
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
-        activeStep: 5
+        activeStep: 0
     };
 
     componentDidMount() {
@@ -43,40 +45,57 @@ class WorkProgram extends React.Component<WorkProgramProps> {
             case 0:
                 return <>
                     <div className={classes.subItem}>
-                        <FirstStep />
+                        <General />
                     </div>
                 </>;
             case 1:
+                return <div className={classes.subItem}>
+
+                    <Typography className={classes.subTitle}>
+                        Пререквизиты
+                    </Typography>
+
+                    <Prerequisites />
+                </div>;
+            case 2:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
                         Разделы
                     </Typography>
 
-                    <SecondStep />
+                    <Sections />
                 </div>;
-            case 2:
+            case 3:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
                         Содержание дисциплины
                     </Typography>
 
-                    <ThirdStep />
+                    <Topics />
                 </div>;
-            case 3:
+            case 4:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
                         Источники
                     </Typography>
 
-                    <ForthStep />
+                    <Literature />
                 </div>;
             case 5:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
-                        Пререквизиты
+                        Оценочные средства
                     </Typography>
 
-                    <SixthStep />
+                    <EvaluationTools />
+                </div>;
+            case 6:
+                return <div className={classes.subItem}>
+                    <Typography className={classes.subTitle}>
+                        Результаты обучения
+                    </Typography>
+
+                    <Results />
                 </div>;
         }
     }
@@ -85,7 +104,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         const {classes} = this.props;
         const {activeStep} = this.state;
 
-        const steps = ['Главное', 'Разделы', "Темы", "Содержание", "Оценочные средства", "Пререквизиты", "Результаты обучения"];
+        const steps = ['Главное',  "Пререквизиты", 'Разделы', "Темы", "Источники", "Оценочные средства", "Результаты обучения"];
 
         return (
             <Paper className={classes.root}>
@@ -99,7 +118,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         return (
                             <Step key={label}>
                                 <StepButton onClick={this.handleStep(index)}
-                                            completed={index === 1 || index === 0}
+                                            completed={false}
                                 >
                                     {label}
                                 </StepButton>

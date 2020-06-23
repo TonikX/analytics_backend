@@ -8,8 +8,6 @@ export default (theme: Theme) => createStyles({
     lastInput: {
         width: '550px',
     },
-    marginBottom30: {
-    },
     selector: {
         width: '550px'
     },
@@ -19,4 +17,9 @@ export default (theme: Theme) => createStyles({
     dialog: {
         padding: 20,
     },
+    link: {
+        marginRight: 'auto',
+        textDecoration: 'none',
+        color: theme.palette.primary.main,
+    }
 });

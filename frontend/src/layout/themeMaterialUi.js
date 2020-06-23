@@ -15,10 +15,23 @@ const muiTheme = createMuiTheme({
     typography: {
         useNextVariants: true,
         fontFamily: [
-            'Montserrat',
-            'Roboto Slab',
-            'Source Sans Pro'
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
         ].join(','),
+        // fontFamily: [
+        //     'Montserrat',
+        //     'Roboto Slab',
+        //     'Source Sans Pro',
+        //     '-apple-system',
+        // ].join(','),
         fontSize: 15
     },
     palette: {
@@ -55,6 +68,11 @@ const muiTheme = createMuiTheme({
                 padding: '5px 25px !important'
             },
         },
+        MuiTableCell: {
+            root: {
+                padding: '10px !important'
+            }
+        }
     }
 }, ruRU);
 

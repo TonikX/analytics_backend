@@ -5,7 +5,8 @@ export default (theme: Theme) => createStyles({
     drawerPaper: {
         width: 250,
         marginTop: 64,
-        borderRight: '1px solid #f4f4f4'
+        borderRight: '1px solid #f4f4f4',
+        zIndex: 100
     },
     divider: {
         backgroundColor: '#f4f4f4'
@@ -33,7 +34,6 @@ export default (theme: Theme) => createStyles({
         borderLeft: `4px solid transparent`,
         '&:hover': {
             backgroundColor: '#f4f4f4 !important',
-            color: `${theme.palette.secondary.main} !important`,
             '& svg': {
                 color: theme.palette.secondary.main,
             },
@@ -43,6 +43,7 @@ export default (theme: Theme) => createStyles({
         textDecoration: 'none'
     },
     icon: {
+        width: 30,
         marginRight: 10
     }
 });

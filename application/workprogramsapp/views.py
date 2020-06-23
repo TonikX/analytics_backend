@@ -6,10 +6,13 @@ from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramF
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, OnlineCourse
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
+from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, FieldOfStudySerializer
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
-    PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer
+    PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
+from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
+    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -29,6 +32,8 @@ from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins
+from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule
+
 
 '''
 # Create your views here.
@@ -232,14 +237,21 @@ class WorkProgramsPostUpdate(View):
         return render(request, 'workprograms/WorkProgramOutcomesPrerequisitesEdit.html', {'form': WorkProgramOP})
 
 
-class WorkProgramsListApi(APIView):
-    """
-    Список рабочих программ для апи.
-    """
-    def get(self, request, format=None):
-        WorkPrograms = WorkProgram.objects.all()
-        serializer = WorkProgramSerializer(WorkPrograms, many=True)
-        return Response(serializer.data)
+# class WorkProgramsListApi(APIView):
+# #     """
+# #     Список рабочих программ для апи.
+# #     """
+# #     def get(self, request, format=None):
+# #         WorkPrograms = WorkProgram.objects.all()
+# #         serializer = WorkProgramSerializer(WorkPrograms, many=True)
+# #         return Response(serializer.data)
+
+
+class WorkProgramsListApi(generics.ListAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['discipline_code', 'title']
 
 
 class PrerequisitesUpdate(View):
@@ -430,31 +442,72 @@ class TopicPostUpdate(View):
 
 
 
-class IndicatorListView(APIView):
-    """
-       Список индикаторов.
-    """
-    def get(self, request):
-        indicators = Indicator.objects.all()
-        serializer = IndicatorSerializer(indicators, many=True)
-        return Response(serializer.data)
+# class IndicatorListView(APIView):new_
+#     """
+#        Список индикаторов.
+#     """
+#     def get(self, request):
+#         indicators = Indicator.objects.all()
+#         serializer = IndicatorSerializer(indicators, many=True)
+#         return Response(serializer.data)
+#
+# class IndicatorUpdateView(APIView):
+#     """
+#         Редактирование (обновление) индикатора
+#     """
+#     def get(self, request, pk):
+#         indicator = get_object_or_404(Indicator, pk=pk)
+#         serializer = IndicatorSerializer(indicator)
+#         return Response(serializer.data)
+#
+#     def put(self, request, pk):
+#         indicator = get_object_or_404(Indicator, pk=pk)
+#         serializer = IndicatorSerializer(indicator, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class IndicatorUpdateView(APIView):
-    """
-        Редактирование (обновление) индикатора
-    """
-    def get(self, request, pk):
-        indicator = get_object_or_404(Indicator, pk=pk)
-        serializer = IndicatorSerializer(indicator)
-        return Response(serializer.data)
 
-    def put(self, request, pk):
-        indicator = get_object_or_404(Indicator, pk=pk)
-        serializer = IndicatorSerializer(indicator, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class IndicatorListAPIView(generics.ListAPIView):
+    serializer_class = IndicatorListSerializer
+    queryset = Indicator.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['number', 'name', 'competence']
+
+
+class IndicatorCreateAPIView(generics.CreateAPIView):
+    serializer_class = IndicatorSerializer
+    queryset = Indicator.objects.all()
+
+
+class IndicatorDestroyView(generics.DestroyAPIView):
+    queryset = Indicator.objects.all()
+    serializer_class = IndicatorSerializer
+
+
+class IndicatorUpdateView(generics.UpdateAPIView):
+    queryset = Indicator.objects.all()
+    serializer_class = IndicatorSerializer
+
+
+class IndicatorDetailsView(generics.RetrieveAPIView):
+    queryset = Indicator.objects.all()
+    serializer_class = IndicatorListSerializer
+
+
+
+class CompetenceCreateView(generics.CreateAPIView):
+    serializer_class = CompetenceSerializer
+    queryset = Competence.objects.all()
+
+
+class CompetencesListView(generics.ListAPIView):
+    serializer_class = CompetenceSerializer
+    queryset = Competence.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name','number']
+
 
 class CompetenceListView(APIView):
     """
@@ -559,17 +612,17 @@ class OutcomesOfWorkProgramUpdateView(generics.UpdateAPIView):
 
 
 class PrerequisitesOfWorkProgramList(generics.ListAPIView):
-        serializer_class = PrerequisitesOfWorkProgramSerializer
-        permission_classes = [IsAuthenticated]
+    serializer_class = PrerequisitesOfWorkProgramSerializer
+    permission_classes = [IsAuthenticated]
 
-        def list(self, request, **kwargs):
-            """
-            Вывод всех результатов для одной рабочей программы по id
-            """
-            # Note the use of `get_queryset()` instead of `self.queryset`
-            queryset = PrerequisitesOfWorkProgram.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
-            serializer = PrerequisitesOfWorkProgramSerializer(queryset, many=True)
-            return Response(serializer.data)
+    def list(self, request, **kwargs):
+        """
+        Вывод всех результатов для одной рабочей программы по id
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = PrerequisitesOfWorkProgram.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        serializer = PrerequisitesOfWorkProgramSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class PrerequisitesOfWorkProgramCreateAPIView(generics.CreateAPIView):
@@ -625,6 +678,10 @@ class TopicCreateAPI(generics.CreateAPIView):
     queryset = Topic.objects.all()
     serializer_class = TopicCreateSerializer
 
+    def perform_create(self, serializer):
+        # print (Topic.objects.filter(discipline_section = serializer.validated_data['discipline_section']).count()+1)
+        serializer.save(number = Topic.objects.filter(discipline_section = serializer.validated_data['discipline_section']).count()+1)
+
 
 class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -639,7 +696,7 @@ class EvaluationToolListAPI(generics.ListCreateAPIView):
     API endpoint that represents a list of Evaluation Tools.
     """
     queryset = EvaluationTool.objects.all()
-    serializer_class = EvaluationToolSerializer
+    serializer_class = EvaluationToolCreateSerializer
 
 
 class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -647,7 +704,7 @@ class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     API endpoint that represents a single Evaluation Tool.
     """
     queryset = EvaluationTool.objects.all()
-    serializer_class = EvaluationToolSerializer
+    serializer_class = EvaluationToolCreateSerializer
 
 
 class DisciplineSectionListAPI(generics.ListCreateAPIView):
@@ -664,6 +721,23 @@ class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
+
+class FieldOfStudyDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    """
+        Удаление, редактирование, просмотр образовательной программы (направления) по id
+    """
+    queryset = FieldOfStudy.objects.all()
+    serializer_class = FieldOfStudySerializer
+
+
+class FieldOfStudyListCreateView(generics.ListCreateAPIView):
+    """
+        Отображение списка ОП(направлений), создание образовательной программы (напрвления)
+    """
+    queryset = FieldOfStudy.objects.all()
+    serializer_class = FieldOfStudySerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title','number', 'faculty', 'educational_profile']
 
 
 # class NewOrdinalNumbersForDesciplineSectionAPI(APIView):
@@ -830,18 +904,18 @@ def handle_uploaded_file(file, filename):
     if not os.path.exists('upload/'):
         os.mkdir('upload/')
     path = 'upload/' + filename
-    
+
     with open(path, 'wb+') as destination:
         for chunk in file.chunks():
             destination.write(chunk)
-    
+
     df = pandas.read_csv(path, sep=',', encoding = 'utf-8')
     df.dropna(subset=['Направления подготовки'], inplace = True)
     df = df.drop(['Unnamed: 0'], axis=1)
     return df
 
 class FileUploadWorkProgramAPIView(APIView):
-    
+
     def post(self, request):
 
         serializer = FileUploadSerializer(data=request.data)
@@ -851,7 +925,7 @@ class FileUploadWorkProgramAPIView(APIView):
         data.fillna('не задано', inplace=True)
         for i in range(len(data)):
             try:
-            
+
                 #получаем список всех объектов-пререквизитов для дисциплины
                 prerequisite = data['Ключевые слова-пререквизиты'][i].split(', ')
                 prerequisite_items = []
@@ -867,7 +941,7 @@ class FileUploadWorkProgramAPIView(APIView):
 
                 prerequisite_items = Items.objects.filter(name__in = prerequisite_items)
                 print("Pre--",prerequisite_items)
-                
+
                 #получаем список всех объектов-результатов для дисциплины
                 outcomes = data['Ключевые слова содержания'][i].split(', ')
                 outcomes_items = []
@@ -915,7 +989,7 @@ class FileUploadWorkProgramAPIView(APIView):
                             out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj)
                             out_obj.save()
                             print('ok-2')
-                    
+
                     for fs in fs_list:
                         fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs, work_program = wp_obj)
                         fswp_obj.save()
@@ -931,7 +1005,7 @@ class FileUploadWorkProgramAPIView(APIView):
                             prereq_obj = PrerequisitesOfWorkProgram(item = item, workprogram = wp_obj)
                             prereq_obj.save()
                             print('ok-1')
-                    
+
                     if len(outcomes_items) !=0:
                         for item in outcomes_items:
                             out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj)
@@ -943,14 +1017,14 @@ class FileUploadWorkProgramAPIView(APIView):
                         fswp_obj.save()
                         print('ok-3')
 
-                
+
             except:
                 print(i)
                 continue;
-        return Response(status=200)  
+        return Response(status=200)
 
 class FileUploadOnlineCoursesAPIView(APIView):
-    
+
     def post(self, request):
 
         serializer = FileUploadSerializer(data=request.data)
@@ -958,7 +1032,7 @@ class FileUploadOnlineCoursesAPIView(APIView):
 
         data = handle_uploaded_file(request.FILES['file'], str(request.FILES['file']))
         data.fillna('', inplace=True)
-        
+
         for i in range(len(data)):
             try:
                 #получаем список всех объектов-пререквизитов для дисциплины
@@ -973,19 +1047,119 @@ class FileUploadOnlineCoursesAPIView(APIView):
 
                     # если нет, то записываем в БД и апдейтим
                     oc_obj = OnlineCourse(title = data['Название курса'][i],
-                                        platform = 'online.edu.ru',
-                                        description = data['Содержание курса'][i],
-                                        course_url = data['URL'][i])
+                                          platform = 'online.edu.ru',
+                                          description = data['Содержание курса'][i],
+                                          course_url = data['URL'][i])
                     oc_obj.save()
             except:
                 print(i)
                 continue;
-        return Response(status=200)  
+        return Response(status=200)
+
+
+class AcademicPlanListAPIView(generics.ListAPIView):
+    serializer_class = AcademicPlanSerializer
+    queryset = AcademicPlan.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['educational_profile']
+
+
+class AcademicPlanCreateAPIView(generics.CreateAPIView):
+    serializer_class = AcademicPlanCreateSerializer
+    queryset = AcademicPlan.objects.all()
+
+
+    def perform_create(self, serializer):
+        serializer.save()
+        # AcademicPlan.new_descipline_blocks(self, serializer)
+        AcademicPlan.clone_descipline_blocks(self, serializer)
+
+
+class AcademicPlanDestroyView(generics.DestroyAPIView):
+    queryset = AcademicPlan.objects.all()
+    serializer_class = AcademicPlanSerializer
+
+
+class AcademicPlanUpdateView(generics.UpdateAPIView):
+    queryset = AcademicPlan.objects.all()
+    serializer_class = AcademicPlanSerializer
+
+
+class AcademicPlanDetailsView(generics.RetrieveAPIView):
+    queryset = AcademicPlan.objects.all()
+    serializer_class = AcademicPlanSerializer
+
+
+class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
+    """
+    API endpoint that represents a list of Topics.
+    """
+    queryset = ImplementationAcademicPlan.objects.all()
+    serializer_class = ImplementationAcademicPlanCreateSerializer
+
+
+class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
+    serializer_class = ImplementationAcademicPlanSerializer
+    queryset = ImplementationAcademicPlan.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['educational_profile']
+
+
+class ImplementationAcademicPlanDestroyView(generics.DestroyAPIView):
+    queryset = ImplementationAcademicPlan.objects.all()
+    serializer_class = ImplementationAcademicPlanSerializer
+
+
+class ImplementationAcademicPlanUpdateView(generics.UpdateAPIView):
+    queryset = ImplementationAcademicPlan.objects.all()
+    serializer_class = ImplementationAcademicPlanCreateSerializer
+
+
+class ImplementationAcademicPlanDetailsView(generics.RetrieveAPIView):
+    queryset = ImplementationAcademicPlan.objects.all()
+    serializer_class = ImplementationAcademicPlanSerializer
+
+
+class WorkProgramChangeInDisciplineBlockModuleListAPIView(generics.ListAPIView):
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+    queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['educational_profile']
+
+
+class WorkProgramChangeInDisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+    queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
+
+
+class WorkProgramChangeInDisciplineBlockModuleDestroyView(generics.DestroyAPIView):
+    queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+
+
+class WorkProgramChangeInDisciplineBlockModuleDetailsView(generics.RetrieveAPIView):
+    queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+
+
+class WorkProgramChangeInDisciplineBlockModuleUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+
+
+class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
+    serializer_class = DisciplineBlockModuleCreateSerializer
+    queryset = DisciplineBlockModule.objects.all()
+
+
+class DisciplineBlockModuleDestroyView(generics.DestroyAPIView):
+    queryset = DisciplineBlockModule.objects.all()
+    serializer_class = DisciplineBlockModuleSerializer
+
+
+class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
+    queryset = DisciplineBlockModule.objects.all()
+    serializer_class = DisciplineBlockModuleCreateSerializer
 
 #Конец блока ендпоинтов рабочей программы
-
-
-
-
-
 

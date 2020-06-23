@@ -1,6 +1,8 @@
 from rest_framework import serializers, viewsets
 
-from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference
+from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool,\
+    PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
+    ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
 
 from dataprocessing.serializers import ItemSerializer
 
@@ -19,6 +21,47 @@ class CompetenceSerializer(serializers.ModelSerializer):
         fields = ['id','number', 'name']
 
 
+class IndicatorListSerializer(serializers.ModelSerializer):
+    competence = CompetenceSerializer()
+
+    class Meta:
+        model = Indicator
+        fields = ['id','number', 'name', 'competence']
+
+
+class FieldOfStudyImplementationSerializer(serializers.ModelSerializer):
+    """
+        Сериализатор образовательных программ (направлений)
+    """
+    class Meta:
+        model = FieldOfStudy
+        fields = ['id', 'title', 'number', 'qualification', 'educational_profile', 'faculty']
+
+
+class AcademicPlanInImplementationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id', 'educational_profile', 'number', 'approval_date']
+
+
+class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
+    academic_plan = AcademicPlanInImplementationSerializer()
+    field_of_study = FieldOfStudyImplementationSerializer()
+    #academic_plan = AcademicPlanSerializer()
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = ['id','academic_plan', 'field_of_study', 'year']
+
+
+class ImplementationAcademicPlanCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = "__all__"
+
+
 class OutcomesOfWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор работы с результатом обучения"""
     item  = ItemSerializer()
@@ -31,7 +74,21 @@ class OutcomesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
     """Сериализатор создания результата обучения"""
     class Meta:
         model = OutcomesOfWorkProgram
-        fields = ['item', 'workprogram', 'masterylevel']
+        fields = ['item', 'workprogram', 'masterylevel', 'evaluation_tool']
+
+
+class EvaluationToolSerializer(serializers.ModelSerializer):
+    """Сериализатор ФОСов"""
+    class Meta:
+        model = EvaluationTool
+        fields = "__all__"
+
+
+class EvaluationToolForOutcomsSerializer(serializers.ModelSerializer):
+    """Сериализатор ФОСов"""
+    class Meta:
+        model = EvaluationTool
+        fields = ['id', 'type', 'name']
 
 
 class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
@@ -39,10 +96,11 @@ class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
     # item_name  = serializers.ReadOnlyField(source='item.name')
     # item_id  = serializers.ReadOnlyField(source='item.id')
     item  = ItemSerializer()
+    evaluation_tool = EvaluationToolForOutcomsSerializer(many=True)
 
     class Meta:
         model = OutcomesOfWorkProgram
-        fields = ['item', 'masterylevel']
+        fields = ['id', 'item', 'masterylevel', 'evaluation_tool']
 
 
 class PrerequisitesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
@@ -57,7 +115,7 @@ class PrerequisitesOfWorkProgramSerializer(serializers.ModelSerializer):
     item  = ItemSerializer()
     class Meta:
         model = PrerequisitesOfWorkProgram
-        fields = ['item', 'workprogram', 'masterylevel']
+        fields = ['id', 'item', 'workprogram', 'masterylevel']
 
 
 class PrerequisitesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
@@ -91,13 +149,9 @@ class TopicCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
         fields = ['id', 'discipline_section', 'number', 'description', 'url_online_course']
-
-
-class EvaluationToolSerializer(serializers.ModelSerializer):
-    """Сериализатор ФОСов"""
-    class Meta:
-        model = EvaluationTool
-        fields = "__all__"
+        extra_kwargs = {
+            'number': {'required': False}
+        }
 
 
 class SectionSerializer(serializers.ModelSerializer):
@@ -142,12 +196,12 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     #discipline_sections = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
     discipline_sections = DisciplineSectionSerializer(many = True)
     discipline_certification = CertificationSerializer(many = True)
-    bibliographic_reference = BibliographicReferenceSerializer(many = True)
+    bibliographic_reference = BibliographicReferenceSerializer(many = True, required=False)
 
 
     class Meta:
         model = WorkProgram
-        fields = ['discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference']
+        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference']
 
     def create(self, validated_data):
         """
@@ -160,7 +214,11 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['discipline_code', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference']
+        fields = ['discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference']
+        extra_kwargs = {
+            'bibliographic_reference': {'required': False}
+        }
+
 
 
 class BibliographicReferenceForWorkProgramSerializer(serializers.ModelSerializer):
@@ -216,6 +274,15 @@ class DisciplineSectionForEvaluationToolsSerializer(serializers.ModelSerializer)
         fields = ['id', 'ordinal_number', 'name']
 
 
+class FieldOfStudySerializer(serializers.ModelSerializer):
+    """
+        Сериализатор образовательных программ (направлений)
+    """
+    class Meta:
+        model = FieldOfStudy
+        fields = "__all__"
+
+        
 class EvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
     #descipline_sections = serializers.StringRelatedField(many=True, source='evaluation_tools')
@@ -223,10 +290,86 @@ class EvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EvaluationTool
+        fields = ['id', 'type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections']
+
+
+class EvaluationToolCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор ФОСов"""
+    descipline_sections = serializers.PrimaryKeyRelatedField(many=True, source='evaluation_tools', queryset=DisciplineSection.objects.all())
+    #descipline_sections = DisciplineSectionForEvaluationToolsSerializer(many=True, source='evaluation_tools')
+
+    class Meta:
+        model = EvaluationTool
         fields = ['type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections']
 
 
+class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
+    """Сериализатор рабочих программ"""
+    prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set', many=True)
+    outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
 
 
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'prerequisites', 'outcomes', 'hoursFirstSemester', 'hoursSecondSemester']
+
+
+class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
+    work_program = WorkProgramForDisciplineBlockSerializer(many=True)
+
+    class Meta:
+        model = WorkProgramChangeInDisciplineBlockModule
+        fields = ['id', 'semester_hour', 'change_type', 'work_program']
+
+
+class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
+    change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = ['id', 'name', 'change_blocks_of_work_programs_in_modules']
+        extra_kwargs = {
+            'change_blocks_of_work_programs_in_modules': {'required': False}
+        }
+
+
+class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = ['id', 'name', 'descipline_block']
+
+
+class DisciplineBlockSerializer(serializers.ModelSerializer):
+    modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
+
+    class Meta:
+        model = DisciplineBlock
+        fields = ['id', 'name', 'modules_in_discipline_block']
+
+
+class AcademicPlanSerializer(serializers.ModelSerializer):
+    discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, required=False)
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan']
+        extra_kwargs = {
+            'discipline_blocks_in_academic_plan': {'required': False}
+        }
+
+
+class AcademicPlanCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id', 'educational_profile', 'number', 'approval_date']
+
+
+class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = WorkProgramChangeInDisciplineBlockModule
+        fields = "__all__"
 
 

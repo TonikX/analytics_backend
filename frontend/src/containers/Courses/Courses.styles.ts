@@ -33,7 +33,8 @@ export default (theme: Theme) => createStyles({
     },
     courseTitle: {
         minWidth: 200,
-        width: '20%'
+        width: '20%',
+        flex: 'none'
     },
     courseLink: {
         minWidth: 200,
@@ -41,6 +42,7 @@ export default (theme: Theme) => createStyles({
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
+        flex: 'none',
         '&: a': {
             textDecoration: 'none'
         }
@@ -72,9 +74,10 @@ export default (theme: Theme) => createStyles({
     },
     coursePlatform: {
         minWidth: 200,
-        width: '10%'
+        width: '10%',
+        flex: 'none'
     },
     courseDescription: {
-        whiteSpace: 'nowrap'
+
     },
 });

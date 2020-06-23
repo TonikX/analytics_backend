@@ -1,13 +1,18 @@
 import {ReactText} from "react";
+import get from 'lodash/get';
 import BaseService from "../../service/base-service";
 import {Section, Topic} from "./types";
-import {PrerequisiteFields, workProgramTopicFields} from "./enum";
+import {EvaluationToolFields, PrerequisiteFields, ResultsFields, workProgramTopicFields} from "./enum";
 import {CourseFields} from "../Courses/enum";
 import {TrainingEntitiesFields} from "../TrainingEntities/enum";
 
 class WorkProgramService extends BaseService{
     getWorkProgram(id: string){
         return this.get(`/api/workprogram/detail/${id}`);
+    }
+
+    getWorkProgramEvaluationTools(id: string){
+        return this.get(`/api/toolsinworkprogram/${id}`);
     }
 
     saveWorkProgram(destination: string, value: string, id: string){
@@ -125,6 +130,33 @@ class WorkProgramService extends BaseService{
         return this.post(`/api/prerequisitesofworkprogram/create`, formData);
     }
 
+    addEvaluationTool(evaluationTool: any){
+        return this.post(`/api/tools/`, evaluationTool);
+    }
+
+    addResult(result: any, workProgramId: ReactText){
+        return this.post(`/api/outcomesofworkprogram/create`, {
+            ...result,
+            workprogram: workProgramId,
+            item: get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID])
+        });
+    }
+
+    changeEvaluationTool(evaluationTool: any){
+        const id = evaluationTool[EvaluationToolFields.ID];
+
+        return this.patch(`/api/tools/${id}`, evaluationTool);
+    }
+
+    changeResult(result: any){
+        const id = result[ResultsFields.ID];
+
+        return this.patch(`/api/outcomesofworkprogram/update/${id}`, {
+            ...result,
+            item: get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID])
+        });
+    }
+
     changeTopicNumber(newNumber: ReactText, topicId: ReactText){
         const formData = new FormData();
 
@@ -144,14 +176,18 @@ class WorkProgramService extends BaseService{
         return this.delete(`/api/prerequisitesofworkprogram/${id}`);
     }
 
+    deleteEvaluationTool(id: ReactText){
+        return this.delete(`/api/tools/${id}`);
+    }
+
+    deleteResult(id: ReactText){
+        return this.delete(`/api/outcomesofworkprogram/delete/${id}`);
+    }
+
     updateLiterature(literature: Array<number>, workProgramId: ReactText){
-        const formData = new FormData();
-
-        literature.forEach((id, index) => {
-            formData.append(`bibliographic_reference[${index}]`, id.toString());
-        })
-
-        return this.patch(`/api/workprogram/update/${workProgramId}`, formData);
+        return this.patch(`/api/workprogram/update/${workProgramId}`, {
+            bibliographic_reference: literature
+        });
     }
 }
 

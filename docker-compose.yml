@@ -29,11 +29,13 @@ services:
         command: bash -c "
                 python manage.py makemigrations && python manage.py migrate &&
                 python manage.py runserver --insecure 0.0.0.0:8000";
+ #       "python manage.py makemigrations --merge --noinput";
                 
         volumes:
              - ./application:/application
         ports:
             - "8003:8000"
+        restart: always
         depends_on:
             - db
     frontend:

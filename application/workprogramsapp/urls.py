@@ -5,17 +5,23 @@ from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, W
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
 from .views import TopicList, TopicPost, TopicPostUpdate
-from .views import PrerequisitesUpdate, OutcomesUpdate, FieldOfStudyWPListView, IndicatorListView, \
+from .views import PrerequisitesUpdate, OutcomesUpdate, FieldOfStudyWPListView, \
     IndicatorUpdateView, CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, DeleteIndicatorFromCompetenceView, \
     AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
 from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView
 from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, TopicsListAPI, TopicDetailAPI, NewOrdinalNumbersForDesciplineSectionAPI
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
+from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateView
 from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
-    FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView
+    FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView, CompetenceCreateView, CompetencesListView
+from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, IndicatorUpdateView
+from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlanDetailsView, ImplementationAcademicPlanDestroyView, ImplementationAcademicPlanUpdateView, ImplementationAcademicPlanListAPIView
+from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
+from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
+    WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView
 
 
 urlpatterns = [
@@ -50,13 +56,21 @@ urlpatterns = [
     path('api/workprograms/', WorkProgramsListApi.as_view()),
 
     #Компетенции индикаторы
-    path('api/indicator/', IndicatorListView.as_view(), name='indicator'),
-    path('api/indicator/<int:pk>', IndicatorUpdateView.as_view(), name='indicator_update'),
+    # path('api/indicator/', IndicatorListView.as_view(), name='indicator'),
+    # path('api/indicator/<int:pk>', IndicatorUpdateView.as_view(), name='indicator_update'),
+    path('api/competences', CompetencesListView.as_view(), name='comptence'),
+    path('api/competence/create', CompetenceCreateView.as_view(), name='comptence'),
     path('api/competence/', CompetenceListView.as_view(), name='comptence'),
     path('api/competence/<int:pk>', CompetenceUpdateView.as_view(), name='comptence_update'),
     path('api/competenceindicator/<int:pk>', CompetenceIndicatorDetailView.as_view(), name='comptenceindicator'),
     path('api/competenceindicator/indicator/delete', DeleteIndicatorFromCompetenceView.as_view(), name='DeleteIndicatorFromCompetenceView'),
     path('api/competenceindicator/indicator/add', AddIndicatorToCompetenceView.as_view(), name="AddIndicatorFromCompetenceView"),
+
+    path('api/indicator', IndicatorListAPIView.as_view()),
+    path('api/indicator/create', IndicatorCreateAPIView.as_view()),
+    path('api/indicator/detail/<int:pk>', IndicatorDetailsView.as_view()),
+    path('api/indicator/delete/<int:pk>', IndicatorDestroyView.as_view()),
+    path('api/indicator/update/<int:pk>', IndicatorUpdateView.as_view()),
 
     path('api/outcomesofworkprogram/<int:workprogram_id>', OutcomesOfWorkProgramList.as_view()),
 
@@ -94,6 +108,10 @@ urlpatterns = [
     path('api/prerequisitesofworkprogram/delete/<int:pk>', PrerequisitesOfWorkProgramDestroyView.as_view()),
     path('api/prerequisitesofworkprogram/update/<int:pk>', PrerequisitesOfWorkProgramUpdateView.as_view()),
 
+    #Работа с образовательными программами
+    path('api/fieldofstudy/', FieldOfStudyListCreateView.as_view()),
+    path('api/fieldofstudy/<int:pk>', FieldOfStudyDetailUpdateDeleteView.as_view()),
+
     #Онлайн курс
     path('api/onlinecourse', OnlineCourseListCreateAPIView.as_view()),
     path('api/onlinecourse/create', OnlineCourseListCreateAPIView.as_view()),
@@ -111,5 +129,29 @@ urlpatterns = [
 
     path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
     path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
+
+    path('api/academicplan', AcademicPlanListAPIView.as_view()),
+    path('api/academicplan/create', AcademicPlanCreateAPIView.as_view()),
+    path('api/academicplan/detail/<int:pk>', AcademicPlanDetailsView.as_view()),
+    path('api/academicplan/delete/<int:pk>', AcademicPlanDestroyView.as_view()),
+    path('api/academicplan/update/<int:pk>', AcademicPlanUpdateView.as_view()),
+
+    path('api/implementationacademicplan', ImplementationAcademicPlanListAPIView.as_view()),
+    path('api/implementationacademicplan/create', ImplementationAcademicPlanAPIView.as_view()),
+    path('api/implementationacademicplan/detail/<int:pk>', ImplementationAcademicPlanDetailsView.as_view()),
+    path('api/implementationacademicplan/delete/<int:pk>', ImplementationAcademicPlanDestroyView.as_view()),
+    path('api/implementationacademicplan/update/<int:pk>', ImplementationAcademicPlanUpdateView.as_view()),
+
+    path('api/academicplan/implemention', ImplementationAcademicPlanAPIView.as_view()),
+
+    path('api/workprogramchangeindisciplineblockmodule', WorkProgramChangeInDisciplineBlockModuleListAPIView.as_view()),
+    path('api/workprogramchangeindisciplineblockmodule/create', WorkProgramChangeInDisciplineBlockModuleCreateAPIView.as_view()),
+    path('api/workprogramchangeindisciplineblockmodule/detail/<int:pk>', WorkProgramChangeInDisciplineBlockModuleDetailsView.as_view()),
+    path('api/workprogramchangeindisciplineblockmodule/delete/<int:pk>', WorkProgramChangeInDisciplineBlockModuleDestroyView.as_view()),
+    path('api/workprogramchangeindisciplineblockmodule/update/<int:pk>', WorkProgramChangeInDisciplineBlockModuleUpdateView.as_view()),
+
+    path('api/disciplineblockmodule/create', DisciplineBlockModuleCreateAPIView.as_view()),
+    path('api/disciplineblockmodule/delete/<int:pk>', DisciplineBlockModuleDestroyView.as_view()),
+    path('api/disciplineblockmodule/update/<int:pk>', DisciplineBlockModuleUpdateView.as_view()),
 
 ]

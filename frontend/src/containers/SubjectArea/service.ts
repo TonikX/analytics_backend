@@ -17,7 +17,7 @@ class SubjectAreaServices extends BaseService{
         const formData = new FormData();
 
         formData.append(SubjectAreaFields.TITLE, subjectArea[SubjectAreaFields.TITLE]);
-        return this.post(`/api/domain`, formData);
+        return this.post(`/api/domain/`, formData);
     }
 
     updateSubjectArea(subjectArea: any){

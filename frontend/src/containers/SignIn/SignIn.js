@@ -30,6 +30,7 @@ class SignIn extends React.PureComponent{
     };
 
     clickButtonHandler = () => {
+        this.props.actions.signIn();
     };
 
     handleKeyPress = (event) => {
@@ -43,7 +44,7 @@ class SignIn extends React.PureComponent{
     render() {
         const {classes, disableButton, auth} = this.props;
 
-        if (auth) return <Redirect to={'work-program/2'} />;
+        if (auth) return <Redirect to={'work-program/5'} />;
 
         return(
             <div className={classes.root}

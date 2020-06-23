@@ -6,7 +6,7 @@ export default (theme: Theme) => createStyles({
         marginLeft: 'auto'
     },
     header: {
-        zIndex: 10000
+        zIndex: 1000
     },
     // @ts-ignore
     popper: {
