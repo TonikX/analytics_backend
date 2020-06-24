@@ -2,7 +2,7 @@ import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
     addIcon: {
-        marginTop: '30px',
+        marginTop: '10px',
         marginLeft: 'auto',
         flex: 'none',
     },
