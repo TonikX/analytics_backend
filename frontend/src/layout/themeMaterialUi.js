@@ -72,6 +72,12 @@ const muiTheme = createMuiTheme({
             root: {
                 padding: '10px !important'
             }
+        },
+        MuiFab: {
+            root: {
+                width: '50px',
+                height: '50px'
+            }
         }
     }
 }, ruRU);

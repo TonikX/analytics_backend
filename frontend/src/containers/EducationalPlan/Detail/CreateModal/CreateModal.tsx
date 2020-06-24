@@ -42,7 +42,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [BlocksOfWorkProgramsFields.ID]: null,
             [BlocksOfWorkProgramsFields.TYPE]: '',
             [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: [],
-            [BlocksOfWorkProgramsFields.SEMESTER_HOUR]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         },
         showWorkProgramSelector: false,
         showAddWorkProgramButton: true,
@@ -57,7 +57,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         if (!shallowEqual(blockOfWorkPrograms, prevProps.blockOfWorkPrograms)){
             const workProgram = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.WORK_PROGRAMS) || [];
-            const semesterHours = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.SEMESTER_HOUR);
+            const semesterHours = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.SEMESTER_UNIT);
 
             const mappedWorkProgram = workProgram.map((program: WorkProgramGeneralType) => {
                 const date = moment(program[WorkProgramGeneralFields.APPROVAL_DATE]).isValid() ?
@@ -77,7 +77,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 blockOfWorkPrograms: {
                     [BlocksOfWorkProgramsFields.ID]: get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.ID),
                     [BlocksOfWorkProgramsFields.TYPE]: get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.TYPE, ''),
-                    [BlocksOfWorkProgramsFields.SEMESTER_HOUR]: mappedSemesterHours,
+                    [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: mappedSemesterHours,
                     [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: mappedWorkProgram,
                 },
                 module: {
@@ -188,14 +188,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     handleChangeHours = (index: number) => (e: React.ChangeEvent) => {
         const {blockOfWorkPrograms} = this.state;
-        const hours = blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_HOUR];
+        const hours = blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_UNIT];
 
         hours[index] = get(e, 'target.value', 0);
 
         this.setState({
             blockOfWorkPrograms: {
                 ...blockOfWorkPrograms,
-                [BlocksOfWorkProgramsFields.SEMESTER_HOUR]: hours
+                [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: hours
             }
         });
     }
@@ -289,9 +289,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     </div>
 
                     <div className={classes.semesterBlock}>
-                        <Typography className={classes.label}> Количество часов в семестрах </Typography>
+                        <Typography className={classes.label}> Количество зачетных единиц в семестрах </Typography>
                         <div className={classes.semesterList}>
-                            {blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_HOUR].map((item, index) =>
+                            {blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_UNIT].map((item, index) =>
                                 <TextField className={classes.semesterField}
                                            label={`${index} семестр`}
                                            variant='outlined'

@@ -18,7 +18,6 @@ export default (theme: Theme) => createStyles({
     },
     table: {
         height: '100%',
-        maxHeight: '600px',
         flex: 1
     }
 });

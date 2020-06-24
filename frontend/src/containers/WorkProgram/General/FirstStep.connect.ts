@@ -17,10 +17,15 @@ const mapStateToProps = (state:rootState) => {
         code: getWorkProgramField(state, WorkProgramGeneralFields.CODE),
         authors: getWorkProgramField(state, WorkProgramGeneralFields.AUTHORS),
         date: getWorkProgramField(state, WorkProgramGeneralFields.APPROVAL_DATE),
+        video: getWorkProgramField(state, WorkProgramGeneralFields.VIDEO_LINK),
+        description: getWorkProgramField(state, WorkProgramGeneralFields.DESCRIPTION),
+
         fetchingCode: isFetchingComponentByKey(state, WorkProgramGeneralFields.TITLE),
         fetchingTitle: isFetchingComponentByKey(state, WorkProgramGeneralFields.CODE),
         fetchingDate: isFetchingComponentByKey(state, WorkProgramGeneralFields.APPROVAL_DATE),
         fetchingAuthors: isFetchingComponentByKey(state, WorkProgramGeneralFields.AUTHORS),
+        fetchingVideoLink: isFetchingComponentByKey(state, WorkProgramGeneralFields.DESCRIPTION),
+        fetchingDescription: isFetchingComponentByKey(state, WorkProgramGeneralFields.VIDEO_LINK),
     };
 };
 

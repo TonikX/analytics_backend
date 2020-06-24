@@ -24,6 +24,8 @@ class FirstStep extends React.Component<FirstStepProps> {
         [WorkProgramGeneralFields.TITLE]: '',
         [WorkProgramGeneralFields.APPROVAL_DATE]: '',
         [WorkProgramGeneralFields.AUTHORS]: '',
+        [WorkProgramGeneralFields.DESCRIPTION]: '',
+        [WorkProgramGeneralFields.VIDEO_LINK]: '',
     };
 
     componentDidMount() {
@@ -32,6 +34,8 @@ class FirstStep extends React.Component<FirstStepProps> {
             [WorkProgramGeneralFields.CODE]: this.props.code,
             [WorkProgramGeneralFields.APPROVAL_DATE]: this.props.date,
             [WorkProgramGeneralFields.AUTHORS]: this.props.authors,
+            [WorkProgramGeneralFields.DESCRIPTION]: this.props.description,
+            [WorkProgramGeneralFields.VIDEO_LINK]: this.props.video,
         })
     }
 
@@ -43,6 +47,8 @@ class FirstStep extends React.Component<FirstStepProps> {
                 [WorkProgramGeneralFields.CODE]: this.props.code,
                 [WorkProgramGeneralFields.APPROVAL_DATE]: this.props.date,
                 [WorkProgramGeneralFields.AUTHORS]: this.props.authors,
+                [WorkProgramGeneralFields.DESCRIPTION]: this.props.description,
+                [WorkProgramGeneralFields.VIDEO_LINK]: this.props.video,
             })
         }
     }
@@ -72,7 +78,19 @@ class FirstStep extends React.Component<FirstStepProps> {
 
     changeAuthors = (e: React.ChangeEvent) => {
         this.setState({
-            [WorkProgramGeneralFields.TITLE]: get(e, 'target.value')
+            [WorkProgramGeneralFields.AUTHORS]: get(e, 'target.value')
+        });
+    }
+
+    changeVideo = (e: React.ChangeEvent) => {
+        this.setState({
+            [WorkProgramGeneralFields.VIDEO_LINK]: get(e, 'target.value')
+        });
+    }
+
+    changeDescription = (e: React.ChangeEvent) => {
+        this.setState({
+            [WorkProgramGeneralFields.DESCRIPTION]: get(e, 'target.value')
         });
     }
 
@@ -88,67 +106,101 @@ class FirstStep extends React.Component<FirstStepProps> {
     }
 
     render() {
-        const {classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate} = this.props;
+        const {classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription} = this.props;
         const {state} = this;
 
         return (
-            <>
-                <InputsLoader loading={fetchingCode}>
-                    <TextField variant="outlined"
-                               label="Код программы"
-                               className={classes.input}
-                               value={state[WorkProgramGeneralFields.CODE]}
-                               onBlur={this.saveField(WorkProgramGeneralFields.CODE)}
-                               onChange={this.changeCode}
-                               disabled={fetchingCode}
-                               InputLabelProps={{
-                                   shrink: true,
-                               }}
-                    />
-                </InputsLoader>
-                <InputsLoader loading={fetchingTitle}>
-                    <TextField variant="outlined"
-                               label="Название дисциплины"
-                               value={state[WorkProgramGeneralFields.TITLE]}
-                               className={classes.input}
-                               onBlur={this.saveField(WorkProgramGeneralFields.TITLE)}
-                               onChange={this.changeTitle}
-                               disabled={fetchingTitle}
-                    />
-                </InputsLoader>
-                <InputsLoader loading={fetchingAuthors}>
-                    <TextField variant="outlined"
-                               label="Авторский состав"
-                               value={state[WorkProgramGeneralFields.AUTHORS]}
-                               className={classes.input}
-                               onBlur={this.saveField(WorkProgramGeneralFields.AUTHORS)}
-                               onChange={this.changeAuthors}
-                               disabled={fetchingAuthors}
-                               InputLabelProps={{
-                                   shrink: true,
-                               }}
-                    />
-                </InputsLoader>
-                <InputsLoader loading={fetchingDate}>
-                    <DatePicker
-                        value={moment(state[WorkProgramGeneralFields.APPROVAL_DATE])}
-                        onChange={(date: any) => this.changeDate(date)}
-                        InputProps={{
-                            endAdornment: (
-                                <IconButton>
-                                    <DateIcon />
-                                </IconButton>
-                            ),
-                        }}
-                        inputVariant="outlined"
-                        className={classes.datePicker}
-                        format={FULL_DATE_FORMAT}
-                        label={'Дата создания'}
-                    />
-                </InputsLoader>
+            <div className={classes.container}>
+                <div className={classes.side}>
+                    <InputsLoader loading={fetchingCode}>
+                        <TextField variant="outlined"
+                                   label="Шифр программы"
+                                   className={classes.input}
+                                   value={state[WorkProgramGeneralFields.CODE]}
+                                   onBlur={this.saveField(WorkProgramGeneralFields.CODE)}
+                                   onChange={this.changeCode}
+                                   disabled={fetchingCode}
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}
+                        />
+                    </InputsLoader>
+                    <InputsLoader loading={fetchingTitle}>
+                        <TextField variant="outlined"
+                                   label="Название дисциплины"
+                                   value={state[WorkProgramGeneralFields.TITLE]}
+                                   className={classes.input}
+                                   onBlur={this.saveField(WorkProgramGeneralFields.TITLE)}
+                                   onChange={this.changeTitle}
+                                   disabled={fetchingTitle}
+                        />
+                    </InputsLoader>
+                    <InputsLoader loading={fetchingAuthors}>
+                        <TextField variant="outlined"
+                                   label="Авторский состав"
+                                   value={state[WorkProgramGeneralFields.AUTHORS]}
+                                   className={classes.input}
+                                   onBlur={this.saveField(WorkProgramGeneralFields.AUTHORS)}
+                                   onChange={this.changeAuthors}
+                                   disabled={fetchingAuthors}
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}
+                        />
+                    </InputsLoader>
+                    <InputsLoader loading={fetchingVideoLink}>
+                        <TextField variant="outlined"
+                                   label="Видео"
+                                   value={state[WorkProgramGeneralFields.VIDEO_LINK]}
+                                   className={classes.input}
+                                   onBlur={this.saveField(WorkProgramGeneralFields.VIDEO_LINK)}
+                                   onChange={this.changeVideo}
+                                   disabled={fetchingVideoLink}
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}
+                        />
+                    </InputsLoader>
 
-                <Selector />
-            </>
+                    <Selector />
+                </div>
+
+                <div className={classes.side}>
+                    <InputsLoader loading={fetchingDescription}>
+                        <TextField variant="outlined"
+                                   label="Описание"
+                                   value={state[WorkProgramGeneralFields.DESCRIPTION]}
+                                   className={classes.input}
+                                   onBlur={this.saveField(WorkProgramGeneralFields.DESCRIPTION)}
+                                   onChange={this.changeDescription}
+                                   disabled={fetchingDescription}
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}
+                                   multiline
+                                   rows={11}
+                        />
+                    </InputsLoader>
+
+                    <InputsLoader loading={fetchingDate}>
+                        <DatePicker
+                            value={moment(state[WorkProgramGeneralFields.APPROVAL_DATE])}
+                            onChange={(date: any) => this.changeDate(date)}
+                            InputProps={{
+                                endAdornment: (
+                                    <IconButton>
+                                        <DateIcon />
+                                    </IconButton>
+                                ),
+                            }}
+                            inputVariant="outlined"
+                            className={classes.datePicker}
+                            format={FULL_DATE_FORMAT}
+                            label={'Дата создания'}
+                        />
+                    </InputsLoader>
+                </div>
+            </div>
         );
     }
 }

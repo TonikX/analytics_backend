@@ -2,8 +2,8 @@ import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
     tableWrap: {
-        height: 'calc(100% - 200px)',
-        maxHeight: 'calc(100% - 200px)',
+        height: 'calc(100% - 60px)',
+        maxheight: 'calc(100% - 60px)',
         '& td': {
             padding: '5px 10px !important'
         }
@@ -80,4 +80,7 @@ export default (theme: Theme) => createStyles({
     marginRight: {
         marginRight: 20
     },
+    workProgramLink: {
+        cursor: 'pointer'
+    }
 });
