@@ -145,16 +145,16 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                 </TableRow>
 
                                 <TableRow>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">1</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">2</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">3</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">4</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">5</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">6</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">7</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">8</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">9</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">10</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '25px'}} align="center">1</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '25px'}} align="center">2</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '25px'}} align="center">3</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '25px'}} align="center">4</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '25px'}} align="center">5</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '25px'}} align="center">6</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '25px'}} align="center">7</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '25px'}} align="center">8</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '25px'}} align="center">9</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '25px'}} align="center">10</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>

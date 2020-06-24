@@ -18,6 +18,12 @@ export default (theme: Theme) => createStyles({
     },
     table: {
         height: '100%',
-        flex: 1
+        flex: 1,
+        '& th': {
+            padding: '3px 10px !important'
+        },
+        '& td': {
+            padding: '3px 10px !important'
+        }
     }
 });

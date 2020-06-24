@@ -5,7 +5,11 @@ export default (theme: Theme) => createStyles({
         height: 'calc(100% - 60px)',
         maxheight: 'calc(100% - 60px)',
         '& td': {
-            padding: '5px 10px !important'
+            padding: '5px 10px !important',
+            fontSize: '14px'
+        },
+        '& p': {
+            fontSize: '14px'
         }
     },
     rowModule: {
@@ -19,7 +23,7 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center',
     },
     root: {
-        padding: '20px 50px 40px 50px',
+        padding: '20px 50px 20px 50px',
         boxShadow: '0px 0px 6px 1px rgba(194,194,194,0.3)',
         height: '100%',
         boxSizing: 'border-box',
@@ -46,6 +50,8 @@ export default (theme: Theme) => createStyles({
             color: '#fff',
             background: theme.palette.primary.main,
             fontWeight: '400',
+            fontSize: '14px',
+            padding: '0px 10px !important'
         }
     },
     title: {
