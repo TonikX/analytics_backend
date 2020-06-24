@@ -101,6 +101,10 @@ class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = OutcomesOfWorkProgram
         fields = ['id', 'item', 'masterylevel', 'evaluation_tool']
+        extra_kwargs = {
+            'evaluation_tool': {'required': False}
+        }
+
 
 
 class PrerequisitesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
@@ -201,7 +205,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference']
+        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video']
 
     def create(self, validated_data):
         """
@@ -214,7 +218,7 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference']
+        fields = ['discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference', 'description', 'video']
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }

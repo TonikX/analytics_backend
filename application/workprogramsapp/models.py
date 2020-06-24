@@ -60,6 +60,8 @@ class WorkProgram(models.Model):
     field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram, verbose_name = "Предметная область")
     bibliographic_reference = models.ManyToManyField('BibliographicReference', verbose_name='Библиогравическая_ссылка', related_name='bibrefs')
     #evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
+    description = models.CharField(max_length=5000, blank=True, null=True)
+    video = models.CharField(max_length=1024, blank=True, null=True)
 
     # list_of_references = models.TextField(blank=True, null=True)
     # guidelines = models.TextField(blank=True, null=True)
