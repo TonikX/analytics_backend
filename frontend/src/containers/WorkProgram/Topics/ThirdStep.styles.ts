@@ -28,7 +28,10 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         height: 'fit-content',
         marginLeft: 'auto',
-        padding: '0px 20px'
+        padding: '0px 20px',
+        '& button': {
+            padding: '3px'
+        }
     },
     sectionItem: {
 
@@ -50,7 +53,6 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center',
         padding: '0 0 0 20px',
         boxSizing: 'border-box',
-        minHeight: '50px',
         background: '#fff'
     },
     topicName: {
