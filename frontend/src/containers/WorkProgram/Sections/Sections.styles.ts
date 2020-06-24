@@ -20,10 +20,10 @@ export default (theme: Theme) => createStyles({
         height: '100%',
         flex: 1,
         '& th': {
-            padding: '3px 10px !important'
+            padding: '3px !important',
         },
         '& td': {
-            padding: '3px 10px !important'
+            padding: '3px !important'
         }
     }
 });
