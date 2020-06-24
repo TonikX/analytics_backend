@@ -165,7 +165,6 @@ class CreateModal extends React.PureComponent<CourseCreateModalProps> {
                                 <OutlinedInput
                                     notched
                                     labelWidth={100}
-                                    name="course"
                                     id="section-label"
                                 />
                             }

@@ -16,7 +16,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import MultipleSearchSelector from '../../../../components/SearchSelector';
+import SearchSelector from '../../../../components/SearchSelector';
 
 import {fields, PrerequisiteFields} from '../../enum';
 import {TrainingEntitiesFields} from "../../../TrainingEntities/enum";
@@ -160,7 +160,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         </RadioGroup>
                     </FormControl>
 
-                    <MultipleSearchSelector label="Предметная область *"
+                    <SearchSelector label="Предметная область *"
                                             changeSearchText={this.handleChangeSubjectAreaSearch}
                                             list={subjectArea}
                                             changeItem={this.changeSubjectAreaField}
@@ -169,7 +169,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             className={classes.marginBottom30}
                     />
 
-                    <MultipleSearchSelector label="Учебная сущность *"
+                    <SearchSelector label="Учебная сущность *"
                                             changeSearchText={this.handleChangeTrainingEntitySearchText}
                                             list={trainingEntities}
                                             changeItem={this.saveTrainingEntityField}

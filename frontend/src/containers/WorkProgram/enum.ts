@@ -26,6 +26,8 @@ export enum WorkProgramGeneralFields {
     TITLE = 'title',
     CODE = 'discipline_code',
     QUALIFICATION = 'qualification',
+    APPROVAL_DATE = 'approval_date',
+    AUTHORS = 'authors',
 }
 
 export enum workProgramSectionFields {

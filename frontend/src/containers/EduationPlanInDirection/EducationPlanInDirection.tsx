@@ -121,7 +121,7 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                         </Typography>
 
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Учебный план
+                            Учебные планы
                             <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.EDUCATION_PLAN)}
                                            mode={sortingField === EducationPlanInDirectionFields.EDUCATION_PLAN ? sortingMode : ''}
                             />

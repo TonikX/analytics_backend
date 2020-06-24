@@ -14,6 +14,7 @@ import Competences from './containers/Competences';
 import EducationalProgram from './containers/Direction';
 import EducationalPlan from './containers/EducationalPlan';
 import EducationPlanInDirection from './containers/EduationPlanInDirection';
+import EducationPlanDetail from './containers/EducationalPlan/Detail';
 import Indicators from './containers/Indicators';
 import WorkProgramList from "./containers/WorkProgramList";
 
@@ -54,9 +55,15 @@ export default () => (
                 <AuthRoute path={routerService.getIndicatorsRoute()}>
                     <Indicators />
                 </AuthRoute>
-                <AuthRoute path={routerService.getEducationPlanRoute()}>
-                    <EducationalPlan />
-                </AuthRoute>
+                <AuthRoute path={routerService.getEducationPlanDetailRoute()}
+                           children={() => (
+                               <Route
+                                   render={({match}) => (
+                                       <EducationPlanDetail match={match}/>
+                                   )}
+                               />
+                           )}
+                />
                 <AuthRoute path={routerService.getEducationPlanInDirectionRoute()}>
                     <EducationPlanInDirection />
                 </AuthRoute>
@@ -64,14 +71,17 @@ export default () => (
                     <WorkProgramList />
                 </AuthRoute>
                 <AuthRoute path={routerService.getWorkProgramRoute()}
-                       children={() => (
-                           <Route
-                               render={({match}) => (
-                                   <WorkProgram match={match}/>
-                               )}
-                           />
-                       )      }
+                           children={() => (
+                               <Route
+                                   render={({match}) => (
+                                       <WorkProgram match={match}/>
+                                   )}
+                               />
+                           )}
                 />
+                <AuthRoute path={routerService.getEducationPlanRoute()}>
+                    <EducationalPlan />
+                </AuthRoute>
             </Switch>
         </Layout>
     </Router>

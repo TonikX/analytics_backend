@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import MultipleSearchSelector from "../../../components/SearchSelector/SearchSelector";
+import SearchSelector from "../../../components/SearchSelector/SearchSelector";
 import {SubjectAreaFields} from "../../SubjectArea/enum";
 import {TrainingEntitiesFields} from '../enum';
 
@@ -121,7 +121,7 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
                                    shrink: true,
                                }}
                     />
-                    <MultipleSearchSelector label="Предметная область * "
+                    <SearchSelector label="Предметная область * "
                                             changeSearchText={this.handleChangeSubjectAreaSearchText}
                                             list={subjectAreaList}
                                             changeItem={this.saveSubjectAreaField}

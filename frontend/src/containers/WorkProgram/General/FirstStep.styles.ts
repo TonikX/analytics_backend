@@ -7,5 +7,9 @@ export default (theme: Theme) => createStyles({
     },
     marginRight: {
         marginRight: '20px'
+    },
+    datePicker: {
+        width: '400px',
+        marginBottom: '20px'
     }
 });

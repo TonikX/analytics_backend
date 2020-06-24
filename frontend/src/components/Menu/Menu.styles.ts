@@ -34,7 +34,6 @@ export default (theme: Theme) => createStyles({
         borderLeft: `4px solid transparent`,
         '&:hover': {
             backgroundColor: '#f4f4f4 !important',
-            color: `${theme.palette.secondary.main} !important`,
             '& svg': {
                 color: theme.palette.secondary.main,
             },
@@ -44,6 +43,7 @@ export default (theme: Theme) => createStyles({
         textDecoration: 'none'
     },
     icon: {
+        width: 30,
         marginRight: 10
     }
 });

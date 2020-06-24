@@ -2,7 +2,7 @@ import {createLogic} from "redux-logic";
 import get from 'lodash/get';
 
 import actions from '../../layout/actions';
-import competencesActions from './actions';
+import educationalPlanActions from './actions';
 
 import Service from './service';
 
@@ -12,7 +12,7 @@ import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from ".
 const service = new Service();
 
 const getEducationalPlansInDirection = createLogic({
-    type: competencesActions.getEducationalPlansInDirection.type,
+    type: educationalPlanActions.getEducationalPlansInDirection.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState();
@@ -22,29 +22,29 @@ const getEducationalPlansInDirection = createLogic({
         const sortingField = getSortingField(state);
         const sortingMode = getSortingMode(state);
 
-        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EDUCATION_PLAN_IN_DIRECTION}));
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EDUCATION_PLANS_IN_DIRECTION}));
 
         service.getEducationalPlansInDirection(currentPage, searchQuery, sortingField, sortingMode)
             .then((res) => {
                 const courses = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));
 
-                dispatch(competencesActions.setEducationalPlansInDirection(courses));
-                dispatch(competencesActions.changeAllCount(allPages));
+                dispatch(educationalPlanActions.setEducationalPlansInDirection(courses));
+                dispatch(educationalPlanActions.changeAllCount(allPages));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
             })
             .then(() => {
-                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_EDUCATION_PLAN_IN_DIRECTION}));
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_EDUCATION_PLANS_IN_DIRECTION}));
                 return done();
             });
     }
 });
 
 const deleteEducationalPlanInDirection = createLogic({
-    type: competencesActions.deleteEducationalPlanInDirection.type,
+    type: educationalPlanActions.deleteEducationalPlanInDirection.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const courseId = action.payload;
@@ -53,7 +53,7 @@ const deleteEducationalPlanInDirection = createLogic({
 
         service.deleteEducationalPlansInDirection(courseId)
             .then((res) => {
-                dispatch(competencesActions.getEducationalPlansInDirection());
+                dispatch(educationalPlanActions.getEducationalPlansInDirection());
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -67,7 +67,7 @@ const deleteEducationalPlanInDirection = createLogic({
 });
 
 const createNewEducationalPlanInDirection = createLogic({
-    type: competencesActions.createNewEducationalPlanInDirection.type,
+    type: educationalPlanActions.createNewEducationalPlanInDirection.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const course = action.payload;
@@ -76,9 +76,9 @@ const createNewEducationalPlanInDirection = createLogic({
 
         service.createEducationalPlansInDirection(course)
             .then((res) => {
-                dispatch(competencesActions.getEducationalPlansInDirection());
+                dispatch(educationalPlanActions.getEducationalPlansInDirection());
                 dispatch(actions.fetchingSuccess());
-                dispatch(competencesActions.closeDialog());
+                dispatch(educationalPlanActions.closeDialog());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
@@ -91,7 +91,7 @@ const createNewEducationalPlanInDirection = createLogic({
 });
 
 const changeEducationalPlanInDirection = createLogic({
-    type: competencesActions.changeEducationalPlanInDirection.type,
+    type: educationalPlanActions.changeEducationalPlanInDirection.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const course = action.payload;
@@ -100,9 +100,9 @@ const changeEducationalPlanInDirection = createLogic({
 
         service.updateEducationalPlansInDirection(course)
             .then((res) => {
-                dispatch(competencesActions.getEducationalPlansInDirection());
+                dispatch(educationalPlanActions.getEducationalPlansInDirection());
                 dispatch(actions.fetchingSuccess());
-                dispatch(competencesActions.closeDialog());
+                dispatch(educationalPlanActions.closeDialog());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));

@@ -14,7 +14,7 @@ import TextField from "@material-ui/core/TextField";
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {CompetenceFields} from "../../Competences/enum";
-import MultipleSearchSelector from "../../../components/SearchSelector/SearchSelector";
+import SearchSelector from "../../../components/SearchSelector/SearchSelector";
 
 import {IndicatorsFields} from '../enum';
 
@@ -136,7 +136,7 @@ class CreateModal extends React.PureComponent<IndicatorCreateModalProps> {
                                    shrink: true,
                                }}
                     />
-                    <MultipleSearchSelector label="Компетенция * "
+                    <SearchSelector label="Компетенция * "
                                             changeSearchText={this.handleChangeCompetenceSearchText}
                                             list={competenceList}
                                             changeItem={this.saveCompetenceField}
