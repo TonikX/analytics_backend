@@ -51,6 +51,6 @@ export enum ModuleFields {
 export enum BlocksOfWorkProgramsFields {
     ID = 'id',
     WORK_PROGRAMS = 'work_program',
-    SEMESTER_HOUR = 'semester_hour',
+    SEMESTER_UNIT = 'semester_unit',
     TYPE = 'change_type',
 }

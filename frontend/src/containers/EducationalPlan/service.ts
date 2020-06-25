@@ -31,7 +31,7 @@ class EducationalPlanService extends BaseService{
         return this.post(`/api/workprogramchangeindisciplineblockmodule/create`, {
             'discipline_block_module': moduleWithBlocks.moduleId,
             [BlocksOfWorkProgramsFields.TYPE]: moduleWithBlocks[BlocksOfWorkProgramsFields.TYPE],
-            [BlocksOfWorkProgramsFields.SEMESTER_HOUR]: moduleWithBlocks[BlocksOfWorkProgramsFields.SEMESTER_HOUR].toString(),
+            [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: moduleWithBlocks[BlocksOfWorkProgramsFields.SEMESTER_UNIT].toString(),
             [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: moduleWithBlocks[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((item: { value: any; }) => item.value),
         });
     }
@@ -40,7 +40,7 @@ class EducationalPlanService extends BaseService{
         return this.patch(`/api/workprogramchangeindisciplineblockmodule/update/${moduleWithBlocks[BlocksOfWorkProgramsFields.ID]}`, {
             'discipline_block_module': moduleWithBlocks.moduleId,
             [BlocksOfWorkProgramsFields.TYPE]: moduleWithBlocks[BlocksOfWorkProgramsFields.TYPE],
-            [BlocksOfWorkProgramsFields.SEMESTER_HOUR]: moduleWithBlocks[BlocksOfWorkProgramsFields.SEMESTER_HOUR].toString(),
+            [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: moduleWithBlocks[BlocksOfWorkProgramsFields.SEMESTER_UNIT].toString(),
             [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: moduleWithBlocks[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((item: { value: any; }) => item.value),
         });
     }

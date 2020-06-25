@@ -32,7 +32,7 @@ const muiTheme = createMuiTheme({
         //     'Source Sans Pro',
         //     '-apple-system',
         // ].join(','),
-        fontSize: 15
+        fontSize: 14
     },
     palette: {
         primary: {
@@ -71,6 +71,12 @@ const muiTheme = createMuiTheme({
         MuiTableCell: {
             root: {
                 padding: '10px !important'
+            }
+        },
+        MuiFab: {
+            root: {
+                width: '40px',
+                height: '40px'
             }
         }
     }
