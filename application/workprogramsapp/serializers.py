@@ -323,7 +323,7 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'semester_hour', 'change_type', 'work_program']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program']
 
 
 class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
