@@ -10,24 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='workprogram',
-            name='approval_date',
-            field=models.DateTimeField(auto_now_add=True, null=True),
-        ),
-        migrations.AddField(
-            model_name='workprogram',
-            name='authors',
-            field=models.CharField(blank=True, max_length=1024, null=True),
-        ),
-        migrations.AddField(
-            model_name='workprogram',
-            name='description',
-            field=models.CharField(blank=True, max_length=5000, null=True),
-        ),
-        migrations.AddField(
-            model_name='workprogram',
-            name='video',
-            field=models.CharField(blank=True, max_length=1024, null=True),
-        ),
+
     ]
