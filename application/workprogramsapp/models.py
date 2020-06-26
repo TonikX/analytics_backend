@@ -111,7 +111,7 @@ class OutcomesOfWorkProgram(models.Model):
         choices=MasterylevelChoices,
         default=1, verbose_name = "Уровень"
     )
-    evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочные средства', related_name='evaluation_tool_of_outcomes')
+    evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочные средства', related_name='evaluation_tool_of_outcomes', blank = True, null = True)
 
 #
 # class User(AbstractUser):
