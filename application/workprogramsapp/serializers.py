@@ -75,6 +75,9 @@ class OutcomesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = OutcomesOfWorkProgram
         fields = ['item', 'workprogram', 'masterylevel', 'evaluation_tool']
+        extra_kwargs = {
+            'evaluation_tool': {'required': False}
+        }
 
 
 class EvaluationToolSerializer(serializers.ModelSerializer):
