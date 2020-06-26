@@ -15,9 +15,5 @@ class Migration(migrations.Migration):
             model_name='disciplineblock',
             name='implementation_academic_plan',
         ),
-        migrations.AddField(
-            model_name='disciplineblock',
-            name='academic_plan',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='workprogramsapp.AcademicPlan', verbose_name='Учебный план в направлении'),
-        ),
+
     ]
