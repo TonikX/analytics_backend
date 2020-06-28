@@ -1012,7 +1012,7 @@ class FileUploadAPIView(APIView):
 
         print('============Создаю рпд и направления============')
         #создаем рпд и направления
-
+        
         for i in range(len(data)):
             try:
                 print('============Записываю РПД и Направления============')
@@ -1063,106 +1063,12 @@ class FileUploadAPIView(APIView):
                 print('что-то не так рпд')
                 continue;
         print('============Завершено: РПД и направления==============')
-
+        
         print('============Создаю учебные планы=============')
         academic_plan = data['SUBFIELDNAME'].drop_duplicates()
         for i in academic_plan:
             df = data[(data['SUBFIELDNAME'] == i)]
             fs = df['SUBFIELDCODE'].drop_duplicates()
-            if AcademicPlan.objects.filter(educational_profile = i).exists():
-                ap_obj = AcademicPlan.objects.get(educational_profile = i)
-                print(ap_obj)
-                print('===========Добавляю блоки===========')
-                blocks = df['CYCLE'].drop_duplicates()
-                for b in blocks:
-                    try:
-
-                        db = DisciplineBlock()
-                        db.name = b
-                        db.academic_plan_id = ap_obj.id
-                        db.save()
-                        
-                        print('---------BLOCKS----------')
-                        #db = DisciplineBlock.objects.get(name = b, academic_plan = ap_obj)
-                        modules = df[(df['CYCLE']==db.name)]['COMPONENT']
-                        print('===========Добавляю модули в блоки===========')
-                        for m in modules:
-                            try:
-                                mdb = DisciplineBlockModule()
-                                mdb.name = m
-                                mdb.descipline_block = db
-                                mdb.save()
-                                #print(mdb)
-                                print('---------MODULES----------')
-                    
-                                print('===========Добавляю дисциплины в модули===========')
-                                subjects = df[(df['CYCLE']==db.name)&(df['COMPONENT']==mdb.name)]['SUBJECT'].drop_duplicates()
-                                print(subjects)
-                                for s in subjects:
-                                    try:
-                                        print(s)
-                                        wp_obj = WorkProgram.objects.get(title = s)
-                                        print(wp_obj)
-                                        wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
-                                        wpchangemdb.discipline_block_module = mdb
-                                        wpchangemdb.work_program= wp_obj
-                                        wpchangemdb.save()
-                                        print('---------SUBJECTS----------')
-                                    except:
-                                        continue; 
-                            except:
-                                continue;
-                    except:
-                        print('что-то не так')
-                        continue;
-
-                else:
-                    ap_obj = AcademicPlan(educational_profile = i)
-                    ap_obj.save()
-                    print(ap_obj)
-                    print('===========Добавляю блоки===========')
-                blocks = df['CYCLE'].drop_duplicates()
-                for b in blocks:
-                    try:
-                        db = DisciplineBlock()
-                        db.name = b
-                        db.academic_plan_id = ap_obj.id
-                        db.save()
-                        
-                        print('---------BLOCKS----------')
-                        #db = DisciplineBlock.objects.get(name = b, academic_plan = ap_obj)
-                        modules = df[(df['CYCLE']==db.name)]['COMPONENT']
-                        print('===========Добавляю модули в блоки===========')
-                        for m in modules:
-                            try:
-                                mdb = DisciplineBlockModule()
-                                mdb.name = m
-                                mdb.descipline_block = db
-                                mdb.save()
-                                #print(mdb)
-                                print('---------MODULES----------')
-                    
-                                print('===========Добавляю дисциплины в модули===========')
-                                subjects = df[(df['CYCLE']==db.name)&(df['COMPONENT']==mdb.name)]['SUBJECT'].drop_duplicates()
-                                print(subjects)
-                                for s in subjects:
-                                    try:
-                                        print(s)
-                                        wp_obj = WorkProgram.objects.get(title = s)
-                                        print(wp_obj)
-                                        wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
-                                        wpchangemdb.discipline_block_module = mdb
-                                        wpchangemdb.work_program_id = wp_obj.id
-                                        wpchangemdb.save()
-                                        print('---------SUBJECTS----------')
-                                    except:
-                                        continue; 
-                            except:
-                                continue;
-                    except:
-                        print('что-то не так')
-                        continue;
-     
 
             print('===========Добавляю учебные планы в направления===========')
             for f in fs:
@@ -1180,7 +1086,143 @@ class FileUploadAPIView(APIView):
                 except:
                     print('Ошибка в учебном плане или направлении')
                     continue;
+                    
+            if AcademicPlan.objects.filter(educational_profile = i).exists():
+                ap_obj = AcademicPlan.objects.get(educational_profile = i)
+                print('===========Добавляю блоки===========')
+                blocks = df['CYCLE'].drop_duplicates()
+                for b in blocks:
+                    try:
+                        print('---------BLOCKS----------')
+                        if DisciplineBlock.objects.filter(name = b, academic_plan = ap_obj).exists():
+                            db = DisciplineBlock.objects.get(name = b, academic_plan = ap_obj)
+                        else:
+                            db = DisciplineBlock()
+                            db.name = b
+                            db.academic_plan_id = ap_obj.id
+                            db.save()
+                            
+                        modules = df[(df['CYCLE']==db.name)]['COMPONENT']
+                        print('===========Добавляю модули в блоки===========')
+                        for m in modules:
+                            try:
+                                if DisciplineBlockModule.objects.filter(name = m, descipline_block = db).exists():
+                                    mdb = DisciplineBlockModule.objects.get(name = m, descipline_block = db)
+                                else:
+                                    mdb = DisciplineBlockModule()
+                                    mdb.name = m
+                                    mdb.descipline_block = db
+                                    mdb.save()
+                                print('---------MODULES----------')
 
+                                print('===========Добавляю дисциплины в модули===========')
+                                subjects = df[(df['CYCLE']==b)&(df['COMPONENT']==m)]['SUBJECT'].drop_duplicates()
+                                for s in subjects:
+                                    try:
+                                        print(s)
+                                        semesters = df[(df['CYCLE']==b)&(df['COMPONENT']==m)&(df['SUBJECT']==s)]['SEMESTER'].drop_duplicates()
+                                        print(semesters)
+                                        credit_units = [0 for i in range(0,10)]
+                                        print(credit_units)
+                                        for semester in semesters:
+                                            credit_units[int(semester)-1] = 1
+                                        print(credit_units)
+                                        if WorkProgram.objects.filter(title = s).exists():
+                                            wp_obj = WorkProgram.objects.get(title = s)
+                                        else:
+                                            wp_obj = WorkProgram(title = s)
+                                            wp_obj.save()
+                                        print(wp_obj)
+                                        wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
+                                        print('ok-init')
+                                        wpchangemdb.credit_units = ','.join(str(i) for i in credit_units)
+                                        print('ok-credit-units')
+                                        wpchangemdb.discipline_block_module = mdb
+                                        print('ok-mdb')
+                                        wpchangemdb.save()
+                                        print(wpchangemdb)
+                                        wpchangemdb.work_program.add(wp_obj)
+                                        #если добавится выборность, поменять на wpchangemdb.work_program.set([])
+                                        print(wpchangemdb.work_program.all())
+                                        print('---------SUBJECTS----------')
+                                    except:
+                                        print('err')
+                                        continue; 
+                            except:
+                                continue;
+                    except:
+                        print('что-то не так')
+                        continue;
+
+            else:
+                ap_obj = AcademicPlan(educational_profile = i)
+                ap_obj.save()
+                print('===========Добавляю блоки===========')
+                blocks = df['CYCLE'].drop_duplicates()
+                for b in blocks:
+                    try:
+                        print('---------BLOCKS----------')
+                        if DisciplineBlock.objects.filter(name = b, academic_plan = ap_obj).exists():
+                            db = DisciplineBlock.objects.get(name = b, academic_plan = ap_obj)
+                        else:
+                            db = DisciplineBlock()
+                            db.name = b
+                            db.academic_plan_id = ap_obj.id
+                            db.save()
+
+                        modules = df[(df['CYCLE']==db.name)]['COMPONENT']
+                        print('===========Добавляю модули в блоки===========')
+                        for m in modules:
+                            try:
+                                if DisciplineBlockModule.objects.filter(name = m, descipline_block = db).exists():
+                                    mdb = DisciplineBlockModule.objects.get(name = m, descipline_block = db)
+                                else:
+                                    mdb = DisciplineBlockModule()
+                                    mdb.name = m
+                                    mdb.descipline_block = db
+                                    mdb.save()
+                                print('---------MODULES----------')
+
+                                print('===========Добавляю дисциплины в модули===========')
+                                subjects = df[(df['CYCLE']==b)&(df['COMPONENT']==m)]['SUBJECT'].drop_duplicates()
+                                for s in subjects:
+                                    try:
+                                        print(s)
+                                        semesters = df[(df['CYCLE']==b)&(df['COMPONENT']==m)&(df['SUBJECT']==s)]['SEMESTER'].drop_duplicates()
+                                        print(semesters)
+                                        credit_units = [0 for i in range(0,10)]
+                                        print(credit_units)
+                                        for semester in semesters:
+                                            credit_units[int(semester)-1] = 1
+                                        print(credit_units)
+                                        if WorkProgram.objects.filter(title = s).exists():
+                                            wp_obj = WorkProgram.objects.get(title = s)
+                                        else:
+                                            wp_obj = WorkProgram(title = s)
+                                            wp_obj.save()
+                                        print(wp_obj)
+                                        wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
+                                        print('ok-init')
+                                        wpchangemdb.credit_units = ','.join(str(i) for i in credit_units)
+                                        print('ok-credit-units')
+                                        wpchangemdb.discipline_block_module = mdb
+                                        print('ok-mdb')
+                                        wpchangemdb.save()
+                                        print(wpchangemdb)
+                                        wpchangemdb.work_program.add(wp_obj)
+                                        #если добавится выборность, поменять на wpchangemdb.work_program.set([])
+                                        print(wpchangemdb.work_program.all())
+                                        print('---------SUBJECTS----------')
+                                    except:
+                                        print('err')
+                                        continue; 
+                            except:
+                                continue;
+                    except:
+                        print('что-то не так')
+                        continue;
+     
+        
         print('Завершено: Учебные планы, блоки, модулиб дисциплины')
         return Response(status=200)
 
