@@ -32,86 +32,9 @@ from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins
-from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule
+from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, DisciplineBlock
 
 
-'''
-# Create your views here.
-def upload_file(request):
-    """
-    Функция добавления данных об РПД из файлов
-    """
-    try:
-        if request.method == 'POST':
-            data = handle_uploaded_file(request.FILES['file'], str(request.FILES['file']))
-            print(data.head())
-            print(data.shape)
-            for i in range(len(data)):
-                try:
-                    # проверяем если ОП уже существует в БД
-                    if FieldOfStudy.objects.filter(number = data['SUBFIELDCODE'][i]+'-'+data['SUBFIELDNAME'][i]).exists():
-                        fs_obj = FieldOfStudy.objects.get(number = data['SUBFIELDCODE'][i]+'-'+data['SUBFIELDNAME'][i]).id
-                        # Проверяем если Дисцпилина уже есть в БД
-                        #
-                        if WorkProgram.objects.filter(title = data['SUBJECT'][i]).exists():
-                            # если да, то записываем в FieldOfStudyWorkProgram
-                            wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i]).id
-                            fswp_obj = FieldOfStudyWorkProgram(field_of_study = FieldOfStudy.objects.get(id = fs_obj), work_program = WorkProgram.objects.get(id = wp_obj))
-                            fswp_obj.save()
-                        else:
-                            # если нет, то записываем в БД
-                            wp_obj = WorkProgram(title = data['SUBJECT'][i])
-                            wp_obj.save()
-                            wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i]).id
-                            # Теперь записываем в FieldOfStudyWorkProgram
-                            fswp_obj = FieldOfStudyWorkProgram(field_of_study = FieldOfStudy.objects.get(id = fs_obj), work_program = WorkProgram.objects.get(id = wp_obj))
-                            fswp_obj.save()
-                    else:
-                        # Записываем в БД новую ОП
-                        #
-                        fs_obj = FieldOfStudy(number = data['SUBFIELDCODE'][i]+'-'+data['SUBFIELDNAME'][i],
-                                              qualification = data['DEGREE'][i],)
-                        fs_obj.save()
-                        fs_obj = FieldOfStudy.objects.get(number = data['SUBFIELDCODE'][i]+'-'+data['SUBFIELDNAME'][i]).id
-                        # Проверяем если Дисцпилина уже есть в БД
-                        #
-                        if WorkProgram.objects.filter(title = data['SUBJECT'][i]).exists():
-                            # если да, то записываем в FieldOfStudyWorkProgram
-                            #
-                            workprogram = WorkProgram.objects.get(title = data['SUBJECT'][i]).id
-                            fswp_obj = FieldOfStudyWorkProgram(field_of_study = FieldOfStudy.objects.get(id = fs_obj), work_program = WorkProgram.objects.get(id = wp_obj))
-                            fswp_obj.save()
-
-                        else:
-                            # если нет, то записываем в БД
-                            wp_obj = WorkProgram(title = data['SUBJECT'][i])
-                            wp_obj.save()
-
-                            wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i]).id
-                            # Теперь записываем в FieldOfStudyWorkProgram
-                            fswp_obj = FieldOfStudyWorkProgram(field_of_study = FieldOfStudy.objects.get(id = fs_obj), work_program = WorkProgram.objects.get(id = wp_obj))
-                            fswp_obj.save()
-                except:
-                    pass
-        return redirect('/fswp/')
-    except:
-        print("Что-то не так")
-    return redirect('/workprogramslist/')
-
-def handle_uploaded_file(file, filename):
-    """
-    ???
-    """
-    if not os.path.exists('upload/'):
-        os.mkdir('upload/')
-    path = 'upload/' + filename
-    with open(path, 'wb+') as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
-    df = pandas.read_csv(path, sep=';', encoding = 'windows-1251')
-    df = df.drop(df.columns[[0]], axis=1)
-    return df
-'''
 class FieldOfStudyWPListView(View):
     model = FieldOfStudyWorkProgram
 
@@ -895,11 +818,13 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
         except:
             return Response(status=400)
 
+#Блок эндпоинтов для обрабоки файлов
+
 from dataprocessing.serializers import FileUploadSerializer
 
 def handle_uploaded_file(file, filename):
     """
-    Обработка файла
+    Обработка файла csv спарсенного с online.edu.ru
     """
     if not os.path.exists('upload/'):
         os.mkdir('upload/')
@@ -915,6 +840,9 @@ def handle_uploaded_file(file, filename):
     return df
 
 class FileUploadWorkProgramAPIView(APIView):
+    """
+    API эндпоинт для добавления данных о РПД из csv-файла, спарсенного с online.edu.ru
+    """
 
     def post(self, request):
 
@@ -965,7 +893,6 @@ class FileUploadWorkProgramAPIView(APIView):
                 fs_list = []
                 for f in field_of_study:
                     number,title,empty = re.split('.([А-Я][^А-Я]*)', f)
-                    print(number,'--', title)
                     if FieldOfStudy.objects.filter(number = number, title = title).exists():
                         fs_list.append(FieldOfStudy.objects.get(number = number, title = title))
                     else:
@@ -983,17 +910,14 @@ class FileUploadWorkProgramAPIView(APIView):
                         for item in prerequisite_items:
                             prereq_obj = PrerequisitesOfWorkProgram(item = item, workprogram = wp_obj)
                             prereq_obj.save()
-                            print('ok-1')
                     if len(outcomes_items) !=0:
                         for item in outcomes_items:
                             out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj)
                             out_obj.save()
-                            print('ok-2')
 
                     for fs in fs_list:
                         fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs, work_program = wp_obj)
                         fswp_obj.save()
-                        print('ok-3')
 
                 else:
 
@@ -1004,18 +928,15 @@ class FileUploadWorkProgramAPIView(APIView):
                         for item in prerequisite_items:
                             prereq_obj = PrerequisitesOfWorkProgram(item = item, workprogram = wp_obj)
                             prereq_obj.save()
-                            print('ok-1')
 
                     if len(outcomes_items) !=0:
                         for item in outcomes_items:
                             out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj)
                             out_obj.save()
-                            print('ok-2')
 
                     for fs in fs_list:
                         fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs, work_program = wp_obj)
                         fswp_obj.save()
-                        print('ok-3')
 
 
             except:
@@ -1024,6 +945,9 @@ class FileUploadWorkProgramAPIView(APIView):
         return Response(status=200)
 
 class FileUploadOnlineCoursesAPIView(APIView):
+    """
+    API эндпоинт для добавления данных об онлайн курсах из csv-файла, спарсенного с online.edu.ru
+    """
 
     def post(self, request):
 
@@ -1055,6 +979,211 @@ class FileUploadOnlineCoursesAPIView(APIView):
                 print(i)
                 continue;
         return Response(status=200)
+
+def handle_uploaded_csv(file, filename):
+    """
+    Обработка файла csv 
+    """
+    if not os.path.exists('upload/'):
+        os.mkdir('upload/')
+    path = 'upload/' + filename
+    
+    with open(path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    
+    df = pandas.read_csv(path, sep=';', encoding = 'windows-1251', low_memory=False)
+    df.dropna(subset=['SUBFIELDCODE','SUBFIELDNAME'], inplace = True)
+    print(df.head())
+    return df
+
+class FileUploadAPIView(APIView):
+
+    def post(self, request):
+
+        serializer = FileUploadSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        data = handle_uploaded_csv(request.FILES['file'], str(request.FILES['file']))
+        print(len(data))
+        #data.fillna('', inplace=True)
+        #берем только первые 3 семестра
+        data = data[(data['SEMESTER']<4)]
+
+        print('============Создаю рпд и направления============')
+        #создаем рпд и направления
+
+        for i in range(len(data)):
+            try:
+                print('============Записываю РПД и Направления============')
+                
+                # проверяем если ОП уже существует в БД
+                if FieldOfStudy.objects.filter(number = data['SUBFIELDCODE'][i]).exists():
+                    fs_obj = FieldOfStudy.objects.get(number = data['SUBFIELDCODE'][i])
+                    # Проверяем если Дисцпилина уже есть в БД
+                    #
+                    if WorkProgram.objects.filter(title = data['SUBJECT'][i]).exists():
+                        # если да, то записываем в FieldOfStudyWorkProgram
+                        wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i])
+                        fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs_obj, work_program = wp_obj)
+                        fswp_obj.save()
+                    else:
+                        # если нет, то записываем в БД
+                        wp_obj = WorkProgram(title = data['SUBJECT'][i])
+                        wp_obj.save()
+                        
+                        # Теперь записываем в FieldOfStudyWorkProgram
+                        fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs_obj, work_program = wp_obj)
+                        fswp_obj.save()
+                else:
+                
+                    # Записываем в БД новую ОП
+                    #
+                    fs_obj = FieldOfStudy(number = data['SUBFIELDCODE'][i])
+                    print(fs_obj)
+                    fs_obj.save()
+                    # Проверяем если Дисцпилина уже есть в БД
+                    #
+                    if WorkProgram.objects.filter(title = data['SUBJECT'][i]).exists():
+                        # если да, то записываем в FieldOfStudyWorkProgram
+                        #
+                        wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i])
+                        fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs_obj, work_program = wp_obj)
+                        fswp_obj.save()
+
+                    else:
+                        # если нет, то записываем в БД
+                        wp_obj = WorkProgram(title = data['SUBJECT'][i])
+                        wp_obj.save()
+                        
+                        # Теперь записываем в FieldOfStudyWorkProgram
+                        fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs_obj, work_program = wp_obj)
+                        fswp_obj.save()
+            except:
+                print('что-то не так рпд')
+                continue;
+        print('============Завершено: РПД и направления==============')
+
+        print('============Создаю учебные планы=============')
+        academic_plan = data['SUBFIELDNAME'].drop_duplicates()
+        for i in academic_plan:
+            df = data[(data['SUBFIELDNAME'] == i)]
+            fs = df['SUBFIELDCODE'].drop_duplicates()
+            if AcademicPlan.objects.filter(educational_profile = i).exists():
+                ap_obj = AcademicPlan.objects.get(educational_profile = i)
+                print(ap_obj)
+                print('===========Добавляю блоки===========')
+                blocks = df['CYCLE'].drop_duplicates()
+                for b in blocks:
+                    try:
+
+                        db = DisciplineBlock()
+                        db.name = b
+                        db.academic_plan_id = ap_obj.id
+                        db.save()
+                        
+                        print('---------BLOCKS----------')
+                        db = DisciplineBlock.objects.get(name = b, academic_plan = ap_obj)
+                        modules = df[(df['CYCLE']==db.name)]['COMPONENT']
+                        print('===========Добавляю модули в блоки===========')
+                        for m in modules:
+                            try:
+                                mdb = DisciplineBlockModule()
+                                mdb.name = m
+                                mdb.descipline_block = db
+                                mdb.save()
+                                #print(mdb)
+                                print('---------MODULES----------')
+                    
+                                print('===========Добавляю дисциплины в модули===========')
+                                subjects = df[(df['CYCLE']==db.name)&(df['COMPONENT']==mdb.name)]['SUBJECT'].drop_duplicates()
+                                print(subjects)
+                                for s in subjects:
+                                    try:
+                                        print(s)
+                                        wp_obj = WorkProgram.objects.get(title = s)
+                                        print(wp_obj)
+                                        wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
+                                        wpchangemdb.discipline_block_module = mdb
+                                        wpchangemdb.work_program= wp_obj
+                                        wpchangemdb.save()
+                                        print('---------SUBJECTS----------')
+                                    except:
+                                        continue; 
+                            except:
+                                continue;
+                    except:
+                        print('что-то не так')
+                        continue;
+
+                else:
+                    ap_obj = AcademicPlan(educational_profile = i)
+                    ap_obj.save()
+                    print(ap_obj)
+                    print('===========Добавляю блоки===========')
+                blocks = df['CYCLE'].drop_duplicates()
+                for b in blocks:
+                    try:
+                        db = DisciplineBlock()
+                        db.name = b
+                        db.academic_plan_id = ap_obj.id
+                        db.save()
+                        
+                        print('---------BLOCKS----------')
+                        db = DisciplineBlock.objects.get(name = b, academic_plan = ap_obj)
+                        modules = df[(df['CYCLE']==db.name)]['COMPONENT']
+                        print('===========Добавляю модули в блоки===========')
+                        for m in modules:
+                            try:
+                                mdb = DisciplineBlockModule()
+                                mdb.name = m
+                                mdb.descipline_block = db
+                                mdb.save()
+                                #print(mdb)
+                                print('---------MODULES----------')
+                    
+                                print('===========Добавляю дисциплины в модули===========')
+                                subjects = df[(df['CYCLE']==db.name)&(df['COMPONENT']==mdb.name)]['SUBJECT'].drop_duplicates()
+                                print(subjects)
+                                for s in subjects:
+                                    try:
+                                        print(s)
+                                        wp_obj = WorkProgram.objects.get(title = s)
+                                        print(wp_obj)
+                                        wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
+                                        wpchangemdb.discipline_block_module = mdb
+                                        wpchangemdb.work_program_id = wp_obj.id
+                                        wpchangemdb.save()
+                                        print('---------SUBJECTS----------')
+                                    except:
+                                        continue; 
+                            except:
+                                continue;
+                    except:
+                        print('что-то не так')
+                        continue;
+     
+
+            print('===========Добавляю учебные планы в направления===========')
+            for f in fs:
+                try:
+                    if FieldOfStudy.objects.filter(number = f).exists():
+                        fs_obj = FieldOfStudy.objects.get(number = f)
+                        iap_obj = ImplementationAcademicPlan(academic_plan = ap_obj, field_of_study = fs_obj)
+                        iap_obj.save()
+                    else:
+                        fs_obj = FieldOfStudy(number = f)
+                        fs_obj.save()
+
+                        iap_obj = ImplementationAcademicPlan(academic_plan = ap_obj, field_of_study = fs_obj)
+                        iap_obj.save()
+                except:
+                    print('Ошибка в учебном плане или направлении')
+                    continue;
+
+        print('Завершено: Учебные планы, блоки, модулиб дисциплины')
+        return Response(status=200)
+
 
 
 class AcademicPlanListAPIView(generics.ListAPIView):
