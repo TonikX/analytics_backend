@@ -97,7 +97,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                    shrink: true,
                                }}
                     />
-                    <TextField label="Код *"
+                    <TextField label="Шифр *"
                                onChange={this.saveField(WorkProgramGeneralFields.CODE)}
                                variant="outlined"
                                className={classes.input}

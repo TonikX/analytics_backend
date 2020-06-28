@@ -32,6 +32,8 @@ import {typeOfWorkProgramInPlan} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
+import {appRouter} from "../../../service/router-service";
+import {withRouter} from "react-router-dom";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -106,6 +108,13 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         this.props.actions.openDialog(detailPlan);
     }
 
+    goToWorkProgramPage = (id: number) => () => {
+        // @ts-ignore
+        const {history} = this.props;
+
+        history.push(appRouter.getWorkProgramLink(id));
+    }
+
     render() {
         const {classes, blocks} = this.props;
         const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength} = this.state;
@@ -129,23 +138,23 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                         Название
                                     </TableCell>
                                     <TableCell colSpan={10} className={classes.headerTextHoursCount}>
-                                        Количество часов в семестрах
+                                        Количество зачетных единиц в семестрах
                                     </TableCell>
                                     <TableCell rowSpan={2}> Тип </TableCell>
                                     <TableCell rowSpan={2}/>
                                 </TableRow>
 
                                 <TableRow>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">1</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">2</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">3</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">4</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">5</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">6</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">7</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">8</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">9</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '45px'}} align="center">10</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">1</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">2</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">3</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">4</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">5</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">6</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">7</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">8</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">9</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">10</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -195,7 +204,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                         </TableRow>
 
                                                         {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map(blockOfWorkProgram => {
-                                                            const semesterHours = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.SEMESTER_HOUR);
+                                                            const semesterHours = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.SEMESTER_UNIT);
                                                             const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
 
                                                             const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -203,7 +212,8 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                             return <TableRow>
                                                                 <TableCell>
                                                                     {workPrograms.map(workProgram =>
-                                                                        <Typography>
+                                                                        <Typography className={classes.workProgramLink}
+                                                                                    onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
                                                                             {workProgram[WorkProgramGeneralFields.TITLE]}
                                                                         </Typography>
                                                                     )}
@@ -263,4 +273,5 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     }
 }
 
-export default connect(withStyles(styles)(EducationalPlan));
+// @ts-ignore
+export default connect(withStyles(styles)(withRouter(EducationalPlan)));

@@ -199,7 +199,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                     <FormControl className={classes.evaluationToolSelector}>
                         <InputLabel shrink id="section-label">
-                            Оценочное средство *
+                            Оценочное средство
                         </InputLabel>
                         <Select
                             variant="outlined"

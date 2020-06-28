@@ -12,13 +12,18 @@ export default (theme: Theme) => createStyles({
         fontWeight: 'bold'
     },
     addIcon: {
-        marginTop: '30px',
+        marginTop: '10px',
         marginLeft: 'auto',
         flex: 'none',
     },
     table: {
         height: '100%',
-        maxHeight: '600px',
-        flex: 1
+        flex: 1,
+        '& th': {
+            padding: '3px !important',
+        },
+        '& td': {
+            padding: '3px !important'
+        }
     }
 });

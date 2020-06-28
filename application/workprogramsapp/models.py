@@ -60,6 +60,8 @@ class WorkProgram(models.Model):
     field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram, verbose_name = "Предметная область")
     bibliographic_reference = models.ManyToManyField('BibliographicReference', verbose_name='Библиогравическая_ссылка', related_name='bibrefs')
     #evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
+    description = models.CharField(max_length=5000, blank=True, null=True)
+    video = models.CharField(max_length=1024, blank=True, null=True)
 
     # list_of_references = models.TextField(blank=True, null=True)
     # guidelines = models.TextField(blank=True, null=True)
@@ -301,6 +303,8 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
 
     )
 
+    code = models.CharField(max_length=1024, blank=True, null=True)
+    credit_units = models.CharField(max_length=1024, blank=True, null=True)
     semester_hour = models.CharField(max_length=1024, blank=True, null=True)
     change_type = models.CharField(choices=CHANGE_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
     discipline_block_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="change_blocks_of_work_programs_in_modules", blank=True, null=True)

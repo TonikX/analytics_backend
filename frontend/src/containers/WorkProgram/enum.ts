@@ -28,6 +28,8 @@ export enum WorkProgramGeneralFields {
     QUALIFICATION = 'qualification',
     APPROVAL_DATE = 'approval_date',
     AUTHORS = 'authors',
+    VIDEO_LINK = 'video',
+    DESCRIPTION = 'description',
 }
 
 export enum workProgramSectionFields {

@@ -6,7 +6,7 @@ export default (theme: Theme) => createStyles({
         width: '100%'
     },
     root: {
-        padding: '50px',
+        padding: '20px 50px 20px 50px',
         boxShadow: '0px 0px 6px 1px rgba(194,194,194,0.3)',
         display: 'flex',
         height: '100%',
@@ -26,7 +26,7 @@ export default (theme: Theme) => createStyles({
     },
     subItem: {
         marginBottom: '20px',
-        height: '80%'
+        height: 'calc(100% - 100px)'
     },
     specializationSelector: {
         width: '465px'

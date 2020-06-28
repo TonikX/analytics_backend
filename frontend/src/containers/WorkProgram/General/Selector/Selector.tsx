@@ -1,6 +1,8 @@
 import React from 'react';
 import get from "lodash/get";
 
+import {AutoSizer} from "react-virtualized";
+
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -33,22 +35,28 @@ class Selector extends React.PureComponent<SecondStepProps> {
             <div>
                 <InputLabel className={classes.label}> Место дисциплины в структуре образовательной программы высшего образования (ОП ВО) </InputLabel>
                 <InputsLoader loading={isFetching}>
-                    <FormControl>
-                        <Select
-                            className={classes.specializationSelector}
-                            disabled={isFetching}
-                            value={value}
-                            // @ts-ignore
-                            onChange={this.saveField}
-                            variant="outlined"
-                        >
-                            {specialization.map(item =>
-                                <MenuItem value={item.value} key={`group-${item.value}`}>
-                                    {item.label}
-                                </MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
+                    <AutoSizer style={{width: '100%'}}>
+                        {({width}) => (
+                            <FormControl
+                                style={{width: width}}>
+                                <Select
+                                    className={classes.specializationSelector}
+                                    disabled={isFetching}
+                                    value={value}
+                                    // @ts-ignore
+                                    onChange={this.saveField}
+                                    variant="outlined"
+                                    style={{width: width}}
+                                >
+                                    {specialization.map(item =>
+                                        <MenuItem value={item.value} key={`group-${item.value}`}>
+                                            {item.label}
+                                        </MenuItem>
+                                    )}
+                                </Select>
+                                </FormControl>
+                        )}
+                    </AutoSizer>
                 </InputsLoader>
             </div>
         );

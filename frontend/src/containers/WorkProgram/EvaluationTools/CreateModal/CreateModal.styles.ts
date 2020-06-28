@@ -56,7 +56,7 @@ export default (theme: Theme) => createStyles({
         marginBottom: '30px',
     },
     weekTitle: {
-        marginBottom: '50px'
+        marginBottom: '20px'
     },
     rightSide: {
         width: '55%',

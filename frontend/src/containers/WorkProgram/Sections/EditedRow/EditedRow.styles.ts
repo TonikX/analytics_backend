@@ -22,6 +22,9 @@ export default (theme: Theme) => createStyles({
         color: 'green'
     },
     actions: {
-        display: 'flex'
+        display: 'flex',
+        '& button': {
+            padding: '3px'
+        }
     }
 });
