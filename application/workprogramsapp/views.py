@@ -1101,7 +1101,7 @@ class FileUploadAPIView(APIView):
                             db.name = b
                             db.academic_plan_id = ap_obj.id
                             db.save()
-
+                            
                         modules = df[(df['CYCLE']==db.name)]['COMPONENT']
                         print('===========Добавляю модули в блоки===========')
                         for m in modules:
