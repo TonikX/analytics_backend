@@ -1083,7 +1083,7 @@ class FileUploadAPIView(APIView):
                         db.save()
                         
                         print('---------BLOCKS----------')
-                        db = DisciplineBlock.objects.get(name = b, academic_plan = ap_obj)
+                        #db = DisciplineBlock.objects.get(name = b, academic_plan = ap_obj)
                         modules = df[(df['CYCLE']==db.name)]['COMPONENT']
                         print('===========Добавляю модули в блоки===========')
                         for m in modules:
@@ -1130,7 +1130,7 @@ class FileUploadAPIView(APIView):
                         db.save()
                         
                         print('---------BLOCKS----------')
-                        db = DisciplineBlock.objects.get(name = b, academic_plan = ap_obj)
+                        #db = DisciplineBlock.objects.get(name = b, academic_plan = ap_obj)
                         modules = df[(df['CYCLE']==db.name)]['COMPONENT']
                         print('===========Добавляю модули в блоки===========')
                         for m in modules:
