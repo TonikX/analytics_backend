@@ -21,7 +21,8 @@ from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetail
 from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlanDetailsView, ImplementationAcademicPlanDestroyView, ImplementationAcademicPlanUpdateView, ImplementationAcademicPlanListAPIView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
-    WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView
+    WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
+    FileUploadAPIView
 
 
 urlpatterns = [
@@ -129,6 +130,7 @@ urlpatterns = [
 
     path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
     path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
+    path('api/upload/csv', FileUploadAPIView.as_view()),
 
     path('api/academicplan', AcademicPlanListAPIView.as_view()),
     path('api/academicplan/create', AcademicPlanCreateAPIView.as_view()),
