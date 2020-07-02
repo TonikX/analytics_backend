@@ -188,8 +188,9 @@ class AcademicPlan(models.Model):
     '''
     educational_profile = models.CharField(unique=True, max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
     number = models.CharField(unique=True, max_length=1024, verbose_name = 'Номер учебного плана', blank = True, null = True)
-    field_of_study = models.ManyToManyField('FieldOfStudy', through='ImplementationAcademicPlan', blank = True, null = True)
+    field_of_study = models.ManyToManyField('FieldOfStudy', through='ImplementationAcademicPlan', related_name="block_in_academic_plan", blank = True, null = True)
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
+    #TODO: Добавить год набора
 
     def __str__(self):
         return (self.educational_profile)
@@ -223,7 +224,7 @@ class ImplementationAcademicPlan(models.Model):
     '''
     Модель приминения учебного плана в направлении
     '''
-    academic_plan = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план')
+    academic_plan = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план', related_name="academic_plan_in_field_of_study")
     field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE, verbose_name = 'Направление подготовки')
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
@@ -308,7 +309,7 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
     semester_hour = models.CharField(max_length=1024, blank=True, null=True)
     change_type = models.CharField(choices=CHANGE_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
     discipline_block_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="change_blocks_of_work_programs_in_modules", blank=True, null=True)
-    work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
+    work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", related_name="work_program_in_change_block", blank=True, null=True)
 
     def __str__(self):
         return (str(self.discipline_block_module) + str(self.work_program))
