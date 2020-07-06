@@ -417,12 +417,12 @@ class DisciplineSection(models.Model):
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
     evaluation_tools = models.ManyToManyField('EvaluationTool', verbose_name='Фонды оценочных средств', blank = True, null = True, related_name='evaluation_tools')
     #description = models.CharField(max_length=1024, verbose_name = "Раздел", blank = True, null = True)
-    contact_work = models.IntegerField(verbose_name = "Контактная работа", blank = True, null = True)
-    lecture_classes = models.IntegerField(verbose_name = "Занятия лекционного типа", blank = True, null = True)
-    laboratory = models.IntegerField(verbose_name = "Лабораторные занятия", blank = True, null = True)
-    practical_lessons = models.IntegerField(verbose_name = "Практические занятия", blank = True, null = True)
-    SRO = models.IntegerField(verbose_name = "СРО", blank = True, null = True)
-    total_hours = models.IntegerField(verbose_name = "Всего часов", blank = True, null = True)
+    contact_work = models.DecimalField(verbose_name = "Контактная работа", max_digits=5, decimal_places=2, blank = True, null = True)
+    lecture_classes = models.DecimalField(verbose_name = "Занятия лекционного типа", max_digits=5, decimal_places=2, blank = True, null = True)
+    laboratory = models.DecimalField(verbose_name = "Лабораторные занятия", max_digits=5, decimal_places=2, blank = True, null = True)
+    practical_lessons = models.DecimalField(verbose_name = "Практические занятия", max_digits=5, decimal_places=2, blank = True, null = True)
+    SRO = models.DecimalField(verbose_name = "СРО", max_digits=5, decimal_places=2, blank = True, null = True)
+    total_hours = models.DecimalField(verbose_name = "Всего часов", max_digits=5, decimal_places=2, blank = True, null = True)
 
     def __str__(self):
         return self.name
