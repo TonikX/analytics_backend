@@ -21,5 +21,13 @@ export default (theme: Theme) => createStyles({
     },
     datePicker: {
         width: '100%'
-    }
+    },
+    selectorWrap: {
+        '& .MuiInputLabel-shrink': {
+            transform: 'translate(14px, -6.5px) scale(0.75) !important',
+        },
+        '& .MuiOutlinedInput-notchedOutline legend': {
+            width: '107px !important'
+        }
+    },
 });

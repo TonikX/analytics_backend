@@ -54,14 +54,10 @@ class FirstStep extends React.Component<FirstStepProps> {
     }
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
-        const value = get(e, 'target.value');
-
-        if (value.length !== 0){
-            this.props.actions.saveWorkProgram({
-                destination: field,
-                value: get(e, 'target.value')
-            });
-        }
+        this.props.actions.saveWorkProgram({
+            destination: field,
+            value: get(e, 'target.value')
+        });
     };
 
     changeCode = (e: React.ChangeEvent) => {

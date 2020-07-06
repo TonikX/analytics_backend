@@ -16,6 +16,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
+import FileIcon from '@material-ui/icons/DescriptionOutlined';
 
 import ConfirmDialog from "../../../components/ConfirmDialog";
 import CreateModal from "./CreateModal";
@@ -228,6 +229,11 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                 </TableCell>
 
                                                                 <TableCell className={classes.actions}>
+                                                                    <Tooltip title={`Скачать ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу' }`}>
+                                                                        <FileIcon className={classes.marginRight}
+                                                                                  onClick={()=>{}}
+                                                                        />
+                                                                    </Tooltip>
                                                                     <Tooltip title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу' }`}>
                                                                         <DeleteIcon className={classes.marginRight}
                                                                                     onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}

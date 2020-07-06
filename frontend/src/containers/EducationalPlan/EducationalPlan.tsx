@@ -145,8 +145,8 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                     <div className={classNames(classes.row, classes.header)}>
                         <Typography className={classNames(classes.marginRight, classes.dateCell)}>
                             Дата согласования
-                            <SortingButton changeMode={this.changeSorting(EducationalPlanFields.PROFILE)}
-                                           mode={sortingField === EducationalPlanFields.PROFILE ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(EducationalPlanFields.APPROVAL_DATE)}
+                                           mode={sortingField === EducationalPlanFields.APPROVAL_DATE ? sortingMode : ''}
                             />
                         </Typography>
 
@@ -163,6 +163,25 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                             />
                         </Typography>
 
+                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                            Год реализации
+                            <SortingButton changeMode={this.changeSorting(EducationalPlanFields.YEAR)}
+                                           mode={sortingField === EducationalPlanFields.YEAR ? sortingMode : ''}
+                            />
+                        </Typography>
+                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                            Квалификация
+                            <SortingButton changeMode={this.changeSorting(EducationalPlanFields.QUALIFICATION)}
+                                           mode={sortingField === EducationalPlanFields.QUALIFICATION ? sortingMode : ''}
+                            />
+                        </Typography>
+                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                            Форма обучения
+                            <SortingButton changeMode={this.changeSorting(EducationalPlanFields.EDUCATION_FORM)}
+                                           mode={sortingField === EducationalPlanFields.EDUCATION_FORM ? sortingMode : ''}
+                            />
+                        </Typography>
+
                     </div>
 
                     <div className={classes.list}>
@@ -174,6 +193,9 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.numberCell)}> {plan[EducationalPlanFields.NUMBER]} </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}> {plan[EducationalPlanFields.PROFILE]} </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.yearCell)}> {plan[EducationalPlanFields.YEAR]} </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.qualificationCell)}> {plan[EducationalPlanFields.QUALIFICATION]} </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.educationFormCell)}> {plan[EducationalPlanFields.EDUCATION_FORM]} </Typography>
 
                                     <div className={classes.actions}>
                                         <IconButton

@@ -120,8 +120,15 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                             />
                         </Typography>
 
+                        <Typography className={classNames(classes.marginRight, classes.numberCell)}>
+                            Номер направления
+                            <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.NUMBER)}
+                                           mode={sortingField === EducationPlanInDirectionFields.NUMBER ? sortingMode : ''}
+                            />
+                        </Typography>
+
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Учебные планы
+                            Учебный план
                             <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.EDUCATION_PLAN)}
                                            mode={sortingField === EducationPlanInDirectionFields.EDUCATION_PLAN ? sortingMode : ''}
                             />
@@ -141,6 +148,9 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                 <div className={classes.row} key={educationalPlanInDirection[EducationPlanInDirectionFields.ID]}>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                                         {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.TITLE]}
+                                    </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.numberCell)}>
+                                        {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.NUMBER]}
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                                         {educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]}

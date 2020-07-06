@@ -32,14 +32,14 @@ export default (theme: Theme) => createStyles({
         minHeight: '50px'
     },
     titleCell: {
-        width: '40%',
+        width: '30%',
         flex: 'none'
     },
-    yearCell: {
-        width: '10%',
+    numberCell: {
+        width: '220px',
     },
-    competenceCell: {
-        width: '45%',
+    yearCell: {
+        width: '86px',
     },
     actions: {
         display: 'flex',

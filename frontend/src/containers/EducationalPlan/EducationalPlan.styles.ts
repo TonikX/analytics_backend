@@ -40,7 +40,16 @@ export default (theme: Theme) => createStyles({
         flex: 'none'
     },
     titleCell: {
-        width: '50%',
+        width: '20%',
+    },
+    yearCell: {
+        width: '150px',
+    },
+    qualificationCell: {
+        width: '150px',
+    },
+    educationFormCell: {
+        width: '150px',
     },
     actions: {
         display: 'flex',

@@ -34,6 +34,9 @@ export enum EducationalPlanFields {
     APPROVAL_DATE = 'approval_date',
     NUMBER = 'number',
     DISCIPLINE_BLOCKS = 'discipline_blocks_in_academic_plan',
+    EDUCATION_FORM = 'education_form',
+    YEAR = 'year',
+    QUALIFICATION = 'qualification',
 }
 
 export enum EducationalPlanBlockFields {
@@ -51,6 +54,6 @@ export enum ModuleFields {
 export enum BlocksOfWorkProgramsFields {
     ID = 'id',
     WORK_PROGRAMS = 'work_program',
-    SEMESTER_UNIT = 'credit_unit',
+    SEMESTER_UNIT = 'credit_units',
     TYPE = 'change_type',
 }

@@ -1,7 +1,6 @@
 import React, {ReactText} from 'react';
 import {shallowEqual} from "recompose";
 import get from "lodash/get";
-import moment, {Moment} from "moment";
 
 import {CreateModalProps} from './types';
 
@@ -11,9 +10,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {IconButton} from "@material-ui/core";
-import DateIcon from "@material-ui/icons/DateRange";
-import {DatePicker} from "@material-ui/pickers";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
 
 import SearchSelector from "../../../components/SearchSelector/SearchSelector";
 
@@ -21,15 +22,16 @@ import {EducationPlanInDirectionFields} from '../enum';
 import {EducationalPlanFields} from "../../EducationalPlan/enum";
 import {DirectionFields} from "../../Direction/enum";
 
+import {years} from '../../WorkProgram/data';
+
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-import {YEAR_DATE_FORMAT} from "../../../common/utils";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
         educationalPlansInDirection: {
             [EducationPlanInDirectionFields.ID]: null,
-            [EducationPlanInDirectionFields.YEAR]: '2020',
+            [EducationPlanInDirectionFields.YEAR]: '2020/2021',
             [EducationPlanInDirectionFields.EDUCATION_PLAN]: {
                 [EducationalPlanFields.ID]: '',
                 [EducationalPlanFields.PROFILE]: '',
@@ -48,7 +50,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             this.setState({
                 educationalPlansInDirection: {
                     [EducationPlanInDirectionFields.ID]: get(educationalPlansInDirection, EducationPlanInDirectionFields.ID),
-                    [EducationPlanInDirectionFields.YEAR]: get(educationalPlansInDirection, EducationPlanInDirectionFields.YEAR, '2020'),
+                    [EducationPlanInDirectionFields.YEAR]: get(educationalPlansInDirection, EducationPlanInDirectionFields.YEAR, '2020/2021'),
                     [EducationPlanInDirectionFields.EDUCATION_PLAN]: get(educationalPlansInDirection, EducationPlanInDirectionFields.EDUCATION_PLAN, {
                         [EducationalPlanFields.ID]: '',
                         [EducationalPlanFields.PROFILE]: '',
@@ -81,13 +83,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         }
     }
 
-    saveYear = (date: Moment) => {
+    saveYear = (e: React.ChangeEvent) => {
         const {educationalPlansInDirection} = this.state;
 
         this.setState({
             educationalPlansInDirection: {
                 ...educationalPlansInDirection,
-                [EducationPlanInDirectionFields.YEAR]: date.format('YYYY')
+                [EducationPlanInDirectionFields.YEAR]: get(e, 'target.value')
             }
         })
     }
@@ -139,7 +141,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const isEditMode = Boolean(educationalPlansInDirection[EducationPlanInDirectionFields.ID]);
 
-        const date = get(educationalPlansInDirection, [EducationPlanInDirectionFields.YEAR], '2020').toString();
+        const date = get(educationalPlansInDirection, [EducationPlanInDirectionFields.YEAR], '2020/2021').toString();
 
         return (
             <Dialog
@@ -169,22 +171,33 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             valueLabel={get(educationalPlansInDirection, [EducationPlanInDirectionFields.DIRECTION, DirectionFields.TITLE], '')}
                     />
 
-                    <DatePicker
-                        value={moment(date).format('YYYY')}
-                        onChange={(date: any) => this.saveYear(date)}
-                        InputProps={{
-                            endAdornment: (
-                                <IconButton>
-                                    <DateIcon />
-                                </IconButton>
-                            ),
-                        }}
-                        inputVariant="outlined"
-                        className={classes.datePicker}
-                        format={YEAR_DATE_FORMAT}
-                        views={["year"]}
-                        label={'Год реализации'}
-                    />
+                    <FormControl className={classes.selectorWrap}>
+                        <InputLabel shrink>
+                            Год реализации *
+                        </InputLabel>
+                        <Select
+                            variant="outlined"
+                            className={classes.selector}
+                            // @ts-ignore
+                            onChange={this.saveYear}
+                            value={date}
+                            fullWidth
+                            displayEmpty
+                            input={
+                                <OutlinedInput
+                                    notched
+                                    labelWidth={100}
+                                    name="year"
+                                />
+                            }
+                        >
+                            {years.map(item =>
+                                <MenuItem value={item.value} key={`group-${item.value}`}>
+                                    {item.label}
+                                </MenuItem>
+                            )}
+                        </Select>
+                    </FormControl>
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={this.handleClose}
