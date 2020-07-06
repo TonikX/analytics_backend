@@ -991,7 +991,7 @@ def handle_uploaded_csv(file, filename):
             destination.write(chunk)
     
     df = pandas.read_excel(path)
-    df.dropna(subset=['COMPONENT'], inplace = True)
+    #df.dropna(subset=['COMPONENT'], inplace = True)
     print(df.head())
     return df
 
@@ -1011,7 +1011,7 @@ class FileUploadAPIView(APIView):
         with open('/application/workprogramsapp/modules-order.json', 'r', encoding='utf-8') as fh: #открываем файл на чтение
             order = json.load(fh)       
         
-        data['CREDITS'].fillna('0', inplace=True)
+        #data['CREDITS'].fillna('0', inplace=True)
         #берем только первые 3 семестра
         #data = data[(data['SEMESTER']<5)]
 
