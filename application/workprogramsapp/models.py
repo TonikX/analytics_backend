@@ -253,7 +253,7 @@ class ImplementationAcademicPlan(models.Model):
     field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE, verbose_name = 'Направление подготовки')
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
-    period_of_study = models.CharField(max_length=100)
+    period_of_study = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return str(self.academic_plan)
