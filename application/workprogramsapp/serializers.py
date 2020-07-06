@@ -75,6 +75,9 @@ class OutcomesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = OutcomesOfWorkProgram
         fields = ['item', 'workprogram', 'masterylevel', 'evaluation_tool']
+        extra_kwargs = {
+            'evaluation_tool': {'required': False}
+        }
 
 
 class EvaluationToolSerializer(serializers.ModelSerializer):
@@ -370,10 +373,74 @@ class AcademicPlanCreateSerializer(serializers.ModelSerializer):
         fields = ['id', 'educational_profile', 'number', 'approval_date']
 
 
+
 class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
         fields = "__all__"
+
+
+class ImplementationAcademicPlanForWPinFSSerializer(serializers.ModelSerializer):
+    field_of_study = FieldOfStudyImplementationSerializer()
+    #academic_plan = AcademicPlanSerializer()
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = ['id', 'year', 'field_of_study']
+
+
+class AcademicPlanForWPinFSSerializer(serializers.ModelSerializer):
+    academic_plan_in_field_of_study = ImplementationAcademicPlanForWPinFSSerializer(many=True)
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'academic_plan_in_field_of_study']
+
+
+class DisciplineBlockForWPinFSSerializer(serializers.ModelSerializer):
+    #modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
+    academic_plan = AcademicPlanForWPinFSSerializer(read_only=True)
+
+    class Meta:
+        model = DisciplineBlock
+        fields = ['id', 'name', 'academic_plan']
+
+
+
+class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
+    descipline_block = DisciplineBlockForWPinFSSerializer(read_only=True)
+
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = ['id', 'name', 'descipline_block']
+
+
+class WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
+    discipline_block_module = DisciplineBlockModuleForWPinFSSerializer(read_only=True)
+
+    class Meta:
+        model = WorkProgramChangeInDisciplineBlockModule
+        fields = ['id', 'code', 'credit_units', 'change_type', 'discipline_block_module']
+
+
+class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
+
+    """Сериализатор рабочих программ"""
+    #prerequisites = serializers.StringRelatedField(many=True)
+    prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set', many=True)
+    # outcomes = serializers.StringRelatedField(many=True)
+    outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
+    #discipline_sections = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
+    #discipline_sections = DisciplineSectionSerializer(many = True)
+    #discipline_certification = CertificationSerializer(many = True)
+    #bibliographic_reference = BibliographicReferenceSerializer(many = True, required=False)
+    work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True, read_only=True)
+
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'description', 'video', 'work_program_in_change_block']
 
 

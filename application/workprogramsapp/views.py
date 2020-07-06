@@ -12,7 +12,7 @@ from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer
+    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, WorkProgramInFieldOfStudySerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -1240,6 +1240,16 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
     serializer_class = DisciplineBlockModuleCreateSerializer
 
 
+class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
+    """
+        Отображение списка ОП(направлений), создание образовательной программы (напрвления)
+    """
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramInFieldOfStudySerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['approval_date', 'authors', 'discipline_code', 'qualification']
+
+    
 #Конец блока ендпоинтов рабочей программы
 #Скачивание рпд в формате docx/pdf
 
