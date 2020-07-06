@@ -206,7 +206,6 @@ class AcademicPlan(models.Model):
 
         print (block_clone)
 
-
     def new_descipline_blocks(iap, siap):
         blocks = ['Блок 1', 'Блок 2', 'Блок 3']
         print (siap.data.get("id"))
@@ -279,8 +278,11 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     '''
     name = models.CharField(max_length=1024)
     descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="modules_in_discipline_block", blank=True, null=True)
+    order = models.IntegerField(blank=True, null=True, verbose_name = "Порядок модулей")
     #work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
-
+    class Meta: 
+        ordering = ['order']
+        
     def __str__(self):
         return (str(self.name) + str(self.descipline_block))
 
@@ -294,6 +296,7 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
     OGNP_SET = 'OGNP_set'
     SET_SPECIALIZATION = 'Set_specialization'
     FACULTATIV = 'Facultativ'
+    OPT_SPECIALIZATION = 'Opt_specialization'
 
     CHANGE_CHOICES = (
         (REQUIRED, 'Required'),
@@ -301,6 +304,7 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
         (OGNP_SET, 'OGNP_set'),
         (SET_SPECIALIZATION, 'Set_specialization'),
         (FACULTATIV, 'Facultativ'),
+        (OPT_SPECIALIZATION, 'Opt_specialization')
 
     )
 
