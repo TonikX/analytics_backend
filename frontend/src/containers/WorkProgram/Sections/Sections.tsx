@@ -64,12 +64,14 @@ class Sections extends React.PureComponent<SecondStepProps> {
     getTotalHours = (field: string) => {
         const {sections} = this.props;
 
-        return sections.reduce((count, section) => {
-            // @ts-ignore
-            const intCount = parseInt(count);
-            // @ts-ignore
-            return (parseInt(count) ? intCount : 0) + section[field];
-        }, 0)
+        let count = 0;
+
+        sections.forEach(section => {
+            //@ts-ignore
+            count += Boolean(section[field]) ? parseFloat(section[field]) : 0;
+        })
+
+        return count;
     };
 
     render() {

@@ -43,6 +43,12 @@ export default [
             link: appRouter.getTrainingEntitiesRoute(),
             icon: TrainingEntitiesIcon,
             selectedIcon: TrainingEntitiesSelectedIcon,
+        },
+        {
+            title: 'Связи',
+            link: appRouter.getEntityToEntityRoute(),
+            icon: TrainingEntitiesIcon,
+            selectedIcon: TrainingEntitiesSelectedIcon,
         }
     ],
     [
