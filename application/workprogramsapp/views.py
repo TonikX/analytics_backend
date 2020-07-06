@@ -1114,8 +1114,8 @@ class FileUploadAPIView(APIView):
                 except:
                     print(data['SEMESTER'][i])
                 #wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i])
-                
-                if WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists():
+    
+                if (data['ISOPTION'][i] == 'Optionally' or data['ISOPTION'][i] == 'Set_specialization') and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists():
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module = mdb, change_type = data['ISOPTION'][i])
                     wpchangemdb.work_program.add(wp_obj)
                 else:
@@ -1255,6 +1255,7 @@ class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
 
 from docxtpl import DocxTemplate
 def export_docx(request):
+    """Экспорт файла в док"""
     tpl = DocxTemplate('/application/workprogramsapp/RPD_shablon_2020.docx')
     #id = request.data.get('id')
     #field_of_study_code = request.data.get('field_of_study_code') #код
@@ -1271,6 +1272,7 @@ def export_docx(request):
         qualification = 'ИНЖЕНЕР'
     #
     # Получаем данные для таблицы с компетенциями
+    #
     #
     #i_obj = Indicator.objects.filter(work_program = wp_obj)
     #for i in i_obj:
