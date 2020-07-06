@@ -1109,7 +1109,7 @@ class FileUploadAPIView(APIView):
                 #for semester in semesters:
                 #    credit_units[int(semester)-1] = 
                 try:
-                    credit_units[int(data['SEMESTER'][i])-1] = data['CREDITS'][i]
+                    credit_units[int(data['SEMESTER'][i])-1] = int(data['CREDITS'][i])
                     print(credit_units)
                 except:
                     print(data['SEMESTER'][i])
