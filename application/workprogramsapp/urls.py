@@ -23,6 +23,8 @@ from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicP
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
     FileUploadAPIView, WorkProgramInFieldOfStudyListView
+from .views import export_docx    
+
 
 
 urlpatterns = [
@@ -132,6 +134,8 @@ urlpatterns = [
     path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
     path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
     path('api/upload/csv', FileUploadAPIView.as_view()),
+    path('api/export/docx', export_docx),
+
 
     path('api/academicplan', AcademicPlanListAPIView.as_view()),
     path('api/academicplan/create', AcademicPlanCreateAPIView.as_view()),

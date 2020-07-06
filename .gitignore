@@ -3,3 +3,4 @@ __pycache__/*
 mysql-data
 dbs
 /application/workprogramsapp/migrations
+**/migrations/*
