@@ -186,10 +186,36 @@ class AcademicPlan(models.Model):
     '''
     Модель учебного плана
     '''
+    PRIMARY_VOCATIONAL_EDUCATION = 'primary_vocational_education'
+    SECONADARY_VOCATIONAL_EDUCATION = 'secondary_vocational_education'
+    BACHELOR = 'bachelor'
+    SPECIALIST = 'specialist'
+    MASTER = 'master'
+    QUALIFICATION_CHOICES = (
+        (PRIMARY_VOCATIONAL_EDUCATION, 'Primary vocational education'),
+        (SECONADARY_VOCATIONAL_EDUCATION, 'Secondary vocational education'),
+        (BACHELOR, 'Bachelor'),
+        (SPECIALIST, 'Specialist'),
+        (MASTER, 'Master')
+    )
+    INTERNAL = 'internal'
+    EXTRAMURAL = 'extramural'
+    EDUCATION_FORM_CHOICES = (
+        (INTERNAL, 'Internal'),
+        (EXTRAMURAL, 'Extramural'),
+)
+
+
+    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank = True, null = True)
     educational_profile = models.CharField(unique=True, max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
     number = models.CharField(unique=True, max_length=1024, verbose_name = 'Номер учебного плана', blank = True, null = True)
     field_of_study = models.ManyToManyField('FieldOfStudy', through='ImplementationAcademicPlan', related_name="block_in_academic_plan", blank = True, null = True)
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
+    year = models.PositiveIntegerField(
+        default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
+    education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
+
+
     #TODO: Добавить год набора
 
     def __str__(self):
@@ -227,6 +253,7 @@ class ImplementationAcademicPlan(models.Model):
     field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE, verbose_name = 'Направление подготовки')
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
+    period_of_study = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return str(self.academic_plan)
