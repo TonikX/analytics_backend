@@ -1159,7 +1159,7 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
     serializer_class = ImplementationAcademicPlanSerializer
     queryset = ImplementationAcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['educational_profile']
+    search_fields = ['academic_plan__number', 'academic_plan__educational_profile', 'year']
 
 
 class ImplementationAcademicPlanDestroyView(generics.DestroyAPIView):
