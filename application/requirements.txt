@@ -48,3 +48,8 @@ pandas
 pyyaml
 django-clone==0.2.0
 
+xlrd==1.2.0
+
+docxtpl==0.10.0
+drf-pdf==0.2.0
+
