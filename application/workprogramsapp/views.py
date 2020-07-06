@@ -1255,6 +1255,7 @@ class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
 
 from docxtpl import DocxTemplate
 def export_docx(request):
+    """Экспорт файла в док"""
     tpl = DocxTemplate('/application/workprogramsapp/RPD_shablon_2020.docx')
     #id = request.data.get('id')
     #field_of_study_code = request.data.get('field_of_study_code') #код
@@ -1271,6 +1272,7 @@ def export_docx(request):
         qualification = 'ИНЖЕНЕР'
     #
     # Получаем данные для таблицы с компетенциями
+    #
     #
     #i_obj = Indicator.objects.filter(work_program = wp_obj)
     #for i in i_obj:
