@@ -36,20 +36,24 @@ export default (theme: Theme) => createStyles({
         flex: 'none'
     },
     dateCell: {
-        width: 210,
-        flex: 'none'
+        width: 181,
+        fontSize: 14
     },
     titleCell: {
         width: '20%',
+        fontSize: 14
     },
     yearCell: {
-        width: '150px',
+        width: 163,
+        fontSize: 14
     },
     qualificationCell: {
-        width: '150px',
+        width: 170,
+        fontSize: 14
     },
     educationFormCell: {
-        width: '150px',
+        width: 170,
+        fontSize: 14
     },
     actions: {
         display: 'flex',

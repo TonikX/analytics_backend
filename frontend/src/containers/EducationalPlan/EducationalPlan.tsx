@@ -26,19 +26,20 @@ import EyeIcon from "@material-ui/icons/VisibilityOutlined";
 import SettingsIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 
+import CreateModal from "./CreateModal";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
-import CreateModal from "./CreateModal";
 import {SortingType} from "../../components/SortingButton/types";
 
 import {EducationalPlanProps, EducationalPlanType} from './types';
+import {FULL_DATE_FORMAT} from "../../common/utils";
+import {specialization} from "../WorkProgram/data";
 import {EducationalPlanFields} from './enum';
 
 import {appRouter} from "../../service/router-service";
 
 import connect from './EducationalPlan.connect';
 import styles from './EducationalPlan.styles';
-import {FULL_DATE_FORMAT} from "../../common/utils";
 
 class EducationalPlan extends React.Component<EducationalPlanProps> {
     state = {
@@ -163,19 +164,19 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                             />
                         </Typography>
 
-                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                        <Typography className={classNames(classes.marginRight, classes.yearCell)}>
                             Год реализации
                             <SortingButton changeMode={this.changeSorting(EducationalPlanFields.YEAR)}
                                            mode={sortingField === EducationalPlanFields.YEAR ? sortingMode : ''}
                             />
                         </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                        <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
                             Квалификация
                             <SortingButton changeMode={this.changeSorting(EducationalPlanFields.QUALIFICATION)}
                                            mode={sortingField === EducationalPlanFields.QUALIFICATION ? sortingMode : ''}
                             />
                         </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                        <Typography className={classNames(classes.marginRight, classes.educationFormCell)}>
                             Форма обучения
                             <SortingButton changeMode={this.changeSorting(EducationalPlanFields.EDUCATION_FORM)}
                                            mode={sortingField === EducationalPlanFields.EDUCATION_FORM ? sortingMode : ''}
@@ -194,8 +195,12 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                     <Typography className={classNames(classes.marginRight, classes.numberCell)}> {plan[EducationalPlanFields.NUMBER]} </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}> {plan[EducationalPlanFields.PROFILE]} </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.yearCell)}> {plan[EducationalPlanFields.YEAR]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.qualificationCell)}> {plan[EducationalPlanFields.QUALIFICATION]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.educationFormCell)}> {plan[EducationalPlanFields.EDUCATION_FORM]} </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
+                                        {get(specialization.find(item => item.value === plan[EducationalPlanFields.QUALIFICATION]), 'label', '')}
+                                    </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.educationFormCell)}>
+                                        {plan[EducationalPlanFields.EDUCATION_FORM] === 'internal' ? 'Очная' : 'Заочная'}
+                                    </Typography>
 
                                     <div className={classes.actions}>
                                         <IconButton
