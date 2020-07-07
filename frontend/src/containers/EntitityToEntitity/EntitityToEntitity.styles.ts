@@ -16,7 +16,7 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between',
     },
     titleCell: {
-        width: '50%'
+        width: '30%'
     },
     list: {
         width: '100%',

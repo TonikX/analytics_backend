@@ -3,7 +3,7 @@ import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {EntityToEntityFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
-import {SubjectAreaType} from "../SubjectArea/types";
+import {TrainingEntitityType} from "../TrainingEntities/types";
 
 export interface EntityToEntityActions {
     changeSearchQuery: any;
@@ -38,8 +38,9 @@ export interface entityToEntityState {
 
 export type EntityToEntityType = {
     [EntityToEntityFields.ID]: number,
-    [EntityToEntityFields.TITLE]: string,
-    [EntityToEntityFields.SUBJECT_AREA]: SubjectAreaType,
+    [EntityToEntityFields.ITEM1]: TrainingEntitityType,
+    [EntityToEntityFields.ITEM2]: TrainingEntitityType,
+    [EntityToEntityFields.RELATION]: string,
 };
 
 export interface EntityToEntityProps extends WithStyles<typeof styles> {

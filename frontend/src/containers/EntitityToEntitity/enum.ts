@@ -21,6 +21,7 @@ export enum fetchingTypes {
 
 export enum EntityToEntityFields {
     ID = 'id',
-    TITLE = 'name',
-    SUBJECT_AREA = 'domain',
+    ITEM1 = 'item1',
+    ITEM2 = 'item2',
+    RELATION = 'relation',
 }
