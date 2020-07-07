@@ -211,8 +211,7 @@ class AcademicPlan(models.Model):
     number = models.CharField(unique=True, max_length=1024, verbose_name = 'Номер учебного плана', blank = True, null = True)
     field_of_study = models.ManyToManyField('FieldOfStudy', through='ImplementationAcademicPlan', related_name="block_in_academic_plan", blank = True, null = True)
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
-    year = models.PositiveIntegerField(
-        default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
+    year = models.CharField(max_length=1024, blank = True, null = True)
     education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
 
 
@@ -229,8 +228,6 @@ class AcademicPlan(models.Model):
             print (Block.modules_in_discipline_block.all())
             for Module in Block.modules_in_discipline_block.all():
                 module_clone = Module.make_clone(attrs={'descipline_block_id': block_clone.id})
-
-        print (block_clone)
 
     def new_descipline_blocks(iap, siap):
         blocks = ['Блок 1', 'Блок 2', 'Блок 3']
