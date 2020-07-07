@@ -17,6 +17,7 @@ import EducationPlanInDirection from './containers/EduationPlanInDirection';
 import EducationPlanDetail from './containers/EducationalPlan/Detail';
 import Indicators from './containers/Indicators';
 import WorkProgramList from "./containers/WorkProgramList";
+import EntitityToEntitity from "./containers/EntitityToEntitity";
 
 import Literature from './containers/Literature';
 
@@ -51,6 +52,9 @@ export default () => (
                 </AuthRoute>
                 <AuthRoute path={routerService.getEducationalProgramRoute()}>
                     <EducationalProgram />
+                </AuthRoute>
+                <AuthRoute path={routerService.getEntityToEntityRoute()}>
+                    <EntitityToEntitity />
                 </AuthRoute>
                 <AuthRoute path={routerService.getIndicatorsRoute()}>
                     <Indicators />

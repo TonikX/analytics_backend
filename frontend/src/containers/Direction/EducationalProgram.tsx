@@ -96,7 +96,6 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
                     Направления
-
                     <TextField placeholder="Поиск"
                                variant="outlined"
                                InputProps={{

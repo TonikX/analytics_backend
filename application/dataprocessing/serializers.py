@@ -92,7 +92,7 @@ class RelationSerializer(serializers.ModelSerializer):
     item2 = ItemCreateSerializer()
     class Meta:
         model = Relation
-        fields = ('item1','relation','item2', 'count')
+        fields = ('id', 'item1','relation','item2', 'count')
 
 
 class RelationUpdateSerializer(serializers.ModelSerializer):

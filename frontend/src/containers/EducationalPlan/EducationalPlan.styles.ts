@@ -33,14 +33,27 @@ export default (theme: Theme) => createStyles({
     },
     numberCell: {
         width: 200,
-        flex: 'none'
+        fontSize: 14
     },
     dateCell: {
-        width: 210,
-        flex: 'none'
+        width: 181,
+        fontSize: 14
     },
     titleCell: {
-        width: '50%',
+        width: '20%',
+        fontSize: 14
+    },
+    yearCell: {
+        width: 163,
+        fontSize: 14
+    },
+    qualificationCell: {
+        width: 170,
+        fontSize: 14
+    },
+    educationFormCell: {
+        width: 170,
+        fontSize: 14
     },
     actions: {
         display: 'flex',

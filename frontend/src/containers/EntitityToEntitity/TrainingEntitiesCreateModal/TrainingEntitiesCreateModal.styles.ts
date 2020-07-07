@@ -3,6 +3,7 @@ import {createStyles, Theme} from "@material-ui/core";
 export default (theme: Theme) => createStyles({
     input: {
         width: '550px',
+        marginBottom: '30px',
     },
     lastInput: {
         width: '550px',
@@ -16,18 +17,12 @@ export default (theme: Theme) => createStyles({
     dialog: {
         padding: 20,
     },
+    link: {
+        marginRight: 'auto',
+        textDecoration: 'none',
+        color: theme.palette.primary.main,
+    },
     marginBottom30: {
         marginBottom: '30px'
-    },
-    datePicker: {
-        width: '100%'
-    },
-    selectorWrap: {
-        '& .MuiInputLabel-shrink': {
-            transform: 'translate(14px, -6.5px) scale(0.75) !important',
-        },
-        '& .MuiOutlinedInput-notchedOutline legend': {
-            width: '107px !important'
-        }
     },
 });

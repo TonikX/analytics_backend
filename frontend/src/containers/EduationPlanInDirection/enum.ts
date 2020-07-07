@@ -23,4 +23,5 @@ export enum EducationPlanInDirectionFields {
     DIRECTION = 'field_of_study',
     EDUCATION_PLAN = 'academic_plan',
     YEAR = 'year',
+    NUMBER = 'number',
 }

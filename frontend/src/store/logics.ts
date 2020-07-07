@@ -11,6 +11,7 @@ import IndicatorsLogic from '../containers/Indicators/logics';
 import EducationalPlanLogic from '../containers/EducationalPlan/logics';
 import EducationPlanInDirection from '../containers/EduationPlanInDirection/logics';
 import WorkProgramList from '../containers/WorkProgramList/logics';
+import EntityToEntity from '../containers/EntitityToEntitity/logics';
 
 export default [
     ...SignInLogic,
@@ -26,4 +27,5 @@ export default [
     ...EducationalPlanLogic,
     ...EducationPlanInDirection,
     ...WorkProgramList,
+    ...EntityToEntity,
 ];

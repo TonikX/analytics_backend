@@ -17,7 +17,10 @@ const changeCurrentPage = createAction<string>('WORK_PROGRAM_CHANGE_CURRENT_PAGE
 const changeAllCount = createAction<string>('WORK_PROGRAM_CHANGE_ALL_COUNT');
 const changeSorting = createAction<string>('WORK_PROGRAM_CHANGE_SORTING');
 
+const pageDown = createAction<string>('WORK_PROGRAM_LIST_PAGE_DOWN');
+
 const actions: WorkProgramListActions = {
+    pageDown,
     getWorkProgramList,
     setWorkProgramList,
     createNewWorkProgram,

@@ -23,8 +23,11 @@ class EducationalPlanService extends BaseService{
         formData.append(EducationalPlanFields.PROFILE, competence[EducationalPlanFields.PROFILE]);
         formData.append(EducationalPlanFields.NUMBER, competence[EducationalPlanFields.NUMBER]);
         formData.append(EducationalPlanFields.APPROVAL_DATE, competence[EducationalPlanFields.APPROVAL_DATE]);
+        formData.append(EducationalPlanFields.YEAR, competence[EducationalPlanFields.YEAR]);
+        formData.append(EducationalPlanFields.QUALIFICATION, competence[EducationalPlanFields.QUALIFICATION]);
+        formData.append(EducationalPlanFields.EDUCATION_FORM, competence[EducationalPlanFields.EDUCATION_FORM]);
 
-        return this.post(`/api/academicplan`, formData);
+        return this.post(`/api/academicplan/create`, formData);
     }
 
     createBlockOfWorkPrograms(moduleWithBlocks: any){
@@ -74,6 +77,9 @@ class EducationalPlanService extends BaseService{
         formData.append(EducationalPlanFields.PROFILE, competence[EducationalPlanFields.PROFILE]);
         formData.append(EducationalPlanFields.NUMBER, competence[EducationalPlanFields.NUMBER]);
         formData.append(EducationalPlanFields.APPROVAL_DATE, competence[EducationalPlanFields.APPROVAL_DATE]);
+        formData.append(EducationalPlanFields.YEAR, competence[EducationalPlanFields.YEAR]);
+        formData.append(EducationalPlanFields.QUALIFICATION, competence[EducationalPlanFields.QUALIFICATION]);
+        formData.append(EducationalPlanFields.EDUCATION_FORM, competence[EducationalPlanFields.EDUCATION_FORM]);
 
         return this.put(`/api/academicplan/update/${id}`, formData);
     }

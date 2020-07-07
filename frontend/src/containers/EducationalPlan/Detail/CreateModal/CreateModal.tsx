@@ -293,7 +293,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         <div className={classes.semesterList}>
                             {blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_UNIT].map((item, index) =>
                                 <TextField className={classes.semesterField}
-                                           label={`${index} семестр`}
+                                           label={`${index + 1} семестр`}
                                            variant='outlined'
                                            value={item}
                                            onChange={this.handleChangeHours(index)}

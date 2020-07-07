@@ -60,6 +60,9 @@ export type EducationalPlanType = {
     [EducationalPlanFields.PROFILE]: string,
     [EducationalPlanFields.NUMBER]: string,
     [EducationalPlanFields.APPROVAL_DATE]: string,
+    [EducationalPlanFields.YEAR]: string,
+    [EducationalPlanFields.QUALIFICATION]: string,
+    [EducationalPlanFields.EDUCATION_FORM]: string,
     [EducationalPlanFields.DISCIPLINE_BLOCKS]: Array<DisciplineBlockType>,
 };
 

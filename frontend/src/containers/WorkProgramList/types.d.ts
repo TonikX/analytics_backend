@@ -5,6 +5,7 @@ import {WorkProgramGeneralType} from '../WorkProgram/types';
 import {SortingType} from "../../components/SortingButton/types";
 
 export interface WorkProgramListActions {
+    pageDown: any;
     changeSearchQuery: any;
     getWorkProgramList: any;
     setWorkProgramList: any;
