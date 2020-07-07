@@ -370,8 +370,7 @@ class AcademicPlanCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date']
-
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form']
 
 
 class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
