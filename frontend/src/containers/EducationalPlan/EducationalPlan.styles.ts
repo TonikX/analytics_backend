@@ -33,7 +33,7 @@ export default (theme: Theme) => createStyles({
     },
     numberCell: {
         width: 200,
-        flex: 'none'
+        fontSize: 14
     },
     dateCell: {
         width: 181,
