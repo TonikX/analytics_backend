@@ -13,7 +13,10 @@ export default (theme: Theme) => createStyles({
         fontSize: '24px',
         marginBottom: '20px',
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+    },
+    titleCell: {
+        width: '30%'
     },
     list: {
         width: '100%',
@@ -22,7 +25,7 @@ export default (theme: Theme) => createStyles({
     tableWrap: {
         height: 'calc(100% - 60px)'
     },
-    row: {
+    listItem: {
         width: '100%',
         display: 'flex',
         borderBottom: '1px solid #ccc',
@@ -30,16 +33,6 @@ export default (theme: Theme) => createStyles({
         padding: '0 0 0 20px',
         boxSizing: 'border-box',
         minHeight: '50px'
-    },
-    titleCell: {
-        width: '30%',
-        flex: 'none'
-    },
-    numberCell: {
-        width: '220px',
-    },
-    yearCell: {
-        width: '86px',
     },
     actions: {
         display: 'flex',

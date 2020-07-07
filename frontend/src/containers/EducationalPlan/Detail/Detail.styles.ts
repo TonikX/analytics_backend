@@ -36,7 +36,7 @@ export default (theme: Theme) => createStyles({
     },
     actions: {
         textAlign: 'end',
-        width: '100px',
+        width: '112px',
         '& svg': {
             cursor: 'pointer'
         }
@@ -85,6 +85,9 @@ export default (theme: Theme) => createStyles({
     },
     marginRight: {
         marginRight: 20
+    },
+    marginRight10: {
+        marginRight: 10
     },
     workProgramLink: {
         cursor: 'pointer'

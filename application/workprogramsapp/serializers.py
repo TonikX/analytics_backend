@@ -360,7 +360,7 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan']
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year', 'education_form', 'qualification']
         extra_kwargs = {
             'discipline_blocks_in_academic_plan': {'required': False}
         }
@@ -370,8 +370,7 @@ class AcademicPlanCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date']
-
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form']
 
 
 class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):

@@ -48,6 +48,10 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         this.props.actions.getWorkProgramList();
     }
 
+    componentWillUnmount() {
+        this.props.actions.pageDown();
+    }
+
     handleClickDelete = (id: number) => () => {
         this.setState({
             deleteConfirmId: id

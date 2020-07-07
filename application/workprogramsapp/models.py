@@ -211,8 +211,7 @@ class AcademicPlan(models.Model):
     number = models.CharField(unique=True, max_length=1024, verbose_name = 'Номер учебного плана', blank = True, null = True)
     field_of_study = models.ManyToManyField('FieldOfStudy', through='ImplementationAcademicPlan', related_name="block_in_academic_plan", blank = True, null = True)
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
-    year = models.PositiveIntegerField(
-        default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
+    year = models.CharField(max_length=1024, blank = True, null = True)
     education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
 
 
@@ -229,8 +228,6 @@ class AcademicPlan(models.Model):
             print (Block.modules_in_discipline_block.all())
             for Module in Block.modules_in_discipline_block.all():
                 module_clone = Module.make_clone(attrs={'descipline_block_id': block_clone.id})
-
-        print (block_clone)
 
     def new_descipline_blocks(iap, siap):
         blocks = ['Блок 1', 'Блок 2', 'Блок 3']
@@ -417,12 +414,12 @@ class DisciplineSection(models.Model):
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
     evaluation_tools = models.ManyToManyField('EvaluationTool', verbose_name='Фонды оценочных средств', blank = True, null = True, related_name='evaluation_tools')
     #description = models.CharField(max_length=1024, verbose_name = "Раздел", blank = True, null = True)
-    contact_work = models.IntegerField(verbose_name = "Контактная работа", blank = True, null = True)
-    lecture_classes = models.IntegerField(verbose_name = "Занятия лекционного типа", blank = True, null = True)
-    laboratory = models.IntegerField(verbose_name = "Лабораторные занятия", blank = True, null = True)
-    practical_lessons = models.IntegerField(verbose_name = "Практические занятия", blank = True, null = True)
-    SRO = models.IntegerField(verbose_name = "СРО", blank = True, null = True)
-    total_hours = models.IntegerField(verbose_name = "Всего часов", blank = True, null = True)
+    contact_work = models.DecimalField(verbose_name = "Контактная работа", max_digits=5, decimal_places=2, blank = True, null = True)
+    lecture_classes = models.DecimalField(verbose_name = "Занятия лекционного типа", max_digits=5, decimal_places=2, blank = True, null = True)
+    laboratory = models.DecimalField(verbose_name = "Лабораторные занятия", max_digits=5, decimal_places=2, blank = True, null = True)
+    practical_lessons = models.DecimalField(verbose_name = "Практические занятия", max_digits=5, decimal_places=2, blank = True, null = True)
+    SRO = models.DecimalField(verbose_name = "СРО", max_digits=5, decimal_places=2, blank = True, null = True)
+    total_hours = models.DecimalField(verbose_name = "Всего часов", max_digits=5, decimal_places=2, blank = True, null = True)
 
     def __str__(self):
         return self.name

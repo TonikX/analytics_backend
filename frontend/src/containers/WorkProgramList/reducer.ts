@@ -65,6 +65,8 @@ const changeSorting = (state: workProgramListState, {payload}: any): workProgram
     }
 });
 
+const pageDown = () => initialState;
+
 export const reducer = createReducer(initialState, {
     [actions.setWorkProgramList.type]: setWorkProgramList,
     [actions.openDialog.type]: openDialog,
@@ -73,4 +75,5 @@ export const reducer = createReducer(initialState, {
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
+    [actions.pageDown.type]: pageDown,
 });

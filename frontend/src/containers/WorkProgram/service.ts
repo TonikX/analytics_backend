@@ -173,7 +173,7 @@ class WorkProgramService extends BaseService{
     }
 
     deletePrerequisite(id: ReactText){
-        return this.delete(`/api/prerequisitesofworkprogram/${id}`);
+        return this.delete(`/api/prerequisitesofworkprogram/delete/${id}`);
     }
 
     deleteEvaluationTool(id: ReactText){

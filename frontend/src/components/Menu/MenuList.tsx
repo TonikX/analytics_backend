@@ -30,6 +30,9 @@ import WorkProgramSelectedIcon from "./icons/work-programs-selected.svg";
 import WorkProgramInDirectionIcon from "./icons/work-program-in-direction.svg";
 import WorkProgramInDirectionSelectedIcon from "./icons/work-program-in-direction-selected.svg";
 
+import EntityToEntityIcon from "./icons/entity-to-entity.svg";
+import EntityToEntitySelectedIcon from "./icons/entity-to-entity-selected.svg";
+
 export default [
     [
         {
@@ -43,6 +46,12 @@ export default [
             link: appRouter.getTrainingEntitiesRoute(),
             icon: TrainingEntitiesIcon,
             selectedIcon: TrainingEntitiesSelectedIcon,
+        },
+        {
+            title: 'Связи',
+            link: appRouter.getEntityToEntityRoute(),
+            icon: EntityToEntityIcon,
+            selectedIcon: EntityToEntitySelectedIcon,
         }
     ],
     [

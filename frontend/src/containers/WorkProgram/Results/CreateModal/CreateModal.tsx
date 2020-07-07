@@ -60,7 +60,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
             this.setState({
                 result: {
-                    [ResultsFields.MASTER_LEVEL]: get(result, ResultsFields.MASTER_LEVEL, ''),
+                    [ResultsFields.MASTER_LEVEL]: get(result, ResultsFields.MASTER_LEVEL, '1'),
                     [ResultsFields.ITEM]: get(result, ResultsFields.ITEM, {}),
                     [ResultsFields.ID]: get(result, ResultsFields.ID, null),
                     // @ts-ignore
@@ -155,7 +155,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const disableButton = get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID], '').length === 0;
 
-        const isEditMode = Boolean(ResultsFields.ID);
+        const isEditMode = Boolean(get(result, ResultsFields.ID));
 
         return (
             <Dialog

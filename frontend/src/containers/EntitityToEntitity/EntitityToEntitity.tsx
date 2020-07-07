@@ -1,7 +1,7 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
-// @ts-ignore
+
 import Scrollbars from "react-custom-scrollbars";
 
 import classNames from 'classnames';
@@ -22,25 +22,25 @@ import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
+import TrainingEntitiesCreateModal from "./TrainingEntitiesCreateModal";
 import {SortingType} from "../../components/SortingButton/types";
-import CourseCreateModal from "./CreateModal";
 
-import {DirectionFields} from "../Direction/enum";
-import {EducationalPlanFields} from "../EducationalPlan/enum";
-import {EducationPlanInDirectionFields} from './enum';
+import {EntityToEntityProps, EntityToEntityType} from './types';
+import {EntityToEntityFields} from './enum';
+import {TrainingEntitiesFields} from "../TrainingEntities/enum";
 
-import {EducationalPlanInDirectionProps, EducationalPlanInDirectionType} from './types';
+import {relations} from './constants';
 
-import connect from './EducationPlanInDirection.connect';
-import styles from './EducationPlanInDirection.styles';
+import connect from './EntitityToEntitity.connect';
+import styles from './EntitityToEntitity.styles';
 
-class EducationPlanInDirection extends React.Component<EducationalPlanInDirectionProps> {
+class EntitityToEntitity extends React.Component<EntityToEntityProps> {
     state = {
         deleteConfirmId: null
     }
 
     componentDidMount() {
-        this.props.actions.getEducationalPlansInDirection();
+        this.props.actions.getEntityToEntityList();
     }
 
     handleClickDelete = (id: number) => () => {
@@ -52,7 +52,7 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
     handleConfirmDeleteDialog = () => {
         const {deleteConfirmId} = this.state;
 
-        this.props.actions.deleteEducationalPlanInDirection(deleteConfirmId);
+        this.props.actions.deleteEntityToEntity(deleteConfirmId);
         this.closeConfirmDeleteDialog();
     }
 
@@ -62,8 +62,8 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
         });
     }
 
-    handleClickEdit = (competence: EducationalPlanInDirectionType) => () => {
-        this.props.actions.openDialog(competence);
+    handleClickEdit = (item: EntityToEntityType) => () => {
+        this.props.actions.openDialog(item);
     }
 
     handleCreate = () => {
@@ -77,27 +77,27 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
         this.props.actions.changeCurrentPage(1);
-        this.props.actions.getEducationalPlansInDirection();
+        this.props.actions.getEntityToEntityList();
     }, 300);
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
         this.props.actions.changeCurrentPage(page + 1);
-        this.props.actions.getEducationalPlansInDirection();
+        this.props.actions.getEntityToEntityList();
     }
 
     changeSorting = (field: string) => (mode: SortingType)=> {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getEducationalPlansInDirection();
+        this.props.actions.getEntityToEntityList();
     }
 
     render() {
-        const {classes, educationalPlansInDirection, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, trainingEntities, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Реализация учебного плана в направлении
+                    Связи
 
                     <TextField placeholder="Поиск"
                                variant="outlined"
@@ -112,57 +112,47 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                 </Typography>
 
                 <div className={classes.tableWrap}>
-                    <div className={classNames(classes.row, classes.header)}>
+                    <div className={classNames(classes.listItem, classes.header)}>
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Направление
-                            <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.DIRECTION)}
-                                           mode={sortingField === EducationPlanInDirectionFields.DIRECTION ? sortingMode : ''}
-                            />
-                        </Typography>
-
-                        <Typography className={classNames(classes.marginRight, classes.numberCell)}>
-                            Номер направления
-                            <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.NUMBER)}
-                                           mode={sortingField === EducationPlanInDirectionFields.NUMBER ? sortingMode : ''}
+                            Сущность 1
+                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.ITEM1)}
+                                           mode={sortingField === EntityToEntityFields.ITEM1 ? sortingMode : ''}
                             />
                         </Typography>
 
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Учебный план
-                            <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.EDUCATION_PLAN)}
-                                           mode={sortingField === EducationPlanInDirectionFields.EDUCATION_PLAN ? sortingMode : ''}
+                            Сущность 2
+                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.ITEM2)}
+                                           mode={sortingField === EntityToEntityFields.ITEM2 ? sortingMode : ''}
                             />
                         </Typography>
 
-                        <Typography className={classNames(classes.marginRight, classes.yearCell)}>
-                            Год
-                            <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.YEAR)}
-                                           mode={sortingField === EducationPlanInDirectionFields.YEAR ? sortingMode : ''}
+                        <Typography className={classNames(classes.marginRight)}>
+                            Связь
+                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.RELATION)}
+                                           mode={sortingField === EntityToEntityFields.RELATION ? sortingMode : ''}
                             />
                         </Typography>
                     </div>
 
                     <div className={classes.list}>
                         <Scrollbars>
-                            {educationalPlansInDirection.map(educationalPlanInDirection =>
-                                <div className={classes.row} key={educationalPlanInDirection[EducationPlanInDirectionFields.ID]}>
+                            {trainingEntities.map(item =>
+                                <div className={classes.listItem} key={item[EntityToEntityFields.ID]}>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                        {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.TITLE]}
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.numberCell)}>
-                                        {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.NUMBER]}
+                                        {item[EntityToEntityFields.ITEM1][TrainingEntitiesFields.TITLE]}
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                        {educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]}
+                                        {item[EntityToEntityFields.ITEM2][TrainingEntitiesFields.TITLE]}
                                     </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.yearCell)}>
-                                        {educationalPlanInDirection[EducationPlanInDirectionFields.YEAR]}
+                                    <Typography className={classNames(classes.marginRight)}>
+                                        {get(relations, item[EntityToEntityFields.RELATION])}
                                     </Typography>
                                     <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(educationalPlanInDirection[EducationPlanInDirectionFields.ID])}>
+                                        <IconButton onClick={this.handleClickDelete(item[EntityToEntityFields.ID])}>
                                             <DeleteIcon />
                                         </IconButton>
-                                        <IconButton onClick={this.handleClickEdit(educationalPlanInDirection)}>
+                                        <IconButton onClick={this.handleClickEdit(item)}>
                                             <EditIcon />
                                         </IconButton>
                                     </div>
@@ -193,13 +183,13 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                     </Fab>
                 </div>
 
-                <CourseCreateModal />
+                <TrainingEntitiesCreateModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены, что хотите удалить реализацию учебного плана?'}
+                               confirmText={'Вы точно уверены, что хотите удалить учебную сущность?'}
                                isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить реализацию учебного плана'}
+                               dialogTitle={'Удалить учебную сущность'}
                                confirmButtonText={'Удалить'}
                 />
             </Paper>
@@ -207,4 +197,4 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
     }
 }
 
-export default connect(withStyles(styles)(EducationPlanInDirection));
+export default connect(withStyles(styles)(EntitityToEntitity));

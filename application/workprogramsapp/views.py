@@ -1109,15 +1109,17 @@ class FileUploadAPIView(APIView):
                 #for semester in semesters:
                 #    credit_units[int(semester)-1] = 
                 try:
-                    credit_units[int(data['SEMESTER'][i])-1] = data['CREDITS'][i]
+                    credit_units[int(data['SEMESTER'][i])-1] = int(data['CREDITS'][i])
                     print(credit_units)
                 except:
                     print(data['SEMESTER'][i])
                 #wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i])
     
-                if (data['ISOPTION'][i] == 'Optionally' or data['ISOPTION'][i] == 'Set_specialization') and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists():
+                if data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists():
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module = mdb, change_type = data['ISOPTION'][i])
                     wpchangemdb.work_program.add(wp_obj)
+                elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists():
+                    print(data['ISOPTION'][i])
                 else:
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
                     wpchangemdb.credit_units = ','.join(str(i) for i in credit_units)
