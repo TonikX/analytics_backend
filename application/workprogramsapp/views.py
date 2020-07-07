@@ -1115,7 +1115,7 @@ class FileUploadAPIView(APIView):
                     print(data['SEMESTER'][i])
                 #wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i])
     
-                if (data['ISOPTION'][i] == 'Optionally' or data['ISOPTION'][i] == 'Set_specialization') and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists():
+                if data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists():
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module = mdb, change_type = data['ISOPTION'][i])
                     wpchangemdb.work_program.add(wp_obj)
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists():
