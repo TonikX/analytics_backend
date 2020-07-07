@@ -36,7 +36,7 @@ export default (theme: Theme) => createStyles({
     },
     actions: {
         textAlign: 'end',
-        width: '100px',
+        width: '112px',
         '& svg': {
             cursor: 'pointer'
         }
