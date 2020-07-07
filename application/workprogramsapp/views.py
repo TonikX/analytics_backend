@@ -1017,7 +1017,7 @@ class FileUploadAPIView(APIView):
 
         print('============Создаю рпд и направления============')
         #создаем рпд и направления
-        credit_units = [0 for i in range(0,10)]
+        
         fs_count, wp_count, ap_count = 0,0,0
         for i in list(data.index.values):
             try:
@@ -1064,11 +1064,11 @@ class FileUploadAPIView(APIView):
                 
                 print('===========Work program and FieldOfStudyWorkProgram done')
                 
-                if AcademicPlan.objects.filter(educational_profile = data['SUBFIELDNAME'][i].strip()).exists():
-                    ap_obj = AcademicPlan.objects.get(educational_profile = data['SUBFIELDNAME'][i].strip())
+                if AcademicPlan.objects.filter(qualification = qualification, educational_profile = data['SUBFIELDNAME'][i].strip()).exists():
+                    ap_obj = AcademicPlan.objects.get(qualification = qualification, educational_profile = data['SUBFIELDNAME'][i].strip())
 
                 else:
-                    ap_obj = AcademicPlan(educational_profile = data['SUBFIELDNAME'][i].strip())
+                    ap_obj = AcademicPlan(qualification = qualification, educational_profile = data['SUBFIELDNAME'][i].strip())
                     ap_obj.save()
                     ap_count+=1
 
@@ -1104,22 +1104,28 @@ class FileUploadAPIView(APIView):
                 
                 print('===========Block Module done', mdb)
             
-                #semesters = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])]['SEMESTER'].drop_duplicates()
                 #credit_units = [0 for i in range(0,10)]
                 #for semester in semesters:
                 #    credit_units[int(semester)-1] = 
+
+                credit_units = [0 for i in range(0,10)]
+                semesters = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])].drop_duplicates()
                 try:
-                    credit_units[int(data['SEMESTER'][i])-1] = int(data['CREDITS'][i])
-                    print(credit_units)
+                    for s in semesters.index.values:
+                        credit_units[int(semesters['SEMESTER'][s])-1] = int(semesters['CREDITS'][s])
                 except:
-                    print(data['SEMESTER'][i])
+                    print('CREDIT == Nan')
+                #credit_units = [0 for i in range(0,10)]
+                #    print(data['SEMESTER'][i])
                 #wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i])
-    
-                if data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists():
+
+
+                if (data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module = mdb, change_type = data['ISOPTION'][i])
                     wpchangemdb.work_program.add(wp_obj)
-                elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists():
-                    print(data['ISOPTION'][i])
+                elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i], work_program = wp_obj).exists():
+                    print('exist', wp_obj)
+
                 else:
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
                     wpchangemdb.credit_units = ','.join(str(i) for i in credit_units)
@@ -1127,10 +1133,10 @@ class FileUploadAPIView(APIView):
                     wpchangemdb.discipline_block_module = mdb
                     wpchangemdb.save()
                     wpchangemdb.work_program.add(wp_obj)
-                print('===========wpchangemdb done', wpchangemdb)
+                    
+                print('===========wpchangemdb done')
             except:
-                continue;
-        
+                continue;    
         print(f'Записано: Учебные планы:{ap_count}, РПД:{wp_count}, Направления:{fs_count}')
 
         return Response(status=200)
@@ -1254,7 +1260,8 @@ class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
     
 #Конец блока ендпоинтов рабочей программы
 #Скачивание рпд в формате docx/pdf
-
+#
+'''
 from docxtpl import DocxTemplate
 def export_docx(request):
     """Экспорт файла в док"""
@@ -1344,3 +1351,4 @@ def export_docx(request):
     tpl.render(context)
     tpl.save('/application/export/RPD_export_2020.docx')
     return HttpResponse("Succesfully export file!")
+'''
