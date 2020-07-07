@@ -193,7 +193,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                             </TableCell>
                                                             <TableCell className={classes.actions}>
                                                                 <Tooltip title="Удалить модуль">
-                                                                    <DeleteIcon className={classes.marginRight}
+                                                                    <DeleteIcon className={classes.marginRight10}
                                                                                 color="primary"
                                                                                 onClick={this.handleClickDeleteModule(module[ModuleFields.ID])}
                                                                     />
@@ -230,12 +230,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
                                                                 <TableCell className={classes.actions}>
                                                                     <Tooltip title={`Скачать ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу' }`}>
-                                                                        <FileIcon className={classes.marginRight}
+                                                                        <FileIcon className={classes.marginRight10}
                                                                                   onClick={()=>{}}
                                                                         />
                                                                     </Tooltip>
                                                                     <Tooltip title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу' }`}>
-                                                                        <DeleteIcon className={classes.marginRight}
+                                                                        <DeleteIcon className={classes.marginRight10}
                                                                                     onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
                                                                         />
                                                                     </Tooltip>
