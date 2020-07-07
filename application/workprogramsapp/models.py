@@ -229,8 +229,6 @@ class AcademicPlan(models.Model):
             for Module in Block.modules_in_discipline_block.all():
                 module_clone = Module.make_clone(attrs={'descipline_block_id': block_clone.id})
 
-        print (block_clone)
-
     def new_descipline_blocks(iap, siap):
         blocks = ['Блок 1', 'Блок 2', 'Блок 3']
         print (siap.data.get("id"))
