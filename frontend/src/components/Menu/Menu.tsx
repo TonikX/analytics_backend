@@ -35,11 +35,12 @@ class Menu extends React.PureComponent<MenuProps>{
             >
 
                 <List className={classes.menuList}>
-                    {MenuList.map(group =>
+                    {MenuList.map((group, groupIndex) =>
                         <>
-                            {group.map(item =>
+                            {group.map((item, itemIndex) =>
                                 <Link to={item.link}
                                       className={classes.link}
+                                      key={`${groupIndex}-${itemIndex}`}
                                 >
                                     <MenuItem
                                         selected={pathname === item.link}

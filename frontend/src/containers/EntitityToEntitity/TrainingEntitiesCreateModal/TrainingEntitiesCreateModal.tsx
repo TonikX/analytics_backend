@@ -14,20 +14,18 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import SearchSelector from "../../../components/SearchSelector/SearchSelector";
 import {SubjectAreaFields} from "../../SubjectArea/enum";
 import {EntityToEntityFields} from '../enum';
+import {TrainingEntitiesFields} from "../../TrainingEntities/enum";
 
 import connect from './TrainingEntitiesCreateModal.connect';
 import styles from './TrainingEntitiesCreateModal.styles';
-import {Link} from "react-router-dom";
-import {appRouter} from "../../../service/router-service";
-import Typography from "@material-ui/core/Typography";
-
 
 class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCreateModalProps> {
     state = {
         trainingEntity: {
             [EntityToEntityFields.ID]: null,
-            [EntityToEntityFields.TITLE]: '',
-            [EntityToEntityFields.SUBJECT_AREA]: '',
+            [EntityToEntityFields.ITEM1]: {},
+            [EntityToEntityFields.ITEM2]: {},
+            [EntityToEntityFields.RELATION]: '',
         },
     };
 
@@ -42,8 +40,9 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
             this.setState({
                 trainingEntity: {
                     [EntityToEntityFields.ID]: get(trainingEntity, EntityToEntityFields.ID),
-                    [EntityToEntityFields.TITLE]: get(trainingEntity, EntityToEntityFields.TITLE, ''),
-                    [EntityToEntityFields.SUBJECT_AREA]: get(trainingEntity, EntityToEntityFields.SUBJECT_AREA, {}),
+                    [EntityToEntityFields.ITEM1]: get(trainingEntity, EntityToEntityFields.ITEM1, {}),
+                    [EntityToEntityFields.ITEM2]: get(trainingEntity, EntityToEntityFields.ITEM2, {}),
+                    [EntityToEntityFields.RELATION]: get(trainingEntity, EntityToEntityFields.RELATION, ''),
                 }
             });
         }
@@ -74,19 +73,19 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
         })
     }
 
-    handleChangeSubjectAreaSearchText = (searchText: string) => {
+    handleChangeEntitiesSearchText = (searchText: string) => {
         this.props.trainingEntitiesActions.changeSearchQuery(searchText);
         this.props.trainingEntitiesActions.getTrainingEntities();
     }
 
-    saveSubjectAreaField = (value: ReactText) => {
+    saveEntity = (field: string) => (value: ReactText) => {
         const {trainingEntity} = this.state;
 
         this.setState({
             trainingEntity: {
                 ...trainingEntity,
-                [EntityToEntityFields.SUBJECT_AREA]: {
-                    [SubjectAreaFields.ID]: value
+                [field]: {
+                    [TrainingEntitiesFields.ID]: value
                 }
             }
         })
@@ -96,7 +95,7 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
         const {isOpen, classes, trainingEntitiesList} = this.props;
         const {trainingEntity} = this.state;
 
-        const disableButton = trainingEntity[EntityToEntityFields.TITLE].length === 0;
+        const disableButton = true;
 
         const isEditMode = trainingEntity[EntityToEntityFields.ID];
 
@@ -111,29 +110,23 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} связь </DialogTitle>
                 <DialogContent>
                     <SearchSelector label="Учебная сущность 1 * "
-                                    changeSearchText={this.handleChangeSubjectAreaSearchText}
+                                    changeSearchText={this.handleChangeEntitiesSearchText}
                                     list={trainingEntitiesList}
-                                    changeItem={this.saveSubjectAreaField}
-                                    value={get(trainingEntity, [EntityToEntityFields.SUBJECT_AREA, SubjectAreaFields.ID], '')}
-                                    valueLabel={get(trainingEntity, [EntityToEntityFields.SUBJECT_AREA, SubjectAreaFields.TITLE], '')}
+                                    changeItem={this.saveEntity(EntityToEntityFields.ITEM1)}
+                                    value={get(trainingEntity, [EntityToEntityFields.ITEM1, SubjectAreaFields.ID], '')}
+                                    valueLabel={get(trainingEntity, [EntityToEntityFields.ITEM1, SubjectAreaFields.TITLE], '')}
+                                    className={classes.marginBottom30}
                     />
                     <SearchSelector label="Учебная сущность 2 * "
-                                    changeSearchText={this.handleChangeSubjectAreaSearchText}
+                                    changeSearchText={this.handleChangeEntitiesSearchText}
                                     list={trainingEntitiesList}
-                                    changeItem={this.saveSubjectAreaField}
-                                    value={get(trainingEntity, [EntityToEntityFields.SUBJECT_AREA, SubjectAreaFields.ID], '')}
-                                    valueLabel={get(trainingEntity, [EntityToEntityFields.SUBJECT_AREA, SubjectAreaFields.TITLE], '')}
+                                    changeItem={this.saveEntity(EntityToEntityFields.ITEM2)}
+                                    value={get(trainingEntity, [EntityToEntityFields.ITEM1, SubjectAreaFields.ID], '')}
+                                    valueLabel={get(trainingEntity, [EntityToEntityFields.ITEM1, SubjectAreaFields.TITLE], '')}
+                                    className={classes.marginBottom30}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
-                    <Link to={appRouter.getSubjectAreaRoute()}
-                          className={classes.link}
-                          target="_blank"
-                    >
-                        <Typography>
-                            Создать связь
-                        </Typography>
-                    </Link>
                     <Button onClick={this.handleClose}
                             variant="text">
                         Отмена

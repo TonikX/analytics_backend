@@ -27,10 +27,12 @@ import {SortingType} from "../../components/SortingButton/types";
 
 import {EntityToEntityProps, EntityToEntityType} from './types';
 import {EntityToEntityFields} from './enum';
+import {TrainingEntitiesFields} from "../TrainingEntities/enum";
+
+import {relations} from './constants';
 
 import connect from './EntitityToEntitity.connect';
 import styles from './EntitityToEntitity.styles';
-import {SubjectAreaFields} from "../SubjectArea/enum";
 
 class EntitityToEntitity extends React.Component<EntityToEntityProps> {
     state = {
@@ -113,22 +115,22 @@ class EntitityToEntitity extends React.Component<EntityToEntityProps> {
                     <div className={classNames(classes.listItem, classes.header)}>
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                             Сущность 1
-                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.TITLE)}
-                                           mode={sortingField === EntityToEntityFields.TITLE ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.ITEM1)}
+                                           mode={sortingField === EntityToEntityFields.ITEM1 ? sortingMode : ''}
                             />
                         </Typography>
 
-                        <Typography className={classNames(classes.marginRight)}>
+                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                             Сущность 2
-                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.SUBJECT_AREA)}
-                                           mode={sortingField === EntityToEntityFields.SUBJECT_AREA ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.ITEM2)}
+                                           mode={sortingField === EntityToEntityFields.ITEM2 ? sortingMode : ''}
                             />
                         </Typography>
 
                         <Typography className={classNames(classes.marginRight)}>
                             Связь
-                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.SUBJECT_AREA)}
-                                           mode={sortingField === EntityToEntityFields.SUBJECT_AREA ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.RELATION)}
+                                           mode={sortingField === EntityToEntityFields.RELATION ? sortingMode : ''}
                             />
                         </Typography>
                     </div>
@@ -138,10 +140,13 @@ class EntitityToEntitity extends React.Component<EntityToEntityProps> {
                             {trainingEntities.map(item =>
                                 <div className={classes.listItem} key={item[EntityToEntityFields.ID]}>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                        {item[EntityToEntityFields.TITLE]}
+                                        {item[EntityToEntityFields.ITEM1][TrainingEntitiesFields.TITLE]}
+                                    </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                                        {item[EntityToEntityFields.ITEM2][TrainingEntitiesFields.TITLE]}
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight)}>
-                                        {item[EntityToEntityFields.SUBJECT_AREA][SubjectAreaFields.TITLE]}
+                                        {get(relations, item[EntityToEntityFields.RELATION])}
                                     </Typography>
                                     <div className={classes.actions}>
                                         <IconButton onClick={this.handleClickDelete(item[EntityToEntityFields.ID])}>

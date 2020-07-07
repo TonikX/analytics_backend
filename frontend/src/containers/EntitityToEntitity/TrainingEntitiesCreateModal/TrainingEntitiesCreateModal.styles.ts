@@ -21,5 +21,8 @@ export default (theme: Theme) => createStyles({
         marginRight: 'auto',
         textDecoration: 'none',
         color: theme.palette.primary.main,
-    }
+    },
+    marginBottom30: {
+        marginBottom: '30px'
+    },
 });
