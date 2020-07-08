@@ -23,7 +23,7 @@ from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicP
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
     FileUploadAPIView, WorkProgramInFieldOfStudyListView
-#from .views import export_docx    
+from .views import DocxFileExportViewSet    
 
 
 
@@ -123,7 +123,7 @@ urlpatterns = [
     path('api/onlinecourse/delete/<int:pk>', OnlineCourseDestroyView.as_view()),
     path('api/onlinecourse/update/<int:pk>', OnlineCourseUpdateView.as_view()),
 
-    #Библиогшрафическая ссылкуа
+    #Библиогшрафическая ссылка
     path('api/BibliographicReference', BibliographicReferenceListCreateAPIView.as_view()),
     path('api/BibliographicReference/create', BibliographicReferenceListCreateAPIView.as_view()),
     path('api/BibliographicReference/detail/<int:pk>', BibliographicReferenceDetailsView.as_view()),
@@ -131,18 +131,20 @@ urlpatterns = [
     path('api/BibliographicReference/update/<int:pk>', BibliographicReferenceUpdateView.as_view()),
     path('api/bibliographicreferenceinworkprogram/<int:workprogram_id>', BibliographicReferenceInWorkProgramList.as_view()),
 
+    #Работа с файлами (загрузка/экспорт)
     path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
     path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
     path('api/upload/csv', FileUploadAPIView.as_view()),
-    #path('api/export/docx', export_docx),
+    path('api/export/docx', DocxFileExportViewSet.as_view({'get': 'download'})),
 
-
+    #Учебный планы
     path('api/academicplan', AcademicPlanListAPIView.as_view()),
     path('api/academicplan/create', AcademicPlanCreateAPIView.as_view()),
     path('api/academicplan/detail/<int:pk>', AcademicPlanDetailsView.as_view()),
     path('api/academicplan/delete/<int:pk>', AcademicPlanDestroyView.as_view()),
     path('api/academicplan/update/<int:pk>', AcademicPlanUpdateView.as_view()),
 
+    #Учебные планы и направления
     path('api/implementationacademicplan', ImplementationAcademicPlanListAPIView.as_view()),
     path('api/implementationacademicplan/create', ImplementationAcademicPlanAPIView.as_view()),
     path('api/implementationacademicplan/detail/<int:pk>', ImplementationAcademicPlanDetailsView.as_view()),
@@ -151,12 +153,14 @@ urlpatterns = [
 
     path('api/academicplan/implemention', ImplementationAcademicPlanAPIView.as_view()),
 
+    #РПД в учебных планах
     path('api/workprogramchangeindisciplineblockmodule', WorkProgramChangeInDisciplineBlockModuleListAPIView.as_view()),
     path('api/workprogramchangeindisciplineblockmodule/create', WorkProgramChangeInDisciplineBlockModuleCreateAPIView.as_view()),
     path('api/workprogramchangeindisciplineblockmodule/detail/<int:pk>', WorkProgramChangeInDisciplineBlockModuleDetailsView.as_view()),
     path('api/workprogramchangeindisciplineblockmodule/delete/<int:pk>', WorkProgramChangeInDisciplineBlockModuleDestroyView.as_view()),
     path('api/workprogramchangeindisciplineblockmodule/update/<int:pk>', WorkProgramChangeInDisciplineBlockModuleUpdateView.as_view()),
-
+    
+    #Работа с модулями в учебном плане
     path('api/disciplineblockmodule/create', DisciplineBlockModuleCreateAPIView.as_view()),
     path('api/disciplineblockmodule/delete/<int:pk>', DisciplineBlockModuleDestroyView.as_view()),
     path('api/disciplineblockmodule/update/<int:pk>', DisciplineBlockModuleUpdateView.as_view()),
