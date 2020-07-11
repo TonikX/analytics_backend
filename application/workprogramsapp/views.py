@@ -1017,7 +1017,7 @@ class FileUploadAPIView(APIView):
 
         print('============Создаю рпд и направления============')
         #создаем рпд и направления
-        credit_units = [0 for i in range(0,10)]
+        
         fs_count, wp_count, ap_count = 0,0,0
         for i in list(data.index.values):
             try:
@@ -1064,11 +1064,11 @@ class FileUploadAPIView(APIView):
                 
                 print('===========Work program and FieldOfStudyWorkProgram done')
                 
-                if AcademicPlan.objects.filter(educational_profile = data['SUBFIELDNAME'][i].strip()).exists():
-                    ap_obj = AcademicPlan.objects.get(educational_profile = data['SUBFIELDNAME'][i].strip())
+                if AcademicPlan.objects.filter(qualification = qualification, educational_profile = data['SUBFIELDNAME'][i].strip()).exists():
+                    ap_obj = AcademicPlan.objects.get(qualification = qualification, educational_profile = data['SUBFIELDNAME'][i].strip())
 
                 else:
-                    ap_obj = AcademicPlan(educational_profile = data['SUBFIELDNAME'][i].strip())
+                    ap_obj = AcademicPlan(qualification = qualification, educational_profile = data['SUBFIELDNAME'][i].strip())
                     ap_obj.save()
                     ap_count+=1
 
@@ -1104,22 +1104,28 @@ class FileUploadAPIView(APIView):
                 
                 print('===========Block Module done', mdb)
             
-                #semesters = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])]['SEMESTER'].drop_duplicates()
                 #credit_units = [0 for i in range(0,10)]
                 #for semester in semesters:
                 #    credit_units[int(semester)-1] = 
+
+                credit_units = [0 for i in range(0,10)]
+                semesters = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])].drop_duplicates()
                 try:
-                    credit_units[int(data['SEMESTER'][i])-1] = int(data['CREDITS'][i])
-                    print(credit_units)
+                    for s in semesters.index.values:
+                        credit_units[int(semesters['SEMESTER'][s])-1] = int(semesters['CREDITS'][s])
                 except:
-                    print(data['SEMESTER'][i])
+                    print('CREDIT == Nan')
+                #credit_units = [0 for i in range(0,10)]
+                #    print(data['SEMESTER'][i])
                 #wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i])
-    
-                if data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists():
+
+
+                if (data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module = mdb, change_type = data['ISOPTION'][i])
                     wpchangemdb.work_program.add(wp_obj)
-                elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists():
-                    print(data['ISOPTION'][i])
+                elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i], work_program = wp_obj).exists():
+                    print('exist', wp_obj)
+
                 else:
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
                     wpchangemdb.credit_units = ','.join(str(i) for i in credit_units)
@@ -1127,10 +1133,10 @@ class FileUploadAPIView(APIView):
                     wpchangemdb.discipline_block_module = mdb
                     wpchangemdb.save()
                     wpchangemdb.work_program.add(wp_obj)
-                print('===========wpchangemdb done', wpchangemdb)
+                    
+                print('===========wpchangemdb done')
             except:
-                continue;
-        
+                continue;    
         print(f'Записано: Учебные планы:{ap_count}, РПД:{wp_count}, Направления:{fs_count}')
 
         return Response(status=200)
@@ -1254,17 +1260,18 @@ class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
     
 #Конец блока ендпоинтов рабочей программы
 #Скачивание рпд в формате docx/pdf
+#
 
-from docxtpl import DocxTemplate
-def export_docx(request):
+from docxtpl import DocxTemplate, RichText
+def render_docx(*args, **kwargs):
     """Экспорт файла в док"""
-    tpl = DocxTemplate('/application/workprogramsapp/RPD_shablon_2020.docx')
-    #id = request.data.get('id')
-    #field_of_study_code = request.data.get('field_of_study_code') #код
-    #field_of_study = request.data.get('field_of_study') #направление
-    #academic_plan = request.data.get('academic_plan') #учебный план
+    tpl = DocxTemplate('/application/export/RPD_shablon_2020.docx')
+    
+    #
     # Получаем данные рабочей программы дисциплины
-    wp_obj = WorkProgram.objects.get(pk = 5)
+    #
+    wp_obj = WorkProgram.objects.get(pk = kwargs['pk'])
+    bibliography = [bib.description for bib in wp_obj.bibliographic_reference.all()]
     
     if wp_obj.qualification == 'bachelor':
         qualification = 'БАКАЛАВР'
@@ -1281,66 +1288,120 @@ def export_docx(request):
     #    iwp_obj = IndicatorWorkProgram.objects.filter(work_program = wp_obj, indicator = i)
     #competence = [{'competence': competence, 'indicator': indicator},]
     #indicator = [{'indicator': indicator, 'knowledge':knowledge, 'skills':skills, 'proficiency':proficiency} for i in i_obj]
+    
     #
     # Получаем данные для таблицы с разделами
     #
     contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours = 0,0,0,0,0,0
     sec_obj = DisciplineSection.objects.filter(work_program = wp_obj)
-    s,sections_online = [],[]
+    sections_online, sections_tbl, online, topics_online = [],[],[],{}
     for i in sec_obj:
+
         if i.contact_work is None:
-            pass
+            contact_work_str = ''
         else:
             contact_work += i.contact_work
+            contact_work_str = i.contact_work
         if i.lecture_classes is None:
-            pass
+            lecture_classes_str = ''
         else:
             lecture_classes += i.lecture_classes
+            lecture_classes_str = i.lecture_classes
         if i.laboratory is None:
-            pass
+            laboratory_str = ''
         else:
             laboratory += i.laboratory
+            laboratory_str = i.laboratory
+
         if i.practical_lessons is None:
-            pass
+           practical_lessons_str = ''
         else:
             practical_lessons += i.practical_lessons
+            practical_lessons_str = practical_lessons
         if i.SRO is None:
-            pass;
+            SRO_str = ''
         else:
             SRO += i.SRO
+            SRO_str = i.SRO
+
         total_hours += i.total_hours
+        total_hours_str = i.total_hours
+        sections_tbl.append({'section':i.ordinal_number , 'name': i.name, 
+            'hours':[contact_work_str,lecture_classes_str,laboratory_str,practical_lessons_str,SRO_str, total_hours_str]})
         topics = Topic.objects.filter(discipline_section = i)
+        s = []
         for j in topics:
             if j.url_online_course is None:
                 pass
             else:
                 s.append(j.url_online_course.title)
                 sections_online.append(i.ordinal_number)
+                online.append(str(j.url_online_course.title +'— Открытое образование. '+'— Режим доступа: '+j.url_online_course.course_url))
+        topics_online.update({i:', '.join(str(q) for q in s)})
     
-    sections = [{'section': i.ordinal_number, 'name': i.name, 
-                    'hours':[i.contact_work,i.lecture_classes,i.laboratory,i.practical_lessons,i.SRO, i.total_hours]} for i in sec_obj]
-
     section_content = [{'ordinal': i.ordinal_number, 'name': i.name, 
-    'content':', '.join(str(j.description) for j in Topic.objects.filter(discipline_section = i)), 
-    'online':', '.join(str(j) for j in set(s))} for i in sec_obj]
-
+    'content':', '.join('' if j is str(j.description) else str(j.description) for j in Topic.objects.filter(discipline_section = i)),
+    'online':topics_online[i]} for i in sec_obj]
     
+    flag = False
+    if sections_online == []:
+        flag = True
+
     context = {
         'title': wp_obj.title,
-        'field_of_study_code': '01.03.02',
-        'field_of_study': 'Прикладная математика и информатика',
+        'field_of_study_code': kwargs['field_of_study_code'],
+        'field_of_study': kwargs['field_of_study'],
         'QUALIFICATION': qualification,
-        'academic_plan': 'Информатика и программирование',
-        'year': '2020',
+        'academic_plan': kwargs['academic_plan'],
+        'year': kwargs['year'],
         'tbl_competence': '',
-        'tbl_sections': sections,
+        'tbl_sections': sections_tbl,
         'total_hours':[contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours], 
-        'is_no_online':False,
+        'is_no_online':flag,
         'X': 'X',
-        'sections': ', '.join(str(i) for i in sections_online),
+        'sections': ', '.join(str(i) for i in set(sections_online)),
+        'sections_rep': '',
         'tbl_section_content': section_content,
+        'bibliography': bibliography,
+        'online': online,
         }
-
+    
+    filename = str(kwargs['field_of_study_code'])+str(wp_obj.title)+'_'+str(wp_obj.qualification)+'_'+str(kwargs['year'])+'.docx'
+    
     tpl.render(context)
-    tpl.save('/application/export/RPD_export_2020.docx')
-    return HttpResponse("Succesfully export file!")
+    tpl.save('/application/export/'+filename)
+    return tpl, filename
+                        
+
+from rest_framework import viewsets, renderers
+from rest_framework.decorators import action
+from django.http import HttpResponse
+
+class PassthroughRenderer(renderers.BaseRenderer):
+    """
+        Return data as-is. View should supply a Response.
+    """
+    media_type = ''
+    format = ''
+    def render(self, data, accepted_media_type=None, renderer_context=None):
+        return data
+
+class DocxFileExportViewSet(viewsets.ReadOnlyModelViewSet):
+    """Вовзращает response"""
+    @action(methods=['get'], detail=True, renderer_classes=(PassthroughRenderer,))
+    def download(self, request):
+        pk = request.data.get('id')
+        field_of_study_code = request.data.get('field_of_study_code') #код
+        field_of_study = request.data.get('field_of_study') #направление
+        academic_plan = request.data.get('academic_plan') #учебный план
+        year = request.data.get('year')
+        
+        tpl,filename = render_docx(pk = pk, field_of_study_code = field_of_study_code, field_of_study = field_of_study, academic_plan = academic_plan, year = year)
+        print(filename)
+        # send file
+        response = HttpResponse(content_type='application/vnd.ms-word', status=status.HTTP_200_OK)
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+
+        tpl.save(response)
+    
+        return response
