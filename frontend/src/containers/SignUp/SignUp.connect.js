@@ -12,7 +12,6 @@ const mapStateToProps = (state) => {
                     || getFieldValue(state, Enum.LAST_NAME_FIELD).length === 0
                     || getFieldValue(state, Enum.PASSWORD_FIELD).length === 0
                     || getFieldValue(state, Enum.PASSWORD_REPEAT_FIELD).length === 0
-                    || getFieldValue(state, Enum.GROUP_FIELD).length === 0
                     || isPasswordError(state)
         ,
         isPasswordError: isPasswordError(state),
@@ -22,7 +21,6 @@ const mapStateToProps = (state) => {
         lastName: getFieldValue(state, Enum.LAST_NAME_FIELD),
         password: getFieldValue(state, Enum.PASSWORD_FIELD),
         passwordRepeat: getFieldValue(state, Enum.PASSWORD_REPEAT_FIELD),
-        group: getFieldValue(state, Enum.GROUP_FIELD),
     };
 };
 

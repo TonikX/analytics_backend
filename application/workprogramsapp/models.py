@@ -321,6 +321,8 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
     SET_SPECIALIZATION = 'Set_specialization'
     FACULTATIV = 'Facultativ'
     OPT_SPECIALIZATION = 'Opt_specialization'
+    LANG = 'Lang'
+    MODULE = 'Module'
 
     CHANGE_CHOICES = (
         (REQUIRED, 'Required'),
@@ -328,7 +330,9 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
         (OGNP_SET, 'OGNP_set'),
         (SET_SPECIALIZATION, 'Set_specialization'),
         (FACULTATIV, 'Facultativ'),
-        (OPT_SPECIALIZATION, 'Opt_specialization')
+        (OPT_SPECIALIZATION, 'Opt_specialization'),
+        (LANG, 'Lang'),
+        (MODULE, 'Module')
 
     )
 

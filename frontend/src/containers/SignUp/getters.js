@@ -13,7 +13,6 @@ export const getFormDataForSignUp = (state) => {
     formData.append(Enum.USERNAME_FIELD, getFieldValue(state, Enum.USERNAME_FIELD));
     formData.append(Enum.FIRST_NAME_FIELD, getFieldValue(state, Enum.FIRST_NAME_FIELD));
     formData.append(Enum.LAST_NAME_FIELD, getFieldValue(state, Enum.LAST_NAME_FIELD));
-    formData.append(Enum.GROUP_FIELD, getFieldValue(state, Enum.GROUP_FIELD));
     formData.append(Enum.PASSWORD_REPEAT_FIELD, getFieldValue(state, Enum.PASSWORD_REPEAT_FIELD));
 
     return formData;
