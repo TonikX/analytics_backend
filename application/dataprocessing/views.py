@@ -515,7 +515,7 @@ class RelationListCreateAPIView(generics.ListAPIView):
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['item1', 'relation', 'item2']
+    filterset_fields = ['item1__name', 'relation__relation', 'item2__name']
 
 
 class RelationListCreateGroupsAPIView(generics.ListAPIView):

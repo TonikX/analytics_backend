@@ -400,6 +400,7 @@ class EvaluationTool(models.Model):
     description = models.CharField(max_length=50000, verbose_name = "Описание", blank = True, null = True)
     check_point = models.BooleanField(verbose_name = "Контрольная точка", blank = True, null = True)
     deadline = models.IntegerField(verbose_name = "Срок сдачи в неделях", blank = True, null = True)
+    semester = models.IntegerField(verbose_name = "Семестр в котором сдается оценочное средство", blank = True, null = True)
     min = models.IntegerField(verbose_name = "Максимальное значение", blank = True, null = True)
     max = models.IntegerField(verbose_name = "Минимальное значение", blank = True, null = True)
 
