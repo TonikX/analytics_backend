@@ -4,8 +4,6 @@ import get from 'lodash/get';
 // @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
 
-import classNames from 'classnames';
-
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -31,6 +29,11 @@ import {DirectionFields} from './enum';
 import connect from './EducationalProgram.connect';
 import styles from './EducationalProgram.styles';
 import {specialization} from "../WorkProgram/data";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
+import TableBody from "@material-ui/core/TableBody";
 
 class EducationalProgram extends React.Component<EducationalProgramProps> {
     state = {
@@ -107,78 +110,75 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                                onChange={this.handleChangeSearchQuery}
                     />
                 </Typography>
-
-                <div className={classes.tableWrap}>
-                    <div className={classNames(classes.row, classes.header)}>
-                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Название
-                            <SortingButton changeMode={this.changeSorting(DirectionFields.TITLE)}
-                                           mode={sortingField === DirectionFields.TITLE ? sortingMode : ''}
-                            />
-                        </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.numberCell)}>
-                            Номер
-                            <SortingButton changeMode={this.changeSorting(DirectionFields.NUMBER)}
-                                           mode={sortingField === DirectionFields.NUMBER ? sortingMode : ''}
-                            />
-                        </Typography>
-
-                        <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
-                            Квалификация
-                            <SortingButton changeMode={this.changeSorting(DirectionFields.QUALIFICATION)}
-                                           mode={sortingField === DirectionFields.QUALIFICATION ? sortingMode : ''}
-                            />
-                        </Typography>
-
-                        <Typography className={classNames(classes.marginRight, classes.facultyCell)}>
-                            Факультет
-                            <SortingButton changeMode={this.changeSorting(DirectionFields.FACULTY)}
-                                           mode={sortingField === DirectionFields.FACULTY ? sortingMode : ''}
-                            />
-                        </Typography>
-
-                        <Typography className={classNames(classes.marginRight, classes.educationFormCell)}>
-                            Форма обучения
-                            <SortingButton changeMode={this.changeSorting(DirectionFields.EDUCATION_FORM)}
-                                           mode={sortingField === DirectionFields.EDUCATION_FORM ? sortingMode : ''}
-                            />
-                        </Typography>
-
-                        <Typography className={classNames(classes.marginRight, classes.profileCell)}>
-                            Профиль
-                            <SortingButton changeMode={this.changeSorting(DirectionFields.EDUCATIONAL_PROFILE)}
-                                           mode={sortingField === DirectionFields.EDUCATIONAL_PROFILE ? sortingMode : ''}
-                            />
-                        </Typography>
+                <Scrollbars>
+                    <div className={classes.tableWrap}>
+                        <Table stickyHeader size='small'>
+                            <TableHead className={classes.header}>
+                                <TableRow>
+                                    <TableCell>
+                                        Название
+                                        <SortingButton changeMode={this.changeSorting(DirectionFields.TITLE)}
+                                                       mode={sortingField === DirectionFields.TITLE ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        Номер
+                                        <SortingButton changeMode={this.changeSorting(DirectionFields.NUMBER)}
+                                                       mode={sortingField === DirectionFields.NUMBER ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        Квалификация
+                                        <SortingButton changeMode={this.changeSorting(DirectionFields.QUALIFICATION)}
+                                                       mode={sortingField === DirectionFields.QUALIFICATION ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        Факультет
+                                        <SortingButton changeMode={this.changeSorting(DirectionFields.FACULTY)}
+                                                       mode={sortingField === DirectionFields.FACULTY ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        Форма обучения
+                                        <SortingButton changeMode={this.changeSorting(DirectionFields.EDUCATION_FORM)}
+                                                       mode={sortingField === DirectionFields.EDUCATION_FORM ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        Профиль
+                                        <SortingButton changeMode={this.changeSorting(DirectionFields.EDUCATIONAL_PROFILE)}
+                                                       mode={sortingField === DirectionFields.EDUCATIONAL_PROFILE ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell/>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {educationalProgram.map(direction =>
+                                    <TableRow>
+                                        <TableCell>{direction[DirectionFields.TITLE]}</TableCell>
+                                        <TableCell>{direction[DirectionFields.NUMBER]}</TableCell>
+                                        <TableCell>
+                                            {get(specialization.find(item => item.value === direction[DirectionFields.QUALIFICATION]), 'label', '')}
+                                        </TableCell>
+                                        <TableCell>{direction[DirectionFields.FACULTY]}</TableCell>
+                                        <TableCell>{direction[DirectionFields.EDUCATION_FORM] === 'extramural' ? 'Заочная' : 'Очная'}</TableCell>
+                                        <TableCell>{direction[DirectionFields.EDUCATIONAL_PROFILE]} </TableCell>
+                                        <TableCell>
+                                            <IconButton onClick={this.handleClickDelete(direction[DirectionFields.ID])}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                            <IconButton onClick={this.handleClickEdit(direction)}>
+                                                <EditIcon />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
                     </div>
-
-                    <div className={classes.list}>
-                        <Scrollbars>
-                            {educationalProgram.map(competence =>
-                                <div className={classes.row} key={competence[DirectionFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}> {competence[DirectionFields.TITLE]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.numberCell)}> {competence[DirectionFields.NUMBER]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
-                                        {get(specialization.find(item => item.value === competence[DirectionFields.QUALIFICATION]), 'label', '')}
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.facultyCell)}> {competence[DirectionFields.FACULTY]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.educationFormCell)}>
-                                        {competence[DirectionFields.EDUCATION_FORM] === 'extramural' ? 'Заочная' : 'Очная'}
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.profileCell)}> {competence[DirectionFields.EDUCATIONAL_PROFILE]} </Typography>
-                                    <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(competence[DirectionFields.ID])}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        <IconButton onClick={this.handleClickEdit(competence)}>
-                                            <EditIcon />
-                                        </IconButton>
-                                    </div>
-                                </div>
-                            )}
-                        </Scrollbars>
-                    </div>
-                </div>
+                </Scrollbars>
 
                 <div className={classes.footer}>
                     <TablePagination count={allCount}

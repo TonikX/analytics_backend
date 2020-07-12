@@ -6,7 +6,8 @@ export default (theme: Theme) => createStyles({
         width: 250,
         marginTop: 64,
         borderRight: '1px solid #f4f4f4',
-        zIndex: 100
+        zIndex: 100,
+        height: 'calc(100% - 64px)'
     },
     divider: {
         backgroundColor: '#f4f4f4'

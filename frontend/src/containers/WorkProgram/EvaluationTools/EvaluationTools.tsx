@@ -104,6 +104,9 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                     <Typography className={classes.checkpoint}>
                         Контрольная точка
                     </Typography>
+                    <Typography className={classes.semester}>
+                        Семестр
+                    </Typography>
                 </div>
                 <Scrollbars>
                     <div className={classes.list}>
@@ -126,7 +129,10 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                         {evaluationTool[EvaluationToolFields.DEADLINE]}
                                     </Typography>
                                     <Typography className={classes.checkpoint}>
-                                        {EvaluationToolFields.CHECK_POINT ? <CheckIcon /> : <></>}
+                                        {evaluationTool[EvaluationToolFields.CHECK_POINT] ? <CheckIcon /> : <></>}
+                                    </Typography>
+                                    <Typography className={classes.semester}>
+                                        {evaluationTool[EvaluationToolFields.SEMESTER]}
                                     </Typography>
 
                                     <div className={classes.actions}>

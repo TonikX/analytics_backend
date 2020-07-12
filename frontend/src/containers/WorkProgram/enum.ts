@@ -104,4 +104,5 @@ export enum EvaluationToolFields {
     DESCRIPTION = 'description',
     CHECK_POINT = 'check_point',
     SECTIONS = 'descipline_sections',
+    SEMESTER = 'semester',
 }

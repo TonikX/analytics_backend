@@ -1,6 +1,28 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
+    tableWrap: {
+        height: 'calc(100% - 60px)',
+        maxheight: 'calc(100% - 60px)',
+        '& td': {
+            padding: '5px 10px !important',
+            fontSize: '14px'
+        },
+        '& p': {
+            fontSize: '14px'
+        }
+    },
+    header: {
+        background: theme.palette.primary.main,
+        '& th': {
+            color: '#fff',
+            background: theme.palette.primary.main,
+            fontWeight: '400',
+            fontSize: '14px',
+            padding: '0px 10px !important',
+            whiteSpace: 'nowrap'
+        }
+    },
     root: {
         padding: '20px 50px 20px 50px',
         boxShadow: '0px 0px 6px 1px rgba(194,194,194,0.3)',
@@ -15,51 +37,9 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         justifyContent: 'space-between'
     },
-    list: {
-        width: '100%',
-        height: 'calc(100% - 50px)'
-    },
-    tableWrap: {
-        height: 'calc(100% - 60px)'
-    },
-    row: {
-        width: '100%',
-        display: 'flex',
-        borderBottom: '1px solid #ccc',
-        alignItems: 'center',
-        padding: '0 0 0 20px',
-        boxSizing: 'border-box',
-        minHeight: '50px'
-    },
-    numberCell: {
-        width: 200,
-        fontSize: 14
-    },
-    dateCell: {
-        width: 181,
-        fontSize: 14
-    },
-    titleCell: {
-        width: '20%',
-        fontSize: 14
-    },
-    yearCell: {
-        width: 163,
-        fontSize: 14
-    },
-    qualificationCell: {
-        width: 170,
-        fontSize: 14
-    },
-    educationFormCell: {
-        width: 170,
-        fontSize: 14
-    },
     actions: {
         display: 'flex',
         height: 'fit-content',
-        marginLeft: 'auto',
-        padding: '0px 20px'
     },
     searchInput: {
         height: '40px'
@@ -72,10 +52,6 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: '10px'
-    },
-    header: {
-        background: theme.palette.primary.main,
-        color: '#fff'
     },
     marginRight: {
         marginRight: 20
@@ -95,5 +71,5 @@ export default (theme: Theme) => createStyles({
     menuLink: {
         color: 'rgb(51, 51, 51) !important',
         textDecoration: 'none'
-    }
+    },
 });

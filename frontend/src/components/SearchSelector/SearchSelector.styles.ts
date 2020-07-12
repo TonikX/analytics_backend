@@ -8,15 +8,17 @@ export default (theme: Theme) => createStyles({
         position: "absolute",
         width: '100%'
     },
+    //@ts-ignore
     menuItem: {
         width: '100%',
         cursor: 'pointer',
-        whiteSpace: 'break-spaces'
+        //@ts-ignore
+        whiteSpace: 'normal !important',
     },
     popper: {
         zIndex: 100000,
     },
     selectedItem: {
 
-    }
+    },
 });

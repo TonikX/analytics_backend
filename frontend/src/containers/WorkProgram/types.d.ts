@@ -107,5 +107,6 @@ export type EvaluationToolType = {
     [EvaluationToolFields.DEADLINE]: number;
     [EvaluationToolFields.CHECK_POINT]: true | null;
     [EvaluationToolFields.MAX]: number;
+    [EvaluationToolFields.SEMESTER]: number;
     [EvaluationToolFields.SECTIONS]: Array<Section>;
 }

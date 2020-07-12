@@ -74,6 +74,10 @@ export default (theme: Theme) => createStyles({
         textAlign: 'center',
         width: '110px'
     },
+    semester: {
+        paddingLeft: '10px',
+        width: '50px'
+    },
     header: {
         background: theme.palette.primary.main,
         color: '#fff',

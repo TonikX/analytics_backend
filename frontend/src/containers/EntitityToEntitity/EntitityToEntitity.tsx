@@ -1,12 +1,10 @@
 import React from 'react';
-import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 
 import Scrollbars from "react-custom-scrollbars";
 
 import classNames from 'classnames';
 
-import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
 import Fab from "@material-ui/core/Fab";
@@ -18,12 +16,13 @@ import AddIcon from "@material-ui/icons/Add";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
 import TrainingEntitiesCreateModal from "./TrainingEntitiesCreateModal";
 import {SortingType} from "../../components/SortingButton/types";
+import TableSearchButton from "../../components/TableSearchButton";
+import TableFilter from "../../components/TableFilter";
 
 import {EntityToEntityProps, EntityToEntityType} from './types';
 import {EntityToEntityFields} from './enum';
@@ -70,15 +69,20 @@ class EntitityToEntitity extends React.Component<EntityToEntityProps> {
         this.props.actions.openDialog();
     }
 
-    handleChangeSearchQuery = (event: React.ChangeEvent) => {
-        this.changeSearch(get(event, 'target.value', ''));
+    handleChangeSearchItem1 = (searchQuery: string) => {
+        this.props.actions.changeSearchQuery({[EntityToEntityFields.ITEM1] : searchQuery});
+        this.changeFilter();
     }
 
-    changeSearch = debounce((value: string): void => {
-        this.props.actions.changeSearchQuery(value);
+    handleChangeSearchItem2 = (searchQuery: string) => {
+        this.props.actions.changeSearchQuery({[EntityToEntityFields.ITEM2] : searchQuery});
+        this.changeFilter();
+    }
+
+    changeFilter = () => {
         this.props.actions.changeCurrentPage(1);
         this.props.actions.getEntityToEntityList();
-    }, 300);
+    }
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
         this.props.actions.changeCurrentPage(page + 1);
@@ -90,6 +94,11 @@ class EntitityToEntitity extends React.Component<EntityToEntityProps> {
         this.props.actions.getEntityToEntityList();
     }
 
+    handleSelectFilter = (items: Array<any>) => {
+        this.props.actions.changeSearchQuery({[EntityToEntityFields.RELATION] : get(relations, ['items', 0], '')});
+        this.changeFilter();
+    }
+
     render() {
         const {classes, trainingEntities, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
@@ -98,17 +107,6 @@ class EntitityToEntitity extends React.Component<EntityToEntityProps> {
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
                     Связи
-
-                    <TextField placeholder="Поиск"
-                               variant="outlined"
-                               InputProps={{
-                                   classes: {
-                                       root: classes.searchInput
-                                   },
-                                   startAdornment: <SearchOutlined />,
-                               }}
-                               onChange={this.handleChangeSearchQuery}
-                    />
                 </Typography>
 
                 <div className={classes.tableWrap}>
@@ -118,6 +116,15 @@ class EntitityToEntitity extends React.Component<EntityToEntityProps> {
                             <SortingButton changeMode={this.changeSorting(EntityToEntityFields.ITEM1)}
                                            mode={sortingField === EntityToEntityFields.ITEM1 ? sortingMode : ''}
                             />
+                            <TableSearchButton handleSearch={this.handleChangeSearchItem1} />
+                        </Typography>
+
+                        <Typography className={classNames(classes.marginRight, classes.relationCell)}>
+                            Связь
+                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.RELATION)}
+                                           mode={sortingField === EntityToEntityFields.RELATION ? sortingMode : ''}
+                            />
+                            <TableFilter items={relations} handleSelect={this.handleSelectFilter} />
                         </Typography>
 
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
@@ -125,13 +132,7 @@ class EntitityToEntitity extends React.Component<EntityToEntityProps> {
                             <SortingButton changeMode={this.changeSorting(EntityToEntityFields.ITEM2)}
                                            mode={sortingField === EntityToEntityFields.ITEM2 ? sortingMode : ''}
                             />
-                        </Typography>
-
-                        <Typography className={classNames(classes.marginRight)}>
-                            Связь
-                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.RELATION)}
-                                           mode={sortingField === EntityToEntityFields.RELATION ? sortingMode : ''}
-                            />
+                            <TableSearchButton handleSearch={this.handleChangeSearchItem2} />
                         </Typography>
                     </div>
 
@@ -142,11 +143,11 @@ class EntitityToEntitity extends React.Component<EntityToEntityProps> {
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                                         {item[EntityToEntityFields.ITEM1][TrainingEntitiesFields.TITLE]}
                                     </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.relationCell)}>
+                                        {get(relations, item[EntityToEntityFields.RELATION])}
+                                    </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                                         {item[EntityToEntityFields.ITEM2][TrainingEntitiesFields.TITLE]}
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight)}>
-                                        {get(relations, item[EntityToEntityFields.RELATION])}
                                     </Typography>
                                     <div className={classes.actions}>
                                         <IconButton onClick={this.handleClickDelete(item[EntityToEntityFields.ID])}>

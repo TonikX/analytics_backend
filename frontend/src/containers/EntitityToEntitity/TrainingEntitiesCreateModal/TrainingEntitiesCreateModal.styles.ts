@@ -25,4 +25,13 @@ export default (theme: Theme) => createStyles({
     marginBottom30: {
         marginBottom: '30px'
     },
+    wrapSelector: {
+        '& .MuiInputLabel-shrink': {
+            transform: 'translate(13px, -6.5px) scale(0.75) !important',
+        },
+        '& .MuiOutlinedInput-notchedOutline legend': {
+            width: '50px !important'
+        },
+        marginBottom: '30px',
+    }
 });
