@@ -341,10 +341,27 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
     semester_hour = models.CharField(max_length=1024, blank=True, null=True)
     change_type = models.CharField(choices=CHANGE_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
     discipline_block_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="change_blocks_of_work_programs_in_modules", blank=True, null=True)
-    work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", related_name="work_program_in_change_block", blank=True, null=True)
+    work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", through='Zun', related_name="work_program_in_change_block")
+
 
     def __str__(self):
         return (str(self.discipline_block_module) + str(self.work_program))
+
+
+class Zun(models.Model):
+    '''
+    Модель для компетенций
+    '''
+    work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule', on_delete=models.CASCADE, related_name="zun_in_wp")
+    work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zun_for_wp")
+    # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
+    indicator = models.ForeignKey('Indicator', on_delete=models.CASCADE, blank=True, null=True)
+    knowledge = models.CharField(max_length=1024, blank=True, null=True)
+    skills = models.CharField(max_length=1024, blank=True, null=True)
+    attainments = models.CharField(max_length=1024, blank=True, null=True)
+
+    def __str__(self):
+        return (str(self.work_program_change_in_discipline_block_module) + str(self.work_program))
 
 
 class Competence(models.Model):
@@ -353,29 +370,29 @@ class Competence(models.Model):
     '''
     number = models.CharField(unique=True, max_length=1024)
     name = models.CharField(unique=True, max_length=1024)
-    field_of_study = models.ManyToManyField('FieldOfStudy')
-    work_program = models.ManyToManyField('WorkProgram')
+    #field_of_study = models.ForeignKey('Indicator', on_delete=models.CASCADE)
+    #work_program = models.ForeignKey('work_program', on_delete=models.CASCADE)
     # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
 
     def __str__(self):
         return self.name
 
 
-class IndicatorWorkProgram(models.Model):
-    '''
-    Модель для связи рабочих программ и индикаторов
-    '''
-    work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE)
-    indicator = models.ForeignKey('Indicator', on_delete=models.CASCADE)
-    #competence = models.ForeignKey('Competence', on_delete=models.CASCADE)
-    knowledge = models.CharField(max_length=1024)
-    skills = models.CharField(max_length=1024)
-    proficiency = models.CharField(max_length=1024)
-
-    # class Meta:
-    #     unique_together = ('competence', 'work_program', 'indicator')
-    def __str__(self):
-        return self.name
+# class IndicatorWorkProgram(models.Model):
+#     '''
+#     Модель для связи рабочих программ и индикаторов
+#     '''
+#     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE)
+#     indicator = models.ForeignKey('Indicator', on_delete=models.CASCADE)
+#     #competence = models.ForeignKey('Competence', on_delete=models.CASCADE)
+#     knowledge = models.CharField(max_length=1024)
+#     skills = models.CharField(max_length=1024)
+#     proficiency = models.CharField(max_length=1024)
+#
+#     # class Meta:
+#     #     unique_together = ('competence', 'work_program', 'indicator')
+#     def __str__(self):
+#         return self.name
 
 
 class Indicator(models.Model):
@@ -384,7 +401,7 @@ class Indicator(models.Model):
     '''
     number = models.CharField(unique=True, max_length=1024)
     name = models.CharField(max_length=1024)
-    work_programs = models.ManyToManyField('WorkProgram', through=IndicatorWorkProgram, blank=True, null=True)
+    #work_programs = models.ManyToManyField('WorkProgram', through=IndicatorWorkProgram, blank=True, null=True)
     competence = models.ForeignKey('Competence', on_delete=models.CASCADE)
 
     def __str__(self):
