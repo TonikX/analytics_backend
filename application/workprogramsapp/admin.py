@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
-    Competence, Indicator, EvaluationTool, FieldOfStudyWorkProgram, DisciplineSection, Topic,
+    Competence, Indicator, EvaluationTool, FieldOfStudyWorkProgram, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
     RouteComposition, Route, Certification, OnlineCourse, BibliographicReference, AcademicPlan, ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
 )
 
@@ -10,7 +10,7 @@ admin.site.register(Zun)
 admin.site.register(WorkProgram)
 admin.site.register(OutcomesOfWorkProgram)
 admin.site.register(PrerequisitesOfWorkProgram)
-
+admin.site.register(WorkProgramInFieldOfStudy)
 admin.site.register(FieldOfStudy)
 # admin.site.register(CompetenceIndicator)
 admin.site.register(Competence)

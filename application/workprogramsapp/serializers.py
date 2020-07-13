@@ -2,7 +2,7 @@ from rest_framework import serializers, viewsets
 
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool,\
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
-    ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, Zun
+    ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy
 
 from dataprocessing.serializers import ItemSerializer
 
@@ -311,22 +311,33 @@ class EvaluationToolCreateSerializer(serializers.ModelSerializer):
 
 
 class ZunSerializer(serializers.ModelSerializer):
-    """Сериализатор Индикаторов"""
+    """Сериализатор Зунов"""
+    indicator_in_zun = IndicatorListSerializer()
+
     class Meta:
         model = Zun
-        fields = ['id', 'knowledge', 'skills', 'attainments']
+        fields = ['id', 'indicator_in_zun', 'knowledge', 'skills', 'attainments']
+
+
+class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
+    """Сериализатор Зунов"""
+    zun_in_wp = ZunSerializer(many=True)
+
+    class Meta:
+        model = WorkProgramInFieldOfStudy
+        fields = ['id', 'zun_in_wp']
 
 
 class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
     """Сериализатор рабочих программ"""
     prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set', many=True)
     outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
-    zun_for_wp = ZunSerializer()
+    zuns_for_wp = WorkProgramInFieldOfStudySerializer(many=True)
 
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'prerequisites', 'outcomes', 'hoursFirstSemester', 'hoursSecondSemester', 'zun_for_wp']
+        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'prerequisites', 'outcomes', 'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp']
 
 
 class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
@@ -425,11 +436,11 @@ class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
 
 class WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
     discipline_block_module = DisciplineBlockModuleForWPinFSSerializer(read_only=True)
-    zun_in_wp = ZunSerializer(read_only=True)
+    zuns_for_wp = ZunSerializer(read_only=True)
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'discipline_block_module', 'zun_in_wp']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'discipline_block_module', 'zuns_for_wp']
 
 
 class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):

@@ -341,27 +341,31 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
     semester_hour = models.CharField(max_length=1024, blank=True, null=True)
     change_type = models.CharField(choices=CHANGE_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
     discipline_block_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="change_blocks_of_work_programs_in_modules", blank=True, null=True)
-    work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", through='Zun', related_name="work_program_in_change_block")
+    work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", through='WorkProgramInFieldOfStudy', related_name="work_program_in_change_block")
 
 
     def __str__(self):
         return (str(self.discipline_block_module) + str(self.work_program))
 
 
+class WorkProgramInFieldOfStudy(models.Model):
+    work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule', on_delete=models.CASCADE)
+    work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
+    # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
+
+
 class Zun(models.Model):
     '''
     Модель для компетенций
     '''
-    work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule', on_delete=models.CASCADE, related_name="zun_in_wp")
-    work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zun_for_wp")
-    # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
-    indicator = models.ForeignKey('Indicator', on_delete=models.CASCADE, blank=True, null=True)
+    wp_in_fs = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.CASCADE, blank=True, null=True, related_name="zun_in_wp")
+    indicator_in_zun = models.ForeignKey('Indicator', on_delete=models.CASCADE, blank=True, null=True)
     knowledge = models.CharField(max_length=1024, blank=True, null=True)
     skills = models.CharField(max_length=1024, blank=True, null=True)
     attainments = models.CharField(max_length=1024, blank=True, null=True)
 
-    def __str__(self):
-        return (str(self.work_program_change_in_discipline_block_module) + str(self.work_program))
+    # def __str__(self):
+    #     return (str(self.work_program_change_in_discipline_block_module) + str(self.work_program))
 
 
 class Competence(models.Model):
