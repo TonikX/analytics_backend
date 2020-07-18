@@ -816,6 +816,22 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
         except:
             return Response(status=400)
 
+
+class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
+    serializer_class = EvaluationToolForWorkProgramSerializer
+
+    def list(self, request, **kwargs):
+        """
+        Вывод учебных планов для одной рабочей программы по id
+        """
+        try:
+            queryset = FieldOfStudy.objects.filter(workprograms_in_fieldofstudy__id = self.kwargs['workprogram_id']).distinct()
+            serializer = FieldOfStudySerializer(queryset, many=True)
+            return Response(serializer.data)
+        except:
+            return Response(status=400)
+
+
 #Блок эндпоинтов для обрабоки файлов
 
 from dataprocessing.serializers import FileUploadSerializer

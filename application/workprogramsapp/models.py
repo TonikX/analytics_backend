@@ -57,7 +57,7 @@ class WorkProgram(models.Model):
     hoursSecondSemester = models.IntegerField(blank=True, null=True, verbose_name = "Количество часов в 2 семестре")
     #goals = models.CharField(max_length=1024, verbose_name = "Цели освоения" )
     #result_goals = models.CharField(max_length=1024, verbose_name = "Результаты освоения" )
-    field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram, verbose_name = "Предметная область")
+    field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram, verbose_name = "Предметная область", related_name='workprograms_in_fieldofstudy')
     bibliographic_reference = models.ManyToManyField('BibliographicReference', verbose_name='Библиогравическая_ссылка', related_name='bibrefs')
     #evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
     description = models.CharField(max_length=5000, blank=True, null=True)

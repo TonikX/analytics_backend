@@ -22,7 +22,7 @@ from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlan
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
-    FileUploadAPIView, WorkProgramInFieldOfStudyListView
+    FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList
 from .views import DocxFileExportViewSet    
 
 
@@ -84,6 +84,7 @@ urlpatterns = [
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
     path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
     path('api/workprogramsinfieldofstudy', WorkProgramInFieldOfStudyListView.as_view()),
+    path('api/workprogram/fieldofstudies/<int:workprogram_id>', FieldOfStudiesForWorkProgramList.as_view()),
 
     #Работы с темами и разделами
     path('api/tools/', EvaluationToolListAPI.as_view(), name='tools'),
