@@ -1,5 +1,5 @@
 import createReducer from "../../store/createReducer";
-import {fields} from './enum';
+import {EntityToEntityFields, fields} from './enum';
 import actions from "./actions";
 
 import {entityToEntityState} from "./types";
@@ -13,7 +13,11 @@ export const initialState: entityToEntityState = {
     },
     [fields.CURRENT_PAGE]: 1,
     [fields.ALL_COUNT]: 1,
-    [fields.SEARCH_QUERY]: '',
+    [fields.SEARCH_QUERY]: {
+        [EntityToEntityFields.RELATION]: '',
+        [EntityToEntityFields.ITEM1]: '',
+        [EntityToEntityFields.ITEM2]: '',
+    },
     [fields.SUBJECT_ID]: null,
     [fields.ENTITY_TO_ENTITY_LIST]: [],
     [fields.ENTITY_TO_ENTITY_LIST_DIALOG]: {
@@ -29,7 +33,10 @@ const setData = (state: entityToEntityState, {payload}: any): entityToEntityStat
 
 const changeSearchQuery = (state: entityToEntityState, {payload}: any): entityToEntityState => ({
     ...state,
-    [fields.SEARCH_QUERY]: payload,
+    [fields.SEARCH_QUERY]: {
+        ...state[fields.SEARCH_QUERY],
+        ...payload
+    },
 });
 
 const changeCurrentPage = (state: entityToEntityState, {payload}: any): entityToEntityState => ({

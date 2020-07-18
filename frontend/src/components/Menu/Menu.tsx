@@ -14,6 +14,7 @@ import Divider from "@material-ui/core/Divider";
 import MenuList from "./MenuList";
 
 import styles from './Menu.styles';
+import Scrollbars from "react-custom-scrollbars";
 
 interface MenuProps extends WithStyles<typeof styles>, RouteComponentProps {
     isOpen: boolean
@@ -33,8 +34,8 @@ class Menu extends React.PureComponent<MenuProps>{
                     paper: classes.drawerPaper,
                 }}
             >
-
-                <List className={classes.menuList}>
+                <Scrollbars>
+                    <List className={classes.menuList}>
                     {MenuList.map((group, groupIndex) =>
                         <>
                             {group.map((item, itemIndex) =>
@@ -58,7 +59,7 @@ class Menu extends React.PureComponent<MenuProps>{
                         </>
                     )}
                 </List>
-
+                </Scrollbars>
             </Drawer>
         );
     }

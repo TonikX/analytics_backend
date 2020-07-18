@@ -9,15 +9,21 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import SearchSelector from "../../../components/SearchSelector/SearchSelector";
 import {SubjectAreaFields} from "../../SubjectArea/enum";
 import {EntityToEntityFields} from '../enum';
 import {TrainingEntitiesFields} from "../../TrainingEntities/enum";
+import {relations} from '../constants';
 
 import connect from './TrainingEntitiesCreateModal.connect';
 import styles from './TrainingEntitiesCreateModal.styles';
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
 
 class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCreateModalProps> {
     state = {
@@ -95,7 +101,9 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
         const {isOpen, classes, trainingEntitiesList} = this.props;
         const {trainingEntity} = this.state;
 
-        const disableButton = true;
+        const disableButton = get(trainingEntity, [EntityToEntityFields.ITEM1, SubjectAreaFields.TITLE, 'length'], 0) === 0 ||
+            get(trainingEntity, [EntityToEntityFields.ITEM2, SubjectAreaFields.TITLE, 'length'], 0) === 0 ||
+            get(trainingEntity, [EntityToEntityFields.RELATION, 'length'], 0) === 0;
 
         const isEditMode = trainingEntity[EntityToEntityFields.ID];
 
@@ -117,6 +125,35 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
                                     valueLabel={get(trainingEntity, [EntityToEntityFields.ITEM1, SubjectAreaFields.TITLE], '')}
                                     className={classes.marginBottom30}
                     />
+                    <FormControl className={classes.wrapSelector}>
+                        <InputLabel shrink id="section-label">
+                            Связь *
+                        </InputLabel>
+                        <Select
+                            variant="outlined"
+                            className={classes.selector}
+                            // @ts-ignore
+                            onChange={this.saveField(EntityToEntityFields.RELATION)}
+                            value={trainingEntity[EntityToEntityFields.RELATION]}
+                            fullWidth
+                            displayEmpty
+                            input={
+                                <OutlinedInput
+                                    notched
+                                    labelWidth={100}
+                                    name="course"
+                                    id="section-label"
+                                />
+                            }
+                        >
+                            {Object.keys(relations).map((key: any) =>
+                                <MenuItem value={key} key={`type-${key}`}>
+                                    {relations[key]}
+                                </MenuItem>
+                            )}
+                        </Select>
+                    </FormControl>
+
                     <SearchSelector label="Учебная сущность 2 * "
                                     changeSearchText={this.handleChangeEntitiesSearchText}
                                     list={trainingEntitiesList}

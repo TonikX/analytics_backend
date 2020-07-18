@@ -2,7 +2,7 @@ from rest_framework import serializers, viewsets
 
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool,\
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
-    ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
+    ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy
 
 from dataprocessing.serializers import ItemSerializer
 
@@ -297,7 +297,7 @@ class EvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EvaluationTool
-        fields = ['id', 'type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections']
+        fields = ['id', 'type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections', 'semester']
 
 
 class EvaluationToolCreateSerializer(serializers.ModelSerializer):
@@ -310,15 +310,34 @@ class EvaluationToolCreateSerializer(serializers.ModelSerializer):
         fields = ['type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections']
 
 
+class ZunSerializer(serializers.ModelSerializer):
+    """Сериализатор Зунов"""
+    indicator_in_zun = IndicatorListSerializer()
+
+    class Meta:
+        model = Zun
+        fields = ['id', 'indicator_in_zun', 'knowledge', 'skills', 'attainments']
+
+
+class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
+    """Сериализатор Зунов"""
+    zun_in_wp = ZunSerializer(many=True)
+
+    class Meta:
+        model = WorkProgramInFieldOfStudy
+        fields = ['id', 'zun_in_wp']
+
+
 class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
     """Сериализатор рабочих программ"""
     prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set', many=True)
     outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
+    zuns_for_wp = WorkProgramInFieldOfStudySerializer(many=True)
 
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'prerequisites', 'outcomes', 'hoursFirstSemester', 'hoursSecondSemester']
+        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'prerequisites', 'outcomes', 'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp']
 
 
 class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
@@ -406,7 +425,6 @@ class DisciplineBlockForWPinFSSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'academic_plan']
 
 
-
 class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
     descipline_block = DisciplineBlockForWPinFSSerializer(read_only=True)
 
@@ -418,10 +436,11 @@ class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
 
 class WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
     discipline_block_module = DisciplineBlockModuleForWPinFSSerializer(read_only=True)
+    zuns_for_wp = ZunSerializer(read_only=True)
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'discipline_block_module']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'discipline_block_module', 'zuns_for_wp']
 
 
 class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
@@ -441,5 +460,6 @@ class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkProgram
         fields = ['id', 'title', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'description', 'video', 'work_program_in_change_block']
+
 
 

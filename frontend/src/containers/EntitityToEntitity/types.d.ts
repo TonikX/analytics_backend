@@ -27,7 +27,7 @@ export interface entityToEntityState {
     };
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
-    [fields.SEARCH_QUERY]: string;
+    [fields.SEARCH_QUERY]: {[key]: string};
     [fields.SUBJECT_ID]: number|null;
     [fields.ENTITY_TO_ENTITY_LIST]: Array<EntityToEntityType>;
     [fields.ENTITY_TO_ENTITY_LIST_DIALOG]: {

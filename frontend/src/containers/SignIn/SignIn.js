@@ -44,7 +44,7 @@ class SignIn extends React.PureComponent{
     render() {
         const {classes, disableButton, auth} = this.props;
 
-        if (auth) return <Redirect to={'work-program/5'} />;
+        if (auth) return <Redirect to={appRouter.getEducationPlanRoute()} />;
 
         return(
             <div className={classes.root}

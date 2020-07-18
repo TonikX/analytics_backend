@@ -12,7 +12,7 @@ from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, WorkProgramInFieldOfStudySerializer
+    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, WorkProgramInFieldOfStudySerializer, ZunSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -30,7 +30,7 @@ from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins
-from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, DisciplineBlock
+from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, DisciplineBlock, Zun
 import json
 
 class FieldOfStudyWPListView(View):
@@ -1117,7 +1117,11 @@ class FileUploadAPIView(APIView):
 
                 if (data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module = mdb, change_type = data['ISOPTION'][i])
-                    wpchangemdb.work_program.add(wp_obj)
+                    this_zun = Zun()
+                    this_zun.work_program_change_in_discipline_block_module = wpchangemdb
+                    this_zun.work_program = wp_obj
+                    this_zun.save()
+                    #wpchangemdb.work_program.add(wp_obj)
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i], work_program = wp_obj).exists():
                     print('exist', wp_obj)
 
@@ -1127,7 +1131,11 @@ class FileUploadAPIView(APIView):
                     wpchangemdb.change_type = data['ISOPTION'][i]
                     wpchangemdb.discipline_block_module = mdb
                     wpchangemdb.save()
-                    wpchangemdb.work_program.add(wp_obj)
+                    #wpchangemdb.work_program.add(wp_obj)
+                    this_zun = Zun()
+                    this_zun.work_program_change_in_discipline_block_module = wpchangemdb
+                    this_zun.work_program = wp_obj
+                    this_zun.save()
                     
                 print('Рабочая программа дисциплины записана в модуль: done')
             except:
@@ -1253,6 +1261,33 @@ class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
     serializer_class = WorkProgramInFieldOfStudySerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['approval_date', 'authors', 'discipline_code', 'qualification']
+
+
+class ZunListAPIView(generics.ListAPIView):
+    serializer_class = ZunSerializer
+    queryset = Zun.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['educational_profile']
+
+
+class ZunCreateAPIView(generics.CreateAPIView):
+    serializer_class = ZunSerializer
+    queryset = Zun.objects.all()
+
+
+class ZunDestroyView(generics.DestroyAPIView):
+    queryset = Zun.objects.all()
+    serializer_class = ZunSerializer
+
+
+class ZunDetailsView(generics.RetrieveAPIView):
+    queryset = Zun.objects.all()
+    serializer_class = ZunSerializer
+
+
+class ZunUpdateView(generics.UpdateAPIView):
+    queryset = Zun.objects.all()
+    serializer_class = ZunSerializer
 
     
 #Конец блока ендпоинтов рабочей программы

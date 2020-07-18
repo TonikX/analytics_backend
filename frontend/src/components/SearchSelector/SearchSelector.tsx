@@ -113,6 +113,7 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
                                             {list.map((item: SelectorItemType) =>
                                                 <MenuItem onClick={this.setItem(item.value)}
                                                           selected={value === item.value}
+                                                          className={classes.menuItem}
                                                 >
                                                     {item.label}
                                                 </MenuItem>

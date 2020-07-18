@@ -16,7 +16,14 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between',
     },
     titleCell: {
-        width: '30%'
+        width: '30%',
+        display: 'flex',
+        alignItems: 'center'
+    },
+    relationCell: {
+        width: '20%',
+        display: 'flex',
+        alignItems: 'center'
     },
     list: {
         width: '100%',

@@ -3,9 +3,9 @@ const NOT_DEFINED = '0'
 const SAME_PARENT = '2'
 const HAVE_PREREQUISITE = '4'
 const SYNONYMS = '5'
-const NO = '7'
+const NO = 'None'
 
-export const relations = {
+export const relations: {[key: string]: string} = {
     [NOT_DEFINED]: 'Неопределенное',
     [HIERARCHY]: 'Включает в себя',
     [SAME_PARENT]: 'Является частью одного раздела',

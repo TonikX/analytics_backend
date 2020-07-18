@@ -39,6 +39,9 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import {AutoSizer} from "react-virtualized";
+import FormLabel from "@material-ui/core/FormLabel";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Radio from "@material-ui/core/Radio";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -59,6 +62,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [EvaluationToolFields.TYPE]: '',
             [EvaluationToolFields.DEADLINE]: 1,
             [EvaluationToolFields.CHECK_POINT]: false,
+            [EvaluationToolFields.SEMESTER]: '1',
         }
     };
 
@@ -78,6 +82,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     [EvaluationToolFields.DEADLINE]: get(evaluationTool, EvaluationToolFields.DEADLINE, 1),
                     [EvaluationToolFields.TYPE]: get(evaluationTool, EvaluationToolFields.TYPE, ''),
                     [EvaluationToolFields.CHECK_POINT]: get(evaluationTool, EvaluationToolFields.CHECK_POINT, false),
+                    [EvaluationToolFields.SEMESTER]: get(evaluationTool, EvaluationToolFields.SEMESTER, '1'),
                 }
             });
         }
@@ -289,6 +294,19 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                         />
                                     </div>
 
+                                    <FormControl component="fieldset">
+                                        <FormLabel component="legend">Семестр *</FormLabel>
+                                        <RadioGroup className={classes.radioGroup}
+                                                    onChange={this.saveField(EvaluationToolFields.SEMESTER)}
+                                                    value={evaluationTool[EvaluationToolFields.SEMESTER]}
+                                        >
+                                            <FormControlLabel value={'1'} control={<Radio checked={evaluationTool[EvaluationToolFields.SEMESTER] === '1'} />} label="Первый" />
+                                            <FormControlLabel value={'2'} control={<Radio checked={evaluationTool[EvaluationToolFields.SEMESTER] === '2'} />} label="Второй" />
+                                            <FormControlLabel value={'3'} control={<Radio checked={evaluationTool[EvaluationToolFields.SEMESTER] === '3'} />} label="Третий" />
+                                            <FormControlLabel value={'4'} control={<Radio checked={evaluationTool[EvaluationToolFields.SEMESTER] === '4'} />} label="Четвертый" />
+                                        </RadioGroup>
+                                    </FormControl>
+
                                     <FormControlLabel
                                         control={<Checkbox checked={evaluationTool[EvaluationToolFields.CHECK_POINT]} onChange={this.changeCheckPoint}/>}
                                         label="Контрольная точка"
@@ -304,7 +322,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             step={1}
                                             marks
                                             min={1}
-                                            max={56}
+                                            max={20}
                                             valueLabelDisplay="on"
                                             value={evaluationTool[EvaluationToolFields.DEADLINE]}
                                             onChange={this.changeDeadline}
