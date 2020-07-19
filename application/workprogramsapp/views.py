@@ -31,6 +31,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
+
 import json
 
 class FieldOfStudyWPListView(View):
@@ -1063,6 +1064,7 @@ def handle_uploaded_csv(file, filename):
     """
     Обработка файла csv 
     """
+    print('Working')
     if not os.path.exists('upload/'):
         os.mkdir('upload/')
     path = 'upload/' + filename
@@ -1081,9 +1083,10 @@ class FileUploadAPIView(APIView):
     """
 
     def post(self, request):
+        print('Working')
 
-        serializer = FileUploadSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        #serializer = FileUploadSerializer(data=request.data)
+        #serializer.is_valid(raise_exception=True)
 
         data = handle_uploaded_csv(request.FILES['file'], str(request.FILES['file']))
         print(len(data['SUBJECT'].drop_duplicates().to_list()))
@@ -1198,10 +1201,11 @@ class FileUploadAPIView(APIView):
 
                 if (data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module = mdb, change_type = data['ISOPTION'][i])
-                    this_zun = Zun()
-                    this_zun.work_program_change_in_discipline_block_module = wpchangemdb
-                    this_zun.work_program = wp_obj
-                    this_zun.save()
+                    if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = wpchangemdb, work_program = wp_obj).exists():
+                        wpinfs = WorkProgramInFieldOfStudy.objects.get(work_program_change_in_discipline_block_module = wpchangemdb, work_program = wp_obj)
+                    else:
+                        wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module = wpchangemdb, work_program = wp_obj)
+                        wpinfs.save()
                     #wpchangemdb.work_program.add(wp_obj)
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i], work_program = wp_obj).exists():
                     print('exist', wp_obj)
@@ -1212,13 +1216,21 @@ class FileUploadAPIView(APIView):
                     wpchangemdb.change_type = data['ISOPTION'][i]
                     wpchangemdb.discipline_block_module = mdb
                     wpchangemdb.save()
-                    #wpchangemdb.work_program.add(wp_obj)
-                    this_zun = Zun()
-                    this_zun.work_program_change_in_discipline_block_module = wpchangemdb
-                    this_zun.work_program = wp_obj
-                    this_zun.save()
-                    
+                    if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = wpchangemdb, work_program = wp_obj).exists():
+                        wpinfs = WorkProgramInFieldOfStudy.objects.get(work_program_change_in_discipline_block_module = wpchangemdb, work_program = wp_obj)
+                    else:
+                        wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module = wpchangemdb, work_program = wp_obj)
+                        wpinfs.save()
                 print('Рабочая программа дисциплины записана в модуль: done')
+                
+                if Zun.objects.filter(wp_in_fs = wpinfs).exists():
+                    pass
+                else:
+                    zun = Zun(wp_in_fs = wpinfs)
+                    zun.save()
+                    #wpchangemdb.work_program.add(wp_obj)
+                        
+                
             except:
                 print('Строка ',i, 'не записалась, проверьте на опечатки или пустые значения')
                 continue;
@@ -1443,6 +1455,7 @@ def render_docx(*args, **kwargs):
             'hours':[contact_work_str,lecture_classes_str,laboratory_str,practical_lessons_str,SRO_str, total_hours_str]})
         topics = Topic.objects.filter(discipline_section = i)
         s = []
+        
         for j in topics:
             if j.url_online_course is None:
                 pass
