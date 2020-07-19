@@ -342,6 +342,7 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
     change_type = models.CharField(choices=CHANGE_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
     discipline_block_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="change_blocks_of_work_programs_in_modules", blank=True, null=True)
     work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", through='WorkProgramInFieldOfStudy', related_name="work_program_in_change_block")
+    #zuns = models.ManyToManyField('Zun', verbose_name = "Зуны", through='WorkProgramInFieldOfStudy', related_name="zuns_in_changeblock")
 
 
     def __str__(self):

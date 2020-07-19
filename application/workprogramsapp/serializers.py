@@ -332,11 +332,30 @@ class ZunCreateSerializer(serializers.ModelSerializer):
     """Сериализатор Зунов"""
     # indicator_in_zun = IndicatorListSerializer()
     indicator_in_zun = serializers.PrimaryKeyRelatedField(queryset=Indicator.objects.all())
+    wp_changeblock = serializers.IntegerField()
+    work_program = serializers.IntegerField()
+    knowledge = serializers.CharField()
+    kills = serializers.CharField()
+    attainments = serializers.CharField()
+    #zuns_in_changeblock = serializers.PrimaryKeyRelatedField(queryset=Zun.objects.all())
 
+
+class ZunCreateSaveSerializer(serializers.ModelSerializer):
+    """Сериализатор Сохранения Зунов"""
     class Meta:
         model = Zun
-        fields = ['id', 'wp_in_fs', 'indicator_in_zun', 'knowledge', 'skills', 'attainments']
+        fields = ['id', 'indicator_in_zun', 'wp_in_fs', 'knowledge', 'skills', 'attainments']
+        # 'knowledge', 'skills', 'attainments'
 
+    # def create(self, validated_data):
+    #     #wp_in_fs = validated_data.get('wp_changeblock', [])
+    #     zun = Zun(indicator_in_zun=validated_data.get('indicator_in_zun', None),
+    #               knowledge=validated_data.get('knowledge', None),
+    #               skills=validated_data.get('skills', None),
+    #               attainments=validated_data.get('attainments', None))
+    #     zun.save()
+    #
+    #     return zun
 
 class WorkProgramInFieldOfStudyCreateSerializer(serializers.ModelSerializer):
     """Сериализатор Зунов"""
