@@ -328,6 +328,25 @@ class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
         fields = ['id', 'zun_in_wp']
 
 
+class ZunCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор Зунов"""
+    # indicator_in_zun = IndicatorListSerializer()
+    indicator_in_zun = serializers.PrimaryKeyRelatedField(queryset=Indicator.objects.all())
+
+    class Meta:
+        model = Zun
+        fields = ['id', 'wp_in_fs', 'indicator_in_zun', 'knowledge', 'skills', 'attainments']
+
+
+class WorkProgramInFieldOfStudyCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор Зунов"""
+    zun_in_wp = ZunCreateSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = WorkProgramInFieldOfStudy
+        fields = ['id', 'zun_in_wp']
+
+
 class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
     """Сериализатор рабочих программ"""
     prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set', many=True)

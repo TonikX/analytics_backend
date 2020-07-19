@@ -22,7 +22,7 @@ from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlan
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
-    FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList
+    FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, ZunListAPI, ZunDetailAPI
 from .views import DocxFileExportViewSet    
 
 
@@ -84,12 +84,19 @@ urlpatterns = [
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
     path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
     path('api/workprogramsinfieldofstudy', WorkProgramInFieldOfStudyListView.as_view()),
+
     path('api/workprogram/fieldofstudies/<int:workprogram_id>', FieldOfStudiesForWorkProgramList.as_view()),
+    path('api/workprograminfieldofstudy/', WorkProgramInFieldOfStudyListAPI.as_view()),
+    path('api/workprograminfieldofstudy/<int:pk>', WorkProgramInFieldOfStudyDetailAPI.as_view()),
+
+    path('api/zun/', ZunListAPI.as_view()),
+    path('api/zun/<int:pk>', ZunDetailAPI.as_view()),
 
     #Работы с темами и разделами
     path('api/tools/', EvaluationToolListAPI.as_view(), name='tools'),
     path('api/tools/<int:pk>', EvaluationToolDetailAPI.as_view(), name='tool_detail'),
     path('api/toolsinworkprogram/<int:workprogram_id>', EvaluationToolInWorkProgramList.as_view()),
+
 
     path('api/sections/', DisciplineSectionListAPI.as_view(), name='sections'),
     path('api/sections/<int:pk>', DisciplineSectionDetailAPI.as_view(), name='section_detail'),

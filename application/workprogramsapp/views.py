@@ -12,7 +12,7 @@ from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, WorkProgramInFieldOfStudySerializer, ZunSerializer
+    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -30,7 +30,7 @@ from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins
-from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, DisciplineBlock, Zun
+from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
 import json
 
 class FieldOfStudyWPListView(View):
@@ -626,6 +626,42 @@ class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = EvaluationTool.objects.all()
     serializer_class = EvaluationToolCreateSerializer
+
+
+class WorkProgramInFieldOfStudyListAPI(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of WorkProgramInFieldOfStudy.
+    """
+    queryset = WorkProgramInFieldOfStudy.objects.all()
+    serializer_class = WorkProgramInFieldOfStudyCreateSerializer
+
+
+class WorkProgramInFieldOfStudyDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single WorkProgramInFieldOfStudy.
+    """
+    queryset = WorkProgramInFieldOfStudy.objects.all()
+    serializer_class = WorkProgramInFieldOfStudyCreateSerializer
+
+
+class ZunListAPI(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Zun.
+    """
+    serializer_class = ZunCreateSerializer
+    queryset = Zun.objects.all()
+
+    def perform_create(self, serializer):
+        wp_in_fs = serializer.validated_data['wp_in_fs']
+        print (wp_in_fs)
+
+
+class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Zun.
+    """
+    queryset = Zun.objects.all()
+    serializer_class = ZunCreateSerializer
 
 
 class DisciplineSectionListAPI(generics.ListCreateAPIView):
