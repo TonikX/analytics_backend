@@ -12,7 +12,7 @@ from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, WorkProgramInFieldOfStudySerializer, ZunSerializer
+    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, ZunCreateSaveSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -30,8 +30,7 @@ from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins
-from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, DisciplineBlock, Zun, \
-WorkProgramInFieldOfStudy
+from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
 
 import json
 
@@ -630,6 +629,71 @@ class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = EvaluationToolCreateSerializer
 
 
+class WorkProgramInFieldOfStudyListAPI(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of WorkProgramInFieldOfStudy.
+    """
+    queryset = WorkProgramInFieldOfStudy.objects.all()
+    serializer_class = WorkProgramInFieldOfStudyCreateSerializer
+
+
+class WorkProgramInFieldOfStudyDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single WorkProgramInFieldOfStudy.
+    """
+    queryset = WorkProgramInFieldOfStudy.objects.all()
+    serializer_class = WorkProgramInFieldOfStudyCreateSerializer
+
+
+class ZunListAPI(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Zun.
+    """
+    serializer_class = ZunCreateSerializer
+
+    queryset = Zun.objects.all()
+
+    def create(self, request):
+        serializer = ZunCreateSerializer(data=request.data)
+        # wp_in_fs = serializer.validated_data['wp_in_fs']
+        # print (wp_in_fs)
+        if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = request.data.get('wp_changeblock')):
+            if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = request.data.get('wp_changeblock'), work_program__id = request.data.get('work_program')):
+                wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = request.data.get('wp_changeblock'), work_program__id = request.data.get('work_program'))[0]
+                print (wp_in_fs)
+                print ("Замена номера прошла успешно")
+            else:
+                wp_in_fs = WorkProgramInFieldOfStudy()
+                print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = request.data.get('wp_changeblock')[0]))
+                wp_in_fs.work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = request.data.get('wp_changeblock'))[0]
+                wp_in_fs.work_program = WorkProgram.objects.filter(id = request.data.get('work_program'))[0]
+                wp_in_fs.save()
+                print (wp_in_fs)
+            data = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = request.data.get('indicator_in_zun'))[0].id, "knowledge": request.data.get('knowledge'), "skills": request.data.get('skills'), "attainments": request.data.get('attainments')}
+            print(data)
+            serializer = ZunCreateSaveSerializer(data = data)
+            print (serializer)
+            print
+
+            try:
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    print ("Сохранение прошло")
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except:
+                return Response(status=400)
+        else:
+            return Response({"error":"change_block does not exist"}, status=400)
+
+
+class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Zun.
+    """
+    queryset = Zun.objects.all()
+    serializer_class = ZunCreateSerializer
+
+
 class DisciplineSectionListAPI(generics.ListCreateAPIView):
     """
     API endpoint that represents a list of Discipline Sections.
@@ -817,6 +881,22 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
             return Response(serializer.data)
         except:
             return Response(status=400)
+
+
+class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
+    serializer_class = EvaluationToolForWorkProgramSerializer
+
+    def list(self, request, **kwargs):
+        """
+        Вывод учебных планов для одной рабочей программы по id
+        """
+        try:
+            queryset = FieldOfStudy.objects.filter(workprograms_in_fieldofstudy__id = self.kwargs['workprogram_id']).distinct()
+            serializer = FieldOfStudySerializer(queryset, many=True)
+            return Response(serializer.data)
+        except:
+            return Response(status=400)
+
 
 #Блок эндпоинтов для обрабоки файлов
 

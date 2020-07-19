@@ -57,7 +57,7 @@ class WorkProgram(models.Model):
     hoursSecondSemester = models.IntegerField(blank=True, null=True, verbose_name = "Количество часов в 2 семестре")
     #goals = models.CharField(max_length=1024, verbose_name = "Цели освоения" )
     #result_goals = models.CharField(max_length=1024, verbose_name = "Результаты освоения" )
-    field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram, verbose_name = "Предметная область")
+    field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram, verbose_name = "Предметная область", related_name='workprograms_in_fieldofstudy')
     bibliographic_reference = models.ManyToManyField('BibliographicReference', verbose_name='Библиогравическая_ссылка', related_name='bibrefs')
     #evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
     description = models.CharField(max_length=5000, blank=True, null=True)
@@ -342,6 +342,7 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
     change_type = models.CharField(choices=CHANGE_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
     discipline_block_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="change_blocks_of_work_programs_in_modules", blank=True, null=True)
     work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", through='WorkProgramInFieldOfStudy', related_name="work_program_in_change_block")
+    #zuns = models.ManyToManyField('Zun', verbose_name = "Зуны", through='WorkProgramInFieldOfStudy', related_name="zuns_in_changeblock")
 
 
     def __str__(self):
