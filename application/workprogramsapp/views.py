@@ -688,7 +688,7 @@ class ZunListAPI(generics.ListCreateAPIView):
 
 class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
-    API endpoint that represents a single Zun.
+    API endpoint that represents a single Zun.я
     """
     queryset = Zun.objects.all()
     serializer_class = ZunCreateSerializer
