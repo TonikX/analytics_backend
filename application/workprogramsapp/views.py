@@ -708,6 +708,19 @@ class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        descipline_section = request.data.get('descipline_section')
+        try:
+            DisciplineSection.new_ordinal_number(descipline_section, -1)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except:
+            return Response(status=400)
+
+
+
+
 
 class FieldOfStudyDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     """

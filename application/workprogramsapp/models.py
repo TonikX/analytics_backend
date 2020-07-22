@@ -464,6 +464,12 @@ class DisciplineSection(models.Model):
                 sec.ordinal_number = new_ordinal_number+1
                 sec.save()
                 new_ordinal_number +=1
+        elif new_ordinal_number== -1:
+            sections = DisciplineSection.objects.filter(work_program = section.work_program).order_by('ordinal_number')
+            for sec in sections:
+                if sec.ordinal_number > descipline_section:
+                    sec.ordinal_number-=1
+                    sec.save()
         else:
             section.ordinal_number = new_ordinal_number
             section.save()

@@ -307,7 +307,7 @@ class EvaluationToolCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EvaluationTool
-        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections']
+        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'semester', 'min', 'max', 'descipline_sections']
 
 
 class ZunSerializer(serializers.ModelSerializer):
