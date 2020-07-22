@@ -1514,7 +1514,7 @@ class PassthroughRenderer(renderers.BaseRenderer):
 
 class DocxFileExportViewSet(viewsets.ReadOnlyModelViewSet):
     """Вовзращает response"""
-    @action(methods=['get'], detail=True, renderer_classes=(PassthroughRenderer,))
+    @action(methods=['post'], detail=True, renderer_classes=(PassthroughRenderer,))
     def download(self, request):
         pk = request.data.get('id')
         field_of_study_code = request.data.get('field_of_study_code') #код
