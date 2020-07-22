@@ -364,6 +364,7 @@ class Zun(models.Model):
     knowledge = models.CharField(max_length=1024, blank=True, null=True)
     skills = models.CharField(max_length=1024, blank=True, null=True)
     attainments = models.CharField(max_length=1024, blank=True, null=True)
+    items = models.ManyToManyField('OutcomesOfWorkProgram', verbose_name = "Учебная сущность и уровень освоения")
 
     # def __str__(self):
     #     return (str(self.work_program_change_in_discipline_block_module) + str(self.work_program))

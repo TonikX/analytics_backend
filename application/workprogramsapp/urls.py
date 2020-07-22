@@ -143,7 +143,7 @@ urlpatterns = [
     path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
     path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
     path('api/upload/csv', FileUploadAPIView.as_view()),
-    path('api/export/docx', DocxFileExportViewSet.as_view({'get': 'download'})),
+    path('api/export/docx', DocxFileExportViewSet.as_view({'post': 'download'})),
 
     #Учебный планы
     path('api/academicplan', AcademicPlanListAPIView.as_view()),

@@ -688,7 +688,7 @@ class ZunListAPI(generics.ListCreateAPIView):
 
 class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
-    API endpoint that represents a single Zun.
+    API endpoint that represents a single Zun.я
     """
     queryset = Zun.objects.all()
     serializer_class = ZunCreateSerializer
@@ -1514,7 +1514,7 @@ class PassthroughRenderer(renderers.BaseRenderer):
 
 class DocxFileExportViewSet(viewsets.ReadOnlyModelViewSet):
     """Вовзращает response"""
-    @action(methods=['get'], detail=True, renderer_classes=(PassthroughRenderer,))
+    @action(methods=['post'], detail=True, renderer_classes=(PassthroughRenderer,))
     def download(self, request):
         pk = request.data.get('id')
         field_of_study_code = request.data.get('field_of_study_code') #код
