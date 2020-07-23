@@ -46,6 +46,7 @@ class WorkProgram(models.Model):
 
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     discipline_code = models.CharField(max_length=1024, blank=True, null=True)
+    subject_code = models.CharField(max_length=1024, blank=True, null=True)
     authors = models.CharField(max_length=1024, blank=True, null=True)
     prerequisites = models.ManyToManyField(Items, related_name='WorkProgramPrerequisites',)
     qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank=True, null=True)

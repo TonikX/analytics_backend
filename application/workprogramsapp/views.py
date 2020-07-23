@@ -1060,11 +1060,11 @@ class FileUploadOnlineCoursesAPIView(APIView):
                 continue;
         return Response(status=200)
 
+from discipline_code import IPv4_code 
 def handle_uploaded_csv(file, filename):
     """
     Обработка файла csv 
     """
-    print('Working')
     if not os.path.exists('upload/'):
         os.mkdir('upload/')
     path = 'upload/' + filename
@@ -1072,10 +1072,13 @@ def handle_uploaded_csv(file, filename):
     with open(path, 'wb+') as destination:
         for chunk in file.chunks():
             destination.write(chunk)
-    
-    df = pandas.read_excel(path)
-    print(df.head())
-    return df
+    in_df = pandas.read_excel(path)
+    sys_df = pandas.read_excel('discipline_code/discipline_bank_updated.xlsx')
+    print('IPv4_code generating')
+    processed_data, db = IPv4_code.generate_df_w_unique_code(in_df, sys_df)
+    db.to_excel("discipline_code/discipline_bank_updated.xlsx")
+    print(processed_data.head())
+    return processed_data
 
 class FileUploadAPIView(APIView):
     """
@@ -1125,14 +1128,14 @@ class FileUploadAPIView(APIView):
                 print('Направление подготовки: ', fs_obj)
                 # Проверяем если Дисцпилина уже есть в БД
                 #
-                if WorkProgram.objects.filter(title = data['SUBJECT'][i].strip(), discipline_code = data['SUBJECT_CODE'][i], qualification = qualification).exists():
+                if WorkProgram.objects.filter(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification).exists():
                     # если да, то записываем в FieldOfStudyWorkProgram
                     #
-                    wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i].strip(), discipline_code = data['SUBJECT_CODE'][i], qualification = qualification)
+                    wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification)
 
                 else:
                     # если нет, то записываем в БД
-                    wp_obj = WorkProgram(title = data['SUBJECT'][i].strip(), discipline_code = data['SUBJECT_CODE'][i], qualification = qualification)
+                    wp_obj = WorkProgram(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification)
                     wp_obj.save()
                     wp_count+=1
                 print('Рабочая программа дисциплины: ', wp_obj)
@@ -1229,7 +1232,6 @@ class FileUploadAPIView(APIView):
                     zun = Zun(wp_in_fs = wpinfs)
                     zun.save()
                     #wpchangemdb.work_program.add(wp_obj)
-                        
                 
             except:
                 print('Строка ',i, 'не записалась, проверьте на опечатки или пустые значения')
@@ -1388,6 +1390,7 @@ class ZunUpdateView(generics.UpdateAPIView):
 #
 
 from docxtpl import DocxTemplate, RichText
+import datetime
 def render_docx(*args, **kwargs):
     """Экспорт файла в док"""
     tpl = DocxTemplate('/application/export/RPD_shablon_2020.docx')
@@ -1472,18 +1475,23 @@ def render_docx(*args, **kwargs):
     flag = False
     if sections_online == []:
         flag = True
-
+        flag1 = False
+    else:
+        flag1 = True
+    fs_obj = FieldOfStudy.objects.get(pk = kwargs['field_of_study_id'])
+    ap_obj = AcademicPlan.objects.get(pk = kwargs['academic_plan_id'])
     context = {
         'title': wp_obj.title,
-        'field_of_study_code': kwargs['field_of_study_code'],
-        'field_of_study': kwargs['field_of_study'],
+        'field_of_study_code': fs_obj.number ,
+        'field_of_study': fs_obj.title,
         'QUALIFICATION': qualification,
-        'academic_plan': kwargs['academic_plan'],
+        'academic_plan': ap_obj.educational_profile,
         'year': kwargs['year'],
         'tbl_competence': '',
         'tbl_sections': sections_tbl,
         'total_hours':[contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours], 
         'is_no_online':flag,
+        'is_online':flag1,
         'X': 'X',
         'sections': ', '.join(str(i) for i in set(sections_online)),
         'sections_rep': '',
@@ -1492,42 +1500,41 @@ def render_docx(*args, **kwargs):
         'online': online,
         }
     
-    filename = str(kwargs['field_of_study_code'])+str(wp_obj.title)+'_'+str(wp_obj.qualification)+'_'+str(kwargs['year'])+'.docx'
+    filename = str(fs_obj.number)+'_'+str(wp_obj.discipline_code)+'_'+str(wp_obj.qualification)+'_'+str(kwargs['year'])+'_'+datetime.datetime.today().strftime("%Y-%m-%d-%H.%M.%S")+'.docx'
     
     tpl.render(context)
     tpl.save('/application/export/'+filename)
-    return tpl, filename
+    return '/application/export/'+filename
                         
 
 from rest_framework import viewsets, renderers
 from rest_framework.decorators import action
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 
-class PassthroughRenderer(renderers.BaseRenderer):
-    """
-        Return data as-is. View should supply a Response.
-    """
-    media_type = ''
-    format = ''
-    def render(self, data, accepted_media_type=None, renderer_context=None):
-        return data
 
-class DocxFileExportViewSet(viewsets.ReadOnlyModelViewSet):
-    """Вовзращает response"""
-    @action(methods=['post'], detail=True, renderer_classes=(PassthroughRenderer,))
-    def download(self, request):
+
+class DocxFileExportView(APIView):
+    """Возвращает путь к файлу"""
+    def post(self, request):
+        filename = render_docx(pk = request.data.get('pk'), field_of_study_id = request.data.get('field_of_study_id'), 
+            academic_plan_id = request.data.get('academic_plan_id'), year = request.data.get('year'))
+        return HttpResponse(filename,status=status.HTTP_200_OK)
+
+class DocxFileExportOldView(APIView):
+    """OLD-Version Вовзращает response"""
+    def post(self, request):
         pk = request.data.get('id')
-        field_of_study_code = request.data.get('field_of_study_code') #код
-        field_of_study = request.data.get('field_of_study') #направление
-        academic_plan = request.data.get('academic_plan') #учебный план
+        field_of_study_id = request.data.get('field_of_study_id') #код
+        academic_plan_id = request.data.get('academic_plan_id') #учебный план
         year = request.data.get('year')
         
-        tpl,filename = render_docx(pk = pk, field_of_study_code = field_of_study_code, field_of_study = field_of_study, academic_plan = academic_plan, year = year)
+        tpl,filename = render_docx(pk = pk, field_of_study_id = field_of_study_id, academic_plan_id = academic_plan_id, year = year)
         print(filename)
         # send file
         response = HttpResponse(content_type='application/vnd.ms-word', status=status.HTTP_200_OK)
-        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename 
+        #response = FileResponse(open(filename,'r'), as_attachment=False)
+        
         tpl.save(response)
     
         return response
