@@ -611,6 +611,14 @@ class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Topic.objects.all()
     serializer_class = TopicCreateSerializer
+    def delete(self, request, *args, **kwargs):
+        topic_section=kwargs['pk']
+        try:
+            Topic.new_ordinal_number(topic_section, -1)
+            return self.destroy(request, *args, **kwargs)
+        except:
+            return Response(status=400)
+
 
 
 class EvaluationToolListAPI(generics.ListCreateAPIView):
@@ -702,12 +710,23 @@ class DisciplineSectionListAPI(generics.ListCreateAPIView):
     serializer_class = SectionSerializer
 
 
+
 class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     API endpoint that represents a single Discipline Section.
     """
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
+    def delete(self, request, *args, **kwargs):
+        descipline_section=kwargs['pk']
+        try:
+            DisciplineSection.new_ordinal_number(descipline_section, -1)
+            return self.destroy(request, *args, **kwargs)
+        except:
+            return Response(status=400)
+
+
+
 
 class FieldOfStudyDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     """
