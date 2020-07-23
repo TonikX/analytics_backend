@@ -454,9 +454,19 @@ class DisciplineSection(models.Model):
 
 
     def new_ordinal_number(descipline_section, new_ordinal_number):
+        '''
+        :param new_ordinal_number: если равен -1, то значит запрос на удаление элемента из списка,
+                                   любое другое значение - запрос на изменение порядка в списке.
+        '''
         new_ordinal_number = int(new_ordinal_number)
         section = DisciplineSection.objects.get(pk = descipline_section)
-        if int(section.ordinal_number) > int(new_ordinal_number):
+        if new_ordinal_number == -1:
+            sections = DisciplineSection.objects.filter(work_program=section.work_program).order_by('ordinal_number')
+            for sec in sections:
+                if sec.ordinal_number > section.ordinal_number:
+                    sec.ordinal_number -= 1
+                    sec.save()
+        elif int(section.ordinal_number) > int(new_ordinal_number):
             section.ordinal_number = new_ordinal_number
             section.save()
             sections = DisciplineSection.objects.filter(work_program = section.work_program, ordinal_number__gte=new_ordinal_number).exclude(pk = descipline_section).order_by('ordinal_number')
@@ -464,12 +474,6 @@ class DisciplineSection(models.Model):
                 sec.ordinal_number = new_ordinal_number+1
                 sec.save()
                 new_ordinal_number +=1
-        elif new_ordinal_number== -1:
-            sections = DisciplineSection.objects.filter(work_program = section.work_program).order_by('ordinal_number')
-            for sec in sections:
-                if sec.ordinal_number > descipline_section:
-                    sec.ordinal_number-=1
-                    sec.save()
         else:
             section.ordinal_number = new_ordinal_number
             section.save()
@@ -517,9 +521,13 @@ class Topic(models.Model):
     def new_ordinal_number(topic, new_ordinal_number):
         new_ordinal_number = int(new_ordinal_number)
         section = Topic.objects.get(pk = topic)
-        print("ид темы", section)
-        print("новый номер темы", new_ordinal_number)
-        if int(section.number) > int(new_ordinal_number):
+        if new_ordinal_number==-1:
+            sections = Topic.objects.filter(discipline_section  = section.discipline_section).order_by('number')
+            for sec in sections:
+                if sec.number > section.number:
+                    sec.number -= 1
+                    sec.save()
+        elif int(section.number) > int(new_ordinal_number):
             section.number = new_ordinal_number
             section.save()
             sections = Topic.objects.filter(discipline_section  = section.discipline_section, number__gte=new_ordinal_number).exclude(pk = topic).order_by('number')
