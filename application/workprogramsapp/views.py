@@ -465,6 +465,7 @@ class CompetenceUpdateView(APIView):
         except:
             return Response(status=400)
 
+
 class CompetenceIndicatorDetailView(APIView):
     """
        Индикаторы компетенции.
@@ -473,6 +474,8 @@ class CompetenceIndicatorDetailView(APIView):
         indicators = Indicator.objects.filter(competence=pk)
         serializer = IndicatorSerializer(indicators, many=True)
         return Response(serializer.data)
+
+
 class DeleteIndicatorFromCompetenceView(APIView):
     """
         Удаление индикатора из компетенции
@@ -531,6 +534,20 @@ class OutcomesOfWorkProgramDestroyView(generics.DestroyAPIView):
 class OutcomesOfWorkProgramUpdateView(generics.UpdateAPIView):
     queryset = OutcomesOfWorkProgram.objects.all()
     serializer_class = OutcomesOfWorkProgramCreateSerializer
+
+
+class OutcomesForWorkProgramChangeBlock(generics.ListAPIView):
+    serializer_class = PrerequisitesOfWorkProgramSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, **kwargs):
+        """
+        Вывод всех результатов для одной рабочей программы по id
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = OutcomesOfWorkProgram.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        serializer = OutcomesOfWorkProgramSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class PrerequisitesOfWorkProgramList(generics.ListAPIView):

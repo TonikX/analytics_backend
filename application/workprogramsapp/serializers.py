@@ -328,7 +328,7 @@ class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
         fields = ['id', 'zun_in_wp']
 
 
-class ZunCreateSerializer(serializers.ModelSerializer):
+class ZunCreateSerializer(serializers.Serializer):
     """Сериализатор Зунов"""
     # indicator_in_zun = IndicatorListSerializer()
     indicator_in_zun = serializers.PrimaryKeyRelatedField(queryset=Indicator.objects.all())

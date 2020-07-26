@@ -22,7 +22,7 @@ from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlan
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
-    FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, ZunListAPI, ZunDetailAPI
+    FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock
 from .views import DocxFileExportView, DocxFileExportOldView    
 
 
@@ -113,6 +113,7 @@ urlpatterns = [
     path('api/outcomesofworkprogram/create', OutcomesOfWorkProgramCreateAPIView.as_view()),
     path('api/outcomesofworkprogram/delete/<int:pk>', OutcomesOfWorkProgramDestroyView.as_view()),
     path('api/outcomesofworkprogram/update/<int:pk>', OutcomesOfWorkProgramUpdateView.as_view()),
+    path('api/outcomesofworkprogramforacademycplan/<int:workprogram_id>', OutcomesForWorkProgramChangeBlock.as_view()),
 
     #Работа с пререквизитами
     path('api/prerequisitesofworkprogram/<int:workprogram_id>', PrerequisitesOfWorkProgramList.as_view()),
