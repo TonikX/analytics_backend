@@ -22,7 +22,8 @@ from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlan
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
-    FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock
+    FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
+    ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock
 from .views import DocxFileExportView, DocxFileExportOldView    
 
 
@@ -68,6 +69,7 @@ urlpatterns = [
     path('api/competenceindicator/<int:pk>', CompetenceIndicatorDetailView.as_view(), name='comptenceindicator'),
     path('api/competenceindicator/indicator/delete', DeleteIndicatorFromCompetenceView.as_view(), name='DeleteIndicatorFromCompetenceView'),
     path('api/competenceindicator/indicator/add', AddIndicatorToCompetenceView.as_view(), name="AddIndicatorFromCompetenceView"),
+    # path('api/outcomesofworkprogram/<int:workprogram_id>', IndicatorForCompetence.as_view()),
 
     path('api/indicator', IndicatorListAPIView.as_view()),
     path('api/indicator/create', IndicatorCreateAPIView.as_view()),

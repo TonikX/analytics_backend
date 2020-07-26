@@ -418,6 +418,19 @@ class IndicatorDetailsView(generics.RetrieveAPIView):
     serializer_class = IndicatorListSerializer
 
 
+# class IndicatorForCompetence(generics.ListAPIView):
+#     serializer_class = IndicatorListSerializer
+#     queryset = Indicator.objects.all()
+#
+#     def list(self, request, **kwargs):
+#         """
+#         Вывод всех результатов для одной рабочей программы по id
+#         """
+#         # Note the use of `get_queryset()` instead of `self.queryset`
+#         queryset = OutcomesOfWorkProgram.objects.filter(competence__id=self.kwargs['competence_id'])
+#         serializer = IndicatorSerializer(queryset, many=True)
+#         return Response(serializer.data)
+
 
 class CompetenceCreateView(generics.CreateAPIView):
     serializer_class = CompetenceSerializer
