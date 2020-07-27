@@ -316,7 +316,7 @@ class ZunSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Zun
-        fields = ['id', 'indicator_in_zun', 'knowledge', 'skills', 'attainments']
+        fields = ['id', 'indicator_in_zun', 'items']
 
 
 class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):

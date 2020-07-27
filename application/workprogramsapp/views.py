@@ -707,7 +707,7 @@ class ZunListAPI(generics.ListCreateAPIView):
                 wp_in_fs.work_program = WorkProgram.objects.filter(id = request.data.get('work_program'))[0]
                 wp_in_fs.save()
                 print (wp_in_fs)
-            data = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = request.data.get('indicator_in_zun'))[0].id, "knowledge": request.data.get('knowledge'), "skills": request.data.get('skills'), "attainments": request.data.get('attainments')}
+            data = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = request.data.get('indicator_in_zun'))[0].id, "attainments": request.data.get('items')}
             print(data)
             serializer = ZunCreateSaveSerializer(data = data)
             print (serializer)
@@ -1412,8 +1412,8 @@ class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
 class ZunListAPIView(generics.ListAPIView):
     serializer_class = ZunSerializer
     queryset = Zun.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['educational_profile']
+    # filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    # search_fields = ['educational_profile']
 
 
 class ZunCreateAPIView(generics.CreateAPIView):
