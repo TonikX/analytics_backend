@@ -34,7 +34,17 @@ const createModule = createAction<string>('EDUCATIONAL_PLAN_CREATE_MODULE');
 const changeModule = createAction<string>('EDUCATIONAL_PLAN_CHANGE_MODULE');
 const deleteModule = createAction<string>('EDUCATIONAL_PLAN_DELETE_MODULE');
 
+const getDirectionsDependedOnWorkProgram = createAction<string>('GET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM');
+const setDirectionsDependedOnWorkProgram = createAction<string>('SET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM');
+
+const openDownloadModal = createAction<string>('OPEN_DOWNLOAD_MODAL');
+const closeDownloadModal = createAction<string>('CLOSE_DOWNLOAD_MODAL');
+
 const actions: EducationalPlanActions = {
+    openDownloadModal,
+    closeDownloadModal,
+    getDirectionsDependedOnWorkProgram,
+    setDirectionsDependedOnWorkProgram,
     openModuleDialog,
     closeModuleDialog,
     createModule,

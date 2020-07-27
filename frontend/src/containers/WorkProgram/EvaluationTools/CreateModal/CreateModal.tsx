@@ -69,7 +69,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {evaluationTool} = this.props;
 
-        if (!shallowEqual(evaluationTool, prevProps.evaluationTool)){
+        if (!shallowEqual(this.props, prevProps)){
             this.setState({
                 evaluationTool: {
                     [EvaluationToolFields.ID]: get(evaluationTool, EvaluationToolFields.ID, null),

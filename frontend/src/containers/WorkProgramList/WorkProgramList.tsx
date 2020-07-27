@@ -168,7 +168,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                         {moment(workProgram[WorkProgramGeneralFields.APPROVAL_DATE]).format(FULL_DATE_FORMAT)}
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.numberCell)}>
-                                        {workProgram[WorkProgramGeneralFields.CODE]}
+                                        072.0.8.45.2020
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                                         {workProgram[WorkProgramGeneralFields.TITLE]}

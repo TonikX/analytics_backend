@@ -1,5 +1,11 @@
 import BaseService from "../../service/base-service";
-import {BlocksOfWorkProgramsFields, EducationalPlanBlockFields, EducationalPlanFields, ModuleFields} from "./enum";
+import {
+    BlocksOfWorkProgramsFields,
+    DownloadFileModalFields,
+    EducationalPlanBlockFields,
+    EducationalPlanFields,
+    ModuleFields
+} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
 class EducationalPlanService extends BaseService{
@@ -11,6 +17,10 @@ class EducationalPlanService extends BaseService{
 
     getEducationalPlanDetail(id: number){
         return this.get(`/api/academicplan/detail/${id}`);
+    }
+
+    getDirectionsDependedOnWorkProgram(workProgramId: number){
+        return this.get(`/api/workprogram/fieldofstudies/${workProgramId}`);
     }
 
     deleteEducationalPlan(id: number){
@@ -68,6 +78,17 @@ class EducationalPlanService extends BaseService{
 
     deleteModule(id: number){
         return this.delete(`/api/disciplineblockmodule/delete/${id}`);
+    }
+
+    getFile(dialogData: any){
+        const formData = new FormData();
+
+        formData.append(DownloadFileModalFields.ID, dialogData[DownloadFileModalFields.ID]);
+        formData.append(DownloadFileModalFields.ACADEMIC_PLAN_ID, dialogData[DownloadFileModalFields.ACADEMIC_PLAN_ID]);
+        formData.append(DownloadFileModalFields.YEAR, dialogData[DownloadFileModalFields.YEAR]);
+        formData.append(DownloadFileModalFields.DIRECTION_ID, dialogData[DownloadFileModalFields.DIRECTION_ID]);
+
+        return this.post(`/api/export/docx`, formData);
     }
 
     updateEducationalPlan(competence: any){

@@ -20,6 +20,10 @@ export const initialState: educationalPlanState = {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
     },
+    [fields.DOWNLOAD_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
+    },
     [fields.EDUCATIONAL_PLAN_DETAIL_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
@@ -27,7 +31,8 @@ export const initialState: educationalPlanState = {
     [fields.EDUCATIONAL_PLAN_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
-    }
+    },
+    [fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM]: []
 };
 
 const setEducationalPlans = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
@@ -38,6 +43,11 @@ const setEducationalPlans = (state: educationalPlanState, {payload}: any): educa
 const setEducationalPlanDetail = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
     ...state,
     [fields.DETAIL_PLAN]: payload,
+});
+
+const setDirectionsDependedOnWorkProgram = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM]: payload,
 });
 
 const changeSearchQuery = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
@@ -79,6 +89,14 @@ const openModuleDialog = (state: educationalPlanState, {payload}: any): educatio
     }
 });
 
+const openDownloadModal = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.DOWNLOAD_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: true,
+        [fields.DIALOG_DATA]: payload
+    }
+});
+
 const closeModuleDialog = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
     ...state,
     [fields.EDUCATIONAL_PLAN_MODULE_DIALOG]: {
@@ -90,6 +108,14 @@ const closeModuleDialog = (state: educationalPlanState, {payload}: any): educati
 const closeDialog = (state: educationalPlanState): educationalPlanState => ({
     ...state,
     [fields.EDUCATIONAL_PLAN_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
+    }
+});
+
+const closeDownloadModal = (state: educationalPlanState): educationalPlanState => ({
+    ...state,
+    [fields.DOWNLOAD_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
     }
@@ -115,6 +141,8 @@ export const reducer = createReducer(initialState, {
     [actions.setEducationalPlans.type]: setEducationalPlans,
     [actions.setEducationalDetail.type]: setEducationalPlanDetail,
 
+    [actions.setDirectionsDependedOnWorkProgram.type]: setDirectionsDependedOnWorkProgram,
+
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
 
@@ -123,6 +151,9 @@ export const reducer = createReducer(initialState, {
 
     [actions.openModuleDialog.type]: openModuleDialog,
     [actions.closeModuleDialog.type]: closeModuleDialog,
+
+    [actions.openDownloadModal.type]: openDownloadModal,
+    [actions.closeDownloadModal.type]: closeDownloadModal,
 
     [actions.changeSearchQuery.type]: changeSearchQuery,
     [actions.changeCurrentPage.type]: changeCurrentPage,

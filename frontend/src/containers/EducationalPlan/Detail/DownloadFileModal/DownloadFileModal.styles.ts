@@ -1,13 +1,8 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
-    // @ts-ignore
-    root: {
-        zIndex: '13000 !important',
-    },
     input: {
         width: '550px',
-        marginBottom: '30px',
     },
     lastInput: {
         width: '550px',
@@ -21,4 +16,16 @@ export default (theme: Theme) => createStyles({
     dialog: {
         padding: 20,
     },
+    selectorWrap: {
+        '& .MuiInputLabel-shrink': {
+            transform: 'translate(14px, -6.5px) scale(0.75) !important',
+        },
+        '& .MuiOutlinedInput-notchedOutline legend': {
+            width: '90px !important'
+        }
+    },
+    datePicker: {
+        width: '100%',
+        marginTop: '20px'
+    }
 });
