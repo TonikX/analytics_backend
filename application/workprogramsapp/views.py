@@ -1160,8 +1160,21 @@ class FileUploadAPIView(APIView):
 
                 if data['DEGREE'][i].strip() == 'Академический бакалавр':
                     qualification = 'bachelor'
-                else:
+                elif data['DEGREE'][i].strip() == 'Магистр':
                     qualification = 'master'
+                else:
+                    qualification = 'specialist'
+
+                credit_units = [0 for i in range(0,12)]
+                units = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])&(data["SUBJECT_CODE"] == data["SUBJECT_CODE"][i] )].drop_duplicates()
+                 
+                try:
+                    for u in units.index.values:
+                        if pd.isna(units["CREDITS"][u]) or units["CREDITS"][u] == 0: credit_units[int(units["SEMESTER"][u]) - 1] = "-"
+                        elif units["SEMESTER"][u] == ".": credit_units[11] = units["CREDITS"][u]
+                        else: credit_units[int(units["SEMESTER"][u]) - 1] = int(units["CREDITS"][u])
+                except:
+                    pass
                 
                 # проверяем если ОП уже существует в БД
                 if FieldOfStudy.objects.filter(number = data['SUBFIELDCODE'][i], qualification=qualification).exists():
@@ -1182,9 +1195,10 @@ class FileUploadAPIView(APIView):
                     #
                     wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i].strip(), subject_code = data['SUBJECT_CODE'][i], qualification = qualification)
                     wp_obj.discipline_code = data['DIS_CODE'][i] #заменить в параметры
+                    wp_obj.credit_units = ",".join(map(str, credit_units)) #убрать
                 else:
                     # если нет, то записываем в БД
-                    wp_obj = WorkProgram(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification)
+                    wp_obj = WorkProgram(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification, credit_units = ",".join(map(str, credit_units)) )
                     wp_obj.save()
                     wp_count+=1
                 print('Рабочая программа дисциплины: ', wp_obj)
@@ -1238,21 +1252,6 @@ class FileUploadAPIView(APIView):
                     mdb.save()
                 
                 print('Модуль в блоке: ', mdb)
-            
-                #credit_units = [0 for i in range(0,10)]
-                #for semester in semesters:
-                #    credit_units[int(semester)-1] = 
-
-                credit_units = [0 for i in range(0,12)]
-                units = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])&(data["SUBJECT_CODE"] == data["SUBJECT_CODE"][i] )].drop_duplicates()
-                 
-                try:
-                    for u in units.index.values:
-                        if pd.isna(units["CREDITS"][u]) or units["CREDITS"][u] == 0: credit_units[int(units["SEMESTER"][u]) - 1] = "-"
-                        elif units["SEMESTER"][u] == ".": credit_units[11] = units["CREDITS"][u]
-                        else: credit_units[int(units["SEMESTER"][u]) - 1] = int(units["CREDITS"][u])
-                except:
-                    pass
 
                 if (data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module = mdb, change_type = data['ISOPTION'][i])
