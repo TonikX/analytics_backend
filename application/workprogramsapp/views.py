@@ -1441,11 +1441,12 @@ class ZunUpdateView(generics.UpdateAPIView):
 #
 
 from docxtpl import DocxTemplate, RichText
-import datetime
+import datetime, io
+
 def render_docx(*args, **kwargs):
     """Экспорт файла в док"""
+    docx_file = io.BytesIO()
     tpl = DocxTemplate('/application/RPD_shablon_2020.docx')
-    
     #
     # Получаем данные рабочей программы дисциплины
     #
@@ -1554,8 +1555,9 @@ def render_docx(*args, **kwargs):
     filename = str(fs_obj.number)+'_'+str(wp_obj.discipline_code)+'_'+str(wp_obj.qualification)+'_'+str(kwargs['year'])+'_'+datetime.datetime.today().strftime("%Y-%m-%d-%H.%M.%S")+'.docx'
     
     tpl.render(context)
-    tpl.save('/application/export/'+filename)
-    return tpl, filename
+    #tpl.save('/application/export/'+filename)
+    tpl.save(docx_file)
+    return docx_file, filename
                         
 
 from rest_framework import viewsets, renderers
@@ -1569,9 +1571,24 @@ class DocxFileExportView(APIView):
     def post(self, request):
         tpl, filename = render_docx(pk = request.data.get('pk'), field_of_study_id = request.data.get('field_of_study_id'), 
             academic_plan_id = request.data.get('academic_plan_id'), year = request.data.get('year'))
-        response = HttpResponse(tpl,status=status.HTTP_200_OK)
-        response['Content-Disposition'] = 'inline;'
+        #f = io.BytesIO()
+        #tpl.save(f)
+        #length = f.tell()
+        #f.seek(0)
+        #response = HttpResponse(f.getvalue(), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        #response['Content-Disposition'] = 'attachment; filename=test_result.docx'
+        #response['Content-Length'] = length
+        response = HttpResponse(
+            tpl.getvalue(),
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = 'inline; filename=rpd_export.docx'
+
+        #response = HttpResponse(tpl,status=status.HTTP_200_OK)
+        #response['Content-Disposition'] = 'inline;'
         return response
+
+
+
 
 class DocxFileExportOldView(APIView):
     """OLD-Version Вовзращает response"""
@@ -1584,9 +1601,9 @@ class DocxFileExportOldView(APIView):
         tpl, filename = render_docx(pk = pk, field_of_study_id = field_of_study_id, academic_plan_id = academic_plan_id, year = year)
         print(filename)
         # send file
-        #response = HttpResponse(content_type='application/vnd.ms-word', status=status.HTTP_200_OK)
-        #response['Content-Disposition'] = 'attachment; filename="%s"' % filename 
-        response = FileResponse(open('/application/export/'+filename,'rb'), as_attachment=False)
+        response = HttpResponse(content_type='application/vnd.ms-word', status=status.HTTP_200_OK)
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename 
+        #response = FileResponse(open('/application/export/'+filename,'rb'), as_attachment=False)
         
         tpl.save(response)
     
