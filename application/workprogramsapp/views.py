@@ -12,7 +12,7 @@ from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, WorkProgramInFieldOfStudySerializer, ZunSerializer
+    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, ZunCreateSaveSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -30,7 +30,8 @@ from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins
-from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, DisciplineBlock, Zun
+from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
+
 import json
 
 class FieldOfStudyWPListView(View):
@@ -417,6 +418,19 @@ class IndicatorDetailsView(generics.RetrieveAPIView):
     serializer_class = IndicatorListSerializer
 
 
+# class IndicatorForCompetence(generics.ListAPIView):
+#     serializer_class = IndicatorListSerializer
+#     queryset = Indicator.objects.all()
+#
+#     def list(self, request, **kwargs):
+#         """
+#         Вывод всех результатов для одной рабочей программы по id
+#         """
+#         # Note the use of `get_queryset()` instead of `self.queryset`
+#         queryset = OutcomesOfWorkProgram.objects.filter(competence__id=self.kwargs['competence_id'])
+#         serializer = IndicatorSerializer(queryset, many=True)
+#         return Response(serializer.data)
+
 
 class CompetenceCreateView(generics.CreateAPIView):
     serializer_class = CompetenceSerializer
@@ -464,6 +478,7 @@ class CompetenceUpdateView(APIView):
         except:
             return Response(status=400)
 
+
 class CompetenceIndicatorDetailView(APIView):
     """
        Индикаторы компетенции.
@@ -472,6 +487,8 @@ class CompetenceIndicatorDetailView(APIView):
         indicators = Indicator.objects.filter(competence=pk)
         serializer = IndicatorSerializer(indicators, many=True)
         return Response(serializer.data)
+
+
 class DeleteIndicatorFromCompetenceView(APIView):
     """
         Удаление индикатора из компетенции
@@ -530,6 +547,20 @@ class OutcomesOfWorkProgramDestroyView(generics.DestroyAPIView):
 class OutcomesOfWorkProgramUpdateView(generics.UpdateAPIView):
     queryset = OutcomesOfWorkProgram.objects.all()
     serializer_class = OutcomesOfWorkProgramCreateSerializer
+
+
+class OutcomesForWorkProgramChangeBlock(generics.ListAPIView):
+    serializer_class = PrerequisitesOfWorkProgramSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, **kwargs):
+        """
+        Вывод всех результатов для одной рабочей программы по id
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = OutcomesOfWorkProgram.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        serializer = OutcomesOfWorkProgramSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class PrerequisitesOfWorkProgramList(generics.ListAPIView):
@@ -610,6 +641,14 @@ class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Topic.objects.all()
     serializer_class = TopicCreateSerializer
+    def delete(self, request, *args, **kwargs):
+        topic_section=kwargs['pk']
+        try:
+            Topic.new_ordinal_number(topic_section, -1)
+            return self.destroy(request, *args, **kwargs)
+        except:
+            return Response(status=400)
+
 
 
 class EvaluationToolListAPI(generics.ListCreateAPIView):
@@ -628,6 +667,71 @@ class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = EvaluationToolCreateSerializer
 
 
+class WorkProgramInFieldOfStudyListAPI(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of WorkProgramInFieldOfStudy.
+    """
+    queryset = WorkProgramInFieldOfStudy.objects.all()
+    serializer_class = WorkProgramInFieldOfStudyCreateSerializer
+
+
+class WorkProgramInFieldOfStudyDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single WorkProgramInFieldOfStudy.
+    """
+    queryset = WorkProgramInFieldOfStudy.objects.all()
+    serializer_class = WorkProgramInFieldOfStudyCreateSerializer
+
+
+class ZunListAPI(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Zun.
+    """
+    serializer_class = ZunCreateSerializer
+
+    queryset = Zun.objects.all()
+
+    def create(self, request):
+        serializer = ZunCreateSerializer(data=request.data)
+        # wp_in_fs = serializer.validated_data['wp_in_fs']
+        # print (wp_in_fs)
+        if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = request.data.get('wp_changeblock')):
+            if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = request.data.get('wp_changeblock'), work_program__id = request.data.get('work_program')):
+                wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = request.data.get('wp_changeblock'), work_program__id = request.data.get('work_program'))[0]
+                print (wp_in_fs)
+                print ("Замена номера прошла успешно")
+            else:
+                wp_in_fs = WorkProgramInFieldOfStudy()
+                print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = request.data.get('wp_changeblock')[0]))
+                wp_in_fs.work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = request.data.get('wp_changeblock'))[0]
+                wp_in_fs.work_program = WorkProgram.objects.filter(id = request.data.get('work_program'))[0]
+                wp_in_fs.save()
+                print (wp_in_fs)
+            data = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = request.data.get('indicator_in_zun'))[0].id, "knowledge": request.data.get('knowledge'), "skills": request.data.get('skills'), "attainments": request.data.get('attainments')}
+            print(data)
+            serializer = ZunCreateSaveSerializer(data = data)
+            print (serializer)
+            print
+
+            try:
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    print ("Сохранение прошло")
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except:
+                return Response(status=400)
+        else:
+            return Response({"error":"change_block does not exist"}, status=400)
+
+
+class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Zun.я
+    """
+    queryset = Zun.objects.all()
+    serializer_class = ZunCreateSerializer
+
+
 class DisciplineSectionListAPI(generics.ListCreateAPIView):
     """
     API endpoint that represents a list of Discipline Sections.
@@ -636,12 +740,23 @@ class DisciplineSectionListAPI(generics.ListCreateAPIView):
     serializer_class = SectionSerializer
 
 
+
 class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     API endpoint that represents a single Discipline Section.
     """
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
+    def delete(self, request, *args, **kwargs):
+        descipline_section=kwargs['pk']
+        try:
+            DisciplineSection.new_ordinal_number(descipline_section, -1)
+            return self.destroy(request, *args, **kwargs)
+        except:
+            return Response(status=400)
+
+
+
 
 class FieldOfStudyDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -816,6 +931,22 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
         except:
             return Response(status=400)
 
+
+class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
+    serializer_class = EvaluationToolForWorkProgramSerializer
+
+    def list(self, request, **kwargs):
+        """
+        Вывод учебных планов для одной рабочей программы по id
+        """
+        try:
+            queryset = FieldOfStudy.objects.filter(workprograms_in_fieldofstudy__id = self.kwargs['workprogram_id']).distinct()
+            serializer = FieldOfStudySerializer(queryset, many=True)
+            return Response(serializer.data)
+        except:
+            return Response(status=400)
+
+
 #Блок эндпоинтов для обрабоки файлов
 
 from dataprocessing.serializers import FileUploadSerializer
@@ -978,6 +1109,7 @@ class FileUploadOnlineCoursesAPIView(APIView):
                 continue;
         return Response(status=200)
 
+from discipline_code import IPv4_code 
 def handle_uploaded_csv(file, filename):
     """
     Обработка файла csv 
@@ -989,10 +1121,13 @@ def handle_uploaded_csv(file, filename):
     with open(path, 'wb+') as destination:
         for chunk in file.chunks():
             destination.write(chunk)
-    
-    df = pandas.read_excel(path)
-    print(df.head())
-    return df
+    in_df = pandas.read_excel(path)
+    sys_df = pandas.read_excel('discipline_code/discipline_bank_updated.xlsx')
+    print('IPv4_code generating')
+    processed_data, db = IPv4_code.generate_df_w_unique_code(in_df, sys_df)
+    db.to_excel("discipline_code/discipline_bank_updated.xlsx")
+    print(processed_data.head())
+    return processed_data
 
 class FileUploadAPIView(APIView):
     """
@@ -1000,9 +1135,10 @@ class FileUploadAPIView(APIView):
     """
 
     def post(self, request):
+        print('Working')
 
-        serializer = FileUploadSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        #serializer = FileUploadSerializer(data=request.data)
+        #serializer.is_valid(raise_exception=True)
 
         data = handle_uploaded_csv(request.FILES['file'], str(request.FILES['file']))
         print(len(data['SUBJECT'].drop_duplicates().to_list()))
@@ -1024,8 +1160,21 @@ class FileUploadAPIView(APIView):
 
                 if data['DEGREE'][i].strip() == 'Академический бакалавр':
                     qualification = 'bachelor'
-                else:
+                elif data['DEGREE'][i].strip() == 'Магистр':
                     qualification = 'master'
+                else:
+                    qualification = 'specialist'
+
+                credit_units = [0 for i in range(0,12)]
+                units = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])&(data["SUBJECT_CODE"] == data["SUBJECT_CODE"][i] )].drop_duplicates()
+                 
+                try:
+                    for u in units.index.values:
+                        if pd.isna(units["CREDITS"][u]) or units["CREDITS"][u] == 0: credit_units[int(units["SEMESTER"][u]) - 1] = "-"
+                        elif units["SEMESTER"][u] == ".": credit_units[11] = units["CREDITS"][u]
+                        else: credit_units[int(units["SEMESTER"][u]) - 1] = int(units["CREDITS"][u])
+                except:
+                    pass
                 
                 # проверяем если ОП уже существует в БД
                 if FieldOfStudy.objects.filter(number = data['SUBFIELDCODE'][i], qualification=qualification).exists():
@@ -1041,14 +1190,15 @@ class FileUploadAPIView(APIView):
                 print('Направление подготовки: ', fs_obj)
                 # Проверяем если Дисцпилина уже есть в БД
                 #
-                if WorkProgram.objects.filter(title = data['SUBJECT'][i].strip(), discipline_code = data['SUBJECT_CODE'][i], qualification = qualification).exists():
+                if WorkProgram.objects.filter(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification).exists():
                     # если да, то записываем в FieldOfStudyWorkProgram
                     #
-                    wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i].strip(), discipline_code = data['SUBJECT_CODE'][i], qualification = qualification)
-
+                    wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i].strip(), subject_code = data['SUBJECT_CODE'][i], qualification = qualification)
+                    wp_obj.discipline_code = data['DIS_CODE'][i] #заменить в параметры
+                    wp_obj.credit_units = ",".join(map(str, credit_units)) #убрать
                 else:
                     # если нет, то записываем в БД
-                    wp_obj = WorkProgram(title = data['SUBJECT'][i].strip(), discipline_code = data['SUBJECT_CODE'][i], qualification = qualification)
+                    wp_obj = WorkProgram(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification, credit_units = ",".join(map(str, credit_units)) )
                     wp_obj.save()
                     wp_count+=1
                 print('Рабочая программа дисциплины: ', wp_obj)
@@ -1102,42 +1252,38 @@ class FileUploadAPIView(APIView):
                     mdb.save()
                 
                 print('Модуль в блоке: ', mdb)
-            
-                #credit_units = [0 for i in range(0,10)]
-                #for semester in semesters:
-                #    credit_units[int(semester)-1] = 
-
-                credit_units = [0 for i in range(0,10)]
-                semesters = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])].drop_duplicates()
-                try:
-                    for s in semesters.index.values:
-                        credit_units[int(semesters['SEMESTER'][s])-1] = int(semesters['CREDITS'][s])
-                except:
-                    print('CREDIT == Nan')
 
                 if (data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module = mdb, change_type = data['ISOPTION'][i])
-                    this_zun = Zun()
-                    this_zun.work_program_change_in_discipline_block_module = wpchangemdb
-                    this_zun.work_program = wp_obj
-                    this_zun.save()
+                    if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = wpchangemdb, work_program = wp_obj).exists():
+                        wpinfs = WorkProgramInFieldOfStudy.objects.get(work_program_change_in_discipline_block_module = wpchangemdb, work_program = wp_obj)
+                    else:
+                        wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module = wpchangemdb, work_program = wp_obj)
+                        wpinfs.save()
                     #wpchangemdb.work_program.add(wp_obj)
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i], work_program = wp_obj).exists():
                     print('exist', wp_obj)
 
                 else:
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
-                    wpchangemdb.credit_units = ','.join(str(i) for i in credit_units)
+                    wpchangemdb.credit_units = ",".join(map(str, credit_units))
                     wpchangemdb.change_type = data['ISOPTION'][i]
                     wpchangemdb.discipline_block_module = mdb
                     wpchangemdb.save()
-                    #wpchangemdb.work_program.add(wp_obj)
-                    this_zun = Zun()
-                    this_zun.work_program_change_in_discipline_block_module = wpchangemdb
-                    this_zun.work_program = wp_obj
-                    this_zun.save()
-                    
+                    if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = wpchangemdb, work_program = wp_obj).exists():
+                        wpinfs = WorkProgramInFieldOfStudy.objects.get(work_program_change_in_discipline_block_module = wpchangemdb, work_program = wp_obj)
+                    else:
+                        wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module = wpchangemdb, work_program = wp_obj)
+                        wpinfs.save()
                 print('Рабочая программа дисциплины записана в модуль: done')
+                
+                if Zun.objects.filter(wp_in_fs = wpinfs).exists():
+                    pass
+                else:
+                    zun = Zun(wp_in_fs = wpinfs)
+                    zun.save()
+                    #wpchangemdb.work_program.add(wp_obj)
+                
             except:
                 print('Строка ',i, 'не записалась, проверьте на опечатки или пустые значения')
                 continue;
@@ -1295,9 +1441,10 @@ class ZunUpdateView(generics.UpdateAPIView):
 #
 
 from docxtpl import DocxTemplate, RichText
+import datetime
 def render_docx(*args, **kwargs):
     """Экспорт файла в док"""
-    tpl = DocxTemplate('/application/export/RPD_shablon_2020.docx')
+    tpl = DocxTemplate('/application/RPD_shablon_2020.docx')
     
     #
     # Получаем данные рабочей программы дисциплины
@@ -1362,6 +1509,7 @@ def render_docx(*args, **kwargs):
             'hours':[contact_work_str,lecture_classes_str,laboratory_str,practical_lessons_str,SRO_str, total_hours_str]})
         topics = Topic.objects.filter(discipline_section = i)
         s = []
+        
         for j in topics:
             if j.url_online_course is None:
                 pass
@@ -1378,18 +1526,23 @@ def render_docx(*args, **kwargs):
     flag = False
     if sections_online == []:
         flag = True
-
+        flag1 = False
+    else:
+        flag1 = True
+    fs_obj = FieldOfStudy.objects.get(pk = kwargs['field_of_study_id'])
+    ap_obj = AcademicPlan.objects.get(pk = kwargs['academic_plan_id'])
     context = {
         'title': wp_obj.title,
-        'field_of_study_code': kwargs['field_of_study_code'],
-        'field_of_study': kwargs['field_of_study'],
+        'field_of_study_code': fs_obj.number ,
+        'field_of_study': fs_obj.title,
         'QUALIFICATION': qualification,
-        'academic_plan': kwargs['academic_plan'],
+        'academic_plan': ap_obj.educational_profile,
         'year': kwargs['year'],
         'tbl_competence': '',
         'tbl_sections': sections_tbl,
         'total_hours':[contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours], 
         'is_no_online':flag,
+        'is_online':flag1,
         'X': 'X',
         'sections': ', '.join(str(i) for i in set(sections_online)),
         'sections_rep': '',
@@ -1398,7 +1551,7 @@ def render_docx(*args, **kwargs):
         'online': online,
         }
     
-    filename = str(kwargs['field_of_study_code'])+str(wp_obj.title)+'_'+str(wp_obj.qualification)+'_'+str(kwargs['year'])+'.docx'
+    filename = str(fs_obj.number)+'_'+str(wp_obj.discipline_code)+'_'+str(wp_obj.qualification)+'_'+str(kwargs['year'])+'_'+datetime.datetime.today().strftime("%Y-%m-%d-%H.%M.%S")+'.docx'
     
     tpl.render(context)
     tpl.save('/application/export/'+filename)
@@ -1407,33 +1560,34 @@ def render_docx(*args, **kwargs):
 
 from rest_framework import viewsets, renderers
 from rest_framework.decorators import action
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 
-class PassthroughRenderer(renderers.BaseRenderer):
-    """
-        Return data as-is. View should supply a Response.
-    """
-    media_type = ''
-    format = ''
-    def render(self, data, accepted_media_type=None, renderer_context=None):
-        return data
 
-class DocxFileExportViewSet(viewsets.ReadOnlyModelViewSet):
-    """Вовзращает response"""
-    @action(methods=['get'], detail=True, renderer_classes=(PassthroughRenderer,))
-    def download(self, request):
+
+class DocxFileExportView(APIView):
+    """Возвращает путь к файлу"""
+    def post(self, request):
+        tpl, filename = render_docx(pk = request.data.get('pk'), field_of_study_id = request.data.get('field_of_study_id'), 
+            academic_plan_id = request.data.get('academic_plan_id'), year = request.data.get('year'))
+        response = HttpResponse(tpl,status=status.HTTP_200_OK)
+        response['Content-Disposition'] = 'inline;'
+        return response
+
+class DocxFileExportOldView(APIView):
+    """OLD-Version Вовзращает response"""
+    def post(self, request):
         pk = request.data.get('id')
-        field_of_study_code = request.data.get('field_of_study_code') #код
-        field_of_study = request.data.get('field_of_study') #направление
-        academic_plan = request.data.get('academic_plan') #учебный план
+        field_of_study_id = request.data.get('field_of_study_id') #код
+        academic_plan_id = request.data.get('academic_plan_id') #учебный план
         year = request.data.get('year')
         
-        tpl,filename = render_docx(pk = pk, field_of_study_code = field_of_study_code, field_of_study = field_of_study, academic_plan = academic_plan, year = year)
+        tpl, filename = render_docx(pk = pk, field_of_study_id = field_of_study_id, academic_plan_id = academic_plan_id, year = year)
         print(filename)
         # send file
-        response = HttpResponse(content_type='application/vnd.ms-word', status=status.HTTP_200_OK)
-        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-
+        #response = HttpResponse(content_type='application/vnd.ms-word', status=status.HTTP_200_OK)
+        #response['Content-Disposition'] = 'attachment; filename="%s"' % filename 
+        response = FileResponse(open('/application/export/'+filename,'rb'), as_attachment=False)
+        
         tpl.save(response)
     
         return response

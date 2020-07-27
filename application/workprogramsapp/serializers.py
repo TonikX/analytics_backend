@@ -67,7 +67,7 @@ class OutcomesOfWorkProgramSerializer(serializers.ModelSerializer):
     item  = ItemSerializer()
     class Meta:
         model = OutcomesOfWorkProgram
-        fields = ['item', 'workprogram', 'masterylevel']
+        fields = ['id', 'item', 'workprogram', 'masterylevel']
 
 
 class OutcomesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
@@ -307,7 +307,7 @@ class EvaluationToolCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EvaluationTool
-        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections']
+        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'semester', 'min', 'max', 'descipline_sections']
 
 
 class ZunSerializer(serializers.ModelSerializer):
@@ -322,6 +322,44 @@ class ZunSerializer(serializers.ModelSerializer):
 class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
     """Сериализатор Зунов"""
     zun_in_wp = ZunSerializer(many=True)
+
+    class Meta:
+        model = WorkProgramInFieldOfStudy
+        fields = ['id', 'zun_in_wp']
+
+
+class ZunCreateSerializer(serializers.Serializer):
+    """Сериализатор Зунов"""
+    # indicator_in_zun = IndicatorListSerializer()
+    indicator_in_zun = serializers.PrimaryKeyRelatedField(queryset=Indicator.objects.all())
+    wp_changeblock = serializers.IntegerField()
+    work_program = serializers.IntegerField()
+    knowledge = serializers.CharField()
+    kills = serializers.CharField()
+    attainments = serializers.CharField()
+    #zuns_in_changeblock = serializers.PrimaryKeyRelatedField(queryset=Zun.objects.all())
+
+
+class ZunCreateSaveSerializer(serializers.ModelSerializer):
+    """Сериализатор Сохранения Зунов"""
+    class Meta:
+        model = Zun
+        fields = ['id', 'indicator_in_zun', 'wp_in_fs', 'knowledge', 'skills', 'attainments']
+        # 'knowledge', 'skills', 'attainments'
+
+    # def create(self, validated_data):
+    #     #wp_in_fs = validated_data.get('wp_changeblock', [])
+    #     zun = Zun(indicator_in_zun=validated_data.get('indicator_in_zun', None),
+    #               knowledge=validated_data.get('knowledge', None),
+    #               skills=validated_data.get('skills', None),
+    #               attainments=validated_data.get('attainments', None))
+    #     zun.save()
+    #
+    #     return zun
+
+class WorkProgramInFieldOfStudyCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор Зунов"""
+    zun_in_wp = ZunCreateSerializer(many=True, read_only=True)
 
     class Meta:
         model = WorkProgramInFieldOfStudy

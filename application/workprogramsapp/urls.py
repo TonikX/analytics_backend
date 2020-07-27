@@ -22,8 +22,9 @@ from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlan
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
-    FileUploadAPIView, WorkProgramInFieldOfStudyListView
-from .views import DocxFileExportViewSet    
+    FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
+    ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock
+from .views import DocxFileExportView, DocxFileExportOldView    
 
 
 
@@ -68,6 +69,7 @@ urlpatterns = [
     path('api/competenceindicator/<int:pk>', CompetenceIndicatorDetailView.as_view(), name='comptenceindicator'),
     path('api/competenceindicator/indicator/delete', DeleteIndicatorFromCompetenceView.as_view(), name='DeleteIndicatorFromCompetenceView'),
     path('api/competenceindicator/indicator/add', AddIndicatorToCompetenceView.as_view(), name="AddIndicatorFromCompetenceView"),
+    # path('api/outcomesofworkprogram/<int:workprogram_id>', IndicatorForCompetence.as_view()),
 
     path('api/indicator', IndicatorListAPIView.as_view()),
     path('api/indicator/create', IndicatorCreateAPIView.as_view()),
@@ -85,10 +87,18 @@ urlpatterns = [
     path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
     path('api/workprogramsinfieldofstudy', WorkProgramInFieldOfStudyListView.as_view()),
 
+    path('api/workprogram/fieldofstudies/<int:workprogram_id>', FieldOfStudiesForWorkProgramList.as_view()),
+    path('api/workprograminfieldofstudy/', WorkProgramInFieldOfStudyListAPI.as_view()),
+    path('api/workprograminfieldofstudy/<int:pk>', WorkProgramInFieldOfStudyDetailAPI.as_view()),
+
+    path('api/zun/', ZunListAPI.as_view()),
+    path('api/zun/<int:pk>', ZunDetailAPI.as_view()),
+
     #Работы с темами и разделами
     path('api/tools/', EvaluationToolListAPI.as_view(), name='tools'),
     path('api/tools/<int:pk>', EvaluationToolDetailAPI.as_view(), name='tool_detail'),
     path('api/toolsinworkprogram/<int:workprogram_id>', EvaluationToolInWorkProgramList.as_view()),
+
 
     path('api/sections/', DisciplineSectionListAPI.as_view(), name='sections'),
     path('api/sections/<int:pk>', DisciplineSectionDetailAPI.as_view(), name='section_detail'),
@@ -105,6 +115,7 @@ urlpatterns = [
     path('api/outcomesofworkprogram/create', OutcomesOfWorkProgramCreateAPIView.as_view()),
     path('api/outcomesofworkprogram/delete/<int:pk>', OutcomesOfWorkProgramDestroyView.as_view()),
     path('api/outcomesofworkprogram/update/<int:pk>', OutcomesOfWorkProgramUpdateView.as_view()),
+    path('api/outcomesofworkprogramforacademycplan/<int:workprogram_id>', OutcomesForWorkProgramChangeBlock.as_view()),
 
     #Работа с пререквизитами
     path('api/prerequisitesofworkprogram/<int:workprogram_id>', PrerequisitesOfWorkProgramList.as_view()),
@@ -123,7 +134,7 @@ urlpatterns = [
     path('api/onlinecourse/delete/<int:pk>', OnlineCourseDestroyView.as_view()),
     path('api/onlinecourse/update/<int:pk>', OnlineCourseUpdateView.as_view()),
 
-    #Библиогшрафическая ссылка
+    #Библиографическая ссылка
     path('api/BibliographicReference', BibliographicReferenceListCreateAPIView.as_view()),
     path('api/BibliographicReference/create', BibliographicReferenceListCreateAPIView.as_view()),
     path('api/BibliographicReference/detail/<int:pk>', BibliographicReferenceDetailsView.as_view()),
@@ -135,7 +146,8 @@ urlpatterns = [
     path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
     path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
     path('api/upload/csv', FileUploadAPIView.as_view()),
-    path('api/export/docx', DocxFileExportViewSet.as_view({'get': 'download'})),
+    path('api/export/docx', DocxFileExportView.as_view()),
+    path('api/export/docx2', DocxFileExportOldView.as_view()),
 
     #Учебный планы
     path('api/academicplan', AcademicPlanListAPIView.as_view()),

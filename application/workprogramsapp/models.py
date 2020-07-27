@@ -46,6 +46,7 @@ class WorkProgram(models.Model):
 
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     discipline_code = models.CharField(max_length=1024, blank=True, null=True)
+    subject_code = models.CharField(max_length=1024, blank=True, null=True)
     authors = models.CharField(max_length=1024, blank=True, null=True)
     prerequisites = models.ManyToManyField(Items, related_name='WorkProgramPrerequisites',)
     qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank=True, null=True)
@@ -57,11 +58,13 @@ class WorkProgram(models.Model):
     hoursSecondSemester = models.IntegerField(blank=True, null=True, verbose_name = "Количество часов в 2 семестре")
     #goals = models.CharField(max_length=1024, verbose_name = "Цели освоения" )
     #result_goals = models.CharField(max_length=1024, verbose_name = "Результаты освоения" )
-    field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram, verbose_name = "Предметная область")
+    field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram, verbose_name = "Предметная область", related_name='workprograms_in_fieldofstudy')
     bibliographic_reference = models.ManyToManyField('BibliographicReference', verbose_name='Библиогравическая_ссылка', related_name='bibrefs')
     #evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
     description = models.CharField(max_length=5000, blank=True, null=True)
     video = models.CharField(max_length=1024, blank=True, null=True)
+    credit_units = models.CharField(max_length=1024, blank=True, null=True)
+    semester_hour = models.CharField(max_length=1024, blank=True, null=True)
 
     # list_of_references = models.TextField(blank=True, null=True)
     # guidelines = models.TextField(blank=True, null=True)
@@ -342,6 +345,7 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
     change_type = models.CharField(choices=CHANGE_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
     discipline_block_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="change_blocks_of_work_programs_in_modules", blank=True, null=True)
     work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", through='WorkProgramInFieldOfStudy', related_name="work_program_in_change_block")
+    #zuns = models.ManyToManyField('Zun', verbose_name = "Зуны", through='WorkProgramInFieldOfStudy', related_name="zuns_in_changeblock")
 
 
     def __str__(self):
@@ -363,6 +367,7 @@ class Zun(models.Model):
     knowledge = models.CharField(max_length=1024, blank=True, null=True)
     skills = models.CharField(max_length=1024, blank=True, null=True)
     attainments = models.CharField(max_length=1024, blank=True, null=True)
+    items = models.ManyToManyField('OutcomesOfWorkProgram', verbose_name = "Учебная сущность и уровень освоения")
 
     # def __str__(self):
     #     return (str(self.work_program_change_in_discipline_block_module) + str(self.work_program))
@@ -452,9 +457,19 @@ class DisciplineSection(models.Model):
 
 
     def new_ordinal_number(descipline_section, new_ordinal_number):
+        '''
+        :param new_ordinal_number: если равен -1, то значит запрос на удаление элемента из списка,
+                                   любое другое значение - запрос на изменение порядка в списке.
+        '''
         new_ordinal_number = int(new_ordinal_number)
         section = DisciplineSection.objects.get(pk = descipline_section)
-        if int(section.ordinal_number) > int(new_ordinal_number):
+        if new_ordinal_number == -1:
+            sections = DisciplineSection.objects.filter(work_program=section.work_program).order_by('ordinal_number')
+            for sec in sections:
+                if sec.ordinal_number > section.ordinal_number:
+                    sec.ordinal_number -= 1
+                    sec.save()
+        elif int(section.ordinal_number) > int(new_ordinal_number):
             section.ordinal_number = new_ordinal_number
             section.save()
             sections = DisciplineSection.objects.filter(work_program = section.work_program, ordinal_number__gte=new_ordinal_number).exclude(pk = descipline_section).order_by('ordinal_number')
@@ -509,9 +524,13 @@ class Topic(models.Model):
     def new_ordinal_number(topic, new_ordinal_number):
         new_ordinal_number = int(new_ordinal_number)
         section = Topic.objects.get(pk = topic)
-        print("ид темы", section)
-        print("новый номер темы", new_ordinal_number)
-        if int(section.number) > int(new_ordinal_number):
+        if new_ordinal_number==-1:
+            sections = Topic.objects.filter(discipline_section  = section.discipline_section).order_by('number')
+            for sec in sections:
+                if sec.number > section.number:
+                    sec.number -= 1
+                    sec.save()
+        elif int(section.number) > int(new_ordinal_number):
             section.number = new_ordinal_number
             section.save()
             sections = Topic.objects.filter(discipline_section  = section.discipline_section, number__gte=new_ordinal_number).exclude(pk = topic).order_by('number')
