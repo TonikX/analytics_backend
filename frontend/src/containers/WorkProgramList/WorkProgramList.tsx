@@ -118,6 +118,18 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
 
                 <div className={classes.tableWrap}>
                     <div className={classNames(classes.row, classes.header)}>
+                        <Typography className={classNames(classes.marginRight, classes.numberCell)}>
+                            Код
+                            <SortingButton changeMode={this.changeSorting(WorkProgramGeneralFields.CODE)}
+                                           mode={sortingField === WorkProgramGeneralFields.CODE ? sortingMode : ''}
+                            />
+                        </Typography>
+                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                            Название
+                            <SortingButton changeMode={this.changeSorting(WorkProgramGeneralFields.TITLE)}
+                                           mode={sortingField === WorkProgramGeneralFields.TITLE ? sortingMode : ''}
+                            />
+                        </Typography>
                         <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
                             Квалификация
                             <SortingButton changeMode={this.changeSorting(WorkProgramGeneralFields.QUALIFICATION)}
@@ -140,24 +152,18 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                 </Typography>
                             </Tooltip>
                         </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.numberCell)}>
-                            Код
-                            <SortingButton changeMode={this.changeSorting(WorkProgramGeneralFields.CODE)}
-                                           mode={sortingField === WorkProgramGeneralFields.CODE ? sortingMode : ''}
-                            />
-                        </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Название
-                            <SortingButton changeMode={this.changeSorting(WorkProgramGeneralFields.TITLE)}
-                                           mode={sortingField === WorkProgramGeneralFields.TITLE ? sortingMode : ''}
-                            />
-                        </Typography>
                     </div>
 
                     <div className={classes.list}>
                         <Scrollbars>
                             {workProgramList.map(workProgram =>
                                 <div className={classes.row} key={workProgram[WorkProgramGeneralFields.ID]}>
+                                    <Typography className={classNames(classes.marginRight, classes.numberCell)}>
+                                        {workProgram[WorkProgramGeneralFields.CODE]}
+                                    </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                                        {workProgram[WorkProgramGeneralFields.TITLE]}
+                                    </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.qualificationCell)}>
                                         {get(specialization.find(el => el.value === workProgram[WorkProgramGeneralFields.QUALIFICATION]), 'label', '')}
                                     </Typography>
@@ -166,12 +172,6 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.dateCell)}>
                                         {moment(workProgram[WorkProgramGeneralFields.APPROVAL_DATE]).format(FULL_DATE_FORMAT)}
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.numberCell)}>
-                                        072.0.8.45.2020
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                        {workProgram[WorkProgramGeneralFields.TITLE]}
                                     </Typography>
                                     <div className={classes.actions}>
                                         <IconButton onClick={this.handleClickDelete(workProgram[WorkProgramGeneralFields.ID])}>

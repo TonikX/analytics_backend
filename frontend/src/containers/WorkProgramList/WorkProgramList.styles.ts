@@ -37,6 +37,7 @@ export default (theme: Theme) => createStyles({
     },
     titleCell: {
         width: '30%',
+        flex: 'none'
     },
     dateCell: {
         width: 100,
