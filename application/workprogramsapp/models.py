@@ -63,6 +63,8 @@ class WorkProgram(models.Model):
     #evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
     description = models.CharField(max_length=5000, blank=True, null=True)
     video = models.CharField(max_length=1024, blank=True, null=True)
+    credit_units = models.CharField(max_length=1024, blank=True, null=True)
+    semester_hour = models.CharField(max_length=1024, blank=True, null=True)
 
     # list_of_references = models.TextField(blank=True, null=True)
     # guidelines = models.TextField(blank=True, null=True)
