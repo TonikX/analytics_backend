@@ -1180,8 +1180,8 @@ class FileUploadAPIView(APIView):
                 if WorkProgram.objects.filter(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification).exists():
                     # если да, то записываем в FieldOfStudyWorkProgram
                     #
-                    wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification)
-
+                    wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i].strip(), subject_code = data['SUBJECT_CODE'][i], qualification = qualification)
+                    wp_obj.discipline_code = data['DIS_CODE'][i] #заменить в параметры
                 else:
                     # если нет, то записываем в БД
                     wp_obj = WorkProgram(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification)
@@ -1243,13 +1243,16 @@ class FileUploadAPIView(APIView):
                 #for semester in semesters:
                 #    credit_units[int(semester)-1] = 
 
-                credit_units = [0 for i in range(0,10)]
-                semesters = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])].drop_duplicates()
+                credit_units = [0 for i in range(0,12)]
+                units = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])&(data["SUBJECT_CODE"] == data["SUBJECT_CODE"][i] )].drop_duplicates()
+                 
                 try:
-                    for s in semesters.index.values:
-                        credit_units[int(semesters['SEMESTER'][s])-1] = int(semesters['CREDITS'][s])
+                    for u in units.index.values:
+                        if pd.isna(units["CREDITS"][u]) or units["CREDITS"][u] == 0: credit_units[int(units["SEMESTER"][u]) - 1] = "-"
+                        elif units["SEMESTER"][u] == ".": credit_units[11] = units["CREDITS"][u]
+                        else: credit_units[int(units["SEMESTER"][u]) - 1] = int(units["CREDITS"][u])
                 except:
-                    print('CREDIT == Nan')
+                    pass
 
                 if (data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module = mdb, change_type = data['ISOPTION'][i])
@@ -1264,7 +1267,7 @@ class FileUploadAPIView(APIView):
 
                 else:
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
-                    wpchangemdb.credit_units = ','.join(str(i) for i in credit_units)
+                    wpchangemdb.credit_units = ",".join(map(str, credit_units))
                     wpchangemdb.change_type = data['ISOPTION'][i]
                     wpchangemdb.discipline_block_module = mdb
                     wpchangemdb.save()
@@ -1442,7 +1445,7 @@ from docxtpl import DocxTemplate, RichText
 import datetime
 def render_docx(*args, **kwargs):
     """Экспорт файла в док"""
-    tpl = DocxTemplate('/application/export/RPD_shablon_2020.docx')
+    tpl = DocxTemplate('/application/RPD_shablon_2020.docx')
     
     #
     # Получаем данные рабочей программы дисциплины
@@ -1553,7 +1556,7 @@ def render_docx(*args, **kwargs):
     
     tpl.render(context)
     tpl.save('/application/export/'+filename)
-    return '/application/export/'+filename
+    return tpl, filename
                         
 
 from rest_framework import viewsets, renderers
@@ -1565,9 +1568,11 @@ from django.http import HttpResponse, FileResponse
 class DocxFileExportView(APIView):
     """Возвращает путь к файлу"""
     def post(self, request):
-        filename = render_docx(pk = request.data.get('pk'), field_of_study_id = request.data.get('field_of_study_id'), 
+        tpl, filename = render_docx(pk = request.data.get('pk'), field_of_study_id = request.data.get('field_of_study_id'), 
             academic_plan_id = request.data.get('academic_plan_id'), year = request.data.get('year'))
-        return HttpResponse(filename,status=status.HTTP_200_OK)
+        response = HttpResponse(tpl,status=status.HTTP_200_OK)
+        response['Content-Disposition'] = 'inline;'
+        return response
 
 class DocxFileExportOldView(APIView):
     """OLD-Version Вовзращает response"""
@@ -1577,12 +1582,12 @@ class DocxFileExportOldView(APIView):
         academic_plan_id = request.data.get('academic_plan_id') #учебный план
         year = request.data.get('year')
         
-        tpl,filename = render_docx(pk = pk, field_of_study_id = field_of_study_id, academic_plan_id = academic_plan_id, year = year)
+        tpl, filename = render_docx(pk = pk, field_of_study_id = field_of_study_id, academic_plan_id = academic_plan_id, year = year)
         print(filename)
         # send file
-        response = HttpResponse(content_type='application/vnd.ms-word', status=status.HTTP_200_OK)
-        response['Content-Disposition'] = 'attachment; filename="%s"' % filename 
-        #response = FileResponse(open(filename,'r'), as_attachment=False)
+        #response = HttpResponse(content_type='application/vnd.ms-word', status=status.HTTP_200_OK)
+        #response['Content-Disposition'] = 'attachment; filename="%s"' % filename 
+        response = FileResponse(open('/application/export/'+filename,'rb'), as_attachment=False)
         
         tpl.save(response)
     
