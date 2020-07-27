@@ -1125,7 +1125,7 @@ def handle_uploaded_csv(file, filename):
     sys_df = pandas.read_excel('discipline_code/discipline_bank_updated.xlsx')
     print('IPv4_code generating')
     processed_data, db = IPv4_code.generate_df_w_unique_code(in_df, sys_df)
-    db.to_excel("discipline_code/discipline_bank_updated.xlsx")
+    db.to_excel("discipline_code/discipline_bank_updated.xlsx", index = False)
     print(processed_data.head())
     return processed_data
 
