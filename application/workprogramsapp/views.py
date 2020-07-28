@@ -1134,7 +1134,7 @@ def handle_uploaded_csv(file, filename):
     sys_df = pandas.read_excel('discipline_code/discipline_bank_updated.xlsx')
     print('IPv4_code generating')
     processed_data, db = IPv4_code.generate_df_w_unique_code(in_df, sys_df)
-    db.to_excel("discipline_code/discipline_bank_updated.xlsx", index = False)
+    db.to_excel("discipline_code/discipline_bank_updated.xlsx")
     print(processed_data.head())
     return processed_data
 
@@ -1451,10 +1451,10 @@ class ZunUpdateView(generics.UpdateAPIView):
 
 from docxtpl import DocxTemplate, RichText
 import datetime, io
-'''
+
 def render_docx(*args, **kwargs):
     """Экспорт файла в док"""
-    #docx_file = io.BytesIO()
+    docx_file = io.BytesIO()
     tpl = DocxTemplate('/application/RPD_shablon_2020.docx')
     #
     # Получаем данные рабочей программы дисциплины
@@ -1564,93 +1564,56 @@ def render_docx(*args, **kwargs):
     filename = str(fs_obj.number)+'_'+str(wp_obj.discipline_code)+'_'+str(wp_obj.qualification)+'_'+str(kwargs['year'])+'_'+datetime.datetime.today().strftime("%Y-%m-%d-%H.%M.%S")+'.docx'
     
     tpl.render(context)
-    tpl.save('/application/export/'+filename)
-    return tpl, filename
-'''
-from collections import OrderedDict 
-
-def render_context(context, **kwargs):
-    """ Функция, которая возвращает context с параметрами для шаблона """
-    fs_obj = FieldOfStudy.objects.get(pk = kwargs['field_of_study_id'])
-    ap_obj = AcademicPlan.objects.get(pk = kwargs['academic_plan_id'])
-    
-    template_context = OrderedDict() 
-    template_context['title'] = context['title']
-    template_context['field_of_study_code'] = fs_obj.number
-    template_context['field_of_study'] = fs_obj.title
-
-    if context['qualification'] == 'bachelor':
-        template_context['QUALIFICATION'] = 'БАКАЛАВР'
-    elif context['qualification'] == 'master':
-        template_context['QUALIFICATION'] = 'МАГИСТР'
-    else:
-        template_context['QUALIFICATION'] = 'ИНЖЕНЕР'
-    
-    template_context['academic_plan'] = ap_obj.educational_profile
-    template_context['year'] = kwargs['year']
-    template_context['tbl_competence'] = ''
-    template_context['discipline_section'] = context['discipline_sections']
-    
-    contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours, online_sections, url_online_course = 0.0,0.0,0.0,0.0,0.0,0.0, [], []
-    for i in context['discipline_sections']:
-        if i['contact_work'] is None: i['contact_work'] = ''
-        else: contact_work += float(i['contact_work'])
-        if i['lecture_classes'] is None: i['lecture_classes'] = ''
-        else: lecture_classes += float(i['lecture_classes'])
-        if i['laboratory'] is None: i['laboratory'] = '' 
-        else: laboratory += float(i['laboratory'])
-        if i['practical_lessons'] is None: i['practical_lessons']  = ''
-        else: practical_lessons += float(i['practical_lessons'])
-        if i['SRO'] is None: i['SRO'] = ''
-        else: SRO += float(i['SRO']) 
-        total_hours += 0.0 if i['total_hours'] is None else float(i['total_hours'])
-        for j in i['topics']:
-            if j['url_online_course'] is None:
-            else: 
-                online_sections.append(i['ordinal_number'])
-                if j['url_online_course'] not in url_online_course:
-                    url_online_course.append(j['url_online_course'])
-
-    template_context['total_hours'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours], 
-    template_context['is_no_online'] = True if online_sections == 0 else False
-    template_context['is_online'] = False if online_sections == 0 else True
-    template_context['X'] = 'X'
-    template_context['sections'] = ', '.join(str(i) for i in set(online_sections ))
-    template_context['sections_replace']: ''
-    template_context['bibliographic_reference'] =  context['bibliographic_reference']
-    template_context['online_course'] = url_online_course
-    
-    filename = str(fs_obj.number)+'_'+str(context['discipline_code'])+'_'+str(context['qualification'])+'_'+str(kwargs['year'])+'_'+datetime.datetime.today().strftime("%Y-%m-%d-%H.%M.%S")+'.docx'
-    
-    return template_context, filename
-
+    #tpl.save('/application/export/'+filename)
+    tpl.save(docx_file)
+    return docx_file, filename
+                        
 
 from rest_framework import viewsets, renderers
 from rest_framework.decorators import action
 from django.http import HttpResponse, FileResponse
 
-class DocxFileExportView(generics.ListAPIView):
-    """Возвращает РПД в формате docx в браузере"""
-    queryset = WorkProgram.objects.all()
-    serializer = WorkProgramSerializer
 
-    def get(self, request, *args, **kwargs):
-        tpl = DocxTemplate('/application/RPD_shablon_2020_new.docx')
-        queryset = WorkProgram.objects.get(pk = kwargs['pk'])
-        serializer = WorkProgramSerializer(queryset)
-        data = dict(serializer.data)
 
-        context, filename = render_context(data, field_of_study_id = kwargs['fs_id'], 
-            academic_plan_id = kwargs['ap_id'], year = kwargs['year'])
-        tpl.render(context)
-        #tpl.save('/application/export/'+filename) -- сохранение в папку локально
-    
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-        response['Content-Disposition'] = 'inline; filename="%s"' % filename
+class DocxFileExportView(APIView):
+    """Возвращает путь к файлу"""
+    def post(self, request):
+        tpl, filename = render_docx(pk = request.data.get('pk'), field_of_study_id = request.data.get('field_of_study_id'), 
+            academic_plan_id = request.data.get('academic_plan_id'), year = request.data.get('year'))
+        #f = io.BytesIO()
+        #tpl.save(f)
+        #length = f.tell()
+        #f.seek(0)
+        #response = HttpResponse(f.getvalue(), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        #response['Content-Disposition'] = 'attachment; filename=test_result.docx'
+        #response['Content-Length'] = length
+        response = HttpResponse(
+            tpl.getvalue(),
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = 'inline; filename=rpd_export.docx'
 
-        tpl.save(response)
-
+        #response = HttpResponse(tpl,status=status.HTTP_200_OK)
+        #response['Content-Disposition'] = 'inline;'
         return response
 
 
 
+
+class DocxFileExportOldView(APIView):
+    """OLD-Version Вовзращает response"""
+    def post(self, request):
+        pk = request.data.get('id')
+        field_of_study_id = request.data.get('field_of_study_id') #код
+        academic_plan_id = request.data.get('academic_plan_id') #учебный план
+        year = request.data.get('year')
+        
+        tpl, filename = render_docx(pk = pk, field_of_study_id = field_of_study_id, academic_plan_id = academic_plan_id, year = year)
+        print(filename)
+        # send file
+        response = HttpResponse(content_type='application/vnd.ms-word', status=status.HTTP_200_OK)
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename 
+        #response = FileResponse(open('/application/export/'+filename,'rb'), as_attachment=False)
+        
+        tpl.save(response)
+    
+        return response
