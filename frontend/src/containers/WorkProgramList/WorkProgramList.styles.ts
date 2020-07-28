@@ -32,11 +32,12 @@ export default (theme: Theme) => createStyles({
         minHeight: '50px'
     },
     numberCell: {
-        width: 100,
+        width: 110,
         flex: 'none'
     },
     titleCell: {
         width: '30%',
+        flex: 'none'
     },
     dateCell: {
         width: 100,

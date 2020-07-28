@@ -14,6 +14,10 @@ class IndicatorsService extends BaseService{
         return this.delete(`/api/indicator/${id}`);
     }
 
+    getIndicatorsDependsCompetence(competenceId: number){
+        return this.get(`/api/competenceindicator/${competenceId}`);
+    }
+
     createIndicator(indicator: any){
         const formData = new FormData();
 

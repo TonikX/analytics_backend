@@ -1,6 +1,10 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
+    dialogContent: {
+        display: 'flex',
+        padding: 48
+    },
     label: {
         fontSize: '14px',
         marginBottom: 10
@@ -12,9 +16,21 @@ export default (theme: Theme) => createStyles({
             background: 'none'
         }
     },
+    leftSide: {
+        width: '50%',
+        maxWidth: '550px',
+        flex: 'none'
+    },
+    rightSide: {
+        width: '100%',
+        paddingLeft: '50px',
+        paddingRight: '20px',
+        boxSizing: 'border-box'
+    },
     semesterField: {
         width: '100px',
         marginBottom: '10px',
+        marginRight: '10px',
         '& .MuiInputLabel-outlined': {
             fontSize: '13px'
         },
@@ -22,8 +38,27 @@ export default (theme: Theme) => createStyles({
             width: '55px !important'
         }
     },
+    workProgramList: {
+        width: '100%',
+        height: '100%'
+    },
+    appBar: {
+        position: 'relative',
+    },
+    title: {
+        marginLeft: theme.spacing(2),
+        flex: 1,
+    },
     semesterBlock: {
-
+        maxWidth: '600px'
+    },
+    //@ts-ignore
+    root: {
+        //@ts-ignore
+        zIndex: '10000 !important'
+    },
+    dialog: {
+        boxSizing: 'border-box',
     },
     semesterList: {
         display: 'flex',
@@ -59,9 +94,6 @@ export default (theme: Theme) => createStyles({
     actions: {
         padding: '15px 24px 20px'
     },
-    dialog: {
-        padding: 20,
-    },
     marginBottom30: {
         marginBottom: '30px'
     },
@@ -81,5 +113,29 @@ export default (theme: Theme) => createStyles({
     },
     datePicker: {
         width: '100%'
+    },
+    workProgramBlockItem: {
+        padding: 20,
+        marginBottom: 40,
+        boxShadow: '0px 0px 6px 1px rgba(194,194,194,0.3)',
+    },
+    smallButton: {
+        cursor: 'pointer',
+        color: theme.palette.primary.main,
+        display: 'flex',
+        alignItems: 'center'
+    },
+    deleteIcon: {
+        cursor: "pointer",
+        '&:hover': {
+            color: theme.palette.primary.main,
+        }
+    },
+    indicatorItem: {
+        marginBottom: '10px',
+        '& svg': {
+            position: 'relative',
+            top: '6px',
+        }
     }
 });

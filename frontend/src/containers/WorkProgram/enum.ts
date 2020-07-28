@@ -30,6 +30,7 @@ export enum WorkProgramGeneralFields {
     AUTHORS = 'authors',
     VIDEO_LINK = 'video',
     DESCRIPTION = 'description',
+    ZUN = 'zuns_for_wp',
 }
 
 export enum workProgramSectionFields {
@@ -54,6 +55,8 @@ export enum workProgramTopicFields {
 }
 
 export enum fetchingTypes {
+    GET_RESULTS = 'GET_RESULTS',
+
     GET_WORK_PROGRAM = 'GET_WORK_PROGRAM',
     GET_WORK_PROGRAM_EVALUATION_TOOLS = 'GET_WORK_PROGRAM_EVALUATION_TOOLS',
 

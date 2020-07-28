@@ -41,13 +41,9 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
         const {section} = this.state;
 
         const contactWork = parseInt(section[workProgramSectionFields.CONTACT_WORK]);
-        const lectureClasses = parseInt(section[workProgramSectionFields.LECTURE_CLASSES]);
-        const practicalLessons = parseInt(section[workProgramSectionFields.PRACTICAL_LESSONS]);
-        const laboratory = parseInt(section[workProgramSectionFields.LABORATORY]);
         const spo = parseInt(section[workProgramSectionFields.SPO]);
 
-        return (contactWork ? contactWork : 0) + (lectureClasses ? lectureClasses : 0) +
-            (practicalLessons ? practicalLessons : 0) + (laboratory ? laboratory : 0) + (spo ? spo : 0);
+        return (contactWork ? contactWork : 0) + (spo ? spo : 0);
     }
 
     setEditModeTrue = () => {
@@ -183,7 +179,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     }
                 </TableCell>
                 <TableCell className={classes.centerCell}>
-                    <>{section.total_hours}</>
+                    <>{(parseFloat(section.SRO) + parseFloat(section.contact_work)).toFixed(2)}</>
                 </TableCell>
                 <TableCell className={classes.centerCell}>
                 {!isEditMode ?

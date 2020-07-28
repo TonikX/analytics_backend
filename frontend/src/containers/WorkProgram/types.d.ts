@@ -4,11 +4,15 @@ import styles from "./WorkProgram.styles";
 import {CourseType} from "../Courses/types";
 import {TrainingEntitityType} from "../TrainingEntities/types";
 import {ReactText} from "react";
+import {IndicatorsFields} from "../Indicators/enum";
+import {CompetenceFields} from "../Competences/enum";
 
 export interface WorkProgramActions {
     deleteResult: any;
     addResult: any;
     changeResult: any;
+    setResults: any;
+    getResults: any;
 
     getWorkProgram: any;
     setWorkProgram: any;
@@ -46,6 +50,7 @@ export interface workProgramState {
     [fields.WORK_PROGRAM]: any;
     [fields.WORK_PROGRAM_ID]: string;
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: Array<any>;
+    [fields.WORK_PROGRAM_RESULTS]: Array<any>;
     [fields.DIALOGS]: {};
 }
 
@@ -56,7 +61,34 @@ export type WorkProgramGeneralType = {
     [WorkProgramGeneralFields.QUALIFICATION]: string;
     [WorkProgramGeneralFields.APPROVAL_DATE]: string;
     [WorkProgramGeneralFields.AUTHORS]: string;
+    [WorkProgramGeneralFields.ZUN]: Array<ZunType>;
 };
+
+export type ZunType = {
+    'zun_in_wp': {
+        "indicator_in_zun": {
+            "id": 1,
+            "number": "ПКС-1.1.1",
+            "name": "Разрабатывает технико-коммерческое предложение и участвует  в его защите",
+            "competence": {
+                "id": 1,
+                "number": "ПКС-1.1",
+                "name": "Способен управлять аналитическими работами и работать со сложными структурами данных при решении практических задач программирования"
+            }
+        },
+    }
+};
+
+export type IndicatorInZun = {
+    [IndicatorsFields.ID]: number;
+    [IndicatorsFields.NUMBER]: string;
+    [IndicatorsFields.NAME]: string;
+    "competence": {
+        [CompetenceFields.ID]: number;
+        [CompetenceFields.NUMBER]: string;
+        [CompetenceFields.NAME]: string;
+    }
+}
 
 export interface WorkProgramProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;

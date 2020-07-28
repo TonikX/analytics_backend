@@ -291,6 +291,29 @@ const deleteModule = createLogic({
     }
 });
 
+const getDirectionsDependedOnWorkProgram = createLogic({
+    type: planActions.getDirectionsDependedOnWorkProgram.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const moduleId = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM}));
+
+        service.getDirectionsDependedOnWorkProgram(moduleId)
+            .then((res) => {
+                dispatch(planActions.setDirectionsDependedOnWorkProgram(res.data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM}));
+                return done();
+            });
+    }
+});
+
 export default [
     deleteModule,
     changeModule,
@@ -303,4 +326,5 @@ export default [
     createBlockOfWorkPrograms,
     changeBlockOfWorkPrograms,
     deleteBlockOfWorkPrograms,
+    getDirectionsDependedOnWorkProgram,
 ];

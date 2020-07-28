@@ -1,6 +1,10 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
+    // @ts-ignore
+    root: {
+        zIndex: '13000 !important',
+    },
     input: {
         width: '550px',
         marginBottom: '30px',

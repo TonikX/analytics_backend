@@ -1,5 +1,8 @@
 import React from 'react';
 import get from 'lodash/get';
+import {appRouter} from "../../../service/router-service";
+import {withRouter} from "react-router-dom";
+import classNames from "classnames";
 // @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
 
@@ -26,15 +29,20 @@ import ModuleModal from "./ModuleModal";
 import {BlocksOfWorkProgramsType, EducationalPlanType, ModuleType} from '../types';
 import {EducationalPlanDetailProps} from './types';
 
-import {EducationalPlanBlockFields, ModuleFields, BlocksOfWorkProgramsFields} from "../enum";
+import {
+    EducationalPlanBlockFields,
+    ModuleFields,
+    BlocksOfWorkProgramsFields,
+    EducationalPlanFields,
+    DownloadFileModalFields
+} from "../enum";
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
 
 import {typeOfWorkProgramInPlan} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
-import {appRouter} from "../../../service/router-service";
-import {withRouter} from "react-router-dom";
+import DownloadFileModal from "./DownloadFileModal";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -114,6 +122,17 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         const {history} = this.props;
 
         history.push(appRouter.getWorkProgramLink(id));
+    }
+
+    handleDownloadFile = (workProgramId: number) => () => {
+        const {detailPlan} = this.props;
+
+        this.props.actions.openDownloadModal({
+            [DownloadFileModalFields.ACADEMIC_PLAN_ID]: detailPlan[EducationalPlanFields.ID],
+            [DownloadFileModalFields.ID]: workProgramId,
+        });
+
+        this.props.actions.getDirectionsDependedOnWorkProgram(workProgramId);
     }
 
     render() {
@@ -213,10 +232,17 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                             return <TableRow>
                                                                 <TableCell>
                                                                     {workPrograms.map(workProgram =>
-                                                                        <Typography className={classes.workProgramLink}
-                                                                                    onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
-                                                                            {workProgram[WorkProgramGeneralFields.TITLE]}
-                                                                        </Typography>
+                                                                        <div className={classes.displayFlex}>
+                                                                            <Typography className={classes.workProgramLink}
+                                                                                        onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
+                                                                                {workProgram[WorkProgramGeneralFields.TITLE]}
+                                                                            </Typography>
+                                                                            <Tooltip title={'Скачать рабочую программу'}>
+                                                                                <FileIcon className={classNames(classes.marginRight10, classes.button)}
+                                                                                    onClick={this.handleDownloadFile(workProgram[WorkProgramGeneralFields.ID])}
+                                                                                />
+                                                                            </Tooltip>
+                                                                        </div>
                                                                     )}
                                                                 </TableCell>
                                                                 {mappedSemesterHours.map((semesterHour: string) =>
@@ -229,11 +255,6 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                 </TableCell>
 
                                                                 <TableCell className={classes.actions}>
-                                                                    <Tooltip title={`Скачать ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу' }`}>
-                                                                        <FileIcon className={classes.marginRight10}
-                                                                                  onClick={()=>{}}
-                                                                        />
-                                                                    </Tooltip>
                                                                     <Tooltip title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу' }`}>
                                                                         <DeleteIcon className={classes.marginRight10}
                                                                                     onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
@@ -259,6 +280,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                 <CreateModal />
                 <ChangePlanModal />
                 <ModuleModal />
+                <DownloadFileModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmModuleDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

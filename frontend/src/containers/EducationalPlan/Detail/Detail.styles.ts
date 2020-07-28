@@ -12,6 +12,12 @@ export default (theme: Theme) => createStyles({
             fontSize: '14px'
         }
     },
+    displayFlex: {
+        display: 'flex'
+    },
+    button: {
+        cursor: 'pointer'
+    },
     rowModule: {
         display: 'flex',
         alignItems: 'center',

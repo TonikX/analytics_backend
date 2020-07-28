@@ -77,7 +77,8 @@ class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalPro
                 open={isOpen}
                 onClose={this.handleClose}
                 classes={{
-                    paper: classes.dialog
+                    paper: classes.dialog,
+                    root: classes.root
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} учебно-методическое обеспечение</DialogTitle>

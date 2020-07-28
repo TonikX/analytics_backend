@@ -4,6 +4,7 @@ import styles from "./WorkProgram.styles";
 import {EducationalPlanFields, EducationalPlanBlockFields, ModuleFields, BlocksOfWorkProgramsFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
 import {WorkProgramGeneralType} from "../WorkProgram/types";
+import {DirectionType} from "../Direction/types";
 
 export interface EducationalPlanActions {
     closeModuleDialog: any;
@@ -29,6 +30,10 @@ export interface EducationalPlanActions {
     changeCurrentPage: any;
     changeAllCount: any;
     changeSorting: any;
+    openDownloadModal: any;
+    closeDownloadModal: any;
+    getDirectionsDependedOnWorkProgram: any;
+    setDirectionsDependedOnWorkProgram: any;
 }
 
 export interface educationalPlanState {
@@ -53,6 +58,11 @@ export interface educationalPlanState {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: EducationalPlanType|{};
     };
+    [fields.DOWNLOAD_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: boolean;
+        [fields.DIALOG_DATA]: {};
+    };
+    [fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM]: Array<DirectionType>
 }
 
 export type EducationalPlanType = {
