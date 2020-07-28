@@ -334,17 +334,18 @@ class ZunCreateSerializer(serializers.Serializer):
     indicator_in_zun = serializers.PrimaryKeyRelatedField(queryset=Indicator.objects.all())
     wp_changeblock = serializers.IntegerField()
     work_program = serializers.IntegerField()
-    knowledge = serializers.CharField()
-    kills = serializers.CharField()
-    attainments = serializers.CharField()
+    # knowledge = serializers.CharField()
+    # kills = serializers.CharField()
+    # attainments = serializers.CharField()
     #zuns_in_changeblock = serializers.PrimaryKeyRelatedField(queryset=Zun.objects.all())
+    items = serializers.PrimaryKeyRelatedField(queryset=OutcomesOfWorkProgram.objects.all(), many = True)
 
 
 class ZunCreateSaveSerializer(serializers.ModelSerializer):
     """Сериализатор Сохранения Зунов"""
     class Meta:
         model = Zun
-        fields = ['id', 'indicator_in_zun', 'wp_in_fs', 'knowledge', 'skills', 'attainments']
+        fields = ['id', 'indicator_in_zun', 'wp_in_fs', 'items']
         # 'knowledge', 'skills', 'attainments'
 
     # def create(self, validated_data):

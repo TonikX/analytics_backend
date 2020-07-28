@@ -692,36 +692,45 @@ class ZunListAPI(generics.ListCreateAPIView):
     queryset = Zun.objects.all()
 
     def create(self, request):
-        serializer = ZunCreateSerializer(data=request.data)
+        serializer = ZunCreateSerializer(data=request.data, many=True)
         # wp_in_fs = serializer.validated_data['wp_in_fs']
         # print (wp_in_fs)
-        if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = request.data.get('wp_changeblock')):
-            if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = request.data.get('wp_changeblock'), work_program__id = request.data.get('work_program')):
-                wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = request.data.get('wp_changeblock'), work_program__id = request.data.get('work_program'))[0]
-                print (wp_in_fs)
-                print ("Замена номера прошла успешно")
-            else:
-                wp_in_fs = WorkProgramInFieldOfStudy()
-                print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = request.data.get('wp_changeblock')[0]))
-                wp_in_fs.work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = request.data.get('wp_changeblock'))[0]
-                wp_in_fs.work_program = WorkProgram.objects.filter(id = request.data.get('work_program'))[0]
-                wp_in_fs.save()
-                print (wp_in_fs)
-            data = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = request.data.get('indicator_in_zun'))[0].id, "attainments": request.data.get('items')}
-            print(data)
-            serializer = ZunCreateSaveSerializer(data = data)
-            print (serializer)
-            print
+        print (request.data)
+        #print (request.data.get('wp_changeblock'))
+        for new_zun in request.data:
+            print (new_zun.get('wp_changeblock'))
+            if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock')):
+                if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')):
+                    print("new_zun", WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')))
+                    wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program'))
+                    print (wp_in_fs)
+                    print ("Замена номера прошла успешно")
+                else:
+                    wp_in_fs = WorkProgramInFieldOfStudy()
+                    print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
+                    wp_in_fs.work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0]
+                    wp_in_fs.work_program = WorkProgram.objects.filter(id = int(new_zun.get('work_program')))[0]
+                    wp_in_fs.save()
+                    print (wp_in_fs)
+                print (Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id)
+                #print ('wp_in_fs', wp_in_fs.values_list('pk', flat=True)[0])
+                print(new_zun.get('items'))
+                new_zun = {"wp_in_fs" : wp_in_fs.values_list('pk', flat=True)[0], "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
+                # , "items": int(new_zun.get('items'))
+                print(new_zun)
+                serializer = ZunCreateSaveSerializer(data = new_zun)
+                print (serializer)
+                print
 
-            try:
                 if serializer.is_valid(raise_exception=True):
                     serializer.save()
                     print ("Сохранение прошло")
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-            except:
-                return Response(status=400)
-        else:
-            return Response({"error":"change_block does not exist"}, status=400)
+                    #return Response(serializer.data, status=status.HTTP_201_CREATED)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"error":"change_block does not exist"}, status=400)
+        return Response({"message":"all objects saved"}, status=status.HTTP_201_CREATED)
 
 
 class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
