@@ -338,7 +338,7 @@ class ZunCreateSerializer(serializers.Serializer):
     # kills = serializers.CharField()
     # attainments = serializers.CharField()
     #zuns_in_changeblock = serializers.PrimaryKeyRelatedField(queryset=Zun.objects.all())
-    items = serializers.PrimaryKeyRelatedField(queryset=OutcomesOfWorkProgram.objects.all(), many = True)
+    items = serializers.PrimaryKeyRelatedField(allow_null=True, required = False, queryset=OutcomesOfWorkProgram.objects.all(), many = True)
 
 
 class ZunCreateSaveSerializer(serializers.ModelSerializer):
@@ -347,6 +347,9 @@ class ZunCreateSaveSerializer(serializers.ModelSerializer):
         model = Zun
         fields = ['id', 'indicator_in_zun', 'wp_in_fs', 'items']
         # 'knowledge', 'skills', 'attainments'
+        extra_kwargs = {
+            'items': {'allow_null':True}
+        }
 
     # def create(self, validated_data):
     #     #wp_in_fs = validated_data.get('wp_changeblock', [])
