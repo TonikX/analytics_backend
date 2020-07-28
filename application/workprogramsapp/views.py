@@ -702,7 +702,7 @@ class ZunListAPI(generics.ListCreateAPIView):
             if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock')):
                 if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')):
                     print("new_zun", WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')))
-                    wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program'))
+                    wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program'))[0]
                     print (wp_in_fs)
                     print ("Замена номера прошла успешно")
                 else:
@@ -715,7 +715,7 @@ class ZunListAPI(generics.ListCreateAPIView):
                 print (Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id)
                 #print ('wp_in_fs', wp_in_fs.values_list('pk', flat=True)[0])
                 print(new_zun.get('items'))
-                new_zun = {"wp_in_fs" : wp_in_fs.values_list('pk', flat=True)[0], "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
+                new_zun = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
                 # , "items": int(new_zun.get('items'))
                 print(new_zun)
                 serializer = ZunCreateSaveSerializer(data = new_zun)
