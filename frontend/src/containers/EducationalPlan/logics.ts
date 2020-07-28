@@ -6,7 +6,7 @@ import planActions from './actions';
 
 import Service from './service';
 
-import {fetchingTypes} from "./enum";
+import {BlocksOfWorkProgramsFields, fetchingTypes} from "./enum";
 import {getCurrentPage, getEducationalPlanDetailId, getSearchQuery, getSortingField, getSortingMode} from "./getters";
 
 const service = new Service();
@@ -144,16 +144,16 @@ const createBlockOfWorkPrograms = createLogic({
     type: planActions.createBlockOfWorkPrograms.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const moduleWithBlocks = action.payload;
+        const moduleId = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_BLOCK_OF_WORK_PROGRAMS}));
 
-        service.createBlockOfWorkPrograms(moduleWithBlocks)
+        service.createBlockOfWorkPrograms(moduleId)
             .then((res) => {
-                const planId = getEducationalPlanDetailId(getState());
-                dispatch(planActions.getEducationalDetail(planId));
                 dispatch(actions.fetchingSuccess());
-                dispatch(planActions.closeDetailDialog());
+                dispatch(planActions.openDetailDialog({
+                    ...get(res, 'data')
+                }));
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
@@ -175,10 +175,7 @@ const changeBlockOfWorkPrograms = createLogic({
 
         service.changeBlockOfWorkPrograms(moduleWithBlocks)
             .then((res) => {
-                const planId = getEducationalPlanDetailId(getState());
-                dispatch(planActions.getEducationalDetail(planId));
                 dispatch(actions.fetchingSuccess());
-                dispatch(planActions.closeDetailDialog());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
@@ -314,6 +311,41 @@ const getDirectionsDependedOnWorkProgram = createLogic({
     }
 });
 
+const saveCompetenceBlock = createLogic({
+    type: planActions.saveCompetenceBlock.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {competence, workProgramId, wpChangeBlockId} = action.payload;
+        const postData: Array<any> = [];
+
+        competence[BlocksOfWorkProgramsFields.INDICATORS].forEach((indicator: any) => {
+            const results = indicator[BlocksOfWorkProgramsFields.RESULTS].map((item: any) => item.value);
+
+            postData.push({
+                indicator_in_zun: indicator.value,
+                wp_changeblock: wpChangeBlockId,
+                work_program: workProgramId,
+                items: results,
+            })
+        })
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_COMPETENCE_BLOCK}));
+
+        service.saveCompetenceBlock(postData)
+            .then((res) => {
+
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SAVE_COMPETENCE_BLOCK}));
+                return done();
+            });
+    }
+});
+
 export default [
     deleteModule,
     changeModule,
@@ -327,4 +359,5 @@ export default [
     changeBlockOfWorkPrograms,
     deleteBlockOfWorkPrograms,
     getDirectionsDependedOnWorkProgram,
+    saveCompetenceBlock,
 ];

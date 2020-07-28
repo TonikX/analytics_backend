@@ -1,7 +1,7 @@
 import React from 'react';
 import get from 'lodash/get';
 
-import {AddIndicatorsModalProps} from './types';
+import {AddResultsModalProps} from './types';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -15,17 +15,17 @@ import Select from "@material-ui/core/Select";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import MenuItem from "@material-ui/core/MenuItem";
 
-import connect from './AddIndicatorsModal.connect';
-import styles from './AddIndicatorsModal.styles';
+import connect from './AddResultsModal.connect';
+import styles from './AddResultsModal.styles';
 
-class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
+class AddResultsModal extends React.PureComponent<AddResultsModalProps> {
     state = {
-        indicators: []
+        results: []
     };
 
-    componentDidUpdate(prevProps: Readonly<AddIndicatorsModalProps>, prevState: Readonly<{}>, snapshot?: any) {
-        if (prevProps.competenceId !== this.props.competenceId){
-            this.props.indicatorsActions.getIndicatorsDependsCompetence(this.props.competenceId);
+    componentDidUpdate(prevProps: Readonly<AddResultsModalProps>, prevState: Readonly<{}>, snapshot?: any) {
+        if (prevProps.workProgramId !== this.props.workProgramId){
+            this.props.workProgramActions.getResults(this.props.workProgramId);
         }
     }
 
@@ -34,26 +34,26 @@ class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
     }
 
     handleSave = () => {
-        this.props.saveDialog(this.state.indicators);
+        this.props.saveDialog(this.state.results);
         this.props.closeDialog();
-        this.setState({indicators: []})
+        this.setState({results: []})
     }
 
     save = (e: React.ChangeEvent) => {
-        const {indicatorsList} = this.props;
-        const indicatorsIds = get(e, 'target.value');
+        const {resultsList} = this.props;
+        const resultsIds = get(e, 'target.value');
         // @ts-ignore
-        const indicators = indicatorsList.filter(indicator => indicatorsIds.find(id => id === indicator.value));
+        const results = resultsList.filter(result => resultsIds.find(id => id === result.value));
 
-        this.setState({indicators: indicators})
+        this.setState({results: results})
     }
 
     render() {
-        const {isOpen, classes, indicatorsList} = this.props;
-        const {indicators} = this.state;
+        const {isOpen, classes, resultsList} = this.props;
+        const {results} = this.state;
 
         // @ts-ignore
-        const disableButton = get(this, 'state.indicators.length', 0) === 0;
+        const disableButton = get(this, 'state.results.length', 0) === 0;
 
         // @ts-ignore
         return (
@@ -67,12 +67,12 @@ class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
                 maxWidth="sm"
                 fullWidth
             >
-                <DialogTitle>Добавить индикаторы</DialogTitle>
+                <DialogTitle>Добавить результаты</DialogTitle>
 
                 <DialogContent>
                     <FormControl className={classes.selectorWrap}>
                         <InputLabel shrink id="section-label">
-                            Индикаторы *
+                            Результаты *
                         </InputLabel>
                         <Select
                             variant="outlined"
@@ -80,7 +80,7 @@ class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
                             // @ts-ignore
                             onChange={this.save}
                             // @ts-ignore
-                            value={indicators.map(item => item.value)}
+                            value={results.map(item => item.value)}
                             fullWidth
                             input={
                                 <OutlinedInput
@@ -96,7 +96,7 @@ class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
                                 }
                             }}
                         >
-                            {indicatorsList.map(item =>
+                            {resultsList.map(item =>
                                 <MenuItem value={item.value} key={`type-${item.value}`}>
                                     {item.label}
                                 </MenuItem>
@@ -122,4 +122,4 @@ class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
 }
 
 // @ts-ignore
-export default connect(withStyles(styles)(AddIndicatorsModal));
+export default connect(withStyles(styles)(AddResultsModal));

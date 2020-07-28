@@ -182,7 +182,7 @@ class WorkProgramService extends BaseService{
     }
 
     getResults(workProgramId: ReactText){
-        return this.get(`/api/outcomesofworkprogramforacademyplan/${workProgramId}`);
+        return this.get(`/api/outcomesofworkprogramforacademycplan/${workProgramId}`);
     }
 
     updateLiterature(literature: Array<number>, workProgramId: ReactText){

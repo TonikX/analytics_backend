@@ -7,6 +7,7 @@ import {WorkProgramGeneralType} from "../WorkProgram/types";
 import {DirectionType} from "../Direction/types";
 
 export interface EducationalPlanActions {
+    saveCompetenceBlock: any;
     closeModuleDialog: any;
     openModuleDialog: any;
     createModule: any;

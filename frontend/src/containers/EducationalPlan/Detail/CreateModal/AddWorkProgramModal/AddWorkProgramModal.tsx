@@ -10,6 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import SearchSelector from "../../../../../components/SearchSelector/SearchSelector";
+
 import connect from './AddWorkProgramModal.connect';
 import styles from './AddWorkProgramModal.styles';
 
@@ -82,4 +83,5 @@ class AddWorkProgramModal extends React.PureComponent<AddWorkProgramModalProps> 
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(AddWorkProgramModal));

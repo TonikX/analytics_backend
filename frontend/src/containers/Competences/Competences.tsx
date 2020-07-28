@@ -91,6 +91,7 @@ class Competences extends React.Component<CompetenceProps> {
         const {classes, competences, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
+        // @ts-ignore
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
@@ -179,4 +180,5 @@ class Competences extends React.Component<CompetenceProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(Competences));

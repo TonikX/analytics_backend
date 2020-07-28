@@ -9,6 +9,7 @@ export interface CreateModalProps extends WithStyles<typeof styles> {
     actions: EducationalPlanActions;
     isOpen: boolean;
     educationalPlan: any;
+    planId: number;
     workProgramActions: WorkProgramListActions;
     workProgramList: SelectorListType;
     blockOfWorkPrograms: BlocksOfWorkProgramsType;

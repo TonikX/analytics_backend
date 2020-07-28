@@ -10,6 +10,7 @@ import {workProgramState} from './types';
 
 const getStateData = (state: rootState): workProgramState => get(state, GENERAL_PATH);
 export const getWorkProgram = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM, {});
+export const getWorkProgramResults = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_RESULTS, []);
 export const getWorkProgramEvaluationToolsList = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_EVALUATION_TOOLS, []);
 export const getWorkProgramId = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_ID, '');
 export const getWorkProgramField = (state: rootState, field: string) => get(getWorkProgram(state), field);
@@ -25,6 +26,14 @@ export const getAllSectionsForSelect = (state: rootState) => {
     return allSections.map((section: any) => ({
         label: section[workProgramSectionFields.NAME],
         value: section[workProgramSectionFields.ID],
+    }))
+};
+export const getResultsForSelect = (state: rootState) => {
+    const allResults = getWorkProgramResults(state);
+    //@ts-ignore
+    return allResults.map((result: any) => ({
+        value: get(result, 'id'),
+        label: get(result, 'item.name', ''),
     }))
 };
 

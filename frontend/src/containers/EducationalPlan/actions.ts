@@ -40,14 +40,17 @@ const setDirectionsDependedOnWorkProgram = createAction<string>('SET_DIRECTIONS_
 const openDownloadModal = createAction<string>('OPEN_DOWNLOAD_MODAL');
 const closeDownloadModal = createAction<string>('CLOSE_DOWNLOAD_MODAL');
 
+const saveCompetenceBlock = createAction<string>('SAVE_COMPETENCE_BLOCK');
+
 const actions: EducationalPlanActions = {
+    saveCompetenceBlock,
+    createModule,
     openDownloadModal,
     closeDownloadModal,
     getDirectionsDependedOnWorkProgram,
     setDirectionsDependedOnWorkProgram,
     openModuleDialog,
     closeModuleDialog,
-    createModule,
     changeModule,
     deleteModule,
     createBlockOfWorkPrograms,

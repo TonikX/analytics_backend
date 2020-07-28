@@ -52,9 +52,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     }
 
     componentDidMount() {
-        const workProgramId = get(this, 'props.match.params.id');
+        const planId = get(this, 'props.match.params.id');
 
-        this.props.actions.getEducationalDetail(workProgramId);
+        this.props.actions.getEducationalDetail(planId);
     }
 
     handleClickBlockDelete = (id: number, length: number) => () => {
@@ -102,6 +102,10 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
             ...block,
             moduleId
         });
+    }
+
+    handleCreateBlockOfWorkPrograms = (moduleId: number) => () => {
+        this.props.actions.createBlockOfWorkPrograms(moduleId);
     }
 
     handleOpenCreateModuleModal = (module: ModuleType|{}, blockId: number) => () => {
@@ -205,7 +209,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                     <Tooltip title="Создать блок рабочих программ">
                                                                         <AddCircleIcon className={classes.smallAddIcon}
                                                                                        color="primary"
-                                                                                       onClick={this.handleOpenDetailModal({}, module[ModuleFields.ID])}
+                                                                                       onClick={this.handleCreateBlockOfWorkPrograms(module[ModuleFields.ID])}
                                                                         />
                                                                     </Tooltip>
                                                                 </div>
