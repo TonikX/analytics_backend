@@ -299,7 +299,7 @@ class DisciplineBlock(CloneMixin, models.Model):
 #         return (str(self.name) + str(self.descipline_block))
 
 
-class DisciplineBlockModule(CloneMixin,models.Model):
+class DisciplineBlockModule(CloneMixin, models.Model):
     '''
     Модель модуля блока дисциплин
     '''
@@ -495,9 +495,7 @@ class OnlineCourse(models.Model):
     '''
     Модель описания онлайн курса
     '''
-    title = models.CharField(max_length=512, verbose_name = "Название курса на русском")
-    title_eng = models.CharField(max_length=512, blank = True, null = True, verbose_name = "Название курса на английском")
-    author = models.CharField(max_length=512, blank = True, null = True, verbose_name = "Автор курса")
+    title = models.CharField(max_length=512, verbose_name = "Название курсу")
     platform = models.CharField(max_length=512, verbose_name = "Платформа", blank = True, null = True)
     description = models.CharField(max_length=50000, verbose_name = "Описание", blank = True, null = True)
     course_url = models.URLField(verbose_name = "Ссылка на курс")
