@@ -1646,7 +1646,7 @@ class DocxFileExportView(generics.ListAPIView):
     serializer = WorkProgramSerializer
 
     def get(self, request, *args, **kwargs):
-        tpl = DocxTemplate('/application/RPD_shablon_2020_new.docx')
+        tpl = DocxTemplate('/application/export_template/RPD_shablon_2020_new.docx')
         queryset = WorkProgram.objects.get(pk = kwargs['pk'])
         serializer = WorkProgramSerializer(queryset)
         data = dict(serializer.data)
@@ -1654,7 +1654,7 @@ class DocxFileExportView(generics.ListAPIView):
         context, filename = render_context(data, field_of_study_id = kwargs['fs_id'], 
             academic_plan_id = kwargs['ap_id'], year = kwargs['year'])
         tpl.render(context)
-        #tpl.save('/application/export/'+filename) -- сохранение в папку локально
+        #tpl.save('/application/export/'+filename) -- сохранение в папку локально (нужно указать актуальный путь!)
     
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
         response['Content-Disposition'] = 'inline; filename="%s"' % filename
