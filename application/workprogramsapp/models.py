@@ -299,7 +299,7 @@ class DisciplineBlock(CloneMixin, models.Model):
 #         return (str(self.name) + str(self.descipline_block))
 
 
-class DisciplineBlockModule(CloneMixin,models.Model):
+class DisciplineBlockModule(CloneMixin, models.Model):
     '''
     Модель модуля блока дисциплин
     '''
