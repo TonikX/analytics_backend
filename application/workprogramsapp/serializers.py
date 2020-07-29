@@ -316,7 +316,7 @@ class ZunSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Zun
-        fields = ['id', 'indicator_in_zun', 'knowledge', 'skills', 'attainments']
+        fields = ['id', 'indicator_in_zun', 'items']
 
 
 class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
@@ -334,18 +334,22 @@ class ZunCreateSerializer(serializers.Serializer):
     indicator_in_zun = serializers.PrimaryKeyRelatedField(queryset=Indicator.objects.all())
     wp_changeblock = serializers.IntegerField()
     work_program = serializers.IntegerField()
-    knowledge = serializers.CharField()
-    kills = serializers.CharField()
-    attainments = serializers.CharField()
+    # knowledge = serializers.CharField()
+    # kills = serializers.CharField()
+    # attainments = serializers.CharField()
     #zuns_in_changeblock = serializers.PrimaryKeyRelatedField(queryset=Zun.objects.all())
+    items = serializers.PrimaryKeyRelatedField(allow_null=True, required = False, queryset=OutcomesOfWorkProgram.objects.all(), many = True)
 
 
 class ZunCreateSaveSerializer(serializers.ModelSerializer):
     """Сериализатор Сохранения Зунов"""
     class Meta:
         model = Zun
-        fields = ['id', 'indicator_in_zun', 'wp_in_fs', 'knowledge', 'skills', 'attainments']
+        fields = ['id', 'indicator_in_zun', 'wp_in_fs', 'items']
         # 'knowledge', 'skills', 'attainments'
+        extra_kwargs = {
+            'items': {'allow_null':True}
+        }
 
     # def create(self, validated_data):
     #     #wp_in_fs = validated_data.get('wp_changeblock', [])

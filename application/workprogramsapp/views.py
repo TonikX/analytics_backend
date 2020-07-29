@@ -692,36 +692,45 @@ class ZunListAPI(generics.ListCreateAPIView):
     queryset = Zun.objects.all()
 
     def create(self, request):
-        serializer = ZunCreateSerializer(data=request.data)
+        serializer = ZunCreateSerializer(data=request.data, many=True)
         # wp_in_fs = serializer.validated_data['wp_in_fs']
         # print (wp_in_fs)
-        if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = request.data.get('wp_changeblock')):
-            if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = request.data.get('wp_changeblock'), work_program__id = request.data.get('work_program')):
-                wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = request.data.get('wp_changeblock'), work_program__id = request.data.get('work_program'))[0]
-                print (wp_in_fs)
-                print ("Замена номера прошла успешно")
-            else:
-                wp_in_fs = WorkProgramInFieldOfStudy()
-                print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = request.data.get('wp_changeblock')[0]))
-                wp_in_fs.work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = request.data.get('wp_changeblock'))[0]
-                wp_in_fs.work_program = WorkProgram.objects.filter(id = request.data.get('work_program'))[0]
-                wp_in_fs.save()
-                print (wp_in_fs)
-            data = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = request.data.get('indicator_in_zun'))[0].id, "knowledge": request.data.get('knowledge'), "skills": request.data.get('skills'), "attainments": request.data.get('attainments')}
-            print(data)
-            serializer = ZunCreateSaveSerializer(data = data)
-            print (serializer)
-            print
+        print (request.data)
+        #print (request.data.get('wp_changeblock'))
+        for new_zun in request.data:
+            print (new_zun.get('wp_changeblock'))
+            if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock')):
+                if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')):
+                    print("new_zun", WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')))
+                    wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program'))[0]
+                    print (wp_in_fs)
+                    print ("Замена номера прошла успешно")
+                else:
+                    wp_in_fs = WorkProgramInFieldOfStudy()
+                    print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
+                    wp_in_fs.work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0]
+                    wp_in_fs.work_program = WorkProgram.objects.filter(id = int(new_zun.get('work_program')))[0]
+                    wp_in_fs.save()
+                    print (wp_in_fs)
+                print (Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id)
+                #print ('wp_in_fs', wp_in_fs.values_list('pk', flat=True)[0])
+                print(new_zun.get('items'))
+                new_zun = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
+                # , "items": int(new_zun.get('items'))
+                print(new_zun)
+                serializer = ZunCreateSaveSerializer(data = new_zun)
+                print (serializer)
+                print
 
-            try:
                 if serializer.is_valid(raise_exception=True):
                     serializer.save()
                     print ("Сохранение прошло")
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-            except:
-                return Response(status=400)
-        else:
-            return Response({"error":"change_block does not exist"}, status=400)
+                    #return Response(serializer.data, status=status.HTTP_201_CREATED)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"error":"change_block does not exist"}, status=400)
+        return Response({"message":"all objects saved"}, status=status.HTTP_201_CREATED)
 
 
 class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -1412,8 +1421,8 @@ class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
 class ZunListAPIView(generics.ListAPIView):
     serializer_class = ZunSerializer
     queryset = Zun.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['educational_profile']
+    # filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    # search_fields = ['educational_profile']
 
 
 class ZunCreateAPIView(generics.CreateAPIView):
@@ -1441,11 +1450,12 @@ class ZunUpdateView(generics.UpdateAPIView):
 #
 
 from docxtpl import DocxTemplate, RichText
-import datetime
+import datetime, io
+
 def render_docx(*args, **kwargs):
     """Экспорт файла в док"""
+    docx_file = io.BytesIO()
     tpl = DocxTemplate('/application/RPD_shablon_2020.docx')
-    
     #
     # Получаем данные рабочей программы дисциплины
     #
@@ -1554,8 +1564,9 @@ def render_docx(*args, **kwargs):
     filename = str(fs_obj.number)+'_'+str(wp_obj.discipline_code)+'_'+str(wp_obj.qualification)+'_'+str(kwargs['year'])+'_'+datetime.datetime.today().strftime("%Y-%m-%d-%H.%M.%S")+'.docx'
     
     tpl.render(context)
-    tpl.save('/application/export/'+filename)
-    return tpl, filename
+    #tpl.save('/application/export/'+filename)
+    tpl.save(docx_file)
+    return docx_file, filename
                         
 
 from rest_framework import viewsets, renderers
@@ -1569,9 +1580,24 @@ class DocxFileExportView(APIView):
     def post(self, request):
         tpl, filename = render_docx(pk = request.data.get('pk'), field_of_study_id = request.data.get('field_of_study_id'), 
             academic_plan_id = request.data.get('academic_plan_id'), year = request.data.get('year'))
-        response = HttpResponse(tpl,status=status.HTTP_200_OK)
-        response['Content-Disposition'] = 'inline;'
+        #f = io.BytesIO()
+        #tpl.save(f)
+        #length = f.tell()
+        #f.seek(0)
+        #response = HttpResponse(f.getvalue(), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        #response['Content-Disposition'] = 'attachment; filename=test_result.docx'
+        #response['Content-Length'] = length
+        response = HttpResponse(
+            tpl.getvalue(),
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = 'inline; filename=rpd_export.docx'
+
+        #response = HttpResponse(tpl,status=status.HTTP_200_OK)
+        #response['Content-Disposition'] = 'inline;'
         return response
+
+
+
 
 class DocxFileExportOldView(APIView):
     """OLD-Version Вовзращает response"""
@@ -1584,9 +1610,9 @@ class DocxFileExportOldView(APIView):
         tpl, filename = render_docx(pk = pk, field_of_study_id = field_of_study_id, academic_plan_id = academic_plan_id, year = year)
         print(filename)
         # send file
-        #response = HttpResponse(content_type='application/vnd.ms-word', status=status.HTTP_200_OK)
-        #response['Content-Disposition'] = 'attachment; filename="%s"' % filename 
-        response = FileResponse(open('/application/export/'+filename,'rb'), as_attachment=False)
+        response = HttpResponse(content_type='application/vnd.ms-word', status=status.HTTP_200_OK)
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename 
+        #response = FileResponse(open('/application/export/'+filename,'rb'), as_attachment=False)
         
         tpl.save(response)
     
