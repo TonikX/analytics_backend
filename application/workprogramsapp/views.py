@@ -1561,7 +1561,8 @@ def CloneWorkProgramm(request):
     prog_id = request.data.get('program_id')
     try:
         clone_program=WorkProgram.clone_programm(prog_id)
-        return Response(status=200, data=clone_program)
+        serializer=WorkProgramSerializer(clone_program)
+        return Response(status=200, data=serializer.data)
     except:
         return Response(status=400)
 
