@@ -1550,3 +1550,13 @@ class DocxFileExportViewSet(viewsets.ReadOnlyModelViewSet):
         tpl.save(response)
     
         return response
+
+@api_view(['POST'])
+def CloneWorkProgramm(request):
+    prog_id = request.data.get('programm_id')
+    WorkProgram.clone_programm(prog_id)
+    return Response(status=200)
+
+
+
+

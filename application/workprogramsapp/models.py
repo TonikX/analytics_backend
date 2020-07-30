@@ -27,7 +27,7 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
-class WorkProgram(models.Model):
+class WorkProgram(CloneMixin, models.Model):
     '''
     Модель для рабочей программы
     '''
@@ -62,12 +62,23 @@ class WorkProgram(models.Model):
     #evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
     description = models.CharField(max_length=5000, blank=True, null=True)
     video = models.CharField(max_length=1024, blank=True, null=True)
-
+    _clone_many_to_many_fields = ['prerequisites', 'outcomes', 'field_of_studies', 'bibliographic_reference']
     # list_of_references = models.TextField(blank=True, null=True)
     # guidelines = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.title
+    def clone_programm(programm_id):
+        program = WorkProgram.objects.get(pk=programm_id)
+        clone_program = program.make_clone()
+        print(clone_program.pk)
+        discipline = DisciplineSection.objects.filter(work_program_id=programm_id)
+        for disp in discipline:
+            clone_discipline=disp.make_clone(attrs={'work_program': clone_program})
+            topic = Topic.objects.filter(discipline_section=disp)
+            for top in topic:
+                top.make_clone(attrs={'discipline_section': clone_discipline})
+
 
 
 class PrerequisitesOfWorkProgram(models.Model):
@@ -432,7 +443,7 @@ class EvaluationTool(models.Model):
         return self.name
 
 
-class DisciplineSection(models.Model):
+class DisciplineSection(CloneMixin, models.Model):
     '''
     Модель для разделов дисциплин
     '''
@@ -449,6 +460,7 @@ class DisciplineSection(models.Model):
     SRO = models.DecimalField(verbose_name = "СРО", max_digits=5, decimal_places=2, blank = True, null = True)
     total_hours = models.DecimalField(verbose_name = "Всего часов", max_digits=5, decimal_places=2, blank = True, null = True)
 
+    _clone_many_to_many_fields = ['evaluation_tools']
     def __str__(self):
         return self.name
 
@@ -506,7 +518,7 @@ class BibliographicReference(models.Model):
     #work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
 
-class Topic(models.Model):
+class Topic(CloneMixin, models.Model):
     '''
     Модель для темы
     '''
