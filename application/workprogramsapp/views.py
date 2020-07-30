@@ -12,7 +12,8 @@ from .serializers import OutcomesOfWorkProgramCreateSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, ZunCreateSaveSerializer
+    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, \
+    WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -611,6 +612,29 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
 class WorkProgramDetailsView(generics.RetrieveAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
+
+
+class WorkProgramDetailsWithDisciplineCodeView(generics.ListAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramForIndividualRoutesSerializer
+    #lookup_value_regex = r"[0-9.]+"
+
+    def get(self, request, **kwargs):
+        """
+        Вывод всех результатов для одной рабочей программы по id
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        #queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        try:
+            print ('f', WorkProgram.objects.get(discipline_code=self.kwargs['discipline_code']).discipline_code)
+            queryset = WorkProgram.objects.filter(discipline_code=self.kwargs['discipline_code'])
+            print (queryset)
+            serializer = WorkProgramForIndividualRoutesSerializer(queryset, many=True)
+            print (serializer.data)
+            return Response(serializer.data)
+        except:
+            return Response({"error":"work program with such a code was not found"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 #Конец блока ендпоинтов рабочей программы
 
