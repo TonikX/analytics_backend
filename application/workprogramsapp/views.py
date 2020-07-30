@@ -1553,9 +1553,17 @@ class DocxFileExportViewSet(viewsets.ReadOnlyModelViewSet):
 
 @api_view(['POST'])
 def CloneWorkProgramm(request):
-    prog_id = request.data.get('programm_id')
-    WorkProgram.clone_programm(prog_id)
-    return Response(status=200)
+    """
+    Апи для клонирования рабочей программы
+    Запрашивает id программы для клоинрования в поле program_id для тела запроса типа form-data
+    В ответе передается число - айди созданной копии
+    """
+    prog_id = request.data.get('program_id')
+    try:
+        clone_program=WorkProgram.clone_programm(prog_id)
+        return Response(status=200, data=clone_program)
+    except:
+        return Response(status=400)
 
 
 

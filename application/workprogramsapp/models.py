@@ -71,13 +71,13 @@ class WorkProgram(CloneMixin, models.Model):
     def clone_programm(programm_id):
         program = WorkProgram.objects.get(pk=programm_id)
         clone_program = program.make_clone()
-        print(clone_program.pk)
         discipline = DisciplineSection.objects.filter(work_program_id=programm_id)
         for disp in discipline:
             clone_discipline=disp.make_clone(attrs={'work_program': clone_program})
             topic = Topic.objects.filter(discipline_section=disp)
             for top in topic:
                 top.make_clone(attrs={'discipline_section': clone_discipline})
+        return clone_program.id
 
 
 
