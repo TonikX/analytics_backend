@@ -24,7 +24,8 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkPr
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
     FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
     ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView
-from .views import DocxFileExportView, DocxFileExportOldView    
+from .views import DocxFileExportView
+    #DocxFileExportOldView
 
 
 
@@ -149,7 +150,7 @@ urlpatterns = [
     path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
     path('api/upload/csv', FileUploadAPIView.as_view()),
     path('api/export/docx', DocxFileExportView.as_view()),
-    path('api/export/docx2', DocxFileExportOldView.as_view()),
+    #path('api/export/docx2', DocxFileExportOldView.as_view()),
 
     #Учебный планы
     path('api/academicplan', AcademicPlanListAPIView.as_view()),
