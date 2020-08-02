@@ -1199,7 +1199,7 @@ class FileUploadAPIView(APIView):
                     qualification = 'specialist'
 
                 credit_units = [0 for i in range(0,12)]
-                units = data.loc[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])&(data["SUBJECT_CODE"] == data["SUBJECT_CODE"][i])]
+                units = data.loc[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])]
                 #units = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])].drop_duplicates()
                 try:
                     for u in units.index.values:
@@ -1223,10 +1223,10 @@ class FileUploadAPIView(APIView):
                 print('Направление подготовки: ', fs_obj)
                 # Проверяем если Дисцпилина уже есть в БД
                 #
-                if WorkProgram.objects.filter(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification).exists():
+                if WorkProgram.objects.filter(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i]).exists():
                     # если да, то получаем объект
                     #
-                    wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i].strip(), subject_code = data['SUBJECT_CODE'][i], qualification = qualification)
+                    wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i].strip())
                     wp_obj.discipline_code = data['DIS_CODE'][i] #заменить в параметры
                     wp_obj.credit_units = ",".join(map(str, credit_units)) #убрать
                 else:
@@ -1310,12 +1310,12 @@ class FileUploadAPIView(APIView):
                         wpinfs.save()
                 print('Рабочая программа дисциплины записана в модуль: done')
                 
-                if Zun.objects.filter(wp_in_fs = wpinfs).exists():
-                    pass
-                else:
-                    zun = Zun(wp_in_fs = wpinfs)
-                    zun.save()
-                    #wpchangemdb.work_program.add(wp_obj)
+                # if Zun.objects.filter(wp_in_fs = wpinfs).exists():
+                #     pass
+                # else:
+                #     zun = Zun(wp_in_fs = wpinfs)
+                #     zun.save()
+                #     #wpchangemdb.work_program.add(wp_obj)
                 
             except:
                 print('Строка ',i, 'не записалась, проверьте на опечатки или пустые значения')
