@@ -216,6 +216,18 @@ class WorkProgramSerializer(serializers.ModelSerializer):
         """
         return WorkProgram.objects.create(**validated_data)
 
+
+class WorkProgramForIndividualRoutesSerializer(serializers.ModelSerializer):
+    """Сериализатор рабочих программ"""
+    prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set', many=True)
+    outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title', 'discipline_code', 'qualification', 'prerequisites', 'outcomes' ]
+
+
+
 class WorkProgramCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания рабочих программ"""
 
