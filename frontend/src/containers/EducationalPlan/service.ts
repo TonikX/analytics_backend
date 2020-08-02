@@ -12,7 +12,7 @@ class EducationalPlanService extends BaseService{
     getEducationalPlan(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
-        return this.get(`/api/academicplan?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+        return this.get(`/api/academicplan/short?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
     getEducationalPlanDetail(id: number){
