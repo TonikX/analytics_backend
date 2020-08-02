@@ -439,6 +439,17 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
         }
 
 
+class AcademicPlanShortSerializer(serializers.ModelSerializer):
+    #discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, required=False)
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification']
+        extra_kwargs = {
+            'discipline_blocks_in_academic_plan': {'required': False}
+        }
+
+
 class AcademicPlanCreateSerializer(serializers.ModelSerializer):
 
     class Meta:

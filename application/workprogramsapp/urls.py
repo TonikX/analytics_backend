@@ -23,7 +23,7 @@ from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicP
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
     FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
-    ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView
+    ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView, AcademicPlanListShortAPIView
 from .views import DocxFileExportView
     #DocxFileExportOldView
 
@@ -154,6 +154,7 @@ urlpatterns = [
 
     #Учебный планы
     path('api/academicplan', AcademicPlanListAPIView.as_view()),
+    path('api/academicplan/short', AcademicPlanListShortAPIView.as_view()),
     path('api/academicplan/create', AcademicPlanCreateAPIView.as_view()),
     path('api/academicplan/detail/<int:pk>', AcademicPlanDetailsView.as_view()),
     path('api/academicplan/delete/<int:pk>', AcademicPlanDestroyView.as_view()),
