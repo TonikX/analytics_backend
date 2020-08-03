@@ -50,7 +50,7 @@ services:
         ports:
             - "3002:3000"
         environment:
-            - REACT_APP_API_HOST=learnsql.ru
+            - REACT_APP_API_HOST=localhost
             - REACT_APP_API_SCHEMA=http
             - REACT_APP_API_PORT=8003
             - PORT=3000

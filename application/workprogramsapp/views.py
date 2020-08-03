@@ -13,7 +13,8 @@ from .serializers import OnlineCourseSerializer, BibliographicReferenceSerialize
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, \
-    WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer
+    WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, \
+    ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, WorkProgramChangeInDisciplineBlockModuleUpdateSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -1197,6 +1198,7 @@ class FileUploadAPIView(APIView):
                     qualification = 'master'
                 else:
                     qualification = 'specialist'
+                print (qualification)
 
                 credit_units = [0 for i in range(0,12)]
                 units = data.loc[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])]
@@ -1207,6 +1209,7 @@ class FileUploadAPIView(APIView):
                         elif units["SEMESTER"][u] == ".": credit_units[11] = units["CREDITS"][u]
                         else: credit_units[int(units["SEMESTER"][u]) - 1] = int(units["CREDITS"][u])
                 except:
+                    print ("mistake with units")
                     pass
 
                 # проверяем если ОП уже существует в БД
@@ -1223,12 +1226,15 @@ class FileUploadAPIView(APIView):
                 print('Направление подготовки: ', fs_obj)
                 # Проверяем если Дисцпилина уже есть в БД
                 #
+                print (data['SUBJECT'][i].strip(), data['DIS_CODE'][i])
                 if WorkProgram.objects.filter(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i]).exists():
                     # если да, то получаем объект
                     #
+                    print (WorkProgram.objects.filter(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i]))
                     wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i].strip())
                     wp_obj.discipline_code = data['DIS_CODE'][i] #заменить в параметры
                     wp_obj.credit_units = ",".join(map(str, credit_units)) #убрать
+                    print (wp_obj)
                 else:
                     # если нет, то записываем в БД
                     wp_obj = WorkProgram(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification, credit_units = ",".join(map(str, credit_units)))
@@ -1335,7 +1341,7 @@ class AcademicPlanListAPIView(generics.ListAPIView):
 
 
 class AcademicPlanListShortAPIView(generics.ListAPIView):
-    serializer_class = AcademicPlanSerializer
+    serializer_class = AcademicPlanShortSerializer
     queryset = AcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['educational_profile']
@@ -1416,7 +1422,7 @@ class WorkProgramChangeInDisciplineBlockModuleDestroyView(generics.DestroyAPIVie
 
 class WorkProgramChangeInDisciplineBlockModuleDetailsView(generics.RetrieveAPIView):
     queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
-    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleUpdateSerializer
 
 
 class WorkProgramChangeInDisciplineBlockModuleUpdateView(generics.UpdateAPIView):
