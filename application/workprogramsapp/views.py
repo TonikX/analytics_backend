@@ -1230,13 +1230,14 @@ class FileUploadAPIView(APIView):
                 if WorkProgram.objects.filter(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i]).exists():
                     # если да, то получаем объект
                     #
-                    print (WorkProgram.objects.filter(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i]))
-                    wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i].strip())
+                    print ('1', WorkProgram.objects.filter(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i]))
+                    wp_obj = WorkProgram.objects.get(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i])
                     wp_obj.discipline_code = data['DIS_CODE'][i] #заменить в параметры
                     wp_obj.credit_units = ",".join(map(str, credit_units)) #убрать
-                    print (wp_obj)
+                    print ('2', wp_obj)
                 else:
                     # если нет, то записываем в БД
+
                     wp_obj = WorkProgram(title = data['SUBJECT'][i].strip(), discipline_code = data['DIS_CODE'][i], subject_code = data['SUBJECT_CODE'][i], qualification = qualification, credit_units = ",".join(map(str, credit_units)))
                     wp_obj.save()
                     wp_count+=1
@@ -1252,13 +1253,21 @@ class FileUploadAPIView(APIView):
                 
                 print('Связь рабочей программы и дисциплины: done')
                 
-                if AcademicPlan.objects.filter(qualification = qualification, educational_profile = data['SUBFIELDNAME'][i].strip()).exists():
-                    ap_obj = AcademicPlan.objects.get(qualification = qualification, educational_profile = data['SUBFIELDNAME'][i].strip())
+                if AcademicPlan.objects.filter(qualification = qualification, year = data['YEAR'][i], educational_profile = data['SUBFIELDNAME'][i].strip()).exists():
+                    ap_obj = AcademicPlan.objects.get(qualification = qualification, year = data['YEAR'][i], educational_profile = data['SUBFIELDNAME'][i].strip())
+                    print ('старый', ap_obj)
 
                 else:
-                    ap_obj = AcademicPlan(qualification = qualification, educational_profile = data['SUBFIELDNAME'][i].strip())
+                    # if data['TYPELEARNING'][i].strip() == "традиционное":
+                    #     typelearning = 'internal'
+                    # else:
+                    #     typelearning = 'extramural'
+                    typelearning = 'internal'
+                    print (typelearning)
+                    ap_obj = AcademicPlan(education_form = typelearning, qualification = qualification, year = data['YEAR'][i], educational_profile = data['SUBFIELDNAME'][i].strip())
                     ap_obj.save()
                     ap_count+=1
+                    print ('новый', ap_obj)
 
                 print('Учебный план: ', ap_obj)
                 
