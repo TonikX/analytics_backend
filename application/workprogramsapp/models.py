@@ -70,7 +70,7 @@ class WorkProgram(models.Model):
     # guidelines = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.title
+        return (self.discipline_code + self.title)
 
 
 class PrerequisitesOfWorkProgram(models.Model):
