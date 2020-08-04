@@ -1431,12 +1431,12 @@ class WorkProgramChangeInDisciplineBlockModuleDestroyView(generics.DestroyAPIVie
 
 class WorkProgramChangeInDisciplineBlockModuleDetailsView(generics.RetrieveAPIView):
     queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
-    serializer_class = WorkProgramChangeInDisciplineBlockModuleUpdateSerializer
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
 
 
 class WorkProgramChangeInDisciplineBlockModuleUpdateView(generics.UpdateAPIView):
     queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
-    serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+    serializer_class = WorkProgramChangeInDisciplineBlockModuleUpdateSerializer
 
 
 class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):

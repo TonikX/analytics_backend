@@ -443,7 +443,7 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
 
 
 class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.ModelSerializer):
-    #work_program = serializers.PrimaryKeyRelatedField(many=True, queryset=WorkProgram.objects.all())
+    work_program = serializers.PrimaryKeyRelatedField(many=True, queryset=WorkProgram.objects.all())
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
