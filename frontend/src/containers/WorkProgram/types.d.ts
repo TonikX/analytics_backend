@@ -8,6 +8,8 @@ import {IndicatorsFields} from "../Indicators/enum";
 import {CompetenceFields} from "../Competences/enum";
 
 export interface WorkProgramActions {
+    pageDown: any;
+
     deleteResult: any;
     addResult: any;
     changeResult: any;
