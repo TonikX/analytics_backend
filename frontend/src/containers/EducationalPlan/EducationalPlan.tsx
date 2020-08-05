@@ -168,7 +168,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        Год реализации
+                                        Год набора
                                         <SortingButton changeMode={this.changeSorting(EducationalPlanFields.YEAR)}
                                                        mode={sortingField === EducationalPlanFields.YEAR ? sortingMode : ''}
                                         />
