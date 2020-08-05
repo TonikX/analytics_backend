@@ -46,7 +46,8 @@ export default (theme: Theme) => createStyles({
         padding: '0px 20px'
     },
     searchInput: {
-        height: '40px'
+        height: '40px',
+        minHeight: '40px'
     },
     addIcon: {
         marginLeft: 'auto',

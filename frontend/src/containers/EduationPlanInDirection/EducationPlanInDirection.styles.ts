@@ -33,7 +33,11 @@ export default (theme: Theme) => createStyles({
     },
     titleCell: {
         width: '30%',
-        flex: 'none'
+        flex: 'none',
+        '& a': {
+            color: theme.palette.primary.main,
+            textDecoration: 'none'
+        }
     },
     numberCell: {
         width: '220px',
@@ -48,7 +52,8 @@ export default (theme: Theme) => createStyles({
         padding: '0px 20px'
     },
     searchInput: {
-        height: '40px'
+        height: '40px',
+        minHeight: '40px'
     },
     addIcon: {
         marginLeft: 'auto',

@@ -42,7 +42,8 @@ export default (theme: Theme) => createStyles({
         height: 'fit-content',
     },
     searchInput: {
-        height: '40px'
+        height: '40px',
+        minHeight: '40px'
     },
     addIcon: {
         marginLeft: 'auto',

@@ -2,6 +2,8 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 // @ts-ignore
+import Link from "react-router-dom/Link";
+// @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
 
 import classNames from 'classnames';
@@ -33,6 +35,7 @@ import {EducationalPlanInDirectionProps, EducationalPlanInDirectionType} from '.
 
 import connect from './EducationPlanInDirection.connect';
 import styles from './EducationPlanInDirection.styles';
+import {appRouter} from "../../service/router-service";
 
 class EducationPlanInDirection extends React.Component<EducationalPlanInDirectionProps> {
     state = {
@@ -153,7 +156,11 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                         {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.NUMBER]}
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                        {educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]}
+                                        <Link to={appRouter.getPlanDetailLink(educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.ID])}
+                                              target="_blank"
+                                        >
+                                            {educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]}
+                                        </Link>
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.yearCell)}>
                                         {educationalPlanInDirection[EducationPlanInDirectionFields.YEAR]}

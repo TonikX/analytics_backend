@@ -173,7 +173,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                     <FormControl className={classes.selectorWrap}>
                         <InputLabel shrink>
-                            Год реализации *
+                            Год набора *
                         </InputLabel>
                         <Select
                             variant="outlined"

@@ -18,6 +18,7 @@ export default (theme: Theme) => createStyles({
     },
     searchInput: {
         height: '40px',
+        minHeight: '40px',
         marginRight: '10px'
     }
 });
