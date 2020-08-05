@@ -153,10 +153,10 @@ class FieldOfStudy(models.Model):
         (INTERNAL, 'Internal'),
         (EXTRAMURAL, 'Extramural'),
     )
-    number = models.CharField(unique=True, max_length=1024, verbose_name = 'Шифр ОП')
-    title = models.CharField(unique=True, max_length=1024, verbose_name = 'Название ОП', blank = True, null = True)
+    number = models.CharField(max_length=1024, verbose_name = 'Шифр ОП')
+    title = models.CharField(max_length=1024, verbose_name = 'Название ОП', blank = True, null = True)
     qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank = True, null = True)
-    educational_profile = models.CharField(unique=True, max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
+    educational_profile = models.CharField(max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
     faculty = models.CharField(max_length=150, verbose_name = 'Факультет (Структурное подразделение)', null=True)
     education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
 
