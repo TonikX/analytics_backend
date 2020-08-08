@@ -4,3 +4,5 @@ mysql-data
 dbs
 /application/workprogramsapp/migrations
 **/migrations/*
+**/discipline_code/*
+/application/discipline_code
