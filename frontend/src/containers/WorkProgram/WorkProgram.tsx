@@ -34,6 +34,10 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         this.props.actions.setWorkProgramId(workProgramId);
     }
 
+    componentWillUnmount() {
+        this.props.actions.pageDown();
+    }
+
     handleStep = (number: number) => () => {
         this.setState({activeStep: number})
     };

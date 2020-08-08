@@ -77,7 +77,7 @@ class EducationalPlanService extends BaseService{
     }
 
     getFile(dialogData: any){
-        const formData = new FormData();
+        // const formData = new FormData();
 
         // formData.append(DownloadFileModalFields.ID, dialogData[DownloadFileModalFields.ID]);
         // formData.append(DownloadFileModalFields.ACADEMIC_PLAN_ID, dialogData[DownloadFileModalFields.ACADEMIC_PLAN_ID]);

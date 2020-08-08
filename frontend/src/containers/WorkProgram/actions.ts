@@ -39,7 +39,11 @@ const deleteEvaluationTool = createAction<string>('WORK_PROGRAM_DELETE_EVALUATIO
 const addEvaluationTool = createAction<string>('WORK_PROGRAM_ADD_EVALUATION_TOOL');
 const changeEvaluationTool = createAction<string>('WORK_PROGRAM_CHANGE_EVALUATION_TOOL');
 
+const pageDown = createAction<string>('WORK_PROGRAM_PAGE_DOWN');
+
 const actions: WorkProgramActions = {
+    pageDown,
+
     getResults,
     setResults,
     deleteResult,
