@@ -69,8 +69,21 @@ class WorkProgram(models.Model):
     # list_of_references = models.TextField(blank=True, null=True)
     # guidelines = models.TextField(blank=True, null=True)
 
+
     def __str__(self):
         return (self.discipline_code + self.title)
+
+
+    def new_relations(old_descipline_code, new_descipline_code):
+        old_work_program = WorkProgram.objects.get(id = old_descipline_code)
+        print ('old', old_work_program, old_work_program.id)
+        new_work_program = WorkProgram.objects.get(id = new_descipline_code)
+        print ('new', new_work_program, new_work_program.id)
+        for wp_in_fs in WorkProgramInFieldOfStudy.objects.filter(work_program = old_work_program):
+            wp_in_fs.work_program = new_work_program
+            wp_in_fs.save()
+            print ('замена прошла')
+        old_work_program.delete()
 
 
 class PrerequisitesOfWorkProgram(models.Model):

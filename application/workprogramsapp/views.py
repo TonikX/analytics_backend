@@ -851,6 +851,17 @@ def NewOrdinalNumbersForTopicAPI(request):
         return Response(status=400)
 
 
+@api_view(['GET', 'POST'])
+def NewRealtionsForWorkProgramsInFieldOfStudyAPI(request):
+    old_descipline_code = request.data.get('old_descipline_code')
+    new_descipline_code = request.data.get('new_descipline_code')
+    try:
+        WorkProgram.new_relations(old_descipline_code, new_descipline_code)
+        return Response(status=200)
+    except:
+        return Response(status=400)
+
+
 #Блок эндпоинтов рабочей программы
 
 class OnlineCourseListCreateAPIView(generics.ListCreateAPIView):
