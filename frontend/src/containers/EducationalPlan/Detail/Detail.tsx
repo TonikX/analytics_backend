@@ -169,16 +169,16 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                 </TableRow>
 
                                 <TableRow>
-                                    <TableCell className={classes.hourCell} style={{top: '23px'}} align="center">1</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '23px'}} align="center">2</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '23px'}} align="center">3</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '23px'}} align="center">4</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '23px'}} align="center">5</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '23px'}} align="center">6</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '23px'}} align="center">7</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '23px'}} align="center">8</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '23px'}} align="center">9</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '23px'}} align="center">10</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">1</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">2</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">3</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">4</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">5</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">6</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">7</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">8</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">9</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">10</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -232,6 +232,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                             const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
 
                                                             const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                                                            const semesterHour = mappedSemesterHours.slice(0, 10);
 
                                                             return <TableRow>
                                                                 <TableCell>
@@ -249,7 +250,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                         </div>
                                                                     )}
                                                                 </TableCell>
-                                                                {mappedSemesterHours.map((semesterHour: string) =>
+                                                                {semesterHour.map((semesterHour: string) =>
                                                                     <TableCell align="center" className={classes.hourCell} > {semesterHour} </TableCell>
                                                                 )}
                                                                 <TableCell>

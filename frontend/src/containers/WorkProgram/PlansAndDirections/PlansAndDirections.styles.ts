@@ -9,5 +9,8 @@ export default (theme: Theme) => createStyles({
     cellLink: {
         textDecoration: 'none',
         color: theme.palette.primary.main
+    },
+    root: {
+        height: '100%'
     }
 });
