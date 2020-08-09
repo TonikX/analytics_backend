@@ -1714,5 +1714,22 @@ class DocxFileExportView(generics.ListAPIView):
         response['Content-Disposition'] = 'inline; filename="%s"' % filename
 
         tpl.save(response)
-
+    
         return response
+
+    
+@api_view(['POST'])
+def CloneWorkProgramm(request):
+    """
+    Апи для клонирования рабочей программы
+    Запрашивает id программы для клоинрования в поле program_id для тела запроса типа form-data
+    В ответе передается число - айди созданной копии
+    """
+    prog_id = request.data.get('program_id')
+    try:
+        clone_program=WorkProgram.clone_programm(prog_id)
+        serializer=WorkProgramSerializer(clone_program)
+        return Response(status=200, data=serializer.data)
+    except:
+        return Response(status=400)
+

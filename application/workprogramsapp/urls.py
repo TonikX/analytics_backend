@@ -25,8 +25,8 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkPr
     FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
     ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView, AcademicPlanListShortAPIView, NewRealtionsForWorkProgramsInFieldOfStudyAPI
 from .views import DocxFileExportView
+from .views import CloneWorkProgramm
     #DocxFileExportOldView
-
 
 
 urlpatterns = [
@@ -86,6 +86,7 @@ urlpatterns = [
     path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
     path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
+    path('api/workprogram/clone', CloneWorkProgramm),
     path('api/workprogramsinfieldofstudy', WorkProgramInFieldOfStudyListView.as_view()),
     path('api/workprogram/change_relations', NewRealtionsForWorkProgramsInFieldOfStudyAPI),
     #path('api/workprogram/itemrelations/<char:discipline_code>', WorkProgramDetailsWithDisciplineCodeView.as_view()),
