@@ -346,6 +346,64 @@ const saveCompetenceBlock = createLogic({
     }
 });
 
+const transformDetailPlanData = createLogic({
+    type: planActions.openDetailDialog.type,
+    latest: true,
+    transform({getState, action}: any, next) {
+        const plan = action.payload;
+        const workPrograms = get(plan, 'work_program', []);
+        let transformedWorkPrograms: { value: any; label: any; competences: {}; }[] = [];
+
+        workPrograms.forEach((wp: any) => {
+            let newWorkProgram = {
+                ...wp,
+                [BlocksOfWorkProgramsFields.COMPETENCES]: {}
+            };
+            let competences: any[] = [];
+
+            const zun_in_wp = get(wp, 'zuns_for_wp.0.zun_in_wp', []);
+
+            zun_in_wp.forEach((zunInWpItem: any) => {
+                const indicator = get(zunInWpItem, 'indicator_in_zun', {});
+                const competence = get(indicator, 'competence', null);
+                const items = get(zunInWpItem, 'items', []);
+
+                if (competence !== null){
+                    const findCompetence = competences.find(item => item.value === competence.id);
+
+                    const newIndicator = {
+                        value: indicator.id,
+                        label: indicator.name,
+                        [BlocksOfWorkProgramsFields.RESULTS]: items.map((result: any) => ({value: result, label: result}))
+                    };
+
+                    if (!findCompetence){
+                        competences.push({
+                            value: competence.id,
+                            label: competence.name,
+                            [BlocksOfWorkProgramsFields.INDICATORS]: [newIndicator]
+                        })
+                    } else {
+                        findCompetence.indicators.push(newIndicator);
+                    }
+                }
+            })
+
+            newWorkProgram[BlocksOfWorkProgramsFields.COMPETENCES] = competences;
+
+            transformedWorkPrograms.push(newWorkProgram);
+        })
+
+        next({
+            ...action,
+            payload: {
+                ...plan,
+                [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: transformedWorkPrograms
+            }
+        });
+    }
+});
+
 export default [
     deleteModule,
     changeModule,
@@ -360,4 +418,5 @@ export default [
     deleteBlockOfWorkPrograms,
     getDirectionsDependedOnWorkProgram,
     saveCompetenceBlock,
+    transformDetailPlanData,
 ];

@@ -95,7 +95,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                 return {
                     label: `${program[WorkProgramGeneralFields.TITLE]} ${date} ${authors}`,
-                    value: program[WorkProgramGeneralFields.ID]
+                    value: program[WorkProgramGeneralFields.ID],
+                    // @ts-ignore
+                    [BlocksOfWorkProgramsFields.COMPETENCES]: program[BlocksOfWorkProgramsFields.COMPETENCES],
                 };
             });
 
@@ -565,6 +567,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                     <TableBody>
                                                         {workProgram[BlocksOfWorkProgramsFields.COMPETENCES] &&
                                                         workProgram[BlocksOfWorkProgramsFields.COMPETENCES].map((competence: any, index: number) => {
+                                                            console.log('competence', competence);
                                                             if (competence[BlocksOfWorkProgramsFields.INDICATORS].length === 0){
                                                                 return <TableRow>
                                                                     <TableCell className={classes.competenceCell}>{index + 1}. {competence.label}</TableCell>
