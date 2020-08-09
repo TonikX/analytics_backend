@@ -25,6 +25,8 @@ SECRET_KEY = '#or0l2jubs(45^m)#a8q$z3pk64d+q5q6z$8fhgc&36_61smm7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+
 #ALLOWED_HOSTS = ['94.250.249.177', '94.250.249.177:8000', 'localhost', '127.0.0.1']
 ALLOWED_HOSTS = ['*']
 

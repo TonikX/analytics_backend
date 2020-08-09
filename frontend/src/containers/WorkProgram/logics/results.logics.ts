@@ -91,8 +91,33 @@ const deleteResult = createLogic({
     }
 });
 
+const getResults = createLogic({
+    type: workProgramActions.getResults.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const workProgramId = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_RESULTS}));
+
+        service.getResults(workProgramId)
+            .then((res) => {
+                dispatch(workProgramActions.setResults(res.data));
+                // @ts-ignore
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_RESULTS}));
+                return done();
+            });
+    }
+});
+
 export default [
     addResult,
     changeResult,
     deleteResult,
+    getResults,
 ];

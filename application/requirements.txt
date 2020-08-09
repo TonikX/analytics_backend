@@ -47,9 +47,8 @@ django-templated-mail==1.1.1
 pandas
 pyyaml
 django-clone==0.2.0
-
+openpyxl==3.0.4
 xlrd==1.2.0
-
 docxtpl==0.10.0
 drf-pdf==0.2.0
 

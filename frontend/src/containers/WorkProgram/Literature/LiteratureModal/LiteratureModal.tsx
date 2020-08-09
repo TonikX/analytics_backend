@@ -30,11 +30,10 @@ import {fields} from '../../enum';
 
 import {literatureFields} from "../../../Literature/enum";
 import {LiteratureType} from "../../../Literature/types";
+import CreateLiteratureModal from '../../../Literature/LiteratureCreateModal';
 
 import connect from './LiteratureModal.connect';
 import styles from './LiteratureModal.styles';
-import {Link} from "react-router-dom";
-import {appRouter} from "../../../../service/router-service";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -96,103 +95,106 @@ class LiteratureModal extends React.PureComponent<LiteratureModalProps> {
         const disableButton = selectedLiterature.length === 0;
 
         return (
-            <Dialog
-                open={isOpen}
-                onClose={this.handleClose}
-                classes={{
-                    root: classes.root,
-                    paper: classes.dialog
-                }}
-                fullScreen
-                //@ts-ignore
-                TransitionComponent={Transition}
-            >
-                <AppBar className={classes.appBar}>
-                    <Toolbar>
-                        <IconButton edge="start" color="inherit" onClick={this.handleClose} aria-label="close">
-                            <CloseIcon />
-                        </IconButton>
-                        <Typography variant="h6" className={classes.title}>
-                            Добавить источник
-                        </Typography>
-                        <Link to={appRouter.getLiteratureRoute()}
-                              target="_blank"
-                              className={classes.link}
-                        >
-                            <Button autoFocus
-                                    color="inherit"
+            <>
+                <Dialog
+                    open={isOpen}
+                    onClose={this.handleClose}
+                    classes={{
+                        root: classes.root,
+                        paper: classes.dialog
+                    }}
+                    fullScreen
+                    //@ts-ignore
+                    TransitionComponent={Transition}
+                >
+                    <AppBar className={classes.appBar}>
+                        <Toolbar>
+                            <IconButton edge="start" color="inherit" onClick={this.handleClose} aria-label="close">
+                                <CloseIcon />
+                            </IconButton>
+                            <Typography variant="h6" className={classes.title}>
+                                Добавить источник
+                            </Typography>
+                            <div className={classes.link}
+                                 onClick={()=> {this.props.literatureActions.openDialog();}}
                             >
-                                <AddIcon />
-                                Создать источник литературы
-                            </Button>
-                        </Link>
-                    </Toolbar>
-                </AppBar>
+                                <Button autoFocus
+                                        color="inherit"
+                                >
+                                    <AddIcon />
+                                    Создать источник литературы
+                                </Button>
+                            </div>
+                        </Toolbar>
+                    </AppBar>
 
-                <DialogContent className={classes.dialogContent}>
-                    <div className={classes.dialogSearch}>
-                        <TextField placeholder="Поиск"
-                                   variant="outlined"
-                                   InputProps={{
-                                       classes: {
-                                           root: classes.searchInput
-                                       },
-                                       startAdornment: <SearchOutlined />,
-                                   }}
-                                   onChange={this.handleChangeLiteratureSearchText}
-                        />
-                    </div>
+                    <DialogContent className={classes.dialogContent}>
+                        <div className={classes.dialogSearch}>
+                            <TextField placeholder="Поиск"
+                                       variant="outlined"
+                                       InputProps={{
+                                           classes: {
+                                               root: classes.searchInput
+                                           },
+                                           startAdornment: <SearchOutlined />,
+                                       }}
+                                       onChange={this.handleChangeLiteratureSearchText}
+                            />
+                        </div>
 
-                    <Scrollbars>
-                        <div className={classes.list}>
-                            {selectedLiterature.map && selectedLiterature.map((item: LiteratureType) =>
-                                <div className={classes.item}>
-                                    <Typography>{item[literatureFields.DESCRIPTION]}</Typography>
-                                    <Checkbox checked={true}
-                                              onChange={this.handleChangeSelect(item)}/>
-                                </div>
-                            )}
-                            {literatureList.map((item: LiteratureType) => {
-                                const findItem = selectedLiterature.find && selectedLiterature.find((selectedItem: LiteratureType) =>
-                                    selectedItem[literatureFields.ID] === item[literatureFields.ID]);
-
-                                if (findItem) return <></>;
-
-                                return (
+                        <Scrollbars>
+                            <div className={classes.list}>
+                                {selectedLiterature.map && selectedLiterature.map((item: LiteratureType) =>
                                     <div className={classes.item}>
                                         <Typography>{item[literatureFields.DESCRIPTION]}</Typography>
-                                        <Checkbox onChange={this.handleChangeSelect(item)}/>
+                                        <Checkbox checked={true}
+                                                  onChange={this.handleChangeSelect(item)}/>
                                     </div>
-                                );
-                            })}
+                                )}
+                                {literatureList.map((item: LiteratureType) => {
+                                    const findItem = selectedLiterature.find && selectedLiterature.find((selectedItem: LiteratureType) =>
+                                        selectedItem[literatureFields.ID] === item[literatureFields.ID]);
+
+                                    if (findItem) return <></>;
+
+                                    return (
+                                        <div className={classes.item}>
+                                            <Typography>{item[literatureFields.DESCRIPTION]}</Typography>
+                                            <Checkbox onChange={this.handleChangeSelect(item)}/>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </Scrollbars>
+                    </DialogContent>
+                    <DialogActions className={classes.actions}>
+                        <TablePagination count={allCount}
+                                         component="div"
+                                         page={currentPage - 1}
+                                         rowsPerPageOptions={[]}
+                                         onChangePage={this.handleChangePage}
+                            //@ts-ignore
+                                         rowsPerPage={10}
+                                         onChangeRowsPerPage={()=>{}}
+                        />
+                        <div>
+                            <Button onClick={this.handleClose}
+                                    variant="text">
+                                Отмена
+                            </Button>
+                            <Button onClick={this.handleSave}
+                                    variant="contained"
+                                    disabled={disableButton}
+                                    className={classes.saveButton}
+                                    color="primary">
+                                Сохранить
+                            </Button>
                         </div>
-                    </Scrollbars>
-                </DialogContent>
-                <DialogActions className={classes.actions}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                        //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
-                    />
-                    <div>
-                        <Button onClick={this.handleClose}
-                                variant="text">
-                            Отмена
-                        </Button>
-                        <Button onClick={this.handleSave}
-                                variant="contained"
-                                disabled={disableButton}
-                                className={classes.saveButton}
-                                color="primary">
-                            Сохранить
-                        </Button>
-                    </div>
-                </DialogActions>
-            </Dialog>
+                    </DialogActions>
+                </Dialog>
+
+                <CreateLiteratureModal />
+            </>
         );
     }
 }

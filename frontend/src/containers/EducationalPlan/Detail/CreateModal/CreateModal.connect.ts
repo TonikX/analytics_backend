@@ -6,7 +6,7 @@ import workProgramActions from "../../../WorkProgramList/actions";
 import {WorkProgramListActions} from "../../../WorkProgramList/types";
 
 import actions from "../../actions";
-import {isOpenDetailDialog, getDetailDialogData} from '../../getters';
+import {isOpenDetailDialog, getDetailDialogData, getEducationalPlanDetailId} from '../../getters';
 import {EducationalPlanActions} from "../../types";
 
 import {rootState} from "../../../../store/reducers";
@@ -17,6 +17,7 @@ const mapStateToProps = (state: rootState) => {
         isOpen: isOpenDetailDialog(state),
         blockOfWorkPrograms: getDetailDialogData(state),
         workProgramList: getWorkProgramsListForSelector(state),
+        planId: getEducationalPlanDetailId(state)
     };
 };
 

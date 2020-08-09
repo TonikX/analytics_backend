@@ -2,6 +2,8 @@ import {createAction} from "@reduxjs/toolkit";
 
 import {IndicatorProgramActions} from './types';
 
+const getIndicatorsDependsCompetence = createAction<string>('GET_INDICATORS_DEPENDS_COMPETENCE');
+
 const getIndicators = createAction<string>('GET_INDICATORS');
 const setIndicators = createAction<string>('SET_INDICATORS');
 
@@ -18,6 +20,7 @@ const changeAllCount = createAction<string>('INDICATOR_CHANGE_ALL_COUNT');
 const changeSorting = createAction<string>('INDICATOR_CHANGE_SORTING');
 
 const actions: IndicatorProgramActions = {
+    getIndicatorsDependsCompetence,
     getIndicators,
     setIndicators,
     createNewIndicator,

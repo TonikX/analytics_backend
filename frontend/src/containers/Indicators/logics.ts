@@ -43,6 +43,30 @@ const getIndicators = createLogic({
     }
 });
 
+const getIndicatorsDependsCompetence = createLogic({
+    type: competencesActions.getIndicatorsDependsCompetence.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const competence = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_INDICATORS_DEPENDS_COMPETENCE}));
+
+        service.getIndicatorsDependsCompetence(competence)
+            .then((res) => {
+                const data = get(res, 'data', []);
+                dispatch(competencesActions.setIndicators(data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_INDICATORS_DEPENDS_COMPETENCE}));
+                return done();
+            });
+    }
+});
+
 const deleteIndicator = createLogic({
     type: competencesActions.deleteIndicator.type,
     latest: true,
@@ -119,4 +143,5 @@ export default [
     deleteIndicator,
     createNewIndicator,
     changeIndicator,
+    getIndicatorsDependsCompetence,
 ];

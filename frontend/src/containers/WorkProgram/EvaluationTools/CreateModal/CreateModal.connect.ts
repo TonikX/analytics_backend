@@ -15,7 +15,7 @@ const mapStateToProps = (state: rootState) => {
         isOpen: isOpenDialog(state, fields.CREATE_NEW_EVALUATION_TOOLS),
         evaluationTool: getDialogData(state, fields.CREATE_NEW_EVALUATION_TOOLS),
         types: [
-            'Дебаты / Дскуссия / Круглый стол',
+            'Дебаты / Дискуссия / Круглый стол',
             'Деловая (ролевая) игра',
             'Задача (задание)',
             'Исследовательская работа / Проект / Доклад',

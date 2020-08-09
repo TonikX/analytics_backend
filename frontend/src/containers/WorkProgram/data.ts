@@ -23,7 +23,7 @@ export const specialization = [
     },
     {
         value: MASTER,
-        label: 'Мастер'
+        label: 'Магистр'
     }
 ];
 

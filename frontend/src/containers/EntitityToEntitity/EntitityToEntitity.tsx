@@ -95,7 +95,7 @@ class EntitityToEntitity extends React.Component<EntityToEntityProps> {
     }
 
     handleSelectFilter = (items: Array<any>) => {
-        this.props.actions.changeSearchQuery({[EntityToEntityFields.RELATION] : get(relations, ['items', 0], '')});
+        this.props.actions.changeSearchQuery({[EntityToEntityFields.RELATION] : get(items, 0, '')});
         this.changeFilter();
     }
 

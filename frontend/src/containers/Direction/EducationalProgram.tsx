@@ -166,12 +166,14 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                                         <TableCell>{direction[DirectionFields.EDUCATION_FORM] === 'extramural' ? 'Заочная' : 'Очная'}</TableCell>
                                         <TableCell>{direction[DirectionFields.EDUCATIONAL_PROFILE]} </TableCell>
                                         <TableCell>
-                                            <IconButton onClick={this.handleClickDelete(direction[DirectionFields.ID])}>
-                                                <DeleteIcon />
-                                            </IconButton>
-                                            <IconButton onClick={this.handleClickEdit(direction)}>
-                                                <EditIcon />
-                                            </IconButton>
+                                            <div style={{display: 'flex'}}>
+                                                <IconButton onClick={this.handleClickDelete(direction[DirectionFields.ID])}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                                <IconButton onClick={this.handleClickEdit(direction)}>
+                                                    <EditIcon />
+                                                </IconButton>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 )}

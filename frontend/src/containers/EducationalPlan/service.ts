@@ -1,20 +1,34 @@
 import BaseService from "../../service/base-service";
-import {BlocksOfWorkProgramsFields, EducationalPlanBlockFields, EducationalPlanFields, ModuleFields} from "./enum";
+import {
+    BlocksOfWorkProgramsFields,
+    DownloadFileModalFields,
+    EducationalPlanBlockFields,
+    EducationalPlanFields,
+    ModuleFields
+} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
 class EducationalPlanService extends BaseService{
     getEducationalPlan(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
-        return this.get(`/api/academicplan?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+        return this.get(`/api/academicplan/short?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
     getEducationalPlanDetail(id: number){
         return this.get(`/api/academicplan/detail/${id}`);
     }
 
+    getDirectionsDependedOnWorkProgram(workProgramId: number){
+        return this.get(`/api/workprogram/fieldofstudies/${workProgramId}`);
+    }
+
     deleteEducationalPlan(id: number){
         return this.delete(`/api/academicplan/delete/${id}`);
+    }
+
+    saveCompetenceBlock(postData: any){
+        return this.post(`/api/zun/`, postData);
     }
 
     createEducationalPlan(competence: any){
@@ -30,22 +44,14 @@ class EducationalPlanService extends BaseService{
         return this.post(`/api/academicplan/create`, formData);
     }
 
-    createBlockOfWorkPrograms(moduleWithBlocks: any){
+    createBlockOfWorkPrograms(moduleId: number){
         return this.post(`/api/workprogramchangeindisciplineblockmodule/create`, {
-            'discipline_block_module': moduleWithBlocks.moduleId,
-            [BlocksOfWorkProgramsFields.TYPE]: moduleWithBlocks[BlocksOfWorkProgramsFields.TYPE],
-            [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: moduleWithBlocks[BlocksOfWorkProgramsFields.SEMESTER_UNIT].toString(),
-            [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: moduleWithBlocks[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((item: { value: any; }) => item.value),
+            'discipline_block_module': moduleId,
         });
     }
 
     changeBlockOfWorkPrograms(moduleWithBlocks: any){
-        return this.patch(`/api/workprogramchangeindisciplineblockmodule/update/${moduleWithBlocks[BlocksOfWorkProgramsFields.ID]}`, {
-            'discipline_block_module': moduleWithBlocks.moduleId,
-            [BlocksOfWorkProgramsFields.TYPE]: moduleWithBlocks[BlocksOfWorkProgramsFields.TYPE],
-            [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: moduleWithBlocks[BlocksOfWorkProgramsFields.SEMESTER_UNIT].toString(),
-            [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: moduleWithBlocks[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((item: { value: any; }) => item.value),
-        });
+        return this.patch(`/api/workprogramchangeindisciplineblockmodule/update/${moduleWithBlocks[BlocksOfWorkProgramsFields.ID]}`, moduleWithBlocks);
     }
 
     deleteBlockOfWorkPrograms(id: number){
@@ -68,6 +74,17 @@ class EducationalPlanService extends BaseService{
 
     deleteModule(id: number){
         return this.delete(`/api/disciplineblockmodule/delete/${id}`);
+    }
+
+    getFile(dialogData: any){
+        // const formData = new FormData();
+
+        // formData.append(DownloadFileModalFields.ID, dialogData[DownloadFileModalFields.ID]);
+        // formData.append(DownloadFileModalFields.ACADEMIC_PLAN_ID, dialogData[DownloadFileModalFields.ACADEMIC_PLAN_ID]);
+        // formData.append(DownloadFileModalFields.YEAR, dialogData[DownloadFileModalFields.YEAR]);
+        // formData.append(DownloadFileModalFields.DIRECTION_ID, dialogData[DownloadFileModalFields.DIRECTION_ID]);
+
+        return this.get(`/api/export/docx/${dialogData[DownloadFileModalFields.ID]}/${dialogData[DownloadFileModalFields.DIRECTION_ID]}/${dialogData[DownloadFileModalFields.ACADEMIC_PLAN_ID]}/${dialogData[DownloadFileModalFields.YEAR]}`);
     }
 
     updateEducationalPlan(competence: any){

@@ -29,6 +29,8 @@ const changePrerequisite = createAction<string>('WORK_PROGRAM_CHANGE_PREREQUISIT
 const deleteResult = createAction<string>('WORK_PROGRAM_DELETE_RESULT');
 const addResult = createAction<string>('WORK_PROGRAM_ADD_RESULT');
 const changeResult = createAction<string>('WORK_PROGRAM_CHANGE_RESULT');
+const getResults = createAction<string>('WORK_PROGRAM_GET_RESULTS');
+const setResults = createAction<string>('WORK_PROGRAM_SET_RESULTS');
 
 const getWorkProgramEvaluationTools = createAction<string>('GET_WORK_PROGRAM_EVALUATION_TOOLS');
 const setWorkProgramEvaluationTools = createAction<string>('SET_WORK_PROGRAM_EVALUATION_TOOLS');
@@ -37,7 +39,13 @@ const deleteEvaluationTool = createAction<string>('WORK_PROGRAM_DELETE_EVALUATIO
 const addEvaluationTool = createAction<string>('WORK_PROGRAM_ADD_EVALUATION_TOOL');
 const changeEvaluationTool = createAction<string>('WORK_PROGRAM_CHANGE_EVALUATION_TOOL');
 
+const pageDown = createAction<string>('WORK_PROGRAM_PAGE_DOWN');
+
 const actions: WorkProgramActions = {
+    pageDown,
+
+    getResults,
+    setResults,
     deleteResult,
     addResult,
     changeResult,

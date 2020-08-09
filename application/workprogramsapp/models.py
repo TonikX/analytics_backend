@@ -49,6 +49,7 @@ class WorkProgram(CloneMixin, models.Model):
 
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     discipline_code = models.CharField(max_length=1024, blank=True, null=True)
+    subject_code = models.CharField(max_length=1024, blank=True, null=True)
     authors = models.CharField(max_length=1024, blank=True, null=True)
     prerequisites = models.ManyToManyField(Items, related_name='WorkProgramPrerequisites', )
     qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name='Квалификация',
@@ -71,13 +72,30 @@ class WorkProgram(CloneMixin, models.Model):
     # evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
     description = models.CharField(max_length=5000, blank=True, null=True)
     video = models.CharField(max_length=1024, blank=True, null=True)
+    credit_units = models.CharField(max_length=1024, blank=True, null=True)
+    semester_hour = models.CharField(max_length=1024, blank=True, null=True)
+    
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
+
 
     # list_of_references = models.TextField(blank=True, null=True)
     # guidelines = models.TextField(blank=True, null=True)
 
+
     def __str__(self):
-        return self.title
+        return (self.discipline_code + self.title)
+
+
+    def new_relations(old_descipline_code, new_descipline_code):
+        old_work_program = WorkProgram.objects.get(id = old_descipline_code)
+        print ('old', old_work_program, old_work_program.id)
+        new_work_program = WorkProgram.objects.get(id = new_descipline_code)
+        print ('new', new_work_program, new_work_program.id)
+        for wp_in_fs in WorkProgramInFieldOfStudy.objects.filter(work_program = old_work_program):
+            wp_in_fs.work_program = new_work_program
+            wp_in_fs.save()
+            print ('замена прошла')
+        old_work_program.delete()
 
     def clone_programm(programm_id):
         program = WorkProgram.objects.get(pk=programm_id)
@@ -195,15 +213,12 @@ class FieldOfStudy(models.Model):
         (INTERNAL, 'Internal'),
         (EXTRAMURAL, 'Extramural'),
     )
-    number = models.CharField(unique=True, max_length=1024, verbose_name='Шифр ОП')
-    title = models.CharField(unique=True, max_length=1024, verbose_name='Название ОП', blank=True, null=True)
-    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name='Квалификация',
-                                     blank=True, null=True)
-    educational_profile = models.CharField(unique=True, max_length=1024, verbose_name='Профиль ОП', blank=True,
-                                           null=True)
-    faculty = models.CharField(max_length=150, verbose_name='Факультет (Структурное подразделение)', null=True)
-    education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name='Форма обучения',
-                                      blank=True, null=True)
+    number = models.CharField(max_length=1024, verbose_name = 'Шифр ОП')
+    title = models.CharField(max_length=1024, verbose_name = 'Название ОП', blank = True, null = True)
+    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank = True, null = True)
+    educational_profile = models.CharField(max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
+    faculty = models.CharField(max_length=150, verbose_name = 'Факультет (Структурное подразделение)', null=True)
+    education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
 
     def __str__(self):
         return self.number
@@ -251,14 +266,10 @@ class AcademicPlan(models.Model):
         (INTERNAL, 'Internal'),
         (EXTRAMURAL, 'Extramural'),
     )
-
-    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name='Квалификация',
-                                     blank=True, null=True)
-    educational_profile = models.CharField(unique=True, max_length=1024, verbose_name='Профиль ОП', blank=True,
-                                           null=True)
-    number = models.CharField(unique=True, max_length=1024, verbose_name='Номер учебного плана', blank=True, null=True)
-    field_of_study = models.ManyToManyField('FieldOfStudy', through='ImplementationAcademicPlan',
-                                            related_name="block_in_academic_plan", blank=True, null=True)
+    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank = True, null = True)
+    educational_profile = models.CharField(max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
+    number = models.CharField(max_length=1024, verbose_name = 'Номер учебного плана', blank = True, null = True)
+    field_of_study = models.ManyToManyField('FieldOfStudy', through='ImplementationAcademicPlan', related_name="block_in_academic_plan", blank = True, null = True)
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     year = models.CharField(max_length=1024, blank=True, null=True)
     education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name='Форма обучения',
@@ -425,7 +436,8 @@ class Zun(models.Model):
     knowledge = models.CharField(max_length=1024, blank=True, null=True)
     skills = models.CharField(max_length=1024, blank=True, null=True)
     attainments = models.CharField(max_length=1024, blank=True, null=True)
-    items = models.ManyToManyField('OutcomesOfWorkProgram', verbose_name="Учебная сущность и уровень освоения")
+    items = models.ManyToManyField('OutcomesOfWorkProgram', verbose_name = "Учебная сущность и уровень освоения", blank=True, null=True)
+
 
     # def __str__(self):
     #     return (str(self.work_program_change_in_discipline_block_module) + str(self.work_program))

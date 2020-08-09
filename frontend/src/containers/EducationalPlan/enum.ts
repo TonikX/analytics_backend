@@ -3,6 +3,7 @@ export enum fields {
     EDUCATIONAL_PLAN_DIALOG = 'EDUCATIONAL_PLAN_DIALOG',
     EDUCATIONAL_PLAN_DETAIL_DIALOG = 'EDUCATIONAL_PLAN_DETAIL_DIALOG',
     EDUCATIONAL_PLAN_MODULE_DIALOG = 'EDUCATIONAL_PLAN_MODULE_DIALOG',
+    DOWNLOAD_DIALOG = 'DOWNLOAD_DIALOG',
     IS_OPEN_DIALOG = 'IS_OPEN_DIALOG',
     DIALOG_DATA = 'DIALOG_DATA',
     SEARCH_QUERY = 'SEARCH_QUERY',
@@ -12,6 +13,7 @@ export enum fields {
     SORTING_FIELD = 'SORTING_FIELD',
     SORTING_MODE = 'SORTING_MODE',
     DETAIL_PLAN = 'DETAIL_PLAN',
+    DIRECTIONS_DEPENDED_ON_WORK_PROGRAM = 'DIRECTIONS_DEPENDED_ON_WORK_PROGRAM',
 }
 
 export enum fetchingTypes {
@@ -26,6 +28,8 @@ export enum fetchingTypes {
     CHANGE_MODULE = 'CHANGE_MODULE',
     CREATE_MODULE = 'CREATE_MODULE',
     DELETE_MODULE = 'DELETE_MODULE',
+    GET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM = 'GET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM',
+    SAVE_COMPETENCE_BLOCK = 'SAVE_COMPETENCE_BLOCK',
 }
 
 export enum EducationalPlanFields {
@@ -54,6 +58,16 @@ export enum ModuleFields {
 export enum BlocksOfWorkProgramsFields {
     ID = 'id',
     WORK_PROGRAMS = 'work_program',
+    COMPETENCES = 'competences',
+    INDICATORS = 'indicators',
+    RESULTS = 'results',
     SEMESTER_UNIT = 'credit_units',
     TYPE = 'change_type',
+}
+
+export enum DownloadFileModalFields {
+    ID = 'pk',
+    DIRECTION_ID = 'field_of_study_id',
+    ACADEMIC_PLAN_ID = 'academic_plan_id',
+    YEAR = 'year',
 }

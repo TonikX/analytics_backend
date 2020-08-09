@@ -20,6 +20,7 @@ import Results from "./Results";
 import {WorkProgramProps} from './types';
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
+import PlansAndDirections from "./PlansAndDirections";
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
@@ -31,6 +32,10 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
         this.props.actions.getWorkProgram(workProgramId);
         this.props.actions.setWorkProgramId(workProgramId);
+    }
+
+    componentWillUnmount() {
+        this.props.actions.pageDown();
     }
 
     handleStep = (number: number) => () => {
@@ -97,6 +102,14 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
                     <Results />
                 </div>;
+            case 7:
+                return <div className={classes.subItem}>
+                    <Typography className={classes.subTitle}>
+                        Связанные с рпд учебные планы и направления
+                    </Typography>
+
+                    <PlansAndDirections />
+                </div>;
         }
     }
 
@@ -104,7 +117,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         const {classes} = this.props;
         const {activeStep} = this.state;
 
-        const steps = ['Главное',  "Пререквизиты", 'Разделы', "Темы", "Источники", "Оценочные средства", "Результаты обучения"];
+        const steps = ['Главное',  "Пререквизиты", 'Разделы', "Темы", "Источники", "Оценочные средства", "Результаты обучения", "Cвязанные с рпд учебные планы и направления"];
 
         return (
             <Paper className={classes.root}>
@@ -119,6 +132,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                             <Step key={label}>
                                 <StepButton onClick={this.handleStep(index)}
                                             completed={false}
+                                            style={{textAlign: 'left'}}
                                 >
                                     {label}
                                 </StepButton>

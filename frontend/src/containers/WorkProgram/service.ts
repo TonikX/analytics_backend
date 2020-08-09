@@ -94,23 +94,20 @@ class WorkProgramService extends BaseService{
             formData.append(workProgramTopicFields.COURSE, topic[workProgramTopicFields.COURSE][CourseFields.ID]);
         }
 
-        Object.keys(topic).forEach((key: string) => {
-            // @ts-ignore
-            if (topic[key]){
-                // @ts-ignore
-            }
-        })
-
         return this.patch(`/api/topics/${topic[workProgramTopicFields.ID]}`, formData);
     }
 
     createNewTopic(topic: Topic, workProgramId: ReactText){
         const formData = new FormData();
 
-        Object.keys(topic).forEach((key: string) => {
+        formData.append(workProgramTopicFields.DESCRIPTION, topic[workProgramTopicFields.DESCRIPTION]);
+        formData.append(workProgramTopicFields.SECTION, topic[workProgramTopicFields.SECTION]);
+        formData.append(workProgramTopicFields.NUMBER, topic[workProgramTopicFields.NUMBER]);
+
+        if (topic[workProgramTopicFields.COURSE]){
             // @ts-ignore
-            formData.append(key, topic[key]);
-        })
+            formData.append(workProgramTopicFields.COURSE, topic[workProgramTopicFields.COURSE][CourseFields.ID]);
+        }
 
         // @ts-ignore
         formData.append('work_program', workProgramId);
@@ -182,6 +179,10 @@ class WorkProgramService extends BaseService{
 
     deleteResult(id: ReactText){
         return this.delete(`/api/outcomesofworkprogram/delete/${id}`);
+    }
+
+    getResults(workProgramId: ReactText){
+        return this.get(`/api/outcomesofworkprogramforacademycplan/${workProgramId}`);
     }
 
     updateLiterature(literature: Array<number>, workProgramId: ReactText){

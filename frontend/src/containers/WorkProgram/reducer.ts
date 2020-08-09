@@ -12,6 +12,7 @@ export const initialState: workProgramState = {
     },
     [fields.WORK_PROGRAM_ID]: '',
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: [],
+    [fields.WORK_PROGRAM_RESULTS]: [],
     [fields.DIALOGS]: {
         [fields.CREATE_NEW_TOPIC_DIALOG]: {
             [fields.IS_OPEN_DIALOG]: false,
@@ -43,6 +44,11 @@ const setWorkProgramEvaluationTools = (state: workProgramState, {payload}: any):
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: payload
 });
 
+const setResults = (state: workProgramState, {payload}: any): workProgramState => ({
+    ...state,
+    [fields.WORK_PROGRAM_RESULTS]: payload
+});
+
 const openDialog = (state: workProgramState, {payload}: any): workProgramState => ({
     ...state,
     [fields.DIALOGS]: {
@@ -65,13 +71,18 @@ const closeDialog = (state: workProgramState, {payload}: any): workProgramState 
     }
 });
 
+const pageDown = (): workProgramState => initialState;
+
 export const reducer = createReducer(initialState, {
     [actions.setWorkProgramPart.type]: setWorkProgramPart,
     [actions.setWorkProgram.type]: setWorkProgram,
     [actions.setWorkProgramId.type]: setWorkProgramId,
 
+    [actions.setResults.type]: setResults,
+
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
 
     [actions.setWorkProgramEvaluationTools.type]: setWorkProgramEvaluationTools,
+    [actions.pageDown.type]: pageDown,
 });
