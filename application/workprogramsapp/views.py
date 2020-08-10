@@ -864,6 +864,7 @@ def NewRealtionsForWorkProgramsInFieldOfStudyAPI(request):
 
 #Блок эндпоинтов рабочей программы
 
+
 class OnlineCourseListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = OnlineCourseSerializer
     queryset = OnlineCourse.objects.all()

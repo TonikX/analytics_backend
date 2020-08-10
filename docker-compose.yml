@@ -26,7 +26,7 @@ services:
     web:
         container_name: analytics_web
         build: ./application
-        command: bash -c "python manage.py makemigrations --noinput && python manage.py migrate --noinput &&
+        command: bash -c "python manage.py makemigrations --noinput && python manage.py migrate --noinput --fake &&
                 python manage.py runserver --insecure 0.0.0.0:8000";
  #       "python manage.py makemigrations --merge --noinput";
                 

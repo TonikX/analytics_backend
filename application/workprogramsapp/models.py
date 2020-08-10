@@ -74,7 +74,7 @@ class WorkProgram(CloneMixin, models.Model):
     video = models.CharField(max_length=1024, blank=True, null=True)
     credit_units = models.CharField(max_length=1024, blank=True, null=True)
     semester_hour = models.CharField(max_length=1024, blank=True, null=True)
-    
+
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
 
 
@@ -266,19 +266,22 @@ class AcademicPlan(models.Model):
         (INTERNAL, 'Internal'),
         (EXTRAMURAL, 'Extramural'),
     )
+
+
     qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank = True, null = True)
     educational_profile = models.CharField(max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
-    number = models.CharField(max_length=1024, verbose_name = 'Номер учебного плана', blank = True, null = True)
+    number = models.CharField(unique=True, max_length=1024, verbose_name = 'Номер учебного плана', blank = True, null = True)
     field_of_study = models.ManyToManyField('FieldOfStudy', through='ImplementationAcademicPlan', related_name="block_in_academic_plan", blank = True, null = True)
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
-    year = models.CharField(max_length=1024, blank=True, null=True)
-    education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name='Форма обучения',
-                                      blank=True, null=True)
+    year = models.CharField(max_length=1024, blank = True, null = True)
+    education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
 
-    # TODO: Добавить год набора
+
+    #TODO: Добавить год набора
 
     def __str__(self):
         return (self.educational_profile)
+
 
     def clone_descipline_blocks(id, siap):
         DisciplineBlocks = DisciplineBlock.objects.filter(academic_plan__educational_profile='Экспертный профиль')
@@ -305,9 +308,8 @@ class ImplementationAcademicPlan(models.Model):
     '''
     Модель приминения учебного плана в направлении
     '''
-    academic_plan = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, verbose_name='Учебный план',
-                                      related_name="academic_plan_in_field_of_study")
-    field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE, verbose_name='Направление подготовки')
+    academic_plan = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план', related_name="academic_plan_in_field_of_study")
+    field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE, verbose_name = 'Направление подготовки')
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
     period_of_study = models.CharField(max_length=100, blank=True, null=True)
@@ -430,17 +432,16 @@ class Zun(models.Model):
     '''
     Модель для компетенций
     '''
-    wp_in_fs = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.CASCADE, blank=True, null=True,
-                                 related_name="zun_in_wp")
+    wp_in_fs = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.CASCADE, blank=True, null=True, related_name="zun_in_wp")
     indicator_in_zun = models.ForeignKey('Indicator', on_delete=models.CASCADE, blank=True, null=True)
     knowledge = models.CharField(max_length=1024, blank=True, null=True)
     skills = models.CharField(max_length=1024, blank=True, null=True)
     attainments = models.CharField(max_length=1024, blank=True, null=True)
     items = models.ManyToManyField('OutcomesOfWorkProgram', verbose_name = "Учебная сущность и уровень освоения", blank=True, null=True)
 
-
     # def __str__(self):
     #     return (str(self.work_program_change_in_discipline_block_module) + str(self.work_program))
+
 
 
 class Competence(models.Model):
