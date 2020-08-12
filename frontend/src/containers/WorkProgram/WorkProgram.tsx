@@ -114,7 +114,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, workProgramTitle} = this.props;
         const {activeStep} = this.state;
 
         const steps = ['Главное',  "Пререквизиты", 'Разделы', "Темы", "Источники", "Оценочные средства", "Результаты обучения", "Cвязанные с рпд учебные планы и направления"];
@@ -142,7 +142,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                 </Stepper>
 
                 <div className={classes.content}>
-                    <Typography className={classes.title}>Описание рабочей программы дисциплины</Typography>
+                    <Typography className={classes.title}>Описание рабочей программы дисциплины <span style={{fontWeight: 500}}>"{workProgramTitle}"</span></Typography>
 
                     {this.renderContent()}
                 </div>

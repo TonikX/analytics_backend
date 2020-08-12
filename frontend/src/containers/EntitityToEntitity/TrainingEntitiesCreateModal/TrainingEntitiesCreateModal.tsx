@@ -29,9 +29,9 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
     state = {
         trainingEntity: {
             [EntityToEntityFields.ID]: null,
-            [EntityToEntityFields.ITEM1]: {},
-            [EntityToEntityFields.ITEM2]: {},
-            [EntityToEntityFields.RELATION]: '',
+            [EntityToEntityFields.ITEM1]: null,
+            [EntityToEntityFields.ITEM2]: null,
+            [EntityToEntityFields.RELATION]: null,
         },
     };
 
@@ -101,9 +101,9 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
         const {isOpen, classes, trainingEntitiesList} = this.props;
         const {trainingEntity} = this.state;
 
-        const disableButton = get(trainingEntity, [EntityToEntityFields.ITEM1, SubjectAreaFields.TITLE, 'length'], 0) === 0 ||
-            get(trainingEntity, [EntityToEntityFields.ITEM2, SubjectAreaFields.TITLE, 'length'], 0) === 0 ||
-            get(trainingEntity, [EntityToEntityFields.RELATION, 'length'], 0) === 0;
+        const disableButton = !get(trainingEntity, [EntityToEntityFields.ITEM1, SubjectAreaFields.ID], null) ||
+            !get(trainingEntity, [EntityToEntityFields.ITEM2, SubjectAreaFields.ID], null) ||
+            !get(trainingEntity, [EntityToEntityFields.RELATION], null);
 
         const isEditMode = trainingEntity[EntityToEntityFields.ID];
 
@@ -160,7 +160,6 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
                                     changeItem={this.saveEntity(EntityToEntityFields.ITEM2)}
                                     value={get(trainingEntity, [EntityToEntityFields.ITEM1, SubjectAreaFields.ID], '')}
                                     valueLabel={get(trainingEntity, [EntityToEntityFields.ITEM1, SubjectAreaFields.TITLE], '')}
-                                    className={classes.marginBottom30}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>

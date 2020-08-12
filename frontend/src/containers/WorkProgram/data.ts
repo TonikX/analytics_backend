@@ -4,6 +4,14 @@ const BACHELOR = 'bachelor';
 const SPECIALIST = 'specialist';
 const MASTER = 'master';
 
+export const specializationObject: any = {
+    [PRIMARY_VOCATIONAL_EDUCATION]: 'Среднее профессиональное образование',
+    [SECONDARY_VOCATIONAL_EDUCATION]: 'Магистр профессионального образования',
+    [BACHELOR]: 'Бакалавр',
+    [SPECIALIST]: 'Специалист',
+    [MASTER]: 'Магистр',
+}
+
 export const specialization = [
     {
         value: PRIMARY_VOCATIONAL_EDUCATION,

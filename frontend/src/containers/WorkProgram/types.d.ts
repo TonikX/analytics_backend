@@ -94,6 +94,7 @@ export type IndicatorInZun = {
 
 export interface WorkProgramProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
+    workProgramTitle: string;
 }
 
 export type Section = {
