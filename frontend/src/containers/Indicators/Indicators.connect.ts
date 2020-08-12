@@ -10,7 +10,7 @@ import {rootState} from "../../store/reducers";
 
 const mapStateToProps = (state: rootState) => {
     return {
-        results: getIndicators(state),
+        indicators: getIndicators(state),
         currentPage: getCurrentPage(state),
         searchQuery: getSearchQuery(state),
         allCount: getAllCount(state),

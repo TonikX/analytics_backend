@@ -128,7 +128,7 @@ class Indicators extends React.Component<IndicatorProps> {
 
                     <div className={classes.list}>
                         <Scrollbars>
-                            {indicators.map && indicators.map(competence =>
+                            {indicators.map(competence =>
                                 <div className={classes.row} key={competence[IndicatorsFields.ID]}>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                                         {competence[IndicatorsFields.NUMBER]} {competence[IndicatorsFields.TITLE]}
