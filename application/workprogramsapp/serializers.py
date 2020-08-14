@@ -333,6 +333,14 @@ class ZunCreateSerializer(serializers.Serializer):
 
 class ZunCreateSaveSerializer(serializers.ModelSerializer):
     """Сериализатор Сохранения Зунов"""
+
+    def update(self, instance, validated_data):
+        instance.indicator_in_zun = validated_data.get('content', instance.indicator_in_zun)
+
+        for item in validated_data.get('items'):
+            instance.items.add(item)
+        return instance
+
     class Meta:
         model = Zun
         fields = ['id', 'indicator_in_zun', 'wp_in_fs', 'items']

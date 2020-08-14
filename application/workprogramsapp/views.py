@@ -766,6 +766,29 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ZunCreateSerializer
 
 
+    def update(self, request, *args, **kwargs):
+        for new_zun in request.data:
+            print (new_zun.get('wp_changeblock'))
+            print (Zun.objects.get(id = kwargs['pk']).items)
+            if Zun.objects.get(id = kwargs['pk']):
+                for item in new_zun.get('items'):
+                    print ('item', item)
+            new_zun = {"id": Zun.objects.get(id = kwargs['pk']).id, "wp_in_fs" : Zun.objects.get(id = kwargs['pk']).wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
+            print(new_zun)
+            serializer = ZunCreateSaveSerializer(Zun.objects.get(id = kwargs['pk']), data = new_zun)
+            #print (serializer)
+            print
+
+            if serializer.is_valid(raise_exception=True):
+                old_zun = Zun.objects.get(id = kwargs['pk']).items.clear()
+                serializer.save()
+                print ("Сохранение прошло")
+                #return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message":"all objects saved"}, status=status.HTTP_201_CREATED)
+
+
 class DisciplineSectionListAPI(generics.ListCreateAPIView):
     """
     API endpoint that represents a list of Discipline Sections.
