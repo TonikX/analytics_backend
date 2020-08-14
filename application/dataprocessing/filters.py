@@ -12,9 +12,33 @@ class DomainFilter(django_filters.FilterSet):
         model = Domain
         fields = {"name": ["contains"],}
 
+
+class CharFilterInFilter(django_filters.rest_framework.BaseInFilter, django_filters.rest_framework.CharFilter):
+    pass
+
+
+HIERARCHY = '1'
+NOT_DEFINED = '0'
+SAME_PARENT = '2'
+HAVE_PREREQUISITE = '4'
+SYNONYMS = '5'
+NO = '7'
+
+STATUS_CHOICES = (
+    (NOT_DEFINED, 'неопределенное'),
+    (HIERARCHY, 'включает в себя'),
+    (SAME_PARENT, 'является частью одного раздела'),
+    (HAVE_PREREQUISITE, 'имеет пререквизит'),
+    (SYNONYMS, 'тождество'),
+    (NO, 'отсутствует'),
+)
+
+
 class RelationFilter(django_filters.FilterSet):
-    item1__name = django_filters.CharFilter(lookup_expr='icontains')
-    item2__name = django_filters.CharFilter(lookup_expr='icontains')
+    item1 = CharFilterInFilter(field_name="item1__name", lookup_expr='in')
+    item2 = CharFilterInFilter(field_name="item2__name", lookup_expr='in')
+    relation = django_filters.ChoiceFilter(choices=STATUS_CHOICES)
+    #item2_filter = django_filters.CharFilter(lookup_expr='icontains')
     class Meta:
         model = Relation
-        fields = {'relation', }
+        fields = {'item1', 'item2', 'relation'}
