@@ -3,16 +3,19 @@ import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 // @ts-ignore
 import Link from "react-router-dom/Link";
-// @ts-ignore
-import Scrollbars from "react-custom-scrollbars";
 
-import classNames from 'classnames';
+import Scrollbars from "react-custom-scrollbars";
 
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
+import TableBody from "@material-ui/core/TableBody";
 
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -31,11 +34,12 @@ import {DirectionFields} from "../Direction/enum";
 import {EducationalPlanFields} from "../EducationalPlan/enum";
 import {EducationPlanInDirectionFields} from './enum';
 
+import {appRouter} from "../../service/router-service";
+
 import {EducationalPlanInDirectionProps, EducationalPlanInDirectionType} from './types';
 
 import connect from './EducationPlanInDirection.connect';
 import styles from './EducationPlanInDirection.styles';
-import {appRouter} from "../../service/router-service";
 
 class EducationPlanInDirection extends React.Component<EducationalPlanInDirectionProps> {
     state = {
@@ -114,70 +118,73 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                     />
                 </Typography>
 
-                <div className={classes.tableWrap}>
-                    <div className={classNames(classes.row, classes.header)}>
-                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Направление
-                            <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.DIRECTION)}
-                                           mode={sortingField === EducationPlanInDirectionFields.DIRECTION ? sortingMode : ''}
-                            />
-                        </Typography>
-
-                        <Typography className={classNames(classes.marginRight, classes.numberCell)}>
-                            Номер направления
-                            <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.NUMBER)}
-                                           mode={sortingField === EducationPlanInDirectionFields.NUMBER ? sortingMode : ''}
-                            />
-                        </Typography>
-
-                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Учебный план
-                            <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.EDUCATION_PLAN)}
-                                           mode={sortingField === EducationPlanInDirectionFields.EDUCATION_PLAN ? sortingMode : ''}
-                            />
-                        </Typography>
-
-                        <Typography className={classNames(classes.marginRight, classes.yearCell)}>
-                            Год
-                            <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.YEAR)}
-                                           mode={sortingField === EducationPlanInDirectionFields.YEAR ? sortingMode : ''}
-                            />
-                        </Typography>
+                <Scrollbars>
+                    <div className={classes.tableWrap}>
+                        <Table stickyHeader size='small'>
+                            <TableHead className={classes.header}>
+                                <TableRow>
+                                    <TableCell>
+                                        Направление
+                                        <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.DIRECTION)}
+                                                       mode={sortingField === EducationPlanInDirectionFields.DIRECTION ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        Номер направления
+                                        <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.NUMBER)}
+                                                       mode={sortingField === EducationPlanInDirectionFields.NUMBER ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        Учебный план
+                                        <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.EDUCATION_PLAN)}
+                                                       mode={sortingField === EducationPlanInDirectionFields.EDUCATION_PLAN ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        Год
+                                        <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.YEAR)}
+                                                       mode={sortingField === EducationPlanInDirectionFields.YEAR ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell />
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {educationalPlansInDirection.map(educationalPlanInDirection =>
+                                    <TableRow key={educationalPlanInDirection[EducationPlanInDirectionFields.ID]}>
+                                        <TableCell>
+                                            {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.TITLE]}
+                                        </TableCell>
+                                        <TableCell>
+                                            {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.NUMBER]}
+                                        </TableCell>
+                                        <TableCell>
+                                            <Link to={appRouter.getPlanDetailLink(educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.ID])}
+                                                  target="_blank"
+                                            >
+                                                {educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]}
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell>
+                                            {educationalPlanInDirection[EducationPlanInDirectionFields.YEAR]}
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className={classes.actions}>
+                                                <IconButton onClick={this.handleClickDelete(educationalPlanInDirection[EducationPlanInDirectionFields.ID])}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                                <IconButton onClick={this.handleClickEdit(educationalPlanInDirection)}>
+                                                    <EditIcon />
+                                                </IconButton>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
                     </div>
-
-                    <div className={classes.list}>
-                        <Scrollbars>
-                            {educationalPlansInDirection.map(educationalPlanInDirection =>
-                                <div className={classes.row} key={educationalPlanInDirection[EducationPlanInDirectionFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                        {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.TITLE]}
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.numberCell)}>
-                                        {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.NUMBER]}
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                        <Link to={appRouter.getPlanDetailLink(educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.ID])}
-                                              target="_blank"
-                                        >
-                                            {educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]}
-                                        </Link>
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.yearCell)}>
-                                        {educationalPlanInDirection[EducationPlanInDirectionFields.YEAR]}
-                                    </Typography>
-                                    <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(educationalPlanInDirection[EducationPlanInDirectionFields.ID])}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        <IconButton onClick={this.handleClickEdit(educationalPlanInDirection)}>
-                                            <EditIcon />
-                                        </IconButton>
-                                    </div>
-                                </div>
-                            )}
-                        </Scrollbars>
-                    </div>
-                </div>
+                </Scrollbars>
 
                 <div className={classes.footer}>
                     <TablePagination count={allCount}

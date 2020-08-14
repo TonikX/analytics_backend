@@ -63,7 +63,7 @@ class DownloadFileModal extends React.PureComponent<DownloadFileModalProps> {
 
         service.getFile(this.state.dialogData)
             .then((file: any) => {
-                const blob = new Blob([file.data], {type: `application/vnd.openxmlformats-officedocument.wordprocessingml.document`});
+                const blob = new Blob([file.data], {type: `'application/msword'`});
                 const blobURL = window.URL.createObjectURL(blob);
                 this.downloadBlob(blobURL);
                 this.setFetchingFalse();

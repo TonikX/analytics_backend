@@ -9,6 +9,28 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         flexDirection: 'column'
     },
+    tableWrap: {
+        height: 'calc(100% - 60px)',
+        maxheight: 'calc(100% - 60px)',
+        '& td': {
+            padding: '5px 10px !important',
+            fontSize: '14px'
+        },
+        '& p': {
+            fontSize: '14px'
+        }
+    },
+    header: {
+        background: theme.palette.primary.main,
+        '& th': {
+            color: '#fff',
+            background: theme.palette.primary.main,
+            fontWeight: '400',
+            fontSize: '14px',
+            padding: '0px 10px !important',
+            whiteSpace: 'nowrap'
+        }
+    },
     title: {
         fontSize: '24px',
         marginBottom: '20px',
@@ -18,34 +40,6 @@ export default (theme: Theme) => createStyles({
     courseList: {
         width: '100%',
         height: 'calc(100% - 50px)'
-    },
-    courseTableWrap: {
-        height: 'calc(100% - 60px)'
-    },
-    course: {
-        width: '100%',
-        display: 'flex',
-        borderBottom: '1px solid #ccc',
-        alignItems: 'center',
-        padding: '0 0 0 20px',
-        boxSizing: 'border-box',
-        minHeight: '50px'
-    },
-    courseTitle: {
-        minWidth: 200,
-        width: '20%',
-        flex: 'none'
-    },
-    courseLink: {
-        minWidth: 200,
-        width: 200,
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        flex: 'none',
-        '&: a': {
-            textDecoration: 'none'
-        }
     },
     actions: {
         display: 'flex',
@@ -65,20 +59,5 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: '10px'
-    },
-    header: {
-        background: theme.palette.primary.main,
-        color: '#fff'
-    },
-    marginRight: {
-        marginRight: 20
-    },
-    coursePlatform: {
-        minWidth: 200,
-        width: '10%',
-        flex: 'none'
-    },
-    courseDescription: {
-
     },
 });

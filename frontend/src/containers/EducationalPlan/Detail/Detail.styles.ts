@@ -64,7 +64,7 @@ export default (theme: Theme) => createStyles({
         fontSize: '24px',
         marginBottom: '20px',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     titleIcon: {
         marginLeft: '10px',
