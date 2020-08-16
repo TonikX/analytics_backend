@@ -755,7 +755,7 @@ class ZunListAPI(generics.ListCreateAPIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             # else:
             #     return Response({"error":"change_block does not exist"}, status=400)
-        return Response({"message":"all objects saved"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.data)
 
 
 class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -786,7 +786,7 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
                 #return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"message":"all objects saved"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.data)
 
 
 class DisciplineSectionListAPI(generics.ListCreateAPIView):
