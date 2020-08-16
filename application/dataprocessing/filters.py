@@ -13,7 +13,7 @@ class DomainFilter(django_filters.FilterSet):
         fields = {"name": ["contains"],}
 
 
-class CharFilterInFilter(django_filters.rest_framework.BaseInFilter, django_filters.rest_framework.CharFilter):
+class CharFilterInFilter(django_filters.rest_framework.CharFilter):
     pass
 
 
@@ -35,10 +35,11 @@ STATUS_CHOICES = (
 
 
 class RelationFilter(django_filters.FilterSet):
-    item1 = CharFilterInFilter(field_name="item1__name", lookup_expr='in')
-    item2 = CharFilterInFilter(field_name="item2__name", lookup_expr='in')
+    item1 = CharFilterInFilter(field_name="item1__name", lookup_expr='icontains')
+    item2 = CharFilterInFilter(field_name="item2__name", lookup_expr='icontains')
     relation = django_filters.ChoiceFilter(choices=STATUS_CHOICES)
     #item2_filter = django_filters.CharFilter(lookup_expr='icontains')
     class Meta:
         model = Relation
         fields = {'item1', 'item2', 'relation'}
+
