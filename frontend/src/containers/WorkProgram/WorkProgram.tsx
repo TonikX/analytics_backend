@@ -2,6 +2,7 @@ import React from 'react';
 import get from 'lodash/get';
 
 import Typography from '@material-ui/core/Typography';
+import CopyIcon from "@material-ui/icons/FileCopyOutlined";
 import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -16,11 +17,11 @@ import Literature from "./Literature";
 import EvaluationTools from "./EvaluationTools";
 import Prerequisites from "./Prerequisites";
 import Results from "./Results";
+import PlansAndDirections from "./PlansAndDirections";
 
 import {WorkProgramProps} from './types';
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
-import PlansAndDirections from "./PlansAndDirections";
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
@@ -28,7 +29,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     };
 
     componentDidMount() {
-        const workProgramId = get(this, 'props.match.params.id');
+        const workProgramId = this.getWorkProgramId();
 
         this.props.actions.getWorkProgram(workProgramId);
         this.props.actions.setWorkProgramId(workProgramId);
@@ -41,6 +42,12 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     handleStep = (number: number) => () => {
         this.setState({activeStep: number})
     };
+
+    handleCloneProgram = () => {
+        this.props.actions.cloneWorkProgram(this.getWorkProgramId());
+    }
+
+    getWorkProgramId = () => get(this, 'props.match.params.id');
 
     renderContent = () => {
         const {classes} = this.props;
@@ -142,7 +149,10 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                 </Stepper>
 
                 <div className={classes.content}>
-                    <Typography className={classes.title}>Описание рабочей программы дисциплины <span style={{fontWeight: 500}}>"{workProgramTitle}"</span></Typography>
+                    <Typography className={classes.title}>
+                        <div>Описание рабочей программы дисциплины <span style={{fontWeight: 500}}>"{workProgramTitle}"</span></div>
+                        <div className={classes.cloneButton} onClick={this.handleCloneProgram}> <CopyIcon/> Клонировать</div>
+                    </Typography>
 
                     {this.renderContent()}
                 </div>

@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "./actions";
+import workProgramActions from "../WorkProgram/actions";
 import {getWorkProgramList, getCurrentPage, getSearchQuery, getAllCount, getSortingMode, getSortingField} from './getters';
 import {WorkProgramListActions} from "./types";
 
@@ -22,6 +23,8 @@ const mapStateToProps = (state: rootState) => {
 const mapDispatchToProps = (dispatch: Dispatch<WorkProgramListActions>) => ({
     // @ts-ignore
     actions: bindActionCreators(actions, dispatch),
+    // @ts-ignore
+    workProgramActions: bindActionCreators(workProgramActions, dispatch),
 });
 
 // @ts-ignore

@@ -15,6 +15,14 @@ class WorkProgramService extends BaseService{
         return this.get(`/api/toolsinworkprogram/${id}`);
     }
 
+    cloneWorkProgram(id: string){
+        const formData = new FormData();
+
+        formData.append('program_id', id);
+
+        return this.post(`/api/workprogram/clone`, formData);
+    }
+
     saveWorkProgram(destination: string, value: string, id: string){
         const formData = new FormData();
 

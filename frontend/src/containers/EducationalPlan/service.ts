@@ -8,6 +8,8 @@ import {
 } from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
+import appConfigService from '../../config/app-config-service';
+
 class EducationalPlanService extends BaseService{
     getEducationalPlan(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
@@ -76,15 +78,8 @@ class EducationalPlanService extends BaseService{
         return this.delete(`/api/disciplineblockmodule/delete/${id}`);
     }
 
-    getFile(dialogData: any){
-        // const formData = new FormData();
-
-        // formData.append(DownloadFileModalFields.ID, dialogData[DownloadFileModalFields.ID]);
-        // formData.append(DownloadFileModalFields.ACADEMIC_PLAN_ID, dialogData[DownloadFileModalFields.ACADEMIC_PLAN_ID]);
-        // formData.append(DownloadFileModalFields.YEAR, dialogData[DownloadFileModalFields.YEAR]);
-        // formData.append(DownloadFileModalFields.DIRECTION_ID, dialogData[DownloadFileModalFields.DIRECTION_ID]);
-
-        return this.get(`/api/export/docx/${dialogData[DownloadFileModalFields.ID]}/${dialogData[DownloadFileModalFields.DIRECTION_ID]}/${dialogData[DownloadFileModalFields.ACADEMIC_PLAN_ID]}/${dialogData[DownloadFileModalFields.YEAR]}`);
+    getDownloadFileLink(dialogData: any){
+        return (`${appConfigService.getApiBasePath()}/api/export/docx/${dialogData[DownloadFileModalFields.ID]}/${dialogData[DownloadFileModalFields.DIRECTION_ID]}/${dialogData[DownloadFileModalFields.ACADEMIC_PLAN_ID]}/${dialogData[DownloadFileModalFields.YEAR]}`);
     }
 
     updateEducationalPlan(competence: any){

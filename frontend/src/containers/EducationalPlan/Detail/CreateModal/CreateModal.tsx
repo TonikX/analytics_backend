@@ -567,7 +567,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                     <TableBody>
                                                         {workProgram[BlocksOfWorkProgramsFields.COMPETENCES] &&
                                                         workProgram[BlocksOfWorkProgramsFields.COMPETENCES].map((competence: any, index: number) => {
-                                                            console.log('competence', competence);
+
                                                             if (competence[BlocksOfWorkProgramsFields.INDICATORS].length === 0){
                                                                 return <TableRow>
                                                                     <TableCell className={classes.competenceCell}>{index + 1}. {competence.label}</TableCell>
@@ -602,6 +602,16 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                                         <DeleteIcon className={classes.deleteIndicatorIcon}
                                                                                     onClick={this.deleteIndicator(workProgram.value, competence.value, indicator.value)}
                                                                         />
+                                                                        {indicatorIndex === competence[BlocksOfWorkProgramsFields.INDICATORS].length - 1 ?
+                                                                            <div className={classes.smallButton}
+                                                                                 onClick={this.handleOpenAddIndicatorsModal(workProgram.value, competence.value)}
+                                                                                 style={{margin: '20px 0px 0px'}}
+                                                                            >
+                                                                                <AddIcon/> Добавить индикатор
+                                                                            </div>
+                                                                        :
+                                                                            <></>
+                                                                        }
                                                                     </TableCell>
                                                                     <TableCell className={classes.resultsCell}>
                                                                         {indicator[BlocksOfWorkProgramsFields.RESULTS].map((result: any, resultIndex: number) => (
@@ -649,7 +659,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     <DialogActions className={classes.actions}>
                         <Button onClick={this.handleClose}
                                 variant="text">
-                            Отмена
+                            Закрыть
                         </Button>
                     </DialogActions>
                 </Dialog>

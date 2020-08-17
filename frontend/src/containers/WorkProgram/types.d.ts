@@ -16,6 +16,8 @@ export interface WorkProgramActions {
     setResults: any;
     getResults: any;
 
+    cloneWorkProgram: any;
+
     getWorkProgram: any;
     setWorkProgram: any;
     setWorkProgramPart: any;

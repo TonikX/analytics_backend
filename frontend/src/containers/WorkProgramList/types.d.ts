@@ -1,7 +1,7 @@
 import {fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
-import {WorkProgramGeneralType} from '../WorkProgram/types';
+import {WorkProgramActions, WorkProgramGeneralType} from '../WorkProgram/types';
 import {SortingType} from "../../components/SortingButton/types";
 
 export interface WorkProgramListActions {
@@ -35,6 +35,7 @@ export interface workProgramListState {
 }
 export interface WorkProgramListProps extends WithStyles<typeof styles> {
     actions: WorkProgramListActions;
+    workProgramActions: WorkProgramActions;
     workProgramList: Array<WorkProgramGeneralType>;
     currentPage: number;
     searchQuery: string;
