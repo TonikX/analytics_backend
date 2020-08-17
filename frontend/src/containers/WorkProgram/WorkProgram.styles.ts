@@ -19,6 +19,8 @@ export default (theme: Theme) => createStyles({
     title: {
         fontSize: '24px',
         marginBottom: '20px',
+        display: 'flex',
+        alignItems: 'center'
     },
     subTitle: {
         marginBottom: '10px',
@@ -39,5 +41,18 @@ export default (theme: Theme) => createStyles({
     },
     step: {
         background: theme.palette.secondary.main
+    },
+    cloneButton: {
+        display: 'flex',
+        fontSize: '14px',
+        cursor: 'pointer',
+        marginLeft: 'auto',
+        alignItems: 'center',
+        '&:hover': {
+            color: theme.palette.primary.main,
+            '& svg': {
+                color: theme.palette.primary.main,
+            }
+        }
     }
 });

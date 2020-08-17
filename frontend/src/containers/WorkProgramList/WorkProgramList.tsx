@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import moment from 'moment';
@@ -20,11 +20,15 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import withStyles from '@material-ui/core/styles/withStyles';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import AddIcon from "@material-ui/icons/Add";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
+import SettingsIcon from "@material-ui/icons/MoreVert";
+import CopyIcon from "@material-ui/icons/FileCopyOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -44,7 +48,8 @@ import styles from './WorkProgramList.styles';
 
 class WorkProgramList extends React.Component<WorkProgramListProps> {
     state = {
-        deleteConfirmId: null
+        deleteConfirmId: null,
+        anchorsEl: {}
     }
 
     componentDidMount() {
@@ -78,6 +83,10 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         this.props.actions.openDialog();
     }
 
+    handleClickCopy = (id: number) => () => {
+        this.props.workProgramActions.cloneWorkProgram(id);
+    }
+
     handleChangeSearchQuery = (event: React.ChangeEvent) => {
         this.changeSearch(get(event, 'target.value', ''));
     }
@@ -98,9 +107,23 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         this.props.actions.getWorkProgramList();
     }
 
+    handleMenu = (id: number) => (event: SyntheticEvent): void => {
+        this.setState({
+            anchorsEl: {
+                [id]: event.currentTarget
+            }
+        });
+    };
+
+    handleCloseMenu = () => {
+        this.setState({anchorsEl: {}});
+    };
+
     render() {
         const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
+
+        const {anchorsEl} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -182,14 +205,49 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                         </TableCell>
                                         <TableCell>
                                             <div className={classes.actions}>
-                                                <IconButton onClick={this.handleClickDelete(workProgram[WorkProgramGeneralFields.ID])}>
-                                                    <DeleteIcon />
+                                                <IconButton
+                                                    aria-haspopup="true"
+                                                    onClick={this.handleMenu(workProgram[WorkProgramGeneralFields.ID])}
+                                                    color="inherit"
+                                                    className={classes.settingsButton}
+                                                >
+                                                    <SettingsIcon />
                                                 </IconButton>
-                                                <Link to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.ID])} className={classes.link}>
-                                                    <IconButton>
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                </Link>
+                                                <Menu
+                                                    anchorEl={get(anchorsEl, workProgram[WorkProgramGeneralFields.ID])}
+                                                    anchorOrigin={{
+                                                        vertical: 'top',
+                                                        horizontal: 'right',
+                                                    }}
+                                                    keepMounted
+                                                    transformOrigin={{
+                                                        vertical: 'top',
+                                                        horizontal: 'right',
+                                                    }}
+                                                    open={Boolean(get(anchorsEl, workProgram[WorkProgramGeneralFields.ID]))}
+                                                    onClose={this.handleCloseMenu}
+                                                    PopoverClasses={{
+                                                        root: classes.popper,
+                                                        paper: classes.menuPaper
+                                                    }}
+                                                >
+                                                    <MenuItem onClick={this.handleClickCopy(workProgram[WorkProgramGeneralFields.ID])}>
+                                                        <CopyIcon className={classes.menuIcon}/>
+                                                        Клонировать
+                                                    </MenuItem>
+
+                                                    <MenuItem className={classes.menuLinkItem}>
+                                                        <Link to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.ID])}>
+                                                            <EditIcon className={classes.menuIcon} />
+                                                            Редактировать
+                                                        </Link>
+                                                    </MenuItem>
+
+                                                    <MenuItem onClick={this.handleClickDelete(workProgram[WorkProgramGeneralFields.ID])}>
+                                                        <DeleteIcon className={classes.menuIcon} />
+                                                        Удалить
+                                                    </MenuItem>
+                                                </Menu>
                                             </div>
                                         </TableCell>
                                     </TableRow>

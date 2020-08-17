@@ -6,8 +6,10 @@ export default (theme: Theme) => createStyles({
     },
     side: {
         width: '50%',
-        paddingRight: '50px',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        '&:first-child': {
+            paddingRight: '50px',
+        }
     },
     input: {
         width: '100%',

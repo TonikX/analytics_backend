@@ -60,39 +60,20 @@ class DownloadFileModal extends React.PureComponent<DownloadFileModalProps> {
 
     handleSave = () => {
         this.setFetchingTrue();
+        const fileLink = service.getDownloadFileLink(this.state.dialogData);
 
-        service.getFile(this.state.dialogData)
-            .then((file: any) => {
-                const blob = new Blob([file.data], {type: `'application/msword'`});
-                const blobURL = window.URL.createObjectURL(blob);
-                this.downloadBlob(blobURL);
-                this.setFetchingFalse();
-            })
-            .catch(err => {
-                this.setFetchingFalse();
-            })
-    }
-
-    downloadBlob = (blobURL: string): void => {
         let tempLink = document.createElement('a');
 
-        const fileName = `Рабочая программа.docx`;
+        tempLink.href = fileLink;
 
-        tempLink.setAttribute('download', fileName);
-        tempLink.style.display = 'none';
-        tempLink.href = blobURL;
-        if (typeof tempLink.download === 'undefined') {
-            tempLink.setAttribute('target', '_blank');
-        }
+        tempLink.setAttribute('target', '_blank');
+
         document.body.appendChild(tempLink);
         tempLink.click();
         document.body.removeChild(tempLink);
 
-        setTimeout((): void => {
-            // For Firefox it is necessary to delay revoking the ObjectURL
-            window.URL.revokeObjectURL(blobURL);
-        }, 100);
-    };
+        this.setFetchingFalse();
+    }
 
     setFetchingTrue = () => {
         this.setState({

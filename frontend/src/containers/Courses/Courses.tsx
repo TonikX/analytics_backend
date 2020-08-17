@@ -157,7 +157,11 @@ class Courses extends React.Component<CoursesProps> {
                                             {course[CourseFields.PLATFORM]}
                                         </TableCell>
                                         <TableCell>
-                                            {course[CourseFields.DESCRIPTION]}
+                                            {course[CourseFields.DESCRIPTION].length > 50 ?
+                                                course[CourseFields.DESCRIPTION].slice(0, 50) + '...'
+                                                :
+                                                course[CourseFields.DESCRIPTION]
+                                            }
                                         </TableCell>
 
                                         <TableCell>
