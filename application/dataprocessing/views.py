@@ -605,7 +605,7 @@ class FileUploadAPIView(APIView):
                 set_relation_linear(items_query,type_relation) 
             return Response(status=200)  
         except:
-            return Response(status=400, data=error)
+            return Response(status=400)
 
 
 
@@ -625,4 +625,4 @@ class RelationPostAPIView(APIView):
 
             return Response(status=200)
         except:
-            return Response(status=400, data=error)
+            return Response(status=400)
