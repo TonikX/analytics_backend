@@ -885,6 +885,40 @@ def NewRealtionsForWorkProgramsInFieldOfStudyAPI(request):
         return Response(status=400)
 
 
+class FileUploadWorkProgramAPIView(APIView):
+    """
+    API эндпоинт для добавления данных о РПД из csv-файла, спарсенного с online.edu.ru
+    """
+
+    def post(self, request):
+
+        serializer = FileUploadSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        data = handle_uploaded_file(request.FILES['file'], str(request.FILES['file']))
+        data.fillna('не задано', inplace=True)
+        for i in range(len(data)):
+            try:
+                outcomes = data['Ключевые слова содержания'][i].split(', ')
+                outcomes_items = []
+
+                for o in outcomes:
+                    o = o.capitalize()
+
+                    if Items.objects.filter(name = o).exists():
+                        outcomes_items.append(Items.objects.get(name = o))
+                    else:
+                        item = Items(name = o)
+                        item.save()
+                        outcomes_items.append(item)
+
+                outcomes_items = Items.objects.filter(name__in = outcomes_items)
+                print("Outcomes--", outcomes_items)
+            except:
+                pass
+
+
+
 #Блок эндпоинтов рабочей программы
 
 
