@@ -2,6 +2,7 @@ import React from 'react';
 import get from 'lodash/get';
 
 import Typography from '@material-ui/core/Typography';
+import CopyIcon from "@material-ui/icons/FileCopyOutlined";
 import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -16,6 +17,7 @@ import Literature from "./Literature";
 import EvaluationTools from "./EvaluationTools";
 import Prerequisites from "./Prerequisites";
 import Results from "./Results";
+import PlansAndDirections from "./PlansAndDirections";
 
 import {WorkProgramProps} from './types';
 import connect from './WorkProgram.connect';
@@ -27,15 +29,25 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     };
 
     componentDidMount() {
-        const workProgramId = get(this, 'props.match.params.id');
+        const workProgramId = this.getWorkProgramId();
 
         this.props.actions.getWorkProgram(workProgramId);
         this.props.actions.setWorkProgramId(workProgramId);
     }
 
+    componentWillUnmount() {
+        this.props.actions.pageDown();
+    }
+
     handleStep = (number: number) => () => {
         this.setState({activeStep: number})
     };
+
+    handleCloneProgram = () => {
+        this.props.actions.cloneWorkProgram(this.getWorkProgramId());
+    }
+
+    getWorkProgramId = () => get(this, 'props.match.params.id');
 
     renderContent = () => {
         const {classes} = this.props;
@@ -97,14 +109,22 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
                     <Results />
                 </div>;
+            case 7:
+                return <div className={classes.subItem}>
+                    <Typography className={classes.subTitle}>
+                        Связанные с рпд учебные планы и направления
+                    </Typography>
+
+                    <PlansAndDirections />
+                </div>;
         }
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, workProgramTitle} = this.props;
         const {activeStep} = this.state;
 
-        const steps = ['Главное',  "Пререквизиты", 'Разделы', "Темы", "Источники", "Оценочные средства", "Результаты обучения"];
+        const steps = ['Главное',  "Пререквизиты", 'Разделы', "Темы", "Источники", "Оценочные средства", "Результаты обучения", "Cвязанные с рпд учебные планы и направления"];
 
         return (
             <Paper className={classes.root}>
@@ -119,6 +139,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                             <Step key={label}>
                                 <StepButton onClick={this.handleStep(index)}
                                             completed={false}
+                                            style={{textAlign: 'left'}}
                                 >
                                     {label}
                                 </StepButton>
@@ -128,7 +149,10 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                 </Stepper>
 
                 <div className={classes.content}>
-                    <Typography className={classes.title}>Описание рабочей программы дисциплины</Typography>
+                    <Typography className={classes.title}>
+                        <div>Описание рабочей программы дисциплины <span style={{fontWeight: 500}}>"{workProgramTitle}"</span></div>
+                        <div className={classes.cloneButton} onClick={this.handleCloneProgram}> <CopyIcon/> Клонировать</div>
+                    </Typography>
 
                     {this.renderContent()}
                 </div>

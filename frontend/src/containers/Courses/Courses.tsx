@@ -5,13 +5,16 @@ import get from 'lodash/get';
 import Link from "react-router-dom/Link";
 import Scrollbars from "react-custom-scrollbars";
 
-import classNames from 'classnames';
-
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import TableBody from "@material-ui/core/TableBody";
 
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -109,63 +112,74 @@ class Courses extends React.Component<CoursesProps> {
                     />
                 </Typography>
 
-                <div className={classes.courseTableWrap}>
-                    <div className={classNames(classes.course, classes.header)}>
-                        <Typography className={classNames(classes.marginRight, classes.courseTitle)}>
-                            Название курса
-                            <SortingButton changeMode={this.changeSorting(CourseFields.TITLE)}
-                                           mode={sortingField === CourseFields.TITLE ? sortingMode : ''}
-                            />
-                        </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.courseLink)}>
-                            Ссылка на курс
-                            <SortingButton changeMode={this.changeSorting(CourseFields.COURSE_URL)}
-                                           mode={sortingField === CourseFields.COURSE_URL ? sortingMode : ''}
-                            />
-                        </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.coursePlatform)}>
-                            Платформа
-                            <SortingButton changeMode={this.changeSorting(CourseFields.PLATFORM)}
-                                           mode={sortingField === CourseFields.PLATFORM ? sortingMode : ''}
-                            />
-                        </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.courseDescription)}>
-                            Описание
-                            <SortingButton changeMode={this.changeSorting(CourseFields.DESCRIPTION)}
-                                           mode={sortingField === CourseFields.DESCRIPTION ? sortingMode : ''}
-                            />
-                        </Typography>
-                    </div>
+                <Scrollbars>
+                    <div className={classes.tableWrap}>
+                        <Table stickyHeader size='small'>
+                            <TableHead className={classes.header}>
+                                <TableRow>
+                                    <TableCell>
+                                        Название курса
+                                        <SortingButton changeMode={this.changeSorting(CourseFields.TITLE)}
+                                                       mode={sortingField === CourseFields.TITLE ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        Ссылка на курс
+                                        <SortingButton changeMode={this.changeSorting(CourseFields.COURSE_URL)}
+                                                       mode={sortingField === CourseFields.COURSE_URL ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        Платформа
+                                        <SortingButton changeMode={this.changeSorting(CourseFields.PLATFORM)}
+                                                       mode={sortingField === CourseFields.PLATFORM ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        Описание
+                                        <SortingButton changeMode={this.changeSorting(CourseFields.DESCRIPTION)}
+                                                       mode={sortingField === CourseFields.DESCRIPTION ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell />
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {courses.map(course =>
+                                    <TableRow>
+                                        <TableCell> {course[CourseFields.TITLE]} </TableCell>
+                                        <TableCell>
+                                            <Link to={course[CourseFields.COURSE_URL]} className={classes.link}>
+                                                {course[CourseFields.COURSE_URL]}
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell>
+                                            {course[CourseFields.PLATFORM]}
+                                        </TableCell>
+                                        <TableCell>
+                                            {course[CourseFields.DESCRIPTION].length > 50 ?
+                                                course[CourseFields.DESCRIPTION].slice(0, 50) + '...'
+                                                :
+                                                course[CourseFields.DESCRIPTION]
+                                            }
+                                        </TableCell>
 
-                    <div className={classes.courseList}>
-                        <Scrollbars>
-                            {courses.map(course =>
-                                <div className={classes.course} key={course[CourseFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.courseTitle)}> {course[CourseFields.TITLE]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.courseLink)}>
-                                        <Link to={course[CourseFields.COURSE_URL]} className={classes.link}>
-                                            {course[CourseFields.COURSE_URL]}
-                                        </Link>
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.coursePlatform)}>
-                                        {course[CourseFields.PLATFORM]}
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.courseDescription)}>
-                                        {course[CourseFields.DESCRIPTION]}
-                                    </Typography>
-                                    <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(course[CourseFields.ID])}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        <IconButton onClick={this.handleClickEdit(course)}>
-                                            <EditIcon />
-                                        </IconButton>
-                                    </div>
-                                </div>
-                            )}
-                        </Scrollbars>
+                                        <TableCell>
+                                            <div className={classes.actions}>
+                                                <IconButton onClick={this.handleClickDelete(course[CourseFields.ID])}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                                <IconButton onClick={this.handleClickEdit(course)}>
+                                                    <EditIcon />
+                                                </IconButton>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
                     </div>
-                </div>
+                </Scrollbars>
 
                 <div className={classes.footer}>
                     <TablePagination count={allCount}

@@ -42,7 +42,8 @@ export default (theme: Theme) => createStyles({
         height: 'fit-content',
     },
     searchInput: {
-        height: '40px'
+        height: '40px',
+        minHeight: '40px'
     },
     addIcon: {
         marginLeft: 'auto',
@@ -68,8 +69,14 @@ export default (theme: Theme) => createStyles({
         marginRight: '10px',
         fill: 'rgba(0, 0, 0, 0.54)'
     },
-    menuLink: {
-        color: 'rgb(51, 51, 51) !important',
-        textDecoration: 'none'
-    },
+    menuLinkItem: {
+        padding: 0,
+        '&>a': {
+            padding: '6px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            color: 'rgb(51, 51, 51) !important',
+            textDecoration: 'none'
+        }
+    }
 });

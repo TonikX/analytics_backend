@@ -92,4 +92,5 @@ class AddCompetenceModal extends React.PureComponent<AddWorkProgramModalProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(AddCompetenceModal));

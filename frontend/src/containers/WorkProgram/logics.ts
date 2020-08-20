@@ -1,5 +1,7 @@
 import {createLogic} from "redux-logic";
 
+import get from 'lodash/get';
+
 import actions from '../../layout/actions';
 import workProgramActions from './actions';
 
@@ -14,6 +16,7 @@ import literatureLogics from './logics/literature.logics';
 import prerequisitesLogics from './logics/prerequisites.logics';
 import evaluationToolsLogics from './logics/evaluationTools.logics';
 import resultsLogics from './logics/results.logics';
+import {appRouter} from "../../service/router-service";
 
 const service = new Service();
 
@@ -90,6 +93,32 @@ const saveWorkProgram = createLogic({
     }
 });
 
+const cloneWorkProgram = createLogic({
+    type: workProgramActions.cloneWorkProgram.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const workProgramId = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CLONE_WORK_PROGRAM}));
+
+        service.cloneWorkProgram(workProgramId)
+            .then((res) => {
+                const newWorkProgramId = get(res, 'data.id');
+
+                window.location.href = appRouter.getWorkProgramLink(newWorkProgramId);
+
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CLONE_WORK_PROGRAM}));
+                return done();
+            });
+    }
+});
+
 export default [
     ...sectionLogics,
     ...topicLogics,
@@ -100,4 +129,5 @@ export default [
     getWorkProgram,
     saveWorkProgram,
     getWorkProgramEvaluationTools,
+    cloneWorkProgram,
 ];

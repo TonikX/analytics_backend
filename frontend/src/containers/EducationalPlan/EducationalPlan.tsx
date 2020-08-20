@@ -3,6 +3,8 @@ import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import moment from 'moment';
 import {withRouter} from 'react-router-dom'
+// @ts-ignore
+import Link from "react-router-dom/Link";
 
 import Scrollbars from "react-custom-scrollbars";
 
@@ -168,7 +170,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        Год реализации
+                                        Год набора
                                         <SortingButton changeMode={this.changeSorting(EducationalPlanFields.YEAR)}
                                                        mode={sortingField === EducationalPlanFields.YEAR ? sortingMode : ''}
                                         />
@@ -232,9 +234,11 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                         paper: classes.menuPaper
                                                     }}
                                                 >
-                                                    <MenuItem onClick={this.goToDetailView(plan[EducationalPlanFields.ID])}>
-                                                        <EyeIcon className={classes.menuIcon}/>
-                                                        Смотреть детально
+                                                    <MenuItem className={classes.menuLinkItem}>
+                                                        <Link to={appRouter.getPlanDetailLink(plan[EducationalPlanFields.ID])}>
+                                                            <EyeIcon className={classes.menuIcon}/>
+                                                            Смотреть детально
+                                                        </Link>
                                                     </MenuItem>
 
                                                     <MenuItem onClick={this.handleClickEdit(plan)}>

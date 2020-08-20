@@ -79,11 +79,15 @@ class Sections extends React.PureComponent<SecondStepProps> {
         const {classes, sections} = this.props;
         const {createNewSectionMode} = this.state;
 
-        const totalContactWorkHours = this.getTotalHours(workProgramSectionFields.CONTACT_WORK).toFixed(2);
         const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
         const totalLaboratoryClassesHours = this.getTotalHours(workProgramSectionFields.LABORATORY).toFixed(2);
         const totalPracticalClassesHours = this.getTotalHours(workProgramSectionFields.PRACTICAL_LESSONS).toFixed(2);
         const totalSPOHours = this.getTotalHours(workProgramSectionFields.SPO).toFixed(2);
+        const totalContactWorkHours = ((
+            parseFloat(totalSPOHours) +
+            parseFloat(totalLaboratoryClassesHours) +
+            parseFloat(totalPracticalClassesHours))
+            * 1.1).toFixed(2);
         const totalTotalHours = (parseFloat(totalSPOHours) + parseFloat(totalContactWorkHours)).toFixed(2);
 
         return (

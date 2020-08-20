@@ -20,42 +20,30 @@ export default (theme: Theme) => createStyles({
         height: 'calc(100% - 50px)'
     },
     tableWrap: {
-        height: 'calc(100% - 60px)'
+        height: 'calc(100% - 60px)',
+        maxheight: 'calc(100% - 60px)',
+        '& td': {
+            padding: '5px 10px !important',
+            fontSize: '14px'
+        },
+        '& p': {
+            fontSize: '14px'
+        }
     },
-    row: {
-        width: '100%',
-        display: 'flex',
-        borderBottom: '1px solid #ccc',
-        alignItems: 'center',
-        padding: '0 0 0 20px',
-        boxSizing: 'border-box',
-        minHeight: '50px'
-    },
-    numberCell: {
-        width: 110,
-        flex: 'none'
-    },
-    titleCell: {
-        width: '30%',
-        flex: 'none'
-    },
-    dateCell: {
-        width: 100,
-        flex: 'none'
-    },
-    qualificationCell: {
-        width: '20%',
-        flex: 'none',
-        maxWidth: '350px'
-    },
-    authorCell: {
-        width: '20%',
-        flex: 'none'
+    header: {
+        background: theme.palette.primary.main,
+        '& th': {
+            color: '#fff',
+            background: theme.palette.primary.main,
+            fontWeight: '400',
+            fontSize: '14px',
+            padding: '0px 10px !important',
+            whiteSpace: 'nowrap'
+        }
     },
     actions: {
         display: 'flex',
         height: 'fit-content',
-        marginLeft: 'auto',
         padding: '0px 20px'
     },
     searchInput: {
@@ -70,11 +58,29 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center',
         marginTop: '10px'
     },
-    header: {
-        background: theme.palette.primary.main,
-        color: '#fff'
+    // @ts-ignore
+    popper: {
+        // @ts-ignore
+        zIndex: '10000 !important',
     },
-    marginRight: {
-        marginRight: 20
+    menuPaper: {
+        boxShadow: '0px 0px 20px -2px rgba(160, 159, 159, 0.42)'
     },
+    menuIcon: {
+        marginRight: '10px',
+        fill: 'rgba(0, 0, 0, 0.54)'
+    },
+    menuLinkItem: {
+        padding: 0,
+        '&>a': {
+            padding: '6px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            color: 'rgb(51, 51, 51) !important',
+            textDecoration: 'none'
+        }
+    },
+    settingsButton: {
+        marginLeft: 'auto'
+    }
 });

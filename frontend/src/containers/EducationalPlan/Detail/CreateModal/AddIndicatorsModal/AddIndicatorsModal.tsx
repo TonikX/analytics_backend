@@ -90,7 +90,6 @@ class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
                                 />
                             }
                             multiple
-                            id="test-selector-id"
                             MenuProps={{
                                 PopoverClasses: {
                                     root: classes.selector
@@ -122,4 +121,5 @@ class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(AddIndicatorsModal));

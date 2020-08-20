@@ -23,9 +23,10 @@ from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicP
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
     FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
-    ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock
-from .views import DocxFileExportView   
-
+    ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView, AcademicPlanListShortAPIView, NewRealtionsForWorkProgramsInFieldOfStudyAPI
+from .views import DocxFileExportView
+from .views import CloneWorkProgramm
+    #DocxFileExportOldView
 
 
 urlpatterns = [
@@ -85,7 +86,12 @@ urlpatterns = [
     path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
     path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
+    path('api/workprogram/clone', CloneWorkProgramm),
     path('api/workprogramsinfieldofstudy', WorkProgramInFieldOfStudyListView.as_view()),
+    path('api/workprogram/change_relations', NewRealtionsForWorkProgramsInFieldOfStudyAPI),
+    #path('api/workprogram/itemrelations/<char:discipline_code>', WorkProgramDetailsWithDisciplineCodeView.as_view()),
+    url(r'^api/workprogram/itemrelations/(?P<discipline_code>[0-9.]+)/$', WorkProgramDetailsWithDisciplineCodeView.as_view()),
+
 
     path('api/workprogram/fieldofstudies/<int:workprogram_id>', FieldOfStudiesForWorkProgramList.as_view()),
     path('api/workprograminfieldofstudy/', WorkProgramInFieldOfStudyListAPI.as_view()),
@@ -146,10 +152,13 @@ urlpatterns = [
     path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
     path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
     path('api/upload/csv', FileUploadAPIView.as_view()),
+    path('api/export/docx', DocxFileExportView.as_view()),
+    #path('api/export/docx2', DocxFileExportOldView.as_view()),
     path('api/export/docx/<int:pk>/<int:fs_id>/<int:ap_id>/<int:year>', DocxFileExportView.as_view()),
 
     #Учебный планы
     path('api/academicplan', AcademicPlanListAPIView.as_view()),
+    path('api/academicplan/short', AcademicPlanListShortAPIView.as_view()),
     path('api/academicplan/create', AcademicPlanCreateAPIView.as_view()),
     path('api/academicplan/detail/<int:pk>', AcademicPlanDetailsView.as_view()),
     path('api/academicplan/delete/<int:pk>', AcademicPlanDestroyView.as_view()),

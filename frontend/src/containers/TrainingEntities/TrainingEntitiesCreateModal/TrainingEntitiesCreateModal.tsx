@@ -38,15 +38,28 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
 
     componentDidUpdate(prevProps: Readonly<TrainingEntitiesCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {trainingEntity} = this.props;
+        const trainingEntityState = this.state.trainingEntity;
 
         if (!shallowEqual(trainingEntity, prevProps.trainingEntity)){
-            this.setState({
-                trainingEntity: {
-                    [TrainingEntitiesFields.ID]: get(trainingEntity, TrainingEntitiesFields.ID),
-                    [TrainingEntitiesFields.TITLE]: get(trainingEntity, TrainingEntitiesFields.TITLE, ''),
-                    [TrainingEntitiesFields.SUBJECT_AREA]: get(trainingEntity, TrainingEntitiesFields.SUBJECT_AREA, {}),
-                }
-            });
+            debugger
+            if (!get(trainingEntity, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], null) &&
+                get(trainingEntityState, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID])){
+                this.setState({
+                    trainingEntity: {
+                        ...trainingEntityState,
+                        [TrainingEntitiesFields.ID]: get(trainingEntity, TrainingEntitiesFields.ID),
+                        [TrainingEntitiesFields.TITLE]: get(trainingEntity, TrainingEntitiesFields.TITLE, ''),
+                    }
+                });
+            } else {
+                this.setState({
+                    trainingEntity: {
+                        [TrainingEntitiesFields.ID]: get(trainingEntity, TrainingEntitiesFields.ID),
+                        [TrainingEntitiesFields.TITLE]: get(trainingEntity, TrainingEntitiesFields.TITLE, ''),
+                        [TrainingEntitiesFields.SUBJECT_AREA]: get(trainingEntity, TrainingEntitiesFields.SUBJECT_AREA, {}),
+                    }
+                });
+            }
         }
     }
 
@@ -82,12 +95,14 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
 
     saveSubjectAreaField = (value: ReactText) => {
         const {trainingEntity} = this.state;
+        const {subjectAreaList} = this.props;
 
         this.setState({
             trainingEntity: {
                 ...trainingEntity,
                 [TrainingEntitiesFields.SUBJECT_AREA]: {
-                    [SubjectAreaFields.ID]: value
+                    [SubjectAreaFields.ID]: value,
+                    [SubjectAreaFields.TITLE]: get(subjectAreaList.find(item => item.value === value), 'label', ''),
                 }
             }
         })
@@ -97,7 +112,9 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
         const {isOpen, classes, subjectAreaList} = this.props;
         const {trainingEntity} = this.state;
 
-        const disableButton = trainingEntity[TrainingEntitiesFields.TITLE].length === 0;
+        const disableButton = trainingEntity[TrainingEntitiesFields.TITLE].length === 0 ||
+            get(trainingEntity, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '').length === 0
+        ;
 
         const isEditMode = trainingEntity[TrainingEntitiesFields.ID];
 
@@ -122,11 +139,11 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
                                }}
                     />
                     <SearchSelector label="Предметная область * "
-                                            changeSearchText={this.handleChangeSubjectAreaSearchText}
-                                            list={subjectAreaList}
-                                            changeItem={this.saveSubjectAreaField}
-                                            value={get(trainingEntity, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '')}
-                                            valueLabel={get(trainingEntity, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.TITLE], '')}
+                                    changeSearchText={this.handleChangeSubjectAreaSearchText}
+                                    list={subjectAreaList}
+                                    changeItem={this.saveSubjectAreaField}
+                                    value={get(trainingEntity, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '')}
+                                    valueLabel={get(trainingEntity, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.TITLE], '')}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>

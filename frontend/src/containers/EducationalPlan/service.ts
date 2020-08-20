@@ -8,11 +8,13 @@ import {
 } from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
+import appConfigService from '../../config/app-config-service';
+
 class EducationalPlanService extends BaseService{
     getEducationalPlan(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
-        return this.get(`/api/academicplan?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+        return this.get(`/api/academicplan/short?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
     getEducationalPlanDetail(id: number){
@@ -25,6 +27,10 @@ class EducationalPlanService extends BaseService{
 
     deleteEducationalPlan(id: number){
         return this.delete(`/api/academicplan/delete/${id}`);
+    }
+
+    saveCompetenceBlock(postData: any){
+        return this.post(`/api/zun/`, postData);
     }
 
     createEducationalPlan(competence: any){
@@ -40,22 +46,14 @@ class EducationalPlanService extends BaseService{
         return this.post(`/api/academicplan/create`, formData);
     }
 
-    createBlockOfWorkPrograms(moduleWithBlocks: any){
+    createBlockOfWorkPrograms(moduleId: number){
         return this.post(`/api/workprogramchangeindisciplineblockmodule/create`, {
-            'discipline_block_module': moduleWithBlocks.moduleId,
-            [BlocksOfWorkProgramsFields.TYPE]: moduleWithBlocks[BlocksOfWorkProgramsFields.TYPE],
-            [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: moduleWithBlocks[BlocksOfWorkProgramsFields.SEMESTER_UNIT].toString(),
-            [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: moduleWithBlocks[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((item: { value: any; }) => item.value),
+            'discipline_block_module': moduleId,
         });
     }
 
     changeBlockOfWorkPrograms(moduleWithBlocks: any){
-        return this.patch(`/api/workprogramchangeindisciplineblockmodule/update/${moduleWithBlocks[BlocksOfWorkProgramsFields.ID]}`, {
-            'discipline_block_module': moduleWithBlocks.moduleId,
-            [BlocksOfWorkProgramsFields.TYPE]: moduleWithBlocks[BlocksOfWorkProgramsFields.TYPE],
-            [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: moduleWithBlocks[BlocksOfWorkProgramsFields.SEMESTER_UNIT].toString(),
-            [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: moduleWithBlocks[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((item: { value: any; }) => item.value),
-        });
+        return this.patch(`/api/workprogramchangeindisciplineblockmodule/update/${moduleWithBlocks[BlocksOfWorkProgramsFields.ID]}`, moduleWithBlocks);
     }
 
     deleteBlockOfWorkPrograms(id: number){
@@ -80,15 +78,8 @@ class EducationalPlanService extends BaseService{
         return this.delete(`/api/disciplineblockmodule/delete/${id}`);
     }
 
-    getFile(dialogData: any){
-        const formData = new FormData();
-
-        formData.append(DownloadFileModalFields.ID, dialogData[DownloadFileModalFields.ID]);
-        formData.append(DownloadFileModalFields.ACADEMIC_PLAN_ID, dialogData[DownloadFileModalFields.ACADEMIC_PLAN_ID]);
-        formData.append(DownloadFileModalFields.YEAR, dialogData[DownloadFileModalFields.YEAR]);
-        formData.append(DownloadFileModalFields.DIRECTION_ID, dialogData[DownloadFileModalFields.DIRECTION_ID]);
-
-        return this.post(`/api/export/docx`, formData);
+    getDownloadFileLink(dialogData: any){
+        return (`${appConfigService.getApiBasePath()}/api/export/docx/${dialogData[DownloadFileModalFields.ID]}/${dialogData[DownloadFileModalFields.DIRECTION_ID]}/${dialogData[DownloadFileModalFields.ACADEMIC_PLAN_ID]}/${dialogData[DownloadFileModalFields.YEAR]}`);
     }
 
     updateEducationalPlan(competence: any){

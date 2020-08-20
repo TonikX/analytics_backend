@@ -95,6 +95,10 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
         const {classes} = this.props;
         const {isEditMode, section} = this.state;
 
+        const contactWork = parseFloat(section[workProgramSectionFields.LECTURE_CLASSES]) || 0 +
+            parseFloat(section[workProgramSectionFields.PRACTICAL_LESSONS]) || 0 +
+            parseFloat(section[workProgramSectionFields.LABORATORY]) || 0;
+
         return (
             <>
                 <TableCell className={classes.centerCell}>
@@ -113,17 +117,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     }
                 </TableCell>
                 <TableCell className={classes.centerCell}>
-                    {isEditMode ?
-                        <TextField variant="outlined"
-                                   size="small"
-                                   defaultValue={section[workProgramSectionFields.CONTACT_WORK]}
-                                   className={classes.smallInput}
-                                   type="number"
-                                   onChange={this.handleChangeField(workProgramSectionFields.CONTACT_WORK)}
-                        />
-                        :
-                        <>{section.contact_work}</>
-                    }
+                    <>{(contactWork * 1.1).toFixed(2)}</>
                 </TableCell>
                 <TableCell className={classes.centerCell}>
                     {isEditMode ?

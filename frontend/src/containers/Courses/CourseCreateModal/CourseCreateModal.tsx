@@ -140,7 +140,7 @@ class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
                                className={classes.lastInput}
                                fullWidth
                                multiline
-                               rows={5}
+                               rows={8}
                                value={course[CourseFields.DESCRIPTION]}
                                InputLabelProps={{
                                    shrink: true,

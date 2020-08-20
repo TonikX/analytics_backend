@@ -10,15 +10,13 @@ export default (theme: Theme) => createStyles({
         marginBottom: 10
     },
     addWorkProgramButton: {
-        marginLeft: 'auto',
-        padding: 0,
+        padding: '5px !important',
         '&:hover': {
             background: 'none'
         }
     },
     leftSide: {
-        width: '50%',
-        maxWidth: '550px',
+        maxWidth: '300px',
         flex: 'none'
     },
     rightSide: {
@@ -62,7 +60,6 @@ export default (theme: Theme) => createStyles({
     },
     semesterList: {
         display: 'flex',
-        justifyContent: 'space-between',
         flexWrap: 'wrap'
     },
     workProgramBlock: {
@@ -88,8 +85,11 @@ export default (theme: Theme) => createStyles({
     lastInput: {
         width: '550px',
     },
+    //@ts-ignore
     selector: {
-        width: '550px'
+        width: '290px',
+        //@ts-ignore
+        zIndex: '10001 !important'
     },
     actions: {
         padding: '15px 24px 20px'
@@ -125,7 +125,15 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         alignItems: 'center'
     },
-    deleteIcon: {
+    iconButton: {
+        cursor: "pointer",
+        '&:hover': {
+            color: theme.palette.primary.main,
+        }
+    },
+    deleteIndicatorIcon: {
+        position: 'relative',
+        top: '6px',
         cursor: "pointer",
         '&:hover': {
             color: theme.palette.primary.main,
@@ -137,5 +145,15 @@ export default (theme: Theme) => createStyles({
             position: 'relative',
             top: '6px',
         }
+    },
+    competenceButtons: {
+        display: 'flex'
+    },
+    competenceCell: {
+        width: '30%',
+        maxWidth: 500
+    },
+    resultsCell: {
+        maxWidth: 400
     }
 });

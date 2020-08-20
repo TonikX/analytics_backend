@@ -79,6 +79,9 @@ export default class BaseService {
 
         const isAuth = userService.isAuth();
 
+        console.log('isAuth', isAuth);
+        console.log('token', userService.getToken());
+
         if (_axios !== null && isAuth) {
             _axios.defaults.headers.common['Authorization'] = `Token ${userService.getToken()}`;
         }

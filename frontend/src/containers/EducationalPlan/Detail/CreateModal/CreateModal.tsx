@@ -29,14 +29,14 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import Paper from "@material-ui/core/Paper";
-// import Accordion from '@material-ui/core/Accordion';
-// import AccordionDetails from '@material-ui/core/AccordionDetails';
-// import AccordionSummary from '@material-ui/core/AccordionSummary';
-// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import SaveIcon from "@material-ui/icons/SaveOutlined";
 
 import AddWorkProgramModal from "./AddWorkProgramModal";
 import {typeOfWorkProgramInPlan, OPTIONALLY as optionalTypeOfWorkProgram} from '../../data';
@@ -49,6 +49,7 @@ import AddIndicatorsModal from "./AddIndicatorsModal";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
+import AddResultsModal from "./AddResultsModal";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -94,7 +95,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                 return {
                     label: `${program[WorkProgramGeneralFields.TITLE]} ${date} ${authors}`,
-                    value: program[WorkProgramGeneralFields.ID]
+                    value: program[WorkProgramGeneralFields.ID],
+                    // @ts-ignore
+                    [BlocksOfWorkProgramsFields.COMPETENCES]: program[BlocksOfWorkProgramsFields.COMPETENCES],
                 };
             });
 
@@ -129,6 +132,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     handleCloseAddCompetenceModal = () => {
         this.setState({isAddCompetenceModalOpen: null});
     }
+
     handleOpenAddIndicatorsModal = (workProgramId: number, competenceId: number) => () => {
         this.setState({isAddIndicatorsModalOpen: {
             workProgramId,
@@ -140,8 +144,23 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         this.setState({isAddIndicatorsModalOpen: null});
     }
 
+    handleOpenAddResultsModal = (workProgramId: number, competenceId: number, indicatorId: number) => () => {
+        this.setState({isAddResultsModalOpen: {
+            workProgramId,
+            competenceId,
+            indicatorId
+        }});
+    }
+
+    handleCloseAddResultsModal = () => {
+        this.setState({isAddResultsModalOpen: null});
+    }
+
     handleClose = () => {
+        const {planId} = this.props;
+
         this.props.actions.closeDetailDialog();
+        this.props.actions.getEducationalDetail(planId);
     }
 
     handleSave = () => {
@@ -154,17 +173,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         }
     }
 
-    saveField = (field: string) => (e: React.ChangeEvent) => {
-        const {blockOfWorkPrograms} = this.state;
-
-        this.setState({
-            blockOfWorkPrograms: {
-                ...blockOfWorkPrograms,
-                [field]: get(e, 'target.value')
-            }
-        })
-    }
-
     changeType = (e: React.ChangeEvent) => {
         const {blockOfWorkPrograms} = this.state;
         const value = get(e, 'target.value');
@@ -173,6 +181,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         if (value !== optionalTypeOfWorkProgram && get(workPrograms, 'length', 0) > 1){
             workPrograms = [workPrograms[0]];
         }
+
+        this.props.actions.changeBlockOfWorkPrograms({
+            [BlocksOfWorkProgramsFields.TYPE]: get(e, 'target.value'),
+            [BlocksOfWorkProgramsFields.ID]: blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID],
+        });
 
         this.setState({
             blockOfWorkPrograms: {
@@ -190,17 +203,23 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {workProgramList} = this.props;
 
         const workProgram = workProgramList.find(el => el.value === value);
+        const newWorkPrograms = [
+            ...blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS],
+            {
+                value,
+                label: workProgram ? workProgram.label : '',
+            }
+        ]
+
+        this.props.actions.changeBlockOfWorkPrograms({
+            [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: newWorkPrograms.map(workProgram => workProgram.value),
+            [BlocksOfWorkProgramsFields.ID]: blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID],
+        });
 
         this.setState({
             blockOfWorkPrograms: {
                 ...blockOfWorkPrograms,
-                [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: [
-                    ...blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS],
-                    {
-                        value,
-                        label: workProgram ? workProgram.label : '',
-                    }
-                ]
+                [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: newWorkPrograms
             }
         });
     }
@@ -258,6 +277,50 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         });
     }
 
+    saveResults = (results: any) => {
+        const {blockOfWorkPrograms, isAddResultsModalOpen} = this.state;
+        // @ts-ignore
+        const {workProgramId, competenceId, indicatorId} = isAddResultsModalOpen;
+
+        const workPrograms = blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS];
+
+        const modifiedWorkPrograms = workPrograms.map((workProgram: any) => {
+            if (workProgram.value === workProgramId){
+                workProgram = {
+                    ...workProgram,
+                    [BlocksOfWorkProgramsFields.COMPETENCES]: workProgram[BlocksOfWorkProgramsFields.COMPETENCES].map((competence: any) => {
+                        if (competence.value === competenceId){
+                            competence = {
+                                ...competence,
+                                [BlocksOfWorkProgramsFields.INDICATORS]: competence[BlocksOfWorkProgramsFields.INDICATORS].map((indicator: any) => {
+                                    if (indicator.value === indicatorId){
+                                        indicator = {
+                                            ...indicator,
+                                            [BlocksOfWorkProgramsFields.RESULTS]: [
+                                                ...indicator[BlocksOfWorkProgramsFields.RESULTS],
+                                                ...results
+                                            ]
+                                        }
+                                    }
+                                    return indicator;
+                                })
+                            }
+                        }
+                        return competence;
+                    })
+                }
+            }
+            return workProgram;
+        })
+
+        this.setState({
+            blockOfWorkPrograms: {
+                ...blockOfWorkPrograms,
+                [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: modifiedWorkPrograms
+            }
+        });
+    }
+
     saveIndicators = (indicators: any) => {
         const {blockOfWorkPrograms, isAddIndicatorsModalOpen} = this.state;
         // @ts-ignore
@@ -275,7 +338,10 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 ...competence,
                                 [BlocksOfWorkProgramsFields.INDICATORS]: [
                                     ...competence[BlocksOfWorkProgramsFields.INDICATORS],
-                                    ...indicators
+                                    ...indicators.map((indicator: any) => ({
+                                        ...indicator,
+                                        [BlocksOfWorkProgramsFields.RESULTS]: []
+                                    }))
                                 ]
                             }
                         }
@@ -345,6 +411,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         hours[index] = get(e, 'target.value', 0);
 
+        this.props.actions.changeBlockOfWorkPrograms({
+            [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: hours.toString(),
+            [BlocksOfWorkProgramsFields.ID]: blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID],
+        });
+
         this.setState({
             blockOfWorkPrograms: {
                 ...blockOfWorkPrograms,
@@ -354,20 +425,33 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     handleChangeExpandedWorkProgram = (wpId: number) => () => {
-        this.setState({expandedWorkProgram: wpId});
+        const {expandedWorkProgram} = this.state;
+
+        if (expandedWorkProgram === wpId){
+            this.setState({expandedWorkProgram: null});
+        } else {
+            this.setState({expandedWorkProgram: wpId});
+        }
+    }
+
+    saveToBeCompetence = (workProgramId: number, competence: any) => () => {
+        const {blockOfWorkPrograms} = this.state;
+
+        this.props.actions.saveCompetenceBlock({
+            workProgramId: workProgramId,
+            competence: competence,
+            wpChangeBlockId: blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID],
+        })
     }
 
     render() {
         const {isOpen, classes} = this.props;
         const {blockOfWorkPrograms, showAddWorkProgramButton, isAddWorkProgramModalOpen,
-            isAddCompetenceModalOpen, isAddIndicatorsModalOpen, expandedWorkProgram
+            isAddCompetenceModalOpen, isAddIndicatorsModalOpen, expandedWorkProgram, isAddResultsModalOpen
         } = this.state;
 
         const canAddMoreWorkProgram = get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0) === 0 ||
             blockOfWorkPrograms[BlocksOfWorkProgramsFields.TYPE] === optionalTypeOfWorkProgram;
-
-        const disableButton = get(blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS], 'length', 0) === 0 ||
-            get(blockOfWorkPrograms[BlocksOfWorkProgramsFields.TYPE], 'length', 0) === 0;
 
         const isEditMode = Boolean(blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID]);
 
@@ -416,6 +500,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             id="section-label"
                                         />
                                     }
+                                    MenuProps={{
+                                        PopoverClasses: {
+                                            root: classes.selector
+                                        }
+                                    }}
                                 >
                                     {typeOfWorkProgramInPlan.map(item =>
                                         <MenuItem value={item.value} key={`type-${item.value}`}>
@@ -432,8 +521,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                         <TextField className={classes.semesterField}
                                                    label={`${index + 1} семестр`}
                                                    variant='outlined'
-                                                   value={item}
-                                                   onChange={this.handleChangeHours(index)}
+                                                   defaultValue={item}
+                                                   onBlur={this.handleChangeHours(index)}
                                                    type="number"
                                         />
                                     )}
@@ -455,113 +544,110 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         <Scrollbars>
                             <div className={classes.rightSide}>
                                 <div className={classes.workProgramBlock}>
-                                    <Typography className={classes.label}> Рабочие программы </Typography>
-                                    {/*{blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((workProgram: any, wpIndex) =>*/}
-                                    {/*    <Accordion expanded={expandedWorkProgram === wpIndex} onChange={this.handleChangeExpandedWorkProgram(wpIndex)}>*/}
-                                    {/*        <AccordionSummary*/}
-                                    {/*            expandIcon={<ExpandMoreIcon />}*/}
-                                    {/*            aria-controls="panel1bh-content"*/}
-                                    {/*            id="panel1bh-header"*/}
-                                    {/*        >*/}
-                                    {/*            <Typography className={classes.workProgramItem}>{workProgram.label} <DeleteIcon onClick={this.handleRemoveWorkProgram(workProgram.value)}/></Typography>*/}
-                                    {/*        </AccordionSummary>*/}
-                                    {/*        <AccordionDetails>*/}
-                                    {/*            <Table>*/}
-                                    {/*                <TableHead>*/}
-                                    {/*                    <TableRow>*/}
-                                    {/*                        <TableCell>Код компетенции</TableCell>*/}
-                                    {/*                        <TableCell>Код индикаторов</TableCell>*/}
-                                    {/*                        <TableCell>Результаты обучения</TableCell>*/}
-                                    {/*                    </TableRow>*/}
-                                    {/*                </TableHead>*/}
-                                    {/*                <TableBody>*/}
-                                    {/*                    {workProgram[BlocksOfWorkProgramsFields.COMPETENCES] &&*/}
-                                    {/*                    workProgram[BlocksOfWorkProgramsFields.COMPETENCES].map((competence: any, index: number) => {*/}
-                                    {/*                        return <TableRow key={`competence-${wpIndex}-${index}`}>*/}
-                                    {/*                            <TableCell>{index + 1}. {competence.label} <DeleteIcon className={classes.deleteIcon} onClick={this.deleteCompetence(workProgram.value, competence.value)}/></TableCell>*/}
-                                    {/*                            <TableCell>*/}
-                                    {/*                                {competence[BlocksOfWorkProgramsFields.INDICATORS].map((indicator: any, indicatorIndex: number) =>*/}
-                                    {/*                                    <div className={classes.indicatorItem} key={`indicator-${wpIndex}-${index}-${indicatorIndex}`}>*/}
-                                    {/*                                        {index + 1}.{indicatorIndex + 1} {indicator.label}*/}
-                                    {/*                                        <DeleteIcon className={classes.deleteIcon}*/}
-                                    {/*                                                    onClick={this.deleteIndicator(workProgram.value, competence.value, indicator.value)}*/}
-                                    {/*                                        />*/}
-                                    {/*                                    </div>*/}
-                                    {/*                                )}*/}
-
-                                    {/*                                <div className={classes.smallButton}*/}
-                                    {/*                                     onClick={this.handleOpenAddIndicatorsModal(workProgram.value, competence.value)}*/}
-                                    {/*                                ><AddIcon/> Добавить индикатор</div>*/}
-                                    {/*                            </TableCell>*/}
-                                    {/*                            <TableCell>Результаты</TableCell>*/}
-                                    {/*                        </TableRow>*/}
-                                    {/*                    })}*/}
-                                    {/*                    <TableRow>*/}
-                                    {/*                        <TableCell>*/}
-                                    {/*                            <div className={classes.smallButton}*/}
-                                    {/*                                 onClick={this.handleOpenAddCompetenceModal(workProgram.value)}*/}
-                                    {/*                            ><AddIcon/> Добавить компетенцию</div>*/}
-                                    {/*                        </TableCell>*/}
-                                    {/*                        <TableCell />*/}
-                                    {/*                        <TableCell>*/}
-                                    {/*                            <div className={classes.smallButton}><AddIcon/> Добавить результат</div>*/}
-                                    {/*                        </TableCell>*/}
-                                    {/*                    </TableRow>*/}
-                                    {/*                </TableBody>*/}
-                                    {/*            </Table>*/}
-                                    {/*        </AccordionDetails>*/}
-                                    {/*    </Accordion>*/}
-                                    {/*)}*/}
-
-                                    {blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((workProgram: any, wpIndex) =>{
-                                        return <Paper className={classes.workProgramBlockItem}>
-                                            <Typography className={classes.workProgramItem}>{workProgram.label} <DeleteIcon onClick={this.handleRemoveWorkProgram(workProgram.value)}/> </Typography>
-
-                                            <Table>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell>Код компетенции</TableCell>
-                                                        <TableCell>Код индикаторов</TableCell>
-                                                        <TableCell>Результаты обучения</TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {workProgram[BlocksOfWorkProgramsFields.COMPETENCES] &&
+                                    <Typography className={classes.label}> Настройка связей рабочих программ, компетенций, индикаторов и результатов </Typography>
+                                    {blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((workProgram: any, wpIndex) =>
+                                        <ExpansionPanel expanded={expandedWorkProgram === wpIndex} onChange={this.handleChangeExpandedWorkProgram(wpIndex)}>
+                                            <ExpansionPanelSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel1bh-content"
+                                                id="panel1bh-header"
+                                            >
+                                                <Typography className={classes.workProgramItem}>{workProgram.label} <DeleteIcon onClick={this.handleRemoveWorkProgram(workProgram.value)}/></Typography>
+                                            </ExpansionPanelSummary>
+                                            <ExpansionPanelDetails>
+                                                <Table>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell>Код компетенции</TableCell>
+                                                            <TableCell>Код индикаторов</TableCell>
+                                                            <TableCell>Результаты обучения</TableCell>
+                                                            <TableCell />
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {workProgram[BlocksOfWorkProgramsFields.COMPETENCES] &&
                                                         workProgram[BlocksOfWorkProgramsFields.COMPETENCES].map((competence: any, index: number) => {
-                                                        return <TableRow key={`competence-${wpIndex}-${index}`}>
-                                                            <TableCell style={{maxWidth: '500px'}}>{index + 1}. {competence.label} <DeleteIcon className={classes.deleteIcon} onClick={this.deleteCompetence(workProgram.value, competence.value)}/></TableCell>
-                                                            <TableCell>
-                                                                {competence[BlocksOfWorkProgramsFields.INDICATORS].map((indicator: any, indicatorIndex: number) =>
-                                                                    <div className={classes.indicatorItem} key={`indicator-${wpIndex}-${index}-${indicatorIndex}`}>
+
+                                                            if (competence[BlocksOfWorkProgramsFields.INDICATORS].length === 0){
+                                                                return <TableRow>
+                                                                    <TableCell className={classes.competenceCell}>{index + 1}. {competence.label}</TableCell>
+                                                                    <TableCell>
+                                                                        <div className={classes.smallButton}
+                                                                             onClick={this.handleOpenAddIndicatorsModal(workProgram.value, competence.value)}
+                                                                        >
+                                                                            <AddIcon/> Добавить индикатор
+                                                                        </div>
+                                                                    </TableCell>
+                                                                    <TableCell />
+                                                                    <TableCell>
+                                                                        <div className={classes.competenceButtons}>
+                                                                            <DeleteIcon className={classes.iconButton} onClick={this.deleteCompetence(workProgram.value, competence.value)} />
+                                                                            <SaveIcon className={classes.iconButton} onClick={this.saveToBeCompetence(workProgram.value, competence)} />
+                                                                        </div>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            }
+                                                            return competence[BlocksOfWorkProgramsFields.INDICATORS].map((indicator: any, indicatorIndex: number) =>
+                                                                <TableRow>
+                                                                    {indicatorIndex === 0 ?
+                                                                        <TableCell
+                                                                            className={classes.competenceCell}
+                                                                            rowSpan={competence[BlocksOfWorkProgramsFields.INDICATORS].length}>
+                                                                            {index + 1}. {competence.label}
+                                                                        </TableCell>
+                                                                        : <></>
+                                                                    }
+                                                                    <TableCell>
                                                                         {index + 1}.{indicatorIndex + 1} {indicator.label}
-                                                                        <DeleteIcon className={classes.deleteIcon}
+                                                                        <DeleteIcon className={classes.deleteIndicatorIcon}
                                                                                     onClick={this.deleteIndicator(workProgram.value, competence.value, indicator.value)}
                                                                         />
-                                                                    </div>
-                                                                )}
-
+                                                                        {indicatorIndex === competence[BlocksOfWorkProgramsFields.INDICATORS].length - 1 ?
+                                                                            <div className={classes.smallButton}
+                                                                                 onClick={this.handleOpenAddIndicatorsModal(workProgram.value, competence.value)}
+                                                                                 style={{margin: '20px 0px 0px'}}
+                                                                            >
+                                                                                <AddIcon/> Добавить индикатор
+                                                                            </div>
+                                                                        :
+                                                                            <></>
+                                                                        }
+                                                                    </TableCell>
+                                                                    <TableCell className={classes.resultsCell}>
+                                                                        {indicator[BlocksOfWorkProgramsFields.RESULTS].map((result: any, resultIndex: number) => (
+                                                                                <div>{index + 1}.{indicatorIndex + 1}.{resultIndex + 1} {result.label}
+                                                                                    <DeleteIcon className={classes.deleteIndicatorIcon}
+                                                                                                onClick={this.deleteIndicator(workProgram.value, competence.value, indicator.value)}
+                                                                                    />
+                                                                                </div>
+                                                                            ))
+                                                                        }
+                                                                        <div className={classes.smallButton} onClick={this.handleOpenAddResultsModal(workProgram.value, competence.value, indicator.value)}><AddIcon/> Связать результат</div>
+                                                                    </TableCell>
+                                                                    {indicatorIndex === 0 ?
+                                                                        <TableCell rowSpan={competence[BlocksOfWorkProgramsFields.INDICATORS].length}>
+                                                                            <div className={classes.competenceButtons}>
+                                                                                <DeleteIcon className={classes.iconButton} onClick={this.deleteCompetence(workProgram.value, competence.value)} />
+                                                                                <SaveIcon className={classes.iconButton} onClick={this.saveToBeCompetence(workProgram.value, competence)} />
+                                                                            </div>
+                                                                        </TableCell>
+                                                                        : <></>
+                                                                    }
+                                                                </TableRow>
+                                                            )
+                                                        })}
+                                                        <TableRow>
+                                                            <TableCell colSpan={4}>
                                                                 <div className={classes.smallButton}
-                                                                     onClick={this.handleOpenAddIndicatorsModal(workProgram.value, competence.value)}
-                                                                ><AddIcon/> Добавить индикатор</div>
+                                                                     onClick={this.handleOpenAddCompetenceModal(workProgram.value)}
+                                                                ><AddIcon/> Добавить компетенцию</div>
                                                             </TableCell>
-                                                            <TableCell>Результаты</TableCell>
                                                         </TableRow>
-                                                    })}
-                                                    <TableRow>
-                                                        <TableCell>
-                                                            <div className={classes.smallButton}
-                                                                 onClick={this.handleOpenAddCompetenceModal(workProgram.value)}
-                                                            ><AddIcon/> Добавить компетенцию</div>
-                                                        </TableCell>
-                                                        <TableCell />
-                                                        <TableCell>
-                                                            {/*<div className={classes.smallButton}><AddIcon/> Добавить результат</div>*/}
-                                                        </TableCell>
-                                                    </TableRow>
-                                                </TableBody>
-                                            </Table>
-                                        </Paper>;
-                                    })}
+                                                    </TableBody>
+                                                </Table>
+                                            </ExpansionPanelDetails>
+                                        </ExpansionPanel>
+                                    )}
                                     {get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0) === 0 ?
                                         <Typography> Рабочих программ пока не добавлено</Typography>
                                         : <></>
@@ -573,13 +659,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     <DialogActions className={classes.actions}>
                         <Button onClick={this.handleClose}
                                 variant="text">
-                            Отмена
-                        </Button>
-                        <Button onClick={this.handleSave}
-                                variant="contained"
-                                disabled={disableButton}
-                                color="primary">
-                            Сохранить
+                            Закрыть
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -596,9 +676,15 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                     saveDialog={this.saveIndicators}
                                     competenceId={get(isAddIndicatorsModalOpen, 'competenceId', 0)}
                 />
+                <AddResultsModal closeDialog={this.handleCloseAddResultsModal}
+                                 isOpen={Boolean(isAddResultsModalOpen)}
+                                 saveDialog={this.saveResults}
+                                 workProgramId={get(isAddResultsModalOpen, 'workProgramId', 0)}
+                />
             </>
         );
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(CreateModal));

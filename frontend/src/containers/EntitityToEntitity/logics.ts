@@ -25,7 +25,7 @@ const getTrainingEntities = createLogic({
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_ENTITY_TO_ENTITY}));
 
-        service.getTrainingEntities(currentPage, searchQuery, sortingField, sortingMode, subjectId)
+        service.getEntitiesToEntities(currentPage, searchQuery, sortingField, sortingMode, subjectId)
             .then((res) => {
                 const courses = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));
@@ -52,7 +52,7 @@ const deleteTrainingEntities = createLogic({
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_ENTITY_TO_ENTITY}));
 
-        service.deleteTrainingEntities(courseId)
+        service.deleteEntityToEntity(courseId)
             .then((res) => {
                 dispatch(subjectAreaActions.getEntityToEntityList());
                 dispatch(actions.fetchingSuccess());
@@ -75,7 +75,7 @@ const createNewTrainingEntities = createLogic({
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_ENTITY_TO_ENTITY}));
 
-        service.createTrainingEntities(course)
+        service.createEntityToEntity(course)
             .then((res) => {
                 dispatch(subjectAreaActions.getEntityToEntityList());
                 dispatch(actions.fetchingSuccess());
@@ -99,7 +99,7 @@ const changeTrainingEntities = createLogic({
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_ENTITY_TO_ENTITY}));
 
-        service.updateTrainingEntities(course)
+        service.updateEntityToEntity(course)
             .then((res) => {
                 dispatch(subjectAreaActions.getEntityToEntityList());
                 dispatch(actions.fetchingSuccess());

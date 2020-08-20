@@ -17,7 +17,7 @@ from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django_tables2.paginators import LazyPaginator
 from django_tables2 import SingleTableView, RequestConfig
 from .tables import DomainTable, RelationTable, ItemsTable
-from .filters import RelationFilter, DomainFilter, ItemsFilter
+from .filters import RelationFilter, DomainFilter #, ItemsFilter
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 
@@ -515,7 +515,7 @@ class RelationListCreateAPIView(generics.ListAPIView):
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['item1__name', 'relation__relation', 'item2__name']
+    filterset_class = RelationFilter
 
 
 class RelationListCreateGroupsAPIView(generics.ListAPIView):

@@ -8,11 +8,15 @@ import {IndicatorsFields} from "../Indicators/enum";
 import {CompetenceFields} from "../Competences/enum";
 
 export interface WorkProgramActions {
+    pageDown: any;
+
     deleteResult: any;
     addResult: any;
     changeResult: any;
     setResults: any;
     getResults: any;
+
+    cloneWorkProgram: any;
 
     getWorkProgram: any;
     setWorkProgram: any;
@@ -92,6 +96,7 @@ export type IndicatorInZun = {
 
 export interface WorkProgramProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
+    workProgramTitle: string;
 }
 
 export type Section = {

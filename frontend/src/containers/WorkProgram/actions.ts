@@ -8,6 +8,8 @@ const setWorkProgramId = createAction<string>('SET_WORK_PROGRAM_ID');
 const saveWorkProgram = createAction<string>('SAVE_WORK_PROGRAM');
 const setWorkProgramPart = createAction<string>('SET_WORK_PROGRAM_PART');
 
+const cloneWorkProgram = createAction<string>('CLONE_WORK_PROGRAM');
+
 const saveSection = createAction<string>('WORK_PROGRAM_SAVE_SECTION');
 const deleteSection = createAction<string>('WORK_PROGRAM_DELETE_SECTION');
 const changeSectionNumber = createAction<string>('WORK_PROGRAM_CHANGE_SECTION_NUMBER');
@@ -39,7 +41,13 @@ const deleteEvaluationTool = createAction<string>('WORK_PROGRAM_DELETE_EVALUATIO
 const addEvaluationTool = createAction<string>('WORK_PROGRAM_ADD_EVALUATION_TOOL');
 const changeEvaluationTool = createAction<string>('WORK_PROGRAM_CHANGE_EVALUATION_TOOL');
 
+const pageDown = createAction<string>('WORK_PROGRAM_PAGE_DOWN');
+
 const actions: WorkProgramActions = {
+    pageDown,
+
+    cloneWorkProgram,
+
     getResults,
     setResults,
     deleteResult,

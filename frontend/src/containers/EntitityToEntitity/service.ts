@@ -2,30 +2,30 @@ import BaseService from "../../service/base-service";
 import {EntityToEntityFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
-class TrainingEntitiesServices extends BaseService{
-    getTrainingEntities(currentPage: number, searchQuery: Object, sortingField: string, sortingMode: SortingType, domainId: number|null){
+class EntityToEntityServices extends BaseService{
+    getEntitiesToEntities(currentPage: number, searchQuery: Object, sortingField: string, sortingMode: SortingType, domainId: number|null){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
         // @ts-ignore
         return this.get(`/api/relation?page=${currentPage}&item1=${searchQuery[EntityToEntityFields.ITEM1]}&item2=${searchQuery[EntityToEntityFields.ITEM2]}&relation=${searchQuery[EntityToEntityFields.RELATION]}&ordering=${sortingSymbol}${sortingField}&domain=${domainId || ''}`);
     }
 
-    deleteTrainingEntities(itemId: number){
-        return this.delete(`/api/item/detail/${itemId}`);
+    deleteEntityToEntity(itemId: number){
+        return this.delete(`/api/relation/detail/${itemId}`);
     }
 
-    createTrainingEntities(item: any){
+    createEntityToEntity(item: any){
         const formData = new FormData();
 
-        return this.post(`/api/item/create`, formData);
+        return this.post(`/api/relation/create`, formData);
     }
 
-    updateTrainingEntities(item: any){
+    updateEntityToEntity(item: any){
         const formData = new FormData();
         const id = item[EntityToEntityFields.ID];
 
-        return this.patch(`/api/item/detail/${id}`, formData);
+        return this.patch(`/api/relation/update/${id}`, formData);
     }
 }
 
-export default TrainingEntitiesServices;
+export default EntityToEntityServices;

@@ -25,6 +25,7 @@ import ConfirmDialog from "../../../components/ConfirmDialog";
 import CreateModal from "./CreateModal";
 import ChangePlanModal from '../CreateModal';
 import ModuleModal from "./ModuleModal";
+import DownloadFileModal from "./DownloadFileModal";
 
 import {BlocksOfWorkProgramsType, EducationalPlanType, ModuleType} from '../types';
 import {EducationalPlanDetailProps} from './types';
@@ -37,12 +38,12 @@ import {
     DownloadFileModalFields
 } from "../enum";
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
+import {specializationObject} from "../../WorkProgram/data";
 
 import {typeOfWorkProgramInPlan} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
-import DownloadFileModal from "./DownloadFileModal";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -52,9 +53,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     }
 
     componentDidMount() {
-        const workProgramId = get(this, 'props.match.params.id');
+        const planId = get(this, 'props.match.params.id');
 
-        this.props.actions.getEducationalDetail(workProgramId);
+        this.props.actions.getEducationalDetail(planId);
     }
 
     handleClickBlockDelete = (id: number, length: number) => () => {
@@ -104,6 +105,10 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         });
     }
 
+    handleCreateBlockOfWorkPrograms = (moduleId: number) => () => {
+        this.props.actions.createBlockOfWorkPrograms(moduleId);
+    }
+
     handleOpenCreateModuleModal = (module: ModuleType|{}, blockId: number) => () => {
         this.props.actions.openModuleDialog({
             ...module,
@@ -136,14 +141,14 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     }
 
     render() {
-        const {classes, blocks} = this.props;
+        const {classes, blocks, detailPlan} = this.props;
         const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength} = this.state;
 
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Учебный план
-
+                    Учебный план:
+                    &nbsp;{detailPlan[EducationalPlanFields.PROFILE]} / {specializationObject[detailPlan[EducationalPlanFields.QUALIFICATION]]} / {detailPlan[EducationalPlanFields.YEAR]}
                     <Tooltip title="Изменить учебный план">
                         <EditIcon className={classes.titleIcon} color="primary" onClick={this.handleChangePlan}/>
                     </Tooltip>
@@ -205,7 +210,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                     <Tooltip title="Создать блок рабочих программ">
                                                                         <AddCircleIcon className={classes.smallAddIcon}
                                                                                        color="primary"
-                                                                                       onClick={this.handleOpenDetailModal({}, module[ModuleFields.ID])}
+                                                                                       onClick={this.handleCreateBlockOfWorkPrograms(module[ModuleFields.ID])}
                                                                         />
                                                                     </Tooltip>
                                                                 </div>
@@ -228,6 +233,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                             const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
 
                                                             const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                                                            const semesterHour = mappedSemesterHours.slice(0, 10);
 
                                                             return <TableRow>
                                                                 <TableCell>
@@ -245,7 +251,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                         </div>
                                                                     )}
                                                                 </TableCell>
-                                                                {mappedSemesterHours.map((semesterHour: string) =>
+                                                                {semesterHour.map((semesterHour: string) =>
                                                                     <TableCell align="center" className={classes.hourCell} > {semesterHour} </TableCell>
                                                                 )}
                                                                 <TableCell>

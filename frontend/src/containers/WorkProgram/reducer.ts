@@ -71,6 +71,8 @@ const closeDialog = (state: workProgramState, {payload}: any): workProgramState 
     }
 });
 
+const pageDown = (): workProgramState => initialState;
+
 export const reducer = createReducer(initialState, {
     [actions.setWorkProgramPart.type]: setWorkProgramPart,
     [actions.setWorkProgram.type]: setWorkProgram,
@@ -82,4 +84,5 @@ export const reducer = createReducer(initialState, {
     [actions.closeDialog.type]: closeDialog,
 
     [actions.setWorkProgramEvaluationTools.type]: setWorkProgramEvaluationTools,
+    [actions.pageDown.type]: pageDown,
 });

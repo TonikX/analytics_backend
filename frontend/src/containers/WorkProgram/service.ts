@@ -15,6 +15,14 @@ class WorkProgramService extends BaseService{
         return this.get(`/api/toolsinworkprogram/${id}`);
     }
 
+    cloneWorkProgram(id: string){
+        const formData = new FormData();
+
+        formData.append('program_id', id);
+
+        return this.post(`/api/workprogram/clone`, formData);
+    }
+
     saveWorkProgram(destination: string, value: string, id: string){
         const formData = new FormData();
 
@@ -182,7 +190,7 @@ class WorkProgramService extends BaseService{
     }
 
     getResults(workProgramId: ReactText){
-        return this.get(`/api/outcomesofworkprogramforacademyplan/${workProgramId}`);
+        return this.get(`/api/outcomesofworkprogramforacademycplan/${workProgramId}`);
     }
 
     updateLiterature(literature: Array<number>, workProgramId: ReactText){
