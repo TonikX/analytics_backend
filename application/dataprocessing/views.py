@@ -358,9 +358,11 @@ def set_relation(item1, items_set, type_relation):
     list_of_items = []
     
     if Relation.objects.filter(item1 = item1, relation = type_relation).exists():
+        print ('+')
         #existed_query = Relation.objects.filter(item1 = item1, relation = type_relation)
         saved = len(items_set)
         for item2 in items_set:
+            print (item2)
             #item2 = Items.objects.get(name = i)
             if Relation.objects.filter(item1 = item1, relation = type_relation, item2=item2).exists():
                 #Если связь с i уже существует, то увеличиваем count
@@ -383,6 +385,7 @@ def set_relation(item1, items_set, type_relation):
         print('ok-1')
 
     else:
+        print ('-')
         for item2 in items_set:
             print(item2)
             #item2 = Items.objects.get(name = i)
@@ -616,13 +619,49 @@ class RelationPostAPIView(APIView):
         try:
             item1 = request.data.get("item1")
             relation = request.data.get("relation")
-            item2 = request.data.get("item2") 
-            
-            item1 = Items.objects.get(pk = item1)
-            new_items = [Items.objects.get(pk = i) for i in item2]
+            item2 = request.data.get("item2")
+            print(item1, item2, relation)
 
+            item1 = Items.objects.get(pk = item1)
+            print ('item1', item1)
+            try:
+                new_items = [Items.objects.get(pk = i) for i in item2]
+                print ('new items', new_items)
+            except:
+                print ("new item was not found")
+
+            set_relation(item1, new_items, relation)
+
+
+            print(item1, new_items, relation)
             set_relation(item1, new_items, relation)
 
             return Response(status=200)
         except:
             return Response(status=400)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            # item1 = Items.objects.get(pk = item1)
+            # print (item1)
+            # # new_items = [Items.objects.filter(pk = i)[0] for i in item2]
+            # # new_items = Items.objects.get(pk = item2)
+            # new_items=[]
+            # for i in item2:
+            #     print ('in circle', Items.objects.get(pk = i))
+            #     item = Items.objects.get(pk = i)
+            #     new_items.append(item)
+            #     print (new_items)
