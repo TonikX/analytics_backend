@@ -16,7 +16,7 @@ from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateVie
 from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
-    FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView, CompetenceCreateView, CompetencesListView
+    FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView, CompetenceCreateView, CompetencesListView, FileUploadWorkProgramOutcomesAPIView
 from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, IndicatorUpdateView
 from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlanDetailsView, ImplementationAcademicPlanDestroyView, ImplementationAcademicPlanUpdateView, ImplementationAcademicPlanListAPIView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
@@ -150,6 +150,7 @@ urlpatterns = [
 
     #Работа с файлами (загрузка/экспорт)
     path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
+    path('api/upload/wpwithoutcomes', FileUploadWorkProgramOutcomesAPIView.as_view()),
     path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
     path('api/upload/csv', FileUploadAPIView.as_view()),
     path('api/export/docx', DocxFileExportView.as_view()),
