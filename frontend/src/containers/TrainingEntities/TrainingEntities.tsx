@@ -95,7 +95,7 @@ class TrainingEntities extends React.Component<TrainingEntitiesProps> {
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Учебная сущность
+                    Учебные сущности
 
                     <TextField placeholder="Поиск"
                                variant="outlined"
@@ -134,7 +134,7 @@ class TrainingEntities extends React.Component<TrainingEntitiesProps> {
                                         {item[TrainingEntitiesFields.TITLE]}
                                     </Typography>
                                     <Typography className={classNames(classes.marginRight)}>
-                                        {item[TrainingEntitiesFields.SUBJECT_AREA][SubjectAreaFields.TITLE]}
+                                        {get(item, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.TITLE], null) || 'не задано'}
                                     </Typography>
                                     <div className={classes.actions}>
                                         <IconButton onClick={this.handleClickDelete(item[TrainingEntitiesFields.ID])}>

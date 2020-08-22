@@ -1,6 +1,7 @@
 import BaseService from "../../service/base-service";
 import {EntityToEntityFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
+import {EducationalPlanFields} from "../EducationalPlan/enum";
 
 class EntityToEntityServices extends BaseService{
     getEntitiesToEntities(currentPage: number, searchQuery: Object, sortingField: string, sortingMode: SortingType, domainId: number|null){
@@ -17,14 +18,17 @@ class EntityToEntityServices extends BaseService{
     createEntityToEntity(item: any){
         const formData = new FormData();
 
+        formData.append(EntityToEntityFields.ITEM1, item[EntityToEntityFields.ITEM1].id);
+        formData.append(EntityToEntityFields.ITEM2, item[EntityToEntityFields.ITEM2].id);
+        formData.append(EntityToEntityFields.RELATION, item[EntityToEntityFields.RELATION]);
+
         return this.post(`/api/relation/create`, formData);
     }
 
     updateEntityToEntity(item: any){
-        const formData = new FormData();
         const id = item[EntityToEntityFields.ID];
 
-        return this.patch(`/api/relation/update/${id}`, formData);
+        return this.patch(`/api/relation/update/${id}`, item);
     }
 }
 
