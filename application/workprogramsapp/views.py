@@ -885,6 +885,57 @@ def NewRealtionsForWorkProgramsInFieldOfStudyAPI(request):
         return Response(status=400)
 
 
+class FileUploadWorkProgramOutcomesAPIView(APIView):
+    """
+    API эндпоинт для добавления данных о РПД из csv-файла, спарсенного с online.edu.ru
+    """
+
+    def post(self, request):
+
+        serializer = FileUploadSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            data = handle_uploaded_file_v2(request.FILES['file'], str(request.FILES['file']))
+            print (data)
+            data.fillna('не задано', inplace=True)
+            for i in range(len(data)):
+                outcomes = data['KEYWORDS'][i].split(', ')
+                outcomes_items = []
+                print (outcomes)
+
+                for o in outcomes:
+                    o = o.capitalize()
+
+                    if Items.objects.filter(name = o).exists():
+                        outcomes_items.append(Items.objects.get(name = o))
+                    else:
+                        item = Items(name = o)
+                        item.save()
+                        outcomes_items.append(item)
+
+                outcomes_items = Items.objects.filter(name__in = outcomes_items)
+                print("Outcomes--", outcomes_items)
+
+                if WorkProgram.objects.filter(discipline_code = data['DIS_CODE'][i]).exists():
+                    # если запись уже есть то апдейтим
+                    wp_obj = WorkProgram.objects.get(discipline_code = data['DIS_CODE'][i])
+                    if len(outcomes_items) !=0:
+                        for item in outcomes_items:
+                            out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj, masterylevel = "2")
+                            out_obj.save()
+                            print ('item', item, 'was saved for')
+                else:
+                    print ('Рпд не найдена')
+            return Response({"Message": "All data processed"}, status=status.HTTP_201_CREATED)
+
+        except:
+            return Response({"Message": "Data not loaded"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
 #Блок эндпоинтов рабочей программы
 
 
@@ -1019,6 +1070,25 @@ class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
 #Блок эндпоинтов для обрабоки файлов
 
 from dataprocessing.serializers import FileUploadSerializer
+
+
+def handle_uploaded_file_v2(file, filename):
+    """
+    Обработка файла csv спарсенного с online.edu.ru
+    """
+    if not os.path.exists('upload/'):
+        os.mkdir('upload/')
+    path = 'upload/' + filename
+
+    with open(path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+
+    df = pandas.read_csv(path, sep=';', encoding = 'utf-8')
+    #df.dropna(subset=['Направления подготовки'], inplace = True)
+    #df = df.drop(['Unnamed: 0'], axis=1)
+    return df
+
 
 def handle_uploaded_file(file, filename):
     """
