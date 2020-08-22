@@ -922,7 +922,7 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
                     wp_obj = WorkProgram.objects.get(discipline_code = data['DIS_CODE'][i])
                     if len(outcomes_items) !=0:
                         for item in outcomes_items:
-                            out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj)
+                            out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj, masterylevel = "2")
                             out_obj.save()
                             print ('item', item, 'was saved for')
                 else:
