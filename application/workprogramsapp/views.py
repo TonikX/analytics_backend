@@ -8,7 +8,7 @@ from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramF
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, FieldOfStudySerializer
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, TopicCreateSerializer
-from .serializers import OutcomesOfWorkProgramCreateSerializer
+from .serializers import OutcomesOfWorkProgramCreateSerializer, WorkProgramForDisciplineBlockSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
@@ -739,7 +739,10 @@ class ZunListAPI(generics.ListCreateAPIView):
                 print (wp_in_fs)
             print (Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id)
             #print ('wp_in_fs', wp_in_fs.values_list('pk', flat=True)[0])
+            wp_for_response_serializer =[]
             print(new_zun.get('items'))
+            print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
+            wp_for_response_serializer.append(WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
             new_zun = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
             # , "items": int(new_zun.get('items'))
             print(new_zun)
@@ -755,7 +758,15 @@ class ZunListAPI(generics.ListCreateAPIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             # else:
             #     return Response({"error":"change_block does not exist"}, status=400)
-        return Response(serializer.data)
+            # wp_change_block = WorkProgramChangeInDisciplineBlockModule.objects.get(work_program__in = )
+        print (wp_for_response_serializer)
+        response_serializer = WorkProgramForDisciplineBlockSerializer(data = wp_for_response_serializer)
+        if response_serializer.is_valid():
+            return Response(response_serializer.data)
+        else:
+            return Response(response_serializer.error)
+
+        #return Response(response_serializer.data)
 
 
 class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -905,14 +916,18 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
                 print (outcomes)
 
                 for o in outcomes:
-                    o = o.capitalize()
+                    #o = o.capitalize()
+                    o=str(o)
+                    print (o)
 
                     if Items.objects.filter(name = o).exists():
                         outcomes_items.append(Items.objects.get(name = o))
                     else:
+                        print ('попытка сохранения')
                         item = Items(name = o)
                         item.save()
                         outcomes_items.append(item)
+                        print ('после сохранения', item)
 
                 outcomes_items = Items.objects.filter(name__in = outcomes_items)
                 print("Outcomes--", outcomes_items)
