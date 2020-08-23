@@ -921,7 +921,8 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
                     print (o)
 
                     if Items.objects.filter(name = o).exists():
-                        outcomes_items.append(Items.objects.get(name = o))
+                        print ('items finding', Items.objects.filter(name = o)[0])
+                        outcomes_items.append(Items.objects.filter(name = o)[0])
                     else:
                         print ('попытка сохранения')
                         item = Items(name = o)
