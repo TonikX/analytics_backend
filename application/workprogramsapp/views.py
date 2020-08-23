@@ -935,7 +935,7 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
 
                 if WorkProgram.objects.filter(discipline_code = data['DIS_CODE'][i]).exists():
                     # если запись уже есть то апдейтим
-                    wp_obj = WorkProgram.objects.get(discipline_code = data['DIS_CODE'][i])
+                    wp_obj = WorkProgram.objects.filter(discipline_code = data['DIS_CODE'][i])[0]
                     if len(outcomes_items) !=0:
                         for item in outcomes_items:
                             out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj, masterylevel = "2")
