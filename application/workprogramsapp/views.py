@@ -579,6 +579,47 @@ class PrerequisitesOfWorkProgramList(generics.ListAPIView):
         return Response(serializer.data)
 
 
+class WorkProgramsWithOutcomesToPrerequisitesForThisWPView(generics.ListAPIView):
+    '''
+    Дисциплины, в которых в качестве результатов заявлены те ключевые слова, которые являются пререквизитами для этой дисциплины
+    '''
+    serializer_class = WorkProgramSerializer
+
+    def list(self, request, **kwargs):
+        prerequisites_of_this_wp = PrerequisitesOfWorkProgram.objects.filter(workprogram__discipline_code=self.kwargs['discipline_code']).values("item__name")
+        queryset = WorkProgram.objects.filter(outcomes__items__name__in=prerequisites_of_this_wp)
+        serializer = WorkProgramSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class WorkProgramsWithPrerequisitesToOutocomesForThisWPView(generics.ListAPIView):
+    '''
+    Дисциплины, у которых а качестве пререквизитов указаны ключевые слова, являющиеся результатами по этой дисциплине
+    '''
+    serializer_class = WorkProgramSerializer
+
+    def list(self, request, **kwargs):
+        outcomes_of_this_wp = OutcomesOfWorkProgram.objects.filter(workprogram__discipline_code=self.kwargs['discipline_code']).values("item__name")
+        print ('dd', outcomes_of_this_wp)
+        queryset = WorkProgram.objects.filter(prerequisites__items__name__in=outcomes_of_this_wp)
+        serializer = WorkProgramSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class WorkProgramsWithOutocomesForThisWPView(generics.ListAPIView):
+    '''
+    Дисциплины, в которых есть такие же результаты
+    '''
+    serializer_class = WorkProgramSerializer
+
+    def list(self, request, **kwargs):
+        outcomes_of_this_wp = OutcomesOfWorkProgram.objects.filter(workprogram__discipline_code=self.kwargs['discipline_code']).values("item__name")
+        print ('dd', outcomes_of_this_wp)
+        queryset = WorkProgram.objects.filter(outcomes__items__name__in=outcomes_of_this_wp)
+        serializer = WorkProgramSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 class PrerequisitesOfWorkProgramCreateAPIView(generics.CreateAPIView):
     serializer_class = PrerequisitesOfWorkProgramCreateSerializer
     queryset = PrerequisitesOfWorkProgram.objects.all()
@@ -742,6 +783,7 @@ class ZunListAPI(generics.ListCreateAPIView):
             wp_for_response_serializer =[]
             print(new_zun.get('items'))
             print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
+            wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))
             wp_for_response_serializer.append(WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
             new_zun = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
             # , "items": int(new_zun.get('items'))
@@ -759,12 +801,19 @@ class ZunListAPI(generics.ListCreateAPIView):
             # else:
             #     return Response({"error":"change_block does not exist"}, status=400)
             # wp_change_block = WorkProgramChangeInDisciplineBlockModule.objects.get(work_program__in = )
+        print ('чейнж блок', wp_cb)
         print (wp_for_response_serializer)
-        response_serializer = WorkProgramForDisciplineBlockSerializer(data = wp_for_response_serializer)
-        if response_serializer.is_valid():
-            return Response(response_serializer.data)
-        else:
-            return Response(response_serializer.error)
+        response_serializer = WorkProgramChangeInDisciplineBlockModuleSerializer(wp_cb, many=True)
+        return Response(response_serializer.data)
+        # if response_serializer.is_valid():
+        #     #response_serializer.is_valid(raise_exception=True)
+        #     # data = response_serializer.data[:]
+        #     # print (data)
+        #     return Response(response_serializer.data)
+        # else:
+        #     return Response(response_serializer.errors)
+
+        # return HttpResponse(json.dumps(response_serializer.data, ensure_ascii=False), content_type="application/json")
 
         #return Response(response_serializer.data)
 

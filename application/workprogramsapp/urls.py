@@ -23,7 +23,8 @@ from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicP
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
     FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
-    ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView, AcademicPlanListShortAPIView, NewRealtionsForWorkProgramsInFieldOfStudyAPI
+    ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView, AcademicPlanListShortAPIView, \
+    NewRealtionsForWorkProgramsInFieldOfStudyAPI, WorkProgramsWithOutcomesToPrerequisitesForThisWPView, WorkProgramsWithPrerequisitesToOutocomesForThisWPView, WorkProgramsWithOutocomesForThisWPView
 from .views import DocxFileExportView
 from .views import CloneWorkProgramm
     #DocxFileExportOldView
@@ -82,6 +83,9 @@ urlpatterns = [
 
     #Рабочая программа
     path('api/workprogram/create', WorkProgramCreateAPIView.as_view()),
+    url(r'^api/workprogram/outcomes/prerequisites/relations/(?P<discipline_code>[0-9.]+)/$', WorkProgramsWithOutcomesToPrerequisitesForThisWPView.as_view()),
+    url(r'^api/workprogram/prerequisites/outcomes/relations/(?P<discipline_code>[0-9.]+)/$', WorkProgramsWithPrerequisitesToOutocomesForThisWPView.as_view()),
+    url(r'^api/workprogram/outcomes/relations/(?P<discipline_code>[0-9.]+)/$', WorkProgramsWithOutocomesForThisWPView.as_view()),
     path('api/workprogram/detail/<int:pk>', WorkProgramDetailsView.as_view()),
     path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
