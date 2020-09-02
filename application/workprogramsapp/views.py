@@ -14,7 +14,8 @@ from .serializers import OnlineCourseSerializer, BibliographicReferenceSerialize
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, \
     WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, \
-    ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, WorkProgramChangeInDisciplineBlockModuleUpdateSerializer
+    ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
+    WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -803,7 +804,7 @@ class ZunListAPI(generics.ListCreateAPIView):
             # wp_change_block = WorkProgramChangeInDisciplineBlockModule.objects.get(work_program__in = )
         print ('чейнж блок', wp_cb)
         print (wp_for_response_serializer)
-        response_serializer = WorkProgramChangeInDisciplineBlockModuleSerializer(wp_cb, many=True)
+        response_serializer = WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(wp_cb, many=True)
         return Response(response_serializer.data)
         # if response_serializer.is_valid():
         #     #response_serializer.is_valid(raise_exception=True)
@@ -846,6 +847,7 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
                 #return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
         return Response(serializer.data)
 
 
