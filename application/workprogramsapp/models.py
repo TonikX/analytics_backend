@@ -177,7 +177,7 @@ class OutcomesOfWorkProgram(models.Model, CloneMixin):
 
 
     def __str__(self):
-        return (self.item + self.workprogram)
+        return str(self.item) + str(self.workprogram)
 
 #
 # class User(AbstractUser):
