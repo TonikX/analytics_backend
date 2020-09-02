@@ -989,9 +989,14 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
                     wp_obj = WorkProgram.objects.filter(discipline_code = data['DIS_CODE'][i])[0]
                     if len(outcomes_items) !=0:
                         for item in outcomes_items:
-                            out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj, masterylevel = "2")
-                            out_obj.save()
-                            print ('item', item, 'was saved for')
+                            print ('item', item)
+                            #print ('jj', OutcomesOfWorkProgram.objects.filter(item = item, workprogram = wp_obj)[0])
+                            if OutcomesOfWorkProgram.objects.filter(item = item, workprogram = wp_obj).exists():
+                                print ('результат существует')
+                            else:
+                                out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj, masterylevel = "2")
+                                out_obj.save()
+                                print ('item', item, 'was saved for')
                 else:
                     print ('Рпд не найдена')
             return Response({"Message": "All data processed"}, status=status.HTTP_201_CREATED)

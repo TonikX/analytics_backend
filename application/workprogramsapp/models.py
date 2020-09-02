@@ -176,6 +176,9 @@ class OutcomesOfWorkProgram(models.Model, CloneMixin):
     # _clone_many_to_many_fields =['evaluation_tool']
 
 
+    def __str__(self):
+        return (self.item + self.workprogram)
+
 #
 # class User(AbstractUser):
 #     '''
