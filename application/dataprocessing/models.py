@@ -39,11 +39,11 @@ class Items(models.Model):
         Модель для сущностей
     '''
  
-    name = models.CharField(max_length=2000, blank=True, verbose_name='Название')
+    name = models.CharField(max_length=900, blank=True, verbose_name='Название')
     domain = models.ForeignKey(Domain, null = True, blank = True, help_text='Укажите область', verbose_name='Область знаний',on_delete=models.CASCADE,)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name = 'Автор', verbose_name='Пользователи', null=True)
     value = models.IntegerField(blank=True, null = True, default = 0, verbose_name='Значение')
-    source = models.CharField(max_length=2000, blank=True, verbose_name='Источник')
+    source = models.CharField(max_length=200, blank=True, verbose_name='Источник')
     #date_created = models.DateField(auto_now_add = True)
     relation_with_item = models.ManyToManyField('Items', verbose_name='Связи айтима', through='Relation')
     
