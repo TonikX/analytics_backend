@@ -265,8 +265,9 @@ class RelationPostAPIView(APIView):
         try:
             item1 = request.data.get("item1")
             relation = request.data.get("relation")
-            item2 = request.data.get("item2") 
-            
+            item2 = request.data.get("item2")
+            print(item1, item2, relation)
+
             item1 = Items.objects.get(pk = item1)
             item2 = [Items.objects.get(pk = item2),]
 
@@ -275,3 +276,17 @@ class RelationPostAPIView(APIView):
             return Response(status=200)
         except:
             return Response(status=400)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

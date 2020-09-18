@@ -380,6 +380,14 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
         fields = ['id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'prerequisites', 'outcomes', 'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp']
 
 
+class WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(serializers.ModelSerializer):
+    work_program = WorkProgramForDisciplineBlockSerializer(many=True)
+
+    class Meta:
+        model = WorkProgramChangeInDisciplineBlockModule
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program']
+
+
 class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
     work_program = WorkProgramForDisciplineBlockSerializer(many=True)
 
@@ -448,6 +456,8 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
         fields = "__all__"
+
+
 
 
 class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.ModelSerializer):

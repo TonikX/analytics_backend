@@ -8,13 +8,14 @@ from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramF
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, FieldOfStudySerializer
 from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, TopicCreateSerializer
-from .serializers import OutcomesOfWorkProgramCreateSerializer
+from .serializers import OutcomesOfWorkProgramCreateSerializer, WorkProgramForDisciplineBlockSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, \
     WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, \
-    ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, WorkProgramChangeInDisciplineBlockModuleUpdateSerializer
+    ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
+    WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -579,6 +580,47 @@ class PrerequisitesOfWorkProgramList(generics.ListAPIView):
         return Response(serializer.data)
 
 
+class WorkProgramsWithOutcomesToPrerequisitesForThisWPView(generics.ListAPIView):
+    '''
+    Дисциплины, в которых в качестве результатов заявлены те ключевые слова, которые являются пререквизитами для этой дисциплины
+    '''
+    serializer_class = WorkProgramSerializer
+
+    def list(self, request, **kwargs):
+        prerequisites_of_this_wp = PrerequisitesOfWorkProgram.objects.filter(workprogram__discipline_code=self.kwargs['discipline_code']).values("item__name")
+        queryset = WorkProgram.objects.filter(outcomes__items__name__in=prerequisites_of_this_wp)
+        serializer = WorkProgramSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class WorkProgramsWithPrerequisitesToOutocomesForThisWPView(generics.ListAPIView):
+    '''
+    Дисциплины, у которых а качестве пререквизитов указаны ключевые слова, являющиеся результатами по этой дисциплине
+    '''
+    serializer_class = WorkProgramSerializer
+
+    def list(self, request, **kwargs):
+        outcomes_of_this_wp = OutcomesOfWorkProgram.objects.filter(workprogram__discipline_code=self.kwargs['discipline_code']).values("item__name")
+        print ('dd', outcomes_of_this_wp)
+        queryset = WorkProgram.objects.filter(prerequisites__items__name__in=outcomes_of_this_wp)
+        serializer = WorkProgramSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class WorkProgramsWithOutocomesForThisWPView(generics.ListAPIView):
+    '''
+    Дисциплины, в которых есть такие же результаты
+    '''
+    serializer_class = WorkProgramSerializer
+
+    def list(self, request, **kwargs):
+        outcomes_of_this_wp = OutcomesOfWorkProgram.objects.filter(workprogram__discipline_code=self.kwargs['discipline_code']).values("item__name")
+        print ('dd', outcomes_of_this_wp)
+        queryset = WorkProgram.objects.filter(outcomes__items__name__in=outcomes_of_this_wp)
+        serializer = WorkProgramSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 class PrerequisitesOfWorkProgramCreateAPIView(generics.CreateAPIView):
     serializer_class = PrerequisitesOfWorkProgramCreateSerializer
     queryset = PrerequisitesOfWorkProgram.objects.all()
@@ -739,7 +781,11 @@ class ZunListAPI(generics.ListCreateAPIView):
                 print (wp_in_fs)
             print (Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id)
             #print ('wp_in_fs', wp_in_fs.values_list('pk', flat=True)[0])
+            wp_for_response_serializer =[]
             print(new_zun.get('items'))
+            print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
+            wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))
+            wp_for_response_serializer.append(WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
             new_zun = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
             # , "items": int(new_zun.get('items'))
             print(new_zun)
@@ -755,7 +801,22 @@ class ZunListAPI(generics.ListCreateAPIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             # else:
             #     return Response({"error":"change_block does not exist"}, status=400)
-        return Response(serializer.data)
+            # wp_change_block = WorkProgramChangeInDisciplineBlockModule.objects.get(work_program__in = )
+        print ('чейнж блок', wp_cb)
+        print (wp_for_response_serializer)
+        response_serializer = WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(wp_cb, many=True)
+        return Response(response_serializer.data)
+        # if response_serializer.is_valid():
+        #     #response_serializer.is_valid(raise_exception=True)
+        #     # data = response_serializer.data[:]
+        #     # print (data)
+        #     return Response(response_serializer.data)
+        # else:
+        #     return Response(response_serializer.errors)
+
+        # return HttpResponse(json.dumps(response_serializer.data, ensure_ascii=False), content_type="application/json")
+
+        #return Response(response_serializer.data)
 
 
 class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -786,6 +847,7 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
                 #return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         return Response(serializer.data)
 
 
@@ -885,7 +947,7 @@ def NewRealtionsForWorkProgramsInFieldOfStudyAPI(request):
         return Response(status=400)
 
 
-class FileUploadWorkProgramAPIView(APIView):
+class FileUploadWorkProgramOutcomesAPIView(APIView):
     """
     API эндпоинт для добавления данных о РПД из csv-файла, спарсенного с online.edu.ru
     """
@@ -895,27 +957,54 @@ class FileUploadWorkProgramAPIView(APIView):
         serializer = FileUploadSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        data = handle_uploaded_file(request.FILES['file'], str(request.FILES['file']))
-        data.fillna('не задано', inplace=True)
-        for i in range(len(data)):
-            try:
-                outcomes = data['Ключевые слова содержания'][i].split(', ')
+        try:
+            data = handle_uploaded_file_v2(request.FILES['file'], str(request.FILES['file']))
+            print (data)
+            data.fillna('не задано', inplace=True)
+            for i in range(len(data)):
+                outcomes = data['KEYWORDS'][i].split(', ')
                 outcomes_items = []
+                print (outcomes)
 
                 for o in outcomes:
-                    o = o.capitalize()
+                    #o = o.capitalize()
+                    o=str(o)
+                    print (o)
 
                     if Items.objects.filter(name = o).exists():
-                        outcomes_items.append(Items.objects.get(name = o))
+                        print ('items finding', Items.objects.filter(name = o)[0])
+                        outcomes_items.append(Items.objects.filter(name = o)[0])
                     else:
+                        print ('попытка сохранения')
                         item = Items(name = o)
                         item.save()
                         outcomes_items.append(item)
+                        print ('после сохранения', item)
 
                 outcomes_items = Items.objects.filter(name__in = outcomes_items)
                 print("Outcomes--", outcomes_items)
-            except:
-                pass
+
+                if WorkProgram.objects.filter(discipline_code = data['DIS_CODE'][i]).exists():
+                    # если запись уже есть то апдейтим
+                    wp_obj = WorkProgram.objects.filter(discipline_code = data['DIS_CODE'][i])[0]
+                    if len(outcomes_items) !=0:
+                        for item in outcomes_items:
+                            print ('item', item)
+                            #print ('jj', OutcomesOfWorkProgram.objects.filter(item = item, workprogram = wp_obj)[0])
+                            if OutcomesOfWorkProgram.objects.filter(item = item, workprogram = wp_obj).exists():
+                                print ('результат существует')
+                            else:
+                                out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj, masterylevel = "2")
+                                out_obj.save()
+                                print ('item', item, 'was saved for')
+                else:
+                    print ('Рпд не найдена')
+            return Response({"Message": "All data processed"}, status=status.HTTP_201_CREATED)
+
+        except:
+            return Response({"Message": "Data not loaded"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 
@@ -1053,6 +1142,25 @@ class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
 #Блок эндпоинтов для обрабоки файлов
 
 from dataprocessing.serializers import FileUploadSerializer
+
+
+def handle_uploaded_file_v2(file, filename):
+    """
+    Обработка файла csv спарсенного с online.edu.ru
+    """
+    if not os.path.exists('upload/'):
+        os.mkdir('upload/')
+    path = 'upload/' + filename
+
+    with open(path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+
+    df = pandas.read_csv(path, sep=';', encoding = 'utf-8')
+    #df.dropna(subset=['Направления подготовки'], inplace = True)
+    #df = df.drop(['Unnamed: 0'], axis=1)
+    return df
+
 
 def handle_uploaded_file(file, filename):
     """

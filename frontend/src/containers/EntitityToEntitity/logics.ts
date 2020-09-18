@@ -71,11 +71,11 @@ const createNewTrainingEntities = createLogic({
     type: subjectAreaActions.createNewEntityToEntity.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const course = action.payload;
+        const entityToEntity = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_ENTITY_TO_ENTITY}));
 
-        service.createEntityToEntity(course)
+        service.createEntityToEntity(entityToEntity)
             .then((res) => {
                 dispatch(subjectAreaActions.getEntityToEntityList());
                 dispatch(actions.fetchingSuccess());
