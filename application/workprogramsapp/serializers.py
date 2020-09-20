@@ -4,6 +4,8 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy
 
+import requests
+
 from dataprocessing.serializers import ItemSerializer
 
 
@@ -378,7 +380,7 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
     """Сериализатор рабочих программ"""
     prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set', many=True)
     outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
-    #zuns_for_wp = WorkProgramInFieldOfStudySerializer(many=True)
+    #zuns_for_wp = WorkProgramInFieldOfStudySerializerForCb(many=True)
     zuns_for_wp = serializers.SerializerMethodField('clarify_zuns_for_wp')
     #zuns_for_wp = RecursiveField(many=True)
 
@@ -391,9 +393,10 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
 
     def clarify_zuns_for_wp(self, obj, *args, **kwargs):
         #zuns_for_wp_objects = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = 17)
-        zuns_for_wp_objects = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = cb_id)
+        zuns_for_wp_objects = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = self.context.get('parent_cb_id'), work_program = obj.id)
         #print ('obj', self.parent.parent.to_representation(self.instance))
         print ('попытка')
+        print ('obj', self.context.get('parent_cb_id'))
         #print (self.parent[0])
         #print (self.to_representation(self.instances))
         #print (self.cleaned_data['parent'])
@@ -423,16 +426,22 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
         fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'id_for_wp']
 
 
+    # def get_id_of_wpcb(self, obj):
+    #     # wp = WorkProgram.objects.all()
+    #     # print ('попытка')
+    #     # cb_id = obj.id
+    #     # print ('cb_id', cb_id)
+    #     # serializers = WorkProgramForDisciplineBlockSerializer(wp,many=True)
+    #     # return serializers.data
+    #     global cb_id
+    #     cb_id = obj.id
+    #     return cb_id
     def get_id_of_wpcb(self, obj):
-        # wp = WorkProgram.objects.all()
-        # print ('попытка')
-        # cb_id = obj.id
-        # print ('cb_id', cb_id)
-        # serializers = WorkProgramForDisciplineBlockSerializer(wp,many=True)
-        # return serializers.data
-        global cb_id
-        cb_id = obj.id
-        return cb_id
+        work_program = WorkProgram.objects.filter(work_program_in_change_block = obj.id)
+        serializers = WorkProgramForDisciplineBlockSerializer(work_program, many=True, context={'parent_cb_id': obj.id})
+        return serializers.data
+
+
 
 
 
