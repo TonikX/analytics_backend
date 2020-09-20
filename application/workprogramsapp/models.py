@@ -426,7 +426,7 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
 
 class WorkProgramInFieldOfStudy(models.Model):
     work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
-                                                                       on_delete=models.CASCADE)
+                                                                       on_delete=models.CASCADE, related_name="zuns_for_cb")
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
     # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
 

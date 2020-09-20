@@ -829,8 +829,11 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
     def update(self, request, *args, **kwargs):
         for new_zun in request.data:
-            print (new_zun.get('wp_changeblock'))
+            print ('wp_changeblock', new_zun.get('wp_changeblock'))
             print (Zun.objects.get(id = kwargs['pk']).items)
+            wp_changeblock_id = int(new_zun.get('wp_changeblock'))
+            print ('wp_changeblock_id', wp_changeblock_id)
+            wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = wp_changeblock_id)
             if Zun.objects.get(id = kwargs['pk']):
                 for item in new_zun.get('items'):
                     print ('item', item)
@@ -838,7 +841,6 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
             print(new_zun)
             serializer = ZunCreateSaveSerializer(Zun.objects.get(id = kwargs['pk']), data = new_zun)
             #print (serializer)
-            print
 
             if serializer.is_valid(raise_exception=True):
                 old_zun = Zun.objects.get(id = kwargs['pk']).items.clear()
@@ -848,7 +850,10 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.data)
+        print ('чейнж блок', wp_cb)
+        response_serializer = WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(wp_cb, many=True)
+        return Response(response_serializer.data)
+        # return Response(serializer.data)
 
 
 class DisciplineSectionListAPI(generics.ListCreateAPIView):
@@ -1520,8 +1525,10 @@ class FileUploadAPIView(APIView):
 
 
 class AcademicPlanListAPIView(generics.ListAPIView):
+
     serializer_class = AcademicPlanSerializer
     queryset = AcademicPlan.objects.all()
+    print (queryset)
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['educational_profile']
 
@@ -1531,6 +1538,48 @@ class AcademicPlanListShortAPIView(generics.ListAPIView):
     queryset = AcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['educational_profile']
+
+
+    # def get(self, request, **kwargs):
+    #     """
+    #     Вывод всех результатов для одной рабочей программы по id
+    #     """
+    #     # Note the use of `get_queryset()` instead of `self.queryset`
+    #     #queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+    #
+    #     try:
+    #         queryset = AcademicPlan.objects.filter(pk=self.kwargs['pk'])
+    #         print (queryset)
+    #         for academic_plans in queryset:
+    #             print (academic_plans.id)
+    #             for discipline_block_in_academic_plan in academic_plans.discipline_blocks_in_academic_plan.all():
+    #                 print (discipline_block_in_academic_plan.id)
+    #                 for module_in_discipline_block in discipline_block_in_academic_plan.modules_in_discipline_block.all():
+    #                     print (module_in_discipline_block.id)
+    #                     for change_block_of_work_programs_in_modules in  module_in_discipline_block.change_blocks_of_work_programs_in_modules.all():
+    #                         print ('чб', change_block_of_work_programs_in_modules.zuns_for_cb.all().values())
+    #                         for wp_in_fs_set in change_block_of_work_programs_in_modules.zuns_for_cb.all():
+    #                             #print(wp_in_fs_set.zuns_for_wp)
+    #                             wp_in_fs_set.zun_in_wp.remove()
+    #                             zuns = Zun.objects.filter(wp_in_fs__work_program_change_in_discipline_block_module__id = change_block_of_work_programs_in_modules.id, wp_in_fs__work_program__id = wp_in_fs_set.work_program.id)
+    #                             wp_in_fs_set.zun_in_wp.add(*zuns)
+    #                             # for zun in zuns:
+    #                             #     wp_in_fs_set.zun_in_wp.add(*zun)
+    #                             #print('wp_in_fs_set.zun_in_wp.set([zuns])', wp_in_fs_set.zun_in_wp.set([zuns]))
+    #                             # for zun in wp.zuns_for_wp.all():
+    #                             #     print ('рпд', zun.id)
+    #                             print ('чб', wp_in_fs_set.work_program)
+    #                             for zuns_all in wp_in_fs_set.zun_in_wp.all():
+    #                                 print ('zuns', zuns_all)
+    #         serializer = AcademicPlanSerializer(queryset, many=True)
+    #         #print (serializer.data)
+    #         return Response(serializer.data)
+    #
+    #
+    #     except:
+    #         return Response({"error":"work program with such a code was not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 class AcademicPlanCreateAPIView(generics.CreateAPIView):
@@ -1556,7 +1605,97 @@ class AcademicPlanUpdateView(generics.UpdateAPIView):
 
 class AcademicPlanDetailsView(generics.RetrieveAPIView):
     queryset = AcademicPlan.objects.all()
+    print(AcademicPlan.objects.all())
     serializer_class = AcademicPlanSerializer
+
+    # def get(self, request, **kwargs):
+    #     """
+    #     Вывод всех результатов для одной рабочей программы по id
+    #     """
+    #     # Note the use of `get_queryset()` instead of `self.queryset`
+    #     #queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+    #
+    #     query = AcademicPlan.objects.filter(pk=self.kwargs['pk'])
+    #     newlist = list(query)
+    #     queryset2 = []
+    #
+    #     print (newlist)
+    #     for academic_plans in newlist:
+    #         print (academic_plans.id)
+    #         queryset2.append(academic_plans)
+    #         print (queryset2)
+    #         for discipline_block_in_academic_plan in academic_plans.discipline_blocks_in_academic_plan.all():
+    #             #print (discipline_block_in_academic_plan.id)
+    #
+    #             #queryset2.academic_plans.append(discipline_block_in_academic_plan)
+    #             for module_in_discipline_block in discipline_block_in_academic_plan.modules_in_discipline_block.all():
+    #                 #print (module_in_discipline_block.id)
+    #                 for change_block_of_work_programs_in_modules in  module_in_discipline_block.change_blocks_of_work_programs_in_modules.all():
+    #                     #print ('чб', change_block_of_work_programs_in_modules.zuns_for_cb.all().values())
+    #                     # for wp_in_fs_set2 in change_block_of_work_programs_in_modules.zuns_for_cb.all():
+    #                     #     #print(wp_in_fs_set.zuns_for_wp)
+    #                     #     #wp_in_fs_set.zun_in_wp.remove()
+    #                     #     # print ('удалились?',  wp_in_fs_set.zun_in_wp.all().values())
+    #                     #     # zuns = Zun.objects.filter(wp_in_fs__work_program_change_in_discipline_block_module__id = change_block_of_work_programs_in_modules.id, wp_in_fs__work_program__id = wp_in_fs_set.work_program.id)
+    #                     #     # print (zuns)
+    #                     #     # wp_in_fs_set.zun_in_wp.add(*zuns)
+    #                     #     # # for zun in zuns:
+    #                     #     # #     wp_in_fs_set.zun_in_wp.add(*zun)
+    #                     #     # #print('wp_in_fs_set.zun_in_wp.set([zuns])', wp_in_fs_set.zun_in_wp.set([zuns]))
+    #                     #     # # for zun in wp.zuns_for_wp.all():
+    #                     #     # #     print ('рпд', zun.id)
+    #                     #     # print ('чб', wp_in_fs_set.work_program)
+    #                     #     # for zuns_all in wp_in_fs_set.zun_in_wp.all():
+    #                     #     #     print ('zuns', zuns_all)
+    #                     #     print ('ид', wp_in_fs_set2.id)
+    #                     #     print('ид2', (WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = change_block_of_work_programs_in_modules.id)[0].id))
+    #                     #     if wp_in_fs_set2.id != WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = change_block_of_work_programs_in_modules.id)[0].id:
+    #                     #         print ('удаление 2')
+    #                     #
+    #                     #         wp_in_fs_set2.exclude()
+    #                     for wp_in_changeblock in change_block_of_work_programs_in_modules.work_program.all():
+    #                         #wp_in_changeblock.zuns_for_wp.all().delete()
+    #                         #print ('--rpd_чб', wp_in_changeblock)
+    #                         new_zuns = []
+    #                         for zuns in wp_in_changeblock.zuns_for_wp.all():
+    #
+    #                             #print ('----зун в рпд', zuns)
+    #                             if zuns.id == (WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = change_block_of_work_programs_in_modules.id)[0]).id:
+    #                                # print ('удаление 2')
+    #                                 #print ('ид', zuns.id)
+    #                                 new_zuns.append(zuns)
+    #                                 # print('ид2', (WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = change_block_of_work_programs_in_modules.id)[0].id))
+    #                                 # wp_in_changeblock.zuns_for_wp.all().delete()
+    #                                 # wp_in_changeblock.zuns_for_wp.pop()
+    #
+    #                         #print ('-------новые связт рпд и направления', new_zuns)
+    #
+    #                         #wp_in_changeblock.zuns_for_wp = [new_zuns]
+    #     serializer = AcademicPlanSerializer(query, many=True)
+    #     #print (serializer.data)
+    #     #new_serializer_data = list(serializer.data)
+    #     #print (serializer.discipline_blocks_in_academic_plan)
+    #     # for discipline_blocks_in_academic_plan in new_serializer_data:
+    #     #     #print (discipline_blocks_in_academic_plan)
+    #     #     for modules_in_discipline_block in discipline_blocks_in_academic_plan:
+    #     #         print ('--------------', modules_in_discipline_block)
+    #     #     # for discipline_block_in_academic_plan in academic_plans:
+    #     #     #     print (discipline_block_in_academic_plan)
+    #     #     #     #print (discipline_block_in_academic_plan.id)
+    #     #     #     #queryset2.academic_plans.append(discipline_block_in_academic_plan)
+    #     #     #     for module_in_discipline_block in discipline_block_in_academic_plan:
+    #     #     #         #print (module_in_discipline_block.id)
+    #     #     #         for change_block_of_work_programs_in_modules in module_in_discipline_block:
+    #     #     #             print ('чб')
+    #     return Response(serializer.data)
+    #
+    #     try:
+    #         print ('dd')
+    #
+    #
+    #
+    #     except:
+    #         return Response({"error":"work program with such a code was not found"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
