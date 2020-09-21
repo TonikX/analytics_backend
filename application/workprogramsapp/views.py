@@ -15,7 +15,7 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, \
     WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, \
     ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer
+    WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -784,7 +784,7 @@ class ZunListAPI(generics.ListCreateAPIView):
             wp_for_response_serializer =[]
             print(new_zun.get('items'))
             print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
-            wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))
+            wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0]
             wp_for_response_serializer.append(WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
             new_zun = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
             # , "items": int(new_zun.get('items'))
@@ -804,7 +804,7 @@ class ZunListAPI(generics.ListCreateAPIView):
             # wp_change_block = WorkProgramChangeInDisciplineBlockModule.objects.get(work_program__in = )
         print ('чейнж блок', wp_cb)
         print (wp_for_response_serializer)
-        response_serializer = WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(wp_cb, many=True)
+        response_serializer = WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(wp_cb)
         return Response(response_serializer.data)
         # if response_serializer.is_valid():
         #     #response_serializer.is_valid(raise_exception=True)
@@ -1526,7 +1526,7 @@ class FileUploadAPIView(APIView):
 
 class AcademicPlanListAPIView(generics.ListAPIView):
 
-    serializer_class = AcademicPlanSerializer
+    serializer_class = AcademicPlanSerializerForList
     queryset = AcademicPlan.objects.all()
     print (queryset)
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]

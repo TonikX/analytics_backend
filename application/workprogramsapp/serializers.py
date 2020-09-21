@@ -409,21 +409,30 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
 
 
 class WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(serializers.ModelSerializer):
-    work_program = WorkProgramForDisciplineBlockSerializer(many=True)
+    #work_program = WorkProgramForDisciplineBlockSerializer(many=True)
+    work_program = serializers.SerializerMethodField('get_id_of_wpcb')
+
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
         fields = ['id', 'code', 'credit_units', 'change_type', 'work_program']
 
 
+    def get_id_of_wpcb(self, obj):
+        work_program = WorkProgram.objects.filter(work_program_in_change_block = obj.id)
+        serializers = WorkProgramForDisciplineBlockSerializer(work_program, many=True, context={'parent_cb_id': obj.id})
+        return serializers.data
+
+
+
 class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
-    work_program = WorkProgramForDisciplineBlockSerializer(many=True)
+    #work_program = WorkProgramForDisciplineBlockSerializer(many=True)
     #work_program = serializers.SerializerMethodField('get_id_of_wpcb')
-    id_for_wp = serializers.SerializerMethodField('get_id_of_wpcb')
+    work_program = serializers.SerializerMethodField('get_id_of_wpcb')
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'id_for_wp']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program']
 
 
     # def get_id_of_wpcb(self, obj):
@@ -481,6 +490,13 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'discipline_blocks_in_academic_plan': {'required': False}
         }
+
+
+class AcademicPlanSerializerForList(serializers.ModelSerializer):
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification']
 
 
 class AcademicPlanShortSerializer(serializers.ModelSerializer):
