@@ -28,12 +28,17 @@ from django_tables2.paginators import LazyPaginator
 from django_tables2 import SingleTableView, RequestConfig
 from .tables import FieldOfStudyWPTable
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+
 from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
+
+# Права доступа
+from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+
 
 import json
 
@@ -177,6 +182,7 @@ class WorkProgramsListApi(generics.ListAPIView):
     serializer_class = WorkProgramSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['discipline_code', 'title']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class PrerequisitesUpdate(View):
@@ -366,59 +372,36 @@ class TopicPostUpdate(View):
 """Блок реализации API"""
 
 
-
-# class IndicatorListView(APIView):new_
-#     """
-#        Список индикаторов.
-#     """
-#     def get(self, request):
-#         indicators = Indicator.objects.all()
-#         serializer = IndicatorSerializer(indicators, many=True)
-#         return Response(serializer.data)
-#
-# class IndicatorUpdateView(APIView):
-#     """
-#         Редактирование (обновление) индикатора
-#     """
-#     def get(self, request, pk):
-#         indicator = get_object_or_404(Indicator, pk=pk)
-#         serializer = IndicatorSerializer(indicator)
-#         return Response(serializer.data)
-#
-#     def put(self, request, pk):
-#         indicator = get_object_or_404(Indicator, pk=pk)
-#         serializer = IndicatorSerializer(indicator, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class IndicatorListAPIView(generics.ListAPIView):
     serializer_class = IndicatorListSerializer
     queryset = Indicator.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['number', 'name', 'competence']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class IndicatorCreateAPIView(generics.CreateAPIView):
     serializer_class = IndicatorSerializer
     queryset = Indicator.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class IndicatorDestroyView(generics.DestroyAPIView):
     queryset = Indicator.objects.all()
     serializer_class = IndicatorSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class IndicatorUpdateView(generics.UpdateAPIView):
     queryset = Indicator.objects.all()
     serializer_class = IndicatorSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class IndicatorDetailsView(generics.RetrieveAPIView):
     queryset = Indicator.objects.all()
     serializer_class = IndicatorListSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 # class IndicatorForCompetence(generics.ListAPIView):
@@ -438,6 +421,7 @@ class IndicatorDetailsView(generics.RetrieveAPIView):
 class CompetenceCreateView(generics.CreateAPIView):
     serializer_class = CompetenceSerializer
     queryset = Competence.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class CompetencesListView(generics.ListAPIView):
@@ -445,13 +429,17 @@ class CompetencesListView(generics.ListAPIView):
     queryset = Competence.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name','number']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class CompetenceListView(APIView):
     """
        Список компетеций.
     """
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
     def get(self, request):
+
         competences = Competence.objects.all()
         serializer = CompetenceSerializer(competences, many=True)
         return Response(serializer.data)
@@ -460,10 +448,14 @@ class CompetenceUpdateView(APIView):
     """
         Редактирование (обновление) компетенции
     """
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
     def get(self, request, pk):
         competence = get_object_or_404(Competence, pk=pk)
         serializer = CompetenceSerializer(competence)
         return Response(serializer.data)
+
 
     def put(self, request, pk):
         competence = get_object_or_404(Competence, pk=pk)
@@ -472,6 +464,7 @@ class CompetenceUpdateView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     def delete(self, request, pk):
         competence = get_object_or_404(Competence, pk=pk)
@@ -486,6 +479,9 @@ class CompetenceIndicatorDetailView(APIView):
     """
        Индикаторы компетенции.
     """
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
     def get(self, request, pk):
         indicators = Indicator.objects.filter(competence=pk)
         serializer = IndicatorSerializer(indicators, many=True)
@@ -496,6 +492,9 @@ class DeleteIndicatorFromCompetenceView(APIView):
     """
         Удаление индикатора из компетенции
     """
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
     def post(self, request):
         competence_pk = request.data.get("competence_pk")
         indicator_pk = request.data.get("indicator_pk")
@@ -510,6 +509,9 @@ class AddIndicatorToCompetenceView(APIView):
     """
         Добавление индикатора в компетенцию (Создание индикатора)
     """
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
     def post(self, request):
         number = request.data.get("number")
         name = request.data.get("name")
@@ -527,6 +529,7 @@ class OutcomesOfWorkProgramList(generics.ListAPIView):
     serializer_class = OutcomesOfWorkProgramSerializer
     permission_classes = [IsAuthenticated]
 
+
     def list(self, request, **kwargs):
         """
         Вывод всех результатов для одной рабочей программы по id
@@ -540,16 +543,19 @@ class OutcomesOfWorkProgramList(generics.ListAPIView):
 class OutcomesOfWorkProgramCreateAPIView(generics.CreateAPIView):
     serializer_class = OutcomesOfWorkProgramCreateSerializer
     queryset = OutcomesOfWorkProgram.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class OutcomesOfWorkProgramDestroyView(generics.DestroyAPIView):
     queryset = OutcomesOfWorkProgram.objects.all()
     serializer_class = OutcomesOfWorkProgramCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class OutcomesOfWorkProgramUpdateView(generics.UpdateAPIView):
     queryset = OutcomesOfWorkProgram.objects.all()
     serializer_class = OutcomesOfWorkProgramCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class OutcomesForWorkProgramChangeBlock(generics.ListAPIView):
@@ -585,6 +591,8 @@ class WorkProgramsWithOutcomesToPrerequisitesForThisWPView(generics.ListAPIView)
     Дисциплины, в которых в качестве результатов заявлены те ключевые слова, которые являются пререквизитами для этой дисциплины
     '''
     serializer_class = WorkProgramSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
     def list(self, request, **kwargs):
         prerequisites_of_this_wp = PrerequisitesOfWorkProgram.objects.filter(workprogram__discipline_code=self.kwargs['discipline_code']).values("item__name")
@@ -598,6 +606,8 @@ class WorkProgramsWithPrerequisitesToOutocomesForThisWPView(generics.ListAPIView
     Дисциплины, у которых а качестве пререквизитов указаны ключевые слова, являющиеся результатами по этой дисциплине
     '''
     serializer_class = WorkProgramSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
     def list(self, request, **kwargs):
         outcomes_of_this_wp = OutcomesOfWorkProgram.objects.filter(workprogram__discipline_code=self.kwargs['discipline_code']).values("item__name")
@@ -612,6 +622,8 @@ class WorkProgramsWithOutocomesForThisWPView(generics.ListAPIView):
     Дисциплины, в которых есть такие же результаты
     '''
     serializer_class = WorkProgramSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
     def list(self, request, **kwargs):
         outcomes_of_this_wp = OutcomesOfWorkProgram.objects.filter(workprogram__discipline_code=self.kwargs['discipline_code']).values("item__name")
@@ -624,43 +636,55 @@ class WorkProgramsWithOutocomesForThisWPView(generics.ListAPIView):
 class PrerequisitesOfWorkProgramCreateAPIView(generics.CreateAPIView):
     serializer_class = PrerequisitesOfWorkProgramCreateSerializer
     queryset = PrerequisitesOfWorkProgram.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class PrerequisitesOfWorkProgramDestroyView(generics.DestroyAPIView):
     queryset = PrerequisitesOfWorkProgram.objects.all()
     serializer_class = PrerequisitesOfWorkProgramCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class PrerequisitesOfWorkProgramUpdateView(generics.UpdateAPIView):
     queryset = PrerequisitesOfWorkProgram.objects.all()
     serializer_class = PrerequisitesOfWorkProgramCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
 #Блок эндпоинтов рабочей программы
 
 class WorkProgramCreateAPIView(generics.CreateAPIView):
     serializer_class = WorkProgramCreateSerializer
     queryset = WorkProgram.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class WorkProgramDestroyView(generics.DestroyAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
+    permission_classes = [IsOwnerOrReadOnly]
 
 
 class WorkProgramUpdateView(generics.UpdateAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramCreateSerializer
+    permission_classes = [IsOwnerOrReadOnly]
 
 
 class WorkProgramDetailsView(generics.RetrieveAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class WorkProgramDetailsWithDisciplineCodeView(generics.ListAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramForIndividualRoutesSerializer
-    #lookup_value_regex = r"[0-9.]+"
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
     def get(self, request, **kwargs):
         """
@@ -688,6 +712,7 @@ class TopicsListAPI(generics.ListAPIView):
     """
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class TopicCreateAPI(generics.CreateAPIView):
@@ -696,6 +721,8 @@ class TopicCreateAPI(generics.CreateAPIView):
     """
     queryset = Topic.objects.all()
     serializer_class = TopicCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
     def perform_create(self, serializer):
         # print (Topic.objects.filter(discipline_section = serializer.validated_data['discipline_section']).count()+1)
@@ -708,6 +735,9 @@ class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Topic.objects.all()
     serializer_class = TopicCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
     def delete(self, request, *args, **kwargs):
         topic_section=kwargs['pk']
         try:
@@ -717,13 +747,13 @@ class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
             return Response(status=400)
 
 
-
 class EvaluationToolListAPI(generics.ListCreateAPIView):
     """
     API endpoint that represents a list of Evaluation Tools.
     """
     queryset = EvaluationTool.objects.all()
     serializer_class = EvaluationToolCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -732,6 +762,7 @@ class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = EvaluationTool.objects.all()
     serializer_class = EvaluationToolCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class WorkProgramInFieldOfStudyListAPI(generics.ListCreateAPIView):
@@ -740,6 +771,7 @@ class WorkProgramInFieldOfStudyListAPI(generics.ListCreateAPIView):
     """
     queryset = WorkProgramInFieldOfStudy.objects.all()
     serializer_class = WorkProgramInFieldOfStudyCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class WorkProgramInFieldOfStudyDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -748,6 +780,7 @@ class WorkProgramInFieldOfStudyDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = WorkProgramInFieldOfStudy.objects.all()
     serializer_class = WorkProgramInFieldOfStudyCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ZunListAPI(generics.ListCreateAPIView):
@@ -755,8 +788,9 @@ class ZunListAPI(generics.ListCreateAPIView):
     API endpoint that represents a list of Zun.
     """
     serializer_class = ZunCreateSerializer
-
     queryset = Zun.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
     def create(self, request):
         serializer = ZunCreateSerializer(data=request.data, many=True)
@@ -825,6 +859,7 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Zun.objects.all()
     serializer_class = ZunCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
     def update(self, request, *args, **kwargs):
@@ -862,7 +897,7 @@ class DisciplineSectionListAPI(generics.ListCreateAPIView):
     """
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
-
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -871,6 +906,9 @@ class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
     def delete(self, request, *args, **kwargs):
         descipline_section=kwargs['pk']
         try:
@@ -888,6 +926,7 @@ class FieldOfStudyDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = FieldOfStudy.objects.all()
     serializer_class = FieldOfStudySerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class FieldOfStudyListCreateView(generics.ListCreateAPIView):
@@ -898,25 +937,7 @@ class FieldOfStudyListCreateView(generics.ListCreateAPIView):
     serializer_class = FieldOfStudySerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title','number', 'faculty', 'educational_profile']
-
-
-# class NewOrdinalNumbersForDesciplineSectionAPI(APIView):
-#
-#
-#     def get_object(self, pk, request):
-#
-#         print (request)
-#         return DisciplineSection.objects.filter(id = 1)
-#
-#
-#     def post(self, request, *args, **kwargs):
-#         descipline_section = self.get_object(request.data.get('descipline_section'))
-#         #old_ordinal_number = self.get_object(request.data.get('old_ordinal_number'))
-#         new_ordinal_number = self.get_object(request.data.get('new_ordinal_number'))
-#
-#         DisciplineSection.new_ordinal_number(self, descipline_section, new_ordinal_number)
-#
-#         return Response('ok')
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 @api_view(['GET', 'POST'])
@@ -1010,9 +1031,6 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
             return Response({"Message": "Data not loaded"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-
 #Блок эндпоинтов рабочей программы
 
 
@@ -1021,21 +1039,25 @@ class OnlineCourseListCreateAPIView(generics.ListCreateAPIView):
     queryset = OnlineCourse.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title','platform']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class OnlineCourseDestroyView(generics.DestroyAPIView):
     queryset = OnlineCourse.objects.all()
     serializer_class = OnlineCourseSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class OnlineCourseUpdateView(generics.UpdateAPIView):
     queryset = OnlineCourse.objects.all()
     serializer_class = OnlineCourseSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class OnlineCourseDetailsView(generics.RetrieveAPIView):
     queryset = OnlineCourse.objects.all()
     serializer_class = OnlineCourseSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class BibliographicReferenceListCreateAPIView(generics.ListCreateAPIView):
@@ -1043,49 +1065,37 @@ class BibliographicReferenceListCreateAPIView(generics.ListCreateAPIView):
     queryset = BibliographicReference.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['description']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class BibliographicReferenceDestroyView(generics.DestroyAPIView):
     queryset = BibliographicReference.objects.all()
     serializer_class = BibliographicReferenceSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class BibliographicReferenceUpdateView(generics.UpdateAPIView):
     queryset = BibliographicReference.objects.all()
     serializer_class = BibliographicReferenceSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class BibliographicReferenceDetailsView(generics.RetrieveAPIView):
     queryset = BibliographicReference.objects.all()
     serializer_class = BibliographicReferenceSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class WorkProgramBibliographicReferenceUpdateView(generics.UpdateAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramBibliographicReferenceUpdateSerializer
-
-#
-# class WorkProgramBibliographicReferenceUpdateView(mixins.CreateModelMixin, generics.GenericAPIView):
-#     def post(self, request, format=None):
-#         is_many = isinstance(request.data, list)
-#
-#         if is_many:
-#             serializer = WorkProgramBibliographicReferenceUpdateSerializer(data=request.data, many=True)
-#             if serializer.is_valid():
-#                 serializer.save()
-#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#         else:
-#             serializer = WorkProgramBibliographicReferenceUpdateSerializer(data=request.data)
-#             if serializer.is_valid():
-#                 serializer.save()
-#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class BibliographicReferenceInWorkProgramList(generics.ListAPIView):
     serializer_class = BibliographicReferenceSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
     def list(self, request, **kwargs):
         """
@@ -1100,27 +1110,13 @@ class BibliographicReferenceInWorkProgramList(generics.ListAPIView):
 
 class EvaluationToolInWorkProgramList(generics.ListAPIView):
     serializer_class = EvaluationToolForWorkProgramSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
     def list(self, request, **kwargs):
         """
         Вывод всех результатов для одной рабочей программы по id
         """
-        # Note the use of `get_queryset()` instead of `self.queryset`
-        #queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
-        # print (self.kwargs['workprogram_id'])
-        # print (DisciplineSection.objects.get(work_program__id=self.kwargs['workprogram_id']))
-        # print (DisciplineSection.objects.get(work_program__id=self.kwargs['workprogram_id']).evaluation_tools.all())
-        # queryset = DisciplineSection.objects.get(work_program__id=self.kwargs['workprogram_id']).evaluation_tools.all()
-        # print (queryset)
-        # alltools =[]
-        # print (DisciplineSection.objects.filter(work_program__id=self.kwargs['workprogram_id']))
-        # for tools in DisciplineSection.objects.filter(work_program__id=self.kwargs['workprogram_id']):
-        #     print (tools.evaluation_tools.all())
-        #     if tools.evaluation_tools.all():
-        #         alltools.append(tools.evaluation_tools.all())
-        # print (alltools)
-        # #queryset = EvaluationTool.objects.all()
-
         try:
             queryset = EvaluationTool.objects.filter(evaluation_tools__in=DisciplineSection.objects.filter(work_program__id=self.kwargs['workprogram_id'])).distinct()
             serializer = EvaluationToolForWorkProgramSerializer(queryset, many=True)
@@ -1131,6 +1127,8 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
 
 class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
     serializer_class = EvaluationToolForWorkProgramSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
     def list(self, request, **kwargs):
         """
@@ -1153,6 +1151,8 @@ def handle_uploaded_file_v2(file, filename):
     """
     Обработка файла csv спарсенного с online.edu.ru
     """
+
+
     if not os.path.exists('upload/'):
         os.mkdir('upload/')
     path = 'upload/' + filename
@@ -1171,6 +1171,8 @@ def handle_uploaded_file(file, filename):
     """
     Обработка файла csv спарсенного с online.edu.ru
     """
+
+
     if not os.path.exists('upload/'):
         os.mkdir('upload/')
     path = 'upload/' + filename
@@ -1188,6 +1190,7 @@ class FileUploadWorkProgramAPIView(APIView):
     """
     API эндпоинт для добавления данных о РПД из csv-файла, спарсенного с online.edu.ru
     """
+
 
     def post(self, request):
 
@@ -1294,6 +1297,7 @@ class FileUploadOnlineCoursesAPIView(APIView):
     API эндпоинт для добавления данных об онлайн курсах из csv-файла, спарсенного с online.edu.ru
     """
 
+
     def post(self, request):
 
         serializer = FileUploadSerializer(data=request.data)
@@ -1325,11 +1329,15 @@ class FileUploadOnlineCoursesAPIView(APIView):
                 continue;
         return Response(status=200)
 
-from discipline_code import IPv4_code 
+from discipline_code import IPv4_code
+
+
 def handle_uploaded_csv(file, filename):
     """
     Обработка файла csv 
     """
+
+
     if not os.path.exists('upload/'):
         os.mkdir('upload/')
     path = 'upload/' + filename
@@ -1349,6 +1357,7 @@ class FileUploadAPIView(APIView):
     """
     API-endpoint для загрузки файла sub_2019_2020_new
     """
+
 
     def post(self, request):
         print('Working')
@@ -1528,9 +1537,9 @@ class AcademicPlanListAPIView(generics.ListAPIView):
 
     serializer_class = AcademicPlanSerializerForList
     queryset = AcademicPlan.objects.all()
-    print (queryset)
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['educational_profile']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class AcademicPlanListShortAPIView(generics.ListAPIView):
@@ -1538,164 +1547,36 @@ class AcademicPlanListShortAPIView(generics.ListAPIView):
     queryset = AcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['educational_profile']
-
-
-    # def get(self, request, **kwargs):
-    #     """
-    #     Вывод всех результатов для одной рабочей программы по id
-    #     """
-    #     # Note the use of `get_queryset()` instead of `self.queryset`
-    #     #queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
-    #
-    #     try:
-    #         queryset = AcademicPlan.objects.filter(pk=self.kwargs['pk'])
-    #         print (queryset)
-    #         for academic_plans in queryset:
-    #             print (academic_plans.id)
-    #             for discipline_block_in_academic_plan in academic_plans.discipline_blocks_in_academic_plan.all():
-    #                 print (discipline_block_in_academic_plan.id)
-    #                 for module_in_discipline_block in discipline_block_in_academic_plan.modules_in_discipline_block.all():
-    #                     print (module_in_discipline_block.id)
-    #                     for change_block_of_work_programs_in_modules in  module_in_discipline_block.change_blocks_of_work_programs_in_modules.all():
-    #                         print ('чб', change_block_of_work_programs_in_modules.zuns_for_cb.all().values())
-    #                         for wp_in_fs_set in change_block_of_work_programs_in_modules.zuns_for_cb.all():
-    #                             #print(wp_in_fs_set.zuns_for_wp)
-    #                             wp_in_fs_set.zun_in_wp.remove()
-    #                             zuns = Zun.objects.filter(wp_in_fs__work_program_change_in_discipline_block_module__id = change_block_of_work_programs_in_modules.id, wp_in_fs__work_program__id = wp_in_fs_set.work_program.id)
-    #                             wp_in_fs_set.zun_in_wp.add(*zuns)
-    #                             # for zun in zuns:
-    #                             #     wp_in_fs_set.zun_in_wp.add(*zun)
-    #                             #print('wp_in_fs_set.zun_in_wp.set([zuns])', wp_in_fs_set.zun_in_wp.set([zuns]))
-    #                             # for zun in wp.zuns_for_wp.all():
-    #                             #     print ('рпд', zun.id)
-    #                             print ('чб', wp_in_fs_set.work_program)
-    #                             for zuns_all in wp_in_fs_set.zun_in_wp.all():
-    #                                 print ('zuns', zuns_all)
-    #         serializer = AcademicPlanSerializer(queryset, many=True)
-    #         #print (serializer.data)
-    #         return Response(serializer.data)
-    #
-    #
-    #     except:
-    #         return Response({"error":"work program with such a code was not found"}, status=status.HTTP_400_BAD_REQUEST)
-
-
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class AcademicPlanCreateAPIView(generics.CreateAPIView):
     serializer_class = AcademicPlanCreateSerializer
     queryset = AcademicPlan.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
     def perform_create(self, serializer):
         serializer.save()
-        # AcademicPlan.new_descipline_blocks(self, serializer)
         AcademicPlan.clone_descipline_blocks(self, serializer)
 
 
 class AcademicPlanDestroyView(generics.DestroyAPIView):
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlanSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class AcademicPlanUpdateView(generics.UpdateAPIView):
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlanSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class AcademicPlanDetailsView(generics.RetrieveAPIView):
     queryset = AcademicPlan.objects.all()
-    print(AcademicPlan.objects.all())
     serializer_class = AcademicPlanSerializer
-
-    # def get(self, request, **kwargs):
-    #     """
-    #     Вывод всех результатов для одной рабочей программы по id
-    #     """
-    #     # Note the use of `get_queryset()` instead of `self.queryset`
-    #     #queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
-    #
-    #     query = AcademicPlan.objects.filter(pk=self.kwargs['pk'])
-    #     newlist = list(query)
-    #     queryset2 = []
-    #
-    #     print (newlist)
-    #     for academic_plans in newlist:
-    #         print (academic_plans.id)
-    #         queryset2.append(academic_plans)
-    #         print (queryset2)
-    #         for discipline_block_in_academic_plan in academic_plans.discipline_blocks_in_academic_plan.all():
-    #             #print (discipline_block_in_academic_plan.id)
-    #
-    #             #queryset2.academic_plans.append(discipline_block_in_academic_plan)
-    #             for module_in_discipline_block in discipline_block_in_academic_plan.modules_in_discipline_block.all():
-    #                 #print (module_in_discipline_block.id)
-    #                 for change_block_of_work_programs_in_modules in  module_in_discipline_block.change_blocks_of_work_programs_in_modules.all():
-    #                     #print ('чб', change_block_of_work_programs_in_modules.zuns_for_cb.all().values())
-    #                     # for wp_in_fs_set2 in change_block_of_work_programs_in_modules.zuns_for_cb.all():
-    #                     #     #print(wp_in_fs_set.zuns_for_wp)
-    #                     #     #wp_in_fs_set.zun_in_wp.remove()
-    #                     #     # print ('удалились?',  wp_in_fs_set.zun_in_wp.all().values())
-    #                     #     # zuns = Zun.objects.filter(wp_in_fs__work_program_change_in_discipline_block_module__id = change_block_of_work_programs_in_modules.id, wp_in_fs__work_program__id = wp_in_fs_set.work_program.id)
-    #                     #     # print (zuns)
-    #                     #     # wp_in_fs_set.zun_in_wp.add(*zuns)
-    #                     #     # # for zun in zuns:
-    #                     #     # #     wp_in_fs_set.zun_in_wp.add(*zun)
-    #                     #     # #print('wp_in_fs_set.zun_in_wp.set([zuns])', wp_in_fs_set.zun_in_wp.set([zuns]))
-    #                     #     # # for zun in wp.zuns_for_wp.all():
-    #                     #     # #     print ('рпд', zun.id)
-    #                     #     # print ('чб', wp_in_fs_set.work_program)
-    #                     #     # for zuns_all in wp_in_fs_set.zun_in_wp.all():
-    #                     #     #     print ('zuns', zuns_all)
-    #                     #     print ('ид', wp_in_fs_set2.id)
-    #                     #     print('ид2', (WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = change_block_of_work_programs_in_modules.id)[0].id))
-    #                     #     if wp_in_fs_set2.id != WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = change_block_of_work_programs_in_modules.id)[0].id:
-    #                     #         print ('удаление 2')
-    #                     #
-    #                     #         wp_in_fs_set2.exclude()
-    #                     for wp_in_changeblock in change_block_of_work_programs_in_modules.work_program.all():
-    #                         #wp_in_changeblock.zuns_for_wp.all().delete()
-    #                         #print ('--rpd_чб', wp_in_changeblock)
-    #                         new_zuns = []
-    #                         for zuns in wp_in_changeblock.zuns_for_wp.all():
-    #
-    #                             #print ('----зун в рпд', zuns)
-    #                             if zuns.id == (WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = change_block_of_work_programs_in_modules.id)[0]).id:
-    #                                # print ('удаление 2')
-    #                                 #print ('ид', zuns.id)
-    #                                 new_zuns.append(zuns)
-    #                                 # print('ид2', (WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = change_block_of_work_programs_in_modules.id)[0].id))
-    #                                 # wp_in_changeblock.zuns_for_wp.all().delete()
-    #                                 # wp_in_changeblock.zuns_for_wp.pop()
-    #
-    #                         #print ('-------новые связт рпд и направления', new_zuns)
-    #
-    #                         #wp_in_changeblock.zuns_for_wp = [new_zuns]
-    #     serializer = AcademicPlanSerializer(query, many=True)
-    #     #print (serializer.data)
-    #     #new_serializer_data = list(serializer.data)
-    #     #print (serializer.discipline_blocks_in_academic_plan)
-    #     # for discipline_blocks_in_academic_plan in new_serializer_data:
-    #     #     #print (discipline_blocks_in_academic_plan)
-    #     #     for modules_in_discipline_block in discipline_blocks_in_academic_plan:
-    #     #         print ('--------------', modules_in_discipline_block)
-    #     #     # for discipline_block_in_academic_plan in academic_plans:
-    #     #     #     print (discipline_block_in_academic_plan)
-    #     #     #     #print (discipline_block_in_academic_plan.id)
-    #     #     #     #queryset2.academic_plans.append(discipline_block_in_academic_plan)
-    #     #     #     for module_in_discipline_block in discipline_block_in_academic_plan:
-    #     #     #         #print (module_in_discipline_block.id)
-    #     #     #         for change_block_of_work_programs_in_modules in module_in_discipline_block:
-    #     #     #             print ('чб')
-    #     return Response(serializer.data)
-    #
-    #     try:
-    #         print ('dd')
-    #
-    #
-    #
-    #     except:
-    #         return Response({"error":"work program with such a code was not found"}, status=status.HTTP_400_BAD_REQUEST)
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
@@ -1704,6 +1585,7 @@ class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
     """
     queryset = ImplementationAcademicPlan.objects.all()
     serializer_class = ImplementationAcademicPlanCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
@@ -1711,21 +1593,25 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
     queryset = ImplementationAcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['academic_plan__number', 'academic_plan__educational_profile', 'year']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ImplementationAcademicPlanDestroyView(generics.DestroyAPIView):
     queryset = ImplementationAcademicPlan.objects.all()
     serializer_class = ImplementationAcademicPlanSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ImplementationAcademicPlanUpdateView(generics.UpdateAPIView):
     queryset = ImplementationAcademicPlan.objects.all()
     serializer_class = ImplementationAcademicPlanCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ImplementationAcademicPlanDetailsView(generics.RetrieveAPIView):
     queryset = ImplementationAcademicPlan.objects.all()
     serializer_class = ImplementationAcademicPlanSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class WorkProgramChangeInDisciplineBlockModuleListAPIView(generics.ListAPIView):
@@ -1733,41 +1619,49 @@ class WorkProgramChangeInDisciplineBlockModuleListAPIView(generics.ListAPIView):
     queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['educational_profile']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class WorkProgramChangeInDisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
     serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
     queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class WorkProgramChangeInDisciplineBlockModuleDestroyView(generics.DestroyAPIView):
     queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
     serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class WorkProgramChangeInDisciplineBlockModuleDetailsView(generics.RetrieveAPIView):
     queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
     serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class WorkProgramChangeInDisciplineBlockModuleUpdateView(generics.UpdateAPIView):
     queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
     serializer_class = WorkProgramChangeInDisciplineBlockModuleUpdateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
     serializer_class = DisciplineBlockModuleCreateSerializer
     queryset = DisciplineBlockModule.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class DisciplineBlockModuleDestroyView(generics.DestroyAPIView):
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
@@ -1778,33 +1672,37 @@ class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
     serializer_class = WorkProgramInFieldOfStudySerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['approval_date', 'authors', 'discipline_code', 'qualification']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ZunListAPIView(generics.ListAPIView):
     serializer_class = ZunSerializer
     queryset = Zun.objects.all()
-    # filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    # search_fields = ['educational_profile']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ZunCreateAPIView(generics.CreateAPIView):
     serializer_class = ZunSerializer
     queryset = Zun.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ZunDestroyView(generics.DestroyAPIView):
     queryset = Zun.objects.all()
     serializer_class = ZunSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ZunDetailsView(generics.RetrieveAPIView):
     queryset = Zun.objects.all()
     serializer_class = ZunSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ZunUpdateView(generics.UpdateAPIView):
     queryset = Zun.objects.all()
     serializer_class = ZunSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
     
 #Конец блока ендпоинтов рабочей программы
@@ -1813,119 +1711,7 @@ class ZunUpdateView(generics.UpdateAPIView):
 
 from docxtpl import DocxTemplate, RichText
 import datetime, io
-'''
-def render_docx(*args, **kwargs):
-    """Экспорт файла в док"""
-    #docx_file = io.BytesIO()
-    tpl = DocxTemplate('/application/RPD_shablon_2020.docx')
-    #
-    # Получаем данные рабочей программы дисциплины
-    #
-    wp_obj = WorkProgram.objects.get(pk = kwargs['pk'])
-    bibliography = [bib.description for bib in wp_obj.bibliographic_reference.all()]
-    
-    if wp_obj.qualification == 'bachelor':
-        qualification = 'БАКАЛАВР'
-    elif wp_obj.qualification == 'master':
-        qualification = 'МАГИСТР'
-    else:
-        qualification = 'ИНЖЕНЕР'
-    #
-    # Получаем данные для таблицы с компетенциями
-    #
-    #
-    #i_obj = Indicator.objects.filter(work_program = wp_obj)
-    #for i in i_obj:
-    #    iwp_obj = IndicatorWorkProgram.objects.filter(work_program = wp_obj, indicator = i)
-    #competence = [{'competence': competence, 'indicator': indicator},]
-    #indicator = [{'indicator': indicator, 'knowledge':knowledge, 'skills':skills, 'proficiency':proficiency} for i in i_obj]
-    
-    #
-    # Получаем данные для таблицы с разделами
-    #
-    contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours = 0,0,0,0,0,0
-    sec_obj = DisciplineSection.objects.filter(work_program = wp_obj)
-    sections_online, sections_tbl, online, topics_online = [],[],[],{}
-    for i in sec_obj:
-        if i.contact_work is None:
-            contact_work_str = ''
-        else:
-            contact_work += i.contact_work
-            contact_work_str = i.contact_work
-        if i.lecture_classes is None:
-            lecture_classes_str = ''
-        else:
-            lecture_classes += i.lecture_classes
-            lecture_classes_str = i.lecture_classes
-        if i.laboratory is None:
-            laboratory_str = ''
-        else:
-            laboratory += i.laboratory
-            laboratory_str = i.laboratory
-        if i.practical_lessons is None:
-           practical_lessons_str = ''
-        else:
-            practical_lessons += i.practical_lessons
-            practical_lessons_str = practical_lessons
-        if i.SRO is None:
-            SRO_str = ''
-        else:
-            SRO += i.SRO
-            SRO_str = i.SRO
-        total_hours += i.total_hours
-        total_hours_str = i.total_hours
-        sections_tbl.append({'section':i.ordinal_number , 'name': i.name, 
-            'hours':[contact_work_str,lecture_classes_str,laboratory_str,practical_lessons_str,SRO_str, total_hours_str]})
-        topics = Topic.objects.filter(discipline_section = i)
-        s = []
-        
-        for j in topics:
-            if j.url_online_course is None:
-                pass
-            else:
-                s.append(j.url_online_course.title)
-                sections_online.append(i.ordinal_number)
-                online.append(str(j.url_online_course.title +'— Открытое образование. '+'— Режим доступа: '+j.url_online_course.course_url))
-        topics_online.update({i:', '.join(str(q) for q in s)})
-    
-    section_content = [{'ordinal': i.ordinal_number, 'name': i.name, 
-    'content':', '.join('' if j is str(j.description) else str(j.description) for j in Topic.objects.filter(discipline_section = i)),
-    'online':topics_online[i]} for i in sec_obj]
-    
-    flag = False
-    if sections_online == []:
-        flag = True
-        flag1 = False
-    else:
-        flag1 = True
-    fs_obj = FieldOfStudy.objects.get(pk = kwargs['field_of_study_id'])
-    ap_obj = AcademicPlan.objects.get(pk = kwargs['academic_plan_id'])
-    context = {
-        'title': wp_obj.title,
-        'field_of_study_code': fs_obj.number ,
-        'field_of_study': fs_obj.title,
-        'QUALIFICATION': qualification,
-        'academic_plan': ap_obj.educational_profile,
-        'year': kwargs['year'],
-        'tbl_competence': '',
-        'tbl_sections': sections_tbl,
-        'total_hours':[contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours], 
-        'is_no_online':flag,
-        'is_online':flag1,
-        'X': 'X',
-        'sections': ', '.join(str(i) for i in set(sections_online)),
-        'sections_rep': '',
-        'tbl_section_content': section_content,
-        'bibliography': bibliography,
-        'online': online,
-        }
-    
-    filename = str(fs_obj.number)+'_'+str(wp_obj.discipline_code)+'_'+str(wp_obj.qualification)+'_'+str(kwargs['year'])+'_'+datetime.datetime.today().strftime("%Y-%m-%d-%H.%M.%S")+'.docx'
-    
-    tpl.render(context)
-    tpl.save('/application/export/'+filename)
-    return tpl, filename
-'''
+
 from collections import OrderedDict
 
 def render_context(context, **kwargs):

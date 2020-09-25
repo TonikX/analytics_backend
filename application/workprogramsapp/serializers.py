@@ -392,18 +392,7 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
 
 
     def clarify_zuns_for_wp(self, obj, *args, **kwargs):
-        #zuns_for_wp_objects = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = 17)
         zuns_for_wp_objects = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = self.context.get('parent_cb_id'), work_program = obj.id)
-        #print ('obj', self.parent.parent.to_representation(self.instance))
-        print ('попытка')
-        print ('obj', self.context.get('parent_cb_id'))
-        #print (self.parent[0])
-        #print (self.to_representation(self.instances))
-        #print (self.cleaned_data['parent'])
-
-        #print ('obj', self.parent.parent.data.get('work_program'))
-        #print (getattr(self.parent.parent, 'id'))
-        # and return appropriate result
         serializers = WorkProgramInFieldOfStudySerializerForCb(zuns_for_wp_objects,many=True)
         return serializers.data
 
@@ -449,10 +438,6 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
         work_program = WorkProgram.objects.filter(work_program_in_change_block = obj.id)
         serializers = WorkProgramForDisciplineBlockSerializer(work_program, many=True, context={'parent_cb_id': obj.id})
         return serializers.data
-
-
-
-
 
 
 class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
@@ -524,8 +509,6 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
         fields = "__all__"
 
 
-
-
 class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.ModelSerializer):
     work_program = serializers.PrimaryKeyRelatedField(many=True, queryset=WorkProgram.objects.all())
 
@@ -535,7 +518,6 @@ class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.Model
         extra_kwargs = {
             'work_program': {'required': False}
         }
-
 
 
 class ImplementationAcademicPlanForWPinFSSerializer(serializers.ModelSerializer):

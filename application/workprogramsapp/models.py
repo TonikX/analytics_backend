@@ -74,6 +74,8 @@ class WorkProgram(CloneMixin, models.Model):
     video = models.CharField(max_length=1024, blank=True, null=True)
     credit_units = models.CharField(max_length=1024, blank=True, null=True)
     semester_hour = models.CharField(max_length=1024, blank=True, null=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
+
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
 

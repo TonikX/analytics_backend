@@ -13,6 +13,7 @@ class User(AbstractUser):
     #tel = models.CharField("Телефон", max_length=15, blank=True, null=True)
     patronymic = models.CharField(max_length=1024, blank=True, null=True)
     isu_number = models.CharField(max_length=1024, blank=True, null=True)
+    is_rpd_developer = models.BooleanField(default = False)
 
     # def __str__(self):
     #     return self.first_name + ' ' + self.last_name
