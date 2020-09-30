@@ -335,7 +335,7 @@ class EducationalProgram(models.Model):
 
 
     qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank = True, null = True)
-    academic_plan = models.ForeignKey('ImplementationAcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план', related_name="academic_plan_in_educational_program")
+    #academic_plan = models.ForeignKey('ImplementationAcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план', related_name="academic_plan_in_educational_program")
     year_of_recruitment = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
     manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -351,17 +351,17 @@ class GeneralCharacteristics(models.Model):
     kinds_of_activity = models.CharField(max_length=512, verbose_name="Вид (виды) профессиональной деятельности, к которому (которым) готовятся выпускники")
     tasks_of_activity = models.CharField(max_length=512, verbose_name="Задачи профессиональной деятельности ")
     type_of_activity = models.CharField(max_length=512, verbose_name="Тип основной профессиональной образовательной программы")
-    ok_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕКУЛЬТУРНЫЕ КОМПЕТЕНЦИИ")
-    opk_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ")
-    pk_competences = models.ManyToManyField('Competence', verbose_name="ПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ")
-    psk_competences = models.ManyToManyField('Competence', verbose_name="ПРОФЕССИОНАЛЬНО-СПЕЦИАЛИЗИРОВАННЫЕ КОМПЕТЕНЦИИ")
+    ok_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕКУЛЬТУРНЫЕ КОМПЕТЕНЦИИ", related_name="ok_competences_in_gh")
+    opk_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ", related_name="opk_competences_in_gh")
+    pk_competences = models.ManyToManyField('Competence', verbose_name="ПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ", related_name="pk_competences_in_gh")
+    psk_competences = models.ManyToManyField('Competence', verbose_name="ПРОФЕССИОНАЛЬНО-СПЕЦИАЛИЗИРОВАННЫЕ КОМПЕТЕНЦИИ", related_name="psk_competences_in_gh")
     pps = ArrayField(models.CharField(max_length=512, verbose_name="Сведения о профессорско-преподавательском составе, необходимом для реализации основной профессиональной образовательной программы"))
     annotation = models.TextField(max_length=55512, verbose_name="Аннотация основной профессиональной образовательной программы")
-    developers = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Сотрудники Университета ИТМО")
-    employers_representatives = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Представители работодателей")
-    director_of_megafaculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Директор мегафакультета")
-    dean_of_the_faculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Декан факультета")
-    scientific_supervisor_of_the_educational_program = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Научный руководитель образовательной программы")
+    developers = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Сотрудники Университета ИТМО", related_name="ok_competences_in_gh")
+    employers_representatives = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Представители работодателей", related_name="employers_representatives_in_gh")
+    director_of_megafaculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Директор мегафакультета", related_name="director_of_megafaculty_in_gh")
+    dean_of_the_faculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Декан факультета", related_name="dean_of_the_faculty_in_gh")
+    scientific_supervisor_of_the_educational_program = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Научный руководитель образовательной программы", related_name="scientific_supervisor_of_the_educational_program_in_gh")
 
     def __str__(self):
         return str(self.educational_program) + str(self.director_of_megafaculty) + str(self.scientific_supervisor_of_the_educational_program)
