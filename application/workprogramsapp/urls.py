@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.conf.urls import url, include
 from django.urls import path, re_path
-from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView
+from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView, \
+    ExpertiseCommentsView, UserExpertiseView
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
 from .views import TopicList, TopicPost, TopicPostUpdate
@@ -27,6 +28,7 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkPr
     NewRealtionsForWorkProgramsInFieldOfStudyAPI, WorkProgramsWithOutcomesToPrerequisitesForThisWPView, WorkProgramsWithPrerequisitesToOutocomesForThisWPView, WorkProgramsWithOutocomesForThisWPView
 from .views import DocxFileExportView
 from .views import CloneWorkProgramm
+from .views import ExpertiseView
     #DocxFileExportOldView
 
 # Контроллеры
@@ -218,6 +220,12 @@ urlpatterns = [
     path('api/EducationalProgram/delete/<int:pk>', EducationalProgramDestroyView.as_view()),
     path('api/EducationalProgram/update/<int:pk>', EducationalProgramUpdateView.as_view()),
 
+
+
+    path('api/user_expertise', UserExpertiseView.as_view()),
+    path('api/comments/<int:pk>', ExpertiseCommentsView.as_view()),
+    #path('api/comments/', ExpertiseCommentsView.as_view()),
+    path('api/expertise', ExpertiseView.as_view())
 
 
 ]

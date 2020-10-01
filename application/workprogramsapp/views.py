@@ -1,46 +1,52 @@
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import redirect
-from django.views import View
-from .models import WorkProgram, FieldOfStudy, FieldOfStudyWorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, BibliographicReference
-from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm, DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm, PrerequisitesOfWorkProgramForm, UploadFileForm
-from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, Topic, Indicator, Competence, OnlineCourse
-from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
-from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
-from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, FieldOfStudySerializer
-from .serializers import EvaluationToolSerializer, TopicSerializer, SectionSerializer, TopicCreateSerializer
-from .serializers import OutcomesOfWorkProgramCreateSerializer, WorkProgramForDisciplineBlockSerializer
-from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, WorkProgramBibliographicReferenceUpdateSerializer, \
-    PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
-from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, DisciplineBlockModuleCreateSerializer, \
-    WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, \
-    ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList
-from django.contrib.auth.decorators import login_required
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status, viewsets
-from .serializers import WorkProgramSerializer
-from dataprocessing.models import Items
-import itertools, pandas, os
+import json
+import os
+
+import pandas
 from django.core.paginator import Paginator
+from django.shortcuts import redirect
+from django.shortcuts import render, get_object_or_404
+from django.views import View
+from django_tables2 import RequestConfig
 from django_tables2.paginators import LazyPaginator
-from django_tables2 import SingleTableView, RequestConfig
-from .tables import FieldOfStudyWPTable
-from rest_framework import generics
-
-from rest_framework.decorators import api_view
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from rest_framework import mixins
-from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
+from rest_framework import generics
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from dataprocessing.models import Items
+from .forms import DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm
+from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
+from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
+    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy, UserExpertise
+from .models import FieldOfStudy, FieldOfStudyWorkProgram, BibliographicReference, Expertise, ExpertiseComments
+from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
+    Topic, Indicator, Competence, OnlineCourse
 # Права доступа
 from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
+    ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
+    WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, \
+    DisciplineBlockModuleCreateSerializer, \
+    WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, \
+    ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
+    WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
+    WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
+    ExpertiseSerializer, UserExpertiseSerializer, CommentSerializer
+from .serializers import FieldOfStudySerializer
+from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
+    WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
+from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, \
+    WorkProgramBibliographicReferenceUpdateSerializer, \
+    PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
+    IndicatorListSerializer
+from .serializers import OutcomesOfWorkProgramCreateSerializer
+from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
+from .serializers import WorkProgramSerializer
+from .tables import FieldOfStudyWPTable
 
-
-import json
 
 class FieldOfStudyWPListView(View):
     model = FieldOfStudyWorkProgram
@@ -678,6 +684,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
 
 class WorkProgramDetailsWithDisciplineCodeView(generics.ListAPIView):
@@ -1709,8 +1716,8 @@ class ZunUpdateView(generics.UpdateAPIView):
 #Скачивание рпд в формате docx/pdf
 #
 
-from docxtpl import DocxTemplate, RichText
-import datetime, io
+from docxtpl import DocxTemplate
+import datetime
 
 from collections import OrderedDict
 
@@ -1781,9 +1788,8 @@ def render_context(context, **kwargs):
     return template_context, filename
 
 
-from rest_framework import viewsets, renderers
-from rest_framework.decorators import action
-from django.http import HttpResponse, FileResponse
+from django.http import HttpResponse
+
 
 class DocxFileExportView(generics.ListAPIView):
     """Возвращает РПД в формате docx в браузере"""
@@ -1808,7 +1814,7 @@ class DocxFileExportView(generics.ListAPIView):
     
         return response
 
-    
+
 @api_view(['POST'])
 def CloneWorkProgramm(request):
     """
@@ -1818,9 +1824,77 @@ def CloneWorkProgramm(request):
     """
     prog_id = request.data.get('program_id')
     try:
-        clone_program=WorkProgram.clone_programm(prog_id)
-        serializer=WorkProgramSerializer(clone_program)
+        clone_program = WorkProgram.clone_programm(prog_id)
+        serializer = WorkProgramSerializer(clone_program)
         return Response(status=200, data=serializer.data)
     except:
         return Response(status=400)
 
+
+class UserExpertiseView(generics.ListCreateAPIView):
+    """
+    Вывод всей информации об экспертизе для эксперта (автоматически по токену пользователя выдает экспертизы, в которых он учавствует):
+    Общая модель экспертизы, таблица экспертизы отдельного эксперта, Информация об эксперте, информация о РП
+    """
+    queryset = UserExpertise.objects.all()
+    serializer_class = UserExpertiseSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        return UserExpertise.objects.filter(expert=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+class ExpertiseCommentsView(generics.ListCreateAPIView):
+    """
+    View для получения и отправки комментариев, чтобы отправить комментарий указывать UserExpertise НЕ надо (см сериализатор)
+    Комментарии можно получить, указав в адресе айди рабочей программы
+    """
+    queryset = ExpertiseComments.objects.all()
+    serializer_class = CommentSerializer
+    ordering = ['id']
+    paginate_by = 50
+    def get_queryset(self, *args, **kwargs):
+        if ('pk' in dict(self.kwargs)):
+            return ExpertiseComments.objects.filter(user_expertise__expertise__work_program=self.kwargs['pk'])
+        else:
+            return ExpertiseComments.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+class ExpertiseView(generics.ListCreateAPIView):
+    """
+    Создание и получение экспертизы
+    (Подробней о создании экспертизы см. сериализатор)
+    """
+    queryset = Expertise.objects.all()
+    serializer_class = ExpertiseSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+class ChangeExpertise(generics.RetrieveUpdateAPIView):
+    """
+    Редактирование экспертизы (в url пока не указано)
+    """
+    queryset = Expertise.objects.all()
+    serializer_class = ExpertiseSerializer
+
+    def perform_update(self, serializer):
+        if serializer.is_valid():
+            serializer.save()
+
+class ChangeUserExpertise(generics.RetrieveUpdateAPIView):
+    """
+    Редактирование экспертизы отдельного пользователя (в url пока не указано)
+    """
+    queryset = UserExpertise.objects.all()
+    serializer_class = UserExpertiseSerializer
+
+    def perform_update(self, serializer):
+        if serializer.is_valid():
+            serializer.save()

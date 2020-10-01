@@ -1,9 +1,12 @@
 from django.contrib import admin
+
 from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
     Competence, Indicator, EvaluationTool, FieldOfStudyWorkProgram, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
-    RouteComposition, Route, Certification, OnlineCourse, BibliographicReference, AcademicPlan, ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
+    RouteComposition, Route, Certification, OnlineCourse, BibliographicReference, AcademicPlan,
+    ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, Expertise, ExpertiseComments, UserExpertise
 )
+
 from .models import EducationalProgram, GeneralCharacteristics, Department
 
 admin.site.register(Zun)
@@ -14,7 +17,7 @@ admin.site.register(WorkProgramInFieldOfStudy)
 admin.site.register(FieldOfStudy)
 # admin.site.register(CompetenceIndicator)
 admin.site.register(Competence)
-#admin.site.register(IndicatorWorkProgram)
+# admin.site.register(IndicatorWorkProgram)
 admin.site.register(Indicator)
 admin.site.register(EvaluationTool)
 admin.site.register(FieldOfStudyWorkProgram)
@@ -30,6 +33,12 @@ admin.site.register(DisciplineBlock)
 admin.site.register(ImplementationAcademicPlan)
 admin.site.register(DisciplineBlockModule)
 admin.site.register(WorkProgramChangeInDisciplineBlockModule)
+
 admin.site.register(EducationalProgram)
 admin.site.register(GeneralCharacteristics)
 admin.site.register(Department)
+
+admin.site.register(Expertise)
+admin.site.register(ExpertiseComments)
+admin.site.register(UserExpertise)
+
