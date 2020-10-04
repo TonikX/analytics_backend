@@ -799,7 +799,7 @@ class ZunListAPI(generics.ListCreateAPIView):
         print (request.data)
         #print (request.data.get('wp_changeblock'))
         for new_zun in request.data:
-            print (new_zun.get('wp_changeblock'))
+            #print (new_zun.get('wp_changeblock'))
             # if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock')):
             if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')):
                 print("new_zun", WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')))

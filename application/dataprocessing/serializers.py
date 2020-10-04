@@ -5,11 +5,11 @@ from .models import User, Items, Domain, Relation
 
 class userProfileSerializer(serializers.ModelSerializer):
     """Сериализатор для работы с акканутами"""
-    user = serializers.StringRelatedField(read_only=True)
+    #user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ('id', 'username','first_name', 'last_name', 'email', 'isu_number')
 
 
 class DomainSerializer(serializers.ModelSerializer):
