@@ -155,7 +155,7 @@ class PrerequisitesOfWorkProgram(models.Model):
     #     return self.item
 
 
-class OutcomesOfWorkProgram(models.Model, CloneMixin):
+class OutcomesOfWorkProgram(models.Model):
     '''
     Модель для результатов обучения по рабочей программе
     '''
