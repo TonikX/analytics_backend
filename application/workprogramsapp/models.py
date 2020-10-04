@@ -31,7 +31,7 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
-class WorkProgram(CloneMixin, models.Model):
+class WorkProgram(models.Model):
     '''
     Модель для рабочей программы
     '''
@@ -394,7 +394,7 @@ class ImplementationAcademicPlan(models.Model):
         return str(self.academic_plan)
 
 
-class DisciplineBlock(CloneMixin, models.Model):
+class DisciplineBlock(models.Model):
     '''
     Модель блока дисциплин
     '''
@@ -436,7 +436,7 @@ class DisciplineBlock(CloneMixin, models.Model):
 #         return (str(self.name) + str(self.descipline_block))
 
 
-class DisciplineBlockModule(CloneMixin, models.Model):
+class DisciplineBlockModule(models.Model):
     '''
     Модель модуля блока дисциплин
     '''
@@ -565,7 +565,7 @@ class Indicator(models.Model):
         return self.name
 
 
-class EvaluationTool(CloneMixin, models.Model):
+class EvaluationTool(models.Model):
     '''
     Модель для оценочных средств
     '''
@@ -582,7 +582,7 @@ class EvaluationTool(CloneMixin, models.Model):
         return self.name
 
 
-class DisciplineSection(CloneMixin, models.Model):
+class DisciplineSection(models.Model):
     '''
     Модель для разделов дисциплин
     '''
@@ -665,7 +665,7 @@ class BibliographicReference(models.Model):
     # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
 
-class Topic(CloneMixin, models.Model):
+class Topic(models.Model):
     '''
     Модель для темы
     '''
