@@ -1,9 +1,8 @@
 from django.contrib import admin
 from django.conf.urls import url, include
 from django.urls import path, re_path
-
-from .expertise.views import UserExpertiseView, ExpertiseCommentsView, ExpertiseView
-from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView
+from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView, \
+    ExpertiseCommentsView, UserExpertiseView
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
 from .views import TopicList, TopicPost, TopicPostUpdate
@@ -29,7 +28,7 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkPr
     NewRealtionsForWorkProgramsInFieldOfStudyAPI, WorkProgramsWithOutcomesToPrerequisitesForThisWPView, WorkProgramsWithPrerequisitesToOutocomesForThisWPView, WorkProgramsWithOutocomesForThisWPView
 from .views import DocxFileExportView
 from .views import CloneWorkProgramm
-
+from .views import ExpertiseView
     #DocxFileExportOldView
 
 # Контроллеры
