@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.conf.urls import url, include
 from django.urls import path, re_path
-from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView, \
-    ExpertiseCommentsView, UserExpertiseView
+
+from .expertise.views import UserExpertiseView, ExpertiseCommentsView, ExpertiseView, ChangeUserExpertiseView, \
+    ChangeExpertiseView
+from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
 from .views import TopicList, TopicPost, TopicPostUpdate
@@ -28,7 +30,6 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkPr
     NewRealtionsForWorkProgramsInFieldOfStudyAPI, WorkProgramsWithOutcomesToPrerequisitesForThisWPView, WorkProgramsWithPrerequisitesToOutocomesForThisWPView, WorkProgramsWithOutocomesForThisWPView
 from .views import DocxFileExportView
 from .views import CloneWorkProgramm
-from .views import ExpertiseView
     #DocxFileExportOldView
 
 # Контроллеры
@@ -223,9 +224,12 @@ urlpatterns = [
 
 
     path('api/user_expertise', UserExpertiseView.as_view()),
+    path('api/user_expertise/<int:pk>', UserExpertiseView.as_view()),
     path('api/comments/<int:pk>', ExpertiseCommentsView.as_view()),
-    #path('api/comments/', ExpertiseCommentsView.as_view()),
-    path('api/expertise', ExpertiseView.as_view())
+    path('api/expertise', ExpertiseView.as_view()),
+    path('api/expertise/<int:pk>', ExpertiseView.as_view()),
+    path('api/user_expertise_update/<int:pk>', ChangeUserExpertiseView.as_view()),
+    path('api/expertise_update/<int:pk>', ChangeExpertiseView.as_view()),
 
 
 ]

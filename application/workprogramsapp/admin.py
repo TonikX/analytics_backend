@@ -1,10 +1,11 @@
 from django.contrib import admin
 
+from .expertise.models import UserExpertise, ExpertiseComments, Expertise
 from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
     Competence, Indicator, EvaluationTool, FieldOfStudyWorkProgram, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
     RouteComposition, Route, Certification, OnlineCourse, BibliographicReference, AcademicPlan,
-    ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, Expertise, ExpertiseComments, UserExpertise
+    ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
 )
 
 from .models import EducationalProgram, GeneralCharacteristics, Department
