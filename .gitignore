@@ -3,6 +3,7 @@ __pycache__/*
 mysql-data
 dbs
 /application/workprogramsapp/migrations
+/application/dataprocessing/migrations
 **/migrations/*
 **/discipline_code/*
 /application/discipline_code
