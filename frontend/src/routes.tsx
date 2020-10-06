@@ -18,6 +18,8 @@ import EducationPlanDetail from './containers/EducationalPlan/Detail';
 import Indicators from './containers/Indicators';
 import WorkProgramList from "./containers/WorkProgramList";
 import EntitityToEntitity from "./containers/EntitityToEntitity";
+import Professions from "./containers/Professions";
+import ProfessionSkills from "./containers/Professions";
 
 import Literature from './containers/Literature';
 
@@ -55,6 +57,12 @@ export default () => (
                 </AuthRoute>
                 <AuthRoute path={routerService.getEntityToEntityRoute()}>
                     <EntitityToEntitity />
+                </AuthRoute>
+                <AuthRoute path={routerService.getProfessionsRoute()}>
+                    <Professions />
+                </AuthRoute>
+                <AuthRoute path={routerService.getProfessionSkillsRoute()}>
+                    <ProfessionSkills />
                 </AuthRoute>
                 <AuthRoute path={routerService.getIndicatorsRoute()}>
                     <Indicators />

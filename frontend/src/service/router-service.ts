@@ -14,6 +14,8 @@ const EDUCATIONAL_PLAN = 'educational-plans';
 const INDICATORS = 'indicators';
 const EDUCATIONAL_PLAN_IN_DIRECTION = 'educational-plans-in-direction';
 const WORK_PROGRAM_LIST = 'work-programs';
+const PROFESSIONS = 'professions';
+const SKILLS = 'skills';
 
 const SEPARATOR = '/';
 
@@ -73,6 +75,14 @@ export default class RouterService {
 
     getEducationPlanInDirectionRoute = () => {
         return SEPARATOR + EDUCATIONAL_PLAN_IN_DIRECTION;
+    };
+
+    getProfessionsRoute = () => {
+        return SEPARATOR + PROFESSIONS;
+    };
+
+    getProfessionSkillsRoute = () => {
+        return SEPARATOR + PROFESSIONS + SEPARATOR + ':id' + SEPARATOR + SKILLS;
     };
 
     getWorkProgramListRoute = () => {

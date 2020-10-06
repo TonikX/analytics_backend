@@ -1,7 +1,6 @@
 import BaseService from "../../service/base-service";
 import {EntityToEntityFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
-import {EducationalPlanFields} from "../EducationalPlan/enum";
 
 class EntityToEntityServices extends BaseService{
     getEntitiesToEntities(currentPage: number, searchQuery: Object, sortingField: string, sortingMode: SortingType, domainId: number|null){
