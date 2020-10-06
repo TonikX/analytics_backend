@@ -797,5 +797,5 @@ class SkillsOfProfession(models.Model):
     )
 
 
-    def __str__(self):
-        return (self.item + self.profession)
+    # def __str__(self):
+    #     return (str(self.item) + self.profession)
