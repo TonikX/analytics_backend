@@ -749,3 +749,53 @@ class Certification(models.Model):
     description = models.CharField(max_length=1024, verbose_name="Описание", blank=True, null=True)
     deadline = models.IntegerField(verbose_name="Срок сдачи в неделях", blank=True, null=True)
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name='discipline_certification')
+
+
+class Profession(models.Model):
+    '''
+    Модель для рабочей программы
+    '''
+    Scientist = 'Scientist'
+    Entrepreneur = 'Entrepreneur'
+    Developer = 'Developer'
+    ROLES = (
+        (Scientist, 'Scientist'),
+        (Entrepreneur, 'Entrepreneur'),
+        (Developer, 'Developer'),
+    )
+
+    approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True, verbose_name='Профессия')
+    title = models.CharField(max_length=1024, blank=True, null=True)
+    roles = models.CharField(choices=ROLES, max_length=1024, verbose_name='Роль',
+                             blank=True, null=True)
+    skills = models.ManyToManyField(Items, related_name='profession_skils',
+                                    through='SkillsOfProfession', blank=True, null=True,
+                                    verbose_name="Навыки")
+
+
+    def __str__(self):
+        return (self.roles + self.title)
+
+
+
+class SkillsOfProfession(models.Model):
+    '''
+    Модель для пререквизитов рабочей программы
+    '''
+
+    item = models.ForeignKey(Items, on_delete=models.CASCADE, verbose_name="Пререквизит")
+    profession = models.ForeignKey(Profession, on_delete=models.CASCADE, verbose_name="Рабочая программа")
+    MasterylevelChoices = [
+        ('1', 'low'),
+        ('2', 'average'),
+        ('3', 'high'),
+    ]
+    masterylevel = models.CharField(
+        max_length=1,
+        choices=MasterylevelChoices,
+        default=1, verbose_name="Уровень"
+    )
+
+
+    # def __str__(self):
+    #     return (str(self.item) + self.profession)
