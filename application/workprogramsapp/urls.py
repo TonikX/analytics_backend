@@ -219,5 +219,8 @@ urlpatterns = [
     path('api/EducationalProgram/update/<int:pk>', EducationalProgramUpdateView.as_view()),
 
 
+    # Работа с профессиями
+    path('api/workprogram/detail/<int:pk>', WorkProgramDetailsView.as_view()),
+
 
 ]
