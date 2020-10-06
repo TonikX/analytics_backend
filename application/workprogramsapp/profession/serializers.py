@@ -20,7 +20,7 @@ class SkillsOfProfessionInProfessionSerializer(serializers.ModelSerializer):
 
 class ProfessionSerializer(serializers.ModelSerializer):
     """Сериализатор рабочих программ"""
-    skills = SkillsOfProfessionInProfessionSerializer(source='profession_skils', many=True)
+    skills = SkillsOfProfessionInProfessionSerializer(source='skillsofprofession_set', many=True)
 
     class Meta:
         model = Profession
