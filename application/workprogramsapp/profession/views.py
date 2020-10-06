@@ -1,5 +1,6 @@
 from rest_framework import generics
 from rest_framework import filters
+from rest_framework.response import Response
 
 
 # Права доступа
@@ -13,7 +14,7 @@ from workprogramsapp.models import Profession, SkillsOfProfession
 
 
 # Сериализаторы
-from workprogramsapp.profession.serializers import ProfessionSerializer
+from workprogramsapp.profession.serializers import ProfessionSerializer, ProfessionCreateSerializer, SkillsOfProfessionInProfessionSerializer, SkillsOfProfessionInProfessionCreateSerializer
 
 
 
@@ -28,14 +29,14 @@ class ProfessionsListApi(generics.ListAPIView):
 
 
 class ProfessionCreateAPIView(generics.CreateAPIView):
-    serializer_class = ProfessionSerializer
+    serializer_class = ProfessionCreateSerializer
     queryset = Profession.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ProfessionDestroyView(generics.DestroyAPIView):
     queryset = Profession.objects.all()
-    serializer_class = ProfessionSerializer
+    serializer_class = ProfessionCreateSerializer
     permission_classes = [IsOwnerOrReadOnly]
 
 
@@ -48,4 +49,36 @@ class ProfessionUpdateView(generics.UpdateAPIView):
 class ProfessionDetailsView(generics.RetrieveAPIView):
     queryset = Profession.objects.all()
     serializer_class = ProfessionSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class SkillsOfProfessionInProfessionList(generics.ListAPIView):
+    serializer_class = SkillsOfProfessionInProfessionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, **kwargs):
+        """
+        Вывод всех навыков для конкретной профессии
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = SkillsOfProfession.objects.filter(profession__id=self.kwargs['profession_id'])
+        serializer = SkillsOfProfessionInProfessionSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class SkillsOfProfessionInProfessionCreateAPIView(generics.CreateAPIView):
+    serializer_class = SkillsOfProfessionInProfessionCreateSerializer
+    queryset = SkillsOfProfession.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class SkillsOfProfessionInProfessionDestroyView(generics.DestroyAPIView):
+    queryset = SkillsOfProfession.objects.all()
+    serializer_class = SkillsOfProfessionInProfessionCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class SkillsOfProfessionInProfessionUpdateView(generics.UpdateAPIView):
+    queryset = SkillsOfProfession.objects.all()
+    serializer_class = SkillsOfProfessionInProfessionCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
