@@ -4,7 +4,7 @@ from .models import (
     Competence, Indicator, EvaluationTool, FieldOfStudyWorkProgram, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
     RouteComposition, Route, Certification, OnlineCourse, BibliographicReference, AcademicPlan, ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
 )
-from .models import EducationalProgram, GeneralCharacteristics, Department, Profession
+from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession
 
 admin.site.register(Zun)
 admin.site.register(WorkProgram)
