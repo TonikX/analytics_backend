@@ -774,7 +774,7 @@ class Profession(models.Model):
 
 
     def __str__(self):
-        return (self.discipline_code + self.title)
+        return (self.roles + self.title)
 
 
 
