@@ -37,13 +37,13 @@ class ProfessionCreateAPIView(generics.CreateAPIView):
 class ProfessionDestroyView(generics.DestroyAPIView):
     queryset = Profession.objects.all()
     serializer_class = ProfessionCreateSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ProfessionUpdateView(generics.UpdateAPIView):
     queryset = Profession.objects.all()
     serializer_class = ProfessionSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ProfessionDetailsView(generics.RetrieveAPIView):
