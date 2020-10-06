@@ -24,7 +24,7 @@ class ProfessionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profession
-        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block']
+        fields = "__all__"
 
     def create(self, validated_data):
         """
