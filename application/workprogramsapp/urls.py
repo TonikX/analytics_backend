@@ -29,6 +29,11 @@ from .views import DocxFileExportView
 from .views import CloneWorkProgramm
     #DocxFileExportOldView
 
+# Контроллеры
+from .educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView
+from .educational_program.views import DepartmentCreateAPIView, DepartmentListAPIView, DepartmentDetailsView, DepartmentDestroyView, DepartmentUpdateView
+from .educational_program.views import GeneralCharacteristicsCreateAPIView, GeneralCharacteristicsListAPIView, GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView
+
 
 urlpatterns = [
 
@@ -189,6 +194,29 @@ urlpatterns = [
     path('api/disciplineblockmodule/create', DisciplineBlockModuleCreateAPIView.as_view()),
     path('api/disciplineblockmodule/delete/<int:pk>', DisciplineBlockModuleDestroyView.as_view()),
     path('api/disciplineblockmodule/update/<int:pk>', DisciplineBlockModuleUpdateView.as_view()),
+
+    # Работа с оброазовательными программами
+
+    # --Факультет
+    path('api/Department', DepartmentListAPIView.as_view()),
+    path('api/Department/create', DepartmentCreateAPIView.as_view()),
+    path('api/Department/detail/<int:pk>', DepartmentDetailsView.as_view()),
+    path('api/Department/delete/<int:pk>', DepartmentDestroyView.as_view()),
+    path('api/Department/update/<int:pk>', DepartmentUpdateView.as_view()),
+
+    # --Факультет
+    path('api/GeneralCharacteristics', GeneralCharacteristicsListAPIView.as_view()),
+    path('api/GeneralCharacteristics/create', GeneralCharacteristicsCreateAPIView.as_view()),
+    path('api/GeneralCharacteristics/detail/<int:pk>', GeneralCharacteristicsDetailsView.as_view()),
+    path('api/GeneralCharacteristics/delete/<int:pk>', GeneralCharacteristicsDestroyView.as_view()),
+    path('api/GeneralCharacteristics/update/<int:pk>', GeneralCharacteristicsUpdateView.as_view()),
+
+    # --Факультет
+    path('api/EducationalProgram', EducationalProgramListAPIView.as_view()),
+    path('api/EducationalProgram/create', EducationalProgramCreateAPIView.as_view()),
+    path('api/EducationalProgram/detail/<int:pk>', EducationalProgramDetailsView.as_view()),
+    path('api/EducationalProgram/delete/<int:pk>', EducationalProgramDestroyView.as_view()),
+    path('api/EducationalProgram/update/<int:pk>', EducationalProgramUpdateView.as_view()),
 
 
 

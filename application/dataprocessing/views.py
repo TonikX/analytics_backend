@@ -4,9 +4,23 @@ from .models import User, Domain, Items, Relation
 from django.utils import timezone
 from django.views import View,generic
 from django.urls import reverse
-
-
 import os
+
+# Permissions
+from workprogramsapp.permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+
+# Api-libs
+from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer
+from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
+
 def handle_uploaded_file(file, filename):
     """
         Функция обработчик загружаемого файла
@@ -82,16 +96,9 @@ def set_relation_linear(items_query, type_relation):
         return Response(status=200)
     except:
         return Response(status=400)
-        
-        
-from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer
-from rest_framework import generics
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
+
+
+# Api endpoints
 
 class DomainListCreateAPIView(generics.ListCreateAPIView):
     """
@@ -102,6 +109,7 @@ class DomainListCreateAPIView(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name']
     filterset_fields = ['name','user']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
     #def get_queryset(self):
     #    user = self.request.user
@@ -113,13 +121,14 @@ class DomainListCreateAPIView(generics.ListCreateAPIView):
         serializer.save(user=[self.request.user])
 
 
-
 class DomainDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     """
     API endpoint that represents a single Domain.
     """
     queryset = Domain.objects.all()
     serializer_class = DomainSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
 class ItemsListCreateAPIView(generics.ListCreateAPIView):
     """
@@ -130,6 +139,8 @@ class ItemsListCreateAPIView(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name']
     filterset_fields = ['domain']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
 class ItemsListAPIView(generics.ListAPIView):
     """
@@ -140,6 +151,7 @@ class ItemsListAPIView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name']
     filterset_fields = ['domain']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 class ItemsWithRelationListAPIView(generics.ListAPIView):
     """
@@ -147,6 +159,7 @@ class ItemsWithRelationListAPIView(generics.ListAPIView):
     """
     queryset = Items.objects.all()
     serializer_class = ItemWithRelationSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class ItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -155,6 +168,7 @@ class ItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Items.objects.all()
     serializer_class = ItemCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 #GET api/relation/ - Список связей (ответ JSON)
 class RelationListCreateAPIView(generics.ListAPIView):
@@ -165,6 +179,7 @@ class RelationListCreateAPIView(generics.ListAPIView):
     serializer_class = RelationSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['item1__name', 'relation__relation', 'item2__name']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class RelationListCreateGroupsAPIView(generics.ListAPIView):
@@ -174,7 +189,8 @@ class RelationListCreateGroupsAPIView(generics.ListAPIView):
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
     #filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    #filterset_fields = ['item1', 'relation', 'item2']    
+    #filterset_fields = ['item1', 'relation', 'item2']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
     
 #GET api/relation/{item1_id} - Список связей по домену (ответ JSON)
@@ -184,6 +200,7 @@ class RelationListAPIView(generics.ListAPIView):
     """
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
     
     def get_queryset(self):
         item1 = self.kwargs['item1_id']
@@ -197,12 +214,14 @@ class RelationRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
     """
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 #PUT api/relation/update/{id} - Редактирование темы
         #body: json(*) с измененными параметрами
 class RelationUpdateAPIView(generics.RetrieveUpdateAPIView):
     queryset = Relation.objects.all()
     serializer_class = RelationUpdateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 #POST api/upload/
