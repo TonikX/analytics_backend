@@ -85,6 +85,12 @@ export default [
             icon: IndicatorsIcon,
             selectedIcon: IndicatorsSelectedIcon,
         },
+        {
+            title: 'Профессии',
+            link: appRouter.getProfessionsRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
     ],
     [
         {

@@ -40,7 +40,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     calculateTotalHours = () => {
         const {section} = this.state;
 
-        const contactWork = parseInt(section[workProgramSectionFields.CONTACT_WORK]);
+        const contactWork = this.calculateContactWork();
         const spo = parseInt(section[workProgramSectionFields.SPO]);
 
         return (contactWork ? contactWork : 0) + (spo ? spo : 0);
@@ -67,7 +67,8 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
 
         this.props.actions.saveSection({
             ...this.state.section,
-            [workProgramSectionFields.TOTAL_HOURS] : this.calculateTotalHours()
+            [workProgramSectionFields.TOTAL_HOURS] : this.calculateTotalHours(),
+            [workProgramSectionFields.CONTACT_WORK] : this.calculateContactWork()
         });
 
         if (!this.props.section.id){
@@ -91,13 +92,22 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
         })
     }
 
+    calculateContactWork = () => {
+        const {section} = this.state;
+        console.log(section, section[workProgramSectionFields.LECTURE_CLASSES], section[workProgramSectionFields.PRACTICAL_LESSONS], section[workProgramSectionFields.LABORATORY]);
+
+        return (
+            (parseFloat(section[workProgramSectionFields.LECTURE_CLASSES]) || 0) +
+            (parseFloat(section[workProgramSectionFields.PRACTICAL_LESSONS]) || 0) +
+            (parseFloat(section[workProgramSectionFields.LABORATORY]) || 0)
+        ) * 1.1;
+    }
+
     render() {
         const {classes} = this.props;
         const {isEditMode, section} = this.state;
 
-        const contactWork = parseFloat(section[workProgramSectionFields.LECTURE_CLASSES]) || 0 +
-            parseFloat(section[workProgramSectionFields.PRACTICAL_LESSONS]) || 0 +
-            parseFloat(section[workProgramSectionFields.LABORATORY]) || 0;
+        const contactWork = this.calculateContactWork();
 
         return (
             <>
@@ -117,7 +127,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     }
                 </TableCell>
                 <TableCell className={classes.centerCell}>
-                    <>{(contactWork * 1.1).toFixed(2)}</>
+                    <>{contactWork.toFixed(2)}</>
                 </TableCell>
                 <TableCell className={classes.centerCell}>
                     {isEditMode ?
@@ -173,7 +183,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     }
                 </TableCell>
                 <TableCell className={classes.centerCell}>
-                    <>{(parseFloat(section.SRO) + parseFloat(section.contact_work)).toFixed(2)}</>
+                    <>{this.calculateTotalHours()}</>
                 </TableCell>
                 <TableCell className={classes.centerCell}>
                 {!isEditMode ?

@@ -42,7 +42,11 @@ import {workProgramListState} from "../containers/WorkProgramList/types";
 import {GENERAL_PATH as entityToEntityPath, reducer as entityToEntityReducer} from "../containers/EntitityToEntitity/reducer";
 import {entityToEntityState} from "../containers/EntitityToEntitity/types";
 
+import {GENERAL_PATH as professionsPath, reducer as professionsReducer} from "../containers/Professions/reducer";
+import {professionsState} from "../containers/Professions/types";
+
 export interface rootState {
+    [professionsPath]: professionsState,
     [entityToEntityPath]: entityToEntityState,
     [signInPath]: signInState,
     [signUpPath]: signUpState,
@@ -62,6 +66,7 @@ export interface rootState {
 }
 
 export default combineReducers({
+    [professionsPath]: professionsReducer,
     [entityToEntityPath]: entityToEntityReducer,
     [signInPath]: signInReducer,
     [signUpPath]: signUpReducer,
