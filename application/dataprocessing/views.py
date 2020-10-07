@@ -40,7 +40,7 @@ def set_relation(item1, items_set, type_relation):
     
     saved = len(items_set)
     for item2 in items_set:
-        
+        '''
         if item1.name == item2.name:
             print('Связь с самим собой')
             return Response(status=400)
@@ -52,8 +52,8 @@ def set_relation(item1, items_set, type_relation):
             relation.relation = type_relation
             relation.save()
             list_of_items.append(relation.item2)
-
-        elif Relation.objects.filter(item1 = item1, relation = type_relation, item2=item2).exists():
+        '''
+        if Relation.objects.filter(item1 = item1, relation = type_relation, item2=item2).exists():
             #Если связь с i уже существует, то увеличиваем count
             #Подсчет веса ребра
             print('Связь существует')
@@ -81,7 +81,7 @@ def set_relation(item1, items_set, type_relation):
     
     if type_relation == '1':
         print('Создаю связь для типа "включает в себя')
-        query = Items.objects.filter(name__in = list_of_items)
+        query = Items.objects.filter(name__in = list(set(list_of_items)))
         set_relation_linear(query,'2')
         
     print('Связи созданы')
@@ -200,7 +200,7 @@ class RelationListAPIView(generics.ListAPIView):
     filterset_fields = ['item1__name', 'relation__relation', 'item2__name']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
-
+'''
 #POST api/relation/new - Создание новой связи
 class RelationCreateAPIView(APIView):
     """
@@ -218,9 +218,9 @@ class RelationCreateAPIView(APIView):
             return Response(status=200)
         except:
             return Response(status=400)
-
-#POST api/relation/create - Создание новой связи
 '''
+#POST api/relation/create - Создание новой связи
+
 class RelationCreateAPIView(generics.ListCreateAPIView):
     """
     API endpoint to create relation
@@ -228,23 +228,18 @@ class RelationCreateAPIView(generics.ListCreateAPIView):
     queryset = Relation.objects.all()
     serializer_class = RelationCreateSerializer
     #permission_classes = [IsRpdDeveloperOrReadOnly]
-
     def create(self, request):
         try:
             item1 = request.data.get("item1")
             relation = request.data.get("relation")
             item2 = request.data.get("item2")
-
             item1 = Items.objects.get(pk = item1)
             item2 = [Items.objects.get(pk = item2),]
-
             set_relation(item1, item2, relation)
-
             return Response(status=200)
         except:
             return Response(status=400)
 
-'''
 
 #GET api/relation/{item1_id} - Список связей по ключевому слову (ответ JSON)
 class RelationListItemIdAPIView(generics.ListAPIView):
@@ -387,21 +382,3 @@ class FileUploadAPIView(APIView):
             return Response(status=200)  
         except:
             return Response(status=400)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
