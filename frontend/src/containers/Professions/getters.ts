@@ -6,10 +6,12 @@ import {GENERAL_PATH} from "./reducer";
 
 import {fields} from './enum';
 
-import {professionsState, ProfessionType} from './types';
+import {professionsState, ProfessionType, SkillType} from './types';
 
 const getStateData = (state: rootState): professionsState => get(state, GENERAL_PATH);
 export const getProfessionsList = (state: rootState): Array<ProfessionType> => get(getStateData(state), fields.PROFESSIONS_LIST, []);
+export const getSkillsList = (state: rootState): Array<SkillType> => get(getStateData(state), fields.SKILLS_LIST, []);
+export const getProfession = (state: rootState): ProfessionType|{} => get(getStateData(state), fields.PROFESSION, {});
 
 export const getProfessionsDialog = (state: rootState) => get(getStateData(state), fields.PROFESSIONS_DIALOG, {});
 

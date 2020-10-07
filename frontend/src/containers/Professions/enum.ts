@@ -1,6 +1,8 @@
 export enum fields {
     PROFESSIONS_LIST = 'PROFESSIONS_LIST',
     PROFESSIONS_DIALOG = 'PROFESSIONS_DIALOG',
+    SKILLS_LIST = 'SKILLS_LIST',
+    SKILLS_DIALOG = 'SKILLS_DIALOG',
     IS_OPEN_DIALOG = 'IS_OPEN_DIALOG',
     DIALOG_DATA = 'DIALOG_DATA',
     SEARCH_QUERY = 'SEARCH_QUERY',
@@ -10,17 +12,27 @@ export enum fields {
     SORTING_FIELD = 'SORTING_FIELD',
     SORTING_MODE = 'SORTING_MODE',
     ROLE = 'ROLES',
+    PROFESSION = 'PROFESSION',
 }
 
 export enum fetchingTypes {
     GET_PROFESSIONS = 'GET_PROFESSIONS',
+    GET_PROFESSION = 'GET_PROFESSION',
     DELETE_PROFESSIONS = 'DELETE_PROFESSIONS',
     UPDATE_PROFESSIONS = 'UPDATE_PROFESSIONS',
     CREATE_PROFESSIONS = 'CREATE_PROFESSIONS',
+    GET_SKILLS = 'GET_SKILLS',
+    DELETE_SKILL = 'DELETE_SKILL',
+    UPDATE_SKILL = 'UPDATE_SKILL',
+    CREATE_SKILL = 'CREATE_SKILL',
 }
 
 export enum ProfessionsFields {
     ID = 'id',
     ROLE = 'roles',
     TITLE = 'title',
+    ITEM = 'item',
+    NAME = 'name',
+    PROFESSION = 'profession',
+    LEVEL = 'masterylevel',
 }

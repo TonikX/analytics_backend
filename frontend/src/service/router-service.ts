@@ -85,6 +85,10 @@ export default class RouterService {
         return SEPARATOR + PROFESSIONS + SEPARATOR + ':id' + SEPARATOR + SKILLS;
     };
 
+    getProfessionSkillsRouteLink = (id: number) => {
+        return SEPARATOR + PROFESSIONS + SEPARATOR + id + SEPARATOR + SKILLS;
+    };
+
     getWorkProgramListRoute = () => {
         return SEPARATOR + WORK_PROGRAM_LIST;
     };

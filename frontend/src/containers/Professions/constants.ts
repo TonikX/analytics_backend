@@ -7,3 +7,9 @@ export const roles: {[key: string]: string} = {
     [ENTREPRENEUR]: 'Предприниматель',
     [DEVELOPER]: 'Разработчик'
 }
+
+export const levels: {[key: string]: string} = {
+    '1': 'Низкий',
+    '2': 'Средний',
+    '3': 'Высокий'
+}

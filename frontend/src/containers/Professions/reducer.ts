@@ -19,6 +19,8 @@ export const initialState: professionsState = {
     },
     [fields.ROLE]: null,
     [fields.PROFESSIONS_LIST]: [],
+    [fields.PROFESSION]: {},
+    [fields.SKILLS_LIST]: [],
     [fields.PROFESSIONS_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
@@ -28,6 +30,16 @@ export const initialState: professionsState = {
 const setData = (state: professionsState, {payload}: any): professionsState => ({
     ...state,
     [fields.PROFESSIONS_LIST]: payload,
+});
+
+const setSkillList = (state: professionsState, {payload}: any): professionsState => ({
+    ...state,
+    [fields.SKILLS_LIST]: payload,
+});
+
+const setProfession = (state: professionsState, {payload}: any): professionsState => ({
+    ...state,
+    [fields.PROFESSION]: payload,
 });
 
 const changeSearchQuery = (state: professionsState, {payload}: any): professionsState => ({
@@ -79,6 +91,7 @@ const changeSorting = (state: professionsState, {payload}: any): professionsStat
 
 export const reducer = createReducer(initialState, {
     [actions.setProfessionsList.type]: setData,
+    [actions.setSkills.type]: setSkillList,
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
     [actions.changeSearchQuery.type]: changeSearchQuery,
@@ -86,4 +99,5 @@ export const reducer = createReducer(initialState, {
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
     [actions.changeFilteredRole.type]: changeFilteredRole,
+    [actions.setProfession.type]: setProfession,
 });
