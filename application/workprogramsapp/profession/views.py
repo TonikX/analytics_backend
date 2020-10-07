@@ -17,6 +17,9 @@ from workprogramsapp.models import Profession, SkillsOfProfession
 from workprogramsapp.profession.serializers import ProfessionSerializer, ProfessionCreateSerializer, SkillsOfProfessionInProfessionSerializer, SkillsOfProfessionInProfessionCreateSerializer
 
 
+# Пагинация
+from rest_framework.pagination import PageNumberPagination
+
 
 # Блок реализации API для CRUD интерфейсов
 
@@ -52,18 +55,33 @@ class ProfessionDetailsView(generics.RetrieveAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+
 class SkillsOfProfessionInProfessionList(generics.ListAPIView):
     serializer_class = SkillsOfProfessionInProfessionSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
+    #
+    # def list(self, request, **kwargs):
+    #     """
+    #     Вывод всех навыков для конкретной профессии
+    #     """
+    #     # Note the use of `get_queryset()` instead of `self.queryset`
+    #     queryset = SkillsOfProfession.objects.filter(profession__id=self.kwargs['profession_id'])
+    #     page = self.paginate_queryset(queryset)
+    #     if page is not None:
+    #         serializer = self.get_serializer(page, many=True)
+    #         return self.get_paginated_response(serializer.data)
+    #     serializer = SkillsOfProfessionInProfessionSerializer(queryset, many=True)
+    #     return Response(serializer.data)
+    def get_queryset(self):
+        return SkillsOfProfession.objects.filter(profession__id=self.kwargs['profession_id'])
 
-    def list(self, request, **kwargs):
-        """
-        Вывод всех навыков для конкретной профессии
-        """
-        # Note the use of `get_queryset()` instead of `self.queryset`
-        queryset = SkillsOfProfession.objects.filter(profession__id=self.kwargs['profession_id'])
-        serializer = SkillsOfProfessionInProfessionSerializer(queryset, many=True)
-        return Response(serializer.data)
 
 
 class SkillsOfProfessionInProfessionCreateAPIView(generics.CreateAPIView):
