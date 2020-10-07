@@ -11,7 +11,7 @@ from workprogramsapp.permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadO
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 # Api-libs
-from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer
+from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer, RelationCreateSerializer
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -35,15 +35,28 @@ def handle_uploaded_file(file, filename):
     return data
 
 def set_relation(item1, items_set, type_relation):
-    print('set_relation')
+    print('Создаю связи')
     list_of_items = []
     
     saved = len(items_set)
     for item2 in items_set:
-        #item2 = Items.objects.get(name = i)
-        if Relation.objects.filter(item1 = item1, relation = type_relation, item2=item2).exists():
+        
+        if item1.name == item2.name:
+            print('Связь с самим собой')
+            return Response(status=400)
+        
+        elif Relation.objects.filter(item1 = item1, relation = '0', item2=item2).exists():
+            print('Проверка на существование неопределенной связи')
+            #or Relation.objects.filter(item1 = item1, relation = '7', item2=item2).exists()
+            relation = Relation.objects.get(item1 = item1, relation = '0', item2=item2)
+            relation.relation = type_relation
+            relation.save()
+            list_of_items.append(relation.item2)
+
+        elif Relation.objects.filter(item1 = item1, relation = type_relation, item2=item2).exists():
             #Если связь с i уже существует, то увеличиваем count
             #Подсчет веса ребра
+            print('Связь существует')
             relation = Relation.objects.get(item1 = item1, relation = type_relation, item2=item2)
             value = relation.count
             relation.count = int(value) + 1
@@ -51,21 +64,27 @@ def set_relation(item1, items_set, type_relation):
             saved = saved - 1
         else:
             #Если нет, то добавляем новую запись
+            print('Создание новой связи')
             relation = Relation(item1 = item1, relation = type_relation, item2 = item2)
             relation.save()
             list_of_items.append(relation.item2)
+    
     #Подсчет значения вершины графа
     item = Items.objects.get(name = item1)
     value = item.value
     item.value = int(value) + saved
     item.save()
-    print('ok-1')
-
+    
+    
+    items = [rel.item2 for rel in Relation.objects.filter(item1 = item1, relation = type_relation)]
+    list_of_items.extend(items)        
+    
     if type_relation == '1':
+        print('Создаю связь для типа "включает в себя')
         query = Items.objects.filter(name__in = list_of_items)
         set_relation_linear(query,'2')
         
-    print('ok-3')
+    print('Связи созданы')
 
 
 def set_relation_hierarchy(items_query, type_relation):
@@ -74,6 +93,7 @@ def set_relation_hierarchy(items_query, type_relation):
     """
     try:
         for key,value in items_query.items():
+            print(key,value)
             names = value.split(', ')
             items_set = Items.objects.filter(name__in = names)
             item1 = Items.objects.get(name = key)
@@ -86,7 +106,6 @@ def set_relation_linear(items_query, type_relation):
     """
         Запись линейных связей
     """
-    print('set_linear')
     try:
         for item in items_query:
             items_set = items_query.exclude(name = item)
@@ -132,7 +151,7 @@ class DomainDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 class ItemsListCreateAPIView(generics.ListCreateAPIView):
     """
-    Эндпоинт для создания сущностей
+    API endpoint to create an Item
     """
     queryset = Items.objects.all()
     serializer_class = ItemCreateSerializer
@@ -144,7 +163,7 @@ class ItemsListCreateAPIView(generics.ListCreateAPIView):
 
 class ItemsListAPIView(generics.ListAPIView):
     """
-    API endpoint список всех сущностей
+    API endpoint to retrieve list of the items
     """
     queryset = Items.objects.all()
     serializer_class = ItemSerializer
@@ -171,7 +190,7 @@ class ItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 #GET api/relation/ - Список связей (ответ JSON)
-class RelationListCreateAPIView(generics.ListAPIView):
+class RelationListAPIView(generics.ListAPIView):
     """
     API endpoint that represents a list of Relations.
     """
@@ -181,26 +200,39 @@ class RelationListCreateAPIView(generics.ListAPIView):
     filterset_fields = ['item1__name', 'relation__relation', 'item2__name']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
-
-class RelationListCreateGroupsAPIView(generics.ListAPIView):
+#POST api/relation/create - Создание новой связи
+class RelationCreateAPIView(generics.ListCreateAPIView):
     """
-    API endpoint that represents a list of Relations.
+    API endpoint to create relation
     """
     queryset = Relation.objects.all()
-    serializer_class = RelationSerializer
-    #filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    #filterset_fields = ['item1', 'relation', 'item2']
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    serializer_class = RelationCreateSerializer
+    #permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def create(self, request):
+        try:
+            item1 = request.data.get("item1")
+            relation = request.data.get("relation")
+            item2 = request.data.get("item2")
+
+            item1 = Items.objects.get(pk = item1)
+            item2 = [Items.objects.get(pk = item2),]
+
+            set_relation(item1, item2, relation)
+
+            return Response(status=200)
+        except:
+            return Response(status=400)
 
     
-#GET api/relation/{item1_id} - Список связей по домену (ответ JSON)
-class RelationListAPIView(generics.ListAPIView):
+#GET api/relation/{item1_id} - Список связей по ключевому слову (ответ JSON)
+class RelationListItemIdAPIView(generics.ListAPIView):
     """
-    API endpoint that represents a list of Relations.
+    API endpoint that represents a list of Relations by Item1 id.
     """
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    #permission_classes = [IsRpdDeveloperOrReadOnly]
     
     def get_queryset(self):
         item1 = self.kwargs['item1_id']
@@ -210,27 +242,86 @@ class RelationListAPIView(generics.ListAPIView):
 #DELETE api/relation/detail/{id} - Удалить связь с конкретным id  
 class RelationRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
     """
-        API endpoint that represents a single Relation.
+    API endpoint that represents/delete a single Relation.
     """
+    #добавить удаление сопутсвующих связей? ("является частью раздела" при удалении "включает в себя"")
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    
+    def delete(self, request, *args, **kwargs):
+        try:
+            obj = Relation.objects.get(pk = kwargs['pk'])
+            '''
+            #удаление сопутсвующих связей?
+            if obj.relation == '1':
+                conn_obj = [item2 for item2 in Relation.objects.filter(item1 = obj.item1, relation = obj.relation)]
+                query = Items.objects.filter(name__in = list_of_items)
+                item2 = Items.objects.get(pk = request.data.get("item2"))
+                to_del = 0
+                for q in query:
+                    rel = Relation.objects.get(item1 = item2, relation = '2', item2 = q)
+                    rel.delete()
+                    to_del += 1
+                item = Items.objects.get(name = obj.item2)
+                value = item.value
+                item.value = int(value) - to_del
+                item.save()
+            '''
+            item = Items.objects.get(name = obj.item1)
+            value = item.value
+            item.value = int(value) - 1
+            item.save()
+            return self.destroy(request, *args, **kwargs)
+        except:
+            return Response(status=400)
 
 #PUT api/relation/update/{id} - Редактирование темы
         #body: json(*) с измененными параметрами
 class RelationUpdateAPIView(generics.RetrieveUpdateAPIView):
+    """ 
+    API endpoint for the relation update.
+    """
     queryset = Relation.objects.all()
     serializer_class = RelationUpdateSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    #permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def update(self, request, *args, **kwargs):
+        
+        if Relation.objects.filter(item1 = request.data.get("item1"), relation = request.data.get("relation"), item2=request.data.get("item2")).exists():
+           return Response(serializer.errors, status=status.HTTP_302_FOUND)
+        else:
+            old_relation = Relation.objects.get(id = kwargs['pk'])
+            
+            if old_relation.item1.pk != request.data.get("item1") :
+                print('Замена item1')
+                item_pk = request.data.get("item1")
+                item = Items.objects.get(pk = item_pk)
+                value = item.value
+                item.value = int(value) + 1
+                item.save()
+                
+                item = Items.objects.get(name = old_relation.item1)
+                value = item.value
+                item.value = int(value) - 1
+                item.save()
+
+            serializer = RelationCreateSerializer(Relation.objects.get(id = kwargs['pk']), data = request.data)
+
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                
 
 #POST api/upload/
-#body: 
-#{
-#    domain:str
-#    relation:int
-#}
+#body: { domain:str, relation:int }
 class FileUploadAPIView(APIView):
+    """ 
+    API endpoint to upload txt-file with keywords.
+    """
     def post(self, request):
 
         serializer = FileUploadSerializer(data=request.data)
@@ -258,10 +349,11 @@ class FileUploadAPIView(APIView):
             course = file[0]
             file.remove(file[0])  
             if type_relation in ['1','4']:
+                print('create')
                 data = dict(zip(file[::2],file[1::2]))
                 data.update({course:', '.join(file[::2])})
                 set_relation_hierarchy(data, type_relation)
-  
+
             else:
                 data = {course:', '.join(file)}
                 items_query = [Items.objects.get(name = i) for i in items_list]
@@ -277,24 +369,7 @@ class FileUploadAPIView(APIView):
 
 
 
-#POST api/relation/new - Создание новой связи
-class RelationPostAPIView(APIView):
-    """Render the HTML template to post relations"""
-    def post(self, request):
-        try:
-            item1 = request.data.get("item1")
-            relation = request.data.get("relation")
-            item2 = request.data.get("item2")
-            print(item1, item2, relation)
 
-            item1 = Items.objects.get(pk = item1)
-            item2 = [Items.objects.get(pk = item2),]
-
-            set_relation(item1, item2, relation)
-
-            return Response(status=200)
-        except:
-            return Response(status=400)
 
 
 
