@@ -54,6 +54,7 @@ class ProfessionDetailsView(generics.RetrieveAPIView):
 
 class SkillsOfProfessionInProfessionList(generics.ListAPIView):
     serializer_class = SkillsOfProfessionInProfessionSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     permission_classes = [IsAuthenticated]
 
     def list(self, request, **kwargs):

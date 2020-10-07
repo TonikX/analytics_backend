@@ -20,7 +20,6 @@ class SkillsOfProfessionInProfessionSerializer(serializers.ModelSerializer):
 
 class SkillsOfProfessionInProfessionCreateSerializer(serializers.ModelSerializer):
     """Сериализатор вывода пререквизита обучения для вывода пререквизита в рабочей программе"""
-    item  = ItemSerializer()
     class Meta:
         model = SkillsOfProfession
         fields = ['id', 'item', 'masterylevel', 'profession']
