@@ -130,7 +130,7 @@ class Professions extends React.Component<ProfessionsProps> {
                                     </Typography>
                                     <div className={classes.actions}>
                                         <IconButton>
-                                            <Link to={appRouter.getProfessionSkillsRouteLink(item[ProfessionsFields.ID])}>
+                                            <Link style={{textDecoration: 'none'}} to={appRouter.getProfessionSkillsRouteLink(item[ProfessionsFields.ID])}>
                                                 <EyeIcon />
                                             </Link>
                                         </IconButton>
