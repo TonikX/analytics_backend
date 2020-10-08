@@ -17,7 +17,7 @@ class UserExpertiseView(generics.ListCreateAPIView):
 
     def get_queryset(self, *args, **kwargs):
         if ('pk' in dict(self.kwargs)):
-            return ExpertiseComments.objects.filter(expertise=self.kwargs['pk'], expert=self.request.user)
+            return UserExpertise.objects.filter(expertise=self.kwargs['pk'], expert=self.request.user)
         else:
             return UserExpertise.objects.filter(expert=self.request.user)
 
@@ -65,7 +65,7 @@ class ExpertiseView(generics.ListCreateAPIView):
 
     def get_queryset(self, *args, **kwargs):
         if ('pk' in dict(self.kwargs)):
-            return Expertise.objects.filter(id=self.kwargs['pk'])
+            return Expertise.objects.filter(id__work_program=self.kwargs['pk'])
 
     def perform_create(self, serializer):
         serializer.save()
@@ -77,7 +77,7 @@ class ChangeExpertiseView(generics.RetrieveUpdateAPIView):
     """
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
-    #permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def perform_update(self, serializer):
         if serializer.is_valid():
@@ -90,7 +90,7 @@ class ChangeUserExpertiseView(generics.RetrieveUpdateAPIView):
     """
     queryset = UserExpertise.objects.all()
     serializer_class = UserExpertiseSerializer
-    #permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
 
     def perform_update(self, serializer):
         if serializer.is_valid():

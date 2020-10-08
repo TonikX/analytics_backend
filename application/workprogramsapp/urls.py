@@ -222,7 +222,7 @@ urlpatterns = [
     path('api/EducationalProgram/update/<int:pk>', EducationalProgramUpdateView.as_view()),
 
 
-
+    # --Экспертизы
     path('api/user_expertise', UserExpertiseView.as_view()),
     path('api/user_expertise/<int:pk>', UserExpertiseView.as_view()),
     path('api/comments/<int:pk>', ExpertiseCommentsView.as_view()),
