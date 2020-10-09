@@ -1,6 +1,8 @@
 from rest_framework import generics
 from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
+from django.db.models.query import QuerySet
 
 
 # Права доступа
@@ -10,11 +12,12 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 
 # Модели данных
 
-from workprogramsapp.models import Profession, SkillsOfProfession
+from workprogramsapp.models import Profession, SkillsOfProfession, Role, SkillsOfRole
 
 
 # Сериализаторы
-from workprogramsapp.profession.serializers import ProfessionSerializer, ProfessionCreateSerializer, SkillsOfProfessionInProfessionSerializer, SkillsOfProfessionInProfessionCreateSerializer
+from workprogramsapp.profession.serializers import ProfessionSerializer, ProfessionCreateSerializer, SkillsOfProfessionInProfessionSerializer, SkillsOfProfessionInProfessionCreateSerializer, \
+    RoleSerializer, RoleCreateSerializer, SkillsOfRoleInRoleSerializer, SkillsOfRoleInRoleCreateSerializer
 
 
 # Пагинация
@@ -55,33 +58,15 @@ class ProfessionDetailsView(generics.RetrieveAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 1000
-
-
 class SkillsOfProfessionInProfessionList(generics.ListAPIView):
     serializer_class = SkillsOfProfessionInProfessionSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     permission_classes = [IsAuthenticated]
     pagination_class = PageNumberPagination
-    #
-    # def list(self, request, **kwargs):
-    #     """
-    #     Вывод всех навыков для конкретной профессии
-    #     """
-    #     # Note the use of `get_queryset()` instead of `self.queryset`
-    #     queryset = SkillsOfProfession.objects.filter(profession__id=self.kwargs['profession_id'])
-    #     page = self.paginate_queryset(queryset)
-    #     if page is not None:
-    #         serializer = self.get_serializer(page, many=True)
-    #         return self.get_paginated_response(serializer.data)
-    #     serializer = SkillsOfProfessionInProfessionSerializer(queryset, many=True)
-    #     return Response(serializer.data)
+
+
     def get_queryset(self):
         return SkillsOfProfession.objects.filter(profession__id=self.kwargs['profession_id'])
-
 
 
 class SkillsOfProfessionInProfessionCreateAPIView(generics.CreateAPIView):
@@ -99,4 +84,88 @@ class SkillsOfProfessionInProfessionDestroyView(generics.DestroyAPIView):
 class SkillsOfProfessionInProfessionUpdateView(generics.UpdateAPIView):
     queryset = SkillsOfProfession.objects.all()
     serializer_class = SkillsOfProfessionInProfessionCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class RolesListApi(generics.ListAPIView):
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class RoleCreateAPIView(generics.CreateAPIView):
+    serializer_class = RoleCreateSerializer
+    queryset = Role.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class RoleDestroyView(generics.DestroyAPIView):
+    queryset = Role.objects.all()
+    serializer_class = RoleCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class RoleUpdateView(generics.UpdateAPIView):
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class RoleDetailsView(generics.RetrieveAPIView):
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class SkillsOfRoleInRoleList(generics.ListAPIView):
+    serializer_class = SkillsOfRoleInRoleSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
+
+
+    def get_queryset(self):
+        return SkillsOfRole.objects.filter(role__id=self.kwargs['role_id'])
+
+
+from itertools import groupby
+from operator import itemgetter
+from rest_framework.response import Response
+
+
+class SkillsOfRoleInRoleWithItemsList(generics.ListAPIView):
+    serializer_class = SkillsOfRoleInRoleCreateSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
+
+
+    def get_queryset(self):
+        # query = SkillsOfRole.objects.all().query
+        #         # query.group_by = ['item']
+        #         # results = QuerySet(query=query, model=SkillsOfRole)
+
+        # return results
+        items = SkillsOfRole.objects.values('id', 'item', 'masterylevel', 'role').order_by('item')
+        rows = groupby(items, itemgetter('item'))
+        return Response({c_title: list(items) for c_title, items in rows})
+
+
+class SkillsOfRoleInRoleCreateAPIView(generics.CreateAPIView):
+    serializer_class = SkillsOfRoleInRoleCreateSerializer
+    queryset = SkillsOfRole.objects.all()
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class SkillsOfRoleInRoleDestroyView(generics.DestroyAPIView):
+    queryset = SkillsOfRole.objects.all()
+    serializer_class = SkillsOfRoleInRoleCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class SkillsOfRoleInRoleUpdateView(generics.UpdateAPIView):
+    queryset = SkillsOfRole.objects.all()
+    serializer_class = SkillsOfRoleInRoleCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]

@@ -753,34 +753,37 @@ class Certification(models.Model):
 
 class Profession(models.Model):
     '''
-    Модель для рабочей программы
+    Модель для описания профессии
     '''
-    Scientist = 'Scientist'
-    Entrepreneur = 'Entrepreneur'
-    Developer = 'Developer'
-    ROLES = (
-        (Scientist, 'Scientist'),
-        (Entrepreneur, 'Entrepreneur'),
-        (Developer, 'Developer'),
-    )
-
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True, verbose_name='Профессия')
-    title = models.CharField(max_length=1024, blank=True, null=True)
-    roles = models.CharField(choices=ROLES, max_length=1024, verbose_name='Роль',
-                             blank=True, null=True)
+    title = models.CharField(max_length=1024, blank=True, null=True, verbose_name='Название профессии')
     skills = models.ManyToManyField(Items, related_name='profession_skils',
                                     through='SkillsOfProfession', blank=True, null=True,
                                     verbose_name="Навыки")
 
 
     def __str__(self):
-        return (self.roles + self.title)
+        return (self.title)
 
+
+class Role(models.Model):
+    '''
+    Модель для описания ролей
+    '''
+    approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True, verbose_name='Профессия')
+    title = models.CharField(max_length=1024, blank=True, null=True, verbose_name='Название профессии')
+    skills = models.ManyToManyField(Items, related_name='role_skils',
+                                    through='SkillsOfRole', blank=True, null=True,
+                                    verbose_name="Навыки")
+
+
+    def __str__(self):
+        return (self.title)
 
 
 class SkillsOfProfession(models.Model):
     '''
-    Модель для пререквизитов рабочей программы
+    Модель для навыков профессии
     '''
 
     item = models.ForeignKey(Items, on_delete=models.CASCADE, verbose_name="Пререквизит")
@@ -797,5 +800,28 @@ class SkillsOfProfession(models.Model):
     )
 
 
-    # def __str__(self):
-    #     return (str(self.item) + self.profession)
+    def __str__(self):
+        return (str(self.item) + ' / ' + str(self.profession))
+
+
+class SkillsOfRole(models.Model):
+    '''
+    Модель для навыков роли
+    '''
+
+    item = models.ForeignKey(Items, on_delete=models.CASCADE, verbose_name="Пререквизит")
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, verbose_name="Рабочая программа")
+    MasterylevelChoices = [
+        ('1', 'low'),
+        ('2', 'average'),
+        ('3', 'high'),
+    ]
+    masterylevel = models.CharField(
+        max_length=1,
+        choices=MasterylevelChoices,
+        default=1, verbose_name="Уровень"
+    )
+
+
+    def __str__(self):
+        return (str(self.item) + ' / ' + str(self.role))
