@@ -35,7 +35,10 @@ from .educational_program.views import DepartmentCreateAPIView, DepartmentListAP
 from .educational_program.views import GeneralCharacteristicsCreateAPIView, GeneralCharacteristicsListAPIView, GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView
 
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, ProfessionUpdateView
-from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfessionInProfessionCreateAPIView, SkillsOfProfessionInProfessionUpdateView, SkillsOfProfessionInProfessionDestroyView
+from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfessionInProfessionCreateAPIView, SkillsOfProfessionInProfessionUpdateView, SkillsOfProfessionInProfessionDestroyView, SkillsOfProfessionInProfessionWithItemsList
+
+from .profession.views import RolesListApi, RoleCreateAPIView, RoleDetailsView, RoleDestroyView, RoleUpdateView
+from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAPIView, SkillsOfRoleInRoleUpdateView, SkillsOfRoleInRoleDestroyView, SkillsOfRoleInRoleWithItemsList
 
 urlpatterns = [
 
@@ -220,7 +223,6 @@ urlpatterns = [
     path('api/EducationalProgram/delete/<int:pk>', EducationalProgramDestroyView.as_view()),
     path('api/EducationalProgram/update/<int:pk>', EducationalProgramUpdateView.as_view()),
 
-
     # Работа с профессиями
     path('api/professions/', ProfessionsListApi.as_view()),
     path('api/profession/create', ProfessionCreateAPIView.as_view()),
@@ -233,5 +235,20 @@ urlpatterns = [
     path('api/skillsofprofessioninprofession/create', SkillsOfProfessionInProfessionCreateAPIView.as_view()),
     path('api/skillsofprofessioninprofession/delete/<int:pk>', SkillsOfProfessionInProfessionDestroyView.as_view()),
     path('api/skillsofprofessioninprofession/update/<int:pk>', SkillsOfProfessionInProfessionUpdateView.as_view()),
+    path('api/skillsofprofessioningroups', SkillsOfProfessionInProfessionWithItemsList.as_view()),
+
+    # Работа с профессиями
+    path('api/roles/', RolesListApi.as_view()),
+    path('api/role/create', RoleCreateAPIView.as_view()),
+    path('api/role/detail/<int:pk>', RoleDetailsView.as_view()),
+    path('api/role/delete/<int:pk>', RoleDestroyView.as_view()),
+    path('api/role/update/<int:pk>', RoleUpdateView.as_view()),
+
+    #Работа с навыками прфоессий
+    path('api/skillsofroleinrole/<int:role_id>', SkillsOfRoleInRoleList.as_view()),
+    path('api/skillsofroleinrole/create', SkillsOfRoleInRoleCreateAPIView.as_view()),
+    path('api/skillsofroleinrole/delete/<int:pk>', SkillsOfRoleInRoleDestroyView.as_view()),
+    path('api/skillsofroleinrole/update/<int:pk>', SkillsOfRoleInRoleUpdateView.as_view()),
+    path('api/skillsofroleingroups', SkillsOfRoleInRoleWithItemsList.as_view()),
 
 ]
