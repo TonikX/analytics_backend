@@ -13,6 +13,7 @@ import EducationPlanInDirection from '../containers/EduationPlanInDirection/logi
 import WorkProgramList from '../containers/WorkProgramList/logics';
 import EntityToEntity from '../containers/EntitityToEntitity/logics';
 import ProfessionsLogic from '../containers/Professions/logics';
+import RolesLogic from '../containers/Roles/logics';
 
 export default [
     ...SignInLogic,
@@ -30,4 +31,5 @@ export default [
     ...WorkProgramList,
     ...EntityToEntity,
     ...ProfessionsLogic,
+    ...RolesLogic,
 ];
