@@ -1,8 +1,10 @@
 from rest_framework import generics
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.response import Response
 from django.db.models.query import QuerySet
+from itertools import groupby
+from operator import itemgetter
+from rest_framework.response import Response
 
 
 # Права доступа
@@ -87,6 +89,25 @@ class SkillsOfProfessionInProfessionUpdateView(generics.UpdateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+class SkillsOfProfessionInProfessionWithItemsList(generics.ListAPIView):
+    serializer_class = SkillsOfProfessionInProfessionCreateSerializer
+    filter_backends = [filters.OrderingFilter]
+    permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
+
+
+    def get(self, request, *args, **kwargs):
+
+        if self.request.query_params.get('item_n') != None:
+            items = SkillsOfProfession.objects.filter(
+                item__name__icontains=self.request.query_params.get('item_n')).values('id', 'item', 'item__name', 'masterylevel', 'profession__title').order_by('item__name')
+        else:
+            items = SkillsOfProfession.objects.values('id', 'item', 'item__name', 'masterylevel', 'profession__title').order_by('item__name')
+        rows = groupby(items, itemgetter('item__name'))
+        print (rows)
+        return Response({c_title: list(items) for c_title, items in rows})
+
+
 class RolesListApi(generics.ListAPIView):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
@@ -130,26 +151,22 @@ class SkillsOfRoleInRoleList(generics.ListAPIView):
         return SkillsOfRole.objects.filter(role__id=self.kwargs['role_id'])
 
 
-from itertools import groupby
-from operator import itemgetter
-from rest_framework.response import Response
-
-
 class SkillsOfRoleInRoleWithItemsList(generics.ListAPIView):
     serializer_class = SkillsOfRoleInRoleCreateSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.OrderingFilter]
     permission_classes = [IsAuthenticated]
     pagination_class = PageNumberPagination
 
 
-    def get_queryset(self):
-        # query = SkillsOfRole.objects.all().query
-        #         # query.group_by = ['item']
-        #         # results = QuerySet(query=query, model=SkillsOfRole)
+    def get(self, request, *args, **kwargs):
 
-        # return results
-        items = SkillsOfRole.objects.values('id', 'item', 'masterylevel', 'role').order_by('item')
-        rows = groupby(items, itemgetter('item'))
+        if self.request.query_params.get('item_n') != None:
+            items = SkillsOfRole.objects.filter(
+                item__name__icontains=self.request.query_params.get('item_n')).values('id', 'item', 'item__name', 'masterylevel', 'role__title').order_by('item__name')
+        else:
+            items = SkillsOfRole.objects.values('id', 'item', 'item__name', 'masterylevel', 'role__title').order_by('item__name')
+        rows = groupby(items, itemgetter('item__name'))
+        print (rows)
         return Response({c_title: list(items) for c_title, items in rows})
 
 

@@ -35,7 +35,7 @@ from .educational_program.views import DepartmentCreateAPIView, DepartmentListAP
 from .educational_program.views import GeneralCharacteristicsCreateAPIView, GeneralCharacteristicsListAPIView, GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView
 
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, ProfessionUpdateView
-from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfessionInProfessionCreateAPIView, SkillsOfProfessionInProfessionUpdateView, SkillsOfProfessionInProfessionDestroyView
+from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfessionInProfessionCreateAPIView, SkillsOfProfessionInProfessionUpdateView, SkillsOfProfessionInProfessionDestroyView, SkillsOfProfessionInProfessionWithItemsList
 
 from .profession.views import RolesListApi, RoleCreateAPIView, RoleDetailsView, RoleDestroyView, RoleUpdateView
 from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAPIView, SkillsOfRoleInRoleUpdateView, SkillsOfRoleInRoleDestroyView, SkillsOfRoleInRoleWithItemsList
@@ -235,6 +235,7 @@ urlpatterns = [
     path('api/skillsofprofessioninprofession/create', SkillsOfProfessionInProfessionCreateAPIView.as_view()),
     path('api/skillsofprofessioninprofession/delete/<int:pk>', SkillsOfProfessionInProfessionDestroyView.as_view()),
     path('api/skillsofprofessioninprofession/update/<int:pk>', SkillsOfProfessionInProfessionUpdateView.as_view()),
+    path('api/skillsofprofessioningroups', SkillsOfProfessionInProfessionWithItemsList.as_view()),
 
     # Работа с профессиями
     path('api/roles/', RolesListApi.as_view()),
