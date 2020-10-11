@@ -4,6 +4,7 @@ from rest_framework import serializers, viewsets
 # Модели данных
 
 from workprogramsapp.models import Profession, SkillsOfProfession, Role, SkillsOfRole
+from dataprocessing.models import Items
 
 # Другие сериализаторы
 
@@ -78,4 +79,23 @@ class RoleCreateSerializer(serializers.ModelSerializer):
         fields = ['id', 'title']
 
 
+class ItemWithProfessionsSerializer(serializers.ModelSerializer):
+    """Сериализатор Ключевого слова"""
+    profession_skils = ProfessionCreateSerializer(many = True)
 
+
+    class Meta:
+        model = Items
+        fields = ('id', 'name', 'domain', 'value', 'profession_skils')
+        #depth = 1
+
+
+class ItemWithRolesSerializer(serializers.ModelSerializer):
+    """Сериализатор Ключевого слова"""
+    role_skils = RoleCreateSerializer(many = True)
+
+
+    class Meta:
+        model = Items
+        fields = ('id', 'name', 'domain', 'value', 'role_skils')
+        #depth = 1
