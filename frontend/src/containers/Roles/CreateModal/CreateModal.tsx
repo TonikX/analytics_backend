@@ -2,7 +2,7 @@ import React from 'react';
 import {shallowEqual} from "recompose";
 import get from "lodash/get";
 
-import {ProfessionsCreateModalProps} from './types';
+import {RolesCreateModalProps} from './types';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,27 +12,27 @@ import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from "@material-ui/core/TextField";
 
-import {ProfessionsFields} from '../enum';
+import {RolesFields} from '../enum';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 
-class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
+class CreateModal extends React.PureComponent<RolesCreateModalProps> {
     state = {
-        profession: {
-            [ProfessionsFields.ID]: null,
-            [ProfessionsFields.TITLE]: null,
+        role: {
+            [RolesFields.ID]: null,
+            [RolesFields.TITLE]: null,
         },
     };
 
-    componentDidUpdate(prevProps: Readonly<ProfessionsCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
-        const {profession} = this.props;
+    componentDidUpdate(prevProps: Readonly<RolesCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
+        const {role} = this.props;
 
-        if (!shallowEqual(profession, prevProps.profession)){
+        if (!shallowEqual(role, prevProps.role)){
             this.setState({
-                profession: {
-                    [ProfessionsFields.ID]: get(profession, ProfessionsFields.ID),
-                    [ProfessionsFields.TITLE]: get(profession, ProfessionsFields.TITLE, ''),
+                role: {
+                    [RolesFields.ID]: get(role, RolesFields.ID),
+                    [RolesFields.TITLE]: get(role, RolesFields.TITLE, ''),
                 }
             });
         }
@@ -43,21 +43,21 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
     }
 
     handleSave = () => {
-        const {profession} = this.state;
+        const {role} = this.state;
 
-        if (profession[ProfessionsFields.ID]){
-            this.props.actions.changeProfession(profession);
+        if (role[RolesFields.ID]){
+            this.props.actions.changeRole(role);
         } else {
-            this.props.actions.createNewProfession(profession);
+            this.props.actions.createNewRole(role);
         }
     }
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
-        const {profession} = this.state;
+        const {role} = this.state;
 
         this.setState({
-            profession: {
-                ...profession,
+            role: {
+                ...role,
                 [field]: get(e, 'target.value')
             }
         })
@@ -65,11 +65,11 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
 
     render() {
         const {isOpen, classes} = this.props;
-        const {profession} = this.state;
+        const {role} = this.state;
 
-        const disableButton = !get(profession, [ProfessionsFields.TITLE], null);
+        const disableButton = !get(role, [RolesFields.TITLE], null);
 
-        const isEditMode = profession[ProfessionsFields.ID];
+        const isEditMode = role[RolesFields.ID];
 
         return (
             <Dialog
@@ -79,11 +79,11 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} профессию </DialogTitle>
+                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} роль </DialogTitle>
                 <DialogContent>
                     <TextField label="Название *"
-                               onChange={this.saveField(ProfessionsFields.TITLE)}
-                               value={profession[ProfessionsFields.TITLE]}
+                               onChange={this.saveField(RolesFields.TITLE)}
+                               value={role[RolesFields.TITLE]}
                                InputLabelProps={{
                                    shrink: true,
                                }}

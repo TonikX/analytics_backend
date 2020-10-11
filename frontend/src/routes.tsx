@@ -19,7 +19,9 @@ import Indicators from './containers/Indicators';
 import WorkProgramList from "./containers/WorkProgramList";
 import EntitityToEntitity from "./containers/EntitityToEntitity";
 import Professions from "./containers/Professions";
+import Roles from "./containers/Roles";
 import ProfessionSkills from "./containers/Professions/Skills";
+import RolesSkills from "./containers/Roles/Skills";
 
 import Literature from './containers/Literature';
 
@@ -69,6 +71,18 @@ export default () => (
                 />
                 <AuthRoute path={routerService.getProfessionsRoute()}>
                     <Professions />
+                </AuthRoute>
+                <AuthRoute path={routerService.getRolesSkillsRoute()}
+                           children={() => (
+                           <Route
+                               render={({match}) => (
+                                    <RolesSkills match={match} />
+                               )}
+                           />
+                    )}
+                />
+                <AuthRoute path={routerService.getRolesRoute()}>
+                    <Roles />
                 </AuthRoute>
                 <AuthRoute path={routerService.getIndicatorsRoute()}>
                     <Indicators />

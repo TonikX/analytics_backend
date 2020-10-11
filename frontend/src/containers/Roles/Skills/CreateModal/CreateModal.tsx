@@ -2,7 +2,7 @@ import React, {ReactText} from 'react';
 import {shallowEqual} from "recompose";
 import get from "lodash/get";
 
-import {ProfessionsCreateModalProps} from './types';
+import {RolesCreateModalProps} from './types';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -18,19 +18,19 @@ import Radio from "@material-ui/core/Radio";
 
 import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
 
-import {ProfessionsFields} from '../../enum';
+import {RolesFields} from '../../enum';
 import {levels} from '../../constants';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 
-class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
+class CreateModal extends React.PureComponent<RolesCreateModalProps> {
     state = {
         skill: {
-            [ProfessionsFields.ID]: null,
-            [ProfessionsFields.PROFESSION]: null,
-            [ProfessionsFields.ITEM]: {},
-            [ProfessionsFields.LEVEL]: '1',
+            [RolesFields.ID]: null,
+            [RolesFields.ROLE]: null,
+            [RolesFields.ITEM]: {},
+            [RolesFields.LEVEL]: '1',
         },
     };
 
@@ -38,16 +38,16 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
         this.props.trainingEntitiesActions.getTrainingEntities();
     }
 
-    componentDidUpdate(prevProps: Readonly<ProfessionsCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
+    componentDidUpdate(prevProps: Readonly<RolesCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {skill} = this.props;
 
         if (!shallowEqual(skill, prevProps.skill)){
             this.setState({
                 skill: {
-                    [ProfessionsFields.ID]: get(skill, ProfessionsFields.ID),
-                    [ProfessionsFields.PROFESSION]: get(skill, ProfessionsFields.PROFESSION),
-                    [ProfessionsFields.LEVEL]: get(skill, ProfessionsFields.LEVEL, ''),
-                    [ProfessionsFields.ITEM]: get(skill, ProfessionsFields.ITEM, {}),
+                    [RolesFields.ID]: get(skill, RolesFields.ID),
+                    [RolesFields.ROLE]: get(skill, RolesFields.ROLE),
+                    [RolesFields.LEVEL]: get(skill, RolesFields.LEVEL, ''),
+                    [RolesFields.ITEM]: get(skill, RolesFields.ITEM, {}),
                 }
             });
         }
@@ -60,7 +60,7 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
     handleSave = () => {
         const {skill} = this.state;
 
-        if (skill[ProfessionsFields.ID]){
+        if (skill[RolesFields.ID]){
             this.props.actions.changeSkill(skill);
         } else {
             this.props.actions.createSkill(skill);
@@ -89,9 +89,9 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
         this.setState({
             skill: {
                 ...skill,
-                [ProfessionsFields.ITEM]: {
-                    ...skill[ProfessionsFields.ITEM],
-                    [ProfessionsFields.ID]: value
+                [RolesFields.ITEM]: {
+                    ...skill[RolesFields.ITEM],
+                    [RolesFields.ID]: value
                 }
             }
         })
@@ -103,7 +103,7 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
         this.setState({
             skill: {
                 ...skill,
-                [ProfessionsFields.LEVEL]: get(e, 'target.value')
+                [RolesFields.LEVEL]: get(e, 'target.value')
             }
         })
     }
@@ -112,10 +112,10 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
         const {isOpen, classes, trainingEntities} = this.props;
         const {skill} = this.state;
 
-        const disableButton = !get(skill, [ProfessionsFields.ITEM, ProfessionsFields.ID], null) ||
-            !get(skill, [ProfessionsFields.LEVEL], null);
+        const disableButton = !get(skill, [RolesFields.ITEM, RolesFields.ID], null) ||
+            !get(skill, [RolesFields.LEVEL], null);
 
-        const isEditMode = skill[ProfessionsFields.ID];
+        const isEditMode = skill[RolesFields.ID];
 
         return (
             <Dialog
@@ -131,10 +131,11 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
                         <FormLabel component="legend">Уровень *</FormLabel>
                         <RadioGroup className={classes.radioGroup}
                                     onChange={this.changeMasterLevelField}
-                                    value={skill[ProfessionsFields.LEVEL]}
+                                    value={skill[RolesFields.LEVEL]}
                         >
                             {Object.keys(levels).map(key =>
-                                <FormControlLabel value={key} control={<Radio checked={skill[ProfessionsFields.LEVEL] === key} />} label={levels[key]} />
+
+                                <FormControlLabel value={key} control={<Radio checked={skill[RolesFields.LEVEL] === key} />} label={levels[key]} />
                             )}
                         </RadioGroup>
                     </FormControl>
@@ -142,8 +143,8 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
                                     changeSearchText={this.handleChangeTrainingEntitySearchText}
                                     list={trainingEntities}
                                     changeItem={this.saveTrainingEntityField}
-                                    value={get(skill, [ProfessionsFields.ITEM, ProfessionsFields.ID], '')}
-                                    valueLabel={get(skill, [ProfessionsFields.ITEM, ProfessionsFields.NAME], '')}
+                                    value={get(skill, [RolesFields.ITEM, RolesFields.ID], '')}
+                                    valueLabel={get(skill, [RolesFields.ITEM, RolesFields.NAME], '')}
                     />
 
                 </DialogContent>

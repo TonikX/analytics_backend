@@ -24,21 +24,21 @@ import SortingButton from "../../components/SortingButton";
 import TrainingEntitiesCreateModal from "./CreateModal";
 import {SortingType} from "../../components/SortingButton/types";
 
-import {ProfessionsProps, ProfessionType} from './types';
-import {ProfessionsFields} from './enum';
+import {RolesProps, RoleType} from './types';
+import {RolesFields} from './enum';
 
 import {appRouter} from "../../service/router-service";
 
-import connect from './Professions.connect';
-import styles from './Professions.styles';
+import connect from './Roles.connect';
+import styles from './Roles.styles';
 
-class Professions extends React.Component<ProfessionsProps> {
+class Roles extends React.Component<RolesProps> {
     state = {
         deleteConfirmId: null
     }
 
     componentDidMount() {
-        this.props.actions.getProfessionsList();
+        this.props.actions.getRolesList();
     }
 
     handleClickDelete = (id: number) => () => {
@@ -50,7 +50,7 @@ class Professions extends React.Component<ProfessionsProps> {
     handleConfirmDeleteDialog = () => {
         const {deleteConfirmId} = this.state;
 
-        this.props.actions.deleteProfession(deleteConfirmId);
+        this.props.actions.deleteRole(deleteConfirmId);
         this.closeConfirmDeleteDialog();
     }
 
@@ -60,7 +60,7 @@ class Professions extends React.Component<ProfessionsProps> {
         });
     }
 
-    handleClickEdit = (item: ProfessionType) => () => {
+    handleClickEdit = (item: RoleType) => () => {
         this.props.actions.openDialog(item);
     }
 
@@ -70,49 +70,49 @@ class Professions extends React.Component<ProfessionsProps> {
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
         this.props.actions.changeCurrentPage(page + 1);
-        this.props.actions.getProfessionsList();
+        this.props.actions.getRolesList();
     }
 
     changeSorting = (field: string) => (mode: SortingType)=> {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getProfessionsList();
+        this.props.actions.getRolesList();
     }
 
     render() {
-        const {classes, professionsList, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, rolesList, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Профессии
+                    Роли
                 </Typography>
 
                 <div className={classes.tableWrap}>
                     <div className={classNames(classes.listItem, classes.header)}>
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
                             Название
-                            <SortingButton changeMode={this.changeSorting(ProfessionsFields.TITLE)}
-                                           mode={sortingField === ProfessionsFields.TITLE ? sortingMode : ''}
+                            <SortingButton changeMode={this.changeSorting(RolesFields.TITLE)}
+                                           mode={sortingField === RolesFields.TITLE ? sortingMode : ''}
                             />
                         </Typography>
                     </div>
 
                     <div className={classes.list}>
                         <Scrollbars>
-                            {professionsList.map(item =>
-                                <div className={classes.listItem} key={item[ProfessionsFields.ID]}>
+                            {rolesList.map(item =>
+                                <div className={classes.listItem} key={item[RolesFields.ID]}>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                        {item[ProfessionsFields.TITLE]}
+                                        {item[RolesFields.TITLE]}
                                     </Typography>
                                     <div className={classes.actions}>
                                         <IconButton>
                                             <Link style={{textDecoration: 'none', height: '23px', color: 'rgba(0, 0, 0, 0.54)'}}
-                                                  to={appRouter.getProfessionSkillsRouteLink(item[ProfessionsFields.ID])}>
+                                                  to={appRouter.getRoleSkillsRouteLink(item[RolesFields.ID])}>
                                                 <EyeIcon />
                                             </Link>
                                         </IconButton>
-                                        <IconButton onClick={this.handleClickDelete(item[ProfessionsFields.ID])}>
+                                        <IconButton onClick={this.handleClickDelete(item[RolesFields.ID])}>
                                             <DeleteIcon />
                                         </IconButton>
                                         <IconButton onClick={this.handleClickEdit(item)}>
@@ -150,9 +150,9 @@ class Professions extends React.Component<ProfessionsProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены, что хотите удалить профессию?'}
+                               confirmText={'Вы точно уверены, что хотите удалить роль?'}
                                isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить профессию'}
+                               dialogTitle={'Удалить роль'}
                                confirmButtonText={'Удалить'}
                 />
             </Paper>
@@ -160,4 +160,4 @@ class Professions extends React.Component<ProfessionsProps> {
     }
 }
 
-export default connect(withStyles(styles)(Professions));
+export default connect(withStyles(styles)(Roles));

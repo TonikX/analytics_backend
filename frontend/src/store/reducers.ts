@@ -45,7 +45,11 @@ import {entityToEntityState} from "../containers/EntitityToEntitity/types";
 import {GENERAL_PATH as professionsPath, reducer as professionsReducer} from "../containers/Professions/reducer";
 import {professionsState} from "../containers/Professions/types";
 
+import {GENERAL_PATH as rolesPath, reducer as rolesReducer} from "../containers/Roles/reducer";
+import {rolesState} from "../containers/Roles/types";
+
 export interface rootState {
+    [rolesPath]: rolesState,
     [professionsPath]: professionsState,
     [entityToEntityPath]: entityToEntityState,
     [signInPath]: signInState,
@@ -66,6 +70,7 @@ export interface rootState {
 }
 
 export default combineReducers({
+    [rolesPath]: rolesReducer,
     [professionsPath]: professionsReducer,
     [entityToEntityPath]: entityToEntityReducer,
     [signInPath]: signInReducer,

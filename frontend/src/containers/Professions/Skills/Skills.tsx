@@ -24,7 +24,7 @@ import {SortingType} from "../../../components/SortingButton/types";
 import {SkillsProps, SkillType} from '../types';
 import {ProfessionsFields} from '../enum';
 
-import {levels, roles} from '../constants';
+import {levels} from '../constants';
 
 import connect from './Skills.connect';
 import styles from './Skills.styles';
@@ -98,7 +98,7 @@ class Skills extends React.Component<SkillsProps> {
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Навыки профессии {get(profession, ProfessionsFields.TITLE, '')}. Роль: {roles[get(profession, ProfessionsFields.ROLE, '')]}
+                    Навыки профессии {get(profession, ProfessionsFields.TITLE, '')}
                 </Typography>
 
                 <div className={classes.tableWrap}>

@@ -1,9 +1,7 @@
 import React from 'react';
-//@ts-ignore
-import Link from "react-router-dom/Link";
+import get from 'lodash/get';
 
 import Scrollbars from "react-custom-scrollbars";
-
 import classNames from 'classnames';
 
 import Paper from '@material-ui/core/Paper';
@@ -17,29 +15,31 @@ import AddIcon from "@material-ui/icons/Add";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
-import EyeIcon from '@material-ui/icons/VisibilityOutlined';
 
-import ConfirmDialog from "../../components/ConfirmDialog";
-import SortingButton from "../../components/SortingButton";
-import TrainingEntitiesCreateModal from "./CreateModal";
-import {SortingType} from "../../components/SortingButton/types";
+import ConfirmDialog from "../../../components/ConfirmDialog";
+import SortingButton from "../../../components/SortingButton";
+import CreateModal from "./CreateModal";
+import {SortingType} from "../../../components/SortingButton/types";
 
-import {ProfessionsProps, ProfessionType} from './types';
-import {ProfessionsFields} from './enum';
+import {SkillsProps, SkillType} from '../types';
+import {RolesFields} from '../enum';
 
-import {appRouter} from "../../service/router-service";
+import {levels} from '../constants';
 
-import connect from './Professions.connect';
-import styles from './Professions.styles';
+import connect from './Skills.connect';
+import styles from './Skills.styles';
 
-class Professions extends React.Component<ProfessionsProps> {
+class Skills extends React.Component<SkillsProps> {
     state = {
         deleteConfirmId: null
     }
 
     componentDidMount() {
-        this.props.actions.getProfessionsList();
+        this.props.actions.getSkills(this.getRoleId());
+        this.props.actions.getRole(this.getRoleId());
     }
+
+    getRoleId = () => get(this, 'props.match.params.id', 0);
 
     handleClickDelete = (id: number) => () => {
         this.setState({
@@ -50,7 +50,10 @@ class Professions extends React.Component<ProfessionsProps> {
     handleConfirmDeleteDialog = () => {
         const {deleteConfirmId} = this.state;
 
-        this.props.actions.deleteProfession(deleteConfirmId);
+        this.props.actions.deleteSkill({
+            [RolesFields.ID]: deleteConfirmId,
+            [RolesFields.ROLE]: this.getRoleId()
+        });
         this.closeConfirmDeleteDialog();
     }
 
@@ -60,59 +63,72 @@ class Professions extends React.Component<ProfessionsProps> {
         });
     }
 
-    handleClickEdit = (item: ProfessionType) => () => {
-        this.props.actions.openDialog(item);
+    handleClickEdit = (item: SkillType) => () => {
+        this.props.actions.openDialog({
+            ...item,
+            [RolesFields.ROLE]: this.getRoleId()
+        });
     }
 
     handleCreate = () => {
-        this.props.actions.openDialog();
+        this.props.actions.openDialog({
+            [RolesFields.ROLE]: this.getRoleId()
+        });
+    }
+
+    changeFilter = () => {
+        this.props.actions.changeCurrentPage(1);
+        this.props.actions.getSkills(this.getRoleId());
     }
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
         this.props.actions.changeCurrentPage(page + 1);
-        this.props.actions.getProfessionsList();
+        this.props.actions.getSkills(this.getRoleId());
     }
 
     changeSorting = (field: string) => (mode: SortingType)=> {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getProfessionsList();
+        this.props.actions.getSkills(this.getRoleId());
     }
 
     render() {
-        const {classes, professionsList, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, skillList, allCount, currentPage, sortingField, sortingMode, role} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Профессии
+                    Навыки роли {get(role, RolesFields.TITLE, '')}
                 </Typography>
 
                 <div className={classes.tableWrap}>
                     <div className={classNames(classes.listItem, classes.header)}>
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Название
-                            <SortingButton changeMode={this.changeSorting(ProfessionsFields.TITLE)}
-                                           mode={sortingField === ProfessionsFields.TITLE ? sortingMode : ''}
+                            Навык
+                            <SortingButton changeMode={this.changeSorting(RolesFields.NAME)}
+                                           mode={sortingField === RolesFields.NAME ? sortingMode : ''}
+                            />
+                        </Typography>
+                        <Typography className={classNames(classes.marginRight, classes.roleCell)}>
+                            Уровень
+                            <SortingButton changeMode={this.changeSorting(RolesFields.LEVEL)}
+                                           mode={sortingField === RolesFields.LEVEL ? sortingMode : ''}
                             />
                         </Typography>
                     </div>
 
                     <div className={classes.list}>
                         <Scrollbars>
-                            {professionsList.map(item =>
-                                <div className={classes.listItem} key={item[ProfessionsFields.ID]}>
+                            {skillList.map(item =>
+                                <div className={classes.listItem} key={item[RolesFields.ID]}>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                        {item[ProfessionsFields.TITLE]}
+                                        {item[RolesFields.ITEM][RolesFields.NAME]}
+                                    </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.roleCell)}>
+                                        {get(levels, item[RolesFields.LEVEL])}
                                     </Typography>
                                     <div className={classes.actions}>
-                                        <IconButton>
-                                            <Link style={{textDecoration: 'none', height: '23px', color: 'rgba(0, 0, 0, 0.54)'}}
-                                                  to={appRouter.getProfessionSkillsRouteLink(item[ProfessionsFields.ID])}>
-                                                <EyeIcon />
-                                            </Link>
-                                        </IconButton>
-                                        <IconButton onClick={this.handleClickDelete(item[ProfessionsFields.ID])}>
+                                        <IconButton onClick={this.handleClickDelete(item[RolesFields.ID])}>
                                             <DeleteIcon />
                                         </IconButton>
                                         <IconButton onClick={this.handleClickEdit(item)}>
@@ -146,18 +162,18 @@ class Professions extends React.Component<ProfessionsProps> {
                     </Fab>
                 </div>
 
-                <TrainingEntitiesCreateModal />
-
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены, что хотите удалить профессию?'}
+                               confirmText={'Вы точно уверены, что хотите удалить навык?'}
                                isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить профессию'}
+                               dialogTitle={'Удалить навык'}
                                confirmButtonText={'Удалить'}
                 />
+
+                <CreateModal />
             </Paper>
         );
     }
 }
 
-export default connect(withStyles(styles)(Professions));
+export default connect(withStyles(styles)(Skills));
