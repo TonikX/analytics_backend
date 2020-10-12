@@ -810,7 +810,7 @@ class SkillsOfRole(models.Model):
     '''
 
     item = models.ForeignKey(Items, on_delete=models.CASCADE, verbose_name="Пререквизит", related_name = 'item_in_sor')
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, verbose_name="Рабочая программа", related_name = 'role_skils')
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, verbose_name="Рабочая программа")
     MasterylevelChoices = [
         ('1', 'low'),
         ('2', 'average'),
