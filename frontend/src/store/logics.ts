@@ -14,6 +14,7 @@ import WorkProgramList from '../containers/WorkProgramList/logics';
 import EntityToEntity from '../containers/EntitityToEntitity/logics';
 import ProfessionsLogic from '../containers/Professions/logics';
 import RolesLogic from '../containers/Roles/logics';
+import SkillsProfessionsLogic from '../containers/SkillsProfessions/logics';
 
 export default [
     ...SignInLogic,
@@ -32,4 +33,5 @@ export default [
     ...EntityToEntity,
     ...ProfessionsLogic,
     ...RolesLogic,
+    ...SkillsProfessionsLogic,
 ];

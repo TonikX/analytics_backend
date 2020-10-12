@@ -97,6 +97,12 @@ export default [
             icon: IndicatorsIcon,
             selectedIcon: IndicatorsSelectedIcon,
         },
+        {
+            title: 'Навыки - профессии',
+            link: appRouter.getSkillsProfessionsRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
     ],
     [
         {
