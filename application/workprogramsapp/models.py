@@ -786,7 +786,7 @@ class SkillsOfProfession(models.Model):
     Модель для навыков профессии
     '''
 
-    item = models.ForeignKey(Items, on_delete=models.CASCADE, verbose_name="Пререквизит")
+    item = models.ForeignKey(Items, on_delete=models.CASCADE, verbose_name="Пререквизит", related_name = 'item_in_sop')
     profession = models.ForeignKey(Profession, on_delete=models.CASCADE, verbose_name="Рабочая программа")
     MasterylevelChoices = [
         ('1', 'low'),
@@ -809,8 +809,8 @@ class SkillsOfRole(models.Model):
     Модель для навыков роли
     '''
 
-    item = models.ForeignKey(Items, on_delete=models.CASCADE, verbose_name="Пререквизит")
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, verbose_name="Рабочая программа")
+    item = models.ForeignKey(Items, on_delete=models.CASCADE, verbose_name="Пререквизит", related_name = 'item_in_sor')
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, verbose_name="Рабочая программа", related_name = 'role_skils')
     MasterylevelChoices = [
         ('1', 'low'),
         ('2', 'average'),
