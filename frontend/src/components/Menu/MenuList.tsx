@@ -103,6 +103,12 @@ export default [
             icon: IndicatorsIcon,
             selectedIcon: IndicatorsSelectedIcon,
         },
+        {
+            title: 'Навыки - роли',
+            link: appRouter.getSkillsRolesRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
     ],
     [
         {

@@ -15,6 +15,7 @@ import EntityToEntity from '../containers/EntitityToEntitity/logics';
 import ProfessionsLogic from '../containers/Professions/logics';
 import RolesLogic from '../containers/Roles/logics';
 import SkillsProfessionsLogic from '../containers/SkillsProfessions/logics';
+import SkillsRolesLogic from '../containers/SkillsRoles/logics';
 
 export default [
     ...SignInLogic,
@@ -34,4 +35,5 @@ export default [
     ...ProfessionsLogic,
     ...RolesLogic,
     ...SkillsProfessionsLogic,
+    ...SkillsRolesLogic,
 ];

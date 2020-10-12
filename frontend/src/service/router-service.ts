@@ -90,6 +90,10 @@ export default class RouterService {
         return SEPARATOR + 'skills-professions';
     };
 
+    getSkillsRolesRoute = () => {
+        return SEPARATOR + 'skills-roles';
+    };
+
     getRolesSkillsRoute = () => {
         return SEPARATOR + ROLES + SEPARATOR + ':id' + SEPARATOR + SKILLS;
     };

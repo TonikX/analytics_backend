@@ -24,6 +24,7 @@ import ProfessionSkills from "./containers/Professions/Skills";
 import RolesSkills from "./containers/Roles/Skills";
 
 import SkillsProfessions from "./containers/SkillsProfessions";
+import SkillsRoles from "./containers/SkillsRoles";
 
 import Literature from './containers/Literature';
 
@@ -85,6 +86,9 @@ export default () => (
                 />
                 <AuthRoute path={routerService.getRolesRoute()}>
                     <Roles />
+                </AuthRoute>
+                <AuthRoute path={routerService.getSkillsRolesRoute()}>
+                    <SkillsRoles />
                 </AuthRoute>
                 <AuthRoute path={routerService.getSkillsProfessionsRoute()}>
                     <SkillsProfessions />
