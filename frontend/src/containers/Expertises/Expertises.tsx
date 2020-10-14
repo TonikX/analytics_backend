@@ -54,7 +54,7 @@ class Expertises extends React.Component<ExpertisesProps> {
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Навыки - роли
+                    Экспертиза
 
                     <TextField placeholder="Поиск"
                                variant="outlined"

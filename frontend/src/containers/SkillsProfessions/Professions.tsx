@@ -54,7 +54,7 @@ class Professions extends React.Component<ProfessionsProps> {
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Навыки - профессии
+                    Навыки профессий
 
                     <TextField placeholder="Поиск"
                                variant="outlined"
