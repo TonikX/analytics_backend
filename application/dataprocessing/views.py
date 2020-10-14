@@ -178,7 +178,7 @@ class RelationListCreateAPIView(generics.ListAPIView):
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['item1__name', 'relation__relation', 'item2__name']
+    filterset_fields = ['item1__name', 'relation', 'item2__name']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 

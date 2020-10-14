@@ -14,6 +14,9 @@ const EDUCATIONAL_PLAN = 'educational-plans';
 const INDICATORS = 'indicators';
 const EDUCATIONAL_PLAN_IN_DIRECTION = 'educational-plans-in-direction';
 const WORK_PROGRAM_LIST = 'work-programs';
+const PROFESSIONS = 'professions';
+const ROLES = 'roles';
+const SKILLS = 'skills';
 
 const SEPARATOR = '/';
 
@@ -73,6 +76,37 @@ export default class RouterService {
 
     getEducationPlanInDirectionRoute = () => {
         return SEPARATOR + EDUCATIONAL_PLAN_IN_DIRECTION;
+    };
+
+    getProfessionsRoute = () => {
+        return SEPARATOR + PROFESSIONS;
+    };
+
+    getRolesRoute = () => {
+        return SEPARATOR + ROLES;
+    };
+
+    getSkillsProfessionsRoute = () => {
+        return SEPARATOR + 'skills-professions';
+    };
+
+    getSkillsRolesRoute = () => {
+        return SEPARATOR + 'skills-roles';
+    };
+
+    getRolesSkillsRoute = () => {
+        return SEPARATOR + ROLES + SEPARATOR + ':id' + SEPARATOR + SKILLS;
+    };
+    getProfessionSkillsRoute = () => {
+        return SEPARATOR + PROFESSIONS + SEPARATOR + ':id' + SEPARATOR + SKILLS;
+    };
+
+    getProfessionSkillsRouteLink = (id: number) => {
+        return SEPARATOR + PROFESSIONS + SEPARATOR + id + SEPARATOR + SKILLS;
+    };
+
+    getRoleSkillsRouteLink = (id: number) => {
+        return SEPARATOR + ROLES + SEPARATOR + id + SEPARATOR + SKILLS;
     };
 
     getWorkProgramListRoute = () => {

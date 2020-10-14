@@ -18,6 +18,13 @@ import EducationPlanDetail from './containers/EducationalPlan/Detail';
 import Indicators from './containers/Indicators';
 import WorkProgramList from "./containers/WorkProgramList";
 import EntitityToEntitity from "./containers/EntitityToEntitity";
+import Professions from "./containers/Professions";
+import Roles from "./containers/Roles";
+import ProfessionSkills from "./containers/Professions/Skills";
+import RolesSkills from "./containers/Roles/Skills";
+
+import SkillsProfessions from "./containers/SkillsProfessions";
+import SkillsRoles from "./containers/SkillsRoles";
 
 import Literature from './containers/Literature';
 
@@ -55,6 +62,36 @@ export default () => (
                 </AuthRoute>
                 <AuthRoute path={routerService.getEntityToEntityRoute()}>
                     <EntitityToEntitity />
+                </AuthRoute>
+                <AuthRoute path={routerService.getProfessionSkillsRoute()}
+                           children={() => (
+                               <Route
+                                   render={({match}) => (
+                                       <ProfessionSkills match={match}/>
+                                   )}
+                               />
+                           )}
+                />
+                <AuthRoute path={routerService.getProfessionsRoute()}>
+                    <Professions />
+                </AuthRoute>
+                <AuthRoute path={routerService.getRolesSkillsRoute()}
+                           children={() => (
+                           <Route
+                               render={({match}) => (
+                                    <RolesSkills match={match} />
+                               )}
+                           />
+                    )}
+                />
+                <AuthRoute path={routerService.getRolesRoute()}>
+                    <Roles />
+                </AuthRoute>
+                <AuthRoute path={routerService.getSkillsRolesRoute()}>
+                    <SkillsRoles />
+                </AuthRoute>
+                <AuthRoute path={routerService.getSkillsProfessionsRoute()}>
+                    <SkillsProfessions />
                 </AuthRoute>
                 <AuthRoute path={routerService.getIndicatorsRoute()}>
                     <Indicators />

@@ -51,6 +51,12 @@ class Items(models.Model):
     def __str__(self):
         return self.name
 
+    #
+    # def get_related(self):
+    #     qs = SkillsOfProfession.objects.select_related('cod_person_2')
+    #     return qs.filter(cod_person_1=self)
+
+
 class Relation(models.Model):
     '''
         Модель для связей

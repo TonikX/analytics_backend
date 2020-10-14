@@ -85,6 +85,30 @@ export default [
             icon: IndicatorsIcon,
             selectedIcon: IndicatorsSelectedIcon,
         },
+        {
+            title: 'Профессии',
+            link: appRouter.getProfessionsRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
+        {
+            title: 'Роли',
+            link: appRouter.getRolesRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
+        {
+            title: 'Навыки - профессии',
+            link: appRouter.getSkillsProfessionsRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
+        {
+            title: 'Навыки - роли',
+            link: appRouter.getSkillsRolesRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
     ],
     [
         {
