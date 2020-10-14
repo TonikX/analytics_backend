@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.conf.urls import url, include
 from django.urls import path, re_path
+
+from .expertise.views import UserExpertiseView, ExpertiseCommentsView, ExpertiseView, ChangeUserExpertiseView, \
+    ChangeExpertiseView
 from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
@@ -222,6 +225,15 @@ urlpatterns = [
     path('api/EducationalProgram/detail/<int:pk>', EducationalProgramDetailsView.as_view()),
     path('api/EducationalProgram/delete/<int:pk>', EducationalProgramDestroyView.as_view()),
     path('api/EducationalProgram/update/<int:pk>', EducationalProgramUpdateView.as_view()),
+
+    # --Экспертизы
+    path('api/user_expertise', UserExpertiseView.as_view()),
+    path('api/user_expertise/<int:pk>', UserExpertiseView.as_view()),
+    path('api/comments/<int:pk>', ExpertiseCommentsView.as_view()),
+    path('api/expertise', ExpertiseView.as_view()),
+    path('api/expertise/<int:pk>', ExpertiseView.as_view()),
+    path('api/user_expertise_update/<int:pk>', ChangeUserExpertiseView.as_view()),
+    path('api/expertise_update/<int:pk>', ChangeExpertiseView.as_view()),
 
     # Работа с профессиями
     path('api/professions/', ProfessionsListApi.as_view()),
