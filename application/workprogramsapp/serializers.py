@@ -1,12 +1,10 @@
-from rest_framework import serializers, viewsets
+from rest_framework import serializers
 
+from dataprocessing.serializers import ItemSerializer, userProfileSerializer
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
-    ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy
-
-import requests
-
-from dataprocessing.serializers import ItemSerializer
+    ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
+    WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
@@ -485,7 +483,7 @@ class AcademicPlanSerializerForList(serializers.ModelSerializer):
 
 
 class AcademicPlanShortSerializer(serializers.ModelSerializer):
-    #discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, required=False)
+    #discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, requirлинed=False)
 
     class Meta:
         model = AcademicPlan
@@ -607,3 +605,5 @@ class WorkProgramSerializer(serializers.ModelSerializer):
         Create and return a new `Snippet` instance, given the validated data.
         """
         return WorkProgram.objects.create(**validated_data)
+
+
