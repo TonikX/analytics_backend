@@ -17,25 +17,25 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";
 
-import {ProfessionsProps} from './types';
-import {ProfessionsFields} from './enum';
+import {ExpertisesProps} from './types';
+import {ExpertisesFields} from './enum';
 
-import connect from './Professions.connect';
-import styles from './Professions.styles';
+import connect from './Expertises.connect';
+import styles from './Expertises.styles';
 
-class Professions extends React.Component<ProfessionsProps> {
+class Expertises extends React.Component<ExpertisesProps> {
     componentDidMount() {
-        this.props.actions.getProfessionsList();
+        this.props.actions.getExpertisesList();
     }
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
         this.props.actions.changeCurrentPage(page + 1);
-        this.props.actions.getProfessionsList();
+        this.props.actions.getExpertisesList();
     }
 
     changeSorting = (field: string) => (mode: SortingType)=> {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getProfessionsList();
+        this.props.actions.getExpertisesList();
     }
 
     handleChangeSearchQuery = (event: React.ChangeEvent) => {
@@ -45,16 +45,16 @@ class Professions extends React.Component<ProfessionsProps> {
     changeSearch = debounce((value: string): void => {
         this.props.actions.changeSearchQuery(value);
         this.props.actions.changeCurrentPage(1);
-        this.props.actions.getProfessionsList();
+        this.props.actions.getExpertisesList();
     }, 300);
 
     render() {
-        const {classes, professionsList, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, expertisesList, allCount, currentPage, sortingField, sortingMode} = this.props;
 
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Навыки профессий
+                    Экспертиза
 
                     <TextField placeholder="Поиск"
                                variant="outlined"
@@ -71,27 +71,36 @@ class Professions extends React.Component<ProfessionsProps> {
                 <div className={classes.tableWrap}>
                     <div className={classNames(classes.listItem, classes.header)}>
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Навык
-                            <SortingButton changeMode={this.changeSorting(ProfessionsFields.TITLE)}
-                                           mode={sortingField === ProfessionsFields.TITLE ? sortingMode : ''}
+                            Рабочая программа
+                            <SortingButton changeMode={this.changeSorting(ExpertisesFields.TITLE)}
+                                           mode={sortingField === ExpertisesFields.TITLE ? sortingMode : ''}
                             />
                         </Typography>
                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Профессии
+                            Образовательная программа
+                            <SortingButton changeMode={this.changeSorting(ExpertisesFields.TITLE)}
+                                           mode={sortingField === ExpertisesFields.TITLE ? sortingMode : ''}
+                            />
+                        </Typography>
+                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                            Статус
+                            <SortingButton changeMode={this.changeSorting(ExpertisesFields.TITLE)}
+                                           mode={sortingField === ExpertisesFields.TITLE ? sortingMode : ''}
+                            />
                         </Typography>
                     </div>
 
                     <div className={classes.list}>
                         <Scrollbars>
-                            {professionsList.map(item =>
+                            {expertisesList.map(item =>
                                 <>
-                                    <div className={classes.listItem} key={item[ProfessionsFields.ID]}>
+                                    <div className={classes.listItem} key={item[ExpertisesFields.ID]}>
                                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                            {item[ProfessionsFields.NAME]}
+                                            {item[ExpertisesFields.NAME]}
                                         </Typography>
                                         <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                            {item[ProfessionsFields.PROFESSION_SKILLS].map((item: any) =>
-                                                <Chip className={classNames(classes.marginRight)} label={item[ProfessionsFields.TITLE]} />
+                                            {item[ExpertisesFields.EXPERTISE_SKILLS].map((item: any) =>
+                                                <Chip className={classNames(classes.marginRight)} label={item[ExpertisesFields.TITLE]} />
                                             )}
                                         </Typography>
                                     </div>
@@ -117,4 +126,4 @@ class Professions extends React.Component<ProfessionsProps> {
     }
 }
 
-export default connect(withStyles(styles)(Professions));
+export default connect(withStyles(styles)(Expertises));

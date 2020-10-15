@@ -98,7 +98,7 @@ class Skills extends React.Component<SkillsProps> {
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Навыки профессии {get(profession, ProfessionsFields.TITLE, '')}
+                    Навыки профессии «{get(profession, ProfessionsFields.TITLE, '')}»
                 </Typography>
 
                 <div className={classes.tableWrap}>

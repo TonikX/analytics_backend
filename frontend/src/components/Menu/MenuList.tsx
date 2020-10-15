@@ -33,6 +33,18 @@ import WorkProgramInDirectionSelectedIcon from "./icons/work-program-in-directio
 import EntityToEntityIcon from "./icons/entity-to-entity.svg";
 import EntityToEntitySelectedIcon from "./icons/entity-to-entity-selected.svg";
 
+import RolesIcon from "./icons/roles.svg";
+import RolesSelectedIcon from "./icons/roles-selected.svg";
+
+import RolesSkillsIcon from "./icons/roles-skills.svg";
+import RolesSkillsSelectedIcon from "./icons/roles-skills-selected.svg";
+
+import ProfessionsSkillsIcon from "./icons/professions-skills.svg";
+import ProfessionsSkillsSelectedIcon from "./icons/professions-skills-selected.svg";
+
+import ProfessionsIcon from "./icons/professions.svg";
+import ProfessionsSelectedIcon from "./icons/professions-selected.svg";
+
 export default [
     [
         {
@@ -85,30 +97,6 @@ export default [
             icon: IndicatorsIcon,
             selectedIcon: IndicatorsSelectedIcon,
         },
-        {
-            title: 'Профессии',
-            link: appRouter.getProfessionsRoute(),
-            icon: IndicatorsIcon,
-            selectedIcon: IndicatorsSelectedIcon,
-        },
-        {
-            title: 'Роли',
-            link: appRouter.getRolesRoute(),
-            icon: IndicatorsIcon,
-            selectedIcon: IndicatorsSelectedIcon,
-        },
-        {
-            title: 'Навыки - профессии',
-            link: appRouter.getSkillsProfessionsRoute(),
-            icon: IndicatorsIcon,
-            selectedIcon: IndicatorsSelectedIcon,
-        },
-        {
-            title: 'Навыки - роли',
-            link: appRouter.getSkillsRolesRoute(),
-            icon: IndicatorsIcon,
-            selectedIcon: IndicatorsSelectedIcon,
-        },
     ],
     [
         {
@@ -128,6 +116,32 @@ export default [
             link: appRouter.getEducationPlanInDirectionRoute(),
             icon: WorkProgramInDirectionIcon,
             selectedIcon: WorkProgramInDirectionSelectedIcon,
+        },
+    ],
+    [
+        {
+            title: 'Роли',
+            link: appRouter.getRolesRoute(),
+            icon: RolesIcon,
+            selectedIcon: RolesSelectedIcon,
+        },
+        {
+            title: 'Навыки ролей',
+            link: appRouter.getSkillsRolesRoute(),
+            icon: RolesSkillsIcon,
+            selectedIcon: RolesSkillsSelectedIcon,
+        },
+        {
+            title: 'Профессии',
+            link: appRouter.getProfessionsRoute(),
+            icon: ProfessionsIcon,
+            selectedIcon: ProfessionsSelectedIcon,
+        },
+        {
+            title: 'Навыки профессий',
+            link: appRouter.getSkillsProfessionsRoute(),
+            icon: ProfessionsSkillsIcon,
+            selectedIcon: ProfessionsSkillsSelectedIcon,
         },
     ]
 ]

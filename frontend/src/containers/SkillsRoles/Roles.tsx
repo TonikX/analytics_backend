@@ -54,7 +54,7 @@ class Roles extends React.Component<RolesProps> {
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Навыки - роли
+                    Навыки ролей
 
                     <TextField placeholder="Поиск"
                                variant="outlined"
