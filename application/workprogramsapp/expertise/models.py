@@ -2,6 +2,8 @@ from django.db import models
 
 from analytics_project import settings
 
+from datetime import datetime
+
 
 class UserExpertise(models.Model):
     STUFF_STATUS_CHOICES = [
@@ -24,6 +26,20 @@ class Expertise(models.Model):
     educational_program=models.ForeignKey('EducationalProgram', on_delete=models.CASCADE)
     expertise_status = models.CharField(choices=STATUS_CHOICES, max_length=1024, verbose_name="Статус экспертизы")
     experts = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Эксперты', through=UserExpertise)
+    approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
+    date_of_last_change = models.DateTimeField(editable=True, blank=True, null=True)
+
+
+    def __init__(self, *args, **kwargs):
+        super(Expertise, self).__init__(*args, **kwargs)
+        self.old_expertise_status = self.expertise_status
+
+
+    def save(self, *args, **kwargs):
+        if self.expertise_status and self.old_expertise_status != self.expertise_status:
+            self.date_of_last_change = datetime.now()
+            super(Expertise, self).save(*args, **kwargs)
+
 
 class ExpertiseComments(models.Model):
     BLOCK_CHOICES = [
