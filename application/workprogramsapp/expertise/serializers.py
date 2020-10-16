@@ -26,13 +26,12 @@ class ExpertiseSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         exp = Expertise.objects.create(**validated_data)
         request = self.context.get('request')
-        UserExpertise.objects.create(expertise=exp, expert=request.user, stuff_status="LE")  # ???
+        UserExpertise.objects.create(expertise=exp, expert=request.user, stuff_status="AU")  # ???
         return exp
 
     def to_representation(self, value):
         self.fields['work_program'] = WorkProgramSerializer(many=False, read_only=True)
         self.fields['experts'] = userProfileSerializer(many=True, read_only=True)
-        self.fields['educational_program'] = EducationalProgramSerializer(many=False, read_only=True)
         return super().to_representation(value)
 
     class Meta:
