@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataprocessing.models import Items
+from .expertise.models import Expertise, UserExpertise
 from .forms import DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
@@ -684,6 +685,43 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
     serializer_class = WorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def get(self, request, **kwargs):
+        queryset = WorkProgram.objects.filter(pk=self.kwargs['pk'])
+        serializer = WorkProgramSerializer(queryset, many=True)
+        if len(serializer.data)==0:
+            return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
+        newdata=dict(serializer.data[0])
+
+        try:
+            newdata.update({"expertise_status": Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status })
+            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK":
+                newdata.update({"can_edit": "true"})
+            else:
+                newdata.update({"can_edit": "false"})
+        except Expertise.DoesNotExist:
+            newdata.update({"can_edit": "true"})
+        try:
+            ue=UserExpertise.objects.get(expert=request.user, expertise__work_program=self.kwargs['pk'])
+            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX":
+                newdata.update({"can_comment": "true"})
+            else:
+                newdata.update({"can_comment": "false"})
+            if ue.stuff_status=="AU":
+                newdata.update({"can_approve": "false"})
+            else:
+                newdata.update({"can_approve": "true"})
+        except:
+            newdata.update({"can_comment": "false"})
+            newdata.update({"can_approve": "false"})
+        if request.user.is_expertise_master == True:
+            newdata.update({"can_archive": "true"})
+        else:
+            newdata.update({"can_archive": "false"})
+
+
+
+        newdata=OrderedDict(newdata)
+        return Response(newdata,status=status.HTTP_200_OK )
 
 
 class WorkProgramDetailsWithDisciplineCodeView(generics.ListAPIView):
