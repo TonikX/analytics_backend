@@ -15,7 +15,7 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
-import {specialization} from "../../WorkProgram/data";
+import {specialization} from "../../WorkProgram/constants";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';

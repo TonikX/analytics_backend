@@ -1,8 +1,7 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
-// @ts-ignore
-import Link from "react-router-dom/Link";
+import {Link} from "react-router-dom";
 
 import Scrollbars from "react-custom-scrollbars";
 

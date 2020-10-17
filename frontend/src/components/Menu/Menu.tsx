@@ -1,7 +1,6 @@
 import React from 'react';
 
-// @ts-ignore
-import Link from "react-router-dom/Link";
+import {Link} from "react-router-dom";
 import {withRouter, RouteComponentProps} from "react-router-dom";
 
 import Drawer from '@material-ui/core/Drawer';
@@ -37,7 +36,7 @@ class Menu extends React.PureComponent<MenuProps>{
                 <Scrollbars>
                     <List className={classes.menuList}>
                     {MenuList.map((group, groupIndex) =>
-                        <>
+                        <div key={groupIndex}>
                             {group.map((item, itemIndex) =>
                                 <Link to={item.link}
                                       className={classes.link}
@@ -56,7 +55,7 @@ class Menu extends React.PureComponent<MenuProps>{
                                 </Link>
                             )}
                             <Divider />
-                        </>
+                        </div>
                     )}
                 </List>
                 </Scrollbars>

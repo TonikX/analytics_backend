@@ -28,7 +28,7 @@ import {DatePicker} from '@material-ui/pickers';
 
 import {EducationalPlanFields} from '../enum';
 import {FULL_DATE_FORMAT} from "../../../common/utils";
-import {specialization, years} from "../../WorkProgram/data";
+import {specialization, years} from "../../WorkProgram/constants";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';

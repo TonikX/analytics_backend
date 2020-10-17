@@ -4,8 +4,7 @@ import get from 'lodash/get';
 import moment from 'moment';
 import Scrollbars from "react-custom-scrollbars";
 
-// @ts-ignore
-import Link from "react-router-dom/Link";
+import {Link} from "react-router-dom";
 
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
@@ -40,7 +39,7 @@ import {WorkProgramListProps} from './types';
 import {WorkProgramGeneralFields} from '../WorkProgram/enum';
 
 import {appRouter} from "../../service/router-service";
-import {specialization} from "../WorkProgram/data";
+import {specialization} from "../WorkProgram/constants";
 import {FULL_DATE_FORMAT} from "../../common/utils";
 
 import connect from './WorkProgramList.connect';

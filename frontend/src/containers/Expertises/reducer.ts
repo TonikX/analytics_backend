@@ -15,7 +15,13 @@ export const initialState: expertisesState = {
     [fields.ALL_COUNT]: 1,
     [fields.SEARCH_QUERY]: "",
     [fields.EXPERTISES_LIST]: [],
+    [fields.EXPERTISE]: {},
 };
+
+const setExpertise = (state: expertisesState, {payload}: any): expertisesState => ({
+    ...state,
+    [fields.EXPERTISE]: payload,
+});
 
 const setData = (state: expertisesState, {payload}: any): expertisesState => ({
     ...state,
@@ -50,5 +56,6 @@ export const reducer = createReducer(initialState, {
     [actions.changeSearchQuery.type]: changeSearchQuery,
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
-    [actions.changeSorting.type]: changeSorting
+    [actions.changeSorting.type]: changeSorting,
+    [actions.setExpertise.type]: setExpertise
 });

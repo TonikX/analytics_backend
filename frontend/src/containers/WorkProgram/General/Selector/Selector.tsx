@@ -13,7 +13,7 @@ import InputsLoader from "../../../../components/InputsLoader/InputsLoader";
 
 import {SecondStepProps} from './types';
 import {fields} from "../../enum";
-import {specialization} from "../../data";
+import {specialization} from "../../constants";
 
 import connect from './Selector.connect';
 import styles from './Selector.styles';

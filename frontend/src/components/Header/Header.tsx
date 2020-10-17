@@ -1,6 +1,5 @@
 import React, {SyntheticEvent} from 'react';
-// @ts-ignore
-import Link from "react-router-dom/Link";
+import {Link} from "react-router-dom";
 import {withRouter} from "react-router-dom";
 
 import {WithStyles} from "@material-ui/core";
