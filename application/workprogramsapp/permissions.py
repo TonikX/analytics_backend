@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from workprogramsapp.expertise.models import Expertise, UserExpertise
+from workprogramsapp.expertise.models import UserExpertise
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -27,14 +27,35 @@ class IsRpdDeveloperOrReadOnly(permissions.BasePermission):
         return request.user.is_rpd_developer == True
 
 
-class IsMemberOfExpertise(permissions.BasePermission):
-
+class IsExpertiseMaster(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.method == 'PUT' or request.method == 'PATCH':
-            return UserExpertise.objects.filter(expert=request.user)
-        else:
-            if 'pk' in dict(view.kwargs):
-                return UserExpertise.objects.filter(expert=request.user, expertise=view.kwargs['pk'])
-            else:
-                return UserExpertise.objects.filter(expert=request.user)
+        return request.user.is_expertise_master
 
+
+class IsMemberOfExpertise(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_expertise_master:
+            return True
+        if 'pk' in dict(view.kwargs):
+            return UserExpertise.objects.filter(expert=request.user, expertise=view.kwargs['pk'])
+        else:
+            return UserExpertise.objects.filter(expert=request.user)
+
+
+class IsWorkProgramMemberOfExpertise(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_expertise_master:
+            return True
+        if 'pk' in dict(view.kwargs):
+            return UserExpertise.objects.filter(expert=request.user, expertise__work_program=view.kwargs['pk'])
+        else:
+            return UserExpertise.objects.filter(expert=request.user)
+
+class IsMemberOfUserExpertise(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_expertise_master:
+            return True
+        if 'pk' in dict(view.kwargs):
+            return UserExpertise.objects.filter(expert=request.user, pk=view.kwargs['pk'])
+        else:
+            return UserExpertise.objects.filter(expert=request.user)

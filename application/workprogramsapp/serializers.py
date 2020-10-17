@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from dataprocessing.serializers import ItemSerializer, userProfileSerializer
+from .expertise.models import Expertise
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
@@ -598,7 +599,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block']
+        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block' ]
 
     def create(self, validated_data):
         """
