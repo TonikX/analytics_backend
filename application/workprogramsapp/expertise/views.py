@@ -77,8 +77,11 @@ class ExpertiseCreateView(generics.CreateAPIView):
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
     def perform_create(self, serializer):
         serializer.save()
+
 
 class ChangeExpertiseView(generics.RetrieveUpdateAPIView):
     """
