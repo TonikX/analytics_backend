@@ -11,7 +11,7 @@ export default (theme: Theme) => createStyles({
     },
     title: {
         fontSize: '24px',
-        marginBottom: '20px',
+        marginBottom: '10px',
         display: 'flex',
         justifyContent: 'space-between',
     },
@@ -41,15 +41,6 @@ export default (theme: Theme) => createStyles({
         boxSizing: 'border-box',
         minHeight: '50px'
     },
-    actions: {
-        display: 'flex',
-        height: 'fit-content',
-        marginLeft: 'auto',
-        padding: '0px 20px'
-    },
-    searchInput: {
-        height: '40px'
-    },
     addIcon: {
         marginLeft: 'auto',
     },
@@ -66,4 +57,24 @@ export default (theme: Theme) => createStyles({
     marginRight: {
         marginRight: 20
     },
+    statuses: {
+        display: 'flex',
+        marginBottom: '10px',
+    },
+    status: {
+        display: 'flex',
+        alignItems: 'center',
+        marginRight: '20px',
+        cursor: 'pointer'
+    },
+    statusPoint: {
+        marginRight: '5px',
+        width: '10px',
+        height: '10px',
+        borderRadius: '50%',
+        background: 'red'
+    },
+    cellStatus: {
+        borderLeft: '5px solid'
+    }
 });

@@ -3,8 +3,7 @@ import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import moment from 'moment';
 import {withRouter} from 'react-router-dom'
-// @ts-ignore
-import Link from "react-router-dom/Link";
+import {Link} from "react-router-dom";
 
 import Scrollbars from "react-custom-scrollbars";
 
@@ -37,7 +36,7 @@ import {SortingType} from "../../components/SortingButton/types";
 
 import {EducationalPlanProps, EducationalPlanType} from './types';
 import {FULL_DATE_FORMAT} from "../../common/utils";
-import {specialization} from "../WorkProgram/data";
+import {specialization} from "../WorkProgram/constants";
 import {EducationalPlanFields} from './enum';
 
 import {appRouter} from "../../service/router-service";
@@ -149,7 +148,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                 <Scrollbars>
                     <div className={classes.tableWrap}>
                         <Table stickyHeader size='small'>
-                            <TableHead className={classes.header}>
+                            <TableHead>
                                 <TableRow>
                                     <TableCell>
                                         Дата согласования

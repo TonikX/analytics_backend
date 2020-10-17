@@ -110,3 +110,10 @@ export enum EvaluationToolFields {
     SECTIONS = 'descipline_sections',
     SEMESTER = 'semester',
 }
+
+export enum WorkProgramStatusEnum {
+    AT_WORK = 'WK',
+    EXPERTISE = 'EX',
+    APPROVE = 'AC',
+    ARCHIVE = 'AR',
+}

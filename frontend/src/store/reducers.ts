@@ -54,7 +54,11 @@ import {professionsState as skillsProfessionsState} from "../containers/SkillsPr
 import {GENERAL_PATH as skillsRolesPath, reducer as skillsRolesReducer} from "../containers/SkillsRoles/reducer";
 import {rolesState as skillsRolesState} from "../containers/SkillsRoles/types";
 
+import {GENERAL_PATH as expertisesPath, reducer as expertisesReducer} from "../containers/Expertises/reducer";
+import {expertisesState} from "../containers/Expertises/types";
+
 export interface rootState {
+    [expertisesPath]: expertisesState,
     [skillsRolesPath]: skillsRolesState,
     [skillsProfessionsPath]: skillsProfessionsState,
     [rolesPath]: rolesState,
@@ -78,6 +82,7 @@ export interface rootState {
 }
 
 export default combineReducers({
+    [expertisesPath]: expertisesReducer,
     [skillsRolesPath]: skillsRolesReducer,
     [skillsProfessionsPath]: skillsProfessionsReducer,
     [rolesPath]: rolesReducer,

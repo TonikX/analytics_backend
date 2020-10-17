@@ -3,8 +3,7 @@ import get from 'lodash/get';
 
 import Scrollbars from "react-custom-scrollbars";
 
-// @ts-ignore
-import Link from "react-router-dom/Link";
+import {Link} from "react-router-dom";
 
 import withStyles from '@material-ui/core/styles/withStyles';
 import Table from "@material-ui/core/Table";
@@ -17,7 +16,7 @@ import {PlansAndDirectionsProps} from './types';
 import {appRouter} from "../../../service/router-service";
 import {DirectionFields} from "../../Direction/enum";
 
-import {specialization} from "../data";
+import {specialization} from "../constants";
 
 import connect from './PlansAndDirections.connect';
 import styles from './PlansAndDirections.styles';

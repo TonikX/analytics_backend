@@ -1,3 +1,5 @@
+import {WorkProgramStatusEnum} from "./enum";
+
 const PRIMARY_VOCATIONAL_EDUCATION = 'primary_vocational_education';
 const SECONDARY_VOCATIONAL_EDUCATION = 'secondary_vocational_education';
 const BACHELOR = 'bachelor';
@@ -34,6 +36,21 @@ export const specialization = [
         label: 'Магистр'
     }
 ];
+
+export const workProgramStatusesRussian: any = {
+    [WorkProgramStatusEnum.AT_WORK]: 'В работе',
+    [WorkProgramStatusEnum.EXPERTISE]: 'На экспертизе',
+    [WorkProgramStatusEnum.APPROVE]: 'Одобрено',
+    [WorkProgramStatusEnum.ARCHIVE]: 'В архиве',
+}
+
+export const workProgramStatusesColors: any = {
+    [WorkProgramStatusEnum.AT_WORK]: '#009aff',
+    [WorkProgramStatusEnum.EXPERTISE]: '#C000FF',
+    [WorkProgramStatusEnum.APPROVE]: '#2abb00',
+    [WorkProgramStatusEnum.ARCHIVE]: '#ccc',
+}
+
 
 export const years = [
     {

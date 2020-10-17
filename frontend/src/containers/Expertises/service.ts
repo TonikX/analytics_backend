@@ -6,7 +6,7 @@ class ExpertisesService extends BaseService{
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
         // @ts-ignore
-        return this.get(`/api/skillsofexpertiseingroups?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}`);
+        return this.get(`/api/expertise?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}`);
     }
 }
 

@@ -17,6 +17,7 @@ const WORK_PROGRAM_LIST = 'work-programs';
 const PROFESSIONS = 'professions';
 const ROLES = 'roles';
 const SKILLS = 'skills';
+const EXPERTISES = 'expertises';
 
 const SEPARATOR = '/';
 
@@ -115,6 +116,10 @@ export default class RouterService {
 
     getEducationPlanRoute = () => {
         return SEPARATOR;
+    };
+
+    getExpertisesRoute = () => {
+        return SEPARATOR + EXPERTISES;
     };
 
     getWorkProgramRoute = () => {

@@ -97,6 +97,12 @@ export default [
             icon: IndicatorsIcon,
             selectedIcon: IndicatorsSelectedIcon,
         },
+        {
+            title: 'Экспертизы',
+            link: appRouter.getExpertisesRoute(),
+            icon: WorkProgramIcon,
+            selectedIcon: WorkProgramSelectedIcon,
+        },
     ],
     [
         {

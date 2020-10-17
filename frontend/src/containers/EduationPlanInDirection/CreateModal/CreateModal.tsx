@@ -22,7 +22,7 @@ import {EducationPlanInDirectionFields} from '../enum';
 import {EducationalPlanFields} from "../../EducationalPlan/enum";
 import {DirectionFields} from "../../Direction/enum";
 
-import {years} from '../../WorkProgram/data';
+import {years} from '../../WorkProgram/constants';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';

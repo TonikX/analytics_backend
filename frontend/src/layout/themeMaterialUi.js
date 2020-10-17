@@ -71,6 +71,14 @@ const muiTheme = createMuiTheme({
         MuiTableCell: {
             root: {
                 padding: '10px !important'
+            },
+            stickyHeader: {
+                backgroundColor: PRIMARY,
+                color: '#fff',
+                fontWeight: '400',
+                fontSize: '14px',
+                padding: '0px 10px !important',
+                whiteSpace: 'nowrap'
             }
         },
         MuiFab: {
@@ -78,7 +86,7 @@ const muiTheme = createMuiTheme({
                 width: '40px',
                 height: '40px'
             }
-        }
+        },
     }
 }, ruRU);
 
