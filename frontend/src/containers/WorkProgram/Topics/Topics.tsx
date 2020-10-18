@@ -15,16 +15,16 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 
-import {FourthStepProps} from './types';
+import {TopicsProps} from './types';
 import {fields, workProgramSectionFields, workProgramTopicFields} from "../enum";
 import {CourseFields} from "../../Courses/enum";
 
 import ThemeCreateModal from "./ThemeCreateModal";
 
-import connect from './ThirdStep.connect';
-import styles from './ThirdStep.styles';
+import connect from './Topics.connect';
+import styles from './Topics.styles';
 
-class ThirdStep extends React.PureComponent<FourthStepProps> {
+class Topics extends React.PureComponent<TopicsProps> {
     handleCreateNewTopic = () => {
         this.props.actions.openDialog({dialogType: fields.CREATE_NEW_TOPIC_DIALOG, data: {}});
     };
@@ -53,7 +53,8 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
     };
 
     render() {
-        const {classes, sections} = this.props;
+        const {classes, sections, isCanEdit} = this.props;
+
         return (
             <div className={classes.topicsSection}>
                 <Scrollbars>
@@ -63,9 +64,11 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
                             <Typography className={classes.sectionTitle}>
                                 {section[workProgramSectionFields.ORDINAL_NUMBER]}. {section[workProgramSectionFields.NAME]}
 
-                                <AddCircleIcon className={classes.sectionAddTopicIcon}
-                                               onClick={this.handleCreateNewTopicOnSection(section[workProgramSectionFields.ID])}
-                                />
+                                {isCanEdit &&
+                                    <AddCircleIcon className={classes.sectionAddTopicIcon}
+                                                   onClick={this.handleCreateNewTopicOnSection(section[workProgramSectionFields.ID])}
+                                    />
+                                }
                             </Typography>
 
                             <div className={classes.topicsSectionList}>
@@ -85,6 +88,7 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
                                               handleClickDelete={this.handleClickDelete}
                                               handleClickEdit={this.handleClickEdit}
                                               classes={classes}
+                                              isCanEdit={isCanEdit}
                                 />
                             </div>
                         </div>
@@ -92,12 +96,14 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
                 </div>
                 </Scrollbars>
 
-                <Fab color="secondary"
-                     className={classes.addIcon}
-                     onClick={this.handleCreateNewTopic}
-                >
-                    <AddIcon/>
-                </Fab>
+                {isCanEdit &&
+                    <Fab color="secondary"
+                         className={classes.addIcon}
+                         onClick={this.handleCreateNewTopic}
+                    >
+                        <AddIcon/>
+                    </Fab>
+                }
 
                 <ThemeCreateModal />
             </div>
@@ -109,9 +115,9 @@ class ThirdStep extends React.PureComponent<FourthStepProps> {
 const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}}/>);
 
 // @ts-ignore
-const SortableItem = SortableElement(({topic, section, classes, handleClickDelete, handleClickEdit}) =>
-    <div className={classes.topic}>
-        <DragHandle />
+const SortableItem = SortableElement(({topic, section, classes, handleClickDelete, handleClickEdit, isCanEdit}) => {
+    return <div className={classes.topic}>
+        {isCanEdit && <DragHandle />}
 
         <Typography className={classNames(classes.topicName, {[classes.bigTopicName]: !topic[workProgramTopicFields.COURSE]})}>
             {section[workProgramSectionFields.ORDINAL_NUMBER]}.
@@ -129,19 +135,21 @@ const SortableItem = SortableElement(({topic, section, classes, handleClickDelet
             </>}
         </div>
 
-        <div className={classes.actions}>
-            <IconButton onClick={handleClickDelete(topic[workProgramTopicFields.ID])}>
-                <DeleteIcon />
-            </IconButton>
-            <IconButton onClick={handleClickEdit(topic)}>
-                <EditIcon />
-            </IconButton>
-        </div>
+        {isCanEdit &&
+            <div className={classes.actions}>
+                <IconButton onClick={handleClickDelete(topic[workProgramTopicFields.ID])}>
+                    <DeleteIcon/>
+                </IconButton>
+                <IconButton onClick={handleClickEdit(topic)}>
+                    <EditIcon/>
+                </IconButton>
+            </div>
+        }
     </div>
-);
+});
 
 // @ts-ignore
-const SortableList = SortableContainer(({section, classes, handleClickDelete, handleClickEdit}) => {
+const SortableList = SortableContainer(({section, classes, handleClickDelete, handleClickEdit, isCanEdit}) => {
     return (<div>
                 {section[workProgramSectionFields.TOPICS].map((topic: any, index: number) =>
                     <SortableItem key={`item-${topic.id}`}
@@ -151,6 +159,7 @@ const SortableList = SortableContainer(({section, classes, handleClickDelete, ha
                                   classes={classes}
                                   handleClickDelete={handleClickDelete}
                                   handleClickEdit={handleClickEdit}
+                                  isCanEdit={isCanEdit}
                     />
                 )}
             </div>
@@ -158,4 +167,4 @@ const SortableList = SortableContainer(({section, classes, handleClickDelete, ha
 });
 
 
-export default connect(withStyles(styles)(ThirdStep));
+export default connect(withStyles(styles)(Topics));

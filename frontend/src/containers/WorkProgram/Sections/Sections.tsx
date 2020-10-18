@@ -75,8 +75,7 @@ class Sections extends React.PureComponent<SecondStepProps> {
     };
 
     render() {
-        // @ts-ignore
-        const {classes, sections} = this.props;
+        const {classes, sections, isCanEdit} = this.props;
         const {createNewSectionMode} = this.state;
 
         const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
@@ -99,10 +98,10 @@ class Sections extends React.PureComponent<SecondStepProps> {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell className={classes.headerCell} rowSpan={2} colSpan={2}> № раздела </TableCell>
+                                    <TableCell className={classes.headerCell} rowSpan={2} colSpan={isCanEdit ? 2 : 1}> № раздела </TableCell>
                                     <TableCell className={classes.headerCell} rowSpan={2}>Наименование раздела дисциплины</TableCell>
-                                    <TableCell className={classes.headerCell} colSpan={6}>Распределение часов по дисциплине</TableCell>
-                                    <TableCell className={classes.headerCell} rowSpan={2}> </TableCell>
+                                    <TableCell className={classes.headerCell} colSpan={isCanEdit ? 6 : 5}>Распределение часов по дисциплине</TableCell>
+                                    <TableCell className={classes.headerCell} rowSpan={isCanEdit ? 2 : 1}> </TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell className={classes.headerCell}>Контактная работа</TableCell>
@@ -119,6 +118,7 @@ class Sections extends React.PureComponent<SecondStepProps> {
                                           hideSortableGhost={false}
                                           removeNewSection={this.removeNewSection}
                                           onSortEnd={this.onSortEnd}
+                                          isCanEdit={isCanEdit}
                             />
 
                             {createNewSectionMode &&
@@ -129,20 +129,20 @@ class Sections extends React.PureComponent<SecondStepProps> {
                             }
 
                             <TableRow>
-                                <TableCell className={classes.headerCell} colSpan={3}> Всего </TableCell>
+                                <TableCell className={classes.headerCell} colSpan={isCanEdit ? 3 : 2}> Всего </TableCell>
                                 <TableCell className={classes.headerCell}>{totalContactWorkHours}</TableCell>
                                 <TableCell className={classes.headerCell}>{totalLectureClassesHours}</TableCell>
                                 <TableCell className={classes.headerCell}>{totalLaboratoryClassesHours}</TableCell>
                                 <TableCell className={classes.headerCell}>{totalPracticalClassesHours}</TableCell>
                                 <TableCell className={classes.headerCell}>{totalSPOHours}</TableCell>
                                 <TableCell className={classes.headerCell}>{totalTotalHours}</TableCell>
-                                <TableCell className={classes.headerCell} />
+                                {isCanEdit && <TableCell className={classes.headerCell} />}
                             </TableRow>
                         </Table>
                     </Scrollbars>
                 </TableContainer>
 
-                {!createNewSectionMode
+                {!createNewSectionMode && isCanEdit
                     && <Fab color="secondary"
                             className={classes.addIcon}
                             onClick={this.handleCreateNewSection}
@@ -158,23 +158,26 @@ class Sections extends React.PureComponent<SecondStepProps> {
 const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}}/>);
 
 // @ts-ignore
-const SortableItem = SortableElement(({section, removeNewSection}) =>
+const SortableItem = SortableElement(({section, removeNewSection, isCanEdit}) =>
     <TableRow>
-        <TableCell style={{backgroundColor: '#fff', border: '1px solid rgba(224, 224, 224, 1)'}} >
-            <DragHandle />
-        </TableCell>
-        <EditedRow section={section} removeNewSection={removeNewSection}/>
+        {isCanEdit &&
+            <TableCell style={{backgroundColor: '#fff', border: '1px solid rgba(224, 224, 224, 1)'}}>
+                <DragHandle/>
+            </TableCell>
+        }
+        <EditedRow section={section} removeNewSection={removeNewSection} isCanEdit={isCanEdit} />
     </TableRow>
 );
 
 // @ts-ignore
-const SortableList = SortableContainer(({sections, removeNewSection}) => {
+const SortableList = SortableContainer(({sections, removeNewSection, isCanEdit}) => {
     return (<TableBody>
             {sections.map((value: any, index: number) => (
                 <SortableItem key={`item-${value.id}`}
                               index={index}
                               section={value}
                               removeNewSection={removeNewSection}
+                              isCanEdit={isCanEdit}
                 />
             ))}
         </TableBody>

@@ -4,7 +4,7 @@ import {rootState} from '../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 
-import {EvaluationToolFields, fields, workProgramSectionFields} from './enum';
+import {EvaluationToolFields, fields, WorkProgramGeneralFields, workProgramSectionFields} from './enum';
 
 import {workProgramState} from './types';
 
@@ -14,6 +14,11 @@ export const getWorkProgramResults = (state: rootState) => get(getStateData(stat
 export const getWorkProgramEvaluationToolsList = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_EVALUATION_TOOLS, []);
 export const getWorkProgramId = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_ID, '');
 export const getWorkProgramField = (state: rootState, field: string) => get(getWorkProgram(state), field);
+
+export const isCanEdit = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_EDIT);
+export const isCanApprove = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_APPROVE);
+export const isCanArchive = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_ARCHIVE);
+export const isCanComment = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_COMMENT);
 
 export const getDialogs = (state: rootState) => get(getStateData(state), fields.DIALOGS, {});
 

@@ -104,7 +104,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, isCanEdit} = this.props;
         const {isEditMode, section} = this.state;
 
         const contactWork = this.calculateContactWork();
@@ -185,34 +185,35 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                 <TableCell className={classes.centerCell}>
                     <>{this.calculateTotalHours()}</>
                 </TableCell>
-                <TableCell className={classes.centerCell}>
-                {!isEditMode ?
-                    <div className={classes.actions}>
-                        <IconButton onClick={this.handleClickDelete}>
-                            <DeleteIcon />
-                        </IconButton>
-                        <IconButton onClick={this.setEditModeTrue}>
-                            <EditIcon />
-                        </IconButton>
-                    </div>
-                        :
-                    <div className={classes.actions}>
-                            {section.id ?
-                                <IconButton onClick={this.handleClickCancel}>
-                                    <CancelIcon/>
-                                </IconButton>
-                                :
+                {isCanEdit &&
+                    <TableCell className={classes.centerCell}>
+                        {!isEditMode ?
+                            <div className={classes.actions}>
                                 <IconButton onClick={this.handleClickDelete}>
-                                    <DeleteIcon />
+                                    <DeleteIcon/>
                                 </IconButton>
-                            }
-                            <IconButton onClick={this.handleClickSave}>
-                                <SuccessIcon className={classes.saveIcon} />
-                            </IconButton>
-                        </div>
-                    }
-
-                </TableCell>
+                                <IconButton onClick={this.setEditModeTrue}>
+                                    <EditIcon/>
+                                </IconButton>
+                            </div>
+                            :
+                            <div className={classes.actions}>
+                                {section.id ?
+                                    <IconButton onClick={this.handleClickCancel}>
+                                        <CancelIcon/>
+                                    </IconButton>
+                                    :
+                                    <IconButton onClick={this.handleClickDelete}>
+                                        <DeleteIcon/>
+                                    </IconButton>
+                                }
+                                <IconButton onClick={this.handleClickSave}>
+                                    <SuccessIcon className={classes.saveIcon}/>
+                                </IconButton>
+                            </div>
+                        }
+                    </TableCell>
+                }
             </>
         );
     }

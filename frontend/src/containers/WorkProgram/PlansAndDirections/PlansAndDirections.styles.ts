@@ -4,7 +4,8 @@ export default (theme: Theme) => createStyles({
     header: {
         background: theme.palette.primary.main,
         color: '#fff',
-        fontWeight: 400
+        fontWeight: 400,
+        height: '45px'
     },
     cellLink: {
         textDecoration: 'none',

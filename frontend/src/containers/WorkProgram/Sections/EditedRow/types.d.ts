@@ -10,6 +10,7 @@ export interface EditedRowProps extends WithStyles<typeof styles> {
     section: Section;
     removeNewSection: Function;
     count: number;
+    isCanEdit: boolean;
 }
 
 export interface EditedRowState {

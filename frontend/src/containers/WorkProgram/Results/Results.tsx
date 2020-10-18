@@ -37,7 +37,7 @@ class Results extends React.PureComponent<ResultsProps> {
     };
 
     render() {
-        const {classes, resultsList} = this.props;
+        const {classes, resultsList, isCanEdit} = this.props;
 
         return (
             <div className={classes.root}>
@@ -66,14 +66,16 @@ class Results extends React.PureComponent<ResultsProps> {
                                         }
                                     </Typography>
 
-                                    <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(result[ResultsFields.ID])}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        <IconButton onClick={this.handleClickEdit(result)}>
-                                            <EditIcon />
-                                        </IconButton>
-                                    </div>
+                                    {isCanEdit &&
+                                        <div className={classes.actions}>
+                                            <IconButton onClick={this.handleClickDelete(result[ResultsFields.ID])}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                            <IconButton onClick={this.handleClickEdit(result)}>
+                                                <EditIcon />
+                                            </IconButton>
+                                        </div>
+                                    }
                                 </div>
 
                                 <div className={classNames(classes.evaluationToolRow, classes.row)}>
@@ -91,14 +93,16 @@ class Results extends React.PureComponent<ResultsProps> {
                     </div>
                 </Scrollbars>
 
-                <Fab color="secondary"
-                     className={classes.addIcon}
-                     onClick={this.handleCreateNew}
-                >
-                    <AddIcon/>
-                </Fab>
+                {isCanEdit &&
+                    <Fab color="secondary"
+                         className={classes.addIcon}
+                         onClick={this.handleCreateNew}
+                    >
+                        <AddIcon/>
+                    </Fab>
+                }
 
-                <CreateModal />
+                {isCanEdit && <CreateModal />}
             </div>
         );
     }

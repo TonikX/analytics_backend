@@ -11,14 +11,14 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 import InputsLoader from "../../../../components/InputsLoader/InputsLoader";
 
-import {SecondStepProps} from './types';
+import {SpecializationProps} from './types';
 import {fields} from "../../enum";
 import {specialization} from "../../constants";
 
-import connect from './Selector.connect';
-import styles from './Selector.styles';
+import connect from './Specialization.connect';
+import styles from './Specialization.styles';
 
-class Selector extends React.PureComponent<SecondStepProps> {
+class Specialization extends React.PureComponent<SpecializationProps> {
     saveField = (e: React.ChangeEvent) => {
         this.props.actions.saveWorkProgram({
             destination: fields.WORK_PROGRAM_QUALIFICATION,
@@ -27,7 +27,7 @@ class Selector extends React.PureComponent<SecondStepProps> {
     };
 
     render() {
-        const {classes, isFetching, value} = this.props;
+        const {classes, isFetching, value, isCanEdit} = this.props;
 
         if (!value) return <></>;
 
@@ -41,7 +41,7 @@ class Selector extends React.PureComponent<SecondStepProps> {
                                 style={{width: width}}>
                                 <Select
                                     className={classes.specializationSelector}
-                                    disabled={isFetching}
+                                    disabled={isFetching || !isCanEdit}
                                     value={value}
                                     // @ts-ignore
                                     onChange={this.saveField}
@@ -63,4 +63,4 @@ class Selector extends React.PureComponent<SecondStepProps> {
     }
 }
 
-export default connect(withStyles(styles)(Selector));
+export default connect(withStyles(styles)(Specialization));

@@ -31,6 +31,10 @@ export enum WorkProgramGeneralFields {
     VIDEO_LINK = 'video',
     DESCRIPTION = 'description',
     ZUN = 'zuns_for_wp',
+    CAN_COMMENT = 'can_comment',
+    CAN_ARCHIVE = 'can_archive',
+    CAN_APPROVE = 'can_approve',
+    CAN_EDIT = 'can_edit',
 }
 
 export enum workProgramSectionFields {
