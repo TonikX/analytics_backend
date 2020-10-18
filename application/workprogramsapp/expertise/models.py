@@ -14,11 +14,14 @@ class UserExpertise(models.Model):
         ("AP", "Одобрить"),
         ("RE", "Отправить на доработку")
     ]
-    expert = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Эксперт', on_delete=models.CASCADE)
-    expertise = models.ForeignKey('Expertise', verbose_name='Экспертиза', on_delete=models.CASCADE)
-    stuff_status = models.CharField(choices=STUFF_STATUS_CHOICES, max_length=1024, verbose_name="Роль эксперта")
-    user_expertise_status=models.CharField(choices=USER_EXPERTISE_STATUS_CHOISES, max_length=1024, blank=True, null=True, verbose_name="статус экспертизы пользователя")
-    expert_result = models.CharField(verbose_name="Результаты экспертизы", max_length=50000, blank=True, null=True)
+
+
+    expert = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Эксперт', on_delete = models.CASCADE)
+    expertise = models.ForeignKey('Expertise', verbose_name='Экспертиза', on_delete = models.CASCADE)
+    stuff_status = models.CharField(choices = STUFF_STATUS_CHOICES, max_length=1024, verbose_name="Роль эксперта", default = 'EX')
+    user_expertise_status=models.CharField(choices = USER_EXPERTISE_STATUS_CHOISES, max_length = 1024, blank=True, null=True, verbose_name="статус экспертизы пользователя")
+    expert_result = models.CharField(verbose_name = "Результаты экспертизы", max_length = 50000, blank=True, null=True)
+
 
 class Expertise(models.Model):
     STATUS_CHOICES = [
@@ -27,22 +30,24 @@ class Expertise(models.Model):
         ('AC', 'Одобрено'),
         ('AR', 'Архив')
     ]
+
+
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE)
-    expertise_status = models.CharField(choices=STATUS_CHOICES, max_length=1024, verbose_name="Статус экспертизы")
-    experts = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Эксперты', through=UserExpertise)
+    expertise_status = models.CharField(choices = STATUS_CHOICES, max_length=1024, verbose_name="Статус экспертизы", default = 'EX')
+    experts = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Эксперты', through = UserExpertise)
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
-    date_of_last_change = models.DateTimeField(editable=True, blank=True, null=True)
-
-
-    def __init__(self, *args, **kwargs):
-        super(Expertise, self).__init__(*args, **kwargs)
-        self.old_expertise_status = self.expertise_status
-
-
-    def save(self, *args, **kwargs):
-        if self.expertise_status and self.old_expertise_status != self.expertise_status:
-            self.date_of_last_change = datetime.now()
-            super(Expertise, self).save(*args, **kwargs)
+    date_of_last_change = models.DateTimeField(editable=True, auto_now=True, blank=True, null=True)
+    #
+    #
+    # def __init__(self, *args, **kwargs):
+    #     super(Expertise, self).__init__(*args, **kwargs)
+    #     self.old_expertise_status = self.expertise_status
+    #
+    #
+    # def create(self, *args, **kwargs):
+    #     if self.expertise_status and self.old_expertise_status != self.expertise_status:
+    #         self.date_of_last_change = datetime.now()
+    #         super(Expertise, self).save(*args, **kwargs)
 
 
 class ExpertiseComments(models.Model):
@@ -55,7 +60,9 @@ class ExpertiseComments(models.Model):
         ('EV', 'Оценчные средства'),
         ('RE', 'Результаты обучения'),
     ]
-    comment_block = models.CharField(choices=BLOCK_CHOICES, max_length=1024, verbose_name="Блок комментария")
-    user_expertise = models.ForeignKey('UserExpertise', on_delete=models.CASCADE)
-    comment_text = models.CharField(max_length=50000, verbose_name="Комментарий")
+
+
+    comment_block = models.CharField(choices = BLOCK_CHOICES, max_length=1024, verbose_name="Блок комментария")
+    user_expertise = models.ForeignKey('UserExpertise', on_delete = models.CASCADE)
+    comment_text = models.CharField(max_length = 50000, verbose_name = "Комментарий")
     comment_date = models.DateTimeField(auto_now_add=True, blank=True, verbose_name='Дата комментария')
