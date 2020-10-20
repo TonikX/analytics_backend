@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.exceptions import NotFound
 
 from workprogramsapp.expertise.models import UserExpertise, ExpertiseComments, Expertise
 from workprogramsapp.expertise.serializers import UserExpertiseSerializer, CommentSerializer, ExpertiseSerializer
@@ -53,20 +54,32 @@ class ExpertiseCommentsView(generics.ListCreateAPIView):
         serializer.save()
 
 
-class ExpertiseView(generics.ListAPIView):
+class ExpertiseWorkProgramView(generics.RetrieveAPIView):
     """
-    получение экспертизы
-    При указании id в ссылке выдает все экспертизы связанные с id рабочей программы
+     ссылка выдает все экспертизы связанные с id рабочей программы
     """
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
     permission_classes = [IsWorkProgramMemberOfExpertise, IsRpdDeveloperOrReadOnly]
 
-    def get_queryset(self, *args, **kwargs):
-        if ('pk' in dict(self.kwargs)):
-            return Expertise.objects.filter(work_program__id=self.kwargs['pk'])
-        else:
-            return Expertise.objects.all()
+    def get_object(self):
+        try:
+            return Expertise.objects.get(work_program__id=self.kwargs['pk'])
+        except Expertise.DoesNotExist:
+            raise NotFound()
+
+
+class ExpertiseListView(generics.ListAPIView):
+    queryset = Expertise.objects.all()
+    serializer_class = ExpertiseSerializer
+    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
+
+
+class ExpertiseViewById(generics.RetrieveAPIView):
+    queryset = Expertise.objects.all()
+    serializer_class = ExpertiseSerializer
+    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
+
 
 class ExpertiseCreateView(generics.CreateAPIView):
     """
@@ -79,11 +92,7 @@ class ExpertiseCreateView(generics.CreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-    def perform_create(self, serializer):
-        serializer.save()
-
-
-class ChangeExpertiseView(generics.RetrieveUpdateAPIView):
+class ChangeExpertiseView(generics.UpdateAPIView):
     """
     Редактирование экспертизы
     """
@@ -92,7 +101,7 @@ class ChangeExpertiseView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsExpertiseMaster, IsRpdDeveloperOrReadOnly]
 
 
-class ChangeUserExpertiseView(generics.RetrieveUpdateAPIView):
+class ChangeUserExpertiseView(generics.UpdateAPIView):
     """
     Редактирование экспертизы отдельного пользователя
     """

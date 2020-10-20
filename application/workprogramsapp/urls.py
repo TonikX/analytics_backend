@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.conf.urls import url, include
 from django.urls import path, re_path
 
-from .expertise.views import UserExpertiseView, ExpertiseCommentsView, ExpertiseView, ChangeUserExpertiseView, \
-    ChangeExpertiseView, ExpertiseCreateView
+from .expertise.views import UserExpertiseView, ExpertiseCommentsView, ChangeUserExpertiseView, \
+    ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById
 from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
@@ -230,9 +230,10 @@ urlpatterns = [
     path('api/user_expertise', UserExpertiseView.as_view()),
     path('api/user_expertise/<int:pk>', UserExpertiseView.as_view()),
     path('api/comments/<int:pk>', ExpertiseCommentsView.as_view()),
-    path('api/expertise', ExpertiseView.as_view()),
     path('api/expertise_create', ExpertiseCreateView.as_view()),
-    path('api/expertise/<int:pk>', ExpertiseView.as_view()),
+    path('api/expertise', ExpertiseListView.as_view()),
+    path('api/expertise_work_program/<int:pk>', ExpertiseWorkProgramView.as_view()),
+    path('api/expertise_by_id/<int:pk>', ExpertiseViewById.as_view()),
     path('api/user_expertise_update/<int:pk>', ChangeUserExpertiseView.as_view()),
     path('api/expertise_update/<int:pk>', ChangeExpertiseView.as_view()),
 
