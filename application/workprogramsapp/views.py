@@ -695,28 +695,28 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         try:
             newdata.update({"expertise_status": Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status })
             if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK":
-                newdata.update({"can_edit": "true"})
+                newdata.update({"can_edit": True})
             else:
-                newdata.update({"can_edit": "false"})
+                newdata.update({"can_edit": False})
         except Expertise.DoesNotExist:
-            newdata.update({"can_edit": "true"})
+            newdata.update({"can_edit": True})
         try:
             ue=UserExpertise.objects.get(expert=request.user, expertise__work_program=self.kwargs['pk'])
             if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX":
-                newdata.update({"can_comment": "true"})
+                newdata.update({"can_comment": True})
             else:
-                newdata.update({"can_comment": "false"})
+                newdata.update({"can_comment": False})
             if ue.stuff_status=="AU":
-                newdata.update({"can_approve": "false"})
+                newdata.update({"can_approve": False})
             else:
-                newdata.update({"can_approve": "true"})
+                newdata.update({"can_approve": True})
         except:
-            newdata.update({"can_comment": "false"})
-            newdata.update({"can_approve": "false"})
+            newdata.update({"can_comment": False})
+            newdata.update({"can_approve": False})
         if request.user.is_expertise_master == True:
-            newdata.update({"can_archive": "true"})
+            newdata.update({"can_archive": True})
         else:
-            newdata.update({"can_archive": "false"})
+            newdata.update({"can_archive": False})
 
 
 

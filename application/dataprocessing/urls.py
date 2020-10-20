@@ -21,6 +21,8 @@ urlpatterns = [
 
     path('api/upload/', views.FileUploadAPIView.as_view(), ),
 
+    path('api/users/search', views.UserListForSearchView.as_view(), ),
+
     
 
 

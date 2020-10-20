@@ -7,7 +7,7 @@ from workprogramsapp.permissions import IsMemberOfExpertise, IsRpdDeveloperOrRea
     IsExpertiseMaster, IsWorkProgramMemberOfExpertise
 
 
-class UserExpertiseView(generics.ListCreateAPIView):
+class UserExpertiseListView(generics.ListAPIView):
     """
     Вывод всей информации об экспертизе для эксперта (автоматически по токену пользователя выдает экспертизы, в которых он учавствует):
     Если нужна опредленная экспертиза от пользователя, то надо указать ее id
@@ -23,11 +23,17 @@ class UserExpertiseView(generics.ListCreateAPIView):
         else:
             return UserExpertise.objects.filter(expert=self.request.user)
 
-    def perform_create(self, serializer):
-        serializer.save()
+
+class UserExpertiseCreateView(generics.CreateAPIView):
+    """
+    создание экспертизы
+    """
+    queryset = UserExpertise.objects.all()
+    serializer_class = UserExpertiseSerializer
+    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
 
 
-class ExpertiseCommentsView(generics.ListCreateAPIView):
+class ExpertiseCommentsView(generics.ListAPIView):
     """
     View для получения и отправки комментариев
     Чтобы отправить комментарий указывать UserExpertise НЕ надо (см сериализатор), достаточно указать айди экспертизы в адресе
@@ -50,8 +56,14 @@ class ExpertiseCommentsView(generics.ListCreateAPIView):
         else:
             return ExpertiseComments.objects.all()
 
-    def perform_create(self, serializer):
-        serializer.save()
+
+class ExpertiseCommentCreateView(generics.CreateAPIView):
+    """
+    создание коммента к экспертизе
+    """
+    queryset = ExpertiseComments.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
 
 
 class ExpertiseWorkProgramView(generics.RetrieveAPIView):

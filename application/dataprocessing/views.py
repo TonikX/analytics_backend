@@ -11,7 +11,7 @@ from workprogramsapp.permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadO
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 # Api-libs
-from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer
+from .serializers import userProfileSerializer, DomainSerializer, ItemSerializer, ItemWithRelationSerializer, ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -221,6 +221,14 @@ class RelationRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
 class RelationUpdateAPIView(generics.RetrieveUpdateAPIView):
     queryset = Relation.objects.all()
     serializer_class = RelationUpdateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class UserListForSearchView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = userProfileSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['username', 'first_name', 'last_name']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 

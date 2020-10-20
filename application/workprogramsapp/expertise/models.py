@@ -16,7 +16,7 @@ class UserExpertise(models.Model):
     ]
 
 
-    expert = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Эксперт', on_delete = models.CASCADE)
+    expert = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Эксперт', on_delete = models.CASCADE, related_name = 'expertse_in_rpd')
     expertise = models.ForeignKey('Expertise', verbose_name='Экспертиза', on_delete = models.CASCADE)
     stuff_status = models.CharField(choices = STUFF_STATUS_CHOICES, max_length=1024, verbose_name="Роль эксперта", default = 'EX')
     user_expertise_status=models.CharField(choices = USER_EXPERTISE_STATUS_CHOISES, max_length = 1024, blank=True, null=True, verbose_name="статус экспертизы пользователя")
@@ -32,7 +32,7 @@ class Expertise(models.Model):
     ]
 
 
-    work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE)
+    work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name = 'expertise_in_rpd')
     expertise_status = models.CharField(choices = STATUS_CHOICES, max_length=1024, verbose_name="Статус экспертизы", default = 'EX')
     experts = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Эксперты', through = UserExpertise)
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)

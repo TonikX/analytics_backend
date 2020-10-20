@@ -3,7 +3,7 @@ from rest_framework import serializers
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
-from workprogramsapp.serializers import WorkProgramSerializer
+from workprogramsapp.serializers import WorkProgramShortForExperiseSerializer
 
 
 class UserExpertiseSerializer(serializers.ModelSerializer):
@@ -30,7 +30,7 @@ class ExpertiseSerializer(serializers.ModelSerializer):
         return exp
 
     def to_representation(self, value):
-        self.fields['work_program'] = WorkProgramSerializer(many=False, read_only=True)
+        self.fields['work_program'] = WorkProgramShortForExperiseSerializer(many=False, read_only=True)
         self.fields['experts'] = userProfileSerializer(many=True, read_only=True)
         return super().to_representation(value)
 

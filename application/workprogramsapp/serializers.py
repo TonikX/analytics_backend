@@ -8,6 +8,7 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy
 
 
+
 class IndicatorSerializer(serializers.ModelSerializer):
     """Сериализатор Индикаторов"""
     class Meta:
@@ -596,10 +597,11 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     discipline_certification = CertificationSerializer(many = True)
     bibliographic_reference = BibliographicReferenceSerializer(many = True, required=False)
     work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many = True)
+    #expertise_in_rpd = ShortExpertiseSerializer()
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block' ]
+        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block']
 
     def create(self, validated_data):
         """
@@ -607,4 +609,11 @@ class WorkProgramSerializer(serializers.ModelSerializer):
         """
         return WorkProgram.objects.create(**validated_data)
 
+
+class WorkProgramShortForExperiseSerializer(serializers.ModelSerializer):
+    """Сериализатор рабочих программ"""
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title', 'discipline_code', 'qualification', 'prerequisites', 'outcomes' ]
 
