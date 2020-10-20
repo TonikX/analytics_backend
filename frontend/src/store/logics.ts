@@ -16,6 +16,7 @@ import ProfessionsLogic from '../containers/Professions/logics';
 import RolesLogic from '../containers/Roles/logics';
 import SkillsProfessionsLogic from '../containers/SkillsProfessions/logics';
 import SkillsRolesLogic from '../containers/SkillsRoles/logics';
+import ExpertisesLogic from '../containers/Expertises/logics';
 
 export default [
     ...SignInLogic,
@@ -36,4 +37,5 @@ export default [
     ...RolesLogic,
     ...SkillsProfessionsLogic,
     ...SkillsRolesLogic,
+    ...ExpertisesLogic,
 ];

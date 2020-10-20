@@ -38,7 +38,7 @@ import {
     DownloadFileModalFields
 } from "../enum";
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
-import {specializationObject} from "../../WorkProgram/data";
+import {specializationObject} from "../../WorkProgram/constants";
 
 import {typeOfWorkProgramInPlan} from "../data";
 

@@ -36,7 +36,7 @@ class Prerequisites extends React.PureComponent<SixthStepProps> {
     };
 
     render() {
-        const {classes, prerequisitesList} = this.props;
+        const {classes, prerequisitesList, isCanEdit} = this.props;
 
         return (
             <div className={classes.root}>
@@ -44,46 +44,52 @@ class Prerequisites extends React.PureComponent<SixthStepProps> {
                     <Typography className={classes.title}>
                         Учебная сущность
                     </Typography>
-                    <Typography className={classes.level}>
+                    <Typography>
                         Уровень освоения
                     </Typography>
                 </div>
                 <Scrollbars>
                     <div className={classes.list}>
                         {prerequisitesList.map((prerequisite) => (
-                            <div className={classes.item} key={prerequisite[PrerequisiteFields.ID]}>
+                            <div className={classNames(classes.item, {[classes.disableItem]: !isCanEdit})}
+                                 key={prerequisite[PrerequisiteFields.ID]}
+                            >
                                 <Typography className={classes.title}>
                                     {prerequisite[PrerequisiteFields.ITEM][TrainingEntitiesFields.TITLE]}
                                 </Typography>
 
-                                <Typography className={classes.level}>
+                                <Typography>
                                     {prerequisite[PrerequisiteFields.MASTER_LEVEL] === '1' ? 'Низкий'
                                     : prerequisite[PrerequisiteFields.MASTER_LEVEL] === '2' ? 'Средний'
                                     : 'Высокий'
                                     }
                                 </Typography>
 
-                                <div className={classes.actions}>
-                                    <IconButton onClick={this.handleClickDelete(prerequisite[PrerequisiteFields.ID])}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                    <IconButton onClick={this.handleClickEdit(prerequisite)}>
-                                        <EditIcon />
-                                    </IconButton>
-                                </div>
+                                {isCanEdit &&
+                                    <div className={classes.actions}>
+                                        <IconButton onClick={this.handleClickDelete(prerequisite[PrerequisiteFields.ID])}>
+                                            <DeleteIcon/>
+                                        </IconButton>
+                                        <IconButton onClick={this.handleClickEdit(prerequisite)}>
+                                            <EditIcon/>
+                                        </IconButton>
+                                    </div>
+                                }
                             </div>
                         ))}
                     </div>
                 </Scrollbars>
 
-                <Fab color="secondary"
-                     className={classes.addIcon}
-                     onClick={this.handleCreateNew}
-                >
-                    <AddIcon/>
-                </Fab>
+                {isCanEdit &&
+                    <Fab color="secondary"
+                         className={classes.addIcon}
+                         onClick={this.handleCreateNew}
+                    >
+                        <AddIcon/>
+                    </Fab>
+                }
 
-                <CreateModal />
+                {isCanEdit && <CreateModal />}
             </div>
         );
     }

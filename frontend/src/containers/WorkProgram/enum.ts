@@ -31,6 +31,10 @@ export enum WorkProgramGeneralFields {
     VIDEO_LINK = 'video',
     DESCRIPTION = 'description',
     ZUN = 'zuns_for_wp',
+    CAN_COMMENT = 'can_comment',
+    CAN_ARCHIVE = 'can_archive',
+    CAN_APPROVE = 'can_approve',
+    CAN_EDIT = 'can_edit',
 }
 
 export enum workProgramSectionFields {
@@ -109,4 +113,11 @@ export enum EvaluationToolFields {
     CHECK_POINT = 'check_point',
     SECTIONS = 'descipline_sections',
     SEMESTER = 'semester',
+}
+
+export enum WorkProgramStatusEnum {
+    AT_WORK = 'WK',
+    EXPERTISE = 'EX',
+    APPROVE = 'AC',
+    ARCHIVE = 'AR',
 }

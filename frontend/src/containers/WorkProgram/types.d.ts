@@ -1,4 +1,11 @@
-import {fields, PrerequisiteFields, EvaluationToolFields, ResultsFields, WorkProgramGeneralFields} from './enum';
+import {
+    fields,
+    PrerequisiteFields,
+    EvaluationToolFields,
+    ResultsFields,
+    WorkProgramGeneralFields,
+    WorkProgramStatusEnum
+} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {CourseType} from "../Courses/types";
@@ -147,3 +154,10 @@ export type EvaluationToolType = {
     [EvaluationToolFields.SEMESTER]: number;
     [EvaluationToolFields.SECTIONS]: Array<Section>;
 }
+
+export type WorkProgramStatus =
+    WorkProgramStatusEnum.AT_WORK |
+    WorkProgramStatusEnum.EXPERTISE |
+    WorkProgramStatusEnum.APPROVE |
+    WorkProgramStatusEnum.ARCHIVE
+;

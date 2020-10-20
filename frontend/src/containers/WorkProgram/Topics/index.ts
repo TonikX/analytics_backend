@@ -1,1 +1,1 @@
-export {default} from './ThirdStep';
+export {default} from './Topics';

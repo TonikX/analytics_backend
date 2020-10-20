@@ -26,10 +26,10 @@ const getExpertisesList = createLogic({
 
         service.getExpertises(currentPage, searchQuery, sortingField, sortingMode)
             .then((res) => {
-                const courses = get(res, 'data.results', []);
+                const results = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));
 
-                dispatch(expertisesActions.setExpertisesList(courses));
+                dispatch(expertisesActions.setExpertisesList(results));
                 dispatch(expertisesActions.changeAllCount(allPages));
                 dispatch(actions.fetchingSuccess());
             })

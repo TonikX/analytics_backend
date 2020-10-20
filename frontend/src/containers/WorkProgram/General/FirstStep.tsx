@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import InputsLoader from '../../../components/InputsLoader';
-import Selector from './Selector';
+import Selector from './Specialization';
 
 import {FirstStepProps} from './types';
 import {WorkProgramGeneralFields} from "../enum";
@@ -102,7 +102,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     }
 
     render() {
-        const {classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription} = this.props;
+        const {classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription, isCanEdit} = this.props;
         const {state} = this;
 
         return (
@@ -115,7 +115,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                                    value={state[WorkProgramGeneralFields.CODE]}
                                    onBlur={this.saveField(WorkProgramGeneralFields.CODE)}
                                    onChange={this.changeCode}
-                                   disabled={fetchingCode}
+                                   disabled={fetchingCode || !isCanEdit}
                                    InputLabelProps={{
                                        shrink: true,
                                    }}
@@ -128,7 +128,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                                    className={classes.input}
                                    onBlur={this.saveField(WorkProgramGeneralFields.TITLE)}
                                    onChange={this.changeTitle}
-                                   disabled={fetchingTitle}
+                                   disabled={fetchingTitle || !isCanEdit}
                         />
                     </InputsLoader>
                     <InputsLoader loading={fetchingAuthors}>
@@ -138,7 +138,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                                    className={classes.input}
                                    onBlur={this.saveField(WorkProgramGeneralFields.AUTHORS)}
                                    onChange={this.changeAuthors}
-                                   disabled={fetchingAuthors}
+                                   disabled={fetchingAuthors || !isCanEdit}
                                    InputLabelProps={{
                                        shrink: true,
                                    }}
@@ -151,7 +151,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                                    className={classes.input}
                                    onBlur={this.saveField(WorkProgramGeneralFields.VIDEO_LINK)}
                                    onChange={this.changeVideo}
-                                   disabled={fetchingVideoLink}
+                                   disabled={fetchingVideoLink || !isCanEdit}
                                    InputLabelProps={{
                                        shrink: true,
                                    }}
@@ -169,7 +169,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                                    className={classes.input}
                                    onBlur={this.saveField(WorkProgramGeneralFields.DESCRIPTION)}
                                    onChange={this.changeDescription}
-                                   disabled={fetchingDescription}
+                                   disabled={fetchingDescription || !isCanEdit}
                                    InputLabelProps={{
                                        shrink: true,
                                    }}
@@ -193,6 +193,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                             className={classes.datePicker}
                             format={FULL_DATE_FORMAT}
                             label={'Дата создания'}
+                            disabled={!isCanEdit}
                         />
                     </InputsLoader>
                 </div>

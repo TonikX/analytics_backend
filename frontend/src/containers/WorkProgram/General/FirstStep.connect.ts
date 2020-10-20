@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 
 import {WorkProgramGeneralFields} from "../enum";
 import actions from "../actions";
-import {getWorkProgramField} from '../getters';
+import {getWorkProgramField, isCanEdit} from '../getters';
 import {WorkProgramActions} from "../types";
 
 import {isFetchingComponentByKey} from "../../../layout/getters";
@@ -19,6 +19,8 @@ const mapStateToProps = (state:rootState) => {
         date: getWorkProgramField(state, WorkProgramGeneralFields.APPROVAL_DATE),
         video: getWorkProgramField(state, WorkProgramGeneralFields.VIDEO_LINK),
         description: getWorkProgramField(state, WorkProgramGeneralFields.DESCRIPTION),
+
+        isCanEdit: isCanEdit(state),
 
         fetchingCode: isFetchingComponentByKey(state, WorkProgramGeneralFields.TITLE),
         fetchingTitle: isFetchingComponentByKey(state, WorkProgramGeneralFields.CODE),

@@ -1,6 +1,5 @@
 import React from 'react';
-//@ts-ignore
-import Link from "react-router-dom/Link";
+import {Link} from "react-router-dom";
 
 import Scrollbars from "react-custom-scrollbars";
 

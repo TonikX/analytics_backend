@@ -20,6 +20,9 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         alignItems: 'center'
     },
+    disableItem: {
+        padding: '12px 10px',
+    },
     actions: {
         display: 'flex',
         height: 'fit-content',
@@ -28,9 +31,6 @@ export default (theme: Theme) => createStyles({
     },
     title: {
         width: '50%'
-    },
-    level: {
-
     },
     header: {
         background: theme.palette.primary.main,

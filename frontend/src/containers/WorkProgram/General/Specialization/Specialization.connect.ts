@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "../../actions";
-import {getWorkProgramField} from '../../getters';
+import {getWorkProgramField, isCanEdit} from '../../getters';
 import {fields} from "../../enum";
 import {WorkProgramActions} from "../../types";
 
@@ -14,6 +14,7 @@ const mapStateToProps = (state:rootState) => {
     return {
         value: getWorkProgramField(state, fields.WORK_PROGRAM_QUALIFICATION),
         isFetching: isFetchingComponentByKey(state, fields.WORK_PROGRAM_QUALIFICATION),
+        isCanEdit: isCanEdit(state),
     };
 };
 

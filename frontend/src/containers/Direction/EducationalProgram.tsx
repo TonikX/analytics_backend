@@ -28,7 +28,7 @@ import {DirectionFields} from './enum';
 
 import connect from './EducationalProgram.connect';
 import styles from './EducationalProgram.styles';
-import {specialization} from "../WorkProgram/data";
+import {specialization} from "../WorkProgram/constants";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";

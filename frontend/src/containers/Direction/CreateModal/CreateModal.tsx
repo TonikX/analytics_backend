@@ -22,7 +22,7 @@ import Radio from "@material-ui/core/Radio";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import MenuItem from "@material-ui/core/MenuItem";
 
-import {specialization} from '../../WorkProgram/data';
+import {specialization} from '../../WorkProgram/constants';
 
 import {DirectionFields} from '../enum';
 

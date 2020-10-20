@@ -11,6 +11,8 @@ export interface FirstStepProps extends WithStyles<typeof styles> {
     description: string;
     video: string;
 
+    isCanEdit: boolean;
+
     fetchingCode: boolean;
     fetchingTitle: boolean;
     fetchingAuthors: boolean;

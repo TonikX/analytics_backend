@@ -74,7 +74,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
     };
 
     render() {
-        const {classes, evaluationToolsList} = this.props;
+        const {classes, evaluationToolsList, isCanEdit} = this.props;
         const {anchorsEl} = this.state;
 
         return (
@@ -135,48 +135,52 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                         {evaluationTool[EvaluationToolFields.SEMESTER]}
                                     </Typography>
 
-                                    <div className={classes.actions}>
-                                        <IconButton
-                                            aria-haspopup="true"
-                                            onClick={this.handleMenu(evaluationTool[EvaluationToolFields.ID])}
-                                            color="inherit"
-                                        >
-                                            <SettingsIcon />
-                                        </IconButton>
-                                        <Menu
-                                            anchorEl={get(anchorsEl, evaluationTool[EvaluationToolFields.ID])}
-                                            anchorOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            keepMounted
-                                            transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            open={Boolean(get(anchorsEl, evaluationTool[EvaluationToolFields.ID]))}
-                                            onClose={this.handleCloseItemMenu}
-                                            PopoverClasses={{
-                                                root: classes.popper,
-                                                paper: classes.menuPaper
-                                            }}
-                                        >
-                                            <MenuItem onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}>
-                                                <EyeIcon className={classes.menuIcon}/>
-                                                Смотреть описание
-                                            </MenuItem>
+                                    {isCanEdit &&
+                                        <div className={classes.actions}>
+                                            <IconButton
+                                                aria-haspopup="true"
+                                                onClick={this.handleMenu(evaluationTool[EvaluationToolFields.ID])}
+                                                color="inherit"
+                                            >
+                                                <SettingsIcon/>
+                                            </IconButton>
+                                            <Menu
+                                                anchorEl={get(anchorsEl, evaluationTool[EvaluationToolFields.ID])}
+                                                anchorOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'right',
+                                                }}
+                                                keepMounted
+                                                transformOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'right',
+                                                }}
+                                                open={Boolean(get(anchorsEl, evaluationTool[EvaluationToolFields.ID]))}
+                                                onClose={this.handleCloseItemMenu}
+                                                PopoverClasses={{
+                                                    root: classes.popper,
+                                                    paper: classes.menuPaper
+                                                }}
+                                            >
+                                                <MenuItem
+                                                    onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}>
+                                                    <EyeIcon className={classes.menuIcon}/>
+                                                    Смотреть описание
+                                                </MenuItem>
 
-                                            <MenuItem onClick={this.handleClickEdit(evaluationTool)}>
-                                                <EditIcon className={classes.menuIcon} />
-                                                Редактировать
-                                            </MenuItem>
+                                                <MenuItem onClick={this.handleClickEdit(evaluationTool)}>
+                                                    <EditIcon className={classes.menuIcon}/>
+                                                    Редактировать
+                                                </MenuItem>
 
-                                            <MenuItem onClick={this.handleClickDelete(evaluationTool[EvaluationToolFields.ID])}>
-                                                <DeleteIcon className={classes.menuIcon} />
-                                                Удалить
-                                            </MenuItem>
-                                        </Menu>
-                                    </div>
+                                                <MenuItem
+                                                    onClick={this.handleClickDelete(evaluationTool[EvaluationToolFields.ID])}>
+                                                    <DeleteIcon className={classes.menuIcon}/>
+                                                    Удалить
+                                                </MenuItem>
+                                            </Menu>
+                                        </div>
+                                    }
                                 </div>
 
                                 <div className={classNames(classes.sectionsRow, classes.row)}>
@@ -194,15 +198,17 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                     </div>
                 </Scrollbars>
 
-                <Fab color="secondary"
-                     className={classes.addIcon}
-                     onClick={this.handleCreateNew}
-                >
-                    <AddIcon/>
-                </Fab>
+                {isCanEdit &&
+                    <Fab color="secondary"
+                         className={classes.addIcon}
+                         onClick={this.handleCreateNew}
+                    >
+                        <AddIcon/>
+                    </Fab>
+                }
 
-                <CreateModal />
-                <DescriptionModal />
+                {isCanEdit && <CreateModal />}
+                {isCanEdit && <DescriptionModal />}
             </div>
         );
     }

@@ -12,17 +12,6 @@ export default (theme: Theme) => createStyles({
             fontSize: '14px'
         }
     },
-    header: {
-        background: theme.palette.primary.main,
-        '& th': {
-            color: '#fff',
-            background: theme.palette.primary.main,
-            fontWeight: '400',
-            fontSize: '14px',
-            padding: '0px 10px !important',
-            whiteSpace: 'nowrap'
-        }
-    },
     root: {
         padding: '20px 50px 20px 50px',
         boxShadow: '0px 0px 6px 1px rgba(194,194,194,0.3)',

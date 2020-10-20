@@ -91,9 +91,6 @@ class ExpertiseCreateView(generics.CreateAPIView):
     serializer_class = ExpertiseSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
-    def perform_create(self, serializer):
-        serializer.save()
-
 
 class ChangeExpertiseView(generics.UpdateAPIView):
     """

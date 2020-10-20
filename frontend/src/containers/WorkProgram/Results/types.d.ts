@@ -7,4 +7,5 @@ import styles from "./Results.styles";
 export interface ResultsProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
     resultsList: Array<ResultsType>;
+    isCanEdit: boolean;
 }

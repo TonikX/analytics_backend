@@ -13,12 +13,12 @@ import {FourthStepProps} from './types';
 import {fields} from "../enum";
 import {literatureFields} from '../../Literature/enum';
 
-import ThemeCreateModal from "./LiteratureModal";
+import LiteratureAddModal from "./LiteratureModal";
 
-import connect from './ForthStep.connect';
-import styles from './ForthStep.styles';
+import connect from './Literature.connect';
+import styles from './Literature.styles';
 
-class ForthStep extends React.PureComponent<FourthStepProps> {
+class Literature extends React.PureComponent<FourthStepProps> {
     handleCreateNewTopic = () => {
         const {literatureList} = this.props;
 
@@ -30,7 +30,7 @@ class ForthStep extends React.PureComponent<FourthStepProps> {
     };
 
     render() {
-        const {classes, literatureList} = this.props;
+        const {classes, literatureList, isCanEdit} = this.props;
 
         return (
             <div className={classes.root}>
@@ -42,27 +42,31 @@ class ForthStep extends React.PureComponent<FourthStepProps> {
                                     {literature[literatureFields.DESCRIPTION]}
                                 </Typography>
 
-                                <div className={classes.actions}>
-                                    <IconButton onClick={this.handleClickDelete(literature[literatureFields.ID])}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </div>
+                                {isCanEdit &&
+                                    <div className={classes.actions}>
+                                        <IconButton onClick={this.handleClickDelete(literature[literatureFields.ID])}>
+                                            <DeleteIcon/>
+                                        </IconButton>
+                                    </div>
+                                }
                             </div>
                         ))}
                     </div>
                 </Scrollbars>
 
-                <Fab color="secondary"
-                     className={classes.addIcon}
-                     onClick={this.handleCreateNewTopic}
-                >
-                    <AddIcon/>
-                </Fab>
+                {isCanEdit &&
+                    <Fab color="secondary"
+                         className={classes.addIcon}
+                         onClick={this.handleCreateNewTopic}
+                    >
+                        <AddIcon/>
+                    </Fab>
+                }
 
-                <ThemeCreateModal />
+                {isCanEdit && <LiteratureAddModal />}
             </div>
         );
     }
 }
 
-export default connect(withStyles(styles)(ForthStep));
+export default connect(withStyles(styles)(Literature));

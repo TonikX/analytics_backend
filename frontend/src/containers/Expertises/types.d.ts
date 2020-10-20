@@ -1,7 +1,9 @@
-import {fields} from './enum';
+import {ExpertisesFields, ExpertisesTypeEnum, fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./Expertises.styles";
 import {SortingType} from "../../components/SortingButton/types";
+import WorkProgram from "../WorkProgram";
+import {WorkProgramGeneralType} from "../WorkProgram/types";
 
 export interface ExpertisesActions {
     changeSearchQuery: any;
@@ -11,6 +13,11 @@ export interface ExpertisesActions {
     changeCurrentPage: any;
     changeAllCount: any;
     changeSorting: any;
+
+    getExpertise: any;
+    setExpertise: any;
+    approveExpertise: any;
+    updateExpertiseExperts: any;
 }
 
 export interface expertisesState {
@@ -21,7 +28,8 @@ export interface expertisesState {
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
-    [fields.EXPERTISES_LIST]: Array<any>;
+    [fields.EXPERTISES_LIST]: Array<ExpertiseType>;
+    [fields.EXPERTISE]: ExpertiseType|{};
 }
 
 export interface ExpertisesProps extends WithStyles<typeof styles> {
@@ -32,4 +40,15 @@ export interface ExpertisesProps extends WithStyles<typeof styles> {
     allCount: number;
     sortingField: string;
     sortingMode: SortingType;
+}
+
+export type ExpertiseStatusType = ExpertisesTypeEnum.EX|ExpertisesTypeEnum.WK;
+
+export type ExpertiseType = {
+    [ExpertisesFields.ID]: number;
+    [ExpertisesFields.APPROVAL_DATE]: string;
+    [ExpertisesFields.DATE_OF_LAST_CHANGE]: string;
+    [ExpertisesFields.STATUS]: ExpertiseStatusType;
+    [ExpertisesFields.EXPERTS]: Array<any>;
+    [ExpertisesFields.WORK_PROGRAM]: WorkProgramGeneralType;
 }
