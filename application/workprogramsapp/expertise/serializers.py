@@ -18,6 +18,17 @@ class UserExpertiseSerializer(serializers.ModelSerializer):
         return super().to_representation(value)
 
 
+class UserExpertiseForExpertiseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserExpertise
+        fields = ['expert', 'stuff_status', 'user_expertise_status', 'expert_result']
+
+    def to_representation(self, value):
+        self.fields['expert'] = userProfileSerializer(many=False)
+
+        return super().to_representation(value)
+
+
 class ExpertiseSerializer(serializers.ModelSerializer):
     """
     Автоматически добавляет пользователя-создателя как лидера экспертизы
@@ -32,11 +43,25 @@ class ExpertiseSerializer(serializers.ModelSerializer):
     def to_representation(self, value):
         self.fields['work_program'] = WorkProgramShortForExperiseSerializer(many=False, read_only=True)
         self.fields['experts'] = userProfileSerializer(many=True, read_only=True)
+        self.fields['expertse_users_in_rpd'] = UserExpertiseForExpertiseSerializer(many=True, read_only=True)
         return super().to_representation(value)
 
     class Meta:
         model = Expertise
         fields = "__all__"
+
+
+# class ExpertiseWithUsersStatusSerializer(serializers.ModelSerializer):
+#     """
+#     Автоматически добавляет пользователя-создателя как лидера экспертизы
+#     """
+#     work_program = WorkProgramShortForExperiseSerializer(many=False, read_only=True)
+#     expertse_users_in_rpd = UserExpertiseForExpertiseSerializer(many=True, read_only=True)
+#
+#
+#     class Meta:
+#         model = Expertise
+#         fields = ['work_program', 'expertse_users_in_rpdd']
 
 
 class OnlyUserExpertiseSerializer(serializers.ModelSerializer):

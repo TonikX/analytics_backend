@@ -699,7 +699,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             else:
                 newdata.update({"can_edit": False})
         except Expertise.DoesNotExist:
-            newdata.update({"can_edit": True})
+            newdata.update({"can_edit": True, "expertise_status": False})
         try:
             ue=UserExpertise.objects.get(expert=request.user, expertise__work_program=self.kwargs['pk'])
             if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX":
