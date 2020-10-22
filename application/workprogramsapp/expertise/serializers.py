@@ -73,18 +73,8 @@ class OnlyUserExpertiseSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    """
-    При отправке комментария автоматически указывает на отправителя
-    """
-    user_expertise = OnlyUserExpertiseSerializer(many=False, required=False)
-
-    def create(self, validated_data):
-        view = self.context.get('view')
-        request = self.context.get('request')
-        user_expertise = UserExpertise.objects.get(expertise=view.kwargs['pk'], expert=request.user)
-        validated_data['user_expertise'] = user_expertise
-        exp = ExpertiseComments.objects.create(**validated_data)
-        return exp
+    def to_representation(self, value):
+        self.fields['user_expertise']=OnlyUserExpertiseSerializer(many=False, read_only=True)
 
     class Meta:
         model = ExpertiseComments
