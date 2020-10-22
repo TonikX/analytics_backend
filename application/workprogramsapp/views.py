@@ -688,25 +688,30 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
     def get(self, request, **kwargs):
         queryset = WorkProgram.objects.filter(pk=self.kwargs['pk'])
         serializer = WorkProgramSerializer(queryset, many=True)
-        if len(serializer.data)==0:
+        if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
-        newdata=dict(serializer.data[0])
+        newdata = dict(serializer.data[0])
 
         try:
-            newdata.update({"expertise_status": Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status })
-            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK":
+            newdata.update(
+                {"expertise_status": Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status})
+            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK" and WorkProgram.objects.get(pk=self.kwargs['pk']).owner==request.user:
+                print(WorkProgram.objects.get(pk=self.kwargs['pk']).owner, request.user)
                 newdata.update({"can_edit": True})
             else:
                 newdata.update({"can_edit": False})
         except Expertise.DoesNotExist:
-            newdata.update({"can_edit": True, "expertise_status": False})
+            if WorkProgram.objects.get(pk=self.kwargs['pk']).owner==request.user:
+                newdata.update({"can_edit": True, "expertise_status": False})
+            else:
+                newdata.update({"can_edit": False, "expertise_status": False})
         try:
-            ue=UserExpertise.objects.get(expert=request.user, expertise__work_program=self.kwargs['pk'])
+            ue = UserExpertise.objects.get(expert=request.user, expertise__work_program=self.kwargs['pk'])
             if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX":
                 newdata.update({"can_comment": True})
             else:
                 newdata.update({"can_comment": False})
-            if ue.stuff_status=="AU":
+            if ue.stuff_status == "AU":
                 newdata.update({"can_approve": False})
             else:
                 newdata.update({"can_approve": True})
@@ -717,8 +722,6 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             newdata.update({"can_archive": True})
         else:
             newdata.update({"can_archive": False})
-
-
 
         newdata=OrderedDict(newdata)
         return Response(newdata,status=status.HTTP_200_OK )
