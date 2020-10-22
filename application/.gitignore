@@ -1,11 +1,12 @@
 .idea
-          venv
-          local_settings.py
-          __pycache__/
-          */__pycache__/
-          *.py[cod]
-          .pyc
-          .env
-          dataprocessing_frontend_vue/
-          node_modules/
-          templates/
+venv
+local_settings.py
+__pycache__/
+*/__pycache__/
+*.py[cod]
+.pyc
+.env
+dataprocessing_frontend_vue/
+node_modules/
+templates/
+*/migrations/
