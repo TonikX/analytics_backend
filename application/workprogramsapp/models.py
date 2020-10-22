@@ -57,7 +57,6 @@ class WorkProgram(CloneMixin, models.Model):
                                      blank=True, null=True)
     prerequisites = models.ManyToManyField(Items, related_name='WorkProgramPrerequisites',
                                            through='PrerequisitesOfWorkProgram', blank=True, null=True,
-                                           git rm *.pyc     verbose_name="Пререквизиты")
     outcomes = models.ManyToManyField(Items, related_name='WorkProgramOutcomes', through='OutcomesOfWorkProgram',
                                       verbose_name="Постреквизиты")
     title = models.CharField(max_length=1024, verbose_name="Название")
