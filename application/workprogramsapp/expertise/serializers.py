@@ -64,28 +64,19 @@ class ExpertiseSerializer(serializers.ModelSerializer):
 #         fields = ['work_program', 'expertse_users_in_rpdd']
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    def to_representation(self, value):
+        self.fields['user_expertise'] = OnlyUserExpertiseSerializer(many=False, read_only=True)
+        return super().to_representation(value)
+
+    class Meta:
+        model = ExpertiseComments
+        fields = "__all__"
+
+
 class OnlyUserExpertiseSerializer(serializers.ModelSerializer):
     expert = userProfileSerializer(many=False)
 
     class Meta:
         model = UserExpertise
         fields = ['expert']
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    """
-    При отправке комментария автоматически указывает на отправителя
-    """
-    user_expertise = OnlyUserExpertiseSerializer(many=False, required=False)
-
-    def create(self, validated_data):
-        view = self.context.get('view')
-        request = self.context.get('request')
-        user_expertise = UserExpertise.objects.get(expertise=view.kwargs['pk'], expert=request.user)
-        validated_data['user_expertise'] = user_expertise
-        exp = ExpertiseComments.objects.create(**validated_data)
-        return exp
-
-    class Meta:
-        model = ExpertiseComments
-        fields = "__all__"
