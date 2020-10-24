@@ -32,7 +32,7 @@ class Expertise(models.Model):
     ]
 
 
-    work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name = 'expertise_in_rpd')
+    work_program = models.ForeignKey('WorkProgram', related_name = 'expertise_with_rpd', on_delete=models.CASCADE)
     expertise_status = models.CharField(choices = STATUS_CHOICES, max_length=1024, verbose_name="Статус экспертизы", default = 'EX')
     experts = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Эксперты', through = UserExpertise, related_name = 'experts_in_expertise')
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
@@ -48,6 +48,9 @@ class Expertise(models.Model):
     #     if self.expertise_status and self.old_expertise_status != self.expertise_status:
     #         self.date_of_last_change = datetime.now()
     #         super(Expertise, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.pk)
 
 
 class ExpertiseComments(models.Model):

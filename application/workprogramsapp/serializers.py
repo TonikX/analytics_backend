@@ -583,7 +583,14 @@ class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'hoursFirstSemester', 'hoursSecondSemester', 'description', 'video', 'work_program_in_change_block']
 
 
-
+# class ShortExpertiseSerializer(serializers.ModelSerializer):
+#     """
+#     Короткий вывод информации об экспертизе
+#     """
+#
+#     class Meta:
+#         model = Expertise
+#         fields = ['expertise_status']
 
 
 class WorkProgramSerializer(serializers.ModelSerializer):
@@ -597,11 +604,11 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     discipline_certification = CertificationSerializer(many = True)
     bibliographic_reference = BibliographicReferenceSerializer(many = True, required=False)
     work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many = True)
-    expertise_in_rpd = ShortExpertiseSerializer()
+    expertise_with_rpd = ShortExpertiseSerializer(many = True, read_only=True)
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block', 'expertise_in_rpd']
+        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd']
 
     def create(self, validated_data):
         """

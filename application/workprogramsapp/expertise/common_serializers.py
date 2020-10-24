@@ -9,4 +9,4 @@ class ShortExpertiseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Expertise
-        fields = ['pk','expertise_status']
+        fields = ['pk', 'expertise_status', 'experts']

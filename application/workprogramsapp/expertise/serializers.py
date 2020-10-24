@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
+#from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
 from workprogramsapp.serializers import WorkProgramShortForExperiseSerializer
 
