@@ -47,6 +47,10 @@ class WorkProgram(CloneMixin, models.Model):
         (SPECIALIST, 'Specialist'),
         (MASTER, 'Master')
     )
+    status_choise = (
+        ('w', 'inwork'),
+        ('a', 'archive'),
+    )
 
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     discipline_code = models.CharField(max_length=1024, blank=True, null=True)
@@ -76,12 +80,15 @@ class WorkProgram(CloneMixin, models.Model):
     credit_units = models.CharField(max_length=1024, blank=True, null=True)
     semester_hour = models.CharField(max_length=1024, blank=True, null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
-
+    work_status = models.CharField(max_length=1, choices=status_choise, verbose_name='Архив', default = 'w')
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
 
 
-    # list_of_references = models.TextField(blank=True, null=True)
+
+
+
+# list_of_references = models.TextField(blank=True, null=True)
     # guidelines = models.TextField(blank=True, null=True)
 
 
