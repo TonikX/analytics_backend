@@ -118,4 +118,4 @@ class ChangeUserExpertiseView(generics.UpdateAPIView):
     """
     queryset = UserExpertise.objects.all()
     serializer_class = UserExpertiseSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly, IsMemberOfUserExpertise]
+    permission_classes = [IsRpdDeveloperOrReadOnly, IsMemberOfExpertise]
