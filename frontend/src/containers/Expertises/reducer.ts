@@ -16,6 +16,7 @@ export const initialState: expertisesState = {
     [fields.SEARCH_QUERY]: "",
     [fields.EXPERTISES_LIST]: [],
     [fields.EXPERTISE]: {},
+    [fields.IS_OPEN_ADD_EXPERT_MODAL]: false,
 };
 
 const setExpertise = (state: expertisesState, {payload}: any): expertisesState => ({
@@ -43,6 +44,16 @@ const changeAllCount = (state: expertisesState, {payload}: any): expertisesState
     [fields.ALL_COUNT]: payload,
 });
 
+const openAddExpertModal = (state: expertisesState): expertisesState => ({
+    ...state,
+    [fields.IS_OPEN_ADD_EXPERT_MODAL]: true,
+});
+
+const closeAddExpertModal = (state: expertisesState): expertisesState => ({
+    ...state,
+    [fields.IS_OPEN_ADD_EXPERT_MODAL]: false,
+});
+
 const changeSorting = (state: expertisesState, {payload}: any): expertisesState => ({
     ...state,
     [fields.SORTING]: {
@@ -57,5 +68,7 @@ export const reducer = createReducer(initialState, {
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
-    [actions.setExpertise.type]: setExpertise
+    [actions.setExpertise.type]: setExpertise,
+    [actions.openAddExpertModal.type]: openAddExpertModal,
+    [actions.closeAddExpertModal.type]: closeAddExpertModal,
 });

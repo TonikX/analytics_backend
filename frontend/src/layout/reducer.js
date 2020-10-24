@@ -10,6 +10,7 @@ export const initialState = {
     [fields.ERRORS]: [],
     [fields.SUCCESS_MESSAGES]: [],
     [fields.IS_AUTH]: false,
+    [fields.USERS]: [],
 };
 
 const fetchingTrue = (state, {payload}) => ({
@@ -54,6 +55,11 @@ const fetchingSuccess = (state, {payload}) => ({
     [fields.SUCCESS_MESSAGES]: payload,
 });
 
+const setAllUsers = (state, {payload}) => ({
+    ...state,
+    [fields.USERS]: payload,
+});
+
 const setAuthTrue = (state) => ({
     ...state,
     [fields.IS_AUTH]: true,
@@ -73,4 +79,5 @@ export const reducer = createReducer(initialState, {
     [actions.fetchingSuccess.type]: fetchingSuccess,
     [actions.setAuthFalse.type]: setAuthFalse,
     [actions.setAuthTrue.type]: setAuthTrue,
+    [actions.setAllUsers.type]: setAllUsers,
 });

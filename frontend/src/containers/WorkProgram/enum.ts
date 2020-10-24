@@ -7,6 +7,7 @@ export enum fields {
     WORK_PROGRAM_SECTIONS = 'discipline_sections',
     WORK_PROGRAM_PREREQUISITES = 'prerequisites',
     WORK_PROGRAM_RESULTS = 'outcomes',
+    WORK_PROGRAM_COMMENTS = 'comments',
     WORK_PROGRAM_BIBLIOGRAPHIC_REFERENCE = 'bibliographic_reference',
     WORK_PROGRAM_EVALUATION_TOOLS = 'WORK_PROGRAM_EVALUATION_TOOLS',
 
@@ -35,6 +36,8 @@ export enum WorkProgramGeneralFields {
     CAN_ARCHIVE = 'can_archive',
     CAN_APPROVE = 'can_approve',
     CAN_EDIT = 'can_edit',
+    EXPERTISE_STATUS = 'status',
+    USER_EXPERTISE_ID = 'user_expertise_id',
 }
 
 export enum workProgramSectionFields {
@@ -62,6 +65,11 @@ export enum fetchingTypes {
     GET_RESULTS = 'GET_RESULTS',
     CLONE_WORK_PROGRAM = 'CLONE_WORK_PROGRAM',
 
+    SEND_TO_EXPERTISE = 'SEND_TO_EXPERTISE',
+    SEND_TO_ARCHIVE = 'SEND_TO_ARCHIVE',
+    APPROVE_WORK_PROGRAM = 'APPROVE_WORK_PROGRAM',
+    SEND_TO_WORK = 'SEND_TO_WORK',
+
     GET_WORK_PROGRAM = 'GET_WORK_PROGRAM',
     GET_WORK_PROGRAM_EVALUATION_TOOLS = 'GET_WORK_PROGRAM_EVALUATION_TOOLS',
 
@@ -87,6 +95,9 @@ export enum fetchingTypes {
     ADD_RESULT = 'ADD_RESULT',
     CHANGE_RESULT = 'CHANGE_RESULT',
     DELETE_RESULT = 'DELETE_RESULT',
+
+    GET_COMMENTS = 'GET_COMMENTS',
+    CREATE_COMMENT = 'CREATE_COMMENT',
 }
 
 export enum PrerequisiteFields {
@@ -120,4 +131,23 @@ export enum WorkProgramStatusEnum {
     EXPERTISE = 'EX',
     APPROVE = 'AC',
     ARCHIVE = 'AR',
+}
+
+export enum StepsEnum {
+    GENERAL = 'MA',
+    PREREQUISITES = 'PR',
+    SECTIONS = 'SE',
+    TOPICS = 'TH',
+    LITERATURE = 'SO',
+    EVALUATION = 'EV',
+    RESULTS = 'RE',
+    PLANS = 'PL',
+}
+
+export enum CommentFields {
+    DATE = 'comment_date',
+    TEXT = 'comment_text',
+    ID = 'id',
+    USER_EXPERTISE = 'user_expertise',
+    EXPERT = 'expert',
 }

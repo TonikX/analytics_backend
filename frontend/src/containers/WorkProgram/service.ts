@@ -5,6 +5,7 @@ import {Section, Topic} from "./types";
 import {EvaluationToolFields, PrerequisiteFields, ResultsFields, workProgramTopicFields} from "./enum";
 import {CourseFields} from "../Courses/enum";
 import {TrainingEntitiesFields} from "../TrainingEntities/enum";
+import {UserExpertResultEnum} from "../Expertises/enum";
 
 class WorkProgramService extends BaseService{
     getWorkProgram(id: string){
@@ -21,6 +22,24 @@ class WorkProgramService extends BaseService{
         formData.append('program_id', id);
 
         return this.post(`/api/workprogram/clone`, formData);
+    }
+
+    sendToExpertise(id: string){
+        return this.post(`/api/expertise/create`, {
+            work_program: id
+        });
+    }
+
+    returnWorkProgramToWork(expertiseId: number){
+        return this.patch(`/api/expertise/user/update/${expertiseId}`, {
+            expertise_status: UserExpertResultEnum.REWORK,
+        });
+    }
+
+    approveWorkProgram(expertiseId: number){
+        return this.patch(`/api/expertise/user/update/${expertiseId}`, {
+            expertise_status: UserExpertResultEnum.APPROVED,
+        });
     }
 
     saveWorkProgram(destination: string, value: string, id: string){
@@ -196,6 +215,18 @@ class WorkProgramService extends BaseService{
     updateLiterature(literature: Array<number>, workProgramId: ReactText){
         return this.patch(`/api/workprogram/update/${workProgramId}`, {
             bibliographic_reference: literature
+        });
+    }
+
+    getComments(expertiseId: number, step: string){
+        return this.get(`/api/expertise/comments/${expertiseId}?block=${step}`);
+    }
+
+    createComment(expertiseId: number, step: string, comment: string){
+        return this.post(`/api/expertise/comments/create`, {
+            user_expertise: expertiseId,
+            comment_block: step,
+            comment_text: comment,
         });
     }
 }

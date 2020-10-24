@@ -161,11 +161,11 @@ const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "poin
 const SortableItem = SortableElement(({section, removeNewSection, isCanEdit}) =>
     <TableRow>
         {isCanEdit &&
-            <TableCell style={{backgroundColor: '#fff', border: '1px solid rgba(224, 224, 224, 1)'}}>
-                <DragHandle/>
-            </TableCell>
+        <TableCell style={{backgroundColor: '#fff', border: '1px solid rgba(224, 224, 224, 1)'}}>
+            <DragHandle/>
+        </TableCell>
         }
-        <EditedRow section={section} removeNewSection={removeNewSection} isCanEdit={isCanEdit} />
+        <EditedRow section={section} removeNewSection={removeNewSection} />
     </TableRow>
 );
 

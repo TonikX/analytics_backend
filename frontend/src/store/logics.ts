@@ -18,7 +18,10 @@ import SkillsProfessionsLogic from '../containers/SkillsProfessions/logics';
 import SkillsRolesLogic from '../containers/SkillsRoles/logics';
 import ExpertisesLogic from '../containers/Expertises/logics';
 
+import GeneralLogic from '../layout/logics';
+
 export default [
+    ...GeneralLogic,
     ...SignInLogic,
     ...SignUpLogic,
     ...WorkProgramLogic,
