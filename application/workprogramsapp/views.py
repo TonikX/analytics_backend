@@ -709,6 +709,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             ue = UserExpertise.objects.get(expert=request.user, expertise__work_program=self.kwargs['pk'])
             if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX":
                 newdata.update({"can_comment": True})
+                newdata.update({"user_expertise_id": ue.id})
             else:
                 newdata.update({"can_comment": False})
             if ue.stuff_status == "AU":
