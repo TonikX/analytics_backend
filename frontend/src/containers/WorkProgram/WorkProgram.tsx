@@ -3,12 +3,19 @@ import get from 'lodash/get';
 
 import Typography from '@material-ui/core/Typography';
 import CopyIcon from "@material-ui/icons/FileCopyOutlined";
+import CommentIcon from "@material-ui/icons/CommentOutlined";
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import withStyles from '@material-ui/core/styles/withStyles';
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
+import Grow from '@material-ui/core/Grow';
+
+import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 
 import General from "./General";
 import Sections from "./Sections";
@@ -18,21 +25,25 @@ import EvaluationTools from "./EvaluationTools";
 import Prerequisites from "./Prerequisites";
 import Results from "./Results";
 import PlansAndDirections from "./PlansAndDirections";
+import Comments from "./Comments";
 
 import {WorkProgramProps} from './types';
+import {steps} from "./constants";
+
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
-        activeStep: 0
+        activeStep: 0,
+        isOpenComments: false
     };
 
     componentDidMount() {
         const workProgramId = this.getWorkProgramId();
 
-        this.props.actions.getWorkProgram(workProgramId);
         this.props.actions.setWorkProgramId(workProgramId);
+        this.props.actions.getWorkProgram();
     }
 
     componentWillUnmount() {
@@ -120,44 +131,99 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         }
     }
 
-    render() {
-        const {classes, workProgramTitle} = this.props;
-        const {activeStep} = this.state;
+    handleSendToExpertize = () => {
+        this.props.actions.sendWorkProgramToExpertise();
+    }
 
-        const steps = ['Главное',  "Пререквизиты", 'Разделы', "Темы", "Источники", "Оценочные средства", "Результаты обучения", "Cвязанные с рпд учебные планы и направления"];
+    handleSendToArchive = () => {
+        this.props.actions.sendWorkProgramToArchive();
+    }
+
+    handleClickOnComments = () => {
+        this.setState({isOpenComments: !this.state.isOpenComments});
+    }
+
+    handleSendToRework = () => {
+        this.props.actions.returnWorkProgramToWork();
+    }
+
+    handleApproveExpertise = () => {
+        this.props.actions.approveWorkProgram();
+    }
+
+    getCurrentStep = () => Object.keys(steps)[this.state.activeStep];
+
+    render() {
+        const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus} = this.props;
+        const {activeStep, isOpenComments} = this.state;
 
         return (
-            <Paper className={classes.root}>
-                <Stepper activeStep={activeStep}
-                         orientation="vertical"
-                         nonLinear
-                         className={classes.stepper}
-                >
-                    {steps.map((label, index) => {
+            <div className={classes.wrap}>
+                <div className={classes.header}>
+                    <WorkProgramStatus status={workProgramStatus} />
 
-                        return (
-                            <Step key={label}>
-                                <StepButton onClick={this.handleStep(index)}
-                                            completed={false}
-                                            style={{textAlign: 'left'}}
-                                >
-                                    {label}
-                                </StepButton>
-                            </Step>
-                        );
-                    })}
-                </Stepper>
+                    <div className={classes.headerButtons}>
+                        {canSendToArchive && <Button onClick={this.handleSendToArchive}>Отправить в архив</Button>}
 
-                <div className={classes.content}>
-                    <Typography className={classes.title}>
-                        <div>Описание рабочей программы дисциплины <span style={{fontWeight: 500}}>"{workProgramTitle}"</span></div>
-                        <div className={classes.cloneButton} onClick={this.handleCloneProgram}> <CopyIcon/> Клонировать</div>
-                    </Typography>
+                        {canSendToExpertise && <Button onClick={this.handleSendToExpertize}>Отправить на экспертизу</Button>}
 
-                    {this.renderContent()}
+                        {canApprove &&
+                            <ButtonGroup variant="contained">
+                                <Button onClick={this.handleSendToRework}>Отправить РПД на доработку</Button>
+                                <Button color="primary" onClick={this.handleApproveExpertise}>Принять РПД</Button>
+                            </ButtonGroup>
+                        }
+                    </div>
                 </div>
+                <Paper className={classes.root}>
+                    <Stepper activeStep={activeStep}
+                             orientation="vertical"
+                             nonLinear
+                             className={classes.stepper}
+                    >
+                        {Object.values(steps).map((value, index) => {
+                            return (
+                                <Step key={index}>
+                                    <StepButton onClick={this.handleStep(index)}
+                                                completed={false}
+                                                style={{textAlign: 'left'}}
+                                    >
+                                        {value}
+                                    </StepButton>
+                                </Step>
+                            );
+                        })}
+                    </Stepper>
 
-            </Paper>
+                    <div className={classes.content}>
+                        <Typography className={classes.title}>
+                            <div>Описание рабочей программы дисциплины <span style={{fontWeight: 500}}>"{workProgramTitle}"</span></div>
+                            <div className={classes.cloneButton} onClick={this.handleCloneProgram}> <CopyIcon/> Клонировать</div>
+                        </Typography>
+
+                        {this.renderContent()}
+
+                        {canComment &&
+                            <>
+                                <Grow
+                                    in={isOpenComments}
+                                    {...(isOpenComments ? {timeout: 300} : {})}
+                                >
+                                    <Paper className={classes.comments}>
+                                        <Comments currentStep={this.getCurrentStep()} />
+                                    </Paper>
+                                </Grow>
+                                <Fab color="secondary"
+                                     className={classes.commentButton}
+                                     onClick={this.handleClickOnComments}
+                                >
+                                    <CommentIcon className={isOpenComments ? classes.rotateIcon : ''}/>
+                                </Fab>
+                            </>
+                        }
+                    </div>
+                </Paper>
+            </div>
         );
     }
 }

@@ -122,6 +122,14 @@ export default class RouterService {
         return SEPARATOR + EXPERTISES;
     };
 
+    getExpertiseRoute = () => {
+        return SEPARATOR + EXPERTISES + SEPARATOR + ':id';
+    };
+
+    getExpertiseRouteLink = (id: number) => {
+        return SEPARATOR + EXPERTISES + SEPARATOR + id;
+    };
+
     getWorkProgramRoute = () => {
         return SEPARATOR + WORK_PROGRAM + SEPARATOR + ':id';
     };

@@ -1,8 +1,8 @@
 import React, {SyntheticEvent} from 'react';
 import Scrollbars from "react-custom-scrollbars";
 
-import get from "lodash/get";
 import moment from "moment";
+import {Link} from "react-router-dom";
 
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -17,8 +17,8 @@ import TableBody from "@material-ui/core/TableBody";
 
 import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";
-import TableSettingsMenu from '../../components/TableSettingsMenu';
 import Search from "../../components/Search";
+import WorkProgramStatus from "../../components/WorkProgramStatus";
 
 import {ExpertisesProps} from './types';
 import {ExpertisesFields} from "./enum";
@@ -27,6 +27,8 @@ import {FULL_DATE_FORMAT} from "../../common/utils";
 
 import {WorkProgramGeneralFields} from "../WorkProgram/enum";
 import {workProgramStatusesColors, workProgramStatusesRussian, specializationObject} from "../WorkProgram/constants";
+
+import {appRouter} from "../../service/router-service";
 
 import connect from './Expertises.connect';
 import styles from './Expertises.styles';
@@ -68,28 +70,20 @@ class Expertises extends React.Component<ExpertisesProps> {
         this.setState({anchorsEl: {}});
     };
 
-    handleClickAddExperts = () => () => {
-
-    }
-
     render() {
         const {classes, expertisesList, allCount, currentPage, sortingField, sortingMode} = this.props;
-        const {anchorsEl} = this.state;
 
         return (
             <Paper className={classes.root}>
-                <div className={classes.title}>
-                    <Typography> Экспертизы</Typography>
+                <div className={classes.titleWrap}>
+                    <Typography className={classes.title}> Экспертизы</Typography>
 
                     <Search handleChangeSearchQuery={this.handleChangeSearchQuery}/>
                 </div>
 
                 <div className={classes.statuses}>
                     {Object.keys(workProgramStatusesRussian).map(key =>
-                        <div className={classes.status} key={key}>
-                            <div className={classes.statusPoint} style={{backgroundColor: workProgramStatusesColors[key]}}/>
-                            <Typography> {workProgramStatusesRussian[key]} </Typography>
-                        </div>
+                        <WorkProgramStatus status={key} key={key} />
                     )}
                 </div>
 
@@ -106,15 +100,9 @@ class Expertises extends React.Component<ExpertisesProps> {
                                     </TableCell>
                                     <TableCell>
                                         Уровень
-                                        <SortingButton changeMode={this.changeSorting(ExpertisesFields.WORK_PROGRAM)}
-                                                       mode={sortingField === ExpertisesFields.WORK_PROGRAM ? sortingMode : ''}
-                                        />
                                     </TableCell>
                                     <TableCell>
                                         Авторы
-                                        <SortingButton changeMode={this.changeSorting(ExpertisesFields.WORK_PROGRAM)}
-                                                       mode={sortingField === ExpertisesFields.WORK_PROGRAM ? sortingMode : ''}
-                                        />
                                     </TableCell>
                                     <TableCell>
                                         Дата изменения
@@ -132,23 +120,19 @@ class Expertises extends React.Component<ExpertisesProps> {
                                         <TableCell className={classes.cellStatus}
                                                    style={{borderLeftColor: workProgramStatusesColors[expertise[ExpertisesFields.STATUS]]}}
                                         >
-                                            {expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.TITLE]}
+                                            <Link to={appRouter.getWorkProgramLink(expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.ID])}>
+                                                {expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.TITLE]}
+                                            </Link>
                                         </TableCell>
                                         <TableCell>{specializationObject[expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.QUALIFICATION]]}</TableCell>
                                         <TableCell>{expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.AUTHORS]}</TableCell>
                                         <TableCell>
                                             {moment(expertise[ExpertisesFields.DATE_OF_LAST_CHANGE]).format(FULL_DATE_FORMAT)}
                                         </TableCell>
-                                        <TableCell style={{padding: '0 !important'}}>
-                                            <TableSettingsMenu handleOpenMenu={this.handleMenu(expertise[ExpertisesFields.ID])}
-                                                               handleCloseMenu={this.handleCloseMenu}
-                                                               anchorEl={get(anchorsEl, expertise[ExpertisesFields.ID])}
-                                                               menuItems={[{
-                                                                   text: 'Смотреть детально',
-                                                                   icon: <EyeIcon />,
-                                                                   handleClickItem: this.handleClickAddExperts()
-                                                               }]}
-                                            />
+                                        <TableCell className={classes.linkCell}>
+                                            <Link to={appRouter.getExpertiseRouteLink(expertise[ExpertisesFields.ID])}>
+                                                <EyeIcon />
+                                            </Link>
                                         </TableCell>
                                     </TableRow>
                                 )}

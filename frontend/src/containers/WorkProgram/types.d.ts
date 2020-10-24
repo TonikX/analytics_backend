@@ -4,7 +4,7 @@ import {
     EvaluationToolFields,
     ResultsFields,
     WorkProgramGeneralFields,
-    WorkProgramStatusEnum
+    WorkProgramStatusEnum, CommentFields
 } from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
@@ -13,9 +13,15 @@ import {TrainingEntitityType} from "../TrainingEntities/types";
 import {ReactText} from "react";
 import {IndicatorsFields} from "../Indicators/enum";
 import {CompetenceFields} from "../Competences/enum";
+import {UserType} from "../../layout/types";
 
 export interface WorkProgramActions {
     pageDown: any;
+
+    sendWorkProgramToArchive: any;
+    sendWorkProgramToExpertise: any;
+    returnWorkProgramToWork: any;
+    approveWorkProgram: any;
 
     deleteResult: any;
     addResult: any;
@@ -55,6 +61,10 @@ export interface WorkProgramActions {
     deleteEvaluationTool: any;
     addEvaluationTool: any;
     changeEvaluationTool: any;
+
+    getComments: any;
+    setComments: any;
+    createComment: any;
 }
 
 export interface workProgramState {
@@ -63,6 +73,7 @@ export interface workProgramState {
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: Array<any>;
     [fields.WORK_PROGRAM_RESULTS]: Array<any>;
     [fields.DIALOGS]: {};
+    [fields.WORK_PROGRAM_COMMENTS]: Array<any>; //todo: change type
 }
 
 export type WorkProgramGeneralType = {
@@ -104,6 +115,11 @@ export type IndicatorInZun = {
 export interface WorkProgramProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
     workProgramTitle: string;
+    canApprove: boolean;
+    canSendToExpertise: boolean;
+    canSendToArchive: boolean;
+    canComment: boolean;
+    workProgramStatus: string;
 }
 
 export type Section = {
@@ -155,9 +171,18 @@ export type EvaluationToolType = {
     [EvaluationToolFields.SECTIONS]: Array<Section>;
 }
 
-export type WorkProgramStatus =
+export type WorkProgramStatusType =
     WorkProgramStatusEnum.AT_WORK |
     WorkProgramStatusEnum.EXPERTISE |
     WorkProgramStatusEnum.APPROVE |
     WorkProgramStatusEnum.ARCHIVE
 ;
+
+export type CommentType = {
+    [CommentFields.DATE]: string;
+    [CommentFields.TEXT]: string;
+    [CommentFields.ID]: number;
+    [CommentFields.USER_EXPERTISE]: {
+        [CommentFields.EXPERT]: UserType
+    };
+}

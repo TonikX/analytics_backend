@@ -41,10 +41,28 @@ const deleteEvaluationTool = createAction<string>('WORK_PROGRAM_DELETE_EVALUATIO
 const addEvaluationTool = createAction<string>('WORK_PROGRAM_ADD_EVALUATION_TOOL');
 const changeEvaluationTool = createAction<string>('WORK_PROGRAM_CHANGE_EVALUATION_TOOL');
 
+const sendWorkProgramToArchive = createAction<string>('WORK_PROGRAM_SEND_TO_ARCHIVE');
+const sendWorkProgramToExpertise = createAction<string>('WORK_PROGRAM_SEND_TO_EXPERTIZE');
+const returnWorkProgramToWork = createAction<string>('WORK_PROGRAM_RETURN_TO_WORK');
+const approveWorkProgram = createAction<string>('WORK_PROGRAM_APPROVE');
+
+const getComments = createAction<string>('WORK_PROGRAM_GET_COMMENTS');
+const setComments = createAction<string>('WORK_PROGRAM_SET_COMMENTS');
+const createComment = createAction<string>('WORK_PROGRAM_CREATE_COMMENT');
+
 const pageDown = createAction<string>('WORK_PROGRAM_PAGE_DOWN');
 
 const actions: WorkProgramActions = {
     pageDown,
+
+    getComments,
+    setComments,
+    createComment,
+
+    sendWorkProgramToArchive,
+    sendWorkProgramToExpertise,
+    returnWorkProgramToWork,
+    approveWorkProgram,
 
     cloneWorkProgram,
 

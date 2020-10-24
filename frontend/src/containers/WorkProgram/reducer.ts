@@ -13,6 +13,7 @@ export const initialState: workProgramState = {
     [fields.WORK_PROGRAM_ID]: '',
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: [],
     [fields.WORK_PROGRAM_RESULTS]: [],
+    [fields.WORK_PROGRAM_COMMENTS]: [],
     [fields.DIALOGS]: {
         [fields.CREATE_NEW_TOPIC_DIALOG]: {
             [fields.IS_OPEN_DIALOG]: false,
@@ -42,6 +43,11 @@ const setWorkProgramId = (state: workProgramState, {payload}: any): workProgramS
 const setWorkProgramEvaluationTools = (state: workProgramState, {payload}: any): workProgramState => ({
     ...state,
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: payload
+});
+
+const setComments = (state: workProgramState, {payload}: any): workProgramState => ({
+    ...state,
+    [fields.WORK_PROGRAM_COMMENTS]: payload
 });
 
 const setResults = (state: workProgramState, {payload}: any): workProgramState => ({
@@ -82,6 +88,8 @@ export const reducer = createReducer(initialState, {
 
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
+
+    [actions.setComments.type]: setComments,
 
     [actions.setWorkProgramEvaluationTools.type]: setWorkProgramEvaluationTools,
     [actions.pageDown.type]: pageDown,

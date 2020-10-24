@@ -1,4 +1,4 @@
-import {WorkProgramStatusEnum} from "./enum";
+import {StepsEnum, WorkProgramStatusEnum} from "./enum";
 
 const PRIMARY_VOCATIONAL_EDUCATION = 'primary_vocational_education';
 const SECONDARY_VOCATIONAL_EDUCATION = 'secondary_vocational_education';
@@ -51,6 +51,16 @@ export const workProgramStatusesColors: any = {
     [WorkProgramStatusEnum.ARCHIVE]: '#ccc',
 }
 
+export const steps = {
+    [StepsEnum.GENERAL]: 'Главное',
+    [StepsEnum.PREREQUISITES]: 'Пререквизиты',
+    [StepsEnum.SECTIONS]: 'Разделы',
+    [StepsEnum.TOPICS]: 'Темы',
+    [StepsEnum.LITERATURE]: 'Источники',
+    [StepsEnum.EVALUATION]: 'Оценочные средства',
+    [StepsEnum.RESULTS]: 'Результаты обучения',
+    [StepsEnum.PLANS]: 'Cвязанные с рпд учебные планы и направления',
+}
 
 export const years = [
     {

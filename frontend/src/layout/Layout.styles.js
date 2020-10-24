@@ -23,4 +23,7 @@ export default (theme) => ({
         }),
         marginLeft: 250,
     },
+    noPadding: {
+        padding: 0
+    }
 });

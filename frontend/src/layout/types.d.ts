@@ -1,6 +1,6 @@
-import {fields} from './enum';
+import {fields, UserFields} from './enum';
 
-export interface LayoutActions {
+export interface GeneralActions {
     fetchingComponentTrue: any;
     fetchingComponentFalse: any;
     fetchingTrue: any;
@@ -9,6 +9,8 @@ export interface LayoutActions {
     fetchingSuccess: any;
     setAuthTrue: any;
     setAuthFalse: any;
+    getAllUsers: any;
+    setAllUsers: any;
 }
 
 export interface layoutState {
@@ -16,4 +18,12 @@ export interface layoutState {
     [fields.ERRORS]: Array<string>;
     [fields.SUCCESS_MESSAGES]: Array<string>;
     [fields.IS_AUTH]: boolean;
+    [fields.USERS]: Array<any>; //todo: create user type
+}
+
+export type UserType = {
+    [UserFields.FIRST_NAME]: string;
+    [UserFields.LAST_NAME]: string;
+    [UserFields.ID]: number;
+    [UserFields.USERNAME]: string;
 }

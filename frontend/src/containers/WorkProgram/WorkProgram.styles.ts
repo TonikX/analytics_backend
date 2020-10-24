@@ -1,15 +1,24 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
+    wrap: {
+        height: '100%',
+        padding: '0px 30px 30px',
+        boxSizing: 'border-box'
+    },
     content: {
-        marginLeft: '10px',
         width: '100%'
+    },
+    header: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        padding: '10px 0px'
     },
     root: {
         padding: '20px 50px 20px 50px',
         boxShadow: '0px 0px 6px 1px rgba(194,194,194,0.3)',
         display: 'flex',
-        height: '100%',
+        height: 'calc(100% - 54px)',
         boxSizing: 'border-box'
     },
     programInput: {
@@ -54,5 +63,25 @@ export default (theme: Theme) => createStyles({
                 color: theme.palette.primary.main,
             }
         }
+    },
+    commentButton: {
+        position: "fixed",
+        right: '80px',
+        bottom: '54px'
+    },
+    comments: {
+        position: "fixed",
+        right: '80px',
+        bottom: '100px',
+        width: '350px',
+        height: '500px',
+        boxShadow: '0px 0px 36px 1px rgb(143 143 143 / 30%)'
+    },
+    rotateIcon: {
+        transform: 'rotate(360deg)',
+        transition: 'transform 300ms'
+    },
+    headerButtons: {
+        marginLeft: 'auto'
     }
 });

@@ -1,6 +1,6 @@
 import {createAction} from "@reduxjs/toolkit";
 
-import {LayoutActions} from './types';
+import {GeneralActions} from './types';
 
 const fetchingTrue = createAction<string>('FETCHING_TRUE');
 const fetchingFalse = createAction<string>('FETCHING_FALSE');
@@ -13,7 +13,10 @@ const fetchingComponentTrue = createAction<string>('FETCHING_COMPONENT_TRUE');
 const setAuthTrue = createAction<string>('SET_AUTH_TRUE');
 const setAuthFalse = createAction<string>('SET_AUTH_FALSE');
 
-const actions: LayoutActions = {
+const getAllUsers = createAction<string>('GET_ALL_USERS');
+const setAllUsers = createAction<string>('SET_ALL_USERS');
+
+const actions: GeneralActions = {
     fetchingComponentFalse,
     fetchingComponentTrue,
     fetchingTrue,
@@ -21,7 +24,9 @@ const actions: LayoutActions = {
     fetchingFailed,
     fetchingSuccess,
     setAuthTrue,
-    setAuthFalse
+    setAuthFalse,
+    getAllUsers,
+    setAllUsers,
 }
 
 export default actions;

@@ -6,7 +6,10 @@ import actions from '../../layout/actions';
 import workProgramActions from './actions';
 
 import Service from './service';
-import {getWorkProgramId} from './getters';
+import {
+    getWorkProgramId,
+    getWorkProgramUserExpertiseId
+} from './getters';
 
 import {fetchingTypes} from "./enum";
 
@@ -16,6 +19,8 @@ import literatureLogics from './logics/literature.logics';
 import prerequisitesLogics from './logics/prerequisites.logics';
 import evaluationToolsLogics from './logics/evaluationTools.logics';
 import resultsLogics from './logics/results.logics';
+import commentsLogics from './logics/comments.logics';
+
 import {appRouter} from "../../service/router-service";
 
 const service = new Service();
@@ -24,11 +29,12 @@ const getWorkProgram = createLogic({
     type: workProgramActions.getWorkProgram.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const programId = action.payload;
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_WORK_PROGRAM}));
 
-        service.getWorkProgram(programId)
+        service.getWorkProgram(workProgramId)
             .then((res) => {
                 dispatch(workProgramActions.setWorkProgram(res.data));
                 dispatch(actions.fetchingSuccess());
@@ -119,6 +125,78 @@ const cloneWorkProgram = createLogic({
     }
 });
 
+const sendToExpertise = createLogic({
+    type: workProgramActions.sendWorkProgramToExpertise.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SEND_TO_EXPERTISE}));
+
+        service.sendToExpertise(workProgramId)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram());
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SEND_TO_EXPERTISE}));
+                return done();
+            });
+    }
+});
+
+const returnWorkProgramToWork = createLogic({
+    type: workProgramActions.returnWorkProgramToWork.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const expertiseId = getWorkProgramUserExpertiseId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SEND_TO_WORK}));
+
+        service.returnWorkProgramToWork(expertiseId)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram());
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SEND_TO_WORK}));
+                return done();
+            });
+    }
+});
+
+const approveWorkProgram = createLogic({
+    type: workProgramActions.approveWorkProgram.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const expertiseId = getWorkProgramUserExpertiseId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.APPROVE_WORK_PROGRAM}));
+
+        service.approveWorkProgram(expertiseId)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram());
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.APPROVE_WORK_PROGRAM}));
+                return done();
+            });
+    }
+});
+
 export default [
     ...sectionLogics,
     ...topicLogics,
@@ -126,8 +204,12 @@ export default [
     ...prerequisitesLogics,
     ...evaluationToolsLogics,
     ...resultsLogics,
+    ...commentsLogics,
     getWorkProgram,
     saveWorkProgram,
     getWorkProgramEvaluationTools,
     cloneWorkProgram,
+    sendToExpertise,
+    returnWorkProgramToWork,
+    approveWorkProgram,
 ];

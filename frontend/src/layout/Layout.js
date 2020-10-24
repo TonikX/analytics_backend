@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import className from 'classnames';
+import shallowEqual from "recompose/shallowEqual";
+import {withRouter} from "react-router-dom";
 
 import MomentUtils from '@date-io/moment';
 import {SnackbarProvider} from 'notistack';
@@ -21,7 +23,6 @@ import theme from './themeMaterialUi';
 
 import connect from './Layout.connect';
 import styles from './Layout.styles';
-import shallowEqual from "recompose/shallowEqual";
 
 const userService = UserService.factory();
 
@@ -60,10 +61,13 @@ class Layout extends React.Component {
         this.handleCloseMenu();
     };
 
+    isWorkProgramPage = () => this.props.location.pathname.includes('/work-program/');
+
     render() {
         const {openMenu} = this.state;
         const {classes, fetching, errors, successMessages, auth} = this.props;
         const isAuth = userService.isAuth() && auth;
+        const isWorkProgramPage = this.isWorkProgramPage();
 
         return (
             <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -79,7 +83,10 @@ class Layout extends React.Component {
                         />
                         <div className={classes.root}>
                             {isAuth && <Menu isOpen={openMenu} />}
-                            <div className={className(classes.content, {[classes.contentShift]: openMenu})}>
+                            <div className={className(classes.content, {
+                                [classes.contentShift]: openMenu,
+                                [classes.noPadding]: isWorkProgramPage
+                            })}>
                                 {this.props.children}
                             </div>
                         </div>
@@ -97,4 +104,4 @@ Layout.propTypes = {
     fetching: PropTypes.bool
 };
 
-export default connect(withStyles(styles)(Layout));
+export default withRouter(connect(withStyles(styles)(Layout)));

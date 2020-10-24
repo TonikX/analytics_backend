@@ -9,11 +9,13 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         flexDirection: 'column'
     },
-    title: {
-        fontSize: '24px',
+    titleWrap: {
         marginBottom: '10px',
         display: 'flex',
         justifyContent: 'space-between',
+    },
+    title: {
+        fontSize: '24px',
     },
     titleCell: {
         width: '40%',
@@ -61,20 +63,17 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         marginBottom: '10px',
     },
-    status: {
-        display: 'flex',
-        alignItems: 'center',
-        marginRight: '20px',
-        cursor: 'pointer'
-    },
-    statusPoint: {
-        marginRight: '5px',
-        width: '10px',
-        height: '10px',
-        borderRadius: '50%',
-        background: 'red'
-    },
     cellStatus: {
-        borderLeft: '5px solid'
+        borderLeft: '5px solid',
+        '& a': {
+            color: theme.palette.primary.main,
+            textDecoration: 'none'
+        }
+    },
+    linkCell: {
+        padding: '0 !important',
+        '& a': {
+            color: 'rgb(51, 51, 51) !important'
+        }
     }
 });

@@ -9,10 +9,15 @@ import {EvaluationToolFields, fields, WorkProgramGeneralFields, workProgramSecti
 import {workProgramState} from './types';
 
 const getStateData = (state: rootState): workProgramState => get(state, GENERAL_PATH);
+export const getWorkProgramComments = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_COMMENTS, {});
+
 export const getWorkProgram = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM, {});
 export const getWorkProgramResults = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_RESULTS, []);
 export const getWorkProgramEvaluationToolsList = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_EVALUATION_TOOLS, []);
 export const getWorkProgramId = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_ID, '');
+export const getWorkProgramExpertiseStatus = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.EXPERTISE_STATUS, '');
+export const getWorkProgramExpertiseId = (state: rootState) => get(getWorkProgram(state), 'expertise_with_rpd.0.id', null);
+export const getWorkProgramUserExpertiseId = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.USER_EXPERTISE_ID, '');
 export const getWorkProgramField = (state: rootState, field: string) => get(getWorkProgram(state), field);
 
 export const isCanEdit = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_EDIT);
