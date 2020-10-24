@@ -32,13 +32,13 @@ class WorkProgramService extends BaseService{
 
     returnWorkProgramToWork(expertiseId: number){
         return this.patch(`/api/expertise/user/update/${expertiseId}`, {
-            expertise_status: UserExpertResultEnum.REWORK,
+            user_expertise_status: UserExpertResultEnum.REWORK,
         });
     }
 
     approveWorkProgram(expertiseId: number){
         return this.patch(`/api/expertise/user/update/${expertiseId}`, {
-            expertise_status: UserExpertResultEnum.APPROVED,
+            user_expertise_status: UserExpertResultEnum.APPROVED,
         });
     }
 

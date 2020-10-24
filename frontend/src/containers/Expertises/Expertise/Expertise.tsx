@@ -87,7 +87,7 @@ class Expertise extends React.Component<ExpertiseProps> {
                                     <TableRow key={expert.id}>
                                         <TableCell>{expert[ExpertisesFields.EXPERT].first_name} {expert[ExpertisesFields.EXPERT].last_name}</TableCell>
                                         <TableCell>
-                                            {get(UserExpertResult, [expert, ExpertisesFields.EXPERT_RESULT], 'не проверено')}
+                                            {get(UserExpertResult, expert[ExpertisesFields.USER_EXPERTISE_STATUS], 'Не проверено')}
                                         </TableCell>
                                         {canEdit &&
                                             <TableCell className={classes.deleteCell}>
@@ -98,7 +98,6 @@ class Expertise extends React.Component<ExpertiseProps> {
                                         }
                                     </TableRow>
                                 )}
-
                             </TableBody>
                         </Table>
                     </div>
