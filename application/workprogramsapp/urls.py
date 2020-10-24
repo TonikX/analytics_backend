@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.conf.urls import url, include
 from django.urls import path, re_path
 
-from .expertise.views import UserExpertiseView, ExpertiseCommentsView, ExpertiseView, ChangeUserExpertiseView, \
-    ChangeExpertiseView, ExpertiseCreateView
 from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
@@ -42,6 +40,10 @@ from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfes
 
 from .profession.views import RolesListApi, RoleCreateAPIView, RoleDetailsView, RoleDestroyView, RoleUpdateView
 from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAPIView, SkillsOfRoleInRoleUpdateView, SkillsOfRoleInRoleDestroyView
+
+from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView, UserExpertiseListView, ExpertiseCommentsView, ChangeUserExpertiseView, \
+    ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById
+
 
 urlpatterns = [
 
@@ -227,14 +229,17 @@ urlpatterns = [
     path('api/EducationalProgram/update/<int:pk>', EducationalProgramUpdateView.as_view()),
 
     # --Экспертизы
-    path('api/user_expertise', UserExpertiseView.as_view()),
-    path('api/user_expertise/<int:pk>', UserExpertiseView.as_view()),
-    path('api/comments/<int:pk>', ExpertiseCommentsView.as_view()),
-    path('api/expertise', ExpertiseView.as_view()),
-    path('api/expertise_create', ExpertiseCreateView.as_view()),
-    path('api/expertise/<int:pk>', ExpertiseView.as_view()),
-    path('api/user_expertise_update/<int:pk>', ChangeUserExpertiseView.as_view()),
-    path('api/expertise_update/<int:pk>', ChangeExpertiseView.as_view()),
+    path('api/expertise/user', UserExpertiseListView.as_view()),
+    path('api/expertise/user_with_expertise/<int:pk>', UserExpertiseListView.as_view()),
+    path('api/expertise/user/create', UserExpertiseCreateView.as_view()),
+    path('api/expertise/comments/<int:pk>', ExpertiseCommentsView.as_view()),
+    path('api/expertise/comments/create', ExpertiseCommentCreateView.as_view()),
+    path('api/expertise/create', ExpertiseCreateView.as_view()),
+    path('api/expertise', ExpertiseListView.as_view()),
+    path('api/expertise/work_program/<int:pk>', ExpertiseWorkProgramView.as_view()),
+    path('api/expertise/<int:pk>', ExpertiseViewById.as_view()),
+    path('api/expertise/user/update/<int:pk>', ChangeUserExpertiseView.as_view()),
+    path('api/expertise/update/<int:pk>', ChangeExpertiseView.as_view()),
 
     # Работа с профессиями
     path('api/professions/', ProfessionsListApi.as_view()),

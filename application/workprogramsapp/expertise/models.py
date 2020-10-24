@@ -16,8 +16,8 @@ class UserExpertise(models.Model):
     ]
 
 
-    expert = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Эксперт', on_delete = models.CASCADE)
-    expertise = models.ForeignKey('Expertise', verbose_name='Экспертиза', on_delete = models.CASCADE)
+    expert = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Эксперт', on_delete = models.CASCADE, related_name = 'expertse_in_rpd')
+    expertise = models.ForeignKey('Expertise', verbose_name='Экспертиза', on_delete = models.CASCADE, related_name = 'expertse_users_in_rpd')
     stuff_status = models.CharField(choices = STUFF_STATUS_CHOICES, max_length=1024, verbose_name="Роль эксперта", default = 'EX')
     user_expertise_status=models.CharField(choices = USER_EXPERTISE_STATUS_CHOISES, max_length = 1024, blank=True, null=True, verbose_name="статус экспертизы пользователя")
     expert_result = models.CharField(verbose_name = "Результаты экспертизы", max_length = 50000, blank=True, null=True)
@@ -32,9 +32,9 @@ class Expertise(models.Model):
     ]
 
 
-    work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE)
+    work_program = models.ForeignKey('WorkProgram', related_name = 'expertise_with_rpd', on_delete=models.CASCADE)
     expertise_status = models.CharField(choices = STATUS_CHOICES, max_length=1024, verbose_name="Статус экспертизы", default = 'EX')
-    experts = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Эксперты', through = UserExpertise)
+    experts = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Эксперты', through = UserExpertise, related_name = 'experts_in_expertise')
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     date_of_last_change = models.DateTimeField(editable=True, auto_now=True, blank=True, null=True)
     #
@@ -48,6 +48,9 @@ class Expertise(models.Model):
     #     if self.expertise_status and self.old_expertise_status != self.expertise_status:
     #         self.date_of_last_change = datetime.now()
     #         super(Expertise, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.pk)
 
 
 class ExpertiseComments(models.Model):

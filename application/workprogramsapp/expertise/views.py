@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.exceptions import NotFound
 
 from workprogramsapp.expertise.models import UserExpertise, ExpertiseComments, Expertise
 from workprogramsapp.expertise.serializers import UserExpertiseSerializer, CommentSerializer, ExpertiseSerializer
@@ -6,7 +7,7 @@ from workprogramsapp.permissions import IsMemberOfExpertise, IsRpdDeveloperOrRea
     IsExpertiseMaster, IsWorkProgramMemberOfExpertise
 
 
-class UserExpertiseView(generics.ListCreateAPIView):
+class UserExpertiseListView(generics.ListAPIView):
     """
     Вывод всей информации об экспертизе для эксперта (автоматически по токену пользователя выдает экспертизы, в которых он учавствует):
     Если нужна опредленная экспертиза от пользователя, то надо указать ее id
@@ -22,14 +23,19 @@ class UserExpertiseView(generics.ListCreateAPIView):
         else:
             return UserExpertise.objects.filter(expert=self.request.user)
 
-    def perform_create(self, serializer):
-        serializer.save()
+
+class UserExpertiseCreateView(generics.CreateAPIView):
+    """
+    создание экспертизы
+    """
+    queryset = UserExpertise.objects.all()
+    serializer_class = UserExpertiseSerializer
+    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
 
 
-class ExpertiseCommentsView(generics.ListCreateAPIView):
+class ExpertiseCommentsView(generics.ListAPIView):
     """
     View для получения и отправки комментариев
-    Чтобы отправить комментарий указывать UserExpertise НЕ надо (см сериализатор), достаточно указать айди экспертизы в адресе
     Комментарии можно получить или отправить, указав в адресе id экспертизы,
     При желании можно в параметрах указать блок комментариев для GET-запроса
     """
@@ -49,24 +55,42 @@ class ExpertiseCommentsView(generics.ListCreateAPIView):
         else:
             return ExpertiseComments.objects.all()
 
-    def perform_create(self, serializer):
-        serializer.save()
 
-
-class ExpertiseView(generics.ListAPIView):
+class ExpertiseCommentCreateView(generics.CreateAPIView):
     """
-    получение экспертизы
-    При указании id в ссылке выдает все экспертизы связанные с id рабочей программы
+    создание коммента к экспертизе
+    """
+    queryset = ExpertiseComments.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
+
+
+class ExpertiseWorkProgramView(generics.RetrieveAPIView):
+    """
+     ссылка выдает все экспертизы связанные с id рабочей программы
     """
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
     permission_classes = [IsWorkProgramMemberOfExpertise, IsRpdDeveloperOrReadOnly]
 
-    def get_queryset(self, *args, **kwargs):
-        if ('pk' in dict(self.kwargs)):
-            return Expertise.objects.filter(work_program__id=self.kwargs['pk'])
-        else:
-            return Expertise.objects.all()
+    def get_object(self):
+        try:
+            return Expertise.objects.get(work_program__id=self.kwargs['pk'])
+        except Expertise.DoesNotExist:
+            raise NotFound()
+
+
+class ExpertiseListView(generics.ListAPIView):
+    queryset = Expertise.objects.all()
+    serializer_class = ExpertiseSerializer
+    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
+
+
+class ExpertiseViewById(generics.RetrieveAPIView):
+    queryset = Expertise.objects.all()
+    serializer_class = ExpertiseSerializer
+    permission_classes = [IsExpertiseMaster, IsRpdDeveloperOrReadOnly]
+
 
 class ExpertiseCreateView(generics.CreateAPIView):
     """
@@ -79,11 +103,7 @@ class ExpertiseCreateView(generics.CreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-    def perform_create(self, serializer):
-        serializer.save()
-
-
-class ChangeExpertiseView(generics.RetrieveUpdateAPIView):
+class ChangeExpertiseView(generics.UpdateAPIView):
     """
     Редактирование экспертизы
     """
@@ -92,7 +112,7 @@ class ChangeExpertiseView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsExpertiseMaster, IsRpdDeveloperOrReadOnly]
 
 
-class ChangeUserExpertiseView(generics.RetrieveUpdateAPIView):
+class ChangeUserExpertiseView(generics.UpdateAPIView):
     """
     Редактирование экспертизы отдельного пользователя
     """

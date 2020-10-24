@@ -9,3 +9,4 @@ __pycache__/
 dataprocessing_frontend_vue/
 node_modules/
 templates/
+*/migrations/
