@@ -151,12 +151,12 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {isOpen, classes, sections, types} = this.props;
         const {evaluationTool} = this.state;
 
-        const disableButton = evaluationTool[EvaluationToolFields.NAME].length === 0
-                            ||evaluationTool[EvaluationToolFields.DESCRIPTION].length === 0
-                            ||evaluationTool[EvaluationToolFields.MIN].length === 0
-                            ||evaluationTool[EvaluationToolFields.MAX].length === 0
-                            ||evaluationTool[EvaluationToolFields.SECTIONS].length === 0
-                            ||evaluationTool[EvaluationToolFields.TYPE].length === 0
+        const disableButton = get(evaluationTool, [EvaluationToolFields.NAME, 'length'], 0) === 0
+                            || get(evaluationTool, [EvaluationToolFields.DESCRIPTION, 'length'], 0) === 0
+                            || get(evaluationTool, [EvaluationToolFields.MIN, 'length'], 0) === 0
+                            || get(evaluationTool, [EvaluationToolFields.MAX, 'length'], 0) === 0
+                            || get(evaluationTool, [EvaluationToolFields.SECTIONS, 'length'], 0) === 0
+                            || get(evaluationTool, [EvaluationToolFields.TYPE, 'length'], 0) === 0
         ;
         const isEditMode = Boolean(evaluationTool[EvaluationToolFields.ID]);
 
