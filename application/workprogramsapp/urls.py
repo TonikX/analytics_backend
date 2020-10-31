@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.conf.urls import url, include
 from django.urls import path, re_path
 
-from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView
+from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView, \
+     UserGroups
 from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
 from .views import TopicList, TopicPost, TopicPostUpdate
@@ -272,4 +273,6 @@ urlpatterns = [
     path('api/skillsofroleinrole/update/<int:pk>', SkillsOfRoleInRoleUpdateView.as_view()),
     path('api/skillsofroleingroups', ItemWithRoles.as_view()),
 
+    #Информация о пользователе
+    path('api/user/groups', UserGroups),
 ]
