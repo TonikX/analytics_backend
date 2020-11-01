@@ -354,7 +354,7 @@ class GeneralCharacteristics(models.Model):
     Модель описания характеристики образовтаельной программы
     '''
     educational_program = models.ForeignKey('EducationalProgram', on_delete=models.SET_NULL, verbose_name = 'Учебный план_1', related_name="general_characteristics_in_educational_program", blank = True, null = True)
-    area_of_activity = models.CharField(max_length=512, verbose_name="Область профессиональной деятельности", blank=True, null=True)
+    area_of_activity = models.ManyToManyField('ProfessionalAreaOfGeneralCharacteristics', verbose_name = 'Область профессиональной деятельности')
     objects_of_activity = models.CharField(max_length=512, verbose_name="Объекты профессиональной деятельности", blank=True, null=True)
     kinds_of_activity = models.CharField(max_length=512, verbose_name="Вид (виды) профессиональной деятельности, к которому (которым) готовятся выпускники", blank=True, null=True)
     tasks_of_activity = models.CharField(max_length=512, verbose_name="Задачи профессиональной деятельности ", blank=True, null=True)
@@ -382,6 +382,29 @@ class Department(models.Model):
     title = models.CharField(max_length=512, verbose_name="Название факультета")
     mini_titile = models.CharField(max_length=512, verbose_name="Краткое название факультета", blank=True, null=True)
     dean = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
+
+    def __str__(self):
+        return str(self.title)
+
+
+class ProfessionalAreaOfGeneralCharacteristics(models.Model):
+    """
+    Профессиональный стандарт
+    """
+    # general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="ОХ", blank=True, null=True)
+    title = models.CharField(max_length=512, verbose_name="Наименование бласти проф деятельности", blank=True, null=True)
+    professional_standard = models.ManyToManyField('ProfessionalStandard', verbose_name="Профессиональный стандарт", blank=True)
+
+    def __str__(self):
+        return str(self.title)
+
+
+class ProfessionalStandard(models.Model):
+    """
+    Профессиональный стандарт
+    """
+    title = models.CharField(max_length=512, verbose_name="Наименование профессионального стандарта из данной области")
+    code = models.CharField(max_length=512, verbose_name="Код профессионального стандарта из данной области", blank=True, null=True)
 
     def __str__(self):
         return str(self.title)

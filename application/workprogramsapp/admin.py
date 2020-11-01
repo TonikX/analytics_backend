@@ -8,7 +8,8 @@ from .models import (
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
 )
  
-from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, Role
+from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
+    Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
 
 
 admin.site.register(Zun)
@@ -46,4 +47,7 @@ admin.site.register(Profession)
 admin.site.register(Role)
 admin.site.register(SkillsOfProfession)
 admin.site.register(SkillsOfRole)
+admin.site.register(ProfessionalAreaOfGeneralCharacteristics)
+admin.site.register(ProfessionalStandard)
+
 
