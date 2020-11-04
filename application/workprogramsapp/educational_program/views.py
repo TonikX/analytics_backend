@@ -24,7 +24,8 @@ from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, D
 
 
 # Сериализаторы
-from workprogramsapp.educational_program.serializers import  EducationalProgramSerializer, GeneralCharacteristicsSerializer, DepartmentSerializer
+from workprogramsapp.educational_program.serializers import  EducationalCreateProgramSerializer, EducationalProgramSerializer,\
+    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer
 
 
 
@@ -39,9 +40,17 @@ class EducationalProgramListAPIView(generics.ListAPIView):
 
 
 class EducationalProgramCreateAPIView(generics.CreateAPIView):
-    serializer_class = EducationalProgramSerializer
+    serializer_class = EducationalCreateProgramSerializer
     queryset = EducationalProgram.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+    def perform_create(self, serializer):
+        # print ('id', serializer.data.get('id'))
+        general_characteristic = GeneralCharacteristics()
+        general_characteristic.save()
+        ep = serializer.save()
+        GeneralCharacteristics.objects.filter(id = general_characteristic.id).update(educational_program = ep.id)
 
 
 class EducationalProgramDestroyView(generics.DestroyAPIView):
@@ -52,7 +61,7 @@ class EducationalProgramDestroyView(generics.DestroyAPIView):
 
 class EducationalProgramUpdateView(generics.UpdateAPIView):
     queryset = EducationalProgram.objects.all()
-    serializer_class = EducationalProgramSerializer
+    serializer_class = EducationalProgramUpdateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 

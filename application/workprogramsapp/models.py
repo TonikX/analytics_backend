@@ -353,10 +353,10 @@ class GeneralCharacteristics(models.Model):
     '''
     Модель описания характеристики образовтаельной программы
     '''
-    educational_program = models.ForeignKey('EducationalProgram', on_delete=models.SET_NULL, verbose_name = 'Учебный план_1', related_name="general_characteristics_in_educational_program", blank = True, null = True)
+    educational_program = models.ForeignKey('EducationalProgram', on_delete=models.SET_NULL, verbose_name = 'Образовательная программа', related_name="general_characteristics_in_educational_program", blank = True, null = True)
     area_of_activity = models.ManyToManyField('ProfessionalAreaOfGeneralCharacteristics', verbose_name = 'Область профессиональной деятельности')
     objects_of_activity = models.CharField(max_length=512, verbose_name="Объекты профессиональной деятельности", blank=True, null=True)
-    kinds_of_activity = models.CharField(max_length=512, verbose_name="Вид (виды) профессиональной деятельности, к которому (которым) готовятся выпускники", blank=True, null=True)
+    kinds_of_activity = models.CharField(max_length=512, verbose_name="Сферы профессиональной деятельности, к которому (которым) готовятся выпускники", blank=True, null=True)
     tasks_of_activity = models.CharField(max_length=512, verbose_name="Задачи профессиональной деятельности ", blank=True, null=True)
     type_of_activity = models.CharField(max_length=512, verbose_name="Тип основной профессиональной образовательной программы", blank=True, null=True)
     ok_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕКУЛЬТУРНЫЕ КОМПЕТЕНЦИИ", related_name="ok_competences_in_gh", blank=True)
@@ -369,7 +369,8 @@ class GeneralCharacteristics(models.Model):
     employers_representatives = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Представители работодателей", related_name="employers_representatives_in_gh", blank=True)
     director_of_megafaculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Директор мегафакультета", related_name="director_of_megafaculty_in_gh", blank=True, null=True)
     dean_of_the_faculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Декан факультета", related_name="dean_of_the_faculty_in_gh", blank=True, null=True)
-    scientific_supervisor_of_the_educational_program = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Научный руководитель образовательной программы", related_name="scientific_supervisor_of_the_educational_program_in_gh")
+    scientific_supervisor_of_the_educational_program = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Научный руководитель образовательной программы",
+                                                                         related_name="scientific_supervisor_of_the_educational_program_in_gh", blank=True, null=True)
 
     def __str__(self):
         return str(self.educational_program) + str(self.director_of_megafaculty) + str(self.scientific_supervisor_of_the_educational_program)

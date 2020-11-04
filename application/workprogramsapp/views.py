@@ -665,7 +665,7 @@ class WorkProgramCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+            serializer.save(owner=self.request.user)
 
 
 class WorkProgramDestroyView(generics.DestroyAPIView):
@@ -1541,7 +1541,7 @@ class FileUploadAPIView(APIView):
                     mdb = DisciplineBlockModule(name = data['COMPONENT'][i].strip(), descipline_block = db,
                                                 order = o)
                     mdb.save()
-                
+
                 print('Модуль в блоке: ', mdb)
 
                 if (data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module = mdb, change_type = data['ISOPTION'][i]).exists()):

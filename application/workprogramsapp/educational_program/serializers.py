@@ -23,6 +23,24 @@ class EducationalProgramSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class EducationalProgramUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор образовательной программы"""
+
+
+    class Meta:
+        model = EducationalProgram
+        fields = "__all__"
+
+
+class EducationalCreateProgramSerializer(serializers.ModelSerializer):
+    """Сериализатор образовательной программы"""
+
+
+    class Meta:
+        model = EducationalProgram
+        fields = ['qualification', 'manager', 'year_of_recruitment', 'academic_plan_for_ep']
+
+
 class ProfessionalStandardSerializer(serializers.ModelSerializer):
     """Сериализатор образовательной программы"""
 
