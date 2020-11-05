@@ -77,7 +77,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GeneralCharacteristics
-        fields = ['area_of_activity', 'educational_program', 'ok_competences', 'opk_competences', 'pk_competences', 'psk_competences', 'developers', 'employers_representatives', 'director_of_megafaculty', 'dean_of_the_faculty', 'scientific_supervisor_of_the_educational_program']
+        fields = ['id', 'area_of_activity', 'educational_program', 'ok_competences', 'opk_competences', 'pk_competences', 'psk_competences', 'developers', 'employers_representatives', 'director_of_megafaculty', 'dean_of_the_faculty', 'scientific_supervisor_of_the_educational_program']
 
 
 class DepartmentSerializer(serializers.ModelSerializer):

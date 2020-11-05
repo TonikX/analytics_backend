@@ -71,6 +71,18 @@ class EducationalProgramDetailsView(generics.RetrieveAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+class GeneralCharacteristicsDetailsWithEducationalProgramView(generics.RetrieveAPIView):
+    queryset = GeneralCharacteristics.objects.all()
+    serializer_class = GeneralCharacteristicsSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+    def get(self, request, **kwargs):
+        data = GeneralCharacteristics.objects.get(educational_program=self.kwargs['pk'])
+        serializer = self.get_serializer(data)
+        return Response(serializer.data)
+
+
 class GeneralCharacteristicsListAPIView(generics.ListAPIView):
     serializer_class = GeneralCharacteristicsSerializer
     queryset = GeneralCharacteristics.objects.all()

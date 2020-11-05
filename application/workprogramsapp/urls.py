@@ -33,7 +33,8 @@ from .views import CloneWorkProgramm
 # Контроллеры
 from .educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView
 from .educational_program.views import DepartmentCreateAPIView, DepartmentListAPIView, DepartmentDetailsView, DepartmentDestroyView, DepartmentUpdateView
-from .educational_program.views import GeneralCharacteristicsCreateAPIView, GeneralCharacteristicsListAPIView, GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView
+from .educational_program.views import GeneralCharacteristicsCreateAPIView, GeneralCharacteristicsListAPIView, GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
+    GeneralCharacteristicsDetailsWithEducationalProgramView
 
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, ProfessionUpdateView, ItemWithProfessions, ItemWithRoles
 from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfessionInProfessionCreateAPIView, SkillsOfProfessionInProfessionUpdateView, SkillsOfProfessionInProfessionDestroyView
@@ -220,6 +221,7 @@ urlpatterns = [
     path('api/GeneralCharacteristics/detail/<int:pk>', GeneralCharacteristicsDetailsView.as_view()),
     path('api/GeneralCharacteristics/delete/<int:pk>', GeneralCharacteristicsDestroyView.as_view()),
     path('api/GeneralCharacteristics/update/<int:pk>', GeneralCharacteristicsUpdateView.as_view()),
+    path('api/GeneralCharacteristics/detail_with_educational_program/<int:pk>', GeneralCharacteristicsDetailsWithEducationalProgramView.as_view()),
 
     # --Факультет
     path('api/EducationalProgram', EducationalProgramListAPIView.as_view()),
