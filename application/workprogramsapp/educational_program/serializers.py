@@ -62,7 +62,7 @@ class ProfessionalAreaOfGeneralCharacteristicsSerializer(serializers.ModelSerial
 
 class PkCompetencesInGeneralCharacteristicsSerializer(serializers.ModelSerializer):
     """Сериализатор Компетенций"""
-    competence = CompetenceSerializer(many = True)
+    competence = CompetenceSerializer()
 
 
     class Meta:
@@ -76,7 +76,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     educational_program = EducationalProgramSerializer()
     ok_competences = CompetenceSerializer(many = True)
     kc_competences = CompetenceSerializer(many = True)
-    pk_competences = PkCompetencesInGeneralCharacteristicsSerializer(many = True)
+    pk_competences = PkCompetencesInGeneralCharacteristicsSerializer(source = 'pkcompetencesingeneralcharacteristics_set', many = True)
     np_competences = CompetenceSerializer(many = True)
     developers = userProfileSerializer(many = True)
     employers_representatives = userProfileSerializer(many = True)

@@ -9,7 +9,7 @@ from .models import (
 )
  
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
-    Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
+    Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard, PkCompetencesInGeneralCharacteristics
 
 
 admin.site.register(Zun)
@@ -49,5 +49,6 @@ admin.site.register(SkillsOfProfession)
 admin.site.register(SkillsOfRole)
 admin.site.register(ProfessionalAreaOfGeneralCharacteristics)
 admin.site.register(ProfessionalStandard)
+admin.site.register(PkCompetencesInGeneralCharacteristics)
 
 

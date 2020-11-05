@@ -386,7 +386,7 @@ class PkCompetencesInGeneralCharacteristics(models.Model):
     competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
 
     def __str__(self):
-        return str(self.title)
+        return str(self.labor_functions) + str(self.general_characteristic) + str(self.competence)
 
 
 class Department(models.Model):
