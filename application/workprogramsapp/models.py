@@ -360,9 +360,9 @@ class GeneralCharacteristics(models.Model):
     tasks_of_activity = models.CharField(max_length=512, verbose_name="Задачи профессиональной деятельности ", blank=True, null=True)
     type_of_activity = models.CharField(max_length=512, verbose_name="Тип основной профессиональной образовательной программы", blank=True, null=True)
     ok_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕКУЛЬТУРНЫЕ КОМПЕТЕНЦИИ", related_name="ok_competences_in_gh", blank=True)
-    opk_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ", related_name="opk_competences_in_gh", blank=True)
+    kc_competences = models.ManyToManyField('Competence', verbose_name="Ключевые компетенции", related_name="kc_competences_in_gh", blank=True)
     pk_competences = models.ManyToManyField('Competence', verbose_name="ПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ", related_name="pk_competences_in_gh", blank=True)
-    psk_competences = models.ManyToManyField('Competence', verbose_name="ПРОФЕССИОНАЛЬНО-СПЕЦИАЛИЗИРОВАННЫЕ КОМПЕТЕНЦИИ", related_name="psk_competences_in_gh", blank=True,)
+    np_competences = models.ManyToManyField('Competence', verbose_name="Надпрофессиональные компетенции", related_name="np_competences_in_gh", blank=True,)
     pps = ArrayField(models.CharField(max_length=512, verbose_name="Сведения о профессорско-преподавательском составе, необходимом для реализации основной профессиональной образовательной программы"), blank=True, null=True)
     annotation = models.TextField(max_length=55512, verbose_name="Аннотация основной профессиональной образовательной программы", blank=True, null=True)
     developers = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Сотрудники Университета ИТМО", related_name="ok_competences_in_gh", blank=True)
@@ -374,6 +374,19 @@ class GeneralCharacteristics(models.Model):
 
     def __str__(self):
         return str(self.educational_program) + str(self.director_of_megafaculty) + str(self.scientific_supervisor_of_the_educational_program)
+
+
+class PkCompetencesInGeneralCharacteristics(models.Model):
+    """
+    Факультет
+    """
+
+    labor_functions = models.CharField(max_length=512, verbose_name="трудовая функция")
+    general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
+    competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
+
+    def __str__(self):
+        return str(self.title)
 
 
 class Department(models.Model):
