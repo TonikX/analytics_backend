@@ -82,6 +82,7 @@ def set_relation(item1, items_set, type_relation):
             if len(list_of_items) > 1:    
                 query = Items.objects.filter(name__in = list(set(list_of_items)))
                 set_relation_linear(query,'2')
+
         
         print('Связи созданы')
     except:
@@ -248,6 +249,7 @@ class RelationCreateAPIView(generics.ListCreateAPIView):
     queryset = Relation.objects.all()
     serializer_class = RelationCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
     def create(self, request):
         try:
             item1 = request.data.get("item1")
@@ -389,8 +391,6 @@ class FileUploadAPIView(APIView):
             return Response(status=200)  
         except:
             return Response(status=400)
-
-
 
 class HighValueItemsListAPIView(APIView):
     """ Возвращаем синонимы с наивысшим вэлью для результатов и пререквизитов"""
