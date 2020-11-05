@@ -19,9 +19,7 @@ urlpatterns = [
     path('api/relation/update/<int:pk>', views.RelationUpdateAPIView.as_view(),),
     path('api/relation/create', views.RelationCreateAPIView.as_view(), ),
 
+    path('api/outcomes/<int:workprogram_id>', views.HighValueItemsListAPIView.as_view()),
+
     path('api/upload/', views.FileUploadAPIView.as_view(), ),
-
-    
-
-
 ]

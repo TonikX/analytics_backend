@@ -1,17 +1,15 @@
-from django.shortcuts import render, render_to_response,redirect, get_object_or_404
-from django.http.response import HttpResponse,Http404
 from .models import User, Domain, Items, Relation
-from django.utils import timezone
-from django.views import View,generic
-from django.urls import reverse
-import os
+from workprogramsapp.models import OutcomesOfWorkProgram, PrerequisitesOfWorkProgram
 
 # Permissions
 from workprogramsapp.permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 # Api-libs
-from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer, RelationCreateSerializer
+from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, \
+ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer, \
+RelationCreateSerializer, HighValueItemsSerializer
+
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -35,57 +33,61 @@ def handle_uploaded_file(file, filename):
     return data
 
 def set_relation(item1, items_set, type_relation):
-    print('Создаю связи')
-    list_of_items = []
-    
-    saved = len(items_set)
-    for item2 in items_set:
-        '''
-        if item1.name == item2.name:
-            print('Связь с самим собой')
-            return Response(status=400)
-        
-        elif Relation.objects.filter(item1 = item1, relation = '0', item2=item2).exists():
-            print('Проверка на существование неопределенной связи')
-            #or Relation.objects.filter(item1 = item1, relation = '7', item2=item2).exists()
-            relation = Relation.objects.get(item1 = item1, relation = '0', item2=item2)
-            relation.relation = type_relation
-            relation.save()
-            list_of_items.append(relation.item2)
-        '''
-        if Relation.objects.filter(item1 = item1, relation = type_relation, item2=item2).exists():
-            #Если связь с i уже существует, то увеличиваем count
-            #Подсчет веса ребра
-            print('Связь существует')
-            relation = Relation.objects.get(item1 = item1, relation = type_relation, item2=item2)
-            value = relation.count
-            relation.count = int(value) + 1
-            relation.save()
-            saved = saved - 1
-        else:
-            #Если нет, то добавляем новую запись
-            print('Создание новой связи')
-            relation = Relation(item1 = item1, relation = type_relation, item2 = item2)
-            relation.save()
-            list_of_items.append(relation.item2)
-    
-    #Подсчет значения вершины графа
-    item = Items.objects.get(name = item1)
-    value = item.value
-    item.value = int(value) + saved
-    item.save()
-    
-    
-    items = [rel.item2 for rel in Relation.objects.filter(item1 = item1, relation = type_relation)]
-    list_of_items.extend(items)        
-    
-    if type_relation == '1':
-        print('Создаю связь для типа "включает в себя')
-        query = Items.objects.filter(name__in = list(set(list_of_items)))
-        set_relation_linear(query,'2')
-        
-    print('Связи созданы')
+    try:
+        print('Создаю связи')
+        list_of_items = []
+        flag = 0
 
+        saved = len(items_set)
+        for item2 in items_set:
+
+            if Relation.objects.filter(item1 = item1, relation = type_relation, item2=item2).exists():
+                #Если связь с i уже существует, то увеличиваем count
+                #Подсчет веса ребра
+                print('Связь существует')
+                relation = Relation.objects.get(item1 = item1, relation = type_relation, item2=item2)
+                value = relation.count
+                relation.count = int(value) + 1
+                relation.save()
+                saved = saved - 1
+                flag = 1
+            
+            elif Relation.objects.filter(item1 = item1, relation = '0', item2=item2).exists():
+                print('Проверка на существование неопределенной связи')
+                #or Relation.objects.filter(item1 = item1, relation = '7', item2=item2).exists()
+                relation = Relation.objects.get(item1 = item1, relation = '0', item2=item2)
+                relation.relation = type_relation
+                relation.save()
+                list_of_items.append(relation.item2)
+
+            else:
+                #Если нет, то добавляем новую запись
+                print('Создание новой связи')
+                relation = Relation(item1 = item1, relation = type_relation, item2 = item2)
+                relation.save()
+                list_of_items.append(relation.item2)
+        
+        #Подсчет значения вершины графа
+        item = Items.objects.get(name = item1)
+        value = item.value
+        item.value = int(value) + saved
+        item.save()
+            
+        if type_relation == '1':
+            print('Создаю связь для типа "включает в себя')
+            if flag == 0 and Relation.objects.filter(item1 = item1, relation = '1').exists():
+                items = [rel.item2 for rel in Relation.objects.filter(item1 = item1, relation = '1')]
+                list_of_items.extend(items)
+
+            if len(list_of_items) > 1:    
+                query = Items.objects.filter(name__in = list(set(list_of_items)))
+                set_relation_linear(query,'2')
+
+        
+        print('Связи созданы')
+    except:
+        msg = f'Что-то пошло не так:('
+        return Response(msg, status=status.HTTP_400_BAD_REQUEST )
 
 def set_relation_hierarchy(items_query, type_relation):
     """
@@ -95,6 +97,7 @@ def set_relation_hierarchy(items_query, type_relation):
         for key,value in items_query.items():
             print(key,value)
             names = value.split(', ')
+            names = [i.strip() for i in names]
             items_set = Items.objects.filter(name__in = names)
             item1 = Items.objects.get(name = key)
             set_relation(item1, items_set, type_relation)
@@ -160,6 +163,22 @@ class ItemsListCreateAPIView(generics.ListCreateAPIView):
     filterset_fields = ['domain']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def create(self, request):
+        domain_obj = Domain.objects.get(id = request.data.get('domain'))
+        item_name = request.data.get('name')
+        if Items.objects.filter(name = item_name, domain = domain_obj).exists():
+            msg = f'Учебная сущность {item_name} уже существует!'
+            return Response(msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            serializer = ItemCreateSerializer(data = request.data)
+    
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                print ("Сохранение прошло")
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ItemsListAPIView(generics.ListAPIView):
     """
@@ -196,8 +215,10 @@ class RelationListAPIView(generics.ListAPIView):
     """
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['item1__name', 'relation__relation', 'item2__name']
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    #filterset_fields = ['item1__name', 'relation__relation', 'item2__name']
+    search_fields = ['item1__name', 'item2__name']
+    filterset_fields = ['item1__name', 'relation', 'item2__name']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 '''
@@ -227,7 +248,8 @@ class RelationCreateAPIView(generics.ListCreateAPIView):
     """
     queryset = Relation.objects.all()
     serializer_class = RelationCreateSerializer
-    #permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
     def create(self, request):
         try:
             item1 = request.data.get("item1")
@@ -268,22 +290,6 @@ class RelationRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         try:
             obj = Relation.objects.get(pk = kwargs['pk'])
-            '''
-            #удаление сопутсвующих связей?
-            if obj.relation == '1':
-                conn_obj = [item2 for item2 in Relation.objects.filter(item1 = obj.item1, relation = obj.relation)]
-                query = Items.objects.filter(name__in = list_of_items)
-                item2 = Items.objects.get(pk = request.data.get("item2"))
-                to_del = 0
-                for q in query:
-                    rel = Relation.objects.get(item1 = item2, relation = '2', item2 = q)
-                    rel.delete()
-                    to_del += 1
-                item = Items.objects.get(name = obj.item2)
-                value = item.value
-                item.value = int(value) - to_del
-                item.save()
-            '''
             item = Items.objects.get(name = obj.item1)
             value = item.value
             item.value = int(value) - 1
@@ -300,12 +306,13 @@ class RelationUpdateAPIView(generics.RetrieveUpdateAPIView):
     """
     queryset = Relation.objects.all()
     serializer_class = RelationUpdateSerializer
-    #permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def update(self, request, *args, **kwargs):
         
         if Relation.objects.filter(item1 = request.data.get("item1"), relation = request.data.get("relation"), item2=request.data.get("item2")).exists():
-           return Response(serializer.errors, status=status.HTTP_302_FOUND)
+           msg = f'Уже существует!'
+           return Response(msg, status=status.HTTP_302_FOUND)
         else:
             old_relation = Relation.objects.get(id = kwargs['pk'])
             
@@ -362,7 +369,7 @@ class FileUploadAPIView(APIView):
             
             type_relation = str(request.data.get("relation"))
             
-            course = file[0]
+            course = file[0].strip()
             file.remove(file[0])  
             if type_relation in ['1','4']:
                 print('create')
@@ -372,13 +379,30 @@ class FileUploadAPIView(APIView):
 
             else:
                 data = {course:', '.join(file)}
-                items_query = [Items.objects.get(name = i) for i in items_list]
+                items_query = [Items.objects.get(name = i.strip()) for i in items_list]
                 items_query = Items.objects.filter(name__in = items_query)
                 items_query = items_query.exclude(name = course)
                 #Создаем связь верхнего уровня для дисциплины и связанных с ней эелементов
                 set_relation_hierarchy(data, '1')
                 #Создаем линейные связи между элементами
                 set_relation_linear(items_query,type_relation) 
+            #elif type_relation in ['0','5','7']:
+            #    return Response('Данный тип связи не сущесвует', status=400)
             return Response(status=200)  
         except:
             return Response(status=400)
+
+class HighValueItemsListAPIView(APIView):
+    """ Возвращаем синонимы с наивысшим вэлью для результатов и пререквизитов"""
+    def get(self, request, *args, **kwargs):
+
+        outcomes = OutcomesOfWorkProgram.objects.filter(workprogram_id = kwargs['workprogram_id'])
+        items = [o.item for o in outcomes]
+        queryset = Items.objects.filter(name__in = items)
+        
+        serializer = ItemSerializer(queryset)
+        print(serializer.data)
+        #competences = Competence.objects.all()
+        #serializer = CompetenceSerializer(competences, many=True)
+        return Response(serializer.data)
+
