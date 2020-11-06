@@ -1,6 +1,4 @@
 from rest_framework import serializers, viewsets
-
-
 from .models import User, Items, Domain, Relation
 
 class userProfileSerializer(serializers.ModelSerializer):
@@ -58,7 +56,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
     
 class ItemWithRelationSerializer(serializers.ModelSerializer):
-    """Сериализатор Ключевого слова"""
+    """Сериализатор Ключевого слова со связями"""
     #relation_with_item = RecursiveField(many=True)
     relation_with_item = serializers.SerializerMethodField()
     
@@ -74,7 +72,7 @@ class ItemWithRelationSerializer(serializers.ModelSerializer):
 
 
 class RelationInSerializer(serializers.ModelSerializer):
-    """Сериализатор для создания связей"""
+    """Сериализатор для отображения связей"""
     
     def to_representation(self,obj):  
         rep= super(RelationInSerializer,self).to_representation(obj)  
@@ -87,27 +85,28 @@ class RelationInSerializer(serializers.ModelSerializer):
 
 
 class RelationSerializer(serializers.ModelSerializer):
-    """Сериализатор для создания связей"""
-    item1 = ItemCreateSerializer()
-    item2 = ItemCreateSerializer()
+    """Сериализатор для отображения связей"""
+    item1 = ItemSerializer()
+    item2 = ItemSerializer()
     class Meta:
         model = Relation
         fields = ('id', 'item1','relation','item2', 'count')
 
+class RelationCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания связей"""
+    class Meta:
+        model = Relation
+        fields = ('id', 'item1','relation','item2',)
+
 
 class RelationUpdateSerializer(serializers.ModelSerializer):
     """Сериализатор для обновления связей"""
-
     class Meta:
         model = Relation
         fields = ('item1','relation','item2', 'count')
 
 
 class FileUploadSerializer(serializers.Serializer):
+    """Сериализатор для добавления связей"""
     file = serializers.FileField(use_url=False)
-
-
-
-
-
 

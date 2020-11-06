@@ -549,7 +549,27 @@ class OutcomesOfWorkProgramList(generics.ListAPIView):
 class OutcomesOfWorkProgramCreateAPIView(generics.CreateAPIView):
     serializer_class = OutcomesOfWorkProgramCreateSerializer
     queryset = OutcomesOfWorkProgram.objects.all()
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    #permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def create(self, request):
+        serializer = OutcomesOfWorkProgramCreateSerializer(data = request.data)
+
+        # обновляем value для item 
+        item = Items.objects.get(id = request.data.get('item'))
+        value = item.value
+        item.value = int(value) + 1
+        item.save()
+        print(item)
+            
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 class OutcomesOfWorkProgramDestroyView(generics.DestroyAPIView):
@@ -557,6 +577,19 @@ class OutcomesOfWorkProgramDestroyView(generics.DestroyAPIView):
     serializer_class = OutcomesOfWorkProgramCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def delete(self, request, *args, **kwargs):
+        try:
+            obj = OutcomesOfWorkProgram.objects.get(pk = kwargs['pk'])
+            
+            # изменяем значение value для item
+            item = Items.objects.get(name = obj.item)
+            value = item.value
+            item.value = int(value) - 1
+            item.save()
+
+            return self.destroy(request, *args, **kwargs)
+        except:
+            return Response(status=400)
 
 class OutcomesOfWorkProgramUpdateView(generics.UpdateAPIView):
     queryset = OutcomesOfWorkProgram.objects.all()
@@ -644,12 +677,40 @@ class PrerequisitesOfWorkProgramCreateAPIView(generics.CreateAPIView):
     queryset = PrerequisitesOfWorkProgram.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def create(self, request):
+        serializer = PrerequisitesOfWorkProgramCreateSerializer(data = request.data)
+        # обновляем value для item 
+        item = Items.objects.get(id = request.data.get('item'))
+        value = item.value
+        item.value = int(value) + 1
+        item.save()
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class PrerequisitesOfWorkProgramDestroyView(generics.DestroyAPIView):
     queryset = PrerequisitesOfWorkProgram.objects.all()
     serializer_class = PrerequisitesOfWorkProgramCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def delete(self, request, *args, **kwargs):
+        try:
+            obj = PrerequisitesOfWorkProgram.objects.get(pk = kwargs['pk'])
+            
+            # изменяем значение value для item
+            item = Items.objects.get(name = obj.item)
+            value = item.value
+            item.value = int(value) - 1
+            item.save()
+
+            return self.destroy(request, *args, **kwargs)
+        except:
+            return Response(status=400)
 
 class PrerequisitesOfWorkProgramUpdateView(generics.UpdateAPIView):
     queryset = PrerequisitesOfWorkProgram.objects.all()
