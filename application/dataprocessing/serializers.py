@@ -28,7 +28,7 @@ class ItemCreateSerializer(serializers.ModelSerializer):
     """Сериализатор Ключевого слова"""
     class Meta:
         model = Items
-        fields = ('id','name')
+        fields = ('id','name','domain')
 
 
 class RecursiveField(serializers.Serializer):
@@ -110,22 +110,3 @@ class FileUploadSerializer(serializers.Serializer):
     """Сериализатор для добавления связей"""
     file = serializers.FileField(use_url=False)
 
-
-
-class HighValueItemsSerializer(serializers.Serializer):
-    
-    #get_synonym = serializers.SerializerMethodField()
-    
-    class Meta:
-        model = Items
-        fields = ('id', 'name',)
-    '''
-    def get_synonym(self, obj):
-
-        if Relation.objects.filter(item1=obj, relation = 5).exists():
-            qset = Relation.objects.filter(item1=obj, relation = 5)
-            item = max([q.item2.value for q in qset])
-        else:
-            item = obj
-        return ItemSerializer(item).data
-    '''

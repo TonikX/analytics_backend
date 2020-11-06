@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 # Api-libs
 from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, \
 ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer, \
-RelationCreateSerializer, HighValueItemsSerializer
+RelationCreateSerializer
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -36,11 +36,12 @@ def set_relation(item1, items_set, type_relation):
     try:
         print('Создаю связи')
         list_of_items = []
-        flag = 0
+        
 
         saved = len(items_set)
         for item2 in items_set:
-
+            flag = 0
+            
             if Relation.objects.filter(item1 = item1, relation = type_relation, item2=item2).exists():
                 #Если связь с i уже существует, то увеличиваем count
                 #Подсчет веса ребра
@@ -268,7 +269,7 @@ class RelationListItemIdAPIView(generics.ListAPIView):
     """
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
-    #permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsRpdDeveloperOrReadOnly]
     
     def get_queryset(self):
         item1 = self.kwargs['item1_id']
@@ -392,17 +393,64 @@ class FileUploadAPIView(APIView):
 
 
 
-class HighValueItemsListAPIView(APIView):
+class HighValueOutcomesListAPIView(generics.ListAPIView):
     """ Возвращаем синонимы с наивысшим вэлью для результатов и пререквизитов"""
-    def get(self, request, *args, **kwargs):
 
-        outcomes = OutcomesOfWorkProgram.objects.filter(workprogram_id = kwargs['workprogram_id'])
-        items = [o.item for o in outcomes]
-        queryset = Items.objects.filter(name__in = items)
+    serializer_class = ItemSerializer
+    
+    def get_queryset(self):
         
-        serializer = ItemSerializer(queryset)
-        print(serializer.data)
-        #competences = Competence.objects.all()
-        #serializer = CompetenceSerializer(competences, many=True)
-        return Response(serializer.data)
+        out_items = OutcomesOfWorkProgram.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        items = [q.item for q in out_items]
+        result = []
+        # получаем синонимы, если они существуют
+        for obj in items:
 
+            if Relation.objects.filter(item1=obj, relation = 5).exists():
+                qset = Relation.objects.filter(item1=obj, relation = 5)
+                item = {q.item2:q.item2.value for q in qset}
+                print(item)
+                max_key = max(item, key=lambda k: item[k])
+                result.append(max_key)
+            
+            elif Relation.objects.filter(relation = 5, item2 = obj).exists():
+                qset = Relation.objects.filter(relation = 5, item2 = obj)
+                item = {q.item1:q.item1.value for q in qset}
+                print(item)
+                max_key = max(item, key=lambda k: item[k])
+                result.append(max_key)
+            else:
+                result.append(obj)
+
+        return Items.objects.filter(name__in = set(result))
+
+class HighValuePrerequisitesListAPIView(generics.ListAPIView):
+    """ Возвращаем синонимы с наивысшим вэлью для результатов и пререквизитов"""
+
+    serializer_class = ItemSerializer
+    
+    def get_queryset(self):
+        
+        pre_items = PrerquisitesOfWorkProgram.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        items = [q.item for q in pre_items]
+        result = []
+        # получаем синонимы, если они существуют
+        for obj in items:
+
+            if Relation.objects.filter(item1=obj, relation = 5).exists():
+                qset = Relation.objects.filter(item1=obj, relation = 5)
+                item = {q.item2:q.item2.value for q in qset}
+                print(item)
+                max_key = max(item, key=lambda k: item[k])
+                result.append(max_key)
+            
+            elif Relation.objects.filter(relation = 5, item2 = obj).exists():
+                qset = Relation.objects.filter(relation = 5, item2 = obj)
+                item = {q.item1:q.item1.value for q in qset}
+                print(item)
+                max_key = max(item, key=lambda k: item[k])
+                result.append(max_key)
+            else:
+                result.append(obj)
+
+        return Items.objects.filter(name__in = set(result))
