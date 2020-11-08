@@ -549,7 +549,7 @@ class OutcomesOfWorkProgramList(generics.ListAPIView):
 class OutcomesOfWorkProgramCreateAPIView(generics.CreateAPIView):
     serializer_class = OutcomesOfWorkProgramCreateSerializer
     queryset = OutcomesOfWorkProgram.objects.all()
-    #permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def create(self, request):
         serializer = OutcomesOfWorkProgramCreateSerializer(data = request.data)

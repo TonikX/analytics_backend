@@ -1,3 +1,4 @@
+import os
 from .models import User, Domain, Items, Relation
 from workprogramsapp.models import OutcomesOfWorkProgram, PrerequisitesOfWorkProgram
 
@@ -9,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 
 from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, \
 ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer, \
-RelationCreateSerializer
+RelationCreateSerializer, userProfileSerializer
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -37,10 +38,11 @@ def set_relation(item1, items_set, type_relation):
     try:
         print('Создаю связи')
         list_of_items = []
-        
-
         saved = len(items_set)
+        
+        
         for item2 in items_set:
+            print(item2)
             flag = 0
             
             if Relation.objects.filter(item1 = item1, relation = type_relation, item2=item2).exists():
@@ -77,15 +79,21 @@ def set_relation(item1, items_set, type_relation):
             
         if type_relation == '1':
             print('Создаю связь для типа "включает в себя')
+            print(flag)
             if flag == 0 and Relation.objects.filter(item1 = item1, relation = '1').exists():
+                print('ok-1')
                 items = [rel.item2 for rel in Relation.objects.filter(item1 = item1, relation = '1')]
                 list_of_items.extend(items)
+                print(list_of_items)
 
-            if len(list_of_items) > 1:    
+            if len(list_of_items) > 1:  
+                print('pk-2')  
                 query = Items.objects.filter(name__in = list(set(list_of_items)))
+                print(query)
                 set_relation_linear(query,'2')
+                print('finish')
 
-        
+            
         print('Связи созданы')
     except:
         msg = f'Что-то пошло не так:('
@@ -97,11 +105,11 @@ def set_relation_hierarchy(items_query, type_relation):
     """
     try:
         for key,value in items_query.items():
-            print(key,value)
+            print(key)
             names = value.split(', ')
             names = [i.strip() for i in names]
             items_set = Items.objects.filter(name__in = names)
-            item1 = Items.objects.get(name = key)
+            item1 = Items.objects.get(name = key.strip())
             set_relation(item1, items_set, type_relation)
         return Response(status=200)
     except:
@@ -363,22 +371,23 @@ class FileUploadAPIView(APIView):
             items_list = []
             
             for i in file:
-                items_list.extend(i.strip().split(', '))
-
+                items_list.extend(i.split(', '))
+            
             domain_id = Domain.objects.get(name = request.data.get("domain")).id
 
             for i in items_list:
-                if Items.objects.filter(name = i).exists():
+                if Items.objects.filter(name = i.strip()).exists():
                     continue;
                 else:
-                    item = Items(name = i, domain = Domain.objects.get(pk=domain_id),
+                    item = Items(name = i.strip(), domain = Domain.objects.get(pk=domain_id),
                         author = request.user, source = 'uploaded')
                     item.save()
             
             type_relation = str(request.data.get("relation"))
-            
+
             course = file[0].strip()
-            file.remove(file[0])  
+            file.remove(file[0])
+
             if type_relation in ['1','4']:
                 print('create')
                 data = dict(zip(file[::2],file[1::2]))
@@ -394,8 +403,7 @@ class FileUploadAPIView(APIView):
                 set_relation_hierarchy(data, '1')
                 #Создаем линейные связи между элементами
                 set_relation_linear(items_query,type_relation) 
-            #elif type_relation in ['0','5','7']:
-            #    return Response('Данный тип связи не сущесвует', status=400)
+
             return Response(status=200)  
         except:
             return Response(status=400)
@@ -433,13 +441,14 @@ class HighValueOutcomesListAPIView(generics.ListAPIView):
         return Items.objects.filter(name__in = set(result))
 
 class HighValuePrerequisitesListAPIView(generics.ListAPIView):
+    
     """ Возвращаем синонимы с наивысшим вэлью для результатов и пререквизитов"""
 
     serializer_class = ItemSerializer
     
     def get_queryset(self):
         
-        pre_items = PrerquisitesOfWorkProgram.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        pre_items = PrerequisitesOfWorkProgram.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
         items = [q.item for q in pre_items]
         result = []
         # получаем синонимы, если они существуют
