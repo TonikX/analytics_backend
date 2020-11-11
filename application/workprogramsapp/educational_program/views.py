@@ -105,7 +105,7 @@ class GeneralCharacteristicsDestroyView(generics.DestroyAPIView):
 
 class GeneralCharacteristicsUpdateView(generics.UpdateAPIView):
     queryset = GeneralCharacteristics.objects.all()
-    serializer_class = GeneralCharacteristicsSerializer
+    serializer_class = GeneralCharacteristiccsSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
