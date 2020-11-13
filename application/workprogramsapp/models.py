@@ -551,7 +551,7 @@ class WorkProgramInFieldOfStudy(models.Model):
 
 class Zun(models.Model):
     '''
-    Модель для компетенций
+    Модель для зунов
     '''
     wp_in_fs = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.CASCADE, blank=True, null=True, related_name="zun_in_wp")
     indicator_in_zun = models.ForeignKey('Indicator', on_delete=models.CASCADE, blank=True, null=True)
