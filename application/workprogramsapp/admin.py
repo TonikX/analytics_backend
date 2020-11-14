@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .expertise.models import UserExpertise, ExpertiseComments, Expertise
+from .folders_ans_statistic.models import Folder, WorkProgramInFolder
 from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
     Competence, Indicator, EvaluationTool, FieldOfStudyWorkProgram, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
@@ -50,5 +51,7 @@ admin.site.register(SkillsOfRole)
 admin.site.register(ProfessionalAreaOfGeneralCharacteristics)
 admin.site.register(ProfessionalStandard)
 admin.site.register(PkCompetencesInGeneralCharacteristics)
+admin.site.register(Folder)
+admin.site.register(WorkProgramInFolder)
 
 

@@ -1,6 +1,7 @@
 from rest_framework import permissions
 
 from workprogramsapp.expertise.models import UserExpertise
+from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -26,22 +27,22 @@ class IsRpdDeveloperOrReadOnly(permissions.BasePermission):
         return request.user.groups.filter(name="rpd_developer")
 
 
-class isEducationPlanDeveloper(permissions.BasePermission):
+class IsEducationPlanDeveloper(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.groups.filter(name="education_plan_developer")
 
 
-class isOpLeader(permissions.BasePermission):
+class IsOpLeader(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.groups.filter(name="op_leader")
 
 
-class isRolesAndProfessionsMaster(permissions.BasePermission):
+class IsRolesAndProfessionsMaster(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.groups.filter(name="roles_and_professions_master")
 
 
-class isStudent(permissions.BasePermission):
+class IsStudent(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.groups.filter(name="student")
 
@@ -79,3 +80,19 @@ class IsMemberOfUserExpertise(permissions.BasePermission):
             return UserExpertise.objects.filter(expert=request.user, pk=view.kwargs['pk'])
         else:
             return UserExpertise.objects.filter(expert=request.user)
+
+
+class IsOwnerOfFolder(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if 'pk' in dict(view.kwargs):
+            return Folder.objects.filter(owner=request.user, pk=view.kwargs['pk'])
+
+
+class IsOwnerOfFolderWithWorkProgramm(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if 'pk' in dict(view.kwargs):
+            return WorkProgramInFolder.objects.filter(pk=view.kwargs['pk'], folder__owner=request.user)
+        try:
+            return Folder.objects.filter(owner=request.user, pk=request.data['folder'])
+        except KeyError:
+            return True
