@@ -1,3 +1,5 @@
+import get from 'lodash/get';
+
 import {UserType} from "../layout/types";
 import {UserFields} from "../layout/enum";
 
@@ -14,4 +16,4 @@ export const checkUrl = (url: string) => {
 export const FULL_DATE_FORMAT = 'DD.MM.YYYY';
 export const YEAR_DATE_FORMAT = 'YYYY';
 
-export const getUserFullName = (user: UserType) => `${user[UserFields.FIRST_NAME]} ${user[UserFields.LAST_NAME]}`;
+export const getUserFullName = (user: UserType) => `${get(user, [UserFields.FIRST_NAME], '')} ${get(user, [UserFields.LAST_NAME], '')}`;
