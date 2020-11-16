@@ -32,7 +32,7 @@ const muiTheme = createMuiTheme({
         //     'Source Sans Pro',
         //     '-apple-system',
         // ].join(','),
-        fontSize: 14
+        fontSize: 13
     },
     palette: {
         primary: {
@@ -84,9 +84,15 @@ const muiTheme = createMuiTheme({
         MuiFab: {
             root: {
                 width: '40px',
-                height: '40px'
+                height: '40px',
+                boxShadow: 'none'
             }
         },
+        MuiPaper: {
+            root: {
+                borderRadius: '0'
+            }
+        }
     }
 }, ruRU);
 

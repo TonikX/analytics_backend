@@ -107,7 +107,7 @@ export default [
     [
         {
             title: 'Направления',
-            link: appRouter.getEducationalProgramRoute(),
+            link: appRouter.getDirectionRoute(),
             icon: DirectionsIcon,
             selectedIcon: DirectionsSelectedIcon,
         },
@@ -120,6 +120,12 @@ export default [
         {
             title: 'Учебные планы в направлении',
             link: appRouter.getEducationPlanInDirectionRoute(),
+            icon: WorkProgramInDirectionIcon,
+            selectedIcon: WorkProgramInDirectionSelectedIcon,
+        },
+        {
+            title: 'Образовательные программы',
+            link: appRouter.getEducationalProgram(),
             icon: WorkProgramInDirectionIcon,
             selectedIcon: WorkProgramInDirectionSelectedIcon,
         },

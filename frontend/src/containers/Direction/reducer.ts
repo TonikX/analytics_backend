@@ -2,11 +2,11 @@ import createReducer from "../../store/createReducer";
 import {fields} from './enum';
 import actions from "./actions";
 
-import {educationalProgramState} from "./types";
+import {directionState} from "./types";
 
-export const GENERAL_PATH = 'educationalProgram';
+export const GENERAL_PATH = 'directions';
 
-export const initialState: educationalProgramState = {
+export const initialState: directionState = {
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: '',
         [fields.SORTING_MODE]: ''
@@ -21,27 +21,27 @@ export const initialState: educationalProgramState = {
     }
 };
 
-const setEducationalProgram = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+const setEducationalProgram = (state: directionState, {payload}: any): directionState => ({
     ...state,
     [fields.EDUCATIONAL_PROGRAM_LIST]: payload,
 });
 
-const changeSearchQuery = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+const changeSearchQuery = (state: directionState, {payload}: any): directionState => ({
     ...state,
     [fields.SEARCH_QUERY]: payload,
 });
 
-const changeCurrentPage = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+const changeCurrentPage = (state: directionState, {payload}: any): directionState => ({
     ...state,
     [fields.CURRENT_PAGE]: payload,
 });
 
-const changeAllCount = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+const changeAllCount = (state: directionState, {payload}: any): directionState => ({
     ...state,
     [fields.ALL_COUNT]: payload,
 });
 
-const openDialog = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+const openDialog = (state: directionState, {payload}: any): directionState => ({
     ...state,
     [fields.EDUCATIONAL_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: true,
@@ -49,7 +49,7 @@ const openDialog = (state: educationalProgramState, {payload}: any): educational
     }
 });
 
-const closeDialog = (state: educationalProgramState): educationalProgramState => ({
+const closeDialog = (state: directionState): directionState => ({
     ...state,
     [fields.EDUCATIONAL_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
@@ -57,7 +57,7 @@ const closeDialog = (state: educationalProgramState): educationalProgramState =>
     }
 });
 
-const changeSorting = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+const changeSorting = (state: directionState, {payload}: any): directionState => ({
     ...state,
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: payload.field,

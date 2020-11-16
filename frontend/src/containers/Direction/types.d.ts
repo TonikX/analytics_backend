@@ -18,7 +18,7 @@ export interface DirectionActions {
     changeSorting: any;
 }
 
-export interface educationalProgramState {
+export interface directionState {
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: string,
         [fields.SORTING_MODE]: SortingType;

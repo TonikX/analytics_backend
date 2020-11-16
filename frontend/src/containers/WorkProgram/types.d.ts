@@ -10,10 +10,10 @@ import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {CourseType} from "../Courses/types";
 import {TrainingEntitityType} from "../TrainingEntities/types";
-import {ReactText} from "react";
 import {IndicatorsFields} from "../Indicators/enum";
 import {CompetenceFields} from "../Competences/enum";
 import {UserType} from "../../layout/types";
+import {FolderActions, FolderType} from "../Profile/Folders/types";
 
 export interface WorkProgramActions {
     pageDown: any;
@@ -114,12 +114,14 @@ export type IndicatorInZun = {
 
 export interface WorkProgramProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
+    foldersActions: FolderActions;
     workProgramTitle: string;
     canApprove: boolean;
     canSendToExpertise: boolean;
     canSendToArchive: boolean;
     canComment: boolean;
     workProgramStatus: string;
+    folders: Array<FolderType>
 }
 
 export type Section = {

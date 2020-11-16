@@ -31,7 +31,6 @@ import {EvaluationToolType} from "../types";
 import connect from './EvaluationTools.connect';
 import styles from './EvaluationTools.styles';
 
-
 class EvaluationTools extends React.PureComponent<SixthStepProps> {
     state = {
         anchorsEl: {}
@@ -74,7 +73,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
     };
 
     render() {
-        const {classes, evaluationToolsList, isCanEdit} = this.props;
+        const {classes, evaluationToolsList, isCanEdit, isStudent} = this.props;
         const {anchorsEl} = this.state;
 
         return (
@@ -135,7 +134,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                         {evaluationTool[EvaluationToolFields.SEMESTER]}
                                     </Typography>
 
-                                    {isCanEdit &&
+                                    {isCanEdit ?
                                         <div className={classes.actions}>
                                             <IconButton
                                                 aria-haspopup="true"
@@ -164,7 +163,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                             >
                                                 <MenuItem
                                                     onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}>
-                                                    <EyeIcon className={classes.menuIcon}/>
+                                                    <EyeIcon className={classes.menuIcon} />
                                                     Смотреть описание
                                                 </MenuItem>
 
@@ -180,6 +179,11 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                                 </MenuItem>
                                             </Menu>
                                         </div>
+                                        : !isStudent ?
+                                             <div onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}>
+                                                 <EyeIcon className={classes.menuIcon} />
+                                             </div>
+                                        : <></>
                                     }
                                 </div>
 

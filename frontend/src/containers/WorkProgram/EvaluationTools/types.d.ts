@@ -8,4 +8,5 @@ export interface SixthStepProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
     evaluationToolsList: Array<EvaluationToolType>;
     isCanEdit: boolean;
+    isStudent: boolean;
 }

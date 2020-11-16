@@ -25,7 +25,8 @@ export default (theme: Theme) => createStyles({
     },
     root: {
         padding: '20px 50px 20px 50px',
-        boxShadow: '0px 0px 6px 1px rgba(194,194,194,0.3)',
+        boxShadow: 'none',
+        borderRadius: '0px',
         height: '100%',
         boxSizing: 'border-box',
         display: 'flex',

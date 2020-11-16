@@ -16,7 +16,7 @@ import {PlansAndDirectionsProps} from './types';
 import {appRouter} from "../../../service/router-service";
 import {DirectionFields} from "../../Direction/enum";
 
-import {specialization} from "../constants";
+import {specializationObject} from "../constants";
 
 import connect from './PlansAndDirections.connect';
 import styles from './PlansAndDirections.styles';
@@ -52,9 +52,7 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                                             {get(direction, ['field_of_study', DirectionFields.TITLE], '')} &nbsp;
                                         </TableCell>
                                         <TableCell>
-                                            {get(specialization.find(item =>
-                                                item.value === get(direction, ['field_of_study', DirectionFields.QUALIFICATION])), 'label', '')
-                                            }
+                                            {specializationObject[get(direction, ['field_of_study', DirectionFields.QUALIFICATION])]}
                                         </TableCell>
                                     </TableRow>
                                 )

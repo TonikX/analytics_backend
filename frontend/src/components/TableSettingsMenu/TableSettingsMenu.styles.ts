@@ -11,13 +11,12 @@ export default (theme: Theme) => createStyles({
     },
     menuLinkItem: {
         '&>a': {
-            padding: '6px 16px',
             display: 'flex',
             alignItems: 'center',
             color: 'rgb(51, 51, 51) !important',
             textDecoration: 'none'
         },
-        '&>svg': {
+        '& svg': {
             marginRight: '10px',
             fill: 'rgba(0, 0, 0, 0.54)'
         },

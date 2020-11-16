@@ -11,7 +11,7 @@ import Courses from './containers/Courses';
 import SubjectArea from './containers/SubjectArea';
 import Prerequisites from './containers/TrainingEntities';
 import Competences from './containers/Competences';
-import EducationalProgram from './containers/Direction';
+import Direction from './containers/Direction';
 import EducationalPlan from './containers/EducationalPlan';
 import EducationPlanInDirection from './containers/EduationPlanInDirection';
 import EducationPlanDetail from './containers/EducationalPlan/Detail';
@@ -22,6 +22,9 @@ import Professions from "./containers/Professions";
 import Roles from "./containers/Roles";
 import ProfessionSkills from "./containers/Professions/Skills";
 import RolesSkills from "./containers/Roles/Skills";
+
+import EducationalProgram from "./containers/EducationalProgram";
+import EducationalProgramСharacteristic from "./containers/EducationalProgram/Сharacteristic";
 
 import SkillsProfessions from "./containers/SkillsProfessions";
 import SkillsRoles from "./containers/SkillsRoles";
@@ -60,8 +63,8 @@ export default () => (
                 <AuthRoute path={routerService.getCompetencesRoute()}>
                     <Competences />
                 </AuthRoute>
-                <AuthRoute path={routerService.getEducationalProgramRoute()}>
-                    <EducationalProgram />
+                <AuthRoute path={routerService.getDirectionRoute()}>
+                    <Direction />
                 </AuthRoute>
                 <AuthRoute path={routerService.getEntityToEntityRoute()}>
                     <EntitityToEntitity />
@@ -98,6 +101,12 @@ export default () => (
                 </AuthRoute>
                 <AuthRoute path={routerService.getIndicatorsRoute()}>
                     <Indicators />
+                </AuthRoute>
+                <AuthRoute path={routerService.getEducationalProgramCharacteristic()}>
+                    <EducationalProgramСharacteristic />
+                </AuthRoute>
+                <AuthRoute path={routerService.getEducationalProgram()}>
+                    <EducationalProgram />
                 </AuthRoute>
                 <AuthRoute path={routerService.getEducationPlanDetailRoute()}
                            children={() => (

@@ -3,11 +3,12 @@ import {createStyles, Theme} from "@material-ui/core";
 export default (theme: Theme) => createStyles({
     root: {
         padding: '20px 50px 20px 50px',
-        boxShadow: '0px 0px 6px 1px rgba(194,194,194,0.3)',
         height: '100%',
         boxSizing: 'border-box',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        boxShadow: 'none',
+        borderRadius: '0px',
     },
     tableWrap: {
         height: 'calc(100% - 60px)',

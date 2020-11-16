@@ -21,7 +21,10 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         minHeight: '50px',
         alignItems: 'center',
-        padding: '0px 10px'
+        padding: '0px 10px',
+        '& p': {
+            fontSize: '14px'
+        }
     },
     sectionsRow: {
         background: '#f6f6f6',
