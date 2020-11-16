@@ -54,7 +54,7 @@ class IsExpertiseMaster(permissions.BasePermission):
 
 class IsMemberOfExpertise(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.user.is_expertise_master:
+        if request.user.groups.filter(name="expertise_master"):
             return True
         if 'pk' in dict(view.kwargs):
             return UserExpertise.objects.filter(expert=request.user, expertise=view.kwargs['pk'])
@@ -64,7 +64,7 @@ class IsMemberOfExpertise(permissions.BasePermission):
 
 class IsWorkProgramMemberOfExpertise(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.user.is_expertise_master:
+        if request.user.groups.filter(name="expertise_master"):
             return True
         if 'pk' in dict(view.kwargs):
             return UserExpertise.objects.filter(expert=request.user, expertise__work_program=view.kwargs['pk'])
@@ -74,7 +74,7 @@ class IsWorkProgramMemberOfExpertise(permissions.BasePermission):
 
 class IsMemberOfUserExpertise(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.user.is_expertise_master:
+        if request.user.groups.filter(name="expertise_master"):
             return True
         if 'pk' in dict(view.kwargs):
             return UserExpertise.objects.filter(expert=request.user, pk=view.kwargs['pk'])
