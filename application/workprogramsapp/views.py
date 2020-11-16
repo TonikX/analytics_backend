@@ -1877,3 +1877,12 @@ def CloneWorkProgramm(request):
 
 
 
+@api_view(['GET'])
+def UserGroups(request):
+    ""
+    groups_names=[]
+    for group in request.user.groups.all():
+        groups_names.append(group.name)
+    if UserExpertise.objects.filter(expert=request.user):
+        groups_names.append("expertise_member")
+    return Response({"groups": groups_names})

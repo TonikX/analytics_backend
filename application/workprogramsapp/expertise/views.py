@@ -45,7 +45,6 @@ class ExpertiseCommentsView(generics.ListAPIView):
     permission_classes = [IsMemberOfExpertise]
 
     def get_queryset(self, *args, **kwargs):
-        print(dict(self.kwargs))
         if ('pk' in dict(self.kwargs)):
             if self.request.query_params.get('block') != None:
                 return ExpertiseComments.objects.filter(user_expertise__expertise=self.kwargs['pk'],
