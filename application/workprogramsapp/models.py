@@ -385,6 +385,7 @@ class PkCompetencesInGeneralCharacteristics(models.Model):
     labor_functions = models.CharField(max_length=512, verbose_name="трудовая функция")
     general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
     competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
+    professional_standard = models.ManyToManyField('ProfessionalStandard', verbose_name="Профессиональный стандарт", blank=True)
 
     def __str__(self):
         return str(self.labor_functions) + str(self.general_characteristic) + str(self.competence)
@@ -604,7 +605,7 @@ class Indicator(models.Model):
     number = models.CharField(unique=True, max_length=1024)
     name = models.CharField(max_length=1024)
     # work_programs = models.ManyToManyField('WorkProgram', through=IndicatorWorkProgram, blank=True, null=True)
-    competence = models.ForeignKey('Competence', on_delete=models.CASCADE)
+    competence = models.ForeignKey('Competence', on_delete=models.CASCADE, related_name = "indicator_in_competencse")
 
     def __str__(self):
         return self.name
