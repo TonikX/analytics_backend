@@ -16,7 +16,7 @@ const getFolders = createLogic({
 
         service.getFolders()
             .then((res) => {
-                dispatch(folderActions.setFolders(res.data));
+                dispatch(folderActions.setFolders(res.data.results));
 
                 dispatch(actions.fetchingSuccess());
             })

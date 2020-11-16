@@ -8,6 +8,7 @@ import Step from "@material-ui/core/Step";
 import StepButton from "@material-ui/core/StepButton";
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 
 import {CharacteristicProps,} from '../types';
 import {steps} from './constants';
@@ -23,6 +24,16 @@ import {YEAR_DATE_FORMAT} from "../../../common/utils";
 import DatePickerComponent from "../../../components/DatePicker/DatePicker";
 import QualificationSelector from "../../../components/QualificationSelector/QualificationSelector";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import Scrollbars from "react-custom-scrollbars";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import TableBody from "@material-ui/core/TableBody";
+import {CompetenceType} from "../../Competences/types";
+import {CompetenceFields} from "../../Competences/enum";
+import {IndicatorType} from "../../Indicators/types";
+import {IndicatorsFields} from "../../Indicators/enum";
 
 class Characteristic extends React.Component<CharacteristicProps> {
     state = {
@@ -69,8 +80,88 @@ class Characteristic extends React.Component<CharacteristicProps> {
 
     getEducationalProgramCharacteristicId = () => get(this.props.educationalProgramCharacteristic, EducationProgramCharacteristicFields.ID, '');
 
+    returnCompetences = (competences: Array<CompetenceType>) => {
+        const {classes} = this.props;
+        return <>
+            <Table stickyHeader size='small'>
+                <TableHead className={classes.header}>
+                    <TableRow>
+                        <TableCell>
+                            №
+                        </TableCell>
+                        <TableCell>
+                            Название
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {competences.map((item: any, index: number) =>
+                        <TableRow>
+                            <TableCell>
+                                {item[CompetenceFields.NUMBER]}
+                            </TableCell>
+                            <TableCell>
+                                {item[CompetenceFields.TITLE]}
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+            <div style={{display: 'flex'}}>
+                <Button variant="outlined" style={{marginLeft: 'auto', marginTop: '20px'}}>Добавить</Button>
+            </div>
+        </>
+    }
+
+    returnProfessionalCompetences = (competences: Array<CompetenceType>) => {
+        const {classes} = this.props;
+        return <>
+            <Table stickyHeader size='small'>
+                <TableHead className={classes.header}>
+                    <TableRow>
+                        <TableCell>
+                            Код и наименование компетенции
+                        </TableCell>
+                        <TableCell>
+                            Код и наименование индикатора
+                        </TableCell>
+                        <TableCell>
+                            Наименование сопряженного проф. стандарта
+                        </TableCell>
+                        <TableCell>
+                            Выбранные обобщенные трудовые функции
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {competences.map((item: any, index: number) =>
+                        <TableRow>
+                            <TableCell>
+                                {item.competence[CompetenceFields.NUMBER]} {item.competence[CompetenceFields.TITLE]}
+                            </TableCell>
+                            <TableCell>
+                                {get(item, 'competence.indicator_in_competencse', []).map((item: IndicatorType) =>
+                                    <> {item[IndicatorsFields.NUMBER]} {item[IndicatorsFields.TITLE]}<br/></>
+                                )}
+                            </TableCell>
+                            <TableCell>
+                                {get(item, 'professional_standard', []).map((standard: any) => <>{get(standard, 'code')} {get(standard, 'title')}<br/></>)}
+                            </TableCell>
+                            <TableCell>
+                                {item.labor_functions}
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+            <div style={{display: 'flex'}}>
+                <Button variant="outlined" style={{marginLeft: 'auto', marginTop: '20px'}}>Добавить</Button>
+            </div>
+        </>
+    }
+
     renderContent = () => {
-        const {educationalProgramCharacteristic} = this.props;
+        const {educationalProgramCharacteristic, classes} = this.props;
         const {activeStep} = this.state;
 
         switch (activeStep){
@@ -91,8 +182,47 @@ class Characteristic extends React.Component<CharacteristicProps> {
                 </>
             case 1:
                 return <>
-                    ТАБЛИЦА
-
+                    <Typography className={classes.label}>Область профессиональной деятельности</Typography>
+                    <Table stickyHeader size='small'>
+                        <TableHead className={classes.header}>
+                            <TableRow>
+                                <TableCell>
+                                    №
+                                </TableCell>
+                                <TableCell>
+                                    Код и наименования области профессиональной деятельности
+                                </TableCell>
+                                <TableCell>
+                                    Код профессионального стандарта из данной области
+                                </TableCell>
+                                <TableCell>
+                                    Наименование профессионального стандарта из данной области
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.AREA_OF_ACTIVITY, []).map((item: any, index: number) =>
+                                <TableRow>
+                                    <TableCell>
+                                        {index}
+                                    </TableCell>
+                                    <TableCell>
+                                        {item.title}
+                                    </TableCell>
+                                    <TableCell>
+                                        {get(item, 'professional_standard', []).map((standard: any) => <>{get(standard, 'code')} <br/></>)}
+                                    </TableCell>
+                                    <TableCell>
+                                        {get(item, 'professional_standard', []).map((standard: any) => <>{get(standard, 'title')} <br/></>)}
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                    <div style={{display: 'flex'}}>
+                        <Button variant="outlined" style={{marginLeft: 'auto', marginTop: '20px'}}>Добавить</Button>
+                    </div>
+                    <br/> <br/>
                     <CKEditor label={"Сферы профессиональной деятельности"}
                               value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES, '')}
                               onChange={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES)}
@@ -111,6 +241,22 @@ class Characteristic extends React.Component<CharacteristicProps> {
                               onChange={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.TASKS_OF_ACTIVITY)}
                               toolbarContainerId="toolbar-container3"
                     />
+                </>;
+            case 3:
+                return <>
+                    {this.returnCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.OK_COMPETENCES, []))}
+                </>;
+            case 4:
+                return <>
+                    {this.returnCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.KC_COMPETENCES, []))}
+                </>;
+            case 5:
+                return <>
+                    {this.returnProfessionalCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PK_COMPETENCES, []))}
+                </>;
+            case 6:
+                return <>
+                    {this.returnCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.NP_COMPETENCES, []))}
                 </>;
             case 7:
                 return <CKEditor label={"Необходимый преподавательский состав"}

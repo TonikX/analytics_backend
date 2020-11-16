@@ -11,8 +11,10 @@ import styles from './LikeButton.styles';
 
 import {LikeButtonProps} from './types';
 import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import {FoldersFields} from "../../containers/Profile/Folders/enum";
 
-const LikeButton = ({classes, isLiked, onChange}: LikeButtonProps) => {
+const LikeButton = ({classes, isLiked, onChange, folders}: LikeButtonProps) => {
     const [isHover, changeHover] = useState(false);
     const [anchor, changeOpenFolderMenu] = useState(null);
 
@@ -52,7 +54,11 @@ const LikeButton = ({classes, isLiked, onChange}: LikeButtonProps) => {
                       paper: classes.menuPaper
                   }}
             >
-
+                {folders.map(item =>
+                    <MenuItem key={item[FoldersFields.ID]}>
+                        {item[FoldersFields.NAME]}
+                    </MenuItem>
+                )}
             </Menu>
         </>
     );

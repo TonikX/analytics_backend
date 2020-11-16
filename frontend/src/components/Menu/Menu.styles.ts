@@ -7,7 +7,8 @@ export default (theme: Theme) => createStyles({
         marginTop: 64,
         borderRight: '1px solid #f4f4f4',
         zIndex: 100,
-        height: 'calc(100% - 64px)'
+        height: 'calc(100% - 64px)',
+        backgroundColor: '#f4f4f4'
     },
     divider: {
         backgroundColor: '#f4f4f4'
@@ -34,7 +35,7 @@ export default (theme: Theme) => createStyles({
         color: theme.palette.text.primary,
         borderLeft: `4px solid transparent`,
         '&:hover': {
-            backgroundColor: '#f4f4f4 !important',
+            backgroundColor: '#d2d2d2 !important',
             '& svg': {
                 color: theme.palette.secondary.main,
             },
