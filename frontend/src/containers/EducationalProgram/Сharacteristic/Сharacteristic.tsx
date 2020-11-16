@@ -26,7 +26,6 @@ import QualificationSelector from "../../../components/QualificationSelector/Qua
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
-import Scrollbars from "react-custom-scrollbars";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
