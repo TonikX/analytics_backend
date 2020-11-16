@@ -18,7 +18,7 @@ class WorkProgramInFolderSerializer(serializers.ModelSerializer):
 class FolderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Folder
-        fields = ["name","description","owner","work_program"]
+        fields = ["id", "name", "description", "owner", "work_program"]
 
     def update(self, instance, validated_data):
         print(validated_data)
