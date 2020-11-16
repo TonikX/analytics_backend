@@ -730,9 +730,9 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         else:
             newdata.update({"can_archive": False})
         if request.user.groups.filter(name="student"):
-            newdata.update({"can_add_to folder": True})
+            newdata.update({"can_add_to_folder": True})
         else:
-            newdata.update({"can_add_to folder": True})
+            newdata.update({"can_add_to_folder": True})
         newdata = OrderedDict(newdata)
         return Response(newdata, status=status.HTTP_200_OK)
 
