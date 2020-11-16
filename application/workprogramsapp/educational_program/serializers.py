@@ -63,7 +63,7 @@ class ProfessionalAreaOfGeneralCharacteristicsSerializer(serializers.ModelSerial
 class PkCompetencesInGeneralCharacteristicsSerializer(serializers.ModelSerializer):
     """Сериализатор Компетенций"""
     competence = CompetenceForEPSerializer()
-
+    professional_standard = ProfessionalStandardSerializer(many = True)
 
     class Meta:
         model = PkCompetencesInGeneralCharacteristics
