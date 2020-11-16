@@ -15,7 +15,7 @@ class UserExpertiseListView(generics.ListAPIView):
     """
     queryset = UserExpertise.objects.all()
     serializer_class = UserExpertiseSerializer
-    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsMemberOfExpertise]
 
     def get_queryset(self, *args, **kwargs):
         if ('pk' in dict(self.kwargs)):
@@ -30,7 +30,7 @@ class UserExpertiseCreateView(generics.CreateAPIView):
     """
     queryset = UserExpertise.objects.all()
     serializer_class = UserExpertiseSerializer
-    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsMemberOfExpertise]
 
 
 class ExpertiseCommentsView(generics.ListAPIView):
@@ -42,10 +42,9 @@ class ExpertiseCommentsView(generics.ListAPIView):
     queryset = ExpertiseComments.objects.all()
     serializer_class = CommentSerializer
 
-    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsMemberOfExpertise]
 
     def get_queryset(self, *args, **kwargs):
-        print(dict(self.kwargs))
         if ('pk' in dict(self.kwargs)):
             if self.request.query_params.get('block') != None:
                 return ExpertiseComments.objects.filter(user_expertise__expertise=self.kwargs['pk'],
@@ -62,7 +61,7 @@ class ExpertiseCommentCreateView(generics.CreateAPIView):
     """
     queryset = ExpertiseComments.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsMemberOfExpertise]
 
 
 class ExpertiseWorkProgramView(generics.RetrieveAPIView):
@@ -83,13 +82,13 @@ class ExpertiseWorkProgramView(generics.RetrieveAPIView):
 class ExpertiseListView(generics.ListAPIView):
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
-    permission_classes = [IsMemberOfExpertise, IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsMemberOfExpertise]
 
 
 class ExpertiseViewById(generics.RetrieveAPIView):
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
-    permission_classes = [IsExpertiseMaster, IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsExpertiseMaster]
 
 
 class ExpertiseCreateView(generics.CreateAPIView):
@@ -109,7 +108,7 @@ class ChangeExpertiseView(generics.UpdateAPIView):
     """
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
-    permission_classes = [IsExpertiseMaster, IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsExpertiseMaster]
 
 
 class ChangeUserExpertiseView(generics.UpdateAPIView):
@@ -118,4 +117,4 @@ class ChangeUserExpertiseView(generics.UpdateAPIView):
     """
     queryset = UserExpertise.objects.all()
     serializer_class = UserExpertiseSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly, IsMemberOfExpertise]
+    permission_classes = [IsMemberOfUserExpertise]

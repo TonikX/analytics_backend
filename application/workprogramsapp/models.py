@@ -31,7 +31,7 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
-class WorkProgram(CloneMixin, models.Model):
+class WorkProgram(models.Model):
     '''
     Модель для рабочей программы
     '''
@@ -162,7 +162,7 @@ class PrerequisitesOfWorkProgram(models.Model):
     #     return self.item
 
 
-class OutcomesOfWorkProgram(models.Model, CloneMixin):
+class OutcomesOfWorkProgram(models.Model):
     '''
     Модель для результатов обучения по рабочей программе
     '''
@@ -353,26 +353,41 @@ class GeneralCharacteristics(models.Model):
     '''
     Модель описания характеристики образовтаельной программы
     '''
-    educational_program = models.ForeignKey('EducationalProgram', on_delete=models.SET_NULL, verbose_name = 'Учебный план_1', related_name="general_characteristics_in_educational_program", blank = True, null = True)
-    area_of_activity = models.CharField(max_length=512, verbose_name="Область профессиональной деятельности", blank=True, null=True)
+    educational_program = models.ForeignKey('EducationalProgram', on_delete=models.SET_NULL, verbose_name = 'Образовательная программа', related_name="general_characteristics_in_educational_program", blank = True, null = True)
+    area_of_activity = models.ManyToManyField('ProfessionalAreaOfGeneralCharacteristics', verbose_name = 'Область профессиональной деятельности')
     objects_of_activity = models.CharField(max_length=512, verbose_name="Объекты профессиональной деятельности", blank=True, null=True)
-    kinds_of_activity = models.CharField(max_length=512, verbose_name="Вид (виды) профессиональной деятельности, к которому (которым) готовятся выпускники", blank=True, null=True)
+    kinds_of_activity = models.CharField(max_length=512, verbose_name="Сферы профессиональной деятельности, к которому (которым) готовятся выпускники", blank=True, null=True)
     tasks_of_activity = models.CharField(max_length=512, verbose_name="Задачи профессиональной деятельности ", blank=True, null=True)
     type_of_activity = models.CharField(max_length=512, verbose_name="Тип основной профессиональной образовательной программы", blank=True, null=True)
     ok_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕКУЛЬТУРНЫЕ КОМПЕТЕНЦИИ", related_name="ok_competences_in_gh", blank=True)
-    opk_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ", related_name="opk_competences_in_gh", blank=True)
-    pk_competences = models.ManyToManyField('Competence', verbose_name="ПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ", related_name="pk_competences_in_gh", blank=True)
-    psk_competences = models.ManyToManyField('Competence', verbose_name="ПРОФЕССИОНАЛЬНО-СПЕЦИАЛИЗИРОВАННЫЕ КОМПЕТЕНЦИИ", related_name="psk_competences_in_gh", blank=True,)
-    pps = ArrayField(models.CharField(max_length=512, verbose_name="Сведения о профессорско-преподавательском составе, необходимом для реализации основной профессиональной образовательной программы"), blank=True, null=True)
+    kc_competences = models.ManyToManyField('Competence', verbose_name="Ключевые компетенции", related_name="kc_competences_in_gh", blank=True)
+    pk_competences = models.ManyToManyField('Competence', verbose_name="ПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ", through = 'PkCompetencesInGeneralCharacteristics', related_name="pk_competences_in_gh", blank=True)
+    np_competences = models.ManyToManyField('Competence', verbose_name="Надпрофессиональные компетенции", related_name="np_competences_in_gh", blank=True,)
+    #pps = ArrayField(models.CharField(max_length=512, verbose_name="Сведения о профессорско-преподавательском составе, необходимом для реализации основной профессиональной образовательной программы"), blank=True, null=True)
+    pps = models.TextField(max_length=55512, verbose_name="Сведения о профессорско-преподавательском составе, необходимом для реализации ", blank=True, null=True)
     annotation = models.TextField(max_length=55512, verbose_name="Аннотация основной профессиональной образовательной программы", blank=True, null=True)
     developers = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Сотрудники Университета ИТМО", related_name="ok_competences_in_gh", blank=True)
     employers_representatives = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Представители работодателей", related_name="employers_representatives_in_gh", blank=True)
     director_of_megafaculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Директор мегафакультета", related_name="director_of_megafaculty_in_gh", blank=True, null=True)
     dean_of_the_faculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Декан факультета", related_name="dean_of_the_faculty_in_gh", blank=True, null=True)
-    scientific_supervisor_of_the_educational_program = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Научный руководитель образовательной программы", related_name="scientific_supervisor_of_the_educational_program_in_gh")
+    scientific_supervisor_of_the_educational_program = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Научный руководитель образовательной программы",
+                                                                         related_name="scientific_supervisor_of_the_educational_program_in_gh", blank=True, null=True)
 
     def __str__(self):
         return str(self.educational_program) + str(self.director_of_megafaculty) + str(self.scientific_supervisor_of_the_educational_program)
+
+
+class PkCompetencesInGeneralCharacteristics(models.Model):
+    """
+    Факультет
+    """
+
+    labor_functions = models.CharField(max_length=512, verbose_name="трудовая функция")
+    general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
+    competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
+
+    def __str__(self):
+        return str(self.labor_functions) + str(self.general_characteristic) + str(self.competence)
 
 
 class Department(models.Model):
@@ -382,6 +397,29 @@ class Department(models.Model):
     title = models.CharField(max_length=512, verbose_name="Название факультета")
     mini_titile = models.CharField(max_length=512, verbose_name="Краткое название факультета", blank=True, null=True)
     dean = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
+
+    def __str__(self):
+        return str(self.title)
+
+
+class ProfessionalAreaOfGeneralCharacteristics(models.Model):
+    """
+    Профессиональный стандарт
+    """
+    # general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="ОХ", blank=True, null=True)
+    title = models.CharField(max_length=512, verbose_name="Наименование бласти проф деятельности", blank=True, null=True)
+    professional_standard = models.ManyToManyField('ProfessionalStandard', verbose_name="Профессиональный стандарт", blank=True)
+
+    def __str__(self):
+        return str(self.title)
+
+
+class ProfessionalStandard(models.Model):
+    """
+    Профессиональный стандарт
+    """
+    title = models.CharField(max_length=512, verbose_name="Наименование профессионального стандарта из данной области")
+    code = models.CharField(max_length=512, verbose_name="Код профессионального стандарта из данной области", blank=True, null=True)
 
     def __str__(self):
         return str(self.title)
@@ -401,7 +439,7 @@ class ImplementationAcademicPlan(models.Model):
         return str(self.academic_plan)
 
 
-class DisciplineBlock(CloneMixin, models.Model):
+class DisciplineBlock(models.Model):
     '''
     Модель блока дисциплин
     '''
@@ -443,7 +481,7 @@ class DisciplineBlock(CloneMixin, models.Model):
 #         return (str(self.name) + str(self.descipline_block))
 
 
-class DisciplineBlockModule(CloneMixin, models.Model):
+class DisciplineBlockModule(models.Model):
     '''
     Модель модуля блока дисциплин
     '''
@@ -513,7 +551,7 @@ class WorkProgramInFieldOfStudy(models.Model):
 
 class Zun(models.Model):
     '''
-    Модель для компетенций
+    Модель для зунов
     '''
     wp_in_fs = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.CASCADE, blank=True, null=True, related_name="zun_in_wp")
     indicator_in_zun = models.ForeignKey('Indicator', on_delete=models.CASCADE, blank=True, null=True)
@@ -572,7 +610,7 @@ class Indicator(models.Model):
         return self.name
 
 
-class EvaluationTool(CloneMixin, models.Model):
+class EvaluationTool(models.Model):
     '''
     Модель для оценочных средств
     '''
@@ -589,7 +627,7 @@ class EvaluationTool(CloneMixin, models.Model):
         return self.name
 
 
-class DisciplineSection(CloneMixin, models.Model):
+class DisciplineSection(models.Model):
     '''
     Модель для разделов дисциплин
     '''
@@ -672,7 +710,7 @@ class BibliographicReference(models.Model):
     # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
 
-class Topic(CloneMixin, models.Model):
+class Topic(models.Model):
     '''
     Модель для темы
     '''
