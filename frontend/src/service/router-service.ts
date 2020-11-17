@@ -1,5 +1,6 @@
 import {ReactText} from "react";
 
+const FOLDERS = 'folders';
 const SIGN_IN = 'sign-in';
 const SIGN_UP = 'sign-up';
 const COURSES = 'courses';
@@ -38,6 +39,10 @@ export default class RouterService {
 
     getSignInRoute = () => {
         return SEPARATOR + SIGN_IN;
+    };
+
+    getFoldersRoute = () => {
+        return SEPARATOR + FOLDERS;
     };
 
     getSignUpRoute = () => {

@@ -79,10 +79,12 @@ export interface workProgramState {
 export type WorkProgramGeneralType = {
     [WorkProgramGeneralFields.ID]: number;
     [WorkProgramGeneralFields.TITLE]: string;
+    [WorkProgramGeneralFields.DESCRIPTION]: string;
     [WorkProgramGeneralFields.CODE]: string;
     [WorkProgramGeneralFields.QUALIFICATION]: string;
     [WorkProgramGeneralFields.APPROVAL_DATE]: string;
     [WorkProgramGeneralFields.AUTHORS]: string;
+    [WorkProgramGeneralFields.RATING]: boolean;
     [WorkProgramGeneralFields.ZUN]: Array<ZunType>;
 };
 
@@ -119,8 +121,11 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     canApprove: boolean;
     canSendToExpertise: boolean;
     canSendToArchive: boolean;
+    canAddToFolder: boolean;
     canComment: boolean;
     workProgramStatus: string;
+    workProgramRating: boolean;
+    workProgramRatingId: number;
     folders: Array<FolderType>
 }
 

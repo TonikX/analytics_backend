@@ -83,5 +83,11 @@ export default (theme: Theme) => createStyles({
     },
     settingsButton: {
         marginLeft: 'auto'
-    }
+    },
+    link: {
+        '& a': {
+            textDecoration: 'none',
+            color: theme.palette.primary.main
+        }
+    },
 });

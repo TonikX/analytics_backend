@@ -190,8 +190,10 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                         <TableCell>
                                             {workProgram[WorkProgramGeneralFields.CODE]}
                                         </TableCell>
-                                        <TableCell>
-                                            {workProgram[WorkProgramGeneralFields.TITLE]}
+                                        <TableCell className={classes.link}>
+                                            <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.ID])}>
+                                                {workProgram[WorkProgramGeneralFields.TITLE]}
+                                            </Link>
                                         </TableCell>
                                         <TableCell>
                                             {get(specialization.find(el => el.value === workProgram[WorkProgramGeneralFields.QUALIFICATION]), 'label', '')}
