@@ -47,6 +47,8 @@ from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializ
 from .serializers import WorkProgramSerializer
 from .tables import FieldOfStudyWPTable
 
+from .folders_ans_statistic.models import WorkProgramInFolder
+
 
 class FieldOfStudyWPListView(View):
     model = FieldOfStudyWorkProgram
@@ -735,6 +737,11 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         else:
             newdata.update({"can_add_to_folder": True})
             newdata.update({"is_student": False})
+        if WorkProgramInFolder.objects.get(work_program = self.kwargs['pk'], folder__owner = self.request.user):
+            newdata.update({"rating": WorkProgramInFolder.objects.get(work_program = self.kwargs['pk'], folder__owner = self.request.user).work_program_rating})
+            newdata.update({"id_rating": WorkProgramInFolder.objects.get(work_program = self.kwargs['pk'], folder__owner = self.request.user).id})
+        else:
+            newdata.update({"rating": False})
         newdata = OrderedDict(newdata)
         return Response(newdata, status=status.HTTP_200_OK)
 
