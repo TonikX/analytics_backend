@@ -20,5 +20,11 @@ export default (theme: Theme) => createStyles({
     },
     datePicker: {
         marginBottom: '20px'
+    },
+    textItem: {
+        marginBottom: '10px'
+    },
+    fullWidth: {
+        width: '100%'
     }
 });

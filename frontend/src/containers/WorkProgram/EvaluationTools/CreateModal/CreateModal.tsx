@@ -12,19 +12,6 @@ import Button from '@material-ui/core/Button';
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import withStyles from '@material-ui/core/styles/withStyles';
-//@ts-ignore
-import CKEditor from '@ckeditor/ckeditor5-react';
-//@ts-ignore
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
-
-import {
-    EvaluationToolFields,
-    fields,
-    workProgramSectionFields,
-} from '../../enum';
-
-import connect from './CreateModal.connect';
-import styles from './CreateModal.styles';
 import TextField from "@material-ui/core/TextField";
 import Slide from "@material-ui/core/Slide";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -42,6 +29,19 @@ import {AutoSizer} from "react-virtualized";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
+//@ts-ignore
+import CKEditor from '@ckeditor/ckeditor5-react';
+//@ts-ignore
+import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+
+import {
+    EvaluationToolFields,
+    fields,
+    workProgramSectionFields,
+} from '../../enum';
+
+import connect from './CreateModal.connect';
+import styles from './CreateModal.styles';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -336,7 +336,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     <div className={classes.rightSide}>
                         <InputLabel className={classes.label}> Описание * </InputLabel>
 
-                        <div id="toolbar-container"></div>
+                        <div id="toolbar-container" />
 
                         <CKEditor
                             //@ts-ignore

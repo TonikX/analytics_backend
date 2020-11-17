@@ -6,7 +6,7 @@ import LiteratureLogic from '../containers/Literature/logics';
 import SubjectAreaLogic from '../containers/SubjectArea/logics';
 import PrerequisitesLogic from '../containers/TrainingEntities/logics';
 import CompetenceLogic from '../containers/Competences/logics';
-import EducationalProgramLogic from '../containers/Direction/logics';
+import DirectionsLogic from '../containers/Direction/logics';
 import IndicatorsLogic from '../containers/Indicators/logics';
 import EducationalPlanLogic from '../containers/EducationalPlan/logics';
 import EducationPlanInDirection from '../containers/EduationPlanInDirection/logics';
@@ -17,10 +17,13 @@ import RolesLogic from '../containers/Roles/logics';
 import SkillsProfessionsLogic from '../containers/SkillsProfessions/logics';
 import SkillsRolesLogic from '../containers/SkillsRoles/logics';
 import ExpertisesLogic from '../containers/Expertises/logics';
+import EducationalProgramLogic from '../containers/EducationalProgram/logics';
+import FoldersLogic from '../containers/Profile/Folders/logics';
 
 import GeneralLogic from '../layout/logics';
 
 export default [
+    ...FoldersLogic,
     ...GeneralLogic,
     ...SignInLogic,
     ...SignUpLogic,
@@ -30,7 +33,7 @@ export default [
     ...SubjectAreaLogic,
     ...PrerequisitesLogic,
     ...CompetenceLogic,
-    ...EducationalProgramLogic,
+    ...DirectionsLogic,
     ...IndicatorsLogic,
     ...EducationalPlanLogic,
     ...EducationPlanInDirection,
@@ -41,4 +44,5 @@ export default [
     ...SkillsProfessionsLogic,
     ...SkillsRolesLogic,
     ...ExpertisesLogic,
+    ...EducationalProgramLogic,
 ];

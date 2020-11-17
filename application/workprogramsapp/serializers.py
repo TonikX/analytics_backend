@@ -23,6 +23,16 @@ class CompetenceSerializer(serializers.ModelSerializer):
         fields = ['id','number', 'name']
 
 
+class CompetenceForEPSerializer(serializers.ModelSerializer):
+    """Сериализатор Компетенций"""
+    indicator_in_competencse = IndicatorSerializer(many = True)
+
+
+    class Meta:
+        model = Competence
+        fields = ['id','number', 'name', 'indicator_in_competencse']
+
+
 class IndicatorListSerializer(serializers.ModelSerializer):
     competence = CompetenceSerializer()
 

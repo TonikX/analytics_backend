@@ -19,6 +19,7 @@ const mapStateToProps = (state:rootState) => {
         date: getWorkProgramField(state, WorkProgramGeneralFields.APPROVAL_DATE),
         video: getWorkProgramField(state, WorkProgramGeneralFields.VIDEO_LINK),
         description: getWorkProgramField(state, WorkProgramGeneralFields.DESCRIPTION),
+        qualification: getWorkProgramField(state, WorkProgramGeneralFields.QUALIFICATION),
 
         isCanEdit: isCanEdit(state),
 

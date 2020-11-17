@@ -9,7 +9,7 @@ from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, D
 
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer
+from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer, CompetenceForEPSerializer
 
 
 class EducationalProgramSerializer(serializers.ModelSerializer):
@@ -62,22 +62,22 @@ class ProfessionalAreaOfGeneralCharacteristicsSerializer(serializers.ModelSerial
 
 class PkCompetencesInGeneralCharacteristicsSerializer(serializers.ModelSerializer):
     """Сериализатор Компетенций"""
-    competence = CompetenceSerializer()
-
+    competence = CompetenceForEPSerializer()
+    professional_standard = ProfessionalStandardSerializer(many = True)
 
     class Meta:
         model = PkCompetencesInGeneralCharacteristics
-        fields = ['id','labor_functions', 'competence']
+        fields = ['id','labor_functions', 'competence', 'professional_standard']
 
 
 class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     """Сериализатор образовательной программы"""
     area_of_activity = ProfessionalAreaOfGeneralCharacteristicsSerializer(many = True)
     educational_program = EducationalProgramSerializer()
-    ok_competences = CompetenceSerializer(many = True)
-    kc_competences = CompetenceSerializer(many = True)
+    ok_competences = CompetenceForEPSerializer(many = True)
+    kc_competences = CompetenceForEPSerializer(many = True)
     pk_competences = PkCompetencesInGeneralCharacteristicsSerializer(source = 'pkcompetencesingeneralcharacteristics_set', many = True)
-    np_competences = CompetenceSerializer(many = True)
+    np_competences = CompetenceForEPSerializer(many = True)
     developers = userProfileSerializer(many = True)
     employers_representatives = userProfileSerializer(many = True)
     director_of_megafaculty = userProfileSerializer()
@@ -87,7 +87,8 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GeneralCharacteristics
-        fields = ['id', 'area_of_activity', 'educational_program', 'ok_competences', 'kc_competences', 'np_competences', 'pk_competences', 'developers', 'employers_representatives', 'director_of_megafaculty', 'dean_of_the_faculty', 'scientific_supervisor_of_the_educational_program']
+        fields = ['id', 'area_of_activity', 'educational_program', 'ok_competences', 'kc_competences', 'np_competences', 'pk_competences', 'developers', 'employers_representatives', 'director_of_megafaculty', 'dean_of_the_faculty', 'scientific_supervisor_of_the_educational_program',
+                  'objects_of_activity', 'kinds_of_activity', 'tasks_of_activity', 'type_of_activity', 'annotation']
 
 
 class DepartmentSerializer(serializers.ModelSerializer):

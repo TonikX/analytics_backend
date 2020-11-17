@@ -17,6 +17,8 @@ import Grow from '@material-ui/core/Grow';
 
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 
+import LikeButton from "../../components/LikeButton";
+
 import General from "./General";
 import Sections from "./Sections";
 import Topics from "./Topics";
@@ -28,6 +30,7 @@ import PlansAndDirections from "./PlansAndDirections";
 import Comments from "./Comments";
 
 import {WorkProgramProps} from './types';
+
 import {steps} from "./constants";
 
 import connect from './WorkProgram.connect';
@@ -44,6 +47,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
         this.props.actions.setWorkProgramId(workProgramId);
         this.props.actions.getWorkProgram();
+        this.props.foldersActions.getFolders();
     }
 
     componentWillUnmount() {
@@ -153,8 +157,12 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
     getCurrentStep = () => Object.keys(steps)[this.state.activeStep];
 
+    handleChangeLiked = () => {
+
+    }
+
     render() {
-        const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus} = this.props;
+        const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus, folders} = this.props;
         const {activeStep, isOpenComments} = this.state;
 
         return (
@@ -173,6 +181,11 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                                 <Button color="primary" onClick={this.handleApproveExpertise}>Принять РПД</Button>
                             </ButtonGroup>
                         }
+
+                        <LikeButton onChange={this.handleChangeLiked}
+                                    isLiked={false}
+                                    folders={folders}
+                        />
                     </div>
                 </div>
                 <Paper className={classes.root}>

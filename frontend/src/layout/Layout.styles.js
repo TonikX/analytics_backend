@@ -7,7 +7,6 @@ export default (theme) => ({
     },
     content: {
         flexGrow: 1,
-        padding: '30px',
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,

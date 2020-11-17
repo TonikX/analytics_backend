@@ -24,8 +24,8 @@ import {workProgramState} from "../containers/WorkProgram/types";
 import {GENERAL_PATH as competencePath, reducer as competenceReducer} from "../containers/Competences/reducer";
 import {competenceState} from "../containers/Competences/types";
 
-import {GENERAL_PATH as educationalProgramPath, reducer as educationalProgramReducer} from "../containers/Direction/reducer";
-import {educationalProgramState} from "../containers/Direction/types";
+import {GENERAL_PATH as directionPath, reducer as directionReducer} from "../containers/Direction/reducer";
+import {directionState} from "../containers/Direction/types";
 
 import {GENERAL_PATH as indicatorsPath, reducer as indicatorsReducer} from "../containers/Indicators/reducer";
 import {indicatorsState} from "../containers/Indicators/types";
@@ -57,7 +57,15 @@ import {rolesState as skillsRolesState} from "../containers/SkillsRoles/types";
 import {GENERAL_PATH as expertisesPath, reducer as expertisesReducer} from "../containers/Expertises/reducer";
 import {expertisesState} from "../containers/Expertises/types";
 
+import {GENERAL_PATH as educationalProgramPath, reducer as educationalProgramReducer} from "../containers/EducationalProgram/reducer";
+import {educationalProgramState} from "../containers/EducationalProgram/types";
+
+import {GENERAL_PATH as foldersPath, reducer as foldersReducer} from "../containers/Profile/Folders/reducer";
+import {foldersState} from "../containers/Profile/Folders/types";
+
 export interface rootState {
+    [foldersPath]: foldersState,
+    [educationalProgramPath]: educationalProgramState,
     [expertisesPath]: expertisesState,
     [skillsRolesPath]: skillsRolesState,
     [skillsProfessionsPath]: skillsProfessionsState,
@@ -74,7 +82,7 @@ export interface rootState {
     [subjectAreaPath]: subjectAreaState,
     [trainingEntitiesPath]: trainingEntitiesState,
     [competencePath]: competenceState,
-    [educationalProgramPath]: educationalProgramState,
+    [directionPath]: directionState,
     [indicatorsPath]: indicatorsState,
     [educationalPlanPath]: educationalPlanState,
     [educationPlanInDirectionPath]: educationalPlanInDirectionState,
@@ -82,6 +90,8 @@ export interface rootState {
 }
 
 export default combineReducers({
+    [foldersPath]: foldersReducer,
+    [educationalProgramPath]: educationalProgramReducer,
     [expertisesPath]: expertisesReducer,
     [skillsRolesPath]: skillsRolesReducer,
     [skillsProfessionsPath]: skillsProfessionsReducer,
@@ -97,7 +107,7 @@ export default combineReducers({
     [subjectAreaPath]: SubjectAreaReducer,
     [trainingEntitiesPath]: TrainingEntitiesReducer,
     [competencePath]: competenceReducer,
-    [educationalProgramPath]: educationalProgramReducer,
+    [directionPath]: directionReducer,
     [indicatorsPath]: indicatorsReducer,
     [educationalPlanPath]: educationalPlanReducer,
     [educationPlanInDirectionPath]: educationPlanInDirectionReducer,

@@ -10,6 +10,7 @@ export interface FirstStepProps extends WithStyles<typeof styles> {
     authors: string;
     description: string;
     video: string;
+    qualification: string;
 
     isCanEdit: boolean;
 

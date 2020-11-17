@@ -33,6 +33,7 @@ export enum WorkProgramGeneralFields {
     DESCRIPTION = 'description',
     ZUN = 'zuns_for_wp',
     CAN_COMMENT = 'can_comment',
+    IS_STUDENT = 'is_student',
     CAN_ARCHIVE = 'can_archive',
     CAN_APPROVE = 'can_approve',
     CAN_EDIT = 'can_edit',

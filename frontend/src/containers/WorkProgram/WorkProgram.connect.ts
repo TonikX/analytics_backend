@@ -8,6 +8,8 @@ import {WorkProgramActions} from "./types";
 
 import {rootState} from "../../store/reducers";
 import {WorkProgramGeneralFields} from "./enum";
+import {getFolders} from "../Profile/Folders/getters";
+import folderActions from "../Profile/Folders/actions";
 
 const mapStateToProps = (state:rootState) => {
     return {
@@ -18,12 +20,15 @@ const mapStateToProps = (state:rootState) => {
         canApprove: isCanApprove(state),
         canSendToExpertise: isCanEdit(state),
         canComment: isCanComment(state),
+        folders: getFolders(state),
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<WorkProgramActions>) => ({
     // @ts-ignore
     actions: bindActionCreators(actions, dispatch),
+    // @ts-ignore
+    foldersActions: bindActionCreators(folderActions, dispatch),
 });
 
 // @ts-ignore

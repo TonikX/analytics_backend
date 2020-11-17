@@ -9,10 +9,11 @@ const WORK_PROGRAM = 'work-program';
 const TRAINING_ENTITIES = 'training-entities';
 const ENTITY_TO_ENTITY = 'entity-to-entity';
 const COMPETENCES = 'competences';
-const EDUCATIONAL_PROGRAM = 'educational-programs';
+const DIRECTION = 'direction';
 const EDUCATIONAL_PLAN = 'educational-plans';
 const INDICATORS = 'indicators';
 const EDUCATIONAL_PLAN_IN_DIRECTION = 'educational-plans-in-direction';
+const EDUCATIONAL_PROGRAM = 'educational-program';
 const WORK_PROGRAM_LIST = 'work-programs';
 const PROFESSIONS = 'professions';
 const ROLES = 'roles';
@@ -67,12 +68,24 @@ export default class RouterService {
         return SEPARATOR + COMPETENCES;
     };
 
-    getEducationalProgramRoute = () => {
-        return SEPARATOR + EDUCATIONAL_PROGRAM;
+    getDirectionRoute = () => {
+        return SEPARATOR + DIRECTION;
     };
 
     getIndicatorsRoute = () => {
         return SEPARATOR + INDICATORS;
+    };
+
+    getEducationalProgram = () => {
+        return SEPARATOR + EDUCATIONAL_PROGRAM;
+    };
+
+    getEducationalProgramCharacteristic = () => {
+        return SEPARATOR + EDUCATIONAL_PROGRAM + SEPARATOR + ':id';
+    };
+
+    getEducationalProgramCharacteristicLink = (id: number) => {
+        return SEPARATOR + EDUCATIONAL_PROGRAM + SEPARATOR + id;
     };
 
     getEducationPlanInDirectionRoute = () => {

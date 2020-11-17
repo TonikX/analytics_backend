@@ -6,10 +6,10 @@ import {GENERAL_PATH} from "./reducer";
 
 import {DirectionFields, fields} from './enum';
 
-import {educationalProgramState, DirectionType} from './types';
+import {directionState, DirectionType} from './types';
 import {SelectorListType} from "../../components/SearchSelector/types";
 
-const getStateData = (state: rootState): educationalProgramState => get(state, GENERAL_PATH);
+const getStateData = (state: rootState): directionState => get(state, GENERAL_PATH);
 export const getEducationalProgram = (state: rootState): Array<DirectionType> => get(getStateData(state), fields.EDUCATIONAL_PROGRAM_LIST, []);
 
 export const getDirectionsForSelector = (state: rootState): SelectorListType =>

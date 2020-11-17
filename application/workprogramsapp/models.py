@@ -363,7 +363,8 @@ class GeneralCharacteristics(models.Model):
     kc_competences = models.ManyToManyField('Competence', verbose_name="Ключевые компетенции", related_name="kc_competences_in_gh", blank=True)
     pk_competences = models.ManyToManyField('Competence', verbose_name="ПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ", through = 'PkCompetencesInGeneralCharacteristics', related_name="pk_competences_in_gh", blank=True)
     np_competences = models.ManyToManyField('Competence', verbose_name="Надпрофессиональные компетенции", related_name="np_competences_in_gh", blank=True,)
-    pps = ArrayField(models.CharField(max_length=512, verbose_name="Сведения о профессорско-преподавательском составе, необходимом для реализации основной профессиональной образовательной программы"), blank=True, null=True)
+    #pps = ArrayField(models.CharField(max_length=512, verbose_name="Сведения о профессорско-преподавательском составе, необходимом для реализации основной профессиональной образовательной программы"), blank=True, null=True)
+    pps = models.TextField(max_length=55512, verbose_name="Сведения о профессорско-преподавательском составе, необходимом для реализации ", blank=True, null=True)
     annotation = models.TextField(max_length=55512, verbose_name="Аннотация основной профессиональной образовательной программы", blank=True, null=True)
     developers = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Сотрудники Университета ИТМО", related_name="ok_competences_in_gh", blank=True)
     employers_representatives = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Представители работодателей", related_name="employers_representatives_in_gh", blank=True)
@@ -384,6 +385,7 @@ class PkCompetencesInGeneralCharacteristics(models.Model):
     labor_functions = models.CharField(max_length=512, verbose_name="трудовая функция")
     general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
     competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
+    professional_standard = models.ManyToManyField('ProfessionalStandard', verbose_name="Профессиональный стандарт", blank=True)
 
     def __str__(self):
         return str(self.labor_functions) + str(self.general_characteristic) + str(self.competence)
@@ -550,7 +552,7 @@ class WorkProgramInFieldOfStudy(models.Model):
 
 class Zun(models.Model):
     '''
-    Модель для компетенций
+    Модель для зунов
     '''
     wp_in_fs = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.CASCADE, blank=True, null=True, related_name="zun_in_wp")
     indicator_in_zun = models.ForeignKey('Indicator', on_delete=models.CASCADE, blank=True, null=True)
@@ -603,7 +605,7 @@ class Indicator(models.Model):
     number = models.CharField(unique=True, max_length=1024)
     name = models.CharField(max_length=1024)
     # work_programs = models.ManyToManyField('WorkProgram', through=IndicatorWorkProgram, blank=True, null=True)
-    competence = models.ForeignKey('Competence', on_delete=models.CASCADE)
+    competence = models.ForeignKey('Competence', on_delete=models.CASCADE, related_name = "indicator_in_competencse")
 
     def __str__(self):
         return self.name
