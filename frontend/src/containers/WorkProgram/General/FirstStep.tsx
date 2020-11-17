@@ -14,7 +14,7 @@ import InputsLoader from '../../../components/InputsLoader';
 import Selector from './Specialization';
 
 import {FirstStepProps} from './types';
-import {fields, WorkProgramGeneralFields} from "../enum";
+import {WorkProgramGeneralFields} from "../enum";
 import {FULL_DATE_FORMAT} from "../../../common/utils";
 import {specializationObject} from "../constants";
 

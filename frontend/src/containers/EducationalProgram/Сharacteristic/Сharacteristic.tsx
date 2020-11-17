@@ -20,13 +20,12 @@ import UserSelector from "../../Profile/UserSelector";
 import EducationPlanInDirectionSelector
     from "../../EduationPlanInDirection/EducationPlanInDirectionSelector/EducationPlanInDirectionSelector";
 import {EducationProgramCharacteristicFields, EducationProgramFields} from "../enum";
-import {YEAR_DATE_FORMAT} from "../../../common/utils";
+import {getUserFullName, YEAR_DATE_FORMAT} from "../../../common/utils";
 import DatePickerComponent from "../../../components/DatePicker/DatePicker";
 import QualificationSelector from "../../../components/QualificationSelector/QualificationSelector";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
-import Scrollbars from "react-custom-scrollbars";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
@@ -34,6 +33,7 @@ import {CompetenceType} from "../../Competences/types";
 import {CompetenceFields} from "../../Competences/enum";
 import {IndicatorType} from "../../Indicators/types";
 import {IndicatorsFields} from "../../Indicators/enum";
+import {UserFields} from "../../../layout/enum";
 
 class Characteristic extends React.Component<CharacteristicProps> {
     state = {
@@ -92,19 +92,46 @@ class Characteristic extends React.Component<CharacteristicProps> {
                         <TableCell>
                             Название
                         </TableCell>
+                        <TableCell>
+                            Индикаторы
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {competences.map((item: any, index: number) =>
-                        <TableRow>
-                            <TableCell>
-                                {item[CompetenceFields.NUMBER]}
-                            </TableCell>
-                            <TableCell>
-                                {item[CompetenceFields.TITLE]}
-                            </TableCell>
-                        </TableRow>
-                    )}
+                    {competences.map((item: any, index: number) => {
+                        const indicators = get(item, 'indicator_in_competencse', []);
+
+                        if (indicators.length === 0) {
+                            return <TableRow>
+                                <TableCell>
+                                    {item[CompetenceFields.NUMBER]}
+                                </TableCell>
+                                <TableCell>
+                                    {item[CompetenceFields.TITLE]}
+                                </TableCell>
+                                <TableCell />
+                            </TableRow>
+                        }
+
+                        return indicators.map((indicator: IndicatorType, index: number) =>
+                            <TableRow>
+                                {index === 0 &&
+                                    <TableCell rowSpan={indicators.length}>
+                                        {item[CompetenceFields.NUMBER]}
+                                    </TableCell>
+                                }
+                                {index === 0 &&
+                                    <TableCell rowSpan={indicators.length}>
+                                        {item[CompetenceFields.TITLE]}
+                                    </TableCell>
+                                }
+                                <TableCell>
+                                    {indicator[IndicatorsFields.NUMBER]} {indicator[IndicatorsFields.TITLE]}
+                                </TableCell>
+                            </TableRow>
+                        )
+
+                    })}
                 </TableBody>
             </Table>
             <div style={{display: 'flex'}}>
@@ -119,16 +146,16 @@ class Characteristic extends React.Component<CharacteristicProps> {
             <Table stickyHeader size='small'>
                 <TableHead className={classes.header}>
                     <TableRow>
-                        <TableCell>
+                        <TableCell style={{width: '25%'}}>
                             Код и наименование компетенции
                         </TableCell>
-                        <TableCell>
+                        <TableCell style={{width: '25%'}}>
                             Код и наименование индикатора
                         </TableCell>
-                        <TableCell>
+                        <TableCell style={{width: '25%'}}>
                             Наименование сопряженного проф. стандарта
                         </TableCell>
-                        <TableCell>
+                        <TableCell style={{width: '25%'}}>
                             Выбранные обобщенные трудовые функции
                         </TableCell>
                     </TableRow>
@@ -136,18 +163,18 @@ class Characteristic extends React.Component<CharacteristicProps> {
                 <TableBody>
                     {competences.map((item: any, index: number) =>
                         <TableRow>
-                            <TableCell>
+                            <TableCell style={{width: '25%'}}>
                                 {item.competence[CompetenceFields.NUMBER]} {item.competence[CompetenceFields.TITLE]}
                             </TableCell>
-                            <TableCell>
+                            <TableCell style={{width: '25%'}}>
                                 {get(item, 'competence.indicator_in_competencse', []).map((item: IndicatorType) =>
                                     <> {item[IndicatorsFields.NUMBER]} {item[IndicatorsFields.TITLE]}<br/></>
                                 )}
                             </TableCell>
-                            <TableCell>
+                            <TableCell style={{width: '25%'}}>
                                 {get(item, 'professional_standard', []).map((standard: any) => <>{get(standard, 'code')} {get(standard, 'title')}<br/></>)}
                             </TableCell>
-                            <TableCell>
+                            <TableCell style={{width: '25%'}}>
                                 {item.labor_functions}
                             </TableCell>
                         </TableRow>
@@ -169,7 +196,10 @@ class Characteristic extends React.Component<CharacteristicProps> {
                 return <>
                     <EducationPlanInDirectionSelector value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.ACADEMIC_PLAN_FOR_EP, 'id'], '')}
                                                       handleChange={() => {}} />
-                    <UserSelector selectorLabel="Руководитель" value="" />
+                    <UserSelector selectorLabel="Руководитель"
+                                  value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.MANAGER, 'id'], '').toString()}
+                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.MANAGER], ''))}
+                    />
                     <DatePickerComponent label="Год *"
                                          views={["year"]}
                                          value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.YEAR], '').toString()}
@@ -201,22 +231,44 @@ class Characteristic extends React.Component<CharacteristicProps> {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.AREA_OF_ACTIVITY, []).map((item: any, index: number) =>
-                                <TableRow>
-                                    <TableCell>
-                                        {index}
-                                    </TableCell>
-                                    <TableCell>
-                                        {item.title}
-                                    </TableCell>
-                                    <TableCell>
-                                        {get(item, 'professional_standard', []).map((standard: any) => <>{get(standard, 'code')} <br/></>)}
-                                    </TableCell>
-                                    <TableCell>
-                                        {get(item, 'professional_standard', []).map((standard: any) => <>{get(standard, 'title')} <br/></>)}
-                                    </TableCell>
-                                </TableRow>
-                            )}
+                            {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.AREA_OF_ACTIVITY, []).map((item: any, index: number) => {
+                                const standards = get(item, 'professional_standard', []);
+
+                                if (standards.length === 0) {
+                                    return <TableRow>
+                                        <TableCell>
+                                            {index}
+                                        </TableCell>
+                                        <TableCell>
+                                            {item.title}
+                                        </TableCell>
+                                        <TableCell />
+                                        <TableCell />
+                                    </TableRow>
+                                }
+
+                                return standards.map((standard: any, standardIndex: number) =>
+                                    <TableRow>
+                                        {standardIndex === 0 &&
+                                            <TableCell rowSpan={standards.length}>
+                                                {index}
+                                            </TableCell>
+                                        }
+                                        {standardIndex === 0 &&
+                                            <TableCell rowSpan={standards.length}>
+                                                {item.title}
+                                            </TableCell>
+                                        }
+
+                                        <TableCell>
+                                            {get(standard, 'code')}
+                                        </TableCell>
+                                        <TableCell>
+                                            {get(standard, 'title')}
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            })}
                         </TableBody>
                     </Table>
                     <div style={{display: 'flex'}}>
@@ -273,19 +325,23 @@ class Characteristic extends React.Component<CharacteristicProps> {
             case 9:
                 return <>
                     <UserSelector selectorLabel='Разработчики'
-                                  value=""
+                                  value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEVELOPERS, 0, UserFields.ID], '')}
                                   handleChange={()=>{}}
+                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEVELOPERS, 0, UserFields.ID], ''))}
                     />
                     <UserSelector selectorLabel="Представители работодателей"
-                                  value=""
+                                  value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EMPLOYERS, 0, UserFields.ID], '')}
                                   handleChange={()=>{}}
+                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EMPLOYERS, 0, UserFields.ID], ''))}
                     />
                     <UserSelector selectorLabel="Директор мегафакультета"
-                                  value=""
                                   handleChange={()=>{}}
+                                  value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DIRECTOR_MEGAFALCULTY, UserFields.ID], '')}
+                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DIRECTOR_MEGAFALCULTY, UserFields.ID], ''))}
                     />
                     <UserSelector selectorLabel="Декан факультета"
-                                  value=""
+                                  value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEAN, UserFields.ID], '')}
+                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEAN, UserFields.ID], ''))}
                                   handleChange={()=>{}}
                     />
                 </>

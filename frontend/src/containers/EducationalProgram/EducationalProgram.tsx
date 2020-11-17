@@ -1,7 +1,6 @@
 import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
-import {Link} from "react-router-dom";
 
 import Scrollbars from "react-custom-scrollbars";
 
@@ -19,9 +18,7 @@ import TableBody from "@material-ui/core/TableBody";
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
 import EyeIcon from '@material-ui/icons/VisibilityOutlined';
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
@@ -30,13 +27,12 @@ import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";
 import CourseCreateModal from "./CreateModal";
 
-import {EducationProgramCharacteristicFields, EducationProgramFields} from './enum';
+import {EducationProgramFields} from './enum';
 
 import {appRouter} from "../../service/router-service";
 
 import {
     EducationalProgramProps,
-    EducationalProgramCharacteristicType,
     EducationalProgramType
 } from './types';
 
@@ -46,7 +42,6 @@ import {specializationObject} from "../WorkProgram/constants";
 import {getUserFullName} from "../../common/utils";
 import {getEducationPlanInDirectionFullName} from "../EduationPlanInDirection/getters";
 import TableSettingsMenu from "../../components/TableSettingsMenu";
-import {EducationalPlanFields} from "../EducationalPlan/enum";
 
 class EducationalProgramHaracteristic extends React.Component<EducationalProgramProps> {
     state = {

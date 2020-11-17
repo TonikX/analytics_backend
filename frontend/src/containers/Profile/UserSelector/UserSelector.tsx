@@ -20,6 +20,18 @@ class UserSelector extends React.PureComponent<UserSelectorType> {
         this.props.actions.getAllUsers();
     }
 
+    componentDidUpdate(prevProps: Readonly<UserSelectorType>, prevState: Readonly<{}>, snapshot?: any) {
+        //@ts-ignore
+        if (this.props.value !== this.state.value){
+            this.setState({
+                //@ts-ignore
+                label: this.props.label,
+                //@ts-ignore
+                value: this.props.value,
+            })
+        }
+    }
+
     handleChangeSearch = (searchText: string) => {
         this.props.actions.getAllUsers(searchText);
     }
@@ -35,6 +47,8 @@ class UserSelector extends React.PureComponent<UserSelectorType> {
     render() {
         const {optionsList, noMargin, classes, selectorLabel} = this.props;
         const {value, label} = this.state;
+
+        if (!label || !label.length) return <></>;
 
         return (
             <SearchSelector label={selectorLabel}

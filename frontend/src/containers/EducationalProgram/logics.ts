@@ -8,7 +8,6 @@ import Service from './service';
 
 import {fetchingTypes} from "./enum";
 import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from "./getters";
-import {act} from "react-dom/test-utils";
 
 const service = new Service();
 
@@ -49,7 +48,6 @@ const deleteEducationalProgram = createLogic({
     type: educationalPlanActions.deleteEducationalProgram.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const state = getState();
         const id = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_EDUCATION_PROGRAM}));
