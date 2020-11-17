@@ -4,7 +4,9 @@ export default (theme: Theme) => createStyles({
     root: {
         padding: '20px 50px 20px 50px',
         background: '#fff',
-        minHeight: 'calc(100% - 64px)'
+        minHeight: 'calc(100% - 64px)',
+        display: 'flex',
+        flexDirection: 'column'
     },
     title: {
         fontSize: '24px',
@@ -51,5 +53,15 @@ export default (theme: Theme) => createStyles({
             outline: 'none !important',
             height: '32px'
         }
-    }
+    },
+    deleteIcon: {
+        position: 'relative',
+        top: '5px',
+        '&:hover': {
+            color: theme.palette.primary.main
+        }
+    },
+    addIcon: {
+        marginLeft: 'auto',
+    },
 });

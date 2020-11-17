@@ -89,7 +89,9 @@ const createFolder = createLogic({
 
         service.createFolder(name, description)
             .then((res) => {
+                dispatch(folderActions.closeDialog());
                 dispatch(actions.fetchingSuccess());
+                dispatch(folderActions.getFolders());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
@@ -101,9 +103,30 @@ const createFolder = createLogic({
     }
 });
 
+const deleteFolder = createLogic({
+    type: folderActions.deleteFolder.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_FOLDER}));
+
+        service.deleteFolder(action.payload)
+            .then((res) => {
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_FOLDER}));
+                return done();
+            });
+    }
+});
+
 export default [
     getFolders,
     addToFolder,
     removeFromFolder,
     createFolder,
+    deleteFolder,
 ];

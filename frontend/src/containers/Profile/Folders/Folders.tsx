@@ -9,6 +9,13 @@ import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
+import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import AddIcon from "@material-ui/icons/Add";
+import Fab from "@material-ui/core/Fab";
+import AddFolderModal from "./AddFolderModal";
+
+import LikeButton from "../../../components/LikeButton";
+import ConfirmDialog from "../../../components/ConfirmDialog/ConfirmDialog";
 
 import {FoldersProps} from './types';
 import {FoldersFields} from "./enum";
@@ -18,7 +25,6 @@ import {appRouter} from "../../../service/router-service";
 
 import connect from './Folders.connect';
 import styles from './Folders.styles';
-import LikeButton from "../../../components/LikeButton";
 
 function TabPanel(props: any) {
     const { children, value, index, ...other } = props;
@@ -39,8 +45,10 @@ function TabPanel(props: any) {
 
 class Folders extends React.PureComponent<FoldersProps> {
     state = {
-        currentTab: 0
+        currentTab: 0,
+        openConfirmDialogId: null
     }
+
     componentDidMount() {
         this.props.actions.getFolders();
     }
@@ -53,9 +61,26 @@ class Folders extends React.PureComponent<FoldersProps> {
         this.props.actions.removeFromFolder({id});
     }
 
+    deleteFolder = (id: number) => () => {
+        this.setState({openConfirmDialogId: id});
+    }
+
+    handleConfirmDeleteDialog = () => {
+        this.props.actions.deleteFolder(this.state.openConfirmDialogId);
+        this.closeConfirmDeleteDialog();
+    }
+
+    closeConfirmDeleteDialog = () => {
+        this.setState({openConfirmDialogId: null});
+    }
+
+    openCreateDialog = () => {
+        this.props.actions.openAddFolderDialog();
+    }
+
     render() {
         const {classes, folders} = this.props;
-        const {currentTab} = this.state;
+        const {currentTab, openConfirmDialogId} = this.state;
 
         return (
             <div className={classes.root}>
@@ -71,7 +96,7 @@ class Folders extends React.PureComponent<FoldersProps> {
                     >
                         {folders.map((folder, index) =>
                             <Tab value={index}
-                                 label={folder[FoldersFields.NAME]}
+                                 label={<div>{folder[FoldersFields.NAME]} <DeleteIcon className={classes.deleteIcon} onClick={this.deleteFolder(folder[FoldersFields.ID])}/> </div>}
                                  classes={{
                                      wrapper: classes.tab
                                  }}
@@ -106,6 +131,25 @@ class Folders extends React.PureComponent<FoldersProps> {
                         </TabPanel>
                     )}
                 </div>
+
+                <Fab color="secondary"
+                     classes={{
+                         root: classes.addIcon
+                     }}
+                     onClick={this.openCreateDialog}
+                >
+                    <AddIcon/>
+                </Fab>
+
+                <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
+                               onDismiss={this.closeConfirmDeleteDialog}
+                               confirmText={'Вы точно уверены, что хотите удалить папку?'}
+                               isOpen={Boolean(openConfirmDialogId)}
+                               dialogTitle={'Удалить папку'}
+                               confirmButtonText={'Удалить'}
+                />
+
+                <AddFolderModal />
             </div>
         );
     }

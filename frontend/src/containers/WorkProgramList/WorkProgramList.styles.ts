@@ -89,5 +89,5 @@ export default (theme: Theme) => createStyles({
             textDecoration: 'none',
             color: theme.palette.primary.main
         }
-    }
+    },
 });

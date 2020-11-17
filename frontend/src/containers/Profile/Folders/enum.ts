@@ -8,6 +8,7 @@ export enum fetchingTypes{
 
 export enum fields{
     FOLDERS = 'FOLDERS',
+    ADD_FOLDER_DIALOG = 'ADD_FOLDER_DIALOG',
     ADD_TO_FOLDER_DIALOG = 'ADD_TO_FOLDER_DIALOG',
     IS_OPEN_DIALOG = 'IS_OPEN_DIALOG',
     DIALOG_DATA = 'DIALOG_DATA',

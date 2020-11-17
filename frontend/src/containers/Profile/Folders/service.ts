@@ -24,6 +24,10 @@ class Service extends BaseService{
             description: description,
         });
     }
+
+    deleteFolder(id: string){
+        return this.delete(`/api/folders/delete/${id}`);
+    }
 }
 
 export default Service;

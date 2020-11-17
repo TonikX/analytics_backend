@@ -4,6 +4,7 @@ import styles from "./Folders.styles";
 import {WorkProgramGeneralType} from "../../WorkProgram/types";
 
 export interface FolderActions{
+    openAddFolderDialog: any;
     openAddToFolderDialog: any;
     closeDialog: any;
     getFolders: any;
@@ -17,6 +18,10 @@ export interface FolderActions{
 export interface foldersState{
     [fields.FOLDERS]: Array<FolderType>;
     [fields.ADD_TO_FOLDER_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: boolean,
+        [fields.DIALOG_DATA]: {}
+    }
+    [fields.ADD_FOLDER_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean,
         [fields.DIALOG_DATA]: {}
     }
