@@ -13,7 +13,7 @@ from .educational_program.views import GeneralCharacteristicsCreateAPIView, Gene
 from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView, UserExpertiseListView, \
     ExpertiseCommentsView, ChangeUserExpertiseView, \
     ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById
-from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, \
+from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, DeleteFolderView, \
     CreateFolderView, EditFolderView, AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, \
     ProfessionUpdateView, ItemWithProfessions, ItemWithRoles
@@ -314,4 +314,5 @@ urlpatterns = [
     path('api/folders/add', AddToFolderView.as_view()),
     path('api/folders/remove/<int:pk>', RemoveFromFolderView.as_view()),
     path('api/workprogram/statistic/<int:pk>', WorkProgramStatistic),
+    path('api/folders/real_remove/<int:pk>', DeleteFolderView.as_view()),
 ]
