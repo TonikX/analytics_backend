@@ -24,7 +24,7 @@ import ProfessionSkills from "./containers/Professions/Skills";
 import RolesSkills from "./containers/Roles/Skills";
 
 import EducationalProgram from "./containers/EducationalProgram";
-import EducationalProgramСharacteristic from "./containers/EducationalProgram/Сharacteristic";
+import EducationalProgramCharacteristic from "./containers/EducationalProgram/Characteristic";
 
 import SkillsProfessions from "./containers/SkillsProfessions";
 import SkillsRoles from "./containers/SkillsRoles";
@@ -35,6 +35,7 @@ import Expertises from './containers/Expertises';
 import Expertise from './containers/Expertises/Expertise';
 
 import RouterService from './service/router-service';
+import Folders from "./containers/Profile/Folders";
 
 const routerService = RouterService.factory();
 
@@ -48,6 +49,9 @@ export default () => (
                 <Route path={routerService.getSignUpRoute()}>
                     <SignUp />
                 </Route>
+                <AuthRoute path={routerService.getFoldersRoute()}>
+                    <Folders />
+                </AuthRoute>
                 <AuthRoute path={routerService.getCoursesRoute()}>
                     <Courses />
                 </AuthRoute>
@@ -103,7 +107,7 @@ export default () => (
                     <Indicators />
                 </AuthRoute>
                 <AuthRoute path={routerService.getEducationalProgramCharacteristic()}>
-                    <EducationalProgramСharacteristic />
+                    <EducationalProgramCharacteristic />
                 </AuthRoute>
                 <AuthRoute path={routerService.getEducationalProgram()}>
                     <EducationalProgram />

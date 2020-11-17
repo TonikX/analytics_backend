@@ -5,7 +5,8 @@ export default (theme) => ({
         height: '100%'
     },
     form: {
-        boxShadow: '0px 0px 5px 2px rgba(0,0,0,0.1)',
+        borderRadius: 0,
+        boxShadow: 'none',
         background: 'white',
         margin: 'auto',
         width: '300px',

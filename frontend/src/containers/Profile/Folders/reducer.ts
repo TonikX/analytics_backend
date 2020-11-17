@@ -7,7 +7,11 @@ import {foldersState} from "./types";
 export const GENERAL_PATH = 'folders';
 
 export const initialState: foldersState = {
-    [fields.FOLDERS]: []
+    [fields.FOLDERS]: [],
+    [fields.ADD_TO_FOLDER_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
+    }
 };
 
 const setFolders = (state: foldersState, {payload}: any): foldersState => ({
@@ -15,6 +19,23 @@ const setFolders = (state: foldersState, {payload}: any): foldersState => ({
     [fields.FOLDERS]: payload,
 });
 
+const openDialog = (state: foldersState, {payload}: any): foldersState => ({
+    ...state,
+    [fields.ADD_TO_FOLDER_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: true,
+        [fields.DIALOG_DATA]: payload
+    }
+});
+const closeDialog = (state: foldersState): foldersState => ({
+    ...state,
+    [fields.ADD_TO_FOLDER_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
+    }
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setFolders.type]: setFolders,
+    [actions.openDialog.type]: openDialog,
+    [actions.closeDialog.type]: closeDialog,
 });

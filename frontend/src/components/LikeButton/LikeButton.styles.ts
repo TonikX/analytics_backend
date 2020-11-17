@@ -10,6 +10,13 @@ export default (theme: Theme) => createStyles({
         zIndex: '10000 !important',
     },
     menuPaper: {
-        boxShadow: '0px 0px 20px -2px rgba(160, 159, 159, 0.42)'
+        boxShadow: '0px 0px 20px -2px rgba(160, 159, 159, 0.42)',
+        width: '250px'
     },
+    menuItem: {
+        whiteSpace: 'pre-wrap',
+        '& div': {
+            outline: 'none !important',
+        }
+    }
 });

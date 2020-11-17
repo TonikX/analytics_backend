@@ -157,7 +157,16 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
     getCurrentStep = () => Object.keys(steps)[this.state.activeStep];
 
-    handleChangeLiked = () => {
+    handleChangeLiked = (folderId: number, rating: number) => {
+        if (folderId){
+            this.props.foldersActions.addToFolder({
+                folderId,
+                workProgramId: this.getWorkProgramId(),
+                rating
+            });
+        } else {
+            this.props.foldersActions.removeFromFolder(folderId);
+        }
 
     }
 

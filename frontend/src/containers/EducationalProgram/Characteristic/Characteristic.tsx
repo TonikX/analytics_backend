@@ -13,8 +13,8 @@ import Button from "@material-ui/core/Button";
 import {CharacteristicProps,} from '../types';
 import {steps} from './constants';
 
-import connect from './Сharacteristic.connect';
-import styles from './Сharacteristic.styles';
+import connect from './Characteristic.connect';
+import styles from './Characteristic.styles';
 import CKEditor from "../../../components/CKEditor";
 import UserSelector from "../../Profile/UserSelector";
 import EducationPlanInDirectionSelector

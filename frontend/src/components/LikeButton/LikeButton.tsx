@@ -1,4 +1,6 @@
 import React, {SyntheticEvent, useState} from 'react';
+// @ts-ignore
+import ReactStars from "react-rating-stars-component";
 
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -17,13 +19,30 @@ import {FoldersFields} from "../../containers/Profile/Folders/enum";
 const LikeButton = ({classes, isLiked, onChange, folders}: LikeButtonProps) => {
     const [isHover, changeHover] = useState(false);
     const [anchor, changeOpenFolderMenu] = useState(null);
+    const [openRateItemId, openRate] = useState(-1);
 
     const handleClick = (event: SyntheticEvent) => {
-        // @ts-ignore
-        changeOpenFolderMenu(event.currentTarget);
+        if (isLiked){
+            onChange();
+        } else {
+            // @ts-ignore
+            changeOpenFolderMenu(event.currentTarget);
+        }
     }
     const handleCloseMenu = () => {
         changeOpenFolderMenu(null);
+    }
+
+    const handleOpenRate = (index: number) => () => {
+        if (index === openRateItemId){
+            openRate(-1);
+        } else {
+            openRate(index);
+        }
+    }
+
+    const ratingChanged = (newRating: number) => {
+        onChange(openRateItemId, newRating);
     }
 
     return (
@@ -54,9 +73,21 @@ const LikeButton = ({classes, isLiked, onChange, folders}: LikeButtonProps) => {
                       paper: classes.menuPaper
                   }}
             >
-                {folders.map(item =>
-                    <MenuItem key={item[FoldersFields.ID]}>
-                        {item[FoldersFields.NAME]}
+                {folders.map((item) =>
+                    <MenuItem key={item[FoldersFields.ID]}
+                              onClick={handleOpenRate(item[FoldersFields.ID])}
+                              className={classes.menuItem}
+                    >
+                        {openRateItemId === item[FoldersFields.ID] ?
+                            <ReactStars
+                                count={5}
+                                onChange={ratingChanged}
+                                size={18}
+                                activeColor="#ffd700"
+                            />
+                            :
+                            item[FoldersFields.NAME]
+                        }
                     </MenuItem>
                 )}
             </Menu>
