@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 
 import actions from "../actions";
 
-import {isOpenDialogAddToFolderDialog, getAddToFolderDialogData} from '../getters';
+import {isOpenDialogAddToFolderDialog, getAddToFolderDialogData, getFolders} from '../getters';
 import {FolderActions} from "../types";
 
 import {rootState} from "../../../../store/reducers";
@@ -13,6 +13,7 @@ const mapStateToProps = (state: rootState) => {
     return {
         isOpen: isOpenDialogAddToFolderDialog(state),
         data: getAddToFolderDialogData(state),
+        folders: getFolders(state)
     };
 };
 

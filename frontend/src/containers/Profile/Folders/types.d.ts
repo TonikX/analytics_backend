@@ -1,9 +1,10 @@
 import {WithStyles} from "@material-ui/core";
 import {fields, FoldersFields} from './enum';
 import styles from "./Folders.styles";
+import {WorkProgramGeneralType} from "../../WorkProgram/types";
 
 export interface FolderActions{
-    openDialog: any;
+    openAddToFolderDialog: any;
     closeDialog: any;
     getFolders: any;
     setFolders: any;
@@ -31,4 +32,10 @@ export type FolderType = {
     [FoldersFields.ID]: number;
     [FoldersFields.DESCRIPTION]: string;
     [FoldersFields.NAME]: string;
+    [FoldersFields.WORK_PROGRAM_IN_FOLDER]: Array<{
+        [FoldersFields.WORK_PROGRAM]: WorkProgramGeneralType;
+        [FoldersFields.WORK_PROGRAM_RATING]: string;
+        [FoldersFields.COMMENT]: string;
+        [FoldersFields.ID]: number;
+    }>;
 }

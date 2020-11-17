@@ -25,6 +25,7 @@ export const isCanApprove = (state: rootState) => get(getWorkProgram(state), Wor
 export const isCanArchive = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_ARCHIVE);
 export const isCanComment = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_COMMENT);
 export const isStudent = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_COMMENT);
+export const isCanAddToFolder = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_ADD_TO_FOLDER);
 
 export const getDialogs = (state: rootState) => get(getStateData(state), fields.DIALOGS, {});
 

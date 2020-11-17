@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "./actions";
-import {getWorkProgram, getWorkProgramField, isCanApprove, isCanArchive, isCanComment, isCanEdit} from './getters';
+import {getWorkProgram, getWorkProgramField, isCanApprove, isCanArchive, isCanComment, isCanEdit, isCanAddToFolder} from './getters';
 import {WorkProgramActions} from "./types";
 
 import {rootState} from "../../store/reducers";
@@ -15,8 +15,11 @@ const mapStateToProps = (state:rootState) => {
     return {
         workProgram: getWorkProgram(state),
         workProgramTitle: getWorkProgramField(state, WorkProgramGeneralFields.TITLE),
+        workProgramRating: getWorkProgramField(state, WorkProgramGeneralFields.RATING),
+        workProgramRatingId: getWorkProgramField(state, WorkProgramGeneralFields.RATING_ID),
         workProgramStatus: getWorkProgramField(state, 'expertise_status') || 'WK',
         canSendToArchive: isCanArchive(state),
+        canAddToFolder: isCanAddToFolder(state),
         canApprove: isCanApprove(state),
         canSendToExpertise: isCanEdit(state),
         canComment: isCanComment(state),

@@ -16,8 +16,9 @@ import StepButton from '@material-ui/core/StepButton';
 import Grow from '@material-ui/core/Grow';
 
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
-
 import LikeButton from "../../components/LikeButton";
+
+import AddToFolderModal from "../Profile/Folders/AddToFolderModal";
 
 import General from "./General";
 import Sections from "./Sections";
@@ -157,21 +158,18 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
     getCurrentStep = () => Object.keys(steps)[this.state.activeStep];
 
-    handleChangeLiked = (folderId: number, rating: number) => {
-        if (folderId){
-            this.props.foldersActions.addToFolder({
-                folderId,
-                workProgramId: this.getWorkProgramId(),
-                rating
-            });
-        } else {
-            this.props.foldersActions.removeFromFolder(folderId);
-        }
+    handleClickLike = () => {
+        const {workProgramRating, workProgramRatingId} = this.props;
 
+        if (workProgramRating){
+            this.props.foldersActions.removeFromFolder({id: workProgramRatingId, getWorkProgram: true});
+        } else {
+            this.props.foldersActions.openAddToFolderDialog({workProgramId: this.getWorkProgramId()});
+        }
     }
 
     render() {
-        const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus, folders} = this.props;
+        const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus, workProgramRating, canAddToFolder} = this.props;
         const {activeStep, isOpenComments} = this.state;
 
         return (
@@ -191,10 +189,11 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                             </ButtonGroup>
                         }
 
-                        <LikeButton onChange={this.handleChangeLiked}
-                                    isLiked={false}
-                                    folders={folders}
-                        />
+                        {canAddToFolder &&
+                            <LikeButton onClick={this.handleClickLike}
+                                        isLiked={workProgramRating}
+                            />
+                        }
                     </div>
                 </div>
                 <Paper className={classes.root}>
@@ -245,6 +244,8 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         }
                     </div>
                 </Paper>
+
+                <AddToFolderModal />
             </div>
         );
     }

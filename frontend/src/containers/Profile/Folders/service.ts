@@ -5,16 +5,17 @@ class Service extends BaseService{
         return this.get(`/api/folders`);
     }
 
-    addToFolder(id: number, rating: number, workProgramId: number){
+    addToFolder(id: number, rating: number, workProgramId: number, comment: string){
         return this.post(`/api/folders/add`, {
             work_program_rating: rating,
             folder: id,
             work_program: workProgramId,
+            comment: comment,
         });
     }
 
     removeFromFolder(workProgramId: number){
-        return this.get(`/api/folders/remove/${workProgramId}`);
+        return this.delete(`/api/folders/remove/${workProgramId}`);
     }
 
     createFolder(name: string, description: string){

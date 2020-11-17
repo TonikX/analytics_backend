@@ -36,6 +36,6 @@ const closeDialog = (state: foldersState): foldersState => ({
 
 export const reducer = createReducer(initialState, {
     [actions.setFolders.type]: setFolders,
-    [actions.openDialog.type]: openDialog,
+    [actions.openAddToFolderDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
 });

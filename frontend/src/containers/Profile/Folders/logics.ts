@@ -2,6 +2,7 @@ import {createLogic} from "redux-logic";
 
 import actions from '../../../layout/actions';
 import folderActions from './actions';
+import workProgramActions from '../../WorkProgram/actions';
 
 import Service from './service';
 
@@ -34,12 +35,14 @@ const addToFolder = createLogic({
     type: folderActions.addToFolder.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const {id, rating, workProgramId} = action.payload;
+        const {rating, workProgramId, folder, comment} = action.payload;
         dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_TO_FOLDER}));
 
-        service.addToFolder(id, rating, workProgramId)
+        service.addToFolder(folder, rating, workProgramId, comment)
             .then((res) => {
+                dispatch(folderActions.closeDialog());
                 dispatch(actions.fetchingSuccess());
+                dispatch(workProgramActions.getWorkProgram());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
@@ -52,15 +55,20 @@ const addToFolder = createLogic({
 });
 
 const removeFromFolder = createLogic({
-    type: folderActions.addToFolder.type,
+    type: folderActions.removeFromFolder.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const {workProgramId} = action.payload;
         dispatch(actions.fetchingTrue({destination: fetchingTypes.REMOVE_FROM_FOLDER}));
 
-        service.removeFromFolder(workProgramId)
+        service.removeFromFolder(action.payload.id)
             .then((res) => {
                 dispatch(actions.fetchingSuccess());
+
+                if (action.payload.getWorkProgram){
+                    dispatch(workProgramActions.getWorkProgram());
+                } else {
+                    dispatch(folderActions.getFolders());
+                }
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));

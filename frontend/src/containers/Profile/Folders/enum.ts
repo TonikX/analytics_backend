@@ -17,4 +17,8 @@ export enum FoldersFields{
     ID = 'id',
     NAME = 'name',
     DESCRIPTION = 'description',
+    WORK_PROGRAM_IN_FOLDER = 'work_program_in_folder',
+    WORK_PROGRAM = 'work_program',
+    WORK_PROGRAM_RATING = 'work_program_rating',
+    COMMENT = 'comment',
 }

@@ -1,6 +1,4 @@
-import React, {SyntheticEvent, useState} from 'react';
-// @ts-ignore
-import ReactStars from "react-rating-stars-component";
+import React, {useState} from 'react';
 
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -9,44 +7,32 @@ import NotLiked from "@material-ui/icons/FavoriteBorder";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 
+import ConfirmDialog from "../ConfirmDialog";
+import {LikeButtonProps} from './types';
+
 import styles from './LikeButton.styles';
 
-import {LikeButtonProps} from './types';
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import {FoldersFields} from "../../containers/Profile/Folders/enum";
-
-const LikeButton = ({classes, isLiked, onChange, folders}: LikeButtonProps) => {
+const LikeButton = ({classes, isLiked, onClick}: LikeButtonProps) => {
     const [isHover, changeHover] = useState(false);
-    const [anchor, changeOpenFolderMenu] = useState(null);
-    const [openRateItemId, openRate] = useState(-1);
+    const [isOpenConfirmDialog, changeOpenConfirmDialog] = useState(false);
 
-    const handleClick = (event: SyntheticEvent) => {
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
         if (isLiked){
-            onChange();
+            changeOpenConfirmDialog(true);
         } else {
-            // @ts-ignore
-            changeOpenFolderMenu(event.currentTarget);
-        }
-    }
-    const handleCloseMenu = () => {
-        changeOpenFolderMenu(null);
-    }
-
-    const handleOpenRate = (index: number) => () => {
-        if (index === openRateItemId){
-            openRate(-1);
-        } else {
-            openRate(index);
+            onClick();
         }
     }
 
-    const ratingChanged = (newRating: number) => {
-        onChange(openRateItemId, newRating);
+    const handleConfirmDelete = () => {
+        changeOpenConfirmDialog(false);
+        onClick();
     }
 
     return (
-            <>
+        <>
             <Tooltip title={isLiked ? "Убрать из избранного" : "Добавить в избранное"}>
                 <IconButton className={classes.button}
                             onClick={handleClick}
@@ -56,41 +42,13 @@ const LikeButton = ({classes, isLiked, onChange, folders}: LikeButtonProps) => {
                    {(isLiked || isHover) ? <Liked /> : <NotLiked />}
                 </IconButton>
             </Tooltip>
-            <Menu anchorEl={anchor}
-                  anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right'
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                  }}
-                  open={Boolean(anchor)}
-                  onClose={() => handleCloseMenu()}
-                  PopoverClasses={{
-                      root: classes.popper,
-                      paper: classes.menuPaper
-                  }}
-            >
-                {folders.map((item) =>
-                    <MenuItem key={item[FoldersFields.ID]}
-                              onClick={handleOpenRate(item[FoldersFields.ID])}
-                              className={classes.menuItem}
-                    >
-                        {openRateItemId === item[FoldersFields.ID] ?
-                            <ReactStars
-                                count={5}
-                                onChange={ratingChanged}
-                                size={18}
-                                activeColor="#ffd700"
-                            />
-                            :
-                            item[FoldersFields.NAME]
-                        }
-                    </MenuItem>
-                )}
-            </Menu>
+            <ConfirmDialog isOpen={isOpenConfirmDialog}
+                           onConfirm={handleConfirmDelete}
+                           onDismiss={() => changeOpenConfirmDialog(false)}
+                           confirmText={'Вы точно уверены, что хотите удалить РПД из избранного?'}
+                           dialogTitle={'Удалить из избранного'}
+                           confirmButtonText={'Удалить'}
+            />
         </>
     );
 }
