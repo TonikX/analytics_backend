@@ -18,7 +18,7 @@ class WorkProgramInFolderSerializer(serializers.ModelSerializer):
 class FolderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Folder
-        fields = ["id", "name", "description", "owner", "work_program"]
+        fields = ["id", "name", "description", "owner", 'work_program_in_folder']
 
     def update(self, instance, validated_data):
         print(validated_data)
@@ -27,5 +27,6 @@ class FolderSerializer(serializers.ModelSerializer):
 
     def to_representation(self, value):
         self.fields['owner'] = userProfileSerializer(many=False)
-        self.fields['work_program'] = WorkProgramShortForExperiseSerializer(many=True)
+        #self.fields['work_program'] = WorkProgramShortForExperiseSerializer(many=True)
+        self.fields['work_program_in_folder'] = WorkProgramInFolderSerializer(many=True)
         return super().to_representation(value)
