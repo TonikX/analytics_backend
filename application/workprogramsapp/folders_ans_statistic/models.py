@@ -12,7 +12,7 @@ class WorkProgramInFolder(models.Model):
         (4, 4),
         (5, 5),
     ]
-    folder = models.ForeignKey('Folder', verbose_name='Папка', on_delete=models.CASCADE)
+    folder = models.ForeignKey('Folder', verbose_name='Папка', on_delete=models.CASCADE, related_name = "work_program_in_folder")
     work_program = models.ForeignKey("WorkProgram", verbose_name='Рпд в папке', on_delete=models.CASCADE)
     work_program_rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, verbose_name="Важность рпд",
                                                            blank=True, null=True, default=0)
