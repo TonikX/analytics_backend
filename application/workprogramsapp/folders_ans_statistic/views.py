@@ -4,7 +4,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
 from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder
-from workprogramsapp.folders_ans_statistic.serializers import FolderSerializer, WorkProgramInFolderSerializer
+from workprogramsapp.folders_ans_statistic.serializers import FolderSerializer, WorkProgramInFolderSerializer, FolderCreateSerializer
 from workprogramsapp.permissions import IsOwnerOfFolder, IsOwnerOfFolderWithWorkProgramm
 
 
@@ -39,7 +39,11 @@ class CreateFolderView(generics.CreateAPIView):
     Создание папки
     """
     queryset = Folder.objects.all()
-    serializer_class = FolderSerializer
+    serializer_class = FolderCreateSerializer
+
+
+    def perform_create(self, serializer):
+         serializer.save(owner=self.request.user)
 
 
 class DeleteFolderView(generics.DestroyAPIView):
@@ -58,7 +62,17 @@ class EditFolderView(generics.UpdateAPIView):
     # TODO: block to change folder owner
     permission_classes = [IsOwnerOfFolder]
     queryset = Folder.objects.all()
-    serializer_class = FolderSerializer
+    serializer_class = FolderCreateSerializer
+
+
+class DeleteFolderView(generics.DestroyAPIView):
+    """
+      Изменение данных в папке
+    """
+    # TODO: block to change folder owner
+    permission_classes = [IsOwnerOfFolder]
+    queryset = Folder.objects.all()
+    serializer_class = FolderCreateSerializer
 
 
 class AddToFolderView(generics.CreateAPIView):

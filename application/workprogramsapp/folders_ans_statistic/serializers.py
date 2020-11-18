@@ -15,6 +15,12 @@ class WorkProgramInFolderSerializer(serializers.ModelSerializer):
         return super().to_representation(value)
 
 
+class FolderCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Folder
+        fields = ["id", "name", "description"]
+
+
 class FolderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Folder
