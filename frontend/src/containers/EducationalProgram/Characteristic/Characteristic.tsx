@@ -211,6 +211,12 @@ class Characteristic extends React.Component<CharacteristicProps> {
                     />
                 </>
             case 1:
+                return <CKEditor label={"Аннотация"}
+                                 value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
+                                 onChange={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
+                                 toolbarContainerId="toolbar-container"
+                />;
+            case 2:
                 return <>
                     <Typography className={classes.label}>Область профессиональной деятельности</Typography>
                     <Table stickyHeader size='small'>
@@ -281,7 +287,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
                               toolbarContainerId="toolbar-container2"
                     />
                 </>
-            case 2:
+            case 3:
                 return <>
                     <CKEditor label={"Объекты профессиональной деятельности"}
                               value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY, '')}
@@ -294,34 +300,28 @@ class Characteristic extends React.Component<CharacteristicProps> {
                               toolbarContainerId="toolbar-container3"
                     />
                 </>;
-            case 3:
+            case 4:
                 return <>
                     {this.returnCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.OK_COMPETENCES, []))}
                 </>;
-            case 4:
+            case 5:
                 return <>
                     {this.returnCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.KC_COMPETENCES, []))}
                 </>;
-            case 5:
+            case 6:
                 return <>
                     {this.returnProfessionalCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PK_COMPETENCES, []))}
                 </>;
-            case 6:
+            case 7:
                 return <>
                     {this.returnCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.NP_COMPETENCES, []))}
                 </>;
-            case 7:
+            case 8:
                 return <CKEditor label={"Необходимый преподавательский состав"}
                                  value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PPS, '')}
                                  onChange={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.PPS)}
                                  toolbarContainerId="toolbar-container"
                 />;
-            case 8:
-                return <CKEditor label={"Аннотация"}
-                                 value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
-                                 onChange={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
-                                 toolbarContainerId="toolbar-container"
-                    />;
             case 9:
                 return <>
                     <UserSelector selectorLabel='Разработчики'
