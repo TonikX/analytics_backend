@@ -49,6 +49,25 @@ const getAllUsers = createLogic({
     }
 });
 
+const getUserGroups = createLogic({
+    type: actions.getUserGroups.type,
+    latest: true,
+    process({getState, action}, dispatch, done) {
+        service.getUserGroups()
+            .then((res) => {
+                dispatch(actions.setUserGroups(res.data.groups));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                return done();
+            });
+    }
+});
+
 export default [
     getAllUsers,
+    getUserGroups,
 ];

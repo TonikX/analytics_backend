@@ -16,6 +16,7 @@ export const getErrors = (state: rootState): layoutState[fields.ERRORS] => get(g
 export const getSuccessMessages = (state: rootState): layoutState[fields.SUCCESS_MESSAGES] => get(getStateData(state), fields.SUCCESS_MESSAGES, []);
 export const getAuth = (state: rootState): layoutState[fields.IS_AUTH] => get(getStateData(state), fields.IS_AUTH, false);
 
+export const getUserGroups = (state: rootState): layoutState[fields.USER_GROUPS] => get(getStateData(state), fields.USER_GROUPS, []);
 export const getUsers = (state: rootState): layoutState[fields.USERS] => get(getStateData(state), fields.USERS, []);
 export const getUsersForSelector = (state: rootState): layoutState[fields.USERS] => getUsers(state).map((user: any): SelectorListType => ({
     //@ts-ignore

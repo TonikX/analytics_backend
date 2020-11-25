@@ -39,6 +39,10 @@ class Layout extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.props.actions.getUserGroups();
+    }
+
     shouldComponentUpdate(nextProps, nextState){
         return !shallowEqual(this.props.errors, nextProps.errors)
             || !shallowEqual(this.props.children, nextProps.children)
@@ -65,7 +69,7 @@ class Layout extends React.Component {
 
     render() {
         const {openMenu} = this.state;
-        const {classes, fetching, errors, successMessages, auth} = this.props;
+        const {classes, fetching, errors, successMessages, auth, userGroups} = this.props;
         const isAuth = userService.isAuth() && auth;
         const isWorkProgramPage = this.isWorkProgramPage();
 
@@ -82,7 +86,7 @@ class Layout extends React.Component {
                                 logout={this.logout}
                         />
                         <div className={classes.root}>
-                            {isAuth && <Menu isOpen={openMenu} />}
+                            {isAuth && <Menu isOpen={openMenu} userGroups={userGroups} />}
                             <div className={className(classes.content, {
                                 [classes.contentShift]: openMenu,
                                 [classes.noPadding]: isWorkProgramPage
