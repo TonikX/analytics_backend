@@ -44,29 +44,35 @@ import ProfessionsSkillsSelectedIcon from "./icons/professions-skills-selected.s
 
 import ProfessionsIcon from "./icons/professions.svg";
 import ProfessionsSelectedIcon from "./icons/professions-selected.svg";
+import {isUserCanSeeProfessions, isUserInExpertiseGroup, isUserInOpGroup, isUserRpdDev} from "./constants";
 
-export default [
-    [
-        {
-            title: 'Предметные области',
-            link: appRouter.getSubjectAreaRoute(),
-            icon: SubjectAreaIcon,
-            selectedIcon: SubjectAreaSelectedIcon,
-        },
-        {
-            title: 'Учебные сущности',
-            link: appRouter.getTrainingEntitiesRoute(),
-            icon: TrainingEntitiesIcon,
-            selectedIcon: TrainingEntitiesSelectedIcon,
-        },
-        {
-            title: 'Связи',
-            link: appRouter.getEntityToEntityRoute(),
-            icon: EntityToEntityIcon,
-            selectedIcon: EntityToEntitySelectedIcon,
-        }
-    ],
-    [
+export default (groups: Array<string>) => {
+    const firstMenu = isUserRpdDev(groups) ?
+        [
+            {
+                title: 'Предметные области',
+                link: appRouter.getSubjectAreaRoute(),
+                icon: SubjectAreaIcon,
+                selectedIcon: SubjectAreaSelectedIcon,
+            },
+            {
+                title: 'Учебные сущности',
+                link: appRouter.getTrainingEntitiesRoute(),
+                icon: TrainingEntitiesIcon,
+                selectedIcon: TrainingEntitiesSelectedIcon,
+            },
+            {
+                title: 'Связи',
+                link: appRouter.getEntityToEntityRoute(),
+                icon: EntityToEntityIcon,
+                selectedIcon: EntityToEntitySelectedIcon,
+            }
+        ]
+        :
+        []
+    ;
+
+    const secondMenu = [
         {
             title: 'Рабочие программы',
             link: appRouter.getWorkProgramListRoute(),
@@ -97,14 +103,20 @@ export default [
             icon: IndicatorsIcon,
             selectedIcon: IndicatorsSelectedIcon,
         },
-        {
-            title: 'Экспертизы',
-            link: appRouter.getExpertisesRoute(),
-            icon: WorkProgramIcon,
-            selectedIcon: WorkProgramSelectedIcon,
-        },
-    ],
-    [
+    ];
+
+    if (isUserInExpertiseGroup(groups)){
+        secondMenu.push(
+            {
+                title: 'Экспертизы',
+                link: appRouter.getExpertisesRoute(),
+                icon: WorkProgramIcon,
+                selectedIcon: WorkProgramSelectedIcon,
+            },
+        )
+    }
+
+    const thirdMenu = isUserInOpGroup(groups) ? [
         {
             title: 'Направления',
             link: appRouter.getDirectionRoute(),
@@ -129,8 +141,9 @@ export default [
             icon: WorkProgramInDirectionIcon,
             selectedIcon: WorkProgramInDirectionSelectedIcon,
         },
-    ],
-    [
+    ] : [];
+
+    const fourthMenu = isUserCanSeeProfessions(groups) ? [
         {
             title: 'Роли',
             link: appRouter.getRolesRoute(),
@@ -155,5 +168,23 @@ export default [
             icon: ProfessionsSkillsIcon,
             selectedIcon: ProfessionsSkillsSelectedIcon,
         },
-    ]
-]
+    ] : [];
+
+    const menu = [];
+
+    if (firstMenu.length){
+        menu.push(firstMenu);
+    }
+
+    menu.push(secondMenu);
+
+    if (thirdMenu.length){
+        menu.push(thirdMenu);
+    }
+
+    if (fourthMenu.length){
+        menu.push(fourthMenu);
+    }
+
+    return menu;
+}

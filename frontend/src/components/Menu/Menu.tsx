@@ -10,19 +10,21 @@ import {WithStyles} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
 
-import MenuList from "./MenuList";
+import getMenuList from "./MenuList";
 
 import styles from './Menu.styles';
 import Scrollbars from "react-custom-scrollbars";
 
 interface MenuProps extends WithStyles<typeof styles>, RouteComponentProps {
-    isOpen: boolean
+    isOpen: boolean;
+    userGroups: Array<string>;
 }
 
 class Menu extends React.PureComponent<MenuProps>{
     render() {
-        const {classes, isOpen} = this.props;
+        const {classes, isOpen, userGroups} = this.props;
         const {pathname} = this.props.location;
+        const menuList = getMenuList(userGroups);
 
         return(
             <Drawer
@@ -35,7 +37,7 @@ class Menu extends React.PureComponent<MenuProps>{
             >
                 <Scrollbars>
                     <List className={classes.menuList}>
-                    {MenuList.map((group, groupIndex) =>
+                    {menuList.map((group, groupIndex) =>
                         <div key={groupIndex}>
                             {group.map((item, itemIndex) =>
                                 <Link to={item.link}

@@ -16,6 +16,9 @@ const setAuthFalse = createAction<string>('SET_AUTH_FALSE');
 const getAllUsers = createAction<string>('GET_ALL_USERS');
 const setAllUsers = createAction<string>('SET_ALL_USERS');
 
+const getUserGroups = createAction<string>('GET_USER_GROUPS');
+const setUserGroups = createAction<string>('SET_USER_GROUPS');
+
 const actions: GeneralActions = {
     fetchingComponentFalse,
     fetchingComponentTrue,
@@ -27,6 +30,8 @@ const actions: GeneralActions = {
     setAuthFalse,
     getAllUsers,
     setAllUsers,
+    getUserGroups,
+    setUserGroups,
 }
 
 export default actions;

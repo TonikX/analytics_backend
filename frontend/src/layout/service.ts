@@ -7,6 +7,9 @@ class MainService extends BaseService{
     getAllUsers(search: string){
         return this.get(`/api/users/search?search=${search || ''}`);
     }
+    getUserGroups(){
+        return this.get(`/api/user/groups`);
+    }
 }
 
 export default MainService;

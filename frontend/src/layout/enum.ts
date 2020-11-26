@@ -5,6 +5,7 @@ export enum fields {
     IS_AUTH = 'IS_AUTH',
     FETCHING_COMPONENT = 'FETCHING_COMPONENT',
     USERS = 'USERS',
+    USER_GROUPS = 'USER_GROUPS',
 }
 
 export enum UserFields{
