@@ -44,6 +44,7 @@ class ProfessionCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+
 class ProfessionDestroyView(generics.DestroyAPIView):
     queryset = Profession.objects.all()
     serializer_class = ProfessionCreateSerializer
@@ -78,11 +79,42 @@ class SkillsOfProfessionInProfessionCreateAPIView(generics.CreateAPIView):
     queryset = SkillsOfProfession.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def create(self, request):
+        serializer = SkillsOfProfessionInProfessionCreateSerializer(data = request.data)
+
+        # обновляем value для item 
+        item = Items.objects.get(id = request.data.get('item'))
+        value = item.value
+        item.value = int(value) + 1
+        item.save()
+        print(item)
+            
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        
+            return Response(serializer.data, status=200)
+        else:
+            return Response(serializer.errors, status=400)
+
 
 class SkillsOfProfessionInProfessionDestroyView(generics.DestroyAPIView):
     queryset = SkillsOfProfession.objects.all()
     serializer_class = SkillsOfProfessionInProfessionCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            obj = SkillsOfProfession.objects.get(pk = kwargs['pk'])
+            
+            # изменяем значение value для item
+            item = obj.item            
+            value = item.value
+            item.value = int(value) - 1
+            item.save()
+
+            return self.destroy(request, *args, **kwargs)
+        except:
+            return Response(status=400)
 
 
 class SkillsOfProfessionInProfessionUpdateView(generics.UpdateAPIView):
@@ -128,7 +160,7 @@ class RoleDestroyView(generics.DestroyAPIView):
     queryset = Role.objects.all()
     serializer_class = RoleCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
+    
 
 class RoleUpdateView(generics.UpdateAPIView):
     queryset = Role.objects.all()
@@ -224,11 +256,45 @@ class SkillsOfRoleInRoleCreateAPIView(generics.CreateAPIView):
     queryset = SkillsOfRole.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def create(self, request):
+        serializer = SkillsOfRoleInRoleCreateSerializer(data = request.data)
+
+        # обновляем value для item 
+        item = Items.objects.get(id = request.data.get('item'))
+        value = item.value
+        item.value = int(value) + 1
+        item.save()
+        print(item)
+            
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        
+            return Response(serializer.data, status=200)
+        else:
+            return Response(serializer.errors, status=400)
+
+
+
+
 
 class SkillsOfRoleInRoleDestroyView(generics.DestroyAPIView):
     queryset = SkillsOfRole.objects.all()
     serializer_class = SkillsOfRoleInRoleCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    
+    def delete(self, request, *args, **kwargs):
+        try:
+            obj = SkillsOfRole.objects.get(pk = kwargs['pk'])
+            
+            # изменяем значение value для item
+            item = obj.item            
+            value = item.value
+            item.value = int(value) - 1
+            item.save()
+
+            return self.destroy(request, *args, **kwargs)
+        except:
+            return Response(status=400)
 
 
 class SkillsOfRoleInRoleUpdateView(generics.UpdateAPIView):
