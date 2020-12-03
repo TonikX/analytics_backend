@@ -119,7 +119,7 @@ class СertificationEvaluationToolCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = СertificationEvaluationTool
-        fields = ['type', 'name', 'description', 'deadline', 'semester', 'min', 'max']
+        fields = ['type', 'name', 'description', 'deadline', 'semester', 'min', 'max', 'work_program']
 
 
 class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
@@ -631,7 +631,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     bibliographic_reference = BibliographicReferenceSerializer(many = True, required=False)
     work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many = True)
     expertise_with_rpd = ShortExpertiseSerializer(many = True, read_only=True)
-    certification_evaluation_tools = СertificationEvaluationToolCreateSerializer(many = True)
+    certification_evaluation_tools = СertificationEvaluationToolForWorkProgramSerializer(many = True)
 
     class Meta:
         model = WorkProgram
