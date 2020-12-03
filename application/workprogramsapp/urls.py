@@ -63,6 +63,7 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, \
 from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView
 from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView, \
     UserGroups
+from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
 
 # DocxFileExportOldView
 
@@ -315,4 +316,8 @@ urlpatterns = [
     path('api/folders/remove/<int:pk>', RemoveFromFolderView.as_view()),
     path('api/workprogram/statistic/<int:pk>', WorkProgramStatistic),
     path('api/folders/real_remove/<int:pk>', DeleteFolderView.as_view()),
+
+    # Аттестационные оценочные средства
+    path('api/certification_tools/', СertificationEvaluationToolListAPI.as_view()),
+    path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
 ]

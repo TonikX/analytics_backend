@@ -22,7 +22,7 @@ from .forms import DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
     DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
-from .models import FieldOfStudy, FieldOfStudyWorkProgram, BibliographicReference
+from .models import FieldOfStudy, FieldOfStudyWorkProgram, BibliographicReference, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence, OnlineCourse
 # Права доступа
@@ -42,7 +42,7 @@ from .serializers import OnlineCourseSerializer, BibliographicReferenceSerialize
     WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
     IndicatorListSerializer
-from .serializers import OutcomesOfWorkProgramCreateSerializer
+from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer
 from .tables import FieldOfStudyWPTable
@@ -828,6 +828,24 @@ class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = EvaluationTool.objects.all()
     serializer_class = EvaluationToolCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class СertificationEvaluationToolListAPI(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Evaluation Tools.
+    """
+    queryset = СertificationEvaluationTool.objects.all()
+    serializer_class = СertificationEvaluationToolCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class СertificationEvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Evaluation Tool.
+    """
+    queryset = СertificationEvaluationTool.objects.all()
+    serializer_class = СertificationEvaluationToolCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 

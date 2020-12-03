@@ -628,6 +628,29 @@ class EvaluationTool(models.Model):
         return self.name
 
 
+class СertificationEvaluationTool(models.Model):
+    '''
+    Модель для аттестационных оценочных средств
+    '''
+    types = [
+        ('1', 'Exam'),
+        ('2', 'Differentiated credit'),
+        ('3', 'Offset')
+    ]
+    type = models.CharField(choices=types, default='1',max_length=1024, verbose_name="Тип оценочного средства")
+    name = models.CharField(unique=True, max_length=1024, verbose_name="Наименование оценочного средства")
+    description = models.CharField(max_length=50000, verbose_name="Описание", blank=True, null=True)
+    #check_point = models.BooleanField(verbose_name="Контрольная точка", blank=True, null=True)
+    deadline = models.IntegerField(verbose_name="Срок сдачи в неделях", blank=True, null=True)
+    semester = models.IntegerField(verbose_name="Семестр в котором сдается оценочное средство", blank=True, null=True)
+    min = models.IntegerField(verbose_name="Максимальное значение", blank=True, null=True)
+    max = models.IntegerField(verbose_name="Минимальное значение", blank=True, null=True)
+    work_program = models.ForeignKey("WorkProgram", verbose_name='Аттестационное оценочное средство', related_name = "certification_evaluation_tools", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
 class DisciplineSection(models.Model):
     '''
     Модель для разделов дисциплин
