@@ -18,6 +18,7 @@ import topicLogics from './logics/topics.logics';
 import literatureLogics from './logics/literature.logics';
 import prerequisitesLogics from './logics/prerequisites.logics';
 import evaluationToolsLogics from './logics/evaluationTools.logics';
+import intermediateCertificationLogics from './logics/intermediateCertification.logics';
 import resultsLogics from './logics/results.logics';
 import commentsLogics from './logics/comments.logics';
 
@@ -203,6 +204,7 @@ export default [
     ...literatureLogics,
     ...prerequisitesLogics,
     ...evaluationToolsLogics,
+    ...intermediateCertificationLogics,
     ...resultsLogics,
     ...commentsLogics,
     getWorkProgram,

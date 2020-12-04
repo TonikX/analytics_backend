@@ -12,6 +12,7 @@ export const initialState: workProgramState = {
     },
     [fields.WORK_PROGRAM_ID]: '',
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: [],
+    [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION]: [],
     [fields.WORK_PROGRAM_RESULTS]: [],
     [fields.WORK_PROGRAM_COMMENTS]: [],
     [fields.DIALOGS]: {

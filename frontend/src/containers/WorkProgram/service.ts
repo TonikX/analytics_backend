@@ -2,7 +2,13 @@ import {ReactText} from "react";
 import get from 'lodash/get';
 import BaseService from "../../service/base-service";
 import {Section, Topic} from "./types";
-import {EvaluationToolFields, PrerequisiteFields, ResultsFields, workProgramTopicFields} from "./enum";
+import {
+    EvaluationToolFields,
+    IntermediateCertificationFields,
+    PrerequisiteFields,
+    ResultsFields,
+    workProgramTopicFields
+} from "./enum";
 import {CourseFields} from "../Courses/enum";
 import {TrainingEntitiesFields} from "../TrainingEntities/enum";
 import {UserExpertResultEnum} from "../Expertises/enum";
@@ -158,6 +164,13 @@ class WorkProgramService extends BaseService{
         return this.post(`/api/tools/`, evaluationTool);
     }
 
+    addIntermediateCertification(evaluationTool: any, workProgramId: ReactText){
+        return this.post(`/api/certification_tools/`, {
+            ...evaluationTool,
+            work_program: workProgramId
+        });
+    }
+
     addResult(result: any, workProgramId: ReactText){
         return this.post(`/api/outcomesofworkprogram/create`, {
             ...result,
@@ -170,6 +183,12 @@ class WorkProgramService extends BaseService{
         const id = evaluationTool[EvaluationToolFields.ID];
 
         return this.patch(`/api/tools/${id}`, evaluationTool);
+    }
+
+    changeIntermediateCertification(evaluationTool: any){
+        const id = evaluationTool[IntermediateCertificationFields.ID];
+
+        return this.patch(`/api/certification_tools/${id}`, evaluationTool);
     }
 
     changeResult(result: any){
@@ -202,6 +221,10 @@ class WorkProgramService extends BaseService{
 
     deleteEvaluationTool(id: ReactText){
         return this.delete(`/api/tools/${id}`);
+    }
+
+    deleteIntermediateCertification(id: ReactText){
+        return this.delete(`/api/certification_tools/${id}`);
     }
 
     deleteResult(id: ReactText){

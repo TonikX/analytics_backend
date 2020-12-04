@@ -1,4 +1,4 @@
-import {StepsEnum, WorkProgramStatusEnum} from "./enum";
+import {IntermediateCertificationEnum, StepsEnum, WorkProgramStatusEnum} from "./enum";
 
 const PRIMARY_VOCATIONAL_EDUCATION = 'primary_vocational_education';
 const SECONDARY_VOCATIONAL_EDUCATION = 'secondary_vocational_education';
@@ -44,6 +44,14 @@ export const workProgramStatusesRussian: any = {
     [WorkProgramStatusEnum.ARCHIVE]: 'В архиве',
 }
 
+
+export const IntermediateCertificationTypes: any = {
+    [IntermediateCertificationEnum.EXAM]: 'Экзамен',
+    [IntermediateCertificationEnum.DIF_CREDIT]: 'Дифференцируемый зачет',
+    [IntermediateCertificationEnum.CREDIT]: 'Зачет',
+    [IntermediateCertificationEnum.COURSE_WORK]: 'Курсовая работа',
+}
+
 export const workProgramStatusesColors: any = {
     [WorkProgramStatusEnum.AT_WORK]: '#009aff',
     [WorkProgramStatusEnum.EXPERTISE]: '#C000FF',
@@ -58,8 +66,9 @@ export const steps = {
     [StepsEnum.TOPICS]: 'Темы',
     [StepsEnum.LITERATURE]: 'Источники',
     [StepsEnum.EVALUATION]: 'Оценочные средства',
+    [StepsEnum.INTERMEDIATE_CERTIFICATION]: 'Оценочные средства промежуточной аттестации',
     [StepsEnum.RESULTS]: 'Результаты обучения',
-    [StepsEnum.PLANS]: 'Cвязанные с рпд учебные планы и направления',
+    [StepsEnum.PLANS]: 'Связанные с рпд учебные планы и направления',
 }
 
 export const years = [

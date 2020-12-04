@@ -25,6 +25,7 @@ import Sections from "./Sections";
 import Topics from "./Topics";
 import Literature from "./Literature";
 import EvaluationTools from "./EvaluationTools";
+import IntermediateCertification from "./IntermediateCertification";
 import Prerequisites from "./Prerequisites";
 import Results from "./Results";
 import PlansAndDirections from "./PlansAndDirections";
@@ -120,12 +121,20 @@ class WorkProgram extends React.Component<WorkProgramProps> {
             case 6:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
+                        Оценочные средства промежуточной аттестации
+                    </Typography>
+
+                    <IntermediateCertification />
+                </div>;
+            case 7:
+                return <div className={classes.subItem}>
+                    <Typography className={classes.subTitle}>
                         Результаты обучения
                     </Typography>
 
                     <Results />
                 </div>;
-            case 7:
+            case 8:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
                         Связанные с рпд учебные планы и направления

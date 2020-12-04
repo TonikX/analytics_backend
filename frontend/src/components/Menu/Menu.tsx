@@ -2,6 +2,7 @@ import React from 'react';
 
 import {Link} from "react-router-dom";
 import {withRouter, RouteComponentProps} from "react-router-dom";
+import Scrollbars from "react-custom-scrollbars";
 
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -13,7 +14,6 @@ import Divider from "@material-ui/core/Divider";
 import getMenuList from "./MenuList";
 
 import styles from './Menu.styles';
-import Scrollbars from "react-custom-scrollbars";
 
 interface MenuProps extends WithStyles<typeof styles>, RouteComponentProps {
     isOpen: boolean;
