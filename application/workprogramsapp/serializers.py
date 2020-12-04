@@ -5,7 +5,7 @@ from .expertise.models import Expertise
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
-    WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy
+    WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool
 from .expertise.common_serializers import ShortExpertiseSerializer
 
 
@@ -104,6 +104,22 @@ class EvaluationToolForOutcomsSerializer(serializers.ModelSerializer):
     class Meta:
         model = EvaluationTool
         fields = ['id', 'type', 'name']
+
+
+class СertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
+    """Сериализатор ФОСов"""
+
+    class Meta:
+        model = СertificationEvaluationTool
+        fields = ['id', 'type', 'name', 'description', 'deadline', 'min', 'max', 'semester']
+
+
+class СertificationEvaluationToolCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор ФОСов"""
+
+    class Meta:
+        model = СertificationEvaluationTool
+        fields = ['type', 'name', 'description', 'deadline', 'semester', 'min', 'max', 'work_program']
 
 
 class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
@@ -615,10 +631,11 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     bibliographic_reference = BibliographicReferenceSerializer(many = True, required=False)
     work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many = True)
     expertise_with_rpd = ShortExpertiseSerializer(many = True, read_only=True)
+    certification_evaluation_tools = СertificationEvaluationToolForWorkProgramSerializer(many = True)
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd', 'work_status']
+        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd', 'work_status', 'certification_evaluation_tools']
 
     def create(self, validated_data):
         """
