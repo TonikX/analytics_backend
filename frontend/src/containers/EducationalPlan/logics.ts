@@ -346,6 +346,48 @@ const saveCompetenceBlock = createLogic({
     }
 });
 
+const deleteCompetenceBlock = createLogic({
+    type: planActions.deleteCompetenceBlock.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_COMPETENCE_BLOCK}));
+
+        service.deleteCompetenceBlock(action.payload)
+            .then((res) => {
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_COMPETENCE_BLOCK}));
+                return done();
+            });
+    }
+});
+
+const deleteWorkProgramFromZun = createLogic({
+    type: planActions.deleteWorkProgramFromZun.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_WP_FROM_ZUN}));
+
+        service.deleteWPFromZun(action.payload)
+            .then((res) => {
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_WP_FROM_ZUN}));
+                return done();
+            });
+    }
+});
+
 const transformDetailPlanData = createLogic({
     type: planActions.openDetailDialog.type,
     latest: true,
@@ -367,6 +409,7 @@ const transformDetailPlanData = createLogic({
                 const indicator = get(zunInWpItem, 'indicator_in_zun', {});
                 const competence = get(indicator, 'competence', null);
                 const items = get(zunInWpItem, 'items', []);
+                const zunId = get(zunInWpItem, 'id', '');
 
                 if (competence !== null){
                     const findCompetence = competences.find(item => item.value === competence.id);
@@ -379,6 +422,7 @@ const transformDetailPlanData = createLogic({
 
                     if (!findCompetence){
                         competences.push({
+                            zunId: zunId,
                             value: competence.id,
                             label: competence.name,
                             [BlocksOfWorkProgramsFields.INDICATORS]: [newIndicator]
@@ -418,5 +462,7 @@ export default [
     deleteBlockOfWorkPrograms,
     getDirectionsDependedOnWorkProgram,
     saveCompetenceBlock,
+    deleteCompetenceBlock,
+    deleteWorkProgramFromZun,
     transformDetailPlanData,
 ];

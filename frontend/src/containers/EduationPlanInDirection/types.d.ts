@@ -50,6 +50,7 @@ export interface EducationalPlanInDirectionProps extends WithStyles<typeof style
     currentPage: number;
     searchQuery: string;
     allCount: number;
+    canEdit: boolean;
     sortingField: string;
     sortingMode: SortingType;
 }

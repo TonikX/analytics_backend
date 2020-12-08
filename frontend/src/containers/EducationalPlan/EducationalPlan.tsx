@@ -123,7 +123,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
     };
 
     render() {
-        const {classes, educationalPlan, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, educationalPlan, allCount, currentPage, sortingField, sortingMode, canAddNewPlan} = this.props;
         const {deleteConfirmId} = this.state;
 
         const {anchorsEl} = this.state;
@@ -240,15 +240,20 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                         </Link>
                                                     </MenuItem>
 
-                                                    <MenuItem onClick={this.handleClickEdit(plan)}>
-                                                        <EditIcon className={classes.menuIcon} />
-                                                        Редактировать
-                                                    </MenuItem>
+                                                    {plan[EducationalPlanFields.CAN_EDIT] &&
+                                                        <MenuItem onClick={this.handleClickEdit(plan)}>
+                                                            <EditIcon className={classes.menuIcon}/>
+                                                            Редактировать
+                                                        </MenuItem>
+                                                    }
 
-                                                    <MenuItem onClick={this.handleClickDelete(plan[EducationalPlanFields.ID])}>
-                                                        <DeleteIcon className={classes.menuIcon} />
-                                                        Удалить
-                                                    </MenuItem>
+                                                    {plan[EducationalPlanFields.CAN_EDIT] &&
+                                                        <MenuItem
+                                                            onClick={this.handleClickDelete(plan[EducationalPlanFields.ID])}>
+                                                            <DeleteIcon className={classes.menuIcon}/>
+                                                            Удалить
+                                                        </MenuItem>
+                                                    }
                                                 </Menu>
                                             </div>
                                         </TableCell>
@@ -270,17 +275,19 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                      onChangeRowsPerPage={()=>{}}
                     />
 
-                    <Fab color="secondary"
-                         classes={{
-                             root: classes.addIcon
-                         }}
-                         onClick={this.handleCreate}
-                    >
-                        <AddIcon/>
-                    </Fab>
+                    {canAddNewPlan &&
+                        <Fab color="secondary"
+                             classes={{
+                                 root: classes.addIcon
+                             }}
+                             onClick={this.handleCreate}
+                        >
+                            <AddIcon/>
+                        </Fab>
+                    }
                 </div>
 
-                <CreateModal />
+                {canAddNewPlan && <CreateModal/>}
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

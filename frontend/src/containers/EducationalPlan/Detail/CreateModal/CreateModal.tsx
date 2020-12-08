@@ -253,7 +253,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         });
     }
 
-    deleteCompetence = (workProgramId: number, competenceId: number) => () => {
+    deleteCompetence = (workProgramId: number, competenceId: number, zunId?: number) => () => {
         const {blockOfWorkPrograms} = this.state;
         const workPrograms = blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS];
 
@@ -275,6 +275,10 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: modifiedWorkPrograms
             }
         });
+
+        if (zunId){
+            this.props.actions.deleteCompetenceBlock(zunId);
+        }
     }
 
     saveResults = (results: any) => {
@@ -403,6 +407,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: filteredWorkPrograms
             }
         });
+
+        this.props.actions.deleteWorkProgramFromZun(value);
     }
 
     handleChangeHours = (index: number) => (e: React.ChangeEvent) => {
@@ -581,7 +587,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                                     <TableCell />
                                                                     <TableCell>
                                                                         <div className={classes.competenceButtons}>
-                                                                            <DeleteIcon className={classes.iconButton} onClick={this.deleteCompetence(workProgram.value, competence.value)} />
+                                                                            <DeleteIcon className={classes.iconButton} onClick={this.deleteCompetence(workProgram.value, competence.value, competence.zunId)} />
                                                                             <SaveIcon className={classes.iconButton} onClick={this.saveToBeCompetence(workProgram.value, competence)} />
                                                                         </div>
                                                                     </TableCell>
@@ -627,7 +633,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                                     {indicatorIndex === 0 ?
                                                                         <TableCell rowSpan={competence[BlocksOfWorkProgramsFields.INDICATORS].length}>
                                                                             <div className={classes.competenceButtons}>
-                                                                                <DeleteIcon className={classes.iconButton} onClick={this.deleteCompetence(workProgram.value, competence.value)} />
+                                                                                <DeleteIcon className={classes.iconButton} onClick={this.deleteCompetence(workProgram.value, competence.value, competence.zunId)} />
                                                                                 <SaveIcon className={classes.iconButton} onClick={this.saveToBeCompetence(workProgram.value, competence)} />
                                                                             </div>
                                                                         </TableCell>

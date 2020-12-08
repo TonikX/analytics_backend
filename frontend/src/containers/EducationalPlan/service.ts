@@ -33,6 +33,14 @@ class EducationalPlanService extends BaseService{
         return this.post(`/api/zun/`, postData);
     }
 
+    deleteCompetenceBlock(zunId: number){
+        return this.delete(`/api/zun/${zunId}`);
+    }
+
+    deleteWPFromZun(id: number){
+        return this.delete(`api/workprograminfieldofstudy/${id}`);
+    }
+
     createEducationalPlan(competence: any){
         const formData = new FormData();
 

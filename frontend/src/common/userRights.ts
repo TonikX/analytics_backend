@@ -7,10 +7,11 @@ export const ROLES_AND_PROFESSIONS_MASTER = "roles_and_professions_master";
 export const OP_LEADER = "op_leader";
 export const OP_DEVELOPER = "op_developer";
 export const RPD_DEVELOPER = "rpd_developer";
+export const ACADEMIC_PLAN_DEVELOPER = "academic_plan_developer";
 
 export const EXPERTISE_GROUP = [EXPERTISE_MASTER, EXPERTISE_MEMBER, EXPERT];
 
-export const OP_GROUP = [OP_LEADER, OP_DEVELOPER];
+export const OP_GROUP = [OP_LEADER, OP_DEVELOPER, ACADEMIC_PLAN_DEVELOPER];
 
 export const PROFESSIONS_GROUP = [EXPERT, ROLES_AND_PROFESSIONS_MASTER];
 
@@ -19,7 +20,7 @@ export const isUserInExpertiseGroup = (groups: Array<string>) => {
 }
 
 export const isUserInOpGroup = (groups: Array<string>) => {
-    return groups.some(group => Boolean(OP_GROUP.indexOf(group)));
+    return groups.some(group => OP_GROUP.indexOf(group) !== -1);
 }
 
 export const isUserRpdDev = (groups: Array<string>) => {
@@ -27,5 +28,5 @@ export const isUserRpdDev = (groups: Array<string>) => {
 }
 
 export const isUserCanSeeProfessions = (groups: Array<string>) => {
-    return groups.some(group => Boolean(PROFESSIONS_GROUP.indexOf(group)));
+    return groups.some(group => PROFESSIONS_GROUP.indexOf(group) !== -1);
 }
