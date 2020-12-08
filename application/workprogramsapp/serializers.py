@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.fields import CharField, BooleanField
 
 from dataprocessing.serializers import ItemSerializer, userProfileSerializer
 from .expertise.models import Expertise
@@ -494,17 +495,20 @@ class DisciplineBlockSerializer(serializers.ModelSerializer):
 
 class AcademicPlanSerializer(serializers.ModelSerializer):
     discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, required=False)
-
+    can_edit = BooleanField(read_only=True)
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["can_edit"] = self.context['request'].user == instance.author or bool(self.context['request'].user.groups.filter(name="academic_plan_developer"))
+        return data
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year', 'education_form', 'qualification']
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year', 'education_form', 'qualification','author', 'can_edit']
         extra_kwargs = {
             'discipline_blocks_in_academic_plan': {'required': False}
         }
 
 
 class AcademicPlanSerializerForList(serializers.ModelSerializer):
-
     class Meta:
         model = AcademicPlan
         fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification']
@@ -512,20 +516,24 @@ class AcademicPlanSerializerForList(serializers.ModelSerializer):
 
 class AcademicPlanShortSerializer(serializers.ModelSerializer):
     #discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, requirлинed=False)
-
+    can_edit = BooleanField(read_only=True)
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["can_edit"] = self.context['request'].user.id == instance.author or bool(self.context['request'].user.groups.filter(name="academic_plan_developer"))
+        return data
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification']
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification', 'author', "can_edit"]
         extra_kwargs = {
             'discipline_blocks_in_academic_plan': {'required': False}
         }
 
 
-class AcademicPlanCreateSerializer(serializers.ModelSerializer):
 
+class AcademicPlanCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form']
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'author']
 
 
 class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
