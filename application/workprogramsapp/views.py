@@ -1695,6 +1695,7 @@ class AcademicPlanListShortAPIView(generics.ListAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+
 class AcademicPlanCreateAPIView(generics.CreateAPIView):
     serializer_class = AcademicPlanCreateSerializer
     queryset = AcademicPlan.objects.all()
@@ -1702,7 +1703,7 @@ class AcademicPlanCreateAPIView(generics.CreateAPIView):
 
 
     def perform_create(self, serializer):
-        serializer.save()
+        serializer.save(author=self.request.user)
         AcademicPlan.clone_descipline_blocks(self, serializer)
 
 

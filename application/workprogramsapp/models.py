@@ -288,6 +288,7 @@ class AcademicPlan(models.Model):
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     year = models.CharField(max_length=1024, blank = True, null = True)
     education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
+    author=models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Автор учебного плана', on_delete = models.CASCADE, related_name = 'academic_plan_author', blank = True, null = True)
 
 
     #TODO: Добавить год набора
