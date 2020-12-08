@@ -6,3 +6,4 @@ dbs
 **/migrations/*
 **/discipline_code/*
 /application/discipline_code
+/application/export

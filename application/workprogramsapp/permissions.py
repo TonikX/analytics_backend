@@ -47,6 +47,11 @@ class IsStudent(permissions.BasePermission):
         return request.user.groups.filter(name="student")
 
 
+class IsAcademicPlanDeveloper(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.groups.filter(name="academic_plan_developer")
+
+
 class IsExpertiseMaster(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.groups.filter(name="expertise_master")

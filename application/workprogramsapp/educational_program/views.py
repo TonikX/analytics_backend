@@ -39,6 +39,7 @@ class EducationalProgramListAPIView(generics.ListAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+
 class EducationalProgramCreateAPIView(generics.CreateAPIView):
     serializer_class = EducationalCreateProgramSerializer
     queryset = EducationalProgram.objects.all()
