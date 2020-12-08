@@ -498,7 +498,7 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
     can_edit = BooleanField(read_only=True)
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data["can_edit"] = self.context['request'].user.id == data["author"] or bool(self.context['request'].user.groups.filter(name="academic_plan_developer"))
+        data["can_edit"] = self.context['request'].user == instance.author or bool(self.context['request'].user.groups.filter(name="academic_plan_developer"))
         return data
     class Meta:
         model = AcademicPlan
@@ -519,8 +519,7 @@ class AcademicPlanShortSerializer(serializers.ModelSerializer):
     can_edit = BooleanField(read_only=True)
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data["can_edit"] = self.context['request'].user.id == data["author"] or bool(self.context['request'].user.groups.filter(name="academic_plan_developer"))
-        return
+        data["can_edit"] = self.context['request'].user.id == instance.author or bool(self.context['request'].user.groups.filter(name="academic_plan_developer"))
         return data
     class Meta:
         model = AcademicPlan
