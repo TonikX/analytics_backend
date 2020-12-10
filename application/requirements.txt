@@ -11,7 +11,7 @@ django-templated-mail==1.1.1
 djangorestframework==3.10.3
 djangorestframework-jsonapi==3.0.0
 djangorestframework-jwt==1.11.0
-djangorestframework-simplejwt==4.4.0
+djangorestframework-simplejwt
 djoser==2.0.3
 idna==2.8
 inflection==0.3.1
