@@ -44,7 +44,7 @@ import ProfessionsSkillsSelectedIcon from "./icons/professions-skills-selected.s
 
 import ProfessionsIcon from "./icons/professions.svg";
 import ProfessionsSelectedIcon from "./icons/professions-selected.svg";
-import {isUserCanSeeProfessions, isUserInExpertiseGroup, isUserInOpGroup, isUserRpdDev} from "./constants";
+import {isUserCanSeeProfessions, isUserInExpertiseGroup, isUserRpdDev} from "../../common/userRights";
 
 export default (groups: Array<string>) => {
     const firstMenu = isUserRpdDev(groups) ?
@@ -116,7 +116,7 @@ export default (groups: Array<string>) => {
         )
     }
 
-    const thirdMenu = isUserInOpGroup(groups) ? [
+    const thirdMenu = [
         {
             title: 'Направления',
             link: appRouter.getDirectionRoute(),
@@ -141,7 +141,7 @@ export default (groups: Array<string>) => {
             icon: WorkProgramInDirectionIcon,
             selectedIcon: WorkProgramInDirectionSelectedIcon,
         },
-    ] : [];
+    ];
 
     const fourthMenu = isUserCanSeeProfessions(groups) ? [
         {

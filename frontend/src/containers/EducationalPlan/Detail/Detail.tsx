@@ -143,15 +143,22 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     render() {
         const {classes, blocks, detailPlan} = this.props;
         const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength} = this.state;
+        const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
 
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Учебный план:
-                    &nbsp;{detailPlan[EducationalPlanFields.PROFILE]} / {specializationObject[detailPlan[EducationalPlanFields.QUALIFICATION]]} / {detailPlan[EducationalPlanFields.YEAR]}
-                    <Tooltip title="Изменить учебный план">
-                        <EditIcon className={classes.titleIcon} color="primary" onClick={this.handleChangePlan}/>
-                    </Tooltip>
+                    Учебный план
+                    {get(detailPlan[EducationalPlanFields.PROFILE], 'length', 0) ?
+                        <>:&nbsp;{detailPlan[EducationalPlanFields.PROFILE]} / {specializationObject[detailPlan[EducationalPlanFields.QUALIFICATION]]} / {detailPlan[EducationalPlanFields.YEAR]}</>
+                        :
+                        <></>
+                    }
+                    {canEdit &&
+                        <Tooltip title="Изменить учебный план">
+                            <EditIcon className={classes.titleIcon} color="primary" onClick={this.handleChangePlan}/>
+                        </Tooltip>
+                    }
                 </Typography>
 
                 <Scrollbars>
@@ -166,20 +173,20 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                         Количество зачетных единиц в семестрах
                                     </TableCell>
                                     <TableCell rowSpan={2}> Тип </TableCell>
-                                    <TableCell rowSpan={2}/>
+                                    {canEdit && <TableCell rowSpan={2}/>}
                                 </TableRow>
 
                                 <TableRow>
-                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">1</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">2</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">3</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">4</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">5</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">6</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">7</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">8</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">9</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '24px'}} align="center">10</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">1</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">2</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">3</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">4</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">5</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">6</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">7</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">8</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">9</TableCell>
+                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">10</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -191,11 +198,13 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                     <Typography>
                                                         <div className={classes.rowBlock}>
                                                             {block[EducationalPlanBlockFields.NAME]}
-                                                            <Tooltip title="Создать модуль в данном блоке">
-                                                                <AddCircleIcon className={classes.smallAddIcon}
-                                                                               onClick={this.handleOpenCreateModuleModal({}, block[EducationalPlanBlockFields.ID])}
-                                                                />
-                                                            </Tooltip>
+                                                            {canEdit &&
+                                                                <Tooltip title="Создать модуль в данном блоке">
+                                                                    <AddCircleIcon className={classes.smallAddIcon}
+                                                                                   onClick={this.handleOpenCreateModuleModal({}, block[EducationalPlanBlockFields.ID])}
+                                                                    />
+                                                                </Tooltip>
+                                                            }
                                                         </div>
                                                     </Typography>
                                                 </TableCell>
@@ -207,25 +216,31 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                             <TableCell colSpan={12}>
                                                                 <div className={classes.rowModule}>
                                                                     {module[ModuleFields.NAME]}
-                                                                    <Tooltip title="Создать блок рабочих программ">
-                                                                        <AddCircleIcon className={classes.smallAddIcon}
-                                                                                       color="primary"
-                                                                                       onClick={this.handleCreateBlockOfWorkPrograms(module[ModuleFields.ID])}
-                                                                        />
-                                                                    </Tooltip>
+                                                                    {canEdit &&
+                                                                        <Tooltip title="Создать блок рабочих программ">
+                                                                            <AddCircleIcon className={classes.smallAddIcon}
+                                                                                           color="primary"
+                                                                                           onClick={this.handleCreateBlockOfWorkPrograms(module[ModuleFields.ID])}
+                                                                            />
+                                                                        </Tooltip>
+                                                                    }
                                                                 </div>
                                                             </TableCell>
-                                                            <TableCell className={classes.actions}>
-                                                                <Tooltip title="Удалить модуль">
-                                                                    <DeleteIcon className={classes.marginRight10}
-                                                                                color="primary"
-                                                                                onClick={this.handleClickDeleteModule(module[ModuleFields.ID])}
-                                                                    />
-                                                                </Tooltip>
-                                                                <Tooltip title="Изменить модуль">
-                                                                    <EditIcon color="primary" onClick={this.handleOpenCreateModuleModal(module, block[EducationalPlanBlockFields.ID])}/>
-                                                                </Tooltip>
-                                                            </TableCell>
+                                                            {canEdit &&
+                                                                <TableCell className={classes.actions}>
+                                                                    <Tooltip title="Удалить модуль">
+                                                                        <DeleteIcon className={classes.marginRight10}
+                                                                                    color="primary"
+                                                                                    onClick={this.handleClickDeleteModule(module[ModuleFields.ID])}
+                                                                        />
+                                                                    </Tooltip>
+
+                                                                    <Tooltip title="Изменить модуль">
+                                                                        <EditIcon color="primary"
+                                                                                  onClick={this.handleOpenCreateModuleModal(module, block[EducationalPlanBlockFields.ID])}/>
+                                                                    </Tooltip>
+                                                                </TableCell>
+                                                            }
                                                         </TableRow>
 
                                                         {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map(blockOfWorkProgram => {
@@ -260,16 +275,21 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                     ), 'label', '')}
                                                                 </TableCell>
 
-                                                                <TableCell className={classes.actions}>
-                                                                    <Tooltip title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу' }`}>
-                                                                        <DeleteIcon className={classes.marginRight10}
-                                                                                    onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
-                                                                        />
-                                                                    </Tooltip>
-                                                                    <Tooltip title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                                                                        <EditIcon onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}/>
-                                                                    </Tooltip>
-                                                                </TableCell>
+                                                                {canEdit &&
+                                                                    <TableCell className={classes.actions}>
+                                                                        <Tooltip
+                                                                            title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                                                                            <DeleteIcon className={classes.marginRight10}
+                                                                                        onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
+                                                                            />
+                                                                        </Tooltip>
+                                                                        <Tooltip
+                                                                            title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                                                                            <EditIcon
+                                                                                onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}/>
+                                                                        </Tooltip>
+                                                                    </TableCell>
+                                                                }
                                                             </TableRow>;
                                                         })}
                                                     </>

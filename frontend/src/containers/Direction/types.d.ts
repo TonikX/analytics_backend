@@ -41,6 +41,7 @@ export type DirectionType = {
     [DirectionFields.EDUCATIONAL_PROFILE]: string,
     [DirectionFields.FACULTY]: string,
     [DirectionFields.EDUCATION_FORM]: string,
+    [DirectionFields.CAN_EDIT]: string,
 };
 
 export interface EducationalProgramProps extends WithStyles<typeof styles> {
@@ -50,5 +51,6 @@ export interface EducationalProgramProps extends WithStyles<typeof styles> {
     searchQuery: string;
     allCount: number;
     sortingField: string;
+    canEdit: boolean;
     sortingMode: SortingType;
 }

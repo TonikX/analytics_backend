@@ -1,6 +1,7 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
+import classNames from 'classnames';
 import {Link} from "react-router-dom";
 
 import Scrollbars from "react-custom-scrollbars";
@@ -39,6 +40,7 @@ import {EducationalPlanInDirectionProps, EducationalPlanInDirectionType} from '.
 
 import connect from './EducationPlanInDirection.connect';
 import styles from './EducationPlanInDirection.styles';
+import {specializationObject} from "../WorkProgram/constants";
 
 class EducationPlanInDirection extends React.Component<EducationalPlanInDirectionProps> {
     state = {
@@ -97,7 +99,7 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
     }
 
     render() {
-        const {classes, educationalPlansInDirection, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, educationalPlansInDirection, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
@@ -146,14 +148,16 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                                        mode={sortingField === EducationPlanInDirectionFields.YEAR ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell />
+                                    {canEdit && <TableCell />}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {educationalPlansInDirection.map(educationalPlanInDirection =>
-                                    <TableRow key={educationalPlanInDirection[EducationPlanInDirectionFields.ID]}>
+                                    <TableRow key={educationalPlanInDirection[EducationPlanInDirectionFields.ID]}
+                                              className={classNames({[classes.bigRow]: !canEdit})}
+                                    >
                                         <TableCell>
-                                            {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.TITLE]}
+                                            {specializationObject[educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.TITLE]]}
                                         </TableCell>
                                         <TableCell>
                                             {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.NUMBER]}
@@ -161,6 +165,7 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                         <TableCell>
                                             <Link to={appRouter.getPlanDetailLink(educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.ID])}
                                                   target="_blank"
+                                                  className={classes.link}
                                             >
                                                 {educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]}
                                             </Link>
@@ -168,16 +173,19 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                         <TableCell>
                                             {educationalPlanInDirection[EducationPlanInDirectionFields.YEAR]}
                                         </TableCell>
-                                        <TableCell>
-                                            <div className={classes.actions}>
-                                                <IconButton onClick={this.handleClickDelete(educationalPlanInDirection[EducationPlanInDirectionFields.ID])}>
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                                <IconButton onClick={this.handleClickEdit(educationalPlanInDirection)}>
-                                                    <EditIcon />
-                                                </IconButton>
-                                            </div>
-                                        </TableCell>
+                                        {canEdit &&
+                                            <TableCell>
+                                                <div className={classes.actions}>
+                                                    <IconButton
+                                                        onClick={this.handleClickDelete(educationalPlanInDirection[EducationPlanInDirectionFields.ID])}>
+                                                        <DeleteIcon/>
+                                                    </IconButton>
+                                                    <IconButton onClick={this.handleClickEdit(educationalPlanInDirection)}>
+                                                        <EditIcon/>
+                                                    </IconButton>
+                                                </div>
+                                            </TableCell>
+                                        }
                                     </TableRow>
                                 )}
                             </TableBody>
@@ -196,17 +204,19 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                      onChangeRowsPerPage={()=>{}}
                     />
 
-                    <Fab color="secondary"
-                         classes={{
-                             root: classes.addIcon
-                         }}
-                         onClick={this.handleCreate}
-                    >
-                        <AddIcon/>
-                    </Fab>
+                    {canEdit &&
+                        <Fab color="secondary"
+                             classes={{
+                                 root: classes.addIcon
+                             }}
+                             onClick={this.handleCreate}
+                        >
+                            <AddIcon/>
+                        </Fab>
+                    }
                 </div>
 
-                <CourseCreateModal />
+                {canEdit && <CourseCreateModal />}
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

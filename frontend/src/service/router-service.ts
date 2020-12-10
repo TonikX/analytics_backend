@@ -133,7 +133,7 @@ export default class RouterService {
     };
 
     getEducationPlanRoute = () => {
-        return SEPARATOR;
+        return SEPARATOR + EDUCATIONAL_PLAN;
     };
 
     getExpertisesRoute = () => {
@@ -142,6 +142,10 @@ export default class RouterService {
 
     getExpertiseRoute = () => {
         return SEPARATOR + EXPERTISES + SEPARATOR + ':id';
+    };
+
+    getForbiddenPage = () => {
+        return SEPARATOR + 403;
     };
 
     getExpertiseRouteLink = (id: number) => {

@@ -7,6 +7,8 @@ import {WorkProgramGeneralType} from "../WorkProgram/types";
 import {DirectionType} from "../Direction/types";
 
 export interface EducationalPlanActions {
+    deleteCompetenceBlock: any;
+    deleteWorkProgramFromZun: any;
     saveCompetenceBlock: any;
     closeModuleDialog: any;
     openModuleDialog: any;
@@ -67,14 +69,15 @@ export interface educationalPlanState {
 }
 
 export type EducationalPlanType = {
-    [EducationalPlanFields.ID]: number,
-    [EducationalPlanFields.PROFILE]: string,
-    [EducationalPlanFields.NUMBER]: string,
-    [EducationalPlanFields.APPROVAL_DATE]: string,
-    [EducationalPlanFields.YEAR]: string,
-    [EducationalPlanFields.QUALIFICATION]: string,
-    [EducationalPlanFields.EDUCATION_FORM]: string,
-    [EducationalPlanFields.DISCIPLINE_BLOCKS]: Array<DisciplineBlockType>,
+    [EducationalPlanFields.ID]: number;
+    [EducationalPlanFields.PROFILE]: string;
+    [EducationalPlanFields.NUMBER]: string;
+    [EducationalPlanFields.APPROVAL_DATE]: string;
+    [EducationalPlanFields.YEAR]: string;
+    [EducationalPlanFields.QUALIFICATION]: string;
+    [EducationalPlanFields.EDUCATION_FORM]: string;
+    [EducationalPlanFields.CAN_EDIT]: boolean;
+    [EducationalPlanFields.DISCIPLINE_BLOCKS]: Array<DisciplineBlockType>;
 };
 
 export type DisciplineBlockType = {
@@ -103,4 +106,5 @@ export interface EducationalPlanProps extends WithStyles<typeof styles> {
     allCount: number;
     sortingField: string;
     sortingMode: SortingType;
+    canAddNewPlan: boolean;
 }

@@ -41,8 +41,13 @@ const openDownloadModal = createAction<string>('OPEN_DOWNLOAD_MODAL');
 const closeDownloadModal = createAction<string>('CLOSE_DOWNLOAD_MODAL');
 
 const saveCompetenceBlock = createAction<string>('SAVE_COMPETENCE_BLOCK');
+const deleteCompetenceBlock = createAction<string>('DELETE_COMPETENCE_BLOCK');
+
+const deleteWorkProgramFromZun = createAction<string>('DELETE_WP_FROM_ZUN');
 
 const actions: EducationalPlanActions = {
+    deleteWorkProgramFromZun,
+    deleteCompetenceBlock,
     saveCompetenceBlock,
     createModule,
     openDownloadModal,

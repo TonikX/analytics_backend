@@ -41,6 +41,10 @@ const deleteEvaluationTool = createAction<string>('WORK_PROGRAM_DELETE_EVALUATIO
 const addEvaluationTool = createAction<string>('WORK_PROGRAM_ADD_EVALUATION_TOOL');
 const changeEvaluationTool = createAction<string>('WORK_PROGRAM_CHANGE_EVALUATION_TOOL');
 
+const deleteIntermediateCertification = createAction<string>('WORK_PROGRAM_DELETE_INTERMEDIATE_CERTIFICATION');
+const addIntermediateCertification = createAction<string>('WORK_PROGRAM_ADD_INTERMEDIATE_CERTIFICATION');
+const changeIntermediateCertification = createAction<string>('WORK_PROGRAM_CHANGE_INTERMEDIATE_CERTIFICATION');
+
 const sendWorkProgramToArchive = createAction<string>('WORK_PROGRAM_SEND_TO_ARCHIVE');
 const sendWorkProgramToExpertise = createAction<string>('WORK_PROGRAM_SEND_TO_EXPERTIZE');
 const returnWorkProgramToWork = createAction<string>('WORK_PROGRAM_RETURN_TO_WORK');
@@ -71,6 +75,10 @@ const actions: WorkProgramActions = {
     deleteResult,
     addResult,
     changeResult,
+
+    deleteIntermediateCertification,
+    addIntermediateCertification,
+    changeIntermediateCertification,
 
     getWorkProgramEvaluationTools,
     setWorkProgramEvaluationTools,
