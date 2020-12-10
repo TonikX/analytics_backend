@@ -51,4 +51,6 @@ openpyxl==3.0.4
 xlrd==1.2.0
 docxtpl==0.10.0
 drf-pdf==0.2.0
+gunicorn
+django-environ
 
