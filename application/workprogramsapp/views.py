@@ -938,19 +938,12 @@ class ZunListAPI(generics.ListCreateAPIView):
 
 
     def create(self, request):
-        serializer = ZunCreateSerializer(data=request.data, many=True)
-        # wp_in_fs = serializer.validated_data['wp_in_fs']
-        # print (wp_in_fs)
-        print (request.data)
-        #print (request.data.get('wp_changeblock'))
+        for zun in request.data:
+            Zun.objects.filter(wp_in_fs__work_program_change_in_discipline_block_module__id = zun.get('wp_changeblock'), indicator = Indicator.objects.filter(id = int(zun.get('indicator_in_zun')))[0].id).delete()
+
         for new_zun in request.data:
-            #print (new_zun.get('wp_changeblock'))
-            # if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock')):
             if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')):
-                print("new_zun", WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')))
                 wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program'))[0]
-                print (wp_in_fs)
-                print ("Замена номера прошла успешно")
             else:
                 wp_in_fs = WorkProgramInFieldOfStudy()
                 print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
@@ -996,6 +989,8 @@ class ZunListAPI(generics.ListCreateAPIView):
         # return HttpResponse(json.dumps(response_serializer.data, ensure_ascii=False), content_type="application/json")
 
         #return Response(response_serializer.data)
+
+
 
 
 class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
