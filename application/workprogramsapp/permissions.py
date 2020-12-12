@@ -1,7 +1,8 @@
 from rest_framework import permissions
 
 from workprogramsapp.expertise.models import UserExpertise
-from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder
+from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder, FolderForAcademicPlan, \
+    AcademicPlanInFolder, FolderForDisciplineBlockModule, DisciplineBlockModuleInFolder
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -99,5 +100,36 @@ class IsOwnerOfFolderWithWorkProgramm(permissions.BasePermission):
             return WorkProgramInFolder.objects.filter(pk=view.kwargs['pk'], folder__owner=request.user)
         try:
             return Folder.objects.filter(owner=request.user, pk=request.data['folder'])
+        except KeyError:
+            return True
+
+
+class IsOwnerOfAcademicFolder(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if 'pk' in dict(view.kwargs):
+            return FolderForAcademicPlan.objects.filter(owner=request.user, pk=view.kwargs['pk'])
+
+
+class IsOwnerOfFolderWithAcademicPlan(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if 'pk' in dict(view.kwargs):
+            return WorkProgramInFolder.objects.filter(pk=view.kwargs['pk'], folder__owner=request.user)
+        try:
+            return FolderForAcademicPlan.objects.filter(owner=request.user, pk=request.data['folder'])
+        except KeyError:
+            return True
+
+class IsOwnerOfDisciplineBlockModuleFolder(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if 'pk' in dict(view.kwargs):
+            return FolderForDisciplineBlockModule.objects.filter(owner=request.user, pk=view.kwargs['pk'])
+
+
+class IsOwnerOfFolderWithDisciplineBlockModule(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if 'pk' in dict(view.kwargs):
+            return DisciplineBlockModuleInFolder.objects.filter(pk=view.kwargs['pk'], folder__owner=request.user)
+        try:
+            return FolderForDisciplineBlockModule.objects.filter(owner=request.user, pk=request.data['folder'])
         except KeyError:
             return True

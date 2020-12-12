@@ -14,7 +14,11 @@ from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView
     ExpertiseCommentsView, ChangeUserExpertiseView, \
     ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById
 from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, DeleteFolderView, \
-    CreateFolderView, EditFolderView, AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic
+    CreateFolderView, EditFolderView, AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
+    FoldersAcademicPlanListView, CreateFolderAcademicPlanView, EditFolderAcademicPlanView, DeleteFolderAcademicPlanView, \
+    AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, FoldersModuleListView, \
+    CreateFolderModuleView, EditFolderModuleView, DeleteFolderModuleView, ModuleInFolderView, AddToFolderModuleView, \
+    RemoveFromFolderModuleView
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, \
     ProfessionUpdateView, ItemWithProfessions, ItemWithRoles
 from .profession.views import RolesListApi, RoleCreateAPIView, RoleDetailsView, RoleDestroyView, RoleUpdateView
@@ -338,6 +342,24 @@ urlpatterns = [
     path('api/folders/remove/<int:pk>', RemoveFromFolderView.as_view()),
     path('api/workprogram/statistic/<int:pk>', WorkProgramStatistic),
     path('api/folders/real_remove/<int:pk>', DeleteFolderView.as_view()),
+
+    # Папки для УП
+    path('api/academic_folders', FoldersAcademicPlanListView.as_view()),
+    path('api/academic_folders/create', CreateFolderAcademicPlanView.as_view()),
+    path('api/academic_folders/edit/<int:pk>', EditFolderAcademicPlanView.as_view()),
+    path('api/academic_folders/delete/<int:pk>', DeleteFolderAcademicPlanView.as_view()),
+    path('api/academic_folders/content/<int:pk>', AcademicPlanInFolderView.as_view()),
+    path('api/academic_folders/add', AddToFolderAcademicPlanView.as_view()),
+    path('api/academic_folders/remove/<int:pk>', RemoveFromFolderAcademicPlanView.as_view()),
+
+    # Папки для Модулей
+    path('api/module_folders', FoldersModuleListView.as_view()),
+    path('api/module_folders/create', CreateFolderModuleView.as_view()),
+    path('api/module_folders/edit/<int:pk>', EditFolderModuleView.as_view()),
+    path('api/module_folders/delete/<int:pk>', DeleteFolderModuleView.as_view()),
+    path('api/module_folders/content/<int:pk>', ModuleInFolderView.as_view()),
+    path('api/module_folders/add', AddToFolderModuleView.as_view()),
+    path('api/module_folders/remove/<int:pk>', RemoveFromFolderModuleView.as_view()),
 
     # Аттестационные оценочные средства
     path('api/certification_tools/', СertificationEvaluationToolListAPI.as_view()),
