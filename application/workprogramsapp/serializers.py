@@ -332,6 +332,8 @@ class EvaluationToolCreateSerializer(serializers.ModelSerializer):
 class ZunSerializer(serializers.ModelSerializer):
     """Сериализатор Зунов"""
     indicator_in_zun = IndicatorListSerializer()
+
+    class Meta:
         model = Zun
         fields = ['id', 'indicator_in_zun', 'items']
 
