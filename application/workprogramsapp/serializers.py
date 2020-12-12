@@ -332,8 +332,6 @@ class EvaluationToolCreateSerializer(serializers.ModelSerializer):
 class ZunSerializer(serializers.ModelSerializer):
     """Сериализатор Зунов"""
     indicator_in_zun = IndicatorListSerializer()
-
-    class Meta:
         model = Zun
         fields = ['id', 'indicator_in_zun', 'items']
 
@@ -410,6 +408,7 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
     #zuns_for_wp = WorkProgramInFieldOfStudySerializerForCb(many=True)
     zuns_for_wp = serializers.SerializerMethodField('clarify_zuns_for_wp')
     #zuns_for_wp = RecursiveField(many=True)
+    wp_in_fs_id = serializers.SerializerMethodField('wp_in_fs_id_get')
 
 
     class Meta:
@@ -422,6 +421,10 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
         zuns_for_wp_objects = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = self.context.get('parent_cb_id'), work_program = obj.id)
         serializers = WorkProgramInFieldOfStudySerializerForCb(zuns_for_wp_objects,many=True)
         return serializers.data
+
+
+    def wp_in_fs_id_get(self, obj, *args, **kwargs):
+        return WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = self.context.get('parent_cb_id'), work_program = obj.id)[0].id
 
 
 class WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(serializers.ModelSerializer):

@@ -1,6 +1,19 @@
-start:
+start_dev:
 	docker-compose build
 	docker-compose up
+
+make_prod:
+    cd frontend
+    npm run build
+
+start_prod:
+    docker-compose -f docker-compose-prod.yml up
+
+build_make_prod:
+    cd frontend
+    npm run build
+    cd ..
+    docker-compose -f docker-compose-prod.yml build
 
 stop:
 	docker-compose down
