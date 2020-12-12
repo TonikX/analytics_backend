@@ -939,7 +939,7 @@ class ZunListAPI(generics.ListCreateAPIView):
 
     def create(self, request):
         for zun in request.data:
-            Zun.objects.filter(wp_in_fs__work_program_change_in_discipline_block_module__id = zun.get('wp_changeblock'), indicator = Indicator.objects.filter(id = int(zun.get('indicator_in_zun')))[0].id).delete()
+            Zun.objects.filter(wp_in_fs__work_program_change_in_discipline_block_module__id = zun.get('wp_changeblock'), indicator_in_zun = Indicator.objects.filter(id = int(zun.get('indicator_in_zun')))[0].id).delete()
 
         for new_zun in request.data:
             if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')):
