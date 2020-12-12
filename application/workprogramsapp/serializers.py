@@ -338,9 +338,19 @@ class ZunSerializer(serializers.ModelSerializer):
         fields = ['id', 'indicator_in_zun', 'items']
 
 
+class ZunForDetailAcademicPlanSerializer(serializers.ModelSerializer):
+    """Сериализатор Зунов"""
+    indicator_in_zun = IndicatorListSerializer()
+    item = ItemSerializer(many = True)
+
+    class Meta:
+        model = Zun
+        fields = ['id', 'indicator_in_zun', 'items']
+
+
 class WorkProgramInFieldOfStudySerializerForCb(serializers.ModelSerializer):
     """Сериализатор Зунов"""
-    zun_in_wp = ZunSerializer(many=True)
+    zun_in_wp = ZunForDetailAcademicPlanSerializer(many=True)
 
     class Meta:
         model = WorkProgramInFieldOfStudy
@@ -456,16 +466,6 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
         fields = ['id', 'code', 'credit_units', 'change_type', 'work_program']
 
 
-    # def get_id_of_wpcb(self, obj):
-    #     # wp = WorkProgram.objects.all()
-    #     # print ('попытка')
-    #     # cb_id = obj.id
-    #     # print ('cb_id', cb_id)
-    #     # serializers = WorkProgramForDisciplineBlockSerializer(wp,many=True)
-    #     # return serializers.data
-    #     global cb_idwp_in_fs_id
-    #     cb_id = obj.id
-    #     return cb_id
     def get_id_of_wpcb(self, obj):
         work_program = WorkProgram.objects.filter(work_program_in_change_block = obj.id)
         serializers = WorkProgramForDisciplineBlockSerializer(work_program, many=True, context={'parent_cb_id': obj.id})
