@@ -415,7 +415,7 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'prerequisites', 'outcomes', 'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp']
+        fields = ['id', 'wp_in_fs_id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'prerequisites', 'outcomes', 'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp']
 
 
 
@@ -463,7 +463,7 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
     #     # print ('cb_id', cb_id)
     #     # serializers = WorkProgramForDisciplineBlockSerializer(wp,many=True)
     #     # return serializers.data
-    #     global cb_id
+    #     global cb_idwp_in_fs_id
     #     cb_id = obj.id
     #     return cb_id
     def get_id_of_wpcb(self, obj):
