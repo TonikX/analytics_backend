@@ -341,7 +341,7 @@ class ZunSerializer(serializers.ModelSerializer):
 class ZunForDetailAcademicPlanSerializer(serializers.ModelSerializer):
     """Сериализатор Зунов"""
     indicator_in_zun = IndicatorListSerializer()
-    items = ItemSerializer(many = True)
+    items = OutcomesOfWorkProgramSerializer(many = True)
 
     class Meta:
         model = Zun
