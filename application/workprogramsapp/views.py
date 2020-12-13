@@ -973,14 +973,14 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-    def delete(self,request):
+    def delete(self,request, **kwargs):
         # for competences_id in request.data.getlist('comment_id[]'):
         #     competences_id = int(competences_id)
         #     zuns = Zun.objects.filter(indicator_in_zun__competence__id = competences_id, wp_in_fs = request.data["wp_in_fs"])
         #     for zun in zuns:
         #         zun.delete()
 
-        zuns = Zun.objects.filter(indicator_in_zun__competence__id = self.kwargs['competences_id'], wp_in_fs = self.kwargs['wp_in_fs_id'])
+        zuns = Zun.objects.filter(indicator_in_zun__competence__id = kwargs['competences_id'], wp_in_fs = kwargs['wp_in_fs_id'])
         for zun in zuns:
             zun.delete()
         return Response(status=204)
