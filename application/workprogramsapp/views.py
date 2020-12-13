@@ -940,6 +940,7 @@ class ZunListAPI(generics.ListCreateAPIView):
     def create(self, request):
         for zun in request.data:
             Zun.objects.filter(wp_in_fs__id = zun.get('wp_changeblock'), indicator_in_zun = Indicator.objects.filter(id = int(zun.get('indicator_in_zun')))[0].id).delete()
+            print('deleted')
 
         for new_zun in request.data:
             if WorkProgramInFieldOfStudy.objects.filter(id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')):
