@@ -95,8 +95,12 @@ export type ModuleType = {
 export type BlocksOfWorkProgramsType = {
     [BlocksOfWorkProgramsFields.ID]: number;
     [BlocksOfWorkProgramsFields.TYPE]: string;
-    [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: Array<WorkProgramGeneralType>;
+    [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: Array<WorkProgramBlockType>;
 };
+
+export interface WorkProgramBlockType extends WorkProgramGeneralType{
+    wp_in_fs_id: number;
+}
 
 export interface EducationalPlanProps extends WithStyles<typeof styles> {
     actions: EducationalPlanActions;

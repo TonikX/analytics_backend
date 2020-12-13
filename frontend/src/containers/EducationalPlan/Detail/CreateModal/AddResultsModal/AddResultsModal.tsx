@@ -24,7 +24,7 @@ class AddResultsModal extends React.PureComponent<AddResultsModalProps> {
     };
 
     componentDidUpdate(prevProps: Readonly<AddResultsModalProps>, prevState: Readonly<{}>, snapshot?: any) {
-        if (prevProps.workProgramId !== this.props.workProgramId){
+        if (prevProps.workProgramId !== this.props.workProgramId && this.props.isOpen){
             this.props.workProgramActions.getResults(this.props.workProgramId);
         }
     }

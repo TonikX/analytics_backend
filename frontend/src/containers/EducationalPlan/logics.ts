@@ -333,7 +333,7 @@ const saveCompetenceBlock = createLogic({
 
         service.saveCompetenceBlock(postData)
             .then((res) => {
-
+                dispatch(planActions.openDetailDialog(get(res, 'data')));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -354,7 +354,7 @@ const deleteCompetenceBlock = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_COMPETENCE_BLOCK}));
 
         service.deleteCompetenceBlock(action.payload)
-            .then((res) => {
+            .then(() => {
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -394,7 +394,7 @@ const transformDetailPlanData = createLogic({
     transform({getState, action}: any, next) {
         const plan = action.payload;
         const workPrograms = get(plan, 'work_program', []);
-        let transformedWorkPrograms: { value: any; label: any; competences: {}; }[] = [];
+        let transformedWorkPrograms: Array<any> = [];
 
         workPrograms.forEach((wp: any) => {
             let newWorkProgram = {
@@ -417,7 +417,7 @@ const transformDetailPlanData = createLogic({
                     const newIndicator = {
                         value: indicator.id,
                         label: indicator.name,
-                        [BlocksOfWorkProgramsFields.RESULTS]: items.map((result: any) => ({value: result, label: result}))
+                        [BlocksOfWorkProgramsFields.RESULTS]: items.map((result: any) => ({value: get(result, 'item.id'), label: get(result, 'item.name')}))
                     };
 
                     if (!findCompetence){
