@@ -33,7 +33,7 @@ services:
         volumes:
              - ./application:/application
         ports:
-            - "8004:8000"
+            - "8003:8000"
         restart: always
         depends_on:
             - db
