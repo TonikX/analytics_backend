@@ -950,7 +950,7 @@ class ZunListAPI(generics.ListCreateAPIView):
                 wp_in_fs.work_program = WorkProgram.objects.filter(id = int(new_zun.get('work_program')))[0]
                 wp_in_fs.save()
             # wp_for_response_serializer =[]
-            wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(id__zuns_for_cb__id = int(new_zun.get('wp_changeblock')))[0]
+            wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(zuns_for_cb__id = int(new_zun.get('wp_changeblock')))[0]
             # wp_for_response_serializer.append(WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
             new_zun = {"wp_in_fs" :  zun.get('wp_changeblock'), "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
             serializer = ZunCreateSaveSerializer(data = new_zun)
