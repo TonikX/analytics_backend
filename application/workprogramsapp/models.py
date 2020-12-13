@@ -491,7 +491,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name='Модуль в блоке',
                                          related_name="modules_in_discipline_block", blank=True, null=True)
     order = models.IntegerField(blank=True, null=True, verbose_name="Порядок модулей")
-
+    description = models.CharField(max_length=10240, verbose_name="Описания блока модуля дисциплин", blank=True, null=True)
     # work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
     class Meta:
         ordering = ['order']

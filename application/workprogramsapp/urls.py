@@ -27,7 +27,8 @@ from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfes
 from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAPIView, SkillsOfRoleInRoleUpdateView, \
     SkillsOfRoleInRoleDestroyView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, \
-    AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
+    AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, DisciplineBlockModuleShortListView, \
+    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailView
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
@@ -261,8 +262,10 @@ urlpatterns = [
     path('api/disciplineblockmodule/create', DisciplineBlockModuleCreateAPIView.as_view()),
     path('api/disciplineblockmodule/delete/<int:pk>', DisciplineBlockModuleDestroyView.as_view()),
     path('api/disciplineblockmodule/update/<int:pk>', DisciplineBlockModuleUpdateView.as_view()),
-
-    # Работа с оброазовательными программами
+    path('api/disciplineblockmodule/short', DisciplineBlockModuleShortListView.as_view()),
+    path('api/disciplineblockmodule/detail/list', DisciplineBlockModuleDetailListView.as_view()),
+    path('api/disciplineblockmodule/detail/<int:pk>', DisciplineBlockModuleDetailView.as_view()),
+    # Работа с образовательными программами
 
     # --Факультет
     path('api/Department', DepartmentListAPIView.as_view()),
