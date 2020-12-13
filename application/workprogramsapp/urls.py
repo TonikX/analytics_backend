@@ -165,7 +165,7 @@ urlpatterns = [
     path('api/workprograminfieldofstudy/<int:pk>', WorkProgramInFieldOfStudyDetailAPI.as_view()),
 
     path('api/zun/', ZunListAPI.as_view()),
-    path('api/zun/delete/', ZunDetailAPI.as_view()),
+    path('api/zun/delete/competence/<int:competences_id>/wp_in_fs/<int:wp_in_fs_id>', ZunDetailAPI.as_view()),
 
     # Работы с темами и разделами
     path('api/tools/', EvaluationToolListAPI.as_view(), name='tools'),
