@@ -33,7 +33,7 @@ services:
         volumes:
              - ./application:/application
         ports:
-            - "8003:8000"
+            - "8004:8000"
         restart: always
         depends_on:
             - db
@@ -50,9 +50,9 @@ services:
         ports:
             - "3002:3000"
         environment:
-            - REACT_APP_API_HOST=62.109.28.95
+            - REACT_APP_API_HOST=localhost
             - REACT_APP_API_SCHEMA=http
-            - REACT_APP_API_PORT=8003
+            - REACT_APP_API_PORT=8004
             - PORT=3000
 
 volumes:
