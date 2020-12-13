@@ -428,7 +428,6 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
         fields = ['id', 'wp_in_fs_id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp']
 
 
-
     def clarify_zuns_for_wp(self, obj, *args, **kwargs):
         zuns_for_wp_objects = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = self.context.get('parent_cb_id'), work_program = obj.id)
         serializers = WorkProgramInFieldOfStudySerializerForCb(zuns_for_wp_objects,many=True)

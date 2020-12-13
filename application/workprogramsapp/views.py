@@ -939,11 +939,11 @@ class ZunListAPI(generics.ListCreateAPIView):
 
     def create(self, request):
         for zun in request.data:
-            Zun.objects.filter(wp_in_fs__work_program_change_in_discipline_block_module__id = zun.get('wp_changeblock'), indicator_in_zun = Indicator.objects.filter(id = int(zun.get('indicator_in_zun')))[0].id).delete()
+            Zun.objects.filter(wp_in_fs__id = zun.get('wp_changeblock'), indicator_in_zun = Indicator.objects.filter(id = int(zun.get('indicator_in_zun')))[0].id).delete()
 
         for new_zun in request.data:
-            if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')):
-                wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program'))[0]
+            if WorkProgramInFieldOfStudy.objects.filter(id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')):
+                wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program'))[0]
             else:
                 wp_in_fs = WorkProgramInFieldOfStudy()
                 wp_in_fs.work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0]
@@ -952,7 +952,7 @@ class ZunListAPI(generics.ListCreateAPIView):
             wp_for_response_serializer =[]
             wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0]
             wp_for_response_serializer.append(WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
-            new_zun = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
+            new_zun = {"wp_in_fs" :  zun.get('wp_changeblock'), "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
             serializer = ZunCreateSaveSerializer(data = new_zun)
 
             if serializer.is_valid(raise_exception=True):
