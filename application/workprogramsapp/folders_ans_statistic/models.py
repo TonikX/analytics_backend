@@ -21,13 +21,7 @@ class WorkProgramInFolder(models.Model):
     comment = models.CharField(max_length=10240, verbose_name="Комментарий", blank=True, null=True)
 
 
-class Folder(models.Model):
-    name = models.CharField(max_length=1024, verbose_name="Имя папки")
-    description = models.CharField(max_length=1024, verbose_name="Описание папки", blank=True, null=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Владелец папки', on_delete=models.CASCADE)
-    work_program = models.ManyToManyField("WorkProgram", verbose_name='Рабочие программы',
-                                          through=WorkProgramInFolder, related_name='works_program', blank=True,
-                                          null=True)
+
 
 
 # УП
@@ -40,21 +34,13 @@ class AcademicPlanInFolder(models.Model):
         (4, 4),
         (5, 5),
     ]
-    folder = models.ForeignKey('FolderForAcademicPlan', verbose_name='Папка', on_delete=models.CASCADE,
+    folder = models.ForeignKey('Folder', verbose_name='Папка', on_delete=models.CASCADE,
                                related_name="academic_plan_in_folder")
     academic_plan = models.ForeignKey("AcademicPlan", verbose_name='УП в папке', on_delete=models.CASCADE)
     academic_plan_rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, verbose_name="Важность уп",
                                                             blank=True, null=True, default=0)
     comment = models.CharField(max_length=10240, verbose_name="Комментарий", blank=True, null=True)
 
-
-class FolderForAcademicPlan(models.Model):
-    name = models.CharField(max_length=1024, verbose_name="Имя папки")
-    description = models.CharField(max_length=1024, verbose_name="Описание папки", blank=True, null=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Владелец папки', on_delete=models.CASCADE)
-    academic_plan = models.ManyToManyField("AcademicPlan", verbose_name='Академические планы',
-                                           through=AcademicPlanInFolder, related_name='academic_plans', blank=True,
-                                           null=True)
 
 
 # МОДУЛИ
@@ -67,7 +53,7 @@ class DisciplineBlockModuleInFolder(models.Model):
         (4, 4),
         (5, 5),
     ]
-    folder = models.ForeignKey('FolderForDisciplineBlockModule', verbose_name='Папка', on_delete=models.CASCADE,
+    folder = models.ForeignKey('Folder', verbose_name='Папка', on_delete=models.CASCADE,
                                related_name="block_module_in_folder")
     block_module = models.ForeignKey("DisciplineBlockModule", verbose_name='модуль в папке', on_delete=models.CASCADE)
     work_program_rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, verbose_name="Важность модуля",
@@ -75,10 +61,16 @@ class DisciplineBlockModuleInFolder(models.Model):
     comment = models.CharField(max_length=10240, verbose_name="Комментарий", blank=True, null=True)
 
 
-class FolderForDisciplineBlockModule(models.Model):
+class Folder(models.Model):
     name = models.CharField(max_length=1024, verbose_name="Имя папки")
     description = models.CharField(max_length=1024, verbose_name="Описание папки", blank=True, null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Владелец папки', on_delete=models.CASCADE)
+    work_program = models.ManyToManyField("WorkProgram", verbose_name='Рабочие программы',
+                                          through=WorkProgramInFolder, related_name='works_program', blank=True,
+                                          null=True)
+    academic_plan = models.ManyToManyField("AcademicPlan", verbose_name='Академические планы',
+                                           through=AcademicPlanInFolder, related_name='academic_plans', blank=True,
+                                           null=True)
     block_module = models.ManyToManyField("DisciplineBlockModule", verbose_name='Модули дисциплины',
                                           through=DisciplineBlockModuleInFolder, related_name='block_modules',
                                           blank=True,

@@ -3,11 +3,11 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
-from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder, FolderForAcademicPlan, \
-    AcademicPlanInFolder, FolderForDisciplineBlockModule, DisciplineBlockModuleInFolder
+from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder,  \
+    AcademicPlanInFolder,  DisciplineBlockModuleInFolder
 from workprogramsapp.folders_ans_statistic.serializers import FolderSerializer, WorkProgramInFolderSerializer, \
-    FolderCreateSerializer, FolderAcademicPlanSerializer, AcademicPlanInFolderSerializer, \
-    FolderAcademicPlanCreateSerializer, FolderModuleSerializer, ModuleInFolderSerializer, FolderModuleCreateSerializer
+    FolderCreateSerializer,  AcademicPlanInFolderSerializer, \
+      ModuleInFolderSerializer
 from workprogramsapp.permissions import IsOwnerOfFolder, IsOwnerOfFolderWithWorkProgramm, IsOwnerOfAcademicFolder, \
     IsOwnerOfFolderWithAcademicPlan, IsOwnerOfDisciplineBlockModuleFolder, IsOwnerOfFolderWithDisciplineBlockModule
 
@@ -88,16 +88,6 @@ class RemoveFromFolderView(generics.DestroyAPIView):
 
 
 # УП
-class FoldersAcademicPlanListView(generics.ListAPIView):
-    """
-    Выдает все папки для запрашивающего пользователя с учебным планом внутри
-    """
-    queryset = FolderForAcademicPlan.objects.all()
-    serializer_class = FolderAcademicPlanSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        return FolderForAcademicPlan.objects.filter(owner=self.request.user)
-
 
 class AcademicPlanInFolderView(generics.ListAPIView):
     """
@@ -114,34 +104,8 @@ class AcademicPlanInFolderView(generics.ListAPIView):
             raise NotFound()
 
 
-class CreateFolderAcademicPlanView(generics.CreateAPIView):
-    """
-    Создание папки
-    """
-    queryset = FolderForAcademicPlan.objects.all()
-    serializer_class = FolderAcademicPlanCreateSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
 
 
-class DeleteFolderAcademicPlanView(generics.DestroyAPIView):
-    """
-    Удаление папки
-    """
-    permission_classes = [IsOwnerOfAcademicFolder]
-    queryset = FolderForAcademicPlan.objects.all()
-    serializer_class = FolderAcademicPlanSerializer
-
-
-class EditFolderAcademicPlanView(generics.UpdateAPIView):
-    """
-      Изменение данных в папке
-    """
-    # TODO: block to change folder owner
-    permission_classes = [IsOwnerOfAcademicFolder]
-    queryset = FolderForAcademicPlan.objects.all()
-    serializer_class = FolderAcademicPlanCreateSerializer
 
 
 class AddToFolderAcademicPlanView(generics.CreateAPIView):
@@ -162,16 +126,6 @@ class RemoveFromFolderAcademicPlanView(generics.DestroyAPIView):
     serializer_class = AcademicPlanInFolderSerializer
 
 # Модули
-class FoldersModuleListView(generics.ListAPIView):
-    """
-    Выдает все папки для запрашивающего пользователя с моудлями внутри
-    """
-    queryset = FolderForDisciplineBlockModule.objects.all()
-    serializer_class = FolderModuleSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        return FolderForDisciplineBlockModule.objects.filter(owner=self.request.user)
-
 
 class ModuleInFolderView(generics.ListAPIView):
     """
@@ -188,34 +142,9 @@ class ModuleInFolderView(generics.ListAPIView):
             raise NotFound()
 
 
-class CreateFolderModuleView(generics.CreateAPIView):
-    """
-    Создание папки
-    """
-    queryset = FolderForDisciplineBlockModule.objects.all()
-    serializer_class = FolderModuleCreateSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
 
 
-class DeleteFolderModuleView(generics.DestroyAPIView):
-    """
-    Удаление папки
-    """
-    permission_classes = [IsOwnerOfDisciplineBlockModuleFolder]
-    queryset = FolderForDisciplineBlockModule.objects.all()
-    serializer_class = FolderModuleSerializer
 
-
-class EditFolderModuleView(generics.UpdateAPIView):
-    """
-      Изменение данных в папке
-    """
-    # TODO: block to change folder owner
-    permission_classes = [IsOwnerOfDisciplineBlockModuleFolder]
-    queryset = FolderForDisciplineBlockModule.objects.all()
-    serializer_class = FolderModuleCreateSerializer
 
 
 class AddToFolderModuleView(generics.CreateAPIView):
