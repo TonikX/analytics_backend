@@ -8,8 +8,8 @@ from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFo
 from workprogramsapp.folders_ans_statistic.serializers import FolderSerializer, WorkProgramInFolderSerializer, \
     FolderCreateSerializer,  AcademicPlanInFolderSerializer, \
       ModuleInFolderSerializer
-from workprogramsapp.permissions import IsOwnerOfFolder, IsOwnerOfFolderWithWorkProgramm, IsOwnerOfAcademicFolder, \
-    IsOwnerOfFolderWithAcademicPlan, IsOwnerOfDisciplineBlockModuleFolder, IsOwnerOfFolderWithDisciplineBlockModule
+from workprogramsapp.permissions import IsOwnerOfFolder, IsOwnerOfFolderWithWorkProgramm, \
+    IsOwnerOfFolderWithAcademicPlan, IsOwnerOfFolderWithDisciplineBlockModule
 
 
 # РПД
@@ -91,7 +91,7 @@ class RemoveFromFolderView(generics.DestroyAPIView):
 
 class AcademicPlanInFolderView(generics.ListAPIView):
     """
-    Выдает все цчебные планы для запрашивающего пользователя с рейтингом в указанной папке
+    Выдает все учебные планы для запрашивающего пользователя с рейтингом в указанной папке
     В url-е нужно указать айди папки
     """
     queryset = AcademicPlanInFolder.objects.all()
@@ -102,10 +102,6 @@ class AcademicPlanInFolderView(generics.ListAPIView):
             return AcademicPlanInFolder.objects.filter(folder=self.kwargs['pk'], folder__owner=self.request.user)
         except KeyError:
             raise NotFound()
-
-
-
-
 
 
 class AddToFolderAcademicPlanView(generics.CreateAPIView):
@@ -140,10 +136,6 @@ class ModuleInFolderView(generics.ListAPIView):
             return DisciplineBlockModuleInFolder.objects.filter(folder=self.kwargs['pk'], folder__owner=self.request.user)
         except KeyError:
             raise NotFound()
-
-
-
-
 
 
 

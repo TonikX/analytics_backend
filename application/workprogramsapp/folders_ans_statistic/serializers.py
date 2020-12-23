@@ -39,7 +39,7 @@ class FolderSerializer(serializers.ModelSerializer):
         # self.fields['work_program'] = WorkProgramShortForExperiseSerializer(many=True)
         self.fields['work_program_in_folder'] = WorkProgramInFolderSerializer(many=True)
         self.fields['academic_plan_in_folder'] = AcademicPlanInFolderSerializer(many=True)
-        self.fields['block_module_in_folder'] = AcademicPlanInFolderSerializer(many=True)
+        self.fields['block_module_in_folder'] = ModuleInFolderSerializer(many=True)
         return super().to_representation(value)
 
 
