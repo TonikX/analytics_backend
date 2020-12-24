@@ -481,12 +481,11 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
             'change_blocks_of_work_programs_in_modules': {'required': False}
         }
 
-
 class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'descipline_block']
+        fields = ['id', 'name', 'description','descipline_block']
 
 
 class DisciplineBlockSerializer(serializers.ModelSerializer):
@@ -573,6 +572,28 @@ class AcademicPlanForWPinFSSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlan
         fields = ['id', 'educational_profile', 'number', 'approval_date', 'academic_plan_in_field_of_study']
+
+
+
+class DisciplineBlockDetailAcademicSerializer(serializers.ModelSerializer):
+    #modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
+    academic_plan=AcademicPlanForWPinFSSerializer(many=False)
+
+    class Meta:
+        model = DisciplineBlock
+        fields = "__all__"
+
+
+class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
+    change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
+    descipline_block = DisciplineBlockDetailAcademicSerializer(many=False)
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = "__all__"
+        extra_kwargs = {
+            'change_blocks_of_work_programs_in_modules': {'required': False}
+        }
 
 
 class DisciplineBlockForWPinFSSerializer(serializers.ModelSerializer):

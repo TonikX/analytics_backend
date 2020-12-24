@@ -18,6 +18,7 @@ from rest_framework.views import APIView
 
 from dataprocessing.models import Items
 from .expertise.models import Expertise, UserExpertise
+from .folders_ans_statistic.models import WorkProgramInFolder
 from .forms import DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
@@ -34,7 +35,8 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, \
     ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList
+    WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
+    DisciplineBlockModuleDetailSerializer
 from .serializers import FieldOfStudySerializer
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
@@ -46,8 +48,6 @@ from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEv
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer
 from .tables import FieldOfStudyWPTable
-
-from .folders_ans_statistic.models import WorkProgramInFolder
 
 
 class FieldOfStudyWPListView(View):
@@ -2023,6 +2023,26 @@ class SyllabusExportView(generics.ListAPIView):
     
         return response
 
+
+class DisciplineBlockModuleShortListView(generics.ListAPIView):
+    queryset = DisciplineBlockModule.objects.all()
+    serializer_class = DisciplineBlockModuleCreateSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+
+
+class DisciplineBlockModuleDetailListView(generics.ListAPIView):
+    queryset = DisciplineBlockModule.objects.all()
+    serializer_class = DisciplineBlockModuleDetailSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+
+
+class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
+    queryset = DisciplineBlockModule.objects.all()
+    serializer_class = DisciplineBlockModuleDetailSerializer
+
+
 @api_view(['POST'])
 def CloneWorkProgramm(request):
     """
@@ -2039,12 +2059,10 @@ def CloneWorkProgramm(request):
         return Response(status=400)
 
 
-
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def UserGroups(request):
-
-    groups_names=[]
+    groups_names = []
     for group in request.user.groups.all():
         groups_names.append(group.name)
     if UserExpertise.objects.filter(expert=request.user):
