@@ -3,6 +3,7 @@ from django.db import models
 from analytics_project import settings
 
 
+# РПД
 class WorkProgramInFolder(models.Model):
     RATING_CHOICES = [
         (0, 0),
@@ -12,9 +13,50 @@ class WorkProgramInFolder(models.Model):
         (4, 4),
         (5, 5),
     ]
-    folder = models.ForeignKey('Folder', verbose_name='Папка', on_delete=models.CASCADE, related_name = "work_program_in_folder")
+    folder = models.ForeignKey('Folder', verbose_name='Папка', on_delete=models.CASCADE,
+                               related_name="work_program_in_folder")
     work_program = models.ForeignKey("WorkProgram", verbose_name='Рпд в папке', on_delete=models.CASCADE)
     work_program_rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, verbose_name="Важность рпд",
+                                                           blank=True, null=True, default=0)
+    comment = models.CharField(max_length=10240, verbose_name="Комментарий", blank=True, null=True)
+
+
+
+
+
+# УП
+class AcademicPlanInFolder(models.Model):
+    RATING_CHOICES = [
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    ]
+    folder = models.ForeignKey('Folder', verbose_name='Папка', on_delete=models.CASCADE,
+                               related_name="academic_plan_in_folder")
+    academic_plan = models.ForeignKey("AcademicPlan", verbose_name='УП в папке', on_delete=models.CASCADE)
+    academic_plan_rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, verbose_name="Важность уп",
+                                                            blank=True, null=True, default=0)
+    comment = models.CharField(max_length=10240, verbose_name="Комментарий", blank=True, null=True)
+
+
+
+# МОДУЛИ
+class DisciplineBlockModuleInFolder(models.Model):
+    RATING_CHOICES = [
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    ]
+    folder = models.ForeignKey('Folder', verbose_name='Папка', on_delete=models.CASCADE,
+                               related_name="block_module_in_folder")
+    block_module = models.ForeignKey("DisciplineBlockModule", verbose_name='модуль в папке', on_delete=models.CASCADE)
+    work_program_rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, verbose_name="Важность модуля",
                                                            blank=True, null=True, default=0)
     comment = models.CharField(max_length=10240, verbose_name="Комментарий", blank=True, null=True)
 
@@ -26,5 +68,10 @@ class Folder(models.Model):
     work_program = models.ManyToManyField("WorkProgram", verbose_name='Рабочие программы',
                                           through=WorkProgramInFolder, related_name='works_program', blank=True,
                                           null=True)
-
-
+    academic_plan = models.ManyToManyField("AcademicPlan", verbose_name='Академические планы',
+                                           through=AcademicPlanInFolder, related_name='academic_plans', blank=True,
+                                           null=True)
+    block_module = models.ManyToManyField("DisciplineBlockModule", verbose_name='Модули дисциплины',
+                                          through=DisciplineBlockModuleInFolder, related_name='block_modules',
+                                          blank=True,
+                                          null=True)

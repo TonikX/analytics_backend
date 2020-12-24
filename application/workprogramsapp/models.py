@@ -31,7 +31,7 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
-class WorkProgram(models.Model):
+class WorkProgram(CloneMixin, models.Model):
     '''
     Модель для рабочей программы
     '''
@@ -162,7 +162,7 @@ class PrerequisitesOfWorkProgram(models.Model):
     #     return self.item
 
 
-class OutcomesOfWorkProgram(models.Model):
+class OutcomesOfWorkProgram(CloneMixin, models.Model):
     '''
     Модель для результатов обучения по рабочей программе
     '''
@@ -441,7 +441,7 @@ class ImplementationAcademicPlan(models.Model):
         return str(self.academic_plan)
 
 
-class DisciplineBlock(models.Model):
+class DisciplineBlock(CloneMixin, models.Model):
     '''
     Модель блока дисциплин
     '''
@@ -483,7 +483,7 @@ class DisciplineBlock(models.Model):
 #         return (str(self.name) + str(self.descipline_block))
 
 
-class DisciplineBlockModule(models.Model):
+class DisciplineBlockModule(CloneMixin, models.Model):
     '''
     Модель модуля блока дисциплин
     '''
@@ -491,7 +491,7 @@ class DisciplineBlockModule(models.Model):
     descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name='Модуль в блоке',
                                          related_name="modules_in_discipline_block", blank=True, null=True)
     order = models.IntegerField(blank=True, null=True, verbose_name="Порядок модулей")
-
+    description = models.CharField(max_length=10240, verbose_name="Описания блока модуля дисциплин", blank=True, null=True)
     # work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
     class Meta:
         ordering = ['order']
@@ -612,7 +612,7 @@ class Indicator(models.Model):
         return self.name
 
 
-class EvaluationTool(models.Model):
+class EvaluationTool(CloneMixin,models.Model):
     '''
     Модель для оценочных средств
     '''
@@ -652,7 +652,7 @@ class СertificationEvaluationTool(models.Model):
         return self.name
 
 
-class DisciplineSection(models.Model):
+class DisciplineSection(CloneMixin,models.Model):
     '''
     Модель для разделов дисциплин
     '''
@@ -735,7 +735,7 @@ class BibliographicReference(models.Model):
     # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
 
-class Topic(models.Model):
+class Topic(CloneMixin,models.Model):
     '''
     Модель для темы
     '''
