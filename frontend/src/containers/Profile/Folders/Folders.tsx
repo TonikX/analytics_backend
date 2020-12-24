@@ -1,4 +1,5 @@
 import React from 'react';
+import get from 'lodash/get';
 
 import {Link} from "react-router-dom";
 // @ts-ignore
@@ -17,14 +18,16 @@ import AddFolderModal from "./AddFolderModal";
 import LikeButton from "../../../components/LikeButton";
 import ConfirmDialog from "../../../components/ConfirmDialog/ConfirmDialog";
 
-import {FoldersProps} from './types';
-import {FoldersFields} from "./enum";
+import {FoldersProps, FolderType} from './types';
+import {FavoriteType, FoldersFields} from "./enum";
 
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
 import {appRouter} from "../../../service/router-service";
 
 import connect from './Folders.connect';
 import styles from './Folders.styles';
+import {EducationalPlanFields} from "../../EducationalPlan/enum";
+import {specializationObject} from "../../WorkProgram/constants";
 
 function TabPanel(props: any) {
     const { children, value, index, ...other } = props;
@@ -57,8 +60,8 @@ class Folders extends React.PureComponent<FoldersProps> {
         this.setState({currentTab: newValue});
     }
 
-    deleteFromFolder = (id: number) => () => {
-        this.props.actions.removeFromFolder({id});
+    deleteFromFolder = (id: number, type: FavoriteType) => () => {
+        this.props.actions.removeFromFolder({id, type: type});
     }
 
     deleteFolder = (id: number) => () => {
@@ -76,6 +79,47 @@ class Folders extends React.PureComponent<FoldersProps> {
 
     openCreateDialog = () => {
         this.props.actions.openAddFolderDialog();
+    }
+
+    renderWPList = (folder: FolderType) => {
+        const {classes} = this.props;
+
+        return folder[FoldersFields.WORK_PROGRAM_IN_FOLDER].map(item =>
+            <Link target="_blank"
+                  to={appRouter.getWorkProgramLink(item[FoldersFields.WORK_PROGRAM][WorkProgramGeneralFields.ID])}
+                  className={classes.workProgramLink}
+            >
+                <div className={classes.workProgram}>
+                    <div> {item[FoldersFields.WORK_PROGRAM][WorkProgramGeneralFields.TITLE]} </div>
+                    <div> {item[FoldersFields.WORK_PROGRAM][WorkProgramGeneralFields.DESCRIPTION]} </div>
+                    <div className={classes.rating}>
+                        <ReactStars size={20} value={item[FoldersFields.WORK_PROGRAM_RATING]} />
+                        <LikeButton isLiked={true} onClick={this.deleteFromFolder(item[FoldersFields.ID], FavoriteType.WORK_PROGRAM)} />
+                    </div>
+                    <div> {item[FoldersFields.COMMENT]} </div>
+                </div>
+            </Link>
+        );
+    }
+
+    renderAcademicPlanList = (folder: FolderType) => {
+        const {classes} = this.props;
+
+        return folder[FoldersFields.ACADEMIC_PLAN_IN_FOLDER].map(item =>
+            <Link target="_blank"
+                  to={appRouter.getPlanDetailLink(item[FoldersFields.ACADEMIC_PLAN][EducationalPlanFields.ID])}
+                  className={classes.workProgramLink}
+            >
+                <div className={classes.workProgram}>
+                    <div> {item[FoldersFields.ACADEMIC_PLAN][EducationalPlanFields.PROFILE]} / {item[FoldersFields.ACADEMIC_PLAN][EducationalPlanFields.YEAR]} /  {specializationObject[get(item, [FoldersFields.ACADEMIC_PLAN, EducationalPlanFields.QUALIFICATION])]} </div>
+                    <div className={classes.rating}>
+                        <ReactStars size={20} value={item[FoldersFields.ACADEMIC_PLAN_RATING]} />
+                        <LikeButton isLiked={true} onClick={this.deleteFromFolder(item[FoldersFields.ID], FavoriteType.ACADEMIC_PLAN)} />
+                    </div>
+                    <div> {item[FoldersFields.COMMENT]} </div>
+                </div>
+            </Link>
+        );
     }
 
     render() {
@@ -110,22 +154,8 @@ class Folders extends React.PureComponent<FoldersProps> {
                             </div>
 
                             <div className={classes.workPrograms}>
-                                {folder[FoldersFields.WORK_PROGRAM_IN_FOLDER].map(item =>
-                                    <Link target="_blank"
-                                          to={appRouter.getWorkProgramLink(item[FoldersFields.WORK_PROGRAM][WorkProgramGeneralFields.ID])}
-                                          className={classes.workProgramLink}
-                                    >
-                                        <div className={classes.workProgram}>
-                                            <div> {item[FoldersFields.WORK_PROGRAM][WorkProgramGeneralFields.TITLE]} </div>
-                                            <div> {item[FoldersFields.WORK_PROGRAM][WorkProgramGeneralFields.DESCRIPTION]} </div>
-                                            <div className={classes.rating}>
-                                                <ReactStars size={20} value={item[FoldersFields.WORK_PROGRAM_RATING]} />
-                                                <LikeButton isLiked={true} onClick={this.deleteFromFolder(item[FoldersFields.ID])} />
-                                            </div>
-                                            <div> {item[FoldersFields.COMMENT]} </div>
-                                        </div>
-                                    </Link>
-                                )}
+                                {this.renderWPList(folder)}
+                                {this.renderAcademicPlanList(folder)}
                             </div>
 
                         </TabPanel>

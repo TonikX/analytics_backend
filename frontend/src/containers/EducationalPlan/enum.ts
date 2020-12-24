@@ -44,6 +44,8 @@ export enum EducationalPlanFields {
     YEAR = 'year',
     QUALIFICATION = 'qualification',
     CAN_EDIT = 'can_edit',
+    ID_RATING = 'id_rating',
+    RATING = 'rating',
 }
 
 export enum EducationalPlanBlockFields {
