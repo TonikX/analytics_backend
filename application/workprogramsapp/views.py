@@ -18,7 +18,7 @@ from rest_framework.views import APIView
 
 from dataprocessing.models import Items
 from .expertise.models import Expertise, UserExpertise
-from .folders_ans_statistic.models import WorkProgramInFolder
+from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder
 from .forms import DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
@@ -1703,6 +1703,22 @@ class AcademicPlanDetailsView(generics.RetrieveAPIView):
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlanSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    def get(self, request, **kwargs):
+
+        queryset = AcademicPlan.objects.filter(pk=self.kwargs['pk'])
+        serializer = AcademicPlanSerializer(queryset, many=True, context={'request': request})
+        if len(serializer.data) == 0:
+            return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
+        newdata = dict(serializer.data[0])
+        try:
+            newdata.update({"rating": AcademicPlanInFolder.objects.get(academic_plan=self.kwargs['pk'],
+                                                                       folder__owner=self.request.user).academic_plan_rating})
+            newdata.update({"id_rating": AcademicPlanInFolder.objects.get(academic_plan=self.kwargs['pk'],
+                                                                          folder__owner=self.request.user).id})
+        except:
+            newdata.update({"rating": False})
+        newdata = OrderedDict(newdata)
+        return Response(newdata, status=status.HTTP_200_OK)
 
 
 class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
