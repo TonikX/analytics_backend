@@ -111,7 +111,8 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
                                     <Fade {...TransitionProps} timeout={350}>
                                         <Paper className={classes.menu}>
                                             {list.map((item: SelectorItemType) =>
-                                                <MenuItem onClick={this.setItem(item.value)}
+                                                <MenuItem key={item.value}
+                                                          onClick={this.setItem(item.value)}
                                                           selected={value === item.value}
                                                           className={classes.menuItem}
                                                 >

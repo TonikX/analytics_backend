@@ -60,4 +60,9 @@ export default (theme: Theme) => createStyles({
     marginRight: {
         marginRight: 20
     },
+    bigRow: {
+        '& td': {
+            padding: '15px 10px !important'
+        }
+    }
 });

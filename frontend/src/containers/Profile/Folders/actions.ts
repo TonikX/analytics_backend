@@ -9,7 +9,14 @@ const deleteFolder = createAction<string>('DELETE_FOLDER');
 const addToFolder = createAction<string>('ADD_TO_FOLDER');
 const removeFromFolder = createAction<string>('REMOVE_FROM_FOLDER');
 
+const closeDialog = createAction<string>('FOLDER_CLOSE_DIALOG');
+const openAddToFolderDialog = createAction<string>('FOLDER_OPEN_ADD_TO_FOLDER_DIALOG');
+const openAddFolderDialog = createAction<string>('FOLDER_OPEN_ADD_FOLDER_DIALOG');
+
 const actions: FolderActions = {
+    openAddFolderDialog,
+    openAddToFolderDialog,
+    closeDialog,
     getFolders,
     setFolders,
     createFolder,

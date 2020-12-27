@@ -30,6 +30,8 @@ export enum fetchingTypes {
     DELETE_MODULE = 'DELETE_MODULE',
     GET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM = 'GET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM',
     SAVE_COMPETENCE_BLOCK = 'SAVE_COMPETENCE_BLOCK',
+    DELETE_COMPETENCE_BLOCK = 'DELETE_COMPETENCE_BLOCK',
+    DELETE_WP_FROM_ZUN = 'DELETE_WP_FROM_ZUN',
 }
 
 export enum EducationalPlanFields {
@@ -41,6 +43,9 @@ export enum EducationalPlanFields {
     EDUCATION_FORM = 'education_form',
     YEAR = 'year',
     QUALIFICATION = 'qualification',
+    CAN_EDIT = 'can_edit',
+    ID_RATING = 'id_rating',
+    RATING = 'rating',
 }
 
 export enum EducationalPlanBlockFields {

@@ -7,6 +7,8 @@ import {getEducationalPlanInDirection, getCurrentPage, getSearchQuery, getAllCou
 import {EducationalPlanInDirectionActions} from "./types";
 
 import {rootState} from "../../store/reducers";
+import {isUserInOpGroup} from "../../common/userRights";
+import {getUserGroups} from "../../layout/getters";
 
 const mapStateToProps = (state: rootState) => {
     return {
@@ -16,6 +18,7 @@ const mapStateToProps = (state: rootState) => {
         allCount: getAllCount(state),
         sortingField: getSortingField(state),
         sortingMode: getSortingMode(state),
+        canEdit: isUserInOpGroup(getUserGroups(state))
     };
 };
 

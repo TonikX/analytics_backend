@@ -11,18 +11,19 @@ from django_tables2.paginators import LazyPaginator
 from rest_framework import filters
 from rest_framework import generics
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataprocessing.models import Items
 from .expertise.models import Expertise, UserExpertise
+from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder
 from .forms import DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm
 from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
     DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
-from .models import FieldOfStudy, FieldOfStudyWorkProgram, BibliographicReference
+from .models import FieldOfStudy, FieldOfStudyWorkProgram, BibliographicReference, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence, OnlineCourse
 # Права доступа
@@ -34,7 +35,8 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, \
     ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList
+    WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
+    DisciplineBlockModuleDetailSerializer
 from .serializers import FieldOfStudySerializer
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
@@ -42,7 +44,7 @@ from .serializers import OnlineCourseSerializer, BibliographicReferenceSerialize
     WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
     IndicatorListSerializer
-from .serializers import OutcomesOfWorkProgramCreateSerializer
+from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer
 from .tables import FieldOfStudyWPTable
@@ -796,6 +798,11 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         else:
             newdata.update({"can_add_to_folder": True})
             newdata.update({"is_student": False})
+        try:
+            newdata.update({"rating": WorkProgramInFolder.objects.get(work_program = self.kwargs['pk'], folder__owner = self.request.user).work_program_rating})
+            newdata.update({"id_rating": WorkProgramInFolder.objects.get(work_program = self.kwargs['pk'], folder__owner = self.request.user).id})
+        except:
+            newdata.update({"rating": False})
         newdata = OrderedDict(newdata)
         return Response(newdata, status=status.HTTP_200_OK)
 
@@ -885,6 +892,24 @@ class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+class СertificationEvaluationToolListAPI(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of Evaluation Tools.
+    """
+    queryset = СertificationEvaluationTool.objects.all()
+    serializer_class = СertificationEvaluationToolCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class СertificationEvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single Evaluation Tool.
+    """
+    queryset = СertificationEvaluationTool.objects.all()
+    serializer_class = СertificationEvaluationToolCreateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
 class WorkProgramInFieldOfStudyListAPI(generics.ListCreateAPIView):
     """
     API endpoint that represents a list of WorkProgramInFieldOfStudy.
@@ -913,64 +938,30 @@ class ZunListAPI(generics.ListCreateAPIView):
 
 
     def create(self, request):
-        serializer = ZunCreateSerializer(data=request.data, many=True)
-        # wp_in_fs = serializer.validated_data['wp_in_fs']
-        # print (wp_in_fs)
-        print (request.data)
-        #print (request.data.get('wp_changeblock'))
+        for zun in request.data:
+            Zun.objects.filter(wp_in_fs__id = zun.get('wp_changeblock'), indicator_in_zun__competence = Indicator.objects.filter(id = int(zun.get('indicator_in_zun')))[0].competence).delete()
+            print('deleted')
+
         for new_zun in request.data:
-            #print (new_zun.get('wp_changeblock'))
-            # if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock')):
-            if WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')):
-                print("new_zun", WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')))
-                wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module__id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program'))[0]
-                print (wp_in_fs)
-                print ("Замена номера прошла успешно")
+            if WorkProgramInFieldOfStudy.objects.filter(id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program')):
+                wp_in_fs = WorkProgramInFieldOfStudy.objects.filter(id = new_zun.get('wp_changeblock'), work_program__id = new_zun.get('work_program'))[0]
             else:
                 wp_in_fs = WorkProgramInFieldOfStudy()
-                print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
                 wp_in_fs.work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0]
                 wp_in_fs.work_program = WorkProgram.objects.filter(id = int(new_zun.get('work_program')))[0]
                 wp_in_fs.save()
-                print (wp_in_fs)
-            print (Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id)
-            #print ('wp_in_fs', wp_in_fs.values_list('pk', flat=True)[0])
-            wp_for_response_serializer =[]
-            print(new_zun.get('items'))
-            print (WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
-            wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0]
-            wp_for_response_serializer.append(WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
-            new_zun = {"wp_in_fs" : wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
-            # , "items": int(new_zun.get('items'))
-            print(new_zun)
+            # wp_for_response_serializer =[]
+            wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(zuns_for_cb__id = int(new_zun.get('wp_changeblock')))[0]
+            # wp_for_response_serializer.append(WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
+            new_zun = {"wp_in_fs" :  zun.get('wp_changeblock'), "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
             serializer = ZunCreateSaveSerializer(data = new_zun)
-            print (serializer)
-            print
 
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                print ("Сохранение прошло")
-                #return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            # else:
-            #     return Response({"error":"change_block does not exist"}, status=400)
-            # wp_change_block = WorkProgramChangeInDisciplineBlockModule.objects.get(work_program__in = )
-        print ('чейнж блок', wp_cb)
-        print (wp_for_response_serializer)
         response_serializer = WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(wp_cb)
         return Response(response_serializer.data)
-        # if response_serializer.is_valid():
-        #     #response_serializer.is_valid(raise_exception=True)
-        #     # data = response_serializer.data[:]
-        #     # print (data)
-        #     return Response(response_serializer.data)
-        # else:
-        #     return Response(response_serializer.errors)
-
-        # return HttpResponse(json.dumps(response_serializer.data, ensure_ascii=False), content_type="application/json")
-
-        #return Response(response_serializer.data)
 
 
 class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -982,33 +973,47 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-    def update(self, request, *args, **kwargs):
-        for new_zun in request.data:
-            print ('wp_changeblock', new_zun.get('wp_changeblock'))
-            print (Zun.objects.get(id = kwargs['pk']).items)
-            wp_changeblock_id = int(new_zun.get('wp_changeblock'))
-            print ('wp_changeblock_id', wp_changeblock_id)
-            wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = wp_changeblock_id)
-            if Zun.objects.get(id = kwargs['pk']):
-                for item in new_zun.get('items'):
-                    print ('item', item)
-            new_zun = {"id": Zun.objects.get(id = kwargs['pk']).id, "wp_in_fs" : Zun.objects.get(id = kwargs['pk']).wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
-            print(new_zun)
-            serializer = ZunCreateSaveSerializer(Zun.objects.get(id = kwargs['pk']), data = new_zun)
-            #print (serializer)
+    def delete(self,request, **kwargs):
+        # for competences_id in request.data.getlist('comment_id[]'):
+        #     competences_id = int(competences_id)
+        #     zuns = Zun.objects.filter(indicator_in_zun__competence__id = competences_id, wp_in_fs = request.data["wp_in_fs"])
+        #     for zun in zuns:
+        #         zun.delete()
 
-            if serializer.is_valid(raise_exception=True):
-                old_zun = Zun.objects.get(id = kwargs['pk']).items.clear()
-                serializer.save()
-                print ("Сохранение прошло")
-                #return Response(serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        zuns = Zun.objects.filter(indicator_in_zun__competence__id = kwargs['competences_id'], wp_in_fs = kwargs['wp_in_fs_id'])
+        for zun in zuns:
+            zun.delete()
+        return Response(status=204)
 
-        print ('чейнж блок', wp_cb)
-        response_serializer = WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(wp_cb, many=True)
-        return Response(response_serializer.data)
-        # return Response(serializer.data)
+
+    # def update(self, request, *args, **kwargs):
+    #     for new_zun in request.data:
+    #         print ('wp_changeblock', new_zun.get('wp_changeblock'))
+    #         print (Zun.objects.get(id = kwargs['pk']).items)
+    #         wp_changeblock_id = int(new_zun.get('wp_changeblock'))
+    #         print ('wp_changeblock_id', wp_changeblock_id)
+    #         wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = wp_changeblock_id)
+    #         if Zun.objects.get(id = kwargs['pk']):
+    #             for item in new_zun.get('items'):
+    #                 print ('item', item)
+    #         new_zun = {"id": Zun.objects.get(id = kwargs['pk']).id, "wp_in_fs" : Zun.objects.get(id = kwargs['pk']).wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
+    #         print(new_zun)
+    #         serializer = ZunCreateSaveSerializer(Zun.objects.get(id = kwargs['pk']), data = new_zun)
+    #         #print (serializer)
+    #
+    #         if serializer.is_valid(raise_exception=True):
+    #             old_zun = Zun.objects.get(id = kwargs['pk']).items.clear()
+    #             serializer.save()
+    #             print ("Сохранение прошло")
+    #             #return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #         else:
+    #             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #
+    #     print ('чейнж блок', wp_cb)
+    #     response_serializer = WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(wp_cb, many=True)
+    #     return Response(response_serializer.data)
+    #     # return Response(serializer.data)
+
 
 
 class DisciplineSectionListAPI(generics.ListCreateAPIView):
@@ -1670,6 +1675,7 @@ class AcademicPlanListShortAPIView(generics.ListAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+
 class AcademicPlanCreateAPIView(generics.CreateAPIView):
     serializer_class = AcademicPlanCreateSerializer
     queryset = AcademicPlan.objects.all()
@@ -1677,7 +1683,7 @@ class AcademicPlanCreateAPIView(generics.CreateAPIView):
 
 
     def perform_create(self, serializer):
-        serializer.save()
+        serializer.save(author=self.request.user)
         AcademicPlan.clone_descipline_blocks(self, serializer)
 
 
@@ -1697,6 +1703,22 @@ class AcademicPlanDetailsView(generics.RetrieveAPIView):
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlanSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    def get(self, request, **kwargs):
+
+        queryset = AcademicPlan.objects.filter(pk=self.kwargs['pk'])
+        serializer = AcademicPlanSerializer(queryset, many=True, context={'request': request})
+        if len(serializer.data) == 0:
+            return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
+        newdata = dict(serializer.data[0])
+        try:
+            newdata.update({"rating": AcademicPlanInFolder.objects.get(academic_plan=self.kwargs['pk'],
+                                                                       folder__owner=self.request.user).academic_plan_rating})
+            newdata.update({"id_rating": AcademicPlanInFolder.objects.get(academic_plan=self.kwargs['pk'],
+                                                                          folder__owner=self.request.user).id})
+        except:
+            newdata.update({"rating": False})
+        newdata = OrderedDict(newdata)
+        return Response(newdata, status=status.HTTP_200_OK)
 
 
 class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
@@ -1933,7 +1955,7 @@ class DocxFileExportView(generics.ListAPIView):
     serializer = WorkProgramSerializer
 
     def get(self, request, *args, **kwargs):
-        tpl = DocxTemplate('/application/export_template/RPD_shablon_2020_new.docx')
+        tpl = DocxTemplate('/application/static-backend/export_template/RPD_shablon_2020_new.docx')
         queryset = WorkProgram.objects.get(pk = kwargs['pk'])
         serializer = WorkProgramSerializer(queryset)
         data = dict(serializer.data)
@@ -2017,6 +2039,26 @@ class SyllabusExportView(generics.ListAPIView):
     
         return response
 
+
+class DisciplineBlockModuleShortListView(generics.ListAPIView):
+    queryset = DisciplineBlockModule.objects.all()
+    serializer_class = DisciplineBlockModuleCreateSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+
+
+class DisciplineBlockModuleDetailListView(generics.ListAPIView):
+    queryset = DisciplineBlockModule.objects.all()
+    serializer_class = DisciplineBlockModuleDetailSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+
+
+class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
+    queryset = DisciplineBlockModule.objects.all()
+    serializer_class = DisciplineBlockModuleDetailSerializer
+
+
 @api_view(['POST'])
 def CloneWorkProgramm(request):
     """
@@ -2033,11 +2075,10 @@ def CloneWorkProgramm(request):
         return Response(status=400)
 
 
-
 @api_view(['GET'])
+@permission_classes((IsAuthenticated,))
 def UserGroups(request):
-    ""
-    groups_names=[]
+    groups_names = []
     for group in request.user.groups.all():
         groups_names.append(group.name)
     if UserExpertise.objects.filter(expert=request.user):

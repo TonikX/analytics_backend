@@ -10,6 +10,7 @@ export enum fields {
     WORK_PROGRAM_COMMENTS = 'comments',
     WORK_PROGRAM_BIBLIOGRAPHIC_REFERENCE = 'bibliographic_reference',
     WORK_PROGRAM_EVALUATION_TOOLS = 'WORK_PROGRAM_EVALUATION_TOOLS',
+    WORK_PROGRAM_INTERMEDIATE_CERTIFICATION = 'certification_evaluation_tools',
 
     DIALOGS = 'DIALOGS',
     CREATE_NEW_TOPIC_DIALOG = 'CREATE_NEW_TOPIC_DIALOG',
@@ -20,6 +21,9 @@ export enum fields {
     ADD_NEW_RESULT = 'ADD_NEW_RESULT',
     IS_OPEN_DIALOG = 'IS_OPEN_DIALOG',
     DIALOG_DATA = 'DIALOG_DATA',
+
+    CREATE_NEW_INTERMEDIATE_CERTIFICATION = 'CREATE_NEW_INTERMEDIATE_CERTIFICATION',
+    SHOW_INTERMEDIATE_CERTIFICATION_DESCRIPTION = 'SHOW_INTERMEDIATE_CERTIFICATION_DESCRIPTION',
 }
 
 export enum WorkProgramGeneralFields {
@@ -29,10 +33,13 @@ export enum WorkProgramGeneralFields {
     QUALIFICATION = 'qualification',
     APPROVAL_DATE = 'approval_date',
     AUTHORS = 'authors',
+    RATING = 'rating',
+    RATING_ID = 'id_rating',
     VIDEO_LINK = 'video',
     DESCRIPTION = 'description',
     ZUN = 'zuns_for_wp',
     CAN_COMMENT = 'can_comment',
+    CAN_ADD_TO_FOLDER = 'can_add_to_folder',
     IS_STUDENT = 'is_student',
     CAN_ARCHIVE = 'can_archive',
     CAN_APPROVE = 'can_approve',
@@ -93,6 +100,10 @@ export enum fetchingTypes {
     CHANGE_EVALUATION_TOOL = 'CHANGE_EVALUATION_TOOL',
     DELETE_EVALUATION_TOOL = 'DELETE_EVALUATION_TOOL',
 
+    ADD_INTERMEDIATE_CERTIFICATION = 'ADD_INTERMEDIATE_CERTIFICATION',
+    CHANGE_INTERMEDIATE_CERTIFICATION = 'CHANGE_INTERMEDIATE_CERTIFICATION',
+    DELETE_INTERMEDIATE_CERTIFICATION = 'DELETE_INTERMEDIATE_CERTIFICATION',
+
     ADD_RESULT = 'ADD_RESULT',
     CHANGE_RESULT = 'CHANGE_RESULT',
     DELETE_RESULT = 'DELETE_RESULT',
@@ -127,11 +138,31 @@ export enum EvaluationToolFields {
     SEMESTER = 'semester',
 }
 
+export enum IntermediateCertificationFields {
+    ID = 'id',
+    NAME = 'name',
+    MIN = 'min',
+    MAX = 'max',
+    TYPE = 'type',
+    DEADLINE = 'deadline',
+    DESCRIPTION = 'description',
+    CHECK_POINT = 'check_point',
+    SECTIONS = 'descipline_sections',
+    SEMESTER = 'semester',
+}
+
 export enum WorkProgramStatusEnum {
     AT_WORK = 'WK',
     EXPERTISE = 'EX',
     APPROVE = 'AC',
     ARCHIVE = 'AR',
+}
+
+export enum IntermediateCertificationEnum {
+    EXAM = '1',
+    DIF_CREDIT = '2',
+    CREDIT = '3',
+    COURSE_WORK = '4',
 }
 
 export enum StepsEnum {
@@ -141,6 +172,7 @@ export enum StepsEnum {
     TOPICS = 'TH',
     LITERATURE = 'SO',
     EVALUATION = 'EV',
+    INTERMEDIATE_CERTIFICATION = 'CO',
     RESULTS = 'RE',
     PLANS = 'PL',
 }

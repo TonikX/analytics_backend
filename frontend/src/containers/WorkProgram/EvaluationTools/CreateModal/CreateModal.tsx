@@ -36,7 +36,7 @@ import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 
 import {
     EvaluationToolFields,
-    fields,
+    fields, IntermediateCertificationFields,
     workProgramSectionFields,
 } from '../../enum';
 
@@ -153,8 +153,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const disableButton = get(evaluationTool, [EvaluationToolFields.NAME, 'length'], 0) === 0
                             || get(evaluationTool, [EvaluationToolFields.DESCRIPTION, 'length'], 0) === 0
-                            || get(evaluationTool, [EvaluationToolFields.MIN, 'length'], 0) === 0
-                            || get(evaluationTool, [EvaluationToolFields.MAX, 'length'], 0) === 0
+                            || get(evaluationTool, [IntermediateCertificationFields.MIN]) === ''
+                            || get(evaluationTool, [IntermediateCertificationFields.MAX]) === ''
                             || get(evaluationTool, [EvaluationToolFields.SECTIONS, 'length'], 0) === 0
                             || get(evaluationTool, [EvaluationToolFields.TYPE, 'length'], 0) === 0
         ;
@@ -300,10 +300,10 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                     onChange={this.saveField(EvaluationToolFields.SEMESTER)}
                                                     value={evaluationTool[EvaluationToolFields.SEMESTER]}
                                         >
-                                            <FormControlLabel value={'1'} control={<Radio checked={evaluationTool[EvaluationToolFields.SEMESTER] === '1'} />} label="Первый" />
-                                            <FormControlLabel value={'2'} control={<Radio checked={evaluationTool[EvaluationToolFields.SEMESTER] === '2'} />} label="Второй" />
-                                            <FormControlLabel value={'3'} control={<Radio checked={evaluationTool[EvaluationToolFields.SEMESTER] === '3'} />} label="Третий" />
-                                            <FormControlLabel value={'4'} control={<Radio checked={evaluationTool[EvaluationToolFields.SEMESTER] === '4'} />} label="Четвертый" />
+                                            <FormControlLabel value={'1'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 1} />} label="Первый" />
+                                            <FormControlLabel value={'2'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 2} />} label="Второй" />
+                                            <FormControlLabel value={'3'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 3} />} label="Третий" />
+                                            <FormControlLabel value={'4'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 4} />} label="Четвертый" />
                                         </RadioGroup>
                                     </FormControl>
 

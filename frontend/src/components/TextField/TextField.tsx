@@ -11,7 +11,7 @@ import styles from './TextField.styles';
 
 const TextFieldComponent = ({label, noMargin, onChange, classes}: TextFieldProps) => {
     const handleChange = (e: React.ChangeEvent) => {
-        onChange(get(e, 'target.value'));
+        onChange(get(e, 'target.value', ''));
     };
 
     return (

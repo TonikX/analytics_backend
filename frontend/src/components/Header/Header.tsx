@@ -109,6 +109,13 @@ class Header extends React.PureComponent<HeaderProps>{
                                     root: classes.popper
                                 }}
                             >
+                                <MenuItem>
+                                    <Link to={appRouter.getFoldersRoute()}
+                                          className={classes.link}
+                                    >
+                                        Закладки
+                                    </Link>
+                                </MenuItem>
                                 <MenuItem onClick={this.handleLogout}>
                                     <Link to={appRouter.getSignInRoute()}
                                           className={classes.link}

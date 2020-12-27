@@ -20,7 +20,7 @@ import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
-import CourseCreateModal from "./CreateModal";
+import CreateModal from "./CreateModal";
 import {SortingType} from "../../components/SortingButton/types";
 
 import {EducationalProgramProps, DirectionType} from './types';
@@ -34,6 +34,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
+import classNames from "classnames";
 
 class EducationalProgram extends React.Component<EducationalProgramProps> {
     state = {
@@ -92,7 +93,7 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
     }
 
     render() {
-        const {classes, educationalProgram, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, educationalProgram, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
@@ -151,12 +152,14 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                                                        mode={sortingField === DirectionFields.EDUCATIONAL_PROFILE ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell/>
+                                    {canEdit && <TableCell/>}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {educationalProgram.map(direction =>
-                                    <TableRow>
+                                    <TableRow className={classNames({[classes.bigRow]: !canEdit})}
+                                              key={direction[DirectionFields.ID]}
+                                    >
                                         <TableCell>{direction[DirectionFields.TITLE]}</TableCell>
                                         <TableCell>{direction[DirectionFields.NUMBER]}</TableCell>
                                         <TableCell>
@@ -165,16 +168,19 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                                         <TableCell>{direction[DirectionFields.FACULTY]}</TableCell>
                                         <TableCell>{direction[DirectionFields.EDUCATION_FORM] === 'extramural' ? 'Заочная' : 'Очная'}</TableCell>
                                         <TableCell>{direction[DirectionFields.EDUCATIONAL_PROFILE]} </TableCell>
-                                        <TableCell>
-                                            <div style={{display: 'flex'}}>
-                                                <IconButton onClick={this.handleClickDelete(direction[DirectionFields.ID])}>
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                                <IconButton onClick={this.handleClickEdit(direction)}>
-                                                    <EditIcon />
-                                                </IconButton>
-                                            </div>
-                                        </TableCell>
+                                        {canEdit &&
+                                            <TableCell>
+                                                <div style={{display: 'flex'}}>
+                                                    <IconButton
+                                                        onClick={this.handleClickDelete(direction[DirectionFields.ID])}>
+                                                        <DeleteIcon/>
+                                                    </IconButton>
+                                                    <IconButton onClick={this.handleClickEdit(direction)}>
+                                                        <EditIcon/>
+                                                    </IconButton>
+                                                </div>
+                                            </TableCell>
+                                        }
                                     </TableRow>
                                 )}
                             </TableBody>
@@ -193,17 +199,19 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                                      onChangeRowsPerPage={()=>{}}
                     />
 
-                    <Fab color="secondary"
-                         classes={{
-                             root: classes.addIcon
-                         }}
-                         onClick={this.handleCreate}
-                    >
-                        <AddIcon/>
-                    </Fab>
+                    {canEdit &&
+                        <Fab color="secondary"
+                             classes={{
+                                 root: classes.addIcon
+                             }}
+                             onClick={this.handleCreate}
+                        >
+                            <AddIcon/>
+                        </Fab>
+                    }
                 </div>
 
-                <CourseCreateModal />
+                {canEdit && <CreateModal />}
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

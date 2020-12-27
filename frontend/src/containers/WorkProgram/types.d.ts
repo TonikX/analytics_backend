@@ -57,10 +57,14 @@ export interface WorkProgramActions {
 
     getWorkProgramEvaluationTools: any;
     setWorkProgramEvaluationTools: any;
-
     deleteEvaluationTool: any;
     addEvaluationTool: any;
     changeEvaluationTool: any;
+
+    deleteIntermediateCertification: any;
+    addIntermediateCertification: any;
+    changeIntermediateCertification: any;
+
 
     getComments: any;
     setComments: any;
@@ -70,7 +74,8 @@ export interface WorkProgramActions {
 export interface workProgramState {
     [fields.WORK_PROGRAM]: any;
     [fields.WORK_PROGRAM_ID]: string;
-    [fields.WORK_PROGRAM_EVALUATION_TOOLS]: Array<any>;
+    [fields.WORK_PROGRAM_EVALUATION_TOOLS]: Array<EvaluationToolType>;
+    [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION]: Array<IntermediateCertificationType>;
     [fields.WORK_PROGRAM_RESULTS]: Array<any>;
     [fields.DIALOGS]: {};
     [fields.WORK_PROGRAM_COMMENTS]: Array<any>; //todo: change type
@@ -79,10 +84,12 @@ export interface workProgramState {
 export type WorkProgramGeneralType = {
     [WorkProgramGeneralFields.ID]: number;
     [WorkProgramGeneralFields.TITLE]: string;
+    [WorkProgramGeneralFields.DESCRIPTION]: string;
     [WorkProgramGeneralFields.CODE]: string;
     [WorkProgramGeneralFields.QUALIFICATION]: string;
     [WorkProgramGeneralFields.APPROVAL_DATE]: string;
     [WorkProgramGeneralFields.AUTHORS]: string;
+    [WorkProgramGeneralFields.RATING]: boolean;
     [WorkProgramGeneralFields.ZUN]: Array<ZunType>;
 };
 
@@ -119,8 +126,11 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     canApprove: boolean;
     canSendToExpertise: boolean;
     canSendToArchive: boolean;
+    canAddToFolder: boolean;
     canComment: boolean;
     workProgramStatus: string;
+    workProgramRating: boolean;
+    workProgramRatingId: number;
     folders: Array<FolderType>
 }
 
@@ -169,8 +179,18 @@ export type EvaluationToolType = {
     [EvaluationToolFields.DEADLINE]: number;
     [EvaluationToolFields.CHECK_POINT]: true | null;
     [EvaluationToolFields.MAX]: number;
-    [EvaluationToolFields.SEMESTER]: number;
+    [EvaluationToolFields.SEMESTER]: string;
     [EvaluationToolFields.SECTIONS]: Array<Section>;
+}
+
+export type IntermediateCertificationType = {
+    [EvaluationToolFields.ID]: number;
+    [EvaluationToolFields.NAME]: string;
+    [EvaluationToolFields.DESCRIPTION]: string;
+    [EvaluationToolFields.TYPE]: string;
+    [EvaluationToolFields.MIN]: number;
+    [EvaluationToolFields.MAX]: number;
+    [EvaluationToolFields.SEMESTER]: string;
 }
 
 export type WorkProgramStatusType =

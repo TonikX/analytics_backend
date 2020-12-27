@@ -31,7 +31,7 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
-class WorkProgram(models.Model):
+class WorkProgram(CloneMixin, models.Model):
     '''
     Модель для рабочей программы
     '''
@@ -162,7 +162,7 @@ class PrerequisitesOfWorkProgram(models.Model):
     #     return self.item
 
 
-class OutcomesOfWorkProgram(models.Model):
+class OutcomesOfWorkProgram(CloneMixin, models.Model):
     '''
     Модель для результатов обучения по рабочей программе
     '''
@@ -288,6 +288,7 @@ class AcademicPlan(models.Model):
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     year = models.CharField(max_length=1024, blank = True, null = True)
     education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
+    author=models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Автор учебного плана', on_delete = models.CASCADE, related_name = 'academic_plan_author', blank = True, null = True)
 
 
     #TODO: Добавить год набора
@@ -440,7 +441,7 @@ class ImplementationAcademicPlan(models.Model):
         return str(self.academic_plan)
 
 
-class DisciplineBlock(models.Model):
+class DisciplineBlock(CloneMixin, models.Model):
     '''
     Модель блока дисциплин
     '''
@@ -482,7 +483,7 @@ class DisciplineBlock(models.Model):
 #         return (str(self.name) + str(self.descipline_block))
 
 
-class DisciplineBlockModule(models.Model):
+class DisciplineBlockModule(CloneMixin, models.Model):
     '''
     Модель модуля блока дисциплин
     '''
@@ -490,7 +491,7 @@ class DisciplineBlockModule(models.Model):
     descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name='Модуль в блоке',
                                          related_name="modules_in_discipline_block", blank=True, null=True)
     order = models.IntegerField(blank=True, null=True, verbose_name="Порядок модулей")
-
+    description = models.CharField(max_length=10240, verbose_name="Описания блока модуля дисциплин", blank=True, null=True)
     # work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
     class Meta:
         ordering = ['order']
@@ -611,7 +612,7 @@ class Indicator(models.Model):
         return self.name
 
 
-class EvaluationTool(models.Model):
+class EvaluationTool(CloneMixin,models.Model):
     '''
     Модель для оценочных средств
     '''
@@ -628,7 +629,30 @@ class EvaluationTool(models.Model):
         return self.name
 
 
-class DisciplineSection(models.Model):
+class СertificationEvaluationTool(models.Model):
+    '''
+    Модель для аттестационных оценочных средств
+    '''
+    types = [
+        ('1', 'Exam'),
+        ('2', 'Differentiated credit'),
+        ('3', 'Offset')
+    ]
+    type = models.CharField(choices=types, default='1',max_length=1024, verbose_name="Тип оценочного средства")
+    name = models.CharField(unique=True, max_length=1024, verbose_name="Наименование оценочного средства")
+    description = models.CharField(max_length=50000, verbose_name="Описание", blank=True, null=True)
+    #check_point = models.BooleanField(verbose_name="Контрольная точка", blank=True, null=True)
+    deadline = models.IntegerField(verbose_name="Срок сдачи в неделях", blank=True, null=True)
+    semester = models.IntegerField(verbose_name="Семестр в котором сдается оценочное средство", blank=True, null=True)
+    min = models.IntegerField(verbose_name="Максимальное значение", blank=True, null=True)
+    max = models.IntegerField(verbose_name="Минимальное значение", blank=True, null=True)
+    work_program = models.ForeignKey("WorkProgram", verbose_name='Аттестационное оценочное средство', related_name = "certification_evaluation_tools", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class DisciplineSection(CloneMixin,models.Model):
     '''
     Модель для разделов дисциплин
     '''
@@ -711,7 +735,7 @@ class BibliographicReference(models.Model):
     # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
 
-class Topic(models.Model):
+class Topic(CloneMixin,models.Model):
     '''
     Модель для темы
     '''

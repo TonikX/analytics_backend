@@ -37,6 +37,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import SaveIcon from "@material-ui/icons/SaveOutlined";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import AddWorkProgramModal from "./AddWorkProgramModal";
 import {typeOfWorkProgramInPlan, OPTIONALLY as optionalTypeOfWorkProgram} from '../../data';
@@ -44,12 +45,13 @@ import {typeOfWorkProgramInPlan, OPTIONALLY as optionalTypeOfWorkProgram} from '
 import {BlocksOfWorkProgramsFields, ModuleFields} from '../../enum';
 import {WorkProgramGeneralType} from "../../../WorkProgram/types";
 import {WorkProgramGeneralFields} from "../../../WorkProgram/enum";
+
 import AddCompetenceModal from "./AddCompetenceModal";
 import AddIndicatorsModal from "./AddIndicatorsModal";
+import AddResultsModal from "./AddResultsModal";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-import AddResultsModal from "./AddResultsModal";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -96,6 +98,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 return {
                     label: `${program[WorkProgramGeneralFields.TITLE]} ${date} ${authors}`,
                     value: program[WorkProgramGeneralFields.ID],
+                    // @ts-ignore
+                    id: program.wp_in_fs_id,
                     // @ts-ignore
                     [BlocksOfWorkProgramsFields.COMPETENCES]: program[BlocksOfWorkProgramsFields.COMPETENCES],
                 };
@@ -253,7 +257,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         });
     }
 
-    deleteCompetence = (workProgramId: number, competenceId: number) => () => {
+    deleteCompetence = (workProgramId: number, competenceId: number, zunId: number, wpChangeBlockId: number) => () => {
         const {blockOfWorkPrograms} = this.state;
         const workPrograms = blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS];
 
@@ -275,6 +279,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: modifiedWorkPrograms
             }
         });
+
+        if (zunId){
+            this.props.actions.deleteCompetenceBlock({
+                'wpChangeBlockId': wpChangeBlockId,
+                'competenceId': competenceId,
+            });
+        }
     }
 
     saveResults = (results: any) => {
@@ -391,7 +402,48 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         });
     }
 
-    handleRemoveWorkProgram = (value: string) => () => {
+    deleteResult = (workProgramId: number, competenceId: number, indicatorId: number, resultId: number) => () => {
+        const {blockOfWorkPrograms} = this.state;
+
+        const workPrograms = blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS];
+
+        const modifiedWorkPrograms = workPrograms.map((workProgram: any) => {
+            if (workProgram.value === workProgramId){
+                workProgram = {
+                    ...workProgram,
+                    [BlocksOfWorkProgramsFields.COMPETENCES]: workProgram[BlocksOfWorkProgramsFields.COMPETENCES].map((competence: any) => {
+                        if (competence.value === competenceId){
+                            competence = {
+                                ...competence,
+                                [BlocksOfWorkProgramsFields.INDICATORS]: competence[BlocksOfWorkProgramsFields.INDICATORS].map((indicator: any) => {
+                                    if (indicator.value === indicatorId){
+                                        return  {
+                                            ...indicator,
+                                            [BlocksOfWorkProgramsFields.RESULTS]: [
+                                                ...indicator[BlocksOfWorkProgramsFields.RESULTS].filter((result: any) => result.value !== resultId)
+                                            ]
+                                        };
+                                    }
+                                    return indicator;
+                                })
+                            }
+                        }
+                        return competence;
+                    })
+                }
+            }
+            return workProgram;
+        })
+
+        this.setState({
+            blockOfWorkPrograms: {
+                ...blockOfWorkPrograms,
+                [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: modifiedWorkPrograms
+            }
+        });
+    }
+
+    handleRemoveWorkProgram = (value: string, id: number) => () => {
         const {blockOfWorkPrograms} = this.state;
 
         // @ts-ignore
@@ -403,6 +455,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: filteredWorkPrograms
             }
         });
+
+        this.props.actions.deleteWorkProgramFromZun(id);
     }
 
     handleChangeHours = (index: number) => (e: React.ChangeEvent) => {
@@ -434,13 +488,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         }
     }
 
-    saveToBeCompetence = (workProgramId: number, competence: any) => () => {
-        const {blockOfWorkPrograms} = this.state;
-
+    saveToBeCompetence = (workProgramId: number, competence: any, wpChangeBlockId: number ) => () => {
         this.props.actions.saveCompetenceBlock({
             workProgramId: workProgramId,
             competence: competence,
-            wpChangeBlockId: blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID],
+            wpChangeBlockId: wpChangeBlockId,
         })
     }
 
@@ -552,7 +604,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                 aria-controls="panel1bh-content"
                                                 id="panel1bh-header"
                                             >
-                                                <Typography className={classes.workProgramItem}>{workProgram.label} <DeleteIcon onClick={this.handleRemoveWorkProgram(workProgram.value)}/></Typography>
+                                                <Typography className={classes.workProgramItem}>{workProgram.label} <DeleteIcon onClick={this.handleRemoveWorkProgram(workProgram.value, workProgram.id)}/></Typography>
                                             </ExpansionPanelSummary>
                                             <ExpansionPanelDetails>
                                                 <Table>
@@ -581,8 +633,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                                     <TableCell />
                                                                     <TableCell>
                                                                         <div className={classes.competenceButtons}>
-                                                                            <DeleteIcon className={classes.iconButton} onClick={this.deleteCompetence(workProgram.value, competence.value)} />
-                                                                            <SaveIcon className={classes.iconButton} onClick={this.saveToBeCompetence(workProgram.value, competence)} />
+                                                                            <DeleteIcon className={classes.iconButton}
+                                                                                        onClick={this.deleteCompetence(workProgram.value, competence.value, competence.zunId, workProgram.id)}
+                                                                            />
+                                                                            <Tooltip title="Добавьте индикатор, чтобы сохранить"
+                                                                                     classes={{popper: classes.tooltip}}
+                                                                            >
+                                                                                <SaveIcon className={classNames(classes.iconButton, classes.disableIcon)} />
+                                                                            </Tooltip>
                                                                         </div>
                                                                     </TableCell>
                                                                 </TableRow>
@@ -617,7 +675,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                                         {indicator[BlocksOfWorkProgramsFields.RESULTS].map((result: any, resultIndex: number) => (
                                                                                 <div>{index + 1}.{indicatorIndex + 1}.{resultIndex + 1} {result.label}
                                                                                     <DeleteIcon className={classes.deleteIndicatorIcon}
-                                                                                                onClick={this.deleteIndicator(workProgram.value, competence.value, indicator.value)}
+                                                                                                onClick={this.deleteResult(workProgram.value, competence.value, indicator.value, result.value)}
                                                                                     />
                                                                                 </div>
                                                                             ))
@@ -627,8 +685,10 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                                     {indicatorIndex === 0 ?
                                                                         <TableCell rowSpan={competence[BlocksOfWorkProgramsFields.INDICATORS].length}>
                                                                             <div className={classes.competenceButtons}>
-                                                                                <DeleteIcon className={classes.iconButton} onClick={this.deleteCompetence(workProgram.value, competence.value)} />
-                                                                                <SaveIcon className={classes.iconButton} onClick={this.saveToBeCompetence(workProgram.value, competence)} />
+                                                                                <DeleteIcon className={classes.iconButton} onClick={this.deleteCompetence(workProgram.value, competence.value, competence.zunId, workProgram.value)} />
+                                                                                <SaveIcon className={classes.iconButton}
+                                                                                          onClick={this.saveToBeCompetence(workProgram.value, competence, workProgram.id)}
+                                                                                />
                                                                             </div>
                                                                         </TableCell>
                                                                         : <></>

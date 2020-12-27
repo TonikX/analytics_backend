@@ -54,6 +54,7 @@ export type EducationalProgramType = {
     [EducationProgramFields.ID]: number;
     [EducationProgramFields.YEAR]: ReactText;
     [EducationProgramFields.QUALIFICATION]: string;
+    [EducationProgramFields.CAN_EDIT]: boolean;
     [EducationProgramFields.ACADEMIC_PLAN_FOR_EP]: EducationalPlanInDirectionType,
     [EducationProgramFields.MANAGER]: UserType,
 };
@@ -65,6 +66,7 @@ export interface EducationalProgramProps extends WithStyles<typeof styles> {
     searchQuery: string;
     allCount: number;
     sortingField: string;
+    canAddNew: boolean;
     sortingMode: SortingType;
 }
 

@@ -64,4 +64,13 @@ export default (theme: Theme) => createStyles({
     marginRight: {
         marginRight: 20
     },
+    link: {
+        color: theme.palette.primary.main,
+        textDecoration: 'none'
+    },
+    bigRow: {
+        '& td': {
+            padding: '15px 10px !important'
+        }
+    }
 });

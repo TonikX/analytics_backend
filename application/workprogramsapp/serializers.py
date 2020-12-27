@@ -1,11 +1,12 @@
 from rest_framework import serializers
+from rest_framework.fields import CharField, BooleanField
 
 from dataprocessing.serializers import ItemSerializer, userProfileSerializer
 from .expertise.models import Expertise
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
-    WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy
+    WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool
 from .expertise.common_serializers import ShortExpertiseSerializer
 
 
@@ -104,6 +105,22 @@ class EvaluationToolForOutcomsSerializer(serializers.ModelSerializer):
     class Meta:
         model = EvaluationTool
         fields = ['id', 'type', 'name']
+
+
+class СertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
+    """Сериализатор ФОСов"""
+
+    class Meta:
+        model = СertificationEvaluationTool
+        fields = ['id', 'type', 'name', 'description', 'deadline', 'min', 'max', 'semester']
+
+
+class СertificationEvaluationToolCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор ФОСов"""
+
+    class Meta:
+        model = СertificationEvaluationTool
+        fields = ['type', 'name', 'description', 'deadline', 'semester', 'min', 'max', 'work_program']
 
 
 class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
@@ -321,9 +338,19 @@ class ZunSerializer(serializers.ModelSerializer):
         fields = ['id', 'indicator_in_zun', 'items']
 
 
+class ZunForDetailAcademicPlanSerializer(serializers.ModelSerializer):
+    """Сериализатор Зунов"""
+    indicator_in_zun = IndicatorListSerializer()
+    items = OutcomesOfWorkProgramSerializer(many = True)
+
+    class Meta:
+        model = Zun
+        fields = ['id', 'indicator_in_zun', 'items']
+
+
 class WorkProgramInFieldOfStudySerializerForCb(serializers.ModelSerializer):
     """Сериализатор Зунов"""
-    zun_in_wp = ZunSerializer(many=True)
+    zun_in_wp = ZunForDetailAcademicPlanSerializer(many=True)
 
     class Meta:
         model = WorkProgramInFieldOfStudy
@@ -388,23 +415,27 @@ class RecursiveField(serializers.Serializer):
 
 class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
     """Сериализатор рабочих программ"""
-    prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set', many=True)
-    outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
+    # prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set', many=True)
+    # outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
     #zuns_for_wp = WorkProgramInFieldOfStudySerializerForCb(many=True)
     zuns_for_wp = serializers.SerializerMethodField('clarify_zuns_for_wp')
     #zuns_for_wp = RecursiveField(many=True)
+    wp_in_fs_id = serializers.SerializerMethodField('wp_in_fs_id_get')
 
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'prerequisites', 'outcomes', 'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp']
-
+        fields = ['id', 'wp_in_fs_id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp']
 
 
     def clarify_zuns_for_wp(self, obj, *args, **kwargs):
         zuns_for_wp_objects = WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = self.context.get('parent_cb_id'), work_program = obj.id)
         serializers = WorkProgramInFieldOfStudySerializerForCb(zuns_for_wp_objects,many=True)
         return serializers.data
+
+
+    def wp_in_fs_id_get(self, obj, *args, **kwargs):
+        return WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module = self.context.get('parent_cb_id'), work_program = obj.id)[0].id
 
 
 class WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(serializers.ModelSerializer):
@@ -434,16 +465,6 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
         fields = ['id', 'code', 'credit_units', 'change_type', 'work_program']
 
 
-    # def get_id_of_wpcb(self, obj):
-    #     # wp = WorkProgram.objects.all()
-    #     # print ('попытка')
-    #     # cb_id = obj.id
-    #     # print ('cb_id', cb_id)
-    #     # serializers = WorkProgramForDisciplineBlockSerializer(wp,many=True)
-    #     # return serializers.data
-    #     global cb_id
-    #     cb_id = obj.id
-    #     return cb_id
     def get_id_of_wpcb(self, obj):
         work_program = WorkProgram.objects.filter(work_program_in_change_block = obj.id)
         serializers = WorkProgramForDisciplineBlockSerializer(work_program, many=True, context={'parent_cb_id': obj.id})
@@ -460,12 +481,11 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
             'change_blocks_of_work_programs_in_modules': {'required': False}
         }
 
-
 class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'descipline_block']
+        fields = ['id', 'name', 'description','descipline_block']
 
 
 class DisciplineBlockSerializer(serializers.ModelSerializer):
@@ -478,17 +498,20 @@ class DisciplineBlockSerializer(serializers.ModelSerializer):
 
 class AcademicPlanSerializer(serializers.ModelSerializer):
     discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, required=False)
-
+    can_edit = BooleanField(read_only=True)
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["can_edit"] = self.context['request'].user == instance.author or bool(self.context['request'].user.groups.filter(name="academic_plan_developer"))
+        return data
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year', 'education_form', 'qualification']
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year', 'education_form', 'qualification','author', 'can_edit']
         extra_kwargs = {
             'discipline_blocks_in_academic_plan': {'required': False}
         }
 
 
 class AcademicPlanSerializerForList(serializers.ModelSerializer):
-
     class Meta:
         model = AcademicPlan
         fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification']
@@ -496,20 +519,24 @@ class AcademicPlanSerializerForList(serializers.ModelSerializer):
 
 class AcademicPlanShortSerializer(serializers.ModelSerializer):
     #discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, requirлинed=False)
-
+    can_edit = BooleanField(read_only=True)
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["can_edit"] = self.context['request'].user.id == instance.author or bool(self.context['request'].user.groups.filter(name="academic_plan_developer"))
+        return data
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification']
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification', 'author', "can_edit"]
         extra_kwargs = {
             'discipline_blocks_in_academic_plan': {'required': False}
         }
 
 
-class AcademicPlanCreateSerializer(serializers.ModelSerializer):
 
+class AcademicPlanCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form']
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'author']
 
 
 class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
@@ -545,6 +572,28 @@ class AcademicPlanForWPinFSSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlan
         fields = ['id', 'educational_profile', 'number', 'approval_date', 'academic_plan_in_field_of_study']
+
+
+
+class DisciplineBlockDetailAcademicSerializer(serializers.ModelSerializer):
+    #modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
+    academic_plan=AcademicPlanForWPinFSSerializer(many=False)
+
+    class Meta:
+        model = DisciplineBlock
+        fields = "__all__"
+
+
+class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
+    change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
+    descipline_block = DisciplineBlockDetailAcademicSerializer(many=False)
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = "__all__"
+        extra_kwargs = {
+            'change_blocks_of_work_programs_in_modules': {'required': False}
+        }
 
 
 class DisciplineBlockForWPinFSSerializer(serializers.ModelSerializer):
@@ -615,10 +664,11 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     bibliographic_reference = BibliographicReferenceSerializer(many = True, required=False)
     work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many = True)
     expertise_with_rpd = ShortExpertiseSerializer(many = True, read_only=True)
+    certification_evaluation_tools = СertificationEvaluationToolForWorkProgramSerializer(many = True)
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd', 'work_status']
+        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd', 'work_status', 'certification_evaluation_tools']
 
     def create(self, validated_data):
         """

@@ -7,6 +7,7 @@ import {getEducationalPlanDetail, getEducationalPlanDetailBlocks} from '../gette
 import {EducationalPlanActions} from "../types";
 
 import {rootState} from "../../../store/reducers";
+import folderActions from "../../Profile/Folders/actions";
 
 const mapStateToProps = (state: rootState) => {
     return {
@@ -19,6 +20,8 @@ const mapStateToProps = (state: rootState) => {
 const mapDispatchToProps = (dispatch: Dispatch<EducationalPlanActions>) => ({
     // @ts-ignore
     actions: bindActionCreators(actions, dispatch),
+    // @ts-ignore
+    foldersActions: bindActionCreators(folderActions, dispatch),
 });
 
 // @ts-ignore

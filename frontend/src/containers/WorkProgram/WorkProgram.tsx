@@ -16,7 +16,6 @@ import StepButton from '@material-ui/core/StepButton';
 import Grow from '@material-ui/core/Grow';
 
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
-
 import LikeButton from "../../components/LikeButton";
 
 import General from "./General";
@@ -24,11 +23,13 @@ import Sections from "./Sections";
 import Topics from "./Topics";
 import Literature from "./Literature";
 import EvaluationTools from "./EvaluationTools";
+import IntermediateCertification from "./IntermediateCertification";
 import Prerequisites from "./Prerequisites";
 import Results from "./Results";
 import PlansAndDirections from "./PlansAndDirections";
 import Comments from "./Comments";
 
+import {FavoriteType} from "../Profile/Folders/enum";
 import {WorkProgramProps} from './types';
 
 import {steps} from "./constants";
@@ -47,7 +48,6 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
         this.props.actions.setWorkProgramId(workProgramId);
         this.props.actions.getWorkProgram();
-        this.props.foldersActions.getFolders();
     }
 
     componentWillUnmount() {
@@ -119,12 +119,20 @@ class WorkProgram extends React.Component<WorkProgramProps> {
             case 6:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
+                        Оценочные средства промежуточной аттестации
+                    </Typography>
+
+                    <IntermediateCertification />
+                </div>;
+            case 7:
+                return <div className={classes.subItem}>
+                    <Typography className={classes.subTitle}>
                         Результаты обучения
                     </Typography>
 
                     <Results />
                 </div>;
-            case 7:
+            case 8:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
                         Связанные с рпд учебные планы и направления
@@ -157,12 +165,26 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
     getCurrentStep = () => Object.keys(steps)[this.state.activeStep];
 
-    handleChangeLiked = () => {
+    handleClickLike = () => {
+        const {workProgramRating, workProgramRatingId} = this.props;
 
+        if (workProgramRating){
+            this.props.foldersActions.removeFromFolder({
+                id: workProgramRatingId,
+                callback: this.props.actions.getWorkProgram,
+                type: FavoriteType.WORK_PROGRAM
+            });
+        } else {
+            this.props.foldersActions.openAddToFolderDialog({
+                relationId: this.getWorkProgramId(),
+                type: FavoriteType.WORK_PROGRAM,
+                callback: this.props.actions.getWorkProgram
+            });
+        }
     }
 
     render() {
-        const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus, folders} = this.props;
+        const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus, workProgramRating, canAddToFolder} = this.props;
         const {activeStep, isOpenComments} = this.state;
 
         return (
@@ -182,10 +204,11 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                             </ButtonGroup>
                         }
 
-                        <LikeButton onChange={this.handleChangeLiked}
-                                    isLiked={false}
-                                    folders={folders}
-                        />
+                        {canAddToFolder &&
+                            <LikeButton onClick={this.handleClickLike}
+                                        isLiked={workProgramRating}
+                            />
+                        }
                     </div>
                 </div>
                 <Paper className={classes.root}>

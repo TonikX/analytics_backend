@@ -48,4 +48,5 @@ export enum EducationProgramFields {
     YEAR = 'year_of_recruitment',
     QUALIFICATION = 'qualification',
     MANAGER = 'manager',
+    CAN_EDIT = 'can_edit',
 }

@@ -4,6 +4,8 @@ from rest_framework import serializers, viewsets
 # Модели данных
 
 # --Работа с образовательной программой
+from rest_framework.fields import BooleanField
+
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, ProfessionalAreaOfGeneralCharacteristics,\
     ProfessionalStandard, PkCompetencesInGeneralCharacteristics
 
@@ -16,6 +18,11 @@ class EducationalProgramSerializer(serializers.ModelSerializer):
     """Сериализатор образовательной программы"""
     manager = userProfileSerializer()
     academic_plan_for_ep = ImplementationAcademicPlanSerializer()
+    can_edit = BooleanField(read_only=True)
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["can_edit"] = self.context['request'].user == instance.manager or bool(self.context['request'].user.groups.filter(name="education_plan_developer"))
+        return data
 
 
     class Meta:

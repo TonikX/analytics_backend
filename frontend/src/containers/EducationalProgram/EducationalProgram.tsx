@@ -36,12 +36,13 @@ import {
     EducationalProgramType
 } from './types';
 
-import connect from './EducationalProgram.connect';
-import styles from './EducationalProgram.styles';
 import {specializationObject} from "../WorkProgram/constants";
 import {getUserFullName} from "../../common/utils";
 import {getEducationPlanInDirectionFullName} from "../EduationPlanInDirection/getters";
 import TableSettingsMenu from "../../components/TableSettingsMenu";
+
+import connect from './EducationalProgram.connect';
+import styles from './EducationalProgram.styles';
 
 class EducationalProgramHaracteristic extends React.Component<EducationalProgramProps> {
     state = {
@@ -113,7 +114,7 @@ class EducationalProgramHaracteristic extends React.Component<EducationalProgram
     };
 
     render() {
-        const {classes, educationalProgram, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, educationalProgram, allCount, currentPage, sortingField, sortingMode, canAddNew} = this.props;
         const {deleteConfirmId, anchorsEl} = this.state;
 
         return (
@@ -182,17 +183,17 @@ class EducationalProgramHaracteristic extends React.Component<EducationalProgram
                                         </TableCell>
                                         <TableCell>
                                             <TableSettingsMenu menuItems={[
-                                                                            {
-                                                                                text: 'Характеристика',
-                                                                                icon: <EyeIcon />,
-                                                                                link: appRouter.getEducationalProgramCharacteristicLink(educationalProgram[EducationProgramFields.ID])
-                                                                            },
-                                                                            {
-                                                                                text: 'Удалить',
-                                                                                icon: <DeleteIcon />,
-                                                                                handleClickItem: this.handleClickDelete(educationalProgram[EducationProgramFields.ID]),
-                                                                            },
-                                                                        ]}
+                                                {
+                                                    text: 'Характеристика',
+                                                    icon: <EyeIcon/>,
+                                                    link: appRouter.getEducationalProgramCharacteristicLink(educationalProgram[EducationProgramFields.ID])
+                                                },
+                                                ...educationalProgram[EducationProgramFields.CAN_EDIT] ? [{
+                                                    text: 'Удалить',
+                                                    icon: <DeleteIcon/>,
+                                                    handleClickItem: this.handleClickDelete(educationalProgram[EducationProgramFields.ID]),
+                                                }] : []
+                                            ]}
                                                                handleOpenMenu={this.handleOpenMenu(educationalProgram[EducationProgramFields.ID])}
                                                                handleCloseMenu={this.handleCloseMenu}
                                                                anchorEl={get(anchorsEl, educationalProgram[EducationProgramFields.ID])}
@@ -216,17 +217,19 @@ class EducationalProgramHaracteristic extends React.Component<EducationalProgram
                                      onChangeRowsPerPage={()=>{}}
                     />
 
-                    <Fab color="secondary"
-                         classes={{
-                             root: classes.addIcon
-                         }}
-                         onClick={this.handleCreate}
-                    >
-                        <AddIcon/>
-                    </Fab>
+                    {canAddNew &&
+                        <Fab color="secondary"
+                             classes={{
+                                 root: classes.addIcon
+                             }}
+                             onClick={this.handleCreate}
+                        >
+                            <AddIcon/>
+                        </Fab>
+                    }
                 </div>
 
-                <CourseCreateModal />
+                {canAddNew && <CourseCreateModal />}
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

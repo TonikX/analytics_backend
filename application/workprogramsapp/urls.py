@@ -13,8 +13,11 @@ from .educational_program.views import GeneralCharacteristicsCreateAPIView, Gene
 from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView, UserExpertiseListView, \
     ExpertiseCommentsView, ChangeUserExpertiseView, \
     ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById
-from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, \
-    CreateFolderView, EditFolderView, AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic
+from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, DeleteFolderView, \
+    CreateFolderView, EditFolderView, AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
+    AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, \
+    ModuleInFolderView, AddToFolderModuleView, \
+    RemoveFromFolderModuleView
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, \
     ProfessionUpdateView, ItemWithProfessions, ItemWithRoles
 from .profession.views import RolesListApi, RoleCreateAPIView, RoleDetailsView, RoleDestroyView, RoleUpdateView
@@ -23,7 +26,8 @@ from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfes
 from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAPIView, SkillsOfRoleInRoleUpdateView, \
     SkillsOfRoleInRoleDestroyView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, \
-    AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
+    AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, DisciplineBlockModuleShortListView, \
+    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailView
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
@@ -83,6 +87,7 @@ from .views import CloneWorkProgramm
 
 from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView, \
     UserGroups
+from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
 
 
 # DocxFileExportOldView
@@ -164,7 +169,7 @@ urlpatterns = [
     path('api/workprograminfieldofstudy/<int:pk>', WorkProgramInFieldOfStudyDetailAPI.as_view()),
 
     path('api/zun/', ZunListAPI.as_view()),
-    path('api/zun/<int:pk>', ZunDetailAPI.as_view()),
+    path('api/zun/delete/competence/<int:competences_id>/wp_in_fs/<int:wp_in_fs_id>', ZunDetailAPI.as_view()),
 
     # Работы с темами и разделами
     path('api/tools/', EvaluationToolListAPI.as_view(), name='tools'),
@@ -256,8 +261,10 @@ urlpatterns = [
     path('api/disciplineblockmodule/create', DisciplineBlockModuleCreateAPIView.as_view()),
     path('api/disciplineblockmodule/delete/<int:pk>', DisciplineBlockModuleDestroyView.as_view()),
     path('api/disciplineblockmodule/update/<int:pk>', DisciplineBlockModuleUpdateView.as_view()),
-
-    # Работа с оброазовательными программами
+    path('api/disciplineblockmodule/short', DisciplineBlockModuleShortListView.as_view()),
+    path('api/disciplineblockmodule/detail/list', DisciplineBlockModuleDetailListView.as_view()),
+    path('api/disciplineblockmodule/detail/<int:pk>', DisciplineBlockModuleDetailView.as_view()),
+    # Работа с образовательными программами
 
     # --Факультет
     path('api/Department', DepartmentListAPIView.as_view()),
@@ -332,8 +339,23 @@ urlpatterns = [
     path('api/folders/create', CreateFolderView.as_view()),
     path('api/folders/edit/<int:pk>', EditFolderView.as_view()),
     path('api/folders/delete/<int:pk>', DeleteFolderView.as_view()),
-    path('api/folders/content/<int:pk>', WorkProgramInFolderView.as_view()),
-    path('api/folders/add', AddToFolderView.as_view()),
-    path('api/folders/remove/<int:pk>', RemoveFromFolderView.as_view()),
+    path('api/folders/work_program/content/<int:pk>', WorkProgramInFolderView.as_view()),
+    path('api/folders/work_program/add', AddToFolderView.as_view()),
+    path('api/folders/work_program/remove/<int:pk>', RemoveFromFolderView.as_view()),
+    # --Папки для УП
+    path('api/folders/academic_plan/content/<int:pk>', AcademicPlanInFolderView.as_view()),
+    path('api/folders/academic_plan/add', AddToFolderAcademicPlanView.as_view()),
+    path('api/folders/academic_plan/remove/<int:pk>', RemoveFromFolderAcademicPlanView.as_view()),
+    # --Папки для Модулей
+    path('api/folders/block_module/content/<int:pk>', ModuleInFolderView.as_view()),
+    path('api/folders/block_module/add', AddToFolderModuleView.as_view()),
+    path('api/folders/block_module/remove/<int:pk>', RemoveFromFolderModuleView.as_view()),
+    # --прочее
     path('api/workprogram/statistic/<int:pk>', WorkProgramStatistic),
+    path('api/folders/real_remove/<int:pk>', DeleteFolderView.as_view()),
+
+
+    # Аттестационные оценочные средства
+    path('api/certification_tools/', СertificationEvaluationToolListAPI.as_view()),
+    path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
 ]

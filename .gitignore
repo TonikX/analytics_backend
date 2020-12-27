@@ -6,3 +6,8 @@ dbs
 **/migrations/*
 **/discipline_code/*
 /application/discipline_code
+<<<<<<< HEAD
+**/.env
+.env
+/application/export
+

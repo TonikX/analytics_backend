@@ -97,5 +97,8 @@ export default (theme: Theme) => createStyles({
     },
     workProgramLink: {
         cursor: 'pointer'
+    },
+    likeIcon: {
+        marginLeft: 'auto'
     }
 });
