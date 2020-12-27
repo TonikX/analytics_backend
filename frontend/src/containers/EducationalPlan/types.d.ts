@@ -77,6 +77,8 @@ export type EducationalPlanType = {
     [EducationalPlanFields.QUALIFICATION]: string;
     [EducationalPlanFields.EDUCATION_FORM]: string;
     [EducationalPlanFields.CAN_EDIT]: boolean;
+    [EducationalPlanFields.ID_RATING]: string;
+    [EducationalPlanFields.RATING]: string;
     [EducationalPlanFields.DISCIPLINE_BLOCKS]: Array<DisciplineBlockType>;
 };
 
@@ -95,8 +97,12 @@ export type ModuleType = {
 export type BlocksOfWorkProgramsType = {
     [BlocksOfWorkProgramsFields.ID]: number;
     [BlocksOfWorkProgramsFields.TYPE]: string;
-    [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: Array<WorkProgramGeneralType>;
+    [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: Array<WorkProgramBlockType>;
 };
+
+export interface WorkProgramBlockType extends WorkProgramGeneralType{
+    wp_in_fs_id: number;
+}
 
 export interface EducationalPlanProps extends WithStyles<typeof styles> {
     actions: EducationalPlanActions;

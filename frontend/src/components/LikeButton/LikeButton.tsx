@@ -45,7 +45,7 @@ const LikeButton = ({classes, isLiked, onClick}: LikeButtonProps) => {
             <ConfirmDialog isOpen={isOpenConfirmDialog}
                            onConfirm={handleConfirmDelete}
                            onDismiss={() => changeOpenConfirmDialog(false)}
-                           confirmText={'Вы точно уверены, что хотите удалить РПД из избранного?'}
+                           confirmText={'Вы точно уверены, что хотите удалить из избранного?'}
                            dialogTitle={'Удалить из избранного'}
                            confirmButtonText={'Удалить'}
             />

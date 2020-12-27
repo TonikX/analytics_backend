@@ -18,8 +18,6 @@ import Grow from '@material-ui/core/Grow';
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 import LikeButton from "../../components/LikeButton";
 
-import AddToFolderModal from "../Profile/Folders/AddToFolderModal";
-
 import General from "./General";
 import Sections from "./Sections";
 import Topics from "./Topics";
@@ -31,6 +29,7 @@ import Results from "./Results";
 import PlansAndDirections from "./PlansAndDirections";
 import Comments from "./Comments";
 
+import {FavoriteType} from "../Profile/Folders/enum";
 import {WorkProgramProps} from './types';
 
 import {steps} from "./constants";
@@ -49,7 +48,6 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
         this.props.actions.setWorkProgramId(workProgramId);
         this.props.actions.getWorkProgram();
-        this.props.foldersActions.getFolders();
     }
 
     componentWillUnmount() {
@@ -171,9 +169,17 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         const {workProgramRating, workProgramRatingId} = this.props;
 
         if (workProgramRating){
-            this.props.foldersActions.removeFromFolder({id: workProgramRatingId, getWorkProgram: true});
+            this.props.foldersActions.removeFromFolder({
+                id: workProgramRatingId,
+                callback: this.props.actions.getWorkProgram,
+                type: FavoriteType.WORK_PROGRAM
+            });
         } else {
-            this.props.foldersActions.openAddToFolderDialog({workProgramId: this.getWorkProgramId()});
+            this.props.foldersActions.openAddToFolderDialog({
+                relationId: this.getWorkProgramId(),
+                type: FavoriteType.WORK_PROGRAM,
+                callback: this.props.actions.getWorkProgram
+            });
         }
     }
 
@@ -253,8 +259,6 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         }
                     </div>
                 </Paper>
-
-                <AddToFolderModal />
             </div>
         );
     }

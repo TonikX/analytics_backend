@@ -155,5 +155,12 @@ export default (theme: Theme) => createStyles({
     },
     resultsCell: {
         maxWidth: 400
+    },
+    disableIcon: {
+        cursor: 'auto',
+        fill: 'rgba(0, 0, 0, 0.12)'
+    },
+    tooltip: {
+        zIndex: 15000
     }
 });

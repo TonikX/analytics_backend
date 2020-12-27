@@ -2,7 +2,6 @@ import {createLogic} from "redux-logic";
 
 import actions from '../../../layout/actions';
 import folderActions from './actions';
-import workProgramActions from '../../WorkProgram/actions';
 
 import Service from './service';
 
@@ -35,14 +34,17 @@ const addToFolder = createLogic({
     type: folderActions.addToFolder.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const {rating, workProgramId, folder, comment} = action.payload;
+        const {rating, relationId, folder, comment, type, callback} = action.payload;
         dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_TO_FOLDER}));
 
-        service.addToFolder(folder, rating, workProgramId, comment)
+        service.addToFolder(folder, rating, relationId, comment, type)
             .then((res) => {
                 dispatch(folderActions.closeDialog());
                 dispatch(actions.fetchingSuccess());
-                dispatch(workProgramActions.getWorkProgram());
+
+                if (callback){
+                    dispatch(callback(relationId));
+                }
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
@@ -58,14 +60,16 @@ const removeFromFolder = createLogic({
     type: folderActions.removeFromFolder.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
+        const {id, callback, type, relationId} = action.payload;
+
         dispatch(actions.fetchingTrue({destination: fetchingTypes.REMOVE_FROM_FOLDER}));
 
-        service.removeFromFolder(action.payload.id)
+        service.removeFromFolder(id, type)
             .then((res) => {
                 dispatch(actions.fetchingSuccess());
 
-                if (action.payload.getWorkProgram){
-                    dispatch(workProgramActions.getWorkProgram());
+                if (callback){
+                    dispatch(callback(relationId));
                 } else {
                     dispatch(folderActions.getFolders());
                 }

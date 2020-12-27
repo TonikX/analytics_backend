@@ -18,6 +18,7 @@ import Header from '../components/Header';
 import Menu from '../components/Menu';
 import AbsoluteLoader from '../components/AbsoluteLoader';
 import Notificator from '../components/Notificator';
+import AddToFolderModal from "../containers/Profile/Folders/AddToFolderModal/AddToFolderModal";
 
 import theme from './themeMaterialUi';
 
@@ -94,6 +95,8 @@ class Layout extends React.Component {
                                 {this.props.children}
                             </div>
                         </div>
+
+                        <AddToFolderModal />
                     </MuiThemeProvider>
                 </SnackbarProvider>
             </MuiPickersUtilsProvider>

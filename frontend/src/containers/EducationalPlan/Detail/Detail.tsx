@@ -44,6 +44,8 @@ import {typeOfWorkProgramInPlan} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
+import LikeButton from "../../../components/LikeButton/LikeButton";
+import {FavoriteType} from "../../Profile/Folders/enum";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -87,7 +89,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
             deletedWorkProgramsLength: 0,
         });
     }
-    
+
     handleClickDeleteModule = (id: number) => () => {
         this.setState({
             deleteModuleConfirmId: id
@@ -140,6 +142,25 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         this.props.actions.getDirectionsDependedOnWorkProgram(workProgramId);
     }
 
+    handleClickLike = () => {
+        const {detailPlan} = this.props;
+
+        if (detailPlan[EducationalPlanFields.ID_RATING]){
+            this.props.foldersActions.removeFromFolder({
+                id: detailPlan[EducationalPlanFields.ID_RATING],
+                callback: this.props.actions.getEducationalDetail,
+                type: FavoriteType.ACADEMIC_PLAN,
+                relationId: detailPlan[EducationalPlanFields.ID]
+            });
+        } else {
+            this.props.foldersActions.openAddToFolderDialog({
+                relationId: detailPlan[EducationalPlanFields.ID],
+                type: FavoriteType.ACADEMIC_PLAN,
+                callback: this.props.actions.getEducationalDetail
+            });
+        }
+    }
+
     render() {
         const {classes, blocks, detailPlan} = this.props;
         const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength} = this.state;
@@ -159,6 +180,11 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                             <EditIcon className={classes.titleIcon} color="primary" onClick={this.handleChangePlan}/>
                         </Tooltip>
                     }
+                    <div className={classes.likeIcon}>
+                        <LikeButton onClick={this.handleClickLike}
+                                    isLiked={Boolean(detailPlan[EducationalPlanFields.ID_RATING])}
+                        />
+                    </div>
                 </Typography>
 
                 <Scrollbars>

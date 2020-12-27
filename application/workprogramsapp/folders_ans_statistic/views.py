@@ -3,11 +3,16 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
-from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder
-from workprogramsapp.folders_ans_statistic.serializers import FolderSerializer, WorkProgramInFolderSerializer, FolderCreateSerializer
-from workprogramsapp.permissions import IsOwnerOfFolder, IsOwnerOfFolderWithWorkProgramm
+from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder,  \
+    AcademicPlanInFolder,  DisciplineBlockModuleInFolder
+from workprogramsapp.folders_ans_statistic.serializers import FolderSerializer, WorkProgramInFolderSerializer, \
+    FolderCreateSerializer,  AcademicPlanInFolderSerializer, \
+      ModuleInFolderSerializer
+from workprogramsapp.permissions import IsOwnerOfFolder, IsOwnerOfFolderWithWorkProgramm, \
+    IsOwnerOfFolderWithAcademicPlan, IsOwnerOfFolderWithDisciplineBlockModule
 
 
+# РПД
 class FoldersListView(generics.ListAPIView):
     """
     Выдает все папки для запрашивающего пользователя с рпд внутри
@@ -41,9 +46,8 @@ class CreateFolderView(generics.CreateAPIView):
     queryset = Folder.objects.all()
     serializer_class = FolderCreateSerializer
 
-
     def perform_create(self, serializer):
-         serializer.save(owner=self.request.user)
+        serializer.save(owner=self.request.user)
 
 
 class DeleteFolderView(generics.DestroyAPIView):
@@ -56,16 +60,6 @@ class DeleteFolderView(generics.DestroyAPIView):
 
 
 class EditFolderView(generics.UpdateAPIView):
-    """
-      Изменение данных в папке
-    """
-    # TODO: block to change folder owner
-    permission_classes = [IsOwnerOfFolder]
-    queryset = Folder.objects.all()
-    serializer_class = FolderCreateSerializer
-
-
-class DeleteFolderView(generics.DestroyAPIView):
     """
       Изменение данных в папке
     """
@@ -91,6 +85,77 @@ class RemoveFromFolderView(generics.DestroyAPIView):
     permission_classes = [IsOwnerOfFolderWithWorkProgramm]
     queryset = WorkProgramInFolder.objects.all()
     serializer_class = WorkProgramInFolderSerializer
+
+
+# УП
+
+class AcademicPlanInFolderView(generics.ListAPIView):
+    """
+    Выдает все учебные планы для запрашивающего пользователя с рейтингом в указанной папке
+    В url-е нужно указать айди папки
+    """
+    queryset = AcademicPlanInFolder.objects.all()
+    serializer_class = AcademicPlanInFolderSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        try:
+            return AcademicPlanInFolder.objects.filter(folder=self.kwargs['pk'], folder__owner=self.request.user)
+        except KeyError:
+            raise NotFound()
+
+
+class AddToFolderAcademicPlanView(generics.CreateAPIView):
+    """
+      Добавление учебного плана в папку
+    """
+    permission_classes = [IsOwnerOfFolderWithAcademicPlan]
+    queryset = AcademicPlanInFolder.objects.all()
+    serializer_class = AcademicPlanInFolderSerializer
+
+
+class RemoveFromFolderAcademicPlanView(generics.DestroyAPIView):
+    """
+    Удаление учебного план из папки
+    """
+    permission_classes = [IsOwnerOfFolderWithAcademicPlan]
+    queryset = AcademicPlanInFolder.objects.all()
+    serializer_class = AcademicPlanInFolderSerializer
+
+# Модули
+
+class ModuleInFolderView(generics.ListAPIView):
+    """
+    Выдает все моудли для запрашивающего пользователя с рейтингом в указанной папке
+    В url-е нужно указать айди папки
+    """
+    queryset = DisciplineBlockModuleInFolder.objects.all()
+    serializer_class = ModuleInFolderSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        try:
+            return DisciplineBlockModuleInFolder.objects.filter(folder=self.kwargs['pk'], folder__owner=self.request.user)
+        except KeyError:
+            raise NotFound()
+
+
+
+class AddToFolderModuleView(generics.CreateAPIView):
+    """
+      Добавление модуля в папку
+    """
+    permission_classes = [IsOwnerOfFolderWithDisciplineBlockModule]
+    queryset = DisciplineBlockModuleInFolder.objects.all()
+    serializer_class = ModuleInFolderSerializer
+
+
+class RemoveFromFolderModuleView(generics.DestroyAPIView):
+    """
+    Удаление модуля из папки
+    """
+    permission_classes = [IsOwnerOfFolderWithDisciplineBlockModule]
+    queryset = DisciplineBlockModuleInFolder.objects.all()
+    serializer_class = ModuleInFolderSerializer
+
 
 
 @api_view(['GET'])

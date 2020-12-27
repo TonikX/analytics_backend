@@ -31,6 +31,10 @@ class AddToFolderModal extends React.PureComponent<AddToFolderModalProps> {
         folder: null,
     };
 
+    componentDidMount() {
+        this.props.actions.getFolders();
+    }
+
     handleClose = () => {
         this.props.actions.closeDialog();
     }
@@ -38,7 +42,9 @@ class AddToFolderModal extends React.PureComponent<AddToFolderModalProps> {
     handleSave = () => {
         this.props.actions.addToFolder({
             ...this.state,
-            workProgramId: get(this.props, 'data.workProgramId')
+            relationId: get(this.props, 'data.relationId'),
+            type: get(this.props, 'data.type'),
+            callback: get(this.props, 'data.callback'),
         })
     }
 
@@ -72,7 +78,7 @@ class AddToFolderModal extends React.PureComponent<AddToFolderModalProps> {
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> Добавить РПД в избранное </DialogTitle>
+                <DialogTitle> Добавить в избранное </DialogTitle>
                 <DialogContent>
                     <FormControl className={classNames(classes.selectorWrap, classes.marginBottom30)}>
                         <InputLabel shrink id="section-label">
