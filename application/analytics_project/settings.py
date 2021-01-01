@@ -56,6 +56,9 @@ INSTALLED_APPS = [
     'django_filters',
     'bootstrap_pagination',
     'rest_framework_swagger',
+    'oauth2_provider',
+    'social_django',
+    'rest_framework_social_oauth2',
 
 ]
 
@@ -69,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 
     #'django.middleware.common.BrokenLinkEmailsMiddleware',
     #'django.middleware.common.CommonMiddleware',
@@ -92,6 +96,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -159,8 +165,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
     'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
     'DEFAULT_PAGINATION_CLASS':
@@ -185,9 +191,24 @@ REST_FRAMEWORK = {
 #     'AUTH_HEADER_TYPES': ('JWT',),
 # }
 
-AUTHENTICATION_BACKENDS = (
-    ('django.contrib.auth.backends.ModelBackend'),
-)
+SOCIAL_AUTH_ITMOOAUTH2_KEY = 'nexoVnlgoNJnTuZ3CNBcbHgayXmhRjJUYfOb'
+SOCIAL_AUTH_ITMOOAUTH2_SECRET = 'GV4SDAMfv5pgE3jzblcW7HUcND5pywqQL4be'
+
+# CLIENT = 'nexoVnlgoNJnTuZ3CNBcbHgayXmhRjJUYfOb'
+# SECRET = 'GV4SDAMfv5pgE3jzblcW7HUcND5pywqQL4be'
+#
+# SOCIAL_AUTH_AUTH0_DOMAIN = os.getenv("SOCIAL_AUTH_AUTH0_DOMAIN")
+# SOCIAL_AUTH_AUTH0_KEY = os.getenv("SOCIAL_AUTH_AUTH0_KEY")
+# SOCIAL_AUTH_AUTH0_SECRET = os.getenv("SOCIAL_AUTH_AUTH0_SECRET")
+
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+
+AUTHENTICATION_BACKENDS = [
+        #'social_core.backends.github.GithubOAuth2',
+        'social_core.backends.facebook.FacebookOAuth2',
+        'dataprocessing.itmo_backends.ItmoOAuth2',
+        'django.contrib.auth.backends.ModelBackend'
+]
 
 CORS_ORIGIN_ALLOW_ALL = True
 # #CORS_ALLOW_CREDENTIALS = True
