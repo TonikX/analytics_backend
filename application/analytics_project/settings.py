@@ -56,9 +56,12 @@ INSTALLED_APPS = [
     'django_filters',
     'bootstrap_pagination',
     'rest_framework_swagger',
-    'oauth2_provider',
-    'social_django',
-    'rest_framework_social_oauth2',
+    #'oauth2_provider',
+    #'social_django',
+    #'rest_framework_social_oauth2',
+    # 'social_auth',
+    'social_django',  # django social auth
+    'rest_social_auth',  # this package
 
 ]
 
@@ -191,6 +194,14 @@ REST_FRAMEWORK = {
 #     'AUTH_HEADER_TYPES': ('JWT',),
 # }
 
+AUTHENTICATION_BACKENDS = [
+    #'social_core.backends.github.GithubOAuth2',
+    'dataprocessing.social_auth_backend.FiwareAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'dataprocessing.itmo_backends.ItmoOAuth2',
+    'django.contrib.auth.backends.ModelBackend'
+]
+
 SOCIAL_AUTH_ITMOOAUTH2_KEY = 'nexoVnlgoNJnTuZ3CNBcbHgayXmhRjJUYfOb'
 SOCIAL_AUTH_ITMOOAUTH2_SECRET = 'GV4SDAMfv5pgE3jzblcW7HUcND5pywqQL4be'
 
@@ -201,10 +212,20 @@ SOCIAL_AUTH_ITMOOAUTH2_SECRET = 'GV4SDAMfv5pgE3jzblcW7HUcND5pywqQL4be'
 # SOCIAL_AUTH_AUTH0_KEY = os.getenv("SOCIAL_AUTH_AUTH0_KEY")
 # SOCIAL_AUTH_AUTH0_SECRET = os.getenv("SOCIAL_AUTH_AUTH0_SECRET")
 
-SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+FIWARE_APP_ID = 'nexoVnlgoNJnTuZ3CNBcbHgayXmhRjJUYfOb'
+FIWARE_API_SECRET = 'GV4SDAMfv5pgE3jzblcW7HUcND5pywqQL4be'
+FIWARE_IDM_ENDPOINT = 'https://login.itmo.ru/cas/oauth2.0/authorize'
+
+FIWARE_IDM_API_VERSION = 2
+FIWARE_KEYSTONE_ENDPOINT = 'http://cloud.lab.fiware.org:4731'
+
+SOCIAL_AUTH_ENABLED_BACKENDS = ('fiware',)
+
+# SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 
 AUTHENTICATION_BACKENDS = [
         #'social_core.backends.github.GithubOAuth2',
+        'dataprocessing.social_auth_backend.FiwareAuth',
         'social_core.backends.facebook.FacebookOAuth2',
         'dataprocessing.itmo_backends.ItmoOAuth2',
         'django.contrib.auth.backends.ModelBackend'

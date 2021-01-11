@@ -89,6 +89,8 @@ from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, W
     UserGroups
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
 
+from .views import WorkProgramFullDetailsWithDisciplineCodeView
+
 
 # DocxFileExportOldView
 
@@ -163,6 +165,8 @@ urlpatterns = [
     # path('api/workprogram/itemrelations/<char:discipline_code>', WorkProgramDetailsWithDisciplineCodeView.as_view()),
     url(r'^api/workprogram/itemrelations/(?P<discipline_code>[0-9.]+)/$',
         WorkProgramDetailsWithDisciplineCodeView.as_view()),
+    url(r'^api/workprogram/fullitemrelations/(?P<discipline_code>[0-9.]+)/$',
+        WorkProgramFullDetailsWithDisciplineCodeView.as_view()),
 
     path('api/workprogram/fieldofstudies/<int:workprogram_id>', FieldOfStudiesForWorkProgramList.as_view()),
     path('api/workprograminfieldofstudy/', WorkProgramInFieldOfStudyListAPI.as_view()),
