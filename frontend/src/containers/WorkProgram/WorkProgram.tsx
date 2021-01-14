@@ -36,6 +36,7 @@ import {steps} from "./constants";
 
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
+import {WorkProgramGeneralFields} from "./enum";
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
@@ -44,9 +45,9 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     };
 
     componentDidMount() {
-        const workProgramId = this.getWorkProgramId();
+        const workProgramCode = this.getWorkProgramCode();
 
-        this.props.actions.setWorkProgramId(workProgramId);
+        this.props.actions.setWorkProgramCode(workProgramCode);
         this.props.actions.getWorkProgram();
     }
 
@@ -62,7 +63,9 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         this.props.actions.cloneWorkProgram(this.getWorkProgramId());
     }
 
-    getWorkProgramId = () => get(this, 'props.match.params.id');
+    getWorkProgramId = () => this.props.workProgram[WorkProgramGeneralFields.ID];
+
+    getWorkProgramCode = () => get(this, 'props.match.params.code');
 
     renderContent = () => {
         const {classes} = this.props;

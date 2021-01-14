@@ -19,7 +19,10 @@ const setAllUsers = createAction<string>('SET_ALL_USERS');
 const getUserGroups = createAction<string>('GET_USER_GROUPS');
 const setUserGroups = createAction<string>('SET_USER_GROUPS');
 
+const refreshToken = createAction<string>('REFRESH_LOGIN');
+
 const actions: GeneralActions = {
+    refreshToken,
     fetchingComponentFalse,
     fetchingComponentTrue,
     fetchingTrue,

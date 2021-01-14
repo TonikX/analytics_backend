@@ -1,8 +1,8 @@
-import BaseService from "../../service/base-service";
+import AnalyticsService from "../../service/analytics-service";
 import {literatureFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
-class LiteratureServices extends BaseService{
+class LiteratureServices extends AnalyticsService{
     getLiterature(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 

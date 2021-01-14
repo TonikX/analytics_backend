@@ -21,11 +21,13 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         flexDirection: 'column'
     },
-    title: {
-        fontSize: '24px',
+    titleWrap: {
         marginBottom: '20px',
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+    },
+    title: {
+        fontSize: '24px',
     },
     actions: {
         display: 'flex',

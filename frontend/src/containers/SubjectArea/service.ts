@@ -1,8 +1,8 @@
-import BaseService from "../../service/base-service";
+import AnalyticsService from "../../service/analytics-service";
 import {SubjectAreaFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
-class SubjectAreaServices extends BaseService{
+class SubjectAreaServices extends AnalyticsService{
     getSubjectArea(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 

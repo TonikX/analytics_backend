@@ -1,6 +1,6 @@
 import {ReactText} from "react";
 import get from 'lodash/get';
-import BaseService from "../../service/base-service";
+import AnalyticsService from "../../service/analytics-service";
 import {Section, Topic} from "./types";
 import {
     EvaluationToolFields,
@@ -13,9 +13,13 @@ import {CourseFields} from "../Courses/enum";
 import {TrainingEntitiesFields} from "../TrainingEntities/enum";
 import {UserExpertResultEnum} from "../Expertises/enum";
 
-class WorkProgramService extends BaseService{
+class WorkProgramService extends AnalyticsService{
     getWorkProgram(id: string){
         return this.get(`/api/workprogram/detail/${id}`);
+    }
+
+    getWorkProgramByCode(code: string){
+        return this.get(`/api/workprogram/itemrelations/${code}/`);
     }
 
     getWorkProgramEvaluationTools(id: string){
