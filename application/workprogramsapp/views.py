@@ -830,7 +830,32 @@ class WorkProgramDetailsWithDisciplineCodeView(generics.ListAPIView):
             return Response({"error":"work program with such a code was not found"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class WorkProgramFullDetailsWithDisciplineCodeView(generics.ListAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramForIndividualRoutesSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+    def get(self, request, **kwargs):
+        """
+        Вывод всех результатов для одной рабочей программы по id
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        #queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        try:
+            print ('f', WorkProgram.objects.get(discipline_code=self.kwargs['discipline_code']).discipline_code)
+            queryset = WorkProgram.objects.filter(discipline_code=self.kwargs['discipline_code'])
+            print (queryset)
+            serializer = WorkProgramSerializer(queryset, many=True)
+            print (serializer.data)
+            return Response(serializer.data)
+        except:
+            return Response({"error":"work program with such a code was not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 #Конец блока ендпоинтов рабочей программы
+
 
 
 class TopicsListAPI(generics.ListAPIView):
