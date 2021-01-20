@@ -27,7 +27,7 @@ from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAP
     SkillsOfRoleInRoleDestroyView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, \
     AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, DisciplineBlockModuleShortListView, \
-    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailView
+    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailView, DisciplinesByNumber
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
@@ -167,6 +167,8 @@ urlpatterns = [
         WorkProgramDetailsWithDisciplineCodeView.as_view()),
     url(r'^api/workprogram/fullitemrelations/(?P<discipline_code>[0-9.]+)/$',
         WorkProgramFullDetailsWithDisciplineCodeView.as_view()),
+
+    path('api/workprogram/getbynumbers', DisciplinesByNumber),
 
     path('api/workprogram/fieldofstudies/<int:workprogram_id>', FieldOfStudiesForWorkProgramList.as_view()),
     path('api/workprograminfieldofstudy/', WorkProgramInFieldOfStudyListAPI.as_view()),

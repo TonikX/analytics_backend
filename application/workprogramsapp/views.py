@@ -2109,3 +2109,17 @@ def UserGroups(request):
     if UserExpertise.objects.filter(expert=request.user):
         groups_names.append("expertise_member")
     return Response({"groups": groups_names})
+
+@api_view(['POST'])
+def DisciplinesByNumber(request):
+    try:
+        numbers_array = request.data.get('numbers_array')
+        wp_array=[]
+        queryset=WorkProgram.objects.filter(discipline_code__in=numbers_array)
+    
+        for wp in queryset:
+            wp_array.append({"id":wp.id, "discipline_code":wp.discipline_code, "title":wp.title})
+        return Response(wp_array)
+
+    except:
+        return Response(status=400)
