@@ -7,8 +7,9 @@ import workProgramActions from './actions';
 
 import Service from './service';
 import {
-    getWorkProgramId,
-    getWorkProgramUserExpertiseId
+    getWorkProgramRouteCode,
+    getWorkProgramUserExpertiseId,
+    getWorkProgramId
 } from './getters';
 
 import {fetchingTypes} from "./enum";
@@ -31,11 +32,11 @@ const getWorkProgram = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState();
-        const workProgramId = getWorkProgramId(state);
+        const wpCode = getWorkProgramRouteCode(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_WORK_PROGRAM}));
 
-        service.getWorkProgram(workProgramId)
+        service.getWorkProgramByCode(wpCode)
             .then((res) => {
                 dispatch(workProgramActions.setWorkProgram(res.data));
                 dispatch(actions.fetchingSuccess());

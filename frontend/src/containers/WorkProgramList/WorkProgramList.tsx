@@ -191,7 +191,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                             {workProgram[WorkProgramGeneralFields.CODE]}
                                         </TableCell>
                                         <TableCell className={classes.link}>
-                                            <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.ID])}>
+                                            <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.CODE])}>
                                                 {workProgram[WorkProgramGeneralFields.TITLE]}
                                             </Link>
                                         </TableCell>
@@ -238,7 +238,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                                     </MenuItem>
 
                                                     <MenuItem className={classes.menuLinkItem}>
-                                                        <Link to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.ID])}>
+                                                        <Link to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.CODE])}>
                                                             <EditIcon className={classes.menuIcon} />
                                                             Редактировать
                                                         </Link>

@@ -26,15 +26,17 @@ const signIn = createLogic({
 
         service.signIn(password, username)
             .then((res) => {
-                const token = get(res, 'data.auth_token', null);
+                const token = get(res, 'data.access', null);
+                const refreshToken = get(res, 'data.refresh', null);
 
                 userService.setToken(token);
+                userService.setRefreshToken(refreshToken);
 
                 dispatch(actions.fetchingSuccess(['Вы успешно авторизировались!']));
                 dispatch(actions.setAuthTrue());
             })
             .catch((err) => {
-                dispatch(actions.fetchingFailed(err));
+                dispatch(actions.fetchingFailed(['Неверный логин или пароль']));
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: Enum.SIGN_IN_FETCHING}));

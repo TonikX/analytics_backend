@@ -1,8 +1,8 @@
-import BaseService from "../../service/base-service";
+import AnalyticsService from "../../service/analytics-service";
 import {SortingType, Types} from "../../components/SortingButton/types";
 import {EducationProgramFields} from "./enum";
 
-class Service extends BaseService{
+class Service extends AnalyticsService{
     getEducationalProgramList(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 

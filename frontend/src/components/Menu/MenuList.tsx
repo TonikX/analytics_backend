@@ -170,6 +170,13 @@ export default (groups: Array<string>) => {
         },
     ] : [];
 
+    const fifthMenu = [{
+        title: 'Подбор дисциплин',
+        link: appRouter.getSelectDisciplineRoute(),
+        icon: ProfessionsSkillsIcon,
+        selectedIcon: ProfessionsSkillsSelectedIcon,
+    }];
+
     const menu = [];
 
     if (firstMenu.length){
@@ -185,6 +192,8 @@ export default (groups: Array<string>) => {
     if (fourthMenu.length){
         menu.push(fourthMenu);
     }
+
+    menu.push(fifthMenu);
 
     return menu;
 }

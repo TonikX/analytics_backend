@@ -1,9 +1,9 @@
-import BaseService from "../../service/base-service";
+import AnalyticsService from "../../service/analytics-service";
 import {TrainingEntitiesFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 import {SubjectAreaFields} from "../SubjectArea/enum";
 
-class TrainingEntitiesServices extends BaseService{
+class TrainingEntitiesServices extends AnalyticsService{
     getTrainingEntities(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType, domainId: number|null){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 

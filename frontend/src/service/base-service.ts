@@ -2,9 +2,6 @@ import get from 'lodash/get';
 import axiosLib, {AxiosResponse, AxiosInstance} from 'axios';
 
 import AppConfig from '../config/app-config-service';
-import UserService from "./user-service";
-
-const userService = UserService.factory();
 
 export default class BaseService {
     static axios : AxiosInstance | null = null;
@@ -76,15 +73,6 @@ export default class BaseService {
 
         _axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         _axios.defaults.xsrfCookieName = "csrftoken";
-
-        const isAuth = userService.isAuth();
-
-        // console.log('isAuth', isAuth);
-        // console.log('token', userService.getToken());
-
-        if (_axios !== null && isAuth) {
-            _axios.defaults.headers.common['Authorization'] = `Token ${userService.getToken()}`;
-        }
 
         return _axios;
     }

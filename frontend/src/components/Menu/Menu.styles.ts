@@ -31,7 +31,7 @@ export default (theme: Theme) => createStyles({
         whiteSpace: 'normal !important',
         transition: 'all 0.2s',
         margin: '5px 2px',
-        padding: '10px 16px',
+        padding: '5px 16px',
         color: theme.palette.text.primary,
         borderLeft: `4px solid transparent`,
         '&:hover': {

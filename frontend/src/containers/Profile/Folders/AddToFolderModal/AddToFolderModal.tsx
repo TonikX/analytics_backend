@@ -31,10 +31,6 @@ class AddToFolderModal extends React.PureComponent<AddToFolderModalProps> {
         folder: null,
     };
 
-    componentDidMount() {
-        this.props.actions.getFolders();
-    }
-
     handleClose = () => {
         this.props.actions.closeDialog();
     }

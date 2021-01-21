@@ -2,7 +2,7 @@ export default (theme) => ({
     root: {
         display: 'flex',
         width: '100vw',
-        height: '100vh'
+        height: `calc(100vh - 64px)`,
     },
     form: {
         borderRadius: 0,

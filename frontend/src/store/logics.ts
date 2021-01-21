@@ -17,12 +17,14 @@ import RolesLogic from '../containers/Roles/logics';
 import SkillsProfessionsLogic from '../containers/SkillsProfessions/logics';
 import SkillsRolesLogic from '../containers/SkillsRoles/logics';
 import ExpertisesLogic from '../containers/Expertises/logics';
+import SelectDisciplineLogic from '../containers/SelectDiscipline/logics';
 import EducationalProgramLogic from '../containers/EducationalProgram/logics';
 import FoldersLogic from '../containers/Profile/Folders/logics';
 
 import GeneralLogic from '../layout/logics';
 
 export default [
+    ...SelectDisciplineLogic,
     ...FoldersLogic,
     ...GeneralLogic,
     ...SignInLogic,

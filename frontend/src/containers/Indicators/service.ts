@@ -1,9 +1,9 @@
-import BaseService from "../../service/base-service";
+import AnalyticsService from "../../service/analytics-service";
 import {IndicatorsFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 import {CompetenceFields} from "../Competences/enum";
 
-class IndicatorsService extends BaseService{
+class IndicatorsService extends AnalyticsService{
     getIndicators(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 

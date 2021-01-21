@@ -1,4 +1,4 @@
-import BaseService from "../../service/base-service";
+import AnalyticsService from "../../service/analytics-service";
 import {
     BlocksOfWorkProgramsFields,
     DownloadFileModalFields,
@@ -10,7 +10,7 @@ import {SortingType, Types} from "../../components/SortingButton/types";
 
 import appConfigService from '../../config/app-config-service';
 
-class EducationalPlanService extends BaseService{
+class EducationalPlanService extends AnalyticsService{
     getEducationalPlan(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 

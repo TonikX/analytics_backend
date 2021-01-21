@@ -130,8 +130,8 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
 
         return (
             <Paper className={classes.root}>
-                <Typography className={classes.title}>
-                    Учебные планы
+                <div className={classes.titleWrap}>
+                    <Typography className={classes.title}>Учебные планы</Typography>
 
                     <TextField placeholder="Поиск"
                                variant="outlined"
@@ -143,7 +143,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                }}
                                onChange={this.handleChangeSearchQuery}
                     />
-                </Typography>
+                </div>
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>
@@ -192,7 +192,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                             </TableHead>
                             <TableBody>
                                 {educationalPlan.map(plan =>
-                                    <TableRow>
+                                    <TableRow key={plan[EducationalPlanFields.ID]}>
                                         <TableCell>
                                             {moment(plan[EducationalPlanFields.APPROVAL_DATE]).format(FULL_DATE_FORMAT)}
                                         </TableCell>

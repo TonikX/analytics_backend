@@ -1,8 +1,8 @@
-import BaseService from "../../service/base-service";
+import AnalyticsService from "../../service/analytics-service";
 import {ProfessionsFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
-class ProfessionsService extends BaseService{
+class ProfessionsService extends AnalyticsService{
     getProfessions(currentPage: number, searchQuery: Object, sortingField: string, sortingMode: SortingType, role: string|null){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 

@@ -1,13 +1,12 @@
 from rest_framework import serializers
-from rest_framework.fields import CharField, BooleanField
+from rest_framework.fields import BooleanField
 
-from dataprocessing.serializers import ItemSerializer, userProfileSerializer
-from .expertise.models import Expertise
+from dataprocessing.serializers import ItemSerializer
+from .expertise.common_serializers import ShortExpertiseSerializer
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool
-from .expertise.common_serializers import ShortExpertiseSerializer
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
@@ -682,5 +681,10 @@ class WorkProgramShortForExperiseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'title', 'discipline_code', 'qualification', 'prerequisites', 'outcomes' ]
+        fields = ['id', 'title', 'discipline_code', 'qualification', 'prerequisites', 'outcomes']
 
+
+class WorkProgramSerializerByName(serializers.ModelSerializer):
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title', 'discipline_code']

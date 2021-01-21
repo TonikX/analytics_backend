@@ -124,11 +124,11 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         this.props.actions.openDialog(detailPlan);
     }
 
-    goToWorkProgramPage = (id: number) => () => {
+    goToWorkProgramPage = (code: string) => () => {
         // @ts-ignore
         const {history} = this.props;
 
-        history.push(appRouter.getWorkProgramLink(id));
+        history.push(appRouter.getWorkProgramLink(code));
     }
 
     handleDownloadFile = (workProgramId: number) => () => {
@@ -281,7 +281,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                     {workPrograms.map(workProgram =>
                                                                         <div className={classes.displayFlex}>
                                                                             <Typography className={classes.workProgramLink}
-                                                                                        onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
+                                                                                        onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.CODE])}>
                                                                                 {workProgram[WorkProgramGeneralFields.TITLE]}
                                                                             </Typography>
                                                                             <Tooltip title={'Скачать рабочую программу'}>

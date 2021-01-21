@@ -52,10 +52,6 @@ class Folders extends React.PureComponent<FoldersProps> {
         openConfirmDialogId: null
     }
 
-    componentDidMount() {
-        this.props.actions.getFolders();
-    }
-
     handleChangeCurrentTab = (event: any, newValue: any) => {
         this.setState({currentTab: newValue});
     }
@@ -86,7 +82,7 @@ class Folders extends React.PureComponent<FoldersProps> {
 
         return folder[FoldersFields.WORK_PROGRAM_IN_FOLDER].map(item =>
             <Link target="_blank"
-                  to={appRouter.getWorkProgramLink(item[FoldersFields.WORK_PROGRAM][WorkProgramGeneralFields.ID])}
+                  to={appRouter.getWorkProgramLink(item[FoldersFields.WORK_PROGRAM][WorkProgramGeneralFields.CODE])}
                   className={classes.workProgramLink}
             >
                 <div className={classes.workProgram}>

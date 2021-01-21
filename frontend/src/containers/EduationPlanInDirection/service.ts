@@ -1,10 +1,10 @@
-import BaseService from "../../service/base-service";
+import AnalyticsService from "../../service/analytics-service";
 import {EducationPlanInDirectionFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 import {EducationalPlanFields} from "../EducationalPlan/enum";
 import {DirectionFields} from "../Direction/enum";
 
-class IndicatorsService extends BaseService{
+class IndicatorsService extends AnalyticsService{
     getEducationalPlansInDirection(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
