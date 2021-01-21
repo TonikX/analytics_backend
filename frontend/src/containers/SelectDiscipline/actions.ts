@@ -8,7 +8,8 @@ const selectDisciplineGetKeywords = createAction(`${key}_GET_KEYWORDS`);
 const selectDisciplineSetKeywords = createAction(`${key}_SET_KEYWORDS`);
 
 const selectDisciplineGetWorkPrograms = createAction(`${key}_GET_WORK_PROGRAMS`);
-const selectDisciplineSetWorkPrograms = createAction(`${key}_SET_WORK_PROGRAMS`);
+const getCorrectWorkPrograms = createAction(`${key}_GET_CORRECT_WORK_PROGRAMS`);
+const setCorrectWorkPrograms = createAction(`${key}_SET_CORRECT_WORK_PROGRAMS`);
 
 const selectDisciplineSelectKeyword = createAction(`${key}_SELECT_KEYWORD`);
 const selectDisciplineUnselectKeyword = createAction(`${key}_UNSELECT_KEYWORD`);
@@ -21,7 +22,8 @@ const actions: SelectDisciplineActions = {
     selectDisciplineSetKeywords,
 
     selectDisciplineGetWorkPrograms,
-    selectDisciplineSetWorkPrograms,
+    getCorrectWorkPrograms,
+    setCorrectWorkPrograms,
 
     selectDisciplineSelectKeyword,
     selectDisciplineUnselectKeyword,

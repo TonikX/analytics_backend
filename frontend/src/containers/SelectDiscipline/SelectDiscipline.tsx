@@ -248,11 +248,11 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
                         <div>
                             {workPrograms.map((item: WorkProgramType) =>
                                 <Link className={classes.wp}
-                                      to={appRouter.getWorkProgramLink(item[workProgramFields.ID])}
+                                      to={appRouter.getWorkProgramLink(item[workProgramFields.DISCIPLINE_CODE])}
                                       target="_blank"
                                 >
-                                    <Typography className={classes.wpCode}>{item[workProgramFields.ID]}</Typography>
-                                    <Typography> {item[workProgramFields.NAME]} </Typography>
+                                    <Typography className={classes.wpCode}>{item[workProgramFields.DISCIPLINE_CODE]}</Typography>
+                                    <Typography> {item[workProgramFields.TITLE]} </Typography>
                                 </Link>
                             )}
                         </div>

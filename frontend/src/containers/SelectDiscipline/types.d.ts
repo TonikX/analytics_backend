@@ -13,7 +13,8 @@ export interface SelectDisciplineActions {
     selectDisciplineGetKeywords: ActionCreatorWithoutPayload;
     selectDisciplineSetKeywords: ActionCreatorWithPayload;
     selectDisciplineGetWorkPrograms: ActionCreatorWithoutPayload;
-    selectDisciplineSetWorkPrograms: ActionCreatorWithPayload;
+    getCorrectWorkPrograms: ActionCreatorWithPayload;
+    setCorrectWorkPrograms: ActionCreatorWithPayload;
     selectDisciplineSelectKeyword: ActionCreatorWithPayload;
     selectDisciplineUnselectKeyword: ActionCreatorWithPayload;
     selectSemester: ActionCreatorWithPayload;
@@ -35,7 +36,7 @@ export type WorkProgramTypeType = wpTypeEnum;
 
 export type WorkProgramType = {
     [workProgramFields.ID]: string;
-    [workProgramFields.NAME]: string;
+    [workProgramFields.TITLE]: string;
     [workProgramFields.TYPE]: WorkProgramTypeType;
 };
 

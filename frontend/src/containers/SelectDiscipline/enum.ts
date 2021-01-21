@@ -8,13 +8,14 @@ export enum fields {
 
 export enum workProgramFields {
    ID = 'id',
-   NAME = 'name',
-   TYPE = 'type'
+   DISCIPLINE_CODE = 'discipline_code',
+   TITLE = 'title',
 }
 
 export enum fetchingTypes {
    GET_KEYWORDS = 'GET_KEYWORDS',
    GET_WORK_PROGRAMS = 'GET_WORK_PROGRAMS',
+   GET_CORRECT_WORK_PROGRAMS = 'GET_CORRECT_WORK_PROGRAMS',
 }
 
 export enum qualificationEnum {
