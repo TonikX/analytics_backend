@@ -24,7 +24,7 @@ urlpatterns = [
     #url(r'^social-docs/', include('social_django.urls')),
     #path('hho/', include('oauth2_provider.urls')),
     #url(r'social_auth/', include('social_auth.urls')),
-    url(r'^login/', include('rest_social_auth.urls_jwt_pair')),
-    url(r'^login/', include('rest_social_auth.urls_jwt')),
+    # url(r'^login/', include('rest_social_auth.urls_jwt_pair')),
+    # url(r'^login/', include('rest_social_auth.urls_jwt')),
 ]
 
