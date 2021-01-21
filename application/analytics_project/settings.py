@@ -60,8 +60,8 @@ INSTALLED_APPS = [
     #'social_django',
     #'rest_framework_social_oauth2',
     # 'social_auth',
-    'social_django',  # django social auth
-    'rest_social_auth',  # this package
+    # 'social_django',  # django social auth
+    # 'rest_social_auth',  # this package
 
 ]
 
