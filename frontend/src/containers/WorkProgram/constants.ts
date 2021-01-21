@@ -1,39 +1,27 @@
 import {IntermediateCertificationEnum, StepsEnum, WorkProgramStatusEnum} from "./enum";
 
-const PRIMARY_VOCATIONAL_EDUCATION = 'primary_vocational_education';
-const SECONDARY_VOCATIONAL_EDUCATION = 'secondary_vocational_education';
 const BACHELOR = 'bachelor';
 const SPECIALIST = 'specialist';
 const MASTER = 'master';
 
 export const specializationObject: any = {
-    [PRIMARY_VOCATIONAL_EDUCATION]: 'Среднее профессиональное образование',
-    [SECONDARY_VOCATIONAL_EDUCATION]: 'Магистр профессионального образования',
-    [BACHELOR]: 'Бакалавр',
-    [SPECIALIST]: 'Специалист',
-    [MASTER]: 'Магистр',
+    [BACHELOR]: 'Бакалавриат',
+    [SPECIALIST]: 'Специалитет',
+    [MASTER]: 'Магистратура',
 }
 
 export const specialization = [
     {
-        value: PRIMARY_VOCATIONAL_EDUCATION,
-        label: 'Среднее профессиональное образование'
-    },
-    {
-        value: SECONDARY_VOCATIONAL_EDUCATION,
-        label: 'Магистр профессионального образования'
-    },
-    {
         value: BACHELOR,
-        label: 'Бакалавр'
+        label: 'Бакалавриат'
     },
     {
         value: SPECIALIST,
-        label: 'Специалист'
+        label: 'Специалитет'
     },
     {
         value: MASTER,
-        label: 'Магистр'
+        label: 'Магистратура'
     }
 ];
 

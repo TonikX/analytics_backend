@@ -117,7 +117,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                     <InputsLoader loading={fetchingCode}>
                         {isCanEdit ?
                             <TextField variant="outlined"
-                                       label="Шифр программы"
+                                       label="Идентификационный номер программы"
                                        className={classes.input}
                                        value={state[WorkProgramGeneralFields.CODE]}
                                        onBlur={this.saveField(WorkProgramGeneralFields.CODE)}
@@ -128,7 +128,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                                        }}
                             />
                             :
-                            <Typography className={classes.textItem}> <b>Шифр программы:</b> {state[WorkProgramGeneralFields.CODE]}</Typography>
+                            <Typography className={classes.textItem}> <b>Идентификационный номер программы:</b> {state[WorkProgramGeneralFields.CODE]}</Typography>
                         }
 
                     </InputsLoader>
@@ -184,7 +184,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                     {isCanEdit ?
                         <Selector />
                         :
-                        <Typography className={classes.textItem}><b>Место дисциплины в структуре образовательной программы высшего образования:</b> {specializationObject[state[WorkProgramGeneralFields.QUALIFICATION]]} </Typography>
+                        <Typography className={classes.textItem}><b>Уровень образовательной программы:</b> {specializationObject[state[WorkProgramGeneralFields.QUALIFICATION]]} </Typography>
                     }
 
                     {!isCanEdit &&

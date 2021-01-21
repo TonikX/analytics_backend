@@ -36,8 +36,8 @@ export type WorkProgramTypeType = wpTypeEnum;
 
 export type WorkProgramType = {
     [workProgramFields.ID]: string;
+    [workProgramFields.DISCIPLINE_CODE]: string;
     [workProgramFields.TITLE]: string;
-    [workProgramFields.TYPE]: WorkProgramTypeType;
 };
 
 export type mapDispatchToPropsType = ReturnType<mapDispatchToProps>;

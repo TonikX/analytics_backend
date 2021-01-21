@@ -97,7 +97,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                    shrink: true,
                                }}
                     />
-                    <TextField label="Шифр *"
+                    <TextField label="Идентификационный номер программы *"
                                onChange={this.saveField(WorkProgramGeneralFields.CODE)}
                                variant="outlined"
                                className={classes.input}
@@ -133,7 +133,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         label={'Дата создания *'}
                     />
                     <div>
-                        <InputLabel className={classes.label}> Место дисциплины в структуре образовательной программы высшего образования (ОП ВО) * </InputLabel>
+                        <InputLabel className={classes.label}> Уровень образовательной программы * </InputLabel>
                         <Select
                             className={classes.specializationSelector}
                             value={workProgram[WorkProgramGeneralFields.QUALIFICATION]}

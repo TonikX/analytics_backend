@@ -239,7 +239,6 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
                         </Button>
                     </>
                 }
-
                 {workPrograms.length > 0 &&
                     <>
                         <Typography className={classes.subtitle}>
