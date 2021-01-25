@@ -1,8 +1,8 @@
-import BaseService from "../../service/base-service";
+import AnalyticsService from "../../service/analytics-service";
 import {EntityToEntityFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
-class EntityToEntityServices extends BaseService{
+class EntityToEntityServices extends AnalyticsService{
     getEntitiesToEntities(currentPage: number, searchQuery: Object, sortingField: string, sortingMode: SortingType, domainId: number|null){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 

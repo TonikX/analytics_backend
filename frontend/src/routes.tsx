@@ -33,17 +33,23 @@ import Literature from './containers/Literature';
 import Expertises from './containers/Expertises';
 import Expertise from './containers/Expertises/Expertise';
 
-import RouterService from './service/router-service';
 import Folders from "./containers/Profile/Folders";
 
 import NotFoundPage from "./containers/NotFoundPage";
 import ForbiddenPage from "./containers/ForbiddenPage";
 
+import SelectDiscipline from "./containers/SelectDiscipline";
+
+import Layout from "./layout";
+
+import RouterService from './service/router-service';
+
 const routerService = RouterService.factory();
 
 export default () => (
     <Router>
-        <Switch>
+        <Layout>
+            <Switch>
             <Redirect exact from="/" to={routerService.getEducationPlanRoute()} />
 
             <Route path={routerService.getSignInRoute()}>
@@ -52,6 +58,9 @@ export default () => (
             <Route path={routerService.getSignUpRoute()}>
                 <SignUp />
             </Route>
+            <AuthRoute path={routerService.getSelectDisciplineRoute()}>
+                <SelectDiscipline />
+            </AuthRoute>
             <AuthRoute path={routerService.getFoldersRoute()}>
                 <Folders />
             </AuthRoute>
@@ -155,5 +164,6 @@ export default () => (
                 <NotFoundPage />
             </Route>
         </Switch>
+        </Layout>
     </Router>
 );

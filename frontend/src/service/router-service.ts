@@ -109,6 +109,10 @@ export default class RouterService {
         return SEPARATOR + 'skills-professions';
     };
 
+    getSelectDisciplineRoute = () => {
+        return SEPARATOR + 'select-discipline';
+    };
+
     getSkillsRolesRoute = () => {
         return SEPARATOR + 'skills-roles';
     };
@@ -153,15 +157,15 @@ export default class RouterService {
     };
 
     getWorkProgramRoute = () => {
-        return SEPARATOR + WORK_PROGRAM + SEPARATOR + ':id';
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + ':code';
     };
 
     getEducationPlanDetailRoute = () => {
         return SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + ':id';
     };
 
-    getWorkProgramLink = (id: ReactText) => {
-        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id;
+    getWorkProgramLink = (code: string) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + code;
     };
 
     getPlanDetailLink = (id: ReactText) => {

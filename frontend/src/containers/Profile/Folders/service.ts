@@ -1,7 +1,7 @@
-import BaseService from "../../../service/base-service";
+import AnalyticsService from "../../../service/analytics-service";
 import {FavoriteType} from "./enum";
 
-class Service extends BaseService{
+class Service extends AnalyticsService{
     getAddToFolderLink(type: FavoriteType){
         switch (type){
             case FavoriteType.WORK_PROGRAM:

@@ -1,7 +1,7 @@
-import BaseService from "../../service/base-service";
+import AnalyticsService from "../../service/analytics-service";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
-class ProfessionsService extends BaseService{
+class ProfessionsService extends AnalyticsService{
     getProfessions(currentPage: number, search: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 

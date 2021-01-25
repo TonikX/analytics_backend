@@ -830,7 +830,32 @@ class WorkProgramDetailsWithDisciplineCodeView(generics.ListAPIView):
             return Response({"error":"work program with such a code was not found"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class WorkProgramFullDetailsWithDisciplineCodeView(generics.ListAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramForIndividualRoutesSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+    def get(self, request, **kwargs):
+        """
+        Вывод всех результатов для одной рабочей программы по id
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        #queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        try:
+            print ('f', WorkProgram.objects.get(discipline_code=self.kwargs['discipline_code']).discipline_code)
+            queryset = WorkProgram.objects.filter(discipline_code=self.kwargs['discipline_code'])
+            print (queryset)
+            serializer = WorkProgramSerializer(queryset, many=True)
+            print (serializer.data)
+            return Response(serializer.data)
+        except:
+            return Response({"error":"work program with such a code was not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 #Конец блока ендпоинтов рабочей программы
+
 
 
 class TopicsListAPI(generics.ListAPIView):
@@ -2084,3 +2109,17 @@ def UserGroups(request):
     if UserExpertise.objects.filter(expert=request.user):
         groups_names.append("expertise_member")
     return Response({"groups": groups_names})
+
+@api_view(['POST'])
+def DisciplinesByNumber(request):
+    try:
+        numbers_array = request.data.get('numbers_array')
+        wp_array=[]
+        queryset=WorkProgram.objects.filter(discipline_code__in=numbers_array)
+    
+        for wp in queryset:
+            wp_array.append({"id":wp.id, "discipline_code":wp.discipline_code, "title":wp.title})
+        return Response(wp_array)
+
+    except:
+        return Response(status=400)

@@ -1,6 +1,7 @@
 import {fields, UserFields} from './enum';
 
 export interface GeneralActions {
+    refreshToken: any;
     fetchingComponentTrue: any;
     fetchingComponentFalse: any;
     fetchingTrue: any;

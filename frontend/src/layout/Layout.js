@@ -37,11 +37,8 @@ class Layout extends React.Component {
 
         if (isAuth){
             this.props.actions.setAuthTrue();
+            this.props.actions.refreshToken();
         }
-    }
-
-    componentDidMount() {
-        this.props.actions.getUserGroups();
     }
 
     shouldComponentUpdate(nextProps, nextState){
@@ -96,7 +93,7 @@ class Layout extends React.Component {
                             </div>
                         </div>
 
-                        <AddToFolderModal />
+                        {isAuth && <AddToFolderModal />}
                     </MuiThemeProvider>
                 </SnackbarProvider>
             </MuiPickersUtilsProvider>

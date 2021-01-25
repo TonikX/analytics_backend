@@ -10,7 +10,7 @@ export const initialState: workProgramState = {
     [fields.WORK_PROGRAM]: {
         [fields.WORK_PROGRAM_SECTIONS]: []
     },
-    [fields.WORK_PROGRAM_ID]: '',
+    [fields.WORK_PROGRAM_ROUTE_CODE]: '',
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: [],
     [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION]: [],
     [fields.WORK_PROGRAM_RESULTS]: [],
@@ -36,9 +36,9 @@ const setWorkProgram = (state: workProgramState, {payload}: any): workProgramSta
     [fields.WORK_PROGRAM]: payload
 });
 
-const setWorkProgramId = (state: workProgramState, {payload}: any): workProgramState => ({
+const setWorkProgramCode = (state: workProgramState, {payload}: any): workProgramState => ({
     ...state,
-    [fields.WORK_PROGRAM_ID]: payload
+    [fields.WORK_PROGRAM_ROUTE_CODE]: payload
 });
 
 const setWorkProgramEvaluationTools = (state: workProgramState, {payload}: any): workProgramState => ({
@@ -83,7 +83,7 @@ const pageDown = (): workProgramState => initialState;
 export const reducer = createReducer(initialState, {
     [actions.setWorkProgramPart.type]: setWorkProgramPart,
     [actions.setWorkProgram.type]: setWorkProgram,
-    [actions.setWorkProgramId.type]: setWorkProgramId,
+    [actions.setWorkProgramCode.type]: setWorkProgramCode,
 
     [actions.setResults.type]: setResults,
 

@@ -1,6 +1,7 @@
-import BaseService from "../service/base-service";
+import AnalyticsService from "../service/analytics-service";
+import {userService} from '../service/user-service';
 
-class MainService extends BaseService{
+class MainService extends AnalyticsService{
     getUserData(){
         return this.get('/auth/users/me');
     }
@@ -9,6 +10,12 @@ class MainService extends BaseService{
     }
     getUserGroups(){
         return this.get(`/api/user/groups`);
+    }
+
+    refreshToken(){
+        return this.post(`/auth/jwt/refresh`, {
+            refresh: userService.getRefreshToken()
+        });
     }
 }
 

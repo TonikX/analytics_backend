@@ -1,6 +1,6 @@
-import BaseService from "../../service/base-service";
+import AnalyticsService from "../../service/analytics-service";
 
-class SignInService extends BaseService{
+class SignInService extends AnalyticsService{
     signUp(formData) {
         return this.post('/auth/users/', formData);
     }
