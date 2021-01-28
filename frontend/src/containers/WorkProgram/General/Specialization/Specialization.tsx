@@ -33,7 +33,7 @@ class Specialization extends React.PureComponent<SpecializationProps> {
 
         return (
             <div>
-                <InputLabel className={classes.label}> Место дисциплины в структуре образовательной программы высшего образования (ОП ВО) </InputLabel>
+                <InputLabel className={classes.label}> Уровень образовательной программы </InputLabel>
                 <InputsLoader loading={isFetching}>
                     <AutoSizer style={{width: '100%'}}>
                         {({width}) => (

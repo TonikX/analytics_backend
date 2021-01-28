@@ -1,7 +1,7 @@
 import OreshinService from "../../service/oreshin-service";
 import {QualificationType} from "./types";
 
-class Service extends OreshinService{
+class Service extends OreshinService {
     getKeywords(semester: number, qualification: QualificationType){
         return this.post('/get_available_keywords', this.createPostObject({
             semester: semester,
