@@ -57,7 +57,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /frontend/src/
+      device: /tests
       o: bind
 
 networks:
