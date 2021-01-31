@@ -34,7 +34,7 @@ services:
       - ./application/media:/backend/src/media
       - ./application/static-backend:/backend/src/static-backend
       - ./frontend/build:/frontend/src
-      - ./nginx:/etc/nginx/ssl/conf.d
+      - ./nginx/ssl:/etc/nginx/conf.d
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
     depends_on:
