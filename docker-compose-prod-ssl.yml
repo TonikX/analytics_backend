@@ -30,22 +30,23 @@ services:
     container_name: analytics_nginx_prod
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./application/media:/backend/src/media
       - ./application/static-backend:/backend/src/static-backend
       - ./frontend/build:/frontend/src
       - ./nginx/ssl:/etc/nginx/conf.d
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
+      - ./nginx/ssl:/etc/letsencrypt
+      - ./nginx/ssl:/var/lib/letsencrypt
     depends_on:
       - backend
   certbot:
     image: certbot/certbot
     container_name: certbot
     volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - web-root:/var/www/html
+      - ./nginx/ssl:/etc/letsencrypt
+      - ./nginx/ssl:/var/lib/letsencrypt
+      # - web-root:/var/www/html
     depends_on:
       - nginx
     command: certonly --webroot --webroot-path=/var/www/html --email antongovorov@gmail.com --agree-tos --no-eff-email --staging -d op.itmo.ru
