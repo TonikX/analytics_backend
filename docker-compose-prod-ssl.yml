@@ -35,11 +35,31 @@ services:
       - ./application/static-backend:/backend/src/static-backend
       - ./frontend/build:/frontend/src
       - ./nginx:/etc/nginx/conf.d
-      - /etc/letsencrypt/archive/op.itmo.ru:/ssl_cert
-      - /etc/letsencrypt/archive/op.itmo.ru:/ssl_key
-      - /etc/letsencrypt:/ssl_options
-      - /etc/letsencrypt:/ssl_dhparams
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
     depends_on:
       - backend
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - nginx
+    command: certonly --webroot --webroot-path=/var/www/html --email antongovorov@gmail.com --agree-tos --no-eff-email --staging -d op.itmo.ru
 volumes:
   postgres_data:
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /frontend/src/
+      o: bind
+
+networks:
+  app-network:
+    driver: bridge
