@@ -36,16 +36,16 @@ services:
       - ./application/static-backend:/backend/src/static-backend
       - ./frontend/build:/frontend/src
       - ./nginx/ssl:/etc/nginx/conf.d
-      - ./nginx/ssl:/etc/letsencrypt
-      - ./nginx/ssl:/var/lib/letsencrypt
+      - ./nginx/ssl/data/certbot/conf:/etc/letsencrypt
+      - ./nginx/ssl/data/certbot/www:/var/www/certbot
     depends_on:
       - backend
   certbot:
     image: certbot/certbot
     container_name: certbot
     volumes:
-      - ./nginx/ssl:/etc/letsencrypt
-      - ./nginx/ssl:/var/lib/letsencrypt
+      - ./nginx/ssl/data/certbot/conf:/etc/letsencrypt
+      - ./nginx/ssl/data/certbot/www:/var/www/certbot
       # - web-root:/var/www/html
     depends_on:
       - nginx
