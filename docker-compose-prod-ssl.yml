@@ -57,7 +57,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /tests
+      device: /home/user/analytics_backend/tests
       o: bind
 
 networks:
