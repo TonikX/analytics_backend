@@ -44,18 +44,20 @@ services:
       - ./nginx/ssl:/etc/nginx/conf.d
       - ./nginx/ssl/data/certbot/conf:/etc/letsencrypt
       - ./nginx/ssl/data/certbot/www:/var/www/certbot
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
     depends_on:
       - backend
   certbot:
     image: certbot/certbot
     container_name: certbot
+    restart: unless-stopped #+++
     networks:
       nginx_net:
     volumes:
       - ./nginx/ssl/data/certbot/conf:/etc/letsencrypt
       - ./nginx/ssl/data/certbot/www:/var/www/certbot
       # - web-root:/var/www/html
-
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     # command: certonly --webroot --webroot-path=/var/www/html --email antongovorov@gmail.com --agree-tos --no-eff-email --staging -d op.itmo.ru
 volumes:
   postgres_data:
