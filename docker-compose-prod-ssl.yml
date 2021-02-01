@@ -4,6 +4,8 @@ services:
   db:
     container_name: analytics_db_prod
     image: postgres
+    networks:
+      nginx_net:
     ports:
       - "6435:5432"
     environment:
@@ -14,6 +16,8 @@ services:
       - ./dbs/postgres-data-prod:/var/lib/postgresql
   backend:
     container_name: analytics_backend_prod
+    networks:
+      nginx_net:
     build:
       context: ./application
       dockerfile: Dockerfile-prod
@@ -28,6 +32,8 @@ services:
   nginx:
     image: nginx:alpine
     container_name: nginx
+    networks:
+      nginx_net:
     ports:
       - "80:80"
       - "443:443"
@@ -47,8 +53,8 @@ services:
       - ./nginx/ssl/data/certbot/conf:/etc/letsencrypt
       - ./nginx/ssl/data/certbot/www:/var/www/certbot
       # - web-root:/var/www/html
-    depends_on:
-      - nginx
+    networks:
+      nginx_net:
     # command: certonly --webroot --webroot-path=/var/www/html --email antongovorov@gmail.com --agree-tos --no-eff-email --staging -d op.itmo.ru
 volumes:
   postgres_data:
@@ -62,5 +68,5 @@ volumes:
       o: bind
 
 networks:
-  app-network:
-    driver: bridge
+  nginx_net:
+    name: nginx_net
