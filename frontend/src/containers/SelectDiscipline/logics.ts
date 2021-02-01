@@ -5,6 +5,7 @@ import actions from '../../layout/actions';
 import selectDisciplineActions from './actions';
 
 import {service} from './service';
+import {service as internalService} from './internal-service';
 import {fetchingTypes} from "./enum";
 import {getSelectedSemester, getSelectedKeywords} from "./getters";
 import {getSelectedQualification} from "./getters";
@@ -49,7 +50,8 @@ const getWorkPrograms = createLogic({
 
         service.getWorkPrograms(keywords, semester, qualification)
             .then((res) => {
-                dispatch(selectDisciplineActions.selectDisciplineSetWorkPrograms(get(res, 'data.recommended_disciplines', [])));
+                const workPrograms: Array<{id: string}> = get(res, 'data.recommended_disciplines', []);
+                dispatch(selectDisciplineActions.getCorrectWorkPrograms(workPrograms.map(item => item.id)));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -62,7 +64,31 @@ const getWorkPrograms = createLogic({
     }
 });
 
+const getCorrectNamesWorkPrograms = createLogic({
+    type: selectDisciplineActions.getCorrectWorkPrograms.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const workProgramsIds = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_CORRECT_WORK_PROGRAMS}));
+
+        internalService.getCorrectWorkPrograms(workProgramsIds)
+            .then((res) => {
+                dispatch(selectDisciplineActions.setCorrectWorkPrograms(get(res, 'data', [])));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_CORRECT_WORK_PROGRAMS}));
+                return done();
+            });
+    }
+});
+
 export default [
     getKeywords,
-    getWorkPrograms
+    getWorkPrograms,
+    getCorrectNamesWorkPrograms,
 ];
