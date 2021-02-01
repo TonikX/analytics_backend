@@ -27,7 +27,7 @@ services:
       - db
   nginx:
     image: nginx:alpine
-    container_name: analytics_nginx_prod
+    container_name: nginx
     ports:
       - "80:80"
       - "443:443"
