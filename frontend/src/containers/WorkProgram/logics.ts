@@ -37,7 +37,7 @@ const getWorkProgram = createLogic({
 
         service.getWorkProgram(id)
             .then((res) => {
-                dispatch(workProgramActions.setWorkProgram(res.data[0]));
+                dispatch(workProgramActions.setWorkProgram(res.data));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
