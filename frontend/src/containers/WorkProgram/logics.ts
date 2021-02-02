@@ -38,7 +38,7 @@ const getWorkProgram = createLogic({
 
         service.getWorkProgramByCode(wpCode)
             .then((res) => {
-                dispatch(workProgramActions.setWorkProgram(res.data));
+                dispatch(workProgramActions.setWorkProgram(res.data[0]));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
