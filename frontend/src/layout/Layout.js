@@ -47,6 +47,7 @@ class Layout extends React.Component {
             || this.props.fetching !== nextProps.fetching
             || this.props.auth !== nextProps.auth
             || this.state.openMenu !== nextState.openMenu
+            || this.state.isFetchingRefreshToken !== nextState.isFetchingRefreshToken
         ;
     }
 
@@ -67,7 +68,7 @@ class Layout extends React.Component {
 
     render() {
         const {openMenu} = this.state;
-        const {classes, fetching, errors, successMessages, auth, userGroups} = this.props;
+        const {classes, fetching, errors, successMessages, auth, userGroups, isFetchingRefreshToken} = this.props;
         const isAuth = userService.isAuth() && auth;
         const isWorkProgramPage = this.isWorkProgramPage();
 
@@ -89,7 +90,7 @@ class Layout extends React.Component {
                                 [classes.contentShift]: openMenu,
                                 [classes.noPadding]: isWorkProgramPage
                             })}>
-                                {this.props.children}
+                                {!isFetchingRefreshToken && this.props.children}
                             </div>
                         </div>
 

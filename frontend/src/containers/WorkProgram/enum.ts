@@ -1,5 +1,4 @@
 export enum fields {
-    WORK_PROGRAM_ROUTE_CODE = 'WORK_PROGRAM_ROUTE_CODE',
     WORK_PROGRAM = 'WORK_PROGRAM',
     WORK_PROGRAM_TITLE = 'title',
     WORK_PROGRAM_CODE = 'discipline_code',

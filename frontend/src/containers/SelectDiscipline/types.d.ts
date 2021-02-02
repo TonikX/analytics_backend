@@ -35,7 +35,7 @@ export type QualificationType = qualificationEnum;
 export type WorkProgramTypeType = wpTypeEnum;
 
 export type WorkProgramType = {
-    [workProgramFields.ID]: string;
+    [workProgramFields.ID]: number;
     [workProgramFields.DISCIPLINE_CODE]: string;
     [workProgramFields.TITLE]: string;
 };

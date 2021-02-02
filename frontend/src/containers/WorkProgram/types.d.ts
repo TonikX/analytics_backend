@@ -35,7 +35,6 @@ export interface WorkProgramActions {
     setWorkProgram: any;
     setWorkProgramPart: any;
     saveWorkProgram: any;
-    setWorkProgramCode: any;
 
     deleteSection: any;
     saveSection: any;
@@ -73,7 +72,6 @@ export interface WorkProgramActions {
 
 export interface workProgramState {
     [fields.WORK_PROGRAM]: any;
-    [fields.WORK_PROGRAM_ROUTE_CODE]: string;
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: Array<EvaluationToolType>;
     [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION]: Array<IntermediateCertificationType>;
     [fields.WORK_PROGRAM_RESULTS]: Array<any>;

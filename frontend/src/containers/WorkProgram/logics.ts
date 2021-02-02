@@ -7,7 +7,6 @@ import workProgramActions from './actions';
 
 import Service from './service';
 import {
-    getWorkProgramRouteCode,
     getWorkProgramUserExpertiseId,
     getWorkProgramId
 } from './getters';
@@ -32,11 +31,11 @@ const getWorkProgram = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState();
-        const wpCode = getWorkProgramRouteCode(state);
+        const id = action.payload || getWorkProgramId(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_WORK_PROGRAM}));
 
-        service.getWorkProgramByCode(wpCode)
+        service.getWorkProgram(id)
             .then((res) => {
                 dispatch(workProgramActions.setWorkProgram(res.data[0]));
                 dispatch(actions.fetchingSuccess());
