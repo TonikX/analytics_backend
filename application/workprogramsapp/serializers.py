@@ -239,11 +239,10 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference', 'description', 'video']
+        fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner']
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }
-
 
 
 class BibliographicReferenceForWorkProgramSerializer(serializers.ModelSerializer):

@@ -46,7 +46,7 @@ from .serializers import OnlineCourseSerializer, BibliographicReferenceSerialize
     IndicatorListSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
-from .serializers import WorkProgramSerializer
+from .serializers import WorkProgramSerializer, WorkProgramSerializerByName
 from .tables import FieldOfStudyWPTable
 
 
@@ -728,7 +728,7 @@ class WorkProgramCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def perform_create(self, serializer):
-            serializer.save(owner=self.request.user)
+        serializer.save(owner=self.request.user)
 
 
 class WorkProgramDestroyView(generics.DestroyAPIView):
@@ -1066,7 +1066,6 @@ class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
             return self.destroy(request, *args, **kwargs)
         except:
             return Response(status=400)
-
 
 
 
