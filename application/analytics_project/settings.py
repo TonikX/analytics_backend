@@ -190,9 +190,13 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
-# SIMPLE_JWT = {
-#     'AUTH_HEADER_TYPES': ('JWT',),
-# }
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    #'AUTH_HEADER_TYPES': ('JWT',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=480),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
 
 AUTHENTICATION_BACKENDS = [
     #'social_core.backends.github.GithubOAuth2',
