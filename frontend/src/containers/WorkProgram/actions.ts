@@ -4,7 +4,6 @@ import {WorkProgramActions} from './types';
 
 const getWorkProgram = createAction<string>('GET_WORK_PROGRAM');
 const setWorkProgram = createAction<string>('SET_WORK_PROGRAM');
-const setWorkProgramCode = createAction<string>('SET_WORK_PROGRAM_CODE');
 const saveWorkProgram = createAction<string>('SAVE_WORK_PROGRAM');
 const setWorkProgramPart = createAction<string>('SET_WORK_PROGRAM_PART');
 
@@ -93,7 +92,6 @@ const actions: WorkProgramActions = {
 
     getWorkProgram,
     setWorkProgram,
-    setWorkProgramCode,
     setWorkProgramPart,
     saveWorkProgram,
 
