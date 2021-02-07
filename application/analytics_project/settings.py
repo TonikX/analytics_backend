@@ -270,3 +270,9 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+
+ISU = {
+    "ISU_CLIENT_ID": env('ISU_CLIENT_ID'),
+    "ISU_CLIENT_SECRET": env('ISU_CLIENT_SECRET'),
+    "ISU_REDIRECT_URI": env('ISU_REDIRECT_URI'),
+}
