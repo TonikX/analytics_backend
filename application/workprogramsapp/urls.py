@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.urls import path
 
 from .educational_program.views import DepartmentCreateAPIView, DepartmentListAPIView, DepartmentDetailsView, \
-    DepartmentDestroyView, DepartmentUpdateView
+    DepartmentDestroyView, DepartmentUpdateView, EducationalProgramRankingByProfession
 # Контроллеры
 from .educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
     EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView
@@ -295,6 +295,7 @@ urlpatterns = [
     path('api/EducationalProgram/detail/<int:pk>', EducationalProgramDetailsView.as_view()),
     path('api/EducationalProgram/delete/<int:pk>', EducationalProgramDestroyView.as_view()),
     path('api/EducationalProgram/update/<int:pk>', EducationalProgramUpdateView.as_view()),
+    path('api/EducationalProgram/byprofessions', EducationalProgramRankingByProfession),
 
     # --Экспертизы
     path('api/expertise/user', UserExpertiseListView.as_view()),

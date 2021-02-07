@@ -1,31 +1,28 @@
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import redirect
-from django.views import View
-from django.contrib.auth.decorators import login_required
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status, viewsets
-from dataprocessing.models import Items
+from django.db.models import Count
+# Сериализаторы
+from rest_framework import filters
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
-from rest_framework import mixins
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+# Сериализаторы
+from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
+    EducationalProgramSerializer, \
+    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer
+# --Работа с образовательной программой
+from workprogramsapp.models import AcademicPlan
+# --Работа с образовательной программой
+from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram
+# Права доступа
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
+
 
 # Права доступа
-from workprogramsapp.permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+# Модели данных
 
 
 # Модели данных
-
-# --Работа с образовательной программой
-from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram
-
-# Сериализаторы
-from workprogramsapp.educational_program.serializers import  EducationalCreateProgramSerializer, EducationalProgramSerializer,\
-    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer
-
 
 
 # Блок реализации АПИ для КПУД интерфейсов
@@ -146,13 +143,36 @@ class DepartmentDetailsView(generics.RetrieveAPIView):
     serializer_class = DepartmentSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def EducationalProgramRankingByProfession(request):
     professions_array = request.data.get('professions_array')
-    skills_array=[]
+    range_settings = request.data.get('range_set')
+    skills_array = []
     for prof_id in professions_array:
-        skills_array.append((Profession.objects.get(pk=prof_id)).skills.all())
-    wp_with_skills=WorkProgram.objects.filter(outcomes__in=skills_array)
-    print(wp_with_skills)
-    return Response({"groups":"Helloworld"})
+        try:
+            skills_array.extend(list(Profession.objects.get(pk=prof_id).skills.all()))
+        except Profession.DoesNotExist:
+            return Response(status=404)
+    wp_with_skills = WorkProgram.objects.filter(outcomes__in=skills_array).annotate(Count('pk'))
+    for work_program in wp_with_skills:
+        work_program.coincidences = len(set(work_program.outcomes.all()) & set(skills_array))
+    academic_plan_with_skills = AcademicPlan.objects.filter(
+        discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__in=wp_with_skills).annotate(
+        Count('pk'))
+    for ap in academic_plan_with_skills:
+        set_of_wp = (set(wp_with_skills) & set(WorkProgram.objects.filter(
+            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan=ap)))
+        if range_settings == "skills":
+            ap.weight = sum(item.coincidences for item in set_of_wp)
+        elif range_settings == "work_program":
+            ap.weight = len(set_of_wp)
+
+    sorted_academic_plan = sorted(academic_plan_with_skills, key=lambda ac_pl: (ac_pl.weight), reverse=True)
+    list_of_educational_program = []
+    for s in sorted_academic_plan:
+        list_of_educational_program.extend(
+            list(EducationalProgram.objects.filter(academic_plan_for_ep__academic_plan=s)))
+    serializer = EducationalProgramSerializer(list_of_educational_program, many=True)
+    return Response(serializer.data)
