@@ -15,16 +15,18 @@ def remove_mixins(file):
     with open(file, encoding='utf-8', mode='w') as edit_file:
         for line in newlines:
             edit_file.write(line)
+    print("DjangoClone was deactivated")
 
 
 def restore_mixins(file):
     file_buff = file[:file.find(".py")] + "-mixin_copy.py"
     os.remove(file)
     os.rename(file_buff, file)
+    print("DjangoClone was activated")
 
 
 if __name__ == '__main__':
     file_name = 'workprogramsapp/models.py'
     remove_mixins(file_name)
-    os.system("manage.py makemigrations")
+    os.system("python manage.py makemigrations")
     restore_mixins(file_name)
