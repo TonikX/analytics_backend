@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from dataprocessing.models import Items
 from rest_framework import generics
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins
@@ -20,8 +20,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 # Модели данных
 
 # --Работа с образовательной программой
-from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department
-
+from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram
 
 # Сериализаторы
 from workprogramsapp.educational_program.serializers import  EducationalCreateProgramSerializer, EducationalProgramSerializer,\
@@ -146,3 +145,14 @@ class DepartmentDetailsView(generics.RetrieveAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def EducationalProgramRankingByProfession(request):
+    professions_array = request.data.get('professions_array')
+    skills_array=[]
+    for prof_id in professions_array:
+        skills_array.append((Profession.objects.get(pk=prof_id)).skills.all())
+    wp_with_skills=WorkProgram.objects.filter(outcomes__in=skills_array)
+    print(wp_with_skills)
+    return Response({"groups":"Helloworld"})
