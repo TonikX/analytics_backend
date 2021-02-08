@@ -1,6 +1,7 @@
 import React from 'react';
 import get from 'lodash/get';
 import Scrollbars from "react-custom-scrollbars";
+import classNames from "classnames";
 
 import {SortableContainer, SortableElement, SortableHandle} from 'react-sortable-hoc';
 
@@ -10,6 +11,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
+import Button from "@material-ui/core/Button";
 
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -23,12 +25,15 @@ import {workProgramSectionFields} from "../enum";
 
 import connect from './Sections.connect';
 import styles from './Sections.styles';
+import TextField from "@material-ui/core/TextField";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class Sections extends React.PureComponent<SecondStepProps> {
     scrollBar: any = null;
 
     state = {
-        createNewSectionMode: false
+        createNewSectionMode: false,
+        totalHours: 0
     }
 
     getNewSection = () => ({
@@ -73,6 +78,34 @@ class Sections extends React.PureComponent<SecondStepProps> {
 
         return count;
     };
+
+    updateValues = (totalTotalHours: number) => () => {
+        const {sections} = this.props;
+        let totalHoursWithoutCPO = 0;
+
+        sections.forEach((section) => {
+            totalHoursWithoutCPO += parseFloat(this.calculateContactWork(section));
+        });
+
+        const totalHours = this.state.totalHours || totalTotalHours;
+        const cpoValue = ((totalHours - totalHoursWithoutCPO) / sections.length).toFixed(2);
+
+        sections.forEach((section) => {
+            this.props.actions.saveSection({
+                ...section,
+                [workProgramSectionFields.SPO] : cpoValue,
+                [workProgramSectionFields.TOTAL_HOURS] : parseFloat(cpoValue) + parseFloat(this.calculateContactWork(sections))
+            });
+        })
+    }
+
+    calculateContactWork = (section: any) => {
+        return ((
+            (parseFloat(section[workProgramSectionFields.LECTURE_CLASSES]) || 0) +
+            (parseFloat(section[workProgramSectionFields.PRACTICAL_LESSONS]) || 0) +
+            (parseFloat(section[workProgramSectionFields.LABORATORY]) || 0)
+        ) * 1.1).toFixed(2);
+    }
 
     render() {
         const {classes, sections, isCanEdit} = this.props;
@@ -131,12 +164,66 @@ class Sections extends React.PureComponent<SecondStepProps> {
                             <TableRow>
                                 <TableCell className={classes.headerCell} colSpan={isCanEdit ? 3 : 2}> Всего </TableCell>
                                 <TableCell className={classes.headerCell}>{totalContactWorkHours}</TableCell>
-                                <TableCell className={classes.headerCell}>{totalLectureClassesHours}</TableCell>
-                                <TableCell className={classes.headerCell}>{totalLaboratoryClassesHours}</TableCell>
-                                <TableCell className={classes.headerCell}>{totalPracticalClassesHours}</TableCell>
+
+
+                                <Tooltip title="Часы должны делиться на 2 без остатка"
+                                         disableHoverListener={parseFloat(totalLectureClassesHours) %  2 === 0}
+                                >
+                                    <TableCell className={classNames(classes.headerCell, {
+                                        [classes.errorText]: parseFloat(totalLectureClassesHours) %  2 !== 0}
+                                    )}>
+                                            {totalLectureClassesHours}
+                                    </TableCell>
+                                </Tooltip>
+
+
+                                <Tooltip title="Часы должны делиться на 2 без остатка"
+                                         disableHoverListener={parseFloat(totalLaboratoryClassesHours) %  2 === 0}
+                                >
+                                    <TableCell className={classNames(classes.headerCell, {
+                                        [classes.errorText]: parseFloat(totalLaboratoryClassesHours) %  2 !== 0}
+                                    )}>
+                                        {totalLaboratoryClassesHours}
+                                    </TableCell>
+                                </Tooltip>
+
+                                <Tooltip title="Часы должны делиться на 2 без остатка"
+                                         disableHoverListener={parseFloat(totalPracticalClassesHours) %  2 === 0}
+                                >
+                                    <TableCell className={classNames(classes.headerCell, {
+                                        [classes.errorText]: parseFloat(totalPracticalClassesHours) %  2 !== 0}
+                                    )}>
+
+                                        {totalPracticalClassesHours}
+                                    </TableCell>
+                                </Tooltip>
+
                                 <TableCell className={classes.headerCell}>{totalSPOHours}</TableCell>
-                                <TableCell className={classes.headerCell}>{totalTotalHours}</TableCell>
-                                {isCanEdit && <TableCell className={classes.headerCell} />}
+                                <TableCell className={classes.headerCell}>
+                                    {isCanEdit ?
+                                        <Tooltip title="Всего должно делиться на 36 без остатка"
+                                                 disableHoverListener={parseFloat(totalTotalHours) % 36 === 0}
+                                        >
+                                            <TextField variant="outlined"
+                                                       size="small"
+                                                       defaultValue={totalTotalHours}
+                                                       type="number"
+                                                       className={classes.smallInput}
+                                                       onChange={(e) => this.setState({totalHours: e.target.value})}
+                                                       error={parseFloat(totalTotalHours) % 36 !== 0}
+                                            />
+                                        </Tooltip>
+                                        :
+                                        <>{totalTotalHours}</>
+                                    }
+                                </TableCell>
+                                {isCanEdit &&
+                                    <Tooltip title="Пересчитать столбец СРО и всего часов основываясь на введеных значениях">
+                                        <TableCell className={classes.headerCell}>
+                                            <Button onClick={this.updateValues(parseFloat(totalTotalHours))}>Пересчитать</Button>
+                                        </TableCell>
+                                    </Tooltip>
+                                }
                             </TableRow>
                         </Table>
                     </Scrollbars>

@@ -2,22 +2,22 @@ import {createAction} from "@reduxjs/toolkit";
 
 import {IndicatorProgramActions} from './types';
 
-const getIndicatorsDependsCompetence = createAction<string>('GET_INDICATORS_DEPENDS_COMPETENCE');
+const getIndicatorsDependsCompetence = createAction('GET_INDICATORS_DEPENDS_COMPETENCE');
 
-const getIndicators = createAction<string>('GET_INDICATORS');
-const setIndicators = createAction<string>('SET_INDICATORS');
+const getIndicators = createAction('GET_INDICATORS');
+const setIndicators = createAction('SET_INDICATORS');
 
-const createNewIndicator = createAction<string>('CREATE_NEW_INDICATOR');
-const changeIndicator = createAction<string>('CHANGE_INDICATOR');
-const deleteIndicator = createAction<string>('DELETE_INDICATOR');
+const createNewIndicator = createAction('CREATE_NEW_INDICATOR');
+const changeIndicator = createAction('CHANGE_INDICATOR');
+const deleteIndicator = createAction('DELETE_INDICATOR');
 
-const openDialog = createAction<string>('OPEN_INDICATOR_DIALOG');
-const closeDialog = createAction<string>('CLOSE_INDICATOR_DIALOG');
+const openDialog = createAction('OPEN_INDICATOR_DIALOG');
+const closeDialog = createAction('CLOSE_INDICATOR_DIALOG');
 
-const changeSearchQuery = createAction<string>('INDICATOR_CHANGE_SEARCH_QUERY');
-const changeCurrentPage = createAction<string>('INDICATOR_CHANGE_CURRENT_PAGE');
-const changeAllCount = createAction<string>('INDICATOR_CHANGE_ALL_COUNT');
-const changeSorting = createAction<string>('INDICATOR_CHANGE_SORTING');
+const changeSearchQuery = createAction('INDICATOR_CHANGE_SEARCH_QUERY');
+const changeCurrentPage = createAction('INDICATOR_CHANGE_CURRENT_PAGE');
+const changeAllCount = createAction('INDICATOR_CHANGE_ALL_COUNT');
+const changeSorting = createAction('INDICATOR_CHANGE_SORTING');
 
 const actions: IndicatorProgramActions = {
     getIndicatorsDependsCompetence,

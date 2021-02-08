@@ -2,24 +2,24 @@ import {createAction} from "@reduxjs/toolkit";
 
 import {GeneralActions} from './types';
 
-const fetchingTrue = createAction<string>('FETCHING_TRUE');
-const fetchingFalse = createAction<string>('FETCHING_FALSE');
-const fetchingFailed = createAction<string>('FETCHING_FAILED');
-const fetchingSuccess = createAction<string>('FETCHING_SUCCESS');
+const fetchingTrue = createAction('FETCHING_TRUE');
+const fetchingFalse = createAction('FETCHING_FALSE');
+const fetchingFailed = createAction('FETCHING_FAILED');
+const fetchingSuccess = createAction('FETCHING_SUCCESS');
 
-const fetchingComponentFalse = createAction<string>('FETCHING_COMPONENT_FALSE');
-const fetchingComponentTrue = createAction<string>('FETCHING_COMPONENT_TRUE');
+const fetchingComponentFalse = createAction('FETCHING_COMPONENT_FALSE');
+const fetchingComponentTrue = createAction('FETCHING_COMPONENT_TRUE');
 
-const setAuthTrue = createAction<string>('SET_AUTH_TRUE');
-const setAuthFalse = createAction<string>('SET_AUTH_FALSE');
+const setAuthTrue = createAction('SET_AUTH_TRUE');
+const setAuthFalse = createAction('SET_AUTH_FALSE');
 
-const getAllUsers = createAction<string>('GET_ALL_USERS');
-const setAllUsers = createAction<string>('SET_ALL_USERS');
+const getAllUsers = createAction('GET_ALL_USERS');
+const setAllUsers = createAction('SET_ALL_USERS');
 
-const getUserGroups = createAction<string>('GET_USER_GROUPS');
-const setUserGroups = createAction<string>('SET_USER_GROUPS');
+const getUserGroups = createAction('GET_USER_GROUPS');
+const setUserGroups = createAction('SET_USER_GROUPS');
 
-const refreshToken = createAction<string>('REFRESH_LOGIN');
+const refreshToken = createAction('REFRESH_LOGIN');
 
 const actions: GeneralActions = {
     refreshToken,

@@ -5,7 +5,9 @@ import actions from "./actions";
 export const GENERAL_PATH = 'main';
 
 export const initialState = {
-    [fields.FETCHING]: {},
+    [fields.FETCHING]: {
+        'refresh': true
+    },
     [fields.FETCHING_COMPONENT]: {},
     [fields.ERRORS]: [],
     [fields.SUCCESS_MESSAGES]: [],

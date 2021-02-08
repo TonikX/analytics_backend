@@ -20,10 +20,12 @@ import ExpertisesLogic from '../containers/Expertises/logics';
 import SelectDisciplineLogic from '../containers/SelectDiscipline/logics';
 import EducationalProgramLogic from '../containers/EducationalProgram/logics';
 import FoldersLogic from '../containers/Profile/Folders/logics';
+import TrainingModulesLogic from '../containers/TrainingModules/logics';
 
 import GeneralLogic from '../layout/logics';
 
 export default [
+    ...TrainingModulesLogic,
     ...SelectDisciplineLogic,
     ...FoldersLogic,
     ...GeneralLogic,

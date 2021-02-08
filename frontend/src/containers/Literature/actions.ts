@@ -2,20 +2,20 @@ import {createAction} from "@reduxjs/toolkit";
 
 import {LiteratureActions} from './types';
 
-const getLiterature = createAction<string>('GET_LITERATURE');
-const setLiterature = createAction<string>('SET_LITERATURE');
+const getLiterature = createAction('GET_LITERATURE');
+const setLiterature = createAction('SET_LITERATURE');
 
-const createNewLiterature = createAction<string>('CREATE_NEW_LITERATURE');
-const changeLiterature = createAction<string>('CHANGE_LITERATURE');
-const deleteLiterature = createAction<string>('DELETE_LITERATURE');
+const createNewLiterature = createAction('CREATE_NEW_LITERATURE');
+const changeLiterature = createAction('CHANGE_LITERATURE');
+const deleteLiterature = createAction('DELETE_LITERATURE');
 
-const openDialog = createAction<string>('OPEN_LITERATURE_DIALOG');
-const closeDialog = createAction<string>('CLOSE_LITERATURE_DIALOG');
+const openDialog = createAction('OPEN_LITERATURE_DIALOG');
+const closeDialog = createAction('CLOSE_LITERATURE_DIALOG');
 
-const changeSearchQuery = createAction<string>('LITERATURE_CHANGE_SEARCH_QUERY');
-const changeCurrentPage = createAction<string>('LITERATURE_CHANGE_CURRENT_PAGE');
-const changeAllCount = createAction<string>('LITERATURE_CHANGE_ALL_COUNT');
-const changeSorting = createAction<string>('LITERATURE_CHANGE_SORTING');
+const changeSearchQuery = createAction('LITERATURE_CHANGE_SEARCH_QUERY');
+const changeCurrentPage = createAction('LITERATURE_CHANGE_CURRENT_PAGE');
+const changeAllCount = createAction('LITERATURE_CHANGE_ALL_COUNT');
+const changeSorting = createAction('LITERATURE_CHANGE_SORTING');
 
 const actions: LiteratureActions = {
     getLiterature,

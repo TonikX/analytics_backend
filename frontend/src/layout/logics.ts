@@ -92,6 +92,7 @@ const refreshToken = createLogic({
             .catch((err) => {
                 dispatch(actions.setAuthFalse());
                 userService.logout();
+                dispatch(actions.fetchingFalse({destination: 'refresh'}));
             })
             .then(() => {
                 return done();

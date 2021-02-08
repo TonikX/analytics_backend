@@ -41,7 +41,6 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
         const trainingEntityState = this.state.trainingEntity;
 
         if (!shallowEqual(trainingEntity, prevProps.trainingEntity)){
-            debugger
             if (!get(trainingEntity, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], null) &&
                 get(trainingEntityState, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID])){
                 this.setState({
