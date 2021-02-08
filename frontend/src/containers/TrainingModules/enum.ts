@@ -22,4 +22,9 @@ export enum TrainingModuleFields {
     ID = 'id',
     NAME = 'name',
     DESCRIPTION = 'description',
+    DISCIPLINE = 'descipline_block',
+    ACADEMIC_PLAN = 'academic_plan',
+    EDUCATIONAL_PROFILE = 'educational_profile',
+    ACADEMIC_PLAN_IN_FIELD_OF_STUDY = 'academic_plan_in_field_of_study',
+    FIELD_OF_STUDY = 'field_of_study',
 }

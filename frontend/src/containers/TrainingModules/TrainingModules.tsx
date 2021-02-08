@@ -1,5 +1,6 @@
 import React, {SyntheticEvent} from 'react';
 import Scrollbars from "react-custom-scrollbars";
+import get from 'lodash/get';
 
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -20,6 +21,9 @@ import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
 import Search from "../../components/Search";
 import {SortingType} from "../../components/SortingButton/types";
+
+import {DirectionFields} from "../Direction/enum";
+import {DirectionType} from "../Direction/types";
 
 import {TrainingModulesProps, TrainingModuleType} from './types';
 import {TrainingModuleFields} from "./enum";
@@ -121,32 +125,53 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                                        mode={sortingField === TrainingModuleFields.DESCRIPTION ? sortingMode : ''}
                                         />
                                     </TableCell>
+                                    <TableCell>
+                                        Направленность ОП (УП)
+                                    </TableCell>
+                                    <TableCell>
+                                        Направления подготовки
+                                    </TableCell>
 
                                     {canEdit && <TableCell />}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {trainingModules.map((trainingModule: TrainingModuleType) =>
-                                    <TableRow key={trainingModule[TrainingModuleFields.ID]}>
-                                        <TableCell>
-                                            {trainingModule[TrainingModuleFields.NAME]}
-                                        </TableCell>
-                                        <TableCell>
-                                            {trainingModule[TrainingModuleFields.DESCRIPTION]}
-                                        </TableCell>
-                                        {canEdit &&
-                                            <TableCell className={classes.actions}>
-                                                <IconButton
-                                                    onClick={this.handleClickDelete(trainingModule[TrainingModuleFields.ID])}>
-                                                    <DeleteIcon/>
-                                                </IconButton>
-                                                <IconButton onClick={this.handleClickEdit(trainingModule)}>
-                                                    <EditIcon/>
-                                                </IconButton>
+                                {trainingModules.map((trainingModule: TrainingModuleType) => {
+                                    const profile = get(trainingModule, [TrainingModuleFields.DISCIPLINE, TrainingModuleFields.ACADEMIC_PLAN, TrainingModuleFields.EDUCATIONAL_PROFILE], '');
+                                    const plans = get(trainingModule, [TrainingModuleFields.DISCIPLINE, TrainingModuleFields.ACADEMIC_PLAN, TrainingModuleFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY], []);
+
+                                    return (
+                                        <TableRow key={trainingModule[TrainingModuleFields.ID]}>
+                                            <TableCell>
+                                                {trainingModule[TrainingModuleFields.NAME]}
                                             </TableCell>
-                                        }
-                                    </TableRow>
-                                )}
+                                            <TableCell>
+                                                {trainingModule[TrainingModuleFields.DESCRIPTION]}
+                                            </TableCell>
+                                            <TableCell>
+                                                {profile}
+                                            </TableCell>
+                                            <TableCell>
+                                                {/*
+                                                // @ts-ignore*/}
+                                                {plans.map((item: {[TrainingModuleFields.FIELD_OF_STUDY]: DirectionType}) =>
+                                                    <>{item[TrainingModuleFields.FIELD_OF_STUDY][DirectionFields.NUMBER]} {item[TrainingModuleFields.FIELD_OF_STUDY][DirectionFields.FACULTY]}</>
+                                                )}
+                                            </TableCell>
+                                            {canEdit &&
+                                                <TableCell className={classes.actions}>
+                                                    <IconButton
+                                                        onClick={this.handleClickDelete(trainingModule[TrainingModuleFields.ID])}>
+                                                        <DeleteIcon/>
+                                                    </IconButton>
+                                                    <IconButton onClick={this.handleClickEdit(trainingModule)}>
+                                                        <EditIcon/>
+                                                    </IconButton>
+                                                </TableCell>
+                                            }
+                                        </TableRow>
+                                    )
+                                })}
                             </TableBody>
                         </Table>
                     </div>
