@@ -81,6 +81,7 @@ class WorkProgram(CloneMixin, models.Model):
     semester_hour = models.CharField(max_length=1024, blank=True, null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     work_status = models.CharField(max_length=1, choices=status_choise, verbose_name='Архив', default = 'w')
+    hours = models.IntegerField(blank=True, null=True, verbose_name="Сумма часов по разделам")
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
 

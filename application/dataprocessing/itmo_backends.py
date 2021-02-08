@@ -51,7 +51,7 @@ class GetAuthenticationCodeISU(ListAPIView):
 
         return HttpResponseRedirect(cas_auth_uri)
 
-class AuthenticateByCodeISU(ListAPIView):
+class  AuthenticateByCodeISU(ListAPIView):
 
     def get(self, request):
 
