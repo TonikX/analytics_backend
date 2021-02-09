@@ -2,58 +2,58 @@ import {createAction} from "@reduxjs/toolkit";
 
 import {WorkProgramActions} from './types';
 
-const getWorkProgram = createAction<string>('GET_WORK_PROGRAM');
-const setWorkProgram = createAction<string>('SET_WORK_PROGRAM');
-const saveWorkProgram = createAction<string>('SAVE_WORK_PROGRAM');
-const setWorkProgramPart = createAction<string>('SET_WORK_PROGRAM_PART');
+const getWorkProgram = createAction('GET_WORK_PROGRAM');
+const setWorkProgram = createAction('SET_WORK_PROGRAM');
+const saveWorkProgram = createAction('SAVE_WORK_PROGRAM');
+const setWorkProgramPart = createAction('SET_WORK_PROGRAM_PART');
 
-const cloneWorkProgram = createAction<string>('CLONE_WORK_PROGRAM');
+const cloneWorkProgram = createAction('CLONE_WORK_PROGRAM');
 
-const saveSection = createAction<string>('WORK_PROGRAM_SAVE_SECTION');
-const deleteSection = createAction<string>('WORK_PROGRAM_DELETE_SECTION');
-const changeSectionNumber = createAction<string>('WORK_PROGRAM_CHANGE_SECTION_NUMBER');
+const saveSection = createAction('WORK_PROGRAM_SAVE_SECTION');
+const deleteSection = createAction('WORK_PROGRAM_DELETE_SECTION');
+const changeSectionNumber = createAction('WORK_PROGRAM_CHANGE_SECTION_NUMBER');
 
-const saveTopic = createAction<string>('WORK_PROGRAM_SAVE_TOPIC');
-const deleteTopic = createAction<string>('WORK_PROGRAM_DELETE_TOPIC');
-const changeTopicNumber = createAction<string>('WORK_PROGRAM_CHANGE_TOPIC_NUMBER');
+const saveTopic = createAction('WORK_PROGRAM_SAVE_TOPIC');
+const deleteTopic = createAction('WORK_PROGRAM_DELETE_TOPIC');
+const changeTopicNumber = createAction('WORK_PROGRAM_CHANGE_TOPIC_NUMBER');
 
-const openDialog = createAction<string>('WORK_PROGRAM_OPEN_DIALOG');
-const closeDialog = createAction<string>('WORK_PROGRAM_CLOSE_DIALOG')
+const openDialog = createAction('WORK_PROGRAM_OPEN_DIALOG');
+const closeDialog = createAction('WORK_PROGRAM_CLOSE_DIALOG')
 
-const deleteLiterature = createAction<string>('WORK_PROGRAM_DELETE_LITERATURE');
-const addLiterature = createAction<string>('WORK_PROGRAM_ADD_LITERATURE');
+const deleteLiterature = createAction('WORK_PROGRAM_DELETE_LITERATURE');
+const addLiterature = createAction('WORK_PROGRAM_ADD_LITERATURE');
 
-const deletePrerequisite = createAction<string>('WORK_PROGRAM_DELETE_PREREQUISITE');
-const addPrerequisite = createAction<string>('WORK_PROGRAM_ADD_PREREQUISITE');
-const changePrerequisite = createAction<string>('WORK_PROGRAM_CHANGE_PREREQUISITE');
+const deletePrerequisite = createAction('WORK_PROGRAM_DELETE_PREREQUISITE');
+const addPrerequisite = createAction('WORK_PROGRAM_ADD_PREREQUISITE');
+const changePrerequisite = createAction('WORK_PROGRAM_CHANGE_PREREQUISITE');
 
-const deleteResult = createAction<string>('WORK_PROGRAM_DELETE_RESULT');
-const addResult = createAction<string>('WORK_PROGRAM_ADD_RESULT');
-const changeResult = createAction<string>('WORK_PROGRAM_CHANGE_RESULT');
-const getResults = createAction<string>('WORK_PROGRAM_GET_RESULTS');
-const setResults = createAction<string>('WORK_PROGRAM_SET_RESULTS');
+const deleteResult = createAction('WORK_PROGRAM_DELETE_RESULT');
+const addResult = createAction('WORK_PROGRAM_ADD_RESULT');
+const changeResult = createAction('WORK_PROGRAM_CHANGE_RESULT');
+const getResults = createAction('WORK_PROGRAM_GET_RESULTS');
+const setResults = createAction('WORK_PROGRAM_SET_RESULTS');
 
-const getWorkProgramEvaluationTools = createAction<string>('GET_WORK_PROGRAM_EVALUATION_TOOLS');
-const setWorkProgramEvaluationTools = createAction<string>('SET_WORK_PROGRAM_EVALUATION_TOOLS');
+const getWorkProgramEvaluationTools = createAction('GET_WORK_PROGRAM_EVALUATION_TOOLS');
+const setWorkProgramEvaluationTools = createAction('SET_WORK_PROGRAM_EVALUATION_TOOLS');
 
-const deleteEvaluationTool = createAction<string>('WORK_PROGRAM_DELETE_EVALUATION_TOOL');
-const addEvaluationTool = createAction<string>('WORK_PROGRAM_ADD_EVALUATION_TOOL');
-const changeEvaluationTool = createAction<string>('WORK_PROGRAM_CHANGE_EVALUATION_TOOL');
+const deleteEvaluationTool = createAction('WORK_PROGRAM_DELETE_EVALUATION_TOOL');
+const addEvaluationTool = createAction('WORK_PROGRAM_ADD_EVALUATION_TOOL');
+const changeEvaluationTool = createAction('WORK_PROGRAM_CHANGE_EVALUATION_TOOL');
 
-const deleteIntermediateCertification = createAction<string>('WORK_PROGRAM_DELETE_INTERMEDIATE_CERTIFICATION');
-const addIntermediateCertification = createAction<string>('WORK_PROGRAM_ADD_INTERMEDIATE_CERTIFICATION');
-const changeIntermediateCertification = createAction<string>('WORK_PROGRAM_CHANGE_INTERMEDIATE_CERTIFICATION');
+const deleteIntermediateCertification = createAction('WORK_PROGRAM_DELETE_INTERMEDIATE_CERTIFICATION');
+const addIntermediateCertification = createAction('WORK_PROGRAM_ADD_INTERMEDIATE_CERTIFICATION');
+const changeIntermediateCertification = createAction('WORK_PROGRAM_CHANGE_INTERMEDIATE_CERTIFICATION');
 
-const sendWorkProgramToArchive = createAction<string>('WORK_PROGRAM_SEND_TO_ARCHIVE');
-const sendWorkProgramToExpertise = createAction<string>('WORK_PROGRAM_SEND_TO_EXPERTIZE');
-const returnWorkProgramToWork = createAction<string>('WORK_PROGRAM_RETURN_TO_WORK');
-const approveWorkProgram = createAction<string>('WORK_PROGRAM_APPROVE');
+const sendWorkProgramToArchive = createAction('WORK_PROGRAM_SEND_TO_ARCHIVE');
+const sendWorkProgramToExpertise = createAction('WORK_PROGRAM_SEND_TO_EXPERTIZE');
+const returnWorkProgramToWork = createAction('WORK_PROGRAM_RETURN_TO_WORK');
+const approveWorkProgram = createAction('WORK_PROGRAM_APPROVE');
 
-const getComments = createAction<string>('WORK_PROGRAM_GET_COMMENTS');
-const setComments = createAction<string>('WORK_PROGRAM_SET_COMMENTS');
-const createComment = createAction<string>('WORK_PROGRAM_CREATE_COMMENT');
+const getComments = createAction('WORK_PROGRAM_GET_COMMENTS');
+const setComments = createAction('WORK_PROGRAM_SET_COMMENTS');
+const createComment = createAction('WORK_PROGRAM_CREATE_COMMENT');
 
-const pageDown = createAction<string>('WORK_PROGRAM_PAGE_DOWN');
+const pageDown = createAction('WORK_PROGRAM_PAGE_DOWN');
 
 const actions: WorkProgramActions = {
     pageDown,

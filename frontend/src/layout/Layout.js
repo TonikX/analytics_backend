@@ -38,6 +38,8 @@ class Layout extends React.Component {
         if (isAuth){
             this.props.actions.setAuthTrue();
             this.props.actions.refreshToken();
+        } else {
+            this.props.actions.fetchingFalse({destination: 'refresh'})
         }
     }
 

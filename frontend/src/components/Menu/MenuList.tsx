@@ -130,6 +130,12 @@ export default (groups: Array<string>) => {
             selectedIcon: EducationPlanSelectedIcon,
         },
         {
+            title: 'Учебные модули',
+            link: appRouter.getTrainingModulesRoute(),
+            icon: EducationPlanIcon,
+            selectedIcon: EducationPlanSelectedIcon,
+        },
+        {
             title: 'Учебные планы в направлении',
             link: appRouter.getEducationPlanInDirectionRoute(),
             icon: WorkProgramInDirectionIcon,

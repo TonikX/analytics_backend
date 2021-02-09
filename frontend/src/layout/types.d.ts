@@ -18,9 +18,9 @@ export interface GeneralActions {
 
 export interface layoutState {
     [fields.FETCHING]: { [key: string]: boolean };
-    [fields.ERRORS]: Array<string>;
-    [fields.SUCCESS_MESSAGES]: Array<string>;
-    [fields.USER_GROUPS]: Array<string>;
+    [fields.ERRORS]: Array;
+    [fields.SUCCESS_MESSAGES]: Array;
+    [fields.USER_GROUPS]: Array;
     [fields.IS_AUTH]: boolean;
     [fields.USERS]: Array<any>; //todo: create user type
 }

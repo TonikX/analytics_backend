@@ -12,6 +12,7 @@ const ENTITY_TO_ENTITY = 'entity-to-entity';
 const COMPETENCES = 'competences';
 const DIRECTION = 'direction';
 const EDUCATIONAL_PLAN = 'educational-plans';
+const TRAINING_MODULES = 'training-modules';
 const INDICATORS = 'indicators';
 const EDUCATIONAL_PLAN_IN_DIRECTION = 'educational-plans-in-direction';
 const EDUCATIONAL_PROGRAM = 'educational-program';
@@ -138,6 +139,10 @@ export default class RouterService {
 
     getEducationPlanRoute = () => {
         return SEPARATOR + EDUCATIONAL_PLAN;
+    };
+
+    getTrainingModulesRoute = () => {
+        return SEPARATOR + TRAINING_MODULES;
     };
 
     getExpertisesRoute = () => {

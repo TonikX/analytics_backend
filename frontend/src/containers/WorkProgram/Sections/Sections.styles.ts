@@ -25,5 +25,11 @@ export default (theme: Theme) => createStyles({
         '& td': {
             padding: '3px !important'
         }
+    },
+    smallInput: {
+        width: '70px'
+    },
+    errorText: {
+        color: '#d00000'
     }
 });

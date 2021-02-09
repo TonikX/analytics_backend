@@ -3,6 +3,7 @@ import {Redirect} from "react-router";
 import {Link} from 'react-router-dom';
 import PropTypes from "prop-types";
 import get from 'lodash/get';
+import {withRouter} from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -13,12 +14,25 @@ import {appRouter} from '../../service/router-service';
 
 import * as Enum from './enum';
 
+import AppConfig from "../../config/app-config-service";
+import {userService} from '../../service/user-service';
+
 import connect from './SignIn.connect';
 import styles from './SignIn.styles';
 
 class SignIn extends React.PureComponent{
     componentWillUnmount() {
         this.props.actions.signInPageDown();
+    }
+
+    componentDidMount() {
+        const splittedUrl = this.props.location.pathname.split('/');
+
+        if (splittedUrl.length === 4){
+            userService.setToken(splittedUrl[2]);
+            userService.setRefreshToken(splittedUrl[3]);
+            this.props.layoutActions.setAuthTrue();
+        }
     }
 
     changeLogin = (e) => {
@@ -48,8 +62,20 @@ class SignIn extends React.PureComponent{
 
         return(
             <div className={classes.root}
-                 onKeyPress={this.handleKeyPress}>
+                 onKeyPress={this.handleKeyPress}
+            >
                 <div className={classes.form}>
+                    <div className={classes.tabs}>
+                        <Typography className={classes.activeTab}>
+                            Вход
+                        </Typography>
+                        <Link to={appRouter.getSignUpRoute}>
+                            <Typography>
+                                Регистрация
+                            </Typography>
+                        </Link>
+                    </div>
+
                     <TextField label="Логин"
                                className={classes.textField}
                                onChange={this.changeLogin}
@@ -68,13 +94,18 @@ class SignIn extends React.PureComponent{
                         Войти
                     </Button>
 
-                    <Typography className={classes.noAccount}>
-                        Нет аккаунта?&nbsp;
-                        <Link to={appRouter.getSignUpRoute()}
-                              className={classes.link}>
-                            Регистрация
-                        </Link>
-                    </Typography>
+                    <div className={classes.noAccount}>
+                        <a href="https://op.itmo.ru/api/cas-redirect/"
+                              className={classes.link}
+                        >
+                            <Button color="primary"
+                                    variant="outlined"
+                                    className={classes.button}
+                            >
+                                Войти через ИСУ
+                            </Button>
+                        </a>
+                    </div>
                 </div>
             </div>
         );
@@ -88,4 +119,4 @@ SignIn.propTypes = {
     auth: PropTypes.bool,
 };
 
-export default withStyles(styles)(connect(SignIn));
+export default withRouter(withStyles(styles)(connect(SignIn)));

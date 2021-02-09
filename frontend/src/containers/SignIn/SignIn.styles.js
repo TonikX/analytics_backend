@@ -18,12 +18,35 @@ export default (theme) => ({
         marginBottom: '15px'
     },
     button: {
-        marginTop: '15px'
+        marginTop: '15px',
+        width: '100%'
     },
     noAccount: {
-        marginTop: '15px'
+        marginTop: '15px',
+        borderTop: '1px solid #ccc',
     },
     link: {
-        color: theme.palette.primary.main
+        textDecoration: 'none'
+    },
+    tabs: {
+        display: 'flex',
+        marginBottom: '20px',
+        '&>p': {
+            cursor: 'pointer',
+            width: '50%',
+            paddingBottom: '10px',
+            textAlign: 'center',
+        },
+        '& a': {
+            width: '50%',
+            textDecoration: 'none',
+            textAlign: 'center',
+            color: theme.palette.primary.main,
+            borderBottom: '1px solid #ccc',
+        }
+    },
+    activeTab: {
+        color: theme.palette.primary.main,
+        borderBottom: `2px solid ${theme.palette.primary.main}`,
     }
 });

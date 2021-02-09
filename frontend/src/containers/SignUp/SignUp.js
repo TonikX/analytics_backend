@@ -57,6 +57,17 @@ class SignUp extends React.PureComponent{
         return(
             <div className={classes.root}>
                 <div className={classes.form}>
+                    <div className={classes.tabs}>
+                        <Link to={appRouter.getSignInRoute}>
+                            <Typography>
+                                    Вход
+                            </Typography>
+                        </Link>
+                        <Typography className={classes.activeTab}>
+                            Регистрация
+                        </Typography>
+                    </div>
+
                     <TextField label="Логин"
                                className={classes.textField}
                                onChange={this.changeField(Enum.USERNAME_FIELD)}
