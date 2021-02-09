@@ -110,4 +110,4 @@ class  AuthenticateByCodeISU(ListAPIView):
             refresh_token = TokenObtainPairSerializer().get_token(user)
             access_token = AccessToken().for_user(user)
 
-            return HttpResponseRedirect(f"https://op.itmo.ru/sign-indsd/{access_token}/{refresh_token}")
+            return HttpResponseRedirect(f"https://op.itmo.ru/sign-in/{access_token}/{refresh_token}")
