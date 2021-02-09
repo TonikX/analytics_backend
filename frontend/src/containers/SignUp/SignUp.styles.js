@@ -25,5 +25,26 @@ export default (theme) => ({
     },
     link: {
         color: theme.palette.primary.main
+    },
+    tabs: {
+        display: 'flex',
+        marginBottom: '20px',
+        '&>p': {
+            cursor: 'pointer',
+            width: '50%',
+            paddingBottom: '10px',
+            textAlign: 'center',
+        },
+        '& a': {
+            width: '50%',
+            textDecoration: 'none',
+            color: theme.palette.primary.main,
+            textAlign: 'center',
+            borderBottom: '1px solid #ccc',
+        }
+    },
+    activeTab: {
+        color: theme.palette.primary.main,
+        borderBottom: `2px solid ${theme.palette.primary.main}`,
     }
 });
