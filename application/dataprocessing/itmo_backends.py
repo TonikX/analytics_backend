@@ -37,8 +37,10 @@ from django.contrib.auth import get_user_model
 # TODO: Подумать над реализацией авторизации
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.permissions import AllowAny
 
 class GetAuthenticationCodeISU(ListAPIView):
+    permission_classes = [AllowAny]
 
     def get(self, request):
 
@@ -52,6 +54,7 @@ class GetAuthenticationCodeISU(ListAPIView):
         return HttpResponseRedirect(cas_auth_uri)
 
 class  AuthenticateByCodeISU(ListAPIView):
+    permission_classes = [AllowAny]
 
     def get(self, request):
 
@@ -107,4 +110,4 @@ class  AuthenticateByCodeISU(ListAPIView):
             refresh_token = TokenObtainPairSerializer().get_token(user)
             access_token = AccessToken().for_user(user)
 
-            return HttpResponseRedirect(f"https://op.itmo.ru/login/{access_token}/{refresh_token}")
+            return HttpResponseRedirect(f"https://op.itmo.ru/sign-in/{access_token}/{refresh_token}")
