@@ -46,7 +46,7 @@ from .serializers import OnlineCourseSerializer, BibliographicReferenceSerialize
     IndicatorListSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
-from .serializers import WorkProgramSerializer
+from .serializers import WorkProgramSerializer, WorkProgramSerializerByName
 from .tables import FieldOfStudyWPTable
 
 
@@ -728,7 +728,7 @@ class WorkProgramCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def perform_create(self, serializer):
-            serializer.save(owner=self.request.user)
+        serializer.save(owner=self.request.user)
 
 
 class WorkProgramDestroyView(generics.DestroyAPIView):
@@ -1066,7 +1066,6 @@ class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
             return self.destroy(request, *args, **kwargs)
         except:
             return Response(status=400)
-
 
 
 
@@ -2099,6 +2098,20 @@ def CloneWorkProgramm(request):
     except:
         return Response(status=400)
 
+@api_view(['POST'])
+def InsertModule(request):
+    """
+    Апи для вставки модуля в другой блок
+    old_module_id - айди модуля блока дисциплины, который копируется для вставки в другой блок
+    block_id - айди блока в который производиться вставка копии
+    """
+    module_id = request.data.get('old_module_id')
+    block_id=request.data.get('block_id')
+    cloned_module = DisciplineBlockModule.clone_module(module_id)
+    cloned_module.descipline_block=DisciplineBlock.objects.get(pk=block_id)
+    cloned_module.save()
+    serializer = DisciplineBlockModuleDetailSerializer(cloned_module)
+    return Response(status=200, data=serializer.data)
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))

@@ -81,6 +81,7 @@ class WorkProgram(CloneMixin, models.Model):
     semester_hour = models.CharField(max_length=1024, blank=True, null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     work_status = models.CharField(max_length=1, choices=status_choise, verbose_name='Архив', default = 'w')
+    hours = models.IntegerField(blank=True, null=True, verbose_name="Сумма часов по разделам")
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
 
@@ -499,8 +500,19 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     def __str__(self):
         return (str(self.name) + str(self.descipline_block))
 
+    def clone_module(module_id):
+        module = DisciplineBlockModule.objects.get(pk=module_id)
+        clone_module = module.make_clone()
+        wp_in_module=WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=module)
+        for change in wp_in_module:
+            clone_change=change.make_clone(attrs={'discipline_block_module': clone_module})
+            wp_in_fos=WorkProgramInFieldOfStudy.objects.filter(work_program_change_in_discipline_block_module=change)
+            for wp in wp_in_fos:
+                clone_wp_in_fos = wp.make_clone(attrs={'work_program_change_in_discipline_block_module': clone_change})
+        return clone_module
 
-class WorkProgramChangeInDisciplineBlockModule(models.Model):
+
+class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
     '''
     Модель хранения блоков выбора в модуле
     '''
@@ -544,7 +556,7 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
         return (str(self.discipline_block_module) + str(self.work_program))
 
 
-class WorkProgramInFieldOfStudy(models.Model):
+class WorkProgramInFieldOfStudy(CloneMixin,models.Model):
     work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
                                                                        on_delete=models.CASCADE, related_name="zuns_for_cb")
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")

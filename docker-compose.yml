@@ -11,18 +11,6 @@ services:
             - POSTGRES_DB=analytics_db
         volumes:
             - ./dbs/postgres-data:/var/lib/postgresql
-#    mysql:
-#        image: mysql
-#        ports:
-#            - "3309:3306"
-#        restart: always
-#        environment:
-#            - MYSQL_ROOT_PASSWORD=admin
-#            - MYSQL_DATABASE=setupdb
-#            - MYSQL_USER=admin
-#            - MYSQL_PASSWORD=admin
-#        volumes:
-#            - ./dbs/mysql-data:/var/lib/mysql
     web:
         container_name: analytics_web
         build: ./application
