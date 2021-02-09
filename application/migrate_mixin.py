@@ -28,5 +28,5 @@ def restore_mixins(file):
 if __name__ == '__main__':
     file_name = 'workprogramsapp/models.py'
     remove_mixins(file_name)
-    os.system("python manage.py makemigrations")
+    os.system("python manage.py makemigrations workprogramsapp")
     restore_mixins(file_name)
