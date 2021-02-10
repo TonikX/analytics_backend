@@ -12,6 +12,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -20,15 +22,14 @@ import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 
 import EditedRow from "./EditedRow";
 
-import {SecondStepProps} from './types';
-import {workProgramSectionFields} from "../enum";
+import {SectionsProps} from './types';
+import {fields, workProgramSectionFields} from "../enum";
 
 import connect from './Sections.connect';
 import styles from './Sections.styles';
-import TextField from "@material-ui/core/TextField";
-import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
 
-class Sections extends React.PureComponent<SecondStepProps> {
+class Sections extends React.PureComponent<SectionsProps> {
     scrollBar: any = null;
 
     state = {
@@ -107,8 +108,15 @@ class Sections extends React.PureComponent<SecondStepProps> {
         ) * 1.1).toFixed(2);
     }
 
+    handleChangeTotalHours = (e: React.ChangeEvent) => {
+        this.props.actions.saveWorkProgram({
+            destination: fields.WORK_PROGRAM_ALL_HOURS,
+            value: get(e, 'target.value')
+        });
+    }
+
     render() {
-        const {classes, sections, isCanEdit} = this.props;
+        const {classes, sections, isCanEdit, totalHours} = this.props;
         const {createNewSectionMode} = this.state;
 
         const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
@@ -122,7 +130,7 @@ class Sections extends React.PureComponent<SecondStepProps> {
             parseFloat(totalPracticalClassesHours))
             * 1.1).toFixed(2);
 
-        const totalTotalHours = (parseFloat(totalSPOHours) + parseFloat(totalContactWorkHours)).toFixed(2);
+        const currentTotalHours = (parseFloat(totalSPOHours) + parseFloat(totalContactWorkHours)).toFixed(2);
 
         return (
             <div className={classes.secondStep}>
@@ -202,30 +210,49 @@ class Sections extends React.PureComponent<SecondStepProps> {
                                 <TableCell className={classes.headerCell}>
                                     {isCanEdit ?
                                         <Tooltip title="Всего должно делиться на 36 без остатка"
-                                                 disableHoverListener={parseFloat(totalTotalHours) % 36 === 0}
+                                                 disableHoverListener={parseFloat(totalHours) % 36 === 0}
                                         >
                                             <TextField variant="outlined"
                                                        size="small"
-                                                       defaultValue={totalTotalHours}
+                                                       defaultValue={totalHours}
                                                        type="number"
                                                        className={classes.smallInput}
-                                                       onChange={(e) => this.setState({totalHours: e.target.value})}
-                                                       error={parseFloat(totalTotalHours) % 36 !== 0}
+                                                       error={parseFloat(totalHours) % 36 !== 0}
+                                                       onBlur={this.handleChangeTotalHours}
                                             />
                                         </Tooltip>
                                         :
-                                        <>{totalTotalHours}</>
+                                        <>{totalHours}</>
                                     }
                                 </TableCell>
                                 {isCanEdit &&
                                     <Tooltip title="Пересчитать столбец СРО и всего часов основываясь на введеных значениях">
                                         <TableCell className={classes.headerCell}>
-                                            <Button onClick={this.updateValues(parseFloat(totalTotalHours))}>Пересчитать</Button>
+                                            <Button onClick={this.updateValues(parseFloat(totalHours))}>Пересчитать</Button>
                                         </TableCell>
                                     </Tooltip>
                                 }
                             </TableRow>
                         </Table>
+
+                        {isCanEdit &&
+                            <>
+                                {parseFloat(currentTotalHours) !== parseFloat(totalHours) && parseFloat(currentTotalHours) < parseFloat(totalHours) ?
+                                    <div className={classes.totalHourError}>
+                                        <Typography>
+                                            "Всего часов" {totalHours} не равно сумме часов по разделам {currentTotalHours}. У вас осталось часов - {(parseFloat(totalHours) - parseFloat(currentTotalHours)).toFixed(2)}
+                                        </Typography>
+                                    </div>
+                                    : parseFloat(currentTotalHours) !== parseFloat(totalHours) &&
+                                    <div className={classes.totalHourError}>
+                                        <Typography>
+                                            "Всего часов" {totalHours} не равно сумме часов по разделам {currentTotalHours}. У вас лишние часы, нужно убрать часов - {(parseFloat(currentTotalHours) - parseFloat(totalHours)).toFixed(2)}, либо измените "всего часов"
+                                        </Typography>
+                                    </div>
+                                }
+                            </>
+                        }
+
                     </Scrollbars>
                 </TableContainer>
 

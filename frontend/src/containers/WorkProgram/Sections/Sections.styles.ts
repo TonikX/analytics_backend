@@ -31,5 +31,15 @@ export default (theme: Theme) => createStyles({
     },
     errorText: {
         color: '#d00000'
-    }
+    },
+    totalHourError: {
+        maxWidth: '500px',
+        marginTop: '10px',
+        textAlign: 'left',
+        background: '#d00000',
+        boxShadow: '0px 0px 20px -2px rgba(160, 159, 159, 0.42)',
+        color: 'white',
+        padding: '10px',
+        marginLeft: 'auto'
+    },
 });
