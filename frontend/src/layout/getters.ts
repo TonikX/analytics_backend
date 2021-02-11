@@ -35,3 +35,9 @@ export const isFetchingComponentByKey = (state: rootState, key: string) => {
 
     return fetching[key];
 };
+
+export const isFetchingByKey = (state: rootState, key: string) => {
+    const fetching = getFetching(state);
+
+    return fetching[key];
+};

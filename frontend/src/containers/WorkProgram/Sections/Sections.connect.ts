@@ -12,6 +12,7 @@ import {fields} from "../enum";
 const mapStateToProps = (state:rootState) => {
     return {
         sections: getWorkProgramField(state, fields.WORK_PROGRAM_SECTIONS),
+        totalHours: getWorkProgramField(state, fields.WORK_PROGRAM_ALL_HOURS),
         isCanEdit: isCanEdit(state),
     };
 };

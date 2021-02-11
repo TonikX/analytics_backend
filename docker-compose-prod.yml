@@ -7,9 +7,9 @@ services:
         ports:
             - "6435:5432"
         environment:
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=poi987Qw
-            - POSTGRES_DB=analytics_db
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DB=${POSTGRES_DB}
         volumes:
             - ./dbs/postgres-data-prod:/var/lib/postgresql
     backend:

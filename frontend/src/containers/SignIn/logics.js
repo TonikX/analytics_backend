@@ -34,6 +34,7 @@ const signIn = createLogic({
 
                 dispatch(actions.fetchingSuccess(['Вы успешно авторизировались!']));
                 dispatch(actions.setAuthTrue());
+                dispatch(actions.getUserGroups());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(['Неверный логин или пароль']));

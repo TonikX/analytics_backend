@@ -82,7 +82,7 @@ class Folders extends React.PureComponent<FoldersProps> {
 
         return folder[FoldersFields.WORK_PROGRAM_IN_FOLDER].map(item =>
             <Link target="_blank"
-                  to={appRouter.getWorkProgramLink(item[FoldersFields.WORK_PROGRAM][WorkProgramGeneralFields.CODE])}
+                  to={appRouter.getWorkProgramLink(item[FoldersFields.WORK_PROGRAM][WorkProgramGeneralFields.ID])}
                   className={classes.workProgramLink}
             >
                 <div className={classes.workProgram}>

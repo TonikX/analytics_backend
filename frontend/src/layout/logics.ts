@@ -76,6 +76,8 @@ const refreshToken = createLogic({
     type: actions.refreshToken.type,
     latest: true,
     process({getState, action}, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: 'refresh'}));
+
         service.refreshToken()
             .then((res) => {
                 const token = get(res, 'data.access', null);
@@ -84,10 +86,13 @@ const refreshToken = createLogic({
                 dispatch(actions.getUserGroups());
                 dispatch(profileActions.getFolders());
                 dispatch(actions.fetchingSuccess());
+
+                dispatch(actions.fetchingFalse({destination: 'refresh'}));
             })
             .catch((err) => {
                 dispatch(actions.setAuthFalse());
                 userService.logout();
+                dispatch(actions.fetchingFalse({destination: 'refresh'}));
             })
             .then(() => {
                 return done();

@@ -1,10 +1,11 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import actions from "./actions";
-import {isFetching, getErrors, getSuccessMessages, getAuth, getUserGroups} from './getters';
+import {isFetching, getErrors, getSuccessMessages, getAuth, getUserGroups, isFetchingByKey} from './getters';
 const mapStateToProps = (state) => {
     return {
         fetching: isFetching(state),
+        isFetchingRefreshToken: isFetchingByKey(state, 'refresh'),
         errors: getErrors(state),
         successMessages: getSuccessMessages(state),
         auth: getAuth(state),

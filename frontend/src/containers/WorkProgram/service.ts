@@ -19,7 +19,7 @@ class WorkProgramService extends AnalyticsService{
     }
 
     getWorkProgramByCode(code: string){
-        return this.get(`/api/workprogram/itemrelations/${code}/`);
+        return this.get(`/api/workprogram/fullitemrelations/${code}/`);
     }
 
     getWorkProgramEvaluationTools(id: string){

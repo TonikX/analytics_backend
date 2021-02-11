@@ -4,6 +4,7 @@ import actions from "./actions";
 import * as Enum from './enum';
 import {getFieldValue} from './getters';
 import {getAuth} from "../../layout/getters";
+import layoutActions from '../../layout/actions';
 
 const mapStateToProps = (state) => {
     return {
@@ -15,6 +16,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     actions: bindActionCreators(actions, dispatch),
+    layoutActions: bindActionCreators(layoutActions, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps);

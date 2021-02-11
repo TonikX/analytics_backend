@@ -8,6 +8,8 @@ dbs
 /application/discipline_code
 <<<<<<< HEAD
 **/.env
+**/.env.production
 .env
 /application/export
+nginx/ssl/data/
 

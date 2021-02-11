@@ -12,6 +12,7 @@ const ENTITY_TO_ENTITY = 'entity-to-entity';
 const COMPETENCES = 'competences';
 const DIRECTION = 'direction';
 const EDUCATIONAL_PLAN = 'educational-plans';
+const TRAINING_MODULES = 'training-modules';
 const INDICATORS = 'indicators';
 const EDUCATIONAL_PLAN_IN_DIRECTION = 'educational-plans-in-direction';
 const EDUCATIONAL_PROGRAM = 'educational-program';
@@ -140,6 +141,10 @@ export default class RouterService {
         return SEPARATOR + EDUCATIONAL_PLAN;
     };
 
+    getTrainingModulesRoute = () => {
+        return SEPARATOR + TRAINING_MODULES;
+    };
+
     getExpertisesRoute = () => {
         return SEPARATOR + EXPERTISES;
     };
@@ -157,15 +162,15 @@ export default class RouterService {
     };
 
     getWorkProgramRoute = () => {
-        return SEPARATOR + WORK_PROGRAM + SEPARATOR + ':code';
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + ':id';
     };
 
     getEducationPlanDetailRoute = () => {
         return SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + ':id';
     };
 
-    getWorkProgramLink = (code: string) => {
-        return SEPARATOR + WORK_PROGRAM + SEPARATOR + code;
+    getWorkProgramLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id;
     };
 
     getPlanDetailLink = (id: ReactText) => {

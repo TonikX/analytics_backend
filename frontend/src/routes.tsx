@@ -11,6 +11,7 @@ import SubjectArea from './containers/SubjectArea';
 import Prerequisites from './containers/TrainingEntities';
 import Competences from './containers/Competences';
 import Direction from './containers/Direction';
+import TrainingModules from './containers/TrainingModules';
 import EducationalPlan from './containers/EducationalPlan';
 import EducationPlanInDirection from './containers/EduationPlanInDirection';
 import EducationPlanDetail from './containers/EducationalPlan/Detail';
@@ -156,6 +157,9 @@ export default () => (
             </AuthRoute>
             <AuthRoute path={routerService.getEducationPlanRoute()}>
                 <EducationalPlan />
+            </AuthRoute>
+            <AuthRoute path={routerService.getTrainingModulesRoute()}>
+                <TrainingModules />
             </AuthRoute>
             <Route path={routerService.getForbiddenPage()}>
                 <ForbiddenPage />

@@ -14,7 +14,7 @@ import {getTrainingEntitiesForSelect} from "../../TrainingEntities/getters";
 const mapStateToProps = (state: rootState) => {
     return {
         isOpen: isOpenDialog(state),
-        trainingEntity: getDialogData(state),
+        trainingModule: getDialogData(state),
         trainingEntitiesList: getTrainingEntitiesForSelect(state),
     };
 };

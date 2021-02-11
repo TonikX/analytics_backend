@@ -2,30 +2,30 @@ import {createAction} from "@reduxjs/toolkit";
 
 import {RolesActions} from './types';
 
-const getRolesList = createAction<string>('GET_ROLES');
-const setRolesList = createAction<string>('SET_ROLES');
+const getRolesList = createAction('GET_ROLES');
+const setRolesList = createAction('SET_ROLES');
 
-const getRole = createAction<string>('GET_ROLE');
-const setRole = createAction<string>('SET_ROLE');
+const getRole = createAction('GET_ROLE');
+const setRole = createAction('SET_ROLE');
 
-const createNewRole = createAction<string>('CREATE_NEW_ROLES');
-const changeRole = createAction<string>('CHANGE_ROLE');
-const deleteRole = createAction<string>('DELETE_ROLE');
+const createNewRole = createAction('CREATE_NEW_ROLES');
+const changeRole = createAction('CHANGE_ROLE');
+const deleteRole = createAction('DELETE_ROLE');
 
-const openDialog = createAction<string>('OPEN_ROLES_DIALOG');
-const closeDialog = createAction<string>('CLOSE_ROLES_DIALOG');
+const openDialog = createAction('OPEN_ROLES_DIALOG');
+const closeDialog = createAction('CLOSE_ROLES_DIALOG');
 
-const getSkills = createAction<string>('ROLE_GET_SKILLS');
-const setSkills = createAction<string>('ROLE_SET_SKILLS');
-const createSkill = createAction<string>('ROLE_CREATE_SKILL');
-const changeSkill = createAction<string>('ROLE_CHANGE_SKILL');
-const deleteSkill = createAction<string>('ROLE_DELETE_SKILL');
+const getSkills = createAction('ROLE_GET_SKILLS');
+const setSkills = createAction('ROLE_SET_SKILLS');
+const createSkill = createAction('ROLE_CREATE_SKILL');
+const changeSkill = createAction('ROLE_CHANGE_SKILL');
+const deleteSkill = createAction('ROLE_DELETE_SKILL');
 
-const changeSearchQuery = createAction<string>('ROLES_CHANGE_SEARCH_QUERY');
-const changeCurrentPage = createAction<string>('ROLES_CHANGE_CURRENT_PAGE');
-const changeAllCount = createAction<string>('ROLES_CHANGE_ALL_COUNT');
-const changeSorting = createAction<string>('ROLES_CHANGE_SORTING');
-const changeFilteredRole = createAction<string>('ROLES_CHANGE_FILTERED_ROLE');
+const changeSearchQuery = createAction('ROLES_CHANGE_SEARCH_QUERY');
+const changeCurrentPage = createAction('ROLES_CHANGE_CURRENT_PAGE');
+const changeAllCount = createAction('ROLES_CHANGE_ALL_COUNT');
+const changeSorting = createAction('ROLES_CHANGE_SORTING');
+const changeFilteredRole = createAction('ROLES_CHANGE_FILTERED_ROLE');
 
 const actions: RolesActions = {
     getRole,
