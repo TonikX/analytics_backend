@@ -1,0 +1,74 @@
+version: '3.3'
+
+services:
+  db:
+    container_name: analytics_db_prod
+    image: postgres
+    ports:
+      - "6435:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=poi987Qw
+      - POSTGRES_DB=analytics_db
+    networks:
+      nginx_net:
+    volumes:
+      - ./dbs/postgres-data-prod:/var/lib/postgresql
+  backend:
+    container_name: analytics_backend_prod
+    build:
+      context: ./application
+      dockerfile: Dockerfile-prod
+    command: bash -c "sleep 3 &&
+      bash -c "pip uninstall -y python3-openid &&
+      pip uninstall -y social-auth-app-django &&
+      pip install django-rest-framework-social-oauth2 &&
+      python manage.py makemigrations --noinput &&
+      python manage.py migrate --noinput &&
+      python manage.py collectstatic --noinput &&
+      gunicorn analytics_project.wsgi -b 0.0.0.0:8001 --workers 2";
+    networks:
+      nginx_net:
+    volumes:
+      - ./application:/application
+    expose:
+      - 8000
+    restart: always
+    links:
+      - db
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      nginx_net:
+    volumes:
+      - ./application/media:/backend/src/media
+      - ./application/static-backend:/backend/src/static-backend
+      - ./frontend/build:/frontend/src
+      - ./nginx/ssl:/etc/nginx/conf.d
+      - ./nginx/ssl/data/certbot/conf:/etc/letsencrypt
+      - ./nginx/ssl/data/certbot/www:/var/www/certbot
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+    depends_on:
+      - backend
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    restart: unless-stopped #+++
+    networks:
+      nginx_net:
+    volumes:
+      - ./nginx/ssl/data/certbot/conf:/etc/letsencrypt
+      - ./nginx/ssl/data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+volumes:
+  postgres_data:
+
+
+networks:
+  nginx_net:
+
+
