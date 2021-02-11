@@ -1,6 +1,6 @@
 import get from 'lodash/get';
 
-import {rootState} from '../../store/reducers';
+import {rootState} from '../../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 

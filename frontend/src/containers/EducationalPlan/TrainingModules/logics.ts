@@ -1,7 +1,7 @@
 import {createLogic} from "redux-logic";
 import get from 'lodash/get';
 
-import actions from '../../layout/actions';
+import actions from '../../../layout/actions';
 import trainingModuleActions from './actions';
 
 import Service from './service';

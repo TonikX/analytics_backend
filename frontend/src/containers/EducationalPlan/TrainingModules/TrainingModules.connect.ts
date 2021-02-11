@@ -4,9 +4,9 @@ import {bindActionCreators} from "redux";
 import actions from "./actions";
 import {getTrainingModulesList, getCurrentPage, getSearchQuery, getAllCount, getSortingMode, getSortingField} from './getters';
 
-import {rootState} from "../../store/reducers";
-import {isUserInOpGroup} from "../../common/userRights";
-import {getUserGroups} from "../../layout/getters";
+import {rootState} from "../../../store/reducers";
+import {isUserInOpGroup} from "../../../common/userRights";
+import {getUserGroups} from "../../../layout/getters";
 
 export const mapStateToProps = (state: rootState) => {
     return {

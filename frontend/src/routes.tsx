@@ -11,7 +11,7 @@ import SubjectArea from './containers/SubjectArea';
 import Prerequisites from './containers/TrainingEntities';
 import Competences from './containers/Competences';
 import Direction from './containers/Direction';
-import TrainingModules from './containers/TrainingModules';
+import TrainingModules from './containers/EducationalPlan/TrainingModules';
 import EducationalPlan from './containers/EducationalPlan';
 import EducationPlanInDirection from './containers/EduationPlanInDirection';
 import EducationPlanDetail from './containers/EducationalPlan/Detail';

@@ -17,17 +17,19 @@ import EditIcon from "@material-ui/icons/EditOutlined";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 
-import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
-import SortingButton from "../../components/SortingButton";
-import Search from "../../components/Search";
-import {SortingType} from "../../components/SortingButton/types";
+import ConfirmDialog from "../../../components/ConfirmDialog/ConfirmDialog";
+import SortingButton from "../../../components/SortingButton";
+import Search from "../../../components/Search";
+import {SortingType} from "../../../components/SortingButton/types";
 
-import {DirectionFields} from "../Direction/enum";
-import {DirectionType} from "../Direction/types";
+import {DirectionFields} from "../../Direction/enum";
+import {DirectionType} from "../../Direction/types";
+
+import TrainingModuleCreateModal from "./TrainingModuleCreateModal";
 
 import {TrainingModulesProps, TrainingModuleType} from './types';
 import {TrainingModuleFields} from "./enum";
-import TrainingModuleCreateModal from "./TrainingModuleCreateModal";
+import {typesListObject} from './constants';
 
 import connect from './TrainingModules.connect';
 import styles from './TrainingModules.styles';
@@ -126,6 +128,12 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                         />
                                     </TableCell>
                                     <TableCell>
+                                        Тип
+                                        <SortingButton changeMode={this.changeSorting(TrainingModuleFields.TYPE)}
+                                                       mode={sortingField === TrainingModuleFields.TYPE ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
                                         Направленность ОП (УП)
                                     </TableCell>
                                     <TableCell>
@@ -139,6 +147,8 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                 {trainingModules.map((trainingModule: TrainingModuleType) => {
                                     const profile = get(trainingModule, [TrainingModuleFields.DISCIPLINE, TrainingModuleFields.ACADEMIC_PLAN, TrainingModuleFields.EDUCATIONAL_PROFILE], '');
                                     const plans = get(trainingModule, [TrainingModuleFields.DISCIPLINE, TrainingModuleFields.ACADEMIC_PLAN, TrainingModuleFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY], []);
+                                    // @ts-ignore
+                                    const type = typesListObject[trainingModule[TrainingModuleFields.TYPE]];
 
                                     return (
                                         <TableRow key={trainingModule[TrainingModuleFields.ID]}>
@@ -147,6 +157,9 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                             </TableCell>
                                             <TableCell>
                                                 {trainingModule[TrainingModuleFields.DESCRIPTION]}
+                                            </TableCell>
+                                            <TableCell>
+                                                {type}
                                             </TableCell>
                                             <TableCell>
                                                 {profile}

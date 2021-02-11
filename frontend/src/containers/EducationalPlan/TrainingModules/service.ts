@@ -1,6 +1,6 @@
-import {getSortingSymbol} from "../../common/utils";
-import AnalyticsService from "../../service/analytics-service";
-import {SortingType} from "../../components/SortingButton/types";
+import {getSortingSymbol} from "../../../common/utils";
+import AnalyticsService from "../../../service/analytics-service";
+import {SortingType} from "../../../components/SortingButton/types";
 import {ChangeTrainingModulePayload, CreateTrainingModulePayload} from "./types";
 import {TrainingModuleFields} from "./enum";
 

@@ -21,5 +21,14 @@ export default (theme: Theme) => createStyles({
         marginRight: 'auto',
         textDecoration: 'none',
         color: theme.palette.primary.main,
+    },
+    selectorWrap: {
+        width: '100%',
+        '& .MuiInputLabel-shrink': {
+            transform: 'translate(14px, -6.5px) scale(0.75) !important',
+        },
+        '& .MuiOutlinedInput-notchedOutline legend': {
+            width: '35px !important'
+        }
     }
 });

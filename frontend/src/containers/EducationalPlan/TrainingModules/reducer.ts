@@ -1,4 +1,4 @@
-import createReducer from "../../store/createReducer";
+import createReducer from "../../../store/createReducer";
 import {fields} from './enum';
 import actions from "./actions";
 

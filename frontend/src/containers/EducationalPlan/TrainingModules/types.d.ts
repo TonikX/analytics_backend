@@ -1,11 +1,11 @@
 import {ActionCreatorWithoutPayload, ActionCreatorWithPayload} from "@reduxjs/toolkit";
 import {WithStyles} from "@material-ui/core";
 
-import {SortingType} from "../../components/SortingButton/types";
+import {SortingType} from "../../../components/SortingButton/types";
 
 import {mapStateToProps, mapDispatchToProps} from "./TrainingModules.connect";
 import {TrainingModuleFields, fields} from './enum';
-import {DirectionType} from "../Direction/types";
+import {DirectionType} from "../../Direction/types";
 
 import styles from "./TrainingModules.styles";
 
@@ -64,6 +64,7 @@ export type TrainingModuleType = {
     [TrainingModuleFields.ID]: number;
     [TrainingModuleFields.NAME]: string;
     [TrainingModuleFields.DESCRIPTION]: string;
+    [TrainingModuleFields.TYPE]: string;
     [TrainingModuleFields.DISCIPLINE]: {
         [TrainingModuleFields.ACADEMIC_PLAN]: {
             [TrainingModuleFields.EDUCATIONAL_PROFILE]: string;
