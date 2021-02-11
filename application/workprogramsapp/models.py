@@ -511,7 +511,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         ('optional_disciplines', 'optional_disciplines'),
     ]
 
-    type = models.CharField(choices=TYPES, max_length=100, default='1')
+    type = models.CharField(choices=TYPES, max_length=100, default='faculty_module')
     name = models.CharField(max_length=1024)
     descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name='Модуль в блоке',
                                          related_name="modules_in_discipline_block", blank=True, null=True)
