@@ -70,5 +70,14 @@ export default (theme: Theme) => createStyles({
             color: 'rgb(51, 51, 51) !important',
             textDecoration: 'none'
         }
+    },
+    displayFlex: {
+        display: 'flex',
+    },
+    headerCellTitle: {
+        textAlign: 'center',
+        lineHeight: '1.2',
+        display: 'flex',
+        alignItems: 'center'
     }
 });

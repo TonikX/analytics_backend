@@ -14,7 +14,6 @@ import {appRouter} from '../../service/router-service';
 
 import * as Enum from './enum';
 
-import AppConfig from "../../config/app-config-service";
 import {userService} from '../../service/user-service';
 
 import connect from './SignIn.connect';

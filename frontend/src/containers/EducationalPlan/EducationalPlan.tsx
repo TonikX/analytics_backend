@@ -150,8 +150,8 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                         <Table stickyHeader size='small'>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>
-                                        Дата согласования
+                                    <TableCell className={classes.displayFlex}>
+                                        <div className={classes.headerCellTitle}> Дата <br/> согласования </div>
                                         <SortingButton changeMode={this.changeSorting(EducationalPlanFields.APPROVAL_DATE)}
                                                        mode={sortingField === EducationalPlanFields.APPROVAL_DATE ? sortingMode : ''}
                                         />
@@ -168,8 +168,8 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                        mode={sortingField === EducationalPlanFields.PROFILE ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell>
-                                        Год набора
+                                    <TableCell className={classes.displayFlex}>
+                                        <div className={classes.headerCellTitle}> Год <br/> набора </div>
                                         <SortingButton changeMode={this.changeSorting(EducationalPlanFields.YEAR)}
                                                        mode={sortingField === EducationalPlanFields.YEAR ? sortingMode : ''}
                                         />
@@ -180,8 +180,8 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                        mode={sortingField === EducationalPlanFields.QUALIFICATION ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell>
-                                        Форма обучения
+                                    <TableCell className={classes.displayFlex}>
+                                        <div className={classes.headerCellTitle}> Форма <br/> обучения </div>
                                         <SortingButton changeMode={this.changeSorting(EducationalPlanFields.EDUCATION_FORM)}
                                                        mode={sortingField === EducationalPlanFields.EDUCATION_FORM ? sortingMode : ''}
                                         />

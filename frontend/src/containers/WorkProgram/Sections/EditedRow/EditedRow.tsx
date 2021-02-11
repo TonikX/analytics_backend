@@ -41,9 +41,9 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
         const {section} = this.state;
 
         const contactWork = this.calculateContactWork();
-        const spo = parseInt(section[workProgramSectionFields.SPO]);
+        const spo = parseFloat(section[workProgramSectionFields.SPO]);
 
-        return (contactWork ? Number(contactWork) : 0) + (spo ? spo : 0);
+        return (contactWork ? parseFloat(contactWork) : 0) + (spo ? spo : 0);
     }
 
     setEditModeTrue = () => {
@@ -155,7 +155,6 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     }
                 </TableCell>
                 <TableCell className={classes.centerCell}>
-
                     {isEditMode ?
                         <TextField variant="outlined"
                                    size="small"

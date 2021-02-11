@@ -3,10 +3,11 @@ import {Section} from '../types';
 import {WithStyles} from "@material-ui/core";
 import styles from "./Sections.styles";
 
-export interface SecondStepProps extends WithStyles<typeof styles> {
+export interface SectionsProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
     sections: Array<Section>;
     isCanEdit: boolean;
+    totalHours: string;
 }
 
 
