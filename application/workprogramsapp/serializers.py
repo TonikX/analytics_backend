@@ -474,7 +474,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'change_blocks_of_work_programs_in_modules']
+        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules']
         extra_kwargs = {
             'change_blocks_of_work_programs_in_modules': {'required': False}
         }
@@ -483,7 +483,7 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'description','descipline_block']
+        fields = ['id', 'name', 'type', 'description','descipline_block']
 
 
 class DisciplineBlockSerializer(serializers.ModelSerializer):

@@ -488,6 +488,30 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     '''
     Модель модуля блока дисциплин
     '''
+
+    TYPES = [
+        ('Universal_module', 'Universal_module'),
+        ('Physical Culture', 'Physical Culture'),
+        ('Philosophy_Thinking"', 'Philosophy_Thinking"'),
+        ('Digital_culture', 'Digital_culture'),
+        ('Entrepreneurial_culture', 'Entrepreneurial_culture'),
+        ('Soft_Skills', 'Soft_Skills'),
+        ('OGNP', 'OGNP'),
+        ('Natural_science_+module', 'Natural_science_module'),
+        ('General_professional_module', 'General_professional_module'),
+        ('Elective_module', 'Elective_module'),
+        ('Interdisciplinary_module_of_the_faculty', 'Interdisciplinary_module_of_the_faculty'),
+        ('Faculty_module', 'Faculty_module'),
+        ('Profile_professional_module', 'Profile_professional_module'),
+        ('Math_module', 'Math_module'),
+        ('Digital_culture_in_professional_activities', 'Digital_culture_in_professional_activities'),
+        ('Specialization_module', 'Specialization_module'),
+        ('Gia', 'Gia'),
+        ('Practice', 'Practice'),
+        ('Optional_disciplines', 'Optional_disciplines'),
+    ]
+
+    type = models.CharField(choices=TYPES, max_length=100, default='1')
     name = models.CharField(max_length=1024)
     descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name='Модуль в блоке',
                                          related_name="modules_in_discipline_block", blank=True, null=True)
