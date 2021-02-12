@@ -38,6 +38,7 @@ from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.permissions import AllowAny
+from django.contrib.auth.models import Group
 
 class GetAuthenticationCodeISU(ListAPIView):
     permission_classes = [AllowAny]
@@ -112,7 +113,7 @@ class  AuthenticateByCodeISU(ListAPIView):
 
                 groups = ["rpd_developer", "education_plan_developer", "op_leader", "student"]
                 for group in groups:
-                    User.groups.add(group)
+                    User.groups.add(Group.objects.get(name=group))
 
 
             # Авторизация
