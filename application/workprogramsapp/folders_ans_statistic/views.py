@@ -10,6 +10,7 @@ from workprogramsapp.folders_ans_statistic.serializers import FolderSerializer, 
       ModuleInFolderSerializer
 from workprogramsapp.permissions import IsOwnerOfFolder, IsOwnerOfFolderWithWorkProgramm, \
     IsOwnerOfFolderWithAcademicPlan, IsOwnerOfFolderWithDisciplineBlockModule
+from rest_framework.permissions import IsAuthenticated
 
 
 # РПД
