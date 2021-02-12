@@ -20,7 +20,7 @@ class FoldersListView(generics.ListAPIView):
     """
     queryset = Folder.objects.all()
     serializer_class = FolderSerializer
-    permission_classes = [IsOwnerOfFolder]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
         return Folder.objects.filter(owner=self.request.user)
