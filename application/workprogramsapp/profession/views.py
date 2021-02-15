@@ -1,31 +1,22 @@
-from rest_framework import generics
 from rest_framework import filters
-from django_filters.rest_framework import DjangoFilterBackend
-from django.db.models.query import QuerySet
-from itertools import groupby
-from operator import itemgetter
+from rest_framework import generics
+# Пагинация
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-
+from dataprocessing.models import Items
+from workprogramsapp.models import Profession, SkillsOfProfession, Role, SkillsOfRole
 # Права доступа
-from workprogramsapp.permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
+# Сериализаторы
+from workprogramsapp.profession.serializers import ProfessionSerializer, ProfessionCreateSerializer, \
+    SkillsOfProfessionInProfessionSerializer, SkillsOfProfessionInProfessionCreateSerializer, \
+    RoleSerializer, RoleCreateSerializer, SkillsOfRoleInRoleSerializer, SkillsOfRoleInRoleCreateSerializer, \
+    ItemWithProfessionsSerializer, ItemWithRolesSerializer
 
 
 # Модели данных
-
-from workprogramsapp.models import Profession, SkillsOfProfession, Role, SkillsOfRole
-from dataprocessing.models import Items
-
-
-# Сериализаторы
-from workprogramsapp.profession.serializers import ProfessionSerializer, ProfessionCreateSerializer, SkillsOfProfessionInProfessionSerializer, SkillsOfProfessionInProfessionCreateSerializer, \
-    RoleSerializer, RoleCreateSerializer, SkillsOfRoleInRoleSerializer, SkillsOfRoleInRoleCreateSerializer, ItemWithProfessionsSerializer, ItemWithRolesSerializer
-
-
-# Пагинация
-from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
-from django.core.paginator import Paginator
 
 
 # Блок реализации API для CRUD интерфейсов
@@ -33,6 +24,15 @@ from django.core.paginator import Paginator
 class ProfessionsListApi(generics.ListAPIView):
     queryset = Profession.objects.all()
     serializer_class = ProfessionSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class ProfessionsListWithoutPaginationApi(generics.ListAPIView):
+    queryset = Profession.objects.all()
+    serializer_class = ProfessionSerializer
+    pagination_class = None
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title']
     permission_classes = [IsRpdDeveloperOrReadOnly]

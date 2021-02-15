@@ -19,7 +19,7 @@ from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderVie
     ModuleInFolderView, AddToFolderModuleView, \
     RemoveFromFolderModuleView
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, \
-    ProfessionUpdateView, ItemWithProfessions, ItemWithRoles
+    ProfessionUpdateView, ItemWithProfessions, ItemWithRoles, ProfessionsListWithoutPaginationApi
 from .profession.views import RolesListApi, RoleCreateAPIView, RoleDetailsView, RoleDestroyView, RoleUpdateView
 from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfessionInProfessionCreateAPIView, \
     SkillsOfProfessionInProfessionUpdateView, SkillsOfProfessionInProfessionDestroyView
@@ -312,6 +312,7 @@ urlpatterns = [
 
     # Работа с профессиями
     path('api/professions/', ProfessionsListApi.as_view()),
+    path('api/professions/without_pagination', ProfessionsListWithoutPaginationApi.as_view()),
     path('api/profession/create', ProfessionCreateAPIView.as_view()),
     path('api/profession/detail/<int:pk>', ProfessionDetailsView.as_view()),
     path('api/profession/delete/<int:pk>', ProfessionDestroyView.as_view()),
