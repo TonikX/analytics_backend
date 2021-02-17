@@ -52,6 +52,11 @@ class WorkProgram(CloneMixin, models.Model):
         ('a', 'archive'),
     )
 
+    extra_points_choise = (
+        ('0', '0'),
+        ('3', '3'),
+    )
+
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     discipline_code = models.CharField(max_length=1024, blank=True, null=True)
     subject_code = models.CharField(max_length=1024, blank=True, null=True)
@@ -82,6 +87,8 @@ class WorkProgram(CloneMixin, models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     work_status = models.CharField(max_length=1, choices=status_choise, verbose_name='Архив', default = 'w')
     hours = models.IntegerField(blank=True, null=True, verbose_name="Сумма часов по разделам")
+    extra_points = models.CharField(choices=extra_points_choise, max_length=1, verbose_name='Квалификация',
+                                    blank=True, null=True)
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
 
