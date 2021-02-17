@@ -536,9 +536,15 @@ class AcademicPlanCreateSerializer(serializers.ModelSerializer):
         model = AcademicPlan
         fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'author']
 
+class WorkProgramShortForExperiseSerializer(serializers.ModelSerializer):
+    """Сериализатор рабочих программ"""
 
-class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title', 'discipline_code', 'qualification', 'prerequisites', 'outcomes']
 
+class WorkProgramChangeInDisciplineBlockModuleSerializerDetail(serializers.ModelSerializer):
+    work_program=WorkProgramShortForExperiseSerializer(many=True)
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
         fields = "__all__"
@@ -675,12 +681,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
         return WorkProgram.objects.create(**validated_data)
 
 
-class WorkProgramShortForExperiseSerializer(serializers.ModelSerializer):
-    """Сериализатор рабочих программ"""
 
-    class Meta:
-        model = WorkProgram
-        fields = ['id', 'title', 'discipline_code', 'qualification', 'prerequisites', 'outcomes']
 
 
 class WorkProgramSerializerByName(serializers.ModelSerializer):
