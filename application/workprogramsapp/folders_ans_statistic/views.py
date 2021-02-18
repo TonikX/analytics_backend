@@ -10,6 +10,7 @@ from workprogramsapp.folders_ans_statistic.serializers import FolderSerializer, 
       ModuleInFolderSerializer
 from workprogramsapp.permissions import IsOwnerOfFolder, IsOwnerOfFolderWithWorkProgramm, \
     IsOwnerOfFolderWithAcademicPlan, IsOwnerOfFolderWithDisciplineBlockModule
+from rest_framework.permissions import IsAuthenticated
 
 
 # РПД
@@ -19,6 +20,7 @@ class FoldersListView(generics.ListAPIView):
     """
     queryset = Folder.objects.all()
     serializer_class = FolderSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
         return Folder.objects.filter(owner=self.request.user)
@@ -31,6 +33,7 @@ class WorkProgramInFolderView(generics.ListAPIView):
     """
     queryset = WorkProgramInFolder.objects.all()
     serializer_class = WorkProgramInFolderSerializer
+    permission_classes = [IsOwnerOfFolder]
 
     def get_queryset(self, *args, **kwargs):
         try:
@@ -45,6 +48,7 @@ class CreateFolderView(generics.CreateAPIView):
     """
     queryset = Folder.objects.all()
     serializer_class = FolderCreateSerializer
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -96,6 +100,7 @@ class AcademicPlanInFolderView(generics.ListAPIView):
     """
     queryset = AcademicPlanInFolder.objects.all()
     serializer_class = AcademicPlanInFolderSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
         try:
@@ -130,6 +135,7 @@ class ModuleInFolderView(generics.ListAPIView):
     """
     queryset = DisciplineBlockModuleInFolder.objects.all()
     serializer_class = ModuleInFolderSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
         try:

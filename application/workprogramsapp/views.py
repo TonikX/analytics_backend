@@ -1672,7 +1672,7 @@ class DocxFileExportView(generics.ListAPIView):
     """Возвращает РПД в формате docx в браузере"""
     queryset = WorkProgram.objects.all()
     serializer = WorkProgramSerializer
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         tpl = DocxTemplate('/application/static-backend/export_template/RPD_shablon_2020_new.docx')

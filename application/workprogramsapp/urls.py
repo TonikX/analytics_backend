@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.urls import path
 
 from .educational_program.views import DepartmentCreateAPIView, DepartmentListAPIView, DepartmentDetailsView, \
-    DepartmentDestroyView, DepartmentUpdateView
+    DepartmentDestroyView, DepartmentUpdateView, EducationalProgramRankingByProfession
 # Контроллеры
 from .educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
     EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView
@@ -19,7 +19,7 @@ from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderVie
     ModuleInFolderView, AddToFolderModuleView, \
     RemoveFromFolderModuleView
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, \
-    ProfessionUpdateView, ItemWithProfessions, ItemWithRoles
+    ProfessionUpdateView, ItemWithProfessions, ItemWithRoles, ProfessionsListWithoutPaginationApi
 from .profession.views import RolesListApi, RoleCreateAPIView, RoleDetailsView, RoleDestroyView, RoleUpdateView
 from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfessionInProfessionCreateAPIView, \
     SkillsOfProfessionInProfessionUpdateView, SkillsOfProfessionInProfessionDestroyView
@@ -265,6 +265,7 @@ urlpatterns = [
     path('api/EducationalProgram/detail/<int:pk>', EducationalProgramDetailsView.as_view()),
     path('api/EducationalProgram/delete/<int:pk>', EducationalProgramDestroyView.as_view()),
     path('api/EducationalProgram/update/<int:pk>', EducationalProgramUpdateView.as_view()),
+    path('api/EducationalProgram/byprofessions', EducationalProgramRankingByProfession),
 
     # --Экспертизы
     path('api/expertise/user', UserExpertiseListView.as_view()),
@@ -281,6 +282,7 @@ urlpatterns = [
 
     # Работа с профессиями
     path('api/professions/', ProfessionsListApi.as_view()),
+    path('api/professions/without_pagination', ProfessionsListWithoutPaginationApi.as_view()),
     path('api/profession/create', ProfessionCreateAPIView.as_view()),
     path('api/profession/detail/<int:pk>', ProfessionDetailsView.as_view()),
     path('api/profession/delete/<int:pk>', ProfessionDestroyView.as_view()),
