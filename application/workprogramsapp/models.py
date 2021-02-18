@@ -9,11 +9,11 @@ from django.contrib.postgres.fields import ArrayField
 
 from dataprocessing.models import Items
 
-
+'''
 class FieldOfStudyWorkProgram(models.Model):
-    '''
-    Модель для связи направления и рабочей программы
-    '''
+
+    #Модель для связи направления и рабочей программы
+
     field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE,
                                        verbose_name='Образовательная программа')
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа')
@@ -21,7 +21,7 @@ class FieldOfStudyWorkProgram(models.Model):
 
     # class Meta:
     #     unique_together = ('work_program', 'field_of_study')
-
+'''
 
 def current_year():
     return datetime.date.today().year
@@ -74,9 +74,9 @@ class WorkProgram(CloneMixin, models.Model):
     hoursSecondSemester = models.IntegerField(blank=True, null=True, verbose_name="Количество часов в 2 семестре")
     # goals = models.CharField(max_length=1024, verbose_name = "Цели освоения" )
     # result_goals = models.CharField(max_length=1024, verbose_name = "Результаты освоения" )
-    field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram,
-                                              verbose_name="Предметная область",
-                                              related_name='workprograms_in_fieldofstudy')
+    #field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram,
+    #                                          verbose_name="Предметная область",
+    #                                          related_name='workprograms_in_fieldofstudy')
     bibliographic_reference = models.ManyToManyField('BibliographicReference', verbose_name='Библиогравическая_ссылка',
                                                      related_name='bibrefs')
     # evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
