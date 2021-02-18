@@ -2,12 +2,10 @@ import json
 import os
 
 import pandas
-from django.core.paginator import Paginator
+
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.views import View
-from django_tables2 import RequestConfig
-from django_tables2.paginators import LazyPaginator
 from rest_framework import filters
 from rest_framework import generics
 from rest_framework import status
@@ -19,11 +17,9 @@ from rest_framework.views import APIView
 from dataprocessing.models import Items
 from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder
-from .forms import DisciplineSectionForm, TopicForm, OutcomesOfWorkProgramForm
-from .forms import WorkProgramOutcomesPrerequisites, PrerequisitesOfWorkProgramForm, EvaluationToolForm
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
     DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
-from .models import FieldOfStudy, FieldOfStudyWorkProgram, BibliographicReference, СertificationEvaluationTool
+from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence, OnlineCourse
 # Права доступа
@@ -47,133 +43,11 @@ from .serializers import OnlineCourseSerializer, BibliographicReferenceSerialize
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer, WorkProgramSerializerByName
-from .tables import FieldOfStudyWPTable
-
-
-class FieldOfStudyWPListView(View):
-    model = FieldOfStudyWorkProgram
-
-    def get(self,request):
-        table = FieldOfStudyWPTable(FieldOfStudyWorkProgram.objects.all(), order_by="name")
-        RequestConfig(request, paginate={"paginator_class": LazyPaginator, "per_page": 30}).configure(
-            table)
-        return render(request, 'workprograms/fswp_list.html', {"table": table})
 
 
 
-class WorkProgramsList(View):
-
-
-    def get(self, request):
-
-        workprograms = WorkProgram.objects.prefetch_related('outcomes', 'prerequisites')
-        workprograms_outcomes = []
-        workprograms_prerequisites = []
-
-        for workprogram in workprograms:
-            outcomes = [{'pk': OutcomesOfWorkProgram.objects.get(item_id = item.pk).id, 'item': item.name}  for item in workprogram.outcomes.all()]
-            outcomes_levels = OutcomesOfWorkProgram.objects.values_list('masterylevel').filter(workprogram=workprogram.pk)
-            outcomes_levels2 = [entry for entry in outcomes_levels]
-            outcomes_levels3 = []
-            for outcome in outcomes:
-                outcomes_levels3.append({'pk': outcome['pk'],'item': outcome['item'], 'item_level': outcomes_levels2[outcomes.index(outcome)][0]})
-            prerequisites = [{'pk': PrerequisitesOfWorkProgram.objects.get(item_id = item.pk).id, 'item': item.name} for item in workprogram.prerequisites.all()]
-            prerequisites_levels2 = [entry for entry in PrerequisitesOfWorkProgram.objects.values_list('masterylevel').filter(
-                workprogram=workprogram.pk)]
-            prerequisites_levels3 = []
-            for prerequisite in prerequisites:
-                prerequisites_levels3.append({'pk': prerequisite['pk'],'item': prerequisite['item'], 'item_level': prerequisites_levels2[prerequisites.index(prerequisite)][0]})
-                workprograms_prerequisites.append({'title': workprogram.title, 'outcomes_levels': outcomes_levels3, })
-            workprograms_outcomes.append({'pk': workprogram.pk, 'hoursFirstSemester': workprogram.hoursFirstSemester,
-                                          'hoursSecondSemester': workprogram.hoursSecondSemester, 'title': workprogram.title, 'outcomes_levels': outcomes_levels3,
-                                          'prerequisites_levels': prerequisites_levels3})
-
-        paginator = Paginator(workprograms_outcomes, 10) # Show 10 items per page
-        page = request.GET.get('page')
-        workprograms = paginator.get_page(page)
-        return render(request, 'workprograms/workprograms.html', {'workprograms': workprograms})
-
-
-class WorkProgramsPost(View):
-    """
-    Вторая версия редактора рабочих программ
-    """
-    def get(self, request):
-        form = WorkProgramOutcomesPrerequisites()
-        return render(request, 'workprograms/WorkProgramOutcomesPrerequisitesEdit.html', {'form': form})
-
-    def post(self, request):
-        WorkProgramOP = WorkProgramOutcomesPrerequisites(request.POST)
-        if WorkProgramOP.is_valid():
-            WorkProgramOP.save()
-            return redirect('workprograms')
-        return render(request, 'workprograms/WorkProgramOutcomesPrerequisitesEdit.html', {'form': WorkProgramOP})
-
-
-class WorkProgramView(View):
-
-    """
-    Вторая версия просмотра программ
-    """
-
-    def get(self, request, pk):
-        thisworkprogram_for_atributes = WorkProgram.objects.get(pk=pk)
-        print ('thisworkprogram_for_atributes', thisworkprogram_for_atributes.goals)
-        thisworkprogram = WorkProgram.objects.filter(pk=pk).prefetch_related('outcomes', 'prerequisites')
-        workprograms_outcomes = []
-        workprograms_prerequisites = []
-        prerequisites_of_workprogram = WorkProgram.objects.all()[0].prerequisites.all()
-        # prerequisites_levels = PrerequisitesOfWorkProgram.objects.values_list('masterylevel').filter(
-        #     workprogram=pk, item=prerequisites_of_workprogram[0].pk)
-
-        prerequisites_and_levels =[]
-        print (prerequisites_of_workprogram)
-        prerequisites_levels = []
-        prerequisites_levels2 = [entry for entry in prerequisites_levels]
-        for prerequisite in prerequisites_of_workprogram:
-            #pk = PrerequisitesOfWorkProgram.objects.values_list('id').filter(
-            #workprogram=pk, item=prerequisite.pk)
-            #print(pk)
-            prerequisites_levels = PrerequisitesOfWorkProgram.objects.values_list('masterylevel').filter(
-                workprogram=pk, item=prerequisite.pk)
-            #print (prerequisites_levels)
-            prerequisites_and_levels.append({'item': prerequisite, 'item_level':  prerequisites_levels[0][0]})
-
-        workprograms_outcomes.append({'pk': thisworkprogram[0].pk, 'hoursFirstSemester': thisworkprogram[0].hoursFirstSemester,
-                                      'hoursSecondSemester': thisworkprogram[0].hoursSecondSemester, 'title': thisworkprogram[0].title,
-                                      'prerequisites_levels': prerequisites_and_levels})
-        #Работа над разделами и темами
-        discipline_section_list = DisciplineSection.objects.filter(work_program_id=pk)
-        discipline_topics_list =[]
-        for discipline_section in discipline_section_list:
-            discipline_topics = Topic.objects.select_related('discipline_section').filter(discipline_section = discipline_section.pk)
-            discipline_topics_list.append(discipline_topics)
-
-
-
-        return render(request, 'workprograms/workprogram.html', {'workprogram_atributes':thisworkprogram_for_atributes, 'workprograms': workprograms_outcomes, 'discipline_list': discipline_section_list,
-                                                                 'discipline_topics_list': discipline_topics_list,})
-
-
-class WorkProgramsPostUpdate(View):
-
-    def get(self, request, pk):
-        wp_obj = get_object_or_404(WorkProgram, id=pk)
-        form = WorkProgramOutcomesPrerequisites(instance=wp_obj)
-        return render(request, 'workprograms/WorkProgramOutcomesPrerequisitesEdit.html', {'form': form})
-
-    def post(self, request, pk):
-        wp_obj = get_object_or_404(WorkProgram, id=pk)
-
-        if request.method == "POST":
-            WorkProgramOP = WorkProgramOutcomesPrerequisites(request.POST, instance=wp_obj)
-            if WorkProgramOP.is_valid():
-                WorkProgramOP.save()
-                return redirect('workprograms')
-        else:
-            WorkProgramOP = WorkProgramOutcomesPrerequisites(instance=wp_obj)
-        return render(request, 'workprograms/WorkProgramOutcomesPrerequisitesEdit.html', {'form': WorkProgramOP})
-
+""""Удалены старые views с использованием джанго рендеринга"""
+"""Блок реализации API"""
 
 # class WorkProgramsListApi(APIView):
 # #     """
@@ -191,194 +65,6 @@ class WorkProgramsListApi(generics.ListAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['discipline_code', 'title']
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class PrerequisitesUpdate(View):
-    def get(self, request, pk):
-        p_obj = get_object_or_404(PrerequisitesOfWorkProgram, id=pk)
-        form = PrerequisitesOfWorkProgramForm(instance=p_obj)
-        return render(request, 'workprograms/PrerequisitesOfWorkProgramEdit.html', {'form': form})
-
-    def post(self, request, pk):
-        p_obj = get_object_or_404(PrerequisitesOfWorkProgram, id=pk)
-
-        if request.method == "POST":
-            prerequisite = PrerequisitesOfWorkProgramForm(request.POST, instance=p_obj)
-            if prerequisite.is_valid():
-                prerequisite.save()
-                return redirect('workprograms')
-        else:
-            prerequisite = PrerequisitesOfWorkProgramForm(instance=p_obj)
-        return render(request, 'workprograms/PrerequisitesOfWorkProgramEdit.html', {'form': prerequisite})
-#
-#Outcomes Update
-#
-class OutcomesUpdate(View):
-    def get(self, request, pk):
-        o_obj = get_object_or_404(OutcomesOfWorkProgram, id=pk)
-        form = OutcomesOfWorkProgramForm(instance=o_obj)
-        return render(request, 'workprograms/OutcomesOfWorkProgramEdit.html', {'form': form})
-
-    def post(self, request, pk):
-        o_obj = get_object_or_404(OutcomesOfWorkProgram, id=pk)
-
-        if request.method == "POST":
-            outcomes = OutcomesOfWorkProgramForm(request.POST, instance=p_obj)
-            if outcomes.is_valid():
-                outcomes.save()
-                return redirect('workprograms')
-        else:
-            outcomes = OutcomesPrerequisites(instance=o_obj)
-        return render(request, 'workprograms/OutcomesOfWorkProgramEdit.html', {'form': outcomes})
-
-
-class EvaluationToolList(View):
-
-    def get(self, request):
-        evaluation = EvaluationTool.objects.all()
-        result = []
-        for e in evaluation:
-            sections = DisciplineSection.objects.filter(evaluation_tools = e)
-            result.append({'pk': e.pk, 'type': e.type,
-                           'name': e.name, 'description': e.description, 'sections': sections})
-
-        paginator = Paginator(result, 10) # Show 25 contacts per page
-        page = request.GET.get('page')
-        evaluation = paginator.get_page(page)
-        return render(request, 'workprograms/evaluation_list.html', {'evaluation': evaluation})
-
-
-
-class EvaluationToolPost(View):
-
-    def get(self, request):
-        form = EvaluationToolForm()
-        return render(request, 'workprograms/EvaluationToolEdit.html', {'form': form})
-
-    def post(self, request):
-        evaluation = EvaluationToolForm(request.POST)
-        if evaluation.is_valid():
-            evaluation.save()
-            return redirect('evaluation')
-        return render(request, 'workprograms/EvaluationToolEdit.html', {'form': evaluation})
-
-class EvaluationToolPostUpdate(View):
-
-    def get(self, request, pk):
-        et_obj = get_object_or_404(EvaluationTool, id=pk)
-        form = EvaluationToolForm(instance=et_obj)
-        return render(request, 'workprograms/EvaluationToolEdit.html', {'form': form})
-
-    def post(self, request, pk):
-        et_obj = get_object_or_404(EvaluationTool, id=pk)
-
-        if request.method == "POST":
-            evaluation = EvaluationToolForm(request.POST, instance=et_obj)
-            if evaluation.is_valid():
-                evaluation.save()
-                return redirect('evaluation')
-        else:
-            evaluation = WorkProgramOutcomesPrerequisites(instance=et_obj)
-        return render(request, 'workprograms/EvaluationToolEdit.html', {'form': evaluation})
-
-
-class DisciplineSectionList(View):
-
-    def get(self, request):
-        sections = DisciplineSection.objects.all()
-        section = []
-        for e in sections:
-            topic = Topic.objects.filter(discipline_section = e)
-            section.append({'pk': e.pk, 'name': e.name, 'work_program': e.work_program,'evaluation_tools': e.evaluation_tools, 'topic': topic})
-
-        paginator = Paginator(section, 25) # Show 25 contacts per page
-        page = request.GET.get('page')
-        sections = paginator.get_page(page)
-        return render(request, 'workprograms/sections_list.html', {'section': sections})
-
-
-class DiscplineSectionPost(View):
-
-    def get(self, request):
-        form = DisciplineSectionForm()
-        return render(request, 'workprograms/DisciplineSectionEdit.html', {'form': form})
-
-    def post(self, request):
-        section = DisciplineSectionForm(request.POST)
-        if section.is_valid():
-            section.save()
-            return redirect('section')
-        return render(request, 'workprograms/DisciplineSectionEdit.html', {'form': section})
-
-class DisciplineSectionPostUpdate(View):
-
-    def get(self, request, pk):
-        ds_obj = get_object_or_404(DisciplineSection, id=pk)
-        form = DisciplineSectionForm(instance=ds_obj)
-        return render(request, 'workprograms/EvaluationToolEdit.html', {'form': form})
-
-    def post(self, request, pk):
-        ds_obj = get_object_or_404(DisciplineSection, id=pk)
-
-        if request.method == "POST":
-            section = DisciplineSectionForm(request.POST, instance=ds_obj)
-            if section.is_valid():
-                section.save()
-                return redirect('section')
-        else:
-            section = DisciplineSection(instance=ds_obj)
-        return render(request, 'workprograms/DisciplineSectionEdit.html', {'form': section})
-
-
-class TopicList(View):
-
-    def get(self, request):
-        topic = Topic.objects.all()
-        paginator = Paginator(topic, 25) # Show 25 contacts per page
-        page = request.GET.get('page')
-        topic = paginator.get_page(page)
-        return render(request, 'workprograms/topics_list.html', {'topic': topic})
-
-
-class TopicPost(View):
-
-    def get(self, request):
-        form = TopicForm()
-        return render(request, 'workprograms/TopicEdit.html', {'form': form})
-
-    def post(self, request):
-        topic = TopicForm(request.POST)
-        if topic.is_valid():
-            topic.save()
-            return redirect('topic')
-        return render(request, 'workprograms/TopicEdit.html', {'form': topic})
-
-class TopicPostUpdate(View):
-
-    def get(self, request, pk):
-        t_obj = get_object_or_404(Topic, id=pk)
-        form = TopicForm(instance=t_obj)
-        return render(request, 'workprograms/TopicEdit.html', {'form': form})
-
-    def post(self, request, pk):
-        t_obj = get_object_or_404(Topic, id=pk)
-
-        if request.method == "POST":
-            topic = TopicForm(request.POST, instance=t_obj)
-            if topic.is_valid():
-                topic.save()
-                return redirect('topic')
-        else:
-            topic = Topic(instance=t_obj)
-        return render(request, 'workprograms/TopicEdit.html', {'form': topic})
-
-
-
-
-
-
-"""Блок реализации API"""
-
 
 class IndicatorListAPIView(generics.ListAPIView):
     serializer_class = IndicatorListSerializer
@@ -1411,10 +1097,13 @@ class FileUploadWorkProgramAPIView(APIView):
                         for item in outcomes_items:
                             out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj)
                             out_obj.save()
-
-                    for fs in fs_list:
-                        fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs, work_program = wp_obj)
-                        fswp_obj.save()
+                    """
+                       Данная таблица больше не используется. Для дальнейшей работы код нужно заменить.
+                       Связь направления и РПД реализована через таблицу WorkProgramInFieldOfStudy.
+                    """
+                    #for fs in fs_list:
+                    #    fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs, work_program = wp_obj)
+                    #    fswp_obj.save()
 
                 else:
 
@@ -1430,10 +1119,13 @@ class FileUploadWorkProgramAPIView(APIView):
                         for item in outcomes_items:
                             out_obj = OutcomesOfWorkProgram(item = item, workprogram = wp_obj)
                             out_obj.save()
-
-                    for fs in fs_list:
-                        fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs, work_program = wp_obj)
-                        fswp_obj.save()
+                    """
+                       Данная таблица больше не используется. Для дальнейшей работы код нужно заменить.
+                       Связь направления и РПД реализована через таблицу WorkProgramInFieldOfStudy.
+                    """
+                    #for fs in fs_list:
+                    #    fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs, work_program = wp_obj)
+                    #    fswp_obj.save()
 
 
             except:
@@ -1583,15 +1275,18 @@ class FileUploadAPIView(APIView):
                     wp_count+=1
                 print('Рабочая программа дисциплины: ', wp_obj)
 
-
-                if FieldOfStudyWorkProgram.objects.filter(field_of_study = fs_obj, work_program = wp_obj).exists():
-                    print('FieldOfStudyWorkProgram exist')
-                else:
+                """
+                   Данная таблица больше не используется. Для дальнейшей работы код нужно заменить.
+                   Связь направления и РПД реализована через таблицу WorkProgramInFieldOfStudy.
+                """
+                #if FieldOfStudyWorkProgram.objects.filter(field_of_study = fs_obj, work_program = wp_obj).exists():
+                #    print('FieldOfStudyWorkProgram exist')
+                #else:
                     # Теперь записываем в FieldOfStudyWorkProgram
-                    fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs_obj, work_program = wp_obj)
-                    fswp_obj.save()
+                    #fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs_obj, work_program = wp_obj)
+                    #fswp_obj.save()
 
-                print('Связь рабочей программы и дисциплины: done')
+                #print('Связь рабочей программы и дисциплины: done')
 
                 if AcademicPlan.objects.filter(qualification = qualification, year = data['YEAR'][i], educational_profile = data['SUBFIELDNAME'][i].strip()).exists():
                     ap_obj = AcademicPlan.objects.get(qualification = qualification, year = data['YEAR'][i], educational_profile = data['SUBFIELDNAME'][i].strip())
@@ -1977,6 +1672,7 @@ class DocxFileExportView(generics.ListAPIView):
     """Возвращает РПД в формате docx в браузере"""
     queryset = WorkProgram.objects.all()
     serializer = WorkProgramSerializer
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         tpl = DocxTemplate('/application/static-backend/export_template/RPD_shablon_2020_new.docx')
@@ -2044,6 +1740,7 @@ class SyllabusExportView(generics.ListAPIView):
     """Возвращает РПД в формате docx в браузере"""
     queryset = WorkProgram.objects.all()
     serializer = WorkProgramSerializer
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
         tpl = DocxTemplate('/application/export_template/Syllabus_shablon_2020_new.docx')

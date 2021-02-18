@@ -9,11 +9,11 @@ from django.contrib.postgres.fields import ArrayField
 
 from dataprocessing.models import Items
 
-
+'''
 class FieldOfStudyWorkProgram(models.Model):
-    '''
-    Модель для связи направления и рабочей программы
-    '''
+
+    #Модель для связи направления и рабочей программы
+
     field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE,
                                        verbose_name='Образовательная программа')
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа')
@@ -21,7 +21,7 @@ class FieldOfStudyWorkProgram(models.Model):
 
     # class Meta:
     #     unique_together = ('work_program', 'field_of_study')
-
+'''
 
 def current_year():
     return datetime.date.today().year
@@ -52,6 +52,11 @@ class WorkProgram(CloneMixin, models.Model):
         ('a', 'archive'),
     )
 
+    extra_points_choise = (
+        ('0', '0'),
+        ('3', '3'),
+    )
+
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     discipline_code = models.CharField(max_length=1024, blank=True, null=True)
     subject_code = models.CharField(max_length=1024, blank=True, null=True)
@@ -69,9 +74,9 @@ class WorkProgram(CloneMixin, models.Model):
     hoursSecondSemester = models.IntegerField(blank=True, null=True, verbose_name="Количество часов в 2 семестре")
     # goals = models.CharField(max_length=1024, verbose_name = "Цели освоения" )
     # result_goals = models.CharField(max_length=1024, verbose_name = "Результаты освоения" )
-    field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram,
-                                              verbose_name="Предметная область",
-                                              related_name='workprograms_in_fieldofstudy')
+    #field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram,
+    #                                          verbose_name="Предметная область",
+    #                                          related_name='workprograms_in_fieldofstudy')
     bibliographic_reference = models.ManyToManyField('BibliographicReference', verbose_name='Библиогравическая_ссылка',
                                                      related_name='bibrefs')
     # evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
@@ -82,6 +87,8 @@ class WorkProgram(CloneMixin, models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     work_status = models.CharField(max_length=1, choices=status_choise, verbose_name='Архив', default = 'w')
     hours = models.IntegerField(blank=True, null=True, verbose_name="Сумма часов по разделам")
+    extra_points = models.CharField(choices=extra_points_choise, max_length=1, verbose_name='Квалификация',
+                                    blank=True, null=True)
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
 
@@ -488,6 +495,30 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     '''
     Модель модуля блока дисциплин
     '''
+
+    TYPES = [
+        ('universal_module', 'universal_module'),
+        ('physical_culture', 'physical_culture'),
+        ('philosophy_thinking"', 'philosophy_thinking"'),
+        ('digital_culture', 'digital_culture'),
+        ('entrepreneurial_culture', 'entrepreneurial_culture'),
+        ('soft_skills', 'soft_skills'),
+        ('ognp', 'ognp'),
+        ('natural_science_module', 'natural_science_module'),
+        ('general_professional_module', 'general_professional_module'),
+        ('elective_module', 'elective_module'),
+        ('interdisciplinary_module_of_the_faculty', 'interdisciplinary_module_of_the_faculty'),
+        ('faculty_module', 'faculty_module'),
+        ('profile_professional_module', 'profile_professional_module'),
+        ('math_module', 'math_module'),
+        ('digital_culture_in_professional_activities', 'digital_culture_in_professional_activities'),
+        ('specialization_module', 'specialization_module'),
+        ('gia', 'gia'),
+        ('practice', 'practice'),
+        ('optional_disciplines', 'optional_disciplines'),
+    ]
+
+    type = models.CharField(choices=TYPES, max_length=100, default='faculty_module')
     name = models.CharField(max_length=1024)
     descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name='Модуль в блоке',
                                          related_name="modules_in_discipline_block", blank=True, null=True)
