@@ -22,7 +22,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
 import FileIcon from '@material-ui/icons/DescriptionOutlined';
 
 import ConfirmDialog from "../../../components/ConfirmDialog";
-import CreateModal from "./CreateModal";
+import WPBlockCreateModal from "./WPBlockCreateModal";
 import ChangePlanModal from '../CreateModal';
 import ModuleModal from "./ModuleModal";
 import DownloadFileModal from "./DownloadFileModal";
@@ -329,7 +329,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                     </div>
                 </Scrollbars>
 
-                <CreateModal />
+                <WPBlockCreateModal />
                 <ChangePlanModal />
                 <ModuleModal />
                 <DownloadFileModal />

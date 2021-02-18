@@ -46,6 +46,7 @@ export enum WorkProgramGeneralFields {
     CAN_EDIT = 'can_edit',
     EXPERTISE_STATUS = 'status',
     USER_EXPERTISE_ID = 'user_expertise_id',
+    EXTRA_POINTS = 'extra_points',
 }
 
 export enum workProgramSectionFields {

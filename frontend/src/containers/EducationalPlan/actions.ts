@@ -44,8 +44,10 @@ const saveCompetenceBlock = createAction('SAVE_COMPETENCE_BLOCK');
 const deleteCompetenceBlock = createAction('DELETE_COMPETENCE_BLOCK');
 
 const deleteWorkProgramFromZun = createAction('DELETE_WP_FROM_ZUN');
+const pageDown = createAction('EDUCATIONAL_PLAN_PAGE_DOWN');
 
 const actions: EducationalPlanActions = {
+    pageDown,
     deleteWorkProgramFromZun,
     deleteCompetenceBlock,
     saveCompetenceBlock,

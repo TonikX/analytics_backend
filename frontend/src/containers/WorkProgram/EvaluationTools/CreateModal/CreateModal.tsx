@@ -315,13 +315,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                                     <div>
                                         <Typography className={classes.weekTitle}>
-                                            Срок контроля в неделях *
+                                            Срок контроля в неделях
                                         </Typography>
                                         <Slider
                                             defaultValue={1}
                                             step={1}
                                             marks
-                                            min={1}
+                                            min={0}
                                             max={20}
                                             valueLabelDisplay="on"
                                             value={evaluationTool[EvaluationToolFields.DEADLINE]}

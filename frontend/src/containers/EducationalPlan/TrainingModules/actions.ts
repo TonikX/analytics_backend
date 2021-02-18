@@ -1,9 +1,17 @@
 import {createAction} from "@reduxjs/toolkit";
 
-import {ChangeTrainingModulePayload, CreateTrainingModulePayload, OpenDialogPayload, TrainingModulesActions} from './types';
+import {
+    ChangeTrainingModulePayload,
+    CreateTrainingModulePayload,
+    GetTrainingModulePayload,
+    OpenDialogPayload,
+    TrainingModulesActions
+} from './types';
 
 const getTrainingModulesList = createAction('GET_TRAINING_MODULES');
 const setTrainingModulesList = createAction('SET_TRAINING_MODULES');
+const getTrainingModule = createAction<GetTrainingModulePayload>('GET_TRAINING_MODULE');
+const setTrainingModule = createAction('SET_TRAINING_MODULE');
 
 const createTrainingModule = createAction<CreateTrainingModulePayload>('CREATE_TRAINING_MODULES');
 const changeTrainingModule = createAction<ChangeTrainingModulePayload>('CHANGE_TRAINING_MODULES');
@@ -20,6 +28,8 @@ const changeSorting = createAction('TRAINING_MODULES_CHANGE_SORTING');
 const actions: TrainingModulesActions = {
     getTrainingModulesList,
     setTrainingModulesList,
+    getTrainingModule,
+    setTrainingModule,
 
     changeSearchQuery,
     changeCurrentPage,

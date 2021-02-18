@@ -131,6 +131,7 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     workProgramRatingId: number;
     folders: Array<FolderType>
     workProgram: WorkProgramGeneralType;
+    hoursError: boolean;
 }
 
 export type Section = {

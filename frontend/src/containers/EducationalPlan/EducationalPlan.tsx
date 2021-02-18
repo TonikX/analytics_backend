@@ -54,6 +54,10 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
         this.props.actions.getEducationalPlans();
     }
 
+    componentWillUnmount() {
+        this.props.actions.pageDown();
+    }
+
     handleClickDelete = (id: number) => () => {
         this.setState({
             deleteConfirmId: id

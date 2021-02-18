@@ -12,6 +12,8 @@ import styles from "./TrainingModules.styles";
 export interface TrainingModulesActions {
     getTrainingModulesList: ActionCreatorWithoutPayload;
     setTrainingModulesList: ActionCreatorWithPayload;
+    getTrainingModule: ActionCreatorWithPayload<GetTrainingModulePayload>;
+    setTrainingModule: ActionCreatorWithPayload;
 
     changeSearchQuery: ActionCreatorWithPayload;
     changeCurrentPage: ActionCreatorWithPayload;
@@ -36,11 +38,17 @@ export type CreateTrainingModulePayload = {
         [TrainingModuleFields.DESCRIPTION]: string;
     };
 }
+
+export type GetTrainingModulePayload = {
+    id: number;
+}
+
 export type ChangeTrainingModulePayload = {
     data: TrainingModuleType
 }
 
 export interface trainingModulesState {
+    [fields.DETAIL_TRAINING_MODULE]: TrainingModuleType|{};
     [fields.TRAINING_MODULES_LIST]: Array<TrainingModuleType>;
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: string,

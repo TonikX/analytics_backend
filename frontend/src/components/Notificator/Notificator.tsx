@@ -16,7 +16,7 @@ class Notificator extends React.Component<NotificatorProps>{
 
     componentDidUpdate(prevProps: NotificatorProps, prevState: any, snapshot: any) {
         if (!shallowEqual(this.props.errors, prevProps.errors)){
-            this.props.errors.forEach((error: any) => {
+            (typeof this.props.errors) === "object" && this.props.errors.length < 5 && this.props.errors.forEach((error: any) => {
                 if (typeof error === "string"){
                     this.props.enqueueSnackbar(error, {
                         variant: 'error',

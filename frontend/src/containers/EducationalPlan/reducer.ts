@@ -137,6 +137,8 @@ const changeSorting = (state: educationalPlanState, {payload}: any): educational
     }
 });
 
+const pageDown = (): educationalPlanState => initialState;
+
 export const reducer = createReducer(initialState, {
     [actions.setEducationalPlans.type]: setEducationalPlans,
     [actions.setEducationalDetail.type]: setEducationalPlanDetail,
@@ -159,4 +161,6 @@ export const reducer = createReducer(initialState, {
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
+
+    [actions.pageDown.type]: pageDown,
 });

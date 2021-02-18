@@ -19,21 +19,26 @@ import EditIcon from "@material-ui/icons/EditOutlined";
 import EyeIcon from '@material-ui/icons/VisibilityOutlined';
 
 import DescriptionModal from "./DescriptionModal";
+import EvaluationCertificationTotalList from "../EvaluationCertificationTotalList";
 
 import {IntermediateCertificationProps} from './types';
 import {IntermediateCertificationFields, fields} from "../enum";
+import {IntermediateCertificationTypes} from "../constants";
+import {IntermediateCertificationType} from "../types";
 
 import CreateModal from "./CreateModal";
-import {IntermediateCertificationType} from "../types";
 
 import connect from './IntermediateCertification.connect';
 import styles from './IntermediateCertification.styles';
-import {IntermediateCertificationTypes} from "../constants";
 
 class IntermediateCertification extends React.PureComponent<IntermediateCertificationProps> {
     state = {
         anchorsEl: {}
     };
+
+    componentDidMount() {
+        this.props.actions.getWorkProgramEvaluationTools();
+    }
 
     handleCreateNew = () => {
         this.props.actions.openDialog({dialogType: fields.CREATE_NEW_INTERMEDIATE_CERTIFICATION, data: {}});
@@ -94,8 +99,8 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                         Семестр
                     </Typography>
                 </div>
-                <Scrollbars>
-                    <div className={classes.list}>
+                <Scrollbars autoHeight>
+                    <div>
                         {intermediateCertificationList.map((intermediateCertificationTool) => (
                             <div className={classes.item}>
                                 <div className={classes.row}>
@@ -171,6 +176,10 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                         ))}
                     </div>
                 </Scrollbars>
+
+                <div style={{marginTop: '50px'}}>
+                    <EvaluationCertificationTotalList />
+                </div>
 
                 {isCanEdit &&
                     <Fab color="secondary"

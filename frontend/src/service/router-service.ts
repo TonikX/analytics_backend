@@ -145,6 +145,14 @@ export default class RouterService {
         return SEPARATOR + TRAINING_MODULES;
     };
 
+    getTrainingModuleDetailRoute = () => {
+        return SEPARATOR + TRAINING_MODULES + SEPARATOR + ':id';
+    };
+
+    getTrainingModuleDetailLink = (id: number) => {
+        return SEPARATOR + TRAINING_MODULES + SEPARATOR + id;
+    };
+
     getExpertisesRoute = () => {
         return SEPARATOR + EXPERTISES;
     };

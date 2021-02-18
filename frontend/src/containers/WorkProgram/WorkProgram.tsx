@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import withStyles from '@material-ui/core/styles/withStyles';
 import ButtonGroup from "@material-ui/core/ButtonGroup";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
@@ -183,7 +183,8 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     }
 
     render() {
-        const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus, workProgramRating, canAddToFolder} = this.props;
+        const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
+            workProgramRating, canAddToFolder, hoursError} = this.props;
         const {activeStep, isOpenComments} = this.state;
 
         return (
@@ -194,7 +195,17 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                     <div className={classes.headerButtons}>
                         {canSendToArchive && <Button onClick={this.handleSendToArchive}>Отправить в архив</Button>}
 
-                        {canSendToExpertise && <Button onClick={this.handleSendToExpertize}>Отправить на экспертизу</Button>}
+                        {canSendToExpertise &&
+                            <Tooltip title="Часы по разделам заполнены неверно"
+                                     disableHoverListener={!hoursError}
+                            >
+                                <Button onClick={this.handleSendToExpertize}
+                                        disabled={hoursError}
+                                >
+                                    Отправить на экспертизу
+                                </Button>
+                            </Tooltip>
+                        }
 
                         {canApprove &&
                             <ButtonGroup variant="contained">

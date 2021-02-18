@@ -3,11 +3,13 @@ import get from 'lodash/get';
 
 import actions from '../../layout/actions';
 import planActions from './actions';
+import moduleActions from './TrainingModules/actions';
 
 import Service from './service';
 
 import {BlocksOfWorkProgramsFields, fetchingTypes} from "./enum";
 import {getCurrentPage, getEducationalPlanDetailId, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {getTrainingModuleId} from "./TrainingModules/getters";
 
 const service = new Service();
 
@@ -198,7 +200,16 @@ const deleteBlockOfWorkPrograms = createLogic({
         service.deleteBlockOfWorkPrograms(blockId)
             .then((res) => {
                 const planId = getEducationalPlanDetailId(getState());
-                dispatch(planActions.getEducationalDetail(planId));
+                const moduleId = getTrainingModuleId(getState());
+
+                if (planId){
+                    dispatch(planActions.getEducationalDetail(planId));
+                }
+
+                if (moduleId){
+                    dispatch(moduleActions.getTrainingModule({id: moduleId}));
+                }
+
                 dispatch(actions.fetchingSuccess());
                 dispatch(planActions.closeDetailDialog());
             })
@@ -224,7 +235,16 @@ const createModule = createLogic({
         service.createModule(moduleWithBlocks)
             .then((res) => {
                 const planId = getEducationalPlanDetailId(getState());
-                dispatch(planActions.getEducationalDetail(planId));
+                const moduleId = getTrainingModuleId(getState());
+
+                if (planId){
+                    dispatch(planActions.getEducationalDetail(planId));
+                }
+
+                if (moduleId){
+                    dispatch(moduleActions.getTrainingModule({id: moduleId}));
+                }
+
                 dispatch(actions.fetchingSuccess());
                 dispatch(planActions.closeModuleDialog());
             })
@@ -248,8 +268,18 @@ const changeModule = createLogic({
 
         service.changeModule(moduleWithBlocks)
             .then((res) => {
+
                 const planId = getEducationalPlanDetailId(getState());
-                dispatch(planActions.getEducationalDetail(planId));
+                const moduleId = getTrainingModuleId(getState());
+
+                if (planId){
+                    dispatch(planActions.getEducationalDetail(planId));
+                }
+
+                if (moduleId){
+                    dispatch(moduleActions.getTrainingModule({id: moduleId}));
+                }
+
                 dispatch(actions.fetchingSuccess());
                 dispatch(planActions.closeModuleDialog());
             })

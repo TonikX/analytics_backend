@@ -12,7 +12,7 @@ export default (theme: Theme) => createStyles({
         flex: 'none',
     },
     list: {
-        height: '100%',
+        maxHeight: '100%',
     },
     item: {
         borderBottom: '1px solid #ccc',
@@ -101,5 +101,9 @@ export default (theme: Theme) => createStyles({
     menuIcon: {
         marginRight: '10px',
         fill: 'rgba(0, 0, 0, 0.54)'
+    },
+    eyeIcon: {
+        cursor: 'pointer',
+        marginLeft: 'auto'
     }
 });

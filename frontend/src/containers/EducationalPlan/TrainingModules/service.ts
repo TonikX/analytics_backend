@@ -9,6 +9,10 @@ class TrainingModulesService extends AnalyticsService{
         return this.get(`/api/disciplineblockmodule/detail/list?page=${currentPage}&ordering=${getSortingSymbol(sortingMode)}${sortingField}&search=${search}`);
     }
 
+    getTrainingModule(id: number){
+        return this.get(`/api/disciplineblockmodule/detail/${id}`);
+    }
+
     deleteTrainingModule(id: number){
         return this.delete(`/api/disciplineblockmodule/delete/${id}`);
     }
