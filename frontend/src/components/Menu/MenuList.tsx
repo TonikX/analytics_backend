@@ -176,12 +176,20 @@ export default (groups: Array<string>) => {
         },
     ] : [];
 
-    const fifthMenu = [{
-        title: 'Подбор дисциплин',
-        link: appRouter.getSelectDisciplineRoute(),
-        icon: ProfessionsSkillsIcon,
-        selectedIcon: ProfessionsSkillsSelectedIcon,
-    }];
+    const fifthMenu = [
+        {
+            title: 'Подбор дисциплин',
+            link: appRouter.getSelectDisciplineRoute(),
+            icon: ProfessionsSkillsIcon,
+            selectedIcon: ProfessionsSkillsSelectedIcon,
+        },
+        {
+            title: 'Подбор образовательных программ',
+            link: appRouter.getSelectEducationalProgramRoute(),
+            icon: ProfessionsSkillsIcon,
+            selectedIcon: ProfessionsSkillsSelectedIcon,
+        }
+    ];
 
     const menu = [];
 

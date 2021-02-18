@@ -21,6 +21,7 @@ const PROFESSIONS = 'professions';
 const ROLES = 'roles';
 const SKILLS = 'skills';
 const EXPERTISES = 'expertises';
+const SELECT_EDUCATIONAL_PROGRAM = 'select-educational-program';
 
 const SEPARATOR = '/';
 
@@ -112,6 +113,10 @@ export default class RouterService {
 
     getSelectDisciplineRoute = () => {
         return SEPARATOR + 'select-discipline';
+    };
+
+    getSelectEducationalProgramRoute = () => {
+        return SEPARATOR + SELECT_EDUCATIONAL_PROGRAM
     };
 
     getSkillsRolesRoute = () => {

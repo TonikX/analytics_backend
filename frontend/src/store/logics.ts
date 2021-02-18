@@ -21,6 +21,7 @@ import SelectDisciplineLogic from '../containers/SelectDiscipline/logics';
 import EducationalProgramLogic from '../containers/EducationalProgram/logics';
 import FoldersLogic from '../containers/Profile/Folders/logics';
 import TrainingModulesLogic from '../containers/TrainingModules/logics';
+import SelectEducationaProgramLogic from '../containers/SelectEducationalProgram/logics'
 
 import GeneralLogic from '../layout/logics';
 
@@ -49,4 +50,5 @@ export default [
     ...SkillsRolesLogic,
     ...ExpertisesLogic,
     ...EducationalProgramLogic,
+    ...SelectEducationaProgramLogic,
 ];
