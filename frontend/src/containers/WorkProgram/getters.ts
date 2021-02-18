@@ -19,7 +19,7 @@ export const getWorkProgramId = (state: rootState) => get(getWorkProgram(state),
 export const getWorkProgramExpertiseStatus = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.EXPERTISE_STATUS, '');
 export const getWorkProgramExpertiseId = (state: rootState) => get(getWorkProgram(state), 'expertise_with_rpd.0.id', null);
 export const getWorkProgramUserExpertiseId = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.USER_EXPERTISE_ID, '');
-export const getWorkProgramField = (state: rootState, field: string) => get(getWorkProgram(state), field);
+export const getWorkProgramField = (state: rootState, field: string) => get(getWorkProgram(state), field, '');
 
 export const isCanEdit = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_EDIT);
 export const isCanApprove = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_APPROVE);
@@ -27,6 +27,14 @@ export const isCanArchive = (state: rootState) => get(getWorkProgram(state), Wor
 export const isCanComment = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_COMMENT);
 export const isStudent = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_COMMENT);
 export const isCanAddToFolder = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_ADD_TO_FOLDER);
+
+export const getIsHoursError = (state: rootState) => {
+    //const totalHours = getWorkProgramField(state, fields.WORK_PROGRAM_ALL_HOURS);
+    //const sections = getWorkProgramField(state, fields.WORK_PROGRAM_SECTIONS);
+    // const currentTotalHours = (parseFloat(totalSPOHours) + parseFloat(totalContactWorkHours)).toFixed(2);
+
+    return false;
+};
 
 export const getDialogs = (state: rootState) => get(getStateData(state), fields.DIALOGS, {});
 

@@ -66,8 +66,8 @@ import {foldersState} from "../containers/Profile/Folders/types";
 import {GENERAL_PATH as selectDisciplinePath, reducer as selectDisciplineReducer} from "../containers/SelectDiscipline/reducer";
 import {selectDisciplineState} from "../containers/SelectDiscipline/types";
 
-import {GENERAL_PATH as trainingModulesPath, reducer as trainingModulesReducer} from "../containers/TrainingModules/reducer";
-import {trainingModulesState} from "../containers/TrainingModules/types";
+import {GENERAL_PATH as trainingModulesPath, reducer as trainingModulesReducer} from "../containers/EducationalPlan/TrainingModules/reducer";
+import {trainingModulesState} from "../containers/EducationalPlan/TrainingModules/types";
 
 export interface rootState {
     [trainingModulesPath]: trainingModulesState,

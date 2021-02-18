@@ -1,7 +1,7 @@
 import {createLogic} from "redux-logic";
 import get from 'lodash/get';
 
-import actions from '../../layout/actions';
+import actions from '../../../layout/actions';
 import trainingModuleActions from './actions';
 
 import Service from './service';
@@ -108,10 +108,32 @@ const deleteTrainingModule = createLogic({
     }
 });
 
+const getTrainingModule = createLogic({
+    type: trainingModuleActions.getTrainingModule.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_TRAINING_MODULE}));
+
+        service.getTrainingModule(action.payload.id)
+            .then((res) => {
+                dispatch(trainingModuleActions.setTrainingModule(res.data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_TRAINING_MODULE}));
+                return done();
+            });
+    }
+});
+
 
 export default [
     getTrainingModulesList,
     createTrainingModule,
     changeTrainingModule,
     deleteTrainingModule,
+    getTrainingModule,
 ];

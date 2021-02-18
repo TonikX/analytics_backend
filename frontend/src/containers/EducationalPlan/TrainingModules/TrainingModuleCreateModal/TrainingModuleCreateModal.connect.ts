@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 import actions from "../actions";
 
 import {isOpenDialog, getDialogData} from '../getters';
-import {rootState} from "../../../store/reducers";
+import {rootState} from "../../../../store/reducers";
 
 const mapStateToProps = (state: rootState) => {
     return {

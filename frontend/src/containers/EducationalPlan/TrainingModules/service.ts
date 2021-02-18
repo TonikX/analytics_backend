@@ -1,12 +1,16 @@
-import {getSortingSymbol} from "../../common/utils";
-import AnalyticsService from "../../service/analytics-service";
-import {SortingType} from "../../components/SortingButton/types";
+import {getSortingSymbol} from "../../../common/utils";
+import AnalyticsService from "../../../service/analytics-service";
+import {SortingType} from "../../../components/SortingButton/types";
 import {ChangeTrainingModulePayload, CreateTrainingModulePayload} from "./types";
 import {TrainingModuleFields} from "./enum";
 
 class TrainingModulesService extends AnalyticsService{
     getTrainingModules(currentPage: number, search: string, sortingField: string, sortingMode: SortingType){
         return this.get(`/api/disciplineblockmodule/detail/list?page=${currentPage}&ordering=${getSortingSymbol(sortingMode)}${sortingField}&search=${search}`);
+    }
+
+    getTrainingModule(id: number){
+        return this.get(`/api/disciplineblockmodule/detail/${id}`);
     }
 
     deleteTrainingModule(id: number){

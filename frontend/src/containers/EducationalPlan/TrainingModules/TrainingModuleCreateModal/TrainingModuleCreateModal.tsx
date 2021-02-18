@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactText} from 'react';
 import {shallowEqual} from "recompose";
 import get from "lodash/get";
 
@@ -10,7 +10,10 @@ import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";
 import withStyles from '@material-ui/core/styles/withStyles';
 
+import SimpleSelector from "../../../../components/SimpleSelector";
+
 import {TrainingModuleFields} from '../enum';
+import {typesListArray} from '../constants'
 
 import {TrainingModuleCreateModalProps} from './types';
 
@@ -23,6 +26,7 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
             [TrainingModuleFields.ID]: null,
             [TrainingModuleFields.NAME]: '',
             [TrainingModuleFields.DESCRIPTION]: '',
+            [TrainingModuleFields.TYPE]: '',
         },
     };
 
@@ -35,6 +39,7 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
                     [TrainingModuleFields.ID]: get(trainingModule, TrainingModuleFields.ID),
                     [TrainingModuleFields.NAME]: get(trainingModule, TrainingModuleFields.NAME, ''),
                     [TrainingModuleFields.DESCRIPTION]: get(trainingModule, TrainingModuleFields.DESCRIPTION, ''),
+                    [TrainingModuleFields.TYPE]: get(trainingModule, TrainingModuleFields.TYPE, ''),
                 }
             });
         }
@@ -65,11 +70,20 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
         })
     }
 
+    handleChangeType = (value: ReactText) => {
+        this.setState({
+            trainingModule: {
+                ...this.state.trainingModule,
+                [TrainingModuleFields.TYPE]: value
+            }
+        })
+    }
+
     render() {
         const {isOpen, classes} = this.props;
         const {trainingModule} = this.state;
 
-        const disableButton = trainingModule[TrainingModuleFields.NAME].length === 0;
+        const disableButton = trainingModule[TrainingModuleFields.NAME].length === 0 || trainingModule[TrainingModuleFields.TYPE].length === 0;
         const isEditMode = trainingModule[TrainingModuleFields.ID];
 
         return (
@@ -91,6 +105,12 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
                                InputLabelProps={{
                                    shrink: true,
                                }}
+                    />
+                    <SimpleSelector label="Тип *"
+                                    value={trainingModule[TrainingModuleFields.TYPE]}
+                                    onChange={this.handleChangeType}
+                                    metaList={typesListArray}
+                                    wrapClass={classes.selectorWrap}
                     />
                     <TextField label="Описание"
                                onChange={this.saveField(TrainingModuleFields.DESCRIPTION)}

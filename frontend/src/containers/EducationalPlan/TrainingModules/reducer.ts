@@ -1,4 +1,4 @@
-import createReducer from "../../store/createReducer";
+import createReducer from "../../../store/createReducer";
 import {fields} from './enum';
 import actions from "./actions";
 
@@ -19,11 +19,17 @@ export const initialState: trainingModulesState = {
         [fields.IS_OPEN_TRAINING_MODULE_DIALOG]: false,
         [fields.TRAINING_MODULE_DIALOG_DATA]: {}
     },
+    [fields.DETAIL_TRAINING_MODULE]: {}
 };
 
 const setData = (state: trainingModulesState, {payload}: any): trainingModulesState => ({
     ...state,
     [fields.TRAINING_MODULES_LIST]: payload,
+});
+
+const setTrainingModule = (state: trainingModulesState, {payload}: any): trainingModulesState => ({
+    ...state,
+    [fields.DETAIL_TRAINING_MODULE]: payload,
 });
 
 const changeSearchQuery = (state: trainingModulesState, {payload}: any): trainingModulesState => ({
@@ -64,6 +70,7 @@ const changeSorting = (state: trainingModulesState, {payload}: any): trainingMod
 
 export const reducer = createReducer(initialState, {
     [actions.setTrainingModulesList.type]: setData,
+    [actions.setTrainingModule.type]: setTrainingModule,
     [actions.changeSearchQuery.type]: changeSearchQuery,
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,

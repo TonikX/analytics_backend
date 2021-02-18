@@ -11,9 +11,6 @@ export default (theme: Theme) => createStyles({
         marginLeft: 'auto',
         flex: 'none',
     },
-    list: {
-        height: '100%',
-    },
     item: {
         borderBottom: '1px solid #ccc',
     },

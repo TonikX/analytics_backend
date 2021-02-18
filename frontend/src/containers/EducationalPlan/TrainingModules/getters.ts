@@ -1,15 +1,17 @@
 import get from 'lodash/get';
 
-import {rootState} from '../../store/reducers';
+import {rootState} from '../../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 
-import {fields} from './enum';
+import {fields, TrainingModuleFields} from './enum';
 
 import {trainingModulesState, TrainingModuleType} from './types';
 
 const getStateData = (state: rootState): trainingModulesState => get(state, GENERAL_PATH);
 export const getTrainingModulesList = (state: rootState): Array<TrainingModuleType> => get(getStateData(state), fields.TRAINING_MODULES_LIST, []);
+export const getTrainingModule = (state: rootState): TrainingModuleType|{} => get(getStateData(state), fields.DETAIL_TRAINING_MODULE, {});
+export const getTrainingModuleId = (state: rootState): number => get(getTrainingModule(state), TrainingModuleFields.ID, 0);
 
 export const getAllCount = (state: rootState) => get(getStateData(state), fields.ALL_COUNT, 1);
 export const getCurrentPage = (state: rootState) => get(getStateData(state), fields.CURRENT_PAGE, 1);

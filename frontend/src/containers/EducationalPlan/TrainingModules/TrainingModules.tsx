@@ -12,22 +12,27 @@ import TableCell from "@material-ui/core/TableCell";
 import withStyles from '@material-ui/core/styles/withStyles';
 import TableBody from "@material-ui/core/TableBody";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
+import EyeIcon from "@material-ui/icons/VisibilityOutlined";
 
-import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
-import SortingButton from "../../components/SortingButton";
-import Search from "../../components/Search";
-import {SortingType} from "../../components/SortingButton/types";
+import ConfirmDialog from "../../../components/ConfirmDialog/ConfirmDialog";
+import SortingButton from "../../../components/SortingButton";
+import Search from "../../../components/Search";
+import {SortingType} from "../../../components/SortingButton/types";
+import TableSettingsMenu from "../../../components/TableSettingsMenu/TableSettingsMenu";
 
-import {DirectionFields} from "../Direction/enum";
-import {DirectionType} from "../Direction/types";
+import {DirectionFields} from "../../Direction/enum";
+import {DirectionType} from "../../Direction/types";
+
+import TrainingModuleCreateModal from "./TrainingModuleCreateModal";
+
+import {appRouter} from "../../../service/router-service";
 
 import {TrainingModulesProps, TrainingModuleType} from './types';
 import {TrainingModuleFields} from "./enum";
-import TrainingModuleCreateModal from "./TrainingModuleCreateModal";
+import {typesListObject} from './constants';
 
 import connect from './TrainingModules.connect';
 import styles from './TrainingModules.styles';
@@ -47,7 +52,7 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
         this.props.actions.getTrainingModulesList();
     }
 
-    changeSorting = (field: string) => (mode: SortingType)=> {
+    changeSorting = (field: string) => (mode: SortingType) => {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
         this.props.actions.getTrainingModulesList();
     }
@@ -96,9 +101,17 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
         this.props.actions.openDialog({data: {}});
     }
 
+    handleOpenMenu = (id: number) => (event: SyntheticEvent): void => {
+        this.setState({
+            anchorsEl: {
+                [id]: event.currentTarget
+            }
+        });
+    };
+
     render() {
         const {classes, trainingModules, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
-        const {deleteConfirmId} = this.state;
+        const {deleteConfirmId, anchorsEl} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -126,6 +139,12 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                         />
                                     </TableCell>
                                     <TableCell>
+                                        Тип
+                                        <SortingButton changeMode={this.changeSorting(TrainingModuleFields.TYPE)}
+                                                       mode={sortingField === TrainingModuleFields.TYPE ? sortingMode : ''}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
                                         Направленность ОП (УП)
                                     </TableCell>
                                     <TableCell>
@@ -139,6 +158,8 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                 {trainingModules.map((trainingModule: TrainingModuleType) => {
                                     const profile = get(trainingModule, [TrainingModuleFields.DISCIPLINE, TrainingModuleFields.ACADEMIC_PLAN, TrainingModuleFields.EDUCATIONAL_PROFILE], '');
                                     const plans = get(trainingModule, [TrainingModuleFields.DISCIPLINE, TrainingModuleFields.ACADEMIC_PLAN, TrainingModuleFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY], []);
+                                    // @ts-ignore
+                                    const type = typesListObject[trainingModule[TrainingModuleFields.TYPE]];
 
                                     return (
                                         <TableRow key={trainingModule[TrainingModuleFields.ID]}>
@@ -147,6 +168,9 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                             </TableCell>
                                             <TableCell>
                                                 {trainingModule[TrainingModuleFields.DESCRIPTION]}
+                                            </TableCell>
+                                            <TableCell>
+                                                {type}
                                             </TableCell>
                                             <TableCell>
                                                 {profile}
@@ -159,15 +183,39 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                                 )}
                                             </TableCell>
                                             {canEdit &&
-                                                <TableCell className={classes.actions}>
-                                                    <IconButton
-                                                        onClick={this.handleClickDelete(trainingModule[TrainingModuleFields.ID])}>
-                                                        <DeleteIcon/>
-                                                    </IconButton>
-                                                    <IconButton onClick={this.handleClickEdit(trainingModule)}>
-                                                        <EditIcon/>
-                                                    </IconButton>
+                                                <TableCell>
+                                                    <TableSettingsMenu menuItems={[
+                                                        {
+                                                            text: 'Удалить',
+                                                            icon: <DeleteIcon />,
+                                                            handleClickItem: this.handleClickDelete(trainingModule[TrainingModuleFields.ID])
+                                                        },
+                                                        {
+                                                            text: 'Редактировать',
+                                                            icon: <EditIcon />,
+                                                            handleClickItem: this.handleClickEdit(trainingModule)
+                                                        },
+                                                        {
+                                                            text: 'Смотреть детально',
+                                                            icon: <EyeIcon />,
+                                                            link: appRouter.getTrainingModuleDetailLink(trainingModule[TrainingModuleFields.ID])
+                                                        }
+                                                    ]}
+                                                           handleOpenMenu={this.handleOpenMenu(trainingModule[TrainingModuleFields.ID])}
+                                                           handleCloseMenu={this.handleCloseMenu}
+                                                           anchorEl={get(anchorsEl, trainingModule[TrainingModuleFields.ID])}
+                                                    />
                                                 </TableCell>
+
+                                                // <TableCell className={classes.actions}>
+                                                //     <IconButton
+                                                //         onClick={this.handleClickDelete(trainingModule[TrainingModuleFields.ID])}>
+                                                //         <DeleteIcon/>
+                                                //     </IconButton>
+                                                //     <IconButton onClick={this.handleClickEdit(trainingModule)}>
+                                                //         <EditIcon/>
+                                                //     </IconButton>
+                                                // </TableCell>
                                             }
                                         </TableRow>
                                     )

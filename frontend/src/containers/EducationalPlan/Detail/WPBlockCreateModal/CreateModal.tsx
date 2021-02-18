@@ -161,10 +161,16 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     handleClose = () => {
-        const {planId} = this.props;
+        const {planId, moduleId} = this.props;
 
         this.props.actions.closeDetailDialog();
-        this.props.actions.getEducationalDetail(planId);
+        
+        if (planId){
+            this.props.actions.getEducationalDetail(planId);
+        } else {
+            //@ts-ignore
+            this.props.moduleActions.getTrainingModule({id: moduleId});
+        }
     }
 
     handleSave = () => {
@@ -497,7 +503,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     render() {
-        const {isOpen, classes} = this.props;
+        const {isOpen, classes, disableZUN} = this.props;
         const {blockOfWorkPrograms, showAddWorkProgramButton, isAddWorkProgramModalOpen,
             isAddCompetenceModalOpen, isAddIndicatorsModalOpen, expandedWorkProgram, isAddResultsModalOpen
         } = this.state;
@@ -596,11 +602,17 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         <Scrollbars>
                             <div className={classes.rightSide}>
                                 <div className={classes.workProgramBlock}>
-                                    <Typography className={classes.label}> Настройка связей рабочих программ, компетенций, индикаторов и результатов </Typography>
+                                    {!disableZUN &&
+                                        <Typography className={classes.label}>
+                                            Настройка связей рабочих программ, компетенций, индикаторов и результатов
+                                        </Typography>
+                                    }
                                     {blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((workProgram: any, wpIndex) =>
-                                        <ExpansionPanel expanded={expandedWorkProgram === wpIndex} onChange={this.handleChangeExpandedWorkProgram(wpIndex)}>
+                                        <ExpansionPanel expanded={disableZUN ? false : expandedWorkProgram === wpIndex}
+                                                        onChange={this.handleChangeExpandedWorkProgram(wpIndex)}
+                                        >
                                             <ExpansionPanelSummary
-                                                expandIcon={<ExpandMoreIcon />}
+                                                expandIcon={disableZUN ? <></> : <ExpandMoreIcon />}
                                                 aria-controls="panel1bh-content"
                                                 id="panel1bh-header"
                                             >

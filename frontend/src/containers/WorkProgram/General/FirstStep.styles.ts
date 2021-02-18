@@ -26,5 +26,9 @@ export default (theme: Theme) => createStyles({
     },
     fullWidth: {
         width: '100%'
+    },
+    extraPoint: {
+        marginTop: '9px',
+        marginLeft: '0px'
     }
 });

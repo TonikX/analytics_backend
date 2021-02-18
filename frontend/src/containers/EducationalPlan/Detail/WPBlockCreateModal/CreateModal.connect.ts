@@ -1,16 +1,15 @@
-import {Dispatch} from "react";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import workProgramActions from "../../../WorkProgramList/actions";
-import {WorkProgramListActions} from "../../../WorkProgramList/types";
 
 import actions from "../../actions";
 import {isOpenDetailDialog, getDetailDialogData, getEducationalPlanDetailId} from '../../getters';
-import {EducationalPlanActions} from "../../types";
 
 import {rootState} from "../../../../store/reducers";
 import {getWorkProgramsListForSelector} from "../../../WorkProgramList/getters";
+
+import moduleActions from '../../TrainingModules/actions';
 
 const mapStateToProps = (state: rootState) => {
     return {
@@ -21,11 +20,10 @@ const mapStateToProps = (state: rootState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<EducationalPlanActions|WorkProgramListActions>) => ({
-    // @ts-ignore
-    actions: bindActionCreators(actions, dispatch),
-    // @ts-ignore
-    workProgramActions: bindActionCreators(workProgramActions, dispatch),
+const mapDispatchToProps = (dispatch: any) => ({
+    actions: bindActionCreators<any, any>(actions, dispatch),
+    workProgramActions: bindActionCreators<any, any>(workProgramActions, dispatch),
+    moduleActions: bindActionCreators<any, any>(moduleActions, dispatch),
 });
 
 // @ts-ignore

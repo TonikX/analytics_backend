@@ -17,7 +17,7 @@ import {EducationalPlanBlockFields, ModuleFields} from '../../enum';
 import connect from './ModuleModal.connect';
 import styles from './ModuleModal.styles';
 
-class ModuleModal extends React.PureComponent<ModuleModalProps> {
+class ModuleModal extends React.Component<ModuleModalProps> {
     state = {
         block: {
             [EducationalPlanBlockFields.ID]: null
