@@ -7,10 +7,10 @@ export const GENERAL_PATH = 'select-educational-program';
 
 const initialState: selectEducationalProgramState = {
   [fields.PROFESSIONS]: [],
-  [fields.EDU_PROGRAMS]: [],
+  [fields.EDUCATIONAL_PROGRAMS]: [],
   [fields.SELECTED_PROFESSIONS]: [],
 }
-// как свитч в редьюсере в моей архитектуре
+
 const setProfessions = (state: selectEducationalProgramState, {payload}: any): selectEducationalProgramState => ({
   ...state,
   [fields.PROFESSIONS]: payload
@@ -27,9 +27,14 @@ const unselectProfession = (state: selectEducationalProgramState, {payload}: any
     .filter((i: ProfessionType) => i.id !== payload.id)]
 })
 
+const setEducationalPrograms = (state: selectEducationalProgramState, {payload}: any): selectEducationalProgramState => ({
+  ...state,
+  [fields.EDUCATIONAL_PROGRAMS]: payload
+})
 
 export const reducer = createReducer(initialState, {
   [actions.setProfessions.type]: setProfessions,
   [actions.selectProfession]: selectProfession,
   [actions.unselectProfession]: unselectProfession,
+  [actions.setEducationalPrograms]: setEducationalPrograms,
 })

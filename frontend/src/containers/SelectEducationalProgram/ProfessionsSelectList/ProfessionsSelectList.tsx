@@ -8,11 +8,12 @@ import {useStyles} from './ProfessionsSelectList.styles'
 import {List, AutoSizer} from 'react-virtualized';
 import Scrollbars from "react-custom-scrollbars";
 import TextField from '../../../components/TextField';
-import ProfessionItem from '../ProfessionItem/ProfessionItem'
+import {ProfessionItem} from '../ProfessionItem/ProfessionItem'
 
 import {ProfessionsSelectListProps} from './types'
+import {ProfessionType} from '../types'
 
-const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ professions, selectProfession, selectedProfessions, unselectProfession }) => {
+export const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ professions, selectProfession, selectedProfessions, unselectProfession }) => {
   const classes = useStyles()
   const [scrollTop, setScrollTop] = useState<number>(0)
   const [searchQuery, setSearchQuery] = useState<string>('')
@@ -20,10 +21,10 @@ const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ professio
     setScrollTop(scrollTop)
   }
 
-  const searchedProfessions = useMemo(() => 
+  const searchedProfessions = useMemo((): Array<ProfessionType> => 
     matchSorter(professions, searchQuery, {keys: ['title']}), [searchQuery, professions])
 
-  const rowRenderer = ({key, index, style}: any)  => {
+  const rowRenderer = ({key, index, style}: any) => {
     return (
       <ProfessionItem 
         key={key}
@@ -38,7 +39,7 @@ const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ professio
 
   const handleChangeSearch = (query: string): void => debounceSearch(query)
 
-  const debounceSearch =  debounce((value: string): void => {
+  const debounceSearch = debounce((value: string): void => {
     setSearchQuery(value);
   }, 400);
   const selectedProfessionsList = selectedProfessions.map((p) => (
@@ -96,5 +97,3 @@ const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ professio
     </div>
   )
 }
-
-export default ProfessionsSelectList

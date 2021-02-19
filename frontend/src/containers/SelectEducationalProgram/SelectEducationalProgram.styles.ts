@@ -22,4 +22,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         marginBottom: '20px',
         marginTop: '20px'
     },
+    submitBtn: {
+        width: 'fit-content'
+    },
 }));
