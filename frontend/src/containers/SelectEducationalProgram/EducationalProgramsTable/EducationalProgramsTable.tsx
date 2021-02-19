@@ -31,9 +31,11 @@ export const EducationalProgramsTable: React.FC<EducationalProgramsTableProps> =
   const [sortedPrograms, setSortedPrograms] = useState<Array<EducationalProgramType>>(educationalPrograms)
   useEffect(() => {
     setSortedPrograms(sortPrograms(sortingField, sortMode))
-    return () => dispatch(actions.setEducationalPrograms([]))
   }, [sortMode, sortingField])
 
+  useEffect(() => {
+    return () => dispatch(actions.setEducationalPrograms([]))
+  }, [])
   const sortPrograms = (sortingField: string, sortMode: string): Array<EducationalProgramType> => {
     if (sortMode === sortFields.ASC) {
       if (sortingField === EducationProgramFields.ACADEMIC_PLAN_FOR_EP) {
