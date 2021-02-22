@@ -252,7 +252,10 @@ class FirstStep extends React.Component<FirstStepProps> {
                             control={
                                 <Switch color="primary"
                                         onChange={this.changeExtraPoints}
-                                        checked={state[WorkProgramGeneralFields.EXTRA_POINTS].toString() === "3"}
+                                        checked={state[WorkProgramGeneralFields.EXTRA_POINTS] ?
+                                            state[WorkProgramGeneralFields.EXTRA_POINTS].toString() === "3"
+                                            : false
+                                        }
                                 />
                             }
                             label="Дополнительные 3 балла"
