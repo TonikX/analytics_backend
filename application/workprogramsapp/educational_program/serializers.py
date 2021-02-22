@@ -7,7 +7,7 @@ from rest_framework import serializers, viewsets
 from rest_framework.fields import BooleanField
 
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, ProfessionalAreaOfGeneralCharacteristics,\
-    ProfessionalStandard, PkCompetencesInGeneralCharacteristics
+    ProfessionalStandard, PkCompetencesInGeneralCharacteristics, PkCompetencesInGeneralCharacteristics
 
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
@@ -108,4 +108,12 @@ class DepartmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Department
+        fields = "__all__"
+
+
+class PkCompetencesInGeneralCharacteristicsSerializer(serializers.ModelSerializer):
+    """Сериализатор образовательной программы"""
+
+    class Meta:
+        model = PkCompetencesInGeneralCharacteristics
         fields = "__all__"

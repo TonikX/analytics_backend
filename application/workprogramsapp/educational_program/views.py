@@ -1,7 +1,7 @@
 from django.db.models import Count
 # Сериализаторы
 from rest_framework import filters
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -9,11 +9,11 @@ from rest_framework.response import Response
 # Сериализаторы
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
     EducationalProgramSerializer, \
-    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer
+    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, PkCompetencesInGeneralCharacteristicsSerializer
 # --Работа с образовательной программой
 from workprogramsapp.models import AcademicPlan
 # --Работа с образовательной программой
-from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram
+from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, PkCompetencesInGeneralCharacteristics
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 
@@ -176,3 +176,9 @@ def EducationalProgramRankingByProfession(request):
             list(EducationalProgram.objects.filter(academic_plan_for_ep__academic_plan=s)))
     serializer = EducationalProgramSerializer(list_of_educational_program, many=True)
     return Response(serializer.data)
+
+
+class PkCompetencesInGeneralCharacteristicsSet(viewsets.ModelViewSet):
+    queryset = PkCompetencesInGeneralCharacteristics.objects.all()
+    serializer_class = PkCompetencesInGeneralCharacteristicsSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)

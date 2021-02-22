@@ -392,8 +392,8 @@ class PkCompetencesInGeneralCharacteristics(models.Model):
     """
 
     labor_functions = models.CharField(max_length=512, verbose_name="трудовая функция")
-    general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
-    competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
+    general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="Общая характеристика", blank=True, null=True)
+    competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Компетенции", blank=True, null=True)
     professional_standard = models.ManyToManyField('ProfessionalStandard', verbose_name="Профессиональный стандарт", blank=True)
 
     def __str__(self):
