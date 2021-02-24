@@ -184,7 +184,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
     render() {
         const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
-            workProgramRating, canAddToFolder, hoursError} = this.props;
+            workProgramRating, canAddToFolder, hoursError, evaluationToolsErrors} = this.props;
         const {activeStep, isOpenComments} = this.state;
 
         return (
@@ -196,11 +196,10 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         {canSendToArchive && <Button onClick={this.handleSendToArchive}>Отправить в архив</Button>}
 
                         {canSendToExpertise &&
-                            <Tooltip title="Часы по разделам заполнены неверно"
-                                     disableHoverListener={!hoursError}
+                            <Tooltip title={hoursError ? "Ошибка! Часы по разделам заполнены неверно" : evaluationToolsErrors ? "Ошибка! Кол-во баллов в РПД больше 100" : ''}
+                                     disableHoverListener={!hoursError && !evaluationToolsErrors}
                             >
-                                <Button onClick={this.handleSendToExpertize}
-                                        disabled={hoursError}
+                                <Button onClick={() => (!hoursError && !evaluationToolsErrors) && this.handleSendToExpertize}
                                 >
                                     Отправить на экспертизу
                                 </Button>

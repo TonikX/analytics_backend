@@ -3,13 +3,24 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "./actions";
-import {getWorkProgram, getWorkProgramField, isCanApprove, isCanArchive, isCanComment, isCanEdit, isCanAddToFolder, getIsHoursError} from './getters';
+import {
+    getWorkProgram,
+    getWorkProgramField,
+    isCanApprove,
+    isCanArchive,
+    isCanComment,
+    isCanEdit,
+    isCanAddToFolder,
+    getIsHoursError,
+    getWorkProgramEvaluationToolsList, getWorkProgramIntermediateCertificationList
+} from './getters';
 import {WorkProgramActions} from "./types";
 
 import {rootState} from "../../store/reducers";
 import {WorkProgramGeneralFields} from "./enum";
 import {getFolders} from "../Profile/Folders/getters";
 import folderActions from "../Profile/Folders/actions";
+import {getEvaluationToolsMaxSum, getIntermediateCertificationMaxSum} from "./utils";
 
 const mapStateToProps = (state:rootState) => {
     return {
@@ -24,7 +35,9 @@ const mapStateToProps = (state:rootState) => {
         canSendToExpertise: isCanEdit(state),
         canComment: isCanComment(state),
         folders: getFolders(state),
-        hoursError: getIsHoursError(state)
+        hoursError: getIsHoursError(state),
+        evaluationToolsErrors: getEvaluationToolsMaxSum(getWorkProgramEvaluationToolsList(state))
+            + getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state)) > 100
     };
 };
 

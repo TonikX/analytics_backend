@@ -25,20 +25,18 @@ import EvaluationCertificationTotalList from "../EvaluationCertificationTotalLis
 import CreateModal from "./CreateModal";
 
 import {SixthStepProps} from './types';
-import {EvaluationToolFields, fields, workProgramSectionFields} from "../enum";
+import {EvaluationToolFields, fields, WorkProgramGeneralFields, workProgramSectionFields} from "../enum";
 import {EvaluationToolType} from "../types";
 
 import connect from './EvaluationTools.connect';
 import styles from './EvaluationTools.styles';
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 class EvaluationTools extends React.PureComponent<SixthStepProps> {
     state = {
         anchorsEl: {}
     };
-
-    componentDidMount() {
-        this.props.actions.getWorkProgramEvaluationTools();
-    }
 
     handleCreateNew = () => {
         this.props.actions.openDialog({dialogType: fields.CREATE_NEW_EVALUATION_TOOLS, data: {}});
@@ -72,12 +70,36 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
         this.setState({anchorsEl: {}});
     };
 
+    changeExtraPoints = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+        this.props.actions.saveWorkProgram({
+            destination: WorkProgramGeneralFields.EXTRA_POINTS,
+            value: checked ? 3 : 0
+        });
+    }
+
     render() {
-        const {classes, evaluationToolsList, isCanEdit, isStudent} = this.props;
+        const {classes, evaluationToolsList, isCanEdit, isStudent, extraPoints} = this.props;
         const {anchorsEl} = this.state;
 
         return (
             <div className={classes.root}>
+                <FormControlLabel
+                    value="start"
+                    control={
+                        <Switch color="primary"
+                                onChange={this.changeExtraPoints}
+                                defaultChecked={extraPoints === "3"}
+                        />
+                    }
+                    label="Дополнительные 3 балла"
+                    labelPlacement="start"
+                    className={classes.extraPoint}
+                />
+
+                <div className={classes.totalList}>
+                    <EvaluationCertificationTotalList />
+                </div>
+
                 <div className={classNames(classes.header, classes.row)}>
                     <Typography className={classes.title}>
                         Название
@@ -107,8 +129,8 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                         Семестр
                     </Typography>
                 </div>
-                <Scrollbars autoHeight>
-                    <div>
+                <Scrollbars>
+                    <div className={classes.list}>
                         {evaluationToolsList.map((evaluationTool) => (
                             <div className={classes.item}>
                                 <div className={classes.row}>
@@ -203,10 +225,6 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                         ))}
                     </div>
                 </Scrollbars>
-
-                <div style={{marginTop: '50px'}}>
-                    <EvaluationCertificationTotalList />
-                </div>
 
                 {isCanEdit &&
                     <Fab color="secondary"

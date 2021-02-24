@@ -45,6 +45,7 @@ const getWorkProgram = createLogic({
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_WORK_PROGRAM}));
+                dispatch(workProgramActions.getWorkProgramEvaluationTools());
                 return done();
             });
     }

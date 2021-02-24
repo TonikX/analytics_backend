@@ -78,6 +78,11 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
         
         return (
             <div className={classes.root}>
+
+                <div className={classes.totalList}>
+                    <EvaluationCertificationTotalList />
+                </div>
+
                 <div className={classNames(classes.header, classes.row)}>
                     <Typography className={classes.title}>
                         Название
@@ -99,8 +104,9 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                         Семестр
                     </Typography>
                 </div>
-                <Scrollbars autoHeight>
-                    <div>
+
+                <Scrollbars>
+                    <div className={classes.list}>
                         {intermediateCertificationList.map((intermediateCertificationTool) => (
                             <div className={classes.item}>
                                 <div className={classes.row}>
@@ -176,10 +182,6 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                         ))}
                     </div>
                 </Scrollbars>
-
-                <div style={{marginTop: '50px'}}>
-                    <EvaluationCertificationTotalList />
-                </div>
 
                 {isCanEdit &&
                     <Fab color="secondary"

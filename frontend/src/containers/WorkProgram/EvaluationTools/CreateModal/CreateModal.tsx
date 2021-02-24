@@ -295,7 +295,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                     </div>
 
                                     <FormControl component="fieldset">
-                                        <FormLabel component="legend">Семестр *</FormLabel>
+                                        <FormLabel component="legend">Длительность изучения *</FormLabel>
                                         <RadioGroup className={classes.radioGroup}
                                                     onChange={this.saveField(EvaluationToolFields.SEMESTER)}
                                                     value={evaluationTool[EvaluationToolFields.SEMESTER]}

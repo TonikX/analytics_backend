@@ -23,6 +23,12 @@ export default (theme: Theme) => createStyles({
             fontSize: '14px'
         }
     },
+    list: {
+        height: '100%',
+    },
+    totalList: {
+        marginBottom: '10px'
+    },
     sectionsRow: {
         background: '#f6f6f6',
         flexWrap: "wrap"

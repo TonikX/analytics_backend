@@ -12,7 +12,10 @@ export default (theme: Theme) => createStyles({
         flex: 'none',
     },
     list: {
-        maxHeight: '100%',
+        height: '100%',
+    },
+    totalList: {
+        marginBottom: '10px'
     },
     item: {
         borderBottom: '1px solid #ccc',
@@ -105,5 +108,9 @@ export default (theme: Theme) => createStyles({
     eyeIcon: {
         cursor: 'pointer',
         marginLeft: 'auto'
+    },
+    extraPoint: {
+        justifyContent: 'flex-end',
+        marginLeft: '0px'
     }
 });
