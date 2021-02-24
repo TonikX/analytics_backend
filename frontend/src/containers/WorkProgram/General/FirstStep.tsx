@@ -3,6 +3,8 @@ import get from 'lodash/get';
 import classNames from 'classnames';
 import moment, {Moment} from "moment";
 
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {DatePicker} from "@material-ui/pickers";
@@ -30,6 +32,7 @@ class FirstStep extends React.Component<FirstStepProps> {
         [WorkProgramGeneralFields.DESCRIPTION]: '',
         [WorkProgramGeneralFields.VIDEO_LINK]: '',
         [WorkProgramGeneralFields.QUALIFICATION]: '',
+        [WorkProgramGeneralFields.EXTRA_POINTS]: '',
     };
 
     componentDidMount() {
@@ -41,6 +44,7 @@ class FirstStep extends React.Component<FirstStepProps> {
             [WorkProgramGeneralFields.DESCRIPTION]: this.props.description,
             [WorkProgramGeneralFields.VIDEO_LINK]: this.props.video,
             [WorkProgramGeneralFields.QUALIFICATION]: this.props.qualification,
+            [WorkProgramGeneralFields.EXTRA_POINTS]: this.props.extraPoints,
         })
     }
 
@@ -55,6 +59,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                 [WorkProgramGeneralFields.DESCRIPTION]: this.props.description,
                 [WorkProgramGeneralFields.VIDEO_LINK]: this.props.video,
                 [WorkProgramGeneralFields.QUALIFICATION]: this.props.qualification,
+                [WorkProgramGeneralFields.EXTRA_POINTS]: this.props.extraPoints,
             })
         }
     }
@@ -104,6 +109,17 @@ class FirstStep extends React.Component<FirstStepProps> {
         this.props.actions.saveWorkProgram({
             destination: WorkProgramGeneralFields.APPROVAL_DATE,
             value: date.format()
+        });
+    }
+
+    changeExtraPoints = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+        this.setState({
+            [WorkProgramGeneralFields.EXTRA_POINTS]: checked ? 3 : 0
+        })
+
+        this.props.actions.saveWorkProgram({
+            destination: WorkProgramGeneralFields.EXTRA_POINTS,
+            value: checked ? 3 : 0
         });
     }
 
@@ -230,6 +246,22 @@ class FirstStep extends React.Component<FirstStepProps> {
                                 disabled={!isCanEdit}
                             />
                         </InputsLoader>
+
+                        <FormControlLabel
+                            value="start"
+                            control={
+                                <Switch color="primary"
+                                        onChange={this.changeExtraPoints}
+                                        checked={state[WorkProgramGeneralFields.EXTRA_POINTS] ?
+                                            state[WorkProgramGeneralFields.EXTRA_POINTS].toString() === "3"
+                                            : false
+                                        }
+                                />
+                            }
+                            label="Дополнительные 3 балла"
+                            labelPlacement="start"
+                            className={classes.extraPoint}
+                        />
                     </div>
                 }
             </div>

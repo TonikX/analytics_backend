@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "./actions";
-import {getWorkProgram, getWorkProgramField, isCanApprove, isCanArchive, isCanComment, isCanEdit, isCanAddToFolder} from './getters';
+import {getWorkProgram, getWorkProgramField, isCanApprove, isCanArchive, isCanComment, isCanEdit, isCanAddToFolder, getIsHoursError} from './getters';
 import {WorkProgramActions} from "./types";
 
 import {rootState} from "../../store/reducers";
@@ -24,6 +24,7 @@ const mapStateToProps = (state:rootState) => {
         canSendToExpertise: isCanEdit(state),
         canComment: isCanComment(state),
         folders: getFolders(state),
+        hoursError: getIsHoursError(state)
     };
 };
 

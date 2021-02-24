@@ -4,11 +4,11 @@ from .expertise.models import UserExpertise, ExpertiseComments, Expertise
 from .folders_ans_statistic.models import Folder, WorkProgramInFolder
 from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
-    Competence, Indicator, EvaluationTool, FieldOfStudyWorkProgram, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
+    Competence, Indicator, EvaluationTool, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
     RouteComposition, Route, Certification, OnlineCourse, BibliographicReference, AcademicPlan,
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
 )
- 
+# FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
     Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard, PkCompetencesInGeneralCharacteristics
 
@@ -24,7 +24,7 @@ admin.site.register(Competence)
 # admin.site.register(IndicatorWorkProgram)
 admin.site.register(Indicator)
 admin.site.register(EvaluationTool)
-admin.site.register(FieldOfStudyWorkProgram)
+#admin.site.register(FieldOfStudyWorkProgram)
 admin.site.register(DisciplineSection)
 admin.site.register(Topic)
 admin.site.register(RouteComposition)
