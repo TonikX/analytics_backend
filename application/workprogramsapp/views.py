@@ -404,7 +404,7 @@ class WorkProgramCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(owner=self.request.user, editors = [self.request.user])
 
 
 class WorkProgramDestroyView(generics.DestroyAPIView):

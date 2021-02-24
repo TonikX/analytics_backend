@@ -89,7 +89,7 @@ class WorkProgram(CloneMixin, models.Model):
     hours = models.IntegerField(blank=True, null=True, verbose_name="Сумма часов по разделам")
     extra_points = models.CharField(choices=extra_points_choise, max_length=1, verbose_name='Квалификация',
                                    blank=True, null=True)
-    editors=models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors", verbose_name="Редакторы РПД", blank=True, null=True)
+    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors", verbose_name="Редакторы РПД", blank=True, null=True)
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
 
 
