@@ -96,7 +96,9 @@ export default (theme: Theme) => createStyles({
         marginTop: '20px'
     },
     sliderWrap: {
-        width: '700px',
+        // width: '50%',
+        // width: '700px',
+        width: '42%',
         padding: '0px 50px',
     }
 });
