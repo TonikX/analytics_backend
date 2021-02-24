@@ -35,5 +35,23 @@ export default (theme: Theme) => createStyles({
         '& .MuiOutlinedInput-notchedOutline legend': {
             width: '100px !important'
         }
+    },
+    editorsList: {
+        display: 'flex',
+        flexWrap: 'wrap'
+    },
+    editorItem: {
+        marginRight: '5px',
+        marginBottom: '10px'
+    },
+    editorTitle: {
+        fontSize: '14px',
+        marginBottom: 10
+    },
+    dialog: {
+        padding: 40,
+    },
+    addEditorButton: {
+        padding: '0px !important'
     }
 });

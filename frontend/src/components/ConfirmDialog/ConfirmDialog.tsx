@@ -6,11 +6,11 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 import {WithStyles} from '@material-ui/core';
 
 import styles from './ConfirmDialog.styles';
-import DialogTitle from "@material-ui/core/DialogTitle";
 
 interface ConfirmDialogProps extends WithStyles<typeof styles> {
     isOpen: boolean;

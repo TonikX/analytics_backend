@@ -4,12 +4,14 @@ import classNames from 'classnames';
 import moment, {Moment} from "moment";
 
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {DatePicker} from "@material-ui/pickers";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import DateIcon from "@material-ui/icons/DateRange";
+import AddIcon from "@material-ui/icons/Add";
 
 import InputsLoader from '../../../components/InputsLoader';
 import SimpleSelector from '../../../components/SimpleSelector';
@@ -19,11 +21,13 @@ import UserSelector from "../../Profile/UserSelector";
 
 import {FirstStepProps} from './types';
 import {WorkProgramGeneralFields} from "../enum";
-import {FULL_DATE_FORMAT} from "../../../common/utils";
+import {FULL_DATE_FORMAT, getUserFullName} from "../../../common/utils";
 import {languageObject, specializationObject, languageArray} from "../constants";
 
 import connect from './FirstStep.connect';
 import styles from './FirstStep.styles';
+import Chip from "@material-ui/core/Chip";
+import {UserFields} from "../../../layout/enum";
 
 class FirstStep extends React.Component<FirstStepProps> {
     state = {
@@ -129,15 +133,40 @@ class FirstStep extends React.Component<FirstStepProps> {
         });
     }
 
-    handleAddUser = () => {
+    handleAddUser = (userId: number) => {
+        const {editors} = this.props;
 
+        this.props.actions.saveWorkProgram({
+            destination: WorkProgramGeneralFields.EDITORS,
+            value: [
+                ...editors.map(user => user[UserFields.ID]),
+                userId
+            ]
+        });
+
+        this.setState({
+            addEditorsMode: false
+        });
+    }
+
+    deleteEditor = (userId: number) => () => {
+        const {editors} = this.props;
+
+        this.props.actions.saveWorkProgram({
+            destination: WorkProgramGeneralFields.EDITORS,
+            value: editors.reduce((editors: Array<any>, user) => {
+                if (user[UserFields.ID] !== userId){
+                    editors.push(user[UserFields.ID]);
+                }
+                return editors;
+            }, [])
+        });
     }
 
     render() {
         const {classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription, isCanEdit, editors} = this.props;
         const {state} = this;
         const {addEditorsMode} = state;
-        console.log('editors', editors);
 
         return (
             <div className={classes.container}>
@@ -233,15 +262,42 @@ class FirstStep extends React.Component<FirstStepProps> {
                         </>
                     }
 
+                    <Typography className={classes.editorTitle}>
+                        Редакторы
+                    </Typography>
+
+                    <div className={classes.editorsList}>
+                        {editors && editors.map && editors.map(editor =>
+                            <Chip label={getUserFullName(editor)}
+                                  onDelete={isCanEdit ? this.deleteEditor(editor[UserFields.ID]) : undefined}
+                                  className={classes.editorItem}
+                            />
+                        )}
+                    </div>
+
                     {addEditorsMode ?
-                        <UserSelector handleChange={this.handleAddUser}
-                                      selectorLabel="Выберите редактора"
-                        />
+                        <Dialog open
+                                fullWidth
+                                maxWidth="sm"
+                                classes={{
+                                    paper: classes.dialog
+                                }}
+                                onClose={() => this.setState({addEditorsMode: false})}
+                        >
+                            <UserSelector handleChange={this.handleAddUser}
+                                          selectorLabel="Выберите редактора"
+                                          label="Выберите редактора"
+                                          noMargin
+                            />
+                        </Dialog>
                         :
-                        <Button onClick={() => this.setState({addEditorsMode: true})}>Добавить редактора</Button>
+                        <Button onClick={() => this.setState({addEditorsMode: true})}
+                                variant="text"
+                                className={classes.addEditorButton}
+                        >
+                            <AddIcon /> Добавить редактора
+                        </Button>
                     }
-
-
                 </div>
 
                 {isCanEdit &&

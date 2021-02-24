@@ -52,10 +52,18 @@ class WorkProgramService extends AnalyticsService{
         });
     }
 
-    saveWorkProgram(destination: string, value: string, id: string){
+    saveWorkProgram(destination: string, value: string|Array<number>, id: string){
         const formData = new FormData();
 
-        formData.append(destination, value);
+        if (typeof value === 'string'){
+            formData.append(destination, value);
+        }
+
+        if (Array.isArray(value)){
+            value.forEach((value, index) => {
+                formData.append(`${destination}[${index}]`, value.toString());
+            });
+        }
 
         return this.patch(`/api/workprogram/update/${id}`, formData);
     }

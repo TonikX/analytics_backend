@@ -48,7 +48,7 @@ export enum WorkProgramGeneralFields {
     EXPERTISE_STATUS = 'status',
     USER_EXPERTISE_ID = 'user_expertise_id',
     EXTRA_POINTS = 'extra_points',
-    EDITORS = 'editor',
+    EDITORS = 'editors',
 }
 
 export enum workProgramSectionFields {
