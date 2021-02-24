@@ -21,6 +21,7 @@ const mapStateToProps = (state:rootState) => {
         description: getWorkProgramField(state, WorkProgramGeneralFields.DESCRIPTION),
         qualification: getWorkProgramField(state, WorkProgramGeneralFields.QUALIFICATION),
         language: getWorkProgramField(state, WorkProgramGeneralFields.LANGUAGE),
+        editors: getWorkProgramField(state, WorkProgramGeneralFields.EDITORS),
 
         isCanEdit: isCanEdit(state),
 

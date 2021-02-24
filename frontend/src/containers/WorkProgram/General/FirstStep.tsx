@@ -3,6 +3,7 @@ import get from 'lodash/get';
 import classNames from 'classnames';
 import moment, {Moment} from "moment";
 
+import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {DatePicker} from "@material-ui/pickers";
@@ -35,6 +36,7 @@ class FirstStep extends React.Component<FirstStepProps> {
         [WorkProgramGeneralFields.QUALIFICATION]: '',
         [WorkProgramGeneralFields.EXTRA_POINTS]: '',
         [WorkProgramGeneralFields.LANGUAGE]: '',
+        addEditorsMode: false
     };
 
     componentDidMount() {
@@ -132,8 +134,10 @@ class FirstStep extends React.Component<FirstStepProps> {
     }
 
     render() {
-        const {classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription, isCanEdit} = this.props;
+        const {classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription, isCanEdit, editors} = this.props;
         const {state} = this;
+        const {addEditorsMode} = state;
+        console.log('editors', editors);
 
         return (
             <div className={classes.container}>
@@ -229,9 +233,15 @@ class FirstStep extends React.Component<FirstStepProps> {
                         </>
                     }
 
-                    <UserSelector handleChange={this.handleAddUser}
-                                  label="Редакторы"
-                    />
+                    {addEditorsMode ?
+                        <UserSelector handleChange={this.handleAddUser}
+                                      selectorLabel="Выберите редактора"
+                        />
+                        :
+                        <Button onClick={() => this.setState({addEditorsMode: true})}>Добавить редактора</Button>
+                    }
+
+
                 </div>
 
                 {isCanEdit &&
