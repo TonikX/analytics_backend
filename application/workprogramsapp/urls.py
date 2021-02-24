@@ -1,15 +1,11 @@
 from django.conf.urls import url
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.urls import path
 
 from .educational_program.views import DepartmentCreateAPIView, DepartmentListAPIView, DepartmentDetailsView, \
     DepartmentDestroyView, DepartmentUpdateView, EducationalProgramRankingByProfession
 # Контроллеры
-from .educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
-    EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView
-from .educational_program.views import GeneralCharacteristicsCreateAPIView, GeneralCharacteristicsListAPIView, \
-    GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
-    GeneralCharacteristicsDetailsWithEducationalProgramView
+
 from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView, UserExpertiseListView, \
     ExpertiseCommentsView, ChangeUserExpertiseView, \
     ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById
@@ -250,23 +246,6 @@ urlpatterns = [
     path('api/Department/delete/<int:pk>', DepartmentDestroyView.as_view()),
     path('api/Department/update/<int:pk>', DepartmentUpdateView.as_view()),
 
-    # --Факультет
-    path('api/GeneralCharacteristics', GeneralCharacteristicsListAPIView.as_view()),
-    path('api/GeneralCharacteristics/create', GeneralCharacteristicsCreateAPIView.as_view()),
-    path('api/GeneralCharacteristics/detail/<int:pk>', GeneralCharacteristicsDetailsView.as_view()),
-    path('api/GeneralCharacteristics/delete/<int:pk>', GeneralCharacteristicsDestroyView.as_view()),
-    path('api/GeneralCharacteristics/update/<int:pk>', GeneralCharacteristicsUpdateView.as_view()),
-    path('api/GeneralCharacteristics/detail_with_educational_program/<int:pk>',
-         GeneralCharacteristicsDetailsWithEducationalProgramView.as_view()),
-
-    # --Факультет
-    path('api/EducationalProgram', EducationalProgramListAPIView.as_view()),
-    path('api/EducationalProgram/create', EducationalProgramCreateAPIView.as_view()),
-    path('api/EducationalProgram/detail/<int:pk>', EducationalProgramDetailsView.as_view()),
-    path('api/EducationalProgram/delete/<int:pk>', EducationalProgramDestroyView.as_view()),
-    path('api/EducationalProgram/update/<int:pk>', EducationalProgramUpdateView.as_view()),
-    path('api/EducationalProgram/byprofessions', EducationalProgramRankingByProfession),
-
     # --Экспертизы
     path('api/expertise/user', UserExpertiseListView.as_view()),
     path('api/expertise/user_with_expertise/<int:pk>', UserExpertiseListView.as_view()),
@@ -337,4 +316,7 @@ urlpatterns = [
     # Аттестационные оценочные средства
     path('api/certification_tools/', СertificationEvaluationToolListAPI.as_view()),
     path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
+
+
+    url(r'^', include('workprogramsapp.educational_program.urls')),
 ]

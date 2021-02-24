@@ -88,8 +88,8 @@ class WorkProgram(CloneMixin, models.Model):
     work_status = models.CharField(max_length=1, choices=status_choise, verbose_name='Архив', default = 'w')
     hours = models.IntegerField(blank=True, null=True, verbose_name="Сумма часов по разделам")
     extra_points = models.CharField(choices=extra_points_choise, max_length=1, verbose_name='Квалификация',
-                                    blank=True, null=True)
-
+                                   blank=True, null=True)
+    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors", verbose_name="Редакторы РПД", blank=True, null=True)
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
 
 
@@ -392,8 +392,8 @@ class PkCompetencesInGeneralCharacteristics(models.Model):
     """
 
     labor_functions = models.CharField(max_length=512, verbose_name="трудовая функция")
-    general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
-    competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Декан", blank=True, null=True)
+    general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="Общая характеристика", blank=True, null=True)
+    competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Компетенции", blank=True, null=True)
     professional_standard = models.ManyToManyField('ProfessionalStandard', verbose_name="Профессиональный стандарт", blank=True)
 
     def __str__(self):
