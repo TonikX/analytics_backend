@@ -14,6 +14,8 @@ import InputsLoader from '../../../components/InputsLoader';
 import SimpleSelector from '../../../components/SimpleSelector';
 import SpecializationSelector from './Specialization';
 
+import UserSelector from "../../Profile/UserSelector";
+
 import {FirstStepProps} from './types';
 import {WorkProgramGeneralFields} from "../enum";
 import {FULL_DATE_FORMAT} from "../../../common/utils";
@@ -125,6 +127,10 @@ class FirstStep extends React.Component<FirstStepProps> {
         });
     }
 
+    handleAddUser = () => {
+
+    }
+
     render() {
         const {classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription, isCanEdit} = this.props;
         const {state} = this;
@@ -222,6 +228,10 @@ class FirstStep extends React.Component<FirstStepProps> {
                             <Typography className={classes.textItem}> {state[WorkProgramGeneralFields.DESCRIPTION]} </Typography>
                         </>
                     }
+
+                    <UserSelector handleChange={this.handleAddUser}
+                                  label="Редакторы"
+                    />
                 </div>
 
                 {isCanEdit &&
