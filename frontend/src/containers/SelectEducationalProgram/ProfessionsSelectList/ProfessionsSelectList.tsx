@@ -12,6 +12,7 @@ import {ProfessionItem} from '../ProfessionItem/ProfessionItem'
 
 import {ProfessionsSelectListProps} from './types'
 import {ProfessionType} from '../types'
+import {selectListModes} from '../enum'
 
 export const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ professions, selectProfession, selectedProfessions, unselectProfession }) => {
   const classes = useStyles()
@@ -29,7 +30,7 @@ export const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ pr
       <ProfessionItem 
         key={key}
         style={style}
-        mode='select'
+        mode={selectListModes.SELECT}
         selectProfession={selectProfession}
         unselectProfession={unselectProfession}
         profession={searchedProfessions[index]}
@@ -45,7 +46,7 @@ export const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ pr
   const selectedProfessionsList = selectedProfessions.map((p) => (
     <ProfessionItem
       key={p.id}
-      mode='unselect'
+      mode={selectListModes.UNSELECT}
       selectProfession={selectProfession}
       unselectProfession={unselectProfession}
       profession={p}

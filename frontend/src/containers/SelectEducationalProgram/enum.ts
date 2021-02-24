@@ -13,3 +13,8 @@ export enum fetchingTypes {
   GET_PROFESSIONS = 'GET_PROFESSIONS',
   GET_EDUCATIONAL_PROGRAMS = 'GET_EDUCATIONAL_PROGRAMS',
 }
+
+export enum selectListModes {
+  SELECT = 'select',
+  UNSELECT = 'unselect',
+}

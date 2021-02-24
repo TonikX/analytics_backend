@@ -9,13 +9,14 @@ import CancelOutlined from "@material-ui/icons/CancelOutlined";
 
 import {ProfessionItemProps} from './types'
 import {ProfessionType} from '../types'
-import {professionFields} from '../enum'
+import {professionFields, selectListModes} from '../enum'
+
 
 export const ProfessionItem: React.FC<ProfessionItemProps> = ({ style, profession, selectProfession, mode, unselectProfession}) => {
   const classes = useStyles()
   const addProfession = (profession: ProfessionType) => selectProfession(profession)
   const removeProfession = (profession: ProfessionType) => unselectProfession(profession)
-  const onHandle = () => mode === 'select' 
+  const onHandle = () => mode === selectListModes.SELECT 
     ? addProfession(profession) 
     : removeProfession(profession)
 
@@ -28,7 +29,7 @@ export const ProfessionItem: React.FC<ProfessionItemProps> = ({ style, professio
       >
         <Typography>{profession[professionFields.TITLE]}</Typography>
         <IconButton className={classes.iconButton}>
-          {mode === 'select' 
+          {mode === selectListModes.SELECT
             ? <CheckCircleOutline className={classes.addIcon} />
             : <CancelOutlined className={classes.removeIcon} />
           }
