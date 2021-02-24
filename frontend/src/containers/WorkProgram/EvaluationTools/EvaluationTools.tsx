@@ -21,11 +21,11 @@ import EyeIcon from '@material-ui/icons/VisibilityOutlined';
 import CheckIcon from "@material-ui/icons/CheckOutlined";
 
 import DescriptionModal from "./DescriptionModal";
+import EvaluationCertificationTotalList from "../EvaluationCertificationTotalList";
+import CreateModal from "./CreateModal";
 
 import {SixthStepProps} from './types';
 import {EvaluationToolFields, fields, workProgramSectionFields} from "../enum";
-
-import CreateModal from "./CreateModal";
 import {EvaluationToolType} from "../types";
 
 import connect from './EvaluationTools.connect';
@@ -107,8 +107,8 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                         Семестр
                     </Typography>
                 </div>
-                <Scrollbars>
-                    <div className={classes.list}>
+                <Scrollbars autoHeight>
+                    <div>
                         {evaluationToolsList.map((evaluationTool) => (
                             <div className={classes.item}>
                                 <div className={classes.row}>
@@ -180,7 +180,9 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                             </Menu>
                                         </div>
                                         : !isStudent ?
-                                             <div onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}>
+                                             <div className={classes.eyeIcon}
+                                                  onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}
+                                             >
                                                  <EyeIcon className={classes.menuIcon} />
                                              </div>
                                         : <></>
@@ -202,6 +204,10 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                     </div>
                 </Scrollbars>
 
+                <div style={{marginTop: '50px'}}>
+                    <EvaluationCertificationTotalList />
+                </div>
+
                 {isCanEdit &&
                     <Fab color="secondary"
                          className={classes.addIcon}
@@ -212,7 +218,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                 }
 
                 {isCanEdit && <CreateModal />}
-                {isCanEdit && <DescriptionModal />}
+                <DescriptionModal />
             </div>
         );
     }

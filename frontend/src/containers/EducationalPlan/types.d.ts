@@ -7,6 +7,7 @@ import {WorkProgramGeneralType} from "../WorkProgram/types";
 import {DirectionType} from "../Direction/types";
 
 export interface EducationalPlanActions {
+    pageDown: any;
     deleteCompetenceBlock: any;
     deleteWorkProgramFromZun: any;
     saveCompetenceBlock: any;

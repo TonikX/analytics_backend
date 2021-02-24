@@ -56,7 +56,8 @@ class EducationalPlanService extends AnalyticsService{
 
     createBlockOfWorkPrograms(moduleId: number){
         return this.post(`/api/workprogramchangeindisciplineblockmodule/create`, {
-            'discipline_block_module': moduleId,
+            //@ts-ignore
+            'discipline_block_module': parseInt(moduleId),
         });
     }
 

@@ -1,15 +1,11 @@
 from django.conf.urls import url
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.urls import path
 
 from .educational_program.views import DepartmentCreateAPIView, DepartmentListAPIView, DepartmentDetailsView, \
     DepartmentDestroyView, DepartmentUpdateView, EducationalProgramRankingByProfession
 # Контроллеры
-from .educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
-    EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView
-from .educational_program.views import GeneralCharacteristicsCreateAPIView, GeneralCharacteristicsListAPIView, \
-    GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
-    GeneralCharacteristicsDetailsWithEducationalProgramView
+
 from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView, UserExpertiseListView, \
     ExpertiseCommentsView, ChangeUserExpertiseView, \
     ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById
@@ -35,9 +31,6 @@ from .views import BibliographicReferenceListCreateAPIView, BibliographicReferen
     FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView, CompetenceCreateView, CompetencesListView, \
     FileUploadWorkProgramOutcomesAPIView
 from .views import CloneWorkProgramm
-from .views import DisciplineSectionList, DiscplineSectionPost, DisciplineSectionPostUpdate
-from .views import DocxFileExportView
-from .views import EvaluationToolList, EvaluationToolPost, EvaluationToolPostUpdate
 from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, \
     TopicsListAPI, TopicDetailAPI, NewOrdinalNumbersForDesciplineSectionAPI
 from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateView
@@ -50,10 +43,8 @@ from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, Onlin
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, \
     PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
-from .views import PrerequisitesUpdate, OutcomesUpdate, FieldOfStudyWPListView, \
-    CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, DeleteIndicatorFromCompetenceView, \
+from .views import CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, DeleteIndicatorFromCompetenceView, \
     AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
-from .views import TopicList, TopicPost, TopicPostUpdate
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, \
     WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView, \
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, \
@@ -85,8 +76,7 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkPr
 from .views import DocxFileExportView, SyllabusExportView
 from .views import CloneWorkProgramm
 
-from .views import WorkProgramsList, WorkProgramsPost, WorkProgramsPostUpdate, WorkProgramsListApi, WorkProgramView, \
-    UserGroups
+from .views import WorkProgramsListApi, UserGroups
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
 
 from .views import WorkProgramFullDetailsWithDisciplineCodeView
@@ -97,31 +87,7 @@ from .views import WorkProgramFullDetailsWithDisciplineCodeView
 
 urlpatterns = [
 
-    # ToDo: сделать нормально.
-    # re_path(r'^workprograms/(?P<pk>)/update/', WorkProgramsPostUpdate.as_view(), name='workprograms_update'),
-    url(r'^workprograms/(?P<pk>\d+)/update/$', WorkProgramsPostUpdate.as_view(), name='workprograms_update'),
-    # url for prerequisites
-    url(r'^prerequisites/(?P<pk>\d+)/update/$', PrerequisitesUpdate.as_view(), name='prereq_update'),
-    # url for outcomes
-    url(r'^outcomes/(?P<pk>\d+)/update/$', OutcomesUpdate.as_view(), name='outcome_update'),
-    # url for evaluation tools
-    path('evaluationlist/', EvaluationToolList.as_view(), name='evaluation'),
-    path('evaluation/new', EvaluationToolPost.as_view(), name='eval_post'),
-    url(r'^evaluation/(?P<pk>\d+)/update/$', EvaluationToolPostUpdate.as_view(), name='eval_update'),
-    # url for sections
-    path('sectionlist/', DisciplineSectionList.as_view(), name='section'),
-    path('section/new', DiscplineSectionPost.as_view(), name='sec_post'),
-    url(r'^section/(?P<pk>\d+)/update/$', DisciplineSectionPostUpdate.as_view(), name='sec_update'),
-    # url for topics
-    path('topiclist/', TopicList.as_view(), name='topic'),
-    path('topic/new', TopicPost.as_view(), name='topic_post'),
-    url(r'^topic/(?P<pk>\d+)/update/$', TopicPostUpdate.as_view(), name='topic_update'),
-    path('workprogramslist/', WorkProgramsList.as_view(), name='workprograms'),
-    url(r'^workprogram/(?P<pk>\d+)/$', WorkProgramView.as_view(), name='workprogram'),
-    path('workprograms/newbinding', WorkProgramsPost.as_view(), name='author_update'),
-    # url(r'^uploadcsv/$', upload_file, name = 'uploadcsv'),
-    url(r'^fswplist/$', FieldOfStudyWPListView.as_view(), name='fswp'),
-
+    # Старые урлы приложения удалены
     # Блок реализации API
     path('api/workprograms/', WorkProgramsListApi.as_view()),
 
@@ -280,23 +246,6 @@ urlpatterns = [
     path('api/Department/delete/<int:pk>', DepartmentDestroyView.as_view()),
     path('api/Department/update/<int:pk>', DepartmentUpdateView.as_view()),
 
-    # --Факультет
-    path('api/GeneralCharacteristics', GeneralCharacteristicsListAPIView.as_view()),
-    path('api/GeneralCharacteristics/create', GeneralCharacteristicsCreateAPIView.as_view()),
-    path('api/GeneralCharacteristics/detail/<int:pk>', GeneralCharacteristicsDetailsView.as_view()),
-    path('api/GeneralCharacteristics/delete/<int:pk>', GeneralCharacteristicsDestroyView.as_view()),
-    path('api/GeneralCharacteristics/update/<int:pk>', GeneralCharacteristicsUpdateView.as_view()),
-    path('api/GeneralCharacteristics/detail_with_educational_program/<int:pk>',
-         GeneralCharacteristicsDetailsWithEducationalProgramView.as_view()),
-
-    # --Факультет
-    path('api/EducationalProgram', EducationalProgramListAPIView.as_view()),
-    path('api/EducationalProgram/create', EducationalProgramCreateAPIView.as_view()),
-    path('api/EducationalProgram/detail/<int:pk>', EducationalProgramDetailsView.as_view()),
-    path('api/EducationalProgram/delete/<int:pk>', EducationalProgramDestroyView.as_view()),
-    path('api/EducationalProgram/update/<int:pk>', EducationalProgramUpdateView.as_view()),
-    path('api/EducationalProgram/byprofessions', EducationalProgramRankingByProfession),
-
     # --Экспертизы
     path('api/expertise/user', UserExpertiseListView.as_view()),
     path('api/expertise/user_with_expertise/<int:pk>', UserExpertiseListView.as_view()),
@@ -367,4 +316,7 @@ urlpatterns = [
     # Аттестационные оценочные средства
     path('api/certification_tools/', СertificationEvaluationToolListAPI.as_view()),
     path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
+
+
+    url(r'^', include('workprogramsapp.educational_program.urls')),
 ]

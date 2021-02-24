@@ -16,7 +16,7 @@ const Search = ({handleChangeSearchQuery, classes} : SearchProps) => {
         debounceSearch(get(event, 'target.value', ''));
     };
 
-    const debounceSearch =  debounce((value: string): void => {
+    const debounceSearch = debounce((value: string): void => {
         handleChangeSearchQuery(value);
     }, 500);
 
