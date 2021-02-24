@@ -20,6 +20,7 @@ const mapStateToProps = (state:rootState) => {
         video: getWorkProgramField(state, WorkProgramGeneralFields.VIDEO_LINK),
         description: getWorkProgramField(state, WorkProgramGeneralFields.DESCRIPTION),
         qualification: getWorkProgramField(state, WorkProgramGeneralFields.QUALIFICATION),
+        language: getWorkProgramField(state, WorkProgramGeneralFields.LANGUAGE),
 
         isCanEdit: isCanEdit(state),
 

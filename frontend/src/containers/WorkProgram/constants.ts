@@ -25,6 +25,32 @@ export const specialization = [
     }
 ];
 
+
+const ENGLISH = 'en';
+const RUSSIAN = 'ru';
+const RUSSIAN_ENGLISH = 'ru/en';
+
+export const languageObject: any = {
+    [RUSSIAN]: 'Русский',
+    [ENGLISH]: 'Английский',
+    [RUSSIAN_ENGLISH]: 'Русский/Английский',
+}
+
+export const languageArray = [
+    {
+        value: RUSSIAN,
+        label: 'Русский'
+    },
+    {
+        value: ENGLISH,
+        label: 'Английский'
+    },
+    {
+        value: RUSSIAN_ENGLISH,
+        label: 'Русский/Английский'
+    }
+];
+
 export const workProgramStatusesRussian: any = {
     [WorkProgramStatusEnum.AT_WORK]: 'В работе',
     [WorkProgramStatusEnum.EXPERTISE]: 'На экспертизе',

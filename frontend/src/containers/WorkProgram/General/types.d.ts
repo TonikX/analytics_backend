@@ -11,6 +11,7 @@ export interface FirstStepProps extends WithStyles<typeof styles> {
     description: string;
     video: string;
     qualification: string;
+    language: string;
     extraPoints: string|null;
 
     isCanEdit: boolean;

@@ -11,12 +11,13 @@ import IconButton from "@material-ui/core/IconButton";
 import DateIcon from "@material-ui/icons/DateRange";
 
 import InputsLoader from '../../../components/InputsLoader';
-import Selector from './Specialization';
+import SimpleSelector from '../../../components/SimpleSelector';
+import SpecializationSelector from './Specialization';
 
 import {FirstStepProps} from './types';
 import {WorkProgramGeneralFields} from "../enum";
 import {FULL_DATE_FORMAT} from "../../../common/utils";
-import {specializationObject} from "../constants";
+import {languageObject, specializationObject, languageArray} from "../constants";
 
 import connect from './FirstStep.connect';
 import styles from './FirstStep.styles';
@@ -31,6 +32,7 @@ class FirstStep extends React.Component<FirstStepProps> {
         [WorkProgramGeneralFields.VIDEO_LINK]: '',
         [WorkProgramGeneralFields.QUALIFICATION]: '',
         [WorkProgramGeneralFields.EXTRA_POINTS]: '',
+        [WorkProgramGeneralFields.LANGUAGE]: '',
     };
 
     componentDidMount() {
@@ -43,6 +45,7 @@ class FirstStep extends React.Component<FirstStepProps> {
             [WorkProgramGeneralFields.VIDEO_LINK]: this.props.video,
             [WorkProgramGeneralFields.QUALIFICATION]: this.props.qualification,
             [WorkProgramGeneralFields.EXTRA_POINTS]: this.props.extraPoints,
+            [WorkProgramGeneralFields.LANGUAGE]: this.props.language,
         })
     }
 
@@ -58,6 +61,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                 [WorkProgramGeneralFields.VIDEO_LINK]: this.props.video,
                 [WorkProgramGeneralFields.QUALIFICATION]: this.props.qualification,
                 [WorkProgramGeneralFields.EXTRA_POINTS]: this.props.extraPoints,
+                [WorkProgramGeneralFields.LANGUAGE]: this.props.language,
             })
         }
     }
@@ -96,6 +100,17 @@ class FirstStep extends React.Component<FirstStepProps> {
     changeDescription = (e: React.ChangeEvent) => {
         this.setState({
             [WorkProgramGeneralFields.DESCRIPTION]: get(e, 'target.value')
+        });
+    }
+
+    changeLanguage = (language: string) => {
+        this.setState({
+            [WorkProgramGeneralFields.LANGUAGE]: language
+        });
+
+        this.props.actions.saveWorkProgram({
+            destination: WorkProgramGeneralFields.LANGUAGE,
+            value: language
         });
     }
 
@@ -185,10 +200,22 @@ class FirstStep extends React.Component<FirstStepProps> {
                     </InputsLoader>
 
                     {isCanEdit ?
-                        <Selector />
+                        <SpecializationSelector />
                         :
                         <Typography className={classes.textItem}><b>Уровень образовательной программы:</b> {specializationObject[state[WorkProgramGeneralFields.QUALIFICATION]]} </Typography>
                     }
+
+                    {isCanEdit ?
+                        <SimpleSelector label="Язык реализации"
+                                        metaList={languageArray}
+                                        value={languageObject[state[WorkProgramGeneralFields.LANGUAGE]]}
+                                        wrapClass={classes.selectorWrap}
+                                        onChange={this.changeLanguage}
+                        />
+                        :
+                        <Typography className={classes.textItem}><b>Язык реализации:</b> {languageObject[state[WorkProgramGeneralFields.LANGUAGE]]} </Typography>
+                    }
+
 
                     {!isCanEdit &&
                         <>

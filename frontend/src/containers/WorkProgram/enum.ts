@@ -31,6 +31,7 @@ export enum WorkProgramGeneralFields {
     TITLE = 'title',
     CODE = 'discipline_code',
     QUALIFICATION = 'qualification',
+    LANGUAGE = 'language',
     APPROVAL_DATE = 'approval_date',
     AUTHORS = 'authors',
     RATING = 'rating',
