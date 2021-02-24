@@ -41,6 +41,7 @@ import NotFoundPage from "./containers/NotFoundPage";
 import ForbiddenPage from "./containers/ForbiddenPage";
 
 import SelectDiscipline from "./containers/SelectDiscipline";
+import SelectEducationalProgram from './containers/SelectEducationalProgram'
 
 import Layout from "./layout";
 
@@ -62,6 +63,9 @@ export default () => (
             </Route>
             <AuthRoute path={routerService.getSelectDisciplineRoute()}>
                 <SelectDiscipline />
+            </AuthRoute>
+            <AuthRoute path={routerService.getSelectEducationalProgramRoute()}>
+                <SelectEducationalProgram />
             </AuthRoute>
             <AuthRoute path={routerService.getFoldersRoute()}>
                 <Folders />
