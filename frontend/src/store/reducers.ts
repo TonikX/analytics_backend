@@ -69,6 +69,9 @@ import {selectDisciplineState} from "../containers/SelectDiscipline/types";
 import {GENERAL_PATH as trainingModulesPath, reducer as trainingModulesReducer} from "../containers/EducationalPlan/TrainingModules/reducer";
 import {trainingModulesState} from "../containers/EducationalPlan/TrainingModules/types";
 
+import {GENERAL_PATH as selectEducationalProgramPath, reducer as selectEducationalProgramReducer} from "../containers/SelectEducationalProgram/reducer";
+import {selectEducationalProgramState} from "../containers/SelectEducationalProgram/types"
+
 export interface rootState {
     [trainingModulesPath]: trainingModulesState,
     [foldersPath]: foldersState,
@@ -95,6 +98,7 @@ export interface rootState {
     [educationPlanInDirectionPath]: educationalPlanInDirectionState,
     [workProgramListPath]: workProgramListState,
     [selectDisciplinePath]: selectDisciplineState,
+    [selectEducationalProgramPath]: selectEducationalProgramState,
 }
 
 export default combineReducers({
@@ -122,4 +126,5 @@ export default combineReducers({
     [educationalPlanPath]: educationalPlanReducer,
     [educationPlanInDirectionPath]: educationPlanInDirectionReducer,
     [workProgramListPath]: workProgramListReducer,
+    [selectEducationalProgramPath]: selectEducationalProgramReducer,
 });

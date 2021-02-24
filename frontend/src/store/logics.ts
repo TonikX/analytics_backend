@@ -20,6 +20,7 @@ import ExpertisesLogic from '../containers/Expertises/logics';
 import SelectDisciplineLogic from '../containers/SelectDiscipline/logics';
 import EducationalProgramLogic from '../containers/EducationalProgram/logics';
 import FoldersLogic from '../containers/Profile/Folders/logics';
+import SelectEducationalProgramLogic from '../containers/SelectEducationalProgram/logics'
 import TrainingModulesLogic from '../containers/EducationalPlan/TrainingModules/logics';
 
 import GeneralLogic from '../layout/logics';
@@ -49,4 +50,5 @@ export default [
     ...SkillsRolesLogic,
     ...ExpertisesLogic,
     ...EducationalProgramLogic,
+    ...SelectEducationalProgramLogic,
 ];
