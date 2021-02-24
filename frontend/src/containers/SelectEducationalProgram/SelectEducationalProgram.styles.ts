@@ -5,7 +5,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         padding: '20px 50px 20px 50px',
         boxShadow: 'none',
         borderRadius: '0px',
-        // height: '100%',
+        height: '100%',
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',

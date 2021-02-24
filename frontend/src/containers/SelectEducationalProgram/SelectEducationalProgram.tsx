@@ -28,7 +28,6 @@ const SelectEducationalProgram: React.FC = () => {
 
   useEffect(() => {
     dispatch(actions.getProfessions())
-    // eslint-disable-next-line
   }, [])
   
   return (
