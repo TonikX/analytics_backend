@@ -31,10 +31,12 @@ export const EducationalProgramsTable: React.FC<EducationalProgramsTableProps> =
   const [sortedPrograms, setSortedPrograms] = useState<Array<EducationalProgramType>>(educationalPrograms)
   useEffect(() => {
     setSortedPrograms(sortPrograms(sortingField, sortMode))
+    // eslint-disable-next-line
   }, [sortMode, sortingField])
 
   useEffect(() => {
     return () => dispatch(actions.setEducationalPrograms([]))
+    // eslint-disable-next-line
   }, [])
   const sortPrograms = (sortingField: string, sortMode: string): Array<EducationalProgramType> => {
     if (sortMode === sortFields.ASC) {
