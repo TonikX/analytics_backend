@@ -4,7 +4,7 @@ export default (theme: Theme) => createStyles({
     root: {
         padding: '20px 50px 20px 50px',
         background: '#fff',
-        minHeight: 'calc(100% - 64px)',
+        minHeight: 'calc(100% - 44px)',
         display: 'flex',
         flexDirection: 'column'
     },
