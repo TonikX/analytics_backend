@@ -66,7 +66,7 @@ class WorkProgramService extends AnalyticsService{
         // }
 
         return this.patch(`/api/workprogram/update/${id}`, {
-            destination: value
+            [destination]: value
         });
     }
 
