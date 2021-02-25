@@ -70,7 +70,6 @@ const SelectEducationalProgram: React.FC = () => {
           />
         </>
       ) : null}
-
     </Paper>
   )
 }

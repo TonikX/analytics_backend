@@ -13,7 +13,7 @@ export default (theme) => ({
         }),
         marginLeft: 0,
         boxSizing: 'border-box',
-        height: `calc(100vh - 64px)`,
+        minHeight: `calc(100vh - 64px)`,
     },
     contentShift: {
         transition: theme.transitions.create('margin', {
