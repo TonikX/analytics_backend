@@ -95,7 +95,6 @@ class Layout extends React.Component {
                                 [classes.contentShift]: openMenu,
                                 [classes.noPadding]: isWorkProgramPage
                             })}>
-                                {/* {!isFetchingRefreshToken && this.props.children} */}
                                 {!isFetchingRefreshToken && (
                                     <AutoSizer>
                                         {({ width, height }) => (
