@@ -419,6 +419,18 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
     permission_classes = [IsOwnerOrReadOnly]
 
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        print(serializer.data['id'])
+        response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id = serializer.data['id']))
+        return Response(response_serializer.data)
+
+
+
 class WorkProgramDetailsView(generics.RetrieveAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
