@@ -34,9 +34,6 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         width: '100%',
         justifyContent: 'space-between',
-        // // minHeight: '30px',
-        // // paddingTop: '15px',
-        // // paddingBottom: '15px',
         alignItems: 'center',
     },
     keywordTitle: {

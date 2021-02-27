@@ -9,6 +9,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     height: '30px',
     alignItems: 'center',
   },
+  professionTitle: {
+    lineHeight: 1,
+  },
   iconButton: {
     width: '30px',
     height: '30px',
