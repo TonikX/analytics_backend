@@ -7,8 +7,9 @@ from .views import EducationalProgramCreateAPIView, EducationalProgramListAPIVie
     EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView
 from .views import GeneralCharacteristicsCreateAPIView, GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
-    GeneralCharacteristicsDetailsWithEducationalProgramView, EducationalProgramRankingByProfession
+    GeneralCharacteristicsDetailsWithEducationalProgramView
 from .views import PkCompetencesInGeneralCharacteristicsSet
+from ..op_slection.views import EducationalProgramRankingByProfession
 
 router = DefaultRouter()
 router.register(r'api/pk_competences_in_gh', PkCompetencesInGeneralCharacteristicsSet, basename='pk-competences-in-gh')

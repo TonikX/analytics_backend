@@ -9,13 +9,16 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 # Сериализаторы
+from dataprocessing.models import Items
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
     EducationalProgramSerializer, \
-    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, PkCompetencesInGeneralCharacteristicsSerializer
+    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
+    PkCompetencesInGeneralCharacteristicsSerializer
 # --Работа с образовательной программой
-from workprogramsapp.models import AcademicPlan
+from workprogramsapp.models import AcademicPlan, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
 # --Работа с образовательной программой
-from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, PkCompetencesInGeneralCharacteristics
+from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
+    PkCompetencesInGeneralCharacteristics
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 
@@ -145,55 +148,6 @@ class DepartmentDetailsView(generics.RetrieveAPIView):
     serializer_class = DepartmentSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
-
-@api_view(['POST'])
-@permission_classes((IsAuthenticated,))
-def EducationalProgramRankingByProfession(request):
-    professions_array = request.data.get('professions_array')
-    range_settings = request.data.get('range_set')
-    year_for_ap = []
-    now = datetime.datetime.now()
-    if now.month in range(2, 9):
-        year_for_ap.append(str(now.year))
-        year_for_ap.append(str(now.year - 1))
-    else:
-        year_for_ap.append(str(now.year))
-        year_for_ap.append(str(now.year + 1))
-    skills_array = []
-    # Теперь при выборе нескольких профессий будет находить объединение их множеств умений
-    for prof_id in professions_array:
-        try:
-            skills_in_prof = list(Profession.objects.get(pk=prof_id).skills.all())
-            skills_array.extend(skills_in_prof)
-            set_checker = set(skills_array) & set(skills_in_prof)
-            skills_array = list(set_checker)
-        except Profession.DoesNotExist:
-            return Response(status=404)
-    wp_with_skills = WorkProgram.objects.filter(outcomes__in=skills_array).annotate(Count('pk'))
-    for work_program in wp_with_skills:
-        work_program.coincidences = len(set(work_program.outcomes.all()) & set(skills_array))
-        # Теперь в учбеном плане указан текущий год набора
-    academic_plan_with_skills = AcademicPlan.objects.filter(
-        discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__in=wp_with_skills,
-        year__in=year_for_ap).annotate(
-        Count('pk'))
-    for ap in academic_plan_with_skills:
-        wp_all = WorkProgram.objects.filter(
-            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan=ap)
-        set_of_wp = (set(wp_with_skills) & set(wp_all))
-        if range_settings == "skills":
-            ap.weight = sum(item.coincidences for item in set_of_wp)
-        elif range_settings == "work_program":
-            # При выборе ранжирования "по рабочим программам" ранжирует оп удельному весу рабочих программ в данном учбеном плане
-            ap.weight = len(set_of_wp) / len(wp_all)
-
-    sorted_academic_plan = sorted(academic_plan_with_skills, key=lambda ac_pl: (ac_pl.weight), reverse=True)
-    list_of_educational_program = []
-    for s in sorted_academic_plan:
-        list_of_educational_program.extend(
-            list(EducationalProgram.objects.filter(academic_plan_for_ep__academic_plan=s)))
-    serializer = EducationalProgramSerializer(list_of_educational_program, many=True)
-    return Response(serializer.data)
 
 
 class PkCompetencesInGeneralCharacteristicsSet(viewsets.ModelViewSet):
