@@ -34,8 +34,13 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         width: '100%',
         justifyContent: 'space-between',
-        height: '30px',
+        // // minHeight: '30px',
+        // // paddingTop: '15px',
+        // // paddingBottom: '15px',
         alignItems: 'center',
+    },
+    keywordTitle: {
+        lineHeight: 1,
     },
     iconButton: {
         width: '30px',

@@ -75,7 +75,7 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
                  className={classes.keywordListItem}
                  onClick={this.addKeyword(keyword)}
             >
-                <Typography> {this.getFormattedKeyword(keyword)} </Typography>
+                <Typography className={classes.keywordTitle}> {this.getFormattedKeyword(keyword)} </Typography>
                 <IconButton className={classes.iconButton}>
                     <CheckCircleOutline className={classes.addIcon} />
                 </IconButton>
