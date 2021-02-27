@@ -3,7 +3,7 @@ import React from 'react';
 // @ts-ignore
 import matchSorter from 'match-sorter';
 import {Link} from "react-router-dom";
-import {List, AutoSizer} from 'react-virtualized';
+import {List, AutoSizer, CellMeasurer, CellMeasurerCache} from 'react-virtualized';
 import Scrollbars from "react-custom-scrollbars";
 
 import className from "classnames";
@@ -32,6 +32,10 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
         scrollTop: 0,
         searchQuery: ''
     }
+    cache = new CellMeasurerCache({
+        fixedWidth: true,
+        defaultHeight: 30,
+      })
 
     handleChangeQualification = (value: string) => () => {
         const {semester} = this.props;
@@ -52,34 +56,52 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
     }
 
     addKeyword = (keyword: string) => () => {
+        // необходимо чтобы избежать подергивание списка
+        const rows = this.getSearchedKeywords()
+        const index = rows.indexOf(keyword)
+
         this.props.actions.selectDisciplineSelectKeyword(keyword);
+
+        // необходимо чтобы избежать подергивание списка
+        const afterRows = rows.filter((keyword: string) => rows.indexOf(keyword) >= index )
+        const afterRowsIndexes = afterRows.map((keyword: string) => rows.indexOf(keyword))
+        afterRowsIndexes.forEach((index: number) => this.cache.clear(index, 0))
     }
 
     removeKeyword = (keyword: string) => () => {
         this.props.actions.selectDisciplineUnselectKeyword(keyword);
+        this.cache.clearAll()
     }
 
     handleGetWorkPrograms = () => {
         this.props.actions.selectDisciplineGetWorkPrograms();
     }
 
-    rowRenderer = ({key, index, style}: any)  => {
+    rowRenderer = ({key, parent, index, style}: any)  => {
         const {classes} = this.props;
         const searchedKeywords = this.getSearchedKeywords();
 
         const keyword = searchedKeywords[index];
 
         return (
-            <div key={key}
-                 style={style}
-                 className={classes.keywordListItem}
-                 onClick={this.addKeyword(keyword)}
+            <CellMeasurer
+                key={key}
+                cache={this.cache}
+                parent={parent}
+                columnIndex={0}
+                rowIndex={index}
             >
-                <Typography className={classes.keywordTitle}> {this.getFormattedKeyword(keyword)} </Typography>
-                <IconButton className={classes.iconButton}>
-                    <CheckCircleOutline className={classes.addIcon} />
-                </IconButton>
-            </div>
+                <div
+                    style={style}
+                    className={classes.keywordListItem}
+                    onClick={this.addKeyword(keyword)}
+                >
+                    <Typography className={classes.keywordTitle}> {this.getFormattedKeyword(keyword)} </Typography>
+                    <IconButton className={classes.iconButton}>
+                        <CheckCircleOutline className={classes.addIcon} />
+                    </IconButton>
+                </div>
+            </CellMeasurer>
         );
     }
 
@@ -193,8 +215,9 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
                                                     width={width}
                                                     height={height - 80}
                                                     rowCount={searchedKeywords.length}
-                                                    rowHeight={30}
+                                                    rowHeight={this.cache.rowHeight}
                                                     rowRenderer={this.rowRenderer}
+                                                    deferredMeasurementCache={this.cache}
                                                     scrollTop={scrollTop}
                                                     autoHeight
                                                 />

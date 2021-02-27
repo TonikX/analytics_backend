@@ -37,7 +37,9 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center',
     },
     keywordTitle: {
-        lineHeight: 1,
+        lineHeight: 1.2,
+        paddingBottom: '5px',
+        paddingTop: '5px'
     },
     iconButton: {
         width: '30px',
