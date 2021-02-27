@@ -184,7 +184,7 @@ export default (groups: Array<string>) => {
             selectedIcon: ProfessionsSkillsSelectedIcon,
         },
         {
-            title: 'Подбор ОП',
+            title: 'Подбор ОП по профессиям',
             link: appRouter.getSelectEducationalProgramRoute(),
             icon: WorkProgramInDirectionIcon,
             selectedIcon: WorkProgramInDirectionSelectedIcon,

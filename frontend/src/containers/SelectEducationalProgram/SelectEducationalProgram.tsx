@@ -34,7 +34,7 @@ const SelectEducationalProgram: React.FC = () => {
   return (
     <Paper className={classes.root}>
       <Typography className={classes.title}>
-        Подбор образовательных программ
+        Подбор образовательных программ по профессиям
       </Typography>
       {(professions.length > 0 || selectedProfessions.length) ? 
         (
@@ -70,7 +70,6 @@ const SelectEducationalProgram: React.FC = () => {
           />
         </>
       ) : null}
-
     </Paper>
   )
 }
