@@ -25,6 +25,9 @@ import theme from './themeMaterialUi';
 import connect from './Layout.connect';
 import styles from './Layout.styles';
 
+import Scrollbars from "react-custom-scrollbars";
+import { AutoSizer } from "react-virtualized";
+
 const userService = UserService.factory();
 
 class Layout extends React.Component {
@@ -92,7 +95,14 @@ class Layout extends React.Component {
                                 [classes.contentShift]: openMenu,
                                 [classes.noPadding]: isWorkProgramPage
                             })}>
-                                {!isFetchingRefreshToken && this.props.children}
+                                {!isFetchingRefreshToken && (
+                                    <AutoSizer>
+                                        {({ width, height }) => (
+                                            <Scrollbars style={{ width, height }}>
+                                                {this.props.children}
+                                            </Scrollbars>)}
+                                    </AutoSizer>        
+                                )}
                             </div>
                         </div>
 

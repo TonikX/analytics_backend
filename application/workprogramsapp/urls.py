@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from django.urls import path
 
 from .educational_program.views import DepartmentCreateAPIView, DepartmentListAPIView, DepartmentDetailsView, \
-    DepartmentDestroyView, DepartmentUpdateView, EducationalProgramRankingByProfession
+    DepartmentDestroyView, DepartmentUpdateView
 # Контроллеры
 
 from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView, UserExpertiseListView, \
@@ -14,6 +14,7 @@ from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderVie
     AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, \
     ModuleInFolderView, AddToFolderModuleView, \
     RemoveFromFolderModuleView
+from .op_slection.views import CreateProfessionByKeywords
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, \
     ProfessionUpdateView, ItemWithProfessions, ItemWithRoles, ProfessionsListWithoutPaginationApi
 from .profession.views import RolesListApi, RoleCreateAPIView, RoleDetailsView, RoleDestroyView, RoleUpdateView
@@ -267,6 +268,7 @@ urlpatterns = [
     path('api/profession/delete/<int:pk>', ProfessionDestroyView.as_view()),
     path('api/profession/update/<int:pk>', ProfessionUpdateView.as_view()),
     # path('api/itp', ItemWithProfessions.as_view()),
+    path('api/profession/create/bykeywords', CreateProfessionByKeywords),
 
     # Работа с навыками прфоессий
     path('api/skillsofprofessioninprofession/<int:profession_id>', SkillsOfProfessionInProfessionList.as_view()),

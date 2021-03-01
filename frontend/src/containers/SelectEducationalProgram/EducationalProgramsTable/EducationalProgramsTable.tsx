@@ -14,7 +14,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
-import Scrollbars from "react-custom-scrollbars";
 import SortingButton from "../../../components/SortingButton";
 
 import {EducationalProgramsTableProps} from './types'
@@ -103,46 +102,44 @@ export const EducationalProgramsTable: React.FC<EducationalProgramsTableProps> =
   }
 
   return (
-    <Scrollbars>
-      <div className={classes.tableWrap}>
-        <Table stickyHeader size='small'>
-          <TableHead className={classes.tableHead}>
-            <TableRow>
-              <TableCell>
-                Учебный план
-                <SortingButton 
-                  changeMode={changeSorting(EducationProgramFields.ACADEMIC_PLAN_FOR_EP)}
-                  mode={sortingField === EducationProgramFields.ACADEMIC_PLAN_FOR_EP ? sortMode : ''}
-                />
-              </TableCell>
-              <TableCell>
-                Квалификация
-                <SortingButton 
-                  changeMode={changeSorting(EducationProgramFields.QUALIFICATION)}
-                  mode={sortingField === EducationProgramFields.QUALIFICATION ? sortMode : ''}
-                />
-              </TableCell>
-              <TableCell>
-                Год начала
-                <SortingButton 
-                  changeMode={changeSorting(EducationProgramFields.YEAR)}
-                  mode={sortingField === EducationProgramFields.YEAR ? sortMode : ''}
-                />
-              </TableCell>
-              <TableCell>
-                Руководитель
-                <SortingButton 
-                  changeMode={changeSorting(EducationProgramFields.MANAGER)}
-                  mode={sortingField === EducationProgramFields.MANAGER ? sortMode : ''}
-                />
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows}
-          </TableBody>
-        </Table>
-      </div>
-    </Scrollbars>
+    <div className={classes.tableWrap}>
+      <Table stickyHeader size='small'>
+        <TableHead className={classes.tableHead}>
+          <TableRow>
+            <TableCell>
+              Учебный план
+              <SortingButton 
+                changeMode={changeSorting(EducationProgramFields.ACADEMIC_PLAN_FOR_EP)}
+                mode={sortingField === EducationProgramFields.ACADEMIC_PLAN_FOR_EP ? sortMode : ''}
+              />
+            </TableCell>
+            <TableCell>
+              Квалификация
+              <SortingButton 
+                changeMode={changeSorting(EducationProgramFields.QUALIFICATION)}
+                mode={sortingField === EducationProgramFields.QUALIFICATION ? sortMode : ''}
+              />
+            </TableCell>
+            <TableCell>
+              Год начала
+              <SortingButton 
+                changeMode={changeSorting(EducationProgramFields.YEAR)}
+                mode={sortingField === EducationProgramFields.YEAR ? sortMode : ''}
+              />
+            </TableCell>
+            <TableCell>
+              Руководитель
+              <SortingButton 
+                changeMode={changeSorting(EducationProgramFields.MANAGER)}
+                mode={sortingField === EducationProgramFields.MANAGER ? sortMode : ''}
+              />
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows}
+        </TableBody>
+      </Table>
+    </div>
   )
 }
