@@ -18,7 +18,8 @@ from workprogramsapp.profession.serializers import ProfessionSerializer
 def CreateProfessionByKeywords(request):
     keywords_dict = request.data.get('keywords_dict')
     profession_name = request.data.get('profession_name')
-    str_skills_key, str_skills_additional = skill_sorter(keywords_dict)
+    num_of_prof = request.data.get('num_of_prof')
+    str_skills_key, str_skills_additional = skill_sorter(keywords_dict, int(num_of_prof))
     skills_key = list(Items.objects.filter(name__in=str_skills_key))
     skills_additional = list(Items.objects.filter(name__in=str_skills_additional))
     for key in str_skills_key:
