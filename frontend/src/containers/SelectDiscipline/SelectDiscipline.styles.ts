@@ -5,7 +5,7 @@ export default (theme: Theme) => createStyles({
         padding: '20px 50px 20px 50px',
         boxShadow: 'none',
         borderRadius: '0px',
-        height: '100%',
+        minHeight: '100%',
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
@@ -34,8 +34,12 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         width: '100%',
         justifyContent: 'space-between',
-        height: '30px',
         alignItems: 'center',
+    },
+    keywordTitle: {
+        lineHeight: 1.2,
+        paddingBottom: '5px',
+        paddingTop: '5px'
     },
     iconButton: {
         width: '30px',
@@ -92,7 +96,7 @@ export default (theme: Theme) => createStyles({
         fontWeight: 'bold'
     },
     searchKeysButton: {
-        height: '34px',
+        minHeight: '34px',
         marginTop: '20px'
     },
     sliderWrap: {

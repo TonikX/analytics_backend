@@ -291,12 +291,16 @@ class FirstStep extends React.Component<FirstStepProps> {
                             />
                         </Dialog>
                         :
-                        <Button onClick={() => this.setState({addEditorsMode: true})}
-                                variant="text"
-                                className={classes.addEditorButton}
-                        >
-                            <AddIcon /> Добавить редактора
-                        </Button>
+                        isCanEdit
+                            ?
+                            <Button onClick={() => this.setState({addEditorsMode: true})}
+                                    variant="text"
+                                    className={classes.addEditorButton}
+                            >
+                                <AddIcon /> Добавить редактора
+                            </Button>
+                            :
+                            <></>
                     }
                 </div>
 
