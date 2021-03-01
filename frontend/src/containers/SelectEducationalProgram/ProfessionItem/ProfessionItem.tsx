@@ -27,7 +27,7 @@ export const ProfessionItem: React.FC<ProfessionItemProps> = ({ style, professio
         className={classes.professionListItem}
         onClick={onHandle}
       >
-        <Typography>{profession[professionFields.TITLE]}</Typography>
+        <Typography className={classes.professionTitle}>{profession[professionFields.TITLE]}</Typography>
         <IconButton className={classes.iconButton}>
           {mode === selectListModes.SELECT
             ? <CheckCircleOutline className={classes.addIcon} />

@@ -127,11 +127,11 @@ class Folders extends React.PureComponent<FoldersProps> {
                 <Typography className={classes.title}>
                     Закладки
                 </Typography>
-
                 <div className={classes.tabsWrap}>
+                    <div>
                     <Tabs value={currentTab}
                           orientation="vertical"
-                          className={classes.tabs}
+                          classes={{root: classes.tabs}}
                           onChange={this.handleChangeCurrentTab}
                     >
                         {folders.map((folder, index) =>
@@ -143,6 +143,7 @@ class Folders extends React.PureComponent<FoldersProps> {
                             />
                         )}
                     </Tabs>
+                    </div>
                     {folders.map((folder, index) =>
                         <TabPanel value={currentTab} index={index}>
                             <div className={classes.description}>
@@ -156,6 +157,7 @@ class Folders extends React.PureComponent<FoldersProps> {
 
                         </TabPanel>
                     )}
+ 
                 </div>
 
                 <Fab color="secondary"
