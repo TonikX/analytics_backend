@@ -83,7 +83,7 @@ class WorkProgram(CloneMixin, models.Model):
     #field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram,
     #                                          verbose_name="Предметная область",
     #                                          related_name='workprograms_in_fieldofstudy')
-    bibliographic_reference = models.ManyToManyField('BibliographicReference', verbose_name='Библиогравическая_ссылка',
+    bibliographic_reference = models.ManyToManyField('BibliographicReference', blank=True, null=True, verbose_name='Библиогравическая_ссылка',
                                                      related_name='bibrefs')
     # evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
     description = models.CharField(max_length=5000, blank=True, null=True)
