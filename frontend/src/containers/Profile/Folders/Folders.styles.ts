@@ -15,14 +15,16 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between',
     },
     tabs: {
-        borderRight: '1px solid #ccc'
+        borderRight: '1px solid #ccc',
+        width: '265px',
     },
     tabsWrap: {
-        display: 'flex'
+        display: 'flex',
     },
     tab: {
         display: 'block',
-        textAlign: 'left'
+        textAlign: 'left',
+        width: '100%',
     },
     description: {
         marginBottom: '10px'
