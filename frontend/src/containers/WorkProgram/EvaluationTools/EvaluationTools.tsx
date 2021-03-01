@@ -94,6 +94,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                     label="Дополнительные 3 балла"
                     labelPlacement="start"
                     className={classes.extraPoint}
+                    disabled={!isCanEdit}
                 />
 
                 <div className={classes.totalList}>
