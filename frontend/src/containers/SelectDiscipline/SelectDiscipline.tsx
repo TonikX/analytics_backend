@@ -35,7 +35,7 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
     cache = new CellMeasurerCache({
         fixedWidth: true,
         defaultHeight: 30,
-      })
+    })
 
     handleChangeQualification = (value: string) => () => {
         const {semester} = this.props;

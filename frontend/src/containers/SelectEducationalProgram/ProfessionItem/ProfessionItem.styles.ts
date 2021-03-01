@@ -6,11 +6,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     width: '100%',
     justifyContent: 'space-between',
-    height: '30px',
     alignItems: 'center',
   },
   professionTitle: {
-    lineHeight: 1,
+    lineHeight: 1.2,
+    paddingBottom: '5px',
+    paddingTop: '5px'
   },
   iconButton: {
     width: '30px',
