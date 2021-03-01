@@ -2,7 +2,7 @@ import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
     wrap: {
-        height: '100%',
+        minHeight: '100%',
         padding: '0px 30px 30px',
         boxSizing: 'border-box'
     },
