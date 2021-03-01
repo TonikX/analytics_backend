@@ -12,4 +12,5 @@ dbs
 .env
 /application/export
 nginx/ssl/data/
+frontend/.env.production
 
