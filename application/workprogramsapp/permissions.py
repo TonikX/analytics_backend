@@ -11,8 +11,14 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
+
         if request.method in permissions.SAFE_METHODS:
             return True
+
+        try:
+            return request.user in obj.editors.all()
+        except:
+            pass
 
         return obj.owner == request.user
 

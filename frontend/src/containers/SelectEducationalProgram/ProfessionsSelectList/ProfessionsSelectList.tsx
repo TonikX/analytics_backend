@@ -5,7 +5,7 @@ import matchSorter from 'match-sorter';
 
 import {useStyles} from './ProfessionsSelectList.styles'
 
-import {List, AutoSizer} from 'react-virtualized';
+import {List, AutoSizer, CellMeasurer, CellMeasurerCache} from 'react-virtualized';
 import Scrollbars from "react-custom-scrollbars";
 import TextField from '../../../components/TextField';
 import {ProfessionItem} from '../ProfessionItem/ProfessionItem'
@@ -16,25 +16,52 @@ import {selectListModes} from '../enum'
 
 export const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ professions, selectProfession, selectedProfessions, unselectProfession }) => {
   const classes = useStyles()
+  const cache = new CellMeasurerCache({
+    fixedWidth: true,
+    defaultHeight: 30,
+  })
   const [scrollTop, setScrollTop] = useState<number>(0)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const handleScroll = ({ target: { scrollTop } }: any): void => {
     setScrollTop(scrollTop)
   }
+  const addProfession = (profession: ProfessionType) => {
+    // необходимо чтобы избежать подергивание списка
+    const index = searchedProfessions.indexOf(profession)
+
+    selectProfession(profession)
+  
+    // необходимо чтобы избежать подергивание списка
+    const afterRows = searchedProfessions.filter((profession: ProfessionType) => searchedProfessions.indexOf(profession) >= index )
+    const afterRowsIndexes = afterRows.map((profession: ProfessionType) => searchedProfessions.indexOf(profession))
+    afterRowsIndexes.forEach((index: number) => cache.clear(index, 0))
+  }
+  const removeProfession = (profession: ProfessionType) => {
+    unselectProfession(profession)
+    cache.clearAll()
+  }
 
   const searchedProfessions = useMemo((): Array<ProfessionType> => 
     matchSorter(professions, searchQuery, {keys: ['title']}), [searchQuery, professions])
 
-  const rowRenderer = ({key, index, style}: any) => {
+  const rowRenderer = ({key, parent, index, style}: any) => {
     return (
-      <ProfessionItem 
+      <CellMeasurer
         key={key}
-        style={style}
-        mode={selectListModes.SELECT}
-        selectProfession={selectProfession}
-        unselectProfession={unselectProfession}
-        profession={searchedProfessions[index]}
-      />
+        cache={cache}
+        columnIndex={0}
+        rowIndex={index}
+        parent={parent}
+      >
+        <ProfessionItem 
+          style={style}
+          mode={selectListModes.SELECT}
+          selectProfession={addProfession}
+          unselectProfession={removeProfession}
+          profession={searchedProfessions[index]}
+        />
+      </CellMeasurer>
+
     );
   }
 
@@ -47,8 +74,8 @@ export const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ pr
     <ProfessionItem
       key={p.id}
       mode={selectListModes.UNSELECT}
-      selectProfession={selectProfession}
-      unselectProfession={unselectProfession}
+      selectProfession={addProfession}
+      unselectProfession={removeProfession}
       profession={p}
     />
   ))
@@ -71,8 +98,9 @@ export const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ pr
                     width={width}
                     height={height - 80}
                     rowCount={searchedProfessions.length}
-                    rowHeight={30}
+                    rowHeight={cache.rowHeight}
                     rowRenderer={rowRenderer}
+                    deferredMeasurementCache={cache}
                     scrollTop={scrollTop}
                     autoHeight
                 />
