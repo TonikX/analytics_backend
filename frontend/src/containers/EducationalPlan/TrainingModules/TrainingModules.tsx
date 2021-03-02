@@ -95,6 +95,7 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
 
     handleClickEdit = (trainingModule: TrainingModuleType) => () => {
         this.props.actions.openDialog({data: trainingModule});
+        this.handleCloseMenu()
     }
 
     handleClickCreate = () => {
