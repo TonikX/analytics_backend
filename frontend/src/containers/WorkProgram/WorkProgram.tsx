@@ -84,14 +84,13 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                     <Prerequisites />
                 </div>;
             case 2:
-                return <> <div className={classes.subItem}>
+                return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
                         Разделы
                     </Typography>
 
                     <Sections />
-                </div>
-                </>;
+                </div>;
             case 3:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>

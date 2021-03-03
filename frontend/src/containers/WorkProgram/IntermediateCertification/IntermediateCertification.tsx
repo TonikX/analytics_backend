@@ -1,6 +1,7 @@
 import React, {SyntheticEvent} from 'react';
 import get from 'lodash/get';
 import Scrollbars from "react-custom-scrollbars";
+import {AutoSizer} from 'react-virtualized';
 
 import classNames from "classnames";
 
@@ -82,7 +83,9 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                 <div className={classes.totalList}>
                     <EvaluationCertificationTotalList />
                 </div>
-
+                <AutoSizer disableHeight>
+                    {({ width, height }) => (
+                <Scrollbars style={{width, height}} autoHeight autoHeightMax={Number.MAX_VALUE}>
                 <div className={classNames(classes.header, classes.row)}>
                     <Typography className={classes.title}>
                         Название
@@ -105,7 +108,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                     </Typography>
                 </div>
 
-                <Scrollbars>
+                
                     <div className={classes.list}>
                         {intermediateCertificationList.map((intermediateCertificationTool) => (
                             <div className={classes.item}>
@@ -181,7 +184,8 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                             </div>
                         ))}
                     </div>
-                </Scrollbars>
+                </Scrollbars>)}
+                </AutoSizer>
 
                 {isCanEdit &&
                     <Fab color="secondary"

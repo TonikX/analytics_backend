@@ -138,7 +138,7 @@ class Sections extends React.PureComponent<SectionsProps> {
                 <TableContainer className={classes.table}>
                     <AutoSizer disableHeight>
                     {({ width, height }) => (
-                    <Scrollbars style={{width, height} }  ref={(el) => {this.scrollBar = el}} autoHeight autoHeightMax={Number.MAX_VALUE}>
+                    <Scrollbars style={{width, height}}  ref={(el) => {this.scrollBar = el}} autoHeight autoHeightMax={Number.MAX_VALUE}>
                         <Table>
                             <TableHead>
                                 <TableRow>

@@ -20,12 +20,14 @@ export default (theme: Theme) => createStyles({
         minHeight: '50px',
         alignItems: 'center',
         padding: '0px 10px',
+        minWidth: '680px',
         '& p': {
             fontSize: '14px'
         }
     },
     list: {
         height: '100%',
+        minWidth: '680px',
     },
     totalList: {
         marginBottom: '10px'

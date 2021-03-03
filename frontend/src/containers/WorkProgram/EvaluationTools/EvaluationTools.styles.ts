@@ -14,6 +14,7 @@ export default (theme: Theme) => createStyles({
     },
     list: {
         height: '100%',
+        minWidth: '800px',
     },
     totalList: {
         marginBottom: '10px'
@@ -26,6 +27,7 @@ export default (theme: Theme) => createStyles({
         minHeight: '50px',
         alignItems: 'center',
         padding: '0px 10px',
+        minWidth: '800px',
         '& p': {
             fontSize: '14px'
         }

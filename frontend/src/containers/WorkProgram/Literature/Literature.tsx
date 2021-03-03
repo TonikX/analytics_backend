@@ -34,7 +34,7 @@ class Literature extends React.PureComponent<FourthStepProps> {
 
         return (
             <div className={classes.root}>
-                <Scrollbars>
+                <Scrollbars style={{height: 'calc(100vh - 400px)'}} >
                     <div className={classes.list}>
                         {literatureList.map((literature) => (
                             <div className={classes.item}>
@@ -55,12 +55,14 @@ class Literature extends React.PureComponent<FourthStepProps> {
                 </Scrollbars>
 
                 {isCanEdit &&
-                    <Fab color="secondary"
-                         className={classes.addIcon}
-                         onClick={this.handleCreateNewTopic}
-                    >
-                        <AddIcon/>
-                    </Fab>
+                    <div className={classes.iconWrapper}>
+                        <Fab color="secondary"
+                            className={classes.addIcon}
+                            onClick={this.handleCreateNewTopic}
+                        >
+                            <AddIcon/>
+                        </Fab>
+                    </div>
                 }
 
                 {isCanEdit && <LiteratureAddModal />}
