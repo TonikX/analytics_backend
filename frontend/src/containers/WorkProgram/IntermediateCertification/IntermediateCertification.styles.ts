@@ -16,6 +16,9 @@ export default (theme: Theme) => createStyles({
         borderBottom: '1px solid #ccc',
     },
     row: {
+        [theme.breakpoints.down('md')]: {
+            minWidth: '600px',
+        },
         display: 'flex',
         minHeight: '50px',
         alignItems: 'center',
@@ -26,6 +29,9 @@ export default (theme: Theme) => createStyles({
         }
     },
     list: {
+        [theme.breakpoints.down('md')]: {
+            minWidth: '600px',
+        },
         height: '100%',
         minWidth: '680px',
     },
@@ -51,19 +57,28 @@ export default (theme: Theme) => createStyles({
         padding: '0px 20px'
     },
     title: {
+        [theme.breakpoints.down('md')]: {
+            width: '20%',
+        },
         width: '30%',
-        flex: 'none'
+        flex: 'none',
+        overflowWrap: 'anywhere',
     },
     type: {
+        [theme.breakpoints.down('md')]: {
+            width: '15%',
+        },
         width: '30%',
         paddingLeft: '10px',
         boxSizing: 'border-box',
-        flex: 'none'
+        flex: 'none',
+        overflowWrap: 'anywhere',
     },
     min: {
         width: '100px',
         paddingLeft: '10px',
         boxSizing: 'border-box',
+        textAlign: 'center',
     },
     max: {
         width: '100px',
@@ -73,7 +88,8 @@ export default (theme: Theme) => createStyles({
     },
     semester: {
         paddingLeft: '10px',
-        width: '50px'
+        width: '50px',
+        textAlign: 'center',
     },
     header: {
         background: theme.palette.primary.main,
