@@ -10,6 +10,7 @@ export default (theme: Theme) => createStyles({
         marginTop: '10px',
         marginLeft: 'auto',
         flex: 'none',
+        marginBottom: '20px',
     },
     item: {
         borderBottom: '1px solid #ccc',

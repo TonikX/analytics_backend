@@ -96,12 +96,9 @@ class Layout extends React.Component {
                                 [classes.noPadding]: isWorkProgramPage
                             })}>
                                 {!isFetchingRefreshToken && (
-                                    <AutoSizer>
-                                        {({ width, height }) => (
-                                            <Scrollbars style={{ width, height }}>
-                                                {this.props.children}
-                                            </Scrollbars>)}
-                                    </AutoSizer>        
+                                    <Scrollbars>
+                                        {this.props.children}
+                                    </Scrollbars>       
                                 )}
                             </div>
                         </div>

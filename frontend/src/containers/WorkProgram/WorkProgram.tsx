@@ -84,13 +84,14 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                     <Prerequisites />
                 </div>;
             case 2:
-                return <div className={classes.subItem}>
+                return <> <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
                         Разделы
                     </Typography>
 
                     <Sections />
-                </div>;
+                </div>
+                </>;
             case 3:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
@@ -220,7 +221,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         }
                     </div>
                 </div>
-                <Paper className={classes.root}>
+                <Paper className={classes.root} component="div">
                     <Stepper activeStep={activeStep}
                              orientation="vertical"
                              nonLinear

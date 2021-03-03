@@ -1,6 +1,7 @@
 import React from 'react';
 import get from 'lodash/get';
 import Scrollbars from "react-custom-scrollbars";
+import {AutoSizer} from 'react-virtualized';
 import classNames from "classnames";
 
 import {SortableContainer, SortableElement, SortableHandle} from 'react-sortable-hoc';
@@ -135,7 +136,9 @@ class Sections extends React.PureComponent<SectionsProps> {
         return (
             <div className={classes.secondStep}>
                 <TableContainer className={classes.table}>
-                    <Scrollbars ref={(el) => {this.scrollBar = el}}>
+                    <AutoSizer>
+                    {({ width, height }) => (
+                    <Scrollbars style={{width, height}} ref={(el) => {this.scrollBar = el}} >
                         <Table>
                             <TableHead>
                                 <TableRow>
@@ -253,7 +256,8 @@ class Sections extends React.PureComponent<SectionsProps> {
                             </>
                         }
 
-                    </Scrollbars>
+                    </Scrollbars>)}
+                    </AutoSizer>
                 </TableContainer>
 
                 {!createNewSectionMode && isCanEdit
