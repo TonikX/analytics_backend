@@ -4,7 +4,7 @@ export default (theme: Theme) => createStyles({
     root: {
         height: '100%',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     addIcon: {
         marginTop: '10px',
