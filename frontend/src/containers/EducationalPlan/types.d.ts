@@ -11,11 +11,18 @@ export interface EducationalPlanActions {
     deleteCompetenceBlock: any;
     deleteWorkProgramFromZun: any;
     saveCompetenceBlock: any;
-    closeModuleDialog: any;
-    openModuleDialog: any;
+
+    closeCreateModuleDialog: any;
+    openCreateModuleDialog: any;
+
+    openAddModuleDialog: any;
+    closeAddModuleDialog: any;
+
     createModule: any;
     changeModule: any;
     deleteModule: any;
+    addModule: any;
+
     changeBlockOfWorkPrograms: any;
     deleteBlockOfWorkPrograms: any;
     createBlockOfWorkPrograms: any;
@@ -54,13 +61,17 @@ export interface educationalPlanState {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: EducationalPlanType|{};
     };
-    [fields.EDUCATIONAL_PLAN_MODULE_DIALOG]: {
+    [fields.EDUCATIONAL_PLAN_CREATE_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: ModuleType|{};
     };
     [fields.EDUCATIONAL_PLAN_DETAIL_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: EducationalPlanType|{};
+    };
+    [fields.EDUCATIONAL_PLAN_ADD_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: boolean;
+        [fields.DIALOG_DATA]: {};
     };
     [fields.DOWNLOAD_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;

@@ -32,9 +32,13 @@ export const getEducationalPlanDetailDialog = (state: rootState) => get(getState
 export const isOpenDetailDialog = (state: rootState) => get(getEducationalPlanDetailDialog(state), fields.IS_OPEN_DIALOG, false);
 export const getDetailDialogData = (state: rootState) => get(getEducationalPlanDetailDialog(state), fields.DIALOG_DATA, {});
 
-export const getEducationalPlanModuleDialog = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_PLAN_MODULE_DIALOG, {});
+export const getEducationalPlanModuleDialog = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_PLAN_CREATE_MODULE_DIALOG, {});
 export const isOpenModuleDialog = (state: rootState) => get(getEducationalPlanModuleDialog(state), fields.IS_OPEN_DIALOG, false);
 export const getModuleDialogData = (state: rootState) => get(getEducationalPlanModuleDialog(state), fields.DIALOG_DATA, {});
+
+export const getAddModuleDialog = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_PLAN_ADD_MODULE_DIALOG, {});
+export const isOpenAddModuleDialog = (state: rootState) => get(getAddModuleDialog(state), fields.IS_OPEN_DIALOG, false);
+export const getModuleAddDialogData = (state: rootState) => get(getAddModuleDialog(state), fields.DIALOG_DATA, {});
 
 export const getDownloadDialog = (state: rootState) => get(getStateData(state), fields.DOWNLOAD_DIALOG, {});
 export const isOpenDownloadDialog = (state: rootState) => get(getDownloadDialog(state), fields.IS_OPEN_DIALOG, false);

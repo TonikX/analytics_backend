@@ -246,13 +246,40 @@ const createModule = createLogic({
                 }
 
                 dispatch(actions.fetchingSuccess());
-                dispatch(planActions.closeModuleDialog());
+                dispatch(planActions.closeCreateModuleDialog());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_MODULE}));
+                return done();
+            });
+    }
+});
+
+const addModule = createLogic({
+    type: planActions.addModule.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {block, module} = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_MODULE}));
+
+        service.addModule(module, block)
+            .then((res) => {
+                const planId = getEducationalPlanDetailId(getState());
+
+                dispatch(planActions.getEducationalDetail(planId));
+
+                dispatch(actions.fetchingSuccess());
+                dispatch(planActions.closeAddModuleDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.ADD_MODULE}));
                 return done();
             });
     }
@@ -281,7 +308,7 @@ const changeModule = createLogic({
                 }
 
                 dispatch(actions.fetchingSuccess());
-                dispatch(planActions.closeModuleDialog());
+                dispatch(planActions.closeCreateModuleDialog());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
@@ -306,7 +333,7 @@ const deleteModule = createLogic({
                 const planId = getEducationalPlanDetailId(getState());
                 dispatch(planActions.getEducationalDetail(planId));
                 dispatch(actions.fetchingSuccess());
-                dispatch(planActions.closeModuleDialog());
+                dispatch(planActions.closeCreateModuleDialog());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
@@ -482,6 +509,7 @@ export default [
     deleteModule,
     changeModule,
     createModule,
+    addModule,
     getEducationalPlans,
     deleteEducationalPlan,
     createNewEducationalPlan,

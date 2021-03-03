@@ -61,10 +61,12 @@ export default (theme: Theme) => createStyles({
         }
     },
     title: {
-        fontSize: '24px',
-        marginBottom: '20px',
         display: 'flex',
         alignItems: 'center',
+        marginBottom: '20px',
+        '& p': {
+            fontSize: '24px',
+        }
     },
     titleIcon: {
         marginLeft: '10px',
