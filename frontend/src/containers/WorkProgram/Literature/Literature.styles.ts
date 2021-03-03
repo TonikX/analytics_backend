@@ -3,10 +3,6 @@ import {createStyles, Theme} from "@material-ui/core";
 export default (theme: Theme) => createStyles({
     root: {
         height: 'inherit',
-        //minHeight: '500px',
-        // height: '100%',
-        // display: 'flex',
-        // flexDirection: 'column'
     },
     iconWrapper: {
         display: 'flex',
@@ -21,10 +17,7 @@ export default (theme: Theme) => createStyles({
         width: '40px',
         marginBottom: '20px',
     },
-    list: {
-        //height: '100%',
-        // height: '500px',
-    },
+    list: {},
     item: {
         borderBottom: '1px solid #ccc',
         padding: '10px',
