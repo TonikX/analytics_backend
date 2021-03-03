@@ -2,24 +2,24 @@ import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
     wrap: {
-        minHeight: '100%',
         padding: '0px 30px 30px',
         boxSizing: 'border-box'
     },
     content: {
-        width: '100%'
+        width: '100%',
+        alignSelf: 'stretch',
     },
     header: {
         display: 'flex',
         justifyContent: 'flex-end',
-        padding: '10px 0px'
+        padding: '10px 0px',
     },
     root: {
         padding: '20px 50px 20px 50px',
         boxShadow: 'none',
+        minHeight: 'calc(100vh - 200px)',
         display: 'flex',
-        height: 'calc(100% - 54px)',
-        boxSizing: 'border-box'
+        flexDirection: 'row',
     },
     programInput: {
         width: '200px',
@@ -29,16 +29,13 @@ export default (theme: Theme) => createStyles({
         fontSize: '24px',
         marginBottom: '20px',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     subTitle: {
         marginBottom: '10px',
         fontSize: '20px'
     },
-    subItem: {
-        marginBottom: '20px',
-        height: 'calc(100% - 100px)'
-    },
+    subItem: {},
     specializationSelector: {
         width: '465px'
     },
@@ -46,7 +43,8 @@ export default (theme: Theme) => createStyles({
         width: '250px',
         height: 'fit-content',
         padding: 0,
-        minWidth: '210px'
+        minWidth: '210px',
+        marginRight: '15px',
     },
     step: {
         background: theme.palette.secondary.main

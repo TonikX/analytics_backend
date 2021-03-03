@@ -54,10 +54,10 @@ class Topics extends React.PureComponent<TopicsProps> {
 
     render() {
         const {classes, sections, isCanEdit} = this.props;
-
+        
         return (
             <div className={classes.topicsSection}>
-                <Scrollbars>
+                <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
                     <div className={classes.topicsList}>
                     {sections.map((section, index) => (
                         <div key={`section-${section.id}`} className={classes.sectionItem}>

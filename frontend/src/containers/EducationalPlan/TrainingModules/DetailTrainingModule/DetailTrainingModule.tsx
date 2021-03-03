@@ -152,7 +152,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                                             <TableCell className={classes.actions}>
                                                 <Tooltip
                                                     title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                                                    <DeleteIcon className={classes.marginRight10}
+                                                    <DeleteIcon className={classes.deleteIcon}
                                                                 onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
                                                     />
                                                 </Tooltip>
