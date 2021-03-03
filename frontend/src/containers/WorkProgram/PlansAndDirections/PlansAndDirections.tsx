@@ -26,10 +26,11 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
 
     render() {
         const {classes, plans} = this.props;
-
+        console.log(plans)
+        
         return (
             <div className={classes.root}>
-                <Scrollbars ref={(el) => {this.scrollBar = el}}>
+                <Scrollbars style={{height: 'calc(100vh - 400px)'}} ref={(el) => {this.scrollBar = el}}>
                     <Table stickyHeader>
                         <TableHead>
                             <TableRow>

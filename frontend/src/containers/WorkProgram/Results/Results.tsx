@@ -38,7 +38,7 @@ class Results extends React.PureComponent<ResultsProps> {
 
     render() {
         const {classes, resultsList, isCanEdit} = this.props;
-
+        
         return (
             <div className={classes.root}>
                 <div className={classNames(classes.header, classes.item)}>
@@ -49,7 +49,7 @@ class Results extends React.PureComponent<ResultsProps> {
                         Уровень освоения
                     </Typography>
                 </div>
-                <Scrollbars>
+                <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
                     <div className={classes.list}>
                         {resultsList.map((result) => (
                             <div className={classes.item}>

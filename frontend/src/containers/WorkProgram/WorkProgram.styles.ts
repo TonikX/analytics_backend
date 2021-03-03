@@ -43,7 +43,8 @@ export default (theme: Theme) => createStyles({
         width: '250px',
         height: 'fit-content',
         padding: 0,
-        minWidth: '210px'
+        minWidth: '210px',
+        marginRight: '15px',
     },
     step: {
         background: theme.palette.secondary.main

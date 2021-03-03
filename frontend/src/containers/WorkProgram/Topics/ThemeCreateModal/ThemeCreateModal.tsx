@@ -32,6 +32,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
         topic: {
             [workProgramTopicFields.ID]: null,
             [workProgramTopicFields.DESCRIPTION]: '',
+            [workProgramTopicFields.NUMBER]: this.props.sections.length,
             [workProgramTopicFields.SECTION]: '',
             [workProgramTopicFields.COURSE]: {
                 [CourseFields.ID]: ''

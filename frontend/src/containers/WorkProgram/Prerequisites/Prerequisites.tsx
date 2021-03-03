@@ -37,7 +37,7 @@ class Prerequisites extends React.PureComponent<SixthStepProps> {
 
     render() {
         const {classes, prerequisitesList, isCanEdit} = this.props;
-
+        
         return (
             <div className={classes.root}>
                 <div className={classNames(classes.header, classes.item)}>
@@ -48,7 +48,7 @@ class Prerequisites extends React.PureComponent<SixthStepProps> {
                         Уровень освоения
                     </Typography>
                 </div>
-                <Scrollbars>
+                <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
                     <div className={classes.list}>
                         {prerequisitesList.map((prerequisite) => (
                             <div className={classNames(classes.item, {[classes.disableItem]: !isCanEdit})}
