@@ -136,9 +136,9 @@ class Sections extends React.PureComponent<SectionsProps> {
         return (
             <div className={classes.secondStep}>
                 <TableContainer className={classes.table}>
-                    <AutoSizer>
+                    <AutoSizer disableHeight>
                     {({ width, height }) => (
-                    <Scrollbars style={{width, height}} ref={(el) => {this.scrollBar = el}} >
+                    <Scrollbars style={{width, height} }  ref={(el) => {this.scrollBar = el}} autoHeight autoHeightMax={Number.MAX_VALUE}>
                         <Table>
                             <TableHead>
                                 <TableRow>
@@ -256,17 +256,19 @@ class Sections extends React.PureComponent<SectionsProps> {
                             </>
                         }
 
-                    </Scrollbars>)}
-                    </AutoSizer>
+                    </Scrollbars>
+                    )}
+                    </AutoSizer> 
                 </TableContainer>
 
                 {!createNewSectionMode && isCanEdit
-                    && <Fab color="secondary"
+                    && <div className={classes.iconWrapper}>  <Fab color="secondary"
                             className={classes.addIcon}
                             onClick={this.handleCreateNewSection}
                         >
                         <AddIcon/>
                     </Fab>
+                    </div>
                 }
             </div>
         );

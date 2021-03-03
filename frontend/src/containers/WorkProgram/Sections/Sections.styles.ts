@@ -2,33 +2,27 @@ import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
     secondStep: {
-        display: 'flex',
-        //flexWrap: 'wrap',
-        flexDirection: 'column',
-        minHeight: '100%',
-        // height: 'inherit'
-        // width: '100%',
-        //flexGrow: 1,
-        
+        height: 'inherit',
     },
     headerCell: {
         border: '1px solid rgba(224, 224, 224, 1)',
         textAlign: 'center',
         fontWeight: 'bold'
     },
+    iconWrapper: {
+        marginTop: '20px',
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
+    },
     addIcon: {
-        marginTop: '10px',
-        marginLeft: 'auto',
-        //flex: 'none',
-        marginBottom: '20px',
+        width: '40px',
+        height: '40px',
     },
     table: {
-        // width: '100%',
-        minHeight: '100%',
-        //flexGrow: 1,
-        overflowX: 'hidden',
-        
-        flex: 1,
+        height: '100%',
+        overflow: 'hidden',
         '& th': {
             padding: '3px !important',
         },

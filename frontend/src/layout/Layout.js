@@ -26,7 +26,6 @@ import connect from './Layout.connect';
 import styles from './Layout.styles';
 
 import Scrollbars from "react-custom-scrollbars";
-import { AutoSizer } from "react-virtualized";
 
 const userService = UserService.factory();
 
