@@ -26,7 +26,6 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
 
     render() {
         const {classes, plans} = this.props;
-        console.log(plans)
         
         return (
             <div className={classes.root}>
