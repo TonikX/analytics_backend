@@ -42,6 +42,8 @@ import {
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
+import QuestionIcon from "@material-ui/icons/HelpOutline";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -295,7 +297,12 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                     </div>
 
                                     <FormControl component="fieldset">
-                                        <FormLabel component="legend">Длительность изучения *</FormLabel>
+                                        <FormLabel component="legend">
+                                            Длительность изучения *
+                                            <Tooltip title="Первый семестр - семестр с которого начинается дисциплина.">
+                                                <QuestionIcon color="primary" className={classes.tooltipIcon} />
+                                            </Tooltip>
+                                        </FormLabel>
                                         <RadioGroup className={classes.radioGroup}
                                                     onChange={this.saveField(EvaluationToolFields.SEMESTER)}
                                                     value={evaluationTool[EvaluationToolFields.SEMESTER]}

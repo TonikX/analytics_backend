@@ -9,9 +9,11 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/MenuOutlined';
 import CloseIcon from '@material-ui/icons/CloseOutlined';
+import BookmarksIcon from '@material-ui/icons/BookmarksOutlined';
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import Tooltip from "@material-ui/core/Tooltip";
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import UserService from "../../service/user-service";
@@ -84,46 +86,52 @@ class Header extends React.PureComponent<HeaderProps>{
                         Учебная аналитика
                     </Typography>
                     {isAuth &&
-                        <div className={classes.avatar}>
-                            <IconButton
-                                aria-haspopup="true"
-                                onClick={this.handleMenu}
-                                color="inherit"
-                            >
-                                <AccountCircle/>
-                            </IconButton>
-                            <Menu
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={isOpenAvatarMenu}
-                                onClose={this.handleClose}
-                                PopoverClasses={{
-                                    root: classes.popper
-                                }}
-                            >
-                                <MenuItem>
-                                    <Link to={appRouter.getFoldersRoute()}
-                                          className={classes.link}
-                                    >
-                                        Закладки
-                                    </Link>
-                                </MenuItem>
-                                <MenuItem onClick={this.handleLogout}>
-                                    <Link to={appRouter.getSignInRoute()}
-                                          className={classes.link}
-                                    >
-                                        Выйти
-                                    </Link>
-                                </MenuItem>
-                            </Menu>
+                        <div className={classes.rightSide}>
+                            <Tooltip title="Закладки">
+                                <Link to={appRouter.getFoldersRoute()}
+                                      className={classes.link}
+                                >
+                                    <IconButton aria-haspopup="true">
+                                        <BookmarksIcon className={classes.bookmarkIcon} />
+                                    </IconButton>
+                                </Link>
+                            </Tooltip>
+
+                            <div className={classes.avatar}>
+                                <IconButton
+                                    aria-haspopup="true"
+                                    onClick={this.handleMenu}
+                                    color="inherit"
+                                >
+                                    <AccountCircle/>
+                                </IconButton>
+
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={isOpenAvatarMenu}
+                                    onClose={this.handleClose}
+                                    PopoverClasses={{
+                                        root: classes.popper
+                                    }}
+                                >
+                                    <MenuItem onClick={this.handleLogout}>
+                                        <Link to={appRouter.getSignInRoute()}
+                                              className={classes.link}
+                                        >
+                                            Выйти
+                                        </Link>
+                                    </MenuItem>
+                                </Menu>
+                            </div>
                         </div>
                     }
                 </Toolbar>

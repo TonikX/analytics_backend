@@ -85,5 +85,10 @@ export default (theme: Theme) => createStyles({
     label: {
         fontSize: '14px',
         marginBottom: 10
+    },
+    tooltipIcon: {
+        position: 'relative',
+        top: '5px',
+        left: '5px'
     }
 });

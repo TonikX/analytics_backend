@@ -3,7 +3,12 @@ import {Theme} from '@material-ui/core/styles/createMuiTheme';
 
 export default (theme: Theme) => createStyles({
     avatar: {
-        marginLeft: 'auto'
+        marginLeft: 10,
+    },
+    rightSide: {
+        marginLeft: 'auto',
+        display: 'flex',
+        alignItems: 'center'
     },
     header: {
         zIndex: 1000,
@@ -23,5 +28,8 @@ export default (theme: Theme) => createStyles({
     },
     menuIcon: {
         marginRight: '20px'
+    },
+    bookmarkIcon: {
+        color: '#fff'
     }
 });

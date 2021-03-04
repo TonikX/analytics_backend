@@ -12,7 +12,7 @@ import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import AddIcon from "@material-ui/icons/Add";
-import Fab from "@material-ui/core/Fab";
+import Button from "@material-ui/core/Button";
 import AddFolderModal from "./AddFolderModal";
 
 import LikeButton from "../../../components/LikeButton";
@@ -129,20 +129,27 @@ class Folders extends React.PureComponent<FoldersProps> {
                 </Typography>
                 <div className={classes.tabsWrap}>
                     <div>
-                    <Tabs value={currentTab}
-                          orientation="vertical"
-                          classes={{root: classes.tabs}}
-                          onChange={this.handleChangeCurrentTab}
-                    >
-                        {folders.map((folder, index) =>
-                            <Tab value={index}
-                                 label={<div>{folder[FoldersFields.NAME]} <DeleteIcon className={classes.deleteIcon} onClick={this.deleteFolder(folder[FoldersFields.ID])}/> </div>}
-                                 classes={{
-                                     wrapper: classes.tab
-                                 }}
-                            />
-                        )}
-                    </Tabs>
+                        <Tabs value={currentTab}
+                              orientation="vertical"
+                              classes={{root: classes.tabs}}
+                              onChange={this.handleChangeCurrentTab}
+                        >
+                            {folders.map((folder, index) =>
+                                <Tab value={index}
+                                     label={<div>{folder[FoldersFields.NAME]} <DeleteIcon className={classes.deleteIcon} onClick={this.deleteFolder(folder[FoldersFields.ID])}/> </div>}
+                                     classes={{
+                                         wrapper: classes.tab
+                                     }}
+                                />
+                            )}
+                        </Tabs>
+                        <Button onClick={this.openCreateDialog}
+                                className={classes.addButton}
+                                color="primary"
+                                variant="text"
+                        >
+                            <AddIcon/> Создать папку
+                        </Button>
                     </div>
                     {folders.map((folder, index) =>
                         <TabPanel value={currentTab} index={index}>
@@ -159,15 +166,6 @@ class Folders extends React.PureComponent<FoldersProps> {
                     )}
  
                 </div>
-
-                <Fab color="secondary"
-                     classes={{
-                         root: classes.addIcon
-                     }}
-                     onClick={this.openCreateDialog}
-                >
-                    <AddIcon/>
-                </Fab>
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

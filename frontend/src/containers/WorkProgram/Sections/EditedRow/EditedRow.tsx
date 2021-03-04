@@ -205,7 +205,9 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                                         <DeleteIcon/>
                                     </IconButton>
                                 }
-                                <IconButton onClick={this.handleClickSave}>
+                                <IconButton onClick={this.handleClickSave}
+                                            disabled={!section[workProgramSectionFields.NAME].length}
+                                >
                                     <SuccessIcon className={classes.saveIcon}/>
                                 </IconButton>
                             </div>

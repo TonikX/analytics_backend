@@ -16,6 +16,7 @@ import Slide from "@material-ui/core/Slide";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import QuestionIcon from "@material-ui/icons/HelpOutline";
 import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -38,6 +39,7 @@ import {
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import {IntermediateCertificationTypes} from "../../constants";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -229,7 +231,12 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                     </div>
 
                                     <FormControl component="fieldset">
-                                        <FormLabel component="legend">Длительность изучения *</FormLabel>
+                                        <FormLabel component="legend">
+                                            Длительность изучения *
+                                            <Tooltip title="Первый семестр - семестр с которого начинается дисциплина.">
+                                                <QuestionIcon color="primary" className={classes.tooltipIcon}/>
+                                            </Tooltip>
+                                        </FormLabel>
                                         <RadioGroup className={classes.radioGroup}
                                                     onChange={this.saveField(IntermediateCertificationFields.SEMESTER)}
                                                     value={evaluationTool[IntermediateCertificationFields.SEMESTER]}

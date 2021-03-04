@@ -92,7 +92,17 @@ const muiTheme = createMuiTheme({
             root: {
                 borderRadius: '0'
             }
-        }
+        },
+        MuiListItem: {
+            root: {
+                "&$selected": {
+                    backgroundColor: "rgb(29 81 163 / 25%)",
+                    "&:hover": {
+                        backgroundColor: "rgb(29 81 163 / 25%)",
+                    },
+                },
+            },
+        },
     }
 }, ruRU);
 
