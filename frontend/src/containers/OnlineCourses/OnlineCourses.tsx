@@ -34,7 +34,7 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-// через стили не удалось сделать чтобы при открытии margin не появлялся
+// через стили (.styles.ts) не удалось сделать чтобы при открытии margin не появлялся
 const ExpansionPanel = withStyles({
   root: {
     border: '1px solid rgba(0, 0, 0, .125)',
