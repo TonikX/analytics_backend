@@ -4,6 +4,7 @@ const FOLDERS = 'folders';
 const SIGN_IN = 'sign-in';
 const SIGN_UP = 'sign-up';
 const COURSES = 'courses';
+const ONLINE_COURSES = 'online-courses';
 const LITERATURE = 'literature';
 const SUBJECT_AREA = 'subject-area';
 const WORK_PROGRAM = 'work-program';
@@ -53,6 +54,10 @@ export default class RouterService {
 
     getCoursesRoute = () => {
         return SEPARATOR + COURSES;
+    };
+
+    getOnlineCoursesRoute = () => {
+        return SEPARATOR + ONLINE_COURSES;
     };
 
     getLiteratureRoute = () => {
