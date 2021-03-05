@@ -19,9 +19,9 @@ import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 
-//import CourseCreateModal from "./CourseCreateModal";
+import CourseCreateModal from "./CourseCreateModal";
 
-import {CoursesProps, CourseType} from './types';
+import {CoursesProps} from './types';
 
 
 import connect from './Courses.connect';
@@ -59,7 +59,7 @@ class OnlineCourses extends React.Component<CoursesProps> {
       showFilters: false,
   }
 
-  componentDidMount() {
+  componentDidMount() {      
       this.props.actions.getCourses();
   }
 
@@ -82,10 +82,10 @@ class OnlineCourses extends React.Component<CoursesProps> {
       });
   }
 
-  handleClickEdit = (course: CourseType): void => {
-    console.log('handleClickEdit', course.id);
-    this.props.actions.openDialog(course);
-  }
+  // handleClickEdit = (course: CourseType): void => {
+  //   console.log('handleClickEdit', course.id);
+  //   this.props.actions.openDialog(course);
+  // }
 
   handleCreate = (): void => {
     this.props.actions.openDialog();
@@ -159,7 +159,7 @@ class OnlineCourses extends React.Component<CoursesProps> {
           sortingField={sortingField} 
           sortingMode={sortingMode} 
           handleClickDelete={(id: number) => this.handleClickDelete(id)} 
-          handleClickEdit={(course: CourseType) => this.handleClickEdit(course)}
+          // handleClickEdit={(course: CourseType) => this.handleClickEdit(course)}
         />
 
         <div className={classes.footer}>
@@ -185,7 +185,7 @@ class OnlineCourses extends React.Component<CoursesProps> {
           </Fab>
         </div>
 
-        {/* <CourseCreateModal /> */}
+        <CourseCreateModal />
 
         <ConfirmDialog 
           onConfirm={this.handleConfirmDeleteDialog}

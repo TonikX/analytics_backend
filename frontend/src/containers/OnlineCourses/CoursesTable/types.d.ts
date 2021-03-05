@@ -6,5 +6,5 @@ export interface CoursesTableProps {
   sortingField: string;
   sortingMode: SortingType;
   handleClickDelete: (id: number) => void;
-  handleClickEdit: (course: CourseType) => void;
+  // handleClickEdit: (course: CourseType) => void;
 }

@@ -11,6 +11,7 @@ const deleteCourse = createAction('DELETE_COURSE');
 
 const openDialog = createAction('OPEN_COURSE_DIALOG');
 const closeDialog = createAction('CLOSE_COURSE_DIALOG');
+const changeDialogStep = createAction('CHANGE_DIALOG_STEP')
 
 const changeSearchQuery = createAction('COURSES_CHANGE_SEARCH_QUERY');
 const changeCurrentPage = createAction('COURSES_CHANGE_CURRENT_PAGE');
@@ -29,6 +30,7 @@ const actions: CoursesActions = {
     changeCurrentPage,
     changeAllCount,
     changeSorting,
+    changeDialogStep,
 }
 
 export default actions;

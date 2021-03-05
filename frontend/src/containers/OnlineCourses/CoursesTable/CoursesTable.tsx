@@ -12,7 +12,6 @@ import Scrollbars from "react-custom-scrollbars";
 
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
 
 import SortingButton from "../../../components/SortingButton";
 
@@ -22,7 +21,7 @@ import actions from '../actions'
 import { CoursesTableProps } from './types'
 import { useDispatch } from 'react-redux'
 
-export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingField, sortingMode, handleClickDelete, handleClickEdit }) => {
+export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingField, sortingMode, handleClickDelete }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -89,9 +88,9 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
                     <IconButton onClick={() => handleClickDelete(course[CourseFields.ID])}>
                       <DeleteIcon />
                     </IconButton>
-                    <IconButton onClick={() => handleClickEdit(course)}>
+                    {/* <IconButton onClick={() => handleClickEdit(course)}>
                       <EditIcon />
-                    </IconButton>
+                    </IconButton> */}
                   </div>
                 </TableCell>
               </TableRow>
