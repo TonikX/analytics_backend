@@ -20,7 +20,6 @@ import SearchOutlined from "@material-ui/icons/SearchOutlined";
 import ConfirmDialog from "../../components/ConfirmDialog";
 
 //import CourseCreateModal from "./CourseCreateModal";
-import {SortingType} from "../../components/SortingButton/types";
 
 import {CoursesProps, CourseType} from './types';
 
@@ -28,10 +27,36 @@ import {CoursesProps, CourseType} from './types';
 import connect from './Courses.connect';
 import styles from './Courses.styles';
 import { CoursesTable } from './CoursesTable/CoursesTable'
+import Button from '@material-ui/core/Button'
+import { Filters } from './Filters/Filters'
+import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+// через стили не удалось сделать чтобы при открытии margin не появлялся
+const ExpansionPanel = withStyles({
+  root: {
+    border: '1px solid rgba(0, 0, 0, .125)',
+    boxShadow: 'none',
+    '&:not(:last-child)': {
+      borderBottom: 0,
+    },
+    '&:before': {
+      display: 'none',
+    },
+    '&$expanded': {
+      // этот margin
+      margin: 0,
+    },
+  },
+  expanded: {},
+})(MuiExpansionPanel);
 
 class OnlineCourses extends React.Component<CoursesProps> {
   state = {
-      deleteConfirmId: null
+      deleteConfirmId: null,
+      showFilters: false,
   }
 
   componentDidMount() {
@@ -81,7 +106,11 @@ class OnlineCourses extends React.Component<CoursesProps> {
       this.props.actions.getCourses();
   }
 
-
+  handleShowFilters = (): void => {
+    this.setState({
+      showFilters: !this.state.showFilters,
+    })
+  }
   render() {
     const {classes, courses, allCount, currentPage, sortingField, sortingMode} = this.props;
     const {deleteConfirmId} = this.state;
@@ -90,19 +119,40 @@ class OnlineCourses extends React.Component<CoursesProps> {
       <Paper className={classes.root}>
         <Typography className={classes.title}>
             Онлайн курсы
-
-            <TextField 
-              placeholder="Поиск"
-              variant="outlined"
-              InputProps={{
-                  classes: {
-                      root: classes.searchInput
-                  },
-                  startAdornment: <SearchOutlined />,
-              }}
-              onChange={this.handleChangeSearchQuery}
-            />
+            <div className={classes.searchWrapper}>
+              <Button 
+                onClick={this.handleShowFilters} 
+                variant="contained" 
+                color="primary" 
+                disableElevation 
+                className={classes.filterBtn}
+              >
+                Фильтрация
+              </Button>
+              <TextField 
+                placeholder="Поиск"
+                variant="outlined"
+                InputProps={{
+                    classes: {
+                        root: classes.searchInput
+                    },
+                    startAdornment: <SearchOutlined />,
+                }}
+                onChange={this.handleChangeSearchQuery}
+              />
+            </div>
         </Typography>
+        <ExpansionPanel expanded={this.state.showFilters} onChange={this.handleShowFilters}>
+          <ExpansionPanelSummary 
+            className={classes.accordionSummary}
+            expandIcon={<ExpandMoreIcon />}
+          >
+            Фильтрация
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Filters />
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
 
         <CoursesTable 
           courses={courses} 
@@ -124,11 +174,12 @@ class OnlineCourses extends React.Component<CoursesProps> {
             onChangeRowsPerPage={()=>{}}
           />
 
-          <Fab color="secondary"
-                  classes={{
-                      root: classes.addIcon
-                  }}
-                  onClick={this.handleCreate}
+          <Fab 
+            color="secondary"
+            classes={{
+              root: classes.addIcon
+            }}
+            onClick={this.handleCreate}
           >
             <AddIcon/>
           </Fab>
