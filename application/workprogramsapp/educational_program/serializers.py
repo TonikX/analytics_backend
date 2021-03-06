@@ -7,11 +7,13 @@ from rest_framework import serializers, viewsets
 from rest_framework.fields import BooleanField
 
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, ProfessionalAreaOfGeneralCharacteristics,\
-    ProfessionalStandard, PkCompetencesInGeneralCharacteristics, PkCompetencesInGeneralCharacteristics
+    ProfessionalStandard
+
+from .models import PkCompetencesInGroupOfGeneralCharacteristic, GroupOfPkCompetencesInGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
 
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer, CompetenceForEPSerializer
+from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer, CompetenceForEPSerializer, IndicatorListSerializer
 
 
 class EducationalProgramSerializer(serializers.ModelSerializer):
@@ -70,15 +72,56 @@ class ProfessionalAreaOfGeneralCharacteristicsSerializer(serializers.ModelSerial
         model = ProfessionalAreaOfGeneralCharacteristics
         fields = "__all__"
 
+"""
+Профессиональные компетенции
+"""
 
-class PkCompetencesInGeneralCharacteristicsSerializer(serializers.ModelSerializer):
-    """Сериализатор Компетенций"""
-    competence = CompetenceForEPSerializer()
-    professional_standard = ProfessionalStandardSerializer(many = True)
+class IndicatorInPkCompetenceInGeneralCharacteristicSerializer(serializers.ModelSerializer):
+    """
+    Индикатор компетенции в общей характеристике
+    """
+
+    indicator = IndicatorListSerializer()
 
     class Meta:
-        model = PkCompetencesInGeneralCharacteristics
-        fields = ['id','labor_functions', 'competence', 'professional_standard']
+        model = IndicatorInPkCompetenceInGeneralCharacteristic
+        fields = "__all__"
+
+
+class PkCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
+    """Сериализатор просмотра профессиональных компетенций"""
+    indicator_of_competence_in_group_of_pk_competences = IndicatorInPkCompetenceInGeneralCharacteristicSerializer(many=True)
+    competence = CompetenceForEPSerializer()
+
+    class Meta:
+        model = PkCompetencesInGroupOfGeneralCharacteristic
+        fields = "__all__"
+
+
+class CreatePkCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
+    """Сериализатор создания и изменения профессиональных компетенций"""
+
+    class Meta:
+        model = PkCompetencesInGroupOfGeneralCharacteristic
+        fields = "__all__"
+
+
+class GroupOfPkCompetencesInGeneralCharacteristicSerializer(serializers.ModelSerializer):
+    """Сериализатор вывода группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
+
+    competence_in_group_of_pk_competences = PkCompetencesInGroupOfGeneralCharacteristicSerializer(many=True)
+
+    class Meta:
+        model = GroupOfPkCompetencesInGeneralCharacteristic
+        fields = ['id','name', 'general_characteristic', 'competence_in_group_of_pk_competences']
+
+
+class CreateGroupOfPkCompetencesInGeneralCharacteristicSerializer(serializers.ModelSerializer):
+    """Сериализатор создания и редактирования группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
+
+    class Meta:
+        model = GroupOfPkCompetencesInGeneralCharacteristic
+        fields = ['id','name', 'general_characteristic']
 
 
 class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
@@ -87,7 +130,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     educational_program = EducationalProgramSerializer()
     ok_competences = CompetenceForEPSerializer(many = True)
     kc_competences = CompetenceForEPSerializer(many = True)
-    pk_competences = PkCompetencesInGeneralCharacteristicsSerializer(source = 'pkcompetencesingeneralcharacteristics_set', many = True)
+    pk_competences = GroupOfPkCompetencesInGeneralCharacteristicSerializer(many = True)
     np_competences = CompetenceForEPSerializer(many = True)
     developers = userProfileSerializer(many = True)
     employers_representatives = userProfileSerializer(many = True)
@@ -108,12 +151,4 @@ class DepartmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Department
-        fields = "__all__"
-
-
-class PkCompetencesInGeneralCharacteristicsSerializer(serializers.ModelSerializer):
-    """Сериализатор образовательной программы"""
-
-    class Meta:
-        model = PkCompetencesInGeneralCharacteristics
         fields = "__all__"
