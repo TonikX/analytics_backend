@@ -18,6 +18,9 @@ const closeDialog = createAction('CLOSE_EDUCATIONAL_PLAN_DIALOG');
 const openModuleDialog = createAction('OPEN_EDUCATIONAL_PLAN_MODULE_DIALOG');
 const closeModuleDialog = createAction('CLOSE_EDUCATIONAL_PLAN_MODULE_DIALOG');
 
+const openAddModuleDialog = createAction('OPEN_EDUCATIONAL_PLAN_ADD_MODULE_DIALOG');
+const closeAddModuleDialog = createAction('CLOSE_EDUCATIONAL_PLAN_ADD_MODULE_DIALOG');
+
 const openDetailDialog = createAction('OPEN_DETAIL_EDUCATIONAL_PLAN_DIALOG');
 const closeDetailDialog = createAction('CLOSE_DETAIL_EDUCATIONAL_PLAN_DIALOG');
 
@@ -33,6 +36,7 @@ const deleteBlockOfWorkPrograms = createAction('DELETE_BLOCK_OF_WORK_PROGRAM');
 const createModule = createAction('EDUCATIONAL_PLAN_CREATE_MODULE');
 const changeModule = createAction('EDUCATIONAL_PLAN_CHANGE_MODULE');
 const deleteModule = createAction('EDUCATIONAL_PLAN_DELETE_MODULE');
+const addModule = createAction('EDUCATIONAL_PLAN_ADD_MODULE');
 
 const getDirectionsDependedOnWorkProgram = createAction('GET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM');
 const setDirectionsDependedOnWorkProgram = createAction('SET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM');
@@ -47,6 +51,8 @@ const deleteWorkProgramFromZun = createAction('DELETE_WP_FROM_ZUN');
 const pageDown = createAction('EDUCATIONAL_PLAN_PAGE_DOWN');
 
 const actions: EducationalPlanActions = {
+    openAddModuleDialog,
+    closeAddModuleDialog,
     pageDown,
     deleteWorkProgramFromZun,
     deleteCompetenceBlock,
@@ -56,10 +62,11 @@ const actions: EducationalPlanActions = {
     closeDownloadModal,
     getDirectionsDependedOnWorkProgram,
     setDirectionsDependedOnWorkProgram,
-    openModuleDialog,
-    closeModuleDialog,
+    openCreateModuleDialog: openModuleDialog,
+    closeCreateModuleDialog: closeModuleDialog,
     changeModule,
     deleteModule,
+    addModule,
     createBlockOfWorkPrograms,
     changeBlockOfWorkPrograms,
     deleteBlockOfWorkPrograms,

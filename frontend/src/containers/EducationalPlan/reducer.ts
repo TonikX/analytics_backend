@@ -28,7 +28,15 @@ export const initialState: educationalPlanState = {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
     },
-    [fields.EDUCATIONAL_PLAN_MODULE_DIALOG]: {
+    [fields.EDUCATIONAL_PLAN_CREATE_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
+    },
+    [fields.EDUCATIONAL_PLAN_ADD_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
+    },
+    [fields.EDUCATIONAL_PLAN_CREATE_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
     },
@@ -83,7 +91,14 @@ const openDetailDialog = (state: educationalPlanState, {payload}: any): educatio
 
 const openModuleDialog = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
     ...state,
-    [fields.EDUCATIONAL_PLAN_MODULE_DIALOG]: {
+    [fields.EDUCATIONAL_PLAN_CREATE_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: true,
+        [fields.DIALOG_DATA]: payload
+    }
+});
+const openAddModuleDialog = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.EDUCATIONAL_PLAN_ADD_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: true,
         [fields.DIALOG_DATA]: payload
     }
@@ -99,7 +114,15 @@ const openDownloadModal = (state: educationalPlanState, {payload}: any): educati
 
 const closeModuleDialog = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
     ...state,
-    [fields.EDUCATIONAL_PLAN_MODULE_DIALOG]: {
+    [fields.EDUCATIONAL_PLAN_CREATE_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: payload
+    }
+});
+
+const closeAddModuleDialog = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.EDUCATIONAL_PLAN_ADD_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: payload
     }
@@ -151,8 +174,11 @@ export const reducer = createReducer(initialState, {
     [actions.openDetailDialog.type]: openDetailDialog,
     [actions.closeDetailDialog.type]: closeDetailDialog,
 
-    [actions.openModuleDialog.type]: openModuleDialog,
-    [actions.closeModuleDialog.type]: closeModuleDialog,
+    [actions.openCreateModuleDialog.type]: openModuleDialog,
+    [actions.closeCreateModuleDialog.type]: closeModuleDialog,
+
+    [actions.openAddModuleDialog.type]: openAddModuleDialog,
+    [actions.closeAddModuleDialog.type]: closeAddModuleDialog,
 
     [actions.openDownloadModal.type]: openDownloadModal,
     [actions.closeDownloadModal.type]: closeDownloadModal,

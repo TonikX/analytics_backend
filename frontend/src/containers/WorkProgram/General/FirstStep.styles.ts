@@ -46,6 +46,7 @@ export default (theme: Theme) => createStyles({
     },
     editorTitle: {
         fontSize: '14px',
+        fontWeight: 'bold',
         marginBottom: 10
     },
     dialog: {

@@ -45,7 +45,7 @@ class ModuleModal extends React.Component<ModuleModalProps> {
     }
 
     handleClose = () => {
-        this.props.actions.closeModuleDialog();
+        this.props.actions.closeCreateModuleDialog();
     }
 
     handleSave = () => {

@@ -76,6 +76,13 @@ class EducationalPlanService extends AnalyticsService{
         });
     }
 
+    addModule(module: any, block: any){
+        return this.post(`/api/disciplineblockmodule/insert`, {
+            'old_module_id': module,
+            'block_id': block,
+        });
+    }
+
     changeModule(moduleWithBlocks: any){
         return this.patch(`/api/disciplineblockmodule/update/${moduleWithBlocks[EducationalPlanBlockFields.ID]}`, {
             'descipline_block': moduleWithBlocks.blockId,

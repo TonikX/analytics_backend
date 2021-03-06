@@ -220,7 +220,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         }
                     </div>
                 </div>
-                <Paper className={classes.root}>
+                <Paper className={classes.root} component="div">
                     <Stepper activeStep={activeStep}
                              orientation="vertical"
                              nonLinear

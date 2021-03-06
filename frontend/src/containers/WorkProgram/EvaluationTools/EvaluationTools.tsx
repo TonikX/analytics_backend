@@ -1,6 +1,7 @@
 import React, {SyntheticEvent} from 'react';
 import get from 'lodash/get';
 import Scrollbars from "react-custom-scrollbars";
+import {AutoSizer} from 'react-virtualized';
 
 import classNames from "classnames";
 
@@ -94,12 +95,15 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                     label="Дополнительные 3 балла"
                     labelPlacement="start"
                     className={classes.extraPoint}
+                    disabled={!isCanEdit}
                 />
 
                 <div className={classes.totalList}>
                     <EvaluationCertificationTotalList />
                 </div>
-
+                <AutoSizer disableHeight>
+                    {({ width, height }) => (
+                <Scrollbars style={{width, height}} autoHeight autoHeightMax={Number.MAX_VALUE}>
                 <div className={classNames(classes.header, classes.row)}>
                     <Typography className={classes.title}>
                         Название
@@ -129,7 +133,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                         Семестр
                     </Typography>
                 </div>
-                <Scrollbars>
+                
                     <div className={classes.list}>
                         {evaluationToolsList.map((evaluationTool) => (
                             <div className={classes.item}>
@@ -224,7 +228,8 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                             </div>
                         ))}
                     </div>
-                </Scrollbars>
+                </Scrollbars>)}
+                </AutoSizer>
 
                 {isCanEdit &&
                     <Fab color="secondary"

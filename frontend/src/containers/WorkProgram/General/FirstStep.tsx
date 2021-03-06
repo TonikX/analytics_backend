@@ -263,7 +263,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                     }
 
                     <Typography className={classes.editorTitle}>
-                        Редакторы
+                        Редакторы:
                     </Typography>
 
                     <div className={classes.editorsList}>

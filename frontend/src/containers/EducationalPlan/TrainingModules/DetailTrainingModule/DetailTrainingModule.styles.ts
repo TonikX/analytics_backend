@@ -59,7 +59,7 @@ export default (theme: Theme) => createStyles({
             cursor: 'pointer'
         }
     },
-    marginRight10: {
-        marginRight: 10
+    deleteIcon: {
+        marginRight: 5
     },
 });

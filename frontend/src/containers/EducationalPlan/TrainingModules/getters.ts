@@ -7,9 +7,15 @@ import {GENERAL_PATH} from "./reducer";
 import {fields, TrainingModuleFields} from './enum';
 
 import {trainingModulesState, TrainingModuleType} from './types';
+import {SelectorListType} from "../../../components/SearchSelector/types";
 
 const getStateData = (state: rootState): trainingModulesState => get(state, GENERAL_PATH);
 export const getTrainingModulesList = (state: rootState): Array<TrainingModuleType> => get(getStateData(state), fields.TRAINING_MODULES_LIST, []);
+export const getTrainingModulesListForSelector = (state: rootState): SelectorListType => getTrainingModulesList(state).map(item => ({
+    value: item[TrainingModuleFields.ID],
+    label: item[TrainingModuleFields.NAME],
+}));
+
 export const getTrainingModule = (state: rootState): TrainingModuleType|{} => get(getStateData(state), fields.DETAIL_TRAINING_MODULE, {});
 export const getTrainingModuleId = (state: rootState): number => get(getTrainingModule(state), TrainingModuleFields.ID, 0);
 

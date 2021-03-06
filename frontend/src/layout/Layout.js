@@ -26,7 +26,6 @@ import connect from './Layout.connect';
 import styles from './Layout.styles';
 
 import Scrollbars from "react-custom-scrollbars";
-import { AutoSizer } from "react-virtualized";
 
 const userService = UserService.factory();
 
@@ -96,12 +95,9 @@ class Layout extends React.Component {
                                 [classes.noPadding]: isWorkProgramPage
                             })}>
                                 {!isFetchingRefreshToken && (
-                                    <AutoSizer>
-                                        {({ width, height }) => (
-                                            <Scrollbars style={{ width, height }}>
-                                                {this.props.children}
-                                            </Scrollbars>)}
-                                    </AutoSizer>        
+                                    <Scrollbars>
+                                        {this.props.children}
+                                    </Scrollbars>       
                                 )}
                             </div>
                         </div>

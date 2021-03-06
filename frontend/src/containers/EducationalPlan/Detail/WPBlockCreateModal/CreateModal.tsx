@@ -582,6 +582,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                    defaultValue={item}
                                                    onBlur={this.handleChangeHours(index)}
                                                    type="number"
+                                                   key={'semester' + index}
                                         />
                                     )}
                                 </div>
@@ -610,6 +611,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                     {blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((workProgram: any, wpIndex) =>
                                         <ExpansionPanel expanded={disableZUN ? false : expandedWorkProgram === wpIndex}
                                                         onChange={this.handleChangeExpandedWorkProgram(wpIndex)}
+                                                        key={wpIndex}
                                         >
                                             <ExpansionPanelSummary
                                                 expandIcon={disableZUN ? <></> : <ExpandMoreIcon />}
@@ -633,7 +635,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                         workProgram[BlocksOfWorkProgramsFields.COMPETENCES].map((competence: any, index: number) => {
 
                                                             if (competence[BlocksOfWorkProgramsFields.INDICATORS].length === 0){
-                                                                return <TableRow>
+                                                                return <TableRow key={'indicator' + index}>
                                                                     <TableCell className={classes.competenceCell}>{index + 1}. {competence.label}</TableCell>
                                                                     <TableCell>
                                                                         <div className={classes.smallButton}
@@ -658,7 +660,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                                 </TableRow>
                                                             }
                                                             return competence[BlocksOfWorkProgramsFields.INDICATORS].map((indicator: any, indicatorIndex: number) =>
-                                                                <TableRow>
+                                                                <TableRow key={`indicator-${indicatorIndex}`}>
                                                                     {indicatorIndex === 0 ?
                                                                         <TableCell
                                                                             className={classes.competenceCell}
@@ -685,7 +687,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                                     </TableCell>
                                                                     <TableCell className={classes.resultsCell}>
                                                                         {indicator[BlocksOfWorkProgramsFields.RESULTS].map((result: any, resultIndex: number) => (
-                                                                                <div>{index + 1}.{indicatorIndex + 1}.{resultIndex + 1} {result.label}
+                                                                                <div key={`result-${indicatorIndex}-${resultIndex}`}>
+                                                                                    {index + 1}.{indicatorIndex + 1}.{resultIndex + 1} {result.label}
                                                                                     <DeleteIcon className={classes.deleteIndicatorIcon}
                                                                                                 onClick={this.deleteResult(workProgram.value, competence.value, indicator.value, result.value)}
                                                                                     />

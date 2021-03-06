@@ -20,12 +20,16 @@ import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
 import FileIcon from '@material-ui/icons/DescriptionOutlined';
+import AttachIcon from '@material-ui/icons/AttachFileOutlined';
 
+import LikeButton from "../../../components/LikeButton/LikeButton";
 import ConfirmDialog from "../../../components/ConfirmDialog";
+
 import WPBlockCreateModal from "./WPBlockCreateModal";
 import ChangePlanModal from '../CreateModal';
 import ModuleModal from "./ModuleModal";
 import DownloadFileModal from "./DownloadFileModal";
+import AddModuleModal from "./AddModuleModal";
 
 import {BlocksOfWorkProgramsType, EducationalPlanType, ModuleType} from '../types';
 import {EducationalPlanDetailProps} from './types';
@@ -37,6 +41,7 @@ import {
     EducationalPlanFields,
     DownloadFileModalFields
 } from "../enum";
+import {FavoriteType} from "../../Profile/Folders/enum";
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
 import {specializationObject} from "../../WorkProgram/constants";
 
@@ -44,8 +49,6 @@ import {typeOfWorkProgramInPlan} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
-import LikeButton from "../../../components/LikeButton/LikeButton";
-import {FavoriteType} from "../../Profile/Folders/enum";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -112,8 +115,14 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     }
 
     handleOpenCreateModuleModal = (module: ModuleType|{}, blockId: number) => () => {
-        this.props.actions.openModuleDialog({
+        this.props.actions.openCreateModuleDialog({
             ...module,
+            blockId
+        });
+    }
+
+    handleOpenAddModuleModal = (blockId: number) => () => {
+        this.props.actions.openAddModuleDialog({
             blockId
         });
     }
@@ -168,10 +177,10 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
         return (
             <Paper className={classes.root}>
-                <Typography className={classes.title}>
-                    Учебный план
+                <div className={classes.title}>
+                    <Typography> Учебный план </Typography>
                     {get(detailPlan[EducationalPlanFields.PROFILE], 'length', 0) ?
-                        <>:&nbsp;{detailPlan[EducationalPlanFields.PROFILE]} / {specializationObject[detailPlan[EducationalPlanFields.QUALIFICATION]]} / {detailPlan[EducationalPlanFields.YEAR]}</>
+                        <Typography>:&nbsp;{detailPlan[EducationalPlanFields.PROFILE]} / {specializationObject[detailPlan[EducationalPlanFields.QUALIFICATION]]} / {detailPlan[EducationalPlanFields.YEAR]}</Typography>
                         :
                         <></>
                     }
@@ -185,7 +194,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                     isLiked={Boolean(detailPlan[EducationalPlanFields.ID_RATING])}
                         />
                     </div>
-                </Typography>
+                </div>
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>
@@ -219,26 +228,31 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                 {blocks.map(block => {
                                     return (
                                         <>
-                                            <TableRow className={classes.blockRow}>
+                                            <TableRow className={classes.blockRow} key={'block' + block[EducationalPlanBlockFields.ID]}>
                                                 <TableCell colSpan={13}>
-                                                    <Typography>
-                                                        <div className={classes.rowBlock}>
-                                                            {block[EducationalPlanBlockFields.NAME]}
-                                                            {canEdit &&
-                                                                <Tooltip title="Создать модуль в данном блоке">
-                                                                    <AddCircleIcon className={classes.smallAddIcon}
-                                                                                   onClick={this.handleOpenCreateModuleModal({}, block[EducationalPlanBlockFields.ID])}
-                                                                    />
-                                                                </Tooltip>
-                                                            }
-                                                        </div>
-                                                    </Typography>
+                                                    <div className={classes.rowBlock}>
+                                                        {block[EducationalPlanBlockFields.NAME]}
+                                                        {canEdit &&
+                                                            <Tooltip title="Создать модуль в данном блоке">
+                                                                <AddCircleIcon className={classes.smallAddIcon}
+                                                                               onClick={this.handleOpenCreateModuleModal({}, block[EducationalPlanBlockFields.ID])}
+                                                                />
+                                                            </Tooltip>
+                                                        }
+                                                        {canEdit &&
+                                                            <Tooltip title="Добавить модуль в данный блок">
+                                                                <AttachIcon className={classes.smallAddIcon}
+                                                                               onClick={this.handleOpenAddModuleModal(block[EducationalPlanBlockFields.ID])}
+                                                                />
+                                                            </Tooltip>
+                                                        }
+                                                    </div>
                                                 </TableCell>
                                             </TableRow>
                                             {block[EducationalPlanBlockFields.MODULES].map(module => {
                                                 return (
                                                     <>
-                                                        <TableRow>
+                                                        <TableRow key={'module' + module[ModuleFields.ID]}>
                                                             <TableCell colSpan={12}>
                                                                 <div className={classes.rowModule}>
                                                                     {module[ModuleFields.NAME]}
@@ -269,17 +283,17 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                             }
                                                         </TableRow>
 
-                                                        {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map(blockOfWorkProgram => {
+                                                        {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map((blockOfWorkProgram, index) => {
                                                             const semesterHours = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.SEMESTER_UNIT);
                                                             const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
 
                                                             const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                                                             const semesterHour = mappedSemesterHours.slice(0, 10);
 
-                                                            return <TableRow>
+                                                            return <TableRow key={`blockOfWorkProgram-${index}-${module[ModuleFields.ID]}`}>
                                                                 <TableCell>
                                                                     {workPrograms.map(workProgram =>
-                                                                        <div className={classes.displayFlex}>
+                                                                        <div className={classes.displayFlex} key={'wp' + workProgram[WorkProgramGeneralFields.ID]}>
                                                                             <Typography className={classes.workProgramLink}
                                                                                         onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
                                                                                 {workProgram[WorkProgramGeneralFields.TITLE]}
@@ -292,8 +306,8 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                         </div>
                                                                     )}
                                                                 </TableCell>
-                                                                {semesterHour.map((semesterHour: string) =>
-                                                                    <TableCell align="center" className={classes.hourCell} > {semesterHour} </TableCell>
+                                                                {semesterHour.map((semesterHour: string, index: number) =>
+                                                                    <TableCell key={'hour' + index} align="center" className={classes.hourCell} > {semesterHour} </TableCell>
                                                                 )}
                                                                 <TableCell>
                                                                     {get(typeOfWorkProgramInPlan.find(item =>
@@ -333,6 +347,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                 <ChangePlanModal />
                 <ModuleModal />
                 <DownloadFileModal />
+                <AddModuleModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmModuleDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
