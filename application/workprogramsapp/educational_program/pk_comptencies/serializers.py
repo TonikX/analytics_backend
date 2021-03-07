@@ -74,5 +74,5 @@ class CreateGroupOfPkCompetencesInGeneralCharacteristicSerializer(serializers.Mo
 
     class Meta:
         model = GroupOfPkCompetencesInGeneralCharacteristic
-        fields = ['id','name', 'general_characteristic', 'professional_standard', 'labor_functions']
+        fields = ['id','name', 'general_characteristic']
 
