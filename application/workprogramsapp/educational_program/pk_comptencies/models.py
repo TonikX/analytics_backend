@@ -25,8 +25,8 @@ class PkCompetencesInGroupOfGeneralCharacteristic(models.Model):
                                     verbose_name="Группа профессиональных компетенций в ОХ", related_name = "competence_in_group_of_pk_competences")
     labor_functions = models.CharField(max_length=512, verbose_name="Трудовая функция")
     #general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="Общая характеристика", blank=True, null=True)
-    competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Компетенция", blank=True, null=True, related_name = "")
-    professional_standard = models.ForeignKey('ProfessionalStandard', on_delete=models.SET_NULL, verbose_name="Профессиональный стандарт", blank=True, null=True, )
+    competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Компетенция", blank=True, null=True)
+    professional_standard = models.ForeignKey('ProfessionalStandard', on_delete=models.SET_NULL, verbose_name="Профессиональный стандарт", blank=True, null=True)
 
     def __str__(self):
         return str(self.group_of_pk) + '/' + str(self.competence)
