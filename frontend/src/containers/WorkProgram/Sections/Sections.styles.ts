@@ -16,10 +16,6 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'flex-end',
         flexDirection: 'row',
     },
-    addIcon: {
-        width: '40px',
-        height: '40px',
-    },
     table: {
         height: '100%',
         overflow: 'hidden',

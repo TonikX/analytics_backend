@@ -50,3 +50,7 @@ export enum EducationProgramFields {
     MANAGER = 'manager',
     CAN_EDIT = 'can_edit',
 }
+
+export enum CompetenceTableType {
+    SUPRA_PROFESSIONAL = 'SUPRA_PROFESSIONAL'
+}

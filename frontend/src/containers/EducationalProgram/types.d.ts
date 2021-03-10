@@ -9,6 +9,7 @@ import {ReactText} from "react";
 import {EducationalPlanInDirectionType} from "../EduationPlanInDirection/types";
 import {UserType} from "../../layout/types";
 import {characterisicStyles} from './Сharacteristic/Сharacteristic.styles';
+import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
 
 export interface EducationalProgramActions {
     changeSearchQuery: any;
@@ -25,6 +26,11 @@ export interface EducationalProgramActions {
     deleteEducationalProgram: any;
     changeEducationalProgram: any;
     setEducationalProgramList: any;
+
+    characteristicSaveGroupTitle: ActionCreatorWithPayload<{title: string}>;
+    characteristicSaveCompetence: ActionCreatorWithPayload<{competenceId: number}>;
+    characteristicSaveIndicators: ActionCreatorWithPayload<{indicatorId: number}>;
+    characteristicDeleteGroup: ActionCreatorWithPayload<{groupId: number}>;
 }
 
 export interface educationalProgramState {

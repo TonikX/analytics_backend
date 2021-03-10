@@ -64,10 +64,13 @@ export interface WorkProgramActions {
     addIntermediateCertification: any;
     changeIntermediateCertification: any;
 
-
     getComments: any;
     setComments: any;
     createComment: any;
+
+    addTopicMaterial: any;
+    updateTopicMaterial: any;
+    deleteTopicMaterial: any;
 }
 
 export interface workProgramState {

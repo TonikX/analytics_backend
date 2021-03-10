@@ -36,7 +36,7 @@ import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 
 import {
     EvaluationToolFields,
-    fields, IntermediateCertificationFields,
+    fields,
     workProgramSectionFields,
 } from '../../enum';
 
@@ -155,8 +155,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const disableButton = get(evaluationTool, [EvaluationToolFields.NAME, 'length'], 0) === 0
                             || get(evaluationTool, [EvaluationToolFields.DESCRIPTION, 'length'], 0) === 0
-                            || get(evaluationTool, [IntermediateCertificationFields.MIN]) === ''
-                            || get(evaluationTool, [IntermediateCertificationFields.MAX]) === ''
                             || get(evaluationTool, [EvaluationToolFields.SECTIONS, 'length'], 0) === 0
                             || get(evaluationTool, [EvaluationToolFields.TYPE, 'length'], 0) === 0
         ;
@@ -273,7 +271,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                         </Select>
                                     </FormControl>
                                     <div className={classNames(classes.row, classes.marginBottom30)}>
-                                        <TextField label="Минимальное значение *"
+                                        <TextField label="Минимальное значение"
                                                    onChange={this.saveField(EvaluationToolFields.MIN)}
                                                    variant="outlined"
                                                    className={classes.numberInput}
@@ -284,7 +282,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                    type="number"
                                                    value={evaluationTool[EvaluationToolFields.MIN]}
                                         />
-                                        <TextField label="Максимальное значение *"
+                                        <TextField label="Максимальное значение"
                                                    onChange={this.saveField(EvaluationToolFields.MAX)}
                                                    variant="outlined"
                                                    fullWidth

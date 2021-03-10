@@ -16,6 +16,9 @@ const changeSectionNumber = createAction('WORK_PROGRAM_CHANGE_SECTION_NUMBER');
 const saveTopic = createAction('WORK_PROGRAM_SAVE_TOPIC');
 const deleteTopic = createAction('WORK_PROGRAM_DELETE_TOPIC');
 const changeTopicNumber = createAction('WORK_PROGRAM_CHANGE_TOPIC_NUMBER');
+const addTopicMaterial = createAction('WORK_PROGRAM_ADD_TOPIC_MATERIAL');
+const updateTopicMaterial = createAction('WORK_PROGRAM_UPDATE_TOPIC_MATERIAL');
+const deleteTopicMaterial = createAction('WORK_PROGRAM_DELETE_TOPIC_MATERIAL');
 
 const openDialog = createAction('WORK_PROGRAM_OPEN_DIALOG');
 const closeDialog = createAction('WORK_PROGRAM_CLOSE_DIALOG')
@@ -57,6 +60,10 @@ const pageDown = createAction('WORK_PROGRAM_PAGE_DOWN');
 
 const actions: WorkProgramActions = {
     pageDown,
+
+    addTopicMaterial,
+    updateTopicMaterial,
+    deleteTopicMaterial,
 
     getComments,
     setComments,

@@ -16,7 +16,6 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Tooltip from "@material-ui/core/Tooltip";
 
-import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import withStyles from '@material-ui/core/styles/withStyles';
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
@@ -40,12 +39,12 @@ class Sections extends React.PureComponent<SectionsProps> {
 
     getNewSection = () => ({
         name: '',
-        SRO: '',
-        contact_work: '',
-        lecture_classes: '',
-        practical_lessons: '',
-        total_hours: '',
-        laboratory: '',
+        SRO: 0,
+        contact_work: 0,
+        lecture_classes: 0,
+        practical_lessons: 0,
+        total_hours: 0,
+        laboratory: 0,
         ordinal_number: get(this, 'props.sections.length', 0) + 1 ,
     })
 
@@ -262,12 +261,12 @@ class Sections extends React.PureComponent<SectionsProps> {
                 </TableContainer>
 
                 {!createNewSectionMode && isCanEdit
-                    && <div className={classes.iconWrapper}>  <Fab color="secondary"
-                            className={classes.addIcon}
-                            onClick={this.handleCreateNewSection}
-                        >
-                        <AddIcon/>
-                    </Fab>
+                    && <div className={classes.iconWrapper}>
+                        <Button color="secondary"
+                                onClick={this.handleCreateNewSection}
+                            >
+                            <AddIcon/> Добавить раздел
+                        </Button>
                     </div>
                 }
             </div>

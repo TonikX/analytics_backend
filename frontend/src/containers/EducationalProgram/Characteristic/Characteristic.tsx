@@ -19,7 +19,7 @@ import CKEditor from "../../../components/CKEditor";
 import UserSelector from "../../Profile/UserSelector";
 import EducationPlanInDirectionSelector
     from "../../EduationPlanInDirection/EducationPlanInDirectionSelector/EducationPlanInDirectionSelector";
-import {EducationProgramCharacteristicFields, EducationProgramFields} from "../enum";
+import {CompetenceTableType, EducationProgramCharacteristicFields, EducationProgramFields} from "../enum";
 import {getUserFullName, YEAR_DATE_FORMAT} from "../../../common/utils";
 import DatePickerComponent from "../../../components/DatePicker/DatePicker";
 import QualificationSelector from "../../../components/QualificationSelector/QualificationSelector";
@@ -34,6 +34,7 @@ import {CompetenceFields} from "../../Competences/enum";
 import {IndicatorType} from "../../Indicators/types";
 import {IndicatorsFields} from "../../Indicators/enum";
 import {UserFields} from "../../../layout/enum";
+import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
 
 class Characteristic extends React.Component<CharacteristicProps> {
     state = {
@@ -301,9 +302,9 @@ class Characteristic extends React.Component<CharacteristicProps> {
                     />
                 </>;
             case 4:
-                return <>
-                    {this.returnCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.OK_COMPETENCES, []))}
-                </>;
+                return <CompetenceTable competenceTableType={CompetenceTableType.SUPRA_PROFESSIONAL}
+                                        tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.OK_COMPETENCES, [])}
+                />;
             case 5:
                 return <>
                     {this.returnCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.KC_COMPETENCES, []))}

@@ -10,6 +10,10 @@ import {educationalProgramState, EducationalProgramCharacteristicType, Education
 
 const getStateData = (state: rootState): educationalProgramState => get(state, GENERAL_PATH);
 export const getEducationalProgramCharacteristic = (state: rootState): EducationalProgramCharacteristicType|{} => get(getStateData(state), fields.EDUCATION_PROGRAM_CHARACTERISTIC, {});
+
+export const getSupraProfessionalCompetencies = (state: rootState): EducationalProgramCharacteristicType|{} =>
+    get(getEducationalProgramCharacteristic(state), fields.EDUCATION_PROGRAM_CHARACTERISTIC, {})
+;
 export const getEducationalProgramList = (state: rootState): Array<EducationalProgramType> => get(getStateData(state), fields.EDUCATION_PROGRAM_LIST, []);
 
 // export const getEducationalProgramCharacteristicForSelector = (state: rootState): SelectorListType =>

@@ -7,25 +7,31 @@ import Scrollbars from "react-custom-scrollbars";
 import Typography from "@material-ui/core/Typography";
 import withStyles from '@material-ui/core/styles/withStyles';
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
-import Fab from "@material-ui/core/Fab";
+import Button from "@material-ui/core/Button";
 
 import AddIcon from "@material-ui/icons/Add";
 import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
+import Tooltip from "@material-ui/core/Tooltip";
+import DescriptionIcon from '@material-ui/icons/DescriptionOutlined';
 
 import {TopicsProps} from './types';
 import {fields, workProgramSectionFields, workProgramTopicFields} from "../enum";
 import {CourseFields} from "../../Courses/enum";
 
 import ThemeCreateModal from "./ThemeCreateModal";
+import ThemeMaterialCreateModal from "./ThemeMaterialCreateModal";
 
 import connect from './Topics.connect';
 import styles from './Topics.styles';
-import Tooltip from "@material-ui/core/Tooltip";
 
-class Topics extends React.PureComponent<TopicsProps> {
+class Topics extends React.PureComponent<TopicsProps, any> {
+    state = {
+        showMaterial: {}
+    }
+
     handleCreateNewTopic = () => {
         this.props.actions.openDialog({dialogType: fields.CREATE_NEW_TOPIC_DIALOG, data: {}});
     };
@@ -53,9 +59,37 @@ class Topics extends React.PureComponent<TopicsProps> {
         this.props.actions.openDialog({dialogType: fields.CREATE_NEW_TOPIC_DIALOG, data: topic});
     };
 
+    handleClickAddMaterial = (topicId: number) => () => {
+        this.props.actions.openDialog({dialogType: fields.ADD_NEW_MATERIAL_TO_TOPIC, data: {
+            topicId: topicId
+        }});
+    };
+
+    handleClickUpdateMaterial = (material: any, topicId: number) => () => {
+        this.props.actions.openDialog({dialogType: fields.ADD_NEW_MATERIAL_TO_TOPIC, data: {
+            ...material,
+            topicId: topicId
+        }});
+    };
+
+    handleClickDeleteMaterial = (materialId: any) => () => {
+        this.props.actions.deleteTopicMaterial(materialId);
+    };
+
+    handleClickMaterial = (topicId: any) => () => {
+        this.setState({
+            showMaterial: {
+                ...this.state.showMaterial,
+                // @ts-ignore
+                [topicId]: !this.state.showMaterial[topicId]
+            }
+        });
+    };
+
     render() {
         const {classes, sections, isCanEdit} = this.props;
-        
+        const {showMaterial} = this.state;
+
         return (
             <div className={classes.topicsSection}>
                 <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
@@ -90,8 +124,13 @@ class Topics extends React.PureComponent<TopicsProps> {
                                               onSortEnd={this.onSortEnd(index)}
                                               handleClickDelete={this.handleClickDelete}
                                               handleClickEdit={this.handleClickEdit}
+                                              handleClickMaterial={this.handleClickMaterial}
+                                              handleClickAddMaterial={this.handleClickAddMaterial}
+                                              handleClickDeleteMaterial={this.handleClickDeleteMaterial}
+                                              handleClickUpdateMaterial={this.handleClickUpdateMaterial}
                                               classes={classes}
                                               isCanEdit={isCanEdit}
+                                              showMaterial={showMaterial}
                                 />
                             </div>
                         </div>
@@ -100,15 +139,16 @@ class Topics extends React.PureComponent<TopicsProps> {
                 </Scrollbars>
 
                 {isCanEdit &&
-                    <Fab color="secondary"
+                    <Button color="secondary"
                          className={classes.addIcon}
                          onClick={this.handleCreateNewTopic}
                     >
-                        <AddIcon/>
-                    </Fab>
+                        <AddIcon/> Добавить тему
+                    </Button>
                 }
 
                 <ThemeCreateModal />
+                <ThemeMaterialCreateModal />
             </div>
         );
     }
@@ -118,41 +158,71 @@ class Topics extends React.PureComponent<TopicsProps> {
 const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}}/>);
 
 // @ts-ignore
-const SortableItem = SortableElement(({topic, section, classes, handleClickDelete, handleClickEdit, isCanEdit}) => {
+const SortableItem = SortableElement(({topic, section, classes, handleClickDelete, handleClickEdit, isCanEdit, handleClickMaterial, showMaterial, handleClickAddMaterial, handleClickDeleteMaterial, handleClickUpdateMaterial}) => {
+    const topicId = topic[workProgramTopicFields.ID];
+
     return <div className={classes.topic}>
-        {isCanEdit && <DragHandle />}
+        <div className={classes.topicItem}>
+            {isCanEdit && <DragHandle />}
 
-        <Typography className={classNames(classes.topicName, {[classes.bigTopicName]: !topic[workProgramTopicFields.COURSE]})}>
-            {section[workProgramSectionFields.ORDINAL_NUMBER]}.
-            {topic[workProgramTopicFields.NUMBER]}. {topic[workProgramTopicFields.DESCRIPTION]}
-        </Typography>
+            <Typography className={classNames(classes.topicName, {[classes.bigTopicName]: !topic[workProgramTopicFields.COURSE]})}>
+                {section[workProgramSectionFields.ORDINAL_NUMBER]}.
+                {topic[workProgramTopicFields.NUMBER]}. {topic[workProgramTopicFields.DESCRIPTION]}
+            </Typography>
 
-        <div className={classes.onlineCourseItem}>
-            {topic[workProgramTopicFields.COURSE] && <>
-                <Typography>Онлайн курс: &nbsp;
-                    {/* eslint-disable-next-line*/}
-                    <a target="_blank" href={topic[workProgramTopicFields.COURSE][CourseFields.COURSE_URL]} className={classes.link}>
-                        <Typography> {topic[workProgramTopicFields.COURSE][CourseFields.TITLE]} </Typography>
-                    </a>
-                </Typography>
-            </>}
+            <div className={classes.onlineCourseItem}>
+                {topic[workProgramTopicFields.COURSE] && <>
+                    <Typography>Онлайн курс: &nbsp;
+                        {/* eslint-disable-next-line*/}
+                        <a target="_blank" href={topic[workProgramTopicFields.COURSE][CourseFields.COURSE_URL]} className={classes.link}>
+                            <Typography> {topic[workProgramTopicFields.COURSE][CourseFields.TITLE]} </Typography>
+                        </a>
+                    </Typography>
+                </>}
+            </div>
+
+            {isCanEdit &&
+                <div className={classes.actions}>
+                    <IconButton onClick={handleClickDelete(topic[workProgramTopicFields.ID])}>
+                        <DeleteIcon/>
+                    </IconButton>
+                    <IconButton onClick={handleClickEdit(topic)}>
+                        <EditIcon/>
+                    </IconButton>
+                    <Tooltip title="Материалы">
+                        <IconButton onClick={handleClickMaterial(topicId)}>
+                            <DescriptionIcon />
+                        </IconButton>
+                    </Tooltip>
+                </div>
+            }
         </div>
 
-        {isCanEdit &&
-            <div className={classes.actions}>
-                <IconButton onClick={handleClickDelete(topic[workProgramTopicFields.ID])}>
-                    <DeleteIcon/>
-                </IconButton>
-                <IconButton onClick={handleClickEdit(topic)}>
-                    <EditIcon/>
-                </IconButton>
+        {showMaterial[topic[workProgramTopicFields.ID]] &&
+            <div className={classes.materials}>
+                <Typography> <b>Материалы:</b> </Typography>
+                {topic[workProgramTopicFields.MATERIALS].map((material: any) =>
+                    <Typography className={classes.materialItem} key={`material-${material[workProgramTopicFields.ID]}`}>
+                        {material[workProgramTopicFields.MATERIAL_TITLE]}:&nbsp;&nbsp;<a href={material[workProgramTopicFields.MATERIAL_URL]}> ссылка </a>
+                        <DeleteIcon className={classes.materialItemIcon} onClick={handleClickDeleteMaterial(material[workProgramTopicFields.ID])}/>
+                        <EditIcon className={classes.materialItemIcon} onClick={handleClickUpdateMaterial(material, topicId)} />
+                    </Typography>
+                )}
+
+                <Button size="small"
+                        onClick={handleClickAddMaterial(topicId)}
+                        className={classes.addMaterialButton}
+                        variant="text"
+                >
+                    Добавить материал
+                </Button>
             </div>
         }
     </div>
 });
 
 // @ts-ignore
-const SortableList = SortableContainer(({section, classes, handleClickDelete, handleClickEdit, isCanEdit}) => {
+const SortableList = SortableContainer(({section, classes, handleClickDelete, handleClickEdit, isCanEdit, handleClickMaterial, handleClickUpdateMaterial, handleClickDeleteMaterial, showMaterial, handleClickAddMaterial}) => {
     return (<div>
                 {section[workProgramSectionFields.TOPICS].map((topic: any, index: number) =>
                     <SortableItem key={`item-${topic.id}`}
@@ -162,7 +232,12 @@ const SortableList = SortableContainer(({section, classes, handleClickDelete, ha
                                   classes={classes}
                                   handleClickDelete={handleClickDelete}
                                   handleClickEdit={handleClickEdit}
+                                  handleClickMaterial={handleClickMaterial}
                                   isCanEdit={isCanEdit}
+                                  showMaterial={showMaterial}
+                                  handleClickAddMaterial={handleClickAddMaterial}
+                                  handleClickDeleteMaterial={handleClickDeleteMaterial}
+                                  handleClickUpdateMaterial={handleClickUpdateMaterial}
                     />
                 )}
             </div>

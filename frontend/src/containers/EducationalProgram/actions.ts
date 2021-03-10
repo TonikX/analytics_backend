@@ -11,6 +11,11 @@ const changeEducationalProgram = createAction('CHANGE_EDUCATIONAL_PROGRAM');
 const getEducationalProgramCharacteristic = createAction('GET_EDUCATIONAL_PROGRAM_CHARACTERISTIC');
 const setEducationalProgramCharacteristic = createAction('SET_EDUCATIONAL_PROGRAM_CHARACTERISTIC');
 
+const characteristicSaveGroupTitle = createAction<{title: string}>('CHARACTERISTIC_COMPETENCIES_SAVE_GROUP_TITLE');
+const characteristicSaveCompetence = createAction<{competenceId: number}>('CHARACTERISTIC_COMPETENCIES_SAVE_COMPETENCE');
+const characteristicSaveIndicators = createAction<{indicatorId: number}>('CHARACTERISTIC_COMPETENCIES_SAVE_INDICATORS');
+const characteristicDeleteGroup = createAction<{groupId: number}>('CHARACTERISTIC_COMPETENCIES_DELETE_GROUP');
+
 const changeEducationalProgramCharacteristic = createAction('CHANGE_EDUCATIONAL_PROGRAM_CHARACTERISTIC');
 
 const openDialog = createAction('OPEN_CREATE_EDUCATIONAL_PROGRAM_DIALOG');
@@ -22,6 +27,11 @@ const changeAllCount = createAction('EDUCATIONAL_PROGRAM_LIST_CHANGE_ALL_COUNT')
 const changeSorting = createAction('EDUCATIONAL_PROGRAM_LIST_CHANGE_SORTING');
 
 const actions: EducationalProgramActions = {
+    characteristicSaveGroupTitle,
+    characteristicSaveCompetence,
+    characteristicSaveIndicators,
+    characteristicDeleteGroup,
+
     getEducationalProgramList,
     setEducationalProgramList,
     createEducationalProgram,

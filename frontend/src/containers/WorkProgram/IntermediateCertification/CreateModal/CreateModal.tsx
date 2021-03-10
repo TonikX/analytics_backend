@@ -121,8 +121,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const disableButton = get(evaluationTool, [IntermediateCertificationFields.NAME, 'length'], 0) === 0
                             || get(evaluationTool, [IntermediateCertificationFields.DESCRIPTION, 'length'], 0) === 0
-                            || get(evaluationTool, [IntermediateCertificationFields.MIN]) === ''
-                            || get(evaluationTool, [IntermediateCertificationFields.MAX]) === ''
                             || get(evaluationTool, [IntermediateCertificationFields.TYPE, 'length'], 0) === 0
         ;
         const isEditMode = Boolean(evaluationTool[IntermediateCertificationFields.ID]);
@@ -207,7 +205,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                         </Select>
                                     </FormControl>
                                     <div className={classNames(classes.row, classes.marginBottom30)}>
-                                        <TextField label="Минимальное значение *"
+                                        <TextField label="Минимальное значение"
                                                    onChange={this.saveField(IntermediateCertificationFields.MIN)}
                                                    variant="outlined"
                                                    className={classes.numberInput}
@@ -218,7 +216,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                    type="number"
                                                    value={evaluationTool[IntermediateCertificationFields.MIN]}
                                         />
-                                        <TextField label="Максимальное значение *"
+                                        <TextField label="Максимальное значение"
                                                    onChange={this.saveField(IntermediateCertificationFields.MAX)}
                                                    variant="outlined"
                                                    fullWidth

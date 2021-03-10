@@ -129,6 +129,26 @@ class WorkProgramService extends AnalyticsService{
         return this.patch(`/api/prerequisitesofworkprogram/update/${id}`, formData);
     }
 
+    addTopicMaterial(item: any){
+        return this.post(`/api/general_ch/additional_material_in_topic_of_rpd/`, {
+            topic: item.topicId,
+            title: item.title,
+            url: item.url
+        });
+    }
+
+    updateTopicMaterial(item: any){
+        return this.patch(`/api/general_ch/additional_material_in_topic_of_rpd/${item.id}/`, {
+            topic: item.topicId,
+            title: item.title,
+            url: item.url
+        });
+    }
+
+    deleteTopicMaterial(id: number){
+        return this.delete(`/api/general_ch/additional_material_in_topic_of_rpd/${id}/`);
+    }
+
     saveTopic(topic: Topic){
         const formData = new FormData();
 
