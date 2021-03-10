@@ -30,7 +30,6 @@ export interface coursesState {
     [fields.COURSES_LIST]: Array<CourseType>;
     [fields.COURSE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;
-        [fields.DIALOG_STEP]: number;
         [fields.DIALOG_DATA]: CourseType|{};
     };
 }

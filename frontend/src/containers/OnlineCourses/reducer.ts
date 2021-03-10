@@ -18,7 +18,6 @@ export const initialState: coursesState = {
     [fields.COURSE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {},
-        [fields.DIALOG_STEP]: 1,
     }
 };
 
@@ -47,7 +46,6 @@ const openDialog = (state: coursesState, {payload}: any): coursesState => ({
     [fields.COURSE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: true,
         [fields.DIALOG_DATA]: payload,
-        [fields.DIALOG_STEP]: 1,
     }
 });
 
@@ -56,18 +54,8 @@ const closeDialog = (state: coursesState): coursesState => ({
     [fields.COURSE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {},
-        [fields.DIALOG_STEP]: 1,
     }
 });
-
-const changeDialogStep = (state: coursesState, {payload}: any ): coursesState => ({
-    ...state,
-    [fields.COURSE_DIALOG]: {
-        [fields.IS_OPEN_DIALOG]: true,
-        [fields.DIALOG_DATA]: {},
-        [fields.DIALOG_STEP]: payload,
-    }
-})
 
 const changeSorting = (state: coursesState, {payload}: any): coursesState => ({
     ...state,
@@ -85,5 +73,4 @@ export const reducer = createReducer(initialState, {
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
-    [actions.changeDialogStep.type]: changeDialogStep,
 });

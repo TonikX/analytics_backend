@@ -1,12 +1,6 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
-    input: {
-        width: '490px',
-        marginBottom: '30px',
-        marginLeft: '30px',
-        marginRight: '30px',
-    },
     lastInput: {
         width: '550px',
     },
@@ -17,12 +11,4 @@ export default (theme: Theme) => createStyles({
         width: '900px',
         padding: 20,
     },
-    addIcon: {
-        position: 'absolute',
-        top: '5px',
-        left: '536px',
-    },
-    inputAddWrapper: {
-        position: 'relative',
-    }
 });
