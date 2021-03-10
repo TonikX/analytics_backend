@@ -136,7 +136,7 @@ export default (groups: Array<string>) => {
             selectedIcon: EducationPlanSelectedIcon,
         },
         {
-            title: 'Учебные модули',
+            title: 'Образовательные модули',
             link: appRouter.getTrainingModulesRoute(),
             icon: EducationPlanIcon,
             selectedIcon: EducationPlanSelectedIcon,

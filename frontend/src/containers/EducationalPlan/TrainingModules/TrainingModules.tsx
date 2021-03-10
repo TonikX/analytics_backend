@@ -117,7 +117,7 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
         return (
             <Paper className={classes.root}>
                 <div className={classes.titleWrap}>
-                    <Typography className={classes.title}> Учебные модули </Typography>
+                    <Typography className={classes.title}> Образовательные модули </Typography>
 
                     <Search handleChangeSearchQuery={this.handleChangeSearchQuery}/>
                 </div>

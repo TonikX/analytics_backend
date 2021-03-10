@@ -362,7 +362,7 @@ class EducationalProgram(models.Model):
     #academic_plan = models.ForeignKey('ImplementationAcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план', related_name="academic_plan_in_educational_program")
     year_of_recruitment = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
-    manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank = True, null = True)
     academic_plan_for_ep = models.ForeignKey('ImplementationAcademicPlan', on_delete=models.SET_NULL, verbose_name = 'Учебный план_1', related_name="academic_plan_in_educational_program", blank = True, null = True)
 
 
@@ -376,10 +376,10 @@ class GeneralCharacteristics(models.Model):
     kinds_of_activity = models.CharField(max_length=512, verbose_name="Сферы профессиональной деятельности, к которому (которым) готовятся выпускники", blank=True, null=True)
     tasks_of_activity = models.CharField(max_length=512, verbose_name="Задачи профессиональной деятельности ", blank=True, null=True)
     type_of_activity = models.CharField(max_length=512, verbose_name="Тип основной профессиональной образовательной программы", blank=True, null=True)
-    ok_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕКУЛЬТУРНЫЕ КОМПЕТЕНЦИИ", related_name="ok_competences_in_gh", blank=True)
-    kc_competences = models.ManyToManyField('Competence', verbose_name="Ключевые компетенции", related_name="kc_competences_in_gh", blank=True)
-    pk_competences = models.ManyToManyField('Competence', verbose_name="ПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ", through = 'PkCompetencesInGeneralCharacteristics', related_name="pk_competences_in_gh", blank=True)
-    np_competences = models.ManyToManyField('Competence', verbose_name="Надпрофессиональные компетенции", related_name="np_competences_in_gh", blank=True,)
+    # ok_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕКУЛЬТУРНЫЕ КОМПЕТЕНЦИИ", related_name="ok_competences_in_gh", blank=True)
+    # kc_competences = models.ManyToManyField('Competence', verbose_name="Ключевые компетенции", related_name="kc_competences_in_gh", blank=True)
+    #pk_competences = models.ManyToManyField('Indicator', verbose_name="ПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ", through = 'PkCompetencesInGeneralCharacteristics', related_name="pk_competences_in_gh", blank=True)
+    # np_competences = models.ManyToManyField('Competence', verbose_name="Надпрофессиональные компетенции", related_name="np_competences_in_gh", blank=True,)
     #pps = ArrayField(models.CharField(max_length=512, verbose_name="Сведения о профессорско-преподавательском составе, необходимом для реализации основной профессиональной образовательной программы"), blank=True, null=True)
     pps = models.TextField(max_length=55512, verbose_name="Сведения о профессорско-преподавательском составе, необходимом для реализации ", blank=True, null=True)
     annotation = models.TextField(max_length=55512, verbose_name="Аннотация основной профессиональной образовательной программы", blank=True, null=True)
@@ -392,20 +392,6 @@ class GeneralCharacteristics(models.Model):
 
     def __str__(self):
         return str(self.educational_program) + str(self.director_of_megafaculty) + str(self.scientific_supervisor_of_the_educational_program)
-
-
-class PkCompetencesInGeneralCharacteristics(models.Model):
-    """
-    Факультет
-    """
-
-    labor_functions = models.CharField(max_length=512, verbose_name="трудовая функция")
-    general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="Общая характеристика", blank=True, null=True)
-    competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Компетенции", blank=True, null=True)
-    professional_standard = models.ManyToManyField('ProfessionalStandard', verbose_name="Профессиональный стандарт", blank=True)
-
-    def __str__(self):
-        return str(self.labor_functions) + str(self.general_characteristic) + str(self.competence)
 
 
 class Department(models.Model):
@@ -668,7 +654,7 @@ class EvaluationTool(CloneMixin,models.Model):
     Модель для оценочных средств
     '''
     type = models.CharField(max_length=1024, verbose_name="Тип оценочного средства")
-    name = models.CharField(unique=True, max_length=1024, verbose_name="Наименование оценочного средства")
+    name = models.CharField(max_length=1024, verbose_name="Наименование оценочного средства")
     description = models.CharField(max_length=50000, verbose_name="Описание", blank=True, null=True)
     check_point = models.BooleanField(verbose_name="Контрольная точка", blank=True, null=True)
     deadline = models.IntegerField(verbose_name="Срок сдачи в неделях", blank=True, null=True)
@@ -687,7 +673,8 @@ class СertificationEvaluationTool(models.Model):
     types = [
         ('1', 'Exam'),
         ('2', 'Differentiated credit'),
-        ('3', 'Offset')
+        ('3', 'Offset'),
+        ('4', 'Coursework')
     ]
     type = models.CharField(choices=types, default='1',max_length=1024, verbose_name="Тип оценочного средства")
     name = models.CharField(unique=True, max_length=1024, verbose_name="Наименование оценочного средства")

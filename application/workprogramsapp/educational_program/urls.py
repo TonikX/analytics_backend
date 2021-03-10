@@ -3,16 +3,15 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 
-from .views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
+from workprogramsapp.educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
     EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView
-from .views import GeneralCharacteristicsCreateAPIView, GeneralCharacteristicsListAPIView, \
+from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
     GeneralCharacteristicsDetailsWithEducationalProgramView
-from .views import PkCompetencesInGeneralCharacteristicsSet
 from ..op_slection.views import EducationalProgramRankingByProfession, EducationalProgramRankingByProfessionScientific
 
 router = DefaultRouter()
-router.register(r'api/pk_competences_in_gh', PkCompetencesInGeneralCharacteristicsSet, basename='pk-competences-in-gh')
+
 
 urlpatterns = [
 
@@ -34,6 +33,10 @@ urlpatterns = [
     path('api/EducationalProgram/byprofessions', EducationalProgramRankingByProfession),
     path('api/EducationalProgram/byprofessionsscience', EducationalProgramRankingByProfessionScientific),
 
-    url(r'^', include(router.urls))
+    url(r'^', include(router.urls)),
+    url(r'^', include('workprogramsapp.educational_program.key_competences.urls')),
+    url(r'^', include('workprogramsapp.educational_program.over_professional_competencies.urls')),
+    url(r'^', include('workprogramsapp.educational_program.general_prof_competencies.urls')),
+    url(r'^', include('workprogramsapp.educational_program.pk_comptencies.urls')),
 
 ]

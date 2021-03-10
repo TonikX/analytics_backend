@@ -9,26 +9,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 # Сериализаторы
-from dataprocessing.models import Items
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
     EducationalProgramSerializer, \
-    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
-    PkCompetencesInGeneralCharacteristicsSerializer
+    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer
+
 # --Работа с образовательной программой
-from workprogramsapp.models import AcademicPlan, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
-# --Работа с образовательной программой
-from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
-    PkCompetencesInGeneralCharacteristics
+from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram
+
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
-
-
-# Права доступа
-# Модели данных
-
-
-# Модели данных
-
 
 # Блок реализации АПИ для КПУД интерфейсов
 
@@ -38,7 +27,6 @@ class EducationalProgramListAPIView(generics.ListAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['qualification', 'year_of_recruitment', 'manager']
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
 
 
 class EducationalProgramCreateAPIView(generics.CreateAPIView):
@@ -149,8 +137,3 @@ class DepartmentDetailsView(generics.RetrieveAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-
-class PkCompetencesInGeneralCharacteristicsSet(viewsets.ModelViewSet):
-    queryset = PkCompetencesInGeneralCharacteristics.objects.all()
-    serializer_class = PkCompetencesInGeneralCharacteristicsSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter)

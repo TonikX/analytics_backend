@@ -66,4 +66,15 @@ export default (theme: Theme) => createStyles({
     addIcon: {
         marginLeft: 'auto',
     },
+    addButton: {
+        padding: '0px !important',
+        marginTop: '10px',
+        marginLeft: '7px',
+        '&:hover': {
+            background: 'transparent'
+        },
+        '& span': {
+            background: 'transparent !important'
+        }
+    }
 });

@@ -23,6 +23,7 @@ import ThemeCreateModal from "./ThemeCreateModal";
 
 import connect from './Topics.connect';
 import styles from './Topics.styles';
+import Tooltip from "@material-ui/core/Tooltip";
 
 class Topics extends React.PureComponent<TopicsProps> {
     handleCreateNewTopic = () => {
@@ -65,9 +66,11 @@ class Topics extends React.PureComponent<TopicsProps> {
                                 {section[workProgramSectionFields.ORDINAL_NUMBER]}. {section[workProgramSectionFields.NAME]}
 
                                 {isCanEdit &&
-                                    <AddCircleIcon className={classes.sectionAddTopicIcon}
-                                                   onClick={this.handleCreateNewTopicOnSection(section[workProgramSectionFields.ID])}
-                                    />
+                                    <Tooltip title="Добавить тему в данный раздел">
+                                        <AddCircleIcon className={classes.sectionAddTopicIcon}
+                                                       onClick={this.handleCreateNewTopicOnSection(section[workProgramSectionFields.ID])}
+                                        />
+                                    </Tooltip>
                                 }
                             </Typography>
 

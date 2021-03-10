@@ -41,6 +41,13 @@ class IndicatorListSerializer(serializers.ModelSerializer):
         fields = ['id','number', 'name', 'competence']
 
 
+class IndicatorListWithoutCompetenceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Indicator
+        fields = ['id','number', 'name']
+
+
 class FieldOfStudyImplementationSerializer(serializers.ModelSerializer):
     """
         Сериализатор образовательных программ (направлений)

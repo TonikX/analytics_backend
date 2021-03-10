@@ -10,7 +10,7 @@ from .models import (
 )
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
-    Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard, PkCompetencesInGeneralCharacteristics
+    Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
 
 
 admin.site.register(Zun)
@@ -50,7 +50,7 @@ admin.site.register(SkillsOfProfession)
 admin.site.register(SkillsOfRole)
 admin.site.register(ProfessionalAreaOfGeneralCharacteristics)
 admin.site.register(ProfessionalStandard)
-admin.site.register(PkCompetencesInGeneralCharacteristics)
+
 admin.site.register(Folder)
 admin.site.register(WorkProgramInFolder)
 
