@@ -182,9 +182,10 @@ class OnlineCourseSerializer(serializers.ModelSerializer):
 class TopicSerializer(serializers.ModelSerializer):
     """Сериализатор Тем"""
     url_online_course = OnlineCourseSerializer(required=False)
+    additional_materials_for_topic = AdditionalMaterialSerializer(many = True)
     class Meta:
         model = Topic
-        fields = ['id', 'discipline_section', 'number', 'description', 'url_online_course']
+        fields = ['id', 'discipline_section', 'number', 'description', 'url_online_course', 'additional_materials_for_topic']
 
 
 class TopicCreateSerializer(serializers.ModelSerializer):
@@ -678,7 +679,6 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     expertise_with_rpd = ShortExpertiseSerializer(many = True, read_only=True)
     certification_evaluation_tools = СertificationEvaluationToolForWorkProgramSerializer(many = True)
     editors = userProfileSerializer(many = True)
-    additional_materials_for_topic = AdditionalMaterialSerializer(many = True)
 
     class Meta:
         model = WorkProgram
