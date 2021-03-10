@@ -12,7 +12,7 @@ from .models import (
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
     Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
 
-from workprogram_additions.models import AdditionalMaterial
+from .workprogram_additions.models import AdditionalMaterial
 
 
 admin.site.register(Zun)
