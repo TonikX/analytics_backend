@@ -8,6 +8,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { FirstStep } from './FirstStep/FirstStep'
+import { SecondStep } from './SecondStep/SecondStep'
 
 import {CourseFields} from '../enum';
 
@@ -15,8 +17,7 @@ import {checkUrl} from '../../../common/utils';
 
 import connect from './CourseCreateModal.connect';
 import styles from './CourseCreateModal.styles';
-import { FirstStep } from './FirstStep/FirstStep'
-import { SecondStep } from './SecondStep/SecondStep'
+
 
 class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
     initialState = {

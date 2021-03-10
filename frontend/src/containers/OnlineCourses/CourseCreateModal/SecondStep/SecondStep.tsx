@@ -1,12 +1,14 @@
 import React from 'react'
 
+import { Scrollbars } from 'react-custom-scrollbars'
 import DialogContent from '@material-ui/core/DialogContent';
 import TextField from "@material-ui/core/TextField";
-import { SecondStepProps } from './types'
+
 import { useStyles } from './SecondStep.styles'
 
 import { CourseFields } from '../../enum'
-import { Scrollbars } from 'react-custom-scrollbars'
+import { SecondStepProps } from './types'
+
 
 export const SecondStep: React.FC<SecondStepProps> = ({ course, saveField }) => {
   const classes = useStyles()

@@ -6,6 +6,7 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 
 import { useStyles } from './FirstStep.styles'
+
 import { checkUrl } from '../../../../common/utils';
 
 import { CourseFields } from '../../enum'
