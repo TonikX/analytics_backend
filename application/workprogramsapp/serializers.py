@@ -7,6 +7,7 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool
+from .workprogram_additions.serializers import AdditionalMaterialSerializer
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
@@ -677,6 +678,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     expertise_with_rpd = ShortExpertiseSerializer(many = True, read_only=True)
     certification_evaluation_tools = СertificationEvaluationToolForWorkProgramSerializer(many = True)
     editors = userProfileSerializer(many = True)
+    additional_materials_for_topic = AdditionalMaterialSerializer(many = True)
 
     class Meta:
         model = WorkProgram
