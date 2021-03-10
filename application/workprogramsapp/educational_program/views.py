@@ -13,27 +13,11 @@ from workprogramsapp.educational_program.serializers import EducationalCreatePro
     EducationalProgramSerializer, \
     GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer
 
-from workprogramsapp.educational_program.serializers import PkCompetencesInGroupOfGeneralCharacteristicSerializer, IndicatorInPkCompetenceInGeneralCharacteristicSerializer,\
-    CreatePkCompetencesInGroupOfGeneralCharacteristicSerializer, CreateGroupOfPkCompetencesInGeneralCharacteristicSerializer
-#     PkCompetencesCreateInGeneralCharacteristicsSerializer
-
-from workprogramsapp.educational_program.serializers import GroupOfPkCompetencesInGeneralCharacteristicSerializer
-
 # --Работа с образовательной программой
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram
 
-from workprogramsapp.educational_program.models import GroupOfPkCompetencesInGeneralCharacteristic, PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
-
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
-
-
-# Права доступа
-# Модели данных
-
-
-# Модели данных
-
 
 # Блок реализации АПИ для КПУД интерфейсов
 
@@ -43,7 +27,6 @@ class EducationalProgramListAPIView(generics.ListAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['qualification', 'year_of_recruitment', 'manager']
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
 
 
 class EducationalProgramCreateAPIView(generics.CreateAPIView):
@@ -154,33 +137,3 @@ class DepartmentDetailsView(generics.RetrieveAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class PkCompetencesInGroupOfGeneralCharacteristicSet(viewsets.ModelViewSet):
-    queryset = PkCompetencesInGroupOfGeneralCharacteristic.objects.all()
-    serializer_class = PkCompetencesInGroupOfGeneralCharacteristicSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return CreatePkCompetencesInGroupOfGeneralCharacteristicSerializer
-        if self.action == 'update':
-            return CreatePkCompetencesInGroupOfGeneralCharacteristicSerializer
-        return PkCompetencesInGroupOfGeneralCharacteristicSerializer
-
-
-class GroupOfPkCompetencesInGeneralCharacteristicsSet(viewsets.ModelViewSet):
-    queryset = GroupOfPkCompetencesInGeneralCharacteristic.objects.all()
-    serializer_class = GroupOfPkCompetencesInGeneralCharacteristicSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return CreateGroupOfPkCompetencesInGeneralCharacteristicSerializer
-        if self.action == 'update':
-            return CreateGroupOfPkCompetencesInGeneralCharacteristicSerializer
-        return GroupOfPkCompetencesInGeneralCharacteristicSerializer
-
-
-class IndicatorGroupOfPkCompetencesInGeneralCharacteristicSet(viewsets.ModelViewSet):
-    queryset = IndicatorInPkCompetenceInGeneralCharacteristic.objects.all()
-    serializer_class = IndicatorInPkCompetenceInGeneralCharacteristicSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter)

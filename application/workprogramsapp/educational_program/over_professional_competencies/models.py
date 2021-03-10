@@ -13,7 +13,7 @@ class GroupOfOverProfCompetencesInGeneralCharacteristic(models.Model):
     name = models.CharField(max_length=512, verbose_name="трудовая функция")
     general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE,
                                                verbose_name="Общая характеристика",
-                                               elated_name = "group_of_over_prof_competences")
+                                               related_name = "group_of_over_prof_competences")
 
     def __str__(self):
         return str(self.name) + '/' + str(self.general_characteristic)
@@ -46,4 +46,4 @@ class IndicatorInOverProfCompetenceInGeneralCharacteristic(models.Model):
     indicator = models.ForeignKey('Indicator', on_delete=models.CASCADE, verbose_name="Индикатор ПК компетенции в ОХ")
 
     def __str__(self):
-        return str(self.group_of_pk) + '/' + str(self.competence)
+        return str(self.group_of_pk) + '/' + str(self.indicator)

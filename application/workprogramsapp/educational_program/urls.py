@@ -8,13 +8,10 @@ from workprogramsapp.educational_program.views import EducationalProgramCreateAP
 from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
     GeneralCharacteristicsDetailsWithEducationalProgramView
-from workprogramsapp.educational_program.views import GroupOfPkCompetencesInGeneralCharacteristicsSet, PkCompetencesInGroupOfGeneralCharacteristicSet, IndicatorGroupOfPkCompetencesInGeneralCharacteristicSet
 from ..op_slection.views import EducationalProgramRankingByProfession, EducationalProgramRankingByProfessionScientific
 
 router = DefaultRouter()
-router.register(r'api/general_ch/group_of_pk_competence/competence/indicator', IndicatorGroupOfPkCompetencesInGeneralCharacteristicSet, basename='indicator-in-pk-competences-in-pkgroup-in-gh')
-router.register(r'api/general_ch/group_of_pk_competence/competence', PkCompetencesInGroupOfGeneralCharacteristicSet, basename='pk-competences-in-pkgroup-in-ghh')
-router.register(r'api/general_ch/group_of_pk_competence', GroupOfPkCompetencesInGeneralCharacteristicsSet, basename='pkgroup-in-gh')
+
 
 urlpatterns = [
 
@@ -40,5 +37,6 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.educational_program.key_competences.urls')),
     url(r'^', include('workprogramsapp.educational_program.over_professional_competencies.urls')),
     url(r'^', include('workprogramsapp.educational_program.general_prof_competencies.urls')),
+    url(r'^', include('workprogramsapp.educational_program.pk_comptencies.urls')),
 
 ]

@@ -12,6 +12,8 @@ from .models import (
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
     Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
 
+from .workprogram_additions.models import AdditionalMaterial
+
 
 admin.site.register(Zun)
 admin.site.register(WorkProgram)
@@ -53,5 +55,6 @@ admin.site.register(ProfessionalStandard)
 
 admin.site.register(Folder)
 admin.site.register(WorkProgramInFolder)
+admin.site.register(AdditionalMaterial)
 
 
