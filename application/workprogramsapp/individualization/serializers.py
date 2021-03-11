@@ -9,11 +9,13 @@ from workprogramsapp.models import ImplementationAcademicPlan
 # Сериализаторы
 
 from workprogramsapp.serializers import AcademicPlanSerializer, FieldOfStudyImplementationSerializer, AcademicPlanInImplementationSerializer
+from dataprocessing.serializers import userProfileSerializer
 
 
 class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     academic_plan = AcademicPlanSerializer()
     field_of_study = FieldOfStudyImplementationSerializer()
+    user = userProfileSerializer()
 
     class Meta:
         model = ImplementationAcademicPlan
@@ -23,6 +25,7 @@ class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
 class ShortImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     academic_plan = AcademicPlanInImplementationSerializer()
     field_of_study = FieldOfStudyImplementationSerializer()
+    user = userProfileSerializer()
 
     class Meta:
         model = ImplementationAcademicPlan

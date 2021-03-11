@@ -7,6 +7,7 @@ from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 from .models import IndividualImplementationAcademicPlan
 from .serializers import IndividualImplementationAcademicPlanSerializer,CreateIndividualImplementationAcademicPlanSerializer,\
@@ -26,3 +27,18 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
         if self.action == 'update':
             return CreateIndividualImplementationAcademicPlanSerializer
         return IndividualImplementationAcademicPlanSerializer
+
+
+    def retrieve(self, request, *args, **kwargs):
+        # do your customization here
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        newdata = dict(serializer.data)
+        for discipline_block in newdata['implementation_of_academic_plan']['academic_plan']['discipline_blocks_in_academic_plan']:
+            print(discipline_block['id'])
+            for module in discipline_block['modules_in_discipline_block']:
+                print(module['id'])
+                for change_block in module['change_blocks_of_work_programs_in_modules']:
+                    if change_block['change_type'] == "Optionally":
+                        print('ашел')
+        return Response(serializer.data)
