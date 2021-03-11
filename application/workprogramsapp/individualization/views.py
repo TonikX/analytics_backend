@@ -50,6 +50,7 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                                                     work_program_change_in_discipline_block_module = change_block['id']).work_program.id:
                                     print('dd')
                                     del change_block['work_program']
+                                    del work_program
                             except:
                                 pass
         return Response(OrderedDict(newdata), status=status.HTTP_200_OK)
