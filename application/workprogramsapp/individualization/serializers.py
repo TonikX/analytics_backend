@@ -1,0 +1,19 @@
+# Библиотеки для сариализации
+from rest_framework import serializers, viewsets
+
+# Модели данных
+
+# --Работа с образовательной программой
+from rest_framework.fields import BooleanField
+
+from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, ProfessionalAreaOfGeneralCharacteristics,\
+    ProfessionalStandard
+
+# Другие сериализаторы
+from dataprocessing.serializers import userProfileSerializer
+from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer, CompetenceForEPSerializer, IndicatorListSerializer
+from .pk_comptencies.serializers import GroupOfPkCompetencesInGeneralCharacteristicSerializer
+from .general_prof_competencies.serializers import GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer
+from .over_professional_competencies.serializers import GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
+from .key_competences.serializers import GroupOfKeyCompetencesInGeneralCharacteristicSerializer
+
