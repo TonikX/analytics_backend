@@ -54,3 +54,10 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                             except:
                                 pass
         return Response(OrderedDict(newdata), status=status.HTTP_200_OK)
+@api_view(['POST'])
+@permission_classes((IsAuthenticated, ))
+def SaveImplementationAcademicPlans(request):
+    implementations=request.data.get('implementation_set')
+    for imp in implementations:
+        IndividualImplementationAcademicPlan.objects.filter(pk=imp).update(user=request.user)
+    return Response("нечего")
