@@ -518,6 +518,15 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
         }
 
 
+class AcademicPlanForRepresentationSerializer(serializers.ModelSerializer):
+    discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, required=False)
+    can_edit = BooleanField(read_only=True)
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year', 'education_form', 'qualification','author', 'can_edit']
+
+
 class AcademicPlanSerializerForList(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlan

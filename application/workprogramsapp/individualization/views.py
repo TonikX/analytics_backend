@@ -74,6 +74,21 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                             a +=1
         return Response(OrderedDict(newdata), status=status.HTTP_200_OK)
 
+
+class IndividualImplementationAcademicPlanForUser(generics.ListAPIView):
+    serializer_class = ShortIndividualImplementationAcademicPlanSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, **kwargs):
+        """
+        Вывод всех результатов для одной рабочей программы по id
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = IndividualImplementationAcademicPlan.objects.filter(user=self.request.user)
+        serializer = ShortIndividualImplementationAcademicPlanSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 @api_view(['POST'])
 @permission_classes((IsAuthenticated, ))
 def SaveImplementationAcademicPlans(request):

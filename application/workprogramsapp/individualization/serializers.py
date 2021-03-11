@@ -8,7 +8,7 @@ from workprogramsapp.models import ImplementationAcademicPlan
 
 # Сериализаторы
 
-from workprogramsapp.serializers import AcademicPlanSerializer, FieldOfStudyImplementationSerializer, AcademicPlanInImplementationSerializer
+from workprogramsapp.serializers import AcademicPlanSerializer, FieldOfStudyImplementationSerializer, AcademicPlanInImplementationSerializer, AcademicPlanForRepresentationSerializer
 from dataprocessing.serializers import userProfileSerializer
 
 
@@ -52,6 +52,8 @@ class IndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer
     """Сериализатор вывода группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
 
     implementation_of_academic_plan = ImplementationAcademicPlanSerializer()
+    user = userProfileSerializer()
+
 
     class Meta:
         model = IndividualImplementationAcademicPlan
