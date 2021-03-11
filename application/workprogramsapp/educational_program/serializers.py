@@ -14,6 +14,8 @@ from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer, CompetenceForEPSerializer, IndicatorListSerializer
 from .pk_comptencies.serializers import GroupOfPkCompetencesInGeneralCharacteristicSerializer
 from .general_prof_competencies.serializers import GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer
+from .over_professional_competencies.serializers import GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
+from .key_competences.serializers import GroupOfKeyCompetencesInGeneralCharacteristicSerializer
 
 
 class EducationalProgramSerializer(serializers.ModelSerializer):
@@ -78,9 +80,9 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     area_of_activity = ProfessionalAreaOfGeneralCharacteristicsSerializer(many = True)
     educational_program = EducationalProgramSerializer()
     group_of_general_prof_competences = GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer(many = True)
-    # kc_competences = CompetenceForEPSerializer(many = True)
-    group_of_pk_competences = GroupOfPkCompetencesInGeneralCharacteristicSerializer(many = True)
-    # np_competences = CompetenceForEPSerializer(many = True)
+    group_of_key_competences = GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer(many = True)
+    group_of_over_prof_competences = GroupOfOverProfCompetencesInGeneralCharacteristicSerializer(many = True)
+    group_of_pk_competences = GroupOfKeyCompetencesInGeneralCharacteristicSerializer(many = True)
     developers = userProfileSerializer(many = True)
     employers_representatives = userProfileSerializer(many = True)
     director_of_megafaculty = userProfileSerializer()
