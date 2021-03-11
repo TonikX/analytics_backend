@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from collections import OrderedDict
 
 from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .serializers import IndividualImplementationAcademicPlanSerializer,CreateIndividualImplementationAcademicPlanSerializer,\
@@ -50,4 +51,4 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                                     del change_block['work_program']
                             except:
                                 pass
-        return Response(serializer.data)
+        return Response(OrderedDict(newdata), status=status.HTTP_200_OK)
