@@ -3,6 +3,8 @@ from django.contrib import admin
 from .bars_merge.models import BarsWorkProgramsAssociate, HistoryOfSendingToBars, BarsEPAssociate
 from .expertise.models import UserExpertise, ExpertiseComments, Expertise
 from .folders_ans_statistic.models import Folder, WorkProgramInFolder
+from .individualization.models import IndividualImplementationAcademicPlan, \
+    WorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
     Competence, Indicator, EvaluationTool, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
@@ -86,3 +88,5 @@ admin.site.register(AdditionalMaterial)
 admin.site.register(BarsWorkProgramsAssociate)
 admin.site.register(HistoryOfSendingToBars)
 admin.site.register(BarsEPAssociate)
+admin.site.register(IndividualImplementationAcademicPlan)
+admin.site.register(WorkProgramInWorkProgramChangeInDisciplineBlockModule)

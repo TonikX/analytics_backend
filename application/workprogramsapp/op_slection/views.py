@@ -8,6 +8,8 @@ from rest_framework.response import Response
 
 from dataprocessing.models import Items
 from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
+from workprogramsapp.individualization.models import IndividualImplementationAcademicPlan, \
+    WorkProgramInWorkProgramChangeInDisciplineBlockModule
 from workprogramsapp.models import Profession, WorkProgram, AcademicPlan, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, EducationalProgram, SkillsOfProfession, ImplementationAcademicPlan
 from workprogramsapp.op_slection.temp__skills_array import skill_sorter
@@ -174,17 +176,26 @@ def EducationalProgramRankingByProfessionScientific(request):
     # for i in sorted_academic_plan: print(i, i.metrics)
     list_of_educational_program = []
     for s in sorted_academic_plan:
-        print(str({"name": str(s), "coverage": s.coverage, "focus": s.focus, "route": s.routes}) + ",")
+        # print(str({"name": str(s), "coverage": s.coverage, "focus": s.focus, "route": s.routes}) + ",")
         for implementation in ImplementationAcademicPlan.objects.filter(academic_plan=s):
             serializer = ImplementationAcademicPlanSerializer(implementation, many=False)
+            individual = IndividualImplementationAcademicPlan.objects.create(
+                implementation_of_academic_plan=implementation, user=request.user)
+            print(len(s.routes))
+            for wp_dict in s.routes:
+                el=WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.create(
+                    work_program_change_in_discipline_block_module=wp_dict['change_block'], work_program=wp_dict['wp'],
+                    individual_implementation_of_academic_plan=individual)
+                print(el)
             updated_serializer = dict(serializer.data)
             updated_serializer["metrics"] = s.metrics
+            updated_serializer["individual_implementation_id"] = individual.id
             list_of_educational_program.append(updated_serializer)
     return Response(list_of_educational_program)
 
 
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))
+@permission_classes((AllowAny,))
 def EducationalProgramRankingByProfession(request):
     professions_array = request.data.get('professions_array')
     range_settings = request.data.get('range_set')

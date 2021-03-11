@@ -23,7 +23,7 @@ class WorkProgramInWorkProgramChangeInDisciplineBlockModule(models.Model):
     '''
     work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
                                                                        on_delete=models.CASCADE, related_name="changed_workprogram_in_wpcb")
-    work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
+    work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE)
     individual_implementation_of_academic_plan = models.ForeignKey('IndividualImplementationAcademicPlan', on_delete=models.CASCADE,
                                                                    verbose_name = 'Учебный план с направлением в индивидуальном маршруте',
                                                                    related_name="implementation_of_academic_plan_in_field_of_study")
