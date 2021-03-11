@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django_filters',
     'bootstrap_pagination',
     'rest_framework_swagger',
+    'onlinecourse',
     #'oauth2_provider',
     #'social_django',
     #'rest_framework_social_oauth2',
