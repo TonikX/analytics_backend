@@ -22,8 +22,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   btn: {
     minWidth: '120px',
-    // width: '170px',
-    // fontSize: '14px',
     background: theme.palette.primary.main,
     marginBottom: '20px',
   },
@@ -31,6 +29,5 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     width: '20%',
     display: 'flex',
     flexDirection: 'column',
-
   },
 }));
