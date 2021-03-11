@@ -15,21 +15,21 @@ from dataprocessing.serializers import userProfileSerializer
 class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     academic_plan = AcademicPlanSerializer()
     field_of_study = FieldOfStudyImplementationSerializer()
-    user = userProfileSerializer()
+    #user = userProfileSerializer()
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id','academic_plan', 'field_of_study', 'year', 'user']
+        fields = ['id','academic_plan', 'field_of_study', 'year']
 
 
 class ShortImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     academic_plan = AcademicPlanInImplementationSerializer()
     field_of_study = FieldOfStudyImplementationSerializer()
-    user = userProfileSerializer()
+    #user = userProfileSerializer()
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id','academic_plan', 'field_of_study', 'year', 'user']
+        fields = ['id','academic_plan', 'field_of_study', 'year']
 
 
 class WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
@@ -62,6 +62,7 @@ class ShortIndividualImplementationAcademicPlanSerializer(serializers.ModelSeria
     """Сериализатор вывода группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
 
     implementation_of_academic_plan = ShortImplementationAcademicPlanSerializer()
+    user = userProfileSerializer()
 
     class Meta:
         model = IndividualImplementationAcademicPlan
