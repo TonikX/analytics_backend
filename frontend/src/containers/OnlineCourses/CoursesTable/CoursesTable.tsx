@@ -33,7 +33,7 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
         <Table stickyHeader>
           <TableHead className={classes.header}>
             <TableRow>
-              <TableCell>
+              <TableCell className={classes.stickyHeader}>
                 <Typography component='div'>
                   Название курса
                   <SortingButton changeMode={changeSorting(CourseFields.TITLE)}
@@ -41,7 +41,7 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
                   />
                 </Typography>
               </TableCell>
-              <TableCell>
+              <TableCell className={classes.stickyHeader}>
                 <Typography component='div'>
                   Правообладатель
                   <SortingButton changeMode={changeSorting(CourseFields.COURSE_URL)}
@@ -49,7 +49,7 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
                   />
                 </Typography>
               </TableCell>
-              <TableCell>
+              <TableCell className={classes.stickyHeader}>
                 <Typography component='div'>
                   Платформа
                   <SortingButton changeMode={changeSorting(CourseFields.PLATFORM)}
@@ -57,7 +57,7 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
                   />
                 </Typography>
               </TableCell>
-              <TableCell>
+              <TableCell className={classes.stickyHeader}>
                 <Typography component='div'>
                   Язык
                   <SortingButton changeMode={() => {}}
@@ -65,7 +65,7 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
                   />
                 </Typography>
               </TableCell>
-              <TableCell>
+              <TableCell className={classes.stickyHeader}>
                 <Typography 
                   component='div' 
                   style={{whiteSpace: 'normal', display: 'flex', alignItems: 'center', width: '185px'}}
@@ -76,7 +76,7 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
                   />
                 </Typography> 
               </TableCell>
-              <TableCell>
+              <TableCell className={classes.stickyHeader}>
                 <Typography 
                   component='div'
                   style={{whiteSpace: 'normal', display: 'flex', alignItems: 'center', width: '100px'}}
@@ -87,14 +87,13 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
                   />
                 </Typography>
               </TableCell>
-              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
             {courses.map(course =>
               <TableRow key={course[CourseFields.ID]}>
-                <TableCell>
-                  <Link to={course[CourseFields.COURSE_URL]} className={classes.link}>
+                <TableCell className={classes.link}>
+                  <Link target='_blank' to={'/course/1'}>
                     {course[CourseFields.TITLE]}
                   </Link>
                 </TableCell>

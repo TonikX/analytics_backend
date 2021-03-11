@@ -61,5 +61,13 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         alignItems: 'center',
         marginTop: '10px'
     },
-    link: {},
+    link: {
+        '& a': {
+            textDecoration: 'none',
+            color: theme.palette.primary.main
+        }
+    },
+    stickyHeader: {
+        left: 'auto',
+    }
 }));
