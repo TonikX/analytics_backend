@@ -44,7 +44,7 @@ import TableSettingsMenu from "../../components/TableSettingsMenu";
 import connect from './EducationalProgram.connect';
 import styles from './EducationalProgram.styles';
 
-class EducationalProgramHaracteristic extends React.Component<EducationalProgramProps> {
+class EducationalProgram extends React.Component<EducationalProgramProps> {
     state = {
         deleteConfirmId: null,
         anchorsEl: {}
@@ -243,4 +243,4 @@ class EducationalProgramHaracteristic extends React.Component<EducationalProgram
     }
 }
 
-export default connect(withStyles(styles)(EducationalProgramHaracteristic));
+export default connect(withStyles(styles)(EducationalProgram));

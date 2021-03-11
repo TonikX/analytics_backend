@@ -8,7 +8,7 @@ import classNames from "classnames";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import withStyles from '@material-ui/core/styles/withStyles';
-import Fab from "@material-ui/core/Fab";
+import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 
@@ -188,12 +188,12 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                 </AutoSizer>
 
                 {isCanEdit &&
-                    <Fab color="secondary"
+                    <Button color="secondary"
                          className={classes.addIcon}
                          onClick={this.handleCreateNew}
                     >
-                        <AddIcon/>
-                    </Fab>
+                        <AddIcon/> Добавить оценочное средство
+                    </Button>
                 }
 
                 {isCanEdit && <CreateModal />}

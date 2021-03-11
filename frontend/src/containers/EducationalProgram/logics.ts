@@ -7,7 +7,14 @@ import educationalPlanActions from './actions';
 import Service from './service';
 
 import {fetchingTypes} from "./enum";
-import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {
+    getCurrentPage,
+    getEducationalProgramCharacteristicId,
+    getEducationalProgramId,
+    getSearchQuery,
+    getSortingField,
+    getSortingMode
+} from "./getters";
 
 const service = new Service();
 
@@ -163,6 +170,52 @@ const changeEducationalProgramCharacteristic = createLogic({
     }
 });
 
+const characteristicCreateGroup = createLogic({
+    type: educationalPlanActions.characteristicCreateGroup.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalProgramId = getEducationalProgramId(getState());
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_CREATE_COMPETENCE_GROUP}));
+
+        service.characteristicCreateGroup(action.payload, characteristicId)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_CREATE_COMPETENCE_GROUP}));
+                return done();
+            });
+    }
+});
+const characteristicDeleteGroup = createLogic({
+    type: educationalPlanActions.characteristicDeleteGroup.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalProgramId = getEducationalProgramId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_COMPETENCE_GROUP}));
+
+        service.characteristicDeleteGroup(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_DELETE_COMPETENCE_GROUP}));
+                return done();
+            });
+    }
+});
+
 export default [
     getEducationalProgramList,
     deleteEducationalProgram,
@@ -171,4 +224,7 @@ export default [
 
     changeEducationalProgramCharacteristic,
     getEducationalProgramCharacteristic,
+
+    characteristicCreateGroup,
+    characteristicDeleteGroup,
 ];

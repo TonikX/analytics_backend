@@ -98,8 +98,87 @@ const deleteTopic = createLogic({
     }
 });
 
+const addTopicMaterial = createLogic({
+    type: workProgramActions.addTopicMaterial.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+        const id = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_TOPIC_MATERIAL}));
+
+        service.addTopicMaterial(id)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram(workProgramId));
+                dispatch(actions.fetchingSuccess());
+                dispatch(workProgramActions.closeDialog(fields.ADD_NEW_MATERIAL_TO_TOPIC));
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.ADD_TOPIC_MATERIAL}));
+                return done();
+            });
+    }
+});
+
+const updateTopicMaterial = createLogic({
+    type: workProgramActions.updateTopicMaterial.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_TOPIC_MATERIAL}));
+
+        service.updateTopicMaterial(action.payload)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram(workProgramId));
+                dispatch(actions.fetchingSuccess());
+                dispatch(workProgramActions.closeDialog(fields.ADD_NEW_MATERIAL_TO_TOPIC));
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_TOPIC_MATERIAL}));
+                return done();
+            });
+    }
+});
+
+const deleteTopicMaterial = createLogic({
+    type: workProgramActions.deleteTopicMaterial.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+        const id = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_TOPIC_MATERIAL}));
+
+        service.deleteTopicMaterial(id)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram(workProgramId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_TOPIC_MATERIAL}));
+                return done();
+            });
+    }
+});
+
 export default [
     saveTopic,
     deleteTopic,
     changeTopicNumber,
+    addTopicMaterial,
+    updateTopicMaterial,
+    deleteTopicMaterial,
 ];

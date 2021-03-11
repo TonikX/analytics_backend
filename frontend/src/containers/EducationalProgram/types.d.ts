@@ -1,4 +1,4 @@
-import {EducationProgramFields, fields} from './enum';
+import {CompetenceTableType, EducationProgramFields, fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {EducationProgramCharacteristicFields} from './enum';
@@ -9,6 +9,7 @@ import {ReactText} from "react";
 import {EducationalPlanInDirectionType} from "../EduationPlanInDirection/types";
 import {UserType} from "../../layout/types";
 import {characterisicStyles} from './Сharacteristic/Сharacteristic.styles';
+import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
 
 export interface EducationalProgramActions {
     changeSearchQuery: any;
@@ -25,6 +26,12 @@ export interface EducationalProgramActions {
     deleteEducationalProgram: any;
     changeEducationalProgram: any;
     setEducationalProgramList: any;
+
+    characteristicCreateGroup: ActionCreatorWithPayload<CharacteristicCreateGroupActionType>;
+    characteristicSaveGroupTitle: ActionCreatorWithPayload<{title: string, type: CompetenceTableType}>;
+    characteristicSaveCompetence: ActionCreatorWithPayload<{competenceId: number, type: CompetenceTableType}>;
+    characteristicSaveIndicators: ActionCreatorWithPayload<{indicatorId: number, type: CompetenceTableType}>;
+    characteristicDeleteGroup: ActionCreatorWithPayload<CharacteristicDeleteGroupActionType>;
 }
 
 export interface educationalProgramState {
@@ -73,4 +80,14 @@ export interface EducationalProgramProps extends WithStyles<typeof styles> {
 export interface CharacteristicProps extends WithStyles<typeof characterisicStyles> {
     actions: EducationalProgramActions;
     educationalProgramCharacteristic: EducationProgramCharacteristicFields;
+}
+
+export type CharacteristicCreateGroupActionType = {
+    name: string;
+    type: CompetenceTableType;
+}
+
+export type CharacteristicDeleteGroupActionType = {
+    groupId: number;
+    type: CompetenceTableType;
 }

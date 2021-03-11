@@ -2,6 +2,7 @@ from django.conf.urls import url
 from django.conf.urls import url, include
 from django.urls import path
 
+from .bars_merge.views import FindSimilarEP, FindSimilarWP, CreateCheckPoint
 from .educational_program.views import DepartmentCreateAPIView, DepartmentListAPIView, DepartmentDetailsView, \
     DepartmentDestroyView, DepartmentUpdateView
 # Контроллеры
@@ -318,7 +319,13 @@ urlpatterns = [
     # Аттестационные оценочные средства
     path('api/certification_tools/', СertificationEvaluationToolListAPI.as_view()),
     path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
-
-
     url(r'^', include('workprogramsapp.educational_program.urls')),
+
+    #Запросы для работы с БАРС
+    path('api/bars_tools/similar_ep', FindSimilarEP),
+    path('api/bars_tools/similar_wp', FindSimilarWP),
+    path('api/bars_tools/post_checkpoint', CreateCheckPoint),
+    url(r'^', include('workprogramsapp.educational_program.urls')),
+    url(r'^', include('workprogramsapp.workprogram_additions.urls')),
+
 ]

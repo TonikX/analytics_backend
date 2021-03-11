@@ -7,6 +7,7 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool
+from .workprogram_additions.serializers import AdditionalMaterialSerializer
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
@@ -181,9 +182,10 @@ class OnlineCourseSerializer(serializers.ModelSerializer):
 class TopicSerializer(serializers.ModelSerializer):
     """Сериализатор Тем"""
     url_online_course = OnlineCourseSerializer(required=False)
+    additional_materials_for_topic = AdditionalMaterialSerializer(many = True)
     class Meta:
         model = Topic
-        fields = ['id', 'discipline_section', 'number', 'description', 'url_online_course']
+        fields = ['id', 'discipline_section', 'number', 'description', 'url_online_course', 'additional_materials_for_topic']
 
 
 class TopicCreateSerializer(serializers.ModelSerializer):

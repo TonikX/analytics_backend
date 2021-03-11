@@ -48,13 +48,41 @@ export default (theme: Theme) => createStyles({
     topicsSectionList: {
 
     },
-    topic: {
+    topicItem: {
         display: 'flex',
-        borderBottom: '1px solid #ccc',
         alignItems: 'center',
         padding: '0 0 0 20px',
         boxSizing: 'border-box',
         background: '#fff'
+    },
+    topic: {
+        borderBottom: '1px solid #ccc',
+        background: '#fff'
+    },
+    materials: {
+        padding: '20px',
+        background: '#f6f6f6',
+        '& a': {
+            color: theme.palette.primary.main
+        }
+    },
+    materialItem: {
+        display: 'flex',
+        alignItems: 'center'
+    },
+    materialItemIcon: {
+        cursor: 'pointer',
+        marginLeft: '5px',
+        '&:hover': {
+            color: theme.palette.primary.main
+        }
+    },
+    addMaterialButton: {
+        padding: '0px !important',
+        marginTop: '10px',
+        '&:hover': {
+            background: 'transparent !important'
+        }
     },
     topicName: {
         width: '50%',

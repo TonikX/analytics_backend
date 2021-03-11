@@ -5,7 +5,7 @@ import classNames from "classnames";
 
 import Typography from "@material-ui/core/Typography";
 import withStyles from '@material-ui/core/styles/withStyles';
-import Fab from "@material-ui/core/Fab";
+import Button from "@material-ui/core/Button";
 
 import AddIcon from "@material-ui/icons/Add";
 import IconButton from "@material-ui/core/IconButton";
@@ -81,12 +81,12 @@ class Prerequisites extends React.PureComponent<SixthStepProps> {
                 </Scrollbars>
 
                 {isCanEdit &&
-                    <Fab color="secondary"
+                    <Button color="secondary"
                          className={classes.addIcon}
                          onClick={this.handleCreateNew}
                     >
-                        <AddIcon/>
-                    </Fab>
+                        <AddIcon/> Добавить пререквизит
+                    </Button>
                 }
 
                 {isCanEdit && <CreateModal />}

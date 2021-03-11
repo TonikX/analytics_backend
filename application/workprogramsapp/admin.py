@@ -1,7 +1,10 @@
 from django.contrib import admin
 
+from .bars_merge.models import BarsWorkProgramsAssociate, HistoryOfSendingToBars, BarsEPAssociate
 from .expertise.models import UserExpertise, ExpertiseComments, Expertise
 from .folders_ans_statistic.models import Folder, WorkProgramInFolder
+from .individualization.models import IndividualImplementationAcademicPlan, \
+    WorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
     Competence, Indicator, EvaluationTool, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
@@ -11,6 +14,34 @@ from .models import (
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
     Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
+
+from .workprogram_additions.models import AdditionalMaterial
+
+from .educational_program.pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
+    PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
+from .educational_program.over_professional_competencies.models import GroupOfOverProfCompetencesInGeneralCharacteristic, \
+    OverProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInOverProfCompetenceInGeneralCharacteristic
+from .educational_program.key_competences.models import GroupOfKeyCompetencesInGeneralCharacteristic, \
+    KeyCompetencesInGroupOfGeneralCharacteristic, IndicatorInKeyCompetenceInGeneralCharacteristic
+from .educational_program.general_prof_competencies.models import GroupOfGeneralProfCompetencesInGeneralCharacteristic, \
+    GeneralProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
+
+
+admin.site.register(GroupOfPkCompetencesInGeneralCharacteristic)
+admin.site.register(PkCompetencesInGroupOfGeneralCharacteristic)
+admin.site.register(IndicatorInPkCompetenceInGeneralCharacteristic)
+
+admin.site.register(GroupOfOverProfCompetencesInGeneralCharacteristic)
+admin.site.register(OverProfCompetencesInGroupOfGeneralCharacteristic)
+admin.site.register(IndicatorInOverProfCompetenceInGeneralCharacteristic)
+
+admin.site.register(GroupOfKeyCompetencesInGeneralCharacteristic)
+admin.site.register(KeyCompetencesInGroupOfGeneralCharacteristic)
+admin.site.register(IndicatorInKeyCompetenceInGeneralCharacteristic)
+
+admin.site.register(GroupOfGeneralProfCompetencesInGeneralCharacteristic)
+admin.site.register(GeneralProfCompetencesInGroupOfGeneralCharacteristic)
+admin.site.register(IndicatorInGeneralProfCompetenceInGeneralCharacteristic)
 
 
 admin.site.register(Zun)
@@ -53,5 +84,9 @@ admin.site.register(ProfessionalStandard)
 
 admin.site.register(Folder)
 admin.site.register(WorkProgramInFolder)
-
-
+admin.site.register(AdditionalMaterial)
+admin.site.register(BarsWorkProgramsAssociate)
+admin.site.register(HistoryOfSendingToBars)
+admin.site.register(BarsEPAssociate)
+admin.site.register(IndividualImplementationAcademicPlan)
+admin.site.register(WorkProgramInWorkProgramChangeInDisciplineBlockModule)

@@ -13,8 +13,6 @@ export default (theme: Theme) => createStyles({
         marginTop: '10px',
         marginLeft: 'auto',
         flex: 'none',
-        height: '40px',
-        width: '40px',
         marginBottom: '20px',
     },
     list: {},
