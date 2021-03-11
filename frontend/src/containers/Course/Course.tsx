@@ -11,6 +11,9 @@ import { General } from './General/General'
 import { Content } from './Content/Content'
 import { CurrentSession } from './CurrentSession/CurrentSession'
 import { Directions } from './Directions/Directions'
+import { Requirements } from './Requirements/Requirements'
+import { Competences } from './Competences/Competences'
+import { Results } from './Results/Results'
 
 import { steps } from './enum'
 
@@ -27,59 +30,17 @@ export const Course: React.FC = () => {
       case 0:
         return <General />
       case 1:
-        return (
-          <>
-            <Typography className={classes.title}>
-              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
-            </Typography>
-            <Content />
-          </>
-        )
+        return <Content />
       case 2:
-        return (
-          <>
-            <Typography className={classes.title}>
-              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
-            </Typography>
-            <CurrentSession />
-          </>
-        )
+        return <CurrentSession />
       case 3:
-        return (
-          <>
-            <Typography className={classes.title}>
-              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
-            </Typography>
-            <Directions />
-          </>
-        )
+        return <Directions />
       case 4:
-        return (
-          <>
-            <Typography className={classes.title}>
-              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
-            </Typography>
-            4
-          </>
-        )
+        return <Requirements />
       case 5:
-        return (
-          <>
-            <Typography className={classes.title}>
-              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
-            </Typography>
-            5
-          </>
-        )
+        return <Competences />
       case 6:
-        return (
-          <>
-            <Typography className={classes.title}>
-              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
-            </Typography>
-            6
-          </>
-        )
+        return <Results />
     }
   }
   return (
@@ -159,6 +120,11 @@ export const Course: React.FC = () => {
           </Step>
         </Stepper>
         <div className={classes.content}>
+          {activeStep !== 0 && (
+            <Typography className={classes.title}>
+              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
+            </Typography>
+          )}
           {showActiveStep(activeStep)}
         </div>
       </Paper>
