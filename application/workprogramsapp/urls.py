@@ -328,4 +328,6 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.educational_program.urls')),
     url(r'^', include('workprogramsapp.workprogram_additions.urls')),
 
+    url(r'^', include('workprogramsapp.individualization.urls')),
+
 ]
