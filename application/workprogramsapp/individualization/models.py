@@ -10,7 +10,7 @@ class IndividualImplementationAcademicPlan(models.Model):
     implementation_of_academic_plan = models.ForeignKey('ImplementationAcademicPlan', on_delete=models.CASCADE,
                                                         verbose_name = 'Учебный план с направлением',
                                                         related_name="implementation_of_academic_plan_in_field_of_study")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     comment = models.CharField(max_length=1024, blank=True, null=True)
 
     def __str__(self):

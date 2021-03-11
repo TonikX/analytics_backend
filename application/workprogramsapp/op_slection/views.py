@@ -1,16 +1,20 @@
 import datetime
+import random
 
 from django.db.models import Count
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
 
 from dataprocessing.models import Items
 from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
+from workprogramsapp.individualization.models import IndividualImplementationAcademicPlan, \
+    WorkProgramInWorkProgramChangeInDisciplineBlockModule
 from workprogramsapp.models import Profession, WorkProgram, AcademicPlan, DisciplineBlockModule, \
-    WorkProgramChangeInDisciplineBlockModule, EducationalProgram, SkillsOfProfession
+    WorkProgramChangeInDisciplineBlockModule, EducationalProgram, SkillsOfProfession, ImplementationAcademicPlan
 from workprogramsapp.op_slection.temp__skills_array import skill_sorter
 from workprogramsapp.profession.serializers import ProfessionSerializer
+from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
 
 
 @api_view(['POST'])
@@ -18,7 +22,8 @@ from workprogramsapp.profession.serializers import ProfessionSerializer
 def CreateProfessionByKeywords(request):
     keywords_dict = request.data.get('keywords_dict')
     profession_name = request.data.get('profession_name')
-    str_skills_key, str_skills_additional = skill_sorter(keywords_dict)
+    num_of_prof = request.data.get('num_of_prof')
+    str_skills_key, str_skills_additional = skill_sorter(keywords_dict, int(num_of_prof))
     skills_key = list(Items.objects.filter(name__in=str_skills_key))
     skills_additional = list(Items.objects.filter(name__in=str_skills_additional))
     for key in str_skills_key:
@@ -39,7 +44,7 @@ def CreateProfessionByKeywords(request):
 
 
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))
+@permission_classes((IsAdminUser,))
 def EducationalProgramRankingByProfessionScientific(request):
     # Передаваемые значения
     professions_array = request.data.get('professions_array')
@@ -76,7 +81,7 @@ def EducationalProgramRankingByProfessionScientific(request):
     wp_with_skills = WorkProgram.objects.filter(outcomes__in=skills_key + skills_additional).annotate(
         Count('pk'))
     for work_program in wp_with_skills:
-        # work_program.coincidences = len(set(work_program.outcomes.all()) & set(skills_array))
+        work_program.coincidences = len(set(work_program.outcomes.all()) & set(skills_key + skills_additional))
         # work_program.skills_list = list(set(work_program.outcomes.all()) & set(skills_array))
 
         work_program.skills_key = list(set(work_program.outcomes.all()) & set(skills_key))
@@ -88,6 +93,10 @@ def EducationalProgramRankingByProfessionScientific(request):
         year="2020", qualification=qualification).annotate(
         Count('pk'))
     # Считаем метрики
+    max_coverage = 0
+    min_coverage = float('inf')
+    max_focus = 0
+    min_focus = float('inf')
     for ap in academic_plan_with_skills:
 
         wp_all = WorkProgram.objects.filter(
@@ -108,17 +117,31 @@ def EducationalProgramRankingByProfessionScientific(request):
         ap_specialization_wp_count = 0
         wp_count = 0
         discipline_weight = 0
+        individual_route_wp_list = []
         for module in DisciplineBlockModule.objects.filter(descipline_block__academic_plan=ap):
             if not (module.type == "ognp" or "ОГНП" in module.name or "Факультатив" in module.name):
                 wp_count__local = 0
                 discipline_weight__local = 0
                 for change in WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=module):
                     wp_count__local += 1
-                    for wp in WorkProgram.objects.filter(
-                            zuns_for_wp__work_program_change_in_discipline_block_module=change):
-                        if wp in set_of_wp:
+                    wp_weight_max = 0
+                    chosen_wp = None
+                    wp_in_change = WorkProgram.objects.filter(
+                        zuns_for_wp__work_program_change_in_discipline_block_module=change)
+                    for wp in wp_in_change:
+                        for set_wp in set_of_wp:
+                            if wp == set_wp and set_wp.coincidences > wp_weight_max:
+                                chosen_wp = wp
+                                wp_weight_max = set_wp.coincidences
+                    if wp_weight_max != 0:
+                        discipline_weight__local += 1
+                        if len(wp_in_change) > 1:
+                            individual_route_wp_list.append({"change_block": change, "wp": chosen_wp})
+                    elif len(wp_in_change) > 1:
+                        individual_route_wp_list.append({"change_block": change, "wp": random.choice(wp_in_change)})
+                        """if wp in set_of_wp:
                             discipline_weight__local += 1
-                            break
+                            break"""
                 if module.type == "specialization_module" or "Специализация" in module.name:
                     if ap_specialization_discipline_weight < discipline_weight__local:
                         ap_specialization_discipline_weight = discipline_weight__local
@@ -133,17 +156,40 @@ def EducationalProgramRankingByProfessionScientific(request):
         add_coverage = len(set([val for item in set_of_wp for val in item.skills_add])) / len(skills_additional)
         coof = 0.8
         ap.coverage = coof * (key_coverage) + (1 - coof) * (add_coverage)
-        ap.metrics = 2 * (ap.coverage * ap.focus) / (ap.coverage + ap.focus)
+        ap.routes = individual_route_wp_list
+        if ap.coverage > max_coverage:
+            max_coverage = ap.coverage
+        if ap.coverage < min_coverage:
+            min_coverage = ap.coverage
+        if ap.focus > max_focus:
+            max_focus = ap.focus
+        if ap.focus < min_focus:
+            min_focus = ap.focus
 
+        # ap.metrics = 2 * (ap.coverage * ap.focus) / (ap.coverage + ap.focus)
+    for ap in academic_plan_with_skills:
+        ap.coverage = 0.01 + (ap.coverage - min_coverage) * (1 - 0.01) / (max_coverage - min_coverage)
+        ap.focus = 0.01 + (ap.focus - min_focus) * (1 - 0.01) / (max_focus - min_focus)
+        ap.metrics = 2 * (ap.coverage * ap.focus) / (ap.coverage + ap.focus)
     # Cортировка--
     sorted_academic_plan = sorted(academic_plan_with_skills, key=lambda ac_pl: ac_pl.metrics, reverse=True)
-    for i in sorted_academic_plan: print(i, i.metrics)
+    # for i in sorted_academic_plan: print(i, i.metrics)
     list_of_educational_program = []
     for s in sorted_academic_plan:
-        for e in EducationalProgram.objects.filter(academic_plan_for_ep__academic_plan=s):
-            serializer = EducationalProgramSerializer(e, many=False)
+        # print(str({"name": str(s), "coverage": s.coverage, "focus": s.focus, "route": s.routes}) + ",")
+        for implementation in ImplementationAcademicPlan.objects.filter(academic_plan=s):
+            serializer = ImplementationAcademicPlanSerializer(implementation, many=False)
+            individual = IndividualImplementationAcademicPlan.objects.create(
+                implementation_of_academic_plan=implementation, user=request.user)
+            print(len(s.routes))
+            for wp_dict in s.routes:
+                el=WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.create(
+                    work_program_change_in_discipline_block_module=wp_dict['change_block'], work_program=wp_dict['wp'],
+                    individual_implementation_of_academic_plan=individual)
+                print(el)
             updated_serializer = dict(serializer.data)
             updated_serializer["metrics"] = s.metrics
+            updated_serializer["individual_implementation_id"] = individual.id
             list_of_educational_program.append(updated_serializer)
     return Response(list_of_educational_program)
 

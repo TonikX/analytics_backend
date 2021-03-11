@@ -9,7 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import IndividualImplementationAcademicPlan
-from .serializers import IndividualImplementationAcademicPlanSerializer,CreateIndividualImplementationAcademicPlanSerializer
+from .serializers import IndividualImplementationAcademicPlanSerializer,CreateIndividualImplementationAcademicPlanSerializer,\
+    ShortIndividualImplementationAcademicPlanSerializer
 
 
 class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
@@ -18,6 +19,8 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_serializer_class(self):
+        if self.action == 'list':
+            return ShortIndividualImplementationAcademicPlanSerializer
         if self.action == 'create':
             return CreateIndividualImplementationAcademicPlanSerializer
         if self.action == 'update':
