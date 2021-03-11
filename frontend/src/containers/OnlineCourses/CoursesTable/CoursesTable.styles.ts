@@ -14,8 +14,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         height: 'calc(100% - 60px)',
         maxheight: 'calc(100% - 60px)',
         '& td': {
-            padding: '5px 10px !important',
-            fontSize: '14px'
+            padding: '18px 10px !important',
+            fontSize: '14px',
         },
         '& p': {
             fontSize: '14px'

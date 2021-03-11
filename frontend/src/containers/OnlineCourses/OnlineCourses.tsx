@@ -2,37 +2,30 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 
-
-
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
 import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
-
-
-import withStyles from '@material-ui/core/styles/withStyles';
-
-import AddIcon from "@material-ui/icons/Add";
-
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
-
-import ConfirmDialog from "../../components/ConfirmDialog";
-
-import CourseCreateModal from "./CourseCreateModal";
-
-import {CoursesProps} from './types';
-
-
-import connect from './Courses.connect';
-import styles from './Courses.styles';
-import { CoursesTable } from './CoursesTable/CoursesTable'
 import Button from '@material-ui/core/Button'
-import { Filters } from './Filters/Filters'
+import Typography from "@material-ui/core/Typography";
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import CourseCreateModal from "./CourseCreateModal";
+import { CoursesTable } from './CoursesTable/CoursesTable'
+import { Filters } from './Filters/Filters'
+
+import AddIcon from "@material-ui/icons/Add";
+
+import withStyles from '@material-ui/core/styles/withStyles';
+
+import {CoursesProps} from './types';
+
+import connect from './Courses.connect';
+import styles from './Courses.styles';
 
 // через стили (.styles.ts) не удалось сделать чтобы при открытии margin не появлялся
 const ExpansionPanel = withStyles({
@@ -81,11 +74,6 @@ class OnlineCourses extends React.Component<CoursesProps> {
           deleteConfirmId: null
       });
   }
-
-  // handleClickEdit = (course: CourseType): void => {
-  //   console.log('handleClickEdit', course.id);
-  //   this.props.actions.openDialog(course);
-  // }
 
   handleCreate = (): void => {
     this.props.actions.openDialog();
@@ -159,7 +147,6 @@ class OnlineCourses extends React.Component<CoursesProps> {
           sortingField={sortingField} 
           sortingMode={sortingMode} 
           handleClickDelete={(id: number) => this.handleClickDelete(id)} 
-          // handleClickEdit={(course: CourseType) => this.handleClickEdit(course)}
         />
 
         <div className={classes.footer}>
