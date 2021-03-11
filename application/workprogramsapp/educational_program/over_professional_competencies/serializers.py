@@ -68,5 +68,5 @@ class CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer(serializ
 
     class Meta:
         model = GroupOfOverProfCompetencesInGeneralCharacteristic
-        fields = ['id','name']
+        fields = ['id','name', 'general_characteristic']
 

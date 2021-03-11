@@ -67,5 +67,5 @@ class CreateGroupOfKeyCompetencesInGeneralCharacteristicSerializer(serializers.M
 
     class Meta:
         model = GroupOfKeyCompetencesInGeneralCharacteristic
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'general_characteristic']
 
