@@ -35,6 +35,7 @@ import {IndicatorType} from "../../Indicators/types";
 import {IndicatorsFields} from "../../Indicators/enum";
 import {UserFields} from "../../../layout/enum";
 import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
+import {ProfessionalCompetences} from "./ProfessionalCompetences/ProfessionalCompetences";
 
 class Characteristic extends React.Component<CharacteristicProps> {
     state = {
@@ -301,22 +302,22 @@ class Characteristic extends React.Component<CharacteristicProps> {
                               toolbarContainerId="toolbar-container3"
                     />
                 </>;
+
             case 4:
-                return <CompetenceTable competenceTableType={CompetenceTableType.SUPRA_PROFESSIONAL}
-                                        tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.OK_COMPETENCES, [])}
+                return <CompetenceTable competenceTableType={CompetenceTableType.KEY_COMPETENCES}
+                                        tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.KEY_COMPETENCES, [])}
                 />;
             case 5:
-                return <>
-                    {this.returnCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.KC_COMPETENCES, []))}
-                </>;
-            case 6:
-                return <>
-                    {this.returnProfessionalCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PK_COMPETENCES, []))}
-                </>;
-            case 7:
-                return <CompetenceTable competenceTableType={CompetenceTableType.SUPRA_PROFESSIONAL}
+                return <CompetenceTable competenceTableType={CompetenceTableType.SUPRA_PROFESSIONAL_COMPETENCES}
                                         tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.SUPRA_PROFESSIONAL_COMPETENCES, [])}
                 />;
+            case 6:
+                return <CompetenceTable competenceTableType={CompetenceTableType.GENERAL_PROFESSIONAL_COMPETENCES}
+                                        tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.GENERAL_PROFESSIONAL_COMPETENCES, [])}
+                />;
+
+            case 7:
+                return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PROFESSIONAL_COMPETENCES, [])} />;
             case 8:
                 return <CKEditor label={"Необходимый преподавательский состав"}
                                  value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PPS, '')}

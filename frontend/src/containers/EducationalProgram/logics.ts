@@ -193,6 +193,28 @@ const characteristicCreateGroup = createLogic({
             });
     }
 });
+const characteristicDeleteGroup = createLogic({
+    type: educationalPlanActions.characteristicDeleteGroup.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalProgramId = getEducationalProgramId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_COMPETENCE_GROUP}));
+
+        service.characteristicDeleteGroup(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_DELETE_COMPETENCE_GROUP}));
+                return done();
+            });
+    }
+});
 
 export default [
     getEducationalProgramList,
@@ -204,4 +226,5 @@ export default [
     getEducationalProgramCharacteristic,
 
     characteristicCreateGroup,
+    characteristicDeleteGroup,
 ];

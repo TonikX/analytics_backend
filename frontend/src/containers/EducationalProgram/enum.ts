@@ -18,6 +18,7 @@ export enum fetchingTypes {
     UPDATE_EDUCATION_PROGRAM = 'UPDATE_EDUCATION_PROGRAM',
     CREATE_EDUCATION_PROGRAM = 'CREATE_EDUCATION_PROGRAM',
     CHARACTERISTIC_CREATE_COMPETENCE_GROUP = 'CHARACTERISTIC_CREATE_COMPETENCE_GROUP',
+    CHARACTERISTIC_DELETE_COMPETENCE_GROUP = 'CHARACTERISTIC_DELETE_COMPETENCE_GROUP',
 }
 
 export enum EducationProgramCharacteristicFields {
@@ -29,9 +30,14 @@ export enum EducationProgramCharacteristicFields {
     EMPLOYERS = 'employers_representatives',
     KC_COMPETENCES = 'kc_competences',
     NP_COMPETENCES = 'np_competences',
-    OK_COMPETENCES = 'ok_competences',
     PK_COMPETENCES = 'pk_competences',
-    SUPRA_PROFESSIONAL_COMPETENCES = 'over_prof',
+    OK_COMPETENCES = 'ok_competences',
+
+    GENERAL_PROFESSIONAL_COMPETENCES = 'group_of_general_prof_competences',
+    SUPRA_PROFESSIONAL_COMPETENCES = 'group_of_over_prof_competences',
+    KEY_COMPETENCES = 'group_of_key_competences',
+    PROFESSIONAL_COMPETENCES = 'group_of_pk_competences',
+
     SCIENTIFIC_SUPERVISOR = 'scientific_supervisor_of_the_educational_program',
     EDUCATION_PROGRAM = 'educational_program',
     KINDS_OF_ACTIVITIES = 'kinds_of_activity',
@@ -54,5 +60,7 @@ export enum EducationProgramFields {
 }
 
 export enum CompetenceTableType {
-    SUPRA_PROFESSIONAL = 'SUPRA_PROFESSIONAL'
+    KEY_COMPETENCES = 'KEY_COMPETENCES',
+    SUPRA_PROFESSIONAL_COMPETENCES = 'SUPRA_PROFESSIONAL_COMPETENCES',
+    GENERAL_PROFESSIONAL_COMPETENCES = 'GENERAL_PROFESSIONAL_COMPETENCES',
 }
