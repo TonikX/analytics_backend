@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
-from .models import IndividualImplementationAcademicPlan
+from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .serializers import IndividualImplementationAcademicPlanSerializer,CreateIndividualImplementationAcademicPlanSerializer,\
     ShortIndividualImplementationAcademicPlanSerializer
 
@@ -41,6 +41,10 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                 for change_block in module['change_blocks_of_work_programs_in_modules']:
                     if change_block['change_type'] == "Optionally":
                         for work_program in change_block['work_program']:
-                            if work_program['id'] != WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.get(individual_implementation_of_academic_plan = newdata['id']):
+                            if work_program['id'] != \
+                                    WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.\
+                                            get(individual_implementation_of_academic_plan = newdata['id'],
+                                                work_program_change_in_discipline_block_module = change_block['id'].work_program.id):
                                 print('dd')
+                                del work_program
         return Response(serializer.data)
