@@ -40,5 +40,7 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                 print(module['id'])
                 for change_block in module['change_blocks_of_work_programs_in_modules']:
                     if change_block['change_type'] == "Optionally":
-                        print('ашел')
+                        for work_program in change_block['work_program']:
+                            if work_program['id'] != WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.get(individual_implementation_of_academic_plan = newdata['id']):
+                                print('dd')
         return Response(serializer.data)

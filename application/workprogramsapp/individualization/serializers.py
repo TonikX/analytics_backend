@@ -19,7 +19,7 @@ class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id','academic_plan', 'field_of_study', 'year']
+        fields = ['id','academic_plan', 'field_of_study', 'year', 'user']
 
 
 class ShortImplementationAcademicPlanSerializer(serializers.ModelSerializer):
@@ -29,7 +29,7 @@ class ShortImplementationAcademicPlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id','academic_plan', 'field_of_study', 'year']
+        fields = ['id','academic_plan', 'field_of_study', 'year', 'user']
 
 
 class WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
