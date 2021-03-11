@@ -11,9 +11,11 @@ export const Content: React.FC = () => {
     <div>
       <Typography className={classes.title}>Содержание</Typography>
       <Typography>В курсе рассматриваются следующие темы:</Typography>
-      <ol className={classes.list}>
-        {topics.map((topic) => <li>{topic}</li>)}
-      </ol>
+      <Typography component='div'>
+        <ol className={classes.list}>
+          {topics.map((topic) =>  <li>{topic}</li>)}
+        </ol>
+      </Typography>
       <Typography><b>Количество лекций:</b> 16</Typography>
     </div>
   )
