@@ -7,6 +7,7 @@ from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 from collections import OrderedDict
 from rest_framework import status
@@ -78,6 +79,7 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
 class IndividualImplementationAcademicPlanForUser(generics.ListAPIView):
     serializer_class = ShortIndividualImplementationAcademicPlanSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
 
     def list(self, request, **kwargs):
         """
@@ -86,8 +88,8 @@ class IndividualImplementationAcademicPlanForUser(generics.ListAPIView):
         # Note the use of `get_queryset()` instead of `self.queryset`
         queryset = IndividualImplementationAcademicPlan.objects.filter(user=self.request.user)
         page = self.paginate_queryset(queryset)
-        serializer = ShortIndividualImplementationAcademicPlanSerializer(page, many=True)
-        return Response(serializer.data)
+        serializer = ShortIndividualImplementationAcademicPlanSerializer(queryset, many=True)
+        return self.get_paginated_response(serializer.data)
 
 
 @api_view(['POST'])
