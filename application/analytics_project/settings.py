@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django_filters',
     'bootstrap_pagination',
     'rest_framework_swagger',
+    'onlinecourse',
     #'oauth2_provider',
     #'social_django',
     #'rest_framework_social_oauth2',
@@ -75,7 +76,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'social_django.middleware.SocialAuthExceptionMiddleware',
+    #'social_django.middleware.SocialAuthExceptionMiddleware',
 
     #'django.middleware.common.BrokenLinkEmailsMiddleware',
     #'django.middleware.common.CommonMiddleware',
@@ -99,8 +100,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+                #'social_django.context_processors.backends',
+                #'social_django.context_processors.login_redirect',
             ],
         },
     },
