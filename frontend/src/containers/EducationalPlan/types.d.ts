@@ -5,6 +5,7 @@ import {EducationalPlanFields, EducationalPlanBlockFields, ModuleFields, BlocksO
 import {SortingType} from "../../components/SortingButton/types";
 import {WorkProgramGeneralType} from "../WorkProgram/types";
 import {DirectionType} from "../Direction/types";
+import {UserType} from "../../layout/types";
 
 export interface EducationalPlanActions {
     pageDown: any;
@@ -45,6 +46,10 @@ export interface EducationalPlanActions {
     closeDownloadModal: any;
     getDirectionsDependedOnWorkProgram: any;
     setDirectionsDependedOnWorkProgram: any;
+
+    setIsTrajectoryRoute: any;
+    planTrajectorySetUserData: any;
+    planTrajectorySetDirection: any;
 }
 
 export interface educationalPlanState {
@@ -77,7 +82,10 @@ export interface educationalPlanState {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: {};
     };
-    [fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM]: Array<DirectionType>
+    [fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM]: Array<DirectionType>;
+    [fields.IS_TRAJECTORY_ROUTE]: boolean,
+    [fields.TRAJECTORY_USER_DATA]: {} | UserType,
+    [fields.TRAJECTORY_DIRECTION]: {} | DirectionType,
 }
 
 export type EducationalPlanType = {

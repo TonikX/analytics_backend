@@ -8,6 +8,8 @@ const setEducationalPlans = createAction('SET_EDUCATIONAL_PLANS');
 const getEducationalDetail = createAction('GET_EDUCATIONAL_PLAN_DETAIL');
 const setEducationalDetail = createAction('SET_EDUCATIONAL_PLAN_DETAIL');
 
+const setIsTrajectoryRoute = createAction('SET_EDUCATIONAL_PLAN_IS_TRAJECTORY_ROUTE');
+
 const createNewEducationalPlan = createAction('CREATE_NEW_EDUCATIONAL_PLAN');
 const changeEducationalPlan = createAction('CHANGE_EDUCATIONAL_PLAN');
 const deleteEducationalPlan = createAction('DELETE_EDUCATIONAL_PLAN');
@@ -50,6 +52,9 @@ const deleteCompetenceBlock = createAction('DELETE_COMPETENCE_BLOCK');
 const deleteWorkProgramFromZun = createAction('DELETE_WP_FROM_ZUN');
 const pageDown = createAction('EDUCATIONAL_PLAN_PAGE_DOWN');
 
+const planTrajectorySetUserData = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SET_USER_DATA');
+const planTrajectorySetDirection = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SET_DIRECTION');
+
 const actions: EducationalPlanActions = {
     openAddModuleDialog,
     closeAddModuleDialog,
@@ -74,6 +79,7 @@ const actions: EducationalPlanActions = {
     closeDetailDialog,
     getEducationalDetail,
     setEducationalDetail,
+    setIsTrajectoryRoute,
     getEducationalPlans,
     setEducationalPlans,
     createNewEducationalPlan,
@@ -85,6 +91,8 @@ const actions: EducationalPlanActions = {
     changeCurrentPage,
     changeAllCount,
     changeSorting,
+    planTrajectorySetUserData,
+    planTrajectorySetDirection,
 }
 
 export default actions;

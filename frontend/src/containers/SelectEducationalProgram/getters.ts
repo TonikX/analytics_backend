@@ -10,6 +10,8 @@ const getStateData = (state: rootState): selectEducationalProgramState => get(st
 export const getProfessions = (state: rootState) => get(getStateData(state), fields.PROFESSIONS);
 export const getSelectedProfessions = (state: rootState) => get(getStateData(state), fields.SELECTED_PROFESSIONS);
 export const getEducationalPrograms = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_PROGRAMS)
+export const getQualification = (state: rootState) => get(getStateData(state), fields.QUALIFICATION)
+export const getSelectedEducationalPrograms = (state: rootState) => get(getStateData(state), fields.SELECTED_EDUCATIONAL_PROGRAMS)
 
 export const getNoSelectedProfessions = (state: rootState) => {
   const professions = getProfessions(state)

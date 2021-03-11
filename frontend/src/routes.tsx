@@ -23,7 +23,6 @@ import Professions from "./containers/Professions";
 import Roles from "./containers/Roles";
 import ProfessionSkills from "./containers/Professions/Skills";
 import RolesSkills from "./containers/Roles/Skills";
-
 import EducationalProgram from "./containers/EducationalProgram";
 import EducationalProgramCharacteristic from "./containers/EducationalProgram/Characteristic";
 
@@ -41,7 +40,8 @@ import NotFoundPage from "./containers/NotFoundPage";
 import ForbiddenPage from "./containers/ForbiddenPage";
 
 import SelectDiscipline from "./containers/SelectDiscipline";
-import SelectEducationalProgram from './containers/SelectEducationalProgram'
+import SelectEducationalProgram from './containers/SelectEducationalProgram';
+import IndividualTrajectories from './containers/IndividualTrajectories';
 
 import Layout from "./layout";
 
@@ -55,6 +55,16 @@ export default () => (
             <Switch>
             <Redirect exact from="/" to={routerService.getEducationPlanRoute()} />
 
+            <AuthRoute path={routerService.getTrajectoryPlanDetailRoute()}
+                       children={() => (
+                           <Route
+                               render={({match}) => (
+                                   <EducationPlanDetail match={match} trajectoryRoute />
+                               )}
+                           />
+                       )}
+            />
+
             <Route path={routerService.getSignInRoute()}>
                 <SignIn />
             </Route>
@@ -63,6 +73,9 @@ export default () => (
             </Route>
             <AuthRoute path={routerService.getSelectDisciplineRoute()}>
                 <SelectDiscipline />
+            </AuthRoute>
+            <AuthRoute path={routerService.getIndividualTrajectoriesRoute()}>
+                <IndividualTrajectories />
             </AuthRoute>
             <AuthRoute path={routerService.getSelectEducationalProgramRoute()}>
                 <SelectEducationalProgram />

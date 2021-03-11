@@ -22,6 +22,7 @@ const ROLES = 'roles';
 const SKILLS = 'skills';
 const EXPERTISES = 'expertises';
 const SELECT_EDUCATIONAL_PROGRAM = 'select-educational-program';
+const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
 
 const SEPARATOR = '/';
 
@@ -116,7 +117,11 @@ export default class RouterService {
     };
 
     getSelectEducationalProgramRoute = () => {
-        return SEPARATOR + SELECT_EDUCATIONAL_PROGRAM
+        return SEPARATOR + SELECT_EDUCATIONAL_PROGRAM;
+    };
+
+    getIndividualTrajectoriesRoute = () => {
+        return SEPARATOR + INDIVIDUAL_TRAJECTORIES;
     };
 
     getSkillsRolesRoute = () => {
@@ -182,12 +187,20 @@ export default class RouterService {
         return SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + ':id';
     };
 
+    getTrajectoryPlanDetailRoute = () => {
+        return SEPARATOR + INDIVIDUAL_TRAJECTORIES + SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + ':id';
+    };
+
     getWorkProgramLink = (id: number) => {
         return SEPARATOR + WORK_PROGRAM + SEPARATOR + id;
     };
 
     getPlanDetailLink = (id: ReactText) => {
         return SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + id;
+    };
+
+    getTrajectoryPlanDetailLink = (id: ReactText) => {
+        return SEPARATOR + INDIVIDUAL_TRAJECTORIES + SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + id;
     };
 }
 

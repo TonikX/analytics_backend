@@ -17,7 +17,10 @@ class EducationalPlanService extends AnalyticsService{
         return this.get(`/api/academicplan/short?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
-    getEducationalPlanDetail(id: number){
+    getEducationalPlanDetail(id: number, trajectoryRoute: boolean){
+        if (trajectoryRoute){
+            return this.get(`api/individualization/individual_path/${id}/`)
+        }
         return this.get(`/api/academicplan/detail/${id}`);
     }
 

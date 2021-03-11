@@ -8,10 +8,15 @@ import {EducationalPlanFields, fields} from './enum';
 
 import {educationalPlanState, EducationalPlanType} from './types';
 import {SelectorListType} from "../../components/SearchSelector/types";
+import {UserType} from "../../layout/types";
+import {DirectionType} from "../Direction/types";
 
 const getStateData = (state: rootState): educationalPlanState => get(state, GENERAL_PATH);
 export const getEducationalPlan = (state: rootState): Array<EducationalPlanType> => get(getStateData(state), fields.EDUCATIONAL_PLAN_LIST, []);
 export const getEducationalPlanDetail = (state: rootState): EducationalPlanType|{} => get(getStateData(state), fields.DETAIL_PLAN, {});
+export const getIsTrajectoryRoute = (state: rootState): boolean => get(getStateData(state), fields.IS_TRAJECTORY_ROUTE, false);
+export const getTrajectoryUserData = (state: rootState): UserType|{} => get(getStateData(state), fields.TRAJECTORY_USER_DATA, {});
+export const getTrajectoryDirection = (state: rootState): DirectionType|{} => get(getStateData(state), fields.TRAJECTORY_DIRECTION, {});
 
 export const getEducationalPlanDetailBlocks = (state: rootState): Array<EducationalPlanType> =>
     get(getEducationalPlanDetail(state), EducationalPlanFields.DISCIPLINE_BLOCKS, []);

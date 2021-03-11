@@ -25,4 +25,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     submitBtn: {
         width: 'fit-content'
     },
+    whiteButton: {
+        background: 'white !important'
+    },
 }));

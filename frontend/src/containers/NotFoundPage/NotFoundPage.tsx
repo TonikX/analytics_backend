@@ -7,10 +7,11 @@ import Typography from "@material-ui/core/Typography";
 
 import {NotFoundProps} from './types';
 
+import {appRouter} from "../../service/router-service";
+
 import img from './404-error.svg';
 
 import styles from './NotFound.styles';
-import {appRouter} from "../../service/router-service";
 
 const NotFoundPage = ({classes}: NotFoundProps) => {
     return (

@@ -3,7 +3,6 @@ import {createStyles, Theme} from "@material-ui/core";
 export default (theme: Theme) => createStyles({
     wrap: {
         display: 'flex',
-        width: '100vw',
         height: '100vh',
         alignItems: 'center',
         justifyContent: 'center'

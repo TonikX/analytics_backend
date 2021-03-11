@@ -1,26 +1,26 @@
 import {IntermediateCertificationEnum, StepsEnum, WorkProgramStatusEnum} from "./enum";
 
-const BACHELOR = 'bachelor';
-const SPECIALIST = 'specialist';
-const MASTER = 'master';
+export const BACHELOR_QUALIFICATION = 'bachelor';
+export const SPECIALIST_QUALIFICATION = 'specialist';
+export const MASTER_QUALIFICATION = 'master';
 
 export const specializationObject: any = {
-    [BACHELOR]: 'Бакалавриат',
-    [SPECIALIST]: 'Специалитет',
-    [MASTER]: 'Магистратура',
+    [BACHELOR_QUALIFICATION]: 'Бакалавриат',
+    [SPECIALIST_QUALIFICATION]: 'Специалитет',
+    [MASTER_QUALIFICATION]: 'Магистратура',
 }
 
 export const specialization = [
     {
-        value: BACHELOR,
+        value: BACHELOR_QUALIFICATION,
         label: 'Бакалавриат'
     },
     {
-        value: SPECIALIST,
+        value: SPECIALIST_QUALIFICATION,
         label: 'Специалитет'
     },
     {
-        value: MASTER,
+        value: MASTER_QUALIFICATION,
         label: 'Магистратура'
     }
 ];
