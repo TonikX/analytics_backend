@@ -10,8 +10,9 @@ router.register(r'api/individualization/individual_path',
                 IndividualImplementationAcademicPlansSet, basename='individual_path')
 urlpatterns = [
 
-    url(r'^', include(router.urls)),
-    path('api/individualization/save_for_user', SaveImplementationAcademicPlans),
     path('api/individualization/individual_path/for_this_user/', IndividualImplementationAcademicPlanForUser.as_view()),
+    path('api/individualization/save_for_user', SaveImplementationAcademicPlans),
+
+    url(r'^', include(router.urls)),
 
     ]
