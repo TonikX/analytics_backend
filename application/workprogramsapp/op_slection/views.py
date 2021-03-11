@@ -2,15 +2,16 @@ import datetime
 
 from django.db.models import Count
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
 
 from dataprocessing.models import Items
 from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
 from workprogramsapp.models import Profession, WorkProgram, AcademicPlan, DisciplineBlockModule, \
-    WorkProgramChangeInDisciplineBlockModule, EducationalProgram, SkillsOfProfession
+    WorkProgramChangeInDisciplineBlockModule, EducationalProgram, SkillsOfProfession, ImplementationAcademicPlan
 from workprogramsapp.op_slection.temp__skills_array import skill_sorter
 from workprogramsapp.profession.serializers import ProfessionSerializer
+from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
 
 
 @api_view(['POST'])
@@ -40,7 +41,7 @@ def CreateProfessionByKeywords(request):
 
 
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))
+@permission_classes((AllowAny,))
 def EducationalProgramRankingByProfessionScientific(request):
     # Передаваемые значения
     professions_array = request.data.get('professions_array')
@@ -89,6 +90,10 @@ def EducationalProgramRankingByProfessionScientific(request):
         year="2020", qualification=qualification).annotate(
         Count('pk'))
     # Считаем метрики
+    max_coverage = 0
+    min_coverage = float('inf')
+    max_focus = 0
+    min_focus = float('inf')
     for ap in academic_plan_with_skills:
 
         wp_all = WorkProgram.objects.filter(
@@ -134,15 +139,28 @@ def EducationalProgramRankingByProfessionScientific(request):
         add_coverage = len(set([val for item in set_of_wp for val in item.skills_add])) / len(skills_additional)
         coof = 0.8
         ap.coverage = coof * (key_coverage) + (1 - coof) * (add_coverage)
-        ap.metrics = 2 * (ap.coverage * ap.focus) / (ap.coverage + ap.focus)
+        if ap.coverage > max_coverage:
+            max_coverage = ap.coverage
+        if ap.coverage < min_coverage:
+            min_coverage = ap.coverage
+        if ap.focus > max_focus:
+            max_focus = ap.focus
+        if ap.focus < min_focus:
+            min_focus = ap.focus
 
+        # ap.metrics = 2 * (ap.coverage * ap.focus) / (ap.coverage + ap.focus)
+    for ap in academic_plan_with_skills:
+        ap.coverage= 0.01+(ap.coverage - min_coverage)*(1-0.01)/(max_coverage-min_coverage)
+        ap.focus= 0.01+( ap.focus - min_focus)*(1-0.01)/(max_focus-min_focus)
+        ap.metrics = 2 * (ap.coverage * ap.focus) / (ap.coverage + ap.focus)
     # Cортировка--
     sorted_academic_plan = sorted(academic_plan_with_skills, key=lambda ac_pl: ac_pl.metrics, reverse=True)
-    for i in sorted_academic_plan: print(i, i.metrics)
+    # for i in sorted_academic_plan: print(i, i.metrics)
     list_of_educational_program = []
     for s in sorted_academic_plan:
-        for e in EducationalProgram.objects.filter(academic_plan_for_ep__academic_plan=s):
-            serializer = EducationalProgramSerializer(e, many=False)
+        print(str({"name": str(s), "coverage": s.coverage, "focus": s.focus}) + ",")
+        for implementation in ImplementationAcademicPlan.objects.filter(academic_plan=s):
+            serializer = ImplementationAcademicPlanSerializer(implementation, many=False)
             updated_serializer = dict(serializer.data)
             updated_serializer["metrics"] = s.metrics
             list_of_educational_program.append(updated_serializer)

@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from .bars_merge.models import BarsWorkProgramsAssociate, HistoryOfSendingToBars, BarsEPAssociate
 from .expertise.models import UserExpertise, ExpertiseComments, Expertise
 from .folders_ans_statistic.models import Folder, WorkProgramInFolder
 from .models import (
@@ -82,5 +83,6 @@ admin.site.register(ProfessionalStandard)
 admin.site.register(Folder)
 admin.site.register(WorkProgramInFolder)
 admin.site.register(AdditionalMaterial)
-
-
+admin.site.register(BarsWorkProgramsAssociate)
+admin.site.register(HistoryOfSendingToBars)
+admin.site.register(BarsEPAssociate)
