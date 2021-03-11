@@ -6,9 +6,7 @@ import TextField from "@material-ui/core/TextField";
 
 import { useStyles } from './SecondStep.styles'
 
-import { CourseFields } from '../../enum'
 import { SecondStepProps } from './types'
-
 
 export const SecondStep: React.FC<SecondStepProps> = ({ course, saveField }) => {
   const classes = useStyles()

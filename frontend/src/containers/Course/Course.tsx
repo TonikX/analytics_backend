@@ -12,13 +12,74 @@ import { General } from './General/General'
 import { steps } from './enum'
 
 import { useStyles } from './Course.styles'
+import { Content } from './Content/Content'
 
 export const Course: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0)
   const params = useParams()
   const classes = useStyles()
   console.log('params', params)
-  
+
+  const showActiveStep = (step: number): React.ReactNode => {
+    switch (step) {
+      case 0:
+        return <General />
+      case 1:
+        return (
+          <>
+            <Typography className={classes.title}>
+              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
+            </Typography>
+            <Content />
+          </>
+        )
+      case 2:
+        return (
+          <>
+            <Typography className={classes.title}>
+              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
+            </Typography>
+            2
+          </>
+        )
+      case 3:
+        return (
+          <>
+            <Typography className={classes.title}>
+              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
+            </Typography>
+            3
+          </>
+        )
+      case 4:
+        return (
+          <>
+            <Typography className={classes.title}>
+              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
+            </Typography>
+            4
+          </>
+        )
+      case 5:
+        return (
+          <>
+            <Typography className={classes.title}>
+              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
+            </Typography>
+            5
+          </>
+        )
+      case 6:
+        return (
+          <>
+            <Typography className={classes.title}>
+              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
+            </Typography>
+            6
+          </>
+        )
+    }
+  }
   return (
     <div className={classes.wrap}>
       <div className={classes.header}>
@@ -96,12 +157,7 @@ export const Course: React.FC = () => {
           </Step>
         </Stepper>
         <div className={classes.content}>
-          {activeStep !== 0 && (
-            <Typography className={classes.title}>
-              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
-            </Typography>
-          )}
-          <General />
+          {showActiveStep(activeStep)}
         </div>
       </Paper>
     </div>
