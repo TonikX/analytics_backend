@@ -10,6 +10,7 @@ import LikeButton from "../../components/LikeButton"
 import { General } from './General/General'
 import { Content } from './Content/Content'
 import { CurrentSession } from './CurrentSession/CurrentSession'
+import { Directions } from './Directions/Directions'
 
 import { steps } from './enum'
 
@@ -17,9 +18,9 @@ import { useStyles } from './Course.styles'
 
 export const Course: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0)
+  // eslint-disable-next-line
   const params = useParams()
   const classes = useStyles()
-  console.log('params', params)
 
   const showActiveStep = (step: number): React.ReactNode => {
     switch (step) {
@@ -49,7 +50,7 @@ export const Course: React.FC = () => {
             <Typography className={classes.title}>
               Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
             </Typography>
-            3
+            <Directions />
           </>
         )
       case 4:
