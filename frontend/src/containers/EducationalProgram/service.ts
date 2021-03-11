@@ -1,6 +1,7 @@
 import AnalyticsService from "../../service/analytics-service";
 import {SortingType, Types} from "../../components/SortingButton/types";
-import {EducationProgramFields} from "./enum";
+import {CompetenceTableType, EducationProgramFields} from "./enum";
+import {CharacteristicCreateGroupActionType} from "./types";
 
 class Service extends AnalyticsService{
     getEducationalProgramList(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
@@ -36,6 +37,20 @@ class Service extends AnalyticsService{
 
     updateEducationProgramCharacteristic(id: any, payload: any){
         return this.patch(`/api/GeneralCharacteristics/update/${id}`, payload);
+    }
+
+    getCompetenceTableUrl(type: CompetenceTableType){
+        switch (type){
+            case CompetenceTableType.SUPRA_PROFESSIONAL:
+                return 'group_of_over_prof_competence';
+        }
+    }
+
+    characteristicCreateGroup({name, type}: CharacteristicCreateGroupActionType, characteristicId: number){
+        return this.post(`/api/general_ch/${this.getCompetenceTableUrl(type)}/`, {
+            name,
+            general_characteristic: characteristicId
+        });
     }
 }
 

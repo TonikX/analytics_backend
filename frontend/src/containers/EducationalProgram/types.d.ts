@@ -1,4 +1,4 @@
-import {EducationProgramFields, fields} from './enum';
+import {CompetenceTableType, EducationProgramFields, fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {EducationProgramCharacteristicFields} from './enum';
@@ -27,10 +27,11 @@ export interface EducationalProgramActions {
     changeEducationalProgram: any;
     setEducationalProgramList: any;
 
-    characteristicSaveGroupTitle: ActionCreatorWithPayload<{title: string}>;
-    characteristicSaveCompetence: ActionCreatorWithPayload<{competenceId: number}>;
-    characteristicSaveIndicators: ActionCreatorWithPayload<{indicatorId: number}>;
-    characteristicDeleteGroup: ActionCreatorWithPayload<{groupId: number}>;
+    characteristicCreateGroup: ActionCreatorWithPayload<CharacteristicCreateGroupActionType>;
+    characteristicSaveGroupTitle: ActionCreatorWithPayload<{title: string, type: CompetenceTableType}>;
+    characteristicSaveCompetence: ActionCreatorWithPayload<{competenceId: number, type: CompetenceTableType}>;
+    characteristicSaveIndicators: ActionCreatorWithPayload<{indicatorId: number, type: CompetenceTableType}>;
+    characteristicDeleteGroup: ActionCreatorWithPayload<{groupId: number, type: CompetenceTableType}>;
 }
 
 export interface educationalProgramState {
@@ -79,4 +80,9 @@ export interface EducationalProgramProps extends WithStyles<typeof styles> {
 export interface CharacteristicProps extends WithStyles<typeof characterisicStyles> {
     actions: EducationalProgramActions;
     educationalProgramCharacteristic: EducationProgramCharacteristicFields;
+}
+
+export type CharacteristicCreateGroupActionType = {
+    name: string;
+    type: CompetenceTableType;
 }

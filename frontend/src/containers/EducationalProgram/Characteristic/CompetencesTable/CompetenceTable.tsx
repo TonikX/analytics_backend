@@ -6,6 +6,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
+import Button from "@material-ui/core/Button";
 
 import actions from '../../actions';
 
@@ -16,22 +17,26 @@ import useStyles from './CompetencesTable.style';
 export const CompetenceTable: React.FC<CompetenceTableProps> = ({competenceTableType, tableData}) => {
     const dispatch = useDispatch();
     const classes = useStyles();
+    const canEdit = true; //todo: change
 
+    const createNewGroup = (): void => {
+        dispatch(actions.characteristicCreateGroup({name: 'Новая группа', type: competenceTableType}));
+    };
     const saveGroupTitle = (title: string): void => {
-        dispatch(actions.characteristicSaveGroupTitle({title}));
+        // dispatch(actions.characteristicSaveGroupTitle({title}));
     };
     const saveGroupCompetence = (competenceId: number): void => {
-        dispatch(actions.characteristicSaveCompetence({competenceId}));
+        // dispatch(actions.characteristicSaveCompetence({competenceId}));
     };
     const saveGroupIndicator = (indicatorId: number): void => {
-        dispatch(actions.characteristicSaveIndicators({indicatorId}));
+        // dispatch(actions.characteristicSaveIndicators({indicatorId}));
     };
     const deleteGroup = (groupId: number): void => {
-        dispatch(actions.characteristicDeleteGroup({groupId}));
+        // dispatch(actions.characteristicDeleteGroup({groupId}));
     };
 
     return (
-        <div className={classes.tableWrap}>
+        <div className={classes.root}>
             <Table stickyHeader size='small'>
                 <TableHead className={classes.tableHead}>
                     <TableRow>
@@ -50,6 +55,13 @@ export const CompetenceTable: React.FC<CompetenceTableProps> = ({competenceTable
 
                 </TableBody>
             </Table>
+
+            <Button className={classes.addButton}
+                    onClick={createNewGroup}
+                    variant="outlined"
+            >
+                Добавить новую категорию
+            </Button>
         </div>
     )
 };

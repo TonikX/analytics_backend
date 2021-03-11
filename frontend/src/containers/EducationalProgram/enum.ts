@@ -17,6 +17,7 @@ export enum fetchingTypes {
     DELETE_EDUCATION_PROGRAM = 'DELETE_EDUCATION_PROGRAM',
     UPDATE_EDUCATION_PROGRAM = 'UPDATE_EDUCATION_PROGRAM',
     CREATE_EDUCATION_PROGRAM = 'CREATE_EDUCATION_PROGRAM',
+    CHARACTERISTIC_CREATE_COMPETENCE_GROUP = 'CHARACTERISTIC_CREATE_COMPETENCE_GROUP',
 }
 
 export enum EducationProgramCharacteristicFields {
@@ -30,6 +31,7 @@ export enum EducationProgramCharacteristicFields {
     NP_COMPETENCES = 'np_competences',
     OK_COMPETENCES = 'ok_competences',
     PK_COMPETENCES = 'pk_competences',
+    SUPRA_PROFESSIONAL_COMPETENCES = 'over_prof',
     SCIENTIFIC_SUPERVISOR = 'scientific_supervisor_of_the_educational_program',
     EDUCATION_PROGRAM = 'educational_program',
     KINDS_OF_ACTIVITIES = 'kinds_of_activity',

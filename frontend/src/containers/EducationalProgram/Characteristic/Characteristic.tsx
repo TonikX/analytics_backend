@@ -314,9 +314,9 @@ class Characteristic extends React.Component<CharacteristicProps> {
                     {this.returnProfessionalCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PK_COMPETENCES, []))}
                 </>;
             case 7:
-                return <>
-                    {this.returnCompetences(get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.NP_COMPETENCES, []))}
-                </>;
+                return <CompetenceTable competenceTableType={CompetenceTableType.SUPRA_PROFESSIONAL}
+                                        tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.SUPRA_PROFESSIONAL_COMPETENCES, [])}
+                />;
             case 8:
                 return <CKEditor label={"Необходимый преподавательский состав"}
                                  value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PPS, '')}
