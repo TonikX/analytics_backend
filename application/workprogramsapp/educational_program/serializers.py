@@ -14,6 +14,8 @@ from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer, CompetenceForEPSerializer, IndicatorListSerializer
 from .pk_comptencies.serializers import GroupOfPkCompetencesInGeneralCharacteristicSerializer
 from .general_prof_competencies.serializers import GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer
+from .over_professional_competencies.serializers import GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
+from .key_competences.serializers import GroupOfKeyCompetencesInGeneralCharacteristicSerializer
 
 
 class EducationalProgramSerializer(serializers.ModelSerializer):
@@ -78,9 +80,9 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     area_of_activity = ProfessionalAreaOfGeneralCharacteristicsSerializer(many = True)
     educational_program = EducationalProgramSerializer()
     group_of_general_prof_competences = GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer(many = True)
-    # kc_competences = CompetenceForEPSerializer(many = True)
+    group_of_key_competences = GroupOfKeyCompetencesInGeneralCharacteristicSerializer(many = True)
+    group_of_over_prof_competences = GroupOfOverProfCompetencesInGeneralCharacteristicSerializer(many = True)
     group_of_pk_competences = GroupOfPkCompetencesInGeneralCharacteristicSerializer(many = True)
-    # np_competences = CompetenceForEPSerializer(many = True)
     developers = userProfileSerializer(many = True)
     employers_representatives = userProfileSerializer(many = True)
     director_of_megafaculty = userProfileSerializer()
@@ -90,7 +92,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GeneralCharacteristics
-        fields = ['id', 'area_of_activity', 'educational_program', 'group_of_pk_competences', 'group_of_general_prof_competences', 'developers', 'employers_representatives', 'director_of_megafaculty', 'dean_of_the_faculty', 'scientific_supervisor_of_the_educational_program',
+        fields = ['id', 'area_of_activity', 'educational_program', 'group_of_pk_competences', 'group_of_over_prof_competences', 'group_of_key_competences', 'group_of_general_prof_competences', 'developers', 'employers_representatives', 'director_of_megafaculty', 'dean_of_the_faculty', 'scientific_supervisor_of_the_educational_program',
                   'objects_of_activity', 'kinds_of_activity', 'tasks_of_activity', 'type_of_activity', 'annotation']
 
 

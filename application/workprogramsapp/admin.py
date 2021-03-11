@@ -14,6 +14,32 @@ from .models import EducationalProgram, GeneralCharacteristics, Department, Prof
 
 from .workprogram_additions.models import AdditionalMaterial
 
+from .educational_program.pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
+    PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
+from .educational_program.over_professional_competencies.models import GroupOfOverProfCompetencesInGeneralCharacteristic, \
+    OverProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInOverProfCompetenceInGeneralCharacteristic
+from .educational_program.key_competences.models import GroupOfKeyCompetencesInGeneralCharacteristic, \
+    KeyCompetencesInGroupOfGeneralCharacteristic, IndicatorInKeyCompetenceInGeneralCharacteristic
+from .educational_program.general_prof_competencies.models import GroupOfGeneralProfCompetencesInGeneralCharacteristic, \
+    GeneralProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
+
+
+admin.site.register(GroupOfPkCompetencesInGeneralCharacteristic)
+admin.site.register(PkCompetencesInGroupOfGeneralCharacteristic)
+admin.site.register(IndicatorInPkCompetenceInGeneralCharacteristic)
+
+admin.site.register(GroupOfOverProfCompetencesInGeneralCharacteristic)
+admin.site.register(OverProfCompetencesInGroupOfGeneralCharacteristic)
+admin.site.register(IndicatorInOverProfCompetenceInGeneralCharacteristic)
+
+admin.site.register(GroupOfKeyCompetencesInGeneralCharacteristic)
+admin.site.register(KeyCompetencesInGroupOfGeneralCharacteristic)
+admin.site.register(IndicatorInKeyCompetenceInGeneralCharacteristic)
+
+admin.site.register(GroupOfGeneralProfCompetencesInGeneralCharacteristic)
+admin.site.register(GeneralProfCompetencesInGroupOfGeneralCharacteristic)
+admin.site.register(IndicatorInGeneralProfCompetenceInGeneralCharacteristic)
+
 
 admin.site.register(Zun)
 admin.site.register(WorkProgram)
