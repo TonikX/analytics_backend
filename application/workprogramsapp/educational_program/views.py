@@ -135,5 +135,3 @@ class DepartmentDetailsView(generics.RetrieveAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
