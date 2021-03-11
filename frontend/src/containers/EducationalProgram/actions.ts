@@ -1,6 +1,10 @@
 import {createAction} from "@reduxjs/toolkit";
 
-import {CharacteristicCreateGroupActionType, EducationalProgramActions} from './types';
+import {
+    CharacteristicCreateGroupActionType,
+    CharacteristicDeleteGroupActionType,
+    EducationalProgramActions
+} from './types';
 import {CompetenceTableType} from "./enum";
 
 const getEducationalProgramList = createAction('GET_EDUCATIONAL_PROGRAM_LIST');
@@ -16,7 +20,7 @@ const characteristicCreateGroup = createAction<CharacteristicCreateGroupActionTy
 const characteristicSaveGroupTitle = createAction<{title: string, type: CompetenceTableType}>('CHARACTERISTIC_COMPETENCIES_SAVE_GROUP_TITLE');
 const characteristicSaveCompetence = createAction<{competenceId: number, type: CompetenceTableType}>('CHARACTERISTIC_COMPETENCIES_SAVE_COMPETENCE');
 const characteristicSaveIndicators = createAction<{indicatorId: number, type: CompetenceTableType}>('CHARACTERISTIC_COMPETENCIES_SAVE_INDICATORS');
-const characteristicDeleteGroup = createAction<{groupId: number, type: CompetenceTableType}>('CHARACTERISTIC_COMPETENCIES_DELETE_GROUP');
+const characteristicDeleteGroup = createAction<CharacteristicDeleteGroupActionType>('CHARACTERISTIC_COMPETENCIES_DELETE_GROUP');
 
 const changeEducationalProgramCharacteristic = createAction('CHANGE_EDUCATIONAL_PROGRAM_CHARACTERISTIC');
 

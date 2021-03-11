@@ -31,7 +31,7 @@ export interface EducationalProgramActions {
     characteristicSaveGroupTitle: ActionCreatorWithPayload<{title: string, type: CompetenceTableType}>;
     characteristicSaveCompetence: ActionCreatorWithPayload<{competenceId: number, type: CompetenceTableType}>;
     characteristicSaveIndicators: ActionCreatorWithPayload<{indicatorId: number, type: CompetenceTableType}>;
-    characteristicDeleteGroup: ActionCreatorWithPayload<{groupId: number, type: CompetenceTableType}>;
+    characteristicDeleteGroup: ActionCreatorWithPayload<CharacteristicDeleteGroupActionType>;
 }
 
 export interface educationalProgramState {
@@ -84,5 +84,10 @@ export interface CharacteristicProps extends WithStyles<typeof characterisicStyl
 
 export type CharacteristicCreateGroupActionType = {
     name: string;
+    type: CompetenceTableType;
+}
+
+export type CharacteristicDeleteGroupActionType = {
+    groupId: number;
     type: CompetenceTableType;
 }
