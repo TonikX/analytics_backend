@@ -44,7 +44,7 @@ def CreateProfessionByKeywords(request):
 
 
 @api_view(['POST'])
-@permission_classes((IsAdminUser,))
+@permission_classes((AllowAny, ))
 def EducationalProgramRankingByProfessionScientific(request):
     # Передаваемые значения
     professions_array = request.data.get('professions_array')
