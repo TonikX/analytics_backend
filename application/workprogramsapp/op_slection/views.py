@@ -180,13 +180,11 @@ def EducationalProgramRankingByProfessionScientific(request):
         for implementation in ImplementationAcademicPlan.objects.filter(academic_plan=s):
             serializer = ImplementationAcademicPlanSerializer(implementation, many=False)
             individual = IndividualImplementationAcademicPlan.objects.create(
-                implementation_of_academic_plan=implementation, user=request.user)
-            print(len(s.routes))
+                implementation_of_academic_plan=implementation)
             for wp_dict in s.routes:
                 el=WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.create(
                     work_program_change_in_discipline_block_module=wp_dict['change_block'], work_program=wp_dict['wp'],
                     individual_implementation_of_academic_plan=individual)
-                print(el)
             updated_serializer = dict(serializer.data)
             updated_serializer["metrics"] = s.metrics
             updated_serializer["individual_implementation_id"] = individual.id
