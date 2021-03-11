@@ -40,7 +40,7 @@ export const EducationalProgramsTable: React.FC<EducationalProgramsTableProps> =
                 {p.year}
             </TableCell>
             <TableCell>
-                {(p.metrics * 100).toFixed(2)}
+                {p.metrics.toFixed(2)}
             </TableCell>
             <TableCell>
                 <Tooltip title="Вы можете выбрать программы и сохранить индивидуальную траекторию">

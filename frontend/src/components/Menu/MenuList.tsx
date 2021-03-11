@@ -142,7 +142,7 @@ export default (groups: Array<string>) => {
             selectedIcon: WorkProgramInDirectionSelectedIcon,
         },
         {
-            title: 'Общая характеристика',
+            title: 'Общие характеристики',
             link: appRouter.getEducationalProgram(),
             icon: WorkProgramInDirectionIcon,
             selectedIcon: WorkProgramInDirectionSelectedIcon,
