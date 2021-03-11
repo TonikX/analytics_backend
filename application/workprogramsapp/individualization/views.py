@@ -44,7 +44,7 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                             if work_program['id'] != \
                                     WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.\
                                             get(individual_implementation_of_academic_plan = newdata['id'],
-                                                work_program_change_in_discipline_block_module = change_block['id'].work_program.id):
+                                                work_program_change_in_discipline_block_module = change_block['id']).work_program.id:
                                 print('dd')
                                 del work_program
         return Response(serializer.data)
