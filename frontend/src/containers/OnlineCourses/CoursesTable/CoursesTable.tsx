@@ -14,11 +14,13 @@ import Scrollbars from "react-custom-scrollbars";
 import SortingButton from "../../../components/SortingButton";
 
 import {SortingType} from "../../../components/SortingButton/types";
-import {CourseFields} from '../enum';
+import {CourseFields, InstitutionFields, PlatformFields} from '../enum';
 import actions from '../actions'
 import { CoursesTableProps } from './types'
+import { InstitutionType, PlatformType } from '../types'
+import { languageObject } from '../../WorkProgram/constants'
 
-export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingField, sortingMode, handleClickDelete }) => {
+export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingField, sortingMode, handleClickDelete, institutions, platforms }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -26,7 +28,16 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
     dispatch(actions.changeSorting({field: mode === '' ? '' : field, mode}));
     dispatch(actions.getCourses());
   }
-
+  const getInstitutionName = (institutionId: number): string => {
+    if (institutions.length) {
+      return institutions.filter((institution: InstitutionType) => institution[InstitutionFields.ID] ===  institutionId)[0][InstitutionFields.TITLE]
+    } else return ''
+  }
+  const getPlatformName = (platformId: number): string => {
+    if (platforms.length) {
+      return platforms.filter((platform: PlatformType) => platform[PlatformFields.ID] ===  platformId)[0][PlatformFields.TITLE]
+    } else return ''
+  } 
   return (
     <Scrollbars>
       <div className={classes.tableWrap}>
@@ -44,16 +55,16 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
               <TableCell className={classes.stickyHeader}>
                 <Typography component='div'>
                   Правообладатель
-                  <SortingButton changeMode={changeSorting(CourseFields.COURSE_URL)}
-                                  mode={sortingField === CourseFields.COURSE_URL ? sortingMode : ''}
+                  <SortingButton changeMode={() => {}}
+                                  mode={''}
                   />
                 </Typography>
               </TableCell>
               <TableCell className={classes.stickyHeader}>
                 <Typography component='div'>
                   Платформа
-                  <SortingButton changeMode={changeSorting(CourseFields.PLATFORM)}
-                                  mode={sortingField === CourseFields.PLATFORM ? sortingMode : ''}
+                  <SortingButton changeMode={() => {}}
+                                  mode={''}
                   />
                 </Typography>
               </TableCell>
@@ -98,19 +109,19 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
                   </Link>
                 </TableCell>
                 <TableCell>
-                  Университет ИТМО
+                  {getInstitutionName(course[CourseFields.INSTITUTION_ID])}
                 </TableCell>
                 <TableCell>
-                  {course[CourseFields.PLATFORM]}
+                  {getPlatformName(course[CourseFields.PLATFORM_ID])}
                 </TableCell>
                 <TableCell>
-                  Русский
+                  {languageObject[course[CourseFields.LANGUAGE]]}
                 </TableCell>
                 <TableCell align="left">
-                  16.02.2021
+                  {course[CourseFields.STARTED_AT]}
                 </TableCell>
                 <TableCell align="left">
-                  10.0
+                  {course[CourseFields.RATING]}
                 </TableCell>
               </TableRow>
             )}

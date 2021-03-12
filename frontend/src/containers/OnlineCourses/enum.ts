@@ -9,6 +9,8 @@ export enum fields {
     SORTING = 'SORTING',
     SORTING_FIELD = 'SORTING_FIELD',
     SORTING_MODE = 'SORTING_MODE',
+    PLATFORMS = 'PLATFORMS',
+    INSTITUTIONS = 'INSTITUTIONS',
 }
 
 export enum fetchingTypes {
@@ -16,6 +18,8 @@ export enum fetchingTypes {
     DELETE_COURSE = 'DELETE_COURSE',
     UPDATE_COURSE = 'UPDATE_COURSE',
     CREATE_COURSE = 'CREATE_COURSE',
+    GET_PLATFORMS = 'GET_PLATFORMS',
+    GET_INSTITUTIONS = 'GET_INSTITUTIONS',
 }
 
 export enum CourseFields {
@@ -23,5 +27,23 @@ export enum CourseFields {
     TITLE = 'title',
     DESCRIPTION = 'description',
     COURSE_URL = 'course_url',
-    PLATFORM = 'platform',
+    PLATFORM_ID = 'platform',
+    INSTITUTION_ID = 'institution',
+    LANGUAGE = 'language',
+    STARTED_AT = 'started_at',
+    RATING = 'rating',
+}
+
+export enum PlatformFields {
+    ID = 'id',
+    TITLE = 'title',
+}
+
+export enum InstitutionFields {
+    ID = 'id',
+    TITLE = 'title',
+}
+
+export enum Language {
+    
 }

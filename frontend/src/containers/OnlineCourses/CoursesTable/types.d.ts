@@ -1,4 +1,4 @@
-import { CourseType } from '../types'
+import { CourseType, PlatformType, InstitutionType } from '../types'
 import {SortingType} from "../../../components/SortingButton/types";
 
 export interface CoursesTableProps {
@@ -6,5 +6,7 @@ export interface CoursesTableProps {
   sortingField: string;
   sortingMode: SortingType;
   handleClickDelete: (id: number) => void;
+  platforms: Array<PlatformType> | [];
+  institutions: Array<InstitutionType> | [];
   // handleClickEdit: (course: CourseType) => void;
 }

@@ -53,6 +53,8 @@ class OnlineCourses extends React.Component<CoursesProps> {
   }
 
   componentDidMount() {      
+      this.props.actions.getPlatforms()
+      this.props.actions.getInstitutions()
       this.props.actions.getCourses();
   }
 
@@ -100,7 +102,7 @@ class OnlineCourses extends React.Component<CoursesProps> {
     })
   }
   render() {
-    const {classes, courses, allCount, currentPage, sortingField, sortingMode} = this.props;
+    const {classes, courses, allCount, currentPage, sortingField, sortingMode, institutions, platforms} = this.props;
     const {deleteConfirmId} = this.state;
 
     return (
@@ -146,7 +148,9 @@ class OnlineCourses extends React.Component<CoursesProps> {
           courses={courses} 
           sortingField={sortingField} 
           sortingMode={sortingMode} 
-          handleClickDelete={(id: number) => this.handleClickDelete(id)} 
+          handleClickDelete={(id: number) => this.handleClickDelete(id)}
+          institutions={institutions}
+          platforms={platforms}
         />
 
         <div className={classes.footer}>

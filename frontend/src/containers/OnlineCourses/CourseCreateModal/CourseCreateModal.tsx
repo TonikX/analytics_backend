@@ -26,7 +26,7 @@ class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
             [CourseFields.TITLE]: '',
             [CourseFields.DESCRIPTION]: '',
             [CourseFields.COURSE_URL]: '',
-            [CourseFields.PLATFORM]: '',
+            [CourseFields.PLATFORM_ID]: '',
         },
         step: 1,
         courseUrlFieldIsFocused: false

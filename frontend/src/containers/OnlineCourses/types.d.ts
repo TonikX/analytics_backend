@@ -1,7 +1,7 @@
 import {fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
-import {CourseFields} from './enum';
+import {CourseFields, PlatformFields, InstitutionFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
 
 export interface CoursesActions {
@@ -17,6 +17,10 @@ export interface CoursesActions {
     changeAllCount: any;
     changeSorting: any;
     changeDialogStep: any;
+    getPlatforms: any;
+    setPlatforms: any;
+    getInstitutions: any;
+    setInstitutions: any;
 }
 
 export interface coursesState {
@@ -32,14 +36,30 @@ export interface coursesState {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: CourseType|{};
     };
+    [fields.INSTITUTIONS]: Array<InstitutionType> | [],
+    [fields.PLATFORMS]: Array<PlatformType> | [],
+}
+
+export type PlatformType = {
+    [PlatformFields.ID]: number,
+    [PlatformFields.TITLE]: string,
+}
+
+export type InstitutionType = {
+    [InstitutionFields.ID]: number,
+    [InstitutionFields.TITLE]: string,
 }
 
 export type CourseType = {
     [CourseFields.ID]: number,
     [CourseFields.DESCRIPTION]: string,
     [CourseFields.TITLE]: string,
-    [CourseFields.PLATFORM]: string,
+    [CourseFields.PLATFORM_ID]: number,
+    [CourseFields.INSTITUTION_ID]: number,
     [CourseFields.COURSE_URL]: string,
+    [CourseFields.LANGUAGE]: string,
+    [CourseFields.STARTED_AT]: string,
+    [CourseFields.RATING]: number,
 };
 
 export interface CoursesProps extends WithStyles<typeof styles> {
@@ -50,4 +70,6 @@ export interface CoursesProps extends WithStyles<typeof styles> {
     allCount: number;
     sortingField: string;
     sortingMode: SortingType;
+    platforms: Array<PlatformType> | [];
+    institutions: Array<InstitutionType> | [];
 }

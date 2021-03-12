@@ -18,7 +18,9 @@ export const initialState: coursesState = {
     [fields.COURSE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {},
-    }
+    },
+    [fields.PLATFORMS]: [],
+    [fields.INSTITUTIONS]: [],
 };
 
 const setCourses = (state: coursesState, {payload}: any): coursesState => ({
@@ -65,6 +67,16 @@ const changeSorting = (state: coursesState, {payload}: any): coursesState => ({
     }
 });
 
+const setPlatforms = (state: coursesState, {payload}: any): coursesState => ({
+    ...state,
+    [fields.PLATFORMS]: payload
+})
+
+const setInstitutions = (state: coursesState, {payload}: any): coursesState => ({
+    ...state,
+    [fields.INSTITUTIONS]: payload
+})
+
 export const reducer = createReducer(initialState, {
     [actions.setCourses.type]: setCourses,
     [actions.openDialog.type]: openDialog,
@@ -73,4 +85,6 @@ export const reducer = createReducer(initialState, {
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
+    [actions.setPlatforms.type]: setPlatforms,
+    [actions.setInstitutions.type]: setInstitutions,
 });
