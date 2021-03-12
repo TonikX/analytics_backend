@@ -49,6 +49,8 @@ import {typeOfWorkProgramInPlan} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
+import {getUserFullName} from "../../../common/utils";
+import {DirectionFields} from "../../Direction/enum";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -59,6 +61,8 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
     componentDidMount() {
         const planId = get(this, 'props.match.params.id');
+
+        this.props.actions.setIsTrajectoryRoute(this.props.trajectoryRoute);
 
         this.props.actions.getEducationalDetail(planId);
     }
@@ -171,7 +175,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     }
 
     render() {
-        const {classes, blocks, detailPlan} = this.props;
+        const {classes, blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
         const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength} = this.state;
         const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
 
@@ -195,6 +199,13 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                         />
                     </div>
                 </div>
+
+                {trajectoryRoute && <Typography className={classes.trajectoryOwner}>
+                    <b>Направление:</b> {direction[DirectionFields.EDUCATIONAL_PROFILE]} {direction[DirectionFields.NUMBER]} {direction[DirectionFields.FACULTY]}
+                </Typography>}
+                {trajectoryRoute && <Typography className={classes.trajectoryOwner}>
+                    <b>Владелец траектории:</b> {getUserFullName(user)}
+                </Typography>}
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>
@@ -292,7 +303,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
                                                             return <TableRow key={`blockOfWorkProgram-${index}-${module[ModuleFields.ID]}`}>
                                                                 <TableCell>
-                                                                    {workPrograms.map(workProgram =>
+                                                                    {workPrograms && workPrograms.map && workPrograms.map(workProgram =>
                                                                         <div className={classes.displayFlex} key={'wp' + workProgram[WorkProgramGeneralFields.ID]}>
                                                                             <Typography className={classes.workProgramLink}
                                                                                         onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>

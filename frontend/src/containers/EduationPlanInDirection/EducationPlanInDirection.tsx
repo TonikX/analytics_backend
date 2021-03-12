@@ -105,7 +105,7 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Реализация учебного плана в направлении
+                    Образовательные программы
 
                     <TextField placeholder="Поиск"
                                variant="outlined"

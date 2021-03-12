@@ -23,10 +23,12 @@ import EducationalProgramLogic from '../containers/EducationalProgram/logics';
 import FoldersLogic from '../containers/Profile/Folders/logics';
 import SelectEducationalProgramLogic from '../containers/SelectEducationalProgram/logics'
 import TrainingModulesLogic from '../containers/EducationalPlan/TrainingModules/logics';
+import IndividualTrajectoriesLogic from '../containers/IndividualTrajectories/logics';
 
 import GeneralLogic from '../layout/logics';
 
 export default [
+    ...IndividualTrajectoriesLogic,
     ...TrainingModulesLogic,
     ...SelectDisciplineLogic,
     ...FoldersLogic,

@@ -40,8 +40,26 @@ export const initialState: educationalPlanState = {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
     },
-    [fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM]: []
+    [fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM]: [],
+    [fields.IS_TRAJECTORY_ROUTE]: false,
+    [fields.TRAJECTORY_USER_DATA]: {},
+    [fields.TRAJECTORY_DIRECTION]: {},
 };
+
+const setIsTrajectoryRoute = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.IS_TRAJECTORY_ROUTE]: payload,
+});
+
+const planTrajectorySetUserData = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.TRAJECTORY_USER_DATA]: payload,
+});
+
+const planTrajectorySetDirection = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.TRAJECTORY_DIRECTION]: payload,
+});
 
 const setEducationalPlans = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
     ...state,
@@ -187,6 +205,9 @@ export const reducer = createReducer(initialState, {
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
+    [actions.setIsTrajectoryRoute.type]: setIsTrajectoryRoute,
+    [actions.planTrajectorySetUserData.type]: planTrajectorySetUserData,
+    [actions.planTrajectorySetDirection.type]: planTrajectorySetDirection,
 
     [actions.pageDown.type]: pageDown,
 });

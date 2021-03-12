@@ -102,5 +102,8 @@ export default (theme: Theme) => createStyles({
     },
     likeIcon: {
         marginLeft: 'auto'
+    },
+    trajectoryOwner: {
+        marginBottom: '10px'
     }
 });

@@ -21,4 +21,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
             whiteSpace: 'nowrap'
         }
     },
+    subtitle: {
+        marginBottom: '20px',
+        marginTop: '20px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
 }));

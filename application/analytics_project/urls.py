@@ -13,6 +13,7 @@ urlpatterns = [
     #path('hho/', include('oauth2_provider.urls')),
     url(r'^', include('dataprocessing.urls')),
     url(r'^', include('workprogramsapp.urls')),
+    url(r'^', include('onlinecourse.urls')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('auth/', include('djoser.urls.jwt')),
