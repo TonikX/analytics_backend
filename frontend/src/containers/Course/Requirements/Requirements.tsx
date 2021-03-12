@@ -8,12 +8,12 @@ import { useStyles } from './Requirements.styles'
 export const Requirements: React.FC = () => {
   const classes = useStyles()
   const requirements = [
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit.', 
-    'Quasi ut quae libero aspernatur, quia earum expedita.', 
-    'Itaque, numquam aspernatur quisquam repudiandae fugit incidunt non tempore cum voluptates accusamus totam dolorem.',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit.', 
-    'Quasi ut quae libero aspernatur, quia earum expedita.', 
-    'Itaque, numquam aspernatur quisquam repudiandae fugit incidunt non tempore cum voluptates accusamus totam dolorem.',
+    'Стековая машина', 
+    'Дискретная математика', 
+    'Архитектура современных микропроцессоров',
+    'Интерактивные среды разработки', 
+    'Введение в безопасность', 
+    'Матрицы',
   ]
   return (
     <div>

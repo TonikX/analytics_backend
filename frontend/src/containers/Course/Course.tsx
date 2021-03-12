@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-
+import { useDispatch, useSelector } from 'react-redux'
+import get from 'lodash/get'
 import Paper from '@material-ui/core/Paper'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
@@ -15,16 +16,26 @@ import { Requirements } from './Requirements/Requirements'
 import { Competences } from './Competences/Competences'
 import { Results } from './Results/Results'
 
-import { steps } from './enum'
+import actions from './actions'
 
+import { steps } from './enum'
+import { getCourse } from './getters'
 import { useStyles } from './Course.styles'
+import { rootState } from '../../store/reducers'
 
 export const Course: React.FC = () => {
+  const dispatch = useDispatch()
   const [activeStep, setActiveStep] = useState<number>(0)
   // eslint-disable-next-line
   const params = useParams()
   const classes = useStyles()
+  const course = useSelector((state: rootState) => getCourse(state))
 
+  useEffect(() => {
+    //dispatch(actions.getPlatforms1())
+    dispatch(actions.getInstitutions1())
+    dispatch(actions.getCourse(get(params, 'id', null)))
+  }, [])
   const showActiveStep = (step: number): React.ReactNode => {
     switch (step) {
       case 0:
@@ -122,7 +133,7 @@ export const Course: React.FC = () => {
         <div className={classes.content}>
           {activeStep !== 0 && (
             <Typography className={classes.title}>
-              Описание онлайн-курса <span className={classes.courseName}>"Трехмерное моделирование"</span>
+              Описание онлайн-курса <span className={classes.courseName}>{`"${course.title}"`}</span>
             </Typography>
           )}
           {showActiveStep(activeStep)}
