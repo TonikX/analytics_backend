@@ -104,7 +104,7 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
             {courses.map(course =>
               <TableRow key={course[CourseFields.ID]}>
                 <TableCell className={classes.link}>
-                  <Link target='_blank' to={'/course/1'}>
+                  <Link target='_blank' to={`/course/${course[CourseFields.ID]}`}>
                     {course[CourseFields.TITLE]}
                   </Link>
                 </TableCell>

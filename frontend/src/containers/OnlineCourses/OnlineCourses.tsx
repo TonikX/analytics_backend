@@ -165,7 +165,7 @@ class OnlineCourses extends React.Component<CoursesProps> {
             onChangeRowsPerPage={()=>{}}
           />
 
-          <Fab 
+          {/* <Fab 
             color="secondary"
             classes={{
               root: classes.addIcon
@@ -173,19 +173,11 @@ class OnlineCourses extends React.Component<CoursesProps> {
             onClick={this.handleCreate}
           >
             <AddIcon/>
-          </Fab>
+          </Fab> */}
         </div>
-
+{/* 
         <CourseCreateModal />
-
-        <ConfirmDialog 
-          onConfirm={this.handleConfirmDeleteDialog}
-          onDismiss={this.closeConfirmDeleteDialog}
-          confirmText={'Вы точно уверены, что хотите удалить курс?'}
-          isOpen={Boolean(deleteConfirmId)}
-          dialogTitle={'Удалить онлайн курс'}
-          confirmButtonText={'Удалить'}
-        />
+        /> */}
       </Paper>
     );
   }
