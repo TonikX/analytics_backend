@@ -9,9 +9,10 @@ from rest_framework.response import Response
 from dataprocessing.models import Items
 from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
 from workprogramsapp.individualization.models import IndividualImplementationAcademicPlan, \
-    WorkProgramInWorkProgramChangeInDisciplineBlockModule
+    WorkProgramInWorkProgramChangeInDisciplineBlockModule, DisciplineBlockModuleInDisciplineBlock
 from workprogramsapp.models import Profession, WorkProgram, AcademicPlan, DisciplineBlockModule, \
-    WorkProgramChangeInDisciplineBlockModule, EducationalProgram, SkillsOfProfession, ImplementationAcademicPlan
+    WorkProgramChangeInDisciplineBlockModule, EducationalProgram, SkillsOfProfession, ImplementationAcademicPlan, \
+    DisciplineBlock
 from workprogramsapp.op_slection.temp__skills_array import skill_sorter
 from workprogramsapp.profession.serializers import ProfessionSerializer
 from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
@@ -44,7 +45,7 @@ def CreateProfessionByKeywords(request):
 
 
 @api_view(['POST'])
-@permission_classes((AllowAny, ))
+@permission_classes((AllowAny,))
 def EducationalProgramRankingByProfessionScientific(request):
     # Передаваемые значения
     professions_array = request.data.get('professions_array')
@@ -118,6 +119,7 @@ def EducationalProgramRankingByProfessionScientific(request):
         wp_count = 0
         discipline_weight = 0
         individual_route_wp_list = []
+        module_select = None
         for module in DisciplineBlockModule.objects.filter(descipline_block__academic_plan=ap):
             if not (module.type == "ognp" or "ОГНП" in module.name or "Факультатив" in module.name):
                 wp_count__local = 0
@@ -146,6 +148,7 @@ def EducationalProgramRankingByProfessionScientific(request):
                     if ap_specialization_discipline_weight < discipline_weight__local:
                         ap_specialization_discipline_weight = discipline_weight__local
                         ap_specialization_wp_count = wp_count__local
+                        module_select = module
                 else:
                     wp_count += wp_count__local
                     discipline_weight += discipline_weight__local
@@ -157,6 +160,7 @@ def EducationalProgramRankingByProfessionScientific(request):
         coof = 0.8
         ap.coverage = coof * (key_coverage) + (1 - coof) * (add_coverage)
         ap.routes = individual_route_wp_list
+        ap.module = module_select
         if ap.coverage > max_coverage:
             max_coverage = ap.coverage
         if ap.coverage < min_coverage:
@@ -181,8 +185,12 @@ def EducationalProgramRankingByProfessionScientific(request):
             serializer = ImplementationAcademicPlanSerializer(implementation, many=False)
             individual = IndividualImplementationAcademicPlan.objects.create(
                 implementation_of_academic_plan=implementation)
+            block = DisciplineBlock.objects.get(modules_in_discipline_block=s.module)
+            DisciplineBlockModuleInDisciplineBlock.objects.create(discipline_block=block,
+                                                                  discipline_block_module=s.module,
+                                                                  individual_implementation_of_academic_plan=individual)
             for wp_dict in s.routes:
-                el=WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.create(
+                el = WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.create(
                     work_program_change_in_discipline_block_module=wp_dict['change_block'], work_program=wp_dict['wp'],
                     individual_implementation_of_academic_plan=individual)
             updated_serializer = dict(serializer.data)
