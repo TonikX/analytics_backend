@@ -20,7 +20,7 @@ import { CoursesTableProps } from './types'
 import { InstitutionType, PlatformType } from '../types'
 import { languageObject } from '../../WorkProgram/constants'
 
-export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingField, sortingMode, handleClickDelete, institutions, platforms }) => {
+export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingField, sortingMode, institutions, platforms }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 

@@ -79,15 +79,9 @@ export default (groups: Array<string>) => {
             icon: WorkProgramIcon,
             selectedIcon: WorkProgramSelectedIcon,
         },
-        // {
-        //     title: 'Онлайн курсы',
-        //     link: appRouter.getCoursesRoute(),
-        //     icon: CoursesIcon,
-        //     selectedIcon: CoursesSelectedIcon,
-        // },
         {
             title: 'Онлайн курсы',
-            link: appRouter.getOnlineCoursesRoute(),
+            link: appRouter.getCoursesRoute(),
             icon: CoursesIcon,
             selectedIcon: CoursesSelectedIcon,
         },
