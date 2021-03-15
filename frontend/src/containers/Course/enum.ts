@@ -22,12 +22,17 @@ export enum fields {
   HAS_CERTIFICATE = 'has_certificate',
   CREDITS = 'credits',
   TOTAL_VISITORS_NUMBER = 'total_visitors_number',
+  VISITORS_NUMBER = 'visitors_number',
   CREATED_AT = 'created_at',
   DURATION = 'duration',
   VOLUME = 'volume',
   INTENSITY_PER_WEEK = 'intensity_per_week',
   PLATFORMS = 'platforms',
   INSTITUTIONS = 'institutions',
+  LECTURES_NUMBER = 'lectures_number',
+  CONTENT = 'content',
+  RECORD_END_AT = 'record_end_at',
+  FINISHED_AT = 'finished_at',
 }
 
 export enum fetchingTypes {

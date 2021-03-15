@@ -12,6 +12,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   textItem: {
     marginBottom: '10px'
   },
+  description: {
+    marginBottom: '10px',
+    whiteSpace: 'pre-wrap',
+  },
   content: {
     display: 'flex',
     justifyContent: 'row',

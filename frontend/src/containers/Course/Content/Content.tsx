@@ -1,22 +1,25 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 import { useStyles } from './Content.styles'
 import Typography from '@material-ui/core/Typography'
 
+import { getCourse } from '../getters'
+
+import { rootState } from '../../../store/reducers'
+import { fields } from '../enum'
+
 export const Content: React.FC = () => {
+  const course = useSelector((state: rootState) => getCourse(state))
   const classes = useStyles()
-  const topics = ['Начало работы', 'Создание простых объектов', 'Сплайны', 
-    'Введение в полигональное моделирование', 'Полигональное моделирование', 'Симуляции', 'Плагины']
   return (
     <div>
       <Typography className={classes.title}>Содержание</Typography>
-      <Typography>В курсе рассматриваются следующие темы:</Typography>
-      <Typography component='div'>
-        <ol className={classes.list}>
-          {topics.map((topic) =>  <li>{topic}</li>)}
-        </ol>
-      </Typography>
-      <Typography><b>Количество лекций:</b> 16</Typography>
+      {course[fields.CONTENT] &&
+        <Typography className={classes.content}>
+          {course[fields.CONTENT]}
+        </Typography>}
+      <Typography><b>Количество лекций:</b> {course[fields.LECTURES_NUMBER]}</Typography>
     </div>
   )
 }

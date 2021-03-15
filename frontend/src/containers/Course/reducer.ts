@@ -24,6 +24,11 @@ export const initialState: courseState = {
   [fields.DURATION]: null,
   [fields.VOLUME]: null,
   [fields.INTENSITY_PER_WEEK]: null,
+  [fields.LECTURES_NUMBER]: null,
+  [fields.CONTENT]: '',
+  [fields.VISITORS_NUMBER]: null,
+  [fields.RECORD_END_AT]: null,
+  [fields.FINISHED_AT]: null,
 };
 
 const setCourse = (state: courseState, {payload}: any): courseState => ({
