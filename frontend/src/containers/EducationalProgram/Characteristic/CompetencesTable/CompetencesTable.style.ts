@@ -46,5 +46,11 @@ export default makeStyles((theme: Theme) => createStyles({
         '&:hover': {
             background: 'transparent',
         }
+    },
+    categoryCell: {
+        width: '200px'
+    },
+    competenceCell: {
+        width: '50%'
     }
 }));
