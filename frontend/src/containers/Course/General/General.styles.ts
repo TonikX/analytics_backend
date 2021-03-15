@@ -25,6 +25,14 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     background: theme.palette.primary.main,
     marginBottom: '20px',
   },
+  link: {
+    minWidth: '120px',
+  },
+  btnLink: {
+    width: '100%',
+    background: theme.palette.primary.main,
+    marginBottom: '20px',
+  },
   options: {
     width: '20%',
     display: 'flex',

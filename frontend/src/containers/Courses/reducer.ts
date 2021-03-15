@@ -17,7 +17,6 @@ export const initialState: coursesState = {
     [fields.COURSES_LIST]: [],
     [fields.COURSE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
-        [fields.DIALOG_DATA]: {},
     },
     [fields.PLATFORMS]: [],
     [fields.INSTITUTIONS]: [],
@@ -43,11 +42,10 @@ const changeAllCount = (state: coursesState, {payload}: any): coursesState => ({
     [fields.ALL_COUNT]: payload,
 });
 
-const openDialog = (state: coursesState, {payload}: any): coursesState => ({
+const openDialog = (state: coursesState): coursesState => ({
     ...state,
     [fields.COURSE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: true,
-        [fields.DIALOG_DATA]: payload,
     }
 });
 
@@ -55,7 +53,6 @@ const closeDialog = (state: coursesState): coursesState => ({
     ...state,
     [fields.COURSE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
-        [fields.DIALOG_DATA]: {},
     }
 });
 

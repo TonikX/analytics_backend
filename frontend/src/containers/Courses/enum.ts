@@ -2,7 +2,6 @@ export enum fields {
     COURSES_LIST = 'COURSES_LIST',
     COURSE_DIALOG = 'COURSE_DIALOG',
     IS_OPEN_DIALOG = 'IS_OPEN_DIALOG',
-    DIALOG_DATA = 'DIALOG_DATA',
     SEARCH_QUERY = 'SEARCH_QUERY',
     CURRENT_PAGE = 'CURRENT_PAGE',
     ALL_COUNT = 'ALL_COUNT',
@@ -26,9 +25,9 @@ export enum CourseFields {
     ID = 'id',
     TITLE = 'title',
     DESCRIPTION = 'description',
-    COURSE_URL = 'course_url',
-    PLATFORM_ID = 'platform',
-    INSTITUTION_ID = 'institution',
+    COURSE_URL = 'external_url',
+    PLATFORM = 'platform',
+    INSTITUTION = 'institution',
     LANGUAGE = 'language',
     STARTED_AT = 'started_at',
     RATING = 'rating',
@@ -42,8 +41,4 @@ export enum PlatformFields {
 export enum InstitutionFields {
     ID = 'id',
     TITLE = 'title',
-}
-
-export enum Language {
-    
 }

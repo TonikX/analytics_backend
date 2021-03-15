@@ -13,7 +13,7 @@ const getStateData = (state: rootState): coursesState => get(state, GENERAL_PATH
 export const getCourses = (state: rootState): Array<CourseType> => get(getStateData(state), fields.COURSES_LIST, []);
 
 export const getCoursesForSelector = (state: rootState): SelectorListType =>
-    getCourses(state).map((course: CourseType) => ({
+    getCourses(state).map((course: any) => ({
         value: course[CourseFields.ID],
         label: course[CourseFields.TITLE],
     }))
@@ -21,7 +21,6 @@ export const getCoursesForSelector = (state: rootState): SelectorListType =>
 export const getCourseDialog = (state: rootState) => get(getStateData(state), fields.COURSE_DIALOG, {});
 
 export const isOpenDialog = (state: rootState) => get(getCourseDialog(state), fields.IS_OPEN_DIALOG, false);
-export const getDialogData = (state: rootState) => get(getCourseDialog(state), fields.DIALOG_DATA, false);
 
 export const getAllCount = (state: rootState) => get(getStateData(state), fields.ALL_COUNT, 1);
 export const getCurrentPage = (state: rootState) => get(getStateData(state), fields.CURRENT_PAGE, 1);

@@ -34,7 +34,6 @@ export interface coursesState {
     [fields.COURSES_LIST]: Array<CourseType>;
     [fields.COURSE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;
-        [fields.DIALOG_DATA]: CourseType|{};
     };
     [fields.INSTITUTIONS]: Array<InstitutionType> | [],
     [fields.PLATFORMS]: Array<PlatformType> | [],
@@ -51,15 +50,15 @@ export type InstitutionType = {
 }
 
 export type CourseType = {
-    [CourseFields.ID]: number,
+    [CourseFields.ID]: number | undefined,
     [CourseFields.DESCRIPTION]: string,
     [CourseFields.TITLE]: string,
-    [CourseFields.PLATFORM_ID]: number,
-    [CourseFields.INSTITUTION_ID]: number,
+    [CourseFields.PLATFORM]: PlatformType | {},
+    [CourseFields.INSTITUTION]: InstitutionType | {},
     [CourseFields.COURSE_URL]: string,
     [CourseFields.LANGUAGE]: string,
     [CourseFields.STARTED_AT]: string,
-    [CourseFields.RATING]: number,
+    [CourseFields.RATING]: number | null,
 };
 
 export interface CoursesProps extends WithStyles<typeof styles> {

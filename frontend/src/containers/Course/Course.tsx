@@ -32,8 +32,6 @@ export const Course: React.FC = () => {
   const course = useSelector((state: rootState) => getCourse(state))
 
   useEffect(() => {
-    //dispatch(actions.getPlatforms1())
-    dispatch(actions.getInstitutions1())
     dispatch(actions.getCourse(get(params, 'id', null)))
   }, [])
   const showActiveStep = (step: number): React.ReactNode => {

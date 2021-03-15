@@ -13,12 +13,13 @@ import TableBody from "@material-ui/core/TableBody";
 import Scrollbars from "react-custom-scrollbars";
 import SortingButton from "../../../components/SortingButton";
 
+import actions from '../actions'
+
 import {SortingType} from "../../../components/SortingButton/types";
 import {CourseFields, InstitutionFields, PlatformFields} from '../enum';
-import actions from '../actions'
 import { CoursesTableProps } from './types'
-import { InstitutionType, PlatformType } from '../types'
 import { languageObject } from '../../WorkProgram/constants'
+import get from 'lodash/get'
 
 export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingField, sortingMode, institutions, platforms }) => {
   const classes = useStyles()
@@ -28,16 +29,7 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
     dispatch(actions.changeSorting({field: mode === '' ? '' : field, mode}));
     dispatch(actions.getCourses());
   }
-  const getInstitutionName = (institutionId: number): string => {
-    if (institutions.length) {
-      return institutions.filter((institution: InstitutionType) => institution[InstitutionFields.ID] ===  institutionId)[0][InstitutionFields.TITLE]
-    } else return ''
-  }
-  const getPlatformName = (platformId: number): string => {
-    if (platforms.length) {
-      return platforms.filter((platform: PlatformType) => platform[PlatformFields.ID] ===  platformId)[0][PlatformFields.TITLE]
-    } else return ''
-  } 
+
   return (
     <Scrollbars>
       <div className={classes.tableWrap}>
@@ -109,10 +101,10 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
                   </Link>
                 </TableCell>
                 <TableCell>
-                  {getInstitutionName(course[CourseFields.INSTITUTION_ID])}
+                  {get(course, `${CourseFields.INSTITUTION}.${InstitutionFields.TITLE}`, '')}
                 </TableCell>
                 <TableCell>
-                  {getPlatformName(course[CourseFields.PLATFORM_ID])}
+                  {get(course, `${CourseFields.PLATFORM}.${PlatformFields.TITLE}`, '')}
                 </TableCell>
                 <TableCell>
                   {languageObject[course[CourseFields.LANGUAGE]]}
