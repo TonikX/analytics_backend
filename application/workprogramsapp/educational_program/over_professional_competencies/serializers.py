@@ -38,14 +38,14 @@ class CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer(seria
     )
 
     def create(self, validated_data):
-        competence = IndicatorInOverProfCompetenceInGeneralCharacteristic.objects.get(pk = validated_data.pop('competence_in_group_of_pk'))
+        competence = OverProfCompetencesInGroupOfGeneralCharacteristic.objects.get(pk = validated_data.pop('competence_in_group_of_pk'))
         indicators = validated_data.pop('indicator')
 
         for ind in indicators:
             try:
                 IndicatorInOverProfCompetenceInGeneralCharacteristic. \
                     objects.create(competence_in_group_of_pk =
-                                                   IndicatorInOverProfCompetenceInGeneralCharacteristic.objects.get
+                                                   OverProfCompetencesInGroupOfGeneralCharacteristic.objects.get
                                    (pk = competence.id), indicator = Indicator.objects.get(pk = ind))
             except:
                 raise serializers.ValidationError({"error":"indicator not found"})
