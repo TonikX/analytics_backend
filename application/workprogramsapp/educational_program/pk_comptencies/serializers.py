@@ -44,7 +44,7 @@ class IndicatorInPkCompetenceInGeneralCharacteristicSerializer(serializers.Model
         fields = "__all__"
 
 
-class CreateIndicatorInPkCompetenceInGeneralCharacteristicSerializer(serializers.ModelSerializer):
+class CreateIndicatorInPkCompetenceInGeneralCharacteristicSerializer(serializers.Serializer):
     """
     Индикатор компетенции в общей характеристике
     """

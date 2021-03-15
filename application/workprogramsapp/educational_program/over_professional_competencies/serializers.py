@@ -28,7 +28,7 @@ class IndicatorInOverProfCompetenceInGeneralCharacteristicSerializer(serializers
         fields = ['id', 'indicator']
 
 
-class CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer(serializers.ModelSerializer):
+class CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer(serializers.Serializer):
     """
     Индикатор компетенции в общей характеристике
     """
