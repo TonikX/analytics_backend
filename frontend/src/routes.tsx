@@ -7,6 +7,8 @@ import SignIn from './containers/SignIn';
 import SignUp from './containers/SignUp';
 import WorkProgram from './containers/WorkProgram';
 import Courses from './containers/Courses';
+import OnlineCourses from './containers/OnlineCourses';
+import { Course } from './containers/Course/Course';
 import SubjectArea from './containers/SubjectArea';
 import Prerequisites from './containers/TrainingEntities';
 import Competences from './containers/Competences';
@@ -83,8 +85,14 @@ export default () => (
             <AuthRoute path={routerService.getFoldersRoute()}>
                 <Folders />
             </AuthRoute>
-            <AuthRoute path={routerService.getCoursesRoute()}>
+            {/* <AuthRoute path={routerService.getCoursesRoute()}>
                 <Courses />
+            </AuthRoute> */}
+            <AuthRoute path={routerService.getOnlineCoursesRoute()}>
+                <OnlineCourses />
+            </AuthRoute>
+            <AuthRoute path={routerService.getCourseRoute()}>
+                <Course />
             </AuthRoute>
             <AuthRoute path={routerService.getLiteratureRoute()}>
                 <Literature />

@@ -75,6 +75,8 @@ class OnlineCourseSerializer(serializers.ModelSerializer):
     course_requirement = CourseRequirementSerializer(many=True)
     course_credit = CourseCreditSerializer(many=True)
     course_workprogram = CourseWorkProgramSerializer(many=True)
+    institution = InstitutionSerializer(many=False)
+    platform = PlatformSerializer(many=False)
 
     class Meta:
         model = OnlineCourse
