@@ -1,3 +1,6 @@
+from rest_framework.response import Response
+from rest_framework import response, status
+
 # Библиотеки для сариализации
 from rest_framework import serializers, viewsets
 
@@ -5,6 +8,7 @@ from rest_framework import serializers, viewsets
 from .models import PkCompetencesInGroupOfGeneralCharacteristic, \
     GroupOfPkCompetencesInGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
 from workprogramsapp.models import ProfessionalStandard
+from workprogramsapp.models import Indicator
 
 # Другие сериализаторы
 from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer, \
@@ -38,6 +42,30 @@ class IndicatorInPkCompetenceInGeneralCharacteristicSerializer(serializers.Model
     class Meta:
         model = IndicatorInPkCompetenceInGeneralCharacteristic
         fields = "__all__"
+
+
+class CreateIndicatorInPkCompetenceInGeneralCharacteristicSerializer(serializers.ModelSerializer):
+    """
+    Индикатор компетенции в общей характеристике
+    """
+    competence_in_group_of_pk = serializers.IntegerField(min_value=1, write_only=True)
+    indicator = serializers.ListField(
+        child=serializers.IntegerField(min_value=1, write_only=True), write_only=True
+    )
+
+    def create(self, validated_data):
+        competence = IndicatorInPkCompetenceInGeneralCharacteristic.objects.get(pk = validated_data.pop('competence_in_group_of_pk'))
+        indicators = validated_data.pop('indicator')
+
+        for ind in indicators:
+            try:
+                IndicatorInPkCompetenceInGeneralCharacteristic. \
+                    objects.create(competence_in_group_of_pk =
+                                   IndicatorInPkCompetenceInGeneralCharacteristic.objects.get
+                                   (pk = competence.id), indicator = Indicator.objects.get(pk = ind))
+            except:
+                raise serializers.ValidationError({"error":"indicator not found"})
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class PkCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
