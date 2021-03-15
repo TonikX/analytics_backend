@@ -12,7 +12,8 @@ from django.shortcuts import get_object_or_404
 from collections import OrderedDict
 from rest_framework import status
 
-from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgramChangeInDisciplineBlockModule
+from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgramChangeInDisciplineBlockModule,\
+    DisciplineBlockModuleInDisciplineBlock
 from .serializers import IndividualImplementationAcademicPlanSerializer,CreateIndividualImplementationAcademicPlanSerializer,\
     ShortIndividualImplementationAcademicPlanSerializer
 
@@ -39,31 +40,22 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
         newdata = dict(serializer.data)
         for discipline_block in newdata['implementation_of_academic_plan']['academic_plan']['discipline_blocks_in_academic_plan']:
             print(discipline_block['id'])
+            delete_module = []
+            k = 0
             for module in discipline_block['modules_in_discipline_block']:
                 print(module['id'])
+
                 for change_block in module['change_blocks_of_work_programs_in_modules']:
                     if change_block['change_type'] == "Optionally":
                         i = 0
                         delete = []
                         for work_program in change_block['work_program']:
-
-                            print(i)
-                            print('work_program', work_program['id'])
-                            print('work_program', WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects. \
-                                  get(individual_implementation_of_academic_plan = newdata['id'],
-                                      work_program_change_in_discipline_block_module = change_block['id']).work_program.id)
                             try:
                                 if work_program['id'] != \
-                                        WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.\
+                                        WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects. \
                                                 get(individual_implementation_of_academic_plan = newdata['id'],
                                                     work_program_change_in_discipline_block_module = change_block['id']).work_program.id:
-                                    print('dd')
-                                    #change_block['work_program'].pop(i)
-                                    #del change_block['work_program'][i]
                                     delete.append(i)
-                                    #del change_block[work_program]
-
-                                    #change_block.remove(work_program['id'])
 
                             except:
                                 pass
@@ -73,6 +65,37 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                             print(i)
                             del change_block['work_program'][i-a]
                             a +=1
+
+
+
+                if module['type'] == "specialization_module":
+
+                    print('module id', module['id'] )
+                    print('2module id',DisciplineBlockModuleInDisciplineBlock.objects. \
+                          get(individual_implementation_of_academic_plan = newdata['id'],
+                              discipline_block = discipline_block['id']).discipline_block_module.id)
+                    try:
+                        if module['id'] != \
+                                DisciplineBlockModuleInDisciplineBlock.objects. \
+                                        get(individual_implementation_of_academic_plan = newdata['id'],
+                                            discipline_block = discipline_block['id']).discipline_block_module.id:
+                            #change_block['work_program'].pop(i)
+                            #del change_block['work_program'][i]
+                            delete_module.append(k)
+                            print('dd',k)
+                            #del change_block[work_program]
+
+                            #change_block.remove(work_program['id'])
+
+                    except:
+                        pass
+                k +=1
+            a = 0
+            for i in delete_module:
+                print('dddddd', k)
+                del discipline_block['modules_in_discipline_block'][i]
+                a +=1
+
         return Response(OrderedDict(newdata), status=status.HTTP_200_OK)
 
 

@@ -6,8 +6,14 @@ import {GENERAL_PATH as signUpPath, reducer as signUpReducer, signUpState} from 
 import {GENERAL_PATH as layoutPath, reducer as LayoutReducer} from "../layout/reducer";
 import {layoutState} from "../layout/types";
 
-import {GENERAL_PATH as coursesPath, reducer as CoursesReducer} from "../containers/Courses/reducer";
-import {coursesState} from "../containers/Courses/types";
+// import {GENERAL_PATH as coursesPath, reducer as CoursesReducer} from "../containers/Courses/reducer";
+// import {coursesState} from "../containers/Courses/types";
+
+import {GENERAL_PATH as onlineCoursesPath, reducer as OnlineCoursesReducer} from "../containers/OnlineCourses/reducer";
+import {coursesState as onlineCoursesState} from "../containers/OnlineCourses/types";
+
+import {GENERAL_PATH as coursePath, reducer as CourseReducer} from "../containers/Course/reducer";
+import {courseState as CourseState} from "../containers/Course/types";
 
 import {GENERAL_PATH as literaturePath, reducer as LiteratureReducer} from "../containers/Literature/reducer";
 import {literatureState} from "../containers/Literature/types";
@@ -90,7 +96,8 @@ export interface rootState {
     [signUpPath]: signUpState,
     [workProgramPath]: workProgramState,
     [layoutPath]: layoutState,
-    [coursesPath]: coursesState,
+    //[coursesPath]: coursesState,
+    [onlineCoursesPath]: onlineCoursesState,
     [literaturePath]: literatureState,
     [subjectAreaPath]: subjectAreaState,
     [subjectAreaPath]: subjectAreaState,
@@ -103,6 +110,7 @@ export interface rootState {
     [workProgramListPath]: workProgramListState,
     [selectDisciplinePath]: selectDisciplineState,
     [selectEducationalProgramPath]: selectEducationalProgramState,
+    [coursePath]: CourseState,
 }
 
 export default combineReducers({
@@ -121,7 +129,8 @@ export default combineReducers({
     [signUpPath]: signUpReducer,
     [workProgramPath]: workProgramReducer,
     [layoutPath]: LayoutReducer,
-    [coursesPath]: CoursesReducer,
+    //[coursesPath]: CoursesReducer,
+    [onlineCoursesPath]: OnlineCoursesReducer,
     [literaturePath]: LiteratureReducer,
     [subjectAreaPath]: SubjectAreaReducer,
     [trainingEntitiesPath]: TrainingEntitiesReducer,
@@ -132,4 +141,5 @@ export default combineReducers({
     [educationPlanInDirectionPath]: educationPlanInDirectionReducer,
     [workProgramListPath]: workProgramListReducer,
     [selectEducationalProgramPath]: selectEducationalProgramReducer,
+    [coursePath]: CourseReducer,
 });

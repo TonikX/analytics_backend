@@ -32,5 +32,18 @@ class WorkProgramInWorkProgramChangeInDisciplineBlockModule(models.Model):
         return str(self.pk) + '/' + str(self.work_program_change_in_discipline_block_module) + '/' + str(self.individual_implementation_of_academic_plan)
 
 
+class DisciplineBlockModuleInDisciplineBlock(models.Model):
+    '''
+    Модель выбора РПД в блоке выборной РПД учебного плана
+    '''
+    discipline_block = models.ForeignKey('DisciplineBlock',
+                                        on_delete=models.CASCADE, related_name="changed_workprogram_in_wpcb")
+    discipline_block_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE)
+    individual_implementation_of_academic_plan = models.ForeignKey('IndividualImplementationAcademicPlan',
+                                                                   on_delete=models.CASCADE,
+                                                                   verbose_name='Учебный план с направлением в индивидуальном маршруте',
+                                                                   related_name="implementation_of_academic_plan_in_field_of_study_for_bloc_module")
 
-
+    def __str__(self):
+        return str(self.pk) + '/' + str(self.discipline_block) + '/' + str(
+            self.individual_implementation_of_academic_plan)

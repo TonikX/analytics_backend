@@ -13,7 +13,8 @@ from .serializers import PkCompetencesInGroupOfGeneralCharacteristicSerializer, 
     IndicatorInPkCompetenceInGeneralCharacteristicSerializer, \
     CreatePkCompetencesInGroupOfGeneralCharacteristicSerializer, \
     CreateGroupOfPkCompetencesInGeneralCharacteristicSerializer, \
-    GroupOfPkCompetencesInGeneralCharacteristicSerializer
+    GroupOfPkCompetencesInGeneralCharacteristicSerializer, \
+    CreateIndicatorInPkCompetenceInGeneralCharacteristicSerializer
 
 from .models import PkCompetencesInGroupOfGeneralCharacteristic, \
     GroupOfPkCompetencesInGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
@@ -52,3 +53,10 @@ class IndicatorGroupOfPkCompetencesInGeneralCharacteristicSet(viewsets.ModelView
     queryset = IndicatorInPkCompetenceInGeneralCharacteristic.objects.all()
     serializer_class = IndicatorInPkCompetenceInGeneralCharacteristicSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateIndicatorInPkCompetenceInGeneralCharacteristicSerializer
+        if self.action == 'update':
+            return CreateIndicatorInPkCompetenceInGeneralCharacteristicSerializer
+        return GroupOfPkCompetencesInGeneralCharacteristicSerializer
