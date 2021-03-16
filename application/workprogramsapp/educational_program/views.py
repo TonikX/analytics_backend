@@ -13,8 +13,11 @@ from workprogramsapp.educational_program.serializers import EducationalCreatePro
     EducationalProgramSerializer, \
     GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer
 
+from serializers import ProfessionalStandardSerializer
+
 # --Работа с образовательной программой
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram
+from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
@@ -134,4 +137,11 @@ class DepartmentUpdateView(generics.UpdateAPIView):
 class DepartmentDetailsView(generics.RetrieveAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class ProfessionalStandardSet(viewsets.ModelViewSet):
+    queryset = ProfessionalStandard.objects.all()
+    serializer_class = ProfessionalStandardSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]

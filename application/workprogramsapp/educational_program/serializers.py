@@ -2,6 +2,7 @@
 from rest_framework import serializers, viewsets
 
 # Модели данных
+from workprogramsapp.models import ProfessionalStandard
 
 # --Работа с образовательной программой
 from rest_framework.fields import BooleanField
@@ -103,3 +104,14 @@ class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         fields = "__all__"
+
+
+class ProfessionalStandardSerializer(serializers.ModelSerializer):
+    """
+    Профессиональный стандарт
+    """
+
+    class Meta:
+        model = ProfessionalStandard
+        fields = "__all__"
+
