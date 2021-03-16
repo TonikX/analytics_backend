@@ -216,6 +216,144 @@ const characteristicDeleteGroup = createLogic({
     }
 });
 
+const characteristicSaveCompetence = createLogic({
+    type: educationalPlanActions.characteristicSaveCompetence.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalProgramId = getEducationalProgramId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_COMPETENCE}));
+
+        service.characteristicSaveCompetence(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_SAVE_COMPETENCE}));
+                return done();
+            });
+    }
+});
+
+const characteristicDeleteCompetence = createLogic({
+    type: educationalPlanActions.characteristicDeleteCompetence.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalProgramId = getEducationalProgramId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_COMPETENCE}));
+
+        service.characteristicDeleteCompetence(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_DELETE_COMPETENCE}));
+                return done();
+            });
+    }
+});
+
+const characteristicSaveIndicator = createLogic({
+    type: educationalPlanActions.characteristicSaveIndicator.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalProgramId = getEducationalProgramId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_INDICATOR}));
+
+        service.characteristicSaveIndicator(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_SAVE_INDICATOR}));
+                return done();
+            });
+    }
+});
+
+const characteristicDeleteIndicator = createLogic({
+    type: educationalPlanActions.characteristicDeleteIndicator.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalProgramId = getEducationalProgramId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_INDICATOR}));
+
+        service.characteristicDeleteIndicator(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_DELETE_INDICATOR}));
+                return done();
+            });
+    }
+});
+
+const characteristicSaveGroupTitle = createLogic({
+    type: educationalPlanActions.characteristicSaveGroupTitle.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalProgramId = getEducationalProgramId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_GROUP_TITLE}));
+
+        service.characteristicSaveGroupTitle(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_SAVE_GROUP_TITLE}));
+                return done();
+            });
+    }
+});
+
+const characteristicSaveCompetenceLaborFunction = createLogic({
+    type: educationalPlanActions.characteristicSaveCompetenceLaborFunction.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalProgramId = getEducationalProgramId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_COMPETENCE_LABOR_FUNCTION}));
+
+        service.characteristicSaveCompetenceLaborFunction(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_SAVE_COMPETENCE_LABOR_FUNCTION}));
+                return done();
+            });
+    }
+});
+
 export default [
     getEducationalProgramList,
     deleteEducationalProgram,
@@ -227,4 +365,13 @@ export default [
 
     characteristicCreateGroup,
     characteristicDeleteGroup,
+
+    characteristicSaveCompetence,
+    characteristicDeleteCompetence,
+
+    characteristicSaveIndicator,
+    characteristicDeleteIndicator,
+
+    characteristicSaveGroupTitle,
+    characteristicSaveCompetenceLaborFunction,
 ];

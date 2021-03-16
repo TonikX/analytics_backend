@@ -1,15 +1,19 @@
-import {CompetenceTableType, EducationProgramFields, fields} from './enum';
+import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
+import {ReactText} from "react";
+
 import {WithStyles} from "@material-ui/core";
-import styles from "./WorkProgram.styles";
-import {EducationProgramCharacteristicFields} from './enum';
+
 import {SortingType} from "../../components/SortingButton/types";
+import {EducationalPlanInDirectionType} from "../EduationPlanInDirection/types";
 import {EducationalPlanType} from "../EducationalPlan/types";
 import {DirectionType} from "../Direction/types";
-import {ReactText} from "react";
-import {EducationalPlanInDirectionType} from "../EduationPlanInDirection/types";
 import {UserType} from "../../layout/types";
+
+import {CompetenceTableType, EducationProgramFields, fields} from './enum';
+import {EducationProgramCharacteristicFields} from './enum';
+
 import {characterisicStyles} from './Сharacteristic/Сharacteristic.styles';
-import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
+import styles from "./WorkProgram.styles";
 
 export interface EducationalProgramActions {
     changeSearchQuery: any;
@@ -28,10 +32,13 @@ export interface EducationalProgramActions {
     setEducationalProgramList: any;
 
     characteristicCreateGroup: ActionCreatorWithPayload<CharacteristicCreateGroupActionType>;
-    characteristicSaveGroupTitle: ActionCreatorWithPayload<{title: string, type: CompetenceTableType}>;
-    characteristicSaveCompetence: ActionCreatorWithPayload<{competenceId: number, type: CompetenceTableType}>;
-    characteristicSaveIndicators: ActionCreatorWithPayload<{indicatorId: number, type: CompetenceTableType}>;
+    characteristicSaveGroupTitle: ActionCreatorWithPayload<CharacteristicSaveGroupTitleActionType>;
+    characteristicSaveCompetence: ActionCreatorWithPayload<CharacteristicAddCompetenceActionType>;
+    characteristicSaveIndicator: ActionCreatorWithPayload<CharacteristicAddIndicatorActionType>;
     characteristicDeleteGroup: ActionCreatorWithPayload<CharacteristicDeleteGroupActionType>;
+    characteristicDeleteCompetence: ActionCreatorWithPayload<CharacteristicDeleteCompetenceActionType>;
+    characteristicSaveCompetenceLaborFunction: ActionCreatorWithPayload<CharacteristicSaveCompetenceLaborFunctionActionType>;
+    characteristicDeleteIndicator: ActionCreatorWithPayload<CharacteristicDeleteIndicatorActionType>;
 }
 
 export interface educationalProgramState {
@@ -87,7 +94,40 @@ export type CharacteristicCreateGroupActionType = {
     type: CompetenceTableType;
 }
 
+export type CharacteristicSaveGroupTitleActionType = {
+    title: string;
+    groupId: number;
+    type: CompetenceTableType;
+}
+export type CharacteristicSaveCompetenceLaborFunctionActionType = {
+    laborFunction: string;
+    competenceId: number;
+    type: CompetenceTableType;
+}
+
 export type CharacteristicDeleteGroupActionType = {
     groupId: number;
+    type: CompetenceTableType;
+}
+
+export type CharacteristicAddCompetenceActionType = {
+    groupId: number;
+    competenceId: number;
+    type: CompetenceTableType;
+}
+
+export type CharacteristicAddIndicatorActionType = {
+    indicatorId: Array<number>;
+    competenceId: number;
+    type: CompetenceTableType;
+}
+
+export type CharacteristicDeleteCompetenceActionType = {
+    competenceId: number;
+    type: CompetenceTableType;
+}
+
+export type CharacteristicDeleteIndicatorActionType = {
+    indicatorId: number;
     type: CompetenceTableType;
 }

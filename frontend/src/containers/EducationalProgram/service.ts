@@ -1,7 +1,16 @@
 import AnalyticsService from "../../service/analytics-service";
 import {SortingType, Types} from "../../components/SortingButton/types";
 import {CompetenceTableType, EducationProgramFields} from "./enum";
-import {CharacteristicCreateGroupActionType, CharacteristicDeleteGroupActionType} from "./types";
+import {
+    CharacteristicAddCompetenceActionType,
+    CharacteristicAddIndicatorActionType,
+    CharacteristicCreateGroupActionType,
+    CharacteristicDeleteCompetenceActionType,
+    CharacteristicDeleteGroupActionType,
+    CharacteristicDeleteIndicatorActionType,
+    CharacteristicSaveCompetenceLaborFunctionActionType,
+    CharacteristicSaveGroupTitleActionType
+} from "./types";
 
 class Service extends AnalyticsService{
     getEducationalProgramList(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
@@ -47,6 +56,8 @@ class Service extends AnalyticsService{
                 return 'group_of_general_prof_competence';
             case CompetenceTableType.KEY_COMPETENCES:
                 return 'group_of_key_competence';
+            case CompetenceTableType.PROFESSIONAL_COMPETENCES:
+                return 'group_of_pk_competence';
         }
     }
 
@@ -59,6 +70,40 @@ class Service extends AnalyticsService{
 
     characteristicDeleteGroup({groupId, type}: CharacteristicDeleteGroupActionType){
         return this.delete(`/api/general_ch/${this.getCompetenceTableUrl(type)}/${groupId}`);
+    }
+
+    characteristicDeleteCompetence({competenceId, type}: CharacteristicDeleteCompetenceActionType){
+        return this.delete(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}`);
+    }
+
+    characteristicDeleteIndicator({indicatorId, type}: CharacteristicDeleteIndicatorActionType){
+        return this.delete(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/indicator/${indicatorId}/`);
+    }
+
+    characteristicSaveGroupTitle({groupId, type, title}: CharacteristicSaveGroupTitleActionType){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/${groupId}/`, {
+            name: title
+        });
+    }
+
+    characteristicSaveCompetenceLaborFunction({competenceId, type, laborFunction}: CharacteristicSaveCompetenceLaborFunctionActionType){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            labor_functions: laborFunction
+        });
+    }
+
+    characteristicSaveCompetence({groupId, type, competenceId}: CharacteristicAddCompetenceActionType){
+        return this.post(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/`, {
+            "group_of_pk": groupId,
+            "competence": competenceId
+        });
+    }
+
+    characteristicSaveIndicator({indicatorId, type, competenceId}: CharacteristicAddIndicatorActionType){
+        return this.post(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/indicator/`, {
+            "competence_in_group_of_pk": competenceId,
+            "indicator": indicatorId
+        });
     }
 }
 

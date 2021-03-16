@@ -46,8 +46,8 @@ import {BlocksOfWorkProgramsFields, ModuleFields} from '../../enum';
 import {WorkProgramGeneralType} from "../../../WorkProgram/types";
 import {WorkProgramGeneralFields} from "../../../WorkProgram/enum";
 
-import AddCompetenceModal from "./AddCompetenceModal";
-import AddIndicatorsModal from "./AddIndicatorsModal";
+import AddCompetenceModal from "../../../../components/AddCompetenceModal";
+import AddIndicatorsModal from "../../../../components/AddIndicatorsModal";
 import AddResultsModal from "./AddResultsModal";
 
 import connect from './CreateModal.connect';

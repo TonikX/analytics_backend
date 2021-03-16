@@ -1,8 +1,8 @@
 import {WithStyles} from "@material-ui/core";
-import {CompetenceActions} from "../../../../Competences/types";
+import {CompetenceActions} from "../../containers/Competences/types";
 
-import styles from "../CreateModal.styles";
-import {SelectorListType} from "../../../../../components/SearchSelector/types";
+import styles from "../../containers/EducationalPlan/Detail/WPBlockCreateModal/CreateModal.styles";
+import {SelectorListType} from "../SearchSelector/types";
 
 export interface AddWorkProgramModalProps extends WithStyles<typeof styles> {
     isOpen: boolean;

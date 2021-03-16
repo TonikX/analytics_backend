@@ -16,3 +16,5 @@ export const YEAR_DATE_FORMAT = 'YYYY';
 export const getUserFullName = (user: UserType) => `${get(user, [UserFields.FIRST_NAME], '')} ${get(user, [UserFields.LAST_NAME], '')}`;
 
 export const getSortingSymbol = (sortingMode: SortingType): '-'|'+'|'' => sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
+
+export const isStringValueValid = (value: string) => value.trim() && get(value, 'length', 0) !== 0;
