@@ -1,4 +1,4 @@
-import { fields } from './enum'
+import { fields, fieldsOfStudyFields, reqFields, outcomeFields } from './enum'
 import { CourseType } from '../Courses/types'
 
 export interface courseState extends CourseType {
@@ -15,6 +15,27 @@ export interface courseState extends CourseType {
   [fields.VISITORS_NUMBER]: number | null,
   [fields.RECORD_END_AT]: string | null,
   [fields.FINISHED_AT]: string | null,
+  [fields.FIELDS_OF_STUDY]: Array<fieldOfStudyType>,
+  [fields.REQUIREMENTS]: Array<reqType>,
+  [fields.OUTCOMES]: Array<outcomeType>,
+}
+
+export type fieldOfStudyType = {
+  [fieldsOfStudyFields.ID]: number,
+  [fieldsOfStudyFields.COURSE]: string,
+  [fieldsOfStudyFields.FIELD_OF_STUDY]: string,
+}
+
+export type reqType = {
+  [reqFields.ID]: number,
+  [reqFields.COURSE]: string,
+  [reqFields.ITEM]: string,
+}
+
+export type outcomeType = {
+  [outcomeFields.ID]: number,
+  [outcomeFields.COURSE]: string,
+  [outcomeFields.LEARNING_OUTCOME]: string,
 }
 
 export interface CourseActions {

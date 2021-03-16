@@ -13,7 +13,7 @@ import { Content } from './Content/Content'
 import { CurrentSession } from './CurrentSession/CurrentSession'
 import { Directions } from './Directions/Directions'
 import { Requirements } from './Requirements/Requirements'
-import { Competences } from './Competences/Competences'
+// import { Competences } from './Competences/Competences'
 import { Results } from './Results/Results'
 
 import actions from './actions'
@@ -33,6 +33,7 @@ export const Course: React.FC = () => {
 
   useEffect(() => {
     dispatch(actions.getCourse(get(params, 'id', null)))
+    // eslint-disable-next-line
   }, [])
   const showActiveStep = (step: number): React.ReactNode => {
     switch (step) {
@@ -46,9 +47,9 @@ export const Course: React.FC = () => {
         return <Directions />
       case 4:
         return <Requirements />
+      // case 5:
+      //   return <Competences />
       case 5:
-        return <Competences />
-      case 6:
         return <Results />
     }
   }
@@ -109,7 +110,7 @@ export const Course: React.FC = () => {
               {steps.REQUIREMENTS}
             </StepButton>
           </Step>
-          <Step>
+          {/* <Step>
             <StepButton 
               onClick={() => setActiveStep(5)}
               completed={false} 
@@ -117,10 +118,10 @@ export const Course: React.FC = () => {
             >
               {steps.COMPETENCES}
             </StepButton>
-          </Step>
+          </Step> */}
           <Step>
             <StepButton 
-              onClick={() => setActiveStep(6)}
+              onClick={() => setActiveStep(5)}
               completed={false} 
               style={{textAlign: 'left'}}
             >

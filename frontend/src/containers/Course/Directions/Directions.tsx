@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 import Typography from '@material-ui/core/Typography'
 import Table from "@material-ui/core/Table";
@@ -6,11 +7,14 @@ import TableHead from "@material-ui/core/TableHead"
 import TableRow from "@material-ui/core/TableRow"
 import TableCell from "@material-ui/core/TableCell"
 import TableBody from "@material-ui/core/TableBody"
-import TablePagination from '@material-ui/core/TablePagination'
 import Scrollbars from 'react-custom-scrollbars'
 import SortingButton from "../../../components/SortingButton"
 
 import { useStyles } from './Directions.styles'
+import { getFieldsOfStudy } from '../getters'
+import { rootState } from '../../../store/reducers'
+import { fieldsOfStudyFields } from '../enum'
+import { fieldOfStudyType } from '../types'
 
 export const Directions: React.FC = () => {
   const classes = useStyles()
@@ -19,6 +23,8 @@ export const Directions: React.FC = () => {
     { name: 'Информационные системы и технологии', number:'09.03.02' },
     { name: 'Прикладная информатика', number:'09.03.03' },
   ]
+  const fieldsOfStudy = useSelector((state: rootState) => getFieldsOfStudy(state))
+
   return (
     <div>
       <Typography className={classes.title}>Направления подготовки</Typography>
@@ -39,28 +45,16 @@ export const Directions: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {directions.map((direction: any) => (
-                <TableRow key={direction.number}>
-                  <TableCell>{direction.name}</TableCell>
-                  <TableCell>{direction.number}</TableCell>
+              {fieldsOfStudy.map((fieldOfStudy: fieldOfStudyType) => (
+                <TableRow key={fieldOfStudy[fieldsOfStudyFields.ID]}>
+                  <TableCell>{directions[0].name}</TableCell>
+                  <TableCell>{fieldOfStudy[fieldsOfStudyFields.FIELD_OF_STUDY]}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </div>
       </Scrollbars>
-      <div className={classes.footer}>
-        <TablePagination 
-          count={20}
-          component="div"
-          page={1 - 1}
-          rowsPerPageOptions={[]}
-          onChangePage={() => {}}
-          //@ts-ignore
-          rowsPerPage={10}
-          onChangeRowsPerPage={()=>{}}
-        />
-      </div>
     </div>
   )
 }

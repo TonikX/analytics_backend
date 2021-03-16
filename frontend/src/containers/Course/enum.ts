@@ -33,10 +33,35 @@ export enum fields {
   CONTENT = 'content',
   RECORD_END_AT = 'record_end_at',
   FINISHED_AT = 'finished_at',
+  FIELDS_OF_STUDY = 'course_field_of_study',
+  REQUIREMENTS = 'course_requirement',
+  OUTCOMES = 'course_learning_outcome'
 }
 
 export enum fetchingTypes {
   GET_COURSE = 'GET_COURSE',
   GET_PLATFORMS = 'GET_PLATFORMS1',
   GET_INSTITUTIONS = 'GET_INSTITUTIONS1',
+}
+
+export enum fieldsOfStudyFields {
+  ID = 'id',
+  COURSE = 'course',
+  FIELD_OF_STUDY = 'field_of_study',
+
+  // NEW
+  // ID = 'id',
+  // TITLE = 'field_of_study'
+}
+
+export enum reqFields {
+  ID = 'id',
+  COURSE = 'course',
+  ITEM = 'item',
+}
+
+export enum outcomeFields {
+  ID = 'id',
+  COURSE = 'course',
+  LEARNING_OUTCOME = 'learning_outcome',
 }

@@ -7,7 +7,7 @@ import {GENERAL_PATH as layoutPath, reducer as LayoutReducer} from "../layout/re
 import {layoutState} from "../layout/types";
 
 import {GENERAL_PATH as coursesPath, reducer as CoursesReducer} from "../containers/Courses/reducer";
-import {coursesState as coursesState} from "../containers/Courses/types";
+import {coursesState} from "../containers/Courses/types";
 
 import {GENERAL_PATH as coursePath, reducer as CourseReducer} from "../containers/Course/reducer";
 import {courseState as CourseState} from "../containers/Course/types";
