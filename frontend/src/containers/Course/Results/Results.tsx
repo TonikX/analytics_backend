@@ -18,6 +18,7 @@ export const Results:React.FC = () => {
     <div>
       <Typography className={classes.title}>Результаты</Typography>
       <Scrollbars style={{height: 'calc(100vh - 300px)'}}>
+        {outcomes.length === 0 && <Typography><b>Нет информации!</b></Typography>}
         {outcomes.map((outcome: outcomeType) => (
         <div className={classes.item}>
           <Typography style={{width: '80%'}}>{outcome[outcomeFields.LEARNING_OUTCOME]}</Typography>
