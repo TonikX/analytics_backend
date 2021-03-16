@@ -13,7 +13,7 @@ from workprogramsapp.educational_program.serializers import EducationalCreatePro
     EducationalProgramSerializer, \
     GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer
 
-from serializers import ProfessionalStandardSerializer
+from .serializers import ProfessionalStandardSerializer
 
 # --Работа с образовательной программой
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram
