@@ -88,6 +88,8 @@ class Sections extends React.PureComponent<SectionsProps> {
             totalHoursWithoutCPO += parseFloat(this.calculateContactWork(section));
         });
 
+        totalHoursWithoutCPO = parseFloat(totalHoursWithoutCPO.toFixed(2));
+
         const totalHours = this.state.totalHours || totalTotalHours;
         const cpoValue: any = ((totalHours - totalHoursWithoutCPO) / sections.length).toFixed(2);
 
