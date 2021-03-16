@@ -32,6 +32,7 @@ export const initialState: courseState = {
   [fields.FIELDS_OF_STUDY]: [],
   [fields.REQUIREMENTS]: [],
   [fields.OUTCOMES]: [],
+  [fields.WORK_PROGRAMS]: [],
 };
 
 const setCourse = (state: courseState, {payload}: any): courseState => ({

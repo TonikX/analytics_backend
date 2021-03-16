@@ -1,4 +1,4 @@
-import { fields, fieldsOfStudyFields, reqFields, outcomeFields } from './enum'
+import { fields, fieldsOfStudyFields, reqFields, outcomeFields, wpFields } from './enum'
 import { CourseType } from '../Courses/types'
 
 export interface courseState extends CourseType {
@@ -18,6 +18,7 @@ export interface courseState extends CourseType {
   [fields.FIELDS_OF_STUDY]: Array<fieldOfStudyType>,
   [fields.REQUIREMENTS]: Array<reqType>,
   [fields.OUTCOMES]: Array<outcomeType>,
+  [fields.WORK_PROGRAMS]: Array<wpType>,
 }
 
 export type fieldOfStudyType = {
@@ -36,6 +37,12 @@ export type outcomeType = {
   [outcomeFields.ID]: number,
   [outcomeFields.COURSE]: string,
   [outcomeFields.LEARNING_OUTCOME]: string,
+}
+
+export type wpType = {
+  [wpFields.ID]: number,
+  [wpFields.COURSE]: string,
+  [wpFields.WORK_PROGRAM]: string,
 }
 
 export interface CourseActions {

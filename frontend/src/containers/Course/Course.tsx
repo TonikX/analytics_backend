@@ -22,6 +22,7 @@ import { steps } from './enum'
 import { getCourse } from './getters'
 import { useStyles } from './Course.styles'
 import { rootState } from '../../store/reducers'
+import { WorkPrograms } from './WorkPrograms/WorkPrograms'
 
 export const Course: React.FC = () => {
   const dispatch = useDispatch()
@@ -51,6 +52,8 @@ export const Course: React.FC = () => {
       //   return <Competences />
       case 5:
         return <Results />
+      case 6:
+        return <WorkPrograms />
     }
   }
   return (
@@ -126,6 +129,15 @@ export const Course: React.FC = () => {
               style={{textAlign: 'left'}}
             >
               {steps.RESULTS}
+            </StepButton>
+          </Step>
+          <Step>
+            <StepButton 
+              onClick={() => setActiveStep(6)}
+              completed={false} 
+              style={{textAlign: 'left'}}
+            >
+              {steps.WORK_PROGRAMS}
             </StepButton>
           </Step>
         </Stepper>

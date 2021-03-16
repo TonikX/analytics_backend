@@ -6,6 +6,7 @@ export enum steps {
   REQUIREMENTS = 'Требования',
   COMPETENCES = 'Формируемые компетенции',
   RESULTS = 'Результаты',
+  WORK_PROGRAMS = 'Связанные с курсом РПД'
 }
 
 export enum fields {
@@ -35,7 +36,8 @@ export enum fields {
   FINISHED_AT = 'finished_at',
   FIELDS_OF_STUDY = 'course_field_of_study',
   REQUIREMENTS = 'course_requirement',
-  OUTCOMES = 'course_learning_outcome'
+  OUTCOMES = 'course_learning_outcome',
+  WORK_PROGRAMS = 'course_workprogram',
 }
 
 export enum fetchingTypes {
@@ -64,4 +66,10 @@ export enum outcomeFields {
   ID = 'id',
   COURSE = 'course',
   LEARNING_OUTCOME = 'learning_outcome',
+}
+
+export enum wpFields {
+  ID = 'id',
+  COURSE = 'course',
+  WORK_PROGRAM = 'work_program',
 }
