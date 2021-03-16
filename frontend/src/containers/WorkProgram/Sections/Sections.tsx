@@ -15,6 +15,7 @@ import TableCell from "@material-ui/core/TableCell";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
 
 import AddIcon from '@material-ui/icons/Add';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -27,7 +28,6 @@ import {fields, workProgramSectionFields} from "../enum";
 
 import connect from './Sections.connect';
 import styles from './Sections.styles';
-import Typography from "@material-ui/core/Typography";
 
 class Sections extends React.PureComponent<SectionsProps> {
     scrollBar: any = null;
@@ -88,14 +88,22 @@ class Sections extends React.PureComponent<SectionsProps> {
             totalHoursWithoutCPO += parseFloat(this.calculateContactWork(section));
         });
 
-        const totalHours = this.state.totalHours || totalTotalHours;
-        const cpoValue = ((totalHours - totalHoursWithoutCPO) / sections.length).toFixed(2);
+        totalHoursWithoutCPO = parseFloat(totalHoursWithoutCPO.toFixed(2));
 
-        sections.forEach((section) => {
+        const totalHours = this.state.totalHours || totalTotalHours;
+        const cpoValue: any = ((totalHours - totalHoursWithoutCPO) / sections.length).toFixed(2);
+
+        const cpoLastValue: any = (totalHours - totalHoursWithoutCPO) - cpoValue * (sections.length - 1);
+
+        const contactsWork = this.calculateContactWork(sections);
+
+        sections.forEach((section, index) => {
             this.props.actions.saveSection({
                 ...section,
                 [workProgramSectionFields.SPO] : cpoValue,
-                [workProgramSectionFields.TOTAL_HOURS] : parseFloat(cpoValue) + parseFloat(this.calculateContactWork(sections))
+                [workProgramSectionFields.TOTAL_HOURS] : index === sections.length - 1 ?
+                    parseFloat(cpoLastValue) + parseFloat(contactsWork) :
+                    parseFloat(cpoValue) + parseFloat(contactsWork)
             });
         })
     }

@@ -120,7 +120,7 @@ class Expertises extends React.Component<ExpertisesProps> {
                                         <TableCell className={classes.cellStatus}
                                                    style={{borderLeftColor: workProgramStatusesColors[expertise[ExpertisesFields.STATUS]]}}
                                         >
-                                            <Link to={appRouter.getWorkProgramLink(expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.CODE])}>
+                                            <Link to={appRouter.getWorkProgramLink(expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.ID])}>
                                                 {expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.TITLE]}
                                             </Link>
                                         </TableCell>
