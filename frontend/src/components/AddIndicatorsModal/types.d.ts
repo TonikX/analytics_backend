@@ -1,8 +1,8 @@
 import {WithStyles} from "@material-ui/core";
-import {IndicatorProgramActions} from "../../../../Indicators/types";
+import {IndicatorProgramActions} from "../../containers/Indicators/types";
 
-import styles from "../CreateModal.styles";
-import {SelectorListType} from "../../../../../components/SearchSelector/types";
+import styles from "../../containers/EducationalPlan/Detail/WPBlockCreateModal/CreateModal.styles";
+import {SelectorListType} from "../SearchSelector/types";
 
 export interface AddIndicatorsModalProps extends WithStyles<typeof styles> {
     isOpen: boolean;

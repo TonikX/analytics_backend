@@ -1,8 +1,12 @@
+from rest_framework.response import Response
+from rest_framework import response, status
+
 # Библиотеки для сариализации
 from rest_framework import serializers, viewsets
 
 # Модели данных
 from .models import GeneralProfCompetencesInGroupOfGeneralCharacteristic, GroupOfGeneralProfCompetencesInGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
+from workprogramsapp.models import Indicator
 
 # Другие сериализаторы
 from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer, CompetenceForEPSerializer, IndicatorListSerializer, IndicatorListWithoutCompetenceSerializer
@@ -24,14 +28,28 @@ class IndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer(serializ
         fields = ['id', 'indicator']
 
 
-class CreateIndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer(serializers.ModelSerializer):
+class CreateIndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer(serializers.Serializer):
     """
     Индикатор компетенции в общей характеристике
     """
+    competence_in_group_of_pk = serializers.IntegerField(min_value=1, write_only=True)
+    indicator = serializers.ListField(
+        child=serializers.IntegerField(min_value=1, write_only=True), write_only=True
+    )
 
-    class Meta:
-        model = IndicatorInGeneralProfCompetenceInGeneralCharacteristic
-        fields = "__all__"
+    def create(self, validated_data):
+        competence = GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.get(pk = validated_data.pop('competence_in_group_of_pk'))
+        indicators = validated_data.pop('indicator')
+
+        for ind in indicators:
+            try:
+                IndicatorInGeneralProfCompetenceInGeneralCharacteristic.\
+                    objects.create(competence_in_group_of_pk =
+                                                   GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.get
+                                                   (pk = competence.id), indicator = Indicator.objects.get(pk = ind))
+            except:
+                raise serializers.ValidationError({"error":"indicator not found"})
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):

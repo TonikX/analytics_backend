@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import SearchSelector from "../../../../../components/SearchSelector/SearchSelector";
+import SearchSelector from "../SearchSelector/SearchSelector";
 
 import connect from './AddCompetenceModal.connect';
 import styles from './AddCompetenceModal.styles';

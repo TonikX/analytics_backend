@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react'
-import {useDispatch, useSelector} from 'react-redux';
+import React, {useState} from 'react'
+import {useDispatch} from 'react-redux';
 import get from 'lodash/get';
 
 import Table from "@material-ui/core/Table";
@@ -8,18 +8,23 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+
+import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import AddIcon from "@material-ui/icons/Add";
 
 import actions from '../../actions';
 
 import {CompetenceTableProps} from './types';
 
-import useStylesReusable from './ProfessionalCompetences.style';
-import useStyles from '../CompetencesTable/CompetencesTable.style';
+import {CompetenceTableType} from "../../enum";
+import EditableText from "../../../../components/EditableText/EditableText";
+import AddCompetenceModal from "../../../../components/AddCompetenceModal/AddCompetenceModal";
+import AddIndicatorsModal from "../../../../components/AddIndicatorsModal/AddIndicatorsModal";
 
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import IconButton from "@material-ui/core/IconButton";
-import {Tooltip} from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
+import useStyles from './ProfessionalCompetences.style';
+import useStylesReusable  from '../CompetencesTable/CompetencesTable.style';
 
 export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableData}) => {
     const dispatch = useDispatch();
@@ -27,22 +32,70 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
         ...useStylesReusable(),
         ...useStyles()
     };
-    const canEdit = true; //todo: change
+
+    const competenceTableType = CompetenceTableType.PROFESSIONAL_COMPETENCES;
+
+    const [competenceModalData, changeCompetenceOpenModal] = useState({isOpen: false, groupId: 0});
+    const [indicatorModalData, changeIndicatorOpenModal] = useState({isOpen: false, competenceId: 0, competenceIdRelation: 0});
+    const [editGroupTitleData, changeEditGroupTitle] = useState({isEdit: false, groupId: 0});
+    const [editCompetenceLaborFunctionData, changeEditCompetenceLaborFunction] = useState({isEdit: false, competenceId: 0});
 
     const createNewGroup = (): void => {
-        //dispatch(actions.characteristicCreateGroup({name: 'Новая категория', type: competenceTableType}));
+        dispatch(actions.characteristicCreateGroup({name: 'Новая категория', type: competenceTableType}));
     };
+
+    const saveCompetence = ({value}: { value: number, label: string }): void => {
+        dispatch(actions.characteristicSaveCompetence({
+            competenceId: value,
+            type: competenceTableType,
+            groupId: competenceModalData.groupId
+        }));
+    }
+
+    const deleteCompetence = (competenceId: number) => () => {
+        dispatch(actions.characteristicDeleteCompetence({
+            competenceId,
+            type: competenceTableType,
+        }));
+    }
+
+    const saveIndicator = (indicators: Array<{value: number}>): void => {
+        dispatch(actions.characteristicSaveIndicator({
+            indicatorId: indicators.map(item => item.value),
+            competenceId: indicatorModalData.competenceIdRelation,
+            type: competenceTableType,
+        }));
+    }
+
+    const deleteIndicator = (indicatorId: number) => () => {
+        dispatch(actions.characteristicDeleteIndicator({
+            indicatorId,
+            type: competenceTableType,
+        }));
+    }
+
     const saveGroupTitle = (title: string): void => {
-        // dispatch(actions.characteristicSaveGroupTitle({title}));
+        dispatch(actions.characteristicSaveGroupTitle({
+            title,
+            type: competenceTableType,
+            groupId: editGroupTitleData.groupId
+        }));
+
+        changeEditGroupTitle({isEdit: false, groupId: 0})
     };
-    const saveGroupCompetence = (competenceId: number): void => {
-        // dispatch(actions.characteristicSaveCompetence({competenceId}));
+
+    const saveGroupLaborFunctions = (laborFunction: string): void => {
+        dispatch(actions.characteristicSaveCompetenceLaborFunction({
+            laborFunction,
+            type: competenceTableType,
+            competenceId: editCompetenceLaborFunctionData.competenceId
+        }));
+
+        changeEditCompetenceLaborFunction({isEdit: false, competenceId: 0})
     };
-    const saveGroupIndicator = (indicatorId: number): void => {
-        // dispatch(actions.characteristicSaveIndicators({indicatorId}));
-    };
+
     const deleteGroup = (groupId: number) => (): void => {
-        //dispatch(actions.characteristicDeleteGroup({groupId, type: competenceTableType}));
+        dispatch(actions.characteristicDeleteGroup({groupId, type: competenceTableType}));
     };
 
     return (
@@ -62,29 +115,33 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
                         <TableCell className={classes.functionsCell}>
                             Выбранные обобщенные трудовые функции
                         </TableCell>
-                        <TableCell>
-                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {tableData.map((item: any) => {
                         const competences = get(item, 'competence_in_group_of_pk_competences', []);
                         const groupRow = (
-                            <TableRow>
+                            <TableRow className={classes.groupRowWrap}>
                                 <TableCell colSpan={5}
                                            align="center"
                                 >
-                                    {get(item, 'name')}
-                                    <Button color="primary"
-                                            variant="text"
-                                            size="small"
-                                    >
-                                        <AddIcon/> Добавить компетенцию
-                                    </Button>
+                                    <div className={classes.groupRow}>
+                                        <div className={classes.editableGroupTitleWrap}>
+                                            <EditableText value={get(item, 'name')}
+                                                          isEditMode={editGroupTitleData.isEdit && editGroupTitleData.groupId === item.id}
+                                                          onClickDone={saveGroupTitle}
+                                                          onClickCancel={() => changeEditGroupTitle({isEdit: false, groupId: 0})}
+                                                          onValueClick={() => changeEditGroupTitle({isEdit: true, groupId: item.id})}
+                                                          fullWidth
+                                            />
+                                        </div>
 
-                                    <IconButton onClick={deleteGroup(item.id)}>
-                                        <DeleteIcon/>
-                                    </IconButton>
+                                        <Tooltip title="Удалить группу">
+                                            <IconButton onClick={deleteGroup(item.id)}>
+                                                <DeleteIcon/>
+                                            </IconButton>
+                                        </Tooltip>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         );
@@ -96,19 +153,20 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
                         return (
                             <>
                                 {groupRow}
-                                {competences.map((competenceItem: any) => (
+                                {competences.map((competenceItem: any, index: number) => (
                                     <TableRow key={`competence-${get(competenceItem, 'competence.id')}`}>
                                         <TableCell className={classes.competenceCell}>
                                             {get(competenceItem, 'competence.number')} {get(competenceItem, 'competence.name')}
                                             <Tooltip title="Удалить компетенцию">
-                                                <DeleteIcon className={classes.deleteIcon}/>
+                                                <DeleteIcon className={classes.deleteIcon} onClick={deleteCompetence(competenceItem.id)} />
                                             </Tooltip>
+                                            <br/>
                                         </TableCell>
                                         <TableCell>
                                             {get(competenceItem, 'indicator_of_competence_in_group_of_pk_competences').map((indicatorItem: any) => (
                                                 <>
                                                     {get(indicatorItem, 'indicator.number')} {get(indicatorItem, 'indicator.name')}
-                                                    <Tooltip title="Удалить индикатор">
+                                                    <Tooltip title="Удалить индикатор" onClick={deleteIndicator(indicatorItem.id)}>
                                                         <DeleteIcon className={classes.deleteIcon}/>
                                                     </Tooltip>
                                                     <br/>
@@ -118,6 +176,11 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
                                                     variant="text"
                                                     size="small"
                                                     className={classes.addSmallButton}
+                                                    onClick={() => changeIndicatorOpenModal({
+                                                        isOpen: true,
+                                                        competenceId: get(competenceItem, 'competence.id'),
+                                                        competenceIdRelation: competenceItem.id,
+                                                    })}
                                             >
                                                 <AddIcon/> Добавить индикатор
                                             </Button>
@@ -126,17 +189,29 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
                                             {get(competenceItem, 'professional_standard.code')} {get(competenceItem, 'professional_standard.title')}
                                         </TableCell>
                                         <TableCell className={classes.functionsCell}>
-                                            {get(competenceItem, 'labor_functions')}
-                                        </TableCell>
-                                        <TableCell className={classes.actions}>
-                                            <Tooltip title="Удалить группу">
-                                                <IconButton onClick={deleteGroup(item.id)}>
-                                                    <DeleteIcon/>
-                                                </IconButton>
-                                            </Tooltip>
+                                            <EditableText value={get(competenceItem, 'labor_functions') || 'трудовая функция'}
+                                                          isEditMode={editCompetenceLaborFunctionData.isEdit
+                                                                && editCompetenceLaborFunctionData.competenceId === competenceItem.id
+                                                          }
+                                                          onClickDone={saveGroupLaborFunctions}
+                                                          onClickCancel={() => changeEditCompetenceLaborFunction({isEdit: false, competenceId: 0})}
+                                                          onValueClick={() => changeEditCompetenceLaborFunction({isEdit: true, competenceId: competenceItem.id})}
+                                                          fullWidth
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}
+                                <TableRow>
+                                    <TableCell colSpan={4}>
+                                        <Button color="primary"
+                                                variant="text"
+                                                size="small"
+                                                onClick={() => changeCompetenceOpenModal({isOpen: true, groupId: item.id})}
+                                        >
+                                            <AddIcon/> Добавить компетенцию
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
                             </>
                         );
                     })}
@@ -150,6 +225,17 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
             >
                 Добавить новую категорию
             </Button>
+
+
+            <AddCompetenceModal closeDialog={() => changeCompetenceOpenModal({isOpen: false, groupId: 0})}
+                                isOpen={competenceModalData.isOpen}
+                                saveDialog={saveCompetence}
+            />
+            <AddIndicatorsModal closeDialog={() => changeIndicatorOpenModal({isOpen: false, competenceId: 0, competenceIdRelation: 0})}
+                                isOpen={indicatorModalData.isOpen}
+                                saveDialog={saveIndicator}
+                                competenceId={indicatorModalData.competenceId}
+            />
         </div>
     )
 };
