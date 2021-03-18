@@ -1,16 +1,14 @@
 import get from 'lodash/get';
 
 import {rootState} from '../../store/reducers';
-
 import {GENERAL_PATH} from "./reducer";
 
-// import {CourseFields, fields, InstitutionFields, PlatformFields} from './enum';
-
-import {courseState  } from './types';
-//import {SelectorListType} from "../../components/SearchSelector/types";
+import { fields } from './enum'
+import {courseState, outcomeType, fieldOfStudyType, reqType, wpType } from './types';
 
 const getStateData = (state: rootState): courseState => get(state, GENERAL_PATH);
 export const getCourse = (state: rootState): any => getStateData(state);
-
-// export const getPlatforms = (state: rootState) => get(getStateData(state), fields.PLATFORMS, [])
-// export const getIntitutions = (state: rootState) => get(getStateData(state), fields.INSTITUTIONS, [])
+export const getOutcomes = (state: rootState): Array<outcomeType> => get(getStateData(state), fields.OUTCOMES, [])
+export const getFieldsOfStudy= (state: rootState): Array<fieldOfStudyType> => get(getStateData(state), fields.FIELDS_OF_STUDY, [])
+export const getRequirements = (state: rootState): Array<reqType> => get(getStateData(state), fields.REQUIREMENTS, [])
+export const getWorkPrograms = (state: rootState): Array<wpType> => get(getStateData(state), fields.WORK_PROGRAMS, [])

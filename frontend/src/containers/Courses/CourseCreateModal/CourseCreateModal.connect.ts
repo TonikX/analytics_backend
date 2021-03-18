@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "../actions";
-import {isOpenDialog, getDialogData} from '../getters';
+import {isOpenDialog} from '../getters';
 import {CoursesActions} from "../types";
 
 import {rootState} from "../../../store/reducers";
@@ -11,7 +11,6 @@ import {rootState} from "../../../store/reducers";
 const mapStateToProps = (state: rootState) => {
     return {
         isOpen: isOpenDialog(state),
-        course: getDialogData(state),
     };
 };
 
