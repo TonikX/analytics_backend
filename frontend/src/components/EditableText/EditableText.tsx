@@ -10,6 +10,7 @@ import withStyles, {WithStyles} from '@material-ui/core/styles/withStyles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import EditIcon from "@material-ui/icons/EditOutlined";
 
 import ConfirmReject from '../ConfirmReject';
 
@@ -43,16 +44,14 @@ class EditableText extends Component<EditableTextProps, EditableTexState> {
         };
     }
 
-    // eslint-disable-next-line no-undef
-    static getDerivedStateFromProps(nextProps: Readonly<EditableTextProps>, prevState: Readonly<EditableTexState>): Object|null {
+    static getDerivedStateFromProps(nextProps: EditableTextProps, prevState: EditableTexState): Object|null {
         if(!prevState.value && !nextProps.isEditMode){
             return { value: nextProps.value};
         }
         return null;
     }
 
-    // eslint-disable-next-line no-undef
-    shouldComponentUpdate(nextProps: Readonly<EditableTextProps>, nextState: Readonly<EditableTexState>, nextContext: any): boolean {
+    shouldComponentUpdate(nextProps: EditableTextProps, nextState: EditableTexState, nextContext: any): boolean {
         return nextProps.value !== this.props.value
             || nextProps.isEditMode !== this.props.isEditMode
             || nextState.value !== this.state.value
@@ -108,10 +107,10 @@ class EditableText extends Component<EditableTextProps, EditableTexState> {
         const { value } = this.state;
 
         if (!isEditMode) {
-            return <p className={classNames({[classes.clickableValue]: Boolean(onValueClick)})}
+            return <p className={classNames(classes.text, {[classes.clickableValue]: Boolean(onValueClick)})}
                       onClick={this.valueClickHandler}
             >
-                {textPrefix} <span className={textClass && classes[textClass]}>{value}</span>
+                {textPrefix} <span className={textClass && classes[textClass]}>{value}</span>&nbsp;<EditIcon />
             </p>;
         }
 
