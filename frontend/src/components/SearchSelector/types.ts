@@ -11,6 +11,7 @@ export interface SearchSelectorProps extends WithStyles<typeof styles> {
     list: SelectorListType;
     className?: string;
     disabled?: boolean;
+    isReset?: boolean;
 }
 
 export type SelectorListType = Array<SelectorItemType>;

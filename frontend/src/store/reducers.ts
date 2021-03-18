@@ -6,11 +6,8 @@ import {GENERAL_PATH as signUpPath, reducer as signUpReducer, signUpState} from 
 import {GENERAL_PATH as layoutPath, reducer as LayoutReducer} from "../layout/reducer";
 import {layoutState} from "../layout/types";
 
-// import {GENERAL_PATH as coursesPath, reducer as CoursesReducer} from "../containers/Courses/reducer";
-// import {coursesState} from "../containers/Courses/types";
-
-import {GENERAL_PATH as onlineCoursesPath, reducer as OnlineCoursesReducer} from "../containers/OnlineCourses/reducer";
-import {coursesState as onlineCoursesState} from "../containers/OnlineCourses/types";
+import {GENERAL_PATH as coursesPath, reducer as CoursesReducer} from "../containers/Courses/reducer";
+import {coursesState} from "../containers/Courses/types";
 
 import {GENERAL_PATH as coursePath, reducer as CourseReducer} from "../containers/Course/reducer";
 import {courseState as CourseState} from "../containers/Course/types";
@@ -96,8 +93,7 @@ export interface rootState {
     [signUpPath]: signUpState,
     [workProgramPath]: workProgramState,
     [layoutPath]: layoutState,
-    //[coursesPath]: coursesState,
-    [onlineCoursesPath]: onlineCoursesState,
+    [coursesPath]: coursesState,
     [literaturePath]: literatureState,
     [subjectAreaPath]: subjectAreaState,
     [subjectAreaPath]: subjectAreaState,
@@ -129,8 +125,7 @@ export default combineReducers({
     [signUpPath]: signUpReducer,
     [workProgramPath]: workProgramReducer,
     [layoutPath]: LayoutReducer,
-    //[coursesPath]: CoursesReducer,
-    [onlineCoursesPath]: OnlineCoursesReducer,
+    [coursesPath]: CoursesReducer,
     [literaturePath]: LiteratureReducer,
     [subjectAreaPath]: SubjectAreaReducer,
     [trainingEntitiesPath]: TrainingEntitiesReducer,
