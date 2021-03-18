@@ -1,5 +1,5 @@
 import createReducer from "../../store/createReducer";
-import {fields} from './enum';
+import {fields, filterFields} from './enum';
 import actions from "./actions";
 
 import {coursesState} from "./types";
@@ -10,6 +10,11 @@ export const initialState: coursesState = {
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: '',
         [fields.SORTING_MODE]: ''
+    },
+    [fields.FILTERING]: {
+        [filterFields.FILTERING_PLATFORM]: '',
+        [filterFields.FILTERING_INSTITUTION]: '',
+        [filterFields.FILTERING_LANGUAGE]: '',
     },
     [fields.CURRENT_PAGE]: 1,
     [fields.ALL_COUNT]: 1,
@@ -64,6 +69,15 @@ const changeSorting = (state: coursesState, {payload}: any): coursesState => ({
     }
 });
 
+const changeFiltering = (state: coursesState, {payload}: any): coursesState => ({
+    ...state,
+    [fields.FILTERING]: {
+        [filterFields.FILTERING_PLATFORM]: payload.platform,
+        [filterFields.FILTERING_INSTITUTION]: payload.institution,
+        [filterFields.FILTERING_LANGUAGE]: payload.language,
+    }
+})
+
 const setPlatforms = (state: coursesState, {payload}: any): coursesState => ({
     ...state,
     [fields.PLATFORMS]: payload
@@ -84,4 +98,5 @@ export const reducer = createReducer(initialState, {
     [actions.changeSorting.type]: changeSorting,
     [actions.setPlatforms.type]: setPlatforms,
     [actions.setInstitutions.type]: setInstitutions,
+    [actions.changeFiltering.type]: changeFiltering,
 });

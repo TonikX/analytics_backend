@@ -23,6 +23,7 @@ const changeSearchQuery = createAction('COURSES_CHANGE_SEARCH_QUERY');
 const changeCurrentPage = createAction('COURSES_CHANGE_CURRENT_PAGE');
 const changeAllCount = createAction('COURSES_CHANGE_ALL_COUNT');
 const changeSorting = createAction('COURSES_CHANGE_SORTING');
+const changeFiltering = createAction('COURSES_CHANGE_FILTERING')
 
 const actions: CoursesActions = {
     getCourses,
@@ -40,7 +41,8 @@ const actions: CoursesActions = {
     getPlatforms,
     setPlatforms,
     getInstitutions,
-    setInstitutions
+    setInstitutions,
+    changeFiltering,
 }
 
 export default actions;

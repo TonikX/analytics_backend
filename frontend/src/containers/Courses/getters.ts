@@ -6,7 +6,7 @@ import {GENERAL_PATH} from "./reducer";
 
 import {CourseFields, fields} from './enum';
 
-import {coursesState, CourseType, PlatformType, InstitutionType} from './types';
+import {coursesState, CourseType, PlatformType, InstitutionType, filteringType} from './types';
 import {SelectorListType} from "../../components/SearchSelector/types";
 import {SortingType} from "../../components/SortingButton/types";
 
@@ -30,6 +30,8 @@ export const getSearchQuery = (state: rootState): string => get(getStateData(sta
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState): string => get(getSorting(state), fields.SORTING_FIELD, '');
 export const getSortingMode = (state: rootState): SortingType => get(getSorting(state), fields.SORTING_MODE, '');
+
+export const getFilters = (state: rootState): filteringType => get(getStateData(state), fields.FILTERING)
 
 export const getPlatforms = (state: rootState): Array<PlatformType> => get(getStateData(state), fields.PLATFORMS, [])
 export const getIntitutions = (state: rootState): Array<InstitutionType> => get(getStateData(state), fields.INSTITUTIONS, [])
