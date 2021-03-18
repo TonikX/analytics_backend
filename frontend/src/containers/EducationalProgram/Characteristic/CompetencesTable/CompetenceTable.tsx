@@ -190,7 +190,7 @@ export const CompetenceTable: React.FC<CompetenceTableProps> = ({competenceTable
                                 </TableCell>
                                 <TableCell>
                                     {get(competenceItem, getIndicatorField()).map((indicatorItem: any) => (
-                                        <>
+                                        <div key={indicatorItem.id}>
                                             {get(indicatorItem, 'indicator.number')} {get(indicatorItem, 'indicator.name')}
                                             <Tooltip title="Удалить индикатор">
                                                 <DeleteIcon className={classes.deleteIcon}
@@ -198,7 +198,7 @@ export const CompetenceTable: React.FC<CompetenceTableProps> = ({competenceTable
                                                 />
                                             </Tooltip>
                                             <br/>
-                                        </>
+                                        </div>
                                     ))}
                                     <Button color="primary"
                                             variant="text"

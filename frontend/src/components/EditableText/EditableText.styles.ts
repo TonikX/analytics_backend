@@ -13,5 +13,9 @@ export default (theme: Theme) => createStyles({
         '&:hover': {
             color: theme.palette.primary.main
         }
+    },
+    text: {
+        display: 'flex',
+        alignItems: 'center'
     }
 });

@@ -146,8 +146,27 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
                             </TableRow>
                         );
 
+                        const addCompetenceRow = (
+                            <TableRow>
+                                <TableCell colSpan={4}>
+                                    <Button color="primary"
+                                            variant="text"
+                                            size="small"
+                                            onClick={() => changeCompetenceOpenModal({isOpen: true, groupId: item.id})}
+                                    >
+                                        <AddIcon/> Добавить компетенцию
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        );
+
                         if (competences.length === 0) {
-                            return groupRow;
+                            return (
+                                <>
+                                    {groupRow}
+                                    {addCompetenceRow}
+                                </>
+                            );
                         }
 
                         return (
@@ -201,17 +220,7 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
                                         </TableCell>
                                     </TableRow>
                                 ))}
-                                <TableRow>
-                                    <TableCell colSpan={4}>
-                                        <Button color="primary"
-                                                variant="text"
-                                                size="small"
-                                                onClick={() => changeCompetenceOpenModal({isOpen: true, groupId: item.id})}
-                                        >
-                                            <AddIcon/> Добавить компетенцию
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
+                                {addCompetenceRow}
                             </>
                         );
                     })}
