@@ -1,1 +1,1 @@
-export {default} from './SelectEducationalProgram';
+export { default } from './SelectEducationalProgram';

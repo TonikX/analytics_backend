@@ -1,1 +1,1 @@
-export {default} from './TableSettingsMenu';
+export { default } from './TableSettingsMenu';

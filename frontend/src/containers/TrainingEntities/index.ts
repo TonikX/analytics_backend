@@ -1,1 +1,1 @@
-export {default} from './TrainingEntities';
+export { default } from './TrainingEntities';

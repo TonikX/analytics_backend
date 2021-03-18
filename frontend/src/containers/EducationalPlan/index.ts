@@ -1,1 +1,1 @@
-export {default} from './EducationalPlan';
+export { default } from './EducationalPlan';

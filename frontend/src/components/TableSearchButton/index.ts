@@ -1,1 +1,1 @@
-export {default} from './TableSearchButton';
+export { default } from './TableSearchButton';

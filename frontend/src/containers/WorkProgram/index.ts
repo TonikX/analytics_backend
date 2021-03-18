@@ -1,1 +1,1 @@
-export {default} from './WorkProgram';
+export { default } from './WorkProgram';

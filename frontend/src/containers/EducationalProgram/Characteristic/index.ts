@@ -1,1 +1,1 @@
-export {default} from './Characteristic';
+export { default } from './Characteristic';

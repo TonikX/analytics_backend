@@ -1,1 +1,1 @@
-export {default} from './EditableText';
+export { default } from './EditableText';

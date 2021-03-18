@@ -1,1 +1,1 @@
-export {default} from './EntitityToEntitity';
+export { default } from './EntitityToEntitity';

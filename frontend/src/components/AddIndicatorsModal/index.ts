@@ -1,1 +1,1 @@
-export {default} from './AddIndicatorsModal';
+export { default } from './AddIndicatorsModal';

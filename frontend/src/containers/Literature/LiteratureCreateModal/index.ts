@@ -1,1 +1,1 @@
-export {default} from './LiteratureCreateModal';
+export { default } from './LiteratureCreateModal';

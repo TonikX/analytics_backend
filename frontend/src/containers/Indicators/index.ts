@@ -1,1 +1,1 @@
-export {default} from './Indicators';
+export { default } from './Indicators';

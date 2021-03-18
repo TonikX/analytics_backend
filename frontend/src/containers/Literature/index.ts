@@ -1,1 +1,1 @@
-export {default} from './Literature';
+export { default } from './Literature';

@@ -1,1 +1,1 @@
-export {default} from './QualificationSelector';
+export { default } from './QualificationSelector';

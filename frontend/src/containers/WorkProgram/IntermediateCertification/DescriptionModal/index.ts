@@ -1,1 +1,1 @@
-export {default} from './DescriptionModal';
+export { default } from './DescriptionModal';

@@ -1,1 +1,1 @@
-export {default} from './Prerequisites';
+export { default } from './Prerequisites';

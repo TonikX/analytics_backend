@@ -1,1 +1,1 @@
-export {default} from './EducationPlanInDirection';
+export { default } from './EducationPlanInDirection';

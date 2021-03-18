@@ -1,1 +1,1 @@
-export {default} from './DetailTrainingModule';
+export { default } from './DetailTrainingModule';

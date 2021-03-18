@@ -1,1 +1,1 @@
-export {default} from './InputsLoader';
+export { default } from './InputsLoader';

@@ -1,1 +1,1 @@
-export {default} from './SelectDiscipline';
+export { default } from './SelectDiscipline';

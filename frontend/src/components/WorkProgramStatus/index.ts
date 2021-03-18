@@ -1,1 +1,1 @@
-export {default} from './WorkProgramStatus';
+export { default } from './WorkProgramStatus';

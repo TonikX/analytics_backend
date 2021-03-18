@@ -1,1 +1,1 @@
-export {default} from './SubjectAreaCreateModal';
+export { default } from './SubjectAreaCreateModal';

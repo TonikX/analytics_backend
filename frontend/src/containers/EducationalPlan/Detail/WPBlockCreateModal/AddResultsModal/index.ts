@@ -1,1 +1,1 @@
-export {default} from './AddResultsModal';
+export { default } from './AddResultsModal';

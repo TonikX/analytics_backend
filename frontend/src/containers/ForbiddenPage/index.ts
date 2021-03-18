@@ -1,1 +1,1 @@
-export {default} from './ForbiddenPage';
+export { default } from './ForbiddenPage';

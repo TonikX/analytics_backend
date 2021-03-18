@@ -1,1 +1,1 @@
-export {default} from './EvaluationCertificationTotalList';
+export { default } from './EvaluationCertificationTotalList';

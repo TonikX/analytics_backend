@@ -1,1 +1,1 @@
-export {default} from './AbsoluteLoader';
+export { default } from './AbsoluteLoader';

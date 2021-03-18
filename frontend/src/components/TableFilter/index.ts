@@ -1,1 +1,1 @@
-export {default} from './TableFilter';
+export { default } from './TableFilter';

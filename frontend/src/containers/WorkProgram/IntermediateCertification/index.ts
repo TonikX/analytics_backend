@@ -1,1 +1,1 @@
-export {default} from './IntermediateCertification';
+export { default } from './IntermediateCertification';

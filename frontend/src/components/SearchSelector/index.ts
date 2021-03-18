@@ -1,1 +1,1 @@
-export {default} from './SearchSelector';
+export { default } from './SearchSelector';
