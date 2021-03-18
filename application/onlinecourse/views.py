@@ -14,7 +14,7 @@ class InstitutionViewSet(viewsets.ModelViewSet):
     """Контроллер для модели Правообладатель"""
     queryset = Institution.objects.all()
     serializer_class = InstitutionSerializer
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title']
 
 
@@ -22,7 +22,7 @@ class PlatformViewSet(viewsets.ModelViewSet):
     """Контроллер для модели Платформа"""
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title']
 
 
