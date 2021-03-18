@@ -2,7 +2,6 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "lint:fix": "eslint src/**/*.js --fix",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^19.0.2",
     "@ckeditor/ckeditor5-build-decoupled-document": "^19.0.2",
