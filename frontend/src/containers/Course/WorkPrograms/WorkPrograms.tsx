@@ -8,7 +8,6 @@ import TableRow from "@material-ui/core/TableRow"
 import TableCell from "@material-ui/core/TableCell"
 import TableBody from "@material-ui/core/TableBody"
 import Scrollbars from 'react-custom-scrollbars'
-import SortingButton from "../../../components/SortingButton"
 
 import { useStyles } from './WorkPrograms.styles'
 import { getWorkPrograms } from '../getters'
@@ -31,13 +30,32 @@ export const WorkPrograms: React.FC = () => {
               <TableRow>
                 <TableCell>
                   Название
-                  <SortingButton changeMode={() => {}} mode='' />
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {workPrograms.length === 0 && <Typography><b>Нет информации!</b></Typography>}
               {workPrograms.map((workProgram: wpType) => (
+                <TableRow key={workProgram[wpFields.ID]}>
+                  <TableCell>{workProgram[wpFields.WORK_PROGRAM]}</TableCell>
+                </TableRow>
+              ))}
+                            {workPrograms.map((workProgram: wpType) => (
+                <TableRow key={workProgram[wpFields.ID]}>
+                  <TableCell>{workProgram[wpFields.WORK_PROGRAM]}</TableCell>
+                </TableRow>
+              ))}
+                            {workPrograms.map((workProgram: wpType) => (
+                <TableRow key={workProgram[wpFields.ID]}>
+                  <TableCell>{workProgram[wpFields.WORK_PROGRAM]}</TableCell>
+                </TableRow>
+              ))}
+                            {workPrograms.map((workProgram: wpType) => (
+                <TableRow key={workProgram[wpFields.ID]}>
+                  <TableCell>{workProgram[wpFields.WORK_PROGRAM]}</TableCell>
+                </TableRow>
+              ))}
+                            {workPrograms.map((workProgram: wpType) => (
                 <TableRow key={workProgram[wpFields.ID]}>
                   <TableCell>{workProgram[wpFields.WORK_PROGRAM]}</TableCell>
                 </TableRow>
