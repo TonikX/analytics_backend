@@ -2,7 +2,7 @@ from rest_framework import permissions
 
 from workprogramsapp.expertise.models import UserExpertise
 from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder, \
-    AcademicPlanInFolder , DisciplineBlockModuleInFolder
+    AcademicPlanInFolder, DisciplineBlockModuleInFolder, IndividualImplementationAcademicPlanInFolder
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -119,6 +119,16 @@ class IsOwnerOfFolderWithAcademicPlan(permissions.BasePermission):
             return Folder.objects.filter(owner=request.user, pk=request.data['folder'])
         except KeyError:
             return True
+
+class IsOwnerOfFolderWithIndividualImplementationAcademicPlan(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if 'pk' in dict(view.kwargs):
+            return IndividualImplementationAcademicPlanInFolder.objects.filter(pk=view.kwargs['pk'], folder__owner=request.user)
+        try:
+            return Folder.objects.filter(owner=request.user, pk=request.data['folder'])
+        except KeyError:
+            return True
+
 
 
 
