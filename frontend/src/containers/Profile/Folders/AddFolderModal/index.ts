@@ -1,1 +1,1 @@
-export { default } from './AddFolderModal';
+export {default} from './AddFolderModal';

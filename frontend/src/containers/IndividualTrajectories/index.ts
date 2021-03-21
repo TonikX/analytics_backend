@@ -1,1 +1,1 @@
-export { default } from './IndividualTrajectories';
+export {default} from './IndividualTrajectories';

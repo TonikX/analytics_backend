@@ -1,27 +1,20 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
 import Scrollbars from 'react-custom-scrollbars'
 import Typography from '@material-ui/core/Typography'
 
 import { useStyles } from './Results.styles'
 
-import { getOutcomes } from '../getters'
-import { rootState } from '../../../store/reducers'
-import { outcomeFields } from '../enum'
-import { outcomeType } from '../types'
-
 export const Results:React.FC = () => {
   const classes = useStyles()
-  const outcomes = useSelector((state: rootState) => getOutcomes(state))
+  const results = ['Свободная ориентация в программном пакете 3ds Max (РО-1).', 'Настройка и создание деталей в 3ds Max (РО-2).']
   return (
     <div>
       <Typography className={classes.title}>Результаты</Typography>
       <Scrollbars style={{height: 'calc(100vh - 300px)'}}>
-        {outcomes.length === 0 && <Typography><b>Нет информации!</b></Typography>}
-        {outcomes.map((outcome: outcomeType) => (
+        {results.map((result) => (
         <div className={classes.item}>
-          <Typography style={{width: '80%'}}>{outcome[outcomeFields.LEARNING_OUTCOME]}</Typography>
+          <Typography style={{width: '80%'}}>{result}</Typography>
         </div>
         ))}
       </Scrollbars>

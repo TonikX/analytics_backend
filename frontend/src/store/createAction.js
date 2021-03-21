@@ -1,13 +1,13 @@
 const createAction = (type, ...argNames) => (...args) => {
-  let action = { type };
+    let action = {type};
 
-  if (!argNames.length) argNames = ['payload'];
+    if (!argNames.length) argNames = ['payload'];
 
-  argNames.forEach((argName, index) => {
-    action[argName] = args[index];
-  })
+    argNames.forEach((argName, index) => {
+        action[argName] = args[index];
+    });
 
-  return action;
+    return action;
 };
 
 export default createAction;

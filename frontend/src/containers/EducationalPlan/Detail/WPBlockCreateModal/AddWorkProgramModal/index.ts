@@ -1,1 +1,1 @@
-export { default } from './AddWorkProgramModal';
+export {default} from './AddWorkProgramModal';

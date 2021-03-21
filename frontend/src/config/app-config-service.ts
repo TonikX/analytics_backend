@@ -1,9 +1,7 @@
-import { config } from './app-config';
+import {config} from "./app-config";
 
 export default {
-  getApiBasePath() {
-    return `${config.apiSchema}://${config.apiHost}${
-      config.apiPort ? ":" + config.apiPort : ""
-    }`;
-  },
+    getApiBasePath() {
+        return `${config.apiSchema}://${config.apiHost}${config.apiPort ? ":" + config.apiPort : ""}`;
+    },
 };

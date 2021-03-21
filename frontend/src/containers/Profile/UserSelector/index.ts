@@ -1,1 +1,1 @@
-export { default } from './UserSelector';
+export {default} from './UserSelector';

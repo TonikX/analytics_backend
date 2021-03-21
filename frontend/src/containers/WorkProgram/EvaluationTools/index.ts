@@ -1,1 +1,1 @@
-export { default } from './EvaluationTools';
+export {default} from './EvaluationTools';

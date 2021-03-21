@@ -1,4 +1,4 @@
-import { createLogic } from 'redux-logic';
+import {createLogic} from "redux-logic";
 
 import actions from './actions';
 import profileActions from '../containers/Profile/Folders/actions';
@@ -33,73 +33,75 @@ const userService = new UserService();
 // });
 
 const getAllUsers = createLogic({
-  type: actions.getAllUsers.type,
-  latest: true,
-  process({ getState, action }, dispatch, done) {
-    //@ts-ignore
-    const searchText = action.payload;
+    type: actions.getAllUsers.type,
+    latest: true,
+    process({getState, action}, dispatch, done) {
+        //@ts-ignore
+        const searchText = action.payload;
 
-    service
-      .getAllUsers(searchText)
-      .then((res) => {
-        dispatch(actions.setAllUsers(res.data.results));
-        dispatch(actions.fetchingSuccess())
-      })
-      .catch((err) => {
-        dispatch(actions.fetchingFailed(err));
-      })
-      .then(() => {
-        return done();
-      })
-  },
+        service.getAllUsers(searchText)
+            .then((res) => {
+                dispatch(actions.setAllUsers(res.data.results));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+
+                return done();
+            });
+    }
 });
 
 const getUserGroups = createLogic({
-  type: actions.getUserGroups.type,
-  latest: true,
-  process({ getState, action }, dispatch, done) {
-    service
-      .getUserGroups()
-      .then((res) => {
-        dispatch(actions.setUserGroups(res.data.groups));
-        dispatch(actions.fetchingSuccess())
-      })
-      .catch((err) => {
-        dispatch(actions.fetchingFailed(err));
-      })
-      .then(() => {
-        return done();
-      })
-  },
+    type: actions.getUserGroups.type,
+    latest: true,
+    process({getState, action}, dispatch, done) {
+        service.getUserGroups()
+            .then((res) => {
+                dispatch(actions.setUserGroups(res.data.groups));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                return done();
+            });
+    }
 });
 
 const refreshToken = createLogic({
-  type: actions.refreshToken.type,
-  latest: true,
-  process({ getState, action }, dispatch, done) {
-    dispatch(actions.fetchingTrue({ destination: "refresh" }));
+    type: actions.refreshToken.type,
+    latest: true,
+    process({getState, action}, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: 'refresh'}));
 
-    service
-      .refreshToken()
-      .then((res) => {
-        const token = get(res, "data.access", null);
+        service.refreshToken()
+            .then((res) => {
+                const token = get(res, 'data.access', null);
 
-        userService.setToken(token)
-        dispatch(actions.getUserGroups())
-        dispatch(profileActions.getFolders())
-        dispatch(actions.fetchingSuccess())
+                userService.setToken(token);
+                dispatch(actions.getUserGroups());
+                dispatch(profileActions.getFolders());
+                dispatch(actions.fetchingSuccess());
 
-        dispatch(actions.fetchingFalse({ destination: 'refresh' }))
-      })
-      .catch((err) => {
-        dispatch(actions.setAuthFalse());
-        userService.logout()
-        dispatch(actions.fetchingFalse({ destination: 'refresh' }))
-      })
-      .then(() => {
-        return done();
-      })
-  },
+                dispatch(actions.fetchingFalse({destination: 'refresh'}));
+            })
+            .catch((err) => {
+                dispatch(actions.setAuthFalse());
+                userService.logout();
+                dispatch(actions.fetchingFalse({destination: 'refresh'}));
+            })
+            .then(() => {
+                return done();
+            });
+    }
 });
 
-export default [getAllUsers, getUserGroups, refreshToken]
+export default [
+    getAllUsers,
+    getUserGroups,
+    refreshToken,
+];

@@ -6,5 +6,5 @@ import styles from "./CourseCreateModal.styles";
 export interface CourseCreateModalProps extends WithStyles<typeof styles> {
     actions: CoursesActions;
     isOpen: boolean;
-    step: number;
+    course: any;
 }

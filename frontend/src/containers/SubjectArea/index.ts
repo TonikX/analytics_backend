@@ -1,1 +1,1 @@
-export { default } from './SubjectArea';
+export {default} from './SubjectArea';

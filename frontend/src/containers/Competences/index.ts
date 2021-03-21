@@ -1,1 +1,1 @@
-export { default } from './Competences';
+export {default} from './Competences';

@@ -1,1 +1,1 @@
-export { default } from './PlansAndDirections';
+export {default} from './PlansAndDirections';

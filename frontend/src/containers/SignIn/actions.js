@@ -8,7 +8,7 @@ const signIn = createAction(C.SIGN_IN, 'payload');
 const signInPageDown = createAction(C.SIGN_IN_PAGE_DOWN, 'payload');
 
 export default {
-  signInChangeField,
-  signIn,
-  signInPageDown,
+    signInChangeField,
+    signIn,
+    signInPageDown,
 }

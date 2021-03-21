@@ -1,1 +1,1 @@
-export { default } from './CompetenceTable';
+export {default} from './CompetenceTable';

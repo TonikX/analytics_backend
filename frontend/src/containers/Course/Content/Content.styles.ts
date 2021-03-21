@@ -6,8 +6,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     marginTop: '10px',
     marginBottom: '10px',
   },
-  content: {
-    marginBottom: '10px',
-    whiteSpace: 'pre-wrap',
+  list: {
+    paddingLeft: '40px',
   }
 }));

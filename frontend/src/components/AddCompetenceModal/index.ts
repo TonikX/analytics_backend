@@ -1,1 +1,1 @@
-export { default } from './AddCompetenceModal';
+export {default} from './AddCompetenceModal';

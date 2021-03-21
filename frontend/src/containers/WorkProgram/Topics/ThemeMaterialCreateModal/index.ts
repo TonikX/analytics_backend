@@ -1,1 +1,1 @@
-export { default } from './ThemeMaterialCreateModal';
+export {default} from './ThemeMaterialCreateModal';

@@ -48,19 +48,9 @@ export default (theme: Theme) => createStyles({
         marginLeft: 'auto',
         padding: '0px 20px'
     },
-    searchWrapper: {},
     searchInput: {
         height: '40px',
         minHeight: '40px'
-    },
-    filterBtn: {
-        width: '150px',
-        height: '40px',
-        marginRight: '20px',
-        backgroundColor: theme.palette.primary.main,
-        color: '#fff',
-        textDecoration: 'uppercase',
-        fontSize: '15px',
     },
     addIcon: {
         marginLeft: 'auto',
@@ -71,8 +61,4 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center',
         marginTop: '10px'
     },
-    accordionSummary: {
-        backgroundColor: 'rgba(0, 0, 0, .03)', 
-        borderBottom: '1px solid rgba(0, 0, 0, .125)',
-    }
 });

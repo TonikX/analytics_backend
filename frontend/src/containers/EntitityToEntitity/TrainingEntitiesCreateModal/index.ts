@@ -1,1 +1,1 @@
-export { default } from './TrainingEntitiesCreateModal';
+export {default} from './TrainingEntitiesCreateModal';

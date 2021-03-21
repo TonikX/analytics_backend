@@ -1,1 +1,1 @@
-export { default } from './ConfirmReject';
+export {default} from './ConfirmReject';

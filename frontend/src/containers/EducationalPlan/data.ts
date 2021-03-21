@@ -6,28 +6,28 @@ const FACULTATIV = 'Facultativ';
 const OPT = 'Opt_specialization';
 
 export const typeOfWorkProgramInPlan = [
-  {
-    value: OPTIONALLY,
-    label: "Дициплина по выбору",
-  },
-  {
-    value: REQUIRED,
-    label: "Обязательная",
-  },
-  {
-    value: SET_SPECIALIZATION,
-    label: "Часть специализации",
-  },
-  {
-    value: FACULTATIV,
-    label: "Факультативная",
-  },
-  {
-    value: OGNP_SET,
-    label: "ОГНП",
-  },
-  {
-    value: OPT,
-    label: "Выбор в специализации",
-  },
+    {
+        value: OPTIONALLY,
+        label: 'Дициплина по выбору',
+    },
+    {
+        value: REQUIRED,
+        label: 'Обязательная',
+    },
+    {
+        value: SET_SPECIALIZATION,
+        label: 'Часть специализации',
+    },
+    {
+        value: FACULTATIV,
+        label: 'Факультативная',
+    },
+    {
+        value: OGNP_SET,
+        label: 'ОГНП',
+    },
+    {
+        value: OPT,
+        label: 'Выбор в специализации',
+    }
 ];

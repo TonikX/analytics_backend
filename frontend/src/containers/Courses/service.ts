@@ -1,18 +1,39 @@
 import AnalyticsService from "../../service/analytics-service";
+import {CourseFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
 class CoursesServices extends AnalyticsService{
-    getCourses(currentPage: number, searchQuery: string, sortingField: string,
-        sortingMode: SortingType, platform: number | '', institution: number | '', language: string){
-
+    getCourses(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
-        return this.get(`/api/course/onlinecourse/?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&platform=${platform}&institution=${institution}&language=${language}`)
+
+        return this.get(`/api/onlinecourse?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
-    getPlatforms(){
-        return this.get('/api/course/platform/')
+
+    deleteCourse(courseId: number){
+        return this.delete(`/api/onlinecourse/delete/${courseId}`);
     }
-    getInstitutions(){
-        return this.get('/api/course/institution/')
+
+    createCourse(course: any){
+        const formData = new FormData();
+
+        formData.append(CourseFields.TITLE, course[CourseFields.TITLE]);
+        formData.append(CourseFields.DESCRIPTION, course[CourseFields.DESCRIPTION]);
+        formData.append(CourseFields.COURSE_URL, course[CourseFields.COURSE_URL]);
+        formData.append(CourseFields.PLATFORM, course[CourseFields.PLATFORM]);
+
+        return this.post(`/api/onlinecourse/create`, formData);
+    }
+
+    updateCourse(course: any){
+        const formData = new FormData();
+        const courseId = course[CourseFields.ID];
+
+        formData.append(CourseFields.TITLE, course[CourseFields.TITLE]);
+        formData.append(CourseFields.DESCRIPTION, course[CourseFields.DESCRIPTION]);
+        formData.append(CourseFields.COURSE_URL, course[CourseFields.COURSE_URL]);
+        formData.append(CourseFields.PLATFORM, course[CourseFields.PLATFORM]);
+
+        return this.patch(`/api/onlinecourse/update/${courseId}`, formData);
     }
 }
 

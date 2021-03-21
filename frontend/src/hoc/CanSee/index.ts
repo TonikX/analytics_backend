@@ -1,1 +1,1 @@
-export { default } from './CanSee';
+export {default} from './CanSee';

@@ -1,1 +1,1 @@
-export { default } from './SimpleSelector';
+export {default} from './SimpleSelector';
