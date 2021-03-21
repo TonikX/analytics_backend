@@ -3,6 +3,7 @@ import {ReactText} from "react";
 const FOLDERS = 'folders';
 const SIGN_IN = 'sign-in';
 const SIGN_UP = 'sign-up';
+const COURSES = 'courses';
 const ONLINE_COURSES = 'online-courses';
 const COURSE = 'course'
 const LITERATURE = 'literature';
@@ -56,6 +57,10 @@ export default class RouterService {
 
     getSignUpRoute = () => {
         return SEPARATOR + SIGN_UP;
+    };
+    //todo: remove it
+    getCoursesRoute = () => {
+        return SEPARATOR + COURSES;
     };
 
     getOnlineCoursesRoute = () => {
