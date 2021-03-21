@@ -1,5 +1,6 @@
 import React, {ReactText} from 'react';
 import get from "lodash/get";
+import {shallowEqual} from "recompose";
 
 import {ThemeCreateModalProps} from './types';
 
@@ -17,15 +18,12 @@ import FormControl from "@material-ui/core/FormControl";
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import SearchSelector from '../../../../components/SearchSelector';
+
+import {CourseFields} from "../../../Courses/enum";
 import {workProgramTopicFields, fields} from '../../enum';
 
 import connect from './ThemeCreateModal.connect';
 import styles from './ThemeCreateModal.styles';
-import {shallowEqual} from "recompose";
-import {CourseFields} from "../../../Courses/enum";
-import {Link} from "react-router-dom";
-import {appRouter} from "../../../../service/router-service";
-import Typography from "@material-ui/core/Typography";
 
 class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
     state = {
@@ -162,14 +160,6 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
-                    <Link to={appRouter.getCoursesRoute()}
-                          className={classes.link}
-                          target="_blank"
-                    >
-                        <Typography>
-                            Создать онлайн курс
-                        </Typography>
-                    </Link>
                     <Button onClick={this.handleClose}
                             variant="text">
                         Отмена

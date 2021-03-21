@@ -81,7 +81,7 @@ export default (groups: Array<string>) => {
         },
         {
             title: 'Онлайн курсы',
-            link: appRouter.getOnlineCoursesRoute(),
+            link: appRouter.getCoursesRoute(),
             icon: CoursesIcon,
             selectedIcon: CoursesSelectedIcon,
         },
