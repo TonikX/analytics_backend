@@ -22,15 +22,15 @@ import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
-import CourseCreateModal from "../ProfessionalStandards/CreateModal";
+import ProfessionalStandardCreateModal from "../ProfessionalStandards/CreateModal";
 import {SortingType} from "../../components/SortingButton/types";
 
-import { ProfessionalStandardsType} from './types';
+import {ProfessionalStandardsType} from './types';
 import {ProfessionalStandardFields} from './enum';
+import {ProfessionalStandardsProps} from "./types";
 
 import connect from './ProfessionalStandards.connect';
 import styles from './ProfessionalStandarts.styles';
-import {ProfessionalStandardsProps} from "./types";
 
 class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> {
     state = {
@@ -166,13 +166,13 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
                     </Fab>
                 </div>
 
-                <CourseCreateModal />
+                <ProfessionalStandardCreateModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены, что хотите удалить компетенцию?'}
+                               confirmText={'Вы точно уверены, что хотите удалить профессиональный стандарт?'}
                                isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить компетенцию'}
+                               dialogTitle={'Удалить профессиоанльный стандарт'}
                                confirmButtonText={'Удалить'}
                 />
             </Paper>
