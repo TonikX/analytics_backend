@@ -144,7 +144,7 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
 
                 <div className={classes.row}>
                     <div>
-                        <Typography>Квалификация: </Typography>
+                        <Typography>Уровень образования: </Typography>
                         <ButtonGroup>
                             <Button onClick={this.handleChangeQualification(qualificationEnum.BACHELOR)}
                                     color={qualification === qualificationEnum.BACHELOR ? 'primary' : 'default'}

@@ -95,7 +95,7 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Профессиональные Стандарты
+                    Профессиональные стандарты
 
                     <TextField placeholder="Поиск"
                                variant="outlined"

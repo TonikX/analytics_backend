@@ -314,7 +314,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                                     <FormControlLabel
                                         control={<Checkbox checked={evaluationTool[EvaluationToolFields.CHECK_POINT]} onChange={this.changeCheckPoint}/>}
-                                        label="Контрольная точка"
+                                        label="Ключевая точка"
                                         className={classes.marginBottom30}
                                     />
 
