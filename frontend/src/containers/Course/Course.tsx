@@ -13,7 +13,7 @@ import { Content } from './Content/Content'
 import { CurrentSession } from './CurrentSession/CurrentSession'
 import { Directions } from './Directions/Directions'
 import { Requirements } from './Requirements/Requirements'
-// import { Competences } from './Competences/Competences'
+import { Competences } from './Competences/Competences'
 import { Results } from './Results/Results'
 
 import actions from './actions'
@@ -22,7 +22,6 @@ import { steps } from './enum'
 import { getCourse } from './getters'
 import { useStyles } from './Course.styles'
 import { rootState } from '../../store/reducers'
-import { WorkPrograms } from './WorkPrograms/WorkPrograms'
 
 export const Course: React.FC = () => {
   const dispatch = useDispatch()
@@ -33,8 +32,9 @@ export const Course: React.FC = () => {
   const course = useSelector((state: rootState) => getCourse(state))
 
   useEffect(() => {
+    //dispatch(actions.getPlatforms1())
+    dispatch(actions.getInstitutions1())
     dispatch(actions.getCourse(get(params, 'id', null)))
-    // eslint-disable-next-line
   }, [])
   const showActiveStep = (step: number): React.ReactNode => {
     switch (step) {
@@ -48,12 +48,10 @@ export const Course: React.FC = () => {
         return <Directions />
       case 4:
         return <Requirements />
-      // case 5:
-      //   return <Competences />
       case 5:
-        return <Results />
+        return <Competences />
       case 6:
-        return <WorkPrograms />
+        return <Results />
     }
   }
   return (
@@ -113,22 +111,13 @@ export const Course: React.FC = () => {
               {steps.REQUIREMENTS}
             </StepButton>
           </Step>
-          {/* <Step>
-            <StepButton 
-              onClick={() => setActiveStep(5)}
-              completed={false} 
-              style={{textAlign: 'left'}}
-            >
-              {steps.COMPETENCES}
-            </StepButton>
-          </Step> */}
           <Step>
             <StepButton 
               onClick={() => setActiveStep(5)}
               completed={false} 
               style={{textAlign: 'left'}}
             >
-              {steps.RESULTS}
+              {steps.COMPETENCES}
             </StepButton>
           </Step>
           <Step>
@@ -137,7 +126,7 @@ export const Course: React.FC = () => {
               completed={false} 
               style={{textAlign: 'left'}}
             >
-              {steps.WORK_PROGRAMS}
+              {steps.RESULTS}
             </StepButton>
           </Step>
         </Stepper>

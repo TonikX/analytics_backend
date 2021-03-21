@@ -12,10 +12,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   textItem: {
     marginBottom: '10px'
   },
-  description: {
-    marginBottom: '10px',
-    whiteSpace: 'pre-wrap',
-  },
   content: {
     display: 'flex',
     justifyContent: 'row',
@@ -26,14 +22,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   btn: {
     minWidth: '120px',
-    background: theme.palette.primary.main,
-    marginBottom: '20px',
-  },
-  link: {
-    minWidth: '120px',
-  },
-  btnLink: {
-    width: '100%',
     background: theme.palette.primary.main,
     marginBottom: '20px',
   },

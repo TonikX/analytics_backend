@@ -3,13 +3,14 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
-from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder,  \
-    AcademicPlanInFolder,  DisciplineBlockModuleInFolder
+from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder, \
+    AcademicPlanInFolder, DisciplineBlockModuleInFolder, IndividualImplementationAcademicPlanInFolder
 from workprogramsapp.folders_ans_statistic.serializers import FolderSerializer, WorkProgramInFolderSerializer, \
-    FolderCreateSerializer,  AcademicPlanInFolderSerializer, \
-      ModuleInFolderSerializer
+    FolderCreateSerializer, AcademicPlanInFolderSerializer, \
+    ModuleInFolderSerializer, IndividualImplementationAcademicPlanInFolderSerializer
 from workprogramsapp.permissions import IsOwnerOfFolder, IsOwnerOfFolderWithWorkProgramm, \
-    IsOwnerOfFolderWithAcademicPlan, IsOwnerOfFolderWithDisciplineBlockModule
+    IsOwnerOfFolderWithAcademicPlan, IsOwnerOfFolderWithDisciplineBlockModule, \
+    IsOwnerOfFolderWithIndividualImplementationAcademicPlan
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -163,6 +164,41 @@ class RemoveFromFolderModuleView(generics.DestroyAPIView):
     serializer_class = ModuleInFolderSerializer
 
 
+# Траектории
+
+class IndividualImplementationAcademicPlanInFolderView(generics.ListAPIView):
+    """
+    Выдает все моудли для запрашивающего пользователя с рейтингом в указанной папке
+    В url-е нужно указать айди папки
+    """
+    queryset = IndividualImplementationAcademicPlanInFolder.objects.all()
+    serializer_class = IndividualImplementationAcademicPlanInFolderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self, *args, **kwargs):
+        try:
+            return IndividualImplementationAcademicPlanInFolder.objects.filter(folder=self.kwargs['pk'], folder__owner=self.request.user)
+        except KeyError:
+            raise NotFound()
+
+
+
+class AddToFolderndividualImplementationAcademicPlanView(generics.CreateAPIView):
+    """
+      Добавление модуля в папку
+    """
+    permission_classes = [IsOwnerOfFolderWithIndividualImplementationAcademicPlan]
+    queryset = IndividualImplementationAcademicPlanInFolder.objects.all()
+    serializer_class = IndividualImplementationAcademicPlanInFolderSerializer
+
+
+class RemoveFromFolderImplementationAcademicPlanView(generics.DestroyAPIView):
+    """
+    Удаление модуля из папки
+    """
+    permission_classes = [IsOwnerOfFolderWithIndividualImplementationAcademicPlan]
+    queryset = IndividualImplementationAcademicPlanInFolder.objects.all()
+    serializer_class = IndividualImplementationAcademicPlanInFolderSerializer
 
 @api_view(['GET'])
 def WorkProgramStatistic(request, pk):
