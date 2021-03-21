@@ -159,7 +159,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        Квалификация
+                                        Уровень образования
                                         <SortingButton changeMode={this.changeSorting(WorkProgramGeneralFields.QUALIFICATION)}
                                                        mode={sortingField === WorkProgramGeneralFields.QUALIFICATION ? sortingMode : ''}
                                         />

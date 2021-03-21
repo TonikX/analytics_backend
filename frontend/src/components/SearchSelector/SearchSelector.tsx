@@ -28,6 +28,15 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
         this.setState({searchText: valueLabel});
     }
 
+    componentDidUpdate(prevProps: SearchSelectorProps) {
+        // позволяет сбросить SearchSelector (отправка пустого value и isReset: true)
+        if ((this.props.value !== prevProps.value) && this.props.isReset) {
+            const {list} = this.props;
+            let item = list.find(el => el.value === this.props.value)
+            this.setState({searchText: get(item, 'label', '')})
+        }
+    }
+
     changeSearchText = (event: React.ChangeEvent) => {
         const value = get(event, 'currentTarget.value', '');
 

@@ -45,7 +45,7 @@ const SelectEducationalProgram: React.FC = () => {
         (
           <>
             <Typography className={classes.subtitle}>
-              1. Квалификация
+              1. Уровень образования
             </Typography>
             <ButtonGroup>
               <Button onClick={handleChangeQualification(BACHELOR_QUALIFICATION)}

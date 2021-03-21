@@ -6,6 +6,7 @@ export enum steps {
   REQUIREMENTS = 'Требования',
   COMPETENCES = 'Формируемые компетенции',
   RESULTS = 'Результаты',
+  WORK_PROGRAMS = 'Связанные с курсом РПД'
 }
 
 export enum fields {
@@ -13,8 +14,8 @@ export enum fields {
   TITLE = 'title',
   DESCRIPTION = 'description',
   COURSE_URL = 'external_url',
-  PLATFORM_ID = 'platform',
-  INSTITUTION_ID = 'institution',
+  PLATFORM = 'platform',
+  INSTITUTION = 'institution',
   LANGUAGE = 'language',
   STARTED_AT = 'started_at',
   RATING = 'rating',
@@ -22,16 +23,53 @@ export enum fields {
   HAS_CERTIFICATE = 'has_certificate',
   CREDITS = 'credits',
   TOTAL_VISITORS_NUMBER = 'total_visitors_number',
+  VISITORS_NUMBER = 'visitors_number',
   CREATED_AT = 'created_at',
   DURATION = 'duration',
   VOLUME = 'volume',
   INTENSITY_PER_WEEK = 'intensity_per_week',
   PLATFORMS = 'platforms',
   INSTITUTIONS = 'institutions',
+  LECTURES_NUMBER = 'lectures_number',
+  CONTENT = 'content',
+  RECORD_END_AT = 'record_end_at',
+  FINISHED_AT = 'finished_at',
+  FIELDS_OF_STUDY = 'course_field_of_study',
+  REQUIREMENTS = 'course_requirement',
+  OUTCOMES = 'course_learning_outcome',
+  WORK_PROGRAMS = 'course_workprogram',
 }
 
 export enum fetchingTypes {
   GET_COURSE = 'GET_COURSE',
   GET_PLATFORMS = 'GET_PLATFORMS1',
   GET_INSTITUTIONS = 'GET_INSTITUTIONS1',
+}
+
+export enum fieldsOfStudyFields {
+  ID = 'id',
+  COURSE = 'course',
+  FIELD_OF_STUDY = 'field_of_study',
+
+  // NEW
+  // ID = 'id',
+  // TITLE = 'field_of_study'
+}
+
+export enum reqFields {
+  ID = 'id',
+  COURSE = 'course',
+  ITEM = 'item',
+}
+
+export enum outcomeFields {
+  ID = 'id',
+  COURSE = 'course',
+  LEARNING_OUTCOME = 'learning_outcome',
+}
+
+export enum wpFields {
+  ID = 'id',
+  COURSE = 'course',
+  WORK_PROGRAM = 'work_program',
 }

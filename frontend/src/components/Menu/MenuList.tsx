@@ -79,12 +79,6 @@ export default (groups: Array<string>) => {
             icon: WorkProgramIcon,
             selectedIcon: WorkProgramSelectedIcon,
         },
-        // {
-        //     title: 'Онлайн курсы',
-        //     link: appRouter.getCoursesRoute(),
-        //     icon: CoursesIcon,
-        //     selectedIcon: CoursesSelectedIcon,
-        // },
         {
             title: 'Онлайн курсы',
             link: appRouter.getOnlineCoursesRoute(),
@@ -106,6 +100,12 @@ export default (groups: Array<string>) => {
         {
             title: 'Индикаторы',
             link: appRouter.getIndicatorsRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
+        {
+            title: 'Профессиональные стандарты',
+            link: appRouter.getProfessionalStandardsRoute(),
             icon: IndicatorsIcon,
             selectedIcon: IndicatorsSelectedIcon,
         },

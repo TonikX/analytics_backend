@@ -179,7 +179,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        Квалификация
+                                        Уровень образования
                                         <SortingButton changeMode={this.changeSorting(EducationalPlanFields.QUALIFICATION)}
                                                        mode={sortingField === EducationalPlanFields.QUALIFICATION ? sortingMode : ''}
                                         />

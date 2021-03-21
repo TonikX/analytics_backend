@@ -45,6 +45,8 @@ import SelectDiscipline from "./containers/SelectDiscipline";
 import SelectEducationalProgram from './containers/SelectEducationalProgram';
 import IndividualTrajectories from './containers/IndividualTrajectories';
 
+import ProfessionalStandards from './containers/ProfessionalStandards';
+
 import Layout from "./layout";
 
 import RouterService from './service/router-service';
@@ -75,6 +77,9 @@ export default () => (
             </Route>
             <AuthRoute path={routerService.getSelectDisciplineRoute()}>
                 <SelectDiscipline />
+            </AuthRoute>
+            <AuthRoute path={routerService.getProfessionalStandardsRoute()}>
+                <ProfessionalStandards />
             </AuthRoute>
             <AuthRoute path={routerService.getIndividualTrajectoriesRoute()}>
                 <IndividualTrajectories />
