@@ -24,6 +24,7 @@ const SKILLS = 'skills';
 const EXPERTISES = 'expertises';
 const SELECT_EDUCATIONAL_PROGRAM = 'select-educational-program';
 const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
+const PROFESSIONAL_STANDARDS = 'professional-standards';
 
 const SEPARATOR = '/';
 
@@ -47,6 +48,10 @@ export default class RouterService {
 
     getFoldersRoute = () => {
         return SEPARATOR + FOLDERS;
+    };
+
+    getProfessionalStandardsRoute = () => {
+        return SEPARATOR + PROFESSIONAL_STANDARDS;
     };
 
     getSignUpRoute = () => {

@@ -103,6 +103,12 @@ export default (groups: Array<string>) => {
             icon: IndicatorsIcon,
             selectedIcon: IndicatorsSelectedIcon,
         },
+        {
+            title: 'Профессиональные стандарты',
+            link: appRouter.getProfessionalStandardsRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
     ];
 
     if (isUserInExpertiseGroup(groups)){
