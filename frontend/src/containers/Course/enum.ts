@@ -50,10 +50,9 @@ export enum fieldsOfStudyFields {
   ID = 'id',
   COURSE = 'course',
   FIELD_OF_STUDY = 'field_of_study',
-
-  // NEW
-  // ID = 'id',
-  // TITLE = 'field_of_study'
+  NUMBER = 'number',
+  TITLE = 'title',
+  FIELD_OF_STUDY_ID = 'id',
 }
 
 export enum reqFields {

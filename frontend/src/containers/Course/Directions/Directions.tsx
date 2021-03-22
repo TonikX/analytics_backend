@@ -11,6 +11,7 @@ import Scrollbars from 'react-custom-scrollbars'
 import SortingButton from "../../../components/SortingButton"
 
 import { useStyles } from './Directions.styles'
+
 import { getFieldsOfStudy } from '../getters'
 import { rootState } from '../../../store/reducers'
 import { fieldsOfStudyFields } from '../enum'
@@ -18,11 +19,6 @@ import { fieldOfStudyType } from '../types'
 
 export const Directions: React.FC = () => {
   const classes = useStyles()
-  const directions = [
-    { name: 'Информатика и вычислительная техника', number:'09.03.01' },
-    { name: 'Информационные системы и технологии', number:'09.03.02' },
-    { name: 'Прикладная информатика', number:'09.03.03' },
-  ]
   const fieldsOfStudy = useSelector((state: rootState) => getFieldsOfStudy(state))
 
   return (
@@ -48,8 +44,8 @@ export const Directions: React.FC = () => {
               {fieldsOfStudy.length === 0 && <Typography><b>Нет информации!</b></Typography>}
               {fieldsOfStudy.map((fieldOfStudy: fieldOfStudyType) => (
                 <TableRow key={fieldOfStudy[fieldsOfStudyFields.ID]}>
-                  <TableCell>{directions[0].name}</TableCell>
-                  <TableCell>{fieldOfStudy[fieldsOfStudyFields.FIELD_OF_STUDY]}</TableCell>
+                  <TableCell>{fieldOfStudy[fieldsOfStudyFields.FIELD_OF_STUDY][fieldsOfStudyFields.TITLE]}</TableCell>
+                  <TableCell>{fieldOfStudy[fieldsOfStudyFields.FIELD_OF_STUDY][fieldsOfStudyFields.NUMBER]}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
