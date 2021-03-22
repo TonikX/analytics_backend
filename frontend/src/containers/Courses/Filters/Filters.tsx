@@ -96,19 +96,19 @@ export const Filters: React.FC = () => {
       <div className={classes.btnsWrapper}>
         <Button
           color="primary"
-          variant="contained" 
-          className={cn(classes.btn, classes.filterBtn)}
-          onClick={() => dispatch(actions.getCourses())}
-        >
-          Отфильтровать
-        </Button>
-        <Button
-          color="primary"
           variant="outlined" 
           className={cn(classes.btn, classes.resetBtn)}
           onClick={resetFilters}
         >
           Сбросить
+        </Button>
+        <Button
+          color="primary"
+          variant="contained" 
+          className={cn(classes.btn, classes.filterBtn)}
+          onClick={() => dispatch(actions.getCourses())}
+        >
+          Отфильтровать
         </Button>
       </div>
     </div>

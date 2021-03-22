@@ -5,19 +5,16 @@ import get from 'lodash/get';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
-// import Fab from "@material-ui/core/Fab";
 import Button from '@material-ui/core/Button'
 import Typography from "@material-ui/core/Typography";
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 // import CourseCreateModal from "./CourseCreateModal";
 import { CoursesTable } from './CoursesTable/CoursesTable'
 import { Filters } from './Filters/Filters'
-
-// import AddIcon from "@material-ui/icons/Add";
 
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -44,6 +41,17 @@ const ExpansionPanel = withStyles({
   },
   expanded: {},
 })(MuiExpansionPanel);
+
+const ExpansionPanelSummary = withStyles({
+  root: {
+    margin: 0,
+    backgroundColor: 'rgba(0, 0, 0, .03)',
+    height: '48px',
+  }, 
+  expanded: {
+    minHeight: '20px !important'
+  }
+})(MuiExpansionPanelSummary)
 
 class OnlineCourses extends React.Component<CoursesProps> {
   state = {
@@ -111,11 +119,12 @@ class OnlineCourses extends React.Component<CoursesProps> {
             </div>
         </Typography>
         <ExpansionPanel expanded={this.state.showFilters} onChange={this.handleShowFilters}>
-          <ExpansionPanelSummary 
-            className={classes.accordionSummary}
+          <ExpansionPanelSummary
+            // classes={{ 'expanded': { height: '48px' }  }}
+            // className={classes.accordionSummary}
             expandIcon={<ExpandMoreIcon />}
           >
-            Фильтрация
+            <Typography>Фильтрация</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Filters />
@@ -152,7 +161,7 @@ class OnlineCourses extends React.Component<CoursesProps> {
             <AddIcon/>
           </Fab> */}
         </div>
-{/* 
+        {/* 
         <CourseCreateModal />
         /> */}
       </Paper>

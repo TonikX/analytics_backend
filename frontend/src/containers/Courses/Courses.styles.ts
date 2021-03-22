@@ -72,7 +72,16 @@ export default (theme: Theme) => createStyles({
         marginTop: '10px'
     },
     accordionSummary: {
-        backgroundColor: 'rgba(0, 0, 0, .03)', 
-        borderBottom: '1px solid rgba(0, 0, 0, .125)',
+        backgroundColor: 'rgba(0, 0, 0, .03)',
+        // '&$root': {
+        //     // // этот margin
+        //     // margin: 0,
+        //     height: '48px',
+        //   },
+
+        //   '&$expanded': {
+        //     // этот margin
+        //     height: '48px',
+        //   },
     }
 });
