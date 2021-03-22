@@ -41,7 +41,6 @@ export const Directions: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {fieldsOfStudy.length === 0 && <Typography><b>Нет информации!</b></Typography>}
               {fieldsOfStudy.map((fieldOfStudy: fieldOfStudyType) => (
                 <TableRow key={fieldOfStudy[fieldsOfStudyFields.ID]}>
                   <TableCell>{fieldOfStudy[fieldsOfStudyFields.FIELD_OF_STUDY][fieldsOfStudyFields.TITLE]}</TableCell>
