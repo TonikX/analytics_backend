@@ -79,6 +79,7 @@ class AddToFolderView(generics.CreateAPIView):
       Добавление РПД в папку
     """
     permission_classes = [IsOwnerOfFolderWithWorkProgramm]
+    #permission_classes = [IsAuthenticated]
     queryset = WorkProgramInFolder.objects.all()
     serializer_class = WorkProgramInFolderSerializer
 
@@ -88,6 +89,7 @@ class RemoveFromFolderView(generics.DestroyAPIView):
     Удаление РПД из папки
     """
     permission_classes = [IsOwnerOfFolderWithWorkProgramm]
+    #permission_classes = [IsAuthenticated]
     queryset = WorkProgramInFolder.objects.all()
     serializer_class = WorkProgramInFolderSerializer
 
