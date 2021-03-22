@@ -2,7 +2,6 @@ import SignInLogic from '../containers/SignIn/logics';
 import SignUpLogic from '../containers/SignUp/logics';
 import WorkProgramLogic from '../containers/WorkProgram/logics';
 import CoursesLogic from '../containers/Courses/logics';
-import OnlineCoursesLogic from '../containers/OnlineCourses/logics';
 import CourseLogic from '../containers/Course/logics';
 import LiteratureLogic from '../containers/Literature/logics';
 import SubjectAreaLogic from '../containers/SubjectArea/logics';
@@ -40,7 +39,6 @@ export default [
     ...SignUpLogic,
     ...WorkProgramLogic,
     ...CoursesLogic,
-    ...OnlineCoursesLogic,
     ...LiteratureLogic,
     ...SubjectAreaLogic,
     ...PrerequisitesLogic,
