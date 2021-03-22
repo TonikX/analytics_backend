@@ -43,8 +43,8 @@ export interface coursesState {
 }
 
 export type filteringType = {
-    [filterFields.FILTERING_PLATFORM]: number | '',
-    [filterFields.FILTERING_INSTITUTION]: number | '',
+    [filterFields.FILTERING_PLATFORM]: string,
+    [filterFields.FILTERING_INSTITUTION]: string,
     [filterFields.FILTERING_LANGUAGE]: string,
     [filterFields.FILTERING_SEARCH_QUERY]: string,
 }
