@@ -47,24 +47,24 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
               <TableCell className={classes.stickyHeader}>
                 <Typography component='div'>
                   Правообладатель
-                  <SortingButton changeMode={() => {}}
-                                  mode={''}
+                  <SortingButton changeMode={changeSorting(CourseFields.INSTITUTION)}
+                                  mode={sortingField === CourseFields.INSTITUTION ? sortingMode : ''}
                   />
                 </Typography>
               </TableCell>
               <TableCell className={classes.stickyHeader}>
                 <Typography component='div'>
                   Платформа
-                  <SortingButton changeMode={() => {}}
-                                  mode={''}
+                  <SortingButton changeMode={changeSorting(CourseFields.PLATFORM)}
+                                  mode={sortingField === CourseFields.PLATFORM ? sortingMode : ''}
                   />
                 </Typography>
               </TableCell>
               <TableCell className={classes.stickyHeader}>
                 <Typography component='div'>
                   Язык
-                  <SortingButton changeMode={() => {}}
-                                  mode={''}
+                  <SortingButton changeMode={changeSorting(CourseFields.LANGUAGE)}
+                                  mode={sortingField === CourseFields.LANGUAGE ? sortingMode : ''}
                   />
                 </Typography>
               </TableCell>
@@ -74,8 +74,8 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
                   style={{whiteSpace: 'normal', display: 'flex', alignItems: 'center', width: '185px'}}
                 >
                   Дата ближайшего запуска
-                  <SortingButton changeMode={() => {}}
-                                  mode={''}
+                  <SortingButton changeMode={changeSorting(CourseFields.STARTED_AT)}
+                                  mode={sortingField === CourseFields.STARTED_AT ? sortingMode : ''}
                   />
                 </Typography> 
               </TableCell>
@@ -85,8 +85,8 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
                   style={{whiteSpace: 'normal', display: 'flex', alignItems: 'center', width: '100px'}}
                 >
                   Общий рейтинг
-                  <SortingButton changeMode={() => {}}
-                                  mode={''}
+                  <SortingButton changeMode={changeSorting(CourseFields.RATING)}
+                                  mode={sortingField === CourseFields.RATING ? sortingMode : ''}
                   />
                 </Typography>
               </TableCell>
