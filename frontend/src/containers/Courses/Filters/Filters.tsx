@@ -50,6 +50,16 @@ export const Filters: React.FC = () => {
     }))
     dispatch(actions.getCourses())
   }
+
+  const handleChangePlatformsSearchText = (query:string): void => {
+    dispatch(actions.changeFilerSearchQuery(query))
+    dispatch(actions.getPlatforms())
+  }
+
+  const handleChangeInstitutionsSearchText = (query:string): void => {
+    dispatch(actions.changeFilerSearchQuery(query))
+    dispatch(actions.getInstitutions())
+  }
   return (
     <div className={classes.root}>
       <div className={classes.fieldsWrapper}>
@@ -65,7 +75,7 @@ export const Filters: React.FC = () => {
         />
         <SeacrhSelector
           label='Платформа' 
-          changeSearchText={() => {}}
+          changeSearchText={handleChangePlatformsSearchText}
           list={lists.platforms}
           changeItem={(value: string) => handleFilter(filterFields.FILTERING_PLATFORM, value)}
           value={filters[filterFields.FILTERING_PLATFORM]+''}
@@ -84,7 +94,7 @@ export const Filters: React.FC = () => {
         /> */}
         <SeacrhSelector 
           label='Автор курса (правообл.)' 
-          changeSearchText={() => {}}
+          changeSearchText={handleChangeInstitutionsSearchText}
           list={lists.authors}
           changeItem={(value: string) => handleFilter(filterFields.FILTERING_INSTITUTION, value)}
           value={filters[filterFields.FILTERING_INSTITUTION]+''}
