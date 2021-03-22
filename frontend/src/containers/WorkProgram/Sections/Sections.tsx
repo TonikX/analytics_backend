@@ -91,19 +91,25 @@ class Sections extends React.PureComponent<SectionsProps> {
         totalHoursWithoutCPO = parseFloat(totalHoursWithoutCPO.toFixed(2));
 
         const totalHours = this.state.totalHours || totalTotalHours;
-        const cpoValue: any = ((totalHours - totalHoursWithoutCPO) / sections.length).toFixed(2);
-
-        const cpoLastValue: any = (totalHours - totalHoursWithoutCPO) - cpoValue * (sections.length - 1);
-
-        const contactsWork = this.calculateContactWork(sections);
+        const cpoValueTotal = totalHours - totalHoursWithoutCPO;
+        const cpoValue = (cpoValueTotal / sections.length).toFixed(2);
+        const cpoLastValue: any = (cpoValueTotal - (parseFloat(cpoValue) * (sections.length - 1))).toFixed(2);
 
         sections.forEach((section, index) => {
+            const contactWork = section[workProgramSectionFields.CONTACT_WORK];
+            //@ts-ignore
+            const totalHours = (parseFloat(cpoValue) + parseFloat(contactWork)).toFixed(2);
+            //@ts-ignore
+            const totalHoursLast = (parseFloat(cpoLastValue) + parseFloat(contactWork)).toFixed(2);
+
             this.props.actions.saveSection({
                 ...section,
-                [workProgramSectionFields.SPO] : cpoValue,
-                [workProgramSectionFields.TOTAL_HOURS] : index === sections.length - 1 ?
-                    parseFloat(cpoLastValue) + parseFloat(contactsWork) :
-                    parseFloat(cpoValue) + parseFloat(contactsWork)
+                [workProgramSectionFields.SPO]: index === sections.length - 1 ?
+                    cpoLastValue :
+                    cpoValue,
+                [workProgramSectionFields.TOTAL_HOURS]: index === sections.length - 1 ?
+                    totalHoursLast :
+                    totalHours
             });
         })
     }
@@ -117,10 +123,14 @@ class Sections extends React.PureComponent<SectionsProps> {
     }
 
     handleChangeTotalHours = (e: React.ChangeEvent) => {
-        this.props.actions.saveWorkProgram({
-            destination: fields.WORK_PROGRAM_ALL_HOURS,
-            value: get(e, 'target.value')
-        });
+        const value = get(e, 'target.value');
+
+        if (value !== '') {
+            this.props.actions.saveWorkProgram({
+                destination: fields.WORK_PROGRAM_ALL_HOURS,
+                value: get(e, 'target.value')
+            });
+        }
     }
 
     render() {
@@ -131,6 +141,7 @@ class Sections extends React.PureComponent<SectionsProps> {
         const totalLaboratoryClassesHours = this.getTotalHours(workProgramSectionFields.LABORATORY).toFixed(2);
         const totalPracticalClassesHours = this.getTotalHours(workProgramSectionFields.PRACTICAL_LESSONS).toFixed(2);
         const totalSPOHours = this.getTotalHours(workProgramSectionFields.SPO).toFixed(2);
+        const currentTotalHours = this.getTotalHours(workProgramSectionFields.TOTAL_HOURS).toFixed(2);
 
         const totalContactWorkHours = ((
             parseFloat(totalLectureClassesHours) +
@@ -138,7 +149,7 @@ class Sections extends React.PureComponent<SectionsProps> {
             parseFloat(totalPracticalClassesHours))
             * 1.1).toFixed(2);
 
-        const currentTotalHours = (parseFloat(totalSPOHours) + parseFloat(totalContactWorkHours)).toFixed(2);
+        //const currentTotalHours = (parseFloat(totalSPOHours) + parseFloat(totalContactWorkHours)).toFixed(2);
 
         return (
             <div className={classes.secondStep}>
@@ -220,14 +231,14 @@ class Sections extends React.PureComponent<SectionsProps> {
                                 <TableCell className={classes.headerCell}>
                                     {isCanEdit ?
                                         <Tooltip title="Всего должно делиться на 36 без остатка"
-                                                 disableHoverListener={parseFloat(totalHours) % 36 === 0}
+                                                 disableHoverListener={parseFloat(totalHours) % 36 === 0 || !sections.length}
                                         >
                                             <TextField variant="outlined"
                                                        size="small"
                                                        defaultValue={totalHours}
                                                        type="number"
                                                        className={classes.smallInput}
-                                                       error={parseFloat(totalHours) % 36 !== 0}
+                                                       error={parseFloat(totalHours) % 36 !== 0 && sections.length !== 0}
                                                        onBlur={this.handleChangeTotalHours}
                                             />
                                         </Tooltip>
@@ -245,7 +256,7 @@ class Sections extends React.PureComponent<SectionsProps> {
                             </TableRow>
                         </Table>
 
-                        {isCanEdit &&
+                        {isCanEdit && sections.length !== 0 &&
                             <>
                                 {parseFloat(currentTotalHours) !== parseFloat(totalHours) && parseFloat(currentTotalHours) < parseFloat(totalHours) ?
                                     <div className={classes.totalHourError}>
