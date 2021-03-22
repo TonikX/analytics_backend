@@ -247,7 +247,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                     {isCanEdit ?
                         <SimpleSelector label="Язык реализации"
                                         metaList={languageArray}
-                                        value={languageObject[state[WorkProgramGeneralFields.LANGUAGE]]}
+                                        value={state[WorkProgramGeneralFields.LANGUAGE]}
                                         wrapClass={classes.selectorWrap}
                                         onChange={this.changeLanguage}
                         />
