@@ -31,7 +31,7 @@ class OnlineCourseViewSet(viewsets.ModelViewSet):
     queryset = OnlineCourse.objects.all()
     serializer_class = OnlineCourseSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['title', 'platform__title', 'institution__title']
+    search_fields = ['title']
     filterset_fields = ['platform__title', 'institution__title', 'language']
 
 
