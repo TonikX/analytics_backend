@@ -1,10 +1,10 @@
 from rest_framework import filters
 from rest_framework import generics, permissions, viewsets, renderers
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db import models
 
 from .models import Institution, Platform, OnlineCourse, CourseCredit, CourseRequirement, CourseFieldOfStudy,\
     CourseLearningOutcome, CourseWorkProgram
-from .service import OnlineCourseFilter
 from .serializers import InstitutionSerializer, PlatformSerializer, OnlineCourseSerializer, \
     CourseCreditSerializer, CourseRequirementSerializer, CourseFieldOfStudySerializer, CourseLearningOutcomeSerializer,\
     CourseWorkProgramSerializer
@@ -31,8 +31,8 @@ class OnlineCourseViewSet(viewsets.ModelViewSet):
     queryset = OnlineCourse.objects.all()
     serializer_class = OnlineCourseSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['title']
-    filterset_class = OnlineCourseFilter
+    search_fields = ['title', 'platform__title', 'institution__title']
+    filterset_fields = ['platform__title', 'institution__title', 'language']
 
 
 class CourseCreditViewSet(viewsets.ModelViewSet):
