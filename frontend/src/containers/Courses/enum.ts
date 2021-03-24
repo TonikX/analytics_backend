@@ -41,6 +41,15 @@ export enum CourseFields {
     RATING = 'rating',
 }
 
+export enum CourseSortingFields {
+    TITLE = 'title',
+    PLATFORM_TITLE = 'platform__title',
+    INSTITUTION_TITLE = 'institution__title',
+    LANGUAGE = 'language',
+    STARTED_AT = 'started_at',
+    RATING = 'rating',
+}
+
 export enum PlatformFields {
     ID = 'id',
     TITLE = 'title',
