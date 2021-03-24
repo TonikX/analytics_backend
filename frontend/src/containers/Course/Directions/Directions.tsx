@@ -8,7 +8,6 @@ import TableRow from "@material-ui/core/TableRow"
 import TableCell from "@material-ui/core/TableCell"
 import TableBody from "@material-ui/core/TableBody"
 import Scrollbars from 'react-custom-scrollbars'
-import SortingButton from "../../../components/SortingButton"
 
 import { useStyles } from './Directions.styles'
 
@@ -32,11 +31,9 @@ export const Directions: React.FC = () => {
               <TableRow>
                 <TableCell>
                   Название
-                  <SortingButton changeMode={() => {}} mode='' />
                 </TableCell>
                 <TableCell>
                   Номер
-                  <SortingButton changeMode={() => {}} mode='' />
                 </TableCell>
               </TableRow>
             </TableHead>
