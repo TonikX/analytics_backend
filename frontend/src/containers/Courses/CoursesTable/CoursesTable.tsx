@@ -21,7 +21,7 @@ import { CoursesTableProps } from './types'
 import { languageObject } from '../../WorkProgram/constants'
 import get from 'lodash/get'
 
-export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingField, sortingMode, institutions, platforms }) => {
+export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingField, sortingMode }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 

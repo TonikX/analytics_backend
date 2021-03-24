@@ -5,7 +5,5 @@ export interface CoursesTableProps {
   courses: Array<CourseType>;
   sortingField: string;
   sortingMode: SortingType;
-  platforms: Array<PlatformType> | [];
-  institutions: Array<InstitutionType> | [];
   // handleClickEdit: (course: CourseType) => void;
 }

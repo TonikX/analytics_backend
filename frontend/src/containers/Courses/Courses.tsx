@@ -89,7 +89,7 @@ class OnlineCourses extends React.Component<CoursesProps> {
     })
   }
   render() {
-    const {classes, courses, allCount, currentPage, sortingField, sortingMode, institutions, platforms} = this.props;
+    const {classes, courses, allCount, currentPage, sortingField, sortingMode } = this.props;
 
     return (
       <Paper className={classes.root}>
@@ -135,8 +135,6 @@ class OnlineCourses extends React.Component<CoursesProps> {
           courses={courses} 
           sortingField={sortingField} 
           sortingMode={sortingMode} 
-          institutions={institutions}
-          platforms={platforms}
         />
 
         <div className={classes.footer}>
