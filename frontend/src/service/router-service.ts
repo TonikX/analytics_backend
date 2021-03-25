@@ -62,7 +62,6 @@ export default class RouterService {
         return SEPARATOR + COURSES;
     };
 
-
     getCourseRoute = () => {
         return SEPARATOR + COURSE + SEPARATOR + ':id';
     };
