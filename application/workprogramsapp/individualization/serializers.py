@@ -3,7 +3,8 @@ from rest_framework import serializers, viewsets
 
 # Модели данных
 
-from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgramChangeInDisciplineBlockModule
+from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgramChangeInDisciplineBlockModule,\
+    DisciplineBlockModuleInDisciplineBlock, ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 from workprogramsapp.models import ImplementationAcademicPlan
 
 # Сериализаторы
@@ -76,4 +77,20 @@ class CreateIndividualImplementationAcademicPlanSerializer(serializers.ModelSeri
 
     class Meta:
         model = IndividualImplementationAcademicPlan
+        fields = "__all__"
+
+
+class DisciplineBlockModuleInDisciplineBlockSerializer(serializers.ModelSerializer):
+    """Сериализатор для работы с выбор модуля в блоке учебного плана"""
+
+    class Meta:
+        model = DisciplineBlockModuleInDisciplineBlock
+        fields = "__all__"
+
+
+class ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
+    """Сериализатор для работы с выбор модуля в блоке учебного плана"""
+
+    class Meta:
+        model = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
         fields = "__all__"

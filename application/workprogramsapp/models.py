@@ -57,7 +57,7 @@ class WorkProgram(CloneMixin, models.Model):
         ('3', '3'),
     )
 
-    languages = (
+    languages_for_wp = (
         ('ru', 'ru'),
         ('en', 'en'),
         ('ru/en', 'ru/en'),
@@ -96,8 +96,12 @@ class WorkProgram(CloneMixin, models.Model):
     extra_points = models.CharField(choices=extra_points_choise, max_length=1, verbose_name='Квалификация',
                                    blank=True, null=True)
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors", verbose_name="Редакторы РПД", blank=True, null=True)
-    language = models.CharField(choices=languages, max_length=10, verbose_name='Язык',
+    language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
                                 blank=True, null=True)
+    structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL, verbose_name='Структурное подразделени',
+                                         related_name='workprogram_in_structural_unit', blank=True, null=True)
+    #language = models.CharField(choices=languages_for_wp, max_length=100, verbose_name='Язык', blank=True, null=True)
+
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
 
 
