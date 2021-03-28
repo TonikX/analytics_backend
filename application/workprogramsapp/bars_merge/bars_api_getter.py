@@ -3,6 +3,8 @@ import threading
 
 import requests
 
+from analytics_project import settings
+
 EDUC_PROGRAMS = []
 BASE_URL = "https://cas.crp.rocks/backend//rest"
 BASE_HEADERS = {'content-type': 'application/json'}
@@ -10,7 +12,7 @@ BASE_HEADERS = {'content-type': 'application/json'}
 
 def login():
     url = BASE_URL + "/login"
-    body = {"login": "rpduser", "password": "asd123As"}
+    body = {"login": settings.BARS["BARS_LOGIN"], "password": settings.BARS["BARS_PASSWORD"]}
     headers = {'content-type': 'application/json'}
     r = requests.post(url, data=json.dumps(body), headers=headers)
     BASE_HEADERS['Authorization'] = r.headers['Authorization']
@@ -27,10 +29,34 @@ def get_disciplines():
 
 def get_get_educational_program_request(id_disp, term):
     headers = BASE_HEADERS.copy()
-    url = BASE_URL+"/educational_programs/" + str(id_disp) + "/" + str(term)
+    url = BASE_URL + "/educational_programs/" + str(id_disp) + "/" + str(term)
     r = requests.get(url, headers=headers)
     r.encoding = 'utf-8'
     EDUC_PROGRAMS.extend(json.loads(r.text))
+
+
+def get_one_educational_program(id_disp, term):
+    login()
+    url = BASE_URL + "/educational_programs/" + str(id_disp) + "/" + str(term)
+    r = requests.get(url, headers=BASE_HEADERS)
+    r.encoding = 'utf-8'
+    return json.loads(r.text)
+
+
+def get_list_of_regular_checkpoints():
+    login()
+    url = BASE_URL + "/checkpoint_types?type=regular"
+    r = requests.get(url, headers=BASE_HEADERS)
+    r.encoding = 'utf-8'
+    return json.loads(r.text)
+
+
+def get_list_of_final_checkpoints():
+    login()
+    url = BASE_URL + "/checkpoint_types?type=final"
+    r = requests.get(url, headers=BASE_HEADERS)
+    r.encoding = 'utf-8'
+    return json.loads(r.text)
 
 
 def get_educational_program_main():
@@ -45,3 +71,9 @@ def get_educational_program_main():
 
     educ_programs = (list({v['id']: v for v in EDUC_PROGRAMS}.values()))
     return educ_programs
+
+def post_checkpoint_plan(body):
+    login()
+    url = BASE_URL + "/checkpoint_plans"
+    r = requests.post(url, data=json.dumps(body), headers=BASE_HEADERS)
+    return r.text

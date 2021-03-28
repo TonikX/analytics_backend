@@ -98,6 +98,22 @@ class WorkProgram(CloneMixin, models.Model):
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors", verbose_name="Редакторы РПД", blank=True, null=True)
     language = models.CharField(choices=languages, max_length=10, verbose_name='Язык',
                                 blank=True, null=True)
+
+    have_course_project=models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД курсовой проект")
+    have_diff_pass=models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД дифф. зачет")
+    have_pass = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД зачет")
+    have_exam = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД экзамен")
+
+    lecture_hours=models.FloatField(blank=True, null=True, verbose_name="Часы лекций")
+    practice_hours = models.FloatField(blank=True, null=True, verbose_name="Часы Практик")
+    lab_hours = models.FloatField(blank=True, null=True, verbose_name="Часы лабораторных работ")
+    srs_hours = models.FloatField(blank=True, null=True, verbose_name="Часы СРС")
+
+    old_discipline_code = models.CharField(max_length=1024, blank=True, null=True)
+    wp_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID РПД в ИСУ")
+
+
+    #TODO: Ссылка на подразделение
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
 
 
@@ -441,6 +457,7 @@ class ImplementationAcademicPlan(models.Model):
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year], blank=True, null=True)
     period_of_study = models.CharField(max_length=100, blank=True, null=True)
+    op_isu_id = models.PositiveIntegerField(verbose_name = "ID ОП в ИСУ", blank=True, null=True)
 
     def __str__(self):
         return str(self.academic_plan)
