@@ -354,6 +354,52 @@ const characteristicSaveCompetenceLaborFunction = createLogic({
     }
 });
 
+const characteristicSaveProfessionalStandard = createLogic({
+    type: educationalPlanActions.characteristicSaveProfessionalStandard.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalProgramId = getEducationalProgramId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_PROFESSIONAL_STANDARD}));
+
+        service.characteristicSaveProfessionalStandard(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_SAVE_PROFESSIONAL_STANDARD}));
+                return done();
+            });
+    }
+});
+
+const characteristicDeleteProfessionalStandard = createLogic({
+    type: educationalPlanActions.characteristicDeleteProfessionalStandard.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalProgramId = getEducationalProgramId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_PROFESSIONAL_STANDARD}));
+
+        service.characteristicDeleteProfessionalStandard(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_DELETE_PROFESSIONAL_STANDARD}));
+                return done();
+            });
+    }
+});
+
 export default [
     getEducationalProgramList,
     deleteEducationalProgram,
@@ -374,4 +420,7 @@ export default [
 
     characteristicSaveGroupTitle,
     characteristicSaveCompetenceLaborFunction,
+
+    characteristicSaveProfessionalStandard,
+    characteristicDeleteProfessionalStandard,
 ];

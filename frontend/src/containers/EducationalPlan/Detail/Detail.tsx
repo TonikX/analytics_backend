@@ -156,19 +156,19 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     }
 
     handleClickLike = () => {
-        const {detailPlan} = this.props;
+        const {detailPlan, trajectoryRoute} = this.props;
 
         if (detailPlan[EducationalPlanFields.ID_RATING]){
             this.props.foldersActions.removeFromFolder({
                 id: detailPlan[EducationalPlanFields.ID_RATING],
                 callback: this.props.actions.getEducationalDetail,
-                type: FavoriteType.ACADEMIC_PLAN,
+                type: trajectoryRoute ? FavoriteType.TRAJECTORY_PLAN : FavoriteType.ACADEMIC_PLAN,
                 relationId: detailPlan[EducationalPlanFields.ID]
             });
         } else {
             this.props.foldersActions.openAddToFolderDialog({
                 relationId: detailPlan[EducationalPlanFields.ID],
-                type: FavoriteType.ACADEMIC_PLAN,
+                type: trajectoryRoute ? FavoriteType.TRAJECTORY_PLAN : FavoriteType.ACADEMIC_PLAN,
                 callback: this.props.actions.getEducationalDetail
             });
         }

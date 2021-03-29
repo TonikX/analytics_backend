@@ -3,6 +3,7 @@ import {fields, FoldersFields} from './enum';
 import styles from "./Folders.styles";
 import {WorkProgramGeneralType} from "../../WorkProgram/types";
 import {EducationalPlanType} from "../../EducationalPlan/types";
+import {TrainingModuleType} from "../../EducationalPlan/TrainingModules/types";
 
 export interface FolderActions{
     openAddFolderDialog: any;
@@ -47,6 +48,12 @@ export type FolderType = {
     [FoldersFields.ACADEMIC_PLAN_IN_FOLDER]: Array<{
         [FoldersFields.ACADEMIC_PLAN]: EducationalPlanType;
         [FoldersFields.ACADEMIC_PLAN_RATING]: string;
+        [FoldersFields.COMMENT]: string;
+        [FoldersFields.ID]: number;
+    }>;
+    [FoldersFields.BLOCK_MODULE_IN_FOLDER]: Array<{
+        [FoldersFields.BLOCK_MODULE]: TrainingModuleType;
+        [FoldersFields.BLOCK_MODULE_RATING]: string;
         [FoldersFields.COMMENT]: string;
         [FoldersFields.ID]: number;
     }>;
