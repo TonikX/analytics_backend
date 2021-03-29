@@ -31,6 +31,8 @@ class OverProfCompetencesInGroupOfGeneralCharacteristicSet(viewsets.ModelViewSet
             return CreateOverProfCompetencesInGroupOfGeneralCharacteristicSerializer
         if self.action == 'update':
             return CreateOverProfCompetencesInGroupOfGeneralCharacteristicSerializer
+        if self.action == 'partial_update':
+            return CreateOverProfCompetencesInGroupOfGeneralCharacteristicSerializer
         return OverProfCompetencesInGroupOfGeneralCharacteristicSerializer
 
 
@@ -45,6 +47,8 @@ class GroupOfOverProfCompetencesInGeneralCharacteristicsSet(viewsets.ModelViewSe
             return CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer
         if self.action == 'update':
             return CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer
+        if self.action == 'partial_update':
+            return CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer
         return GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
 
 
@@ -58,5 +62,7 @@ class IndicatorGroupOfOverProfCompetencesInGeneralCharacteristicSet(viewsets.Mod
         if self.action == 'create':
             return CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer
         if self.action == 'update':
+            return CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer
+        if self.action == 'partial_update':
             return CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer
         return GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
