@@ -7,7 +7,7 @@ import courseActions from './actions';
 import Service from './service';
 
 import {fetchingTypes, filterFields} from "./enum";
-import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode, getFilters} from "./getters";
+import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode, getFilters, getFilterSearchQuery} from "./getters";
 
 const service = new Service();
 
@@ -44,13 +44,16 @@ const getCourses = createLogic({
             });
     }
 });
-// ONLY 1st PAGE
+
 const getPlatforms = createLogic({
     type: courseActions.getPlatforms.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const searchQuery = getFilterSearchQuery(state);
+
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_PLATFORMS}));
-        service.getPlatforms().then((res) => {
+        service.getPlatforms(searchQuery).then((res) => {
             const platforms = get(res, 'data.results', [])
             dispatch(courseActions.setPlatforms(platforms))
         }).catch((err) => {
@@ -62,13 +65,15 @@ const getPlatforms = createLogic({
     }
 })
 
-// ONLY 1st PAGE
 const getInstitutions = createLogic({
-    type: courseActions.getPlatforms.type,
+    type: courseActions.getInstitutions.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const searchQuery = getFilterSearchQuery(state);
+
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_INSTITUTIONS}));
-        service.getInstitutions().then((res) => {
+        service.getInstitutions(searchQuery).then((res) => {
             const institutions = get(res, 'data.results', [])
             dispatch(courseActions.setInstitutions(institutions))
         }).catch((err) => {

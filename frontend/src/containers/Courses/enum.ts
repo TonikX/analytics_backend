@@ -17,6 +17,7 @@ export enum filterFields {
     FILTERING_PLATFORM = 'FILTERING_PLATFORM',
     FILTERING_INSTITUTION = 'FILTERING_INSTITUTION',
     FILTERING_LANGUAGE = 'FILTERING_LANGUAGE',
+    FILTERING_SEARCH_QUERY = 'FILTERING_SEARCH_QUERY',
 }
 
 export enum fetchingTypes {
@@ -35,6 +36,15 @@ export enum CourseFields {
     COURSE_URL = 'external_url',
     PLATFORM = 'platform',
     INSTITUTION = 'institution',
+    LANGUAGE = 'language',
+    STARTED_AT = 'started_at',
+    RATING = 'rating',
+}
+
+export enum CourseSortingFields {
+    TITLE = 'title',
+    PLATFORM_TITLE = 'platform__title',
+    INSTITUTION_TITLE = 'institution__title',
     LANGUAGE = 'language',
     STARTED_AT = 'started_at',
     RATING = 'rating',

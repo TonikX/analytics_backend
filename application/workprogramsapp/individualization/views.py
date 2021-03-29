@@ -13,9 +13,11 @@ from collections import OrderedDict
 from rest_framework import status
 
 from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgramChangeInDisciplineBlockModule,\
-    DisciplineBlockModuleInDisciplineBlock
+    DisciplineBlockModuleInDisciplineBlock, ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .serializers import IndividualImplementationAcademicPlanSerializer,CreateIndividualImplementationAcademicPlanSerializer,\
-    ShortIndividualImplementationAcademicPlanSerializer
+    ShortIndividualImplementationAcademicPlanSerializer, WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer, \
+    DisciplineBlockModuleInDisciplineBlockSerializer, ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
+from ..folders_ans_statistic.models import IndividualImplementationAcademicPlanInFolder
 
 
 class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
@@ -67,13 +69,30 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                             a +=1
 
 
+                    if change_block['change_type'] == "Facultativ":
+                        i = 0
+                        delete = []
+                        for work_program in change_block['work_program']:
+                            try:
+                                if work_program['id'] != \
+                                        WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects. \
+                                                get(individual_implementation_of_academic_plan = newdata['id'],
+                                                    work_program_change_in_discipline_block_module = change_block['id']).work_program.id:
+                                    delete.append(i)
+
+                            except:
+                                pass
+                            i +=1
+                        a = 0
+                        for i in delete:
+                            print(i)
+                            del change_block['work_program'][i-a]
+                            a +=1
+
+
 
                 if module['type'] == "specialization_module":
 
-                    print('module id', module['id'] )
-                    print('2module id',DisciplineBlockModuleInDisciplineBlock.objects. \
-                          get(individual_implementation_of_academic_plan = newdata['id'],
-                              discipline_block = discipline_block['id']).discipline_block_module.id)
                     try:
                         if module['id'] != \
                                 DisciplineBlockModuleInDisciplineBlock.objects. \
@@ -91,11 +110,18 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                         pass
                 k +=1
             a = 0
+
             for i in delete_module:
                 print('dddddd', k)
                 del discipline_block['modules_in_discipline_block'][i]
                 a +=1
-
+        try:
+            newdata[0].update({"rating": IndividualImplementationAcademicPlanInFolder.objects.get(individual_implementation_of_academic_plan=self.kwargs['pk'],
+                                                                      folder__owner=self.request.user).module_rating})
+            newdata[0].update({"id_rating": IndividualImplementationAcademicPlanInFolder.objects.get(individual_implementation_of_academic_plan=self.kwargs['pk'],
+                                                                         folder__owner=self.request.user).id})
+        except:
+            newdata.update({"rating": False})
         return Response(OrderedDict(newdata), status=status.HTTP_200_OK)
 
 
@@ -122,3 +148,21 @@ def SaveImplementationAcademicPlans(request):
     for imp in implementations:
         IndividualImplementationAcademicPlan.objects.filter(pk=imp).update(user=request.user)
     return Response("null", status=status.HTTP_200_OK)
+
+
+class WorkProgramInWorkProgramChangeInDisciplineBlockModuleSet(viewsets.ModelViewSet):
+    queryset = WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.all()
+    serializer_class = WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+
+
+class DisciplineBlockModuleInDisciplineBlockSet(viewsets.ModelViewSet):
+    queryset = DisciplineBlockModuleInDisciplineBlock.objects.all()
+    serializer_class = DisciplineBlockModuleInDisciplineBlockSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+
+
+class ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSet(viewsets.ModelViewSet):
+    queryset = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.all()
+    serializer_class = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)

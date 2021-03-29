@@ -16,12 +16,12 @@ import SortingButton from "../../../components/SortingButton";
 import actions from '../actions'
 
 import {SortingType} from "../../../components/SortingButton/types";
-import {CourseFields, InstitutionFields, PlatformFields} from '../enum';
+import {CourseFields, InstitutionFields, PlatformFields, CourseSortingFields} from '../enum';
 import { CoursesTableProps } from './types'
 import { languageObject } from '../../WorkProgram/constants'
 import get from 'lodash/get'
 
-export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingField, sortingMode, institutions, platforms }) => {
+export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingField, sortingMode }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -36,57 +36,57 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
         <Table stickyHeader>
           <TableHead className={classes.header}>
             <TableRow>
-              <TableCell className={classes.stickyHeader}>
+              <TableCell>
                 <Typography component='div'>
                   Название курса
-                  <SortingButton changeMode={changeSorting(CourseFields.TITLE)}
-                                  mode={sortingField === CourseFields.TITLE ? sortingMode : ''}
+                  <SortingButton changeMode={changeSorting(CourseSortingFields.TITLE)}
+                                  mode={sortingField === CourseSortingFields.TITLE ? sortingMode : ''}
                   />
                 </Typography>
               </TableCell>
-              <TableCell className={classes.stickyHeader}>
+              <TableCell>
                 <Typography component='div'>
                   Правообладатель
-                  <SortingButton changeMode={() => {}}
-                                  mode={''}
+                  <SortingButton changeMode={changeSorting(CourseSortingFields.INSTITUTION_TITLE)}
+                                  mode={sortingField === CourseSortingFields.INSTITUTION_TITLE ? sortingMode : ''}
                   />
                 </Typography>
               </TableCell>
-              <TableCell className={classes.stickyHeader}>
+              <TableCell>
                 <Typography component='div'>
                   Платформа
-                  <SortingButton changeMode={() => {}}
-                                  mode={''}
+                  <SortingButton changeMode={changeSorting(CourseSortingFields.PLATFORM_TITLE)}
+                                  mode={sortingField === CourseSortingFields.PLATFORM_TITLE ? sortingMode : ''}
                   />
                 </Typography>
               </TableCell>
-              <TableCell className={classes.stickyHeader}>
+              <TableCell>
                 <Typography component='div'>
                   Язык
-                  <SortingButton changeMode={() => {}}
-                                  mode={''}
+                  <SortingButton changeMode={changeSorting(CourseSortingFields.LANGUAGE)}
+                                  mode={sortingField === CourseSortingFields.LANGUAGE ? sortingMode : ''}
                   />
                 </Typography>
               </TableCell>
-              <TableCell className={classes.stickyHeader}>
+              <TableCell>
                 <Typography 
                   component='div' 
                   style={{whiteSpace: 'normal', display: 'flex', alignItems: 'center', width: '185px'}}
                 >
                   Дата ближайшего запуска
-                  <SortingButton changeMode={() => {}}
-                                  mode={''}
+                  <SortingButton changeMode={changeSorting(CourseFields.STARTED_AT)}
+                                  mode={sortingField === CourseFields.STARTED_AT ? sortingMode : ''}
                   />
                 </Typography> 
               </TableCell>
-              <TableCell className={classes.stickyHeader}>
+              <TableCell>
                 <Typography 
                   component='div'
                   style={{whiteSpace: 'normal', display: 'flex', alignItems: 'center', width: '100px'}}
                 >
                   Общий рейтинг
-                  <SortingButton changeMode={() => {}}
-                                  mode={''}
+                  <SortingButton changeMode={changeSorting(CourseFields.RATING)}
+                                  mode={sortingField === CourseFields.RATING ? sortingMode : ''}
                   />
                 </Typography>
               </TableCell>

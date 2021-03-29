@@ -16,8 +16,6 @@ export const CurrentSession: React.FC = () => {
   return (
     <div>
       <Typography className={classes.title}>Текущая сессия</Typography>
-      {!course[fields.VISITORS_NUMBER] && !course[fields.STARTED_AT] && !course[fields.FINISHED_AT] && 
-        <Typography className={classes.textItem}><b>Нет информации!</b></Typography>}
       {course[fields.VISITORS_NUMBER] && 
         <Typography className={classes.textItem}>
           <b>Количество записей на текущую сессию:</b>{` ${course[fields.VISITORS_NUMBER]}`}
