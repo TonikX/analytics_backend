@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 
 from dataprocessing.models import Items
 from .expertise.models import Expertise, UserExpertise
-from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder
+from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
     DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
 from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
@@ -1210,7 +1210,7 @@ class FileUploadAPIView(APIView):
         data = handle_uploaded_csv(request.FILES['file'], str(request.FILES['file']))
         print(len(data['SUBJECT'].drop_duplicates().to_list()))
         # импортируем json с порядком модулей
-        with open('/application/workprogramsapp/modules-order.json', 'r',
+        with open('workprogramsapp/modules-order.json', 'r',               #with open('/application/workprogramsapp/modules-order.json', 'r',
                   encoding='utf-8') as fh:  # открываем файл на чтение
             order = json.load(fh)
 
@@ -1224,13 +1224,13 @@ class FileUploadAPIView(APIView):
         for i in list(data.index.values):
             try:
                 print('---Новая строка---')
-
+                #TODO: Спросить по катавасию с полями в филд оф стадис
                 if data['DEGREE'][i].strip() == 'Академический бакалавр':
-                    qualification = 'bachelor'
+                    qualification = 'Bachelor'
                 elif data['DEGREE'][i].strip() == 'Магистр':
-                    qualification = 'master'
+                    qualification = 'Master'
                 else:
-                    qualification = 'specialist'
+                    qualification = 'Specialist'
                 print(qualification)
 
                 credit_units = [0 for i in range(0, 12)]
@@ -1249,7 +1249,6 @@ class FileUploadAPIView(APIView):
                 except:
                     print("mistake with units")
                     pass
-
                 # проверяем если ОП уже существует в БД
                 if FieldOfStudy.objects.filter(number=data['SUBFIELDCODE'][i], qualification=qualification).exists():
                     fs_obj = FieldOfStudy.objects.get(number=data['SUBFIELDCODE'][i], qualification=qualification)
@@ -1265,9 +1264,27 @@ class FileUploadAPIView(APIView):
                 # Проверяем если Дисцпилина уже есть в БД
                 #
                 print(data['SUBJECT'][i].strip(), data['DIS_CODE'][i])
-                if WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
-                                              discipline_code=data['DIS_CODE'][i]).exists():
-                    # если да, то получаем объект
+                wp_list=WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
+                                              zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
+                                              data['COMPONENT'][i].strip(),
+                                              zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
+                                              data['ISOPTION'][i],
+                                              credit_units=",".join(
+                                                  map(str, credit_units)),
+                                              zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__educational_profile=
+                                              data['SUBFIELDNAME'][i].strip()).distinct()
+                if wp_list.exists():
+                    wp_obj = WorkProgram.objects.get(pk=wp_list[0].id)
+
+                    if not wp_obj.old_discipline_code:
+                        wp_obj.old_discipline_code=wp_obj.discipline_code
+                        wp_obj.discipline_code = data['DIS_CODE'][i]
+                    else:
+                        if not data['DIS_CODE'][i] == wp_obj.discipline_code:
+                            wp_obj = wp_obj.clone_programm(wp_obj.id)
+                            wp_obj.discipline_code = data['DIS_CODE'][i]
+
+                    """   # если да, то получаем объект
                     #
                     print('1', WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
                                                           discipline_code=data['DIS_CODE'][i]))
@@ -1275,7 +1292,7 @@ class FileUploadAPIView(APIView):
                                                      discipline_code=data['DIS_CODE'][i])
                     wp_obj.discipline_code = data['DIS_CODE'][i]  # заменить в параметры
                     wp_obj.credit_units = ",".join(map(str, credit_units))  # убрать
-                    print('2', wp_obj)
+                    print('2', wp_obj)"""
                 else:
                     # если нет, то записываем в БД
 
@@ -1284,6 +1301,16 @@ class FileUploadAPIView(APIView):
                                          credit_units=",".join(map(str, credit_units)))
                     wp_obj.save()
                     wp_count += 1
+                wp_obj.have_course_project = bool(data['CP'][i])
+                wp_obj.have_diff_pass = bool(data['DIFF'][i])
+                wp_obj.have_pass = bool(data['PASS'][i])
+                wp_obj.have_exam = bool(data['EXAM'][i])
+                wp_obj.lecture_hours = float(data['LECTURE'][i])
+                wp_obj.practice_hours = float(data['PRACTICE'][i])
+                wp_obj.lab_hours = float(data['LAB'][i])
+                wp_obj.srs_hours = float(data['SRS'][i])
+                wp_obj.wp_isu_id=int(data['ISU_SUBJECT_ID'][i])
+                wp_obj.save()
                 print('Рабочая программа дисциплины: ', wp_obj)
 
                 """
@@ -1322,10 +1349,13 @@ class FileUploadAPIView(APIView):
 
                 if ImplementationAcademicPlan.objects.filter(academic_plan=ap_obj, field_of_study=fs_obj,
                                                              year=data['YEAR'][i]).exists():
+                    iap_obj=ImplementationAcademicPlan.objects.get(academic_plan=ap_obj, field_of_study=fs_obj,
+                                                              year=data['YEAR'][i])
+                    iap_obj.op_isu_id=int(data['EP_ID'][i])
                     print('ImplementationAcademicPlan exist')
                 else:
                     iap_obj = ImplementationAcademicPlan(academic_plan=ap_obj, field_of_study=fs_obj,
-                                                         year=data['YEAR'][i])
+                                                         year=data['YEAR'][i], op_isu_id=int(data['EP_ID'][i]))
                     iap_obj.save()
                 print('Связь учебного плана и направления: done')
 
@@ -1394,7 +1424,8 @@ class FileUploadAPIView(APIView):
                 #     zun.save()
                 #     #wpchangemdb.work_program.add(wp_obj)
 
-            except:
+            except  Exception as e:
+                print(e)
                 print('Строка ', i, 'не записалась, проверьте на опечатки или пустые значения')
                 continue;
 
@@ -1824,6 +1855,22 @@ class DisciplineBlockModuleDetailListView(generics.ListAPIView):
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleDetailSerializer
+
+    def get(self, request, **kwargs):
+        queryset = DisciplineBlockModule.objects.filter(pk=self.kwargs['pk'])
+        serializer = DisciplineBlockModuleDetailSerializer(queryset, many=True)
+        if len(serializer.data) == 0:
+            return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
+        newdata = dict(serializer.data[0])
+        try:
+            newdata.update({"rating": DisciplineBlockModuleInFolder.objects.get(block_module=self.kwargs['pk'],
+                                                                      folder__owner=self.request.user).module_rating})
+            newdata.update({"id_rating": DisciplineBlockModuleInFolder.objects.get(block_module=self.kwargs['pk'],
+                                                                         folder__owner=self.request.user).id})
+        except:
+            newdata.update({"rating": False})
+        newdata = OrderedDict(newdata)
+        return Response(newdata, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
