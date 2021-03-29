@@ -31,6 +31,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   link: {
     minWidth: '120px',
+    textDecoration: 'none',
   },
   btnLink: {
     width: '100%',

@@ -24,7 +24,11 @@ export interface courseState extends CourseType {
 export type fieldOfStudyType = {
   [fieldsOfStudyFields.ID]: number,
   [fieldsOfStudyFields.COURSE]: string,
-  [fieldsOfStudyFields.FIELD_OF_STUDY]: string,
+  [fieldsOfStudyFields.FIELD_OF_STUDY]: {
+    [fieldsOfStudyFields.FIELD_OF_STUDY_ID]: number,
+    [fieldsOfStudyFields.NUMBER]: string,
+    [fieldsOfStudyFields.TITLE]: string,
+  },
 }
 
 export type reqType = {
