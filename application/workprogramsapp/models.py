@@ -57,7 +57,7 @@ class WorkProgram(CloneMixin, models.Model):
         ('3', '3'),
     )
 
-    languages = (
+    languages_for_wp = (
         ('ru', 'ru'),
         ('en', 'en'),
         ('ru/en', 'ru/en'),
@@ -96,24 +96,22 @@ class WorkProgram(CloneMixin, models.Model):
     extra_points = models.CharField(choices=extra_points_choise, max_length=1, verbose_name='Квалификация',
                                    blank=True, null=True)
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors", verbose_name="Редакторы РПД", blank=True, null=True)
-    language = models.CharField(choices=languages, max_length=10, verbose_name='Язык',
+    language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
                                 blank=True, null=True)
-
     have_course_project=models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД курсовой проект")
     have_diff_pass=models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД дифф. зачет")
     have_pass = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД зачет")
     have_exam = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД экзамен")
-
     lecture_hours=models.FloatField(blank=True, null=True, verbose_name="Часы лекций")
     practice_hours = models.FloatField(blank=True, null=True, verbose_name="Часы Практик")
     lab_hours = models.FloatField(blank=True, null=True, verbose_name="Часы лабораторных работ")
     srs_hours = models.FloatField(blank=True, null=True, verbose_name="Часы СРС")
-
     old_discipline_code = models.CharField(max_length=1024, blank=True, null=True)
     wp_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID РПД в ИСУ")
+    structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL, verbose_name='Структурное подразделени',
+                                         related_name='workprogram_in_structural_unit', blank=True, null=True)
+    #language = models.CharField(choices=languages_for_wp, max_length=100, verbose_name='Язык', blank=True, null=True)
 
-
-    #TODO: Ссылка на подразделение
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
 
 
