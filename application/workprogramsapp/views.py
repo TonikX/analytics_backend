@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 
 from dataprocessing.models import Items
 from .expertise.models import Expertise, UserExpertise
-from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder
+from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
     DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
 from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
@@ -1855,6 +1855,22 @@ class DisciplineBlockModuleDetailListView(generics.ListAPIView):
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleDetailSerializer
+
+    def get(self, request, **kwargs):
+        queryset = DisciplineBlockModule.objects.filter(pk=self.kwargs['pk'])
+        serializer = DisciplineBlockModuleDetailSerializer(queryset, many=True)
+        if len(serializer.data) == 0:
+            return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
+        newdata = dict(serializer.data[0])
+        try:
+            newdata.update({"rating": DisciplineBlockModuleInFolder.objects.get(block_module=self.kwargs['pk'],
+                                                                      folder__owner=self.request.user).module_rating})
+            newdata.update({"id_rating": DisciplineBlockModuleInFolder.objects.get(block_module=self.kwargs['pk'],
+                                                                         folder__owner=self.request.user).id})
+        except:
+            newdata.update({"rating": False})
+        newdata = OrderedDict(newdata)
+        return Response(newdata, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
