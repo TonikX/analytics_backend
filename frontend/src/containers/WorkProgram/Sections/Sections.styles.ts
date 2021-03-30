@@ -42,4 +42,7 @@ export default (theme: Theme) => createStyles({
         padding: '10px',
         marginLeft: 'auto'
     },
+    lastInfo: {
+        marginTop: '20px'
+    }
 });

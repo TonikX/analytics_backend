@@ -8,6 +8,10 @@ export interface SectionsProps extends WithStyles<typeof styles> {
     sections: Array<Section>;
     isCanEdit: boolean;
     totalHours: string;
+    lectureHours: boolean;
+    practiceHours: boolean;
+    labHours: boolean;
+    srsHours: boolean;
 }
 
 

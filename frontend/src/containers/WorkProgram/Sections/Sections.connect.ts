@@ -14,6 +14,10 @@ const mapStateToProps = (state:rootState) => {
         sections: getWorkProgramField(state, fields.WORK_PROGRAM_SECTIONS),
         totalHours: getWorkProgramField(state, fields.WORK_PROGRAM_ALL_HOURS),
         isCanEdit: isCanEdit(state),
+        lectureHours: getWorkProgramField(state, 'lecture_hours'),
+        practiceHours: getWorkProgramField(state, 'practice_hours'),
+        labHours: getWorkProgramField(state, 'lab_hours'),
+        srsHours: getWorkProgramField(state, 'srs_hours'),
     };
 };
 

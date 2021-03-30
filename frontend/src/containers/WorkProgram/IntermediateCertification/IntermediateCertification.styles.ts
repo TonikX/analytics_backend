@@ -110,5 +110,8 @@ export default (theme: Theme) => createStyles({
     menuIcon: {
         marginRight: '10px',
         fill: 'rgba(0, 0, 0, 0.54)'
+    },
+    lastInfo: {
+        marginTop: '20px'
     }
 });

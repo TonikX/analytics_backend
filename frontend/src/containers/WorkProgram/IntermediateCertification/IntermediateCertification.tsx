@@ -11,6 +11,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import Checkbox from "@material-ui/core/Checkbox";
 
 import AddIcon from "@material-ui/icons/Add";
 import SettingsIcon from "@material-ui/icons/MoreVert";
@@ -74,7 +75,8 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
     };
 
     render() {
-        const {classes, intermediateCertificationList, isCanEdit, isStudent} = this.props;
+        const {classes, intermediateCertificationList, isCanEdit, isStudent,
+            hasCourseProject, hasDiffPass, hasPass, hasExam} = this.props;
         const {anchorsEl} = this.state;
         
         return (
@@ -108,8 +110,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                     </Typography>
                 </div>
 
-                
-                    <div className={classes.list}>
+                <div className={classes.list}>
                         {intermediateCertificationList.map((intermediateCertificationTool) => (
                             <div className={classes.item}>
                                 <div className={classes.row}>
@@ -186,6 +187,13 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                     </div>
                 </Scrollbars>)}
                 </AutoSizer>
+
+                <Typography className={classes.lastInfo}>
+                    Курсовой проект: <b> {hasCourseProject === null ? 'Нет информации' : hasCourseProject ? 'да' : 'нет'}</b> <br/>
+                    Дифферинциальный зачет: <b> {hasDiffPass === null ? 'Нет информации' : hasDiffPass ? 'да' : 'нет'}</b> <br/>
+                    Зачет: <b> {hasPass === null ? 'Нет информации' : hasPass ? 'да' : 'нет'}</b> <br/>
+                    Экзамен: <b> {hasExam === null ? 'Нет информации' : hasExam ? 'да' : 'нет'}</b> <br/>
+                </Typography>
 
                 {isCanEdit &&
                     <Button color="secondary"

@@ -22,6 +22,7 @@ const mapStateToProps = (state:rootState) => {
         qualification: getWorkProgramField(state, WorkProgramGeneralFields.QUALIFICATION),
         language: getWorkProgramField(state, WorkProgramGeneralFields.LANGUAGE),
         editors: getWorkProgramField(state, WorkProgramGeneralFields.EDITORS),
+        structuralUnit: getWorkProgramField(state, 'structural_unit')?.title || 'Подразделение не указано',
 
         isCanEdit: isCanEdit(state),
 

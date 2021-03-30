@@ -164,7 +164,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     }
 
     render() {
-        const {classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription, isCanEdit, editors} = this.props;
+        const {classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription, isCanEdit, editors, structuralUnit} = this.props;
         const {state} = this;
         const {addEditorsMode} = state;
 
@@ -261,6 +261,10 @@ class FirstStep extends React.Component<FirstStepProps> {
                             <Typography className={classes.textItem}> {state[WorkProgramGeneralFields.DESCRIPTION]} </Typography>
                         </>
                     }
+
+                    <Typography className={classes.textItem}>
+                        <b>Структурное подразделение:</b> {structuralUnit}
+                    </Typography>
 
                     <Typography className={classes.editorTitle}>
                         Редакторы:

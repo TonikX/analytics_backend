@@ -134,7 +134,7 @@ class Sections extends React.PureComponent<SectionsProps> {
     }
 
     render() {
-        const {classes, sections, isCanEdit, totalHours} = this.props;
+        const {classes, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours} = this.props;
         const {createNewSectionMode} = this.state;
 
         const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
@@ -278,6 +278,13 @@ class Sections extends React.PureComponent<SectionsProps> {
                     )}
                     </AutoSizer> 
                 </TableContainer>
+
+                <Typography className={classes.lastInfo}>
+                    Сумма часов на лекционные занятия: <b> {lectureHours || 'Нет информации'}</b> <br/>
+                    Сумма часов на практические занятия: <b> {practiceHours || 'Нет информации'}</b> <br/>
+                    Сумма часов на лабораторные занятия: <b> {labHours || 'Нет информации'}</b> <br/>
+                    Сумма часов на самостоятельную работу: <b> {srsHours || 'Нет информации'}</b> <br/>
+                </Typography>
 
                 {!createNewSectionMode && isCanEdit
                     && <div className={classes.iconWrapper}>
