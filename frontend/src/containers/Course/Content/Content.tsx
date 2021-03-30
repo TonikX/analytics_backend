@@ -15,7 +15,6 @@ export const Content: React.FC = () => {
   return (
     <div>
       <Typography className={classes.title}>Содержание</Typography>
-      {!course[fields.CONTENT] && !course[fields.LECTURES_NUMBER] && <Typography><b>Нет информации!</b></Typography>}
       {course[fields.CONTENT] &&
         <Typography className={classes.content}>
           {course[fields.CONTENT]}

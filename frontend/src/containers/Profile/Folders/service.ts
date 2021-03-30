@@ -8,6 +8,10 @@ class Service extends AnalyticsService{
                 return '/api/folders/work_program/add';
             case FavoriteType.ACADEMIC_PLAN:
                 return '/api/folders/academic_plan/add';
+            case FavoriteType.TRAJECTORY_PLAN:
+                return '/api/folders/individual_path/add';
+            case FavoriteType.MODULES:
+                return '/api/folders/block_module/add';
         }
     }
 
@@ -17,6 +21,10 @@ class Service extends AnalyticsService{
                 return '/api/folders/work_program/remove';
             case FavoriteType.ACADEMIC_PLAN:
                 return '/api/folders/academic_plan/remove';
+            case FavoriteType.TRAJECTORY_PLAN:
+                return '/api/folders/individual_path/remove';
+            case FavoriteType.MODULES:
+                return '/api/folders/block_module/remove';
         }
     }
 
@@ -31,6 +39,16 @@ class Service extends AnalyticsService{
                 return {
                     academic_plan_rating: rating,
                     academic_plan: relationId,
+                };
+            case FavoriteType.TRAJECTORY_PLAN:
+                return {
+                    route_rating: rating,
+                    individual_implementation_of_academic_plan: relationId,
+                };
+            case FavoriteType.MODULES:
+                return {
+                    module_rating: rating,
+                    block_module: relationId,
                 };
         }
     }

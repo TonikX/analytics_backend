@@ -23,6 +23,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
           fontWeight: '400',
           fontSize: '14px',
           padding: '0px 10px !important',
+          height: '40px',
           whiteSpace: 'nowrap'
       }
   },

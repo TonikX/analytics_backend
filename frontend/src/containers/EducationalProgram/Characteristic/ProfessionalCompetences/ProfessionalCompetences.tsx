@@ -20,8 +20,10 @@ import {CompetenceTableProps} from './types';
 
 import {CompetenceTableType} from "../../enum";
 import EditableText from "../../../../components/EditableText/EditableText";
-import AddCompetenceModal from "../../../../components/AddCompetenceModal/AddCompetenceModal";
-import AddIndicatorsModal from "../../../../components/AddIndicatorsModal/AddIndicatorsModal";
+
+import AddCompetenceModal from "../../../../components/AddCompetenceModal";
+import AddIndicatorsModal from "../../../../components/AddIndicatorsModal";
+import AddProfStandardsModal from "../../../../components/AddProfStandardsModal";
 
 import useStyles from './ProfessionalCompetences.style';
 import useStylesReusable  from '../CompetencesTable/CompetencesTable.style';
@@ -37,6 +39,7 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
 
     const [competenceModalData, changeCompetenceOpenModal] = useState({isOpen: false, groupId: 0});
     const [indicatorModalData, changeIndicatorOpenModal] = useState({isOpen: false, competenceId: 0, competenceIdRelation: 0});
+    const [professionalStandardModalData, changeProfessionalStandardOpenModal] = useState({isOpen: false, competenceId: 0, competenceIdRelation: 0});
     const [editGroupTitleData, changeEditGroupTitle] = useState({isEdit: false, groupId: 0});
     const [editCompetenceLaborFunctionData, changeEditCompetenceLaborFunction] = useState({isEdit: false, competenceId: 0});
 
@@ -70,6 +73,21 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
     const deleteIndicator = (indicatorId: number) => () => {
         dispatch(actions.characteristicDeleteIndicator({
             indicatorId,
+            type: competenceTableType,
+        }));
+    }
+
+    const saveProfessionalStandard = ({value}: { value: number, label: string }): void => {
+        dispatch(actions.characteristicSaveProfessionalStandard({
+            professionalStandardId: value,
+            competenceId: professionalStandardModalData.competenceIdRelation,
+            type: competenceTableType,
+        }));
+    }
+
+    const deleteProfessionalStandard = (competenceIdRelation: number) => () => {
+        dispatch(actions.characteristicDeleteProfessionalStandard({
+            competenceId: competenceIdRelation,
             type: competenceTableType,
         }));
     }
@@ -205,7 +223,27 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
                                             </Button>
                                         </TableCell>
                                         <TableCell className={classes.standardCell}>
-                                            {get(competenceItem, 'professional_standard.code')} {get(competenceItem, 'professional_standard.title')}
+                                            {competenceItem.professional_standard ?
+                                                <>
+                                                    {get(competenceItem, 'professional_standard.code')} {get(competenceItem, 'professional_standard.title')}
+                                                    <Tooltip title="Удалить профессиональный стандарт" onClick={deleteProfessionalStandard(competenceItem.id)}>
+                                                        <DeleteIcon className={classes.deleteIcon}/>
+                                                    </Tooltip>
+                                                </>
+                                                :
+                                                <Button color="primary"
+                                                        variant="text"
+                                                        size="small"
+                                                        className={classes.addSmallButton}
+                                                        onClick={() => changeProfessionalStandardOpenModal({
+                                                            isOpen: true,
+                                                            competenceId: get(competenceItem, 'competence.id'),
+                                                            competenceIdRelation: competenceItem.id,
+                                                        })}
+                                                >
+                                                    <AddIcon/> Добавить профессиональный стандарт
+                                                </Button>
+                                            }
                                         </TableCell>
                                         <TableCell className={classes.functionsCell}>
                                             <EditableText value={get(competenceItem, 'labor_functions') || 'трудовая функция'}
@@ -244,6 +282,10 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
                                 isOpen={indicatorModalData.isOpen}
                                 saveDialog={saveIndicator}
                                 competenceId={indicatorModalData.competenceId}
+            />
+            <AddProfStandardsModal closeDialog={() => changeProfessionalStandardOpenModal({isOpen: false, competenceId: 0, competenceIdRelation: 0})}
+                                   isOpen={professionalStandardModalData.isOpen}
+                                   saveDialog={saveProfessionalStandard}
             />
         </div>
     )

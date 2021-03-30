@@ -34,7 +34,6 @@ export const WorkPrograms: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {workPrograms.length === 0 && <Typography><b>Нет информации!</b></Typography>}
               {workPrograms.map((workProgram: wpType) => (
                 <TableRow key={workProgram[wpFields.ID]}>
                   <TableCell>{workProgram[wpFields.WORK_PROGRAM]}</TableCell>

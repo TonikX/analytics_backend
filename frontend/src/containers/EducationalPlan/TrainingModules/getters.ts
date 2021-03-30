@@ -18,6 +18,8 @@ export const getTrainingModulesListForSelector = (state: rootState): SelectorLis
 
 export const getTrainingModule = (state: rootState): TrainingModuleType|{} => get(getStateData(state), fields.DETAIL_TRAINING_MODULE, {});
 export const getTrainingModuleId = (state: rootState): number => get(getTrainingModule(state), TrainingModuleFields.ID, 0);
+export const getModuleRating = (state: rootState): boolean => get(getTrainingModule(state), 'rating', false);
+export const getModuleRatingId = (state: rootState): number => get(getTrainingModule(state), 'id_rating', 0);
 
 export const getAllCount = (state: rootState) => get(getStateData(state), fields.ALL_COUNT, 1);
 export const getCurrentPage = (state: rootState) => get(getStateData(state), fields.CURRENT_PAGE, 1);

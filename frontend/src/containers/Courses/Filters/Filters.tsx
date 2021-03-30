@@ -6,7 +6,7 @@ import cn from 'classnames';
 import { getPlatforms, getIntitutions, getFilters } from '../getters'
 
 import Button from '@material-ui/core/Button'
-import SeacrhSelector from '../../../components/SearchSelector'
+import SearchSelector from '../../../components/SearchSelector'
 
 import { filterFields } from '../enum'
 import { PlatformType, InstitutionType, filteringType } from '../types'
@@ -32,7 +32,7 @@ export const Filters: React.FC = () => {
     platforms: platforms.map((platform: PlatformType) => ({ label: platform.title, value: platform.id }))
   }
   
-  const handleFilter = (field: string, value: string):void => {
+  const handleFilter = (field: string, value: string): void => {
     isReset && setIsReset(false)
     dispatch(actions.changeFiltering({
       platform: field === filterFields.FILTERING_PLATFORM ? value : filters[filterFields.FILTERING_PLATFORM],
@@ -41,7 +41,7 @@ export const Filters: React.FC = () => {
     }))
   }
 
-  const resetFilters = ():void => {
+  const resetFilters = (): void => {
     setIsReset(true)
     dispatch(actions.changeFiltering({
       platform: '',
@@ -50,10 +50,20 @@ export const Filters: React.FC = () => {
     }))
     dispatch(actions.getCourses())
   }
+
+  const handleChangePlatformsSearchText = (query:string): void => {
+    dispatch(actions.changeFilerSearchQuery(query))
+    dispatch(actions.getPlatforms())
+  }
+
+  const handleChangeInstitutionsSearchText = (query:string): void => {
+    dispatch(actions.changeFilerSearchQuery(query))
+    dispatch(actions.getInstitutions())
+  }
   return (
     <div className={classes.root}>
       <div className={classes.fieldsWrapper}>
-        <SeacrhSelector 
+        <SearchSelector 
           label='Язык курса' 
           changeSearchText={() => {}}
           list={lists.langs}
@@ -63,12 +73,12 @@ export const Filters: React.FC = () => {
           className={classes.field}
           isReset={isReset}
         />
-        <SeacrhSelector
+        <SearchSelector
           label='Платформа' 
-          changeSearchText={() => {}}
+          changeSearchText={handleChangePlatformsSearchText}
           list={lists.platforms}
           changeItem={(value: string) => handleFilter(filterFields.FILTERING_PLATFORM, value)}
-          value={filters[filterFields.FILTERING_PLATFORM]+''}
+          value={filters[filterFields.FILTERING_PLATFORM]}
           valueLabel={''}
           className={classes.field}
           isReset={isReset}
@@ -82,12 +92,12 @@ export const Filters: React.FC = () => {
           valueLabel={''}
           className={classes.field}
         /> */}
-        <SeacrhSelector 
+        <SearchSelector 
           label='Автор курса (правообл.)' 
-          changeSearchText={() => {}}
+          changeSearchText={handleChangeInstitutionsSearchText}
           list={lists.authors}
           changeItem={(value: string) => handleFilter(filterFields.FILTERING_INSTITUTION, value)}
-          value={filters[filterFields.FILTERING_INSTITUTION]+''}
+          value={filters[filterFields.FILTERING_INSTITUTION]}
           valueLabel={''}
           className={classes.field}
           isReset={isReset}
@@ -96,19 +106,19 @@ export const Filters: React.FC = () => {
       <div className={classes.btnsWrapper}>
         <Button
           color="primary"
-          variant="contained" 
-          className={cn(classes.btn, classes.filterBtn)}
-          onClick={() => dispatch(actions.getCourses())}
-        >
-          Отфильтровать
-        </Button>
-        <Button
-          color="primary"
           variant="outlined" 
           className={cn(classes.btn, classes.resetBtn)}
           onClick={resetFilters}
         >
           Сбросить
+        </Button>
+        <Button
+          color="primary"
+          variant="contained" 
+          className={cn(classes.btn, classes.filterBtn)}
+          onClick={() => dispatch(actions.getCourses())}
+        >
+          Отфильтровать
         </Button>
       </div>
     </div>
