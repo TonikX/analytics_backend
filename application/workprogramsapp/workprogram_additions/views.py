@@ -11,7 +11,7 @@ from rest_framework.response import Response
 # Сериализаторы
 from .serializers import AdditionalMaterialSerializer, CreateAdditionalMaterialSerializer, \
     StructuralUnitSerializer, CreateStructuralUnitSerializer, \
-    CreateUserStructuralUnitSerializer, UserStructuralUnitSerializer
+    CreateUserStructuralUnitSerializer, UserStructuralUnitSerializer, ShortStructuralUnitSerializer
 
 
 from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
@@ -44,6 +44,8 @@ class StructuralUnitSet(viewsets.ModelViewSet):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def get_serializer_class(self):
+        if self.action == 'list':
+            return ShortStructuralUnitSerializer
         if self.action == 'create':
             return CreateStructuralUnitSerializer
         if self.action == 'update':

@@ -60,6 +60,8 @@ class WorkProgram(CloneMixin, models.Model):
     languages_for_wp = (
         ('ru', 'ru'),
         ('en', 'en'),
+        ('kz', 'kz'),
+        ('de', 'de'),
         ('ru/en', 'ru/en'),
     )
 
@@ -112,7 +114,7 @@ class WorkProgram(CloneMixin, models.Model):
                                          related_name='workprogram_in_structural_unit', blank=True, null=True)
     #language = models.CharField(choices=languages_for_wp, max_length=100, verbose_name='Язык', blank=True, null=True)
 
-    _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
+    _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
 
 

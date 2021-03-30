@@ -7,7 +7,7 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool
-from .workprogram_additions.serializers import AdditionalMaterialSerializer
+from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
@@ -248,7 +248,7 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours', 'extra_points', 'language']
+        fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours', 'extra_points', 'language', 'structural_unit']
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }
@@ -688,19 +688,22 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     expertise_with_rpd = ShortExpertiseSerializer(many = True, read_only=True)
     certification_evaluation_tools = СertificationEvaluationToolForWorkProgramSerializer(many = True)
     editors = userProfileSerializer(many = True)
+    structural_unit = ShortStructuralUnitSerializer()
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd', 'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors', 'language']
+        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes',
+                  'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification',
+                  'bibliographic_reference', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd',
+                  'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors', 'language',
+                  'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
+                  'practice_hours', 'lab_hours', 'srs_hours']
 
     def create(self, validated_data):
         """
         Create and return a new `Snippet` instance, given the validated data.
         """
         return WorkProgram.objects.create(**validated_data)
-
-
-
 
 
 class WorkProgramSerializerByName(serializers.ModelSerializer):

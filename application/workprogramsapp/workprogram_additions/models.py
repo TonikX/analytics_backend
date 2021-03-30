@@ -17,6 +17,7 @@ class AdditionalMaterial(models.Model):
 class StructuralUnit(models.Model):
 
     title = models.CharField(max_length=300, verbose_name="Описание")
+    isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID структурного подразделения в ИСУ")
 
 
 class UserStructuralUnit(models.Model):
