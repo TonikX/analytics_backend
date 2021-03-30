@@ -115,10 +115,13 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                 print('dddddd', k)
                 del discipline_block['modules_in_discipline_block'][i]
                 a +=1
+        #TODO: Посмотреть как можно поменять костыль
+        data_order=OrderedDict(newdata)
+        newdata = dict(data_order)
         try:
-            newdata[0].update({"rating": IndividualImplementationAcademicPlanInFolder.objects.get(individual_implementation_of_academic_plan=self.kwargs['pk'],
-                                                                      folder__owner=self.request.user).module_rating})
-            newdata[0].update({"id_rating": IndividualImplementationAcademicPlanInFolder.objects.get(individual_implementation_of_academic_plan=self.kwargs['pk'],
+            newdata.update({"rating": IndividualImplementationAcademicPlanInFolder.objects.get(individual_implementation_of_academic_plan__pk=self.kwargs['pk'],
+                                                                      folder__owner=self.request.user).route_rating})
+            newdata.update({"id_rating": IndividualImplementationAcademicPlanInFolder.objects.get(individual_implementation_of_academic_plan__pk=self.kwargs['pk'],
                                                                          folder__owner=self.request.user).id})
         except:
             newdata.update({"rating": False})
