@@ -40,6 +40,7 @@ from .serializers import OnlineCourseSerializer, BibliographicReferenceSerialize
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer
+from .workprogram_additions.models import StructuralUnit
 
 """"Удалены старые views с использованием джанго рендеринга"""
 """Блок реализации API"""
@@ -1226,11 +1227,11 @@ class FileUploadAPIView(APIView):
                 print('---Новая строка---')
                 #TODO: Спросить по катавасию с полями в филд оф стадис
                 if data['DEGREE'][i].strip() == 'Академический бакалавр':
-                    qualification = 'Bachelor'
+                    qualification = 'bachelor'
                 elif data['DEGREE'][i].strip() == 'Магистр':
-                    qualification = 'Master'
+                    qualification = 'master'
                 else:
-                    qualification = 'Specialist'
+                    qualification = 'specialist'
                 print(qualification)
 
                 credit_units = [0 for i in range(0, 12)]
@@ -1280,9 +1281,16 @@ class FileUploadAPIView(APIView):
                         wp_obj.old_discipline_code=wp_obj.discipline_code
                         wp_obj.discipline_code = data['DIS_CODE'][i]
                     else:
-                        if not data['DIS_CODE'][i] == wp_obj.discipline_code:
-                            wp_obj = wp_obj.clone_programm(wp_obj.id)
-                            wp_obj.discipline_code = data['DIS_CODE'][i]
+                        if not (wp_obj.have_course_project == bool(data['CP'][i]) and
+                                wp_obj.have_diff_pass == bool(data['DIFF'][i])and
+                                wp_obj.have_pass == bool(data['PASS'][i])and
+                                wp_obj.have_exam == bool(data['EXAM'][i])and
+                                wp_obj.lecture_hours == float(data['LECTURE'][i])and
+                                wp_obj.practice_hours == float(data['PRACTICE'][i])and
+                                wp_obj.lab_hours == float(data['LAB'][i])and
+                                wp_obj.srs_hours == float(data['SRS'][i])):
+                                    wp_obj = WorkProgram.clone_programm(wp_obj.id)
+                                    wp_obj.discipline_code = data['DIS_CODE'][i]
 
                     """   # если да, то получаем объект
                     #
@@ -1310,6 +1318,24 @@ class FileUploadAPIView(APIView):
                 wp_obj.lab_hours = float(data['LAB'][i])
                 wp_obj.srs_hours = float(data['SRS'][i])
                 wp_obj.wp_isu_id=int(data['ISU_SUBJECT_ID'][i])
+
+                if data['LANGUAGE'][i].strip().find("Русский") != -1 and data['LANGUAGE'][i].strip().find(
+                        "Английский") != -1:
+                    wp_obj.language = "ru/en"
+                elif data['LANGUAGE'][i].strip() == "Русский":
+                    wp_obj.language = "ru"
+                elif data['LANGUAGE'][i].strip() == "Английский":
+                    wp_obj.language = "en"
+                elif data['LANGUAGE'][i].strip() == "Казахский":
+                    wp_obj.language = "kz"
+                elif data['LANGUAGE'][i].strip() == "Немецкий":
+                    wp_obj.language = "de"
+
+                try:
+                    struct_unit=StructuralUnit.objects.get(title=data['IMPLEMENTOR'][i].strip(), isu_id=data['IMPLEMENTOR_ID'][i])
+                except:
+                    struct_unit=StructuralUnit.objects.create(title=data['IMPLEMENTOR'][i].strip(), isu_id=data['IMPLEMENTOR_ID'][i])
+                wp_obj.structural_unit_id=struct_unit.id
                 wp_obj.save()
                 print('Рабочая программа дисциплины: ', wp_obj)
 
@@ -1861,6 +1887,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
         serializer = DisciplineBlockModuleDetailSerializer(queryset, many=True)
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
+
         newdata = dict(serializer.data[0])
         try:
             newdata.update({"rating": DisciplineBlockModuleInFolder.objects.get(block_module=self.kwargs['pk'],

@@ -15,7 +15,7 @@ from .models import (
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
     Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
 
-from .workprogram_additions.models import AdditionalMaterial
+from .workprogram_additions.models import AdditionalMaterial, StructuralUnit
 
 from .educational_program.pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
     PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
@@ -91,3 +91,5 @@ admin.site.register(BarsEPAssociate)
 admin.site.register(IndividualImplementationAcademicPlan)
 admin.site.register(WorkProgramInWorkProgramChangeInDisciplineBlockModule)
 admin.site.register(DisciplineBlockModuleInDisciplineBlock)
+
+admin.site.register(StructuralUnit)
