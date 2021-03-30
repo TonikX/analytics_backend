@@ -29,11 +29,15 @@ export const specialization = [
 const ENGLISH = 'en';
 const RUSSIAN = 'ru';
 const RUSSIAN_ENGLISH = 'ru/en';
+const KZ = 'kz';
+const GERMAN_ENGLISH = 'de';
 
 export const languageObject: any = {
     [RUSSIAN]: 'Русский',
     [ENGLISH]: 'Английский',
     [RUSSIAN_ENGLISH]: 'Русский/Английский',
+    [KZ]: 'Казахский',
+    [GERMAN_ENGLISH]: 'Немецкий',
 }
 
 export const languageArray = [
@@ -48,6 +52,14 @@ export const languageArray = [
     {
         value: RUSSIAN_ENGLISH,
         label: 'Русский/Английский'
+    },
+    {
+        value: KZ,
+        label: 'Казахский'
+    },
+    {
+        value: GERMAN_ENGLISH,
+        label: 'Немецкий'
     }
 ];
 
