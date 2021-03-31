@@ -280,10 +280,10 @@ class Sections extends React.PureComponent<SectionsProps> {
                 </TableContainer>
 
                 <Typography className={classes.lastInfo}>
-                    Сумма часов на лекционные занятия: <b> {lectureHours || 'Нет информации'}</b> <br/>
-                    Сумма часов на практические занятия: <b> {practiceHours || 'Нет информации'}</b> <br/>
-                    Сумма часов на лабораторные занятия: <b> {labHours || 'Нет информации'}</b> <br/>
-                    Сумма часов на самостоятельную работу: <b> {srsHours || 'Нет информации'}</b> <br/>
+                    Сумма часов на лекционные занятия: <b> {lectureHours ? lectureHours.toFixed(2) : 'Нет информации'}</b> <br/>
+                    Сумма часов на практические занятия: <b> {practiceHours ? practiceHours.toFixed(2) : 'Нет информации'}</b> <br/>
+                    Сумма часов на лабораторные занятия: <b> {labHours ? labHours.toFixed(2) :'Нет информации'}</b> <br/>
+                    Сумма часов на самостоятельную работу: <b> {srsHours ? srsHours.toFixed(2) : 'Нет информации'}</b> <br/>
                 </Typography>
 
                 {!createNewSectionMode && isCanEdit
