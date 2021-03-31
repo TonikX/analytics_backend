@@ -1265,15 +1265,17 @@ class FileUploadAPIView(APIView):
                 # Проверяем если Дисцпилина уже есть в БД
                 #
                 print(data['SUBJECT'][i].strip(), data['DIS_CODE'][i])
-                wp_list=WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
-                                              zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
-                                              data['COMPONENT'][i].strip(),
-                                              zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
-                                              data['ISOPTION'][i],
-                                              credit_units=",".join(
-                                                  map(str, credit_units)),
-                                              zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__educational_profile=
-                                              data['SUBFIELDNAME'][i].strip()).distinct()
+                regex = r'^[0-9]{2}\.' + str(data['DIS_CODE'][i])[3] + '.'
+                print(regex)
+                #TODO: ОГНП НЕКОРРЕКТНО СООТНОСЯТСЯ
+                wp_list = WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
+                                                     zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
+                                                     data['COMPONENT'][i].strip(),
+                                                     zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
+                                                     data['ISOPTION'][i],
+                                                     credit_units=",".join(
+                                                         map(str, credit_units)),
+                                                     discipline_code__iregex=regex).distinct()
                 if wp_list.exists():
                     wp_obj = WorkProgram.objects.get(pk=wp_list[0].id)
 
