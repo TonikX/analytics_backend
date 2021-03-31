@@ -1173,7 +1173,7 @@ class FileUploadOnlineCoursesAPIView(APIView):
         return Response(status=200)
 
 
-from discipline_code import IPv4_code
+from discipline_code import IPv4_code_ver2
 
 
 def handle_uploaded_csv(file, filename):
@@ -1191,7 +1191,7 @@ def handle_uploaded_csv(file, filename):
     in_df = pandas.read_excel(path)
     sys_df = pandas.read_excel('discipline_code/discipline_bank_updated.xlsx')
     print('IPv4_code generating')
-    processed_data, db = IPv4_code.generate_df_w_unique_code(in_df, sys_df)
+    processed_data, db = IPv4_code_ver2.generate_df_w_unique_code(in_df, sys_df)
     db.to_excel("discipline_code/discipline_bank_updated.xlsx", index=False)
     print(processed_data.head())
     return processed_data
