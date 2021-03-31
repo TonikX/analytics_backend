@@ -131,18 +131,70 @@ def numUnitsCredits(units_credits):
     int_creds = [0 if u == "-" else int(u) for u in units]
     return ",".join(map(str, [len(units), sum(int_creds)]))
 
+"""
+def hours_info(df, lec, prac, lab, exam, pf, diff, cp):
+    
+    return ",".join(map(str, [len(units), sum(int_creds)]))
+"""
 
-def getPos4(rep, sem_xlsx, dis_code, subj, sf_name, lec, prac, lab, exam, pf, diff, cp, imp_id, lang):
+
+def getPos4(rep, sem_xlsx, dis_code, subj, sf_name, lec, prac, lab, exam, pf, diff, cp, creds, imp_id, lang):
     if subj not in rep["SUBJECT"].to_list():
         # print(1, end=" ")
         return str(getMax4(rep) + 1)
     else:
         rep1 = rep.loc[rep["SUBJECT"] == subj]
-        new_sem_info = rep1["SEM_INFO"].apply(numUnitsCredits).to_list()
-        rep3 = rep1.assign(UNITS_CREDITS=new_sem_info)
-        if numUnitsCredits(sem_xlsx) not in new_sem_info:
-            # print(2, end=" ")
+        if lang not in rep1["LANGUAGE"].tolist() or imp_id not in rep1["IMPLEMENTOR_ID"].tolist():
+            # print(3, end=" ")
             return str(getMax4(rep) + 1)
+        else:
+            rep2 = rep1.loc[(rep1["LANGUAGE"] == lang) | (rep1["IMPLEMENTOR_ID"] == imp_id)].reset_index(drop=True)
+            new_sem_info = rep2["SEM_INFO"].apply(numUnitsCredits).to_list()
+            rep3 = rep2.assign(UNITS_CREDITS=new_sem_info)
+            if numUnitsCredits(sem_xlsx) not in new_sem_info:
+                # print(2, end=" ")
+                return str(getMax4(rep) + 1)
+            else:
+                rep4 = rep3.loc[rep3["UNITS_CREDITS"] == numUnitsCredits(sem_xlsx)].reset_index(drop=True)
+                if creds != rep4["UNITS_CREDITS"].tolist()[0].split(",")[1]:
+                    if len(set(rep4["ISU_SUBJECT_ID"])) == 1:
+                        return str(rep4["DIS_CODE"].tolist()[0].split(".")[3])
+                    else:
+                        return str(getMax4(rep) + 1)
+                else:
+                    var = 0
+                    for p in rep4.index.values:
+                        if lec == rep4["LECTURE"][p] and lab == rep4["LAB"][p] and prac == rep4["PRACTICE"][p] and \
+                                exam == rep4["EXAM"][p] and pf == rep4["PASS"][p] and diff == rep4["DIFF"][p] and cp == \
+                                rep4["CP"][p]:
+                            var += 1
+                    if var == 0:
+                        # print(4, end=" ")
+                        return str(getMax4(rep) + 1)
+                    else:
+                        rep5 = rep4.loc[(rep4["LECTURE"] == lec)
+                                        & (rep4["LAB"] == lab)
+                                        & (rep4["PRACTICE"] == prac)
+                                        & (rep4["EXAM"] == exam)
+                                        & (rep4["PASS"] == pf)
+                                        & (rep4["DIFF"] == diff)
+                                        & (rep4["CP"] == cp)]
+                        rows = len(rep5)
+                        count = 0
+                        for p in rep5.index.values:
+                            if (rep5["SUBFIELDNAME"][p] != sf_name) and (dis_code.split(".")[2] in ("10", "11")) and (
+                                    dis_code.split(".")[1] != "0"):
+                                count += 1
+                                if count != rows:
+                                    continue
+                                else:
+                                    print(5, end=" ")
+                                    return str(getMax4(rep) + 1)
+                            else:
+                                # print(6, end=" ")
+                                return str(rep5["DIS_CODE"][p].split(".")[3])
+
+                """
         else:
             rep2 = rep3.loc[rep3["UNITS_CREDITS"] == numUnitsCredits(sem_xlsx)].reset_index(drop=True)
             if lang not in rep2["LANGUAGE"].tolist() or imp_id not in rep2["IMPLEMENTOR_ID"].tolist():
@@ -179,93 +231,102 @@ def getPos4(rep, sem_xlsx, dis_code, subj, sf_name, lec, prac, lab, exam, pf, di
                         else:
                             # print(6, end=" ")
                             return str(rep5["DIS_CODE"][p].split(".")[3])
+"""
 
 
 # workaround for 01.04.02 Разработка программного обеспечения / Software Engineering
-def softwareEngineering(rep, sem_xlsx, dis_code, subj, lec, prac, lab, exam, pf, diff, cp, imp_id, lang):
+def softwareEngineering(rep, sem_xlsx, dis_code, subj, lec, prac, lab, exam, pf, diff, cp, creds, imp_id, lang):
     p12 = dis_code[:-2]
     p3 = dis_code.split(".")[2]
     fin_rep = rep.loc[rep["DIS_CODE"].str.match(p12 + p3)]
     if subj not in rep["SUBJECT"].to_list():
+        # print(1, end=" ")
         return p3 + "." + str(getMax4(fin_rep) + 1)
     else:
         rep1 = rep.loc[rep["SUBJECT"] == subj]
-        new_sem_info = rep1["SEM_INFO"].apply(numUnitsCredits).to_list()
-        rep2 = rep1.assign(UNITS_CREDITS=new_sem_info)
-        if numUnitsCredits(sem_xlsx) not in new_sem_info:
+        if lang not in rep1["LANGUAGE"].tolist() or imp_id not in rep1["IMPLEMENTOR_ID"].tolist():
+            # print(3, end=" ")
             return p3 + "." + str(getMax4(fin_rep) + 1)
         else:
-            rep3 = rep2.loc[rep2["UNITS_CREDITS"] == numUnitsCredits(sem_xlsx)].reset_index(drop=True)
-            if lang not in rep3["LANGUAGE"].tolist() or imp_id not in rep3["IMPLEMENTOR_ID"].tolist():
-                # print("e3", end=" ")
+            rep2 = rep1.loc[(rep1["LANGUAGE"] == lang) | (rep1["IMPLEMENTOR_ID"] == imp_id)].reset_index(drop=True)
+            new_sem_info = rep2["SEM_INFO"].apply(numUnitsCredits).to_list()
+            rep3 = rep2.assign(UNITS_CREDITS=new_sem_info)
+            if numUnitsCredits(sem_xlsx) not in new_sem_info:
+                # print(2, end=" ")
                 return p3 + "." + str(getMax4(fin_rep) + 1)
             else:
-                rep4 = rep3.loc[(rep3["LANGUAGE"] == lang) | (rep3["IMPLEMENTOR_ID"] == imp_id)].reset_index(drop=True)
-                # rows = len(rep4)
-                var = 0
-                for p in rep4.index.values:
-                    if lec == rep4["LECTURE"][p] and lab == rep4["LAB"][p] and prac == rep4["PRACTICE"][p] and \
-                            exam == rep4["EXAM"][p] and pf == rep4["PASS"][p] and diff == rep4["DIFF"][p] and cp == \
-                            rep4["CP"][p]:
-                        var += 1
-                if var == 0:
-                    # print("e4", end=" ")
-                    return p3 + "." + str(getMax4(fin_rep) + 1)
+                rep4 = rep3.loc[rep3["UNITS_CREDITS"] == numUnitsCredits(sem_xlsx)].reset_index(drop=True)
+                if creds != rep4["UNITS_CREDITS"].tolist()[0].split(",")[1]:
+                    if len(set(rep4["ISU_SUBJECT_ID"])) == 1:
+                        return ".".join(rep4.groupby(["SUBJECT", "UNITS_CREDITS"])["DIS_CODE"].transform("first")[0].split(".")[-2:])
+                    else:
+                        return p3 + "." + str(getMax4(fin_rep) + 1)
                 else:
-                    rep5 = rep4.loc[(rep4["LECTURE"] == lec)
-                                    & (rep4["LAB"] == lab)
-                                    & (rep4["PRACTICE"] == prac)
-                                    & (rep4["EXAM"] == exam)
-                                    & (rep4["PASS"] == pf)
-                                    & (rep4["DIFF"] == diff)
-                                    & (rep4["CP"] == cp)]
-                    # rep5["DIS_CODE"] = rep5.groupby(["SUBJECT", "UNITS_CREDITS"])["DIS_CODE"].transform("first")
-                    # print("e5", end=" ")
-                    return ".".join(rep5.groupby(["SUBJECT", "UNITS_CREDITS"])["DIS_CODE"].transform("first")[0].split(".")[-2:])
+                    var = 0
+                    for p in rep4.index.values:
+                        if lec == rep4["LECTURE"][p] and lab == rep4["LAB"][p] and prac == rep4["PRACTICE"][p] and \
+                                exam == rep4["EXAM"][p] and pf == rep4["PASS"][p] and diff == rep4["DIFF"][p] and cp == \
+                                rep4["CP"][p]:
+                            var += 1
+                    if var == 0:
+                        # print(4, end=" ")
+                        return p3 + "." + str(getMax4(fin_rep) + 1)
+                    else:
+                        rep5 = rep4.loc[(rep4["LECTURE"] == lec)
+                                        & (rep4["LAB"] == lab)
+                                        & (rep4["PRACTICE"] == prac)
+                                        & (rep4["EXAM"] == exam)
+                                        & (rep4["PASS"] == pf)
+                                        & (rep4["DIFF"] == diff)
+                                        & (rep4["CP"] == cp)]
+                        return ".".join(rep5.groupby(["SUBJECT", "UNITS_CREDITS"])["DIS_CODE"].transform("first")[0].split(".")[-2:])
 
 
 # workaround for элективный модуль по группе направлений
-def electiveModuleBachelor(rep, sem_xlsx, dis_code, subj, lec, prac, lab, exam, pf, diff, cp, imp_id, lang):
+def electiveModuleBachelor(rep, sem_xlsx, dis_code, subj, lec, prac, lab, exam, pf, diff, cp, creds, imp_id, lang):
     p23 = ".".join(dis_code.split(".")[1:])
     fin_rep = rep.loc[rep["DIS_CODE"].str.match(dis_code)]
     if subj not in rep["SUBJECT"].to_list():
-        # print("e1", str(getMax4(fin_rep) + 1))
+        # print(1, end=" ")
         return p23 + str(getMax4(fin_rep) + 1)
     else:
         rep1 = rep.loc[rep["SUBJECT"] == subj]
-        new_sem_info = rep1["SEM_INFO"].apply(numUnitsCredits).to_list()
-        rep2 = rep1.assign(UNITS_CREDITS=new_sem_info)
-        if numUnitsCredits(sem_xlsx) not in new_sem_info:
-            # print("e2", str(getMax4(fin_rep) + 1))
+        if lang not in rep1["LANGUAGE"].tolist() or imp_id not in rep1["IMPLEMENTOR_ID"].tolist():
+            # print(3, end=" ")
             return p23 + str(getMax4(fin_rep) + 1)
         else:
-            rep3 = rep2.loc[rep2["UNITS_CREDITS"] == numUnitsCredits(sem_xlsx)].reset_index(drop=True)
-            if lang not in rep3["LANGUAGE"].tolist() or imp_id not in rep3["IMPLEMENTOR_ID"].tolist():
-                # print("e3", end=" ")
+            rep2 = rep1.loc[(rep1["LANGUAGE"] == lang) | (rep1["IMPLEMENTOR_ID"] == imp_id)].reset_index(drop=True)
+            new_sem_info = rep2["SEM_INFO"].apply(numUnitsCredits).to_list()
+            rep3 = rep2.assign(UNITS_CREDITS=new_sem_info)
+            if numUnitsCredits(sem_xlsx) not in new_sem_info:
+                # print(2, end=" ")
                 return p23 + str(getMax4(fin_rep) + 1)
             else:
-                rep4 = rep3.loc[(rep3["LANGUAGE"] == lang) | (rep3["IMPLEMENTOR_ID"] == imp_id)].reset_index(drop=True)
-                # rows = len(rep4)
-                var = 0
-                for p in rep4.index.values:
-                    if lec == rep4["LECTURE"][p] and lab == rep4["LAB"][p] and prac == rep4["PRACTICE"][p] and \
-                            exam == rep4["EXAM"][p] and pf == rep4["PASS"][p] and diff == rep4["DIFF"][p] and cp == \
-                            rep4["CP"][p]:
-                        var += 1
-                if var == 0:
-                    # print("e4", end=" ")
-                    return p23 + str(getMax4(fin_rep) + 1)
+                rep4 = rep3.loc[rep3["UNITS_CREDITS"] == numUnitsCredits(sem_xlsx)].reset_index(drop=True)
+                if creds != rep4["UNITS_CREDITS"].tolist()[0].split(",")[1]:
+                    if len(set(rep4["ISU_SUBJECT_ID"])) == 1:
+                        return ".".join(rep4.groupby(["SUBJECT", "UNITS_CREDITS"])["DIS_CODE"].transform("first")[0].split(".")[1:])
+                    else:
+                        return p23 + str(getMax4(fin_rep) + 1)
                 else:
-                    rep5 = rep4.loc[(rep4["LECTURE"] == lec)
-                                    & (rep4["LAB"] == lab)
-                                    & (rep4["PRACTICE"] == prac)
-                                    & (rep4["EXAM"] == exam)
-                                    & (rep4["PASS"] == pf)
-                                    & (rep4["DIFF"] == diff)
-                                    & (rep4["CP"] == cp)]
-                    # rep5["DIS_CODE"] = rep3.groupby(["SUBJECT", "UNITS_CREDITS"])["DIS_CODE"].transform("first")
-                    # print("e5", end=" ")
-                    return ".".join(rep3.groupby(["SUBJECT", "UNITS_CREDITS"])["DIS_CODE"].transform("first")[0].split(".")[1:])
+                    var = 0
+                    for p in rep4.index.values:
+                        if lec == rep4["LECTURE"][p] and lab == rep4["LAB"][p] and prac == rep4["PRACTICE"][p] and \
+                                exam == rep4["EXAM"][p] and pf == rep4["PASS"][p] and diff == rep4["DIFF"][p] and cp == \
+                                rep4["CP"][p]:
+                            var += 1
+                    if var == 0:
+                        # print(4, end=" ")
+                        return p23 + str(getMax4(fin_rep) + 1)
+                    else:
+                        rep5 = rep4.loc[(rep4["LECTURE"] == lec)
+                                        & (rep4["LAB"] == lab)
+                                        & (rep4["PRACTICE"] == prac)
+                                        & (rep4["EXAM"] == exam)
+                                        & (rep4["PASS"] == pf)
+                                        & (rep4["DIFF"] == diff)
+                                        & (rep4["CP"] == cp)]
+                        return ".".join(rep3.groupby(["SUBJECT", "UNITS_CREDITS"])["DIS_CODE"].transform("first")[0].split(".")[1:])
 
 
 def getPos5(data, new_sys_df):
@@ -318,20 +379,20 @@ def generate_df_w_unique_code(in_df, sys_df=None):
             p34 = softwareEngineering(sys_df.loc[sys_df["DIS_CODE"].str.match(in_df.loc[i, "DIS_CODE"][:-2])], in_df.loc[i, "SEM_INFO"], in_df["DIS_CODE"][i], in_df["SUBJECT"][i],
                                       in_df["LECTURE"][i], in_df["PRACTICE"][i],
                                       in_df["LAB"][i], in_df["EXAM"][i], in_df["PASS"][i], in_df["DIFF"][i],
-                                      in_df["CP"][i], in_df["IMPLEMENTOR_ID"][i], in_df["LANGUAGE"][i])
+                                      in_df["CP"][i], in_df["CREDITS"][i], in_df["IMPLEMENTOR_ID"][i], in_df["LANGUAGE"][i])
             in_df.loc[i, "DIS_CODE"] = in_df["DIS_CODE"][i][:-2] + str(p34)
         elif (in_df["DIS_CODE"][i].split(".")[0] == "06") and (in_df["DIS_CODE"][i].split(".")[1] != "0") and (in_df["DIS_CODE"][i].split(".")[2] == "3"):
             p234 = electiveModuleBachelor(sys_df.loc[sys_df["DIS_CODE"].str.match("06\.[1-7]\.3\.")], in_df.loc[i, "SEM_INFO"], in_df["DIS_CODE"][i], in_df["SUBJECT"][i],
                                           in_df["LECTURE"][i], in_df["PRACTICE"][i],
                                           in_df["LAB"][i], in_df["EXAM"][i], in_df["PASS"][i], in_df["DIFF"][i],
-                                          in_df["CP"][i], in_df["IMPLEMENTOR_ID"][i], in_df["LANGUAGE"][i])
+                                          in_df["CP"][i], in_df["CREDITS"][i], in_df["IMPLEMENTOR_ID"][i], in_df["LANGUAGE"][i])
             in_df.loc[i, "DIS_CODE"] = in_df["DIS_CODE"][i][:3] + str(p234)
         else:
             p4 = getPos4(sys_df.loc[sys_df["DIS_CODE"].str.match(in_df.loc[i, "DIS_CODE"])],
                          in_df.loc[i, "SEM_INFO"], in_df["DIS_CODE"][i], in_df["SUBJECT"][i],
                          in_df["SUBFIELDNAME"][i], in_df["LECTURE"][i], in_df["PRACTICE"][i],
                          in_df["LAB"][i], in_df["EXAM"][i], in_df["PASS"][i], in_df["DIFF"][i],
-                         in_df["CP"][i], in_df["IMPLEMENTOR_ID"][i], in_df["LANGUAGE"][i])
+                         in_df["CP"][i], in_df["CREDITS"][i], in_df["IMPLEMENTOR_ID"][i], in_df["LANGUAGE"][i])
 
             in_df.loc[i, "DIS_CODE"] = in_df["DIS_CODE"][i] + str(p4)
         sys_df = append_sys_df(sys_df,
@@ -387,14 +448,14 @@ def generate_single_unique_code(sf_code, sf_name, year, subj_degree, subj_code, 
 #start_time = time.time()
 
 # generate codes for an excel file
-
-df1 = pd.read_excel("isu_bachelor.xlsx")
+"""
+df1 = pd.read_excel("isu_bachelor_example.xlsx")
 # discipline_rep = pd.read_excel("discipline_bank.xlsx")
 # processed_data, db = generate_df_w_unique_code(df1, discipline_rep)
 processed_data, db = generate_df_w_unique_code(df1)
-processed_data.to_excel("new_disciplines_test_bachelor.xlsx", index=False)
+processed_data.to_excel("new_disciplines_test_ex_b.xlsx", index=False)
 db.to_excel("discipline_bank.xlsx", index=False)
-
+"""
 """
 discipline_rep = pd.read_excel("source_files/discipline_bank.xlsx")
 discipline_code, db = generate_single_unique_code("19.03.01",
