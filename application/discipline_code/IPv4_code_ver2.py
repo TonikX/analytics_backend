@@ -344,6 +344,7 @@ def generate_df_w_unique_code(in_df, sys_df=None):
                                in_df["PASS"][i], in_df["DIFF"][i], in_df["CP"][i], in_df["SRS"][i], in_df["ISOPTION"][i],
                                in_df["SEM_INFO"][i], in_df["DIS_CODE"][i], in_df["YEAR"][i][-2:]).drop_duplicates().reset_index(drop=True)
         # print(i, in_df["DIS_CODE"][i], in_df["SUBJECT"][i])
+        print(f"\rГотово на .. {round(i / len(in_df) * 100, 2)} %", end="")
     sys_df = getPos5(sys_df, new_sys_df).drop_duplicates().reset_index(drop=True)
     to_merge = sys_df[["DIS_CODE", "VERSION"]].copy()
     in_df_ver = pd.merge(in_df, to_merge, how="left", on="DIS_CODE").drop_duplicates().reset_index(drop=True)
@@ -386,14 +387,14 @@ def generate_single_unique_code(sf_code, sf_name, year, subj_degree, subj_code, 
 #start_time = time.time()
 
 # generate codes for an excel file
-"""
+
 df1 = pd.read_excel("isu_bachelor.xlsx")
 # discipline_rep = pd.read_excel("discipline_bank.xlsx")
 # processed_data, db = generate_df_w_unique_code(df1, discipline_rep)
 processed_data, db = generate_df_w_unique_code(df1)
 processed_data.to_excel("new_disciplines_test_bachelor.xlsx", index=False)
 db.to_excel("discipline_bank.xlsx", index=False)
-"""
+
 """
 discipline_rep = pd.read_excel("source_files/discipline_bank.xlsx")
 discipline_code, db = generate_single_unique_code("19.03.01",
