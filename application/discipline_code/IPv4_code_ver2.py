@@ -157,6 +157,7 @@ def getPos4(rep, sem_xlsx, dis_code, subj, sf_name, lec, prac, lab, exam, pf, di
             else:
                 rep4 = rep3.loc[rep3["UNITS_CREDITS"] == numUnitsCredits(sem_xlsx)].reset_index(drop=True)
                 if creds != rep4["UNITS_CREDITS"].tolist()[0].split(",")[1]:
+                    # TODO: заменить на id записи в jSON
                     if len(set(rep4["ISU_SUBJECT_ID"])) == 1:
                         return str(rep4["DIS_CODE"].tolist()[0].split(".")[3])
                     else:
@@ -326,7 +327,7 @@ def electiveModuleBachelor(rep, sem_xlsx, dis_code, subj, lec, prac, lab, exam, 
                                         & (rep4["PASS"] == pf)
                                         & (rep4["DIFF"] == diff)
                                         & (rep4["CP"] == cp)]
-                        return ".".join(rep3.groupby(["SUBJECT", "UNITS_CREDITS"])["DIS_CODE"].transform("first")[0].split(".")[1:])
+                        return ".".join(rep5.groupby(["SUBJECT", "UNITS_CREDITS"])["DIS_CODE"].transform("first")[0].split(".")[1:])
 
 
 def getPos5(data, new_sys_df):
@@ -449,11 +450,11 @@ def generate_single_unique_code(sf_code, sf_name, year, subj_degree, subj_code, 
 
 # generate codes for an excel file
 """
-df1 = pd.read_excel("isu_bachelor_example.xlsx")
+df1 = pd.read_excel("isu_bachelor.xlsx")
 # discipline_rep = pd.read_excel("discipline_bank.xlsx")
 # processed_data, db = generate_df_w_unique_code(df1, discipline_rep)
 processed_data, db = generate_df_w_unique_code(df1)
-processed_data.to_excel("new_disciplines_test_ex_b.xlsx", index=False)
+processed_data.to_excel("new_disciplines_test_bachelor.xlsx", index=False)
 db.to_excel("discipline_bank.xlsx", index=False)
 """
 """
