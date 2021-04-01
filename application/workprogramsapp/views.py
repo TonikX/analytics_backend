@@ -1189,10 +1189,10 @@ def handle_uploaded_csv(file, filename):
         for chunk in file.chunks():
             destination.write(chunk)
     in_df = pandas.read_excel(path)
-    sys_df = pandas.read_excel('discipline_code/discipline_bank_updated.xlsx')
+    sys_df = pandas.read_excel('discipline_code/discipline_bank_updated2.xlsx')
     print('IPv4_code generating')
     processed_data, db = IPv4_code_ver2.generate_df_w_unique_code(in_df, sys_df)
-    db.to_excel("discipline_code/discipline_bank_updated.xlsx", index=False)
+    db.to_excel("discipline_code/discipline_bank_updated2.xlsx", index=False)
     print(processed_data.head())
     return processed_data
 
@@ -1265,15 +1265,17 @@ class FileUploadAPIView(APIView):
                 # Проверяем если Дисцпилина уже есть в БД
                 #
                 print(data['SUBJECT'][i].strip(), data['DIS_CODE'][i])
-                wp_list=WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
-                                              zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
-                                              data['COMPONENT'][i].strip(),
-                                              zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
-                                              data['ISOPTION'][i],
-                                              credit_units=",".join(
-                                                  map(str, credit_units)),
-                                              zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__educational_profile=
-                                              data['SUBFIELDNAME'][i].strip()).distinct()
+                regex = r'^[0-9]{2}\.' + str(data['DIS_CODE'][i])[3] + '.'
+                print(regex)
+                #TODO: ОГНП НЕКОРРЕКТНО СООТНОСЯТСЯ
+                wp_list = WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
+                                                     zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
+                                                     data['COMPONENT'][i].strip(),
+                                                     zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
+                                                     data['ISOPTION'][i],
+                                                     credit_units=",".join(
+                                                         map(str, credit_units)),
+                                                     discipline_code__iregex=regex).distinct()
                 if wp_list.exists():
                     wp_obj = WorkProgram.objects.get(pk=wp_list[0].id)
 
