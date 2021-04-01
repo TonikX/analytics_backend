@@ -60,7 +60,7 @@ class Results extends React.PureComponent<ResultsProps> {
                                     </Typography>
 
                                     <Typography className={classes.level}>
-                                        {result[ResultsFields.MASTER_LEVEL] === '1' ? 'Низкий'
+                                        {result[ResultsFields.MASTER_LEVEL] === '1' ? 'Начальный'
                                         : result[ResultsFields.MASTER_LEVEL] === '2' ? 'Средний'
                                         : 'Высокий'
                                         }

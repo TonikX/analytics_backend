@@ -9,7 +9,7 @@ export const roles: {[key: string]: string} = {
 }
 
 export const levels: {[key: string]: string} = {
-    '1': 'Низкий',
+    '1': 'Начальный',
     '2': 'Средний',
     '3': 'Высокий'
 }
