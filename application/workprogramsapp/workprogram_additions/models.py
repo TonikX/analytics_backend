@@ -28,6 +28,6 @@ class UserStructuralUnit(models.Model):
         ('employee', 'employee'),
     )
     structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL, verbose_name='Структурное подразделени',
-                                     related_name='user_in_structural_unit')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
+                                     related_name='user_in_structural_unit', blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     status = models.CharField(max_length=1, choices=status_choise, verbose_name='Архив', default = 'l')
