@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import InstitutionViewSet, PlatformViewSet, OnlineCourseViewSet, CourseCreditViewSet,\
-    CourseRequirementViewSet, CourseFieldOfStudyViewSet, CourseLearningOutcomeViewSet, CourseWorkProgramViewSet
+
+from .views import InstitutionViewSet, PlatformViewSet, OnlineCourseViewSet, CourseCreditViewSet, \
+    CourseRequirementViewSet, CourseFieldOfStudyViewSet, CourseLearningOutcomeViewSet, CourseWorkProgramViewSet, \
+    CourseDataAPIView
 
 urlpatterns = [
     path('api/course/institution/', InstitutionViewSet.as_view({'get': 'list'}), name='Institution-list'),
@@ -12,4 +14,5 @@ urlpatterns = [
     path('api/course/coursefieldofstudy/', CourseFieldOfStudyViewSet.as_view({'get': 'list'}), name='CourseFieldOfStudy-list'),
     path('api/course/courselerningoutcome/', CourseLearningOutcomeViewSet.as_view({'get': 'list'}), name='CourseLearningOutcome-list'),
     path('api/course/courseworkprogram/', CourseWorkProgramViewSet.as_view({'get': 'list'}), name='CourseWorkProgramViewSet-list'),
+    path('api/course/upload_data/', CourseDataAPIView.as_view(), name='CourseDataUploader')
 ]
