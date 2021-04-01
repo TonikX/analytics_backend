@@ -11,7 +11,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import Checkbox from "@material-ui/core/Checkbox";
 
 import AddIcon from "@material-ui/icons/Add";
 import SettingsIcon from "@material-ui/icons/MoreVert";

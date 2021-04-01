@@ -33,7 +33,11 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
         if ((this.props.value !== prevProps.value) && this.props.isReset) {
             const {list} = this.props;
             let item = list.find(el => el.value === this.props.value)
-            this.setState({searchText: get(item, 'label', '')})
+            this.setState({searchText: get(item, 'label', false) || this.props.label})
+        }
+
+        if (this.props.valueLabel !== prevProps.valueLabel){
+            this.setState({searchText: this.props.valueLabel});
         }
     }
 

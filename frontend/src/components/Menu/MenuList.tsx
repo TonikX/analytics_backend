@@ -109,6 +109,12 @@ export default (groups: Array<string>) => {
             icon: IndicatorsIcon,
             selectedIcon: IndicatorsSelectedIcon,
         },
+        {
+            title: 'Структурные подразделения',
+            link: appRouter.getStructuralUnitsRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
     ];
 
     if (isUserInExpertiseGroup(groups)){

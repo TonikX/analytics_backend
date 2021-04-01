@@ -9,4 +9,6 @@ export interface UserSelectorType extends WithStyles<typeof styles> {
     noMargin: boolean;
     handleChange: Function;
     selectorLabel: string;
+    label: string;
+    value: number;
 }

@@ -25,6 +25,7 @@ const EXPERTISES = 'expertises';
 const SELECT_EDUCATIONAL_PROGRAM = 'select-educational-program';
 const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
 const PROFESSIONAL_STANDARDS = 'professional-standards';
+const STRUCTURAL_UNITS = 'structural-units';
 
 const SEPARATOR = '/';
 
@@ -52,6 +53,18 @@ export default class RouterService {
 
     getProfessionalStandardsRoute = () => {
         return SEPARATOR + PROFESSIONAL_STANDARDS;
+    };
+
+    getStructuralUnitsRoute = () => {
+        return SEPARATOR + STRUCTURAL_UNITS;
+    };
+
+    getStructuralUnitRouteLink = (id: number) => {
+        return SEPARATOR + STRUCTURAL_UNITS + SEPARATOR + id;
+    };
+
+    getStructuralUnitRoute = () => {
+        return SEPARATOR + STRUCTURAL_UNITS + SEPARATOR + ':id';
     };
 
     getSignUpRoute = () => {

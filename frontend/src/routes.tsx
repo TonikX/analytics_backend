@@ -45,6 +45,8 @@ import SelectEducationalProgram from './containers/SelectEducationalProgram';
 import IndividualTrajectories from './containers/IndividualTrajectories';
 
 import ProfessionalStandards from './containers/ProfessionalStandards';
+import StructuralUnits from './containers/StructuralUnits';
+import StructuralUnit from './containers/StructuralUnits/StructuralUnit';
 
 import Layout from "./layout";
 
@@ -79,6 +81,12 @@ export default () => (
             </AuthRoute>
             <AuthRoute path={routerService.getProfessionalStandardsRoute()}>
                 <ProfessionalStandards />
+            </AuthRoute>
+            <AuthRoute path={routerService.getStructuralUnitRoute()}>
+                <StructuralUnit />
+            </AuthRoute>
+            <AuthRoute path={routerService.getStructuralUnitsRoute()}>
+                <StructuralUnits />
             </AuthRoute>
             <AuthRoute path={routerService.getIndividualTrajectoriesRoute()}>
                 <IndividualTrajectories />
