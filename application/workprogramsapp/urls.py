@@ -86,7 +86,7 @@ from .views import WorkProgramFullDetailsWithDisciplineCodeView
 
 
 # DocxFileExportOldView
-
+from .workprogram_additions.views import CopyContentOfWorkProgram
 
 urlpatterns = [
 
@@ -129,6 +129,7 @@ urlpatterns = [
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
     path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
     path('api/workprogram/clone', CloneWorkProgramm),
+    path('api/workprogram/merge_content', CopyContentOfWorkProgram),
     path('api/workprogramsinfieldofstudy', WorkProgramInFieldOfStudyListView.as_view()),
     path('api/workprogram/change_relations', NewRealtionsForWorkProgramsInFieldOfStudyAPI),
     # path('api/workprogram/itemrelations/<char:discipline_code>', WorkProgramDetailsWithDisciplineCodeView.as_view()),
@@ -326,7 +327,7 @@ urlpatterns = [
     path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
     url(r'^', include('workprogramsapp.educational_program.urls')),
 
-    #Запросы для работы с БАРС
+    # Запросы для работы с БАРС
     path('api/bars_tools/similar_ep', FindSimilarEP),
     path('api/bars_tools/similar_wp', FindSimilarWP),
     path('api/bars_tools/post_checkpoint', CreateCheckPoint),
