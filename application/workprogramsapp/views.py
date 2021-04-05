@@ -1189,10 +1189,13 @@ def handle_uploaded_csv(file, filename):
         for chunk in file.chunks():
             destination.write(chunk)
     in_df = pandas.read_excel(path)
-    sys_df = pandas.DataFrame({'OP_ID':[], 'SUBFIELDNAME':[], 'FACULTY_ID':[], 'FACULTY':[], 'OGNP_ID':[], 'OGNP':[],
-                               'YEAR':[], 'DEGREE':[], 'SEMESTER':[], 'LANGUAGE':[], 'CREDITS':[], 'LECTURE':[],
-                               'PRACTICE':[], 'LAB':[], 'EXAM':[], 'PASS':[], 'DIFF':[], 'CP':[], 'SRS':[], 'ISOPTION':[],
-                               'SEM_INFO':[], 'DIS_CODE':[], 'VERSION':[]})
+    sys_df = pandas.DataFrame({'EP_ID':[], 'SUBJECT_CODE':[], 'CYCLE':[], 'MODULE_ID':[], 'COMPONENT':[],
+                               'ISU_SUBJECT_ID':[], 'SUBJECT':[], 'IMPLEMENTOR_ID':[], 'IMPLEMENTOR':[],
+                               'SUBFIELDCODE':[], 'MAJOR_NAME':[], 'OP_ID':[], 'SUBFIELDNAME':[],
+                               'FACULTY_ID':[], 'FACULTY':[], 'OGNP_ID':[],'OGNP':[], 'YEAR':[], 'DEGREE':[],
+                               'SEMESTER':[], 'LANGUAGE':[], 'CREDITS':[], 'LECTURE':[], 'PRACTICE':[], 'LAB':[],
+                               'EXAM':[], 'PASS':[], 'DIFF':[], 'CP':[], 'SRS':[], 'ISOPTION':[], 'SEM_INFO':[],
+                               'DIS_CODE':[], 'VERSION':[]})
 
     # df.to_excel("discipline_code/discipline_bank_updated5.xlsx", index=False)
     # sys_df = pandas.read_excel('discipline_code/discipline_bank_updated5.xlsx')
