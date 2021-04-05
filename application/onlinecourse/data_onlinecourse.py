@@ -1,9 +1,9 @@
 import requests
 import pandas as pd
-from sqlalchemy import null
 
-cert_cert = '24aca29f-c7f2-4c5a-8faa-5a42737b2f9f.crt'
-cert_key = '24aca29f-c7f2-4c5a-8faa-5a42737b2f9f.key'
+cert_cert = #указать путь к сертификату
+cert_key = #указать путь к ключу
+
 
 def get_data():
     """
@@ -20,7 +20,7 @@ def get_data():
         global_id.append(platform['global_id'])
         title.append(platform['title'])
 
-    data_platform = pd.DataFrame(list(zip(global_id, title)),
+    data_Platform = pd.DataFrame(list(zip(global_id, title)),
                                  columns=['platform_id', 'title'])
 
     """
@@ -38,7 +38,7 @@ def get_data():
         global_id.append(rightholder['global_id'])
         short_title.append(rightholder['short_title'])
 
-    data_rigthholder = pd.DataFrame(list(zip(global_id, short_title)),
+    data_Rigthholder = pd.DataFrame(list(zip(global_id, short_title)),
                                     columns=['institution_id', 'title'])
 
     """
@@ -47,7 +47,6 @@ def get_data():
 
     onlinecourses = requests.get('https://test.online.edu.ru/api/courses/v0/course',
                                  cert=(cert_cert, cert_key))
-    onlinecourses_list = onlinecourses.json()['results']
 
     # сбор ссылок на все страницы с онлайн курсами
     course_link = 'https://test.online.edu.ru/api/courses/v0/course/'
@@ -88,6 +87,22 @@ def get_data():
     has_certificate = []
     credits = []
 
+    course_id_field_of_study = []
+    field_of_study = []
+
+    course_id_transfer = []
+    field_of_study_transfer = []
+    institution_transfer = []
+
+    course_id_req = []
+    item_req = []
+
+    course_id_learning_outcomes = []
+    learning_outcomes = []
+
+    course_comp = []
+    competences = []
+
     # сбор данных по каждому онлайн курсов
     course_link = 'https://test.online.edu.ru/api/courses/v0/course/'
     for i in range(0, len(course_id)):
@@ -116,7 +131,46 @@ def get_data():
         has_certificate.append(current_course.json()['has_certificate'])
         credits.append(current_course.json()['credits'])
 
-    data_online_course = pd.DataFrame(list(zip(course_id, title, description, institution, platform, language, started_at, created_at, record_end_at,
+        """
+        #Collecting onlinecourse&competences to DataFrame
+        """
+        course_comp.append(course_id[i])
+        competences.append(current_course.json()['competences'])
+
+        """
+        Collecting onlinecourse&field_of_study to DataFrame
+        """
+
+        for j in current_course.json()['directions']:
+            field_of_study.append(j)
+            course_id_field_of_study.append(course_id[i])
+
+        """
+        Collecting onlinecourse&credit to DataFrame
+        """
+
+        for j in current_course.json()['transfers']:
+            course_id_transfer.append(course_id[i])
+            field_of_study_transfer.append(j['direction_id'])
+            institution_transfer.append(j['institution_id'])
+
+        """
+        #Collecting onlinecourse&requirements to DataFrame
+        """
+
+        for j in current_course.json()['requirements']:
+            course_id_req.append(course_id[i])
+            item_req.append(j)
+
+        """
+        #Collecting onlinecourse&learning_outcome to DataFrame
+        """
+
+        for j in current_course.json()['learning_outcomes']:
+            course_id_learning_outcomes.append(course_id[i])
+            learning_outcomes.append(j)
+
+    data_OnlineCourse = pd.DataFrame(list(zip(course_id, title, description, institution, platform, language, started_at, created_at, record_end_at,
                                              finished_at, rating, experts_rating, visitors_number, total_visitors_number, duration, volume,
                                              intensity_per_week, content, lectures_number, external_url, has_certificate, credits)),
                                       columns=['course_id','title', 'description', 'institution_id', 'platform_id', 'language', 'started_at',
@@ -124,36 +178,34 @@ def get_data():
                                                'experts_rating', 'visitors_number', 'total_visitors_number',
                                                'duration', 'volume', 'intensity_per_week',
                                                'content', 'lectures_number', 'external_url', 'has_certificate', 'credits'])
+    data_OnlineCourse['id_course'] = data_OnlineCourse.index
 
-    """
-    Collecting onlinecourse&field_of_study to DataFrame
-    """
-
-    course_id_field_of_study = []
-    field_of_study = []
-
-    course_link = 'https://test.online.edu.ru/api/courses/v0/course/'
-    for i in range(0,len(course_id)):
-        current_course_link = course_link + str(course_id[i])
-        current_course = requests.get(current_course_link,
-                                      cert=(cert_cert, cert_key))
-        for j in current_course.json()['directions']:
-            field_of_study.append(j)
-            course_id_field_of_study.append(course_id[i])
 
     data_CourseFieldOfStudy = pd.DataFrame(list(zip(course_id_field_of_study, field_of_study)),
-                                           columns=['course', 'field_of_study'])
+                                           columns=['course_id', 'field_of_study'])
 
 
+
+    data_CourseCredit = pd.DataFrame(list(zip(course_id_transfer, institution_transfer, field_of_study_transfer)),
+                                     columns=['course_id', 'institution_id', 'field_of_study'])
+
+    data_CourseRequirement = pd.DataFrame(list(zip(course_id_req, item_req)),
+                                          columns=['course_id', 'item'])
+
+    data_CourseLearningOutcome = pd.DataFrame(list(zip(course_id_learning_outcomes, learning_outcomes)),
+                                              columns=['course_id', 'learning_outcome'])
+
+    data_CourseCompetence = pd.DataFrame(list(zip(course_comp, competences)),
+                                         columns=['course_id', 'competences'])
 
     """
-    #Adding new id as FK to OnlineCourse
+    Adding new id as FK to OnlineCourse
     """
 
-    data_platform['id_platform'] = data_platform.index
-    data_rigthholder['id_rightholder'] = data_rigthholder.index
-    data_online_course_platform = pd.merge(data_online_course, data_platform, how='left', on='platform_id')
-    data_online_course_platform_inst = pd.merge(data_online_course_platform, data_rigthholder, how='left', on='institution_id')
+    data_Platform['id_platform'] = data_Platform.index
+    data_Rigthholder['id_institution'] = data_Rigthholder.index
+    data_online_course_platform = pd.merge(data_OnlineCourse, data_Platform, how='left', on='platform_id')
+    data_online_course_platform_inst = pd.merge(data_online_course_platform, data_Rigthholder, how='left', on='institution_id')
 
 
     data_online_course_platform_inst.started_at = pd.to_datetime(data_online_course_platform_inst['started_at'],
@@ -162,6 +214,35 @@ def get_data():
                                                                   format='%Y-%m-%d', errors='ignore')
 
     data_online_course_platform_inst = data_online_course_platform_inst.fillna(value='None')
-    data_online_course = data_online_course_platform_inst.copy()
-    
-    return data_platform, data_rigthholder, data_online_course
+    data_OnlineCourse = data_online_course_platform_inst.copy()
+
+    """
+    Adding new id as FK to CourseFieldOfStudy
+    """
+    data_CourseFieldOfStudy = pd.merge(data_CourseFieldOfStudy, data_OnlineCourse[['id_course', 'course_id']],
+                                       how='left', on='course_id')
+
+    """
+    Adding new id as FK to CourseCredit
+    """
+    data_CourseCredit = pd.merge(data_CourseCredit, data_OnlineCourse[['id_course', 'course_id']],
+                                 how='left', on='course_id')
+    data_CourseCredit = pd.merge(data_CourseCredit, data_Rigthholder, how='left', on='institution_id')
+
+    """
+    Adding new id as FK to CourseRequirement
+    """
+    data_CourseRequirement = pd.merge(data_CourseRequirement, data_OnlineCourse[['id_course', 'course_id']],
+                                      how='left', on='course_id')
+    """
+    Adding new id as FK to CourseLearningOutcome
+    """
+    data_CourseLearningOutcome = pd.merge(data_CourseLearningOutcome, data_OnlineCourse[['id_course', 'course_id']],
+                                          how='left', on='course_id')
+    """
+    Adding new id as FK to CourseCompetence
+    """
+    data_CourseCompetence = pd.merge(data_CourseCompetence, data_OnlineCourse[['id_course', 'course_id']],
+                                     how='left', on='course_id')
+    return data_Platform, data_Rigthholder, data_OnlineCourse, data_CourseFieldOfStudy, data_CourseCredit, \
+           data_CourseRequirement, data_CourseLearningOutcome, data_CourseCompetence
