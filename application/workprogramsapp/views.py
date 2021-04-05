@@ -1295,7 +1295,7 @@ class FileUploadAPIView(APIView):
                     else:
                         if data['DIS_CODE'][i] != wp_obj.discipline_code:
                             try:
-                                wp_obj = WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i])
+                                wp_obj = WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip())
                             except:
                                 print("Я СКЛОНИРОВАЛ!!!")
                                 wp_obj = WorkProgram.clone_programm(wp_obj.id)
@@ -1336,26 +1336,26 @@ class FileUploadAPIView(APIView):
                     СertificationEvaluationTool.objects.create(work_program=wp_obj, type="1", semester=semester)
                 if bool(data['CP'][i]):
                     СertificationEvaluationTool.objects.create(work_program=wp_obj, type="4", semester=semester)
+                try:
+                    lecture_array = [float(x) for x in wp_obj.lecture_hours.split(",")]
+                except:
+                    wp_obj.lecture_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    wp_obj.practice_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    wp_obj.lab_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    wp_obj.srs_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    lecture_array = [float(x) for x in wp_obj.lecture_hours.split(",")]
+                practise_array = [float(x) for x in wp_obj.practice_hours.split(",")]
+                lab_array = [float(x) for x in wp_obj.lab_hours.split(",")]
+                srs_array = [float(x) for x in wp_obj.srs_hours.split(",")]
+                lecture_array[int(data['SEMESTER'][i]) - 1] = float(str(data['LECTURE'][i]).replace(",", "."))
+                practise_array[int(data['SEMESTER'][i]) - 1] = float(str(data['PRACTICE'][i]).replace(",", "."))
+                lab_array[int(data['SEMESTER'][i]) - 1] = float(str(data['LAB'][i]).replace(",", "."))
+                srs_array[int(data['SEMESTER'][i]) - 1] = float(str(data['SRS'][i]).replace(",", "."))
 
-                lecture_array = (wp_obj.lecture_hours).split(",")
-                if len(lecture_array) != 10:
-                    wp_obj.lecture_hours = str([0 for i in range(11)])[1:-1]
-                    wp_obj.practice_hours = str([0 for i in range(11)])[1:-1]
-                    wp_obj.lab_hours = str([0 for i in range(11)])[1:-1]
-                    wp_obj.srs_hours = str([0 for i in range(11)])[1:-1]
-                    lecture_array = (wp_obj.lecture_hours).split(",")
-                practise_array = (wp_obj.practice_hours).split(",")
-                lab_array = (wp_obj.lab_hours).split(",")
-                srs_array = (wp_obj.srs_hours).split(",")
-                lecture_array[int(data['SEMESTER'][i]) - 1] = str(data['LECTURE'][i]).replace(",", ".")
-                practise_array[int(data['SEMESTER'][i]) - 1] = str(data['PRACTICE'][i]).replace(",", ".")
-                lab_array[int(data['SEMESTER'][i]) - 1] = str(data['LAB'][i]).replace(",", ".")
-                srs_array[int(data['SEMESTER'][i]) - 1] = str(data['SRS'][i]).replace(",", ".")
-
-                wp_obj.lecture_hours = str(lecture_array)[1:-1]
-                wp_obj.practice_hours = str(practise_array)[1:-1]
-                wp_obj.lab_hours = str(lab_array)[1:-1]
-                wp_obj.srs_hours = str(srs_array)[1:-1]
+                wp_obj.lecture_hours = str(lecture_array)[1:-1].replace(" ", "")
+                wp_obj.practice_hours = str(practise_array)[1:-1].replace(" ", "")
+                wp_obj.lab_hours = str(lab_array)[1:-1].replace(" ", "")
+                wp_obj.srs_hours = str(srs_array)[1:-1].replace(" ", "")
 
                 wp_obj.wp_isu_id = int(data['ISU_SUBJECT_ID'][i])
 
