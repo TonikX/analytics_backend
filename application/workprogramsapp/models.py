@@ -324,6 +324,7 @@ class AcademicPlan(models.Model):
     year = models.CharField(max_length=1024, blank = True, null = True)
     education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
     author=models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Автор учебного плана', on_delete = models.CASCADE, related_name = 'academic_plan_author', blank = True, null = True)
+    ap_isu_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
 
 
     #TODO: Добавить год набора

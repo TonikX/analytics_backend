@@ -1368,6 +1368,9 @@ class FileUploadAPIView(APIView):
                                                educational_profile=data['SUBFIELDNAME'][i].strip()).exists():
                     ap_obj = AcademicPlan.objects.get(qualification=qualification, year=data['YEAR'][i],
                                                       educational_profile=data['SUBFIELDNAME'][i].strip())
+                    # EP_ID - учебный план
+                    ap_obj.ap_isu_id=int(data['EP_ID'][i])
+                    ap_obj.save()
                     print('старый', ap_obj)
 
                 else:
@@ -1378,7 +1381,8 @@ class FileUploadAPIView(APIView):
                     typelearning = 'internal'
                     print(typelearning)
                     ap_obj = AcademicPlan(education_form=typelearning, qualification=qualification,
-                                          year=data['YEAR'][i], educational_profile=data['SUBFIELDNAME'][i].strip())
+                                          year=data['YEAR'][i], educational_profile=data['SUBFIELDNAME'][i].strip(),
+                                          ap_isu_id=int(data['EP_ID'][i]))
                     ap_obj.save()
                     ap_count += 1
                     print('новый', ap_obj)
@@ -1389,11 +1393,13 @@ class FileUploadAPIView(APIView):
                                                              year=data['YEAR'][i]).exists():
                     iap_obj=ImplementationAcademicPlan.objects.get(academic_plan=ap_obj, field_of_study=fs_obj,
                                                               year=data['YEAR'][i])
-                    iap_obj.op_isu_id=int(data['EP_ID'][i])
+                    iap_obj.op_isu_id=int(data['OP_ID'][i])
+                    iap_obj.save()
+                    # OP_ID - образовательная программа
                     print('ImplementationAcademicPlan exist')
                 else:
                     iap_obj = ImplementationAcademicPlan(academic_plan=ap_obj, field_of_study=fs_obj,
-                                                         year=data['YEAR'][i], op_isu_id=int(data['EP_ID'][i]))
+                                                         year=data['YEAR'][i], op_isu_id=int(data['OP_ID'][i]))
                     iap_obj.save()
                 print('Связь учебного плана и направления: done')
 
