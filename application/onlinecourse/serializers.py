@@ -1,14 +1,9 @@
 from rest_framework import serializers
-from .models import Institution, Platform, OnlineCourse, CourseCredit, CourseRequirement, CourseFieldOfStudy,\
+from workprogramsapp.serializers import FieldOfStudySerializer
+from dataprocessing.serializers import ItemSerializer
+
+from .models import Institution, Platform, OnlineCourse, CourseCredit, CourseRequirement, CourseFieldOfStudy, \
     CourseLearningOutcome, CourseWorkProgram
-from workprogramsapp.models import FieldOfStudy
-
-
-class FieldOfStudySerializer(serializers.ModelSerializer):
-    """Сериализатор направления для онлайн курса"""
-    class Meta:
-        model = FieldOfStudy
-        fields = ['id', 'number', 'title']
 
 
 class InstitutionSerializer(serializers.ModelSerializer):
@@ -28,7 +23,7 @@ class PlatformSerializer(serializers.ModelSerializer):
 class CourseCreditSerializer(serializers.ModelSerializer):
     """Сериализатор Перезачетов"""
     course = serializers.SlugRelatedField(slug_field="title", read_only=True)
-    institution = serializers.SlugRelatedField(slug_field="title", read_only=True)
+    institution = InstitutionSerializer()
     field_of_study = FieldOfStudySerializer(many=False)
 
     class Meta:
@@ -39,7 +34,7 @@ class CourseCreditSerializer(serializers.ModelSerializer):
 class CourseRequirementSerializer(serializers.ModelSerializer):
     """Сериализатор Треований для онлайн курса"""
     course = serializers.SlugRelatedField(slug_field="title", read_only=True)
-    item = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    item = ItemSerializer(many=True)
 
     class Meta:
         model = CourseRequirement
@@ -69,7 +64,7 @@ class CourseWorkProgramSerializer(serializers.ModelSerializer):
 class CourseLearningOutcomeSerializer(serializers.ModelSerializer):
     """Сериализатор Результатов для онлайн курса"""
     course = serializers.SlugRelatedField(slug_field="title", read_only=True)
-    learning_outcome = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    learning_outcome = ItemSerializer(many=True)
 
     class Meta:
         model = CourseLearningOutcome
