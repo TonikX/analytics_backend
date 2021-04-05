@@ -1189,10 +1189,17 @@ def handle_uploaded_csv(file, filename):
         for chunk in file.chunks():
             destination.write(chunk)
     in_df = pandas.read_excel(path)
-    sys_df = pandas.read_excel('discipline_code/discipline_bank_updated2.xlsx')
+    sys_df = pandas.DataFrame({'OP_ID':[], 'SUBFIELDNAME':[], 'FACULTY_ID':[], 'FACULTY':[], 'OGNP_ID':[], 'OGNP':[],
+                               'YEAR':[], 'DEGREE':[], 'SEMESTER':[], 'LANGUAGE':[], 'CREDITS':[], 'LECTURE':[],
+                               'PRACTICE':[], 'LAB':[], 'EXAM':[], 'PASS':[], 'DIFF':[], 'CP':[], 'SRS':[], 'ISOPTION':[],
+                               'SEM_INFO':[], 'DIS_CODE':[], 'VERSION':[]})
+
+    # df.to_excel("discipline_code/discipline_bank_updated5.xlsx", index=False)
+    # sys_df = pandas.read_excel('discipline_code/discipline_bank_updated5.xlsx')
     print('IPv4_code generating')
     processed_data, db = IPv4_code_ver2.generate_df_w_unique_code(in_df, sys_df)
-    db.to_excel("discipline_code/discipline_bank_updated2.xlsx", index=False)
+    now = datetime.datetime.now().isoformat("-").split(".")[0].replace(":","-")
+    db.to_excel("discipline_code/discipline_bank_updated_{}.xlsx".format(now), index=False)
     print(processed_data.head())
     return processed_data
 
