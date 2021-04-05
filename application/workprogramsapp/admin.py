@@ -9,7 +9,8 @@ from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
     Competence, Indicator, EvaluationTool, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
     RouteComposition, Route, Certification, OnlineCourse, BibliographicReference, AcademicPlan,
-    ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
+    ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,
+    СertificationEvaluationTool
 )
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
@@ -93,3 +94,5 @@ admin.site.register(WorkProgramInWorkProgramChangeInDisciplineBlockModule)
 admin.site.register(DisciplineBlockModuleInDisciplineBlock)
 
 admin.site.register(StructuralUnit)
+
+admin.site.register(СertificationEvaluationTool)
