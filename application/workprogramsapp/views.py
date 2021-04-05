@@ -1292,15 +1292,14 @@ class FileUploadAPIView(APIView):
                         wp_obj.old_discipline_code=wp_obj.discipline_code
                         wp_obj.discipline_code = data['DIS_CODE'][i]
                         wp_obj.save()
-                    else:
-                        if data['DIS_CODE'][i] != wp_obj.discipline_code:
-                            try:
-                                wp_obj = WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i])
-                            except:
-                                print("Я СКЛОНИРОВАЛ!!!")
-                                wp_obj = WorkProgram.clone_programm(wp_obj.id)
-                                wp_obj.discipline_code = data['DIS_CODE'][i]
-                                wp_obj.save()
+                    elif data['DIS_CODE'][i] != wp_obj.discipline_code:
+                        try:
+                            wp_obj = WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip())
+                        except:
+                            print("Я СКЛОНИРОВАЛ!!!")
+                            wp_obj = WorkProgram.clone_programm(wp_obj.id)
+                            wp_obj.discipline_code = data['DIS_CODE'][i]
+                            wp_obj.save()
 
                     """   # если да, то получаем объект
                     #
