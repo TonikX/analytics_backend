@@ -256,6 +256,6 @@ class CourseDataAPIView(APIView):
                                                                                              id=data_CourseLearningOutcome.id_course[i]),
                                                                                          learning_outcome=Items.objects.get(
                                                                                              name=data_CourseLearningOutcome.item[i]))
-                    onlinecourse_learning_outcome.save()"""
+                    onlinecourse_learning_outcome.save()
             
         return Response(status=200)
