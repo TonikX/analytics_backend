@@ -15,7 +15,7 @@ from dataprocessing.models import Items
 from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
-    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
+    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy, Certification
 from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence, OnlineCourse
@@ -1288,21 +1288,19 @@ class FileUploadAPIView(APIView):
                                                      discipline_code__iregex=regex).distinct()
                 if wp_list.exists():
                     wp_obj = WorkProgram.objects.get(pk=wp_list[0].id)
-
                     if not wp_obj.old_discipline_code:
                         wp_obj.old_discipline_code=wp_obj.discipline_code
                         wp_obj.discipline_code = data['DIS_CODE'][i]
+                        wp_obj.save()
                     else:
-                        if not (wp_obj.have_course_project == bool(data['CP'][i]) and
-                                wp_obj.have_diff_pass == bool(data['DIFF'][i])and
-                                wp_obj.have_pass == bool(data['PASS'][i])and
-                                wp_obj.have_exam == bool(data['EXAM'][i])and
-                                wp_obj.lecture_hours == float(data['LECTURE'][i])and
-                                wp_obj.practice_hours == float(data['PRACTICE'][i])and
-                                wp_obj.lab_hours == float(data['LAB'][i])and
-                                wp_obj.srs_hours == float(data['SRS'][i])):
-                                    wp_obj = WorkProgram.clone_programm(wp_obj.id)
-                                    wp_obj.discipline_code = data['DIS_CODE'][i]
+                        if data['DIS_CODE'][i] != wp_obj.discipline_code:
+                            try:
+                                wp_obj = WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i])
+                            except:
+                                print("Я СКЛОНИРОВАЛ!!!")
+                                wp_obj = WorkProgram.clone_programm(wp_obj.id)
+                                wp_obj.discipline_code = data['DIS_CODE'][i]
+                                wp_obj.save()
 
                     """   # если да, то получаем объект
                     #
@@ -1319,17 +1317,47 @@ class FileUploadAPIView(APIView):
                     wp_obj = WorkProgram(title=data['SUBJECT'][i].strip(), discipline_code=data['DIS_CODE'][i],
                                          subject_code=data['SUBJECT_CODE'][i], qualification=qualification,
                                          credit_units=",".join(map(str, credit_units)))
+                    print("Я СОЗДАЛ!!!")
                     wp_obj.save()
                     wp_count += 1
-                wp_obj.have_course_project = bool(data['CP'][i])
-                wp_obj.have_diff_pass = bool(data['DIFF'][i])
-                wp_obj.have_pass = bool(data['PASS'][i])
-                wp_obj.have_exam = bool(data['EXAM'][i])
-                wp_obj.lecture_hours = float(data['LECTURE'][i])
-                wp_obj.practice_hours = float(data['PRACTICE'][i])
-                wp_obj.lab_hours = float(data['LAB'][i])
-                wp_obj.srs_hours = float(data['SRS'][i])
-                wp_obj.wp_isu_id=int(data['ISU_SUBJECT_ID'][i])
+                certification_for_wp = СertificationEvaluationTool.objects.filter(work_program=wp_obj)
+                semester = 1
+                if not certification_for_wp:
+                    semester = 1
+                else:
+                    for tool in certification_for_wp:
+                        if tool.semester >= semester:
+                            semester = tool.semester + 1
+                if bool(data['PASS'][i]):
+                    СertificationEvaluationTool.objects.create(work_program=wp_obj, type="3", semester=semester)
+                if bool(data['DIFF'][i]):
+                    СertificationEvaluationTool.objects.create(work_program=wp_obj, type="2", semester=semester)
+                if bool(data['EXAM'][i]):
+                    СertificationEvaluationTool.objects.create(work_program=wp_obj, type="1", semester=semester)
+                if bool(data['CP'][i]):
+                    СertificationEvaluationTool.objects.create(work_program=wp_obj, type="4", semester=semester)
+
+                lecture_array = (wp_obj.lecture_hours).split(",")
+                if len(lecture_array) != 10:
+                    wp_obj.lecture_hours = str([0 for i in range(11)])[1:-1]
+                    wp_obj.practice_hours = str([0 for i in range(11)])[1:-1]
+                    wp_obj.lab_hours = str([0 for i in range(11)])[1:-1]
+                    wp_obj.srs_hours = str([0 for i in range(11)])[1:-1]
+                    lecture_array = (wp_obj.lecture_hours).split(",")
+                practise_array = (wp_obj.practice_hours).split(",")
+                lab_array = (wp_obj.lab_hours).split(",")
+                srs_array = (wp_obj.srs_hours).split(",")
+                lecture_array[int(data['SEMESTER'][i]) - 1] = str(data['LECTURE'][i]).replace(",", ".")
+                practise_array[int(data['SEMESTER'][i]) - 1] = str(data['PRACTICE'][i]).replace(",", ".")
+                lab_array[int(data['SEMESTER'][i]) - 1] = str(data['LAB'][i]).replace(",", ".")
+                srs_array[int(data['SEMESTER'][i]) - 1] = str(data['SRS'][i]).replace(",", ".")
+
+                wp_obj.lecture_hours = str(lecture_array)[1:-1]
+                wp_obj.practice_hours = str(practise_array)[1:-1]
+                wp_obj.lab_hours = str(lab_array)[1:-1]
+                wp_obj.srs_hours = str(srs_array)[1:-1]
+
+                wp_obj.wp_isu_id = int(data['ISU_SUBJECT_ID'][i])
 
                 if data['LANGUAGE'][i].strip().find("Русский") != -1 and data['LANGUAGE'][i].strip().find(
                         "Английский") != -1:

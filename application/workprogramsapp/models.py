@@ -104,15 +104,16 @@ class WorkProgram(CloneMixin, models.Model):
     have_diff_pass=models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД дифф. зачет")
     have_pass = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД зачет")
     have_exam = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД экзамен")
-    lecture_hours=models.FloatField(blank=True, null=True, verbose_name="Часы лекций")
-    practice_hours = models.FloatField(blank=True, null=True, verbose_name="Часы Практик")
-    lab_hours = models.FloatField(blank=True, null=True, verbose_name="Часы лабораторных работ")
-    srs_hours = models.FloatField(blank=True, null=True, verbose_name="Часы СРС")
+    lecture_hours = models.CharField(max_length=1024, null=True, verbose_name="Часы лекций")
+    practice_hours = models.CharField(max_length=1024, null=True, verbose_name="Часы Практик")
+    lab_hours = models.CharField(max_length=1024, null=True, verbose_name="Часы лабораторных работ")
+    srs_hours = models.CharField(max_length=1024, null=True, verbose_name="Часы СРС")
     old_discipline_code = models.CharField(max_length=1024, blank=True, null=True)
     wp_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID РПД в ИСУ")
-    structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL, verbose_name='Структурное подразделени',
-                                         related_name='workprogram_in_structural_unit', blank=True, null=True)
-    #language = models.CharField(choices=languages_for_wp, max_length=100, verbose_name='Язык', blank=True, null=True)
+    structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL,
+                                        verbose_name='Структурное подразделени',
+                                        related_name='workprogram_in_structural_unit', blank=True, null=True)
+    # language = models.CharField(choices=languages_for_wp, max_length=100, verbose_name='Язык', blank=True, null=True)
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
@@ -698,7 +699,7 @@ class СertificationEvaluationTool(models.Model):
         ('4', 'Coursework')
     ]
     type = models.CharField(choices=types, default='1',max_length=1024, verbose_name="Тип оценочного средства")
-    name = models.CharField(unique=True, max_length=1024, verbose_name="Наименование оценочного средства")
+    name = models.CharField(blank=True, null=True, max_length=1024, verbose_name="Наименование оценочного средства", default="No name")
     description = models.CharField(max_length=50000, verbose_name="Описание", blank=True, null=True)
     #check_point = models.BooleanField(verbose_name="Контрольная точка", blank=True, null=True)
     deadline = models.IntegerField(verbose_name="Срок сдачи в неделях", blank=True, null=True)
