@@ -1286,15 +1286,19 @@ class FileUploadAPIView(APIView):
                                                      credit_units=",".join(
                                                          map(str, credit_units)),
                                                      discipline_code__iregex=regex).distinct()
+                print('Найдена РПД: ', wp_list)
+                #print(WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip()))
                 if wp_list.exists():
                     wp_obj = WorkProgram.objects.get(pk=wp_list[0].id)
                     if not wp_obj.old_discipline_code:
                         wp_obj.old_discipline_code=wp_obj.discipline_code
                         wp_obj.discipline_code = data['DIS_CODE'][i]
                         wp_obj.save()
+                        print("Я взял старую РПД!!!")
                     elif data['DIS_CODE'][i] != wp_obj.discipline_code:
+                        print('мы ее нашли', WorkProgram.objects.filter(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip()).distinct())
                         try:
-                            wp_obj = WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip())
+                            wp_obj = WorkProgram.objects.filter(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip())[0]
                         except:
                             print("Я СКЛОНИРОВАЛ!!!")
                             wp_obj = WorkProgram.clone_programm(wp_obj.id)
@@ -1319,37 +1323,73 @@ class FileUploadAPIView(APIView):
                                          credit_units=",".join(map(str, credit_units)))
                     print("Я СОЗДАЛ!!!")
                     wp_obj.save()
+                    print(wp_obj.id)
                     wp_count += 1
                 certification_for_wp = СertificationEvaluationTool.objects.filter(work_program=wp_obj)
                 semester = 1
-                if not certification_for_wp:
+                if not СertificationEvaluationTool.objects.filter(work_program=wp_obj).exists():
+                    print('найдено оценочное средство')
                     semester = 1
                 else:
+                    print('начало цыкола обработки семестров')
                     for tool in certification_for_wp:
+                        print('замена номеров оценочных средств')
                         if tool.semester >= semester:
                             semester = tool.semester + 1
-                if bool(data['PASS'][i]):
-                    СertificationEvaluationTool.objects.create(work_program=wp_obj, type="3", semester=semester)
-                if bool(data['DIFF'][i]):
-                    СertificationEvaluationTool.objects.create(work_program=wp_obj, type="2", semester=semester)
-                if bool(data['EXAM'][i]):
-                    СertificationEvaluationTool.objects.create(work_program=wp_obj, type="1", semester=semester)
-                if bool(data['CP'][i]):
-                    СertificationEvaluationTool.objects.create(work_program=wp_obj, type="4", semester=semester)
-                try:
-                    lecture_array = [float(x) for x in wp_obj.lecture_hours.split(",")]
-                except:
+                if not СertificationEvaluationTool.objects.filter(work_program=wp_obj).exists():
+                    print('создаются оценочные срадства')
+                    if bool(data['PASS'][i]):
+                        print('попытка 1')
+                        СertificationEvaluationTool.objects.create(work_program=wp_obj, type="3", semester=semester)
+                    if bool(data['DIFF'][i]):
+                        print('попытка 2')
+                        СertificationEvaluationTool.objects.create(work_program=wp_obj, type="2", semester=semester)
+                    if bool(data['EXAM'][i]):
+                        print('попытка 3')
+                        СertificationEvaluationTool.objects.create(work_program=wp_obj, type="1", semester=semester)
+                    if bool(data['CP'][i]):
+                        print('попытка 4')
+                        СertificationEvaluationTool.objects.create(work_program=wp_obj, type="4", semester=semester)
+                    print('созданы оценочные срадства')
+                # try:
+                #     lecture_array = [float(x) for x in wp_obj.lecture_hours.split(",")]
+                # except:
+                #     wp_obj.lecture_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     wp_obj.practice_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     wp_obj.lab_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     wp_obj.srs_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                # if ',' not in wp_obj.lecture_hours and '.' not in wp_obj.lecture_hours:
+                #print('1', len(list(wp_obj.lecture_hours)))
+                #print('2', not wp_obj.lecture_hours)
+                if not wp_obj.lecture_hours:
+                    print('попытка создать массивыдля данных о семестрах')
                     wp_obj.lecture_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
                     wp_obj.practice_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
                     wp_obj.lab_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
                     wp_obj.srs_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
-                    lecture_array = [float(x) for x in wp_obj.lecture_hours.split(",")]
+                    print('условие длинны лекционных часов прошло')
+                if len(list(wp_obj.lecture_hours)) < 6:
+                    print('2 попытка создать массивыдля данных о семестрах')
+                    wp_obj.lecture_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    wp_obj.practice_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    wp_obj.lab_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    wp_obj.srs_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    print('2 условие длинны лекционных часов прошло')
+                print('попытка вбить часы')
+                lecture_array = [float(x) for x in wp_obj.lecture_hours.split(",")]
                 practise_array = [float(x) for x in wp_obj.practice_hours.split(",")]
                 lab_array = [float(x) for x in wp_obj.lab_hours.split(",")]
                 srs_array = [float(x) for x in wp_obj.srs_hours.split(",")]
+                print('семестр', data['SEMESTER'][i])
+                print('лекционные часы:', float(str(data['LECTURE'][i]).replace(",", ".")))
+                print(lecture_array)
+                print(lecture_array[int(data['SEMESTER'][i]) - 1])
                 lecture_array[int(data['SEMESTER'][i]) - 1] = float(str(data['LECTURE'][i]).replace(",", "."))
+                print('практические часы:', float(str(data['PRACTICE'][i]).replace(",", ".")))
                 practise_array[int(data['SEMESTER'][i]) - 1] = float(str(data['PRACTICE'][i]).replace(",", "."))
+                print('лабораторные часы:', float(str(data['LAB'][i]).replace(",", ".")))
                 lab_array[int(data['SEMESTER'][i]) - 1] = float(str(data['LAB'][i]).replace(",", "."))
+                print('срс часы:', float(str(data['SRS'][i]).replace(",", ".")))
                 srs_array[int(data['SEMESTER'][i]) - 1] = float(str(data['SRS'][i]).replace(",", "."))
 
                 wp_obj.lecture_hours = str(lecture_array)[1:-1].replace(" ", "")
