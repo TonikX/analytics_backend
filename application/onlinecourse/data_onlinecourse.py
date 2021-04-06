@@ -1,8 +1,12 @@
 import requests
 import pandas as pd
+import environ
 
-cert_cert = #указать путь к сертификату
-cert_key = #указать путь к ключу
+env = environ.Env()
+environ.Env.read_env()  # reading .env file
+
+cert_cert = env('CERT')
+cert_key = env('KEY')
 
 
 def get_data():
