@@ -233,6 +233,22 @@ class FirstStep extends React.Component<FirstStepProps> {
                             <Typography className={classes.textItem}> <b>Авторский состав:</b> {state[WorkProgramGeneralFields.AUTHORS]}</Typography>
                         }
                     </InputsLoader>
+
+                    {isCanEdit ?
+                        <SearchSelector label="Структурное подразделение"
+                                        changeSearchText={this.handleChangeStructuralUnitSearchText}
+                                        list={structuralUnitsList}
+                                        changeItem={this.changeStructuralUnit}
+                                        value={structuralUnit?.id}
+                                        valueLabel={structuralUnit?.title}
+                                        className={classes.marginBottom20}
+                        />
+                        :
+                        <Typography className={classes.textItem}>
+                            <b>Структурное подразделение:</b> {structuralUnit?.title || 'Подразделение не указано'}
+                        </Typography>
+                    }
+
                     <InputsLoader loading={fetchingVideoLink}>
                         {isCanEdit ?
                             <TextField variant="outlined"
@@ -251,20 +267,11 @@ class FirstStep extends React.Component<FirstStepProps> {
                         }
                     </InputsLoader>
 
-                    {isCanEdit ?
-                        <SpecializationSelector />
-                        :
+                    {!isCanEdit &&
                         <Typography className={classes.textItem}><b>Уровень образовательной программы:</b> {specializationObject[state[WorkProgramGeneralFields.QUALIFICATION]]} </Typography>
                     }
 
-                    {isCanEdit ?
-                        <SimpleSelector label="Язык реализации"
-                                        metaList={languageArray}
-                                        value={state[WorkProgramGeneralFields.LANGUAGE]}
-                                        wrapClass={classes.selectorWrap}
-                                        onChange={this.changeLanguage}
-                        />
-                        :
+                    {!isCanEdit &&
                         <Typography className={classes.textItem}><b>Язык реализации:</b> {languageObject[state[WorkProgramGeneralFields.LANGUAGE]]} </Typography>
                     }
 
@@ -275,24 +282,9 @@ class FirstStep extends React.Component<FirstStepProps> {
                         </>
                     }
 
-                    {/*{isCanEdit ?*/}
-                    {/*    <SearchSelector label="Структурное подразделение"*/}
-                    {/*                    changeSearchText={this.handleChangeStructuralUnitSearchText}*/}
-                    {/*                    list={structuralUnitsList}*/}
-                    {/*                    changeItem={this.changeStructuralUnit}*/}
-                    {/*                    value={structuralUnit?.id}*/}
-                    {/*                    valueLabel={structuralUnit?.title}*/}
-                    {/*                    // popperPlacement="top"*/}
-                    {/*    />*/}
-                    {/*    :*/}
-                    {/*    <Typography className={classes.textItem}>*/}
-                    {/*        <b>Структурное подразделение:</b> {structuralUnit?.title || 'Подразделение не указано'}*/}
-                    {/*    </Typography>*/}
-                    {/*}*/}
-
-                    <Typography className={classes.textItem}>
-                        <b>Структурное подразделение:</b> {structuralUnit?.title || 'Подразделение не указано'}
-                    </Typography>
+                    {/*<Typography className={classes.textItem}>*/}
+                    {/*    <b>Структурное подразделение:</b> {structuralUnit?.title || 'Подразделение не указано'}*/}
+                    {/*</Typography>*/}
 
                     <Typography className={classes.editorTitle}>
                         Редакторы:
@@ -354,6 +346,15 @@ class FirstStep extends React.Component<FirstStepProps> {
                             />
                         </InputsLoader>
 
+                        <SpecializationSelector />
+
+                        <SimpleSelector label="Язык реализации"
+                                        metaList={languageArray}
+                                        value={state[WorkProgramGeneralFields.LANGUAGE]}
+                                        wrapClass={classes.selectorWrap}
+                                        onChange={this.changeLanguage}
+                        />
+
                         <InputsLoader loading={fetchingDate}>
                             <DatePicker
                                 value={moment(state[WorkProgramGeneralFields.APPROVAL_DATE])}
@@ -364,7 +365,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                                             <DateIcon />
                                         </IconButton>
                                     ),
-                                }}
+                                 }}
                                 inputVariant="outlined"
                                 className={classes.datePicker}
                                 format={FULL_DATE_FORMAT}
