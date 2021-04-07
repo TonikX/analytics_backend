@@ -15,7 +15,7 @@ from dataprocessing.models import Items
 from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
-    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
+    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy, Certification
 from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence, OnlineCourse
@@ -1189,10 +1189,20 @@ def handle_uploaded_csv(file, filename):
         for chunk in file.chunks():
             destination.write(chunk)
     in_df = pandas.read_excel(path)
-    sys_df = pandas.read_excel('discipline_code/discipline_bank_updated2.xlsx')
+    sys_df = pandas.DataFrame({'EP_ID':[], 'SUBJECT_CODE':[], 'CYCLE':[], 'MODULE_ID':[], 'COMPONENT':[],
+                               'ISU_SUBJECT_ID':[], 'SUBJECT':[], 'IMPLEMENTOR_ID':[], 'IMPLEMENTOR':[],
+                               'SUBFIELDCODE':[], 'MAJOR_NAME':[], 'OP_ID':[], 'SUBFIELDNAME':[],
+                               'FACULTY_ID':[], 'FACULTY':[], 'OGNP_ID':[],'OGNP':[], 'YEAR':[], 'DEGREE':[],
+                               'SEMESTER':[], 'LANGUAGE':[], 'CREDITS':[], 'LECTURE':[], 'PRACTICE':[], 'LAB':[],
+                               'EXAM':[], 'PASS':[], 'DIFF':[], 'CP':[], 'SRS':[], 'ISOPTION':[], 'SEM_INFO':[],
+                               'DIS_CODE':[], 'VERSION':[]})
+
+    # df.to_excel("discipline_code/discipline_bank_updated5.xlsx", index=False)
+    # sys_df = pandas.read_excel('discipline_code/discipline_bank_updated5.xlsx')
     print('IPv4_code generating')
     processed_data, db = IPv4_code_ver2.generate_df_w_unique_code(in_df, sys_df)
-    db.to_excel("discipline_code/discipline_bank_updated2.xlsx", index=False)
+    now = datetime.datetime.now().isoformat("-").split(".")[0].replace(":","-")
+    db.to_excel("discipline_code/discipline_bank_updated_{}.xlsx".format(now), index=False)
     print(processed_data.head())
     return processed_data
 
@@ -1276,23 +1286,25 @@ class FileUploadAPIView(APIView):
                                                      credit_units=",".join(
                                                          map(str, credit_units)),
                                                      discipline_code__iregex=regex).distinct()
+                print('Найдена РПД: ', wp_list)
+                #print(WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip()))
                 if wp_list.exists():
                     wp_obj = WorkProgram.objects.get(pk=wp_list[0].id)
-
                     if not wp_obj.old_discipline_code:
                         wp_obj.old_discipline_code=wp_obj.discipline_code
                         wp_obj.discipline_code = data['DIS_CODE'][i]
-                    else:
-                        if not (wp_obj.have_course_project == bool(data['CP'][i]) and
-                                wp_obj.have_diff_pass == bool(data['DIFF'][i])and
-                                wp_obj.have_pass == bool(data['PASS'][i])and
-                                wp_obj.have_exam == bool(data['EXAM'][i])and
-                                wp_obj.lecture_hours == float(data['LECTURE'][i])and
-                                wp_obj.practice_hours == float(data['PRACTICE'][i])and
-                                wp_obj.lab_hours == float(data['LAB'][i])and
-                                wp_obj.srs_hours == float(data['SRS'][i])):
-                                    wp_obj = WorkProgram.clone_programm(wp_obj.id)
-                                    wp_obj.discipline_code = data['DIS_CODE'][i]
+                        wp_obj.save()
+                        print("Я взял старую РПД!!!")
+                    elif data['DIS_CODE'][i] != wp_obj.discipline_code:
+                        print('мы ее нашли', WorkProgram.objects.filter(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip()).distinct())
+                        try:
+                            wp_obj = WorkProgram.objects.filter(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip())[0]
+                        except:
+                            print("Я СКЛОНИРОВАЛ!!!")
+                            wp_obj = WorkProgram.clone_programm(wp_obj.id)
+                            wp_obj.discipline_code = data['DIS_CODE'][i]
+                            wp_obj.save()
+
 
                     """   # если да, то получаем объект
                     #
@@ -1309,17 +1321,83 @@ class FileUploadAPIView(APIView):
                     wp_obj = WorkProgram(title=data['SUBJECT'][i].strip(), discipline_code=data['DIS_CODE'][i],
                                          subject_code=data['SUBJECT_CODE'][i], qualification=qualification,
                                          credit_units=",".join(map(str, credit_units)))
+                    print("Я СОЗДАЛ!!!")
                     wp_obj.save()
+                    print(wp_obj.id)
                     wp_count += 1
-                wp_obj.have_course_project = bool(data['CP'][i])
-                wp_obj.have_diff_pass = bool(data['DIFF'][i])
-                wp_obj.have_pass = bool(data['PASS'][i])
-                wp_obj.have_exam = bool(data['EXAM'][i])
-                wp_obj.lecture_hours = float(data['LECTURE'][i])
-                wp_obj.practice_hours = float(data['PRACTICE'][i])
-                wp_obj.lab_hours = float(data['LAB'][i])
-                wp_obj.srs_hours = float(data['SRS'][i])
-                wp_obj.wp_isu_id=int(data['ISU_SUBJECT_ID'][i])
+                certification_for_wp = СertificationEvaluationTool.objects.filter(work_program=wp_obj)
+                semester = 1
+                if not СertificationEvaluationTool.objects.filter(work_program=wp_obj).exists():
+                    print('найдено оценочное средство')
+                    semester = 1
+                else:
+                    print('начало цыкола обработки семестров')
+                    for tool in certification_for_wp:
+                        print('замена номеров оценочных средств')
+                        if tool.semester >= semester:
+                            semester = tool.semester + 1
+                if not СertificationEvaluationTool.objects.filter(work_program=wp_obj).exists():
+                    print('создаются оценочные срадства')
+                    if bool(data['PASS'][i]):
+                        print('попытка 1')
+                        СertificationEvaluationTool.objects.create(work_program=wp_obj, type="3", semester=semester)
+                    if bool(data['DIFF'][i]):
+                        print('попытка 2')
+                        СertificationEvaluationTool.objects.create(work_program=wp_obj, type="2", semester=semester)
+                    if bool(data['EXAM'][i]):
+                        print('попытка 3')
+                        СertificationEvaluationTool.objects.create(work_program=wp_obj, type="1", semester=semester)
+                    if bool(data['CP'][i]):
+                        print('попытка 4')
+                        СertificationEvaluationTool.objects.create(work_program=wp_obj, type="4", semester=semester)
+                    print('созданы оценочные срадства')
+                # try:
+                #     lecture_array = [float(x) for x in wp_obj.lecture_hours.split(",")]
+                # except:
+                #     wp_obj.lecture_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     wp_obj.practice_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     wp_obj.lab_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     wp_obj.srs_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                # if ',' not in wp_obj.lecture_hours and '.' not in wp_obj.lecture_hours:
+                #print('1', len(list(wp_obj.lecture_hours)))
+                #print('2', not wp_obj.lecture_hours)
+                if not wp_obj.lecture_hours:
+                    print('попытка создать массивыдля данных о семестрах')
+                    wp_obj.lecture_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    wp_obj.practice_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    wp_obj.lab_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    wp_obj.srs_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    print('условие длинны лекционных часов прошло')
+                if len(list(wp_obj.lecture_hours)) < 6:
+                    print('2 попытка создать массивыдля данных о семестрах')
+                    wp_obj.lecture_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    wp_obj.practice_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    wp_obj.lab_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    wp_obj.srs_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                    print('2 условие длинны лекционных часов прошло')
+                print('попытка вбить часы')
+                lecture_array = [float(x) for x in wp_obj.lecture_hours.split(",")]
+                practise_array = [float(x) for x in wp_obj.practice_hours.split(",")]
+                lab_array = [float(x) for x in wp_obj.lab_hours.split(",")]
+                srs_array = [float(x) for x in wp_obj.srs_hours.split(",")]
+                print('семестр', data['SEMESTER'][i])
+                print('лекционные часы:', float(str(data['LECTURE'][i]).replace(",", ".")))
+                print(lecture_array)
+                print(lecture_array[int(data['SEMESTER'][i]) - 1])
+                lecture_array[int(data['SEMESTER'][i]) - 1] = float(str(data['LECTURE'][i]).replace(",", "."))
+                print('практические часы:', float(str(data['PRACTICE'][i]).replace(",", ".")))
+                practise_array[int(data['SEMESTER'][i]) - 1] = float(str(data['PRACTICE'][i]).replace(",", "."))
+                print('лабораторные часы:', float(str(data['LAB'][i]).replace(",", ".")))
+                lab_array[int(data['SEMESTER'][i]) - 1] = float(str(data['LAB'][i]).replace(",", "."))
+                print('срс часы:', float(str(data['SRS'][i]).replace(",", ".")))
+                srs_array[int(data['SEMESTER'][i]) - 1] = float(str(data['SRS'][i]).replace(",", "."))
+
+                wp_obj.lecture_hours = str(lecture_array)[1:-1].replace(" ", "")
+                wp_obj.practice_hours = str(practise_array)[1:-1].replace(" ", "")
+                wp_obj.lab_hours = str(lab_array)[1:-1].replace(" ", "")
+                wp_obj.srs_hours = str(srs_array)[1:-1].replace(" ", "")
+
+                wp_obj.wp_isu_id = int(data['ISU_SUBJECT_ID'][i])
 
                 if data['LANGUAGE'][i].strip().find("Русский") != -1 and data['LANGUAGE'][i].strip().find(
                         "Английский") != -1:
@@ -1358,6 +1436,9 @@ class FileUploadAPIView(APIView):
                                                educational_profile=data['SUBFIELDNAME'][i].strip()).exists():
                     ap_obj = AcademicPlan.objects.get(qualification=qualification, year=data['YEAR'][i],
                                                       educational_profile=data['SUBFIELDNAME'][i].strip())
+                    # EP_ID - учебный план
+                    ap_obj.ap_isu_id=int(data['EP_ID'][i])
+                    ap_obj.save()
                     print('старый', ap_obj)
 
                 else:
@@ -1368,7 +1449,8 @@ class FileUploadAPIView(APIView):
                     typelearning = 'internal'
                     print(typelearning)
                     ap_obj = AcademicPlan(education_form=typelearning, qualification=qualification,
-                                          year=data['YEAR'][i], educational_profile=data['SUBFIELDNAME'][i].strip())
+                                          year=data['YEAR'][i], educational_profile=data['SUBFIELDNAME'][i].strip(),
+                                          ap_isu_id=int(data['EP_ID'][i]))
                     ap_obj.save()
                     ap_count += 1
                     print('новый', ap_obj)
@@ -1379,11 +1461,13 @@ class FileUploadAPIView(APIView):
                                                              year=data['YEAR'][i]).exists():
                     iap_obj=ImplementationAcademicPlan.objects.get(academic_plan=ap_obj, field_of_study=fs_obj,
                                                               year=data['YEAR'][i])
-                    iap_obj.op_isu_id=int(data['EP_ID'][i])
+                    iap_obj.op_isu_id=int(data['OP_ID'][i])
+                    iap_obj.save()
+                    # OP_ID - образовательная программа
                     print('ImplementationAcademicPlan exist')
                 else:
                     iap_obj = ImplementationAcademicPlan(academic_plan=ap_obj, field_of_study=fs_obj,
-                                                         year=data['YEAR'][i], op_isu_id=int(data['EP_ID'][i]))
+                                                         year=data['YEAR'][i], op_isu_id=int(data['OP_ID'][i]))
                     iap_obj.save()
                 print('Связь учебного плана и направления: done')
 
