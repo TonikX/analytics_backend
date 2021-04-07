@@ -1,15 +1,15 @@
-import {Dispatch} from "react";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
+import structuralUnitActions from '../../StructuralUnits/actions';
 import {WorkProgramGeneralFields} from "../enum";
 import actions from "../actions";
 import {getWorkProgramField, isCanEdit} from '../getters';
-import {WorkProgramActions} from "../types";
 
 import {isFetchingComponentByKey} from "../../../layout/getters";
 
 import {rootState} from "../../../store/reducers";
+import {getStructuralUnitsForSelector} from "../../StructuralUnits/getters";
 
 const mapStateToProps = (state:rootState) => {
     return {
@@ -22,9 +22,10 @@ const mapStateToProps = (state:rootState) => {
         qualification: getWorkProgramField(state, WorkProgramGeneralFields.QUALIFICATION),
         language: getWorkProgramField(state, WorkProgramGeneralFields.LANGUAGE),
         editors: getWorkProgramField(state, WorkProgramGeneralFields.EDITORS),
-        structuralUnit: getWorkProgramField(state, 'structural_unit')?.title || 'Подразделение не указано',
+        structuralUnit: getWorkProgramField(state, WorkProgramGeneralFields.STRUCTURAL_UNIT),
 
         isCanEdit: isCanEdit(state),
+        structuralUnitsList: getStructuralUnitsForSelector(state),
 
         fetchingCode: isFetchingComponentByKey(state, WorkProgramGeneralFields.TITLE),
         fetchingTitle: isFetchingComponentByKey(state, WorkProgramGeneralFields.CODE),
@@ -35,9 +36,9 @@ const mapStateToProps = (state:rootState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<WorkProgramActions>) => ({
-    // @ts-ignore
-    actions: bindActionCreators(actions, dispatch),
+const mapDispatchToProps = (dispatch: any) => ({
+    structuralUnitActions: bindActionCreators<any, any>(structuralUnitActions, dispatch),
+    actions: bindActionCreators<any, any>(actions, dispatch),
 });
 
 // @ts-ignore

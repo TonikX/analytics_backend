@@ -1,9 +1,5 @@
 export const positionsListArray = [
     {
-        value: 'employee',
-        label: 'Работник'
-    },
-    {
         value: 'leader',
         label: 'Руководитель'
     },
@@ -15,6 +11,5 @@ export const positionsListArray = [
 
 export const positionsListObject = {
     leader: 'Руководитель',
-    employee: 'Работник',
     deputy: 'Заместитель',
 };

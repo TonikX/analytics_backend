@@ -9,6 +9,10 @@ export default (theme: Theme) => createStyles({
         textAlign: 'center',
         fontWeight: 'bold'
     },
+    cell: {
+        border: '1px solid rgba(224, 224, 224, 1)',
+        textAlign: 'center',
+    },
     iconWrapper: {
         marginTop: '20px',
         display: 'flex',
@@ -43,6 +47,7 @@ export default (theme: Theme) => createStyles({
         marginLeft: 'auto'
     },
     lastInfo: {
-        marginTop: '20px'
+        marginTop: '20px',
+        marginBottom: '10px',
     }
 });

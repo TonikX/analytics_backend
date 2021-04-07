@@ -1,10 +1,14 @@
 import {WithStyles} from "@material-ui/core";
 import {WorkProgramActions} from '../types';
+import {StructuralUnitsActions, StructuralUnitType} from '../../StructuralUnits/types';
 import styles from './FirstStep.styles';
 import {UserType} from "../../../layout/types";
+import {SelectorListType} from "../../../components/SearchSelector/types";
 
 export interface FirstStepProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
+    structuralUnitActions: StructuralUnitsActions;
+    structuralUnitsList: SelectorListType;
     code: string;
     title: string;
     date: string;
@@ -13,9 +17,8 @@ export interface FirstStepProps extends WithStyles<typeof styles> {
     video: string;
     qualification: string;
     language: string;
-    structuralUnit: string;
+    structuralUnit: StructuralUnitType|null;
     editors: Array<UserType>;
-    extraPoints: string|null;
 
     isCanEdit: boolean;
 

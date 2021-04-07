@@ -15,6 +15,10 @@ export default (theme: Theme) => createStyles({
     item: {
         borderBottom: '1px solid #ccc',
     },
+    eyeIcon: {
+        cursor: "pointer",
+        marginLeft: 'auto'
+    },
     row: {
         [theme.breakpoints.down('md')]: {
             minWidth: '600px',

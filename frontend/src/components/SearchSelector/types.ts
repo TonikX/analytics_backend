@@ -1,6 +1,7 @@
 import {WithStyles} from "@material-ui/core";
 import styles from "./SearchSelector.styles";
 import {ReactText} from "react";
+import {PopperPlacementType} from "@material-ui/core/Popper/Popper";
 
 export interface SearchSelectorProps extends WithStyles<typeof styles> {
     changeSearchText: Function;
@@ -12,6 +13,7 @@ export interface SearchSelectorProps extends WithStyles<typeof styles> {
     className?: string;
     disabled?: boolean;
     isReset?: boolean;
+    popperPlacement?: PopperPlacementType;
 }
 
 export type SelectorListType = Array<SelectorItemType>;

@@ -71,7 +71,7 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
         if (open){
             this.closeMenu();
 
-            if (this.state.searchText.length === 0){
+            if (this.state.searchText?.length === 0){
                 this.props.changeItem('');
             } else {
                 this.setState({searchText: this.getLabelForValue(this.props.value)});
@@ -92,7 +92,7 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
     }
 
     render(): any {
-        const {classes, label, list, value, disabled, className} = this.props;
+        const {classes, label, list, value, disabled, className, popperPlacement} = this.props;
         const {anchorEl, searchText} = this.state;
         const open = Boolean(anchorEl);
 
@@ -116,9 +116,19 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
                             <Popper open={open}
                                     anchorEl={anchorEl}
                                     transition
-                                    placement={'bottom'}
+                                    placement={popperPlacement || 'bottom'}
+                                    disablePortal={false}
                                     className={classes.popper}
                                     style={{width: width}}
+                                    // modifiers={{
+                                    //     flip: {
+                                    //         enabled: false,
+                                    //     },
+                                    //     preventOverflow: {
+                                    //         enabled: false,
+                                    //         boundariesElement: 'scrollParent',
+                                    //     },
+                                    // }}
                             >
                                 {({TransitionProps}: any): any => (
                                     <Fade {...TransitionProps} timeout={350}>

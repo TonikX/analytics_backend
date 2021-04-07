@@ -74,8 +74,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
     };
 
     render() {
-        const {classes, intermediateCertificationList, isCanEdit, isStudent,
-            hasCourseProject, hasDiffPass, hasPass, hasExam} = this.props;
+        const {classes, intermediateCertificationList, isCanEdit, isStudent} = this.props;
         const {anchorsEl} = this.state;
         
         return (
@@ -175,7 +174,9 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                                             </Menu>
                                         </div>
                                         : !isStudent ?
-                                             <div onClick={this.handleClickShowDescription(intermediateCertificationTool[IntermediateCertificationFields.DESCRIPTION])}>
+                                             <div className={classes.eyeIcon}
+                                                  onClick={this.handleClickShowDescription(intermediateCertificationTool[IntermediateCertificationFields.DESCRIPTION])}
+                                             >
                                                  <EyeIcon className={classes.menuIcon} />
                                              </div>
                                         : <></>
@@ -187,12 +188,12 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                 </Scrollbars>)}
                 </AutoSizer>
 
-                <Typography className={classes.lastInfo}>
-                    Курсовой проект: <b> {hasCourseProject === null ? 'Нет информации' : hasCourseProject ? 'да' : 'нет'}</b> <br/>
-                    Дифферинциальный зачет: <b> {hasDiffPass === null ? 'Нет информации' : hasDiffPass ? 'да' : 'нет'}</b> <br/>
-                    Зачет: <b> {hasPass === null ? 'Нет информации' : hasPass ? 'да' : 'нет'}</b> <br/>
-                    Экзамен: <b> {hasExam === null ? 'Нет информации' : hasExam ? 'да' : 'нет'}</b> <br/>
-                </Typography>
+                {/*<Typography className={classes.lastInfo}>*/}
+                {/*    Курсовой проект: <b> {hasCourseProject === null ? 'Нет информации' : hasCourseProject ? 'да' : 'нет'}</b> <br/>*/}
+                {/*    Дифферинциальный зачет: <b> {hasDiffPass === null ? 'Нет информации' : hasDiffPass ? 'да' : 'нет'}</b> <br/>*/}
+                {/*    Зачет: <b> {hasPass === null ? 'Нет информации' : hasPass ? 'да' : 'нет'}</b> <br/>*/}
+                {/*    Экзамен: <b> {hasExam === null ? 'Нет информации' : hasExam ? 'да' : 'нет'}</b> <br/>*/}
+                {/*</Typography>*/}
 
                 {isCanEdit &&
                     <Button color="secondary"
@@ -204,7 +205,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                 }
 
                 {isCanEdit && <CreateModal />}
-                {isCanEdit && <DescriptionModal />}
+                {(isCanEdit || !isStudent) && <DescriptionModal />}
             </div>
         );
     }
