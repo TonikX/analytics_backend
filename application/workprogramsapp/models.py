@@ -596,6 +596,7 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
     work_program = models.ManyToManyField('WorkProgram', verbose_name="Рабочая программа",
                                           through='WorkProgramInFieldOfStudy',
                                           related_name="work_program_in_change_block")
+    subject_code = models.IntegerField(verbose_name="Срок сдачи в неделях", blank=True, null=True)
 
     # zuns = models.ManyToManyField('Zun', verbose_name = "Зуны", through='WorkProgramInFieldOfStudy', related_name="zuns_in_changeblock")
 
