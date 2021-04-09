@@ -48,15 +48,11 @@ def get_data():
     """
     Collecting onlinecourses to DataFrame
     """
-
-    onlinecourses = requests.get('https://test.online.edu.ru/api/courses/v0/course',
-                                 cert=(cert_cert, cert_key))
-
     # сбор ссылок на все страницы с онлайн курсами
     course_link = 'https://test.online.edu.ru/api/courses/v0/course/'
     course_links = []
     course_links.append(course_link)
-    for i in range(1,53):
+    for i in range(1, 53):
         new_link = course_link + '?page=' + str(i)
         course_links.append(new_link)
 
@@ -90,6 +86,9 @@ def get_data():
     external_url = []
     has_certificate = []
     credits = []
+    requirements = []
+    learning_outcomes = []
+    competences = []
 
     course_id_field_of_study = []
     field_of_study = []
@@ -97,15 +96,6 @@ def get_data():
     course_id_transfer = []
     field_of_study_transfer = []
     institution_transfer = []
-
-    course_id_req = []
-    item_req = []
-
-    course_id_learning_outcomes = []
-    learning_outcomes = []
-
-    course_comp = []
-    competences = []
 
     # сбор данных по каждому онлайн курсов
     course_link = 'https://test.online.edu.ru/api/courses/v0/course/'
@@ -134,12 +124,21 @@ def get_data():
         external_url.append(current_course.json()['registry_url'])
         has_certificate.append(current_course.json()['has_certificate'])
         credits.append(current_course.json()['credits'])
-
-        """
-        #Collecting onlinecourse&competences to DataFrame
-        """
-        course_comp.append(course_id[i])
-        competences.append(current_course.json()['competences'])
+        try:
+            if len(current_course.json()['requirements']) != 0:
+                requirements.append(current_course.json()['requirements'][0])
+        except:
+            continue
+        try:
+            if len(current_course.json()['learning_outcomes']) != 0:
+                learning_outcomes.append(current_course.json()['learning_outcomes'][0])
+        except:
+            continue
+        try:
+            if len(current_course.json()['competences']) != 0:
+                competences.append(current_course.json()['competences'])
+        except:
+            competences.append('')
 
         """
         Collecting onlinecourse&field_of_study to DataFrame
@@ -158,49 +157,23 @@ def get_data():
             field_of_study_transfer.append(j['direction_id'])
             institution_transfer.append(j['institution_id'])
 
-        """
-        #Collecting onlinecourse&requirements to DataFrame
-        """
-
-        for j in current_course.json()['requirements']:
-            course_id_req.append(course_id[i])
-            item_req.append(j)
-
-        """
-        #Collecting onlinecourse&learning_outcome to DataFrame
-        """
-
-        for j in current_course.json()['learning_outcomes']:
-            course_id_learning_outcomes.append(course_id[i])
-            learning_outcomes.append(j)
-
-    data_OnlineCourse = pd.DataFrame(list(zip(course_id, title, description, institution, platform, language, started_at, created_at, record_end_at,
-                                             finished_at, rating, experts_rating, visitors_number, total_visitors_number, duration, volume,
-                                             intensity_per_week, content, lectures_number, external_url, has_certificate, credits)),
-                                      columns=['course_id','title', 'description', 'institution_id', 'platform_id', 'language', 'started_at',
-                                               'created_at', 'record_end_at', 'finished_at', 'rating',
-                                               'experts_rating', 'visitors_number', 'total_visitors_number',
-                                               'duration', 'volume', 'intensity_per_week',
-                                               'content', 'lectures_number', 'external_url', 'has_certificate', 'credits'])
+    data_OnlineCourse = pd.DataFrame(list(zip(course_id, title, description, institution, platform, language,
+                                              started_at, created_at, record_end_at, finished_at, rating,
+                                              experts_rating, visitors_number, total_visitors_number, duration, volume,
+                                              intensity_per_week, content, lectures_number, external_url,
+                                              has_certificate, credits, requirements, learning_outcomes, competences)),
+                                     columns=['course_id', 'title', 'description', 'institution_id', 'platform_id',
+                                              'language', 'started_at', 'created_at', 'record_end_at', 'finished_at',
+                                              'rating', 'experts_rating', 'visitors_number', 'total_visitors_number',
+                                              'duration', 'volume', 'intensity_per_week', 'content', 'lectures_number',
+                                              'external_url', 'has_certificate', 'credits', 'requirements',
+                                              'learning_outcomes', 'competences'])
     data_OnlineCourse['id_course'] = data_OnlineCourse.index
-
 
     data_CourseFieldOfStudy = pd.DataFrame(list(zip(course_id_field_of_study, field_of_study)),
                                            columns=['course_id', 'field_of_study'])
-
-
-
     data_CourseCredit = pd.DataFrame(list(zip(course_id_transfer, institution_transfer, field_of_study_transfer)),
                                      columns=['course_id', 'institution_id', 'field_of_study'])
-
-    data_CourseRequirement = pd.DataFrame(list(zip(course_id_req, item_req)),
-                                          columns=['course_id', 'item'])
-
-    data_CourseLearningOutcome = pd.DataFrame(list(zip(course_id_learning_outcomes, learning_outcomes)),
-                                              columns=['course_id', 'learning_outcome'])
-
-    data_CourseCompetence = pd.DataFrame(list(zip(course_comp, competences)),
-                                         columns=['course_id', 'competences'])
 
     """
     Adding new id as FK to OnlineCourse
@@ -209,8 +182,8 @@ def get_data():
     data_Platform['id_platform'] = data_Platform.index
     data_Rigthholder['id_institution'] = data_Rigthholder.index
     data_online_course_platform = pd.merge(data_OnlineCourse, data_Platform, how='left', on='platform_id')
-    data_online_course_platform_inst = pd.merge(data_online_course_platform, data_Rigthholder, how='left', on='institution_id')
-
+    data_online_course_platform_inst = pd.merge(data_online_course_platform, data_Rigthholder, how='left',
+                                                on='institution_id')
 
     data_online_course_platform_inst.started_at = pd.to_datetime(data_online_course_platform_inst['started_at'],
                                                                  format='%Y-%m-%d', errors='ignore')
@@ -233,20 +206,4 @@ def get_data():
                                  how='left', on='course_id')
     data_CourseCredit = pd.merge(data_CourseCredit, data_Rigthholder, how='left', on='institution_id')
 
-    """
-    Adding new id as FK to CourseRequirement
-    """
-    data_CourseRequirement = pd.merge(data_CourseRequirement, data_OnlineCourse[['id_course', 'course_id']],
-                                      how='left', on='course_id')
-    """
-    Adding new id as FK to CourseLearningOutcome
-    """
-    data_CourseLearningOutcome = pd.merge(data_CourseLearningOutcome, data_OnlineCourse[['id_course', 'course_id']],
-                                          how='left', on='course_id')
-    """
-    Adding new id as FK to CourseCompetence
-    """
-    data_CourseCompetence = pd.merge(data_CourseCompetence, data_OnlineCourse[['id_course', 'course_id']],
-                                     how='left', on='course_id')
-    return data_Platform, data_Rigthholder, data_OnlineCourse, data_CourseFieldOfStudy, data_CourseCredit, \
-           data_CourseRequirement, data_CourseLearningOutcome, data_CourseCompetence
+    return data_Platform, data_Rigthholder, data_OnlineCourse, data_CourseFieldOfStudy, data_CourseCredit
