@@ -1987,6 +1987,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
 
 
 @api_view(['POST'])
+@permission_classes((IsRpdDeveloperOrReadOnly,))
 def CloneWorkProgramm(request):
     """
     Апи для клонирования рабочей программы
@@ -1996,6 +1997,10 @@ def CloneWorkProgramm(request):
     prog_id = request.data.get('program_id')
     try:
         clone_program = WorkProgram.clone_programm(prog_id)
+        clone_program.editors.add(request.user)
+        clone_program.owner = request.user
+        clone_program.save()
+
         serializer = WorkProgramSerializer(clone_program)
         return Response(status=200, data=serializer.data)
     except:
