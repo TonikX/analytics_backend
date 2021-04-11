@@ -1248,7 +1248,8 @@ class FileUploadAPIView(APIView):
                 credit_units = [0 for i in range(0, 12)]
                 units = data.loc[
                     (data['SUBFIELDNAME'] == data['SUBFIELDNAME'][i]) & (data['CYCLE'] == data['CYCLE'][i]) & (
-                                data['COMPONENT'] == data['COMPONENT'][i]) & (data['SUBJECT'] == data['SUBJECT'][i])]
+                                data['COMPONENT'] == data['COMPONENT'][i]) & (data['SUBJECT'] == data['SUBJECT'][i])
+                    & (data['SEMESTER'] == data['SEMESTER'][i])]
                 # units = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])].drop_duplicates()
                 try:
                     for u in units.index.values:
@@ -1258,6 +1259,7 @@ class FileUploadAPIView(APIView):
                             credit_units[11] = units["CREDITS"][u]
                         else:
                             credit_units[int(units["SEMESTER"][u]) - 1] = int(units["CREDITS"][u])
+                    print('credit_units', credit_units)
                 except:
                     print("mistake with units")
                     pass
@@ -1520,6 +1522,8 @@ class FileUploadAPIView(APIView):
                 else:
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
                     wpchangemdb.credit_units = ",".join(map(str, credit_units))
+                    print('credit_units', credit_units)
+                    print('wpchangemdb.credit_units', wpchangemdb.credit_units)
                     wpchangemdb.change_type = data['ISOPTION'][i]
                     wpchangemdb.discipline_block_module = mdb
                     wpchangemdb.subject_code = data['SUBJECT_CODE'][i]
