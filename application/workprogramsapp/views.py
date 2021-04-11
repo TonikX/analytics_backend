@@ -1249,7 +1249,9 @@ class FileUploadAPIView(APIView):
                 units = data.loc[
                     (data['SUBFIELDNAME'] == data['SUBFIELDNAME'][i]) & (data['CYCLE'] == data['CYCLE'][i]) & (
                                 data['COMPONENT'] == data['COMPONENT'][i]) & (data['SUBJECT'] == data['SUBJECT'][i])
-                    & (data['SEMESTER'] == data['SEMESTER'][i])]
+                    & (data['YEAR'] == data['YEAR'][i])
+                    ]
+                print(units.index.values)
                 # units = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])].drop_duplicates()
                 try:
                     for u in units.index.values:
