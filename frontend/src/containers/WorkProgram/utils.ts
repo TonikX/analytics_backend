@@ -22,6 +22,7 @@ export const getIntermediateCertificationMaxSum = (evaluationTools: Array<Interm
 
 
 export const getHoursArray = (items: string): Array<string> => {
+    if (!items.split) return [];
     const splitterArray = items.split(',');
     const hoursArray = []
 
