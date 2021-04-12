@@ -173,7 +173,7 @@ class individualTrajectories extends React.Component<IndividualTrajectoriesProps
                                                   className={classNames({[classes.bigRow]: !canEdit})}
                                         >
                                             <TableCell>
-                                                {specializationObject[academicPlan[IndividualTrajectoryFields.DIRECTION][DirectionFields.TITLE]]}
+                                                {academicPlan[IndividualTrajectoryFields.DIRECTION][DirectionFields.TITLE]}
                                             </TableCell>
                                             <TableCell>
                                                 {academicPlan[IndividualTrajectoryFields.DIRECTION][DirectionFields.NUMBER]}
