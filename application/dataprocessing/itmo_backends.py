@@ -120,6 +120,7 @@ class  AuthenticateByCodeISU(ListAPIView):
 
 
             # Авторизация
+            User = get_user_model()
             user = User.objects.get(username=isu_profile['id'])
             refresh_token = TokenObtainPairSerializer().get_token(user)
             access_token = AccessToken().for_user(user)
