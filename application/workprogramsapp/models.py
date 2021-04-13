@@ -169,6 +169,8 @@ class WorkProgram(CloneMixin, models.Model):
                 for elem in eva_clone_list:
                     if(eva.id==elem['id']):
                         clone_outcomes.evaluation_tool.add(EvaluationTool.objects.get(pk=elem['clone_id']))
+        for cerf in СertificationEvaluationTool.objects.filter(work_program=program):
+            cerf.make_clone(attrs={'work_program': clone_program})
         return clone_program
 
 
@@ -689,7 +691,7 @@ class EvaluationTool(CloneMixin,models.Model):
         return self.name
 
 
-class СertificationEvaluationTool(models.Model):
+class СertificationEvaluationTool(CloneMixin, models.Model):
     '''
     Модель для аттестационных оценочных средств
     '''

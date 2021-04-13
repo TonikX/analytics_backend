@@ -58,14 +58,14 @@ def FindSimilarWP(request):
 @permission_classes((IsAdminUser,))
 def CreateCheckPoint(request):
     # TODO: УБРАТЬ ХАРДКОДИНГ
-    work_program_id = 2647 #67   request.data.get('work_program_id')
-    bars_id = 27328 #26295  Тут должен быть код, который достает айдишник из барса по присланной РПД
+    work_program_id = 67  # 2647  request.data.get('work_program_id')
+    bars_id = 26295  # 26295 27328  Тут должен быть код, который достает айдишник из барса по присланной РПД
     types_checkpoints = get_list_of_regular_checkpoints()
 
     """Переменные для формирования запроса к БАРС"""
     point_distribution = 0
     term = 2  # АБСОЛЮТНЫЙ СЕМЕСТР /request.data.get('term')
-    educational_bars = get_one_educational_program(bars_id, term)# это должно быть в отдельном эндпоинте
+    educational_bars = get_one_educational_program(bars_id, term)  # это должно быть в отдельном эндпоинте
     list_regular = []
     has_course_project = False
     course_project = None
@@ -94,7 +94,8 @@ def CreateCheckPoint(request):
             if el["name"] == eva.type:
                 id = el["id"]
         list_regular.append(
-            generate_checkpoint(name=eva.name, min=eva.min, max=eva.max, week=int(eva.deadline), type_id=id, key=eva.check_point))
+            generate_checkpoint(name=eva.name, min=eva.min, max=eva.max, week=int(eva.deadline), type_id=id,
+                                key=eva.check_point))
     certificate = СertificationEvaluationTool.objects.filter(work_program=work_program_id, semester=needed_semester)
     for cerf in certificate:
         if int(cerf.type) == 4:
@@ -107,9 +108,12 @@ def CreateCheckPoint(request):
                                                    type_id=get_checkpoints_type(int(cerf.type)), key=True)
     discipline = generate_discipline(bars_id=bars_id, name=WorkProgram.objects.get(id=work_program_id).title, term=term,
                                      course_project=has_course_project)
-    checkpoint_plan=generate_checkpoint_plan(regular_checkpoint=list_regular, programs=educational_bars, discipline=discipline,
-                                   final_checkpoint=final_checkpoint, course_project_checkpoint=course_project,
-                                   term=term, point_distribution=point_distribution, additional_points=extra_points,
-                                   alternate_methods=False, has_course_project=has_course_project)
+    checkpoint_plan = generate_checkpoint_plan(regular_checkpoint=list_regular, programs=educational_bars,
+                                               discipline=discipline,
+                                               final_checkpoint=final_checkpoint,
+                                               course_project_checkpoint=course_project,
+                                               term=term, point_distribution=point_distribution,
+                                               additional_points=extra_points,
+                                               alternate_methods=False, has_course_project=has_course_project)
     print(post_checkpoint_plan(checkpoint_plan))
-    return Response("Гусары, МОЛЧАТЬ!")
+    return Response(checkpoint_plan)
