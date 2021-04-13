@@ -2027,6 +2027,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
 
 
 @api_view(['POST'])
+@permission_classes((IsAuthenticated, IsRpdDeveloperOrReadOnly))
 def CloneWorkProgramm(request):
     """
     Апи для клонирования рабочей программы
