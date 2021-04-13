@@ -3,7 +3,6 @@ import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {EducationPlanInDirectionFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
-import {CompetenceType} from "../Competences/types";
 import {EducationalPlanType} from "../EducationalPlan/types";
 import {DirectionType} from "../Direction/types";
 import {ReactText} from "react";

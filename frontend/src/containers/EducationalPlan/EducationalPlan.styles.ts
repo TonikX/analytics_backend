@@ -69,6 +69,13 @@ export default (theme: Theme) => createStyles({
             alignItems: 'center',
             color: 'rgb(51, 51, 51) !important',
             textDecoration: 'none'
+        },
+        '&>div': {
+            padding: '6px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            color: 'rgb(51, 51, 51) !important',
+            textDecoration: 'none'
         }
     },
     displayFlex: {

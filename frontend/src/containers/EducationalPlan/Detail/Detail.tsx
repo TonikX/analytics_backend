@@ -60,12 +60,14 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     }
 
     componentDidMount() {
-        const planId = get(this, 'props.match.params.id');
+        const planId = this.getPlanId();
 
         this.props.actions.setIsTrajectoryRoute(this.props.trajectoryRoute);
 
         this.props.actions.getEducationalDetail(planId);
     }
+
+    getPlanId = () => get(this, 'props.match.params.id');
 
     handleClickBlockDelete = (id: number, length: number) => () => {
         this.setState({
@@ -163,11 +165,11 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                 id: detailPlan[EducationalPlanFields.ID_RATING],
                 callback: this.props.actions.getEducationalDetail,
                 type: trajectoryRoute ? FavoriteType.TRAJECTORY_PLAN : FavoriteType.ACADEMIC_PLAN,
-                relationId: detailPlan[EducationalPlanFields.ID]
+                relationId: this.getPlanId()
             });
         } else {
             this.props.foldersActions.openAddToFolderDialog({
-                relationId: detailPlan[EducationalPlanFields.ID],
+                relationId: this.getPlanId(),
                 type: trajectoryRoute ? FavoriteType.TRAJECTORY_PLAN : FavoriteType.ACADEMIC_PLAN,
                 callback: this.props.actions.getEducationalDetail
             });

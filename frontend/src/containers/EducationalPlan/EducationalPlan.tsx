@@ -126,6 +126,10 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
         this.setState({anchorsEl: {}});
     };
 
+    handleCreatePlan = (id: number) => () => {
+        this.props.actions.createIndividualEducationalPlan(id);
+    }
+
     render() {
         const {classes, educationalPlan, allCount, currentPage, sortingField, sortingMode, canAddNewPlan} = this.props;
         const {deleteConfirmId} = this.state;
@@ -235,6 +239,13 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                             <EyeIcon className={classes.menuIcon}/>
                                                             Смотреть детально
                                                         </Link>
+                                                    </MenuItem>
+
+                                                    <MenuItem className={classes.menuLinkItem}>
+                                                        <div onClick={this.handleCreatePlan(plan[EducationalPlanFields.ID])}>
+                                                            <EyeIcon className={classes.menuIcon}/>
+                                                            Создать индивидуальный <br /> учебный план
+                                                        </div>
                                                     </MenuItem>
 
                                                     {plan[EducationalPlanFields.CAN_EDIT] &&
