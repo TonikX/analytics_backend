@@ -457,6 +457,27 @@ const deleteWorkProgramFromZun = createLogic({
     }
 });
 
+const createIndividualEducationalPlan = createLogic({
+    type: planActions.createIndividualEducationalPlan.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_INDIVIDUAL_EDUCATIONAL_PLAN}));
+
+        service.createIndividualEducationalPlan(action.payload)
+            .then((res) => {
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_INDIVIDUAL_EDUCATIONAL_PLAN}));
+                return done();
+            });
+    }
+});
+
 const transformDetailPlanData = createLogic({
     type: planActions.openDetailDialog.type,
     latest: true,
@@ -535,4 +556,5 @@ export default [
     deleteCompetenceBlock,
     deleteWorkProgramFromZun,
     transformDetailPlanData,
+    createIndividualEducationalPlan,
 ];

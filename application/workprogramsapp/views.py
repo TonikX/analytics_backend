@@ -1234,6 +1234,7 @@ class FileUploadAPIView(APIView):
         fs_count, wp_count, ap_count = 0, 0, 0
         for i in list(data.index.values):
             try:
+                #print('clone', clone)
                 print('---Новая строка---')
                 #TODO: Спросить по катавасию с полями в филд оф стадис
                 if data['DEGREE'][i].strip() == 'Академический бакалавр':
@@ -1247,7 +1248,10 @@ class FileUploadAPIView(APIView):
                 credit_units = [0 for i in range(0, 12)]
                 units = data.loc[
                     (data['SUBFIELDNAME'] == data['SUBFIELDNAME'][i]) & (data['CYCLE'] == data['CYCLE'][i]) & (
-                                data['COMPONENT'] == data['COMPONENT'][i]) & (data['SUBJECT'] == data['SUBJECT'][i])]
+                                data['COMPONENT'] == data['COMPONENT'][i]) & (data['SUBJECT'] == data['SUBJECT'][i])
+                    & (data['YEAR'] == data['YEAR'][i])
+                    ]
+                print(units.index.values)
                 # units = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])].drop_duplicates()
                 try:
                     for u in units.index.values:
@@ -1257,6 +1261,7 @@ class FileUploadAPIView(APIView):
                             credit_units[11] = units["CREDITS"][u]
                         else:
                             credit_units[int(units["SEMESTER"][u]) - 1] = int(units["CREDITS"][u])
+                    print('credit_units', credit_units)
                 except:
                     print("mistake with units")
                     pass
@@ -1301,6 +1306,7 @@ class FileUploadAPIView(APIView):
                             wp_obj = WorkProgram.objects.filter(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip())[0]
                         except:
                             print("Я СКЛОНИРОВАЛ!!!")
+                            clone = True
                             wp_obj = WorkProgram.clone_programm(wp_obj.id)
                             wp_obj.discipline_code = data['DIS_CODE'][i]
                             wp_obj.save()
@@ -1496,9 +1502,10 @@ class FileUploadAPIView(APIView):
                 print('Модуль в блоке: ', mdb)
 
                 if (data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                        discipline_block_module=mdb, change_type=data['ISOPTION'][i]).exists()):
+                        discipline_block_module=mdb, change_type=data['ISOPTION'][i], subject_code = data['SUBJECT_CODE'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
-                                                                                       change_type=data['ISOPTION'][i])
+                                                                                       change_type=data['ISOPTION'][i], subject_code = data['SUBJECT_CODE'][i]
+                                                                                       )
                     if WorkProgramInFieldOfStudy.objects.filter(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
@@ -1510,23 +1517,56 @@ class FileUploadAPIView(APIView):
                     # wpchangemdb.work_program.add(wp_obj)
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=mdb,
                                                                              change_type=data['ISOPTION'][i],
-                                                                             work_program=wp_obj).exists():
+                                                                             work_program=wp_obj
+                                                                             ).exists():
                     print('exist', wp_obj)
 
                 else:
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
                     wpchangemdb.credit_units = ",".join(map(str, credit_units))
+                    print('credit_units', credit_units)
+                    print('wpchangemdb.credit_units', wpchangemdb.credit_units)
                     wpchangemdb.change_type = data['ISOPTION'][i]
                     wpchangemdb.discipline_block_module = mdb
+                    wpchangemdb.subject_code = data['SUBJECT_CODE'][i]
                     wpchangemdb.save()
+
+
                     if WorkProgramInFieldOfStudy.objects.filter(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
                     else:
+
+
                         wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
-                                                           work_program=wp_obj)
+                                                               work_program=wp_obj)
                         wpinfs.save()
+                try:
+                    if WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
+                                                  zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
+                                                  data['COMPONENT'][i].strip(),
+                                                  # zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
+                                                  # data['ISOPTION'][i],
+                                                  zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module= mdb,
+                                                  ).count() > 1:
+                        # wp_obj2 = WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
+                        #                                     zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
+                        #                                     data['COMPONENT'][i].strip(),
+                        #                                     zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
+                        #                                     data['ISOPTION'][i],
+                        #                                     zuns_for_wp__work_program_change_in_discipline_block_module = wpchangemdb,
+                        #                                     )[0]
+                        # print ('НАЙДЕНА ПОВТОРНАЯ РПД',  wp_obj)
+                        # wpinfs.work_program = wp_obj2
+                        # wpinfs.save()
+                        if clone:
+                            print ('УДАЛЯЕТСЯ СКЛОНИРОВАННАЯ рпд')
+                            wp_obj.delete()
+                            wpchangemdb.delete()
+                except:
+                    pass
+
                 print('Рабочая программа дисциплины записана в модуль: done')
 
                 # if Zun.objects.filter(wp_in_fs = wpinfs).exists():
@@ -1987,7 +2027,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
 
 
 @api_view(['POST'])
-@permission_classes((IsRpdDeveloperOrReadOnly,))
+@permission_classes((IsAuthenticated, IsRpdDeveloperOrReadOnly))
 def CloneWorkProgramm(request):
     """
     Апи для клонирования рабочей программы

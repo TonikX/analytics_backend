@@ -148,6 +148,9 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                                        mode={sortingField === EducationPlanInDirectionFields.YEAR ? sortingMode : ''}
                                         />
                                     </TableCell>
+                                    <TableCell>
+                                        Реализатор
+                                    </TableCell>
                                     {canEdit && <TableCell />}
                                 </TableRow>
                             </TableHead>
@@ -157,7 +160,7 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                               className={classNames({[classes.bigRow]: !canEdit})}
                                     >
                                         <TableCell>
-                                            {specializationObject[educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.TITLE]]}
+                                            {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.TITLE]}
                                         </TableCell>
                                         <TableCell>
                                             {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.NUMBER]}
@@ -172,6 +175,9 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                         </TableCell>
                                         <TableCell>
                                             {educationalPlanInDirection[EducationPlanInDirectionFields.YEAR]}
+                                        </TableCell>
+                                        <TableCell>
+                                            {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.FACULTY]}
                                         </TableCell>
                                         {canEdit &&
                                             <TableCell>

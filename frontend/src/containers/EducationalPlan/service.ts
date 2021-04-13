@@ -44,6 +44,14 @@ class EducationalPlanService extends AnalyticsService{
         return this.delete(`api/workprograminfieldofstudy/${id}`);
     }
 
+    createIndividualEducationalPlan(id: number){
+        return this.post(`/api/individualization/individual_path/`, {
+            user: 1,
+            comment: '',
+            implementation_of_academic_plan: id
+        });
+    }
+
     createEducationalPlan(competence: any){
         const formData = new FormData();
 

@@ -199,8 +199,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                             <Tooltip title={hoursError ? "Ошибка! Часы по разделам заполнены неверно" : evaluationToolsErrors ? "Ошибка! Кол-во баллов в РПД больше 100" : ''}
                                      disableHoverListener={!hoursError && !evaluationToolsErrors}
                             >
-                                <Button onClick={() => (!hoursError && !evaluationToolsErrors) && this.handleSendToExpertize}
-                                >
+                                <Button onClick={this.handleSendToExpertize}>
                                     Отправить на экспертизу
                                 </Button>
                             </Tooltip>

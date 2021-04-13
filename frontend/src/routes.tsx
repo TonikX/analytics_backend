@@ -97,9 +97,9 @@ export default () => (
             <AuthRoute path={routerService.getFoldersRoute()}>
                 <Folders />
             </AuthRoute>
-            {/*<AuthRoute path={routerService.getCoursesRoute()}>*/}
-            {/*    <Courses />*/}
-            {/*</AuthRoute>*/}
+            <AuthRoute path={routerService.getCoursesRoute()}>
+                <Courses />
+            </AuthRoute>
             <AuthRoute path={routerService.getCourseRoute()}>
                 <Course />
             </AuthRoute>

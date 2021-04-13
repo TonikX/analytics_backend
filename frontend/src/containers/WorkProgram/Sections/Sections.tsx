@@ -277,63 +277,67 @@ class Sections extends React.PureComponent<SectionsProps> {
                     </AutoSizer> 
                 </TableContainer>
 
-                <Typography className={classes.lastInfo}>
-                    <b> Трудоемкость по данным из ИСУ (справочно):</b>
-                </Typography>
+                {!lectureHours.length && !practiceHours.length && !labHours.length && !srsHours.length &&
+                    <>
+                      <Typography className={classes.lastInfo}>
+                        <b> Трудоемкость по данным из ИСУ (справочно):</b>
+                      </Typography>
 
-                <TableContainer className={classes.table}>
-                    <Table>
-                        <TableHead>
+                      <TableContainer className={classes.table}>
+                        <Table>
+                          <TableHead>
                             <TableRow>
-                                <TableCell rowSpan={2} className={classes.headerCell} colSpan={1}>
-                                    Занятия
-                                </TableCell>
-                                <TableCell className={classes.headerCell} colSpan={10}>
-                                    Семестр
-                                </TableCell>
+                              <TableCell rowSpan={2} className={classes.headerCell} colSpan={1}>
+                                Занятия
+                              </TableCell>
+                              <TableCell className={classes.headerCell} colSpan={10}>
+                                Семестр
+                              </TableCell>
                             </TableRow>
                             <TableRow>
                                 {([1,2,3,4,5,6,7,8,9,10]).map((item) =>
                                     <TableCell className={classes.headerCell}>{item}</TableCell>
                                 )}
                             </TableRow>
-                        </TableHead>
-                        <TableBody>
+                          </TableHead>
+                          <TableBody>
                             <TableRow>
-                                <TableCell className={classes.headerCell}>
-                                    Лекционные занятия
-                                </TableCell>
+                              <TableCell className={classes.headerCell}>
+                                Лекционные занятия
+                              </TableCell>
                                 {lectureHours.map((item: any) =>
                                     <TableCell className={classes.cell}>{item}</TableCell>
                                 )}
                             </TableRow>
                             <TableRow>
-                                <TableCell className={classes.headerCell}>
-                                    Практические занятия
-                                </TableCell>
+                              <TableCell className={classes.headerCell}>
+                                Практические занятия
+                              </TableCell>
                                 {practiceHours.map((item: any) =>
                                     <TableCell className={classes.cell}>{item}</TableCell>
                                 )}
                             </TableRow>
                             <TableRow>
-                                <TableCell className={classes.headerCell}>
-                                    Лабораторные занятия
-                                </TableCell>
+                              <TableCell className={classes.headerCell}>
+                                Лабораторные занятия
+                              </TableCell>
                                 {labHours.map((item: any) =>
                                     <TableCell className={classes.cell}>{item}</TableCell>
                                 )}
                             </TableRow>
                             <TableRow>
-                                <TableCell className={classes.headerCell}>
-                                    Самостоятельную занятия
-                                </TableCell>
+                              <TableCell className={classes.headerCell}>
+                                Самостоятельную занятия
+                              </TableCell>
                                 {srsHours.map((item: any) =>
                                     <TableCell className={classes.cell}>{item}</TableCell>
                                 )}
                             </TableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </>
+                }
 
                 {!createNewSectionMode && isCanEdit
                     && <div className={classes.iconWrapper}>
