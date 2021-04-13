@@ -96,7 +96,7 @@ class  AuthenticateByCodeISU(ListAPIView):
 
             # Если пользователя нет, то регистрируем
             if not is_registered:
-                reg = True
+                #reg = True
                 User.objects.create_user(
                     username=isu_profile['id'],
                     password=password,
@@ -111,7 +111,7 @@ class  AuthenticateByCodeISU(ListAPIView):
                 except:
                     pass
 
-            if reg:
+            #if reg:
                 groups = ["rpd_developer", "education_plan_developer", "op_leader", "student"]
                 User = User.objects.get(username=isu_profile['id'])
                 for group in groups:
