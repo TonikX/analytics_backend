@@ -1,4 +1,3 @@
-import {Dispatch} from "react";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
@@ -11,16 +10,15 @@ import {
     isCanComment,
     isCanEdit,
     isCanAddToFolder,
-    getIsHoursError,
-    getWorkProgramEvaluationToolsList, getWorkProgramIntermediateCertificationList
 } from './getters';
-import {WorkProgramActions} from "./types";
 
 import {rootState} from "../../store/reducers";
 import {WorkProgramGeneralFields} from "./enum";
 import {getFolders} from "../Profile/Folders/getters";
 import folderActions from "../Profile/Folders/actions";
-import {getEvaluationToolsMaxSum, getIntermediateCertificationMaxSum} from "./utils";
+import {
+    getValidateProgramErrors
+} from "./utils";
 
 const mapStateToProps = (state:rootState) => {
     return {
@@ -35,18 +33,13 @@ const mapStateToProps = (state:rootState) => {
         canSendToExpertise: isCanEdit(state),
         canComment: isCanComment(state),
         folders: getFolders(state),
-        hoursError: getIsHoursError(state),
-        evaluationToolsErrors: getEvaluationToolsMaxSum(getWorkProgramEvaluationToolsList(state))
-            + getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state)) > 100
+        validateErrors: getValidateProgramErrors(state),
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<WorkProgramActions>) => ({
-    // @ts-ignore
-    actions: bindActionCreators(actions, dispatch),
-    // @ts-ignore
-    foldersActions: bindActionCreators(folderActions, dispatch),
+const mapDispatchToProps = (dispatch: any) => ({
+    actions: bindActionCreators<any, any>(actions, dispatch),
+    foldersActions: bindActionCreators<any, any>(folderActions, dispatch),
 });
 
-// @ts-ignore
 export default connect(mapStateToProps, mapDispatchToProps);

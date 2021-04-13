@@ -40,7 +40,6 @@ import {EducationalPlanInDirectionProps, EducationalPlanInDirectionType} from '.
 
 import connect from './EducationPlanInDirection.connect';
 import styles from './EducationPlanInDirection.styles';
-import {specializationObject} from "../WorkProgram/constants";
 
 class EducationPlanInDirection extends React.Component<EducationalPlanInDirectionProps> {
     state = {

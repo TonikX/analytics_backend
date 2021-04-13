@@ -64,7 +64,12 @@ const getEducationalPlanDetail = createLogic({
         service.getEducationalPlanDetail(planId, trajectoryRoute)
             .then((res) => {
                 if (trajectoryRoute){
-                    dispatch(planActions.setEducationalDetail(get(res.data, 'implementation_of_academic_plan.academic_plan', {})));
+                    const data = get(res.data, 'implementation_of_academic_plan.academic_plan', {});
+                    dispatch(planActions.setEducationalDetail({
+                        ...data,
+                        'id_rating': res.data?.id_rating,
+                        'rating': res.data?.rating,
+                    }));
                     dispatch(planActions.planTrajectorySetUserData(get(res.data, 'user', {})));
                     dispatch(planActions.planTrajectorySetDirection(get(res.data, 'implementation_of_academic_plan.field_of_study', {})));
                 } else {

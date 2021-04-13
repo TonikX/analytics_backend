@@ -175,15 +175,9 @@ export default () => (
             <AuthRoute path={routerService.getWorkProgramListRoute()}>
                 <WorkProgramList />
             </AuthRoute>
-            <AuthRoute path={routerService.getWorkProgramRoute()}
-                       children={() => (
-                           <Route
-                               render={({match}) => (
-                                   <WorkProgram match={match}/>
-                               )}
-                           />
-                       )}
-            />
+            <AuthRoute path={routerService.getWorkProgramRoute()}>
+                <WorkProgram />
+            </AuthRoute>
             <AuthRoute path={routerService.getExpertiseRoute()}>
                 <Expertise />
             </AuthRoute>

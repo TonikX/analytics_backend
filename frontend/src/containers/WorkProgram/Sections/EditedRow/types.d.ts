@@ -1,7 +1,7 @@
 import {WithStyles} from "@material-ui/core";
 
 import {WorkProgramActions} from "../../types";
-import {Section} from '../types';
+import {SectionType} from '../types';
 
 import styles from "./EditedRow.styles";
 
