@@ -1331,8 +1331,8 @@ class FileUploadAPIView(APIView):
                 wp_list = WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
                                                      zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
                                                      format_component(data['COMPONENT'][i].strip()),
-                                                     zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
-                                                     data['ISOPTION'][i],
+                                                     # zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
+                                                     # data['ISOPTION'][i],
                                                      credit_units=",".join(
                                                          map(str, credit_units)),
                                                      discipline_code__iregex=regex).distinct()
@@ -1592,8 +1592,8 @@ class FileUploadAPIView(APIView):
                         print("Сохранили рпд в направлении", wpinfs)
                 try:
                     if WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
-                                                  zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
-                                                  format_component(data['COMPONENT'][i].strip()),
+                                                  # zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
+                                                  # format_component(data['COMPONENT'][i].strip()),
                                                   # zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
                                                   # data['ISOPTION'][i],
                                                   zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module= mdb,
