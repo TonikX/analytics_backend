@@ -329,7 +329,7 @@ class Sections extends React.PureComponent<SectionsProps> {
                             </TableRow>
                             <TableRow>
                               <TableCell className={classes.headerCell}>
-                                Самостоятельную занятия
+                                Самостоятельная работа
                               </TableCell>
                                 {srsHours.map((item: any) =>
                                     <TableCell className={classes.cell}>{item}</TableCell>
