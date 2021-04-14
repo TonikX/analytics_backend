@@ -1,10 +1,12 @@
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
-
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from workprogramsapp.expertise.models import UserExpertise, ExpertiseComments, Expertise
 from workprogramsapp.expertise.serializers import UserExpertiseSerializer, CommentSerializer, ExpertiseSerializer
 from workprogramsapp.permissions import IsMemberOfExpertise, IsRpdDeveloperOrReadOnly, IsMemberOfUserExpertise, \
     IsExpertiseMaster, IsWorkProgramMemberOfExpertise
+from workprogramsapp.workprogram_additions.models import UserStructuralUnit
 
 
 class UserExpertiseListView(generics.ListAPIView):
@@ -65,6 +67,7 @@ class ExpertiseCommentCreateView(generics.CreateAPIView):
 
 
 class ExpertiseWorkProgramView(generics.RetrieveAPIView):
+    # TODO: Зачем вообще эта вьюха нужна?
     """
      ссылка выдает все экспертизы связанные с id рабочей программы
     """
@@ -80,9 +83,25 @@ class ExpertiseWorkProgramView(generics.RetrieveAPIView):
 
 
 class ExpertiseListView(generics.ListAPIView):
-    queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
-    permission_classes = [IsMemberOfExpertise]
+    permission_classes = [IsMemberOfUserExpertise]
+    def list(self, request, **kwargs):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        if request.user.groups.filter(name="expertise_master"):
+            queryset = Expertise.objects.all()
+        elif UserStructuralUnit.objects.filter(user=request.user, status="leader"):
+            queryset = Expertise.objects.filter(
+                work_program__structural_unit__user_in_structural_unit__user=request.user,
+                work_program__structural_unit__user_in_structural_unit__status="leader").distinct()
+        else:
+            queryset = Expertise.objects.filter(expertse_users_in_rpd__expert=request.user)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class ExpertiseViewById(generics.RetrieveAPIView):
@@ -118,3 +137,12 @@ class ChangeUserExpertiseView(generics.UpdateAPIView):
     queryset = UserExpertise.objects.all()
     serializer_class = UserExpertiseSerializer
     permission_classes = [IsMemberOfUserExpertise]
+
+
+class DeleteUserExpertise(generics.DestroyAPIView):
+    """
+    Редактирование экспертизы отдельного пользователя
+    """
+    queryset = UserExpertise.objects.all()
+    serializer_class = UserExpertiseSerializer
+    permission_classes = [IsExpertiseMaster]

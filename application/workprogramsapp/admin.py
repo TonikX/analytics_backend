@@ -15,8 +15,9 @@ from .models import (
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
     Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
+from .notifications.models import ExpertiseNotification
 
-from .workprogram_additions.models import AdditionalMaterial, StructuralUnit
+from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 
 from .educational_program.pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
     PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
@@ -94,5 +95,8 @@ admin.site.register(WorkProgramInWorkProgramChangeInDisciplineBlockModule)
 admin.site.register(DisciplineBlockModuleInDisciplineBlock)
 
 admin.site.register(StructuralUnit)
+admin.site.register(UserStructuralUnit)
 
 admin.site.register(СertificationEvaluationTool)
+
+admin.site.register(ExpertiseNotification)

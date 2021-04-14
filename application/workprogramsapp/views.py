@@ -1269,7 +1269,6 @@ class FileUploadAPIView(APIView):
             try:
                 #print('clone', clone)
                 print('---Новая строка---')
-                #TODO: Спросить по катавасию с полями в филд оф стадис
                 if data['DEGREE'][i].strip() == 'Академический бакалавр':
                     qualification = 'bachelor'
                 elif data['DEGREE'][i].strip() == 'Магистр':

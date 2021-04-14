@@ -37,6 +37,7 @@ class Expertise(models.Model):
     experts = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Эксперты', through = UserExpertise, related_name = 'experts_in_expertise')
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     date_of_last_change = models.DateTimeField(editable=True, auto_now=True, blank=True, null=True)
+
     #
     #
     # def __init__(self, *args, **kwargs):

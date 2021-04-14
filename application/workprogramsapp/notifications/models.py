@@ -1,33 +1,26 @@
 from django.db import models
+
+from workprogramsapp.expertise.models import Expertise
 from workprogramsapp.models import Topic, WorkProgram
 from django.conf import settings
 
 
-class AdditionalMaterial(models.Model):
+class UserNotification(models.Model):
     """
-    Материалы тем
+    Базовый класс нотификаций
     """
-
-    topic = models.ForeignKey('Topic', on_delete=models.CASCADE, verbose_name='тема рабочей программы',
-                              related_name='additional_materials_for_topic')
-    title = models.CharField(max_length=300, verbose_name="Описание")
-    url = models.URLField(verbose_name="Ссылка на материал")
-
-
-class StructuralUnit(models.Model):
-
-    title = models.CharField(max_length=300, verbose_name="Описание")
-    isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID структурного подразделения в ИСУ")
-
-
-class UserStructuralUnit(models.Model):
-
-    status_choise = (
-        ('leader', 'leader'),
-        ('deputy', 'deputy'),
-        ('employee', 'employee'),
+    status_choices = (
+        ('read', 'read'),
+        ('unread', 'unread'),
     )
-    structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL, verbose_name='Структурное подразделени',
-                                     related_name='user_in_structural_unit', blank=True, null=True)
+    status = models.CharField(max_length=30, choices=status_choices, verbose_name='Статус нотификации',
+                              default='unread')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
-    status = models.CharField(max_length=30, choices=status_choise, verbose_name='Архив', default = 'l')
+    message = models.CharField(max_length=4096, verbose_name="Сообщение нотификации", blank=True, null=True)
+
+
+class ExpertiseNotification(UserNotification):
+    """
+    Нотификации об экспертизе
+    """
+    expertise = models.ForeignKey(Expertise, on_delete=models.CASCADE, blank=True, null=True)
