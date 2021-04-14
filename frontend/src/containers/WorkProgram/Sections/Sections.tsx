@@ -254,7 +254,7 @@ class Sections extends React.PureComponent<SectionsProps> {
                             </TableRow>
                         </Table>
 
-                        {isCanEdit && sections.length !== 0 && parseFloat(totalHours) &&
+                        {isCanEdit && sections.length !== 0 && parseFloat(totalHours) ?
                             <>
                                 {parseFloat(currentTotalHours) !== parseFloat(totalHours) && parseFloat(currentTotalHours) < parseFloat(totalHours) ?
                                     <div className={classes.totalHourError}>
@@ -270,6 +270,8 @@ class Sections extends React.PureComponent<SectionsProps> {
                                     </div>
                                 }
                             </>
+                            :
+                            <></>
                         }
 
                     </Scrollbars>
@@ -277,7 +279,7 @@ class Sections extends React.PureComponent<SectionsProps> {
                     </AutoSizer> 
                 </TableContainer>
 
-                {!lectureHours.length && !practiceHours.length && !labHours.length && !srsHours.length &&
+                {!lectureHours.length && !practiceHours.length && !labHours.length && !srsHours.length ? <></> :
                     <>
                       <Typography className={classes.lastInfo}>
                         <b> Трудоемкость по данным из ИСУ (справочно):</b>
@@ -327,7 +329,7 @@ class Sections extends React.PureComponent<SectionsProps> {
                             </TableRow>
                             <TableRow>
                               <TableCell className={classes.headerCell}>
-                                Самостоятельную занятия
+                                Самостоятельная работа
                               </TableCell>
                                 {srsHours.map((item: any) =>
                                     <TableCell className={classes.cell}>{item}</TableCell>

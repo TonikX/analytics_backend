@@ -51,6 +51,16 @@ export type FolderType = {
         [FoldersFields.COMMENT]: string;
         [FoldersFields.ID]: number;
     }>;
+    [FoldersFields.INDIVIDUAL_ACADEMIC_PLAN_IN_FOLDER]: Array<{
+        [FoldersFields.INDIVIDUAL_ACADEMIC_PLAN]: {
+            [FoldersFields.IMPLEMENTATION_OF_ACADEMIC_PLAN]: {
+                [FoldersFields.ACADEMIC_PLAN]: EducationalPlanType
+            }
+        };
+        [FoldersFields.INDIVIDUAL_ACADEMIC_PLAN_RATING]: string;
+        [FoldersFields.COMMENT]: string;
+        [FoldersFields.ID]: number;
+    }>;
     [FoldersFields.BLOCK_MODULE_IN_FOLDER]: Array<{
         [FoldersFields.BLOCK_MODULE]: TrainingModuleType;
         [FoldersFields.BLOCK_MODULE_RATING]: string;

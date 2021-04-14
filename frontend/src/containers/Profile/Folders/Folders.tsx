@@ -53,6 +53,10 @@ class Folders extends React.PureComponent<FoldersProps> {
         openConfirmDialogId: null
     }
 
+    componentDidMount() {
+        this.props.actions.getFolders();
+    }
+
     handleChangeCurrentTab = (event: any, newValue: any) => {
         this.setState({currentTab: newValue});
     }
@@ -119,6 +123,29 @@ class Folders extends React.PureComponent<FoldersProps> {
         );
     }
 
+    renderIndividualAcademicPlan = (folder: FolderType) => {
+        const {classes} = this.props;
+
+        return folder[FoldersFields.INDIVIDUAL_ACADEMIC_PLAN_IN_FOLDER].map(item => {
+            const plan = item[FoldersFields.INDIVIDUAL_ACADEMIC_PLAN][FoldersFields.IMPLEMENTATION_OF_ACADEMIC_PLAN][FoldersFields.ACADEMIC_PLAN];
+
+            return <Link target="_blank"
+                  to={appRouter.getPlanDetailLink(plan[EducationalPlanFields.ID])}
+                  className={classes.workProgramLink}
+            >
+                <div className={classes.workProgram}>
+                    <div> {plan[EducationalPlanFields.PROFILE]} </div>
+                    <div className={classes.rating}>
+                        <ReactStars size={20} value={item[FoldersFields.INDIVIDUAL_ACADEMIC_PLAN_RATING]}/>
+                        <LikeButton isLiked={true}
+                                    onClick={this.deleteFromFolder(item[FoldersFields.ID], FavoriteType.ACADEMIC_PLAN)}/>
+                    </div>
+                    <div> {item[FoldersFields.COMMENT]} </div>
+                </div>
+            </Link>
+        });
+    }
+
     renderBlockModuleList = (folder: FolderType) => {
         const {classes} = this.props;
 
@@ -182,6 +209,7 @@ class Folders extends React.PureComponent<FoldersProps> {
                                 {this.renderWPList(folder)}
                                 {this.renderAcademicPlanList(folder)}
                                 {this.renderBlockModuleList(folder)}
+                                {this.renderIndividualAcademicPlan(folder)}
                             </div>
 
                         </TabPanel>

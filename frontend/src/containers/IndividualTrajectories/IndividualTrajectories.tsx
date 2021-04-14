@@ -30,7 +30,6 @@ import {SortingType} from "../../components/SortingButton/types";
 import {DirectionFields} from "../Direction/enum";
 import {EducationalPlanFields} from "../EducationalPlan/enum";
 import {IndividualTrajectoryFields} from './enum';
-import {specializationObject} from "../WorkProgram/constants";
 
 import {appRouter} from "../../service/router-service";
 
