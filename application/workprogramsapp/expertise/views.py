@@ -85,14 +85,16 @@ class ExpertiseWorkProgramView(generics.RetrieveAPIView):
 class ExpertiseListView(generics.ListAPIView):
     serializer_class = ExpertiseSerializer
     permission_classes = [IsMemberOfUserExpertise]
+
     def list(self, request, **kwargs):
         # Note the use of `get_queryset()` instead of `self.queryset`
         if request.user.groups.filter(name="expertise_master"):
             queryset = Expertise.objects.all()
-        elif UserStructuralUnit.objects.filter(user=request.user, status="leader"):
+        elif UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"]):
             queryset = Expertise.objects.filter(
                 work_program__structural_unit__user_in_structural_unit__user=request.user,
-                work_program__structural_unit__user_in_structural_unit__status="leader").distinct()
+                work_program__structural_unit__user_in_structural_unit__status__in=["leader", "deputy"]).distinct() | \
+                       Expertise.objects.filter(expertse_users_in_rpd__expert=request.user).distinct()
         else:
             queryset = Expertise.objects.filter(expertse_users_in_rpd__expert=request.user)
         page = self.paginate_queryset(queryset)

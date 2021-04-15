@@ -17,6 +17,7 @@ from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderVie
     ModuleInFolderView, AddToFolderModuleView, \
     RemoveFromFolderModuleView, IndividualImplementationAcademicPlanInFolderView, \
     AddToFolderndividualImplementationAcademicPlanView, RemoveFromFolderImplementationAcademicPlanView
+from .notifications.views import NotificationListView
 from .op_slection.views import CreateProfessionByKeywords
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, \
     ProfessionUpdateView, ItemWithProfessions, ItemWithRoles, ProfessionsListWithoutPaginationApi
@@ -340,5 +341,9 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.workprogram_additions.urls')),
 
     url(r'^', include('workprogramsapp.individualization.urls')),
+
+    # Нотификации
+    path('api/notifications/list', NotificationListView.as_view()),
+
 
 ]

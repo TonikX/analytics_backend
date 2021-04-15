@@ -41,7 +41,7 @@ from .serializers import OnlineCourseSerializer, BibliographicReferenceSerialize
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer
-from .workprogram_additions.models import StructuralUnit
+from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
 
 """"Удалены старые views с использованием джанго рендеринга"""
 """Блок реализации API"""
@@ -2137,7 +2137,8 @@ def UserGroups(request):
     groups_names = []
     for group in request.user.groups.all():
         groups_names.append(group.name)
-    if UserExpertise.objects.filter(expert=request.user):
+    if UserExpertise.objects.filter(expert=request.user) or \
+            UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"]):
         groups_names.append("expertise_member")
     return Response({"groups": groups_names})
 

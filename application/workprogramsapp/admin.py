@@ -15,7 +15,7 @@ from .models import (
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
     Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
-from .notifications.models import ExpertiseNotification
+from .notifications.models import ExpertiseNotification, UserNotification
 
 from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 
@@ -100,3 +100,4 @@ admin.site.register(UserStructuralUnit)
 admin.site.register(СertificationEvaluationTool)
 
 admin.site.register(ExpertiseNotification)
+admin.site.register(UserNotification)
