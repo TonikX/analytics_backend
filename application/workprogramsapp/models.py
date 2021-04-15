@@ -610,6 +610,7 @@ class WorkProgramInFieldOfStudy(CloneMixin,models.Model):
     work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
                                                                        on_delete=models.CASCADE, related_name="zuns_for_cb")
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
+    #id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
     # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
 
 

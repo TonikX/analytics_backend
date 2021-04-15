@@ -1555,16 +1555,30 @@ class FileUploadAPIView(APIView):
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
+                        wpinfs.id_str_up = int(data['ID_STR_UP'][i])
+                        wpinfs.save()
+                        print('wpinfs', wpinfs.id_str_up)
                     else:
                         wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
                                                            work_program=wp_obj)
+                        wpinfs.id_str_up = int(data['ID_STR_UP'][i])
                         wpinfs.save()
+                        print('wpinfs', wpinfs.id_str_up)
                     # wpchangemdb.work_program.add(wp_obj)
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=mdb,
                                                                              change_type=data['ISOPTION'][i],
                                                                              work_program=wp_obj
                                                                              ).exists():
                     print('exist', wp_obj)
+                    print("ВОТ ТУТ ПРОИСХОДИТ НИЧЕГО!!")
+                    wpinfs = WorkProgramInFieldOfStudy.objects.get(
+                        work_program_change_in_discipline_block_module=WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
+                                                                                                                               change_type=data['ISOPTION'][i],
+                                                                                                                               work_program=wp_obj
+                                                                                                                               ), work_program=wp_obj)
+                    wpinfs.id_str_up = int(data['ID_STR_UP'][i])
+                    wpinfs.save()
+                    print('wpinfs', wpinfs.id_str_up)
 
                 else:
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
@@ -1581,15 +1595,20 @@ class FileUploadAPIView(APIView):
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
+                        wpinfs.id_str_up = int(data['ID_STR_UP'][i])
                         wpinfs.save()
                         print("Нашли рпд в направлении", wpinfs)
+                        print('wpinfs', wpinfs.id_str_up)
                     else:
 
 
                         wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
-                                                               work_program=wp_obj)
+                                                               work_program=wp_obj, id_str_up = int(data['ID_STR_UP'][i]))
                         wpinfs.save()
                         print("Сохранили рпд в направлении", wpinfs)
+                        print('wpinfs', wpinfs.id_str_up)
+
+
                 try:
                     if WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
                                                   # zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
@@ -1611,6 +1630,7 @@ class FileUploadAPIView(APIView):
                         if clone:
                             print ('УДАЛЯЕТСЯ СКЛОНИРОВАННАЯ рпд')
                             wp_obj.delete()
+                            print(wpchangemdb)
                             wpchangemdb.delete()
                 except:
                     pass
