@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 import pandas
 from django.shortcuts import get_object_or_404
@@ -1207,6 +1208,38 @@ def handle_uploaded_csv(file, filename):
     return processed_data
 
 
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, IsRpdDeveloperOrReadOnly))
+def ChangeModulesNames(request):
+    """
+
+    """
+    def format_component(title):
+        sem_num = re.search('\d( ?)семестр', title)
+        ognp_num = re.match('огнп( ?)[1-7]', title.strip(), flags=re.IGNORECASE)
+        p1 = '[^A-Za-zА-Яа-яёЁ]'
+        p2 = ' +'
+        if ognp_num:
+            return ognp_num.group() + " " + re.sub(p2, ' ', re.sub(p1, ' ', title[ognp_num.end():])).strip()
+        if not sem_num:
+            return re.sub(p2, ' ', re.sub(p1, ' ', title)).strip()
+        else:
+            result = re.sub(p1, ' ', title[:sem_num.start()]) + sem_num.group() + re.sub(p1, ' ', title[sem_num.end():])
+            return re.sub(p2, ' ', result).strip()
+    try:
+        modules = DisciplineBlockModule.objects.filter()
+        print(modules)
+        for module in modules:
+            print('-----')
+            print('старое', module.name)
+            module.name = format_component(module.name)
+            module.save()
+            print('новые', module.name)
+        return Response(status=200)
+    except:
+        return Response(status=400)
+
+
 class FileUploadAPIView(APIView):
     """
     API-endpoint для загрузки файла sub_2019_2020_new
@@ -1244,6 +1277,18 @@ class FileUploadAPIView(APIView):
                 else:
                     qualification = 'specialist'
                 print(qualification)
+                def format_component(title):
+                    sem_num = re.search('\d( ?)семестр', title)
+                    ognp_num = re.match('огнп( ?)[1-7]', title.strip(), flags=re.IGNORECASE)
+                    p1 = '[^A-Za-zА-Яа-яёЁ]'
+                    p2 = ' +'
+                    if ognp_num:
+                        return ognp_num.group() + " " + re.sub(p2, ' ', re.sub(p1, ' ', title[ognp_num.end():])).strip()
+                    if not sem_num:
+                        return re.sub(p2, ' ', re.sub(p1, ' ', title)).strip()
+                    else:
+                        result = re.sub(p1, ' ', title[:sem_num.start()]) + sem_num.group() + re.sub(p1, ' ', title[sem_num.end():])
+                        return re.sub(p2, ' ', result).strip()
 
                 credit_units = [0 for i in range(0, 12)]
                 units = data.loc[
@@ -1285,9 +1330,9 @@ class FileUploadAPIView(APIView):
                 #TODO: ОГНП НЕКОРРЕКТНО СООТНОСЯТСЯ
                 wp_list = WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
                                                      zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
-                                                     data['COMPONENT'][i].strip(),
-                                                     zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
-                                                     data['ISOPTION'][i],
+                                                     format_component(data['COMPONENT'][i].strip()),
+                                                     # zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
+                                                     # data['ISOPTION'][i],
                                                      credit_units=",".join(
                                                          map(str, credit_units)),
                                                      discipline_code__iregex=regex).distinct()
@@ -1486,16 +1531,16 @@ class FileUploadAPIView(APIView):
                 print('Блок: ', db)
 
                 try:
-                    o = order[data['COMPONENT'][i].strip()]
+                    o = order[format_component(data['COMPONENT'][i].strip())]
                 except:
-                    order.update({data['COMPONENT'][i].strip(): len(order)})
-                    o = order[data['COMPONENT'][i].strip()]
+                    order.update({format_component(data['COMPONENT'][i].strip()): len(order)})
+                    o = order[format_component(data['COMPONENT'][i].strip())]
 
-                if DisciplineBlockModule.objects.filter(name=data['COMPONENT'][i].strip(),
+                if DisciplineBlockModule.objects.filter(name=format_component(data['COMPONENT'][i].strip()),
                                                         descipline_block=db).exists():
-                    mdb = DisciplineBlockModule.objects.get(name=data['COMPONENT'][i].strip(), descipline_block=db)
+                    mdb = DisciplineBlockModule.objects.get(name=format_component(data['COMPONENT'][i].strip()), descipline_block=db)
                 else:
-                    mdb = DisciplineBlockModule(name=data['COMPONENT'][i].strip(), descipline_block=db,
+                    mdb = DisciplineBlockModule(name=format_component(data['COMPONENT'][i].strip()), descipline_block=db,
                                                 order=o)
                     mdb.save()
 
@@ -1536,16 +1581,19 @@ class FileUploadAPIView(APIView):
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
+                        wpinfs.save()
+                        print("Нашли рпд в направлении", wpinfs)
                     else:
 
 
                         wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
                                                                work_program=wp_obj)
                         wpinfs.save()
+                        print("Сохранили рпд в направлении", wpinfs)
                 try:
                     if WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
-                                                  zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
-                                                  data['COMPONENT'][i].strip(),
+                                                  # zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
+                                                  # format_component(data['COMPONENT'][i].strip()),
                                                   # zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
                                                   # data['ISOPTION'][i],
                                                   zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module= mdb,
