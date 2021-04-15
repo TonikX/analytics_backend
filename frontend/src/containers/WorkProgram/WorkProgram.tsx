@@ -197,7 +197,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         {canSendToArchive && <Button onClick={this.handleSendToArchive}>Отправить в архив</Button>}
 
                         {canSendToExpertise &&
-                            (validateErrors ?
+                            (validateErrors.length ?
                                 <Tooltip title={<div className={classes.tooltip}> Исправьте ошибки, прежде чем отправлять на эспертизу: <br/> {validateErrors.map((item, index) => <>{index  + 1}. {item} <br /></>)} </div>}>
                                     <Button>
                                         Отправить на экспертизу
@@ -259,7 +259,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                                     {...(isOpenComments ? {timeout: 300} : {})}
                                 >
                                     <Paper className={classes.comments}>
-                                        <Comments currentStep={this.getCurrentStep()} />
+                                        <Comments currentStep={this.getCurrentStep()} closeComments={this.handleClickOnComments} />
                                     </Paper>
                                 </Grow>
                                 <Fab color="secondary"

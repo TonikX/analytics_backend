@@ -7,4 +7,5 @@ export interface CommentsProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
     workProgramExpertiseId: number;
     comments: Array<CommentType>;
+    closeComments: Function;
 }

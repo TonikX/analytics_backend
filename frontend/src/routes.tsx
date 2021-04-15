@@ -43,6 +43,7 @@ import ForbiddenPage from "./containers/ForbiddenPage";
 import SelectDiscipline from "./containers/SelectDiscipline";
 import SelectEducationalProgram from './containers/SelectEducationalProgram';
 import IndividualTrajectories from './containers/IndividualTrajectories';
+import IndividualEducationalPlans from './containers/IndividualEducationalPlans';
 
 import ProfessionalStandards from './containers/ProfessionalStandards';
 import StructuralUnits from './containers/StructuralUnits';
@@ -90,6 +91,9 @@ export default () => (
             </AuthRoute>
             <AuthRoute path={routerService.getIndividualTrajectoriesRoute()}>
                 <IndividualTrajectories />
+            </AuthRoute>
+            <AuthRoute path={routerService.getIndividualEducationalPlansRoute()}>
+                <IndividualEducationalPlans />
             </AuthRoute>
             <AuthRoute path={routerService.getSelectEducationalProgramRoute()}>
                 <SelectEducationalProgram />

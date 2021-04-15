@@ -24,6 +24,7 @@ const SKILLS = 'skills';
 const EXPERTISES = 'expertises';
 const SELECT_EDUCATIONAL_PROGRAM = 'select-educational-program';
 const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
+const INDIVIDUAL_EDUCATIONAL_PLANS = 'individual-educational-plans';
 const PROFESSIONAL_STANDARDS = 'professional-standards';
 const STRUCTURAL_UNITS = 'structural-units';
 
@@ -145,6 +146,10 @@ export default class RouterService {
 
     getIndividualTrajectoriesRoute = () => {
         return SEPARATOR + INDIVIDUAL_TRAJECTORIES;
+    };
+
+    getIndividualEducationalPlansRoute = () => {
+        return SEPARATOR + INDIVIDUAL_EDUCATIONAL_PLANS;
     };
 
     getSkillsRolesRoute = () => {
