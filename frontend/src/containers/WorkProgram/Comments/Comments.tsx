@@ -52,6 +52,7 @@ class Comments extends React.Component<CommentsProps> {
         this.setState({
             commentText: ''
         });
+        this.props.closeComments();
     }
 
     render() {

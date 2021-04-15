@@ -22,6 +22,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 
 import AddIcon from "@material-ui/icons/Add";
+import CreateIcon from "@material-ui/icons/NoteAddOutlined";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
@@ -243,7 +244,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
 
                                                     <MenuItem className={classes.menuLinkItem}>
                                                         <div onClick={this.handleCreatePlan(plan[EducationalPlanFields.ID])}>
-                                                            <EyeIcon className={classes.menuIcon}/>
+                                                            <CreateIcon className={classes.menuIcon}/>
                                                             Создать индивидуальный <br /> учебный план
                                                         </div>
                                                     </MenuItem>
