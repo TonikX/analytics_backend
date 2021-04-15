@@ -1513,12 +1513,13 @@ class FileUploadAPIView(APIView):
                     iap_obj=ImplementationAcademicPlan.objects.get(academic_plan=ap_obj, field_of_study=fs_obj,
                                                               year=data['YEAR'][i])
                     iap_obj.op_isu_id=int(data['OP_ID'][i])
+                    iap_obj.ns_id = int(data['NS_ID'][i])
                     iap_obj.save()
                     # OP_ID - образовательная программа
                     print('ImplementationAcademicPlan exist')
                 else:
                     iap_obj = ImplementationAcademicPlan(academic_plan=ap_obj, field_of_study=fs_obj,
-                                                         year=data['YEAR'][i], op_isu_id=int(data['OP_ID'][i]))
+                                                         year=data['YEAR'][i], op_isu_id=int(data['OP_ID'][i]), ns_id = int(data['NS_ID'][i]))
                     iap_obj.save()
                 print('Связь учебного плана и направления: done')
 
