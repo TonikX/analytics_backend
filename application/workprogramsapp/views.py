@@ -1333,9 +1333,10 @@ class FileUploadAPIView(APIView):
                                                      format_component(data['COMPONENT'][i].strip()),
                                                      # zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
                                                      # data['ISOPTION'][i],
-                                                     credit_units=",".join(
-                                                         map(str, credit_units)),
-                                                     discipline_code__iregex=regex).distinct()
+                                                     # credit_units=",".join(
+                                                     #     map(str, credit_units)),
+                                                     discipline_code__iregex=regex
+                                                     ).distinct()
                 print('Найдена РПД: ', wp_list)
                 #print(WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip()))
                 if wp_list.exists():
