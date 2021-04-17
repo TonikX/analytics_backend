@@ -50,7 +50,6 @@ export interface EducationalPlanActions {
     setIsTrajectoryRoute: any;
     planTrajectorySetUserData: any;
     planTrajectorySetDirection: any;
-    createIndividualEducationalPlan: any;
 }
 
 export interface educationalPlanState {

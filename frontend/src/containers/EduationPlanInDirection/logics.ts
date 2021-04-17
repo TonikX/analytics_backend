@@ -8,6 +8,7 @@ import Service from './service';
 
 import {fetchingTypes} from "./enum";
 import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {appRouter} from "../../service/router-service";
 
 const service = new Service();
 
@@ -114,9 +115,32 @@ const changeEducationalPlanInDirection = createLogic({
     }
 });
 
+const createIndividualEducationalPlan = createLogic({
+    type: educationalPlanActions.createIndividualEducationalPlan.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_INDIVIDUAL_EDUCATIONAL_PLAN}));
+
+        service.createIndividualEducationalPlan(action.payload)
+            .then((res: any) => {
+                window.location.href = appRouter.getTrajectoryPlanDetailLink(res.data.id);
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_INDIVIDUAL_EDUCATIONAL_PLAN}));
+                return done();
+            });
+    }
+});
+
 export default [
     getEducationalPlansInDirection,
     deleteEducationalPlanInDirection,
     createNewEducationalPlanInDirection,
     changeEducationalPlanInDirection,
+    createIndividualEducationalPlan,
 ];

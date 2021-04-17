@@ -7,7 +7,7 @@ import SignIn from './containers/SignIn';
 import SignUp from './containers/SignUp';
 import WorkProgram from './containers/WorkProgram';
 import Courses from './containers/Courses';
-import { Course } from './containers/Course/Course';
+import Course from './containers/Course';
 import SubjectArea from './containers/SubjectArea';
 import Prerequisites from './containers/TrainingEntities';
 import Competences from './containers/Competences';
@@ -60,6 +60,13 @@ export default () => (
         <Layout>
             <Switch>
             <Redirect exact from="/" to={routerService.getEducationPlanRoute()} />
+
+            <AuthRoute path={routerService.getCoursesRoute()}>
+                <Courses />
+            </AuthRoute>
+            <AuthRoute path={routerService.getCourseRoute()}>
+                <Course />
+            </AuthRoute>
 
             <AuthRoute path={routerService.getTrajectoryPlanDetailRoute()}
                        children={() => (

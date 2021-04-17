@@ -8,6 +8,7 @@ import {DirectionType} from "../Direction/types";
 import {ReactText} from "react";
 
 export interface EducationalPlanInDirectionActions {
+    createIndividualEducationalPlan: any;
     changeSearchQuery: any;
     getEducationalPlansInDirection: any;
     setEducationalPlansInDirection: any;

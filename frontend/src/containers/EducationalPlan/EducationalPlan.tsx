@@ -22,7 +22,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 
 import AddIcon from "@material-ui/icons/Add";
-import CreateIcon from "@material-ui/icons/NoteAddOutlined";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
@@ -126,10 +125,6 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
     handleCloseMenu = () => {
         this.setState({anchorsEl: {}});
     };
-
-    handleCreatePlan = (id: number) => () => {
-        this.props.actions.createIndividualEducationalPlan(id);
-    }
 
     render() {
         const {classes, educationalPlan, allCount, currentPage, sortingField, sortingMode, canAddNewPlan} = this.props;
@@ -240,13 +235,6 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                             <EyeIcon className={classes.menuIcon}/>
                                                             Смотреть детально
                                                         </Link>
-                                                    </MenuItem>
-
-                                                    <MenuItem className={classes.menuLinkItem}>
-                                                        <div onClick={this.handleCreatePlan(plan[EducationalPlanFields.ID])}>
-                                                            <CreateIcon className={classes.menuIcon}/>
-                                                            Создать индивидуальный <br /> учебный план
-                                                        </div>
                                                     </MenuItem>
 
                                                     {plan[EducationalPlanFields.CAN_EDIT] &&
