@@ -39,7 +39,7 @@ ognp_module = {
     "7": "факультетский модуль",
     "8": "цифровая культура в предметной области мегафакультета",
     "9": "профессиональный модуль",
-    "10": "практика",
+    "10": "практики",
     "11": "гиа",
     "12": "фундаментальный модуль по огнп",
     "13": "неизвестный модуль"
@@ -390,6 +390,7 @@ def generate_df_w_unique_code(in_df, sys_df=None):
     in_df["SEM_INFO"] = "default"
     for i in in_df.index.values:
         in_df.loc[i, "SEM_INFO"] = totalUnitInfo(in_df, in_df["SUBFIELDNAME"][i], in_df["SUBJECT"][i], in_df["COMPONENT"][i], in_df["SUBJECT_CODE"][i], in_df["CYCLE"][i], in_df["YEAR"][i])
+        print(in_df["COMPONENT"][i])
         in_df.loc[i, "DIS_CODE"] = getPos123(in_df["DEGREE"][i], in_df["COMPONENT"][i], in_df["OGNP_ID"][i], str(i + 2) + " ")
         if (in_df["SUBFIELDNAME"][i] == "Разработка программного обеспечения / Software Engineering") and (in_df["DIS_CODE"][i].split(".")[2] in ["5", "6"]):
             p34 = softwareEngineering(sys_df.loc[sys_df["DIS_CODE"].str.match(in_df.loc[i, "DIS_CODE"][:-2])], in_df.loc[i, "SEM_INFO"], in_df["DIS_CODE"][i], in_df["SUBJECT"][i],
