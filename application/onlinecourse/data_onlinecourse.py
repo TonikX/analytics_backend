@@ -7,7 +7,6 @@ environ.Env.read_env()  # reading .env file
 
 cert_cert = env('CERT')
 cert_key = env('KEY')
-print(cert_cert, cert_key)
 
 
 def get_data():

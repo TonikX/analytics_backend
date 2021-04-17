@@ -17,6 +17,7 @@ from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgr
 from .serializers import IndividualImplementationAcademicPlanSerializer,CreateIndividualImplementationAcademicPlanSerializer,\
     ShortIndividualImplementationAcademicPlanSerializer, WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer, \
     DisciplineBlockModuleInDisciplineBlockSerializer, ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
+   # CreateElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
 from ..folders_ans_statistic.models import IndividualImplementationAcademicPlanInFolder
 
 
@@ -169,3 +170,19 @@ class ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSet(viewsets.
     queryset = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.all()
     serializer_class = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+
+
+class ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
+    serializer_class = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
+    queryset = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['description']
+    #permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def post(self, request):
+        for data in request.data['electives']:
+            serializer = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

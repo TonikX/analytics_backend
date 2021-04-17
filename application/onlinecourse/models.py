@@ -75,7 +75,7 @@ class OnlineCourse(models.Model):
     credits = models.FloatField(blank=True, null=True, verbose_name='Трудоемкость курса в з.е.')
     requirements = models.TextField(verbose_name='Требования', blank=True, null=True)
     competences = models.TextField(verbose_name='Компетенции', blank=True, null=True)
-    learning_outcome = models.TextField(verbose_name='Компетенции', blank=True, null=True)
+    learning_outcome = models.TextField(verbose_name='Результаты', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Онлайн курс'
