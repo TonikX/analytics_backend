@@ -8,15 +8,17 @@ from .individualization.models import IndividualImplementationAcademicPlan, \
 from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
     Competence, Indicator, EvaluationTool, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
-    RouteComposition, Route, Certification, OnlineCourse, BibliographicReference, AcademicPlan,
+    RouteComposition, Route, Certification, BibliographicReference, AcademicPlan,
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,
-    СertificationEvaluationTool
+    СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
+    OnlineCourse
 )
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
     Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
+from .notifications.models import ExpertiseNotification, UserNotification
 
-from .workprogram_additions.models import AdditionalMaterial, StructuralUnit
+from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 
 from .educational_program.pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
     PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
@@ -26,6 +28,7 @@ from .educational_program.key_competences.models import GroupOfKeyCompetencesInG
     KeyCompetencesInGroupOfGeneralCharacteristic, IndicatorInKeyCompetenceInGeneralCharacteristic
 from .educational_program.general_prof_competencies.models import GroupOfGeneralProfCompetencesInGeneralCharacteristic, \
     GeneralProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
+from .individualization.models import ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 
 
 admin.site.register(GroupOfPkCompetencesInGeneralCharacteristic)
@@ -62,7 +65,6 @@ admin.site.register(Topic)
 admin.site.register(RouteComposition)
 admin.site.register(Route)
 admin.site.register(Certification)
-admin.site.register(OnlineCourse)
 admin.site.register(BibliographicReference)
 admin.site.register(AcademicPlan)
 admin.site.register(DisciplineBlock)
@@ -94,5 +96,11 @@ admin.site.register(WorkProgramInWorkProgramChangeInDisciplineBlockModule)
 admin.site.register(DisciplineBlockModuleInDisciplineBlock)
 
 admin.site.register(StructuralUnit)
+admin.site.register(UserStructuralUnit)
 
 admin.site.register(СertificationEvaluationTool)
+admin.site.register(ExpertiseNotification)
+admin.site.register(UserNotification)
+admin.site.register(CourseCredit)
+admin.site.register(CourseFieldOfStudy)
+admin.site.register(ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule)

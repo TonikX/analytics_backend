@@ -3,6 +3,7 @@ from rest_framework import permissions
 from workprogramsapp.expertise.models import UserExpertise
 from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder, \
     AcademicPlanInFolder, DisciplineBlockModuleInFolder, IndividualImplementationAcademicPlanInFolder
+from workprogramsapp.workprogram_additions.models import UserStructuralUnit
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -61,7 +62,15 @@ class IsAcademicPlanDeveloper(permissions.BasePermission):
 
 class IsExpertiseMaster(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.groups.filter(name="expertise_master")
+        if request.user.groups.filter(name="expertise_master"):
+            return True
+        if 'pk' in dict(view.kwargs):
+            return (UserExpertise.objects.filter(
+                        expertise__work_program__structural_unit__user_in_structural_unit__user=request.user,
+                        expertise__work_program__structural_unit__user_in_structural_unit__status__in=["leader",
+                                                                                                       "deputy"],
+                        expertise=view.kwargs['pk']))
+        return UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"])
 
 
 class IsMemberOfExpertise(permissions.BasePermission):
@@ -69,9 +78,15 @@ class IsMemberOfExpertise(permissions.BasePermission):
         if request.user.groups.filter(name="expertise_master"):
             return True
         if 'pk' in dict(view.kwargs):
-            return UserExpertise.objects.filter(expert=request.user, expertise=view.kwargs['pk'])
+            return (UserExpertise.objects.filter(expert=request.user, expertise=view.kwargs['pk']) or
+                    UserExpertise.objects.filter(
+                        expertise__work_program__structural_unit__user_in_structural_unit__user=request.user,
+                        expertise__work_program__structural_unit__user_in_structural_unit__status__in=["leader",
+                                                                                                       "deputy"],
+                        expertise=view.kwargs['pk']))
         else:
-            return UserExpertise.objects.filter(expert=request.user)
+            return (UserExpertise.objects.filter(expert=request.user) or
+                    UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"]))
 
 
 class IsWorkProgramMemberOfExpertise(permissions.BasePermission):
@@ -89,9 +104,15 @@ class IsMemberOfUserExpertise(permissions.BasePermission):
         if request.user.groups.filter(name="expertise_master"):
             return True
         if 'pk' in dict(view.kwargs):
-            return UserExpertise.objects.filter(expert=request.user, pk=view.kwargs['pk'])
+            return (UserExpertise.objects.filter(expert=request.user, pk=view.kwargs['pk']) or
+                    UserExpertise.objects.filter(
+                        expertise__work_program__structural_unit__user_in_structural_unit__user=request.user,
+                        expertise__work_program__structural_unit__user_in_structural_unit__status__in=["leader",
+                                                                                                       "deputy"],
+                        pk=view.kwargs['pk']))
         else:
-            return UserExpertise.objects.filter(expert=request.user)
+            return (UserExpertise.objects.filter(expert=request.user) or
+                    UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"]))
 
 
 class IsOwnerOfFolder(permissions.BasePermission):
@@ -110,7 +131,6 @@ class IsOwnerOfFolderWithWorkProgramm(permissions.BasePermission):
             return True
 
 
-
 class IsOwnerOfFolderWithAcademicPlan(permissions.BasePermission):
     def has_permission(self, request, view):
         if 'pk' in dict(view.kwargs):
@@ -120,16 +140,16 @@ class IsOwnerOfFolderWithAcademicPlan(permissions.BasePermission):
         except KeyError:
             return True
 
+
 class IsOwnerOfFolderWithIndividualImplementationAcademicPlan(permissions.BasePermission):
     def has_permission(self, request, view):
         if 'pk' in dict(view.kwargs):
-            return IndividualImplementationAcademicPlanInFolder.objects.filter(pk=view.kwargs['pk'], folder__owner=request.user)
+            return IndividualImplementationAcademicPlanInFolder.objects.filter(pk=view.kwargs['pk'],
+                                                                               folder__owner=request.user)
         try:
             return Folder.objects.filter(owner=request.user, pk=request.data['folder'])
         except KeyError:
             return True
-
-
 
 
 class IsOwnerOfFolderWithDisciplineBlockModule(permissions.BasePermission):

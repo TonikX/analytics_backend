@@ -9,13 +9,15 @@ from .educational_program.views import DepartmentCreateAPIView, DepartmentListAP
 
 from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView, UserExpertiseListView, \
     ExpertiseCommentsView, ChangeUserExpertiseView, \
-    ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById
+    ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById, \
+    DeleteUserExpertise
 from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, DeleteFolderView, \
     CreateFolderView, EditFolderView, AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
     AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, \
     ModuleInFolderView, AddToFolderModuleView, \
     RemoveFromFolderModuleView, IndividualImplementationAcademicPlanInFolderView, \
     AddToFolderndividualImplementationAcademicPlanView, RemoveFromFolderImplementationAcademicPlanView
+from .notifications.views import NotificationListView
 from .op_slection.views import CreateProfessionByKeywords
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, \
     ProfessionUpdateView, ItemWithProfessions, ItemWithRoles, ProfessionsListWithoutPaginationApi
@@ -31,7 +33,7 @@ from .views import BibliographicReferenceListCreateAPIView, BibliographicReferen
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
     BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
-    FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView, CompetenceCreateView, CompetencesListView, \
+    FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, \
     FileUploadWorkProgramOutcomesAPIView
 from .views import CloneWorkProgramm
 from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, \
@@ -41,8 +43,7 @@ from .views import ImplementationAcademicPlanDetailsView, ImplementationAcademic
     ImplementationAcademicPlanUpdateView, ImplementationAcademicPlanListAPIView
 from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, \
     IndicatorUpdateView
-from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, \
-    OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
+from .views import NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, \
     PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
@@ -64,10 +65,10 @@ from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSec
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
 from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateView
-from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
+from .views import NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
-    FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView, CompetenceCreateView, CompetencesListView, FileUploadWorkProgramOutcomesAPIView
+    FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, FileUploadWorkProgramOutcomesAPIView
 from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, IndicatorUpdateView
 from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlanDetailsView, ImplementationAcademicPlanDestroyView, ImplementationAcademicPlanUpdateView, ImplementationAcademicPlanListAPIView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
@@ -179,13 +180,6 @@ urlpatterns = [
     path('api/fieldofstudy/', FieldOfStudyListCreateView.as_view()),
     path('api/fieldofstudy/<int:pk>', FieldOfStudyDetailUpdateDeleteView.as_view()),
 
-    # Онлайн курс
-    path('api/onlinecourse', OnlineCourseListCreateAPIView.as_view()),
-    path('api/onlinecourse/create', OnlineCourseListCreateAPIView.as_view()),
-    path('api/onlinecourse/detail/<int:pk>', OnlineCourseDetailsView.as_view()),
-    path('api/onlinecourse/delete/<int:pk>', OnlineCourseDestroyView.as_view()),
-    path('api/onlinecourse/update/<int:pk>', OnlineCourseUpdateView.as_view()),
-
     # Библиографическая ссылка
     path('api/BibliographicReference', BibliographicReferenceListCreateAPIView.as_view()),
     path('api/BibliographicReference/create', BibliographicReferenceListCreateAPIView.as_view()),
@@ -198,7 +192,6 @@ urlpatterns = [
     # Работа с файлами (загрузка/экспорт)
     path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
     path('api/upload/wpwithoutcomes', FileUploadWorkProgramOutcomesAPIView.as_view()),
-    path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
     path('api/upload/csv', FileUploadAPIView.as_view()),
     path('api/export/docx', DocxFileExportView.as_view()),
     # path('api/export/docx2', DocxFileExportOldView.as_view()),
@@ -255,6 +248,9 @@ urlpatterns = [
     path('api/expertise/user', UserExpertiseListView.as_view()),
     path('api/expertise/user_with_expertise/<int:pk>', UserExpertiseListView.as_view()),
     path('api/expertise/user/create', UserExpertiseCreateView.as_view()),
+    path('api/expertise/user/delete/<int:pk>', DeleteUserExpertise.as_view()),
+
+
     path('api/expertise/comments/<int:pk>', ExpertiseCommentsView.as_view()),
     path('api/expertise/comments/create', ExpertiseCommentCreateView.as_view()),
     path('api/expertise/create', ExpertiseCreateView.as_view()),
@@ -336,5 +332,9 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.workprogram_additions.urls')),
 
     url(r'^', include('workprogramsapp.individualization.urls')),
+
+    # Нотификации
+    path('api/notifications/list', NotificationListView.as_view()),
+
 
 ]
