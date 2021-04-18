@@ -17,7 +17,8 @@ export interface courseState extends CourseType {
   [fields.FINISHED_AT]: string | null,
   [fields.FIELDS_OF_STUDY]: Array<fieldOfStudyType>,
   [fields.REQUIREMENTS]: string | null,
-  [fields.OUTCOMES]: Array<outcomeType>,
+  [fields.OUTCOMES]: string | null,
+  [fields.OUTCOMES_LIST]: Array<outcomeType>,
   [fields.WORK_PROGRAMS]: Array<wpType>,
 }
 

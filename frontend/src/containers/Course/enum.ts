@@ -36,7 +36,8 @@ export enum fields {
   FINISHED_AT = 'finished_at',
   FIELDS_OF_STUDY = 'course_field_of_study',
   REQUIREMENTS = 'requirements',
-  OUTCOMES = 'course_learning_outcome',
+  OUTCOMES = 'learning_outcome',
+  OUTCOMES_LIST = 'learning_outcome_list',
   WORK_PROGRAMS = 'course_workprogram',
 }
 

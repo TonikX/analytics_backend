@@ -31,7 +31,8 @@ export const initialState: courseState = {
   [fields.FINISHED_AT]: null,
   [fields.FIELDS_OF_STUDY]: [],
   [fields.REQUIREMENTS]: null,
-  [fields.OUTCOMES]: [],
+  [fields.OUTCOMES]: null,
+  [fields.OUTCOMES_LIST]: [],
   [fields.WORK_PROGRAMS]: [],
 };
 

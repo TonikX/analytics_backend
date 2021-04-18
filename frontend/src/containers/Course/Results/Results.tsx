@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import Scrollbars from 'react-custom-scrollbars'
 import Typography from '@material-ui/core/Typography'
 
 import { useStyles } from './Results.styles'
@@ -17,13 +16,7 @@ export const Results:React.FC = () => {
   return (
     <div>
       <Typography className={classes.title}>Результаты</Typography>
-      <Scrollbars style={{height: 'calc(100vh - 300px)'}}>
-        {outcomes.map((outcome: outcomeType) => (
-        <div className={classes.item}>
-          <Typography style={{width: '80%'}}>{outcome[outcomeFields.LEARNING_OUTCOME]}</Typography>
-        </div>
-        ))}
-      </Scrollbars>
+      <Typography>{outcomes}</Typography>
     </div>
   )
 }
