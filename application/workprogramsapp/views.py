@@ -875,32 +875,6 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
 # Блок эндпоинтов рабочей программы
 
 
-class OnlineCourseListCreateAPIView(generics.ListCreateAPIView):
-    serializer_class = OnlineCourseSerializer
-    queryset = OnlineCourse.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'platform']
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class OnlineCourseDestroyView(generics.DestroyAPIView):
-    queryset = OnlineCourse.objects.all()
-    serializer_class = OnlineCourseSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class OnlineCourseUpdateView(generics.UpdateAPIView):
-    queryset = OnlineCourse.objects.all()
-    serializer_class = OnlineCourseSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class OnlineCourseDetailsView(generics.RetrieveAPIView):
-    queryset = OnlineCourse.objects.all()
-    serializer_class = OnlineCourseSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
 class BibliographicReferenceListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = BibliographicReferenceSerializer
     queryset = BibliographicReference.objects.all()
@@ -1332,9 +1306,10 @@ class FileUploadAPIView(APIView):
                                                      format_component(data['COMPONENT'][i].strip()),
                                                      # zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
                                                      # data['ISOPTION'][i],
-                                                     credit_units=",".join(
-                                                         map(str, credit_units)),
-                                                     discipline_code__iregex=regex).distinct()
+                                                     # credit_units=",".join(
+                                                     #     map(str, credit_units)),
+                                                     discipline_code__iregex=regex
+                                                     ).distinct()
                 print('Найдена РПД: ', wp_list)
                 #print(WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip()))
                 if wp_list.exists():

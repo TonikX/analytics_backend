@@ -12,6 +12,9 @@ from workprogramsapp.models import ImplementationAcademicPlan
 from workprogramsapp.serializers import AcademicPlanSerializer, FieldOfStudyImplementationSerializer, AcademicPlanInImplementationSerializer, AcademicPlanForRepresentationSerializer
 from dataprocessing.serializers import userProfileSerializer
 
+from django.db import transaction
+from rest_framework.response import Response
+
 
 class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     academic_plan = AcademicPlanSerializer()

@@ -1,6 +1,6 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {createStyles, makeStyles, Theme} from "@material-ui/core";
 
-export default (theme: Theme) => createStyles({
+export default makeStyles((theme: Theme) => createStyles({
     tableWrap: {
         height: 'calc(100% - 60px)',
         maxheight: 'calc(100% - 60px)',
@@ -107,4 +107,4 @@ export default (theme: Theme) => createStyles({
     trajectoryOwner: {
         marginBottom: '10px'
     }
-});
+}));

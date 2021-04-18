@@ -1,7 +1,16 @@
 from rest_framework import serializers
-from workprogramsapp.serializers import FieldOfStudySerializer
 
-from .models import Institution, Platform, OnlineCourse, CourseCredit, CourseFieldOfStudy
+from .models import Institution, Platform, OnlineCourse
+from workprogramsapp.models import CourseCredit, CourseFieldOfStudy, FieldOfStudy
+
+
+class FieldOfStudySerializer(serializers.ModelSerializer):
+    """
+        Сериализатор образовательных программ (направлений)
+    """
+    class Meta:
+        model = FieldOfStudy
+        fields = "__all__"
 
 
 class InstitutionSerializer(serializers.ModelSerializer):

@@ -153,3 +153,5 @@ export const Course: React.FC = () => {
     </div>
   )
 }
+
+export default Course

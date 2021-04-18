@@ -8,7 +8,7 @@ from model_clone import CloneMixin
 from django.contrib.postgres.fields import ArrayField
 
 from dataprocessing.models import Items
-
+from onlinecourse.models import OnlineCourse, Institution
 '''
 class FieldOfStudyWorkProgram(models.Model):
 
@@ -31,7 +31,7 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
-class WorkProgram(CloneMixin, models.Model):
+class WorkProgram(models.Model):
     '''
     Модель для рабочей программы
     '''
@@ -197,7 +197,7 @@ class PrerequisitesOfWorkProgram(models.Model):
     #     return self.item
 
 
-class OutcomesOfWorkProgram(CloneMixin, models.Model):
+class OutcomesOfWorkProgram(models.Model):
     '''
     Модель для результатов обучения по рабочей программе
     '''
@@ -274,6 +274,34 @@ class FieldOfStudy(models.Model):
 
     def __str__(self):
         return self.number
+
+
+class CourseFieldOfStudy(models.Model):
+    """
+    Модель для связи онлайн курса и направления подготовки
+    """
+    course = models.ForeignKey(OnlineCourse, on_delete=models.CASCADE, verbose_name="Онлайн курс", blank=False,
+                               null=False, related_name="course_field_of_study")
+    field_of_study = models.ForeignKey(FieldOfStudy, on_delete=models.CASCADE, verbose_name='Направление подготовки')
+
+    class Meta:
+        verbose_name = 'Онлайн курс и направления подготовки'
+        verbose_name_plural = 'Онлайн курсы и направления подготовки'
+
+
+class CourseCredit(models.Model):
+    """
+    Модель для связи онлайн курса, направления подготовки и  перезачета
+    """
+    course = models.ForeignKey(OnlineCourse, on_delete=models.CASCADE, verbose_name="Онлайн курс", blank=False,
+                               null=False, related_name="course_credit")
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, verbose_name="Правообладатель", blank=False,
+                                    null=False)
+    field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE, verbose_name='Направление подготовки')
+
+    class Meta:
+        verbose_name = 'Перезачет'
+        verbose_name_plural = 'Перезачеты'
 
 
 # class CompetenceIndicator(models.Model):
@@ -465,11 +493,12 @@ class ImplementationAcademicPlan(models.Model):
     op_isu_id = models.PositiveIntegerField(verbose_name = "ID ОП в ИСУ", blank=True, null=True)
     ns_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
 
+
     def __str__(self):
         return str(self.academic_plan)
 
 
-class DisciplineBlock(CloneMixin, models.Model):
+class DisciplineBlock(models.Model):
     '''
     Модель блока дисциплин
     '''
@@ -511,7 +540,7 @@ class DisciplineBlock(CloneMixin, models.Model):
 #         return (str(self.name) + str(self.descipline_block))
 
 
-class DisciplineBlockModule(CloneMixin, models.Model):
+class DisciplineBlockModule(models.Model):
     '''
     Модель модуля блока дисциплин
     '''
@@ -563,7 +592,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         return clone_module
 
 
-class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
+class WorkProgramChangeInDisciplineBlockModule(models.Model):
     '''
     Модель хранения блоков выбора в модуле
     '''
@@ -608,7 +637,7 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
         return (str(self.discipline_block_module) + str(self.work_program))
 
 
-class WorkProgramInFieldOfStudy(CloneMixin,models.Model):
+class WorkProgramInFieldOfStudy(models.Model):
     work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
                                                                        on_delete=models.CASCADE, related_name="zuns_for_cb")
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
@@ -677,7 +706,7 @@ class Indicator(models.Model):
         return self.name
 
 
-class EvaluationTool(CloneMixin,models.Model):
+class EvaluationTool(models.Model):
     '''
     Модель для оценочных средств
     '''
@@ -718,7 +747,7 @@ class СertificationEvaluationTool(CloneMixin, models.Model):
         return self.name
 
 
-class DisciplineSection(CloneMixin,models.Model):
+class DisciplineSection(models.Model):
     '''
     Модель для разделов дисциплин
     '''
@@ -783,16 +812,6 @@ class DisciplineSection(CloneMixin,models.Model):
         ordering = ['ordinal_number']
 
 
-class OnlineCourse(models.Model):
-    '''
-    Модель описания онлайн курса
-    '''
-    title = models.CharField(max_length=512, verbose_name="Название курсу")
-    platform = models.CharField(max_length=512, verbose_name="Платформа", blank=True, null=True)
-    description = models.CharField(max_length=50000, verbose_name="Описание", blank=True, null=True)
-    course_url = models.URLField(verbose_name="Ссылка на курс")
-
-
 class BibliographicReference(models.Model):
     '''
     Модель описания онлайн курса
@@ -801,7 +820,7 @@ class BibliographicReference(models.Model):
     # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
 
-class Topic(CloneMixin,models.Model):
+class Topic(models.Model):
     '''
     Модель для темы
     '''
@@ -810,7 +829,7 @@ class Topic(CloneMixin,models.Model):
     number = models.IntegerField(max_length=1024, verbose_name="номер темы в разделе")
     description = models.CharField(max_length=1024, verbose_name="Описание", blank=True, null=True)
     # online_course = models.CharField(max_length=1024, verbose_name = "Реализация раздела дисциплины с помощью онлайн-курса", blank = True, null = True)
-    url_online_course = models.ForeignKey('OnlineCourse', on_delete=models.CASCADE, verbose_name='Онлайн курс',
+    url_online_course = models.ForeignKey(OnlineCourse, on_delete=models.CASCADE, verbose_name='Онлайн курс',
                                           blank=True, null=True, related_name='topic_with_online_course')
 
     def new_ordinal_number(topic, new_ordinal_number):

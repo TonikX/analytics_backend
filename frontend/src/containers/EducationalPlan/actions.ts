@@ -55,10 +55,7 @@ const pageDown = createAction('EDUCATIONAL_PLAN_PAGE_DOWN');
 const planTrajectorySetUserData = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SET_USER_DATA');
 const planTrajectorySetDirection = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SET_DIRECTION');
 
-const createIndividualEducationalPlan = createAction('CREATE_INDIVIDUAL_EDUCATIONAL_PLAN');
-
 const actions: EducationalPlanActions = {
-    createIndividualEducationalPlan,
     openAddModuleDialog,
     closeAddModuleDialog,
     pageDown,
