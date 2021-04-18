@@ -35,7 +35,8 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                             <TableRow>
                                 <TableCell className={classes.header}>Учебный план</TableCell>
                                 <TableCell className={classes.header}>Направление</TableCell>
-                                <TableCell className={classes.header}>Квалификация</TableCell>
+                                <TableCell className={classes.header}>Уровень образования</TableCell>
+                                <TableCell className={classes.header}>Год набора</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -53,6 +54,9 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                                         </TableCell>
                                         <TableCell>
                                             {specializationObject[get(direction, ['field_of_study', DirectionFields.QUALIFICATION])]}
+                                        </TableCell>
+                                        <TableCell>
+                                            {get(direction, 'year')}
                                         </TableCell>
                                     </TableRow>
                                 )

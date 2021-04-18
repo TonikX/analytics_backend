@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import classNames from 'classnames';
@@ -16,6 +16,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -24,6 +26,8 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import CreateIcon from "@material-ui/icons/NoteAddOutlined";
+import SettingsIcon from "@material-ui/icons/MoreVert";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -40,11 +44,11 @@ import {EducationalPlanInDirectionProps, EducationalPlanInDirectionType} from '.
 
 import connect from './EducationPlanInDirection.connect';
 import styles from './EducationPlanInDirection.styles';
-import {specializationObject} from "../WorkProgram/constants";
 
 class EducationPlanInDirection extends React.Component<EducationalPlanInDirectionProps> {
     state = {
-        deleteConfirmId: null
+        deleteConfirmId: null,
+        anchorsEl: {}
     }
 
     componentDidMount() {
@@ -98,14 +102,31 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
         this.props.actions.getEducationalPlansInDirection();
     }
 
+    handleMenu = (id: number) => (event: SyntheticEvent): void => {
+        this.setState({
+            anchorsEl: {
+                [id]: event.currentTarget
+            }
+        });
+    };
+
+    handleCloseMenu = () => {
+        this.setState({anchorsEl: {}});
+    };
+
+    handleCreatePlan = (id: number) => () => {
+        this.props.actions.createIndividualEducationalPlan(id);
+        this.handleCloseMenu();
+    };
+
     render() {
         const {classes, educationalPlansInDirection, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
-        const {deleteConfirmId} = this.state;
+        const {deleteConfirmId, anchorsEl} = this.state;
 
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Реализация учебного плана в направлении
+                    Образовательные программы
 
                     <TextField placeholder="Поиск"
                                variant="outlined"
@@ -148,6 +169,9 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                                        mode={sortingField === EducationPlanInDirectionFields.YEAR ? sortingMode : ''}
                                         />
                                     </TableCell>
+                                    <TableCell>
+                                        Реализатор
+                                    </TableCell>
                                     {canEdit && <TableCell />}
                                 </TableRow>
                             </TableHead>
@@ -157,7 +181,7 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                               className={classNames({[classes.bigRow]: !canEdit})}
                                     >
                                         <TableCell>
-                                            {specializationObject[educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.TITLE]]}
+                                            {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.TITLE]}
                                         </TableCell>
                                         <TableCell>
                                             {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.NUMBER]}
@@ -173,17 +197,57 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                         <TableCell>
                                             {educationalPlanInDirection[EducationPlanInDirectionFields.YEAR]}
                                         </TableCell>
+                                        <TableCell>
+                                            {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.FACULTY]}
+                                        </TableCell>
                                         {canEdit &&
                                             <TableCell>
-                                                <div className={classes.actions}>
-                                                    <IconButton
-                                                        onClick={this.handleClickDelete(educationalPlanInDirection[EducationPlanInDirectionFields.ID])}>
-                                                        <DeleteIcon/>
-                                                    </IconButton>
-                                                    <IconButton onClick={this.handleClickEdit(educationalPlanInDirection)}>
-                                                        <EditIcon/>
-                                                    </IconButton>
-                                                </div>
+                                              <div className={classes.actions}>
+                                                <IconButton
+                                                  aria-haspopup="true"
+                                                  onClick={this.handleMenu(educationalPlanInDirection[EducationPlanInDirectionFields.ID])}
+                                                  color="inherit"
+                                                >
+                                                  <SettingsIcon />
+                                                </IconButton>
+                                                <Menu
+                                                  anchorEl={get(anchorsEl, educationalPlanInDirection[EducationPlanInDirectionFields.ID])}
+                                                  anchorOrigin={{
+                                                      vertical: 'top',
+                                                      horizontal: 'right',
+                                                  }}
+                                                  keepMounted
+                                                  transformOrigin={{
+                                                      vertical: 'top',
+                                                      horizontal: 'right',
+                                                  }}
+                                                  open={Boolean(get(anchorsEl, educationalPlanInDirection[EducationPlanInDirectionFields.ID]))}
+                                                  onClose={this.handleCloseMenu}
+                                                  PopoverClasses={{
+                                                      root: classes.popper,
+                                                      paper: classes.menuPaper
+                                                  }}
+                                                >
+                                                  <MenuItem className={classes.menuLinkItem}
+                                                            onClick={this.handleCreatePlan(educationalPlanInDirection[EducationPlanInDirectionFields.ID])}
+                                                  >
+                                                    <CreateIcon className={classes.menuIcon} />
+                                                    Создать индивидуальный <br /> учебный план
+                                                  </MenuItem>
+                                                  <MenuItem className={classes.menuLinkItem}
+                                                            onClick={this.handleClickDelete(educationalPlanInDirection[EducationPlanInDirectionFields.ID])}
+                                                  >
+                                                    <DeleteIcon className={classes.menuIcon} />
+                                                    Удалить
+                                                  </MenuItem>
+                                                  <MenuItem className={classes.menuLinkItem}
+                                                            onClick={this.handleClickEdit(educationalPlanInDirection)}
+                                                  >
+                                                    <EditIcon className={classes.menuIcon} />
+                                                    Изменить
+                                                  </MenuItem>
+                                                </Menu>
+                                              </div>
                                             </TableCell>
                                         }
                                     </TableRow>

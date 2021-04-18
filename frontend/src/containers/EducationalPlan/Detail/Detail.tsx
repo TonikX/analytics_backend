@@ -42,10 +42,14 @@ import {
     DownloadFileModalFields
 } from "../enum";
 import {FavoriteType} from "../../Profile/Folders/enum";
+import {getUserFullName} from "../../../common/utils";
+import {DirectionFields} from "../../Direction/enum";
+import OptionalWorkProgramBlock from "./OptionalWorkProgramBlock";
+
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
 import {specializationObject} from "../../WorkProgram/constants";
 
-import {typeOfWorkProgramInPlan} from "../data";
+import {OPTIONALLY, typeOfWorkProgramInPlan} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
@@ -58,10 +62,14 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     }
 
     componentDidMount() {
-        const planId = get(this, 'props.match.params.id');
+        const planId = this.getPlanId();
+
+        this.props.actions.setIsTrajectoryRoute(this.props.trajectoryRoute);
 
         this.props.actions.getEducationalDetail(planId);
     }
+
+    getPlanId = () => get(this, 'props.match.params.id');
 
     handleClickBlockDelete = (id: number, length: number) => () => {
         this.setState({
@@ -152,26 +160,26 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     }
 
     handleClickLike = () => {
-        const {detailPlan} = this.props;
+        const {detailPlan, trajectoryRoute} = this.props;
 
         if (detailPlan[EducationalPlanFields.ID_RATING]){
             this.props.foldersActions.removeFromFolder({
                 id: detailPlan[EducationalPlanFields.ID_RATING],
                 callback: this.props.actions.getEducationalDetail,
-                type: FavoriteType.ACADEMIC_PLAN,
-                relationId: detailPlan[EducationalPlanFields.ID]
+                type: trajectoryRoute ? FavoriteType.TRAJECTORY_PLAN : FavoriteType.ACADEMIC_PLAN,
+                relationId: this.getPlanId()
             });
         } else {
             this.props.foldersActions.openAddToFolderDialog({
-                relationId: detailPlan[EducationalPlanFields.ID],
-                type: FavoriteType.ACADEMIC_PLAN,
+                relationId: this.getPlanId(),
+                type: trajectoryRoute ? FavoriteType.TRAJECTORY_PLAN : FavoriteType.ACADEMIC_PLAN,
                 callback: this.props.actions.getEducationalDetail
             });
         }
     }
 
     render() {
-        const {classes, blocks, detailPlan} = this.props;
+        const {classes, blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
         const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength} = this.state;
         const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
 
@@ -195,6 +203,13 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                         />
                     </div>
                 </div>
+
+                {trajectoryRoute && <Typography className={classes.trajectoryOwner}>
+                    <b>Направление:</b> {direction[DirectionFields.EDUCATIONAL_PROFILE]} {direction[DirectionFields.NUMBER]} {direction[DirectionFields.FACULTY]}
+                </Typography>}
+                {trajectoryRoute && <Typography className={classes.trajectoryOwner}>
+                    <b>Владелец траектории:</b> {getUserFullName(user)}
+                </Typography>}
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>
@@ -284,20 +299,28 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                         </TableRow>
 
                                                         {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map((blockOfWorkProgram, index) => {
+                                                            const blockType = blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE];
+                                                            const showRadioButton = blockType === OPTIONALLY && trajectoryRoute;
+                                                            const moduleId = module[ModuleFields.ID];
+
+                                                            // if (showRadioButton) return <OptionalWorkProgramBlock module={blockOfWorkProgram} key={`blockOfWorkProgram-${index}-${moduleId}`} handleDownloadFile={this.handleDownloadFile}/>;
+
                                                             const semesterHours = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.SEMESTER_UNIT);
                                                             const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
 
                                                             const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                                                             const semesterHour = mappedSemesterHours.slice(0, 10);
 
-                                                            return <TableRow key={`blockOfWorkProgram-${index}-${module[ModuleFields.ID]}`}>
+                                                            return <TableRow key={`blockOfWorkProgram-${index}-${moduleId}`}>
                                                                 <TableCell>
-                                                                    {workPrograms.map(workProgram =>
+                                                                    {workPrograms && workPrograms.map && workPrograms.map(workProgram =>
                                                                         <div className={classes.displayFlex} key={'wp' + workProgram[WorkProgramGeneralFields.ID]}>
-                                                                            <Typography className={classes.workProgramLink}
-                                                                                        onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
-                                                                                {workProgram[WorkProgramGeneralFields.TITLE]}
-                                                                            </Typography>
+                                                                            <div className={classes.displayFlex}>
+                                                                                <Typography className={classes.workProgramLink}
+                                                                                            onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
+                                                                                    {workProgram[WorkProgramGeneralFields.TITLE]}
+                                                                                </Typography>
+                                                                            </div>
                                                                             <Tooltip title={'Скачать рабочую программу'}>
                                                                                 <FileIcon className={classNames(classes.marginRight10, classes.button)}
                                                                                     onClick={this.handleDownloadFile(workProgram[WorkProgramGeneralFields.ID])}
@@ -311,7 +334,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                 )}
                                                                 <TableCell>
                                                                     {get(typeOfWorkProgramInPlan.find(item =>
-                                                                        item.value === blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
+                                                                        item.value === blockType
                                                                     ), 'label', '')}
                                                                 </TableCell>
 

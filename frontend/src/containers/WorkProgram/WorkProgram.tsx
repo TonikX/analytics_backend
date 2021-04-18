@@ -1,5 +1,6 @@
 import React from 'react';
 import get from 'lodash/get';
+import {withRouter} from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
 import CopyIcon from "@material-ui/icons/FileCopyOutlined";
@@ -184,7 +185,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
     render() {
         const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
-            workProgramRating, canAddToFolder, hoursError, evaluationToolsErrors} = this.props;
+            workProgramRating, canAddToFolder, validateErrors} = this.props;
         const {activeStep, isOpenComments} = this.state;
 
         return (
@@ -196,14 +197,17 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         {canSendToArchive && <Button onClick={this.handleSendToArchive}>Отправить в архив</Button>}
 
                         {canSendToExpertise &&
-                            <Tooltip title={hoursError ? "Ошибка! Часы по разделам заполнены неверно" : evaluationToolsErrors ? "Ошибка! Кол-во баллов в РПД больше 100" : ''}
-                                     disableHoverListener={!hoursError && !evaluationToolsErrors}
-                            >
-                                <Button onClick={() => (!hoursError && !evaluationToolsErrors) && this.handleSendToExpertize}
-                                >
+                            (validateErrors.length ?
+                                <Tooltip title={<div className={classes.tooltip}> Исправьте ошибки, прежде чем отправлять на эспертизу: <br/> {validateErrors.map((item, index) => <>{index  + 1}. {item} <br /></>)} </div>}>
+                                    <Button>
+                                        Отправить на экспертизу
+                                    </Button>
+                                </Tooltip>
+                                :
+                                <Button onClick={this.handleSendToExpertize}>
                                     Отправить на экспертизу
                                 </Button>
-                            </Tooltip>
+                            )
                         }
 
                         {canApprove &&
@@ -255,7 +259,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                                     {...(isOpenComments ? {timeout: 300} : {})}
                                 >
                                     <Paper className={classes.comments}>
-                                        <Comments currentStep={this.getCurrentStep()} />
+                                        <Comments currentStep={this.getCurrentStep()} closeComments={this.handleClickOnComments} />
                                     </Paper>
                                 </Grow>
                                 <Fab color="secondary"
@@ -273,4 +277,5 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     }
 }
 
-export default connect(withStyles(styles)(WorkProgram));
+// @ts-ignore
+export default connect(withStyles(styles)(withRouter(WorkProgram)));

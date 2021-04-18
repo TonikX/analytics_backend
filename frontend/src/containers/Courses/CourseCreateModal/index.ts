@@ -1,1 +1,1 @@
-export {default} from './CourseCreateModal';
+export { default } from './CourseCreateModal';

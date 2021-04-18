@@ -146,7 +146,7 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        Квалификация
+                                        Уровень образования
                                         <SortingButton changeMode={this.changeSorting(EducationProgramFields.QUALIFICATION)}
                                                        mode={sortingField === EducationProgramFields.QUALIFICATION ? sortingMode : ''}
                                         />

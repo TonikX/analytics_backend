@@ -105,7 +105,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {educationalPlan} = this.state;
 
         const disableButton = educationalPlan[EducationalPlanFields.PROFILE].length === 0
-            || get(educationalPlan[EducationalPlanFields.NUMBER], 'length', 0) === 0
             || get(educationalPlan[EducationalPlanFields.YEAR], 'length', 0) === 0
             || get(educationalPlan[EducationalPlanFields.QUALIFICATION], 'length', 0) === 0
         ;
@@ -122,7 +121,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} учебный план</DialogTitle>
                 <DialogContent>
-                    <TextField label="Профиль *"
+                    <TextField label="Образовательная программа *"
                                onChange={this.saveField(EducationalPlanFields.PROFILE)}
                                variant="outlined"
                                className={classNames(classes.input, classes.marginBottom30)}
@@ -132,7 +131,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                    shrink: true,
                                }}
                     />
-                    <TextField label="Номер *"
+                    <TextField label="Номер"
                                onChange={this.saveField(EducationalPlanFields.NUMBER)}
                                variant="outlined"
                                className={classNames(classes.input, classes.marginBottom30)}
@@ -160,7 +159,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     </FormControl>
                     <FormControl className={classNames(classes.qualificationSelectorWrap, classes.marginBottom30)}>
                         <InputLabel shrink id="section-label">
-                            Квалификация *
+                            Уровень образования *
                         </InputLabel>
                         <Select
                             variant="outlined"

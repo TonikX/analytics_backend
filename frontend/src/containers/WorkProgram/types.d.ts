@@ -134,11 +134,10 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     workProgramRatingId: number;
     folders: Array<FolderType>
     workProgram: WorkProgramGeneralType;
-    hoursError: boolean;
-    evaluationToolsErrors: boolean;
+    validateErrors: Array<string>;
 }
 
-export type Section = {
+export type SectionType = {
     id: number;
     ordinal_number: number;
     name: string;
@@ -148,10 +147,10 @@ export type Section = {
     practical_lessons: number;
     total_hours: number;
     laboratory: number;
-    topics: Array<Topic>;
+    topics: Array<TopicType>;
 };
 
-export type Topic = {
+export type TopicType = {
     description: string;
     online_course: string;
     url_online_course: CourseType;
@@ -184,7 +183,7 @@ export type EvaluationToolType = {
     [EvaluationToolFields.CHECK_POINT]: true | null;
     [EvaluationToolFields.MAX]: number;
     [EvaluationToolFields.SEMESTER]: string;
-    [EvaluationToolFields.SECTIONS]: Array<Section>;
+    [EvaluationToolFields.SECTIONS]: Array<SectionType>;
 }
 
 export type IntermediateCertificationType = {

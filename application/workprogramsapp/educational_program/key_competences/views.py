@@ -31,6 +31,8 @@ class KeyCompetencesInGroupOfGeneralCharacteristicSet(viewsets.ModelViewSet):
             return CreateKeyCompetencesInGroupOfGeneralCharacteristicSerializer
         if self.action == 'update':
             return CreateKeyCompetencesInGroupOfGeneralCharacteristicSerializer
+        if self.action == 'partial_update':
+            return CreateKeyCompetencesInGroupOfGeneralCharacteristicSerializer
         return KeyCompetencesInGroupOfGeneralCharacteristicSerializer
 
 
@@ -45,6 +47,8 @@ class GroupOfKeyCompetencesInGeneralCharacteristicsSet(viewsets.ModelViewSet):
             return CreateGroupOfKeyCompetencesInGeneralCharacteristicSerializer
         if self.action == 'update':
             return CreateGroupOfKeyCompetencesInGeneralCharacteristicSerializer
+        if self.action == 'partial_update':
+            return CreateGroupOfKeyCompetencesInGeneralCharacteristicSerializer
         return GroupOfKeyCompetencesInGeneralCharacteristicSerializer
 
 
@@ -58,5 +62,7 @@ class IndicatorGroupOfKeyCompetencesInGeneralCharacteristicSet(viewsets.ModelVie
         if self.action == 'create':
             return CreateIndicatorInKeyCompetenceInGeneralCharacteristicSerializer
         if self.action == 'update':
+            return CreateIndicatorInKeyCompetenceInGeneralCharacteristicSerializer
+        if self.action == 'partial_update':
             return CreateIndicatorInKeyCompetenceInGeneralCharacteristicSerializer
         return GroupOfKeyCompetencesInGeneralCharacteristicSerializer

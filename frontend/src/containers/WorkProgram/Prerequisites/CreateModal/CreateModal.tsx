@@ -154,7 +154,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                     onChange={this.changeMasterLevelField}
                                     value={prerequisite[PrerequisiteFields.ITEM]}
                         >
-                            <FormControlLabel value="1" control={<Radio checked={prerequisite[PrerequisiteFields.MASTER_LEVEL] === '1'} />} label="Низкий" />
+                            <FormControlLabel value="1" control={<Radio checked={prerequisite[PrerequisiteFields.MASTER_LEVEL] === '1'} />} label="Начальный" />
                             <FormControlLabel value="2" control={<Radio checked={prerequisite[PrerequisiteFields.MASTER_LEVEL] === '2'} />} label="Средний" />
                             <FormControlLabel value="3" control={<Radio checked={prerequisite[PrerequisiteFields.MASTER_LEVEL] === '3'} />} label="Высокий" />
                         </RadioGroup>

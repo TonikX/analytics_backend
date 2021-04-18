@@ -7,13 +7,18 @@ from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 from collections import OrderedDict
 from rest_framework import status
 
-from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgramChangeInDisciplineBlockModule
+from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgramChangeInDisciplineBlockModule,\
+    DisciplineBlockModuleInDisciplineBlock, ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .serializers import IndividualImplementationAcademicPlanSerializer,CreateIndividualImplementationAcademicPlanSerializer,\
-    ShortIndividualImplementationAcademicPlanSerializer
+    ShortIndividualImplementationAcademicPlanSerializer, WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer, \
+    DisciplineBlockModuleInDisciplineBlockSerializer, ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
+   # CreateElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
+from ..folders_ans_statistic.models import IndividualImplementationAcademicPlanInFolder
 
 
 class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
@@ -38,26 +43,146 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
         newdata = dict(serializer.data)
         for discipline_block in newdata['implementation_of_academic_plan']['academic_plan']['discipline_blocks_in_academic_plan']:
             print(discipline_block['id'])
+            delete_module = []
+            k = 0
             for module in discipline_block['modules_in_discipline_block']:
                 print(module['id'])
+
                 for change_block in module['change_blocks_of_work_programs_in_modules']:
                     if change_block['change_type'] == "Optionally":
+                        i = 0
+                        delete = []
                         for work_program in change_block['work_program']:
                             try:
                                 if work_program['id'] != \
-                                        WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.\
+                                        WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects. \
                                                 get(individual_implementation_of_academic_plan = newdata['id'],
                                                     work_program_change_in_discipline_block_module = change_block['id']).work_program.id:
-                                    print('dd')
-                                    del change_block['work_program']
-                                    del work_program
+                                    delete.append(i)
+
                             except:
                                 pass
+                            i +=1
+                        a = 0
+                        for i in delete:
+                            print(i)
+                            del change_block['work_program'][i-a]
+                            a +=1
+
+
+                    if change_block['change_type'] == "Facultativ":
+                        i = 0
+                        delete = []
+                        for work_program in change_block['work_program']:
+                            try:
+                                if work_program['id'] != \
+                                        WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects. \
+                                                get(individual_implementation_of_academic_plan = newdata['id'],
+                                                    work_program_change_in_discipline_block_module = change_block['id']).work_program.id:
+                                    delete.append(i)
+
+                            except:
+                                pass
+                            i +=1
+                        a = 0
+                        for i in delete:
+                            print(i)
+                            del change_block['work_program'][i-a]
+                            a +=1
+
+
+
+                if module['type'] == "specialization_module":
+
+                    try:
+                        if module['id'] != \
+                                DisciplineBlockModuleInDisciplineBlock.objects. \
+                                        get(individual_implementation_of_academic_plan = newdata['id'],
+                                            discipline_block = discipline_block['id']).discipline_block_module.id:
+                            #change_block['work_program'].pop(i)
+                            #del change_block['work_program'][i]
+                            delete_module.append(k)
+                            print('dd',k)
+                            #del change_block[work_program]
+
+                            #change_block.remove(work_program['id'])
+
+                    except:
+                        pass
+                k +=1
+            a = 0
+
+            for i in delete_module:
+                print('dddddd', k)
+                del discipline_block['modules_in_discipline_block'][i]
+                a +=1
+        #TODO: Посмотреть как можно поменять костыль
+        data_order=OrderedDict(newdata)
+        newdata = dict(data_order)
+        try:
+            newdata.update({"rating": IndividualImplementationAcademicPlanInFolder.objects.get(individual_implementation_of_academic_plan__pk=self.kwargs['pk'],
+                                                                      folder__owner=self.request.user).route_rating})
+            newdata.update({"id_rating": IndividualImplementationAcademicPlanInFolder.objects.get(individual_implementation_of_academic_plan__pk=self.kwargs['pk'],
+                                                                         folder__owner=self.request.user).id})
+        except:
+            newdata.update({"rating": False})
         return Response(OrderedDict(newdata), status=status.HTTP_200_OK)
+
+
+class IndividualImplementationAcademicPlanForUser(generics.ListAPIView):
+    serializer_class = ShortIndividualImplementationAcademicPlanSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
+
+    def list(self, request, **kwargs):
+        """
+        Вывод всех результатов для одной рабочей программы по id
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = IndividualImplementationAcademicPlan.objects.filter(user=self.request.user)
+        page = self.paginate_queryset(queryset)
+        serializer = ShortIndividualImplementationAcademicPlanSerializer(queryset, many=True)
+        return self.get_paginated_response(serializer.data)
+
+
 @api_view(['POST'])
 @permission_classes((IsAuthenticated, ))
 def SaveImplementationAcademicPlans(request):
     implementations=request.data.get('implementation_set')
     for imp in implementations:
         IndividualImplementationAcademicPlan.objects.filter(pk=imp).update(user=request.user)
-    return Response("нечего")
+    return Response("null", status=status.HTTP_200_OK)
+
+
+class WorkProgramInWorkProgramChangeInDisciplineBlockModuleSet(viewsets.ModelViewSet):
+    queryset = WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.all()
+    serializer_class = WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+
+
+class DisciplineBlockModuleInDisciplineBlockSet(viewsets.ModelViewSet):
+    queryset = DisciplineBlockModuleInDisciplineBlock.objects.all()
+    serializer_class = DisciplineBlockModuleInDisciplineBlockSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+
+
+class ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSet(viewsets.ModelViewSet):
+    queryset = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.all()
+    serializer_class = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+
+
+class ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
+    serializer_class = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
+    queryset = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['description']
+    #permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def post(self, request):
+        for data in request.data['electives']:
+            serializer = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

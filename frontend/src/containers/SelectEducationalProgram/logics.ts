@@ -9,7 +9,7 @@ import {ProfessionType} from './types'
 import {fetchingTypes} from './enum'
 import { rootState } from '../../store/reducers'
 
-import { getSelectedProfessions } from "./getters";
+import {getQualification, getSelectedEducationalPrograms, getSelectedProfessions} from "./getters";
 
 const getProfessions = createLogic({
   type: selectEducationalProgramActions.getProfessions.type,
@@ -38,9 +38,10 @@ const getEducationalPrograms = createLogic({
     dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EDUCATIONAL_PROGRAMS}))
     const state: rootState = getState()
 
-    const selectedProfessions: Array<ProfessionType> = getSelectedProfessions(state)
-    const ids = selectedProfessions.map((p: ProfessionType) => p.id)
-    service.getEducationalPrograms(ids)
+    const professionsIds = getSelectedProfessions(state).map((p: ProfessionType) => p.id);
+    const qualification = getQualification(state);
+
+    service.getEducationalPrograms(professionsIds, qualification)
       .then((res: any) => {
         dispatch(selectEducationalProgramActions.setEducationalPrograms(get(res, 'data', [])))
         dispatch(actions.fetchingSuccess())
@@ -55,4 +56,28 @@ const getEducationalPrograms = createLogic({
   }
 })
 
-export default [getProfessions, getEducationalPrograms]
+const savePrograms = createLogic({
+  type: selectEducationalProgramActions.savePrograms.type,
+  latest: true,
+  process({ getState, action}: any, dispatch, done) {
+    dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EDUCATIONAL_PROGRAMS}))
+    const state: rootState = getState()
+
+    const selectedPrograms = getSelectedEducationalPrograms(state);
+
+    service.savePrograms(selectedPrograms)
+      .then((res: any) => {
+        dispatch(selectEducationalProgramActions.resetSelectedPrograms());
+        dispatch(actions.fetchingSuccess(['Программы успешно сохранены!']));
+      })
+      .catch((err) => {
+        dispatch(actions.fetchingFailed(err));
+      })
+      .then(() => {
+        dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_EDUCATIONAL_PROGRAMS}));
+        return done()
+      })
+  }
+})
+
+export default [getProfessions, getEducationalPrograms, savePrograms]

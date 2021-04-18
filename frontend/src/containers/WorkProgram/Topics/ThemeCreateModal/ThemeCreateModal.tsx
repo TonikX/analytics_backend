@@ -1,5 +1,6 @@
 import React, {ReactText} from 'react';
 import get from "lodash/get";
+import {shallowEqual} from "recompose";
 
 import {ThemeCreateModalProps} from './types';
 
@@ -17,14 +18,12 @@ import FormControl from "@material-ui/core/FormControl";
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import SearchSelector from '../../../../components/SearchSelector';
+
+import {CourseFields} from "../../../Courses/enum";
 import {workProgramTopicFields, fields} from '../../enum';
 
 import connect from './ThemeCreateModal.connect';
 import styles from './ThemeCreateModal.styles';
-import {shallowEqual} from "recompose";
-import {CourseFields} from "../../../Courses/enum";
-import {Link} from "react-router-dom";
-import {appRouter} from "../../../../service/router-service";
 import Typography from "@material-ui/core/Typography";
 
 class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
@@ -41,7 +40,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
     };
 
     componentDidMount() {
-        this.props.coursesActions.getCourses();
+        //this.props.coursesActions.getCourses();
     }
 
     componentDidUpdate(prevProps: Readonly<ThemeCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
@@ -154,22 +153,16 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                                }}
                     />
                     <SearchSelector label="Онлайн курс"
-                                            changeSearchText={this.handleChangeCourseSearchText}
-                                            list={coursesList}
-                                            changeItem={this.saveCourseField}
-                                            value={get(topic, [workProgramTopicFields.COURSE, CourseFields.ID], '')}
-                                            valueLabel={get(topic, [workProgramTopicFields.COURSE, CourseFields.TITLE], '')}
+                                    changeSearchText={this.handleChangeCourseSearchText}
+                                    list={coursesList}
+                                    changeItem={this.saveCourseField}
+                                    value={get(topic, [workProgramTopicFields.COURSE, CourseFields.ID], '')}
+                                    valueLabel={get(topic, [workProgramTopicFields.COURSE, CourseFields.TITLE], '')}
+                                    disabled
                     />
+                    <Typography> Добавление онлайн-курсов сейчас недоступно. Ведется интеграция курсов с online.edu.ru  </Typography>
                 </DialogContent>
                 <DialogActions className={classes.actions}>
-                    <Link to={appRouter.getCoursesRoute()}
-                          className={classes.link}
-                          target="_blank"
-                    >
-                        <Typography>
-                            Создать онлайн курс
-                        </Typography>
-                    </Link>
                     <Button onClick={this.handleClose}
                             variant="text">
                         Отмена

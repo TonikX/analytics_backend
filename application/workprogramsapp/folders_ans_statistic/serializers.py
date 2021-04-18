@@ -2,9 +2,11 @@ from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder, AcademicPlanInFolder, \
- DisciplineBlockModuleInFolder
+    DisciplineBlockModuleInFolder, IndividualImplementationAcademicPlanInFolder
+from workprogramsapp.individualization.serializers import ShortImplementationAcademicPlanSerializer, \
+    ShortIndividualImplementationAcademicPlanSerializer
 from workprogramsapp.serializers import WorkProgramShortForExperiseSerializer, AcademicPlanShortSerializer, \
-    DisciplineBlockModuleSerializer
+    DisciplineBlockModuleSerializer, ImplementationAcademicPlanSerializer
 
 
 # ПАПКИ С РПД
@@ -40,6 +42,7 @@ class FolderSerializer(serializers.ModelSerializer):
         self.fields['work_program_in_folder'] = WorkProgramInFolderSerializer(many=True)
         self.fields['academic_plan_in_folder'] = AcademicPlanInFolderSerializer(many=True)
         self.fields['block_module_in_folder'] = ModuleInFolderSerializer(many=True)
+        self.fields['individual_implementation_of_academic_plan_in_folder'] = IndividualImplementationAcademicPlanInFolderSerializer(many=True)
         return super().to_representation(value)
 
 
@@ -67,5 +70,14 @@ class ModuleInFolderSerializer(serializers.ModelSerializer):
         self.fields['block_module'] = DisciplineBlockModuleSerializer(many=False)
         return super().to_representation(value)
 
+# ПАПКИ С ТРАЕКТОРИЯМИ
+class IndividualImplementationAcademicPlanInFolderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IndividualImplementationAcademicPlanInFolder
+        fields = "__all__"
+
+    def to_representation(self, value):
+        self.fields['individual_implementation_of_academic_plan'] = ShortIndividualImplementationAcademicPlanSerializer(many=False)
+        return super().to_representation(value)
 
 

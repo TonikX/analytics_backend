@@ -151,7 +151,7 @@ class CreateModal extends React.PureComponent<CourseCreateModalProps> {
                     />
                     <FormControl className={classNames(classes.selectorWrap, classes.marginBottom30)}>
                         <InputLabel shrink id="section-label">
-                            Квалификация *
+                            Уровень образования *
                         </InputLabel>
                         <Select
                             variant="outlined"

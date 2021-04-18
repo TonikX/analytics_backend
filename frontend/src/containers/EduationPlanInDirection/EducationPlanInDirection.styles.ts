@@ -10,6 +10,10 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         flexDirection: 'column'
     },
+    menuIcon: {
+        marginRight: '10px',
+        fill: 'rgba(0, 0, 0, 0.54)'
+    },
     title: {
         fontSize: '24px',
         marginBottom: '20px',

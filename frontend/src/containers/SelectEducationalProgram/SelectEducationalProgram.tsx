@@ -1,20 +1,23 @@
-import React, {useEffect} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
-
-import {useStyles} from './SelectEducationalProgram.styles'
-
-import actions from './actions'
-
-import {getNoSelectedProfessions, getSelectedProfessions, getEducationalPrograms} from './getters'
+import React, {useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import className from "classnames";
 
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography';
-import {ProfessionsSelectList} from './ProfessionsSelectList/ProfessionsSelectList'
-import {EducationalProgramsTable} from './EducationalProgramsTable/EducationalProgramsTable'
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 
 import {rootState} from '../../store/reducers'
-import {ProfessionType} from './types'
+import {BACHELOR_QUALIFICATION, MASTER_QUALIFICATION} from "../WorkProgram/constants";
+import actions from './actions'
+import {getNoSelectedProfessions, getSelectedProfessions, getEducationalPrograms, getQualification} from './getters';
+
+import {ProfessionsSelectList} from './ProfessionsSelectList/ProfessionsSelectList';
+import {EducationalProgramsTable} from './EducationalProgramsTable/EducationalProgramsTable';
+
+import {ProfessionType, QualificationType} from './types';
+
+import {useStyles} from './SelectEducationalProgram.styles';
 
 const SelectEducationalProgram: React.FC = () => {
   const dispatch = useDispatch()
@@ -22,15 +25,17 @@ const SelectEducationalProgram: React.FC = () => {
   const professions = useSelector((state: rootState) => getNoSelectedProfessions(state))
   const selectedProfessions = useSelector((state: rootState) => getSelectedProfessions(state))
   const educationalPrograms = useSelector((state: rootState) => getEducationalPrograms(state))
+  const qualification = useSelector((state: rootState) => getQualification(state))
 
   const selectProfession = (item: ProfessionType): void => dispatch(actions.selectProfession(item))
   const unselectProfession = (item: ProfessionType): void => dispatch(actions.unselectProfession(item))
+  const handleChangeQualification = (qualification: QualificationType) => () => dispatch(actions.setQualification(qualification))
 
   useEffect(() => {
     dispatch(actions.getProfessions())
     // eslint-disable-next-line
   }, [])
-  
+
   return (
     <Paper className={classes.root}>
       <Typography className={classes.title}>
@@ -40,7 +45,27 @@ const SelectEducationalProgram: React.FC = () => {
         (
           <>
             <Typography className={classes.subtitle}>
-              1. Выберите профессии
+              1. Уровень образования
+            </Typography>
+            <ButtonGroup>
+              <Button onClick={handleChangeQualification(BACHELOR_QUALIFICATION)}
+                      color={qualification === BACHELOR_QUALIFICATION ? 'primary' : 'default'}
+                      variant="contained"
+                      className={className({[classes.whiteButton]: qualification !== BACHELOR_QUALIFICATION})}
+              >
+                Бакалавр
+              </Button>
+              <Button onClick={handleChangeQualification(MASTER_QUALIFICATION)}
+                      color={qualification === MASTER_QUALIFICATION ? 'primary' : 'default'}
+                      variant="contained"
+                      className={className({[classes.whiteButton]: qualification !== MASTER_QUALIFICATION})}
+              >
+                Магистр
+              </Button>
+            </ButtonGroup>
+
+            <Typography className={classes.subtitle}>
+              2. Выберите профессии
             </Typography>
             <ProfessionsSelectList
               selectProfession={selectProfession}
@@ -61,14 +86,9 @@ const SelectEducationalProgram: React.FC = () => {
         ) : null
       }
       {educationalPrograms.length && selectedProfessions.length ? (
-        <>
-          <Typography className={classes.subtitle}>
-            2. Образовательные программы
-          </Typography>
-          <EducationalProgramsTable 
-            educationalPrograms={educationalPrograms}
-          />
-        </>
+        <EducationalProgramsTable
+          educationalPrograms={educationalPrograms}
+        />
       ) : null}
     </Paper>
   )

@@ -77,6 +77,7 @@ class OnlineCourse(models.Model):
     learning_outcome = models.TextField(verbose_name='Результаты', blank=True, null=True)
     learning_outcome_list = models.ManyToManyField(Items)
 
+
     class Meta:
         verbose_name = 'Онлайн курс'
         verbose_name_plural = 'Онлайн курсы'

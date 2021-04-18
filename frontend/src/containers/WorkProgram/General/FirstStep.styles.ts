@@ -21,6 +21,9 @@ export default (theme: Theme) => createStyles({
     datePicker: {
         marginBottom: '20px'
     },
+    marginBottom20: {
+        marginBottom: '20px'
+    },
     textItem: {
         marginBottom: '10px'
     },

@@ -10,7 +10,8 @@ from .models import (
     Competence, Indicator, EvaluationTool, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
     RouteComposition, Route, Certification, BibliographicReference, AcademicPlan,
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,
-    СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy
+    СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
+    OnlineCourse
 )
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
@@ -26,6 +27,7 @@ from .educational_program.key_competences.models import GroupOfKeyCompetencesInG
     KeyCompetencesInGroupOfGeneralCharacteristic, IndicatorInKeyCompetenceInGeneralCharacteristic
 from .educational_program.general_prof_competencies.models import GroupOfGeneralProfCompetencesInGeneralCharacteristic, \
     GeneralProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
+from .individualization.models import ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 
 
 admin.site.register(GroupOfPkCompetencesInGeneralCharacteristic)
@@ -97,3 +99,4 @@ admin.site.register(StructuralUnit)
 admin.site.register(СertificationEvaluationTool)
 admin.site.register(CourseCredit)
 admin.site.register(CourseFieldOfStudy)
+admin.site.register(ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule)

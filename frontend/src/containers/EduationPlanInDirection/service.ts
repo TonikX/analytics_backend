@@ -4,7 +4,7 @@ import {SortingType, Types} from "../../components/SortingButton/types";
 import {EducationalPlanFields} from "../EducationalPlan/enum";
 import {DirectionFields} from "../Direction/enum";
 
-class IndicatorsService extends AnalyticsService{
+class Service extends AnalyticsService{
     getEducationalPlansInDirection(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
@@ -35,6 +35,14 @@ class IndicatorsService extends AnalyticsService{
 
         return this.put(`/api/implementationacademicplan/update/${id}`, formData);
     }
+
+    createIndividualEducationalPlan(id: number){
+        return this.post(`/api/individualization/individual_path/`, {
+            user: 1,
+            comment: '',
+            implementation_of_academic_plan: id
+        });
+    }
 }
 
-export default IndicatorsService;
+export default Service;

@@ -1,26 +1,26 @@
 import {IntermediateCertificationEnum, StepsEnum, WorkProgramStatusEnum} from "./enum";
 
-const BACHELOR = 'bachelor';
-const SPECIALIST = 'specialist';
-const MASTER = 'master';
+export const BACHELOR_QUALIFICATION = 'bachelor';
+export const SPECIALIST_QUALIFICATION = 'specialist';
+export const MASTER_QUALIFICATION = 'master';
 
 export const specializationObject: any = {
-    [BACHELOR]: 'Бакалавриат',
-    [SPECIALIST]: 'Специалитет',
-    [MASTER]: 'Магистратура',
+    [BACHELOR_QUALIFICATION]: 'Бакалавриат',
+    [SPECIALIST_QUALIFICATION]: 'Специалитет',
+    [MASTER_QUALIFICATION]: 'Магистратура',
 }
 
 export const specialization = [
     {
-        value: BACHELOR,
+        value: BACHELOR_QUALIFICATION,
         label: 'Бакалавриат'
     },
     {
-        value: SPECIALIST,
+        value: SPECIALIST_QUALIFICATION,
         label: 'Специалитет'
     },
     {
-        value: MASTER,
+        value: MASTER_QUALIFICATION,
         label: 'Магистратура'
     }
 ];
@@ -29,11 +29,15 @@ export const specialization = [
 const ENGLISH = 'en';
 const RUSSIAN = 'ru';
 const RUSSIAN_ENGLISH = 'ru/en';
+const KZ = 'kz';
+const GERMAN_ENGLISH = 'de';
 
 export const languageObject: any = {
     [RUSSIAN]: 'Русский',
     [ENGLISH]: 'Английский',
     [RUSSIAN_ENGLISH]: 'Русский/Английский',
+    [KZ]: 'Казахский',
+    [GERMAN_ENGLISH]: 'Немецкий',
 }
 
 export const languageArray = [
@@ -48,6 +52,14 @@ export const languageArray = [
     {
         value: RUSSIAN_ENGLISH,
         label: 'Русский/Английский'
+    },
+    {
+        value: KZ,
+        label: 'Казахский'
+    },
+    {
+        value: GERMAN_ENGLISH,
+        label: 'Немецкий'
     }
 ];
 

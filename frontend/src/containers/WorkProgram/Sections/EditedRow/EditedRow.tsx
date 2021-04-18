@@ -181,7 +181,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     }
                 </TableCell>
                 <TableCell className={classes.centerCell}>
-                    <>{this.calculateTotalHours()}</>
+                    <>{section.total_hours}</>
                 </TableCell>
                 {isCanEdit &&
                     <TableCell className={classes.centerCell}>

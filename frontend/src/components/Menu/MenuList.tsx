@@ -103,6 +103,18 @@ export default (groups: Array<string>) => {
             icon: IndicatorsIcon,
             selectedIcon: IndicatorsSelectedIcon,
         },
+        {
+            title: 'Профессиональные стандарты',
+            link: appRouter.getProfessionalStandardsRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
+        {
+            title: 'Структурные подразделения',
+            link: appRouter.getStructuralUnitsRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
     ];
 
     if (isUserInExpertiseGroup(groups)){
@@ -136,13 +148,13 @@ export default (groups: Array<string>) => {
             selectedIcon: EducationPlanSelectedIcon,
         },
         {
-            title: 'Учебные планы в направлении',
+            title: 'Образовательные программы',
             link: appRouter.getEducationPlanInDirectionRoute(),
             icon: WorkProgramInDirectionIcon,
             selectedIcon: WorkProgramInDirectionSelectedIcon,
         },
         {
-            title: 'Образовательные программы',
+            title: 'Общие характеристики',
             link: appRouter.getEducationalProgram(),
             icon: WorkProgramInDirectionIcon,
             selectedIcon: WorkProgramInDirectionSelectedIcon,
@@ -186,6 +198,12 @@ export default (groups: Array<string>) => {
         {
             title: 'Подбор ОП по профессиям',
             link: appRouter.getSelectEducationalProgramRoute(),
+            icon: WorkProgramInDirectionIcon,
+            selectedIcon: WorkProgramInDirectionSelectedIcon,
+        },
+        {
+            title: 'Индивидуальные траектории',
+            link: appRouter.getIndividualTrajectoriesRoute(),
             icon: WorkProgramInDirectionIcon,
             selectedIcon: WorkProgramInDirectionSelectedIcon,
         }

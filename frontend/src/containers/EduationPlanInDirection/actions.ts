@@ -17,7 +17,10 @@ const changeCurrentPage = createAction('EDUCATIONAL_PLAN_IN_DIRECTION_CHANGE_CUR
 const changeAllCount = createAction('EDUCATIONAL_PLAN_IN_DIRECTION_CHANGE_ALL_COUNT');
 const changeSorting = createAction('EDUCATIONAL_PLAN_IN_DIRECTION_CHANGE_SORTING');
 
+const createIndividualEducationalPlan = createAction('CREATE_INDIVIDUAL_EDUCATIONAL_PLAN');
+
 const actions: EducationalPlanInDirectionActions = {
+    createIndividualEducationalPlan,
     getEducationalPlansInDirection,
     setEducationalPlansInDirection,
     createNewEducationalPlanInDirection,

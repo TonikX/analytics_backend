@@ -15,6 +15,7 @@ import TableCell from "@material-ui/core/TableCell";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
 
 import AddIcon from '@material-ui/icons/Add';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -27,7 +28,6 @@ import {fields, workProgramSectionFields} from "../enum";
 
 import connect from './Sections.connect';
 import styles from './Sections.styles';
-import Typography from "@material-ui/core/Typography";
 
 class Sections extends React.PureComponent<SectionsProps> {
     scrollBar: any = null;
@@ -88,14 +88,28 @@ class Sections extends React.PureComponent<SectionsProps> {
             totalHoursWithoutCPO += parseFloat(this.calculateContactWork(section));
         });
 
-        const totalHours = this.state.totalHours || totalTotalHours;
-        const cpoValue = ((totalHours - totalHoursWithoutCPO) / sections.length).toFixed(2);
+        totalHoursWithoutCPO = parseFloat(totalHoursWithoutCPO.toFixed(2));
 
-        sections.forEach((section) => {
+        const totalHours = this.state.totalHours || totalTotalHours;
+        const cpoValueTotal = totalHours - totalHoursWithoutCPO;
+        const cpoValue = (cpoValueTotal / sections.length).toFixed(2);
+        const cpoLastValue: any = (cpoValueTotal - (parseFloat(cpoValue) * (sections.length - 1))).toFixed(2);
+
+        sections.forEach((section, index) => {
+            const contactWork = section[workProgramSectionFields.CONTACT_WORK];
+            //@ts-ignore
+            const totalHours = (parseFloat(cpoValue) + parseFloat(contactWork)).toFixed(2);
+            //@ts-ignore
+            const totalHoursLast = (parseFloat(cpoLastValue) + parseFloat(contactWork)).toFixed(2);
+
             this.props.actions.saveSection({
                 ...section,
-                [workProgramSectionFields.SPO] : cpoValue,
-                [workProgramSectionFields.TOTAL_HOURS] : parseFloat(cpoValue) + parseFloat(this.calculateContactWork(sections))
+                [workProgramSectionFields.SPO]: index === sections.length - 1 ?
+                    cpoLastValue :
+                    cpoValue,
+                [workProgramSectionFields.TOTAL_HOURS]: index === sections.length - 1 ?
+                    totalHoursLast :
+                    totalHours
             });
         })
     }
@@ -109,28 +123,31 @@ class Sections extends React.PureComponent<SectionsProps> {
     }
 
     handleChangeTotalHours = (e: React.ChangeEvent) => {
-        this.props.actions.saveWorkProgram({
-            destination: fields.WORK_PROGRAM_ALL_HOURS,
-            value: get(e, 'target.value')
-        });
+        const value = get(e, 'target.value');
+
+        if (value !== '') {
+            this.props.actions.saveWorkProgram({
+                destination: fields.WORK_PROGRAM_ALL_HOURS,
+                value: get(e, 'target.value')
+            });
+        }
     }
 
     render() {
-        const {classes, sections, isCanEdit, totalHours} = this.props;
+        const {classes, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours} = this.props;
         const {createNewSectionMode} = this.state;
 
         const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
         const totalLaboratoryClassesHours = this.getTotalHours(workProgramSectionFields.LABORATORY).toFixed(2);
         const totalPracticalClassesHours = this.getTotalHours(workProgramSectionFields.PRACTICAL_LESSONS).toFixed(2);
         const totalSPOHours = this.getTotalHours(workProgramSectionFields.SPO).toFixed(2);
+        const currentTotalHours = this.getTotalHours(workProgramSectionFields.TOTAL_HOURS).toFixed(2);
 
         const totalContactWorkHours = ((
             parseFloat(totalLectureClassesHours) +
             parseFloat(totalLaboratoryClassesHours) +
             parseFloat(totalPracticalClassesHours))
             * 1.1).toFixed(2);
-
-        const currentTotalHours = (parseFloat(totalSPOHours) + parseFloat(totalContactWorkHours)).toFixed(2);
 
         return (
             <div className={classes.secondStep}>
@@ -212,14 +229,14 @@ class Sections extends React.PureComponent<SectionsProps> {
                                 <TableCell className={classes.headerCell}>
                                     {isCanEdit ?
                                         <Tooltip title="Всего должно делиться на 36 без остатка"
-                                                 disableHoverListener={parseFloat(totalHours) % 36 === 0}
+                                                 disableHoverListener={parseFloat(totalHours) % 36 === 0 || !sections.length}
                                         >
                                             <TextField variant="outlined"
                                                        size="small"
                                                        defaultValue={totalHours}
                                                        type="number"
                                                        className={classes.smallInput}
-                                                       error={parseFloat(totalHours) % 36 !== 0}
+                                                       error={parseFloat(totalHours) % 36 !== 0 && sections.length !== 0}
                                                        onBlur={this.handleChangeTotalHours}
                                             />
                                         </Tooltip>
@@ -237,7 +254,7 @@ class Sections extends React.PureComponent<SectionsProps> {
                             </TableRow>
                         </Table>
 
-                        {isCanEdit &&
+                        {isCanEdit && sections.length !== 0 && parseFloat(totalHours) ?
                             <>
                                 {parseFloat(currentTotalHours) !== parseFloat(totalHours) && parseFloat(currentTotalHours) < parseFloat(totalHours) ?
                                     <div className={classes.totalHourError}>
@@ -253,12 +270,76 @@ class Sections extends React.PureComponent<SectionsProps> {
                                     </div>
                                 }
                             </>
+                            :
+                            <></>
                         }
 
                     </Scrollbars>
                     )}
                     </AutoSizer> 
                 </TableContainer>
+
+                {!lectureHours.length && !practiceHours.length && !labHours.length && !srsHours.length ? <></> :
+                    <>
+                      <Typography className={classes.lastInfo}>
+                        <b> Трудоемкость по данным из ИСУ (справочно):</b>
+                      </Typography>
+
+                      <TableContainer className={classes.table}>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell rowSpan={2} className={classes.headerCell} colSpan={1}>
+                                Занятия
+                              </TableCell>
+                              <TableCell className={classes.headerCell} colSpan={10}>
+                                Семестр
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                {([1,2,3,4,5,6,7,8,9,10]).map((item) =>
+                                    <TableCell className={classes.headerCell}>{item}</TableCell>
+                                )}
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            <TableRow>
+                              <TableCell className={classes.headerCell}>
+                                Лекционные занятия
+                              </TableCell>
+                                {lectureHours.map((item: any) =>
+                                    <TableCell className={classes.cell}>{item}</TableCell>
+                                )}
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className={classes.headerCell}>
+                                Практические занятия
+                              </TableCell>
+                                {practiceHours.map((item: any) =>
+                                    <TableCell className={classes.cell}>{item}</TableCell>
+                                )}
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className={classes.headerCell}>
+                                Лабораторные занятия
+                              </TableCell>
+                                {labHours.map((item: any) =>
+                                    <TableCell className={classes.cell}>{item}</TableCell>
+                                )}
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className={classes.headerCell}>
+                                Самостоятельная работа
+                              </TableCell>
+                                {srsHours.map((item: any) =>
+                                    <TableCell className={classes.cell}>{item}</TableCell>
+                                )}
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </>
+                }
 
                 {!createNewSectionMode && isCanEdit
                     && <div className={classes.iconWrapper}>

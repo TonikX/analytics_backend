@@ -9,6 +9,9 @@ import {layoutState} from "../layout/types";
 import {GENERAL_PATH as coursesPath, reducer as CoursesReducer} from "../containers/Courses/reducer";
 import {coursesState} from "../containers/Courses/types";
 
+import {GENERAL_PATH as coursePath, reducer as CourseReducer} from "../containers/Course/reducer";
+import {courseState as CourseState} from "../containers/Course/types";
+
 import {GENERAL_PATH as literaturePath, reducer as LiteratureReducer} from "../containers/Literature/reducer";
 import {literatureState} from "../containers/Literature/types";
 
@@ -72,7 +75,19 @@ import {trainingModulesState} from "../containers/EducationalPlan/TrainingModule
 import {GENERAL_PATH as selectEducationalProgramPath, reducer as selectEducationalProgramReducer} from "../containers/SelectEducationalProgram/reducer";
 import {selectEducationalProgramState} from "../containers/SelectEducationalProgram/types"
 
+import {GENERAL_PATH as individualTrajectoriesPath, reducer as individualTrajectoriesReducer} from "../containers/IndividualTrajectories/reducer";
+import {individualTrajectoriesState} from "../containers/IndividualTrajectories/types"
+
+import {GENERAL_PATH as professionalStandardsPath, reducer as professionalStandardsReducer} from "../containers/ProfessionalStandards/reducer";
+import {professionalStandardsState} from "../containers/ProfessionalStandards/types"
+
+import {GENERAL_PATH as structuralUnitsPath, reducer as structuralUnitsReducer} from "../containers/StructuralUnits/reducer";
+import {structuralUnitsState} from "../containers/StructuralUnits/types"
+
 export interface rootState {
+    [structuralUnitsPath]: structuralUnitsState,
+    [professionalStandardsPath]: professionalStandardsState,
+    [individualTrajectoriesPath]: individualTrajectoriesState,
     [trainingModulesPath]: trainingModulesState,
     [foldersPath]: foldersState,
     [educationalProgramPath]: educationalProgramState,
@@ -99,9 +114,13 @@ export interface rootState {
     [workProgramListPath]: workProgramListState,
     [selectDisciplinePath]: selectDisciplineState,
     [selectEducationalProgramPath]: selectEducationalProgramState,
+    [coursePath]: CourseState,
 }
 
 export default combineReducers({
+    [structuralUnitsPath]: structuralUnitsReducer,
+    [professionalStandardsPath]: professionalStandardsReducer,
+    [individualTrajectoriesPath]: individualTrajectoriesReducer,
     [trainingModulesPath]: trainingModulesReducer,
     [selectDisciplinePath]: selectDisciplineReducer,
     [foldersPath]: foldersReducer,
@@ -127,4 +146,5 @@ export default combineReducers({
     [educationPlanInDirectionPath]: educationPlanInDirectionReducer,
     [workProgramListPath]: workProgramListReducer,
     [selectEducationalProgramPath]: selectEducationalProgramReducer,
+    [coursePath]: CourseReducer,
 });

@@ -9,8 +9,10 @@ from workprogramsapp.educational_program.views import GeneralCharacteristicsCrea
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
     GeneralCharacteristicsDetailsWithEducationalProgramView
 from ..op_slection.views import EducationalProgramRankingByProfession, EducationalProgramRankingByProfessionScientific
+from .views import ProfessionalStandardSet
 
 router = DefaultRouter()
+router.register(r'api/professionalstandard', ProfessionalStandardSet, basename='professional-standard')
 
 
 urlpatterns = [

@@ -1,6 +1,9 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
+    tooltip: {
+        fontSize: '14px'
+    },
     wrap: {
         padding: '0px 30px 30px',
         boxSizing: 'border-box'

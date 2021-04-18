@@ -11,6 +11,7 @@ from .workprogram_additions.serializers import AdditionalMaterialSerializer, Sho
 from onlinecourse.serializers import OnlineCourseSerializer
 
 
+
 class IndicatorSerializer(serializers.ModelSerializer):
     """Сериализатор Индикаторов"""
     class Meta:

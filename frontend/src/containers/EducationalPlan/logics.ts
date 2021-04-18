@@ -8,7 +8,14 @@ import moduleActions from './TrainingModules/actions';
 import Service from './service';
 
 import {BlocksOfWorkProgramsFields, fetchingTypes} from "./enum";
-import {getCurrentPage, getEducationalPlanDetailId, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {
+    getCurrentPage,
+    getEducationalPlanDetailId,
+    getIsTrajectoryRoute,
+    getSearchQuery,
+    getSortingField,
+    getSortingMode
+} from "./getters";
 import {getTrainingModuleId} from "./TrainingModules/getters";
 
 const service = new Service();
@@ -49,16 +56,26 @@ const getEducationalPlanDetail = createLogic({
     type: planActions.getEducationalDetail.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        //@ts-ignore
         const planId = action.payload;
+        const trajectoryRoute = getIsTrajectoryRoute(getState());
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EDUCATIONAL_PLAN_DETAIL}));
 
-        service.getEducationalPlanDetail(planId)
+        service.getEducationalPlanDetail(planId, trajectoryRoute)
             .then((res) => {
-                const plan = get(res, 'data', {});
+                if (trajectoryRoute){
+                    const data = get(res.data, 'implementation_of_academic_plan.academic_plan', {});
+                    dispatch(planActions.setEducationalDetail({
+                        ...data,
+                        'id_rating': res.data?.id_rating,
+                        'rating': res.data?.rating,
+                    }));
+                    dispatch(planActions.planTrajectorySetUserData(get(res.data, 'user', {})));
+                    dispatch(planActions.planTrajectorySetDirection(get(res.data, 'implementation_of_academic_plan.field_of_study', {})));
+                } else {
+                    dispatch(planActions.setEducationalDetail(res.data));
+                }
 
-                dispatch(planActions.setEducationalDetail(plan));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {

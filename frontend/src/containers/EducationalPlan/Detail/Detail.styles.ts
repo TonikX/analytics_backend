@@ -13,7 +13,8 @@ export default (theme: Theme) => createStyles({
         }
     },
     displayFlex: {
-        display: 'flex'
+        display: 'flex',
+        alignItems: 'center'
     },
     button: {
         cursor: 'pointer'
@@ -102,5 +103,8 @@ export default (theme: Theme) => createStyles({
     },
     likeIcon: {
         marginLeft: 'auto'
+    },
+    trajectoryOwner: {
+        marginBottom: '10px'
     }
 });

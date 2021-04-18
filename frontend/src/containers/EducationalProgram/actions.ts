@@ -1,11 +1,18 @@
 import {createAction} from "@reduxjs/toolkit";
 
 import {
+    CharacteristicAddCompetenceActionType,
+    CharacteristicAddIndicatorActionType,
+    CharacteristicAddProfessionalStandardActionType,
     CharacteristicCreateGroupActionType,
+    CharacteristicDeleteCompetenceActionType,
     CharacteristicDeleteGroupActionType,
+    CharacteristicDeleteIndicatorActionType,
+    CharacteristicDeleteProfessionalStandardActionType,
+    CharacteristicSaveCompetenceLaborFunctionActionType,
+    CharacteristicSaveGroupTitleActionType,
     EducationalProgramActions
 } from './types';
-import {CompetenceTableType} from "./enum";
 
 const getEducationalProgramList = createAction('GET_EDUCATIONAL_PROGRAM_LIST');
 const setEducationalProgramList = createAction('SET_EDUCATIONAL_PROGRAM_LIST');
@@ -17,9 +24,18 @@ const getEducationalProgramCharacteristic = createAction('GET_EDUCATIONAL_PROGRA
 const setEducationalProgramCharacteristic = createAction('SET_EDUCATIONAL_PROGRAM_CHARACTERISTIC');
 
 const characteristicCreateGroup = createAction<CharacteristicCreateGroupActionType>('CHARACTERISTIC_COMPETENCIES_CREATE_GROUP');
-const characteristicSaveGroupTitle = createAction<{title: string, type: CompetenceTableType}>('CHARACTERISTIC_COMPETENCIES_SAVE_GROUP_TITLE');
-const characteristicSaveCompetence = createAction<{competenceId: number, type: CompetenceTableType}>('CHARACTERISTIC_COMPETENCIES_SAVE_COMPETENCE');
-const characteristicSaveIndicators = createAction<{indicatorId: number, type: CompetenceTableType}>('CHARACTERISTIC_COMPETENCIES_SAVE_INDICATORS');
+const characteristicSaveGroupTitle = createAction<CharacteristicSaveGroupTitleActionType>('CHARACTERISTIC_COMPETENCIES_SAVE_GROUP_TITLE');
+
+const characteristicSaveCompetence = createAction<CharacteristicAddCompetenceActionType>('CHARACTERISTIC_COMPETENCIES_SAVE_COMPETENCE');
+const characteristicDeleteCompetence = createAction<CharacteristicDeleteCompetenceActionType>('CHARACTERISTIC_COMPETENCIES_DELETE_COMPETENCE');
+const characteristicSaveCompetenceLaborFunction = createAction<CharacteristicSaveCompetenceLaborFunctionActionType>('CHARACTERISTIC_COMPETENCIES_SAVE_COMPETENCE_LABOR_FUNCTION');
+
+const characteristicSaveIndicator = createAction<CharacteristicAddIndicatorActionType>('CHARACTERISTIC_COMPETENCIES_SAVE_INDICATOR');
+const characteristicDeleteIndicator = createAction<CharacteristicDeleteIndicatorActionType>('CHARACTERISTIC_COMPETENCIES_DELETE_INDICATOR');
+
+const characteristicSaveProfessionalStandard = createAction<CharacteristicAddProfessionalStandardActionType>('CHARACTERISTIC_COMPETENCIES_SAVE_PROFESSIONAL_STANDARD');
+const characteristicDeleteProfessionalStandard = createAction<CharacteristicDeleteProfessionalStandardActionType>('CHARACTERISTIC_COMPETENCIES_DELETE_PROFESSIONAL_STANDARD');
+
 const characteristicDeleteGroup = createAction<CharacteristicDeleteGroupActionType>('CHARACTERISTIC_COMPETENCIES_DELETE_GROUP');
 
 const changeEducationalProgramCharacteristic = createAction('CHANGE_EDUCATIONAL_PROGRAM_CHARACTERISTIC');
@@ -33,10 +49,18 @@ const changeAllCount = createAction('EDUCATIONAL_PROGRAM_LIST_CHANGE_ALL_COUNT')
 const changeSorting = createAction('EDUCATIONAL_PROGRAM_LIST_CHANGE_SORTING');
 
 const actions: EducationalProgramActions = {
+    characteristicSaveProfessionalStandard,
+    characteristicDeleteProfessionalStandard,
+
     characteristicCreateGroup,
     characteristicSaveGroupTitle,
+
     characteristicSaveCompetence,
-    characteristicSaveIndicators,
+    characteristicDeleteCompetence,
+    characteristicSaveCompetenceLaborFunction,
+
+    characteristicSaveIndicator,
+    characteristicDeleteIndicator,
     characteristicDeleteGroup,
 
     getEducationalProgramList,

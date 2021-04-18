@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "./actions";
-import {getCourses, getCurrentPage, getSearchQuery, getAllCount, getSortingMode, getSortingField} from './getters';
+import { getCourses, getCurrentPage, getSearchQuery, getAllCount, getSortingMode, getSortingField } from './getters'
 import {CoursesActions} from "./types";
 
 import {rootState} from "../../store/reducers";

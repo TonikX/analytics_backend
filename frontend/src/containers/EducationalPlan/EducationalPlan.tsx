@@ -161,13 +161,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        Номер
-                                        <SortingButton changeMode={this.changeSorting(EducationalPlanFields.NUMBER)}
-                                                       mode={sortingField === EducationalPlanFields.NUMBER ? sortingMode : ''}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        Профиль
+                                        Образовательная программа
                                         <SortingButton changeMode={this.changeSorting(EducationalPlanFields.PROFILE)}
                                                        mode={sortingField === EducationalPlanFields.PROFILE ? sortingMode : ''}
                                         />
@@ -179,7 +173,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        Квалификация
+                                        Уровень образования
                                         <SortingButton changeMode={this.changeSorting(EducationalPlanFields.QUALIFICATION)}
                                                        mode={sortingField === EducationalPlanFields.QUALIFICATION ? sortingMode : ''}
                                         />
@@ -201,7 +195,6 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                             {moment(plan[EducationalPlanFields.APPROVAL_DATE]).format(FULL_DATE_FORMAT)}
                                         </TableCell>
 
-                                        <TableCell>{plan[EducationalPlanFields.NUMBER]}</TableCell>
                                         <TableCell>{plan[EducationalPlanFields.PROFILE]}</TableCell>
                                         <TableCell>{plan[EducationalPlanFields.YEAR]}</TableCell>
                                         <TableCell>

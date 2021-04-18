@@ -22,7 +22,7 @@ const Selector = ({classes, value, onChange, noMargin}: QualificationSelectorPro
     return (
         <FormControl className={classNames(classes.selectorWrap, {[classes.marginBottom30]: !noMargin})}>
             <InputLabel shrink id="section-label">
-                Квалификация *
+                Уровень образования *
             </InputLabel>
             <Select
                 variant="outlined"

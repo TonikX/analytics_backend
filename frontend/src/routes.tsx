@@ -7,6 +7,7 @@ import SignIn from './containers/SignIn';
 import SignUp from './containers/SignUp';
 import WorkProgram from './containers/WorkProgram';
 import Courses from './containers/Courses';
+import Course from './containers/Course';
 import SubjectArea from './containers/SubjectArea';
 import Prerequisites from './containers/TrainingEntities';
 import Competences from './containers/Competences';
@@ -23,7 +24,6 @@ import Professions from "./containers/Professions";
 import Roles from "./containers/Roles";
 import ProfessionSkills from "./containers/Professions/Skills";
 import RolesSkills from "./containers/Roles/Skills";
-
 import EducationalProgram from "./containers/EducationalProgram";
 import EducationalProgramCharacteristic from "./containers/EducationalProgram/Characteristic";
 
@@ -41,7 +41,13 @@ import NotFoundPage from "./containers/NotFoundPage";
 import ForbiddenPage from "./containers/ForbiddenPage";
 
 import SelectDiscipline from "./containers/SelectDiscipline";
-import SelectEducationalProgram from './containers/SelectEducationalProgram'
+import SelectEducationalProgram from './containers/SelectEducationalProgram';
+import IndividualTrajectories from './containers/IndividualTrajectories';
+import IndividualEducationalPlans from './containers/IndividualEducationalPlans';
+
+import ProfessionalStandards from './containers/ProfessionalStandards';
+import StructuralUnits from './containers/StructuralUnits';
+import StructuralUnit from './containers/StructuralUnits/StructuralUnit';
 
 import Layout from "./layout";
 
@@ -55,6 +61,23 @@ export default () => (
             <Switch>
             <Redirect exact from="/" to={routerService.getEducationPlanRoute()} />
 
+            <AuthRoute path={routerService.getCoursesRoute()}>
+                <Courses />
+            </AuthRoute>
+            <AuthRoute path={routerService.getCourseRoute()}>
+                <Course />
+            </AuthRoute>
+
+            <AuthRoute path={routerService.getTrajectoryPlanDetailRoute()}
+                       children={() => (
+                           <Route
+                               render={({match}) => (
+                                   <EducationPlanDetail match={match} trajectoryRoute />
+                               )}
+                           />
+                       )}
+            />
+
             <Route path={routerService.getSignInRoute()}>
                 <SignIn />
             </Route>
@@ -64,6 +87,21 @@ export default () => (
             <AuthRoute path={routerService.getSelectDisciplineRoute()}>
                 <SelectDiscipline />
             </AuthRoute>
+            <AuthRoute path={routerService.getProfessionalStandardsRoute()}>
+                <ProfessionalStandards />
+            </AuthRoute>
+            <AuthRoute path={routerService.getStructuralUnitRoute()}>
+                <StructuralUnit />
+            </AuthRoute>
+            <AuthRoute path={routerService.getStructuralUnitsRoute()}>
+                <StructuralUnits />
+            </AuthRoute>
+            <AuthRoute path={routerService.getIndividualTrajectoriesRoute()}>
+                <IndividualTrajectories />
+            </AuthRoute>
+            <AuthRoute path={routerService.getIndividualEducationalPlansRoute()}>
+                <IndividualEducationalPlans />
+            </AuthRoute>
             <AuthRoute path={routerService.getSelectEducationalProgramRoute()}>
                 <SelectEducationalProgram />
             </AuthRoute>
@@ -72,6 +110,9 @@ export default () => (
             </AuthRoute>
             <AuthRoute path={routerService.getCoursesRoute()}>
                 <Courses />
+            </AuthRoute>
+            <AuthRoute path={routerService.getCourseRoute()}>
+                <Course />
             </AuthRoute>
             <AuthRoute path={routerService.getLiteratureRoute()}>
                 <Literature />
@@ -145,15 +186,9 @@ export default () => (
             <AuthRoute path={routerService.getWorkProgramListRoute()}>
                 <WorkProgramList />
             </AuthRoute>
-            <AuthRoute path={routerService.getWorkProgramRoute()}
-                       children={() => (
-                           <Route
-                               render={({match}) => (
-                                   <WorkProgram match={match}/>
-                               )}
-                           />
-                       )}
-            />
+            <AuthRoute path={routerService.getWorkProgramRoute()}>
+                <WorkProgram />
+            </AuthRoute>
             <AuthRoute path={routerService.getExpertiseRoute()}>
                 <Expertise />
             </AuthRoute>

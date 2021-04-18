@@ -30,6 +30,8 @@ import {appRouter} from "../../../../service/router-service";
 import {BlocksOfWorkProgramsType} from "../../types";
 
 import styles from './DetailTrainingModule.styles';
+import LikeButton from "../../../../components/LikeButton/LikeButton";
+import {FavoriteType} from "../../../Profile/Folders/enum";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     state = {
@@ -37,7 +39,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         deletedWorkProgramsLength: 0,
     }
     componentDidMount() {
-        this.props.actions.getTrainingModule({id: this.getModuleId()});
+        this.props.actions.getTrainingModule(this.getModuleId());
     }
 
     handleCreateNewWPBlock = () => {
@@ -80,9 +82,28 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             moduleId: this.getModuleId()
         });
     }
+    handleClickLike = () => {
+        const {moduleRating, moduleRatingId} = this.props;
+        const moduleId = this.getModuleId();
+
+        if (moduleRating){
+            this.props.foldersActions.removeFromFolder({
+                id: moduleRatingId,
+                callback: this.props.actions.getTrainingModule,
+                type: FavoriteType.MODULES,
+                relationId: moduleId
+            });
+        } else {
+            this.props.foldersActions.openAddToFolderDialog({
+                relationId: moduleId,
+                type: FavoriteType.MODULES,
+                callback: this.props.actions.getTrainingModule,
+            });
+        }
+    }
 
     render() {
-        const {module, classes, canEdit} = this.props;
+        const {module, classes, canEdit, moduleRating} = this.props;
         const {deleteBlockConfirmId, deletedWorkProgramsLength} = this.state;
 
         return (
@@ -90,6 +111,10 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                 <div className={classes.title}>
                     <Typography> {get(module, ModuleFields.NAME, '')} </Typography>
                     <Button onClick={this.handleCreateNewWPBlock}>Создать блок рабочих программ</Button>
+
+                    <LikeButton onClick={this.handleClickLike}
+                                isLiked={moduleRating}
+                    />
                 </div>
 
                 <Scrollbars>

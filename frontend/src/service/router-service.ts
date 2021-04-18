@@ -4,6 +4,7 @@ const FOLDERS = 'folders';
 const SIGN_IN = 'sign-in';
 const SIGN_UP = 'sign-up';
 const COURSES = 'courses';
+const COURSE = 'course'
 const LITERATURE = 'literature';
 const SUBJECT_AREA = 'subject-area';
 const WORK_PROGRAM = 'work-program';
@@ -22,6 +23,10 @@ const ROLES = 'roles';
 const SKILLS = 'skills';
 const EXPERTISES = 'expertises';
 const SELECT_EDUCATIONAL_PROGRAM = 'select-educational-program';
+const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
+const INDIVIDUAL_EDUCATIONAL_PLANS = 'individual-educational-plans';
+const PROFESSIONAL_STANDARDS = 'professional-standards';
+const STRUCTURAL_UNITS = 'structural-units';
 
 const SEPARATOR = '/';
 
@@ -47,12 +52,32 @@ export default class RouterService {
         return SEPARATOR + FOLDERS;
     };
 
+    getProfessionalStandardsRoute = () => {
+        return SEPARATOR + PROFESSIONAL_STANDARDS;
+    };
+
+    getStructuralUnitsRoute = () => {
+        return SEPARATOR + STRUCTURAL_UNITS;
+    };
+
+    getStructuralUnitRouteLink = (id: number) => {
+        return SEPARATOR + STRUCTURAL_UNITS + SEPARATOR + id;
+    };
+
+    getStructuralUnitRoute = () => {
+        return SEPARATOR + STRUCTURAL_UNITS + SEPARATOR + ':id';
+    };
+
     getSignUpRoute = () => {
         return SEPARATOR + SIGN_UP;
     };
 
     getCoursesRoute = () => {
         return SEPARATOR + COURSES;
+    };
+
+    getCourseRoute = () => {
+        return SEPARATOR + COURSE + SEPARATOR + ':id';
     };
 
     getLiteratureRoute = () => {
@@ -116,7 +141,15 @@ export default class RouterService {
     };
 
     getSelectEducationalProgramRoute = () => {
-        return SEPARATOR + SELECT_EDUCATIONAL_PROGRAM
+        return SEPARATOR + SELECT_EDUCATIONAL_PROGRAM;
+    };
+
+    getIndividualTrajectoriesRoute = () => {
+        return SEPARATOR + INDIVIDUAL_TRAJECTORIES;
+    };
+
+    getIndividualEducationalPlansRoute = () => {
+        return SEPARATOR + INDIVIDUAL_EDUCATIONAL_PLANS;
     };
 
     getSkillsRolesRoute = () => {
@@ -182,12 +215,20 @@ export default class RouterService {
         return SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + ':id';
     };
 
+    getTrajectoryPlanDetailRoute = () => {
+        return SEPARATOR + INDIVIDUAL_TRAJECTORIES + SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + ':id';
+    };
+
     getWorkProgramLink = (id: number) => {
         return SEPARATOR + WORK_PROGRAM + SEPARATOR + id;
     };
 
     getPlanDetailLink = (id: ReactText) => {
         return SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + id;
+    };
+
+    getTrajectoryPlanDetailLink = (id: ReactText) => {
+        return SEPARATOR + INDIVIDUAL_TRAJECTORIES + SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + id;
     };
 }
 

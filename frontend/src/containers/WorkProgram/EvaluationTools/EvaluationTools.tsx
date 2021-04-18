@@ -127,7 +127,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                         </Tooltip>
                     </Typography>
                     <Typography className={classes.checkpoint}>
-                        Контрольная точка
+                        Ключевая точка
                     </Typography>
                     <Typography className={classes.semester}>
                         Семестр

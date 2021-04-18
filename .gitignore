@@ -4,7 +4,6 @@ mysql-data
 dbs
 /application/workprogramsapp/migrations
 **/migrations/*
-**/discipline_code/*
 /application/discipline_code
 <<<<<<< HEAD
 **/.env
@@ -13,6 +12,7 @@ dbs
 /application/export
 nginx/ssl/data/
 frontend/.env.production
+**/discipline_code/*
 
 
 

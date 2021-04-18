@@ -24,7 +24,7 @@ export default (theme: Theme) => createStyles({
             transform: 'translate(14px, -6.5px) scale(0.75) !important',
         },
         '& .MuiOutlinedInput-notchedOutline legend': {
-            width: '107px !important'
+            width: '80px !important'
         }
     },
     qualificationSelectorWrap: {
@@ -32,7 +32,7 @@ export default (theme: Theme) => createStyles({
             transform: 'translate(14px, -6.5px) scale(0.75) !important',
         },
         '& .MuiOutlinedInput-notchedOutline legend': {
-            width: '95px !important'
+            width: '135px !important'
         }
     },
     radioGroup: {

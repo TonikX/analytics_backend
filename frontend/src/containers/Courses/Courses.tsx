@@ -1,218 +1,170 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
-import {Link} from "react-router-dom";
-import Scrollbars from "react-custom-scrollbars";
 
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
-import Fab from "@material-ui/core/Fab";
+import Button from '@material-ui/core/Button'
 import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
+import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
+import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import SearchOutlined from "@material-ui/icons/SearchOutlined";
+// import CourseCreateModal from "./CourseCreateModal";
+import { CoursesTable } from './CoursesTable/CoursesTable'
+import { Filters } from './Filters/Filters'
 
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
-
-import ConfirmDialog from "../../components/ConfirmDialog";
-import SortingButton from "../../components/SortingButton";
-import CourseCreateModal from "./CourseCreateModal";
-import {SortingType} from "../../components/SortingButton/types";
-
-import {CoursesProps, CourseType} from './types';
-import {CourseFields} from './enum';
+import {CoursesProps} from './types';
 
 import connect from './Courses.connect';
 import styles from './Courses.styles';
 
-class Courses extends React.Component<CoursesProps> {
-    state = {
-        deleteConfirmId: null
-    }
+// через стили (.styles.ts) не удалось сделать чтобы при открытии margin не появлялся
+const ExpansionPanel = withStyles({
+  root: {
+    border: '1px solid rgba(0, 0, 0, .125)',
+    boxShadow: 'none',
+    '&:not(:last-child)': {
+      borderBottom: 0,
+    },
+    '&:before': {
+      display: 'none',
+    },
+    '&$expanded': {
+      // этот margin
+      margin: 0,
+    },
+  },
+  expanded: {},
+})(MuiExpansionPanel);
 
-    componentDidMount() {
-        this.props.actions.getCourses();
-    }
+const ExpansionPanelSummary = withStyles({
+  root: {
+    margin: 0,
+    backgroundColor: 'rgba(0, 0, 0, .03)',
+    height: '48px',
+  }, 
+  expanded: {
+    minHeight: '20px !important'
+  }
+})(MuiExpansionPanelSummary)
 
-    handleClickDelete = (id: number) => () => {
-        this.setState({
-            deleteConfirmId: id
-        });
-    }
+class OnlineCourses extends React.Component<CoursesProps> {
+  state = {
+      showFilters: false,
+  }
 
-    handleConfirmDeleteDialog = () => {
-        const {deleteConfirmId} = this.state;
+  componentDidMount() {      
+      this.props.actions.getPlatforms()
+      this.props.actions.getInstitutions()
+      this.props.actions.getCourses();
+  }
 
-        this.props.actions.deleteCourse(deleteConfirmId);
-        this.closeConfirmDeleteDialog();
-    }
+  // handleCreate = (): void => {
+  //   this.props.actions.openDialog();
+  // }
 
-    closeConfirmDeleteDialog = () => {
-        this.setState({
-            deleteConfirmId: null
-        });
-    }
+  handleChangeSearchQuery = (event: React.ChangeEvent): void => {
+    this.changeSearch(get(event, 'target.value', ''));
+  }
 
-    handleClickEdit = (course: CourseType) => () => {
-        this.props.actions.openDialog(course);
-    }
+  changeSearch = debounce((value: string): void => {
+    this.props.actions.changeSearchQuery(value);
+    this.props.actions.changeCurrentPage(1);
+    this.props.actions.getCourses();
+  }, 300);
 
-    handleCreate = () => {
-        this.props.actions.openDialog();
-    }
+  handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number): void => {
+      this.props.actions.changeCurrentPage(page + 1);
+      this.props.actions.getCourses();
+  }
 
-    handleChangeSearchQuery = (event: React.ChangeEvent) => {
-        this.changeSearch(get(event, 'target.value', ''));
-    }
+  handleShowFilters = (): void => {
+    this.setState({
+      showFilters: !this.state.showFilters,
+    })
+  }
+  render() {
+    const {classes, courses, allCount, currentPage, sortingField, sortingMode } = this.props;
 
-    changeSearch = debounce((value: string): void => {
-        this.props.actions.changeSearchQuery(value);
-        this.props.actions.changeCurrentPage(1);
-        this.props.actions.getCourses();
-    }, 300);
+    return (
+      <Paper className={classes.root}>
+        <Typography className={classes.title}>
+            Онлайн курсы
+            <div className={classes.searchWrapper}>
+              <Button 
+                onClick={this.handleShowFilters} 
+                variant="contained" 
+                color="primary" 
+                disableElevation 
+                className={classes.filterBtn}
+              >
+                Фильтрация
+              </Button>
+              <TextField 
+                placeholder="Поиск"
+                variant="outlined"
+                InputProps={{
+                    classes: {
+                        root: classes.searchInput
+                    },
+                    startAdornment: <SearchOutlined />,
+                }}
+                onChange={this.handleChangeSearchQuery}
+              />
+            </div>
+        </Typography>
+        <ExpansionPanel expanded={this.state.showFilters} onChange={this.handleShowFilters}>
+          <ExpansionPanelSummary
+            // classes={{ 'expanded': { height: '48px' }  }}
+            // className={classes.accordionSummary}
+            expandIcon={<ExpandMoreIcon />}
+          >
+            <Typography>Фильтрация</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Filters />
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
-        this.props.actions.getCourses();
-    }
+        <CoursesTable 
+          courses={courses} 
+          sortingField={sortingField} 
+          sortingMode={sortingMode} 
+        />
 
-    changeSorting = (field: string) => (mode: SortingType)=> {
-        this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getCourses();
-    }
+        <div className={classes.footer}>
+          <TablePagination 
+            count={allCount}
+            component="div"
+            page={currentPage - 1}
+            rowsPerPageOptions={[]}
+            onChangePage={this.handleChangePage}
+            //@ts-ignore
+            rowsPerPage={10}
+            onChangeRowsPerPage={()=>{}}
+          />
 
-    render() {
-        const {classes, courses, allCount, currentPage, sortingField, sortingMode} = this.props;
-        const {deleteConfirmId} = this.state;
-
-        return (
-            <Paper className={classes.root}>
-                <Typography className={classes.title}>
-                    Онлайн курсы
-
-                    <TextField placeholder="Поиск"
-                               variant="outlined"
-                               InputProps={{
-                                   classes: {
-                                       root: classes.searchInput
-                                   },
-                                   startAdornment: <SearchOutlined />,
-                               }}
-                               onChange={this.handleChangeSearchQuery}
-                    />
-                </Typography>
-
-                <Scrollbars>
-                    <div className={classes.tableWrap}>
-                        <Table stickyHeader size='small'>
-                            <TableHead className={classes.header}>
-                                <TableRow>
-                                    <TableCell>
-                                        Название курса
-                                        <SortingButton changeMode={this.changeSorting(CourseFields.TITLE)}
-                                                       mode={sortingField === CourseFields.TITLE ? sortingMode : ''}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        Ссылка на курс
-                                        <SortingButton changeMode={this.changeSorting(CourseFields.COURSE_URL)}
-                                                       mode={sortingField === CourseFields.COURSE_URL ? sortingMode : ''}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        Платформа
-                                        <SortingButton changeMode={this.changeSorting(CourseFields.PLATFORM)}
-                                                       mode={sortingField === CourseFields.PLATFORM ? sortingMode : ''}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        Описание
-                                        <SortingButton changeMode={this.changeSorting(CourseFields.DESCRIPTION)}
-                                                       mode={sortingField === CourseFields.DESCRIPTION ? sortingMode : ''}
-                                        />
-                                    </TableCell>
-                                    <TableCell />
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {courses.map(course =>
-                                    <TableRow>
-                                        <TableCell> {course[CourseFields.TITLE]} </TableCell>
-                                        <TableCell>
-                                            <Link to={course[CourseFields.COURSE_URL]} className={classes.link}>
-                                                {course[CourseFields.COURSE_URL]}
-                                            </Link>
-                                        </TableCell>
-                                        <TableCell>
-                                            {course[CourseFields.PLATFORM]}
-                                        </TableCell>
-                                        <TableCell>
-                                            {course[CourseFields.DESCRIPTION].length > 50 ?
-                                                course[CourseFields.DESCRIPTION].slice(0, 50) + '...'
-                                                :
-                                                course[CourseFields.DESCRIPTION]
-                                            }
-                                        </TableCell>
-
-                                        <TableCell>
-                                            <div className={classes.actions}>
-                                                <IconButton onClick={this.handleClickDelete(course[CourseFields.ID])}>
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                                <IconButton onClick={this.handleClickEdit(course)}>
-                                                    <EditIcon />
-                                                </IconButton>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </div>
-                </Scrollbars>
-
-                <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
-                    />
-
-                    <Fab color="secondary"
-                         classes={{
-                             root: classes.addIcon
-                         }}
-                         onClick={this.handleCreate}
-                    >
-                        <AddIcon/>
-                    </Fab>
-                </div>
-
-                <CourseCreateModal />
-
-                <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
-                               onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены, что хотите удалить курс?'}
-                               isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить онлайн курс'}
-                               confirmButtonText={'Удалить'}
-                />
-            </Paper>
-        );
-    }
+          {/* <Fab 
+            color="secondary"
+            classes={{
+              root: classes.addIcon
+            }}
+            onClick={this.handleCreate}
+          >
+            <AddIcon/>
+          </Fab> */}
+        </div>
+        {/* 
+        <CourseCreateModal />
+        /> */}
+      </Paper>
+    );
+  }
 }
 
-export default connect(withStyles(styles)(Courses));
+export default connect(withStyles(styles)(OnlineCourses));
