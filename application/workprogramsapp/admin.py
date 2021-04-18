@@ -8,9 +8,10 @@ from .individualization.models import IndividualImplementationAcademicPlan, \
 from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
     Competence, Indicator, EvaluationTool, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
-    RouteComposition, Route, Certification, OnlineCourse, BibliographicReference, AcademicPlan,
+    RouteComposition, Route, Certification, BibliographicReference, AcademicPlan,
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,
-    СertificationEvaluationTool
+    СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
+    OnlineCourse
 )
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
@@ -63,7 +64,6 @@ admin.site.register(Topic)
 admin.site.register(RouteComposition)
 admin.site.register(Route)
 admin.site.register(Certification)
-admin.site.register(OnlineCourse)
 admin.site.register(BibliographicReference)
 admin.site.register(AcademicPlan)
 admin.site.register(DisciplineBlock)
@@ -97,4 +97,6 @@ admin.site.register(DisciplineBlockModuleInDisciplineBlock)
 admin.site.register(StructuralUnit)
 
 admin.site.register(СertificationEvaluationTool)
+admin.site.register(CourseCredit)
+admin.site.register(CourseFieldOfStudy)
 admin.site.register(ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule)
