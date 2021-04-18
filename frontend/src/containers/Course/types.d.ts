@@ -16,7 +16,7 @@ export interface courseState extends CourseType {
   [fields.RECORD_END_AT]: string | null,
   [fields.FINISHED_AT]: string | null,
   [fields.FIELDS_OF_STUDY]: Array<fieldOfStudyType>,
-  [fields.REQUIREMENTS]: Array<reqType>,
+  [fields.REQUIREMENTS]: string | null,
   [fields.OUTCOMES]: Array<outcomeType>,
   [fields.WORK_PROGRAMS]: Array<wpType>,
 }
@@ -31,11 +31,6 @@ export type fieldOfStudyType = {
   },
 }
 
-export type reqType = {
-  [reqFields.ID]: number,
-  [reqFields.COURSE]: string,
-  [reqFields.ITEM]: string,
-}
 
 export type outcomeType = {
   [outcomeFields.ID]: number,

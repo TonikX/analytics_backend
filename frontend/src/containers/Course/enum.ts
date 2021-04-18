@@ -35,7 +35,7 @@ export enum fields {
   RECORD_END_AT = 'record_end_at',
   FINISHED_AT = 'finished_at',
   FIELDS_OF_STUDY = 'course_field_of_study',
-  REQUIREMENTS = 'course_requirement',
+  REQUIREMENTS = 'requirements',
   OUTCOMES = 'course_learning_outcome',
   WORK_PROGRAMS = 'course_workprogram',
 }
@@ -55,11 +55,6 @@ export enum fieldsOfStudyFields {
   FIELD_OF_STUDY_ID = 'id',
 }
 
-export enum reqFields {
-  ID = 'id',
-  COURSE = 'course',
-  ITEM = 'item',
-}
 
 export enum outcomeFields {
   ID = 'id',
