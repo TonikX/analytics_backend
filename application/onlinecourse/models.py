@@ -1,6 +1,5 @@
 from django.db import models
-from workprogramsapp.models import FieldOfStudy
-
+from dataprocessing.models import Items
 
 class Institution(models.Model):
     """
@@ -75,7 +74,8 @@ class OnlineCourse(models.Model):
     credits = models.FloatField(blank=True, null=True, verbose_name='Трудоемкость курса в з.е.')
     requirements = models.TextField(verbose_name='Требования', blank=True, null=True)
     competences = models.TextField(verbose_name='Компетенции', blank=True, null=True)
-    learning_outcome = models.TextField(verbose_name='Компетенции', blank=True, null=True)
+    learning_outcome = models.TextField(verbose_name='Результаты', blank=True, null=True)
+    learning_outcome_list = models.ManyToManyField(Items)
 
     class Meta:
         verbose_name = 'Онлайн курс'
@@ -85,29 +85,4 @@ class OnlineCourse(models.Model):
         return self.title
 
 
-class CourseFieldOfStudy(models.Model):
-    """
-    Модель для связи онлайн курса и направления подготовки
-    """
-    course = models.ForeignKey('OnlineCourse', on_delete=models.CASCADE, verbose_name="Онлайн курс", blank=False,
-                               null=False, related_name="course_field_of_study")
-    field_of_study = models.ForeignKey(FieldOfStudy, on_delete=models.CASCADE, verbose_name='Направление подготовки')
 
-    class Meta:
-        verbose_name = 'Онлайн курс и направления подготовки'
-        verbose_name_plural = 'Онлайн курсы и направления подготовки'
-
-
-class CourseCredit(models.Model):
-    """
-    Модель для связи онлайн курса, направления подготовки и  перезачета
-    """
-    course = models.ForeignKey('OnlineCourse', on_delete=models.CASCADE, verbose_name="Онлайн курс", blank=False,
-                               null=False, related_name="course_credit")
-    institution = models.ForeignKey('Institution', on_delete=models.CASCADE, verbose_name="Правообладатель", blank=False,
-                                    null=False)
-    field_of_study = models.ForeignKey(FieldOfStudy, on_delete=models.CASCADE, verbose_name='Направление подготовки')
-
-    class Meta:
-        verbose_name = 'Перезачет'
-        verbose_name_plural = 'Перезачеты'

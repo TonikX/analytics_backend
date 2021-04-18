@@ -7,15 +7,19 @@ environ.Env.read_env()  # reading .env file
 
 cert_cert = env('CERT')
 cert_key = env('KEY')
+print(cert_cert, cert_key)
 
 
 def get_data():
     """
     Collecting platforms to DataFrame
     """
-
+    cert_cert = env('CERT')
+    cert_key = env('KEY')
+    print(cert_cert, cert_key)
     platforms = requests.get('https://test.online.edu.ru/api/partners/v0/platform',
                              cert=(cert_cert, cert_key))
+    print(platforms)
     platforms_list = platforms.json()['rows']
 
     global_id = []

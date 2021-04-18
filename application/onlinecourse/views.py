@@ -4,8 +4,8 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Institution, Platform, OnlineCourse, CourseCredit, CourseFieldOfStudy
-from workprogramsapp.models import FieldOfStudy
+from .models import Institution, Platform, OnlineCourse
+from workprogramsapp.models import FieldOfStudy, CourseCredit, CourseFieldOfStudy
 
 from .serializers import InstitutionSerializer, PlatformSerializer, OnlineCourseSerializer, \
     CourseCreditSerializer, CourseFieldOfStudySerializer
