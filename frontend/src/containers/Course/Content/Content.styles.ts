@@ -8,6 +8,5 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   content: {
     marginBottom: '10px',
-    whiteSpace: 'pre-wrap',
   }
 }));
