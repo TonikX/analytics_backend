@@ -4,18 +4,19 @@ from .bars_merge.models import BarsWorkProgramsAssociate, HistoryOfSendingToBars
 from .expertise.models import UserExpertise, ExpertiseComments, Expertise
 from .folders_ans_statistic.models import Folder, WorkProgramInFolder
 from .individualization.models import IndividualImplementationAcademicPlan, \
-    WorkProgramInWorkProgramChangeInDisciplineBlockModule
+    WorkProgramInWorkProgramChangeInDisciplineBlockModule, DisciplineBlockModuleInDisciplineBlock
 from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
     Competence, Indicator, EvaluationTool, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
-    RouteComposition, Route, Certification, OnlineCourse, BibliographicReference, AcademicPlan,
-    ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
+    RouteComposition, Route, Certification, BibliographicReference, AcademicPlan,
+    ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,
+    СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy
 )
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
     Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
 
-from .workprogram_additions.models import AdditionalMaterial
+from .workprogram_additions.models import AdditionalMaterial, StructuralUnit
 
 from .educational_program.pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
     PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
@@ -61,7 +62,6 @@ admin.site.register(Topic)
 admin.site.register(RouteComposition)
 admin.site.register(Route)
 admin.site.register(Certification)
-admin.site.register(OnlineCourse)
 admin.site.register(BibliographicReference)
 admin.site.register(AcademicPlan)
 admin.site.register(DisciplineBlock)
@@ -90,3 +90,10 @@ admin.site.register(HistoryOfSendingToBars)
 admin.site.register(BarsEPAssociate)
 admin.site.register(IndividualImplementationAcademicPlan)
 admin.site.register(WorkProgramInWorkProgramChangeInDisciplineBlockModule)
+admin.site.register(DisciplineBlockModuleInDisciplineBlock)
+
+admin.site.register(StructuralUnit)
+
+admin.site.register(СertificationEvaluationTool)
+admin.site.register(CourseCredit)
+admin.site.register(CourseFieldOfStudy)

@@ -8,7 +8,7 @@ from model_clone import CloneMixin
 from django.contrib.postgres.fields import ArrayField
 
 from dataprocessing.models import Items
-
+from onlinecourse.models import OnlineCourse, Institution
 '''
 class FieldOfStudyWorkProgram(models.Model):
 
@@ -31,7 +31,7 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
-class WorkProgram(CloneMixin, models.Model):
+class WorkProgram(models.Model):
     '''
     Модель для рабочей программы
     '''
@@ -57,9 +57,11 @@ class WorkProgram(CloneMixin, models.Model):
         ('3', '3'),
     )
 
-    languages = (
+    languages_for_wp = (
         ('ru', 'ru'),
         ('en', 'en'),
+        ('kz', 'kz'),
+        ('de', 'de'),
         ('ru/en', 'ru/en'),
     )
 
@@ -96,9 +98,24 @@ class WorkProgram(CloneMixin, models.Model):
     extra_points = models.CharField(choices=extra_points_choise, max_length=1, verbose_name='Квалификация',
                                    blank=True, null=True)
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors", verbose_name="Редакторы РПД", blank=True, null=True)
-    language = models.CharField(choices=languages, max_length=10, verbose_name='Язык',
+    language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
                                 blank=True, null=True)
-    _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference']
+    have_course_project=models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД курсовой проект")
+    have_diff_pass=models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД дифф. зачет")
+    have_pass = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД зачет")
+    have_exam = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД экзамен")
+    lecture_hours = models.CharField(max_length=1024, null=True,blank=True, verbose_name="Часы лекций")
+    practice_hours = models.CharField(max_length=1024, null=True,blank=True, verbose_name="Часы Практик")
+    lab_hours = models.CharField(max_length=1024, null=True,blank=True, verbose_name="Часы лабораторных работ")
+    srs_hours = models.CharField(max_length=1024, null=True,blank=True, verbose_name="Часы СРС")
+    old_discipline_code = models.CharField(max_length=1024, blank=True, null=True)
+    wp_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID РПД в ИСУ")
+    structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL,
+                                        verbose_name='Структурное подразделени',
+                                        related_name='workprogram_in_structural_unit', blank=True, null=True)
+    # language = models.CharField(choices=languages_for_wp, max_length=100, verbose_name='Язык', blank=True, null=True)
+
+    _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
 
 
@@ -178,7 +195,7 @@ class PrerequisitesOfWorkProgram(models.Model):
     #     return self.item
 
 
-class OutcomesOfWorkProgram(CloneMixin, models.Model):
+class OutcomesOfWorkProgram(models.Model):
     '''
     Модель для результатов обучения по рабочей программе
     '''
@@ -256,6 +273,34 @@ class FieldOfStudy(models.Model):
         return self.number
 
 
+class CourseFieldOfStudy(models.Model):
+    """
+    Модель для связи онлайн курса и направления подготовки
+    """
+    course = models.ForeignKey(OnlineCourse, on_delete=models.CASCADE, verbose_name="Онлайн курс", blank=False,
+                               null=False, related_name="course_field_of_study")
+    field_of_study = models.ForeignKey(FieldOfStudy, on_delete=models.CASCADE, verbose_name='Направление подготовки')
+
+    class Meta:
+        verbose_name = 'Онлайн курс и направления подготовки'
+        verbose_name_plural = 'Онлайн курсы и направления подготовки'
+
+
+class CourseCredit(models.Model):
+    """
+    Модель для связи онлайн курса, направления подготовки и  перезачета
+    """
+    course = models.ForeignKey(OnlineCourse, on_delete=models.CASCADE, verbose_name="Онлайн курс", blank=False,
+                               null=False, related_name="course_credit")
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, verbose_name="Правообладатель", blank=False,
+                                    null=False)
+    field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE, verbose_name='Направление подготовки')
+
+    class Meta:
+        verbose_name = 'Перезачет'
+        verbose_name_plural = 'Перезачеты'
+
+
 # class CompetenceIndicator(models.Model):
 #     '''
 #     Модель для связи компетенций и индикаторов
@@ -308,6 +353,7 @@ class AcademicPlan(models.Model):
     year = models.CharField(max_length=1024, blank = True, null = True)
     education_form = models.CharField(choices=EDUCATION_FORM_CHOICES, max_length=1024, verbose_name = 'Форма обучения', blank = True, null = True)
     author=models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Автор учебного плана', on_delete = models.CASCADE, related_name = 'academic_plan_author', blank = True, null = True)
+    ap_isu_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
 
 
     #TODO: Добавить год набора
@@ -441,12 +487,13 @@ class ImplementationAcademicPlan(models.Model):
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year], blank=True, null=True)
     period_of_study = models.CharField(max_length=100, blank=True, null=True)
+    op_isu_id = models.PositiveIntegerField(verbose_name = "ID ОП в ИСУ", blank=True, null=True)
 
     def __str__(self):
         return str(self.academic_plan)
 
 
-class DisciplineBlock(CloneMixin, models.Model):
+class DisciplineBlock(models.Model):
     '''
     Модель блока дисциплин
     '''
@@ -488,7 +535,7 @@ class DisciplineBlock(CloneMixin, models.Model):
 #         return (str(self.name) + str(self.descipline_block))
 
 
-class DisciplineBlockModule(CloneMixin, models.Model):
+class DisciplineBlockModule(models.Model):
     '''
     Модель модуля блока дисциплин
     '''
@@ -540,7 +587,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         return clone_module
 
 
-class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
+class WorkProgramChangeInDisciplineBlockModule(models.Model):
     '''
     Модель хранения блоков выбора в модуле
     '''
@@ -577,6 +624,7 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
     work_program = models.ManyToManyField('WorkProgram', verbose_name="Рабочая программа",
                                           through='WorkProgramInFieldOfStudy',
                                           related_name="work_program_in_change_block")
+    subject_code = models.IntegerField(verbose_name="Срок сдачи в неделях", blank=True, null=True)
 
     # zuns = models.ManyToManyField('Zun', verbose_name = "Зуны", through='WorkProgramInFieldOfStudy', related_name="zuns_in_changeblock")
 
@@ -584,7 +632,7 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
         return (str(self.discipline_block_module) + str(self.work_program))
 
 
-class WorkProgramInFieldOfStudy(CloneMixin,models.Model):
+class WorkProgramInFieldOfStudy(models.Model):
     work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
                                                                        on_delete=models.CASCADE, related_name="zuns_for_cb")
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
@@ -652,7 +700,7 @@ class Indicator(models.Model):
         return self.name
 
 
-class EvaluationTool(CloneMixin,models.Model):
+class EvaluationTool(models.Model):
     '''
     Модель для оценочных средств
     '''
@@ -680,7 +728,7 @@ class СertificationEvaluationTool(models.Model):
         ('4', 'Coursework')
     ]
     type = models.CharField(choices=types, default='1',max_length=1024, verbose_name="Тип оценочного средства")
-    name = models.CharField(unique=True, max_length=1024, verbose_name="Наименование оценочного средства")
+    name = models.CharField(blank=True, null=True, max_length=1024, verbose_name="Наименование оценочного средства", default="No name")
     description = models.CharField(max_length=50000, verbose_name="Описание", blank=True, null=True)
     #check_point = models.BooleanField(verbose_name="Контрольная точка", blank=True, null=True)
     deadline = models.IntegerField(verbose_name="Срок сдачи в неделях", blank=True, null=True)
@@ -693,7 +741,7 @@ class СertificationEvaluationTool(models.Model):
         return self.name
 
 
-class DisciplineSection(CloneMixin,models.Model):
+class DisciplineSection(models.Model):
     '''
     Модель для разделов дисциплин
     '''
@@ -758,16 +806,6 @@ class DisciplineSection(CloneMixin,models.Model):
         ordering = ['ordinal_number']
 
 
-class OnlineCourse(models.Model):
-    '''
-    Модель описания онлайн курса
-    '''
-    title = models.CharField(max_length=512, verbose_name="Название курсу")
-    platform = models.CharField(max_length=512, verbose_name="Платформа", blank=True, null=True)
-    description = models.CharField(max_length=50000, verbose_name="Описание", blank=True, null=True)
-    course_url = models.URLField(verbose_name="Ссылка на курс")
-
-
 class BibliographicReference(models.Model):
     '''
     Модель описания онлайн курса
@@ -776,7 +814,7 @@ class BibliographicReference(models.Model):
     # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
 
-class Topic(CloneMixin,models.Model):
+class Topic(models.Model):
     '''
     Модель для темы
     '''
@@ -785,7 +823,7 @@ class Topic(CloneMixin,models.Model):
     number = models.IntegerField(max_length=1024, verbose_name="номер темы в разделе")
     description = models.CharField(max_length=1024, verbose_name="Описание", blank=True, null=True)
     # online_course = models.CharField(max_length=1024, verbose_name = "Реализация раздела дисциплины с помощью онлайн-курса", blank = True, null = True)
-    url_online_course = models.ForeignKey('OnlineCourse', on_delete=models.CASCADE, verbose_name='Онлайн курс',
+    url_online_course = models.ForeignKey(OnlineCourse, on_delete=models.CASCADE, verbose_name='Онлайн курс',
                                           blank=True, null=True, related_name='topic_with_online_course')
 
     def new_ordinal_number(topic, new_ordinal_number):

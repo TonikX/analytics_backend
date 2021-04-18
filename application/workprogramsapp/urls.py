@@ -14,7 +14,8 @@ from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderVie
     CreateFolderView, EditFolderView, AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
     AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, \
     ModuleInFolderView, AddToFolderModuleView, \
-    RemoveFromFolderModuleView
+    RemoveFromFolderModuleView, IndividualImplementationAcademicPlanInFolderView, \
+    AddToFolderndividualImplementationAcademicPlanView, RemoveFromFolderImplementationAcademicPlanView
 from .op_slection.views import CreateProfessionByKeywords
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, \
     ProfessionUpdateView, ItemWithProfessions, ItemWithRoles, ProfessionsListWithoutPaginationApi
@@ -30,7 +31,7 @@ from .views import BibliographicReferenceListCreateAPIView, BibliographicReferen
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
     BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
-    FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView, CompetenceCreateView, CompetencesListView, \
+    FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, \
     FileUploadWorkProgramOutcomesAPIView
 from .views import CloneWorkProgramm
 from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, \
@@ -40,8 +41,7 @@ from .views import ImplementationAcademicPlanDetailsView, ImplementationAcademic
     ImplementationAcademicPlanUpdateView, ImplementationAcademicPlanListAPIView
 from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, \
     IndicatorUpdateView
-from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, \
-    OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
+from .views import NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, \
     PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
@@ -63,10 +63,10 @@ from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSec
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
 from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateView
-from .views import OnlineCourseListCreateAPIView, OnlineCourseDetailsView, OnlineCourseDestroyView, OnlineCourseUpdateView, NewOrdinalNumbersForTopicAPI, TopicCreateAPI
+from .views import NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
-    FileUploadWorkProgramAPIView, FileUploadOnlineCoursesAPIView, CompetenceCreateView, CompetencesListView, FileUploadWorkProgramOutcomesAPIView
+    FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, FileUploadWorkProgramOutcomesAPIView
 from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, IndicatorUpdateView
 from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlanDetailsView, ImplementationAcademicPlanDestroyView, ImplementationAcademicPlanUpdateView, ImplementationAcademicPlanListAPIView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
@@ -85,7 +85,7 @@ from .views import WorkProgramFullDetailsWithDisciplineCodeView
 
 
 # DocxFileExportOldView
-
+from .workprogram_additions.views import CopyContentOfWorkProgram
 
 urlpatterns = [
 
@@ -128,6 +128,7 @@ urlpatterns = [
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
     path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
     path('api/workprogram/clone', CloneWorkProgramm),
+    path('api/workprogram/merge_content', CopyContentOfWorkProgram),
     path('api/workprogramsinfieldofstudy', WorkProgramInFieldOfStudyListView.as_view()),
     path('api/workprogram/change_relations', NewRealtionsForWorkProgramsInFieldOfStudyAPI),
     # path('api/workprogram/itemrelations/<char:discipline_code>', WorkProgramDetailsWithDisciplineCodeView.as_view()),
@@ -177,13 +178,6 @@ urlpatterns = [
     path('api/fieldofstudy/', FieldOfStudyListCreateView.as_view()),
     path('api/fieldofstudy/<int:pk>', FieldOfStudyDetailUpdateDeleteView.as_view()),
 
-    # Онлайн курс
-    path('api/onlinecourse', OnlineCourseListCreateAPIView.as_view()),
-    path('api/onlinecourse/create', OnlineCourseListCreateAPIView.as_view()),
-    path('api/onlinecourse/detail/<int:pk>', OnlineCourseDetailsView.as_view()),
-    path('api/onlinecourse/delete/<int:pk>', OnlineCourseDestroyView.as_view()),
-    path('api/onlinecourse/update/<int:pk>', OnlineCourseUpdateView.as_view()),
-
     # Библиографическая ссылка
     path('api/BibliographicReference', BibliographicReferenceListCreateAPIView.as_view()),
     path('api/BibliographicReference/create', BibliographicReferenceListCreateAPIView.as_view()),
@@ -196,7 +190,6 @@ urlpatterns = [
     # Работа с файлами (загрузка/экспорт)
     path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),
     path('api/upload/wpwithoutcomes', FileUploadWorkProgramOutcomesAPIView.as_view()),
-    path('api/upload/oc', FileUploadOnlineCoursesAPIView.as_view()),
     path('api/upload/csv', FileUploadAPIView.as_view()),
     path('api/export/docx', DocxFileExportView.as_view()),
     # path('api/export/docx2', DocxFileExportOldView.as_view()),
@@ -311,6 +304,10 @@ urlpatterns = [
     path('api/folders/block_module/content/<int:pk>', ModuleInFolderView.as_view()),
     path('api/folders/block_module/add', AddToFolderModuleView.as_view()),
     path('api/folders/block_module/remove/<int:pk>', RemoveFromFolderModuleView.as_view()),
+    # --Папки для Траекторий
+    path('api/folders/individual_path/content/<int:pk>', IndividualImplementationAcademicPlanInFolderView.as_view()),
+    path('api/folders/individual_path/add', AddToFolderndividualImplementationAcademicPlanView.as_view()),
+    path('api/folders/individual_path/remove/<int:pk>', RemoveFromFolderImplementationAcademicPlanView.as_view()),
     # --прочее
     path('api/workprogram/statistic/<int:pk>', WorkProgramStatistic),
     path('api/folders/real_remove/<int:pk>', DeleteFolderView.as_view()),
@@ -321,7 +318,7 @@ urlpatterns = [
     path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
     url(r'^', include('workprogramsapp.educational_program.urls')),
 
-    #Запросы для работы с БАРС
+    # Запросы для работы с БАРС
     path('api/bars_tools/similar_ep', FindSimilarEP),
     path('api/bars_tools/similar_wp', FindSimilarWP),
     path('api/bars_tools/post_checkpoint', CreateCheckPoint),
