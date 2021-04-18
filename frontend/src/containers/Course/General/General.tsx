@@ -35,8 +35,7 @@ export const General: React.FC = () => {
                 <b>Язык:</b> {languageObject[course[fields.LANGUAGE]]}
               </Typography>}
             {course[fields.DESCRIPTION] && 
-              <Typography className={classes.description}>
-                <b>Описание:</b>{` ${course[fields.DESCRIPTION]}`}
+              <Typography className={classes.description} dangerouslySetInnerHTML={{__html: `<b>Описание: </b>${course[fields.DESCRIPTION]}`}}>
               </Typography>}
             <Typography className={classes.textItem}>
               <b>Возможность получить сертификат:</b>{course[fields.HAS_CERTIFICATE] ? ' есть' : ' нет'}
@@ -53,7 +52,7 @@ export const General: React.FC = () => {
               <Typography className={classes.textItem}>
                 <b>Дата создания онлайн-курса:</b> {course[fields.CREATED_AT]}
               </Typography>}
-            {course[fields.DURATION] && 
+            {course[fields.DURATION] !== null && course[fields.DURATION] !== 0 && 
               <Typography className={classes.textItem}>
                 <b>Длительность онлайн-курса, недель:</b> {course[fields.DURATION]}
               </Typography>}
