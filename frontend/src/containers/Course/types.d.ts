@@ -1,4 +1,4 @@
-import { fields, fieldsOfStudyFields, reqFields, outcomeFields, wpFields } from './enum'
+import { fields, fieldsOfStudyFields, outcomeFields, wpFields } from './enum'
 import { CourseType } from '../Courses/types'
 
 export interface courseState extends CourseType {
