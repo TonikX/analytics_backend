@@ -22,7 +22,7 @@ export interface CoursesActions {
     getInstitutions: any;
     setInstitutions: any;
     changeFiltering: any;
-    changeFilerSearchQuery: any;
+    changeFilterSearchQuery: any;
 }
 
 export interface coursesState {

@@ -6,7 +6,7 @@ class CoursesServices extends AnalyticsService{
         sortingMode: SortingType, platform: string, institution: string, language: string){
 
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
-        return this.get(`/api/course/onlinecourse/?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&platform=${platform}&institution=${institution}&language=${language}`)
+        return this.get(`/api/course/onlinecourse/?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&platform__title=${platform}&institution__title=${institution}&language=${language}`)
     }
     getPlatforms(searchQuery: string){
         return this.get(`/api/course/platform/?search=${searchQuery}`)

@@ -28,8 +28,8 @@ export const Filters: React.FC = () => {
     //   // { label: '45.03.04', value: 'Русский' },
     //   // { label: '09.03.04', value: 'Английский' },
     // ],
-    authors: institutions.map((institution: InstitutionType) => ({ label: institution.title, value: institution.id })),
-    platforms: platforms.map((platform: PlatformType) => ({ label: platform.title, value: platform.id }))
+    authors: institutions.map((institution: InstitutionType) => ({ label: institution.title, value: institution.title })),
+    platforms: platforms.map((platform: PlatformType) => ({ label: platform.title, value: platform.title }))
   }
   
   const handleFilter = (field: string, value: string): void => {
@@ -52,12 +52,12 @@ export const Filters: React.FC = () => {
   }
 
   const handleChangePlatformsSearchText = (query:string): void => {
-    dispatch(actions.changeFilerSearchQuery(query))
+    dispatch(actions.changeFilterSearchQuery(query))
     dispatch(actions.getPlatforms())
   }
 
   const handleChangeInstitutionsSearchText = (query:string): void => {
-    dispatch(actions.changeFilerSearchQuery(query))
+    dispatch(actions.changeFilterSearchQuery(query))
     dispatch(actions.getInstitutions())
   }
   return (

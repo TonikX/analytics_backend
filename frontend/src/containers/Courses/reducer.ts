@@ -80,7 +80,7 @@ const changeFiltering = (state: coursesState, {payload}: any): coursesState => (
     }
 })
 
-const changeFilerSearchQuery = (state: coursesState, {payload}: any): coursesState => ({
+const changeFilterSearchQuery = (state: coursesState, {payload}: any): coursesState => ({
     ...state,
     [fields.FILTERING]: {
         [filterFields.FILTERING_PLATFORM]: state[fields.FILTERING][filterFields.FILTERING_PLATFORM],
@@ -111,5 +111,5 @@ export const reducer = createReducer(initialState, {
     [actions.setPlatforms.type]: setPlatforms,
     [actions.setInstitutions.type]: setInstitutions,
     [actions.changeFiltering.type]: changeFiltering,
-    [actions.changeFilerSearchQuery.type]: changeFilerSearchQuery,
+    [actions.changeFilterSearchQuery.type]: changeFilterSearchQuery,
 });
