@@ -44,6 +44,22 @@ class EducationalPlanService extends AnalyticsService{
         return this.delete(`api/workprograminfieldofstudy/${id}`);
     }
 
+    planTrajectorySelectOptionalWp(payload: any){
+        return this.post(`/api/individualization/individual_path/change_workprogram/`, payload);
+    }
+
+    planTrajectorySelectElectives({workPrograms, moduleId, planId}: any){
+        const payload = workPrograms.map((wpId: number) => ({
+            work_program_change_in_discipline_block_module: wpId,
+            discipline_block_module: moduleId,
+            individual_implementation_of_academic_plan: planId
+        }));
+
+        return this.post(`/api/individualization/individual_path/electives/create`, {
+            electives: payload
+        });
+    }
+
     createEducationalPlan(competence: any){
         const formData = new FormData();
 

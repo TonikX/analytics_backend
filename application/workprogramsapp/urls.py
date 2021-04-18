@@ -9,13 +9,15 @@ from .educational_program.views import DepartmentCreateAPIView, DepartmentListAP
 
 from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView, UserExpertiseListView, \
     ExpertiseCommentsView, ChangeUserExpertiseView, \
-    ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById
+    ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById, \
+    DeleteUserExpertise
 from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, DeleteFolderView, \
     CreateFolderView, EditFolderView, AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
     AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, \
     ModuleInFolderView, AddToFolderModuleView, \
     RemoveFromFolderModuleView, IndividualImplementationAcademicPlanInFolderView, \
     AddToFolderndividualImplementationAcademicPlanView, RemoveFromFolderImplementationAcademicPlanView
+from .notifications.views import NotificationListView
 from .op_slection.views import CreateProfessionByKeywords
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, \
     ProfessionUpdateView, ItemWithProfessions, ItemWithRoles, ProfessionsListWithoutPaginationApi
@@ -246,6 +248,9 @@ urlpatterns = [
     path('api/expertise/user', UserExpertiseListView.as_view()),
     path('api/expertise/user_with_expertise/<int:pk>', UserExpertiseListView.as_view()),
     path('api/expertise/user/create', UserExpertiseCreateView.as_view()),
+    path('api/expertise/user/delete/<int:pk>', DeleteUserExpertise.as_view()),
+
+
     path('api/expertise/comments/<int:pk>', ExpertiseCommentsView.as_view()),
     path('api/expertise/comments/create', ExpertiseCommentCreateView.as_view()),
     path('api/expertise/create', ExpertiseCreateView.as_view()),
@@ -327,5 +332,9 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.workprogram_additions.urls')),
 
     url(r'^', include('workprogramsapp.individualization.urls')),
+
+    # Нотификации
+    path('api/notifications/list', NotificationListView.as_view()),
+
 
 ]
