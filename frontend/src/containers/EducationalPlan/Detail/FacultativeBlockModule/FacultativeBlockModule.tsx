@@ -50,6 +50,7 @@ export default ({blocks, handleDownloadFile, saveWorkPrograms}: SelectWorkProgra
     }
 
     const blocksOfWorkPrograms = blocks[ModuleFields.BLOCKS_OF_WORK_PROGRAMS];
+    const notChangedWPCount = blocksOfWorkPrograms.filter(module => !module[BlocksOfWorkProgramsFields.CHANGED]).length;
 
     return (
         <>
@@ -58,6 +59,7 @@ export default ({blocks, handleDownloadFile, saveWorkPrograms}: SelectWorkProgra
                 const blockType = module[BlocksOfWorkProgramsFields.TYPE];
                 const moduleId = module[BlocksOfWorkProgramsFields.ID];
                 const changed = module[BlocksOfWorkProgramsFields.CHANGED];
+                const disabledButton = !Object.keys(facultativeWorkPrograms).length;
 
                 return (
                     <TableRow key={`module-${moduleId}`}>
@@ -69,31 +71,30 @@ export default ({blocks, handleDownloadFile, saveWorkPrograms}: SelectWorkProgra
                                                     onClick={goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
                                             {workProgram[WorkProgramGeneralFields.TITLE]}
                                         </Typography>
-                                        {changed ? <></>
-                                            :
-                                            <Tooltip title={'Выбрать дисциплину по выбору'}>
-                                                <Checkbox onChange={selectOptionalProgram(moduleId)}
-                                                          checked={get(facultativeWorkPrograms, moduleId, false)}
-                                                />
-                                            </Tooltip>
-                                        }
+                                        <Tooltip title={changed ? 'Вы уже выбрали эту дисциплину' : 'Выбрать дисциплину по выбору'}>
+                                            <Checkbox onChange={selectOptionalProgram(moduleId)}
+                                                      checked={get(facultativeWorkPrograms, moduleId, false) || changed}
+                                                      disabled={changed}
+                                            />
+                                        </Tooltip>
                                     </div>
                                     <Tooltip title={'Скачать рабочую программу'}>
                                         <FileIcon className={classNames(classes.marginRight10, classes.button)}
                                                   onClick={handleDownloadFile(workProgram[WorkProgramGeneralFields.ID])}
                                         />
                                     </Tooltip>
-                                    {Object.keys(facultativeWorkPrograms).length && index === blocksOfWorkPrograms.length - 1 ?
-                                        <Tooltip title="Сохранить выбранные факультативы">
+
+                                    {index === 0 && notChangedWPCount !== 0 ?
+                                        <Tooltip title={disabledButton ? "Выберите дисциплины, которые вы хотите факультативно изучать" : "Сохранить выбранные факультативы"}>
                                             <Button variant="contained"
-                                                    color="primary"
-                                                    onClick={handleSaveWorkPrograms}
+                                                    color={disabledButton ? "default" : "primary"}
+                                                    onClick={(e) => !disabledButton && handleSaveWorkPrograms(e)}
+                                                    className={disabledButton ? classes.disabled : ''}
                                             >
                                                 Сохранить
                                             </Button>
                                         </Tooltip>
-                                        :
-                                        <></>
+                                        : <></>
                                     }
                                 </div>
                             )}
