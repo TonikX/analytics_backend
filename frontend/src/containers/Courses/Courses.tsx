@@ -62,7 +62,8 @@ class OnlineCourses extends React.Component<CoursesProps> {
   componentDidMount() {      
       this.props.actions.getPlatforms()
       this.props.actions.getInstitutions()
-      this.props.actions.getFieldsOfStudy()
+      this.props.actions.getFieldOfStudyNumbers()
+      this.props.actions.getFieldOfStudyTitles()
       this.props.actions.getCourses();
   }
 

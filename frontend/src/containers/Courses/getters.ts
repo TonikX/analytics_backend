@@ -36,4 +36,5 @@ export const getFilterSearchQuery = (state: rootState): string => get(getFilters
 
 export const getPlatforms = (state: rootState): Array<PlatformType> => get(getStateData(state), fields.PLATFORMS, [])
 export const getIntitutions = (state: rootState): Array<InstitutionType> => get(getStateData(state), fields.INSTITUTIONS, [])
-export const getFieldsOfStudy = (state: rootState): Array<FieldOfStudyType> => get(getStateData(state), fields.FIELDS_OF_STUDY, [])
+export const getFieldsOfStudyTitles = (state: rootState): Array<FieldOfStudyType> => get(getStateData(state), fields.FIELDS_OF_STUDY_TITLES, [])
+export const getFieldsOfStudyNumbers = (state: rootState): Array<FieldOfStudyType> => get(getStateData(state), fields.FIELDS_OF_STUDY_NUMBERS, [])

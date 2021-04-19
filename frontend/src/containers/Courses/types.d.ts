@@ -23,8 +23,10 @@ export interface CoursesActions {
     setInstitutions: any;
     changeFiltering: any;
     changeFilterSearchQuery: any;
-    getFieldsOfStudy: any;
-    setFieldsOfStudy: any;
+    getFieldOfStudyTitles: any;
+    setFieldOfStudyTitles: any;
+    getFieldOfStudyNumbers: any;
+    setFieldOfStudyNumbers: any;
 }
 
 export interface coursesState {
@@ -42,13 +44,16 @@ export interface coursesState {
     };
     [fields.INSTITUTIONS]: Array<InstitutionType> | [],
     [fields.PLATFORMS]: Array<PlatformType> | [],
-    [fields.FIELDS_OF_STUDY]: Array<FieldOfStudyType> | [],
+    [fields.FIELDS_OF_STUDY_NUMBERS]: Array<FieldOfStudyType> | [],
+    [fields.FIELDS_OF_STUDY_TITLES]: Array<FieldOfStudyType> | [],
 }
 
 export type filteringType = {
     [filterFields.FILTERING_PLATFORM]: string,
     [filterFields.FILTERING_INSTITUTION]: string,
     [filterFields.FILTERING_LANGUAGE]: string,
+    [filterFields.FILTERING_FIELD_OF_STUDY_TITLE]: string,
+    [filterFields.FILTERING_FIELD_OF_STUDY_NUMBER]: string,
     [filterFields.FILTERING_SEARCH_QUERY]: string,
 }
 
