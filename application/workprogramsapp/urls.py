@@ -87,7 +87,7 @@ from .views import WorkProgramFullDetailsWithDisciplineCodeView
 
 
 # DocxFileExportOldView
-from .workprogram_additions.views import CopyContentOfWorkProgram
+from .workprogram_additions.views import CopyContentOfWorkProgram, EmptyStringWp
 
 urlpatterns = [
 
@@ -140,6 +140,7 @@ urlpatterns = [
         WorkProgramFullDetailsWithDisciplineCodeView.as_view()),
 
     path('api/workprogram/getbynumbers', DisciplinesByNumber),
+    path('api/workprogram/getemptystring', EmptyStringWp),
 
     path('api/workprogram/fieldofstudies/<int:workprogram_id>', FieldOfStudiesForWorkProgramList.as_view()),
     path('api/workprograminfieldofstudy/', WorkProgramInFieldOfStudyListAPI.as_view()),

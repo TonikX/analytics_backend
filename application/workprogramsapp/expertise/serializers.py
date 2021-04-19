@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
-#from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
+# from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
 from workprogramsapp.serializers import WorkProgramShortForExperiseSerializer
 
@@ -33,8 +33,32 @@ class ExpertiseSerializer(serializers.ModelSerializer):
     """
     Автоматически добавляет пользователя-создателя как лидера экспертизы
     """
+    user_status_in_expertise = serializers.SerializerMethodField()
+
+    def get_user_status_in_expertise(self, instance):
+        request = self.context.get("request")
+        user_statuses = \
+            {
+                "expertise_master": False,
+                "expertise_member": bool(UserExpertise.objects.filter(
+                    expert=request.user, expertise_id=instance.id,
+                    stuff_status="EX")),
+                "structural_leader": bool(Expertise.objects.filter(
+                    pk=instance.id,
+                    work_program__structural_unit__user_in_structural_unit__user=request.user,
+                    work_program__structural_unit__user_in_structural_unit__status__in=["leader", "deputy"]).distinct())
+            }
+        for group in request.user.groups.all():
+            if group.name == "expertise_master":
+                user_statuses["expertise_master"] = True
+
+        return user_statuses
 
     def create(self, validated_data):
+        is_exp_exist = Expertise.objects.filter(work_program=validated_data['work_program'])
+        if is_exp_exist:
+            print("такая экспертиза уже существует")
+            return is_exp_exist[0]
         exp = Expertise.objects.create(**validated_data)
         request = self.context.get('request')
         UserExpertise.objects.create(expertise=exp, expert=request.user, stuff_status="AU")  # ???
