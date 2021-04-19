@@ -42,6 +42,7 @@ from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEv
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer
 from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
+from django_filters.rest_framework import DjangoFilterBackend
 
 """"Удалены старые views с использованием джанго рендеринга"""
 """Блок реализации API"""
@@ -60,8 +61,12 @@ from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
 class WorkProgramsListApi(generics.ListAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['discipline_code', 'title']
+    filterset_fields = ['language',
+                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__title',
+                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__number',
+                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -437,6 +442,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
     def get(self, request, **kwargs):
         queryset = WorkProgram.objects.filter(pk=self.kwargs['pk'])
