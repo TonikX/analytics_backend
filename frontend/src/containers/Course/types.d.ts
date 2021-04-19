@@ -35,8 +35,7 @@ export type fieldOfStudyType = {
 
 export type outcomeType = {
   [outcomeFields.ID]: number,
-  [outcomeFields.COURSE]: string,
-  [outcomeFields.LEARNING_OUTCOME]: string,
+  [outcomeFields.NAME]: string,
 }
 
 export type wpType = {

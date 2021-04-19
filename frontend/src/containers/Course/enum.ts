@@ -59,8 +59,7 @@ export enum fieldsOfStudyFields {
 
 export enum outcomeFields {
   ID = 'id',
-  COURSE = 'course',
-  LEARNING_OUTCOME = 'learning_outcome',
+  NAME = 'name',
 }
 
 export enum wpFields {
