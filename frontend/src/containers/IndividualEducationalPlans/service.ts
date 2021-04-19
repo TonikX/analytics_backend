@@ -2,14 +2,10 @@ import AnalyticsService from "../../service/analytics-service";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
 class Service extends AnalyticsService{
-    getIndividualEducationalPlans(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType, showOnlyMy: boolean){
+    getIndividualEducationalPlans(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
-        if (showOnlyMy){
-            return this.get(`/api/individualization/individual_path/for_this_user/?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
-        }
-
-        return this.get(`/api/individualization/individual_path/?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+        return this.get(`api/individualization/individual_path/for_this_user/?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
     deleteIndividualEducationalPlans(id: number){

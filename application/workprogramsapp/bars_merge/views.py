@@ -58,14 +58,15 @@ def FindSimilarWP(request):
 @permission_classes((IsAdminUser,))
 def CreateCheckPoint(request):
     # TODO: УБРАТЬ ХАРДКОДИНГ
-    work_program_id = 67  # 2647  request.data.get('work_program_id')
-    bars_id = 26295  # 26295 27328  Тут должен быть код, который достает айдишник из барса по присланной РПД
+    work_program_id = request.data.get('work_program_id')  # 2647  request.data.get('work_program_id')
+    bars_id = WorkProgram.objects.get(id=work_program_id).wp_isu_id  # 26295 27328  Тут должен быть код, который достает айдишник из барса по присланной РПД
+    educational_bars = request.data.get('educational_bars_id')
     types_checkpoints = get_list_of_regular_checkpoints()
 
     """Переменные для формирования запроса к БАРС"""
     point_distribution = 0
-    term = 2  # АБСОЛЮТНЫЙ СЕМЕСТР /request.data.get('term')
-    educational_bars = get_one_educational_program(bars_id, term)  # это должно быть в отдельном эндпоинте
+    term = request.data.get('term')  # АБСОЛЮТНЫЙ СЕМЕСТР /request.data.get('term')
+      # это должно быть в отдельном эндпоинте
     list_regular = []
     has_course_project = False
     course_project = None

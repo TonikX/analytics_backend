@@ -31,7 +31,7 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
-class WorkProgram(models.Model):
+class WorkProgram(CloneMixin, models.Model):
     '''
     Модель для рабочей программы
     '''
@@ -197,7 +197,7 @@ class PrerequisitesOfWorkProgram(models.Model):
     #     return self.item
 
 
-class OutcomesOfWorkProgram(models.Model):
+class OutcomesOfWorkProgram(CloneMixin,models.Model):
     '''
     Модель для результатов обучения по рабочей программе
     '''
@@ -498,7 +498,7 @@ class ImplementationAcademicPlan(models.Model):
         return str(self.academic_plan)
 
 
-class DisciplineBlock(models.Model):
+class DisciplineBlock(CloneMixin,models.Model):
     '''
     Модель блока дисциплин
     '''
@@ -540,7 +540,7 @@ class DisciplineBlock(models.Model):
 #         return (str(self.name) + str(self.descipline_block))
 
 
-class DisciplineBlockModule(models.Model):
+class DisciplineBlockModule(CloneMixin,models.Model):
     '''
     Модель модуля блока дисциплин
     '''
@@ -592,7 +592,7 @@ class DisciplineBlockModule(models.Model):
         return clone_module
 
 
-class WorkProgramChangeInDisciplineBlockModule(models.Model):
+class WorkProgramChangeInDisciplineBlockModule(CloneMixin,models.Model):
     '''
     Модель хранения блоков выбора в модуле
     '''
@@ -637,7 +637,7 @@ class WorkProgramChangeInDisciplineBlockModule(models.Model):
         return (str(self.discipline_block_module) + str(self.work_program))
 
 
-class WorkProgramInFieldOfStudy(models.Model):
+class WorkProgramInFieldOfStudy(CloneMixin,models.Model):
     work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
                                                                        on_delete=models.CASCADE, related_name="zuns_for_cb")
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
@@ -706,7 +706,7 @@ class Indicator(models.Model):
         return self.name
 
 
-class EvaluationTool(models.Model):
+class EvaluationTool(CloneMixin,models.Model):
     '''
     Модель для оценочных средств
     '''
@@ -747,7 +747,7 @@ class СertificationEvaluationTool(CloneMixin, models.Model):
         return self.name
 
 
-class DisciplineSection(models.Model):
+class DisciplineSection(CloneMixin, models.Model):
     '''
     Модель для разделов дисциплин
     '''
@@ -820,7 +820,7 @@ class BibliographicReference(models.Model):
     # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
 
-class Topic(models.Model):
+class Topic(CloneMixin, models.Model):
     '''
     Модель для темы
     '''

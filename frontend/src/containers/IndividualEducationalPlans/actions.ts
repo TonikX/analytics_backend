@@ -12,8 +12,6 @@ const changeCurrentPage = createAction('INDIVIDUAL_EDUCATIONAL_PLANS_CHANGE_CURR
 const changeAllCount = createAction('INDIVIDUAL_EDUCATIONAL_PLANS_CHANGE_ALL_COUNT');
 const changeSorting = createAction('INDIVIDUAL_EDUCATIONAL_PLANS_CHANGE_SORTING');
 
-const showOnlyMy = createAction('INDIVIDUAL_EDUCATIONAL_PLANS_SHOW_ONLY_MY');
-
 const actions: IndividualEducationalPlansActions = {
     getIndividualEducationalPlans,
     setIndividualEducationalPlans,
@@ -22,7 +20,6 @@ const actions: IndividualEducationalPlansActions = {
     changeCurrentPage,
     changeAllCount,
     changeSorting,
-    showOnlyMy,
 }
 
 export default actions;

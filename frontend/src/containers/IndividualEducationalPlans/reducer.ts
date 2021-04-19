@@ -2,11 +2,11 @@ import createReducer from "../../store/createReducer";
 import {fields} from './enum';
 import actions from "./actions";
 
-import {IndividualEducationalPlansState} from "./types";
+import {individualEducationalPlansState} from "./types";
 
 export const GENERAL_PATH = 'IndividualEducationalPlans';
 
-export const initialState: IndividualEducationalPlansState = {
+export const initialState: individualEducationalPlansState = {
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: '',
         [fields.SORTING_MODE]: ''
@@ -15,35 +15,29 @@ export const initialState: IndividualEducationalPlansState = {
     [fields.ALL_COUNT]: 1,
     [fields.SEARCH_QUERY]: '',
     [fields.INDIVIDUAL_EDUCATIONAL_PLANS]: [],
-    [fields.SHOW_ONLY_MY]: false,
 };
 
-const setIndividualEducationalPlans = (state: IndividualEducationalPlansState, {payload}: any): IndividualEducationalPlansState => ({
+const setIndividualEducationalPlans = (state: individualEducationalPlansState, {payload}: any): individualEducationalPlansState => ({
     ...state,
     [fields.INDIVIDUAL_EDUCATIONAL_PLANS]: payload,
 });
 
-const changeSearchQuery = (state: IndividualEducationalPlansState, {payload}: any): IndividualEducationalPlansState => ({
+const changeSearchQuery = (state: individualEducationalPlansState, {payload}: any): individualEducationalPlansState => ({
     ...state,
     [fields.SEARCH_QUERY]: payload,
 });
 
-const changeCurrentPage = (state: IndividualEducationalPlansState, {payload}: any): IndividualEducationalPlansState => ({
+const changeCurrentPage = (state: individualEducationalPlansState, {payload}: any): individualEducationalPlansState => ({
     ...state,
     [fields.CURRENT_PAGE]: payload,
 });
 
-const changeAllCount = (state: IndividualEducationalPlansState, {payload}: any): IndividualEducationalPlansState => ({
+const changeAllCount = (state: individualEducationalPlansState, {payload}: any): individualEducationalPlansState => ({
     ...state,
     [fields.ALL_COUNT]: payload,
 });
 
-const showOnlyMy = (state: IndividualEducationalPlansState, {payload}: any): IndividualEducationalPlansState => ({
-    ...state,
-    [fields.SHOW_ONLY_MY]: payload,
-});
-
-const changeSorting = (state: IndividualEducationalPlansState, {payload}: any): IndividualEducationalPlansState => ({
+const changeSorting = (state: individualEducationalPlansState, {payload}: any): individualEducationalPlansState => ({
     ...state,
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: payload.field,
@@ -57,5 +51,4 @@ export const reducer = createReducer(initialState, {
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
-    [actions.showOnlyMy.type]: showOnlyMy,
 });

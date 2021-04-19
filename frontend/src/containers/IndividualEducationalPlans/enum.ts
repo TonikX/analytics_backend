@@ -6,7 +6,6 @@ export enum fields {
     SORTING = 'SORTING',
     SORTING_FIELD = 'SORTING_FIELD',
     SORTING_MODE = 'SORTING_MODE',
-    SHOW_ONLY_MY = 'SHOW_ONLY_MY',
 }
 
 export enum fetchingTypes {
