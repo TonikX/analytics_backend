@@ -65,6 +65,7 @@ export enum ModuleFields {
     ID = 'id',
     NAME = 'name',
     BLOCKS_OF_WORK_PROGRAMS = 'change_blocks_of_work_programs_in_modules',
+    TYPE = 'type',
 }
 
 export enum BlocksOfWorkProgramsFields {
@@ -75,6 +76,7 @@ export enum BlocksOfWorkProgramsFields {
     RESULTS = 'results',
     SEMESTER_UNIT = 'credit_units',
     TYPE = 'change_type',
+    CHANGED = 'changed',
 }
 
 export enum DownloadFileModalFields {

@@ -45,7 +45,8 @@ export default ({blocks, handleDownloadFile, saveWorkPrograms}: SelectWorkProgra
     const handleSaveWorkPrograms = (e: React.MouseEvent) => {
         e.preventDefault();
         // @ts-ignore
-        saveWorkPrograms(blocks[ModuleFields.ID], Object.keys(facultativeWorkPrograms).filter((key) => facultativeWorkPrograms[key]))
+        saveWorkPrograms(blocks[ModuleFields.ID], Object.keys(facultativeWorkPrograms).filter((key) => facultativeWorkPrograms[key]));
+        setFacultativeWorkProgram({});
     }
 
     const blocksOfWorkPrograms = blocks[ModuleFields.BLOCKS_OF_WORK_PROGRAMS];
@@ -56,9 +57,10 @@ export default ({blocks, handleDownloadFile, saveWorkPrograms}: SelectWorkProgra
                 const workPrograms = get(module, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
                 const blockType = module[BlocksOfWorkProgramsFields.TYPE];
                 const moduleId = module[BlocksOfWorkProgramsFields.ID];
+                const changed = module[BlocksOfWorkProgramsFields.CHANGED];
 
                 return (
-                    <TableRow>
+                    <TableRow key={`module-${moduleId}`}>
                         <TableCell>
                             {workPrograms && workPrograms.map && workPrograms.map((workProgram) =>
                                 <div className={classes.displayFlex} key={'wp' + workProgram[WorkProgramGeneralFields.ID]}>
@@ -67,11 +69,14 @@ export default ({blocks, handleDownloadFile, saveWorkPrograms}: SelectWorkProgra
                                                     onClick={goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
                                             {workProgram[WorkProgramGeneralFields.TITLE]}
                                         </Typography>
-                                        <Tooltip title={'Выбрать дисциплину по выбору'}>
-                                            <Checkbox onChange={selectOptionalProgram(moduleId)}
-                                                      checked={get(facultativeWorkPrograms, moduleId, false)}
-                                            />
-                                        </Tooltip>
+                                        {changed ? <></>
+                                            :
+                                            <Tooltip title={'Выбрать дисциплину по выбору'}>
+                                                <Checkbox onChange={selectOptionalProgram(moduleId)}
+                                                          checked={get(facultativeWorkPrograms, moduleId, false)}
+                                                />
+                                            </Tooltip>
+                                        }
                                     </div>
                                     <Tooltip title={'Скачать рабочую программу'}>
                                         <FileIcon className={classNames(classes.marginRight10, classes.button)}
