@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
-#from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
+# from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
 from workprogramsapp.serializers import WorkProgramShortForExperiseSerializer
 
@@ -35,6 +35,10 @@ class ExpertiseSerializer(serializers.ModelSerializer):
     """
 
     def create(self, validated_data):
+        is_exp_exist = Expertise.objects.filter(work_program=validated_data['work_program'])
+        if is_exp_exist:
+            print("такая экспертиза уже существует")
+            return is_exp_exist[0]
         exp = Expertise.objects.create(**validated_data)
         request = self.context.get('request')
         UserExpertise.objects.create(expertise=exp, expert=request.user, stuff_status="AU")  # ???

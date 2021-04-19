@@ -118,9 +118,11 @@ class ExpertiseCreateView(generics.CreateAPIView):
     Автоматически добавляет пользователя-создателя как лидера экспертизы
     (Подробней о создании экспертизы см. сериализатор)
     """
+
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
 
 class ChangeExpertiseView(generics.UpdateAPIView):
