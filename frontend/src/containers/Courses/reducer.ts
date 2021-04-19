@@ -26,6 +26,7 @@ export const initialState: coursesState = {
     },
     [fields.PLATFORMS]: [],
     [fields.INSTITUTIONS]: [],
+    [fields.FIELDS_OF_STUDY]: [],
 };
 
 const setCourses = (state: coursesState, {payload}: any): coursesState => ({

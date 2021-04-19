@@ -11,12 +11,14 @@ export enum fields {
     FILTERING = 'FILTERING',
     PLATFORMS = 'PLATFORMS',
     INSTITUTIONS = 'INSTITUTIONS',
+    FIELDS_OF_STUDY = 'FIELDS_OF_STUDY',
 }
 
 export enum filterFields {
     FILTERING_PLATFORM = 'FILTERING_PLATFORM',
     FILTERING_INSTITUTION = 'FILTERING_INSTITUTION',
     FILTERING_LANGUAGE = 'FILTERING_LANGUAGE',
+    FILTERING_FIELD_OF_STUDY = 'FILTERING_FIELD_OF_STUDY',
     FILTERING_SEARCH_QUERY = 'FILTERING_SEARCH_QUERY',
 }
 
@@ -27,6 +29,7 @@ export enum fetchingTypes {
     CREATE_COURSE = 'CREATE_COURSE',
     GET_PLATFORMS = 'GET_PLATFORMS',
     GET_INSTITUTIONS = 'GET_INSTITUTIONS',
+    GET_FIELDS_OF_STUDY = 'GET_FIELDS_OF_STUDY',
 }
 
 export enum CourseFields {
@@ -57,5 +60,11 @@ export enum PlatformFields {
 
 export enum InstitutionFields {
     ID = 'id',
+    TITLE = 'title',
+}
+
+export enum FieldOfStudyFields {
+    ID = 'id',
+    NUMBER = 'number',
     TITLE = 'title',
 }

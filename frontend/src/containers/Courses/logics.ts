@@ -85,8 +85,29 @@ const getInstitutions = createLogic({
     }
 })
 
+const getFieldsOfStudy = createLogic({
+    type: courseActions.getFieldsOfStudy.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const searchQuery = getFilterSearchQuery(state);
+        dispatch(actions.fetchingTrue({ destination: fetchingTypes.GET_FIELDS_OF_STUDY }))
+        service.getFieldsOfStudy(searchQuery).then((res) => {
+            const fieldsOfStudy = get(res, 'data.results', [])
+            dispatch(courseActions.setFieldsOfStudy(fieldsOfStudy))
+        }).catch((err) => {
+            dispatch(actions.fetchingFailed(err))
+        })
+        .then(() => {
+            dispatch(actions.fetchingFalse({ destination: fetchingTypes.GET_FIELDS_OF_STUDY }))
+            return done()
+        })
+    }
+})
+
 export default [
     getCourses,
     getPlatforms,
     getInstitutions,
+    getFieldsOfStudy,
 ];

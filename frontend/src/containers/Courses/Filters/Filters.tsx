@@ -3,13 +3,13 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useStyles } from './Filters.styles'
 import cn from 'classnames';
 
-import { getPlatforms, getIntitutions, getFilters } from '../getters'
+import { getPlatforms, getIntitutions, getFilters, getFieldsOfStudy } from '../getters'
 
 import Button from '@material-ui/core/Button'
 import SearchSelector from '../../../components/SearchSelector'
 
-import { filterFields } from '../enum'
-import { PlatformType, InstitutionType, filteringType } from '../types'
+import { filterFields, InstitutionFields, PlatformFields, FieldOfStudyFields } from '../enum'
+import { PlatformType, InstitutionType, filteringType, FieldOfStudyType } from '../types'
 import { languageArray } from '../../WorkProgram/constants';
 import { rootState } from '../../../store/reducers'
 
@@ -21,15 +21,22 @@ export const Filters: React.FC = () => {
   const [isReset, setIsReset] = useState<boolean>(false)
   const platforms: Array<PlatformType> = useSelector((state: rootState) => getPlatforms(state))
   const institutions: Array<InstitutionType> = useSelector((state: rootState) => getIntitutions(state))
+  const fieldsOfStudy: Array<FieldOfStudyType> = useSelector((state: rootState) => getFieldsOfStudy(state))
   const filters: filteringType = useSelector((state: rootState) => getFilters(state))
   const lists = {
     langs: languageArray,
     // prepDirections: [
-    //   // { label: '45.03.04', value: 'Русский' },
-    //   // { label: '09.03.04', value: 'Английский' },
+    //   { label: '01.03.02 Прикладная математика и информатика', value: '01.03.02' },
+    //   { label: '01.04.02 Прикладная математика и информатика', value: '01.04.02' },
+    //   { label: '45.03.04 нтеллектуальные системы в гуманитарной сфере', value: '45.03.04' },
     // ],
-    authors: institutions.map((institution: InstitutionType) => ({ label: institution.title, value: institution.title })),
-    platforms: platforms.map((platform: PlatformType) => ({ label: platform.title, value: platform.title }))
+    prepDirections: fieldsOfStudy.map((fieldOfStudy: FieldOfStudyType) => 
+      ({ 
+          label: `${fieldOfStudy[FieldOfStudyFields.NUMBER]} ${fieldOfStudy[FieldOfStudyFields.TITLE]}`, 
+          value: fieldOfStudy[FieldOfStudyFields.NUMBER] 
+      })),
+    authors: institutions.map((institution: InstitutionType) => ({ label: institution[InstitutionFields.TITLE], value: institution[InstitutionFields.TITLE] })),
+    platforms: platforms.map((platform: PlatformType) => ({ label: platform[PlatformFields.TITLE], value: platform[PlatformFields.TITLE] }))
   }
   
   const handleFilter = (field: string, value: string): void => {
@@ -83,7 +90,7 @@ export const Filters: React.FC = () => {
           className={classes.field}
           isReset={isReset}
         />
-        {/* <SeacrhSelector 
+        <SearchSelector 
           label='Направление подготовки' 
           changeSearchText={() => {}}
           list={lists.prepDirections}
@@ -91,7 +98,7 @@ export const Filters: React.FC = () => {
           value={'value'}
           valueLabel={''}
           className={classes.field}
-        /> */}
+        />
         <SearchSelector 
           label='Автор курса (правообл.)' 
           changeSearchText={handleChangeInstitutionsSearchText}

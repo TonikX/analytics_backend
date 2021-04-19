@@ -1,7 +1,7 @@
 import {fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
-import {CourseFields, PlatformFields, InstitutionFields, filterFields} from './enum';
+import {CourseFields, PlatformFields, InstitutionFields, filterFields, FieldOfStudyFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
 
 export interface CoursesActions {
@@ -23,6 +23,8 @@ export interface CoursesActions {
     setInstitutions: any;
     changeFiltering: any;
     changeFilterSearchQuery: any;
+    getFieldsOfStudy: any;
+    setFieldsOfStudy: any;
 }
 
 export interface coursesState {
@@ -40,6 +42,7 @@ export interface coursesState {
     };
     [fields.INSTITUTIONS]: Array<InstitutionType> | [],
     [fields.PLATFORMS]: Array<PlatformType> | [],
+    [fields.FIELDS_OF_STUDY]: Array<FieldOfStudyType> | [],
 }
 
 export type filteringType = {
@@ -57,6 +60,12 @@ export type PlatformType = {
 export type InstitutionType = {
     [InstitutionFields.ID]: number,
     [InstitutionFields.TITLE]: string,
+}
+
+export type FieldOfStudyType = {
+    [FieldOfStudyFields.ID]: number
+    [FieldOfStudyFields.NUMBER]: string,
+    [FieldOfStudyFields.TITLE]: string,
 }
 
 export type CourseType = {

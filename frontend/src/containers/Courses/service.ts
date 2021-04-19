@@ -14,6 +14,9 @@ class CoursesServices extends AnalyticsService{
     getInstitutions(searchQuery: string){
         return this.get(`/api/course/institution/?search=${searchQuery}`)
     }
+    getFieldsOfStudy(searchQuery: string){
+        return this.get(`/api/fieldofstudy/?search=${searchQuery}`)
+    }
 }
 
 export default CoursesServices;

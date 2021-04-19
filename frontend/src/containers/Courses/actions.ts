@@ -11,6 +11,9 @@ const setPlatforms = createAction('SET_PLATFORMS')
 const getInstitutions = createAction('GET_INSTITUTIONS')
 const setInstitutions = createAction('SET_INSTITUTIONS')
 
+const getFieldsOfStudy = createAction('COURSES_GET_FIELDS_OF_STUDY')
+const setFieldsOfStudy = createAction('COURSES_SET_FIELDS_OF_STUDY')
+
 const createNewCourse = createAction('CREATE_NEW_COURSE');
 const changeCourse = createAction('CHANGE_COURSE');
 const deleteCourse = createAction('DELETE_COURSE');
@@ -43,6 +46,8 @@ const actions: CoursesActions = {
     setPlatforms,
     getInstitutions,
     setInstitutions,
+    getFieldsOfStudy,
+    setFieldsOfStudy,
     changeFiltering,
     changeFilterSearchQuery,
 }
