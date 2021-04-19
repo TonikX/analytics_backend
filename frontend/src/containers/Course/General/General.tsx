@@ -67,12 +67,13 @@ export const General: React.FC = () => {
           </Scrollbars>
         </div>
         <div className={classes.options}>
-          <Button className={classes.btn} color='primary' variant='contained'>Перейти к курсу на платформе</Button>
+          
           <a className={classes.link} href={course[fields.COURSE_URL]} target='_blank' rel="noopener noreferrer">
             <Button className={classes.btnLink} color='primary' variant='contained'>
-              Перейти к курсу в РОК
+              Перейти к курсу на платформе
             </Button>
           </a>
+          {/* <Button className={classes.btn} color='primary' variant='contained'>Перейти к курсу в РОК</Button> */}
           {course[fields.RATING] && 
             <Typography><b>Рейтинг по оценкам пользователей:</b>{` ${course[fields.RATING]}`}</Typography>}
           {course[fields.EXPERTS_RATING] && 
