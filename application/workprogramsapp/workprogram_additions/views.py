@@ -42,6 +42,7 @@ class StructuralUnitSet(viewsets.ModelViewSet):
     queryset = StructuralUnit.objects.all()
     serializer_class = StructuralUnitSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ['title']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def get_serializer_class(self):
