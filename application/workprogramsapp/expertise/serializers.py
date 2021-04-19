@@ -33,6 +33,26 @@ class ExpertiseSerializer(serializers.ModelSerializer):
     """
     Автоматически добавляет пользователя-создателя как лидера экспертизы
     """
+    user_status_in_expertise = serializers.SerializerMethodField()
+
+    def get_user_status_in_expertise(self, instance):
+        request = self.context.get("request")
+        user_statuses = \
+            {
+                "expertise_master": False,
+                "expertise_member": bool(UserExpertise.objects.filter(
+                    expert=request.user, expertise_id=instance.id,
+                    stuff_status="EX")),
+                "structural_leader": bool(Expertise.objects.filter(
+                    pk=instance.id,
+                    work_program__structural_unit__user_in_structural_unit__user=request.user,
+                    work_program__structural_unit__user_in_structural_unit__status__in=["leader", "deputy"]).distinct())
+            }
+        for group in request.user.groups.all():
+            if group.name == "expertise_master":
+                user_statuses["expertise_master"] = True
+
+        return user_statuses
 
     def create(self, validated_data):
         is_exp_exist = Expertise.objects.filter(work_program=validated_data['work_program'])
