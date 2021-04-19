@@ -1,7 +1,7 @@
 from rest_framework import serializers
-
 from .models import Institution, Platform, OnlineCourse
 from workprogramsapp.models import CourseCredit, CourseFieldOfStudy, FieldOfStudy
+from dataprocessing.models import Items
 
 
 class FieldOfStudySerializer(serializers.ModelSerializer):
@@ -48,12 +48,20 @@ class CourseFieldOfStudySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ItemsForOnlineCourseSerializer(serializers.ModelSerializer):
+    """Сериализатор результатов прохождения онлайн курсов"""
+    class Meta:
+        model = Items
+        fields = ['id', 'name']
+
+
 class OnlineCourseSerializer(serializers.ModelSerializer):
     """Сериализатор Онлайн курса"""
     course_field_of_study = CourseFieldOfStudySerializer(many=True)
     course_credit = CourseCreditSerializer(many=True)
     institution = InstitutionSerializer(many=False)
     platform = PlatformSerializer(many=False)
+    learning_outcome_list = ItemsForOnlineCourseSerializer(many=True)
 
     class Meta:
         model = OnlineCourse

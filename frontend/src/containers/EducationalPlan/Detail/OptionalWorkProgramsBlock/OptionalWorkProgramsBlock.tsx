@@ -48,7 +48,8 @@ export default ({module, handleDownloadFile, isMultiSelect, saveWorkPrograms}: S
 
     const handleSaveWorkPrograms = (workProgramId: number) => (e: React.MouseEvent) => {
         e.preventDefault();
-        saveWorkPrograms(moduleId, workProgramId)
+        saveWorkPrograms(moduleId, workProgramId);
+        setOptionalModules({});
     }
 
     const SelectComponent = isMultiSelect ? Checkbox : Radio;

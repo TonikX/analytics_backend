@@ -181,9 +181,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
     saveOptionalProgram = (moduleId: number, workProgram: number) => {
         this.props.actions.planTrajectorySelectOptionalWp({
-            work_program_change_in_discipline_block_module: moduleId,
-            work_program: workProgram,
-            individual_implementation_of_academic_plan: this.getPlanId()
+            moduleId,
+            workProgram,
+            planId: this.getPlanId()
         });
     }
 

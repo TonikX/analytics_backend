@@ -119,6 +119,7 @@ export type ModuleType = {
 export type BlocksOfWorkProgramsType = {
     [BlocksOfWorkProgramsFields.ID]: number;
     [BlocksOfWorkProgramsFields.TYPE]: string;
+    [BlocksOfWorkProgramsFields.CHANGED]: boolean;
     [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: Array<WorkProgramBlockType>;
 };
 

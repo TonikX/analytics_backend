@@ -471,6 +471,7 @@ const planTrajectorySelectOptionalWp = createLogic({
 
         service.planTrajectorySelectOptionalWp(action.payload)
             .then((res) => {
+                dispatch(planActions.getEducationalDetail(action.payload?.planId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -492,6 +493,7 @@ const planTrajectorySelectElectives = createLogic({
 
         service.planTrajectorySelectElectives(action.payload)
             .then((res) => {
+                dispatch(planActions.getEducationalDetail(action.payload?.planId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
