@@ -84,7 +84,15 @@ import {professionalStandardsState} from "../containers/ProfessionalStandards/ty
 import {GENERAL_PATH as structuralUnitsPath, reducer as structuralUnitsReducer} from "../containers/StructuralUnits/reducer";
 import {structuralUnitsState} from "../containers/StructuralUnits/types"
 
+import {GENERAL_PATH as individualEducationalPlansPath, reducer as individualEducationalPlansReducer} from "../containers/IndividualEducationalPlans/reducer";
+import {individualEducationalPlansState} from "../containers/IndividualEducationalPlans/types"
+
+import {GENERAL_PATH as profileNotificationsPath, reducer as profileNotificationsReducer} from "../containers/Profile/Notifications/reducer";
+import {notificationsState} from "../containers/Profile/Notifications/types"
+
 export interface rootState {
+    [profileNotificationsPath]: notificationsState,
+    [individualEducationalPlansPath]: individualEducationalPlansState,
     [structuralUnitsPath]: structuralUnitsState,
     [professionalStandardsPath]: professionalStandardsState,
     [individualTrajectoriesPath]: individualTrajectoriesState,
@@ -118,6 +126,8 @@ export interface rootState {
 }
 
 export default combineReducers({
+    [profileNotificationsPath]: profileNotificationsReducer,
+    [individualEducationalPlansPath]: individualEducationalPlansReducer,
     [structuralUnitsPath]: structuralUnitsReducer,
     [professionalStandardsPath]: professionalStandardsReducer,
     [individualTrajectoriesPath]: individualTrajectoriesReducer,

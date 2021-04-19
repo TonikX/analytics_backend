@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "./actions";
-import {getIndividualEducationalPlans, getCurrentPage, getSearchQuery, getAllCount, getSortingMode, getSortingField, getShowOnlyMy} from './getters';
+import {getIndividualEducationalPlans, getCurrentPage, getSearchQuery, getAllCount, getSortingMode, getSortingField} from './getters';
 
 import {rootState} from "../../store/reducers";
 import {isUserInOpGroup} from "../../common/userRights";
@@ -16,7 +16,6 @@ const mapStateToProps = (state: rootState) => {
         allCount: getAllCount(state),
         sortingField: getSortingField(state),
         sortingMode: getSortingMode(state),
-        showOnlyMy: getShowOnlyMy(state),
         canEdit: isUserInOpGroup(getUserGroups(state))
     };
 };

@@ -6,12 +6,10 @@ import {GENERAL_PATH} from "./reducer";
 
 import {fields} from './enum';
 
-import {IndividualEducationalPlansState, IndividualEducationalPlansType} from './types';
+import {individualEducationalPlansState, IndividualEducationalPlansType} from './types';
 
-const getStateData = (state: rootState): IndividualEducationalPlansState => get(state, GENERAL_PATH);
+const getStateData = (state: rootState): individualEducationalPlansState => get(state, GENERAL_PATH);
 export const getIndividualEducationalPlans = (state: rootState): Array<IndividualEducationalPlansType> => get(getStateData(state), fields.INDIVIDUAL_EDUCATIONAL_PLANS, []);
-
-export const getShowOnlyMy = (state: rootState) => get(getStateData(state), fields.SHOW_ONLY_MY, false);
 
 export const getAllCount = (state: rootState) => get(getStateData(state), fields.ALL_COUNT, 1);
 export const getCurrentPage = (state: rootState) => get(getStateData(state), fields.CURRENT_PAGE, 1);

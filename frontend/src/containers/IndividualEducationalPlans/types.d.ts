@@ -3,7 +3,6 @@ import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {IndividualEducationalPlanFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
-import {CompetenceType} from "../Competences/types";
 import {EducationalPlanType} from "../EducationalPlan/types";
 import {DirectionType} from "../Direction/types";
 import {ReactText} from "react";
@@ -17,10 +16,9 @@ export interface IndividualEducationalPlansActions {
     changeCurrentPage: any;
     changeAllCount: any;
     changeSorting: any;
-    showOnlyMy: any;
 }
 
-export interface IndividualEducationalPlansState {
+export interface individualEducationalPlansState {
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: string,
         [fields.SORTING_MODE]: SortingType;
@@ -28,7 +26,6 @@ export interface IndividualEducationalPlansState {
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
-    [fields.SHOW_ONLY_MY]: boolean;
     [fields.INDIVIDUAL_EDUCATIONAL_PLANS]: Array<IndividualEducationalPlansType>;
     [fields.EDUCATION_PLAN_IN_DIRECTION_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;
@@ -53,7 +50,6 @@ export interface IndividualEducationalPlansProps extends WithStyles<typeof style
     searchQuery: string;
     allCount: number;
     canEdit: boolean;
-    showOnlyMy: boolean;
     sortingField: string;
     sortingMode: SortingType;
 }
