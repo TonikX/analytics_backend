@@ -106,5 +106,8 @@ export default makeStyles((theme: Theme) => createStyles({
     },
     trajectoryOwner: {
         marginBottom: '10px'
+    },
+    disabled: {
+        cursor: 'auto'
     }
 }));
