@@ -50,6 +50,8 @@ export interface EducationalPlanActions {
     setIsTrajectoryRoute: any;
     planTrajectorySetUserData: any;
     planTrajectorySetDirection: any;
+    planTrajectorySelectOptionalWp: any;
+    planTrajectorySelectElectives: any;
 }
 
 export interface educationalPlanState {
@@ -117,6 +119,7 @@ export type ModuleType = {
 export type BlocksOfWorkProgramsType = {
     [BlocksOfWorkProgramsFields.ID]: number;
     [BlocksOfWorkProgramsFields.TYPE]: string;
+    [BlocksOfWorkProgramsFields.CHANGED]: boolean;
     [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: Array<WorkProgramBlockType>;
 };
 

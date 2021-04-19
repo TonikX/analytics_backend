@@ -41,7 +41,7 @@ from .serializers import OnlineCourseSerializer, BibliographicReferenceSerialize
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer
-from .workprogram_additions.models import StructuralUnit
+from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
 
 """"Удалены старые views с использованием джанго рендеринга"""
 """Блок реализации API"""
@@ -875,32 +875,6 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
 # Блок эндпоинтов рабочей программы
 
 
-class OnlineCourseListCreateAPIView(generics.ListCreateAPIView):
-    serializer_class = OnlineCourseSerializer
-    queryset = OnlineCourse.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'platform']
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class OnlineCourseDestroyView(generics.DestroyAPIView):
-    queryset = OnlineCourse.objects.all()
-    serializer_class = OnlineCourseSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class OnlineCourseUpdateView(generics.UpdateAPIView):
-    queryset = OnlineCourse.objects.all()
-    serializer_class = OnlineCourseSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class OnlineCourseDetailsView(generics.RetrieveAPIView):
-    queryset = OnlineCourse.objects.all()
-    serializer_class = OnlineCourseSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
 class BibliographicReferenceListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = BibliographicReferenceSerializer
     queryset = BibliographicReference.objects.all()
@@ -1269,7 +1243,6 @@ class FileUploadAPIView(APIView):
             try:
                 #print('clone', clone)
                 print('---Новая строка---')
-                #TODO: Спросить по катавасию с полями в филд оф стадис
                 if data['DEGREE'][i].strip() == 'Академический бакалавр':
                     qualification = 'bachelor'
                 elif data['DEGREE'][i].strip() == 'Магистр':
@@ -2139,7 +2112,8 @@ def UserGroups(request):
     groups_names = []
     for group in request.user.groups.all():
         groups_names.append(group.name)
-    if UserExpertise.objects.filter(expert=request.user):
+    if UserExpertise.objects.filter(expert=request.user) or \
+            UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"]):
         groups_names.append("expertise_member")
     return Response({"groups": groups_names})
 

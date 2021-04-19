@@ -71,25 +71,15 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
 
 
                     if change_block['change_type'] == "Facultativ":
-                        i = 0
-                        delete = []
-                        for work_program in change_block['work_program']:
-                            try:
-                                if work_program['id'] != \
-                                        WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects. \
-                                                get(individual_implementation_of_academic_plan = newdata['id'],
-                                                    work_program_change_in_discipline_block_module = change_block['id']).work_program.id:
-                                    delete.append(i)
-
-                            except:
-                                pass
-                            i +=1
-                        a = 0
-                        for i in delete:
-                            print(i)
-                            del change_block['work_program'][i-a]
-                            a +=1
-
+                        try:
+                            if change_block['id'] == \
+                                    ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule.objects. \
+                                            get(individual_implementation_of_academic_plan = newdata['id'],
+                                                work_program_change_in_discipline_block_module = change_block['id']).work_program_change_in_discipline_block_module.id:
+                                #delete.append(i)
+                                change_block.update({"changed": True})
+                        except:
+                            change_block.update({"changed": False})
 
 
                 if module['type'] == "specialization_module":

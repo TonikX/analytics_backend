@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Tooltip from '@material-ui/core/Tooltip';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 // import CourseCreateModal from "./CourseCreateModal";
@@ -106,17 +107,27 @@ class OnlineCourses extends React.Component<CoursesProps> {
               >
                 Фильтрация
               </Button>
-              <TextField 
-                placeholder="Поиск"
-                variant="outlined"
-                InputProps={{
-                    classes: {
-                        root: classes.searchInput
-                    },
-                    startAdornment: <SearchOutlined />,
-                }}
-                onChange={this.handleChangeSearchQuery}
-              />
+                <Tooltip title={
+                  <>
+                    Поиск осуществляется по: <br/>
+                    - нвазвниям онлайн курсов; <br/>
+                    - названиям платформ; <br/>
+                    - направлениям подготовки, связанными с онлайн курсами; <br/>
+                    - ключевым словам, описывающим результаты прохождения онлайн курса. <br/>
+                  </>
+                }>
+                    <TextField
+                        placeholder="Поиск"
+                        variant="outlined"
+                        InputProps={{
+                            classes: {
+                                root: classes.searchInput
+                            },
+                            startAdornment: <SearchOutlined />,
+                        }}
+                        onChange={this.handleChangeSearchQuery}
+                    />
+                </Tooltip>
             </div>
         </Typography>
         <ExpansionPanel expanded={this.state.showFilters} onChange={this.handleShowFilters}>

@@ -55,7 +55,12 @@ const pageDown = createAction('EDUCATIONAL_PLAN_PAGE_DOWN');
 const planTrajectorySetUserData = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SET_USER_DATA');
 const planTrajectorySetDirection = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SET_DIRECTION');
 
+const planTrajectorySelectOptionalWp = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SELECT_OPTIONAL_WP');
+const planTrajectorySelectElectives = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SELECT_ELECTIVES');
+
 const actions: EducationalPlanActions = {
+    planTrajectorySelectOptionalWp,
+    planTrajectorySelectElectives,
     openAddModuleDialog,
     closeAddModuleDialog,
     pageDown,

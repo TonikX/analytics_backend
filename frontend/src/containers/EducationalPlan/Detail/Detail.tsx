@@ -44,15 +44,16 @@ import {
 import {FavoriteType} from "../../Profile/Folders/enum";
 import {getUserFullName} from "../../../common/utils";
 import {DirectionFields} from "../../Direction/enum";
-import OptionalWorkProgramBlock from "./OptionalWorkProgramBlock";
+import OptionalWorkProgramBlock from "./OptionalWorkProgramsBlock";
 
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
 import {specializationObject} from "../../WorkProgram/constants";
 
-import {OPTIONALLY, typeOfWorkProgramInPlan} from "../data";
+import {FACULTATIV, OPTIONALLY, typeOfWorkProgramInPlan} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
+import FacultativeBlockModule from "./FacultativeBlockModule";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -178,6 +179,18 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         }
     }
 
+    saveOptionalProgram = (moduleId: number, workProgram: number) => {
+        this.props.actions.planTrajectorySelectOptionalWp({
+            moduleId,
+            workProgram,
+            planId: this.getPlanId()
+        });
+    }
+
+    saveElectivesProgram = (moduleId: number, workPrograms: any) => {
+        this.props.actions.planTrajectorySelectElectives({workPrograms, moduleId, planId: this.getPlanId()});
+    }
+
     render() {
         const {classes, blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
         const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength} = this.state;
@@ -298,63 +311,88 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                             }
                                                         </TableRow>
 
-                                                        {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map((blockOfWorkProgram, index) => {
-                                                            const blockType = blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE];
-                                                            const showRadioButton = blockType === OPTIONALLY && trajectoryRoute;
-                                                            const moduleId = module[ModuleFields.ID];
+                                                        {get(module, [ModuleFields.BLOCKS_OF_WORK_PROGRAMS, 0, BlocksOfWorkProgramsFields.TYPE]) === FACULTATIV && trajectoryRoute ?
+                                                            <FacultativeBlockModule blocks={module}
+                                                                                    saveWorkPrograms={this.saveElectivesProgram}
+                                                                                    handleDownloadFile={this.handleDownloadFile}
+                                                            />
+                                                            :
+                                                            <>
+                                                                {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map((blockOfWorkProgram, index) => {
+                                                                    const blockType = blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE];
+                                                                    const moduleId = module[ModuleFields.ID];
+                                                                    const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
 
-                                                            // if (showRadioButton) return <OptionalWorkProgramBlock module={blockOfWorkProgram} key={`blockOfWorkProgram-${index}-${moduleId}`} handleDownloadFile={this.handleDownloadFile}/>;
+                                                                    if (trajectoryRoute && workPrograms?.length > 1 && blockType === OPTIONALLY) {
+                                                                        return <OptionalWorkProgramBlock
+                                                                            module={blockOfWorkProgram}
+                                                                            key={`blockOfWorkProgram-${index}-${moduleId}`}
+                                                                            handleDownloadFile={this.handleDownloadFile}
+                                                                            isMultiSelect={false}
+                                                                            saveWorkPrograms={this.saveOptionalProgram}
+                                                                        />;
+                                                                    }
 
-                                                            const semesterHours = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.SEMESTER_UNIT);
-                                                            const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
+                                                                    const semesterHours = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.SEMESTER_UNIT);
 
-                                                            const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                                                            const semesterHour = mappedSemesterHours.slice(0, 10);
+                                                                    const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                                                                    const semesterHour = mappedSemesterHours.slice(0, 10);
 
-                                                            return <TableRow key={`blockOfWorkProgram-${index}-${moduleId}`}>
-                                                                <TableCell>
-                                                                    {workPrograms && workPrograms.map && workPrograms.map(workProgram =>
-                                                                        <div className={classes.displayFlex} key={'wp' + workProgram[WorkProgramGeneralFields.ID]}>
-                                                                            <div className={classes.displayFlex}>
-                                                                                <Typography className={classes.workProgramLink}
+                                                                    return <TableRow
+                                                                        key={`blockOfWorkProgram-${index}-${moduleId}`}>
+                                                                        <TableCell>
+                                                                            {workPrograms && workPrograms.map && workPrograms.map(workProgram =>
+                                                                                <div className={classes.displayFlex}
+                                                                                     key={'wp' + workProgram[WorkProgramGeneralFields.ID]}>
+                                                                                    <div
+                                                                                        className={classes.displayFlex}>
+                                                                                        <Typography
+                                                                                            className={classes.workProgramLink}
                                                                                             onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
-                                                                                    {workProgram[WorkProgramGeneralFields.TITLE]}
-                                                                                </Typography>
-                                                                            </div>
-                                                                            <Tooltip title={'Скачать рабочую программу'}>
-                                                                                <FileIcon className={classNames(classes.marginRight10, classes.button)}
-                                                                                    onClick={this.handleDownloadFile(workProgram[WorkProgramGeneralFields.ID])}
-                                                                                />
-                                                                            </Tooltip>
-                                                                        </div>
-                                                                    )}
-                                                                </TableCell>
-                                                                {semesterHour.map((semesterHour: string, index: number) =>
-                                                                    <TableCell key={'hour' + index} align="center" className={classes.hourCell} > {semesterHour} </TableCell>
-                                                                )}
-                                                                <TableCell>
-                                                                    {get(typeOfWorkProgramInPlan.find(item =>
-                                                                        item.value === blockType
-                                                                    ), 'label', '')}
-                                                                </TableCell>
+                                                                                            {workProgram[WorkProgramGeneralFields.TITLE]}
+                                                                                        </Typography>
+                                                                                    </div>
+                                                                                    <Tooltip
+                                                                                        title={'Скачать рабочую программу'}>
+                                                                                        <FileIcon
+                                                                                            className={classNames(classes.marginRight10, classes.button)}
+                                                                                            onClick={this.handleDownloadFile(workProgram[WorkProgramGeneralFields.ID])}
+                                                                                        />
+                                                                                    </Tooltip>
+                                                                                </div>
+                                                                            )}
+                                                                        </TableCell>
+                                                                        {semesterHour.map((semesterHour: string, index: number) =>
+                                                                            <TableCell key={'hour' + index}
+                                                                                       align="center"
+                                                                                       className={classes.hourCell}> {semesterHour} </TableCell>
+                                                                        )}
+                                                                        <TableCell>
+                                                                            {get(typeOfWorkProgramInPlan.find(item =>
+                                                                                item.value === blockType
+                                                                            ), 'label', '')}
+                                                                        </TableCell>
 
-                                                                {canEdit &&
-                                                                    <TableCell className={classes.actions}>
-                                                                        <Tooltip
+                                                                        {canEdit &&
+                                                                        <TableCell className={classes.actions}>
+                                                                          <Tooltip
                                                                             title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                                                                            <DeleteIcon className={classes.marginRight10}
-                                                                                        onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
+                                                                            <DeleteIcon
+                                                                              className={classes.marginRight10}
+                                                                              onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
                                                                             />
-                                                                        </Tooltip>
-                                                                        <Tooltip
+                                                                          </Tooltip>
+                                                                          <Tooltip
                                                                             title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
                                                                             <EditIcon
-                                                                                onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}/>
-                                                                        </Tooltip>
-                                                                    </TableCell>
-                                                                }
-                                                            </TableRow>;
-                                                        })}
+                                                                              onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}/>
+                                                                          </Tooltip>
+                                                                        </TableCell>
+                                                                        }
+                                                                    </TableRow>;
+                                                                })}
+                                                            </>
+                                                        }
                                                     </>
                                                 )
                                             })}
@@ -366,11 +404,15 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                     </div>
                 </Scrollbars>
 
-                <WPBlockCreateModal />
-                <ChangePlanModal />
-                <ModuleModal />
+                {!trajectoryRoute &&
+                    <>
+                      <WPBlockCreateModal />
+                      <ChangePlanModal />
+                      <ModuleModal />
+                      <AddModuleModal />
+                    </>
+                }
                 <DownloadFileModal />
-                <AddModuleModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmModuleDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

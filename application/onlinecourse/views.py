@@ -4,8 +4,8 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Institution, Platform, OnlineCourse, CourseCredit, CourseFieldOfStudy
-from workprogramsapp.models import FieldOfStudy
+from .models import Institution, Platform, OnlineCourse
+from workprogramsapp.models import FieldOfStudy, CourseCredit, CourseFieldOfStudy
 
 from .serializers import InstitutionSerializer, PlatformSerializer, OnlineCourseSerializer, \
     CourseCreditSerializer, CourseFieldOfStudySerializer
@@ -34,9 +34,11 @@ class OnlineCourseViewSet(viewsets.ModelViewSet):
     queryset = OnlineCourse.objects.all()
     serializer_class = OnlineCourseSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['title', 'platform__title', 'institution__title']
+    search_fields = ['title', 'platform__title', 'institution__title',
+                     'course_field_of_study__field_of_study__number', 'course_field_of_study__field_of_study__title']
     ordering_fields = ['title', 'platform__title', 'institution__title', 'language', 'started_at', 'rating']
-    filterset_fields = ['platform__title', 'institution__title', 'language']
+    filterset_fields = ['platform__title', 'institution__title', 'language',
+                        'course_field_of_study__field_of_study__number', 'course_field_of_study__field_of_study__title']
 
 
 class CourseCreditViewSet(viewsets.ModelViewSet):

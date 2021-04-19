@@ -462,6 +462,50 @@ const deleteWorkProgramFromZun = createLogic({
     }
 });
 
+const planTrajectorySelectOptionalWp = createLogic({
+    type: planActions.planTrajectorySelectOptionalWp.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_OPTIONAL_WP}));
+
+        service.planTrajectorySelectOptionalWp(action.payload)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(action.payload?.planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_OPTIONAL_WP}));
+                return done();
+            });
+    }
+});
+
+const planTrajectorySelectElectives = createLogic({
+    type: planActions.planTrajectorySelectElectives.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_ELECTIVES}));
+
+        service.planTrajectorySelectElectives(action.payload)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(action.payload?.planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_ELECTIVES}));
+                return done();
+            });
+    }
+});
+
 const transformDetailPlanData = createLogic({
     type: planActions.openDetailDialog.type,
     latest: true,
@@ -540,4 +584,6 @@ export default [
     deleteCompetenceBlock,
     deleteWorkProgramFromZun,
     transformDetailPlanData,
+    planTrajectorySelectOptionalWp,
+    planTrajectorySelectElectives,
 ];
