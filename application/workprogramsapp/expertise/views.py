@@ -83,9 +83,9 @@ class ExpertiseWorkProgramView(generics.RetrieveAPIView):
 
 
 class ExpertiseListView(generics.ListAPIView):
+    queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
     permission_classes = [IsMemberOfUserExpertise]
-
     def list(self, request, **kwargs):
         # Note the use of `get_queryset()` instead of `self.queryset`
         if request.user.groups.filter(name="expertise_master"):
@@ -103,7 +103,8 @@ class ExpertiseListView(generics.ListAPIView):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        newdata = dict(serializer.data[0])
+        return Response("newdata")
 
 
 class ExpertiseViewById(generics.RetrieveAPIView):
@@ -118,9 +119,11 @@ class ExpertiseCreateView(generics.CreateAPIView):
     Автоматически добавляет пользователя-создателя как лидера экспертизы
     (Подробней о создании экспертизы см. сериализатор)
     """
+
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
 
 class ChangeExpertiseView(generics.UpdateAPIView):
