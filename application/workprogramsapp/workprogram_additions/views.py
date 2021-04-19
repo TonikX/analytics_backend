@@ -19,7 +19,7 @@ from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 from ..models import WorkProgram, DisciplineSection, PrerequisitesOfWorkProgram, OutcomesOfWorkProgram, \
-    WorkProgramInFieldOfStudy
+    WorkProgramInFieldOfStudy, СertificationEvaluationTool, EvaluationTool, Topic
 from ..serializers import WorkProgramSerializer, WorkProgramShortForExperiseSerializer
 
 
@@ -98,18 +98,36 @@ def CopyContentOfWorkProgram(request):
                     print(item_exists)
                     item_exists = True
             if not item_exists:
-                item.workprogram = new_wp
-                item.save()
-
-        for item in OutcomesOfWorkProgram.objects.filter(workprogram=from_copy):
-            item_exists = False
-            for new_item in new_out:
-                if new_item.item == item.item:
-                    print(item_exists)
-                    item_exists = True
-            if not item_exists:
-                item.workprogram = new_wp
-                item.save()
+                PrerequisitesOfWorkProgram.objects.create(item=item.item, workprogram=new_wp,
+                                                          masterylevel=item.masterylevel)
+        discipline = DisciplineSection.objects.filter(work_program_id=old_wp.id)
+        disp_clone_list = []
+        eva_clone_list = []
+        for disp in discipline:
+            clone_discipline = disp.make_clone(attrs={'work_program': new_wp})
+            topic = Topic.objects.filter(discipline_section=disp)
+            for top in topic:
+                top.make_clone(attrs={'discipline_section': clone_discipline})
+            clone_dict = {'id': disp.id, 'clone_id': clone_discipline.id}
+            disp_clone_list.append(clone_dict)
+        for eva in EvaluationTool.objects.filter():
+            evaluation_disciplines = eva.evaluation_tools.all().filter(work_program_id=old_wp.id)
+            if (evaluation_disciplines):
+                clone_eva = eva.make_clone()
+                for disp in evaluation_disciplines:
+                    for elem in disp_clone_list:
+                        if (disp.id == elem['id']):
+                            DisciplineSection.objects.get(pk=elem['clone_id']).evaluation_tools.add(clone_eva)
+                clone_dict = {'id': eva.id, 'clone_id': clone_eva.id}
+                eva_clone_list.append(clone_dict)
+        for out in OutcomesOfWorkProgram.objects.filter(workprogram=old_wp):
+            clone_outcomes = out.make_clone(attrs={'workprogram': new_wp})
+            for eva in out.evaluation_tool.all():
+                for elem in eva_clone_list:
+                    if (eva.id == elem['id']):
+                        clone_outcomes.evaluation_tool.add(EvaluationTool.objects.get(pk=elem['clone_id']))
+        for cerf in СertificationEvaluationTool.objects.filter(work_program=old_wp):
+            cerf.make_clone(attrs={'work_program': new_wp})
         new_wp.editors.add(*old_wp.editors.all())
         new_wp.bibliographic_reference.add(*old_wp.bibliographic_reference.all())
 
@@ -123,9 +141,7 @@ def CopyContentOfWorkProgram(request):
         new_wp.work_status = old_wp.work_status
         new_wp.hours = old_wp.hours
         new_wp.extra_points = old_wp.extra_points
-        for section in DisciplineSection.objects.filter(work_program__pk=from_copy):
-            section.work_program = new_wp
-            section.save()
+
         # old_wp.delete()
         new_wp.save()
         serializer = WorkProgramSerializer(new_wp, many=False)
@@ -141,7 +157,9 @@ def EmptyStringWp(request):
     API-запрос на просмотр ВП, которых нету в УП
     """
     try:
-        empty_wp = WorkProgram.objects.filter(editors__isnull=False, zuns_for_wp__id_str_up__isnull=True).distinct()
+        empty_wp = (WorkProgram.objects.filter(editors__isnull=False,
+                                               zuns_for_wp__id_str_up__isnull=True) | WorkProgram.objects.filter(
+            editors__isnull=False, zuns_for_wp__isnull=True)).distinct()
         serializer = WorkProgramShortForExperiseSerializer(empty_wp, many=True)
         return Response(serializer.data)
     except:
