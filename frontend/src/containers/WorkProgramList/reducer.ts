@@ -1,5 +1,5 @@
 import createReducer from "../../store/createReducer";
-import {fields} from './enum';
+import {fields, filterFields} from './enum';
 import actions from "./actions";
 
 import {workProgramListState} from "./types";
@@ -15,6 +15,12 @@ export const initialState: workProgramListState = {
     [fields.ALL_COUNT]: 1,
     [fields.SEARCH_QUERY]: '',
     [fields.WORK_PROGRAM_LIST]: [],
+    [fields.FILTERING]: {
+        [filterFields.NUMBER_OP]: '',
+        [filterFields.NAME_OP]: '',
+        [filterFields.SPECIALIZATION]: '',
+        [filterFields.LANGUAGE]: '',
+    },
     [fields.WORK_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
@@ -39,6 +45,14 @@ const changeCurrentPage = (state: workProgramListState, {payload}: any): workPro
 const changeAllCount = (state: workProgramListState, {payload}: any): workProgramListState => ({
     ...state,
     [fields.ALL_COUNT]: payload,
+});
+
+const changeFiltering = (state: workProgramListState, {payload}: any): workProgramListState => ({
+    ...state,
+    [fields.FILTERING]: {
+        ...state[fields.FILTERING],
+        ...payload
+    },
 });
 
 const openDialog = (state: workProgramListState, {payload}: any): workProgramListState => ({
@@ -76,4 +90,5 @@ export const reducer = createReducer(initialState, {
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
     [actions.pageDown.type]: pageDown,
+    [actions.changeFiltering.type]: changeFiltering,
 });
