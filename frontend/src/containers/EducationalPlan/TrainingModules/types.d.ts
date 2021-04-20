@@ -26,6 +26,7 @@ export interface TrainingModulesActions {
     createTrainingModule: ActionCreatorWithPayload<CreateTrainingModulePayload>;
     changeTrainingModule: ActionCreatorWithPayload<ChangeTrainingModulePayload>;
     deleteTrainingModule: ActionCreatorWithPayload;
+    changeFiltering: ActionCreatorWithPayload;
 }
 
 export type OpenDialogPayload = {

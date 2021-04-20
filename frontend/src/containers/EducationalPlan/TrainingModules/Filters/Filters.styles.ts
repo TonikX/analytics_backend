@@ -11,20 +11,28 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     paddingTop: '10px',
   },
   fieldsWrapper: {
-    margin: '0 auto',
-    display: 'grid',
-    gridTemplateRows: '1fr 1fr',
-    gridTemplateColumns: '1fr 1fr 1fr',
-    gridGap: '20px',
-    width: '95%',
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-around',
+    flexWrap: 'wrap',
+  },
+  field: {
+    width: '23%',
     marginBottom: '20px',
   },
   btnsWrapper: {
     display: 'flex',
+    width: '490px',
     justifyContent: 'space-between',
+    [theme.breakpoints.down(880)]: {
+      width: '100%',
+    }
   },
   btn: {
-    width: '47%',
+    width: '235px',
+    [theme.breakpoints.down(880)]: {
+      width: '40%',
+    }
   },
   filterBtn: {
     backgroundColor: theme.palette.primary.main,

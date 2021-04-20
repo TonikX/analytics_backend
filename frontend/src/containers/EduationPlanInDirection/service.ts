@@ -3,12 +3,14 @@ import {EducationPlanInDirectionFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 import {EducationalPlanFields} from "../EducationalPlan/enum";
 import {DirectionFields} from "../Direction/enum";
+import {filterFields} from "./enum";
 
 class Service extends AnalyticsService{
-    getEducationalPlansInDirection(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
+    getEducationalPlansInDirection(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType, filters: any){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
+        const qualification = `field_of_study__qualification=${filters[filterFields.SPECIALIZATION]}`;
 
-        return this.get(`/api/implementationacademicplan?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+        return this.get(`/api/implementationacademicplan?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&${qualification}`);
     }
 
     deleteEducationalPlansInDirection(id: number){

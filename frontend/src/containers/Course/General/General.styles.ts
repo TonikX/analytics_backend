@@ -14,7 +14,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   description: {
     marginBottom: '10px',
-    whiteSpace: 'pre-wrap',
   },
   content: {
     display: 'flex',

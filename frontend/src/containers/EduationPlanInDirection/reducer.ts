@@ -3,6 +3,7 @@ import {fields} from './enum';
 import actions from "./actions";
 
 import {educationalPlanInDirectionState} from "./types";
+import {filterFields} from "./enum";
 
 export const GENERAL_PATH = 'educationalPlanInDirection';
 
@@ -10,6 +11,11 @@ export const initialState: educationalPlanInDirectionState = {
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: '',
         [fields.SORTING_MODE]: ''
+    },
+    [fields.FILTERING]: {
+        [filterFields.NUMBER_OP]: '',
+        [filterFields.NAME_OP]: '',
+        [filterFields.SPECIALIZATION]: '',
     },
     [fields.CURRENT_PAGE]: 1,
     [fields.ALL_COUNT]: 1,
@@ -65,6 +71,14 @@ const changeSorting = (state: educationalPlanInDirectionState, {payload}: any): 
     }
 });
 
+const changeFiltering = (state: educationalPlanInDirectionState, {payload}: any): educationalPlanInDirectionState => ({
+    ...state,
+    [fields.FILTERING]: {
+        ...state[fields.FILTERING],
+        ...payload
+    },
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setEducationalPlansInDirection.type]: setEducationalPlansInDirection,
     [actions.openDialog.type]: openDialog,
@@ -73,4 +87,5 @@ export const reducer = createReducer(initialState, {
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
+    [actions.changeFiltering.type]: changeFiltering,
 });
