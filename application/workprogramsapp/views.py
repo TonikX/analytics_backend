@@ -1710,7 +1710,7 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
     serializer_class = ImplementationAcademicPlanSerializer
     queryset = ImplementationAcademicPlan.objects.all()
     filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
-    filterset_fields = ['qualification',
+    filterset_fields = [
                         'academic_plan__educational_profile',
                         'field_of_study__title',
                         'field_of_study__number',
