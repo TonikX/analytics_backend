@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Institution, Platform, OnlineCourse
-from workprogramsapp.models import CourseCredit, CourseFieldOfStudy, FieldOfStudy
+from workprogramsapp.models import CourseCredit, CourseFieldOfStudy, FieldOfStudy, Topic, DisciplineSection, WorkProgram
 from dataprocessing.models import Items
 
 
@@ -55,6 +55,32 @@ class ItemsForOnlineCourseSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
+class OnlineCourseInWorkProgram(serializers.ModelSerializer):
+    """Сериализатор для отображения рабочих программ, которые относятся к разделам дисциплин, к которым относятся темы,
+    к которым относится курс"""
+    class Meta:
+        model = WorkProgram
+        fields = '__all__'
+
+
+class OnlineCourseInDisciplineSection(serializers.ModelSerializer):
+    """Сериализатор для отображения разделов дисциплин, к которым относятся темы, к которым относится курс"""
+    work_program = OnlineCourseInWorkProgram(many=False)
+
+    class Meta:
+        model = DisciplineSection
+        fields = '__all__'
+
+
+class OnlineCourseInTopics(serializers.ModelSerializer):
+    """Сериализатор для отображения тем, к которым относится курс"""
+    discipline_section = OnlineCourseInDisciplineSection(many=False)
+
+    class Meta:
+        model = Topic
+        fields = '__all__'
+
+
 class OnlineCourseSerializer(serializers.ModelSerializer):
     """Сериализатор Онлайн курса"""
     course_field_of_study = CourseFieldOfStudySerializer(many=True)
@@ -62,6 +88,7 @@ class OnlineCourseSerializer(serializers.ModelSerializer):
     institution = InstitutionSerializer(many=False)
     platform = PlatformSerializer(many=False)
     learning_outcome_list = ItemsForOnlineCourseSerializer(many=True)
+    topic_with_online_course = OnlineCourseInTopics(many=True)
 
     class Meta:
         model = OnlineCourse
