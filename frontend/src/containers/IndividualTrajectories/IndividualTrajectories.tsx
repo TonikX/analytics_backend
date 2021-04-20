@@ -16,12 +16,16 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import Switch from "@material-ui/core/Switch";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -35,13 +39,45 @@ import {appRouter} from "../../service/router-service";
 
 import {getUserFullName} from "../../common/utils";
 import {IndividualTrajectoriesProps} from './types';
+import Filters from "./Filters";
 
 import connect from './IndividualTrajectories.connect';
 import styles from './IndividualTrajectories.styles';
 
+// через стили (.styles.ts) не удалось сделать чтобы при открытии margin не появлялся
+const ExpansionPanel = withStyles({
+    root: {
+        border: '1px solid rgba(0, 0, 0, .125)',
+        boxShadow: 'none',
+        '&:not(:last-child)': {
+            borderBottom: 0,
+        },
+        '&:before': {
+            display: 'none',
+        },
+        '&$expanded': {
+            // этот margin
+            margin: 0,
+        },
+    },
+    expanded: {},
+})(MuiExpansionPanel);
+
+const ExpansionPanelSummary = withStyles({
+    root: {
+        margin: 0,
+        backgroundColor: 'rgba(0, 0, 0, .03)',
+        height: '48px',
+    },
+    expanded: {
+        minHeight: '20px !important'
+    }
+})(MuiExpansionPanelSummary)
+
 class individualTrajectories extends React.Component<IndividualTrajectoriesProps> {
     state = {
-        deleteConfirmId: null
+        deleteConfirmId: null,
+        showFilters: false
     }
 
     componentDidMount() {
@@ -95,9 +131,15 @@ class individualTrajectories extends React.Component<IndividualTrajectoriesProps
         this.props.actions.getIndividualTrajectories();
     }
 
+    handleShowFilters = (): void => {
+        this.setState({
+            showFilters: !this.state.showFilters,
+        })
+    }
+
     render() {
         const {classes, individualTrajectories, allCount, currentPage, sortingField, sortingMode, canEdit, showOnlyMy} = this.props;
-        const {deleteConfirmId} = this.state;
+        const {deleteConfirmId, showFilters} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -124,6 +166,15 @@ class individualTrajectories extends React.Component<IndividualTrajectoriesProps
                                className={classes.searchWrap}
                     />
                 </div>
+
+                <ExpansionPanel expanded={showFilters} onChange={this.handleShowFilters}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography>Фильтрация</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Filters />
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>

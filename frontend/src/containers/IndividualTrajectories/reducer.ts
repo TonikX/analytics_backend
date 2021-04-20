@@ -3,6 +3,7 @@ import {fields} from './enum';
 import actions from "./actions";
 
 import {individualTrajectoriesState} from "./types";
+import {filterFields} from "./enum";
 
 export const GENERAL_PATH = 'IndividualTrajectories';
 
@@ -16,6 +17,12 @@ export const initialState: individualTrajectoriesState = {
     [fields.SEARCH_QUERY]: '',
     [fields.INDIVIDUAL_TRAJECTORIES]: [],
     [fields.SHOW_ONLY_MY]: false,
+    [fields.FILTERING]: {
+        [filterFields.NUMBER_OP]: '',
+        [filterFields.NAME_OP]: '',
+        [filterFields.SPECIALIZATION]: '',
+        [filterFields.LANGUAGE]: '',
+    },
 };
 
 const setIndividualTrajectories = (state: individualTrajectoriesState, {payload}: any): individualTrajectoriesState => ({
@@ -51,6 +58,14 @@ const changeSorting = (state: individualTrajectoriesState, {payload}: any): indi
     }
 });
 
+const changeFiltering = (state: individualTrajectoriesState, {payload}: any): individualTrajectoriesState => ({
+    ...state,
+    [fields.FILTERING]: {
+        ...state[fields.FILTERING],
+        ...payload
+    },
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setIndividualTrajectories.type]: setIndividualTrajectories,
     [actions.changeSearchQuery.type]: changeSearchQuery,
@@ -58,4 +73,5 @@ export const reducer = createReducer(initialState, {
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
     [actions.showOnlyMy.type]: showOnlyMy,
+    [actions.changeFiltering.type]: changeFiltering,
 });

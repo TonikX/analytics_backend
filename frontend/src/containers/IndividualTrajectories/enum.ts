@@ -7,6 +7,7 @@ export enum fields {
     SORTING_FIELD = 'SORTING_FIELD',
     SORTING_MODE = 'SORTING_MODE',
     SHOW_ONLY_MY = 'SHOW_ONLY_MY',
+    FILTERING = 'FILTERING',
 }
 
 export enum fetchingTypes {
@@ -22,4 +23,11 @@ export enum IndividualTrajectoryFields {
     NUMBER = 'number',
     USER = 'user',
     IMPLEMENTATION_OF_ACADEMIC_PLAN = 'implementation_of_academic_plan',
+}
+
+export enum filterFields{
+    LANGUAGE = 'LANGUAGE',
+    NUMBER_OP = 'NUMBER_OP',
+    NAME_OP = 'NAME_OP',
+    SPECIALIZATION = 'SPECIALIZATION',
 }

@@ -15,7 +15,7 @@ import { rootState } from '../../../store/reducers'
 import actions from '../actions'
 import {filterFields} from "../enum";
 
-export const Filters: React.FC = () => {
+const Filters: React.FC = () => {
   const dispatch = useDispatch()
   const classes = useStyles()
   const [isReset, setIsReset] = useState<boolean>(false)
@@ -37,22 +37,12 @@ export const Filters: React.FC = () => {
       [filterFields.NAME_OP]: '',
       [filterFields.SPECIALIZATION]: '',
     }))
-    dispatch(actions.getWorkProgramList())
+    dispatch(actions.getIndividualTrajectories())
   }
 
   return (
     <div className={classes.root}>
       <div className={classes.fieldsWrapper}>
-        <SearchSelector 
-          label='Язык рабочей программы'
-          changeSearchText={() => {}}
-          list={lists.langs}
-          changeItem={(value: string) => handleFilter(filterFields.LANGUAGE, value)}
-          value={filters[filterFields.LANGUAGE]}
-          valueLabel={''}
-          className={classes.field}
-          isReset={isReset}
-        />
         <SearchSelector
             label='Уровень образовательной программы'
             changeSearchText={() => {}}
@@ -62,16 +52,6 @@ export const Filters: React.FC = () => {
             valueLabel={''}
             className={classes.field}
             isReset={isReset}
-        />
-        <SearchSelector
-          label='Структурное подразделение'
-          changeSearchText={() => {}}
-          list={[]}
-          changeItem={(value: string) => {}}
-          value={''}
-          valueLabel={''}
-          className={classes.field}
-          isReset={isReset}
         />
         <SearchSelector
             label='Образовательная программа'
@@ -121,21 +101,20 @@ export const Filters: React.FC = () => {
                      shrink: true,
                    }}
         />
-      </div>
-      <div className={classes.btnsWrapper}>
+
         <Button
-          color="primary"
-          variant="outlined" 
-          className={cn(classes.btn, classes.resetBtn)}
-          onClick={resetFilters}
+            color="primary"
+            variant="outlined"
+            className={cn(classes.btn, classes.resetBtn)}
+            onClick={resetFilters}
         >
           Сбросить
         </Button>
         <Button
-          color="primary"
-          variant="contained" 
-          className={cn(classes.btn, classes.filterBtn)}
-          onClick={() => dispatch(actions.getWorkProgramList())}
+            color="primary"
+            variant="contained"
+            className={cn(classes.btn, classes.filterBtn)}
+            onClick={() => dispatch(actions.getIndividualTrajectories())}
         >
           Отфильтровать
         </Button>
@@ -143,3 +122,5 @@ export const Filters: React.FC = () => {
     </div>
   )
 }
+
+export default Filters
