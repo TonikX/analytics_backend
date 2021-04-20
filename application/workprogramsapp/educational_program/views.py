@@ -31,11 +31,11 @@ class EducationalProgramListAPIView(generics.ListAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['qualification', 'year_of_recruitment', 'manager']
     filterset_fields = ['qualification',
-                        'academic_plan_for_ep__academic_plan__educational_profile',
-                        'academic_plan_for_ep__field_of_study__title',
-                        'academic_plan_for_ep__field_of_study__number',
-                        'academic_plan_for_ep__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
-                        'academic_plan_for_ep__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                        'implementation_of_academic_plan__academic_plan__educational_profile',
+                        'implementation_of_academic_plan__field_of_study__title',
+                        'implementation_of_academic_plan__field_of_study__number',
+                        'implementation_of_academic_plan__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
+                        'implementation_of_academic_plan__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
