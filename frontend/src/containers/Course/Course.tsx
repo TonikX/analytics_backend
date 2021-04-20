@@ -7,7 +7,7 @@ import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepButton from '@material-ui/core/StepButton'
 import Typography from '@material-ui/core/Typography'
-import LikeButton from "../../components/LikeButton"
+//import LikeButton from "../../components/LikeButton"
 import { General } from './General/General'
 import { Content } from './Content/Content'
 import { CurrentSession } from './CurrentSession/CurrentSession'
@@ -58,8 +58,9 @@ export const Course: React.FC = () => {
   }
   return (
     <div className={classes.wrap}>
-      <div className={classes.header}>
-        <LikeButton onClick={() => {}} isLiked={false} />
+      {/* высота временно вместов добавления в избранное */}
+      <div className={classes.header} style={{height: '46px'}}>
+        {/* <LikeButton onClick={() => {}} isLiked={false} /> */}
       </div>
       <Paper className={classes.root}>
         <Stepper

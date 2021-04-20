@@ -33,7 +33,7 @@ export const initialState: courseState = {
   [fields.REQUIREMENTS]: null,
   [fields.OUTCOMES]: null,
   [fields.OUTCOMES_LIST]: [],
-  [fields.WORK_PROGRAMS]: [],
+  [fields.TOPIC_WITH_ONLINE_COURSE]: [],
 };
 
 const setCourse = (state: courseState, {payload}: any): courseState => ({

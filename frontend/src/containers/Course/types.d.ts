@@ -1,4 +1,4 @@
-import { fields, fieldsOfStudyFields, outcomeFields, wpFields } from './enum'
+import { fields, fieldsOfStudyFields, outcomeFields, topicFields, disciplineSectionFields, wpFields } from './enum'
 import { CourseType } from '../Courses/types'
 
 export interface courseState extends CourseType {
@@ -19,7 +19,7 @@ export interface courseState extends CourseType {
   [fields.REQUIREMENTS]: string | null,
   [fields.OUTCOMES]: string | null,
   [fields.OUTCOMES_LIST]: Array<outcomeType>,
-  [fields.WORK_PROGRAMS]: Array<wpType>,
+  [fields.TOPIC_WITH_ONLINE_COURSE]: Array<topicType>,
 }
 
 export type fieldOfStudyType = {
@@ -38,10 +38,23 @@ export type outcomeType = {
   [outcomeFields.NAME]: string,
 }
 
+export type topicType = {
+  [topicFields.ID]: number,
+  [topicFields.NUMBER]: number,
+  [topicFields.DISCIPLINE_SECTION]: disciplineSectionType,
+}
+
+export type disciplineSectionType = {
+  [disciplineSectionFields.ID]: number,
+  [disciplineSectionFields.NAME]: string,
+  [disciplineSectionFields.WORK_PROGRAM]: wpType,
+}
+
 export type wpType = {
   [wpFields.ID]: number,
-  [wpFields.COURSE]: string,
-  [wpFields.WORK_PROGRAM]: string,
+  [wpFields.TITLE]: string,
+  [wpFields.AUTHORS]: string,
+  [wpFields.QUALIFICATION]: string,
 }
 
 export interface CourseActions {
