@@ -16,8 +16,7 @@ export const Content: React.FC = () => {
     <div>
       <Typography className={classes.title}>Содержание</Typography>
       {course[fields.CONTENT] &&
-        <Typography className={classes.content}>
-          {course[fields.CONTENT]}
+        <Typography className={classes.content} dangerouslySetInnerHTML={{__html: course[fields.CONTENT]}}>
         </Typography>}
       {course[fields.LECTURES_NUMBER] && <Typography><b>Количество лекций:</b> {course[fields.LECTURES_NUMBER]}</Typography>}
     </div>
