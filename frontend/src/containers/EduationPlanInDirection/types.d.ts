@@ -20,6 +20,7 @@ export interface EducationalPlanInDirectionActions {
     changeCurrentPage: any;
     changeAllCount: any;
     changeSorting: any;
+    changeFiltering: any;
 }
 
 export interface educationalPlanInDirectionState {
@@ -27,6 +28,7 @@ export interface educationalPlanInDirectionState {
         [fields.SORTING_FIELD]: string,
         [fields.SORTING_MODE]: SortingType;
     };
+    [fields.FILTERING]: any;
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;

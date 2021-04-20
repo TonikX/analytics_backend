@@ -9,6 +9,7 @@ export enum fields {
     SORTING = 'SORTING',
     SORTING_FIELD = 'SORTING_FIELD',
     SORTING_MODE = 'SORTING_MODE',
+    FILTERING = 'FILTERING',
 }
 
 export enum fetchingTypes {
@@ -25,4 +26,10 @@ export enum EducationPlanInDirectionFields {
     EDUCATION_PLAN = 'academic_plan',
     YEAR = 'year',
     NUMBER = 'number',
+}
+
+export enum filterFields{
+    NUMBER_OP = 'NUMBER_OP',
+    NAME_OP = 'NAME_OP',
+    SPECIALIZATION = 'SPECIALIZATION',
 }

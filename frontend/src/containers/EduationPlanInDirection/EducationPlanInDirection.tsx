@@ -44,11 +44,47 @@ import {EducationalPlanInDirectionProps, EducationalPlanInDirectionType} from '.
 
 import connect from './EducationPlanInDirection.connect';
 import styles from './EducationPlanInDirection.styles';
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import {Filters} from "./Filters/Filters";
+import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+
+// через стили (.styles.ts) не удалось сделать чтобы при открытии margin не появлялся
+const ExpansionPanel = withStyles({
+    root: {
+        border: '1px solid rgba(0, 0, 0, .125)',
+        boxShadow: 'none',
+        '&:not(:last-child)': {
+            borderBottom: 0,
+        },
+        '&:before': {
+            display: 'none',
+        },
+        '&$expanded': {
+            // этот margin
+            margin: 0,
+        },
+    },
+    expanded: {},
+})(MuiExpansionPanel);
+
+const ExpansionPanelSummary = withStyles({
+    root: {
+        margin: 0,
+        backgroundColor: 'rgba(0, 0, 0, .03)',
+        height: '48px',
+    },
+    expanded: {
+        minHeight: '20px !important'
+    }
+})(MuiExpansionPanelSummary)
 
 class EducationPlanInDirection extends React.Component<EducationalPlanInDirectionProps> {
     state = {
         deleteConfirmId: null,
-        anchorsEl: {}
+        anchorsEl: {},
+        showFilters: false
     }
 
     componentDidMount() {
@@ -119,9 +155,15 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
         this.handleCloseMenu();
     };
 
+    handleShowFilters = (): void => {
+        this.setState({
+            showFilters: !this.state.showFilters,
+        })
+    }
+
     render() {
         const {classes, educationalPlansInDirection, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
-        const {deleteConfirmId, anchorsEl} = this.state;
+        const {deleteConfirmId, anchorsEl, showFilters} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -139,6 +181,15 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                onChange={this.handleChangeSearchQuery}
                     />
                 </Typography>
+
+                <ExpansionPanel expanded={showFilters} onChange={this.handleShowFilters}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography>Фильтрация</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Filters />
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>

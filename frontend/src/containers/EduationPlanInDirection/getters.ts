@@ -31,6 +31,7 @@ export const getDialogData = (state: rootState) => get(getEducationalPlanInDirec
 export const getAllCount = (state: rootState) => get(getStateData(state), fields.ALL_COUNT, 1);
 export const getCurrentPage = (state: rootState) => get(getStateData(state), fields.CURRENT_PAGE, 1);
 export const getSearchQuery = (state: rootState) => get(getStateData(state), fields.SEARCH_QUERY, '');
+export const getFilters = (state: rootState) => get(getStateData(state), fields.FILTERING, {});
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
