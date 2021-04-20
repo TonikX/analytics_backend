@@ -11,9 +11,9 @@ start_prod:
 
 build_make_prod:
 	cd frontend
-	npm run build
+	sudo npm run build
 	cd ..
-	docker-compose -f docker-compose-prod.yml build
+	sudo docker-compose -f docker-compose-prod.yml build
 
 stop:
 	docker-compose down
