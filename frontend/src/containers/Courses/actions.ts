@@ -11,6 +11,11 @@ const setPlatforms = createAction('SET_PLATFORMS')
 const getInstitutions = createAction('GET_INSTITUTIONS')
 const setInstitutions = createAction('SET_INSTITUTIONS')
 
+const getFieldOfStudyTitles = createAction('COURSES_GET_FIELD_OF_STUDY_TITLES')
+const setFieldOfStudyTitles = createAction('COURSES_SET_FIELD_OF_STUDY_TITLES')
+const getFieldOfStudyNumbers = createAction('COURSES_GET_FIELD_OF_STUDY_NUMBERS')
+const setFieldOfStudyNumbers = createAction('COURSES_SET_FIELD_OF_STUDY_NUMBERS')
+
 const createNewCourse = createAction('CREATE_NEW_COURSE');
 const changeCourse = createAction('CHANGE_COURSE');
 const deleteCourse = createAction('DELETE_COURSE');
@@ -24,7 +29,7 @@ const changeCurrentPage = createAction('COURSES_CHANGE_CURRENT_PAGE');
 const changeAllCount = createAction('COURSES_CHANGE_ALL_COUNT');
 const changeSorting = createAction('COURSES_CHANGE_SORTING');
 const changeFiltering = createAction('COURSES_CHANGE_FILTERING')
-const changeFilerSearchQuery = createAction('COURSES_CHANGE_FILTER_SEARCH_QUERY')
+const changeFilterSearchQuery = createAction('COURSES_CHANGE_FILTER_SEARCH_QUERY')
 
 const actions: CoursesActions = {
     getCourses,
@@ -43,8 +48,12 @@ const actions: CoursesActions = {
     setPlatforms,
     getInstitutions,
     setInstitutions,
+    getFieldOfStudyTitles,
+    setFieldOfStudyTitles,
+    getFieldOfStudyNumbers,
+    setFieldOfStudyNumbers,
     changeFiltering,
-    changeFilerSearchQuery,
+    changeFilterSearchQuery,
 }
 
 export default actions;

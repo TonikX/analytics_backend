@@ -35,9 +35,11 @@ export enum fields {
   RECORD_END_AT = 'record_end_at',
   FINISHED_AT = 'finished_at',
   FIELDS_OF_STUDY = 'course_field_of_study',
-  REQUIREMENTS = 'course_requirement',
-  OUTCOMES = 'course_learning_outcome',
-  WORK_PROGRAMS = 'course_workprogram',
+  REQUIREMENTS = 'requirements',
+  OUTCOMES = 'learning_outcome',
+  OUTCOMES_LIST = 'learning_outcome_list',
+  TOPIC_WITH_ONLINE_COURSE = 'topic_with_online_course',
+  COMPETENCES = 'competences',
 }
 
 export enum fetchingTypes {
@@ -55,20 +57,28 @@ export enum fieldsOfStudyFields {
   FIELD_OF_STUDY_ID = 'id',
 }
 
-export enum reqFields {
-  ID = 'id',
-  COURSE = 'course',
-  ITEM = 'item',
-}
 
 export enum outcomeFields {
   ID = 'id',
-  COURSE = 'course',
-  LEARNING_OUTCOME = 'learning_outcome',
+  NAME = 'name',
+}
+
+export enum topicFields {
+  ID = 'id',
+  NUMBER = 'number',
+  DESCRIPTION = 'description',
+  DISCIPLINE_SECTION = 'discipline_section',
+}
+
+export enum disciplineSectionFields {
+  ID = 'id',
+  NAME = 'name',
+  WORK_PROGRAM = 'work_program',
 }
 
 export enum wpFields {
   ID = 'id',
-  COURSE = 'course',
-  WORK_PROGRAM = 'work_program',
+  TITLE = 'title',
+  AUTHORS = 'authors',
+  QUALIFICATION = 'qualification',
 }
