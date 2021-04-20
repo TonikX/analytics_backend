@@ -36,7 +36,10 @@ export const WorkPrograms: React.FC = () => {
               {workPrograms.map((workProgram: topicType) => (
                 <TableRow key={workProgram[topicFields.ID]}>
                   <TableCell>
-                    {workProgram[topicFields.DISCIPLINE_SECTION][disciplineSectionFields.WORK_PROGRAM][wpFields.TITLE]}
+                    {/* eslint-disable-next-line*/}
+                    <a target="_blank" href={`${window.location.origin}/work-program/${workProgram[topicFields.DISCIPLINE_SECTION][disciplineSectionFields.WORK_PROGRAM][wpFields.ID]}`} className={classes.link}>
+                      <Typography>{workProgram[topicFields.DISCIPLINE_SECTION][disciplineSectionFields.WORK_PROGRAM][wpFields.TITLE]}</Typography>
+                    </a>
                   </TableCell>
                 </TableRow>
               ))}

@@ -13,3 +13,4 @@ export const getOutcomesList = (state: rootState): Array<outcomeType> => get(get
 export const getFieldsOfStudy= (state: rootState): Array<fieldOfStudyType> => get(getStateData(state), fields.FIELDS_OF_STUDY, [])
 export const getRequirements = (state: rootState): string | null => get(getStateData(state), fields.REQUIREMENTS, null)
 export const getWorkPrograms = (state: rootState): Array<topicType> => get(getStateData(state), fields.TOPIC_WITH_ONLINE_COURSE, [])
+export const getCompetences = (state: rootState): string | null => get(getStateData(state), fields.COMPETENCES, null)

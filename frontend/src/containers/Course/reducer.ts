@@ -34,6 +34,7 @@ export const initialState: courseState = {
   [fields.OUTCOMES]: null,
   [fields.OUTCOMES_LIST]: [],
   [fields.TOPIC_WITH_ONLINE_COURSE]: [],
+  [fields.COMPETENCES]: null,
 };
 
 const setCourse = (state: courseState, {payload}: any): courseState => ({

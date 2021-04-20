@@ -11,7 +11,7 @@ export interface courseState extends CourseType {
   [fields.VOLUME]: number | null,
   [fields.INTENSITY_PER_WEEK]: number | null,
   [fields.LECTURES_NUMBER]: number | null,
-  [fields.CONTENT]: string,
+  [fields.CONTENT]: string | null,
   [fields.VISITORS_NUMBER]: number | null,
   [fields.RECORD_END_AT]: string | null,
   [fields.FINISHED_AT]: string | null,
@@ -20,6 +20,7 @@ export interface courseState extends CourseType {
   [fields.OUTCOMES]: string | null,
   [fields.OUTCOMES_LIST]: Array<outcomeType>,
   [fields.TOPIC_WITH_ONLINE_COURSE]: Array<topicType>,
+  [fields.COMPETENCES]: string | null,
 }
 
 export type fieldOfStudyType = {

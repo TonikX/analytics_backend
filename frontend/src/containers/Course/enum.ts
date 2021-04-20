@@ -39,6 +39,7 @@ export enum fields {
   OUTCOMES = 'learning_outcome',
   OUTCOMES_LIST = 'learning_outcome_list',
   TOPIC_WITH_ONLINE_COURSE = 'topic_with_online_course',
+  COMPETENCES = 'competences',
 }
 
 export enum fetchingTypes {
