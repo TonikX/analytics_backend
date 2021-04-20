@@ -28,7 +28,7 @@ from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 class EducationalProgramListAPIView(generics.ListAPIView):
     serializer_class = EducationalProgramSerializer
     queryset = EducationalProgram.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['qualification', 'year_of_recruitment', 'manager']
     filterset_fields = ['qualification',
                         'academic_plan_for_ep__academic_plan__educational_profile',
