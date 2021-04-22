@@ -13,7 +13,6 @@ from .serializers import AdditionalMaterialSerializer, CreateAdditionalMaterialS
     StructuralUnitSerializer, CreateStructuralUnitSerializer, \
     CreateUserStructuralUnitSerializer, UserStructuralUnitSerializer, ShortStructuralUnitSerializer
 
-
 from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 
 # Права доступа
@@ -73,6 +72,7 @@ class UserStructuralUnitSet(viewsets.ModelViewSet):
             return CreateUserStructuralUnitSerializer
         return UserStructuralUnitSerializer
 
+
 @api_view(['POST'])
 @permission_classes((IsRpdDeveloperOrReadOnly,))
 def CopyContentOfWorkProgram(request):
@@ -129,6 +129,9 @@ def CopyContentOfWorkProgram(request):
                         clone_outcomes.evaluation_tool.add(EvaluationTool.objects.get(pk=elem['clone_id']))
         for cerf in СertificationEvaluationTool.objects.filter(work_program=old_wp):
             cerf.make_clone(attrs={'work_program': new_wp})
+        for cerf in СertificationEvaluationTool.objects.filter(work_program=new_wp):
+            if cerf.name == "No name":
+                cerf.delete()
         new_wp.editors.add(*old_wp.editors.all())
         new_wp.bibliographic_reference.add(*old_wp.bibliographic_reference.all())
 
@@ -151,17 +154,18 @@ def CopyContentOfWorkProgram(request):
         return Response(status=400)
 
 
-@api_view(['GET'])
-@permission_classes((AllowAny,))
-def EmptyStringWp(request):
-    """
-    API-запрос на просмотр ВП, которых нету в УП
-    """
+@api_view(['POST'])
+@permission_classes((IsRpdDeveloperOrReadOnly,))
+def ReconnectWorkProgram(request):
     try:
-        empty_wp = (WorkProgram.objects.filter(editors__isnull=False,
-                                               zuns_for_wp__id_str_up__isnull=True) | WorkProgram.objects.filter(
-            editors__isnull=False, zuns_for_wp__isnull=True)).distinct()
-        serializer = WorkProgramShortForExperiseSerializer(empty_wp, many=True)
+        from_copy = request.data.get('from_copy_id')
+        to_copy = request.data.get('to_copy_id')
+        old_wp = WorkProgram.objects.get(pk=from_copy)
+        new_wp = WorkProgram.objects.get(pk=to_copy)
+        serializer = WorkProgramSerializer(new_wp, many=False)
         return Response(serializer.data)
     except:
         return Response(status=400)
+
+
+
