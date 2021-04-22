@@ -7,6 +7,7 @@ from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
+from ..models import WorkProgramInFieldOfStudy, WorkProgram
 
 """
 Материалы тем
@@ -86,3 +87,5 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = StructuralUnit
         fields = "__all__"
+
+
