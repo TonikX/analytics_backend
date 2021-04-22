@@ -11,7 +11,6 @@ from .workprogram_additions.serializers import AdditionalMaterialSerializer, Sho
 from onlinecourse.serializers import OnlineCourseSerializer
 
 
-
 class IndicatorSerializer(serializers.ModelSerializer):
     """Сериализатор Индикаторов"""
     class Meta:
@@ -113,7 +112,7 @@ class EvaluationToolForOutcomsSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
     class Meta:
         model = EvaluationTool
-        fields = ['id', 'type', 'name']
+        fields = ['id', 'type', 'name', 'max', 'min', 'deadline', 'check_point', 'description']
 
 
 class СertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
@@ -344,7 +343,7 @@ class ZunSerializer(serializers.ModelSerializer):
 class ZunForDetailAcademicPlanSerializer(serializers.ModelSerializer):
     """Сериализатор Зунов"""
     indicator_in_zun = IndicatorListSerializer()
-    items = OutcomesOfWorkProgramSerializer(many = True)
+    items = OutcomesOfWorkProgramSerializer(many=True)
 
     class Meta:
         model = Zun
