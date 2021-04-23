@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from django.urls import path
 
 from workprogramsapp.statistic.views import SimpleStatistic, EmptyStringWp, WpWithoutAP, WpWithSimilarCode, \
-    WpWithoutStructuralUnit, StructuralUnitWp
+    WpWithoutStructuralUnit, StructuralUnitWp, FieldOfStudyPlanToISU
 
 urlpatterns = [
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/statistic/workprogram/wpwithoutap', WpWithoutAP),
     path('api/statistic/workprogram/similarcode', WpWithSimilarCode),
     path('api/statistic/structural/workprogram', StructuralUnitWp),
-    path('api/statistic/structural/empty', WpWithoutStructuralUnit)
+    path('api/statistic/structural/empty', WpWithoutStructuralUnit),
+    path('api/statistic/utils/fostoisu/<int:pk>', FieldOfStudyPlanToISU)
 
 ]
