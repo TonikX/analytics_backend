@@ -41,51 +41,17 @@ import {WorkProgramGeneralFields} from '../WorkProgram/enum';
 import {appRouter} from "../../service/router-service";
 import {specialization} from "../WorkProgram/constants";
 import {FULL_DATE_FORMAT} from "../../common/utils";
+import Filters from "./Filters";
 
 import connect from './WorkProgramList.connect';
 import styles from './WorkProgramList.styles';
-import {Filters} from "./Filters/Filters";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
-import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 
-// через стили (.styles.ts) не удалось сделать чтобы при открытии margin не появлялся
-const ExpansionPanel = withStyles({
-    root: {
-        border: '1px solid rgba(0, 0, 0, .125)',
-        boxShadow: 'none',
-        '&:not(:last-child)': {
-            borderBottom: 0,
-        },
-        '&:before': {
-            display: 'none',
-        },
-        '&$expanded': {
-            // этот margin
-            margin: 0,
-        },
-    },
-    expanded: {},
-})(MuiExpansionPanel);
-
-const ExpansionPanelSummary = withStyles({
-    root: {
-        margin: 0,
-        backgroundColor: 'rgba(0, 0, 0, .03)',
-        height: '48px',
-    },
-    expanded: {
-        minHeight: '20px !important'
-    }
-})(MuiExpansionPanelSummary)
-
+import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
 
 class WorkProgramList extends React.Component<WorkProgramListProps> {
     state = {
         deleteConfirmId: null,
         anchorsEl: {},
-        showFilters: false
     }
 
     componentDidMount() {
@@ -155,17 +121,11 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         this.setState({anchorsEl: {}});
     };
 
-    handleShowFilters = (): void => {
-        this.setState({
-            showFilters: !this.state.showFilters,
-        })
-    }
-
     render() {
         const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
-        const {anchorsEl, showFilters} = this.state;
+        const {anchorsEl} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -184,14 +144,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                     />
                 </Typography>
 
-                <ExpansionPanel expanded={showFilters} onChange={this.handleShowFilters}>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography>Фильтрация</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Filters />
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                <CustomizeExpansionPanel label="Фильтрация" details={<Filters />}/>
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>

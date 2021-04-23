@@ -21,8 +21,7 @@ class ExpertisesService extends AnalyticsService{
     }
 
     removeExpertFromExpertise(expertiseId: number, userId: number){
-        return this.post(`/api/expertise/user/delete`, {
-            expert: userId,
+        return this.delete(`/api/expertise/user/delete/${userId}`, {
             expertise: expertiseId
         });
     }

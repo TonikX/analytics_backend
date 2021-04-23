@@ -16,17 +16,14 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import Switch from "@material-ui/core/Switch";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
-import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
+import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";
@@ -44,37 +41,7 @@ import Filters from "./Filters";
 import connect from './IndividualTrajectories.connect';
 import styles from './IndividualTrajectories.styles';
 
-// через стили (.styles.ts) не удалось сделать чтобы при открытии margin не появлялся
-const ExpansionPanel = withStyles({
-    root: {
-        border: '1px solid rgba(0, 0, 0, .125)',
-        boxShadow: 'none',
-        '&:not(:last-child)': {
-            borderBottom: 0,
-        },
-        '&:before': {
-            display: 'none',
-        },
-        '&$expanded': {
-            // этот margin
-            margin: 0,
-        },
-    },
-    expanded: {},
-})(MuiExpansionPanel);
-
-const ExpansionPanelSummary = withStyles({
-    root: {
-        margin: 0,
-        backgroundColor: 'rgba(0, 0, 0, .03)',
-        height: '48px',
-    },
-    expanded: {
-        minHeight: '20px !important'
-    }
-})(MuiExpansionPanelSummary)
-
-class individualTrajectories extends React.Component<IndividualTrajectoriesProps> {
+class IndividualTrajectories extends React.Component<IndividualTrajectoriesProps> {
     state = {
         deleteConfirmId: null,
         showFilters: false
@@ -131,15 +98,9 @@ class individualTrajectories extends React.Component<IndividualTrajectoriesProps
         this.props.actions.getIndividualTrajectories();
     }
 
-    handleShowFilters = (): void => {
-        this.setState({
-            showFilters: !this.state.showFilters,
-        })
-    }
-
     render() {
         const {classes, individualTrajectories, allCount, currentPage, sortingField, sortingMode, canEdit, showOnlyMy} = this.props;
-        const {deleteConfirmId, showFilters} = this.state;
+        const {deleteConfirmId} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -167,14 +128,7 @@ class individualTrajectories extends React.Component<IndividualTrajectoriesProps
                     />
                 </div>
 
-                <ExpansionPanel expanded={showFilters} onChange={this.handleShowFilters}>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography>Фильтрация</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Filters />
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                <CustomizeExpansionPanel label="Фильтрация" details={<Filters />}/>
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>
@@ -285,4 +239,4 @@ class individualTrajectories extends React.Component<IndividualTrajectoriesProps
     }
 }
 
-export default connect(withStyles(styles)(individualTrajectories));
+export default connect(withStyles(styles)(IndividualTrajectories));
