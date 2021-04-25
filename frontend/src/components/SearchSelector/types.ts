@@ -7,7 +7,7 @@ export interface SearchSelectorProps extends WithStyles<typeof styles> {
     changeSearchText: Function;
     changeItem: Function;
     label: string;
-    value: string;
+    value: string|number;
     valueLabel: string;
     list: SelectorListType;
     className?: string;
