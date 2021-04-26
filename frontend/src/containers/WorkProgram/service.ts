@@ -195,7 +195,11 @@ class WorkProgramService extends AnalyticsService{
     }
 
     addEvaluationTool(evaluationTool: any){
-        return this.post(`/api/tools/`, evaluationTool);
+        return this.post(`/api/tools/`, {
+            ...evaluationTool,
+            min: evaluationTool.min === '' ? 0 : evaluationTool.min,
+            max: evaluationTool.max === '' ? 0 : evaluationTool.max,
+        });
     }
 
     addIntermediateCertification(evaluationTool: any, workProgramId: ReactText){
@@ -216,7 +220,11 @@ class WorkProgramService extends AnalyticsService{
     changeEvaluationTool(evaluationTool: any){
         const id = evaluationTool[EvaluationToolFields.ID];
 
-        return this.patch(`/api/tools/${id}`, evaluationTool);
+        return this.patch(`/api/tools/${id}`, {
+            ...evaluationTool,
+            min: evaluationTool.min === '' ? 0 : evaluationTool.min,
+            max: evaluationTool.max === '' ? 0 : evaluationTool.max,
+        });
     }
 
     changeIntermediateCertification(evaluationTool: any){
