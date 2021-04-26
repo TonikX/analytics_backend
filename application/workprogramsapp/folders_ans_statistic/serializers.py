@@ -81,3 +81,6 @@ class IndividualImplementationAcademicPlanInFolderSerializer(serializers.ModelSe
         return super().to_representation(value)
 
 
+
+
+#Статистика
