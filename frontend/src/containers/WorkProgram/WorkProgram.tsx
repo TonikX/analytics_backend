@@ -168,7 +168,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     handleClickLike = () => {
         const {workProgramRating, workProgramRatingId} = this.props;
 
-        if (workProgramRating){
+        if (workProgramRating !== false){
             this.props.foldersActions.removeFromFolder({
                 id: workProgramRatingId,
                 callback: this.props.actions.getWorkProgram,
@@ -219,7 +219,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
                         {canAddToFolder &&
                             <LikeButton onClick={this.handleClickLike}
-                                        isLiked={workProgramRating}
+                                        isLiked={workProgramRating !== false}
                             />
                         }
                     </div>
