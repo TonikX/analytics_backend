@@ -1,6 +1,8 @@
+import json
+
 from django.db.models.aggregates import Count
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 
 from dataprocessing.models import User
@@ -9,7 +11,7 @@ from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Acade
     DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, ImplementationAcademicPlan, FieldOfStudy, \
     СertificationEvaluationTool
 from workprogramsapp.statistic.serializers import WorkProgramInFieldOfStudySerializerForStatistic, \
-    WorkProgramSerializerForStatistic
+    WorkProgramSerializerForStatistic, SuperShortWorkProgramSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
@@ -128,7 +130,7 @@ def StructuralUnitWp(request):
 
 
 @api_view(['GET'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAdminUser,))
 def FieldOfStudyPlanToISU(request, pk):
     """
     Перевод наших данных в ISU-лайк данные
@@ -141,7 +143,7 @@ def FieldOfStudyPlanToISU(request, pk):
     imp_len = all_imp.count()
     from_len = pk * 20
     end_len = from_len + 20 if from_len + 20 < imp_len else imp_len
-    all_imp = all_imp[from_len:end_len]
+    #all_imp = all_imp[from_len:end_len]
     for implementation in all_imp:
         academic_plan = AcademicPlan.objects.get(pk=implementation.academic_plan.id)
         field_of_study = FieldOfStudy.objects.get(pk=implementation.field_of_study.id)
@@ -170,7 +172,9 @@ def FieldOfStudyPlanToISU(request, pk):
                                 language = "Русский/Английский"
 
                             wp_isu_list.append(
-                                {
+                                {   "УНИКАЛЬНЫЙ_КОД": wp.discipline_code,
+                                    "ИД_ИМПЛЕМЕНТАЦИЯ_АНАЛИТИКА": implementation.id,
+                                    "ИД_УП_АНАЛИТИКА": academic_plan.id,
                                     "ИД_РПД_АНАЛИТИКА": wp.id,
                                     "ИД_УП": academic_plan.ap_isu_id,
                                     # ТИП ПЛАНА
@@ -223,7 +227,19 @@ def FieldOfStudyPlanToISU(request, pk):
                                 }
                             )
         implementation_list.append(wp_isu_list)
+        print("step complete")
         # print(serializer.data)
     print(len(implementation_list))
     print(ImplementationAcademicPlan.objects.all().count())
-    return Response(implementation_list)
+    with open('ap_all.json', 'w', encoding="utf-8") as file:
+        file.write(json.dumps(implementation_list, ensure_ascii=False, indent=4))  # use `json.loads` to do the reverse
+        file.close()
+    return Response("я очинь люблю чоколадние орещки")
+
+
+@api_view(['GET'])
+@permission_classes((AllowAny,))
+def AllWpShort(request):
+    wp = WorkProgram.objects.all()
+    serializer = SuperShortWorkProgramSerializer(wp, many=True)
+    return Response(serializer.data)

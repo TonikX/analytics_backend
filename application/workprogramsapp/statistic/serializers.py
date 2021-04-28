@@ -27,3 +27,10 @@ class StructuralUnitWithWpSerializer(serializers.ModelSerializer):
     class Meta:
         model = StructuralUnit
         fields = ["id", "title", "workprogram_in_structural_unit"]
+
+
+class SuperShortWorkProgramSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title', 'discipline_code']
