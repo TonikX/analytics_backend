@@ -14,6 +14,6 @@ urlpatterns = [
     path('api/statistic/structural/workprogram', StructuralUnitWp),
     path('api/statistic/structural/empty', WpWithoutStructuralUnit),
     path('api/statistic/utils/fostoisu/<int:pk>', FieldOfStudyPlanToISU),
-    path('api/statistic/workprogram/veryshortwp', AllWpShort)
+    path('api/statistic/workprogram/veryshortwp', AllWpShort),
 
 ]
