@@ -21,7 +21,7 @@ class UserExpertiseSerializer(serializers.ModelSerializer):
 class UserExpertiseForExpertiseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserExpertise
-        fields = ['expert', 'stuff_status', 'user_expertise_status', 'expert_result']
+        fields = ['id','expert', 'stuff_status', 'user_expertise_status', 'expert_result']
 
     def to_representation(self, value):
         self.fields['expert'] = userProfileSerializer(many=False)
