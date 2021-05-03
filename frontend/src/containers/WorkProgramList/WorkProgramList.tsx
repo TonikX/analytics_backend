@@ -51,6 +51,7 @@ import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
 class WorkProgramList extends React.Component<WorkProgramListProps> {
     state = {
         deleteConfirmId: null,
+        duplicateConfirmId: null,
         anchorsEl: {},
     }
 
@@ -68,10 +69,23 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         });
     }
 
+    handleClickDuplicate = (id: number) => () => {
+        this.setState({
+            duplicateConfirmId: id
+        });
+    }
+
     handleConfirmDeleteDialog = () => {
         const {deleteConfirmId} = this.state;
 
         this.props.actions.deleteWorkProgram(deleteConfirmId);
+        this.closeConfirmDeleteDialog();
+    }
+
+    handleConfirmDuplicateDialog = () => {
+        const {duplicateConfirmId} = this.state;
+
+        this.props.workProgramActions.cloneWorkProgram(duplicateConfirmId);
         this.closeConfirmDeleteDialog();
     }
 
@@ -81,12 +95,14 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         });
     }
 
-    handleCreate = () => {
-        this.props.actions.openDialog();
+    closeConfirmDuplicateDialog = () => {
+        this.setState({
+            duplicateConfirmId: null
+        });
     }
 
-    handleClickCopy = (id: number) => () => {
-        this.props.workProgramActions.cloneWorkProgram(id);
+    handleCreate = () => {
+        this.props.actions.openDialog();
     }
 
     handleChangeSearchQuery = (event: React.ChangeEvent) => {
@@ -123,9 +139,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
 
     render() {
         const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode} = this.props;
-        const {deleteConfirmId} = this.state;
-
-        const {anchorsEl} = this.state;
+        const {deleteConfirmId, duplicateConfirmId, anchorsEl} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -237,7 +251,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                                         paper: classes.menuPaper
                                                     }}
                                                 >
-                                                    <MenuItem onClick={this.handleClickCopy(workProgram[WorkProgramGeneralFields.ID])}>
+                                                    <MenuItem onClick={this.handleClickDuplicate(workProgram[WorkProgramGeneralFields.ID])}>
                                                         <CopyIcon className={classes.menuIcon}/>
                                                         Клонировать
                                                     </MenuItem>
@@ -290,6 +304,14 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                isOpen={Boolean(deleteConfirmId)}
                                dialogTitle={'Удалить учебную программу'}
                                confirmButtonText={'Удалить'}
+                />
+
+                <ConfirmDialog onConfirm={this.handleConfirmDuplicateDialog}
+                               onDismiss={this.closeConfirmDuplicateDialog}
+                               confirmText={'Вы точно уверены, что хотите клонировать учебную программу?'}
+                               isOpen={Boolean(duplicateConfirmId)}
+                               dialogTitle={'Клонировать учебную программу'}
+                               confirmButtonText={'Клонировать'}
                 />
 
                 <CreateModal />
