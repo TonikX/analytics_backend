@@ -454,6 +454,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         try:
             newdata.update(
                 {"expertise_status": Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status})
+            newdata.update(
+                {"use_chat_with_id_expertise": Expertise.objects.get(work_program__id=self.kwargs['pk']).pk})
             if Expertise.objects.get(
                     work_program__id=self.kwargs['pk']).expertise_status == "WK" and (WorkProgram.objects.get(
                 pk=self.kwargs['pk']).owner == request.user or WorkProgram.objects.filter(pk=self.kwargs['pk'],
@@ -467,9 +469,11 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 newdata.update({"can_edit": True, "expertise_status": False})
             else:
                 newdata.update({"can_edit": False, "expertise_status": False})
+            newdata.update({"use_chat_with_id_expertise": None})
         try:
             ue = UserExpertise.objects.get(expert=request.user, expertise__work_program=self.kwargs['pk'])
-            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX":
+            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX" or \
+                    Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK":
                 newdata.update({"can_comment": True})
                 newdata.update({"user_expertise_id": ue.id})
             else:
