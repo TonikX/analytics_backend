@@ -6,12 +6,11 @@ import {GENERAL_PATH} from "./reducer";
 
 import {fields} from './enum';
 
-import {workProgramListState} from './types';
+import {FiltersType, workProgramListState} from './types';
 
 import {WorkProgramGeneralType} from '../WorkProgram/types';
 import {SelectorListType} from "../../components/SearchSelector/types";
 import {WorkProgramGeneralFields} from "../WorkProgram/enum";
-import {filteringType} from "../Courses/types";
 
 const getStateData = (state: rootState): workProgramListState => get(state, GENERAL_PATH);
 export const getWorkProgramList = (state: rootState): Array<WorkProgramGeneralType> => get(getStateData(state), fields.WORK_PROGRAM_LIST, []);
@@ -35,4 +34,4 @@ export const getSorting = (state: rootState) => get(getStateData(state), fields.
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
 export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
 
-export const getFilters = (state: rootState): any => get(getStateData(state), fields.FILTERING)
+export const getFilters = (state: rootState): FiltersType => get(getStateData(state), fields.FILTERING)

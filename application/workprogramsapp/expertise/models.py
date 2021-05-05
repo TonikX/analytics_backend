@@ -41,6 +41,7 @@ class Expertise(models.Model):
                                      related_name='experts_in_expertise')
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     date_of_last_change = models.DateTimeField(editable=True, auto_now=True, blank=True, null=True)
+    expertise_counter=models.IntegerField(blank=True, null=True, verbose_name="Счетчик отправки на экспертизу", default=0)
 
     #
     #

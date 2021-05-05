@@ -1,4 +1,4 @@
-import {fields} from './enum';
+import {fields, filterFields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {WorkProgramActions, WorkProgramGeneralType} from '../WorkProgram/types';
@@ -35,6 +35,15 @@ export interface workProgramListState {
         [fields.DIALOG_DATA]: WorkProgramGeneralType|{};
     };
 }
+
+export type FiltersType = {
+    [filterFields.NUMBER_OP]: string;
+    [filterFields.NAME_OP]: string;
+    [filterFields.SPECIALIZATION]: string;
+    [filterFields.LANGUAGE]: string;
+    [filterFields.STRUCTURAL_UNIT]: number|'';
+}
+
 export interface WorkProgramListProps extends WithStyles<typeof styles> {
     actions: WorkProgramListActions;
     workProgramActions: WorkProgramActions;

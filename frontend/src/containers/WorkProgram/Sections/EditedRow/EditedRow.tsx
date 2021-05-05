@@ -43,7 +43,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
         const contactWork = this.calculateContactWork();
         const spo = parseFloat(section[workProgramSectionFields.SPO]);
 
-        return (contactWork ? parseFloat(contactWork) : 0) + (spo ? spo : 0);
+        return ((contactWork ? parseFloat(contactWork) : 0) + (spo ? spo : 0)).toFixed(2);
     }
 
     setEditModeTrue = () => {

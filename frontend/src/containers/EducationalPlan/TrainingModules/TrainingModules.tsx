@@ -22,6 +22,7 @@ import SortingButton from "../../../components/SortingButton";
 import Search from "../../../components/Search";
 import {SortingType} from "../../../components/SortingButton/types";
 import TableSettingsMenu from "../../../components/TableSettingsMenu/TableSettingsMenu";
+import CustomizeExpansionPanel from "../../../components/CustomizeExpansionPanel";
 
 import {DirectionFields} from "../../Direction/enum";
 import {DirectionType} from "../../Direction/types";
@@ -37,47 +38,12 @@ import {typesListObject} from './constants';
 import connect from './TrainingModules.connect';
 import styles from './TrainingModules.styles';
 
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
-import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import {Filters} from "./Filters/Filters";
-
-// через стили (.styles.ts) не удалось сделать чтобы при открытии margin не появлялся
-const ExpansionPanel = withStyles({
-    root: {
-        border: '1px solid rgba(0, 0, 0, .125)',
-        boxShadow: 'none',
-        '&:not(:last-child)': {
-            borderBottom: 0,
-        },
-        '&:before': {
-            display: 'none',
-        },
-        '&$expanded': {
-            // этот margin
-            margin: 0,
-        },
-    },
-    expanded: {},
-})(MuiExpansionPanel);
-
-const ExpansionPanelSummary = withStyles({
-    root: {
-        margin: 0,
-        backgroundColor: 'rgba(0, 0, 0, .03)',
-        height: '48px',
-    },
-    expanded: {
-        minHeight: '20px !important'
-    }
-})(MuiExpansionPanelSummary)
+import Filters from "./Filters";
 
 class TrainingModules extends React.Component<TrainingModulesProps> {
     state = {
         anchorsEl: {},
         deleteConfirmId: null,
-        showFilters: false
     }
 
     componentDidMount() {
@@ -147,15 +113,9 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
         });
     };
 
-    handleShowFilters = (): void => {
-        this.setState({
-            showFilters: !this.state.showFilters,
-        })
-    }
-
     render() {
         const {classes, trainingModules, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
-        const {deleteConfirmId, anchorsEl, showFilters} = this.state;
+        const {deleteConfirmId, anchorsEl} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -165,14 +125,7 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                     <Search handleChangeSearchQuery={this.handleChangeSearchQuery}/>
                 </div>
 
-                <ExpansionPanel expanded={showFilters} onChange={this.handleShowFilters}>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography>Фильтрация</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Filters />
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                <CustomizeExpansionPanel label="Фильтрация" details={<Filters />}/>
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>

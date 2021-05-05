@@ -14,8 +14,9 @@ import { rootState } from '../../../store/reducers'
 
 import actions from '../actions'
 import {filterFields} from "../enum";
+import StructuralUnitsSelector from "../../StructuralUnits/StructuralUnitsSelector";
 
-export const Filters: React.FC = () => {
+const Filters: React.FC = () => {
   const dispatch = useDispatch()
   const classes = useStyles()
   const [isReset, setIsReset] = useState<boolean>(false)
@@ -24,7 +25,7 @@ export const Filters: React.FC = () => {
     langs: languageArray,
     specialization: specialization,
   }
-  const handleFilter = (field: string, value: string): void => {
+  const handleFilter = (field: string, value: string|number): void => {
     isReset && setIsReset(false)
     dispatch(actions.changeFiltering({[field]: value}))
   }
@@ -36,6 +37,7 @@ export const Filters: React.FC = () => {
       [filterFields.NUMBER_OP]: '',
       [filterFields.NAME_OP]: '',
       [filterFields.SPECIALIZATION]: '',
+      [filterFields.STRUCTURAL_UNIT]: '',
     }))
     dispatch(actions.getWorkProgramList())
   }
@@ -63,15 +65,8 @@ export const Filters: React.FC = () => {
             className={classes.field}
             isReset={isReset}
         />
-        <SearchSelector
-          label='Структурное подразделение'
-          changeSearchText={() => {}}
-          list={[]}
-          changeItem={(value: string) => {}}
-          value={''}
-          valueLabel={''}
-          className={classes.field}
-          isReset={isReset}
+        <StructuralUnitsSelector value={filters[filterFields.STRUCTURAL_UNIT]}
+                                 onChange={(value: number) => handleFilter(filterFields.STRUCTURAL_UNIT, value)}
         />
         <SearchSelector
             label='Образовательная программа'
@@ -143,3 +138,5 @@ export const Filters: React.FC = () => {
     </div>
   )
 }
+
+export default Filters;

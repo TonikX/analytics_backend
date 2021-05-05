@@ -20,6 +20,7 @@ export const initialState: workProgramListState = {
         [filterFields.NAME_OP]: '',
         [filterFields.SPECIALIZATION]: '',
         [filterFields.LANGUAGE]: '',
+        [filterFields.STRUCTURAL_UNIT]: '',
     },
     [fields.WORK_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,

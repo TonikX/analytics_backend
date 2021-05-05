@@ -16,6 +16,10 @@ def login():
     headers = {'content-type': 'application/json'}
     r = requests.post(url, data=json.dumps(body), headers=headers)
     BASE_HEADERS['Authorization'] = r.headers['Authorization']
+    body_year = {"name": "current_year", "value": "2021/2022"}
+    r = requests.post("https://cas.crp.rocks/backend//rest/config/personal", data=json.dumps(body_year), headers=BASE_HEADERS)
+    body_term = {"name": "current_term", "value": 0}
+    r = requests.post("https://cas.crp.rocks/backend//rest/config/personal", data=json.dumps(body_term), headers=BASE_HEADERS)
 
 
 def get_disciplines():
@@ -77,3 +81,4 @@ def post_checkpoint_plan(body):
     url = BASE_URL + "/checkpoint_plans"
     r = requests.post(url, data=json.dumps(body), headers=BASE_HEADERS)
     return r.text
+

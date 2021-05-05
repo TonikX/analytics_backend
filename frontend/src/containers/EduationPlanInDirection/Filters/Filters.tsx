@@ -15,7 +15,7 @@ import { rootState } from '../../../store/reducers'
 import actions from '../actions'
 import {filterFields} from "../enum";
 
-export const Filters: React.FC = () => {
+const Filters: React.FC = () => {
   const dispatch = useDispatch()
   const classes = useStyles()
   const [isReset, setIsReset] = useState<boolean>(false)
@@ -132,3 +132,5 @@ export const Filters: React.FC = () => {
     </div>
   )
 }
+
+export default Filters
