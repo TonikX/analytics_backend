@@ -333,12 +333,8 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.workprogram_additions.urls')),
 
     url(r'^', include('workprogramsapp.individualization.urls')),
-<<<<<<< HEAD
     url(r'^', include('workprogramsapp.isu_merge.urls')),
-
-=======
     url(r'^', include('workprogramsapp.statistic.urls')),
->>>>>>> 1bfdc8e3d6ed781edf17d71d7fc8de957603d1ff
     # Нотификации
     path('api/notifications/list', NotificationListView.as_view()),
 
