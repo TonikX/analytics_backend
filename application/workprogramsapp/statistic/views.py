@@ -251,12 +251,12 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
     Запрос с филтрами для рпд в структурных подразделениях
     -----------------------------------------------------
     Обязательные параметры:
-    structural_unit_id - id структрных подразделений, для которых надо получить РПД
+    structural_unit_id - id структрных подразделений, для которых надо получить РПД, может быть несколько
 
     Необязательные параметры:
-    year - Год учбеного плана в котором реализуется РПД
+    year - Год учбеного плана в котором реализуется РПД, может быть несколько
     semester - Семетр в котором реализуется РПД
-
+    status - Тип статуса РПД (EX - на экспертизе, AC - одобрена, WK - в работе), только в одном экземпляре
     Пример запроса:
     http://127.0.0.1:8000/api/statistic/structural/workprogram_extend?structural_unit_id=5&semester=5&year=2020&year=2019
     Все РПД из структурного подразделения с ID 5, реализующиеся в 5 семестре, для УП 2020 и 2019 года
@@ -267,17 +267,19 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
 
     def get_queryset(self):
         print(self.request.query_params)
-        status_filter = self.request.query_params.getlist("status") if "status" in self.request.query_params else ""
+        status_filter = self.request.query_params["status"] if "status" in self.request.query_params else ""
         structural_unit_id =  self.request.query_params.getlist("structural_unit_id") if "structural_unit_id" in self.request.query_params else []
         year = self.request.query_params.getlist("year") if "year" in self.request.query_params \
             else [x for x in range(2000, 2050)]
         semester = self.request.query_params.getlist("semester") if "semester" in self.request.query_params else [-1]
         cred_regex = r""
+        structural_unit_id = [int(x) for x in structural_unit_id]
+        print(structural_unit_id)
         for i in range(12):
             if str(i + 1) in semester:
                 cred_regex += "[^0],"
             else:
-                cred_regex += "[0-20],"
+                cred_regex += "[0-9\-],"
         cred_regex = cred_regex[:-1]
         print(cred_regex)
         if status_filter == "WK":
@@ -299,5 +301,5 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
             zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
             structural_unit__in=structural_unit_id,
             zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex).distinct()
-
+        print(len(WorkProgram.objects.filter(structural_unit=6)))
         return needed_wp
