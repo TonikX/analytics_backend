@@ -268,7 +268,7 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
     def get_queryset(self):
         print(self.request.query_params)
         status_filter = self.request.query_params.getlist("status") if "status" in self.request.query_params else ""
-        structural_unit_id = self.request.query_params["structural_unit_id"]
+        structural_unit_id =  self.request.query_params.getlist("structural_unit_id") if "structural_unit_id" in self.request.query_params else []
         year = self.request.query_params.getlist("year") if "year" in self.request.query_params \
             else [x for x in range(2000, 2050)]
         semester = self.request.query_params.getlist("semester") if "semester" in self.request.query_params else [-1]
@@ -283,21 +283,21 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
         if status_filter == "WK":
             needed_wp = (WorkProgram.objects.filter(expertise_with_rpd__isnull=True,
             zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
-            structural_unit=structural_unit_id,
+            structural_unit__in=structural_unit_id,
             zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex) |
             WorkProgram.objects.filter(
             expertise_with_rpd__expertise_status__contains=status_filter,
             zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
-            structural_unit=structural_unit_id,
+            structural_unit__in=structural_unit_id,
             zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex)).distinct()
         elif status_filter == "":
-            needed_wp = WorkProgram.objects.filter(structural_unit=structural_unit_id,
+            needed_wp = WorkProgram.objects.filter(structural_unit__in=structural_unit_id,
             zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
             zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex).distinct()
         else:
             needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains=status_filter,
             zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
-            structural_unit=structural_unit_id,
+            structural_unit__in=structural_unit_id,
             zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex).distinct()
 
         return needed_wp
