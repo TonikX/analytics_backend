@@ -1,7 +1,7 @@
 const REQUIRED = 'Required';
 export const OPTIONALLY = 'Optionally';
 const OGNP_SET = 'OGNP_set';
-const SET_SPECIALIZATION = 'Set_specialization';
+export const SET_SPECIALIZATION = 'Set_specialization';
 export const FACULTATIV = 'Facultativ';
 const OPT = 'Opt_specialization';
 

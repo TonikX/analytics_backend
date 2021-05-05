@@ -49,16 +49,22 @@ import OptionalWorkProgramBlock from "./OptionalWorkProgramsBlock";
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
 import {specializationObject} from "../../WorkProgram/constants";
 
-import {FACULTATIV, OPTIONALLY, typeOfWorkProgramInPlan} from "../data";
+import {FACULTATIV, OPTIONALLY, SET_SPECIALIZATION, typeOfWorkProgramInPlan} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
 import FacultativeBlockModule from "./FacultativeBlockModule";
+import Button from "@material-ui/core/Button";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
         deleteBlockConfirmId: null,
         deleteModuleConfirmId: null,
+        selectSpecializationData: {
+            blockId: null,
+            id: null,
+            title: null
+        },
         deletedWorkProgramsLength: 0,
     }
 
@@ -86,6 +92,18 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         this.closeConfirmDeleteDialog();
     }
 
+    handleConfirmSelectSpecialization = () => {
+        const {selectSpecializationData} = this.state;
+
+        this.props.actions.planTrajectorySelectSpecialization({
+            id: selectSpecializationData.id,
+            blockId: selectSpecializationData.blockId,
+            planId: this.getPlanId()
+        });
+
+        this.closeSelectSpecializationConfirmModal();
+    }
+
     handleConfirmModuleDeleteDialog = () => {
         const {deleteModuleConfirmId} = this.state;
 
@@ -105,6 +123,26 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     handleClickDeleteModule = (id: number) => () => {
         this.setState({
             deleteModuleConfirmId: id
+        });
+    }
+
+    showSelectSpecializationConfirmModal = (title: string, id: number, blockId: number) => () => {
+        this.setState({
+            selectSpecializationData: {
+                blockId,
+                title,
+                id
+            }
+        });
+    }
+
+    closeSelectSpecializationConfirmModal = () => {
+        this.setState({
+            selectSpecializationData: {
+                blockId: null,
+                id: null,
+                title: null
+            }
         });
     }
 
@@ -193,7 +231,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
     render() {
         const {classes, blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
-        const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength} = this.state;
+        const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
         const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
 
         return (
@@ -278,6 +316,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                 </TableCell>
                                             </TableRow>
                                             {block[EducationalPlanBlockFields.MODULES].map(module => {
+                                                const showSelectSpecializationButton = get(module, [ModuleFields.BLOCKS_OF_WORK_PROGRAMS, 0, BlocksOfWorkProgramsFields.TYPE]) === SET_SPECIALIZATION && trajectoryRoute;
                                                 return (
                                                     <>
                                                         <TableRow key={'module' + module[ModuleFields.ID]}>
@@ -291,6 +330,15 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                                            onClick={this.handleCreateBlockOfWorkPrograms(module[ModuleFields.ID])}
                                                                             />
                                                                         </Tooltip>
+                                                                    }
+                                                                    {showSelectSpecializationButton &&
+                                                                        <Button
+                                                                          variant="outlined"
+                                                                          onClick={this.showSelectSpecializationConfirmModal(module[ModuleFields.NAME], module[ModuleFields.ID], block[EducationalPlanBlockFields.ID])}
+                                                                          style={{marginLeft: '5px'}}
+                                                                        >
+                                                                          Выбрать специализацию
+                                                                        </Button>
                                                                     }
                                                                 </div>
                                                             </TableCell>
@@ -427,6 +475,13 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                isOpen={Boolean(deleteBlockConfirmId)}
                                dialogTitle={`Удалить ${deletedWorkProgramsLength > 1 ? 'комлект рабочих программ' : 'рабочую программу'}`}
                                confirmButtonText={'Удалить'}
+                />
+                <ConfirmDialog onConfirm={this.handleConfirmSelectSpecialization}
+                               onDismiss={this.closeSelectSpecializationConfirmModal}
+                               confirmText={`Вы точно уверены, что хотите выбрать специализацию ${selectSpecializationData.title}?`}
+                               isOpen={Boolean(selectSpecializationData.id)}
+                               dialogTitle={'Выбрать специализацию'}
+                               confirmButtonText={'Выбрать специализацию'}
                 />
             </Paper>
         );

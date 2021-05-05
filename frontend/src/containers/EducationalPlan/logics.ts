@@ -506,6 +506,28 @@ const planTrajectorySelectElectives = createLogic({
     }
 });
 
+const planTrajectorySelectSpecialization = createLogic({
+    type: planActions.planTrajectorySelectSpecialization.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_SPECIALIZATION}));
+
+        service.planTrajectorySelectSpecialization(action.payload)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(action.payload?.planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_SPECIALIZATION}));
+                return done();
+            });
+    }
+});
+
 const transformDetailPlanData = createLogic({
     type: planActions.openDetailDialog.type,
     latest: true,
@@ -586,4 +608,5 @@ export default [
     transformDetailPlanData,
     planTrajectorySelectOptionalWp,
     planTrajectorySelectElectives,
+    planTrajectorySelectSpecialization,
 ];
