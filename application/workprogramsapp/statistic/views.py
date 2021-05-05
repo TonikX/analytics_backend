@@ -129,6 +129,7 @@ def StructuralUnitWp(request):
     return Response(result)
 
 
+
 @api_view(['GET'])
 @permission_classes((IsAdminUser,))
 def FieldOfStudyPlanToISU(request, pk):
