@@ -7,13 +7,13 @@ make_prod:
 	npm run build
 
 start_prod:
-	docker-compose -f docker-compose-prod.yml up
+	docker-compose -f docker-compose-prod-ssl.yml up
 
 build_make_prod:
 	cd frontend
 	sudo npm run build
 	cd ..
-	sudo docker-compose -f docker-compose-prod.yml build
+	sudo docker-compose -f docker-compose-prod-ssl.yml build
 
 stop:
 	docker-compose down
