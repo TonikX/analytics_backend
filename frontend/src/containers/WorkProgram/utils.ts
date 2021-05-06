@@ -96,8 +96,10 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
         errors.push('В РПД отсутствуют оценочные средства');
     }
 
-    if (getEvaluationToolsMaxSum(evaluationToolsList) + getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state)) !== 100 && qualification !== MASTER_QUALIFICATION){
-        errors.push('Количество баллов в РПД не равно 100');
+    const fullSum = getEvaluationToolsMaxSum(evaluationToolsList) + getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state))
+
+    if (fullSum % 100 !== 0 && qualification !== MASTER_QUALIFICATION){
+        errors.push('Количество баллов в РПД должно делиться на 100');
     }
 
     return errors;
