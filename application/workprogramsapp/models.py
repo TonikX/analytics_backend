@@ -491,7 +491,7 @@ class ImplementationAcademicPlan(models.Model):
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year], blank=True, null=True)
     period_of_study = models.CharField(max_length=100, blank=True, null=True)
     op_isu_id = models.PositiveIntegerField(verbose_name = "ID ОП в ИСУ", blank=True, null=True)
-    #ns_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
+    ns_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
 
 
     def __str__(self):
@@ -641,7 +641,7 @@ class WorkProgramInFieldOfStudy(CloneMixin,models.Model):
     work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
                                                                        on_delete=models.CASCADE, related_name="zuns_for_cb")
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
-
+    id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
     # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
 
 
