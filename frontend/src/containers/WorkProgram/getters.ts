@@ -18,7 +18,7 @@ export const getWorkProgramIntermediateCertificationList = (state: rootState) =>
 export const getWorkProgramId = (state: rootState) => get(getWorkProgram(state), 'id', '');
 export const getWorkProgramExpertiseStatus = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.EXPERTISE_STATUS, '');
 export const getWorkProgramExpertiseId = (state: rootState) => get(getWorkProgram(state), 'expertise_with_rpd.0.id', null);
-export const getWorkProgramUserExpertiseId = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.USER_EXPERTISE_ID, '');
+export const getWorkProgramUserExpertiseId = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.USER_EXPERTISE_ID) || get(getWorkProgram(state), WorkProgramGeneralFields.EXPERTISE_ID_2);
 export const getWorkProgramField = (state: rootState, field: string) => get(getWorkProgram(state), field, '');
 
 export const isCanEdit = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_EDIT);

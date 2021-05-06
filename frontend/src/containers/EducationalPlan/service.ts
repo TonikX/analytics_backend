@@ -64,6 +64,14 @@ class EducationalPlanService extends AnalyticsService{
         });
     }
 
+    planTrajectorySelectSpecialization({blockId, id, planId}: any){
+        return this.post(`/api/individualization/individual_path/change_specialization/`, {
+            discipline_block: blockId,
+            discipline_block_module: id,
+            individual_implementation_of_academic_plan: planId
+        });
+    }
+
     createEducationalPlan(competence: any){
         const formData = new FormData();
 

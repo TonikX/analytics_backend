@@ -57,8 +57,10 @@ const planTrajectorySetDirection = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SET
 
 const planTrajectorySelectOptionalWp = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SELECT_OPTIONAL_WP');
 const planTrajectorySelectElectives = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SELECT_ELECTIVES');
+const planTrajectorySelectSpecialization = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SPECIALIZATION');
 
 const actions: EducationalPlanActions = {
+    planTrajectorySelectSpecialization,
     planTrajectorySelectOptionalWp,
     planTrajectorySelectElectives,
     openAddModuleDialog,
