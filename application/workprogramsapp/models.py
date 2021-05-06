@@ -126,7 +126,7 @@ class WorkProgram(CloneMixin, models.Model):
 
 
     def __str__(self):
-        return (self.discipline_code + self.title)
+        return (self.title)
 
 
     def new_relations(old_descipline_code, new_descipline_code):
@@ -644,6 +644,11 @@ class WorkProgramInFieldOfStudy(CloneMixin,models.Model):
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
     # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
 
+
+class WorkProgramIdStrUpForIsu(CloneMixin,models.Model):
+    id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
+    ns_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
+    work_program_in_field_of_study = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.CASCADE, related_name="zuns_for_wp")
 
 class Zun(models.Model):
     '''
