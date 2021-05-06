@@ -14,12 +14,14 @@ services:
     web:
         container_name: analytics_web
         build: ./application
-        command: bash -c "python manage.py makemigrations --noinput  &&
-            python manage.py migrate --noinput &&
+        command: bash -c "
+
             python manage.py runserver --insecure 0.0.0.0:8000";
 #            python manage.py makemigrations --noinput  && python manage.py makemigrations dataprocessing && python manage.py makemigrations workprogramsapp &&
 #            python manage.py migrate dataprocessing && python manage.py migrate workprogramsapp &
             # "python manage.py makemigrations --merge --noinput" --fake-initial; -
+        #            python manage.py makemigrations --noinput  &&
+        #            python manage.py migrate --noinput &&
 
         volumes:
              - ./application:/application
@@ -41,7 +43,7 @@ services:
         ports:
             - "3002:3000"
         environment:
-            - REACT_APP_API_HOST=62.109.28.95
+            - REACT_APP_API_HOST=localhost
             - REACT_APP_API_SCHEMA=http
             - REACT_APP_API_PORT=8003
             - PORT=3000
