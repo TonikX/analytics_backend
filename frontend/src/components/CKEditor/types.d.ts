@@ -1,10 +1,12 @@
-import {WithStyles} from "@material-ui/core";
-import styles from "./CKEditor.styles";
-
-export interface CKEditorProps extends WithStyles<typeof styles> {
+export interface CKEditorProps {
     value: string;
-    label: string;
-    toolbarContainerId: string;
-    onChange: Function;
+    // label: string;
+    toolbarContainerId?: string;
+    onChange?: Function;
+    onFocus?: Function;
+    onBlur?: Function;
     noMargin?: boolean;
+    useFormulas?: boolean;
+    toolbarIcons?: Array;
+    readOnly?: boolean;
 }

@@ -13,10 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import {DescriptionModalProps} from './types';
 
-//@ts-ignore
-import CKEditor from '@ckeditor/ckeditor5-react';
-//@ts-ignore
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+import CKEditor from '../../../../components/CKEditor';
 
 import {
     fields,
@@ -63,25 +60,10 @@ class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
                 </AppBar>
 
                 <DialogContent className={classes.dialogContent}>
-                    <div id="toolbar-container"></div>
                     <CKEditor
-                        //@ts-ignore
-                        editor={ DecoupledEditor  }
-                        //@ts-ignore
-                        data={description}
-                        //@ts-ignore
-                        onInit={ editor => {
-                            // Add the toolbar to the container
-                            const toolbarContainer = document.querySelector('#toolbar-container');
-                            //@ts-ignore
-                            toolbarContainer.appendChild( editor.ui.view.toolbar.element );
-
-                            //@ts-ignore
-                            window.editor = editor;
-                            editor.isReadOnly = true;
-                        }}
+                        value={description}
                         readOnly
-                        id={'editor'}
+                        // если не видно формул, то вероятно надо передать useFormulas=true
                     />
                 </DialogContent>
 

@@ -41,4 +41,8 @@ export default (theme: Theme) => createStyles({
         overflowX: 'hidden',
         flexDirection: 'column'
     },
+    label: {
+        fontSize: '14px',
+        marginBottom: 10
+    },
 });
