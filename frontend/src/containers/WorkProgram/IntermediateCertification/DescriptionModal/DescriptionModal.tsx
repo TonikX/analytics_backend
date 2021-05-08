@@ -3,6 +3,7 @@ import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import InputLabel from "@material-ui/core/InputLabel";
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Slide from "@material-ui/core/Slide";
@@ -13,10 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import {DescriptionModalProps} from './types';
 
-//@ts-ignore
-import CKEditor from '@ckeditor/ckeditor5-react';
-//@ts-ignore
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+import CKEditor from "../../../../components/CKEditor";
 
 import {
     fields,
@@ -63,25 +61,10 @@ class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
                 </AppBar>
 
                 <DialogContent className={classes.dialogContent}>
-                    <div id="toolbar-container"></div>
+                    <InputLabel className={classes.label}>Описание</InputLabel>
                     <CKEditor
-                        //@ts-ignore
-                        editor={ DecoupledEditor  }
-                        //@ts-ignore
-                        data={description}
-                        //@ts-ignore
-                        onInit={ editor => {
-                            // Add the toolbar to the container
-                            const toolbarContainer = document.querySelector('#toolbar-container');
-                            //@ts-ignore
-                            toolbarContainer.appendChild( editor.ui.view.toolbar.element );
-
-                            //@ts-ignore
-                            window.editor = editor;
-                            editor.isReadOnly = true;
-                        }}
+                        value={description}
                         readOnly
-                        id={'editor'}
                     />
                 </DialogContent>
 

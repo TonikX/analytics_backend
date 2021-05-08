@@ -251,8 +251,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     </div>
 
                     <div className={classes.rightSide}>
-                        <CKEditor label="Описание"
-                                  onChange={this.changeDescription}
+                        <InputLabel className={classes.label}>Описание</InputLabel>
+                        <CKEditor onBlur={this.changeDescription}
                                   value={evaluationTool[IntermediateCertificationFields.DESCRIPTION] ? evaluationTool[IntermediateCertificationFields.DESCRIPTION] : ''}
                                   toolbarContainerId="toolbar-container"
                         />

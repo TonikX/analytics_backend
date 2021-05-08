@@ -1,7 +1,7 @@
-from rest_framework import generics
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, filters
 from rest_framework.exceptions import NotFound
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
+
 from workprogramsapp.expertise.models import UserExpertise, ExpertiseComments, Expertise
 from workprogramsapp.expertise.serializers import UserExpertiseSerializer, CommentSerializer, ExpertiseSerializer
 from workprogramsapp.permissions import IsMemberOfExpertise, IsRpdDeveloperOrReadOnly, IsMemberOfUserExpertise, \
@@ -86,8 +86,13 @@ class ExpertiseListView(generics.ListAPIView):
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
     permission_classes = [IsMemberOfUserExpertise]
-    def list(self, request, **kwargs):
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filterset_fields = ['date_of_last_change', 'expertise_status', 'work_program__title',
+                        'work_program__discipline_code']
+
+    def get_queryset(self):
         # Note the use of `get_queryset()` instead of `self.queryset`
+        request = self.request
         if request.user.groups.filter(name="expertise_master"):
             queryset = Expertise.objects.all()
         elif UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"]):
@@ -97,15 +102,7 @@ class ExpertiseListView(generics.ListAPIView):
                        Expertise.objects.filter(expertse_users_in_rpd__expert=request.user).distinct()
         else:
             queryset = Expertise.objects.filter(expertse_users_in_rpd__expert=request.user)
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        newdata = dict(serializer.data[0])
-        return Response("newdata")
-
+        return queryset
 
 class ExpertiseViewById(generics.RetrieveAPIView):
     queryset = Expertise.objects.all()

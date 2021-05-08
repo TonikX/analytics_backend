@@ -53,6 +53,7 @@ import Layout from "./layout";
 
 import RouterService from './service/router-service';
 import Notifications from "./containers/Profile/Notifications";
+import { CKTest } from './containers/CKTest/CKTest'
 
 const routerService = RouterService.factory();
 
@@ -61,7 +62,9 @@ export default () => (
         <Layout>
             <Switch>
             <Redirect exact from="/" to={routerService.getEducationPlanRoute()} />
-
+            <Route path="/test">
+                <CKTest />
+            </Route>
             <AuthRoute path={routerService.getCoursesRoute()}>
                 <Courses />
             </AuthRoute>
