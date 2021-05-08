@@ -486,6 +486,9 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                     newdata.update({"your_approve_status": "RE"})
             else:
                 newdata.update({"can_approve": True})
+            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK" or \
+                    Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "AC":
+                newdata.update({"can_approve": False})
         except:
             newdata.update({"can_comment": False})
             newdata.update({"can_approve": False})
