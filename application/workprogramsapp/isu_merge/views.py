@@ -44,7 +44,7 @@ class FileUploadAPIView(APIView):
                 print('-- Уровень образования', qualification)
                 print('--- проверяем если ОП уже существует в БД')
                 if FieldOfStudy.objects.filter(number=data['ШИФР_НАПРАВЛЕНИЯ'][i], qualification=qualification).exists():
-                    fs_obj = FieldOfStudy.objects.get(number=data['ШИФР_НАПРАВЛЕНИЯ'][i], qualification=qualification)
+                    fs_obj = FieldOfStudy.objects.get(number=data['ШИФР_НАПРАВЛЕНИЯ'][i], qualification=qualification) #todo добавить ОБЩАЯ_ТРУДОЕМКОСТЬ
                 else:
                     # Записываем в БД новую ОП
                     #
@@ -73,12 +73,12 @@ class FileUploadAPIView(APIView):
                     ap_obj = AcademicPlan.objects.get(qualification=qualification, year=data['ГОД_НАБОРА'][i],
                                                       educational_profile=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i].strip())
                     # EP_ID - учебный план
-                    ap_obj.ap_isu_id=int(data['ИД_УП'][i])
+                    ap_obj.ap_isu_id=int(data['ИД_УП'][i]) #todo: переносим в ImplementationAcademicPlan
                     ap_obj.save()
                 else:
                     typelearning = 'internal'
                     ap_obj = AcademicPlan(education_form=typelearning, qualification=qualification,
-                                          year=data['ГОД_НАБОРА'][i], educational_profile=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i].strip(),
+                                          year=data['ГОД_НАБОРА'][i], educational_profile=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i].strip(), #todo убрать квалификацию + "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА"
                                           ap_isu_id=int(data['ОП_ИД'][i]))
                     ap_obj.save()
                     ap_count += 1
@@ -88,8 +88,9 @@ class FileUploadAPIView(APIView):
                                                              year=data['ГОД_НАБОРА'][i]).exists():
                     iap_obj=ImplementationAcademicPlan.objects.get(academic_plan=ap_obj, field_of_study=fs_obj,
                                                                    year=data['ГОД_НАБОРА'][i])
-                    iap_obj.op_isu_id=int(data['ОП_ИД'][i])
-                    #iap_obj.ns_id = int(data['НС_ИД'][i])
+                    iap_obj.op_isu_id=int(data['ОП_ИД'][i]) #todo: вернуть нс-ид + записать название ОП сюда "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА" + язык + вуз партнер
+
+                    #iap_obj.ns_id = int(data['НС_ИД'][i]) #todo: записывать уп_ид сюда
                     iap_obj.save()
                     # OP_ID - образовательная программа
                 else:
