@@ -37,11 +37,13 @@ import {steps} from "./constants";
 
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
+import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
         activeStep: 0,
-        isOpenComments: false
+        isOpenComments: false,
+        openConfirmDuplicateWPModal: false,
     };
 
     componentDidMount() {
@@ -54,11 +56,24 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         this.props.actions.pageDown();
     }
 
+    openConfirmDuplicateWPModal = () => {
+        this.setState({
+            openConfirmDuplicateWPModal: true
+        })
+    }
+
+    closeConfirmDuplicateWPModal = () => {
+        this.setState({
+            openConfirmDuplicateWPModal: false
+        })
+    }
+
     handleStep = (number: number) => () => {
         this.setState({activeStep: number})
     };
 
     handleCloneProgram = () => {
+        this.closeConfirmDuplicateWPModal();
         this.props.actions.cloneWorkProgram(this.getWorkProgramId());
     }
 
@@ -247,7 +262,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                     <div className={classes.content}>
                         <Typography className={classes.title}>
                             <div>Описание рабочей программы дисциплины <span style={{fontWeight: 500}}>"{workProgramTitle}"</span></div>
-                            <div className={classes.cloneButton} onClick={this.handleCloneProgram}> <CopyIcon/> Клонировать</div>
+                            <div className={classes.cloneButton} onClick={this.openConfirmDuplicateWPModal}> <CopyIcon/> Клонировать</div>
                         </Typography>
 
                         {this.renderContent()}
@@ -272,6 +287,15 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         }
                     </div>
                 </Paper>
+
+
+                <ConfirmDialog onConfirm={this.handleCloneProgram}
+                               onDismiss={this.closeConfirmDuplicateWPModal}
+                               confirmText={'Вы точно уверены, что хотите клонировать учебную программу?'}
+                               isOpen={this.state.openConfirmDuplicateWPModal}
+                               dialogTitle={'Клонировать учебную программу'}
+                               confirmButtonText={'Клонировать'}
+                />
             </div>
         );
     }
