@@ -29,10 +29,7 @@ import {AutoSizer} from "react-virtualized";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
-//@ts-ignore
-import CKEditor from '@ckeditor/ckeditor5-react';
-//@ts-ignore
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+import CKEditor from '../../../../components/CKEditor'
 
 import {
     EvaluationToolFields,
@@ -44,6 +41,7 @@ import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import QuestionIcon from "@material-ui/icons/HelpOutline";
 import Tooltip from "@material-ui/core/Tooltip";
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -340,26 +338,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                     <div className={classes.rightSide}>
                         <InputLabel className={classes.label}> Описание * </InputLabel>
-
-                        <div id="toolbar-container" />
-
                         <CKEditor
-                            //@ts-ignore
-                            editor={ DecoupledEditor  }
-                            //@ts-ignore
-                            data={evaluationTool[EvaluationToolFields.DESCRIPTION] ? evaluationTool[EvaluationToolFields.DESCRIPTION] : ''}
-                            //@ts-ignore
-                            onInit={ editor => {
-                                // Add the toolbar to the container
-                                const toolbarContainer = document.querySelector( '#toolbar-container' );
-                                //@ts-ignore
-                                toolbarContainer.appendChild( editor.ui.view.toolbar.element );
-
-                                //@ts-ignore
-                                window.editor = editor;
-                            }}
+                            value={evaluationTool[EvaluationToolFields.DESCRIPTION] 
+                                    ? evaluationTool[EvaluationToolFields.DESCRIPTION] : ''}
                             onChange={this.changeDescription}
-                            id={'editor'}
+                            useFormulas
                         />
                     </div>
                 </DialogContent>
