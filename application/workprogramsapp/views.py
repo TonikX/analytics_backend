@@ -32,7 +32,7 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
     DisciplineBlockModuleDetailSerializer
-from .serializers import FieldOfStudySerializer
+from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, \
@@ -789,7 +789,7 @@ class FieldOfStudyListCreateView(generics.ListCreateAPIView):
         Отображение списка ОП(направлений), создание образовательной программы (напрвления)
     """
     queryset = FieldOfStudy.objects.all()
-    serializer_class = FieldOfStudySerializer
+    serializer_class = FieldOfStudyListSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'number', 'faculty', 'educational_profile']
     permission_classes = [IsRpdDeveloperOrReadOnly]
