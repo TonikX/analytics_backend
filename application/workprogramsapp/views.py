@@ -1648,6 +1648,10 @@ class AcademicPlanListAPIView(generics.ListAPIView):
     queryset = AcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['educational_profile']
+    ordering_fields = ['academic_plan_in_field_of_study__qualification',
+                       'academic_plan_in_field_of_study__title',
+                       'academic_plan_in_field_of_study__year',
+                       'academic_plan_in_field_of_study__field_of_study__title']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -1656,6 +1660,10 @@ class AcademicPlanListShortAPIView(generics.ListAPIView):
     queryset = AcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['educational_profile']
+    ordering_fields = ['academic_plan_in_field_of_study__qualification',
+                       'academic_plan_in_field_of_study__title',
+                       'academic_plan_in_field_of_study__year',
+                       'academic_plan_in_field_of_study__field_of_study__title']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
