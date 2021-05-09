@@ -38,7 +38,6 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
 
     componentDidUpdate(prevProps: Readonly<TrainingEntitiesCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {trainingEntity} = this.props;
-        const trainingEntityState = this.state.trainingEntity;
 
         if (!shallowEqual(trainingEntity, prevProps.trainingEntity)){
             this.setState({

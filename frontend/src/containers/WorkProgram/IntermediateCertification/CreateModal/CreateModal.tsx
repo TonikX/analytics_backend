@@ -5,14 +5,12 @@ import classNames from 'classnames';
 
 import {CreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from "@material-ui/core/TextField";
-import Slide from "@material-ui/core/Slide";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
@@ -28,6 +26,7 @@ import {AutoSizer} from "react-virtualized";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import CKEditor from "../../../../components/CKEditor";
 
@@ -35,16 +34,11 @@ import {
     IntermediateCertificationFields,
     fields,
 } from '../../enum';
+import {IntermediateCertificationTypes} from "../../constants";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-import {IntermediateCertificationTypes} from "../../constants";
-import Tooltip from "@material-ui/core/Tooltip";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    //@ts-ignore
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     editor = null;
@@ -104,13 +98,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
-    changeDescription = (description: string) => {
+    changeDescription = (event: React.ChangeEvent<HTMLInputElement>, editor: any) => {
         const {evaluationTool} = this.state;
 
         this.setState({
             evaluationTool: {
                 ...evaluationTool,
-                [IntermediateCertificationFields.DESCRIPTION]: description
+                [IntermediateCertificationFields.DESCRIPTION]: editor.getData()
             }
         })
     }
@@ -126,17 +120,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const isEditMode = Boolean(evaluationTool[IntermediateCertificationFields.ID]);
 
         return (
-            <Dialog
-                open={isOpen}
-                onClose={this.handleClose}
-                classes={{
-                    root: classes.root,
-                    paper: classes.dialog
-                }}
-                fullScreen
-                //@ts-ignore
-                TransitionComponent={Transition}
-            >
+            <div className={classNames(classes.dialog, {[classes.openDialog]: isOpen})}>
                 <AppBar className={classes.appBar}>
                     <Toolbar>
                         <IconButton edge="start" color="inherit" onClick={this.handleClose} aria-label="close">
@@ -159,104 +143,116 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 </AppBar>
 
                 <DialogContent className={classes.dialogContent}>
-                    <div className={classes.leftSide}>
-
-                        <AutoSizer style={{width: '100%'}}>
-                            {({width}) => (
-                                <>
-                                    <TextField label="Название оценочного средства *"
-                                               onChange={this.saveField(IntermediateCertificationFields.NAME)}
-                                               variant="outlined"
-                                               className={classNames(classes.input, classes.marginBottom30, classes.nameInput)}
-                                               fullWidth
-                                               InputLabelProps={{
-                                                   shrink: true,
-                                               }}
-                                               value={evaluationTool[IntermediateCertificationFields.NAME]}
-                                    />
-
-                                    <FormControl className={classes.typeSelector}>
-                                        <InputLabel shrink id="section-label">
-                                            Тип *
-                                        </InputLabel>
-                                        <Select
-                                            variant="outlined"
-                                            className={classes.selector}
-                                            // @ts-ignore
-                                            onChange={this.saveField(IntermediateCertificationFields.TYPE)}
-                                            value={evaluationTool[IntermediateCertificationFields.TYPE]}
-                                            fullWidth
-                                            displayEmpty
-                                            input={
-                                                <OutlinedInput
-                                                    notched
-                                                    labelWidth={100}
-                                                    name="course"
-                                                    id="section-label"
-                                                />
-                                            }
-                                            style={{width: width}}
-                                        >
-                                            {Object.keys(IntermediateCertificationTypes).map((key: any) =>
-                                                <MenuItem value={key}>
-                                                    {IntermediateCertificationTypes[key]}
-                                                </MenuItem>
-                                            )}
-                                        </Select>
-                                    </FormControl>
-                                    <div className={classNames(classes.row, classes.marginBottom30)}>
-                                        <TextField label="Минимальное значение"
-                                                   onChange={this.saveField(IntermediateCertificationFields.MIN)}
+                    {isOpen &&
+                        <>
+                          <div className={classes.leftSide}>
+                            <AutoSizer style={{width: '100%'}}>
+                                {({width}) => (
+                                    <>
+                                        <TextField label="Название оценочного средства *"
+                                                   onChange={this.saveField(IntermediateCertificationFields.NAME)}
                                                    variant="outlined"
-                                                   className={classes.numberInput}
+                                                   className={classNames(classes.input, classes.marginBottom30, classes.nameInput)}
                                                    fullWidth
                                                    InputLabelProps={{
                                                        shrink: true,
                                                    }}
-                                                   type="number"
-                                                   value={evaluationTool[IntermediateCertificationFields.MIN]}
+                                                   value={evaluationTool[IntermediateCertificationFields.NAME]}
                                         />
-                                        <TextField label="Максимальное значение"
-                                                   onChange={this.saveField(IntermediateCertificationFields.MAX)}
-                                                   variant="outlined"
-                                                   fullWidth
-                                                   InputLabelProps={{
-                                                       shrink: true,
-                                                   }}
-                                                   type="number"
-                                                   value={evaluationTool[IntermediateCertificationFields.MAX]}
-                                        />
-                                    </div>
 
-                                    <FormControl component="fieldset">
-                                        <FormLabel component="legend">
-                                            Длительность изучения *
-                                            <Tooltip title="Первый семестр - семестр с которого начинается дисциплина.">
-                                                <QuestionIcon color="primary" className={classes.tooltipIcon}/>
-                                            </Tooltip>
-                                        </FormLabel>
-                                        <RadioGroup className={classes.radioGroup}
-                                                    onChange={this.saveField(IntermediateCertificationFields.SEMESTER)}
-                                                    value={evaluationTool[IntermediateCertificationFields.SEMESTER]}
-                                        >
-                                            <FormControlLabel value={1} control={<Radio checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 1} />} label="Первый" />
-                                            <FormControlLabel value={2} control={<Radio checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 2} />} label="Второй" />
-                                            <FormControlLabel value={3} control={<Radio checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 3} />} label="Третий" />
-                                            <FormControlLabel value={4} control={<Radio checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 4} />} label="Четвертый" />
-                                        </RadioGroup>
-                                    </FormControl>
-                                </>
-                            )}
-                        </AutoSizer>
-                    </div>
+                                        <FormControl className={classes.typeSelector}>
+                                            <InputLabel shrink id="section-label">
+                                                Тип *
+                                            </InputLabel>
+                                            <Select
+                                                variant="outlined"
+                                                className={classes.selector}
+                                                // @ts-ignore
+                                                onChange={this.saveField(IntermediateCertificationFields.TYPE)}
+                                                value={evaluationTool[IntermediateCertificationFields.TYPE]}
+                                                fullWidth
+                                                displayEmpty
+                                                input={
+                                                    <OutlinedInput
+                                                        notched
+                                                        labelWidth={100}
+                                                        name="course"
+                                                        id="section-label"
+                                                    />
+                                                }
+                                                style={{width: width}}
+                                            >
+                                                {Object.keys(IntermediateCertificationTypes).map((key: any) =>
+                                                    <MenuItem value={key}>
+                                                        {IntermediateCertificationTypes[key]}
+                                                    </MenuItem>
+                                                )}
+                                            </Select>
+                                        </FormControl>
+                                        <div className={classNames(classes.row, classes.marginBottom30)}>
+                                            <TextField label="Минимальное значение"
+                                                       onChange={this.saveField(IntermediateCertificationFields.MIN)}
+                                                       variant="outlined"
+                                                       className={classes.numberInput}
+                                                       fullWidth
+                                                       InputLabelProps={{
+                                                           shrink: true,
+                                                       }}
+                                                       type="number"
+                                                       value={evaluationTool[IntermediateCertificationFields.MIN]}
+                                            />
+                                            <TextField label="Максимальное значение"
+                                                       onChange={this.saveField(IntermediateCertificationFields.MAX)}
+                                                       variant="outlined"
+                                                       fullWidth
+                                                       InputLabelProps={{
+                                                           shrink: true,
+                                                       }}
+                                                       type="number"
+                                                       value={evaluationTool[IntermediateCertificationFields.MAX]}
+                                            />
+                                        </div>
 
-                    <div className={classes.rightSide}>
-                        <InputLabel className={classes.label}>Описание</InputLabel>
-                        <CKEditor onBlur={this.changeDescription}
-                                  value={evaluationTool[IntermediateCertificationFields.DESCRIPTION] ? evaluationTool[IntermediateCertificationFields.DESCRIPTION] : ''}
-                                  toolbarContainerId="toolbar-container"
-                        />
-                    </div>
+                                        <FormControl component="fieldset">
+                                            <FormLabel component="legend">
+                                                Длительность изучения *
+                                                <Tooltip title="Первый семестр - семестр с которого начинается дисциплина.">
+                                                    <QuestionIcon color="primary" className={classes.tooltipIcon}/>
+                                                </Tooltip>
+                                            </FormLabel>
+                                            <RadioGroup className={classes.radioGroup}
+                                                        onChange={this.saveField(IntermediateCertificationFields.SEMESTER)}
+                                                        value={evaluationTool[IntermediateCertificationFields.SEMESTER]}
+                                            >
+                                                <FormControlLabel value={1} control={<Radio
+                                                    checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 1}/>}
+                                                                  label="Первый"/>
+                                                <FormControlLabel value={2} control={<Radio
+                                                    checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 2}/>}
+                                                                  label="Второй"/>
+                                                <FormControlLabel value={3} control={<Radio
+                                                    checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 3}/>}
+                                                                  label="Третий"/>
+                                                <FormControlLabel value={4} control={<Radio
+                                                    checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 4}/>}
+                                                                  label="Четвертый"/>
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </>
+                                )}
+                            </AutoSizer>
+                          </div>
+
+                          <div className={classes.rightSide}>
+                            <InputLabel className={classes.label}>Описание</InputLabel>
+                            <CKEditor onBlur={this.changeDescription}
+                                      value={evaluationTool[IntermediateCertificationFields.DESCRIPTION] ? evaluationTool[IntermediateCertificationFields.DESCRIPTION] : ''}
+                                      toolbarContainerId="toolbar-container"
+                                      useFormulas
+                            />
+                          </div>
+                        </>
+                    }
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={this.handleClose}
@@ -270,7 +266,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         Сохранить
                     </Button>
                 </DialogActions>
-            </Dialog>
+            </div>
         );
     }
 }
