@@ -84,20 +84,22 @@ class FileUploadAPIView(APIView):
 
                 if ImplementationAcademicPlan.objects.filter(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
                                                              year=data['ГОД_НАБОРА'][i], language = op_language, qualification=qualification).exists():
-                    iap_obj=ImplementationAcademicPlan.objects.get(title=fs_obj,
-                                                                   year=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i], language = op_language, qualification=qualification)
+                    iap_obj=ImplementationAcademicPlan.objects.get(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
+                                                                   year=data['ГОД_НАБОРА'][i], language = op_language, qualification=qualification)
                     iap_obj.op_isu_id=int(data['ОП_ИД'][i]) #todo: вернуть нс-ид (+) + записать название ОП сюда "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА" + язык + вуз партнер
                     iap_obj.ap_isu_id=int(data['ИД_УП'][i])
                     iap_obj.ns_id = int(data['НС_ИД'][i])
                     iap_obj.title = int(data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i])
+                    iap_obj.field_of_study.add(fs_obj)
                     iap_obj.save()
                 else:
-                    iap_obj = ImplementationAcademicPlan(academic_plan=ap_obj, field_of_study=fs_obj,
-                                                         year=data['ГОД_НАБОРА'][i], op_isu_id=int(data['ОП_ИД'][i]), language = op_language, qualification=qualification)
+                    iap_obj = ImplementationAcademicPlan(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
+                                                         year=data['ГОД_НАБОРА'][i], language = op_language, qualification=qualification)
                     iap_obj.op_isu_id=int(data['ОП_ИД'][i])
                     iap_obj.ap_isu_id=int(data['ИД_УП'][i])
                     iap_obj.ns_id = int(data['НС_ИД'][i])
                     iap_obj.title = int(data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i])
+                    iap_obj.field_of_study.add(fs_obj)
                     iap_obj.save()
                 print('Связь учебного плана и направления: done')
 
