@@ -41,8 +41,9 @@ export interface educationalPlanInDirectionState {
 
 export type EducationalPlanInDirectionType = {
     [EducationPlanInDirectionFields.ID]: number,
-    [EducationPlanInDirectionFields.YEAR]: ReactText,
-    [EducationPlanInDirectionFields.DIRECTION]: DirectionType,
+    [EducationPlanInDirectionFields.YEAR]: number,
+    [EducationPlanInDirectionFields.TITLE]: string,
+    [EducationPlanInDirectionFields.DIRECTION]: Array<DirectionType>,
     [EducationPlanInDirectionFields.EDUCATION_PLAN]: EducationalPlanType,
 };
 
