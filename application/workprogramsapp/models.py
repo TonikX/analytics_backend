@@ -485,6 +485,33 @@ class ImplementationAcademicPlan(models.Model):
     '''
     Модель приминения учебного плана в направлении
     '''
+    PRIMARY_VOCATIONAL_EDUCATION = 'primary_vocational_education'
+    SECONADARY_VOCATIONAL_EDUCATION = 'secondary_vocational_education'
+    BACHELOR = 'bachelor'
+    SPECIALIST = 'specialist'
+    MASTER = 'master'
+    QUALIFICATION_CHOICES = (
+        (PRIMARY_VOCATIONAL_EDUCATION, 'Primary vocational education'),
+        (SECONADARY_VOCATIONAL_EDUCATION, 'Secondary vocational education'),
+        (BACHELOR, 'Bachelor'),
+        (SPECIALIST, 'Specialist'),
+        (MASTER, 'Master')
+    )
+    INTERNAL = 'internal'
+    EXTRAMURAL = 'extramural'
+    EDUCATION_FORM_CHOICES = (
+        (INTERNAL, 'Internal'),
+        (EXTRAMURAL, 'Extramural'),
+    )
+
+    languages_for_wp = (
+        ('ru', 'ru'),
+        ('en', 'en'),
+        ('kz', 'kz'),
+        ('de', 'de'),
+        ('ru/en', 'ru/en'),
+    )
+
     academic_plan = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, verbose_name = 'Учебный план', related_name="academic_plan_in_field_of_study")
     field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE, verbose_name = 'Направление подготовки') #todo сделать многие ко многим
     year = models.PositiveIntegerField(
@@ -492,7 +519,13 @@ class ImplementationAcademicPlan(models.Model):
     period_of_study = models.CharField(max_length=100, blank=True, null=True)
     op_isu_id = models.PositiveIntegerField(verbose_name = "ID ОП в ИСУ", blank=True, null=True)
     ns_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
-
+    ap_isu_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
+    ns_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
+    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank = True, null = True)
+    educational_profile = models.CharField(max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
+    language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
+                                blank=True, null=True)
+    title = models.CharField(max_length=1024, verbose_name = 'Партнер', blank = True, null = True)
 
     def __str__(self):
         return str(self.academic_plan)
@@ -649,6 +682,16 @@ class WorkProgramIdStrUpForIsu(CloneMixin,models.Model):
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
     ns_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
     work_program_in_field_of_study = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.CASCADE, related_name="zuns_for_wp")
+    number = models.CharField(max_length=1024, blank=True, null=True)
+    ze_v_sem = models.CharField(max_length=1024, blank=True, null=True)
+    lec_v_sem = models.CharField(max_length=1024, blank=True, null=True)
+    prak_v_sem = models.CharField(max_length=1024, blank=True, null=True)
+    lab_v_sem = models.CharField(max_length=1024, blank=True, null=True)
+    ekz_v_sem = models.CharField(max_length=1024, blank=True, null=True)
+    zach_v_sem = models.CharField(max_length=1024, blank=True, null=True)
+    dif_zach_v_sem = models.CharField(max_length=1024, blank=True, null=True)
+    kp_v_sem = models.CharField(max_length=1024, blank=True, null=True)
+
 
 class Zun(models.Model):
     '''
