@@ -108,8 +108,8 @@ class FileUploadAPIView(APIView):
                     ap_obj.ap_isu_id=int(data['ИД_УП'][i]) #todo: НЕ переносим в ImplementationAcademicPlan +
                     ap_obj.save()
                 else:
-                    ap_obj.typelearning = 'internal'
                     ap_obj = AcademicPlan(academic_plan_in_field_of_study = iap_obj)
+                    ap_obj.typelearning = 'internal'
                     ap_obj.ap_isu_id=int(data['ИД_УП'][i])
                     ap_obj.save()
                     ap_count += 1
