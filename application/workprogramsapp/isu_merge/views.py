@@ -89,7 +89,7 @@ class FileUploadAPIView(APIView):
                     iap_obj.op_isu_id=int(data['ОП_ИД'][i]) #todo: вернуть нс-ид (+) + записать название ОП сюда "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА" + язык + вуз партнер
                     iap_obj.ap_isu_id=int(data['ИД_УП'][i])
                     iap_obj.ns_id = int(data['НС_ИД'][i])
-                    iap_obj.title = int(data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i])
+                    iap_obj.title = data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i]
                     iap_obj.field_of_study.add(fs_obj)
                     iap_obj.save()
                 else:
@@ -98,7 +98,7 @@ class FileUploadAPIView(APIView):
                     iap_obj.op_isu_id=int(data['ОП_ИД'][i])
                     iap_obj.ap_isu_id=int(data['ИД_УП'][i])
                     iap_obj.ns_id = int(data['НС_ИД'][i])
-                    iap_obj.title = int(data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i])
+                    iap_obj.title = data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i]
                     iap_obj.field_of_study.add(fs_obj)
                     iap_obj.save()
                 print('Связь учебного плана и направления: done')
