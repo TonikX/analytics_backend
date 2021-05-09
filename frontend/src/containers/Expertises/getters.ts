@@ -8,14 +8,15 @@ import {ExpertisesFields, fields} from './enum';
 
 import {expertisesState} from './types';
 import {WorkProgramGeneralFields, WorkProgramStatusEnum} from "../WorkProgram/enum";
+import {WorkProgramStatusType} from "../WorkProgram/types";
 
 const getStateData = (state: rootState): expertisesState => get(state, GENERAL_PATH);
 export const getExpertisesList = (state: rootState): any => get(getStateData(state), fields.EXPERTISES_LIST, []);
 
 export const getExpertise = (state: rootState): any => get(getStateData(state), fields.EXPERTISE, {});
-export const getExpertiseId = (state: rootState): any => get(getExpertise(state), ExpertisesFields.ID);
+export const getSelectedStatus = (state: rootState): WorkProgramStatusType|'' => get(getStateData(state), fields.SELECTED_STATUS, '');
+export const getExpertiseId = (state: rootState): number => get(getExpertise(state), ExpertisesFields.ID);
 export const getExpertiseCanEdit = (state: rootState): any => get(getExpertise(state), ExpertisesFields.STATUS) === WorkProgramStatusEnum.EXPERTISE;
-export const getExpertiseWorkProgram = (state: rootState): any => get(getExpertise(state), [ExpertisesFields.WORK_PROGRAM, WorkProgramGeneralFields.TITLE]);
 
 export const getIsOpenAddExpertModal = (state: rootState): any => get(getStateData(state), fields.IS_OPEN_ADD_EXPERT_MODAL, false);
 

@@ -55,7 +55,7 @@ class Expertise extends React.Component<ExpertiseProps> {
         const {classes, expertise, canEdit} = this.props;
 
         const experts = get(expertise, ExpertisesFields.EXPERTS_USERS_IN_RPD, []).filter((item: any) => item.stuff_status !== 'AU');
-        console.log('experts', experts)
+
         return (
             <Paper className={classes.root}>
                 <div className={classes.titleWrap}>
@@ -91,7 +91,7 @@ class Expertise extends React.Component<ExpertiseProps> {
                                         </TableCell>
                                         {canEdit &&
                                             <TableCell className={classes.deleteCell}>
-                                                <IconButton onClick={this.handleClickDelete(expert[ExpertisesFields.EXPERT].id)}>
+                                                <IconButton onClick={this.handleClickDelete(expert.id)}>
                                                     <DeleteIcon/>
                                                 </IconButton>
                                             </TableCell>

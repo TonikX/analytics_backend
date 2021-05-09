@@ -4,7 +4,7 @@ import actions from "./actions";
 
 import {expertisesState} from "./types";
 
-export const GENERAL_PATH = 'expertisesPath';
+export const GENERAL_PATH = 'expertises';
 
 export const initialState: expertisesState = {
     [fields.SORTING]: {
@@ -17,6 +17,7 @@ export const initialState: expertisesState = {
     [fields.EXPERTISES_LIST]: [],
     [fields.EXPERTISE]: {},
     [fields.IS_OPEN_ADD_EXPERT_MODAL]: false,
+    [fields.SELECTED_STATUS]: '',
 };
 
 const setExpertise = (state: expertisesState, {payload}: any): expertisesState => ({
@@ -54,6 +55,11 @@ const closeAddExpertModal = (state: expertisesState): expertisesState => ({
     [fields.IS_OPEN_ADD_EXPERT_MODAL]: false,
 });
 
+const changeSelectedStatus = (state: expertisesState, {payload}: any): expertisesState => ({
+    ...state,
+    [fields.SELECTED_STATUS]: payload,
+});
+
 const changeSorting = (state: expertisesState, {payload}: any): expertisesState => ({
     ...state,
     [fields.SORTING]: {
@@ -71,4 +77,5 @@ export const reducer = createReducer(initialState, {
     [actions.setExpertise.type]: setExpertise,
     [actions.openAddExpertModal.type]: openAddExpertModal,
     [actions.closeAddExpertModal.type]: closeAddExpertModal,
+    [actions.changeSelectedStatus.type]: changeSelectedStatus,
 });

@@ -21,7 +21,11 @@ const closeAddExpertModal = createAction('EXPERTISES_CLOSE_ADD_EXPERT_MODAL');
 const addExpertToExpertise = createAction('ADD_EXPERT_TO_EXPERTISE');
 const removeExpertFromExpertise = createAction('REMOVE_EXPERT_FROM_EXPERTISE');
 
+const changeSelectedStatus = createAction('EXPERTISES_CHANGE_SELECTED_STATUS');
+
 const actions: ExpertisesActions = {
+    changeSelectedStatus,
+
     openAddExpertModal,
     closeAddExpertModal,
 
