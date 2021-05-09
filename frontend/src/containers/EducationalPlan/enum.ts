@@ -54,6 +54,10 @@ export enum EducationalPlanFields {
     CAN_EDIT = 'can_edit',
     ID_RATING = 'id_rating',
     RATING = 'rating',
+
+    TITLE = 'title',
+    ACADEMIC_PLAN_IN_FIELD_OF_STUDY = 'academic_plan_in_field_of_study',
+    FIELD_OF_STUDY = 'field_of_study',
 }
 
 export enum EducationalPlanBlockFields {

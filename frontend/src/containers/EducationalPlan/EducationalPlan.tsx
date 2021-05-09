@@ -2,8 +2,7 @@ import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import moment from 'moment';
-import {withRouter} from 'react-router-dom'
-import {Link} from "react-router-dom";
+import {Link, withRouter} from 'react-router-dom'
 
 import Scrollbars from "react-custom-scrollbars";
 
@@ -43,6 +42,8 @@ import {appRouter} from "../../service/router-service";
 
 import connect from './EducationalPlan.connect';
 import styles from './EducationalPlan.styles';
+import {DirectionFields} from "../Direction/enum";
+import {DirectionType} from "../Direction/types";
 
 class EducationalPlan extends React.Component<EducationalPlanProps> {
     state = {
@@ -154,12 +155,6 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                         <Table stickyHeader size='small'>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell className={classes.displayFlex}>
-                                        <div className={classes.headerCellTitle}> Дата <br/> согласования </div>
-                                        <SortingButton changeMode={this.changeSorting(EducationalPlanFields.APPROVAL_DATE)}
-                                                       mode={sortingField === EducationalPlanFields.APPROVAL_DATE ? sortingMode : ''}
-                                        />
-                                    </TableCell>
                                     <TableCell>
                                         Образовательная программа
                                         <SortingButton changeMode={this.changeSorting(EducationalPlanFields.PROFILE)}
@@ -167,7 +162,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                         />
                                     </TableCell>
                                     <TableCell className={classes.displayFlex}>
-                                        <div className={classes.headerCellTitle}> Год <br/> набора </div>
+                                        <div className={classes.headerCellTitle}> Год набора </div>
                                         <SortingButton changeMode={this.changeSorting(EducationalPlanFields.YEAR)}
                                                        mode={sortingField === EducationalPlanFields.YEAR ? sortingMode : ''}
                                         />
@@ -178,11 +173,8 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                        mode={sortingField === EducationalPlanFields.QUALIFICATION ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell className={classes.displayFlex}>
-                                        <div className={classes.headerCellTitle}> Форма <br/> обучения </div>
-                                        <SortingButton changeMode={this.changeSorting(EducationalPlanFields.EDUCATION_FORM)}
-                                                       mode={sortingField === EducationalPlanFields.EDUCATION_FORM ? sortingMode : ''}
-                                        />
+                                    <TableCell>
+                                        Направления
                                     </TableCell>
 
                                     <TableCell />
@@ -191,18 +183,16 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                             <TableBody>
                                 {educationalPlan.map(plan =>
                                     <TableRow key={plan[EducationalPlanFields.ID]}>
+                                        <TableCell>{get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.TITLE], '')}</TableCell>
+                                        <TableCell>{get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.YEAR], '')}</TableCell>
                                         <TableCell>
-                                            {moment(plan[EducationalPlanFields.APPROVAL_DATE]).format(FULL_DATE_FORMAT)}
+                                            {get(specialization.find((item) => item.value === get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.QUALIFICATION], '')), 'label', '')}
                                         </TableCell>
 
-                                        <TableCell>{plan[EducationalPlanFields.PROFILE]}</TableCell>
-                                        <TableCell>{plan[EducationalPlanFields.YEAR]}</TableCell>
-                                        <TableCell>
-                                            {get(specialization.find(item => item.value === plan[EducationalPlanFields.QUALIFICATION]), 'label', '')}
-                                        </TableCell>
-                                        <TableCell>
-                                            {plan[EducationalPlanFields.EDUCATION_FORM] === 'internal' ? 'Очная' : 'Заочная'}
-                                        </TableCell>
+                                        <TableCell>{get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.FIELD_OF_STUDY], []).map((fieldOfStudy: DirectionType) =>
+                                            <> {fieldOfStudy[DirectionFields.TITLE]}  {fieldOfStudy[DirectionFields.NUMBER]} <br /> </>
+                                        )}</TableCell>
+
                                         <TableCell style={{padding: '0 !important'}}>
                                             <div className={classes.actions}>
                                                 <IconButton
@@ -237,12 +227,12 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                         </Link>
                                                     </MenuItem>
 
-                                                    {plan[EducationalPlanFields.CAN_EDIT] &&
-                                                        <MenuItem onClick={this.handleClickEdit(plan)}>
-                                                            <EditIcon className={classes.menuIcon}/>
-                                                            Редактировать
-                                                        </MenuItem>
-                                                    }
+                                                    {/*{plan[EducationalPlanFields.CAN_EDIT] &&*/}
+                                                    {/*    <MenuItem onClick={this.handleClickEdit(plan)}>*/}
+                                                    {/*        <EditIcon className={classes.menuIcon}/>*/}
+                                                    {/*        Редактировать*/}
+                                                    {/*    </MenuItem>*/}
+                                                    {/*}*/}
 
                                                     {plan[EducationalPlanFields.CAN_EDIT] &&
                                                         <MenuItem

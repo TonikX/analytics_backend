@@ -6,13 +6,13 @@ import {GENERAL_PATH} from "./reducer";
 
 import {EducationalPlanFields, fields} from './enum';
 
-import {educationalPlanState, EducationalPlanType} from './types';
+import {EducationalPlanListType, educationalPlanState, EducationalPlanType} from './types';
 import {SelectorListType} from "../../components/SearchSelector/types";
 import {UserType} from "../../layout/types";
 import {DirectionType} from "../Direction/types";
 
 const getStateData = (state: rootState): educationalPlanState => get(state, GENERAL_PATH);
-export const getEducationalPlan = (state: rootState): Array<EducationalPlanType> => get(getStateData(state), fields.EDUCATIONAL_PLAN_LIST, []);
+export const getEducationalPlan = (state: rootState): Array<EducationalPlanListType> => get(getStateData(state), fields.EDUCATIONAL_PLAN_LIST, []);
 export const getEducationalPlanDetail = (state: rootState): EducationalPlanType|{} => get(getStateData(state), fields.DETAIL_PLAN, {});
 export const getIsTrajectoryRoute = (state: rootState): boolean => get(getStateData(state), fields.IS_TRAJECTORY_ROUTE, false);
 export const getTrajectoryUserData = (state: rootState): UserType|{} => get(getStateData(state), fields.TRAJECTORY_USER_DATA, {});
@@ -24,9 +24,9 @@ export const getEducationalPlanDetailId = (state: rootState): Array<EducationalP
     get(getEducationalPlanDetail(state), EducationalPlanFields.ID, '');
 
 export const getEducationalPlanForSelector = (state: rootState): SelectorListType =>
-    getEducationalPlan(state).map((competence: EducationalPlanType) => ({
-        value: competence[EducationalPlanFields.ID],
-        label: `${competence[EducationalPlanFields.NUMBER]} ${competence[EducationalPlanFields.PROFILE]}`,
+    getEducationalPlan(state).map((plan: EducationalPlanListType) => ({
+        value: plan[EducationalPlanFields.ID],
+        label: `${get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.NUMBER])} ${get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.TITLE])}`,
     }))
 
 export const getEducationalPlanDialog = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_PLAN_DIALOG, {});
