@@ -97,28 +97,17 @@ export type WorkProgramGeneralType = {
 export type ZunType = {
     'zun_in_wp': {
         "indicator_in_zun": {
-            "id": 1,
-            "number": "ПКС-1.1.1",
-            "name": "Разрабатывает технико-коммерческое предложение и участвует  в его защите",
+            "id": number,
+            "number": string,
+            "name": string,
             "competence": {
-                "id": 1,
-                "number": "ПКС-1.1",
-                "name": "Способен управлять аналитическими работами и работать со сложными структурами данных при решении практических задач программирования"
+                "id": number,
+                "number": string,
+                "name": string
             }
         },
     }
 };
-
-export type IndicatorInZun = {
-    [IndicatorsFields.ID]: number;
-    [IndicatorsFields.NUMBER]: string;
-    [IndicatorsFields.NAME]: string;
-    "competence": {
-        [CompetenceFields.ID]: number;
-        [CompetenceFields.NUMBER]: string;
-        [CompetenceFields.NAME]: string;
-    }
-}
 
 export interface WorkProgramProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
@@ -136,6 +125,7 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     workProgram: WorkProgramGeneralType;
     validateErrors: Array<string>;
 }
+
 
 export type SectionType = {
     id: number;

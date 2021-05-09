@@ -26,6 +26,7 @@ import {ExpertisesFields} from "./enum";
 import {FULL_DATE_FORMAT} from "../../common/utils";
 
 import {WorkProgramGeneralFields} from "../WorkProgram/enum";
+import {WorkProgramStatusType} from "../WorkProgram/types";
 import {workProgramStatusesColors, workProgramStatusesRussian, specializationObject} from "../WorkProgram/constants";
 
 import {appRouter} from "../../service/router-service";
@@ -70,8 +71,17 @@ class Expertises extends React.Component<ExpertisesProps> {
         this.setState({anchorsEl: {}});
     };
 
+    handleSelectStatus = (status: WorkProgramStatusType) => {
+        if (this.props.selectedStatus === status){
+            this.props.actions.changeSelectedStatus('')
+        } else {
+            this.props.actions.changeSelectedStatus(status)
+        }
+        this.props.actions.getExpertisesList();
+    }
+
     render() {
-        const {classes, expertisesList, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, expertisesList, allCount, currentPage, sortingField, sortingMode, selectedStatus} = this.props;
 
         return (
             <Paper className={classes.root}>
@@ -82,8 +92,12 @@ class Expertises extends React.Component<ExpertisesProps> {
                 </div>
 
                 <div className={classes.statuses}>
-                    {Object.keys(workProgramStatusesRussian).map(key =>
-                        <WorkProgramStatus status={key} key={key} />
+                    {Object.keys(workProgramStatusesRussian).map(status =>
+                        <WorkProgramStatus status={status}
+                                           key={status}
+                                           onClick={this.handleSelectStatus}
+                                           disabledStyle={selectedStatus !== '' && selectedStatus !== status}
+                        />
                     )}
                 </div>
 
@@ -100,6 +114,9 @@ class Expertises extends React.Component<ExpertisesProps> {
                                     </TableCell>
                                     <TableCell>
                                         Уровень
+                                        <SortingButton changeMode={this.changeSorting('qualification')}
+                                                       mode={sortingField === 'qualification' ? sortingMode : ''}
+                                        />
                                     </TableCell>
                                     <TableCell>
                                         Авторы

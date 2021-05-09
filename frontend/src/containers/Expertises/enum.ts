@@ -8,6 +8,7 @@ export enum fields {
     SORTING_FIELD = 'SORTING_FIELD',
     SORTING_MODE = 'SORTING_MODE',
     IS_OPEN_ADD_EXPERT_MODAL = 'IS_OPEN_ADD_EXPERT_MODAL',
+    SELECTED_STATUS = 'SELECTED_STATUS',
 }
 
 export enum fetchingTypes {
