@@ -87,7 +87,7 @@ class ExpertiseListView(generics.ListAPIView):
     serializer_class = ExpertiseSerializer
     permission_classes = [IsMemberOfUserExpertise]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    filterset_fields = ['date_of_last_change', 'expertise_status', 'work_program__title',
+    filterset_fields = ['date_of_last_change', 'expertise_status', 'work_program__title', 'work_program__qualification'
                         'work_program__discipline_code']
 
     def get_queryset(self):
