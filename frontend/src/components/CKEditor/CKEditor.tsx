@@ -30,6 +30,8 @@ export const CKEditorComponent: React.FC<CKEditorProps> =
                 onBlur={onBlur}
                 onFocus={onFocus}
                 onReady={(editor: any) => {
+                    if (!editor) return
+
                     const toolbarContainer = document.querySelector(`#${toolbarContainerId}`);
                     toolbarContainer?.appendChild( editor.ui.view.toolbar.element );
                     if (useFormulas) {

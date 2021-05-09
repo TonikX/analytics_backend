@@ -5,7 +5,6 @@ import classNames from 'classnames';
 
 import {CreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
@@ -13,7 +12,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from "@material-ui/core/TextField";
-import Slide from "@material-ui/core/Slide";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
@@ -29,6 +27,8 @@ import {AutoSizer} from "react-virtualized";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
+import QuestionIcon from "@material-ui/icons/HelpOutline";
+import Tooltip from "@material-ui/core/Tooltip";
 import CKEditor from '../../../../components/CKEditor'
 
 import {
@@ -39,14 +39,7 @@ import {
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-import QuestionIcon from "@material-ui/icons/HelpOutline";
-import Tooltip from "@material-ui/core/Tooltip";
 
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-    //@ts-ignore
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     editor = null;
@@ -159,17 +152,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const isEditMode = Boolean(evaluationTool[EvaluationToolFields.ID]);
 
         return (
-            <Dialog
-                open={isOpen}
-                onClose={this.handleClose}
-                classes={{
-                    root: classes.root,
-                    paper: classes.dialog
-                }}
-                fullScreen
-                //@ts-ignore
-                TransitionComponent={Transition}
-            >
+            <div className={classNames(classes.dialog, {[classes.openDialog]: isOpen})}>
                 <AppBar className={classes.appBar}>
                     <Toolbar>
                         <IconButton edge="start" color="inherit" onClick={this.handleClose} aria-label="close">
@@ -192,159 +175,162 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 </AppBar>
 
                 <DialogContent className={classes.dialogContent}>
-                    <div className={classes.leftSide}>
+                    {isOpen &&
+                        <>
+                            <div className={classes.leftSide}>
+                                <AutoSizer style={{width: '100%'}}>
+                                    {({width}) => (
+                                        <>
+                                            <TextField label="Название оценочного средства *"
+                                                       onChange={this.saveField(EvaluationToolFields.NAME)}
+                                                       variant="outlined"
+                                                       className={classNames(classes.input, classes.marginBottom30, classes.nameInput)}
+                                                       fullWidth
+                                                       InputLabelProps={{
+                                                           shrink: true,
+                                                       }}
+                                                       value={evaluationTool[EvaluationToolFields.NAME]}
+                                            />
 
-                        <AutoSizer style={{width: '100%'}}>
-                            {({width}) => (
-                                <>
-                                    <TextField label="Название оценочного средства *"
-                                               onChange={this.saveField(EvaluationToolFields.NAME)}
-                                               variant="outlined"
-                                               className={classNames(classes.input, classes.marginBottom30, classes.nameInput)}
-                                               fullWidth
-                                               InputLabelProps={{
-                                                   shrink: true,
-                                               }}
-                                               value={evaluationTool[EvaluationToolFields.NAME]}
-                                    />
+                                            <FormControl className={classes.sectionSelector}>
+                                                <InputLabel shrink id="section-label">
+                                                    Раздел *
+                                                </InputLabel>
+                                                <Select
+                                                    variant="outlined"
+                                                    multiple
+                                                    className={classes.selector}
+                                                    // @ts-ignore
+                                                    onChange={this.saveField(EvaluationToolFields.SECTIONS)}
+                                                    value={evaluationTool[EvaluationToolFields.SECTIONS]}
+                                                    fullWidth
+                                                    displayEmpty
+                                                    input={
+                                                        <OutlinedInput
+                                                            notched
+                                                            labelWidth={100}
+                                                            name="course"
+                                                            id="section-label"
+                                                        />
+                                                    }
+                                                    style={{width: width}}
+                                                >
+                                                    {sections.map((item: any) =>
+                                                        <MenuItem value={item.value} key={`section-${item.value}`}>
+                                                            {item.label}
+                                                        </MenuItem>
+                                                    )}
+                                                </Select>
+                                            </FormControl>
 
-                                    <FormControl className={classes.sectionSelector}>
-                                        <InputLabel shrink id="section-label">
-                                            Раздел *
-                                        </InputLabel>
-                                        <Select
-                                            variant="outlined"
-                                            multiple
-                                            className={classes.selector}
-                                            // @ts-ignore
-                                            onChange={this.saveField(EvaluationToolFields.SECTIONS)}
-                                            value={evaluationTool[EvaluationToolFields.SECTIONS]}
-                                            fullWidth
-                                            displayEmpty
-                                            input={
-                                                <OutlinedInput
-                                                    notched
-                                                    labelWidth={100}
-                                                    name="course"
-                                                    id="section-label"
+                                            <FormControl className={classes.typeSelector}>
+                                                <InputLabel shrink id="section-label">
+                                                    Тип *
+                                                </InputLabel>
+                                                <Select
+                                                    variant="outlined"
+                                                    className={classes.selector}
+                                                    // @ts-ignore
+                                                    onChange={this.saveField(EvaluationToolFields.TYPE)}
+                                                    value={evaluationTool[EvaluationToolFields.TYPE]}
+                                                    fullWidth
+                                                    displayEmpty
+                                                    input={
+                                                        <OutlinedInput
+                                                            notched
+                                                            labelWidth={100}
+                                                            name="course"
+                                                            id="section-label"
+                                                        />
+                                                    }
+                                                    style={{width: width}}
+                                                >
+                                                    {types.map((type: any, index: number) =>
+                                                        <MenuItem value={type} key={`type-${index}`}>
+                                                            {type}
+                                                        </MenuItem>
+                                                    )}
+                                                </Select>
+                                            </FormControl>
+                                            <div className={classNames(classes.row, classes.marginBottom30)}>
+                                                <TextField label="Минимальное значение"
+                                                           onChange={this.saveField(EvaluationToolFields.MIN)}
+                                                           variant="outlined"
+                                                           className={classes.numberInput}
+                                                           fullWidth
+                                                           InputLabelProps={{
+                                                               shrink: true,
+                                                           }}
+                                                           type="number"
+                                                           value={evaluationTool[EvaluationToolFields.MIN]}
                                                 />
-                                            }
-                                            style={{width: width}}
-                                        >
-                                            {sections.map((item: any) =>
-                                                <MenuItem value={item.value} key={`section-${item.value}`}>
-                                                    {item.label}
-                                                </MenuItem>
-                                            )}
-                                        </Select>
-                                    </FormControl>
-
-                                    <FormControl className={classes.typeSelector}>
-                                        <InputLabel shrink id="section-label">
-                                            Тип *
-                                        </InputLabel>
-                                        <Select
-                                            variant="outlined"
-                                            className={classes.selector}
-                                            // @ts-ignore
-                                            onChange={this.saveField(EvaluationToolFields.TYPE)}
-                                            value={evaluationTool[EvaluationToolFields.TYPE]}
-                                            fullWidth
-                                            displayEmpty
-                                            input={
-                                                <OutlinedInput
-                                                    notched
-                                                    labelWidth={100}
-                                                    name="course"
-                                                    id="section-label"
+                                                <TextField label="Максимальное значение"
+                                                           onChange={this.saveField(EvaluationToolFields.MAX)}
+                                                           variant="outlined"
+                                                           fullWidth
+                                                           InputLabelProps={{
+                                                               shrink: true,
+                                                           }}
+                                                           type="number"
+                                                           value={evaluationTool[EvaluationToolFields.MAX]}
                                                 />
-                                            }
-                                            style={{width: width}}
-                                        >
-                                            {types.map((type: any, index: number) =>
-                                                <MenuItem value={type} key={`type-${index}`}>
-                                                    {type}
-                                                </MenuItem>
-                                            )}
-                                        </Select>
-                                    </FormControl>
-                                    <div className={classNames(classes.row, classes.marginBottom30)}>
-                                        <TextField label="Минимальное значение"
-                                                   onChange={this.saveField(EvaluationToolFields.MIN)}
-                                                   variant="outlined"
-                                                   className={classes.numberInput}
-                                                   fullWidth
-                                                   InputLabelProps={{
-                                                       shrink: true,
-                                                   }}
-                                                   type="number"
-                                                   value={evaluationTool[EvaluationToolFields.MIN]}
-                                        />
-                                        <TextField label="Максимальное значение"
-                                                   onChange={this.saveField(EvaluationToolFields.MAX)}
-                                                   variant="outlined"
-                                                   fullWidth
-                                                   InputLabelProps={{
-                                                       shrink: true,
-                                                   }}
-                                                   type="number"
-                                                   value={evaluationTool[EvaluationToolFields.MAX]}
-                                        />
-                                    </div>
+                                            </div>
 
-                                    <FormControl component="fieldset">
-                                        <FormLabel component="legend">
-                                            Длительность изучения *
-                                            <Tooltip title="Первый семестр - семестр с которого начинается дисциплина.">
-                                                <QuestionIcon color="primary" className={classes.tooltipIcon} />
-                                            </Tooltip>
-                                        </FormLabel>
-                                        <RadioGroup className={classes.radioGroup}
-                                                    onChange={this.saveField(EvaluationToolFields.SEMESTER)}
-                                                    value={evaluationTool[EvaluationToolFields.SEMESTER]}
-                                        >
-                                            <FormControlLabel value={'1'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 1} />} label="Первый" />
-                                            <FormControlLabel value={'2'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 2} />} label="Второй" />
-                                            <FormControlLabel value={'3'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 3} />} label="Третий" />
-                                            <FormControlLabel value={'4'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 4} />} label="Четвертый" />
-                                        </RadioGroup>
-                                    </FormControl>
+                                            <FormControl component="fieldset">
+                                                <FormLabel component="legend">
+                                                    Длительность изучения *
+                                                    <Tooltip title="Первый семестр - семестр с которого начинается дисциплина.">
+                                                        <QuestionIcon color="primary" className={classes.tooltipIcon} />
+                                                    </Tooltip>
+                                                </FormLabel>
+                                                <RadioGroup className={classes.radioGroup}
+                                                            onChange={this.saveField(EvaluationToolFields.SEMESTER)}
+                                                            value={evaluationTool[EvaluationToolFields.SEMESTER]}
+                                                >
+                                                    <FormControlLabel value={'1'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 1} />} label="Первый" />
+                                                    <FormControlLabel value={'2'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 2} />} label="Второй" />
+                                                    <FormControlLabel value={'3'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 3} />} label="Третий" />
+                                                    <FormControlLabel value={'4'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 4} />} label="Четвертый" />
+                                                </RadioGroup>
+                                            </FormControl>
 
-                                    <FormControlLabel
-                                        control={<Checkbox checked={evaluationTool[EvaluationToolFields.CHECK_POINT]} onChange={this.changeCheckPoint}/>}
-                                        label="Ключевая точка"
-                                        className={classes.marginBottom30}
-                                    />
+                                            <FormControlLabel
+                                                control={<Checkbox checked={evaluationTool[EvaluationToolFields.CHECK_POINT]} onChange={this.changeCheckPoint}/>}
+                                                label="Ключевая точка"
+                                                className={classes.marginBottom30}
+                                            />
 
-                                    <div>
-                                        <Typography className={classes.weekTitle}>
-                                            Срок контроля в неделях
-                                        </Typography>
-                                        <Slider
-                                            defaultValue={1}
-                                            step={1}
-                                            marks
-                                            min={0}
-                                            max={20}
-                                            valueLabelDisplay="on"
-                                            value={evaluationTool[EvaluationToolFields.DEADLINE]}
-                                            onChange={this.changeDeadline}
-                                        />
-                                    </div>
-                                </>
-                            )}
-                        </AutoSizer>
-                    </div>
+                                            <div>
+                                                <Typography className={classes.weekTitle}>
+                                                    Срок контроля в неделях
+                                                </Typography>
+                                                <Slider
+                                                    defaultValue={1}
+                                                    step={1}
+                                                    marks
+                                                    min={0}
+                                                    max={20}
+                                                    valueLabelDisplay="on"
+                                                    value={evaluationTool[EvaluationToolFields.DEADLINE]}
+                                                    onChange={this.changeDeadline}
+                                                />
+                                            </div>
+                                        </>
+                                    )}
+                                </AutoSizer>
+                            </div>
 
-                    <div className={classes.rightSide}>
-                        <InputLabel className={classes.label}> Описание * </InputLabel>
-                        <CKEditor
-                            value={evaluationTool[EvaluationToolFields.DESCRIPTION] 
-                                    ? evaluationTool[EvaluationToolFields.DESCRIPTION] : ''}
-                            onChange={this.changeDescription}
-                            useFormulas
-                        />
-                    </div>
+                            <div className={classes.rightSide}>
+                                <InputLabel className={classes.label}> Описание * </InputLabel>
+                                <CKEditor
+                                    value={evaluationTool[EvaluationToolFields.DESCRIPTION]
+                                            ? evaluationTool[EvaluationToolFields.DESCRIPTION] : ''}
+                                    onChange={this.changeDescription}
+                                    useFormulas
+                                />
+                            </div>
+                        </>
+                    }
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={this.handleClose}
@@ -358,7 +344,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         Сохранить
                     </Button>
                 </DialogActions>
-            </Dialog>
+            </div>
         );
     }
 }
