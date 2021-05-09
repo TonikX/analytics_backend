@@ -35,7 +35,7 @@ import {SortingType} from "../../components/SortingButton/types";
 
 import {EducationalPlanProps, EducationalPlanType} from './types';
 import {FULL_DATE_FORMAT} from "../../common/utils";
-import {specialization} from "../WorkProgram/constants";
+import {specialization, specializationObject} from "../WorkProgram/constants";
 import {EducationalPlanFields} from './enum';
 
 import {appRouter} from "../../service/router-service";
@@ -186,7 +186,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                         <TableCell>{get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.TITLE], '')}</TableCell>
                                         <TableCell>{get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.YEAR], '')}</TableCell>
                                         <TableCell>
-                                            {get(specialization.find((item) => item.value === get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.QUALIFICATION], '')), 'label', '')}
+                                            {specializationObject[get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.QUALIFICATION], '')]}
                                         </TableCell>
 
                                         <TableCell>{get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.FIELD_OF_STUDY], []).map((fieldOfStudy: DirectionType) =>

@@ -47,6 +47,7 @@ import Filters from "./Filters";
 
 import connect from './EducationPlanInDirection.connect';
 import styles from './EducationPlanInDirection.styles';
+import {specializationObject} from "../WorkProgram/constants";
 
 
 class EducationPlanInDirection extends React.Component<EducationalPlanInDirectionProps> {
@@ -196,7 +197,7 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                             {get(educationalPlanInDirection, [EducationPlanInDirectionFields.DIRECTION, 0, DirectionFields.TITLE], '')}
                                         </TableCell>
                                         <TableCell>
-                                            {get(educationalPlanInDirection, [EducationPlanInDirectionFields.DIRECTION, 0, DirectionFields.QUALIFICATION], '')}
+                                            {specializationObject[get(educationalPlanInDirection, [EducationPlanInDirectionFields.DIRECTION, 0, DirectionFields.QUALIFICATION], '')]}
                                         </TableCell>
                                         <TableCell>
                                             {educationalPlanInDirection[EducationPlanInDirectionFields.TITLE]}
