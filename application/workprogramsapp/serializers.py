@@ -728,7 +728,7 @@ class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id','academic_plan', 'year', 'qualification', 'title', 'field_of_study']
+        fields = ['id','academic_plan', 'year', 'qualification', 'title', 'field_of_study', 'year']
 
 
 class FieldOfStudyListSerializer(serializers.ModelSerializer):

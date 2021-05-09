@@ -82,9 +82,9 @@ class FileUploadAPIView(APIView):
                 elif data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip() == "Немецкий":
                     op_language = "de"
 
-                if ImplementationAcademicPlan.objects.filter(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
+                if ImplementationAcademicPlan.objects.filter(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i], ap_isu_id=int(data['ИД_УП'][i]),
                                                              year=data['ГОД_НАБОРА'][i], language = op_language, qualification=qualification).exists():
-                    iap_obj=ImplementationAcademicPlan.objects.get(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
+                    iap_obj=ImplementationAcademicPlan.objects.get(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i], ap_isu_id=int(data['ИД_УП'][i]),
                                                                    year=data['ГОД_НАБОРА'][i], language = op_language, qualification=qualification)
                     iap_obj.op_isu_id=int(data['ОП_ИД'][i]) #todo: вернуть нс-ид (+) + записать название ОП сюда "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА" + язык + вуз партнер
                     iap_obj.ap_isu_id=int(data['ИД_УП'][i])
