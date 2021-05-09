@@ -13,7 +13,7 @@ class FileUploadAPIView(APIView):
     """
     API-endpoint для загрузки файла sub_2019_2020_new
     """
-    @transaction.atomic
+    #@transaction.atomic
     def post(self, request):
         print('- Импортируем csv файл')
         if not os.path.exists('upload/'):
@@ -99,23 +99,32 @@ class FileUploadAPIView(APIView):
                     iap_obj.ap_isu_id=int(data['ИД_УП'][i])
                     iap_obj.ns_id = int(data['НС_ИД'][i])
                     iap_obj.title = data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i]
+                    iap_obj.save()
                     iap_obj.field_of_study.add(fs_obj)
                     iap_obj.save()
-                print('Связь учебного плана и направления: done')
+                #print('Связь учебного плана и направления: done')
 
                 print('-- Работа с учебным планом')
+                print('dsssss', AcademicPlan.objects.filter(ap_isu_id = int(data['ИД_УП'][i])))
 
-                if AcademicPlan.objects.filter(academic_plan_in_field_of_study = iap_obj, ap_isu_id = int(data['ИД_УП'][i])).exists():
-                    ap_obj = AcademicPlan.objects.get(academic_plan_in_field_of_study = iap_obj, ap_isu_id = int(data['ИД_УП'][i]))
+                if AcademicPlan.objects.filter(ap_isu_id = int(data['ИД_УП'][i])).exists():
+                    ap_obj = AcademicPlan.objects.get(ap_isu_id = int(data['ИД_УП'][i]))
                     ap_obj.ap_isu_id=int(data['ИД_УП'][i]) #todo: НЕ переносим в ImplementationAcademicPlan +
                     ap_obj.save()
+                    iap_obj.academic_plan = ap_obj
+                    iap_obj.save()
                 else:
-                    ap_obj = AcademicPlan(academic_plan_in_field_of_study = iap_obj)
+                    ap_obj = AcademicPlan()
+                    #ap_obj.academic_plan_in_field_of_study.set(iap_obj)
+                    #iap_obj.academic_plan = ap_obj
                     #ap_obj.typelearning = 'internal'
                     ap_obj.ap_isu_id=int(data['ИД_УП'][i])
                     ap_obj.save()
+                    print('------')
+                    iap_obj.academic_plan = ap_obj
+                    iap_obj.save()
                     ap_count += 1
-                print('Учебный план: ', ap_obj)
+                #print('Учебный план: ', ap_obj)
 
                 print('-- Работа с блоком')
                 if DisciplineBlock.objects.filter(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan=ap_obj).exists():
@@ -123,7 +132,7 @@ class FileUploadAPIView(APIView):
                 else:
                     db = DisciplineBlock(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan_id=ap_obj.id, )
                     db.save()
-                print('Блок: ', db)
+                #print('Блок: ', db)
                 # Тут Денис Терещенко напишет обработчик модулей
                 print('-- Работа с модулями')
                 try:
@@ -139,7 +148,7 @@ class FileUploadAPIView(APIView):
                     mdb = DisciplineBlockModule(name=(data['НАИМЕНОВАНИЕ_МОДУЛЯ'][i].strip()), descipline_block=db,
                                                 order=o)
                     mdb.save()
-                print('Модуль в блоке: ', mdb)
+                #print('Модуль в блоке: ', mdb)
                 print('-- Работа с блок-модулем')
                 if (data['ВЫБОР'][i] == '1' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
                         discipline_block_module=mdb, change_type=data['ВЫБОР'][i], subject_code = data['НОМЕР'][i]).exists()):

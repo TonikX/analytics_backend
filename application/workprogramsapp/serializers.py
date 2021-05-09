@@ -68,7 +68,7 @@ class AcademicPlanInImplementationSerializer(serializers.ModelSerializer):
 
 class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     academic_plan = AcademicPlanInImplementationSerializer()
-    field_of_study = FieldOfStudyImplementationSerializer()
+    field_of_study = FieldOfStudyImplementationSerializer(many = True)
     #academic_plan = AcademicPlanSerializer()
 
     class Meta:
@@ -525,29 +525,6 @@ class AcademicPlanForRepresentationSerializer(serializers.ModelSerializer):
         fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year', 'education_form', 'qualification','author', 'can_edit']
 
 
-class AcademicPlanSerializerForList(serializers.ModelSerializer):
-    class Meta:
-        model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification']
-
-
-class AcademicPlanShortSerializer(serializers.ModelSerializer):
-    #discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, requirлинed=False)
-    can_edit = BooleanField(read_only=True)
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data["can_edit"] = self.context['request'].user.id == instance.author or bool(self.context['request'].user.groups.filter(name="academic_plan_developer"))
-        return data
-
-    class Meta:
-        model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification', 'author', "can_edit"]
-        extra_kwargs = {
-            'discipline_blocks_in_academic_plan': {'required': False}
-        }
-
-
 class AcademicPlanCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlan
@@ -582,7 +559,7 @@ class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.Model
 
 
 class ImplementationAcademicPlanForWPinFSSerializer(serializers.ModelSerializer):
-    field_of_study = FieldOfStudyImplementationSerializer()
+    field_of_study = FieldOfStudyImplementationSerializer(many=True)
     #academic_plan = AcademicPlanSerializer()
 
     class Meta:
@@ -709,3 +686,57 @@ class WorkProgramSerializerByName(serializers.ModelSerializer):
     class Meta:
         model = WorkProgram
         fields = ['id', 'title', 'discipline_code']
+
+
+class AcademicPlanSerializerForList(serializers.ModelSerializer):
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification']
+
+
+class ImplementationAcademicPlanShortForAPSerializer(serializers.ModelSerializer):
+    field_of_study = FieldOfStudyImplementationSerializer(many=True)
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = ['id', 'year', 'qualification', 'title', 'field_of_study']
+
+
+class AcademicPlanShortSerializer(serializers.ModelSerializer):
+    #discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, requirлинed=False)
+    can_edit = BooleanField(read_only=True)
+    academic_plan_in_field_of_study = ImplementationAcademicPlanShortForAPSerializer(many=True)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["can_edit"] = self.context['request'].user.id == instance.author or bool(self.context['request'].user.groups.filter(name="academic_plan_developer"))
+        return data
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification', 'author', "can_edit", 'academic_plan_in_field_of_study']
+        extra_kwargs = {
+            'discipline_blocks_in_academic_plan': {'required': False}
+        }
+
+
+class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
+    academic_plan = AcademicPlanInImplementationSerializer()
+    #field_of_study = FieldOfStudyImplementationSerializer(many = True)
+    #academic_plan = AcademicPlanSerializer()
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = ['id','academic_plan', 'year', 'qualification', 'title', ]
+
+
+class FieldOfStudyListSerializer(serializers.ModelSerializer):
+    """
+        Сериализатор образовательных программ (направлений)
+    """
+    implementation_academic_plan_in_field_of_study = ImplementationAcademicPlanSerializer(many = True)
+
+    class Meta:
+        model = FieldOfStudy
+        fields = ['id', 'title', 'number', 'qualification', 'educational_profile', 'faculty', 'implementation_academic_plan_in_field_of_study']
