@@ -72,20 +72,20 @@ class FileUploadAPIView(APIView):
 
                 if data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find("Русский") != -1 and data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find(
                         "Английский") != -1:
-                    language = "ru/en"
-                elif data['LANGUAGE'][i].strip() == "Русский":
-                    language = "ru"
-                elif data['LANGUAGE'][i].strip() == "Английский":
-                    language = "en"
-                elif data['LANGUAGE'][i].strip() == "Казахский":
-                    language = "kz"
-                elif data['LANGUAGE'][i].strip() == "Немецкий":
-                    language = "de"
+                    op_language = "ru/en"
+                elif data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip() == "Русский":
+                    op_language = "ru"
+                elif data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip() == "Английский":
+                    op_language = "en"
+                elif data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip() == "Казахский":
+                    op_language = "kz"
+                elif data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip() == "Немецкий":
+                    op_language = "de"
 
                 if ImplementationAcademicPlan.objects.filter(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
-                                                             year=data['ГОД_НАБОРА'][i], language = language, qualification=qualification).exists():
+                                                             year=data['ГОД_НАБОРА'][i], language = op_language, qualification=qualification).exists():
                     iap_obj=ImplementationAcademicPlan.objects.get(title=fs_obj,
-                                                                   year=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i], language = language, qualification=qualification)
+                                                                   year=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i], language = op_language, qualification=qualification)
                     iap_obj.op_isu_id=int(data['ОП_ИД'][i]) #todo: вернуть нс-ид (+) + записать название ОП сюда "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА" + язык + вуз партнер
                     iap_obj.ap_isu_id=int(data['ИД_УП'][i])
                     iap_obj.ns_id = int(data['НС_ИД'][i])
@@ -93,7 +93,7 @@ class FileUploadAPIView(APIView):
                     iap_obj.save()
                 else:
                     iap_obj = ImplementationAcademicPlan(academic_plan=ap_obj, field_of_study=fs_obj,
-                                                         year=data['ГОД_НАБОРА'][i], op_isu_id=int(data['ОП_ИД'][i]), language = language, qualification=qualification)
+                                                         year=data['ГОД_НАБОРА'][i], op_isu_id=int(data['ОП_ИД'][i]), language = op_language, qualification=qualification)
                     iap_obj.op_isu_id=int(data['ОП_ИД'][i])
                     iap_obj.ap_isu_id=int(data['ИД_УП'][i])
                     iap_obj.ns_id = int(data['НС_ИД'][i])
