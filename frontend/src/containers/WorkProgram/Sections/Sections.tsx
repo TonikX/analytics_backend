@@ -245,9 +245,9 @@ class Sections extends React.PureComponent<SectionsProps> {
                                     }
                                 </TableCell>
                                 {isCanEdit &&
-                                    <Tooltip title="Пересчитать столбец СРО и всего часов основываясь на введеных значениях">
+                                    <Tooltip title={parseInt(totalHours) <= 0 ? "Всего часов должно быть > 0" : "Пересчитать столбец СРО и всего часов основываясь на введеных значениях"}>
                                         <TableCell className={classes.headerCell}>
-                                            <Button onClick={this.updateValues(parseFloat(totalHours))}>Пересчитать</Button>
+                                            <Button onClick={() => parseInt(totalHours) > 0 && this.updateValues(parseFloat(totalHours))}>Пересчитать</Button>
                                         </TableCell>
                                     </Tooltip>
                                 }

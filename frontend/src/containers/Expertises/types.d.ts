@@ -6,6 +6,7 @@ import {WorkProgramGeneralType, WorkProgramStatusType} from "../WorkProgram/type
 
 export interface ExpertisesActions {
     changeSelectedStatus: any;
+    changeSelectedQualification: any;
     changeSearchQuery: any;
     getExpertisesList: any;
     setExpertisesList: any;
@@ -38,6 +39,7 @@ export interface expertisesState {
     [fields.EXPERTISES_LIST]: Array<ExpertiseType>;
     [fields.EXPERTISE]: ExpertiseType|{};
     [fields.SELECTED_STATUS]: WorkProgramStatusType|'';
+    [fields.SELECTED_QUALIFICATION]: string;
 }
 
 export interface ExpertisesProps extends WithStyles<typeof styles> {
