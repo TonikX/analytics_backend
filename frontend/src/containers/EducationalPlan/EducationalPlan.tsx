@@ -190,7 +190,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                         </TableCell>
 
                                         <TableCell>{get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.FIELD_OF_STUDY], []).map((fieldOfStudy: DirectionType) =>
-                                            <> {fieldOfStudy[DirectionFields.TITLE]}  {fieldOfStudy[DirectionFields.NUMBER]} <br /> </>
+                                            <> {fieldOfStudy[DirectionFields.TITLE]} ({fieldOfStudy[DirectionFields.NUMBER]}) <br /> </>
                                         )}</TableCell>
 
                                         <TableCell style={{padding: '0 !important'}}>
