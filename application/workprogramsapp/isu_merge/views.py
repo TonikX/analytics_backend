@@ -109,10 +109,11 @@ class FileUploadAPIView(APIView):
 
                 if AcademicPlan.objects.filter(ap_isu_id = int(data['ИД_УП'][i])).exists():
                     ap_obj = AcademicPlan.objects.get(ap_isu_id = int(data['ИД_УП'][i]))
-                    ap_obj.ap_isu_id=int(data['ИД_УП'][i]) #todo: НЕ переносим в ImplementationAcademicPlan +
-                    ap_obj.save()
+                    # ap_obj.ap_isu_id=int(data['ИД_УП'][i]) #todo: НЕ переносим в ImplementationAcademicPlan +
+                    # ap_obj.save()
                     iap_obj.academic_plan = ap_obj
                     iap_obj.save()
+                    print('id учебного плана',ap_obj.ap_isu_id)
                 else:
                     ap_obj = AcademicPlan()
                     #ap_obj.academic_plan_in_field_of_study.set(iap_obj)

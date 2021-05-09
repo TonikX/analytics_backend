@@ -723,12 +723,12 @@ class AcademicPlanShortSerializer(serializers.ModelSerializer):
 
 class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     academic_plan = AcademicPlanInImplementationSerializer()
-    #field_of_study = FieldOfStudyImplementationSerializer(many = True)
+    field_of_study = FieldOfStudyImplementationSerializer(many = True)
     #academic_plan = AcademicPlanSerializer()
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id','academic_plan', 'year', 'qualification', 'title', ]
+        fields = ['id','academic_plan', 'year', 'qualification', 'title', 'field_of_study']
 
 
 class FieldOfStudyListSerializer(serializers.ModelSerializer):
