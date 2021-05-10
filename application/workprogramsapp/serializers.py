@@ -564,7 +564,7 @@ class ImplementationAcademicPlanForWPinFSSerializer(serializers.ModelSerializer)
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id', 'year', 'field_of_study']
+        fields = ['id', 'year', 'field_of_study', 'title']
 
 
 class AcademicPlanForWPinFSSerializer(serializers.ModelSerializer):
