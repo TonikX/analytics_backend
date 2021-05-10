@@ -137,16 +137,16 @@ class FileUploadAPIView(APIView):
                 # Тут Денис Терещенко напишет обработчик модулей
                 print('-- Работа с модулями')
                 try:
-                    o = order[(data['НАИМЕНОВАНИЕ_МОДУЛЯ'][i].strip())]
+                    o = order[(data['МОДУЛЬ'][i].strip())]
                 except:
-                    order.update({(data['НАИМЕНОВАНИЕ_МОДУЛЯ'][i].strip()): len(order)})
-                    o = order[(data['НАИМЕНОВАНИЕ_МОДУЛЯ'][i].strip())]
+                    order.update({(data['МОДУЛЬ'][i].strip()): len(order)})
+                    o = order[(data['МОДУЛЬ'][i].strip())]
 
-                if DisciplineBlockModule.objects.filter(name=(data['НАИМЕНОВАНИЕ_МОДУЛЯ'][i].strip()),
+                if DisciplineBlockModule.objects.filter(name=(data['МОДУЛЬ'][i].strip()),
                                                         descipline_block=db).exists():
-                    mdb = DisciplineBlockModule.objects.get(name=(data['НАИМЕНОВАНИЕ_МОДУЛЯ'][i].strip()), descipline_block=db)
+                    mdb = DisciplineBlockModule.objects.get(name=(data['МОДУЛЬ'][i].strip()), descipline_block=db)
                 else:
-                    mdb = DisciplineBlockModule(name=(data['НАИМЕНОВАНИЕ_МОДУЛЯ'][i].strip()), descipline_block=db,
+                    mdb = DisciplineBlockModule(name=(data['МОДУЛЬ'][i].strip()), descipline_block=db,
                                                 order=o)
                     mdb.save()
                 #print('Модуль в блоке: ', mdb)
