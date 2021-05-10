@@ -22,8 +22,10 @@ const addExpertToExpertise = createAction('ADD_EXPERT_TO_EXPERTISE');
 const removeExpertFromExpertise = createAction('REMOVE_EXPERT_FROM_EXPERTISE');
 
 const changeSelectedStatus = createAction('EXPERTISES_CHANGE_SELECTED_STATUS');
+const changeSelectedQualification = createAction('EXPERTISES_CHANGE_SELECTED_QUALIFICATION');
 
 const actions: ExpertisesActions = {
+    changeSelectedQualification,
     changeSelectedStatus,
 
     openAddExpertModal,

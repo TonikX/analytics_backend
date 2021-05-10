@@ -33,6 +33,8 @@ import {appRouter} from "../../service/router-service";
 
 import connect from './Expertises.connect';
 import styles from './Expertises.styles';
+import TableFilter from "../../components/TableFilter/TableFilter";
+import {relations} from "../EntitityToEntitity/constants";
 
 class Expertises extends React.Component<ExpertisesProps> {
     state = {
@@ -77,7 +79,12 @@ class Expertises extends React.Component<ExpertisesProps> {
         } else {
             this.props.actions.changeSelectedStatus(status)
         }
-        this.props.actions.getExpertisesList();
+        this.props.actions.getExpertisesList()
+    }
+
+    handleSelectQualification = (qualification: Array<string>) => {
+        this.props.actions.changeSelectedQualification(qualification[0])
+        this.props.actions.getExpertisesList()
     }
 
     render() {
@@ -112,11 +119,9 @@ class Expertises extends React.Component<ExpertisesProps> {
                                                        mode={sortingField === ExpertisesFields.WORK_PROGRAM ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className={classes.qualificationCell}>
                                         Уровень
-                                        <SortingButton changeMode={this.changeSorting('qualification')}
-                                                       mode={sortingField === 'qualification' ? sortingMode : ''}
-                                        />
+                                        <TableFilter items={specializationObject} handleSelect={this.handleSelectQualification} />
                                     </TableCell>
                                     <TableCell>
                                         Авторы

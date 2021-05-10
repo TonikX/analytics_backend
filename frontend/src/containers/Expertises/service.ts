@@ -3,11 +3,11 @@ import {SortingType, Types} from "../../components/SortingButton/types";
 import {WorkProgramStatusType} from "../WorkProgram/types";
 
 class ExpertisesService extends AnalyticsService{
-    getExpertises(currentPage: number, search: string, sortingField: string, sortingMode: SortingType, selectedStatus: WorkProgramStatusType|''){
+    getExpertises(currentPage: number, search: string, sortingField: string, sortingMode: SortingType, selectedStatus: WorkProgramStatusType|'', selectedQualification: string){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
         // @ts-ignore
-        return this.get(`/api/expertise?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}&expertise_status=${selectedStatus}`);
+        return this.get(`/api/expertise?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}&expertise_status=${selectedStatus}&work_program__qualification=${selectedQualification}`);
     }
 
     getExpertise(id: number){

@@ -18,6 +18,7 @@ export const initialState: expertisesState = {
     [fields.EXPERTISE]: {},
     [fields.IS_OPEN_ADD_EXPERT_MODAL]: false,
     [fields.SELECTED_STATUS]: '',
+    [fields.SELECTED_QUALIFICATION]: '',
 };
 
 const setExpertise = (state: expertisesState, {payload}: any): expertisesState => ({
@@ -59,6 +60,10 @@ const changeSelectedStatus = (state: expertisesState, {payload}: any): expertise
     ...state,
     [fields.SELECTED_STATUS]: payload,
 });
+const changeSelectedQualification = (state: expertisesState, {payload}: any): expertisesState => ({
+    ...state,
+    [fields.SELECTED_QUALIFICATION]: payload,
+});
 
 const changeSorting = (state: expertisesState, {payload}: any): expertisesState => ({
     ...state,
@@ -78,4 +83,5 @@ export const reducer = createReducer(initialState, {
     [actions.openAddExpertModal.type]: openAddExpertModal,
     [actions.closeAddExpertModal.type]: closeAddExpertModal,
     [actions.changeSelectedStatus.type]: changeSelectedStatus,
+    [actions.changeSelectedQualification.type]: changeSelectedQualification,
 });

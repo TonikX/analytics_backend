@@ -157,24 +157,27 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                 <TableRow>
                                     <TableCell>
                                         Образовательная программа
-                                        <SortingButton changeMode={this.changeSorting(EducationalPlanFields.PROFILE)}
-                                                       mode={sortingField === EducationalPlanFields.PROFILE ? sortingMode : ''}
+                                        <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__title')}
+                                                       mode={sortingField === 'academic_plan_in_field_of_study__title' ? sortingMode : ''}
                                         />
                                     </TableCell>
                                     <TableCell className={classes.displayFlex}>
                                         <div className={classes.headerCellTitle}> Год набора </div>
-                                        <SortingButton changeMode={this.changeSorting(EducationalPlanFields.YEAR)}
-                                                       mode={sortingField === EducationalPlanFields.YEAR ? sortingMode : ''}
+                                        <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__year')}
+                                                       mode={sortingField === 'academic_plan_in_field_of_study__year' ? sortingMode : ''}
                                         />
                                     </TableCell>
                                     <TableCell>
                                         Уровень образования
-                                        <SortingButton changeMode={this.changeSorting(EducationalPlanFields.QUALIFICATION)}
-                                                       mode={sortingField === EducationalPlanFields.QUALIFICATION ? sortingMode : ''}
+                                        <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__qualification')}
+                                                       mode={sortingField === 'academic_plan_in_field_of_study__qualification' ? sortingMode : ''}
                                         />
                                     </TableCell>
                                     <TableCell>
                                         Направления
+                                        <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__field_of_study__title')}
+                                                       mode={sortingField === 'academic_plan_in_field_of_study__field_of_study__title' ? sortingMode : ''}
+                                        />
                                     </TableCell>
 
                                     <TableCell />
