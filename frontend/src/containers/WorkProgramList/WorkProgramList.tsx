@@ -308,7 +308,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
 
                 <ConfirmDialog onConfirm={this.handleConfirmDuplicateDialog}
                                onDismiss={this.closeConfirmDuplicateDialog}
-                               confirmText={'Вы точно уверены, что хотите клонировать учебную программу?'}
+                               confirmText={'Клонируя рабочую программу, вы получите копию этой программы, которая не будет включена ни в один учебный план. Вы уверены, что хотите клонировать программу?'}
                                isOpen={Boolean(duplicateConfirmId)}
                                dialogTitle={'Клонировать учебную программу'}
                                confirmButtonText={'Клонировать'}
