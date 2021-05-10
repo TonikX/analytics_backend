@@ -66,24 +66,3 @@ export const getEvaluationToolsForSelect = (state: rootState) => {
         value: evaluationTool[EvaluationToolFields.ID],
     }))
 };
-
-export const getWorkProgramPlans = (state: rootState) => {
-    const blocks = getWorkProgramField(state, 'work_program_in_change_block');
-    const plans: any[] = [];
-
-    blocks.forEach((block: any) => {
-        const academicPlan = get(block, 'discipline_block_module.descipline_block.academic_plan', {});
-
-        if (!plans.find(item => item.id === academicPlan.id)){
-            const directions = get(academicPlan, 'academic_plan_in_field_of_study', []);
-
-            plans.push({
-                id: academicPlan.id,
-                name: academicPlan.educational_profile,
-                directions: directions
-            })
-        }
-    })
-
-    return plans;
-};

@@ -13,5 +13,9 @@ export default (theme: Theme) => createStyles({
     },
     root: {
         height: '100%'
+    },
+    link: {
+        textDecoration: 'none',
+        color: theme.palette.primary.main,
     }
 });
