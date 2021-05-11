@@ -44,6 +44,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     editor = null;
 
     state = {
+        isOpen: false,
         evaluationTool: {
             [IntermediateCertificationFields.ID]: null,
             [IntermediateCertificationFields.DESCRIPTION]: '',
@@ -60,6 +61,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         if (!shallowEqual(this.props, prevProps)){
             this.setState({
+                isOpen: this.props.isOpen,
                 evaluationTool: {
                     [IntermediateCertificationFields.ID]: get(evaluationTool, IntermediateCertificationFields.ID, null),
                     [IntermediateCertificationFields.NAME]: get(evaluationTool, IntermediateCertificationFields.NAME, ''),
@@ -110,15 +112,15 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     render() {
-        const {isOpen, classes} = this.props;
-        const {evaluationTool} = this.state;
+        const {classes} = this.props;
+        const {evaluationTool, isOpen} = this.state;
 
         const disableButton = get(evaluationTool, [IntermediateCertificationFields.NAME, 'length'], 0) === 0
                             || get(evaluationTool, [IntermediateCertificationFields.DESCRIPTION, 'length'], 0) === 0
                             || get(evaluationTool, [IntermediateCertificationFields.TYPE, 'length'], 0) === 0
         ;
         const isEditMode = Boolean(evaluationTool[IntermediateCertificationFields.ID]);
-
+        if (!isOpen) return <></>
         return (
             <div className={classNames(classes.dialog, {[classes.openDialog]: isOpen})}>
                 <AppBar className={classes.appBar}>
