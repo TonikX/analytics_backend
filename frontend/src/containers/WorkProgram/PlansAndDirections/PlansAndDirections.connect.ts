@@ -3,14 +3,14 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "../actions";
-import {getWorkProgramPlans} from '../getters';
+import {getWorkProgramField} from '../getters';
 import {WorkProgramActions} from "../types";
 
 import {rootState} from "../../../store/reducers";
 
 const mapStateToProps = (state:rootState) => {
     return {
-        plans: getWorkProgramPlans(state),
+        plans: getWorkProgramField(state, 'work_program_in_change_block')
     };
 };
 

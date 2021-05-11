@@ -291,7 +291,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
                 <ConfirmDialog onConfirm={this.handleCloneProgram}
                                onDismiss={this.closeConfirmDuplicateWPModal}
-                               confirmText={'Вы точно уверены, что хотите клонировать учебную программу?'}
+                               confirmText={'Клонируя рабочую программу, вы получите копию этой программы, которая не будет включена ни в один учебный план. Вы уверены, что хотите клонировать программу?'}
                                isOpen={this.state.openConfirmDuplicateWPModal}
                                dialogTitle={'Клонировать учебную программу'}
                                confirmButtonText={'Клонировать'}
