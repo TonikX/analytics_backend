@@ -32,7 +32,7 @@ services:
     volumes:
       - ./application:/application
     expose:
-      - 8000
+      - "8004:8000"
     restart: always
     links:
       - db
