@@ -33,8 +33,6 @@ services:
       - ./application:/application
     expose:
       - 8000
-    ports:
-      - "8003:8000"
     restart: always
     links:
       - db
