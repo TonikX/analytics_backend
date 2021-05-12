@@ -45,6 +45,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     editor = null;
 
     state = {
+        isOpen: false,
         evaluationTool: {
             [EvaluationToolFields.ID]: null,
             [EvaluationToolFields.DESCRIPTION]: '',
@@ -64,6 +65,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         if (!shallowEqual(this.props, prevProps)){
             this.setState({
+                isOpen: this.props.isOpen,
                 evaluationTool: {
                     [EvaluationToolFields.ID]: get(evaluationTool, EvaluationToolFields.ID, null),
                     [EvaluationToolFields.NAME]: get(evaluationTool, EvaluationToolFields.NAME, ''),
@@ -141,17 +143,19 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     render() {
-        const {isOpen, classes, sections, types} = this.props;
-        const {evaluationTool} = this.state;
-
+        const {classes, sections, types} = this.props;
+        const {evaluationTool, isOpen} = this.state;
+        
+        
         const disableButton = get(evaluationTool, [EvaluationToolFields.NAME, 'length'], 0) === 0
                             || get(evaluationTool, [EvaluationToolFields.DESCRIPTION, 'length'], 0) === 0
                             || get(evaluationTool, [EvaluationToolFields.SECTIONS, 'length'], 0) === 0
                             || get(evaluationTool, [EvaluationToolFields.TYPE, 'length'], 0) === 0
         ;
         const isEditMode = Boolean(evaluationTool[EvaluationToolFields.ID]);
-
+        if (!isOpen) return <></>
         return (
+            
             <div className={classNames(classes.dialog, {[classes.openDialog]: isOpen})}>
                 <AppBar className={classes.appBar}>
                     <Toolbar>

@@ -1647,7 +1647,10 @@ class AcademicPlanListAPIView(generics.ListAPIView):
     serializer_class = AcademicPlanSerializerForList
     queryset = AcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['educational_profile']
+    search_fields = ['academic_plan_in_field_of_study__qualification',
+                     'academic_plan_in_field_of_study__title',
+                     'academic_plan_in_field_of_study__year',
+                     'academic_plan_in_field_of_study__field_of_study__title']
     ordering_fields = ['academic_plan_in_field_of_study__qualification',
                        'academic_plan_in_field_of_study__title',
                        'academic_plan_in_field_of_study__year',
@@ -1659,7 +1662,10 @@ class AcademicPlanListShortAPIView(generics.ListAPIView):
     serializer_class = AcademicPlanShortSerializer
     queryset = AcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['educational_profile']
+    search_fields = ['academic_plan_in_field_of_study__qualification',
+                     'academic_plan_in_field_of_study__title',
+                     'academic_plan_in_field_of_study__year',
+                     'academic_plan_in_field_of_study__field_of_study__title']
     ordering_fields = ['academic_plan_in_field_of_study__qualification',
                        'academic_plan_in_field_of_study__title',
                        'academic_plan_in_field_of_study__year',
@@ -1725,6 +1731,13 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
     serializer_class = ImplementationAcademicPlanSerializer
     queryset = ImplementationAcademicPlan.objects.all()
     filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+    search_fields = ['academic_plan__educational_profile',
+                     'field_of_study__title',
+                     'field_of_study__number',
+                     'field_of_study__qualification',
+                     'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
+                     'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                     ]
     filterset_fields = ['academic_plan__educational_profile',
                         'field_of_study__title',
                         'field_of_study__number',
