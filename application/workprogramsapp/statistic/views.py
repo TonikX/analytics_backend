@@ -309,18 +309,27 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
 
 
 class OneAcademicPlanWithDescriptionWp(generics.RetrieveAPIView):
+    """
+    Получение конкретного учебного плана по его id со всеми описаниями РПД
+    """
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlansDescriptionWpSerializer
     permission_classes = [AllowAny]
 
 
 class AllAcademicPlanWithDescriptionWp(generics.ListAPIView):
+    """
+    Получение всех учебных планов со всеми описаниями РПД
+    """
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlansDescriptionWpSerializer
     permission_classes = [AllowAny]
 
 
 class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
+    """
+    Получение пререквизитов и результатов РПД по СТР_УП_ИД
+    """
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramPrerequisitesAndOutcomesSerializer
     permission_classes = [AllowAny]
