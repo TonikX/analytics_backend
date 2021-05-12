@@ -89,6 +89,8 @@ class ExpertiseListView(generics.ListAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     filterset_fields = ['date_of_last_change', 'expertise_status', 'work_program__title', 'work_program__qualification',
                         'work_program__discipline_code']
+    search_fields = ['work_program__title', 'work_program__qualification',
+                     'work_program__discipline_code']
 
     def get_queryset(self):
         # Note the use of `get_queryset()` instead of `self.queryset`
