@@ -204,7 +204,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                 }
 
                 {isCanEdit && <CreateModal />}
-                {(isCanEdit || !isStudent) && <DescriptionModal />}
+                <DescriptionModal />
             </div>
         );
     }
