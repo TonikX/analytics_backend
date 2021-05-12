@@ -9,4 +9,6 @@ export interface CKEditorProps {
     useFormulas?: boolean;
     toolbarIcons?: Array;
     readOnly?: boolean;
+    height?: string | number;
+    width?: string | number;
 }
