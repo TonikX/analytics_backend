@@ -4,8 +4,6 @@
   "private": true,
   "lint:fix": "eslint src/**/*.js --fix",
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^27.1.0",
-    "@ckeditor/ckeditor5-react": "^3.0.2",
     "@date-io/moment": "^1.3.13",
     "@material-ui/core": "^4.9.11",
     "@material-ui/icons": "^4.9.1",
@@ -28,7 +26,7 @@
     "@types/recompose": "^0.30.7",
     "@types/redux": "^3.6.0",
     "axios": "^0.19.2",
-    "ckeditor5-custom-build": "file:packages/ckeditor5_decouple_with_math",
+    "ckeditor4-react": "^1.4.1",
     "classnames": "^2.2.6",
     "lodash": "^4.17.15",
     "match-sorter": "2.3.0",
