@@ -60,6 +60,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         if (!shallowEqual(this.props, prevProps)){
             this.setState({
+                isOpen: this.props.isOpen,
                 evaluationTool: {
                     [IntermediateCertificationFields.ID]: get(evaluationTool, IntermediateCertificationFields.ID, null),
                     [IntermediateCertificationFields.NAME]: get(evaluationTool, IntermediateCertificationFields.NAME, ''),
