@@ -2,6 +2,8 @@ from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan
+from workprogramsapp.serializers import PrerequisitesOfWorkProgramInWorkProgramSerializer, \
+    OutcomesOfWorkProgramInWorkProgramSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 from workprogramsapp.workprogram_additions.serializers import ShortStructuralUnitSerializer
 
@@ -17,7 +19,8 @@ class WorkProgramSerializerForStatistic(serializers.ModelSerializer):
 class WorkProgramSerializerForStatisticExtended(serializers.ModelSerializer):
     editors = userProfileSerializer(many=True)
     academic_plans = serializers.SerializerMethodField()
-    structural_unit=ShortStructuralUnitSerializer(many=False)
+    structural_unit = ShortStructuralUnitSerializer(many=False)
+
     def get_academic_plans(self, instance):
         return AcademicPlansStatisticSerializer(
             instance=AcademicPlan.objects.filter(
@@ -61,3 +64,32 @@ class AcademicPlansStatisticSerializer(serializers.ModelSerializer):
         model = AcademicPlan
         fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification',
                   'author']
+
+
+class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title', 'description']
+
+
+class AcademicPlansDescriptionWpSerializer(serializers.ModelSerializer):
+    wp_in_academic_plan = serializers.SerializerMethodField()
+
+    def get_wp_in_academic_plan(self, instance):
+        return WorkProgramDescriptionOnlySerializer(
+            instance=WorkProgram.objects.filter(
+                zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan=instance).distinct(),
+            many=True).data
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id', 'educational_profile', 'wp_in_academic_plan', ]
+
+
+class WorkProgramPrerequisitesAndOutcomesSerializer(serializers.ModelSerializer):
+    prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(many=True)
+    outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(many=True)
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title', 'prerequisites', 'outcomes']
