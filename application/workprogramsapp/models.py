@@ -713,8 +713,8 @@ class Competence(models.Model):
     '''
     Модель для компетенций
     '''
-    number = models.CharField(unique=True, max_length=1024)
-    name = models.CharField(unique=True, max_length=1024)
+    number = models.CharField(max_length=1024)
+    name = models.CharField(max_length=1024)
 
     # field_of_study = models.ForeignKey('Indicator', on_delete=models.CASCADE)
     # work_program = models.ForeignKey('work_program', on_delete=models.CASCADE)
