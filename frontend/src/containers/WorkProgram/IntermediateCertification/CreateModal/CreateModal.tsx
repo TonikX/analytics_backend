@@ -100,13 +100,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
-    changeDescription = (event: React.ChangeEvent<HTMLInputElement>, editor: any) => {
+    changeDescription = (event: any) => {
         const {evaluationTool} = this.state;
 
         this.setState({
             evaluationTool: {
                 ...evaluationTool,
-                [IntermediateCertificationFields.DESCRIPTION]: editor.getData()
+                [IntermediateCertificationFields.DESCRIPTION]: event.editor.getData()
             }
         })
     }
@@ -247,10 +247,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                           <div className={classes.rightSide}>
                             <InputLabel className={classes.label}>Описание</InputLabel>
-                            <CKEditor onBlur={this.changeDescription}
+                            <CKEditor onChange={this.changeDescription}
                                       value={evaluationTool[IntermediateCertificationFields.DESCRIPTION] ? evaluationTool[IntermediateCertificationFields.DESCRIPTION] : ''}
                                       toolbarContainerId="toolbar-container"
                                       useFormulas
+                                      height="calc(100vh - 300px)"
                             />
                           </div>
                         </>

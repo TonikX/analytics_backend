@@ -130,9 +130,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
-    changeDescription = (event: React.ChangeEvent<HTMLInputElement>, editor: any) => {
+    changeDescription = (event: any) => {
         const {evaluationTool} = this.state;
-        const data = editor.getData();
+        const data = event.editor.getData();
 
         this.setState({
             evaluationTool: {
@@ -331,6 +331,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             ? evaluationTool[EvaluationToolFields.DESCRIPTION] : ''}
                                     onChange={this.changeDescription}
                                     useFormulas
+                                    height="calc(100vh - 280px)"
                                 />
                             </div>
                         </>

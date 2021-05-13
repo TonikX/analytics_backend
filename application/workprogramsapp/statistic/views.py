@@ -1,6 +1,7 @@
 import json
 
 from django.db.models.aggregates import Count
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAdminUser
@@ -12,7 +13,8 @@ from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Acade
     DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, ImplementationAcademicPlan, FieldOfStudy, \
     СertificationEvaluationTool
 from workprogramsapp.statistic.serializers import WorkProgramInFieldOfStudySerializerForStatistic, \
-    WorkProgramSerializerForStatistic, SuperShortWorkProgramSerializer, WorkProgramSerializerForStatisticExtended
+    WorkProgramSerializerForStatistic, SuperShortWorkProgramSerializer, WorkProgramSerializerForStatisticExtended, \
+    AcademicPlansDescriptionWpSerializer, WorkProgramPrerequisitesAndOutcomesSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
@@ -268,7 +270,8 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
     def get_queryset(self):
         print(self.request.query_params)
         status_filter = self.request.query_params["status"] if "status" in self.request.query_params else ""
-        structural_unit_id =  self.request.query_params.getlist("structural_unit_id") if "structural_unit_id" in self.request.query_params else []
+        structural_unit_id = self.request.query_params.getlist(
+            "structural_unit_id") if "structural_unit_id" in self.request.query_params else []
         year = self.request.query_params.getlist("year") if "year" in self.request.query_params \
             else [x for x in range(2000, 2050)]
         semester = self.request.query_params.getlist("semester") if "semester" in self.request.query_params else [-1]
@@ -284,22 +287,58 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
         print(cred_regex)
         if status_filter == "WK":
             needed_wp = (WorkProgram.objects.filter(expertise_with_rpd__isnull=True,
-            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
-            structural_unit__in=structural_unit_id,
-            zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex) |
-            WorkProgram.objects.filter(
-            expertise_with_rpd__expertise_status__contains=status_filter,
-            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
-            structural_unit__in=structural_unit_id,
-            zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex)).distinct()
+                                                    zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
+                                                    structural_unit__in=structural_unit_id,
+                                                    zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex) |
+                         WorkProgram.objects.filter(
+                             expertise_with_rpd__expertise_status__contains=status_filter,
+                             zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
+                             structural_unit__in=structural_unit_id,
+                             zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex)).distinct()
         elif status_filter == "":
             needed_wp = WorkProgram.objects.filter(structural_unit__in=structural_unit_id,
-            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
-            zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex).distinct()
+                                                   zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
+                                                   zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex).distinct()
         else:
             needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains=status_filter,
-            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
-            structural_unit__in=structural_unit_id,
-            zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex).distinct()
+                                                   zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
+                                                   structural_unit__in=structural_unit_id,
+                                                   zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex).distinct()
         print(len(WorkProgram.objects.filter(structural_unit=6)))
         return needed_wp
+
+
+class OneAcademicPlanWithDescriptionWp(generics.RetrieveAPIView):
+    """
+    Получение конкретного учебного плана по его id со всеми описаниями РПД
+    """
+    queryset = AcademicPlan.objects.all()
+    serializer_class = AcademicPlansDescriptionWpSerializer
+    permission_classes = [AllowAny]
+
+
+class AllAcademicPlanWithDescriptionWp(generics.ListAPIView):
+    """
+    Получение всех учебных планов со всеми описаниями РПД
+    """
+    queryset = AcademicPlan.objects.all()
+    serializer_class = AcademicPlansDescriptionWpSerializer
+    permission_classes = [AllowAny]
+
+
+class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
+    """
+    Получение пререквизитов и результатов РПД по СТР_УП_ИД
+    """
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramPrerequisitesAndOutcomesSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        pk=self.kwargs['pk']
+        return WorkProgram.objects.filter(zuns_for_wp__zuns_for_wp__id_str_up=pk)
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset)
+        self.check_object_permissions(self.request, obj)
+        return obj
