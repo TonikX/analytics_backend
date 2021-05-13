@@ -87,8 +87,8 @@ class AcademicPlansDescriptionWpSerializer(serializers.ModelSerializer):
 
 
 class WorkProgramPrerequisitesAndOutcomesSerializer(serializers.ModelSerializer):
-    prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(many=True)
-    outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(many=True)
+    prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set',many=True)
+    outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
 
     class Meta:
         model = WorkProgram
