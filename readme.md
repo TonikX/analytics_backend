@@ -9,6 +9,16 @@
 DEBUG=True
 DATABASE_URL=postgres://postgres:ПАРОЛЬ@db:5432/analytics_db
 SECRET_KEY=СЕКРЕТНЫЙ_КЛЮЧ_ДЖАНГО
+ISU_CLIENT_ID=''
+ISU_CLIENT_SECRET=''
+ISU_REDIRECT_URI=''
+BARS_LOGIN=''
+BARS_PASSWORD=''
+```
+В папке /application/onlinecourse создать файл .env. Пример:
+```
+CERT=''
+KEY=''
 ```
 
 ### Запуск версии для разработки

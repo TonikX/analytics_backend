@@ -240,6 +240,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                 }
 
                 {isCanEdit && <CreateModal />}
+
                 <DescriptionModal />
             </div>
         );
