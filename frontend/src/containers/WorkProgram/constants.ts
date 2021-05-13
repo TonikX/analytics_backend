@@ -73,7 +73,7 @@ export const workProgramStatusesRussian: any = {
 
 export const IntermediateCertificationTypes: any = {
     [IntermediateCertificationEnum.EXAM]: 'Экзамен',
-    [IntermediateCertificationEnum.DIF_CREDIT]: 'Дифференцируемый зачет',
+    [IntermediateCertificationEnum.DIF_CREDIT]: 'Дифференцированный зачет',
     [IntermediateCertificationEnum.CREDIT]: 'Зачет',
     [IntermediateCertificationEnum.COURSE_WORK]: 'Курсовая работа',
 }

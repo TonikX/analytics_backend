@@ -31,8 +31,6 @@ import {EducationalPlanFields} from "../EducationalPlan/enum";
 import {IndividualEducationalPlanFields} from './enum';
 
 import {appRouter} from "../../service/router-service";
-
-import {getUserFullName} from "../../common/utils";
 import {IndividualEducationalPlansProps} from './types';
 
 import connect from './IndividualEducationalPlans.connect';
@@ -83,14 +81,6 @@ class IndividualEducationalPlans extends React.Component<IndividualEducationalPl
 
     changeSorting = (field: string) => (mode: SortingType)=> {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getIndividualEducationalPlans();
-    }
-
-    changeShowOnlyMy = () => {
-        const {showOnlyMy} = this.props;
-
-        this.props.actions.showOnlyMy(!showOnlyMy);
-
         this.props.actions.getIndividualEducationalPlans();
     }
 
@@ -145,12 +135,6 @@ class IndividualEducationalPlans extends React.Component<IndividualEducationalPl
                                                        mode={sortingField === IndividualEducationalPlanFields.YEAR ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell>
-                                        Владелец
-                                        <SortingButton changeMode={this.changeSorting(IndividualEducationalPlanFields.YEAR)}
-                                                       mode={sortingField === IndividualEducationalPlanFields.YEAR ? sortingMode : ''}
-                                        />
-                                    </TableCell>
                                     {canEdit && <TableCell />}
                                 </TableRow>
                             </TableHead>
@@ -179,9 +163,6 @@ class IndividualEducationalPlans extends React.Component<IndividualEducationalPl
                                             </TableCell>
                                             <TableCell>
                                                 {academicPlan[IndividualEducationalPlanFields.YEAR]}
-                                            </TableCell>
-                                            <TableCell>
-                                                {getUserFullName(IndividualEducationalPlans[IndividualEducationalPlanFields.USER])}
                                             </TableCell>
                                             {canEdit &&
                                                 <TableCell>

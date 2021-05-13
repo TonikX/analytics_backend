@@ -41,14 +41,18 @@ import {WorkProgramGeneralFields} from '../WorkProgram/enum';
 import {appRouter} from "../../service/router-service";
 import {specialization} from "../WorkProgram/constants";
 import {FULL_DATE_FORMAT} from "../../common/utils";
+import Filters from "./Filters";
 
 import connect from './WorkProgramList.connect';
 import styles from './WorkProgramList.styles';
 
+import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
+
 class WorkProgramList extends React.Component<WorkProgramListProps> {
     state = {
         deleteConfirmId: null,
-        anchorsEl: {}
+        duplicateConfirmId: null,
+        anchorsEl: {},
     }
 
     componentDidMount() {
@@ -65,10 +69,23 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         });
     }
 
+    handleClickDuplicate = (id: number) => () => {
+        this.setState({
+            duplicateConfirmId: id
+        });
+    }
+
     handleConfirmDeleteDialog = () => {
         const {deleteConfirmId} = this.state;
 
         this.props.actions.deleteWorkProgram(deleteConfirmId);
+        this.closeConfirmDeleteDialog();
+    }
+
+    handleConfirmDuplicateDialog = () => {
+        const {duplicateConfirmId} = this.state;
+
+        this.props.workProgramActions.cloneWorkProgram(duplicateConfirmId);
         this.closeConfirmDeleteDialog();
     }
 
@@ -78,12 +95,14 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         });
     }
 
-    handleCreate = () => {
-        this.props.actions.openDialog();
+    closeConfirmDuplicateDialog = () => {
+        this.setState({
+            duplicateConfirmId: null
+        });
     }
 
-    handleClickCopy = (id: number) => () => {
-        this.props.workProgramActions.cloneWorkProgram(id);
+    handleCreate = () => {
+        this.props.actions.openDialog();
     }
 
     handleChangeSearchQuery = (event: React.ChangeEvent) => {
@@ -120,9 +139,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
 
     render() {
         const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode} = this.props;
-        const {deleteConfirmId} = this.state;
-
-        const {anchorsEl} = this.state;
+        const {deleteConfirmId, duplicateConfirmId, anchorsEl} = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -140,6 +157,8 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                onChange={this.handleChangeSearchQuery}
                     />
                 </Typography>
+
+                <CustomizeExpansionPanel label="Фильтрация" details={<Filters />}/>
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>
@@ -232,7 +251,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                                         paper: classes.menuPaper
                                                     }}
                                                 >
-                                                    <MenuItem onClick={this.handleClickCopy(workProgram[WorkProgramGeneralFields.ID])}>
+                                                    <MenuItem onClick={this.handleClickDuplicate(workProgram[WorkProgramGeneralFields.ID])}>
                                                         <CopyIcon className={classes.menuIcon}/>
                                                         Клонировать
                                                     </MenuItem>
@@ -285,6 +304,14 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                isOpen={Boolean(deleteConfirmId)}
                                dialogTitle={'Удалить учебную программу'}
                                confirmButtonText={'Удалить'}
+                />
+
+                <ConfirmDialog onConfirm={this.handleConfirmDuplicateDialog}
+                               onDismiss={this.closeConfirmDuplicateDialog}
+                               confirmText={'Клонируя рабочую программу, вы получите копию этой программы, которая не будет включена ни в один учебный план. Вы уверены, что хотите клонировать программу?'}
+                               isOpen={Boolean(duplicateConfirmId)}
+                               dialogTitle={'Клонировать учебную программу'}
+                               confirmButtonText={'Клонировать'}
                 />
 
                 <CreateModal />

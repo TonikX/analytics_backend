@@ -11,6 +11,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 from collections import OrderedDict
 from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgramChangeInDisciplineBlockModule,\
     DisciplineBlockModuleInDisciplineBlock, ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
@@ -24,7 +25,13 @@ from ..folders_ans_statistic.models import IndividualImplementationAcademicPlanI
 class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
     queryset = IndividualImplementationAcademicPlan.objects.all()
     serializer_class = IndividualImplementationAcademicPlanSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+    filterset_fields = ['implementation_of_academic_plan__academic_plan__educational_profile',
+                        'implementation_of_academic_plan__field_of_study__title',
+                        'implementation_of_academic_plan__field_of_study__number',
+                        'implementation_of_academic_plan__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
+                        'implementation_of_academic_plan__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                        ]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -71,25 +78,15 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
 
 
                     if change_block['change_type'] == "Facultativ":
-                        i = 0
-                        delete = []
-                        for work_program in change_block['work_program']:
-                            try:
-                                if work_program['id'] != \
-                                        WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects. \
-                                                get(individual_implementation_of_academic_plan = newdata['id'],
-                                                    work_program_change_in_discipline_block_module = change_block['id']).work_program.id:
-                                    delete.append(i)
-
-                            except:
-                                pass
-                            i +=1
-                        a = 0
-                        for i in delete:
-                            print(i)
-                            del change_block['work_program'][i-a]
-                            a +=1
-
+                        try:
+                            if change_block['id'] == \
+                                    ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule.objects. \
+                                            get(individual_implementation_of_academic_plan = newdata['id'],
+                                                work_program_change_in_discipline_block_module = change_block['id']).work_program_change_in_discipline_block_module.id:
+                                #delete.append(i)
+                                change_block.update({"changed": True})
+                        except:
+                            change_block.update({"changed": False})
 
 
                 if module['type'] == "specialization_module":

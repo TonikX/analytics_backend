@@ -11,6 +11,8 @@ import MenuIcon from '@material-ui/icons/MenuOutlined';
 import CloseIcon from '@material-ui/icons/CloseOutlined';
 import BookmarksIcon from '@material-ui/icons/BookmarksOutlined';
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
+import NotificationsIcon from '@material-ui/icons/NotificationsNone';
+import TrajectoryIcon from '@material-ui/icons/SchoolOutlined';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Tooltip from "@material-ui/core/Tooltip";
@@ -87,6 +89,26 @@ class Header extends React.PureComponent<HeaderProps>{
                     </Typography>
                     {isAuth &&
                         <div className={classes.rightSide}>
+                            <Tooltip title="Индивидуальные учебные планы">
+                                <Link to={appRouter.getIndividualEducationalPlansRoute()}
+                                      className={classes.link}
+                                >
+                                    <IconButton aria-haspopup="true">
+                                        <TrajectoryIcon className={classes.bookmarkIcon} />
+                                    </IconButton>
+                                </Link>
+                            </Tooltip>
+
+                            <Tooltip title="Уведомления">
+                                <Link to={appRouter.getNotificationsRoute()}
+                                      className={classes.link}
+                                >
+                                    <IconButton aria-haspopup="true">
+                                        <NotificationsIcon className={classes.bookmarkIcon} />
+                                    </IconButton>
+                                </Link>
+                            </Tooltip>
+
                             <Tooltip title="Закладки">
                                 <Link to={appRouter.getFoldersRoute()}
                                       className={classes.link}

@@ -42,13 +42,18 @@ import {appRouter} from "../../service/router-service";
 
 import {EducationalPlanInDirectionProps, EducationalPlanInDirectionType} from './types';
 
+import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
+import Filters from "./Filters";
+
 import connect from './EducationPlanInDirection.connect';
 import styles from './EducationPlanInDirection.styles';
+import {specializationObject} from "../WorkProgram/constants";
+
 
 class EducationPlanInDirection extends React.Component<EducationalPlanInDirectionProps> {
     state = {
         deleteConfirmId: null,
-        anchorsEl: {}
+        anchorsEl: {},
     }
 
     componentDidMount() {
@@ -140,11 +145,19 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                     />
                 </Typography>
 
+                <CustomizeExpansionPanel label="Фильтрация" details={<Filters />}/>
+
                 <Scrollbars>
                     <div className={classes.tableWrap}>
                         <Table stickyHeader size='small'>
                             <TableHead className={classes.header}>
                                 <TableRow>
+                                    <TableCell>
+                                        Номер
+                                        <SortingButton changeMode={this.changeSorting(DirectionFields.NUMBER)}
+                                                       mode={sortingField === DirectionFields.NUMBER ? sortingMode : ''}
+                                        />
+                                    </TableCell>
                                     <TableCell>
                                         Направление
                                         <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.DIRECTION)}
@@ -152,15 +165,15 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        Номер направления
-                                        <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.NUMBER)}
-                                                       mode={sortingField === EducationPlanInDirectionFields.NUMBER ? sortingMode : ''}
+                                        Квалификация
+                                        <SortingButton changeMode={this.changeSorting(DirectionFields.QUALIFICATION)}
+                                                       mode={sortingField === DirectionFields.QUALIFICATION ? sortingMode : ''}
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        Учебный план
-                                        <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.EDUCATION_PLAN)}
-                                                       mode={sortingField === EducationPlanInDirectionFields.EDUCATION_PLAN ? sortingMode : ''}
+                                        Образовательная программа
+                                        <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.TITLE)}
+                                                       mode={sortingField === EducationPlanInDirectionFields.TITLE ? sortingMode : ''}
                                         />
                                     </TableCell>
                                     <TableCell>
@@ -168,9 +181,6 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                         <SortingButton changeMode={this.changeSorting(EducationPlanInDirectionFields.YEAR)}
                                                        mode={sortingField === EducationPlanInDirectionFields.YEAR ? sortingMode : ''}
                                         />
-                                    </TableCell>
-                                    <TableCell>
-                                        Реализатор
                                     </TableCell>
                                     {canEdit && <TableCell />}
                                 </TableRow>
@@ -181,24 +191,19 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                               className={classNames({[classes.bigRow]: !canEdit})}
                                     >
                                         <TableCell>
-                                            {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.TITLE]}
+                                            {get(educationalPlanInDirection, [EducationPlanInDirectionFields.DIRECTION, 0, DirectionFields.NUMBER], '')}
                                         </TableCell>
                                         <TableCell>
-                                            {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.NUMBER]}
+                                            {get(educationalPlanInDirection, [EducationPlanInDirectionFields.DIRECTION, 0, DirectionFields.TITLE], '')}
                                         </TableCell>
                                         <TableCell>
-                                            <Link to={appRouter.getPlanDetailLink(educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.ID])}
-                                                  target="_blank"
-                                                  className={classes.link}
-                                            >
-                                                {educationalPlanInDirection[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]}
-                                            </Link>
+                                            {specializationObject[get(educationalPlanInDirection, [EducationPlanInDirectionFields.DIRECTION, 0, DirectionFields.QUALIFICATION], '')]}
+                                        </TableCell>
+                                        <TableCell>
+                                            {educationalPlanInDirection[EducationPlanInDirectionFields.TITLE]}
                                         </TableCell>
                                         <TableCell>
                                             {educationalPlanInDirection[EducationPlanInDirectionFields.YEAR]}
-                                        </TableCell>
-                                        <TableCell>
-                                            {educationalPlanInDirection[EducationPlanInDirectionFields.DIRECTION][DirectionFields.FACULTY]}
                                         </TableCell>
                                         {canEdit &&
                                             <TableCell>
@@ -240,12 +245,12 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                                     <DeleteIcon className={classes.menuIcon} />
                                                     Удалить
                                                   </MenuItem>
-                                                  <MenuItem className={classes.menuLinkItem}
-                                                            onClick={this.handleClickEdit(educationalPlanInDirection)}
-                                                  >
-                                                    <EditIcon className={classes.menuIcon} />
-                                                    Изменить
-                                                  </MenuItem>
+                                                  {/*<MenuItem className={classes.menuLinkItem}*/}
+                                                  {/*          onClick={this.handleClickEdit(educationalPlanInDirection)}*/}
+                                                  {/*>*/}
+                                                  {/*  <EditIcon className={classes.menuIcon} />*/}
+                                                  {/*  Изменить*/}
+                                                  {/*</MenuItem>*/}
                                                 </Menu>
                                               </div>
                                             </TableCell>
@@ -268,16 +273,16 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                                      onChangeRowsPerPage={()=>{}}
                     />
 
-                    {canEdit &&
-                        <Fab color="secondary"
-                             classes={{
-                                 root: classes.addIcon
-                             }}
-                             onClick={this.handleCreate}
-                        >
-                            <AddIcon/>
-                        </Fab>
-                    }
+                    {/*{canEdit &&*/}
+                    {/*    <Fab color="secondary"*/}
+                    {/*         classes={{*/}
+                    {/*             root: classes.addIcon*/}
+                    {/*         }}*/}
+                    {/*         onClick={this.handleCreate}*/}
+                    {/*    >*/}
+                    {/*        <AddIcon/>*/}
+                    {/*    </Fab>*/}
+                    {/*}*/}
                 </div>
 
                 {canEdit && <CourseCreateModal />}

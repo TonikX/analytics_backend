@@ -7,7 +7,7 @@ import educationalPlanActions from './actions';
 import Service from './service';
 
 import {fetchingTypes} from "./enum";
-import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {getCurrentPage, getFilters, getSearchQuery, getSortingField, getSortingMode} from "./getters";
 import {appRouter} from "../../service/router-service";
 
 const service = new Service();
@@ -22,10 +22,11 @@ const getEducationalPlansInDirection = createLogic({
         const searchQuery = getSearchQuery(state);
         const sortingField = getSortingField(state);
         const sortingMode = getSortingMode(state);
+        const filters = getFilters(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EDUCATION_PLANS_IN_DIRECTION}));
 
-        service.getEducationalPlansInDirection(currentPage, searchQuery, sortingField, sortingMode)
+        service.getEducationalPlansInDirection(currentPage, searchQuery, sortingField, sortingMode, filters)
             .then((res) => {
                 const courses = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));

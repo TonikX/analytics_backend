@@ -53,11 +53,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             this.setState({
                 educationalPlan: {
                     [EducationalPlanFields.ID]: get(educationalPlan, EducationalPlanFields.ID),
-                    [EducationalPlanFields.PROFILE]: get(educationalPlan, EducationalPlanFields.PROFILE, ''),
-                    [EducationalPlanFields.QUALIFICATION]: get(educationalPlan, EducationalPlanFields.QUALIFICATION, ''),
+                    [EducationalPlanFields.PROFILE]: get(educationalPlan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.TITLE], ''),
+                    [EducationalPlanFields.QUALIFICATION]: get(educationalPlan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.QUALIFICATION], ''),
                     [EducationalPlanFields.EDUCATION_FORM]: get(educationalPlan, EducationalPlanFields.EDUCATION_FORM, 'internal'),
-                    [EducationalPlanFields.YEAR]: get(educationalPlan, EducationalPlanFields.YEAR, '2020/2021'),
-                    [EducationalPlanFields.NUMBER]: get(educationalPlan, EducationalPlanFields.NUMBER, ''),
+                    [EducationalPlanFields.YEAR]: get(educationalPlan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.QUALIFICATION], '2020/2021'),
+                    [EducationalPlanFields.NUMBER]: get(educationalPlan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.NUMBER], ''),
                     [EducationalPlanFields.APPROVAL_DATE]: get(educationalPlan, EducationalPlanFields.APPROVAL_DATE, moment().format()),
                 }
             });

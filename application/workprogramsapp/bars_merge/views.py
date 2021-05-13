@@ -5,11 +5,12 @@ from rest_framework.response import Response
 from workprogramsapp.bars_merge.bars_api_getter import get_educational_program_main, get_disciplines, \
     get_one_educational_program, get_list_of_regular_checkpoints, get_list_of_final_checkpoints, post_checkpoint_plan
 from workprogramsapp.bars_merge.checkpoint_template import generate_checkpoint, get_checkpoints_type, \
-    generate_discipline, generate_checkpoint_plan
+    generate_discipline, generate_checkpoint_plan, generate_fos
 from workprogramsapp.bars_merge.models import BarsEPAssociate, BarsWorkProgramsAssociate
 from workprogramsapp.bars_merge.serializers import BarsEPAssociateSerializer, BarsWorkProgramsAssociateSerializer
 from workprogramsapp.models import WorkProgram, FieldOfStudy, ImplementationAcademicPlan, EvaluationTool, \
-    DisciplineSection, WorkProgramChangeInDisciplineBlockModule, WorkProgramInFieldOfStudy, СertificationEvaluationTool
+    DisciplineSection, WorkProgramChangeInDisciplineBlockModule, WorkProgramInFieldOfStudy, СertificationEvaluationTool, \
+    AcademicPlan
 
 
 @api_view(['POST'])
@@ -58,25 +59,44 @@ def FindSimilarWP(request):
 @permission_classes((IsAdminUser,))
 def CreateCheckPoint(request):
     # TODO: УБРАТЬ ХАРДКОДИНГ
-    work_program_id = 67  # 2647  request.data.get('work_program_id')
-    bars_id = 26295  # 26295 27328  Тут должен быть код, который достает айдишник из барса по присланной РПД
-    types_checkpoints = get_list_of_regular_checkpoints()
+    work_program_id = request.data.get('work_program_id')
+    field_of_study_id = request.data.get('field_of_study_id')
+    term = request.data.get('term')
 
-    """Переменные для формирования запроса к БАРС"""
+    # Переменные для формирования запроса к БАРС
     point_distribution = 0
-    term = 2  # АБСОЛЮТНЫЙ СЕМЕСТР /request.data.get('term')
-    educational_bars = get_one_educational_program(bars_id, term)  # это должно быть в отдельном эндпоинте
+    bars_id = WorkProgram.objects.get(
+        id=work_program_id).wp_isu_id
+    types_checkpoints = get_list_of_regular_checkpoints()  # Список оценочных средств в БАРСе
     list_regular = []
     has_course_project = False
     course_project = None
     final_checkpoint = None
     discipline = None
     extra_points = True if WorkProgram.objects.get(id=work_program_id).extra_points else False
+    field_of_study = FieldOfStudy.objects.get(id=field_of_study_id)
 
-    wp_in_change = WorkProgramChangeInDisciplineBlockModule.objects.get(
-        discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__number=
-        educational_bars[0]["code"][:educational_bars[0]["code"].rfind(".")],
-        work_program=work_program_id)
+    # Получение дисцплины из направления
+    wp_in_change = WorkProgramChangeInDisciplineBlockModule.objects.filter(work_program=work_program_id,
+                    discipline_block_module__descipline_block__academic_plan__field_of_study=field_of_study).distinct()
+    wp_in_change = wp_in_change[0]
+
+    """
+    Пока названия имен в Конструкторе РПД не совпадают с именами в БАРСе этот код не имеет смысла, 
+    заменяется тем что ниже
+    
+    educational_bars_id = WorkProgramInFieldOfStudy.objects.filter(
+        work_program_change_in_discipline_block_module=wp_in_change)[0].id_str_up
+    """
+
+    # Поиск информции об образовательной программе в барсе, получение ее таблицы
+    programs = []
+    bars_education = get_one_educational_program(bars_id, term)
+    for educ in bars_education:
+        if educ["code"] == field_of_study.number + ".":
+            programs = educ
+
+    # Поиск относительного семестра из переданного абсолютного
     semesters = str(wp_in_change.credit_units).split(",")
     needed_semester = -1
     count = 1
@@ -86,9 +106,10 @@ def CreateCheckPoint(request):
                 needed_semester = count
                 break
             count += 1
+
+    # Поиск оценочных средства для семетра, а также нахождение БАРСовских типов оценочных срелств
     evaluation_tools = EvaluationTool.objects.filter(evaluation_tools__in=DisciplineSection.objects.filter(
         work_program__id=work_program_id)).distinct().filter(semester=needed_semester)
-
     for eva in evaluation_tools:
         for el in types_checkpoints:
             if el["name"] == eva.type:
@@ -106,9 +127,11 @@ def CreateCheckPoint(request):
             point_distribution = 100 - cerf.max
             final_checkpoint = generate_checkpoint(name=cerf.name, min=cerf.min, max=cerf.max, week=None,
                                                    type_id=get_checkpoints_type(int(cerf.type)), key=True)
+
     discipline = generate_discipline(bars_id=bars_id, name=WorkProgram.objects.get(id=work_program_id).title, term=term,
                                      course_project=has_course_project)
-    checkpoint_plan = generate_checkpoint_plan(regular_checkpoint=list_regular, programs=educational_bars,
+    print(programs)
+    checkpoint_plan = generate_checkpoint_plan(regular_checkpoint=list_regular, programs=programs,
                                                discipline=discipline,
                                                final_checkpoint=final_checkpoint,
                                                course_project_checkpoint=course_project,

@@ -36,6 +36,7 @@ import {IndicatorsFields} from "../../Indicators/enum";
 import {UserFields} from "../../../layout/enum";
 import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
 import {ProfessionalCompetences} from "./ProfessionalCompetences/ProfessionalCompetences";
+import InputLabel from '@material-ui/core/InputLabel'
 
 class Characteristic extends React.Component<CharacteristicProps> {
     state = {
@@ -68,12 +69,13 @@ class Characteristic extends React.Component<CharacteristicProps> {
         })
     }
 
-    handleChangeSKEEditorField = (field: string) => (value: string) => {
+    handleChangeSKEEditorField = (field: string) => (event: any) => {
+        const data: string = event.editor.getData()
         this.props.actions.changeEducationalProgramCharacteristic({
             id: this.getEducationalProgramCharacteristicId(),
             educationalProgramId: this.getEducationalProgramId(),
             payload: {
-                [field]: value
+                [field]: data
             }
         })
     }
@@ -213,11 +215,14 @@ class Characteristic extends React.Component<CharacteristicProps> {
                     />
                 </>
             case 1:
-                return <CKEditor label={"Аннотация"}
-                                 value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
-                                 onChange={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
-                                 toolbarContainerId="toolbar-container"
-                />;
+                return <div className={classes.editorWrap}>
+                            <InputLabel className={classes.label}>Аннотация</InputLabel>
+                            <CKEditor 
+                                value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
+                                onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
+                                toolbarContainerId="toolbar-container"
+                            />
+                        </div>
             case 2:
                 return <>
                     <Typography className={classes.label}>Область профессиональной деятельности</Typography>
@@ -283,24 +288,33 @@ class Characteristic extends React.Component<CharacteristicProps> {
                         <Button variant="outlined" style={{marginLeft: 'auto', marginTop: '20px'}}>Добавить</Button>
                     </div>
                     <br/> <br/>
-                    <CKEditor label={"Сферы профессиональной деятельности"}
-                              value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES, '')}
-                              onChange={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES)}
-                              toolbarContainerId="toolbar-container2"
-                    />
+                    <div className={classes.editorWrap}>
+                        <InputLabel className={classes.label}>Сферы профессиональной деятельности</InputLabel>
+                        <CKEditor 
+                            value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES, '')}
+                            onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES)}
+                            toolbarContainerId="toolbar-container2"
+                        />
+                    </div>
                 </>
             case 3:
                 return <>
-                    <CKEditor label={"Объекты профессиональной деятельности"}
-                              value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY, '')}
-                              onChange={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY)}
-                              toolbarContainerId="toolbar-container1"
-                    />
-                    <CKEditor label={"Задачи профессиональной деятельности"}
-                              value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.TASKS_OF_ACTIVITY, '')}
-                              onChange={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.TASKS_OF_ACTIVITY)}
-                              toolbarContainerId="toolbar-container3"
-                    />
+                        <div className={classes.editorWrap}>
+                            <InputLabel className={classes.label}>Объекты профессиональной деятельности</InputLabel>
+                            <CKEditor 
+                                value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY, '')}
+                                onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY)}
+                                toolbarContainerId="toolbar-container1"
+                            />
+                        </div>
+                        <div className={classes.editorWrap}>
+                            <InputLabel className={classes.label}>Задачи профессиональной деятельности</InputLabel>
+                            <CKEditor 
+                                value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.TASKS_OF_ACTIVITY, '')}
+                                onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.TASKS_OF_ACTIVITY)}
+                                toolbarContainerId="toolbar-container3"
+                            />
+                        </div>
                 </>;
 
             case 4:
@@ -319,11 +333,14 @@ class Characteristic extends React.Component<CharacteristicProps> {
             case 7:
                 return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PROFESSIONAL_COMPETENCES, [])} />;
             case 8:
-                return <CKEditor label={"Необходимый преподавательский состав"}
-                                 value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PPS, '')}
-                                 onChange={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.PPS)}
-                                 toolbarContainerId="toolbar-container"
-                />;
+                return <div className={classes.editorWrap}>
+                        <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
+                        <CKEditor 
+                            value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PPS, '')}
+                            onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.PPS)}
+                            toolbarContainerId="toolbar-container"
+                        />
+                </div>
             case 9:
                 return <>
                     <UserSelector selectorLabel='Разработчики'

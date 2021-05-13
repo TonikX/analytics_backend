@@ -13,7 +13,6 @@ const mapStateToProps = (state:rootState) => {
     return {
         evaluationToolsList: getWorkProgramEvaluationToolsList(state),
         isCanEdit: isCanEdit(state),
-        isStudent: isStudent(state),
         extraPoints: getWorkProgramField(state, WorkProgramGeneralFields.EXTRA_POINTS),
     };
 };

@@ -12,7 +12,6 @@ const mapStateToProps = (state:rootState) => {
     return {
         intermediateCertificationList: getWorkProgramIntermediateCertificationList(state),
         isCanEdit: isCanEdit(state),
-        isStudent: isStudent(state),
         hasCourseProject: getWorkProgramField(state, 'have_course_project'),
         hasDiffPass: getWorkProgramField(state, 'have_course_project'),
         hasPass: getWorkProgramField(state, 'have_pass'),

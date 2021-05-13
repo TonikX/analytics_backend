@@ -14,7 +14,7 @@ import {getSubjectAreaListForSelect} from "../../SubjectArea/getters";
 const mapStateToProps = (state: rootState) => {
     return {
         isOpen: isOpenDialog(state),
-        trainingModule: getDialogData(state),
+        trainingEntity: getDialogData(state),
         subjectAreaList: getSubjectAreaListForSelect(state),
     };
 };

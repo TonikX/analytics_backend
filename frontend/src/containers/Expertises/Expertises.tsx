@@ -26,12 +26,15 @@ import {ExpertisesFields} from "./enum";
 import {FULL_DATE_FORMAT} from "../../common/utils";
 
 import {WorkProgramGeneralFields} from "../WorkProgram/enum";
+import {WorkProgramStatusType} from "../WorkProgram/types";
 import {workProgramStatusesColors, workProgramStatusesRussian, specializationObject} from "../WorkProgram/constants";
 
 import {appRouter} from "../../service/router-service";
 
 import connect from './Expertises.connect';
 import styles from './Expertises.styles';
+import TableFilter from "../../components/TableFilter/TableFilter";
+import {relations} from "../EntitityToEntitity/constants";
 
 class Expertises extends React.Component<ExpertisesProps> {
     state = {
@@ -70,8 +73,22 @@ class Expertises extends React.Component<ExpertisesProps> {
         this.setState({anchorsEl: {}});
     };
 
+    handleSelectStatus = (status: WorkProgramStatusType) => {
+        if (this.props.selectedStatus === status){
+            this.props.actions.changeSelectedStatus('')
+        } else {
+            this.props.actions.changeSelectedStatus(status)
+        }
+        this.props.actions.getExpertisesList()
+    }
+
+    handleSelectQualification = (qualification: Array<string>) => {
+        this.props.actions.changeSelectedQualification(qualification[0])
+        this.props.actions.getExpertisesList()
+    }
+
     render() {
-        const {classes, expertisesList, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, expertisesList, allCount, currentPage, sortingField, sortingMode, selectedStatus} = this.props;
 
         return (
             <Paper className={classes.root}>
@@ -82,8 +99,12 @@ class Expertises extends React.Component<ExpertisesProps> {
                 </div>
 
                 <div className={classes.statuses}>
-                    {Object.keys(workProgramStatusesRussian).map(key =>
-                        <WorkProgramStatus status={key} key={key} />
+                    {Object.keys(workProgramStatusesRussian).map(status =>
+                        <WorkProgramStatus status={status}
+                                           key={status}
+                                           onClick={this.handleSelectStatus}
+                                           disabledStyle={selectedStatus !== '' && selectedStatus !== status}
+                        />
                     )}
                 </div>
 
@@ -98,8 +119,9 @@ class Expertises extends React.Component<ExpertisesProps> {
                                                        mode={sortingField === ExpertisesFields.WORK_PROGRAM ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className={classes.qualificationCell}>
                                         Уровень
+                                        <TableFilter items={specializationObject} handleSelect={this.handleSelectQualification} />
                                     </TableCell>
                                     <TableCell>
                                         Авторы

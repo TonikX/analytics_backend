@@ -52,6 +52,7 @@ import StructuralUnit from './containers/StructuralUnits/StructuralUnit';
 import Layout from "./layout";
 
 import RouterService from './service/router-service';
+import Notifications from "./containers/Profile/Notifications";
 
 const routerService = RouterService.factory();
 
@@ -60,7 +61,6 @@ export default () => (
         <Layout>
             <Switch>
             <Redirect exact from="/" to={routerService.getEducationPlanRoute()} />
-
             <AuthRoute path={routerService.getCoursesRoute()}>
                 <Courses />
             </AuthRoute>
@@ -101,6 +101,9 @@ export default () => (
             </AuthRoute>
             <AuthRoute path={routerService.getIndividualEducationalPlansRoute()}>
                 <IndividualEducationalPlans />
+            </AuthRoute>
+            <AuthRoute path={routerService.getNotificationsRoute()}>
+                <Notifications />
             </AuthRoute>
             <AuthRoute path={routerService.getSelectEducationalProgramRoute()}>
                 <SelectEducationalProgram />

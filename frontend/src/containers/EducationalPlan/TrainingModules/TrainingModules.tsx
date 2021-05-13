@@ -22,6 +22,7 @@ import SortingButton from "../../../components/SortingButton";
 import Search from "../../../components/Search";
 import {SortingType} from "../../../components/SortingButton/types";
 import TableSettingsMenu from "../../../components/TableSettingsMenu/TableSettingsMenu";
+import CustomizeExpansionPanel from "../../../components/CustomizeExpansionPanel";
 
 import {DirectionFields} from "../../Direction/enum";
 import {DirectionType} from "../../Direction/types";
@@ -37,10 +38,12 @@ import {typesListObject} from './constants';
 import connect from './TrainingModules.connect';
 import styles from './TrainingModules.styles';
 
+import Filters from "./Filters";
+
 class TrainingModules extends React.Component<TrainingModulesProps> {
     state = {
         anchorsEl: {},
-        deleteConfirmId: null
+        deleteConfirmId: null,
     }
 
     componentDidMount() {
@@ -121,6 +124,8 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
 
                     <Search handleChangeSearchQuery={this.handleChangeSearchQuery}/>
                 </div>
+
+                <CustomizeExpansionPanel label="Фильтрация" details={<Filters />}/>
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>

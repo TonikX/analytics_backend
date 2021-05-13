@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django_filters.rest_framework import DjangoFilterBackend
 
 from dataprocessing.models import Items
 from .expertise.models import Expertise, UserExpertise
@@ -32,7 +33,7 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
     DisciplineBlockModuleDetailSerializer
-from .serializers import FieldOfStudySerializer
+from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import BibliographicReferenceSerializer, \
@@ -42,7 +43,8 @@ from .serializers import BibliographicReferenceSerializer, \
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer
-from .workprogram_additions.models import StructuralUnit
+from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
+from django_filters.rest_framework import DjangoFilterBackend
 
 """"Удалены старые views с использованием джанго рендеринга"""
 """Блок реализации API"""
@@ -61,8 +63,12 @@ from .workprogram_additions.models import StructuralUnit
 class WorkProgramsListApi(generics.ListAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['discipline_code', 'title']
+    filterset_fields = ['language',
+                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__title',
+                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__number',
+                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile', 'qualification']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -439,6 +445,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
     serializer_class = WorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+
     def get(self, request, **kwargs):
         queryset = WorkProgram.objects.filter(pk=self.kwargs['pk'])
         serializer = WorkProgramSerializer(queryset, many=True)
@@ -448,6 +455,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         try:
             newdata.update(
                 {"expertise_status": Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status})
+            newdata.update(
+                {"use_chat_with_id_expertise": Expertise.objects.get(work_program__id=self.kwargs['pk']).pk})
             if Expertise.objects.get(
                     work_program__id=self.kwargs['pk']).expertise_status == "WK" and (WorkProgram.objects.get(
                 pk=self.kwargs['pk']).owner == request.user or WorkProgram.objects.filter(pk=self.kwargs['pk'],
@@ -461,9 +470,11 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 newdata.update({"can_edit": True, "expertise_status": False})
             else:
                 newdata.update({"can_edit": False, "expertise_status": False})
+            newdata.update({"use_chat_with_id_expertise": None})
         try:
             ue = UserExpertise.objects.get(expert=request.user, expertise__work_program=self.kwargs['pk'])
-            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX":
+            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX" or \
+                    Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK":
                 newdata.update({"can_comment": True})
                 newdata.update({"user_expertise_id": ue.id})
             else:
@@ -476,6 +487,9 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                     newdata.update({"your_approve_status": "RE"})
             else:
                 newdata.update({"can_approve": True})
+            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK" or \
+                    Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "AC":
+                newdata.update({"can_approve": False})
         except:
             newdata.update({"can_comment": False})
             newdata.update({"can_approve": False})
@@ -776,7 +790,7 @@ class FieldOfStudyListCreateView(generics.ListCreateAPIView):
         Отображение списка ОП(направлений), создание образовательной программы (напрвления)
     """
     queryset = FieldOfStudy.objects.all()
-    serializer_class = FieldOfStudySerializer
+    serializer_class = FieldOfStudyListSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'number', 'faculty', 'educational_profile']
     permission_classes = [IsRpdDeveloperOrReadOnly]
@@ -1175,7 +1189,6 @@ class FileUploadAPIView(APIView):
             try:
                 #print('clone', clone)
                 print('---Новая строка---')
-                #TODO: Спросить по катавасию с полями в филд оф стадис
                 if data['DEGREE'][i].strip() == 'Академический бакалавр':
                     qualification = 'bachelor'
                 elif data['DEGREE'][i].strip() == 'Магистр':
@@ -1529,7 +1542,14 @@ class AcademicPlanListAPIView(generics.ListAPIView):
     serializer_class = AcademicPlanSerializerForList
     queryset = AcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['educational_profile']
+    search_fields = ['academic_plan_in_field_of_study__qualification',
+                     'academic_plan_in_field_of_study__title',
+                     'academic_plan_in_field_of_study__year',
+                     'academic_plan_in_field_of_study__field_of_study__title']
+    ordering_fields = ['academic_plan_in_field_of_study__qualification',
+                       'academic_plan_in_field_of_study__title',
+                       'academic_plan_in_field_of_study__year',
+                       'academic_plan_in_field_of_study__field_of_study__title']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -1537,7 +1557,14 @@ class AcademicPlanListShortAPIView(generics.ListAPIView):
     serializer_class = AcademicPlanShortSerializer
     queryset = AcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['educational_profile']
+    search_fields = ['academic_plan_in_field_of_study__qualification',
+                     'academic_plan_in_field_of_study__title',
+                     'academic_plan_in_field_of_study__year',
+                     'academic_plan_in_field_of_study__field_of_study__title']
+    ordering_fields = ['academic_plan_in_field_of_study__qualification',
+                       'academic_plan_in_field_of_study__title',
+                       'academic_plan_in_field_of_study__year',
+                       'academic_plan_in_field_of_study__field_of_study__title']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -1598,8 +1625,21 @@ class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
 class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
     serializer_class = ImplementationAcademicPlanSerializer
     queryset = ImplementationAcademicPlan.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['academic_plan__number', 'academic_plan__educational_profile', 'year']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+    search_fields = ['academic_plan__educational_profile',
+                     'field_of_study__title',
+                     'field_of_study__number',
+                     'field_of_study__qualification',
+                     'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
+                     'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                     ]
+    filterset_fields = ['academic_plan__educational_profile',
+                        'field_of_study__title',
+                        'field_of_study__number',
+                        'field_of_study__qualification',
+                        'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
+                        'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                        ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -1759,12 +1799,13 @@ def CloneWorkProgramm(request):
     В ответе передается число - айди созданной копии
     """
     prog_id = request.data.get('program_id')
-    try:
-        clone_program = WorkProgram.clone_programm(prog_id)
-        serializer = WorkProgramSerializer(clone_program)
-        return Response(status=200, data=serializer.data)
-    except:
-        return Response(status=400)
+    clone_program = WorkProgram.clone_programm(prog_id)
+    clone_program.editors.add(request.user)
+    clone_program.owner = request.user
+    clone_program.save()
+
+    serializer = WorkProgramSerializer(clone_program)
+    return Response(status=200, data=serializer.data)
 
 
 @api_view(['POST'])
@@ -1789,7 +1830,8 @@ def UserGroups(request):
     groups_names = []
     for group in request.user.groups.all():
         groups_names.append(group.name)
-    if UserExpertise.objects.filter(expert=request.user):
+    if UserExpertise.objects.filter(expert=request.user) or \
+            UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"]):
         groups_names.append("expertise_member")
     return Response({"groups": groups_names})
 

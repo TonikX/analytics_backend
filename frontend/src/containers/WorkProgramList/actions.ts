@@ -16,11 +16,13 @@ const changeSearchQuery = createAction('WORK_PROGRAM_CHANGE_SEARCH_QUERY');
 const changeCurrentPage = createAction('WORK_PROGRAM_CHANGE_CURRENT_PAGE');
 const changeAllCount = createAction('WORK_PROGRAM_CHANGE_ALL_COUNT');
 const changeSorting = createAction('WORK_PROGRAM_CHANGE_SORTING');
+const changeFiltering = createAction('WORK_PROGRAMS_CHANGE_FILTERING');
 
 const pageDown = createAction('WORK_PROGRAM_LIST_PAGE_DOWN');
 
 const actions: WorkProgramListActions = {
     pageDown,
+    changeFiltering,
     getWorkProgramList,
     setWorkProgramList,
     createNewWorkProgram,

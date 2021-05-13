@@ -5,7 +5,6 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         alignItems: 'center',
         marginRight: '20px',
-        cursor: 'pointer'
     },
     statusPoint: {
         marginRight: '5px',
@@ -14,4 +13,10 @@ export default (theme: Theme) => createStyles({
         borderRadius: '50%',
         background: 'red'
     },
+    cursorPointer: {
+        cursor: 'pointer'
+    },
+    disabledStyle: {
+
+    }
 });

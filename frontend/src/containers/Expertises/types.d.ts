@@ -5,6 +5,8 @@ import {SortingType} from "../../components/SortingButton/types";
 import {WorkProgramGeneralType, WorkProgramStatusType} from "../WorkProgram/types";
 
 export interface ExpertisesActions {
+    changeSelectedStatus: any;
+    changeSelectedQualification: any;
     changeSearchQuery: any;
     getExpertisesList: any;
     setExpertisesList: any;
@@ -36,6 +38,8 @@ export interface expertisesState {
     [fields.SEARCH_QUERY]: string;
     [fields.EXPERTISES_LIST]: Array<ExpertiseType>;
     [fields.EXPERTISE]: ExpertiseType|{};
+    [fields.SELECTED_STATUS]: WorkProgramStatusType|'';
+    [fields.SELECTED_QUALIFICATION]: string;
 }
 
 export interface ExpertisesProps extends WithStyles<typeof styles> {
@@ -46,6 +50,7 @@ export interface ExpertisesProps extends WithStyles<typeof styles> {
     allCount: number;
     sortingField: string;
     sortingMode: SortingType;
+    selectedStatus: WorkProgramStatusType | '';
 }
 
 export type ExpertiseType = {

@@ -38,27 +38,15 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
 
     componentDidUpdate(prevProps: Readonly<TrainingEntitiesCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {trainingEntity} = this.props;
-        const trainingEntityState = this.state.trainingEntity;
 
         if (!shallowEqual(trainingEntity, prevProps.trainingEntity)){
-            if (!get(trainingEntity, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], null) &&
-                get(trainingEntityState, [TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID])){
-                this.setState({
-                    trainingEntity: {
-                        ...trainingEntityState,
-                        [TrainingEntitiesFields.ID]: get(trainingEntity, TrainingEntitiesFields.ID),
-                        [TrainingEntitiesFields.TITLE]: get(trainingEntity, TrainingEntitiesFields.TITLE, ''),
-                    }
-                });
-            } else {
-                this.setState({
-                    trainingEntity: {
-                        [TrainingEntitiesFields.ID]: get(trainingEntity, TrainingEntitiesFields.ID),
-                        [TrainingEntitiesFields.TITLE]: get(trainingEntity, TrainingEntitiesFields.TITLE, ''),
-                        [TrainingEntitiesFields.SUBJECT_AREA]: get(trainingEntity, TrainingEntitiesFields.SUBJECT_AREA, {}),
-                    }
-                });
-            }
+            this.setState({
+                trainingEntity: {
+                    [TrainingEntitiesFields.ID]: get(trainingEntity, TrainingEntitiesFields.ID),
+                    [TrainingEntitiesFields.TITLE]: get(trainingEntity, TrainingEntitiesFields.TITLE, ''),
+                    [TrainingEntitiesFields.SUBJECT_AREA]: get(trainingEntity, TrainingEntitiesFields.SUBJECT_AREA, {}),
+                }
+            });
         }
     }
 

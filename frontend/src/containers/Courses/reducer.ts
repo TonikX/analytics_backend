@@ -15,6 +15,8 @@ export const initialState: coursesState = {
         [filterFields.FILTERING_PLATFORM]: '',
         [filterFields.FILTERING_INSTITUTION]: '',
         [filterFields.FILTERING_LANGUAGE]: '',
+        [filterFields.FILTERING_FIELD_OF_STUDY_TITLE]: '',
+        [filterFields.FILTERING_FIELD_OF_STUDY_NUMBER]: '',
         [filterFields.FILTERING_SEARCH_QUERY]: '',
     },
     [fields.CURRENT_PAGE]: 1,
@@ -26,6 +28,8 @@ export const initialState: coursesState = {
     },
     [fields.PLATFORMS]: [],
     [fields.INSTITUTIONS]: [],
+    [fields.FIELDS_OF_STUDY_NUMBERS]: [],
+    [fields.FIELDS_OF_STUDY_TITLES]: [],
 };
 
 const setCourses = (state: coursesState, {payload}: any): coursesState => ({
@@ -77,15 +81,19 @@ const changeFiltering = (state: coursesState, {payload}: any): coursesState => (
         [filterFields.FILTERING_INSTITUTION]: payload.institution,
         [filterFields.FILTERING_LANGUAGE]: payload.language,
         [filterFields.FILTERING_SEARCH_QUERY]: state[fields.FILTERING][filterFields.FILTERING_SEARCH_QUERY],
+        [filterFields.FILTERING_FIELD_OF_STUDY_NUMBER]: payload.fieldOfStudyNumber,
+        [filterFields.FILTERING_FIELD_OF_STUDY_TITLE]: payload.fieldOfStudyTitle,
     }
 })
 
-const changeFilerSearchQuery = (state: coursesState, {payload}: any): coursesState => ({
+const changeFilterSearchQuery = (state: coursesState, {payload}: any): coursesState => ({
     ...state,
     [fields.FILTERING]: {
         [filterFields.FILTERING_PLATFORM]: state[fields.FILTERING][filterFields.FILTERING_PLATFORM],
         [filterFields.FILTERING_INSTITUTION]: state[fields.FILTERING][filterFields.FILTERING_INSTITUTION],
         [filterFields.FILTERING_LANGUAGE]: state[fields.FILTERING][filterFields.FILTERING_LANGUAGE],
+        [filterFields.FILTERING_FIELD_OF_STUDY_TITLE]: state[fields.FILTERING][filterFields.FILTERING_FIELD_OF_STUDY_TITLE],
+        [filterFields.FILTERING_FIELD_OF_STUDY_NUMBER]: state[fields.FILTERING][filterFields.FILTERING_FIELD_OF_STUDY_NUMBER],
         [filterFields.FILTERING_SEARCH_QUERY]: payload,
     }
 })
@@ -100,6 +108,16 @@ const setInstitutions = (state: coursesState, {payload}: any): coursesState => (
     [fields.INSTITUTIONS]: payload
 })
 
+const setFieldOfStudyTitles = (state: coursesState, {payload}: any): coursesState => ({
+    ...state,
+    [fields.FIELDS_OF_STUDY_TITLES]: payload,
+})
+
+const setFieldOfStudyNumbers = (state: coursesState, {payload}: any): coursesState => ({
+    ...state,
+    [fields.FIELDS_OF_STUDY_NUMBERS]: payload,
+})
+
 export const reducer = createReducer(initialState, {
     [actions.setCourses.type]: setCourses,
     [actions.openDialog.type]: openDialog,
@@ -110,6 +128,8 @@ export const reducer = createReducer(initialState, {
     [actions.changeSorting.type]: changeSorting,
     [actions.setPlatforms.type]: setPlatforms,
     [actions.setInstitutions.type]: setInstitutions,
+    [actions.setFieldOfStudyTitles.type]: setFieldOfStudyTitles,
+    [actions.setFieldOfStudyNumbers.type]: setFieldOfStudyNumbers,
     [actions.changeFiltering.type]: changeFiltering,
-    [actions.changeFilerSearchQuery.type]: changeFilerSearchQuery,
+    [actions.changeFilterSearchQuery.type]: changeFilterSearchQuery,
 });

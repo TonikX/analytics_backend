@@ -24,8 +24,10 @@ const changeSearchQuery = createAction('TRAINING_MODULES_CHANGE_SEARCH_QUERY');
 const changeCurrentPage = createAction('TRAINING_MODULES_CHANGE_CURRENT_PAGE');
 const changeAllCount = createAction('TRAINING_MODULES_CHANGE_ALL_COUNT');
 const changeSorting = createAction('TRAINING_MODULES_CHANGE_SORTING');
+const changeFiltering = createAction('TRAINING_MODULES_CHANGE_FILTERING');
 
 const actions: TrainingModulesActions = {
+    changeFiltering,
     getTrainingModulesList,
     setTrainingModulesList,
     getTrainingModule,

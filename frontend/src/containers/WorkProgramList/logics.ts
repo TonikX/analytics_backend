@@ -7,7 +7,7 @@ import workProgramActions from './actions';
 import Service from './service';
 
 import {fetchingTypes} from "./enum";
-import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {getCurrentPage, getFilters, getSearchQuery, getSortingField, getSortingMode} from "./getters";
 
 const service = new Service();
 
@@ -21,10 +21,11 @@ const getWorkProgramList = createLogic({
         const searchQuery = getSearchQuery(state);
         const sortingField = getSortingField(state);
         const sortingMode = getSortingMode(state);
+        const filters = getFilters(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_WORK_PROGRAM_LIST}));
 
-        service.getWorkPrograms(currentPage, searchQuery, sortingField, sortingMode)
+        service.getWorkPrograms(currentPage, searchQuery, sortingField, sortingMode, filters)
             .then((res) => {
                 const courses = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));

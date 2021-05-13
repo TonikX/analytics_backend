@@ -13,6 +13,7 @@ dbs
 nginx/ssl/data/
 frontend/.env.production
 **/discipline_code/*
+**/upload/*
 
 
 

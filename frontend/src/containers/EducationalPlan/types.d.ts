@@ -50,6 +50,9 @@ export interface EducationalPlanActions {
     setIsTrajectoryRoute: any;
     planTrajectorySetUserData: any;
     planTrajectorySetDirection: any;
+    planTrajectorySelectOptionalWp: any;
+    planTrajectorySelectElectives: any;
+    planTrajectorySelectSpecialization: any;
 }
 
 export interface educationalPlanState {
@@ -61,7 +64,7 @@ export interface educationalPlanState {
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
     [fields.DETAIL_PLAN]: EducationalPlanType|{};
-    [fields.EDUCATIONAL_PLAN_LIST]: Array<EducationalPlanType>;
+    [fields.EDUCATIONAL_PLAN_LIST]: Array<EducationalPlanListType>;
     [fields.EDUCATIONAL_PLAN_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: EducationalPlanType|{};
@@ -102,6 +105,20 @@ export type EducationalPlanType = {
     [EducationalPlanFields.DISCIPLINE_BLOCKS]: Array<DisciplineBlockType>;
 };
 
+export type EducationalPlanListType = {
+    [EducationalPlanFields.ID]: number;
+    [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY]: Array<{
+        [EducationalPlanFields.FIELD_OF_STUDY]: Array<DirectionType>;
+        [EducationalPlanFields.QUALIFICATION]: string;
+        [EducationalPlanFields.YEAR]: string;
+        [EducationalPlanFields.NUMBER]: string;
+        [EducationalPlanFields.PROFILE]: string;
+        [EducationalPlanFields.TITLE]: string;
+    }>;
+    [EducationalPlanFields.APPROVAL_DATE]: string;
+    [EducationalPlanFields.CAN_EDIT]: boolean;
+}
+
 export type DisciplineBlockType = {
     [EducationalPlanBlockFields.ID]: number;
     [EducationalPlanBlockFields.NAME]: string;
@@ -117,6 +134,7 @@ export type ModuleType = {
 export type BlocksOfWorkProgramsType = {
     [BlocksOfWorkProgramsFields.ID]: number;
     [BlocksOfWorkProgramsFields.TYPE]: string;
+    [BlocksOfWorkProgramsFields.CHANGED]: boolean;
     [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: Array<WorkProgramBlockType>;
 };
 

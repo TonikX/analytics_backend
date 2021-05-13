@@ -55,5 +55,8 @@ export default (theme: Theme) => createStyles({
         fontSize: '14px',
         marginBottom: '10px',
         color: 'rgba(0, 0, 0, 0.54)'
+    },
+    editorWrap: {
+        marginBottom: '30px',
     }
 });

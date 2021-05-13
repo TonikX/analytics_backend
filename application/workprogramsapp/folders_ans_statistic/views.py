@@ -1,17 +1,20 @@
 from rest_framework import generics
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
+from dataprocessing.models import User
+from workprogramsapp.expertise.models import Expertise
 from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder, \
     AcademicPlanInFolder, DisciplineBlockModuleInFolder, IndividualImplementationAcademicPlanInFolder
 from workprogramsapp.folders_ans_statistic.serializers import FolderSerializer, WorkProgramInFolderSerializer, \
     FolderCreateSerializer, AcademicPlanInFolderSerializer, \
     ModuleInFolderSerializer, IndividualImplementationAcademicPlanInFolderSerializer
+from workprogramsapp.models import WorkProgram
 from workprogramsapp.permissions import IsOwnerOfFolder, IsOwnerOfFolderWithWorkProgramm, \
     IsOwnerOfFolderWithAcademicPlan, IsOwnerOfFolderWithDisciplineBlockModule, \
     IsOwnerOfFolderWithIndividualImplementationAcademicPlan
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 # РПД
@@ -203,6 +206,7 @@ class RemoveFromFolderImplementationAcademicPlanView(generics.DestroyAPIView):
     serializer_class = IndividualImplementationAcademicPlanInFolderSerializer
 
 @api_view(['GET'])
+@permission_classes((AllowAny,))
 def WorkProgramStatistic(request, pk):
     marks = [0, 0, 0, 0, 0, 0]
     work_programs = WorkProgramInFolder.objects.filter(work_program=pk)
@@ -210,3 +214,4 @@ def WorkProgramStatistic(request, pk):
         marks[program.work_program_rating] += 1
     return Response({"Important Score": {"5": marks[5], "4": marks[4], "3": marks[3], "2": marks[2], "1": marks[1],
                                          "Not important": marks[0]}})
+

@@ -6,6 +6,7 @@ import {
     getWorkProgramField,
     getWorkProgramIntermediateCertificationList
 } from "./getters";
+import {MASTER_QUALIFICATION} from "./constants";
 
 export const getEvaluationToolsMaxSum = (evaluationTools: Array<EvaluationToolType>) => {
     let sum = 0;
@@ -60,6 +61,7 @@ const getTotalHours = (sections: Array<SectionType>) => {
 
 export const getValidateProgramErrors = (state: rootState): Array<string> => {
     const sections = getWorkProgramField(state, fields.WORK_PROGRAM_SECTIONS);
+    const qualification = getWorkProgramField(state, fields.WORK_PROGRAM_QUALIFICATION);
     const errors = [];
     const evaluationToolsList = getWorkProgramEvaluationToolsList(state);
 
@@ -94,9 +96,10 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
         errors.push('В РПД отсутствуют оценочные средства');
     }
 
-    if (getEvaluationToolsMaxSum(evaluationToolsList)
-        + getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state)) !== 100){
-        errors.push('Количество баллов в РПД не равно 100');
+    const fullSum = getEvaluationToolsMaxSum(evaluationToolsList) + getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state))
+
+    if (fullSum % 100 !== 0 && qualification !== MASTER_QUALIFICATION){
+        errors.push('Количество баллов в РПД должно делиться на 100');
     }
 
     return errors;

@@ -26,10 +26,14 @@ import TrainingModulesLogic from '../containers/EducationalPlan/TrainingModules/
 import IndividualTrajectoriesLogic from '../containers/IndividualTrajectories/logics';
 import ProfessionalStandardsLogic from '../containers/ProfessionalStandards/logics';
 import StructuralUnitsLogic from '../containers/StructuralUnits/logics';
+import IndividualEducationalPlansLogic from '../containers/IndividualEducationalPlans/logics';
+import ProfileNotificationsLogic from '../containers/Profile/Notifications/logics';
 
 import GeneralLogic from '../layout/logics';
 
 export default [
+    ...ProfileNotificationsLogic,
+    ...IndividualEducationalPlansLogic,
     ...StructuralUnitsLogic,
     ...ProfessionalStandardsLogic,
     ...IndividualTrajectoriesLogic,

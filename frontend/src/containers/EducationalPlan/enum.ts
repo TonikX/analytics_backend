@@ -37,6 +37,9 @@ export enum fetchingTypes {
     SAVE_COMPETENCE_BLOCK = 'SAVE_COMPETENCE_BLOCK',
     DELETE_COMPETENCE_BLOCK = 'DELETE_COMPETENCE_BLOCK',
     DELETE_WP_FROM_ZUN = 'DELETE_WP_FROM_ZUN',
+    PLAN_TRAJECTORY_SELECT_ELECTIVES = 'PLAN_TRAJECTORY_SELECT_ELECTIVES',
+    PLAN_TRAJECTORY_SELECT_SPECIALIZATION = 'PLAN_TRAJECTORY_SELECT_SPECIALIZATION',
+    PLAN_TRAJECTORY_SELECT_OPTIONAL_WP = 'PLAN_TRAJECTORY_SELECT_OPTIONAL_WP',
 }
 
 export enum EducationalPlanFields {
@@ -51,6 +54,10 @@ export enum EducationalPlanFields {
     CAN_EDIT = 'can_edit',
     ID_RATING = 'id_rating',
     RATING = 'rating',
+
+    TITLE = 'title',
+    ACADEMIC_PLAN_IN_FIELD_OF_STUDY = 'academic_plan_in_field_of_study',
+    FIELD_OF_STUDY = 'field_of_study',
 }
 
 export enum EducationalPlanBlockFields {
@@ -63,6 +70,7 @@ export enum ModuleFields {
     ID = 'id',
     NAME = 'name',
     BLOCKS_OF_WORK_PROGRAMS = 'change_blocks_of_work_programs_in_modules',
+    TYPE = 'type',
 }
 
 export enum BlocksOfWorkProgramsFields {
@@ -73,6 +81,7 @@ export enum BlocksOfWorkProgramsFields {
     RESULTS = 'results',
     SEMESTER_UNIT = 'credit_units',
     TYPE = 'change_type',
+    CHANGED = 'changed',
 }
 
 export enum DownloadFileModalFields {
