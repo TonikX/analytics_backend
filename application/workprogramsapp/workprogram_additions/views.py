@@ -1,25 +1,20 @@
-import datetime
-
-from django.db.models import Count
 # Сериализаторы
 from rest_framework import filters
-from rest_framework import generics, viewsets
+from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
+# Права доступа
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
+from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 # Сериализаторы
 from .serializers import AdditionalMaterialSerializer, CreateAdditionalMaterialSerializer, \
     StructuralUnitSerializer, CreateStructuralUnitSerializer, \
     CreateUserStructuralUnitSerializer, UserStructuralUnitSerializer, ShortStructuralUnitSerializer
-
-from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
-
-# Права доступа
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 from ..models import WorkProgram, DisciplineSection, PrerequisitesOfWorkProgram, OutcomesOfWorkProgram, \
-    WorkProgramInFieldOfStudy, СertificationEvaluationTool, EvaluationTool, Topic
-from ..serializers import WorkProgramSerializer, WorkProgramShortForExperiseSerializer
+    СertificationEvaluationTool, EvaluationTool, Topic
+from ..serializers import WorkProgramSerializer
 
 
 class AdditionalMaterialSet(viewsets.ModelViewSet):
@@ -168,6 +163,29 @@ def ReconnectWorkProgram(request):
         return Response(status=400)
 
 
-
-
-
+@api_view(['POST'])
+@permission_classes((IsAdminUser,))
+def ChangeSemesterInEvaluationsCorrect(request):
+    needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC').distinct()
+    for wp in needed_wp:
+        evaluation_tools = EvaluationTool.objects.filter(evaluation_tools__in=DisciplineSection.objects.filter(
+            work_program__id=wp.id))
+        min_sem = 12
+        for eva in evaluation_tools:
+            if eva.semester < min_sem:
+                min_sem = eva.semester
+        if min_sem != 1:
+            for eva in evaluation_tools:
+                eva.semester = eva.semester - min_sem + 1
+                eva.save()
+        final_tool=СertificationEvaluationTool.objects.filter(work_program=wp)
+        min_sem = 12
+        for eva in final_tool:
+            if eva.semester < min_sem:
+                min_sem = eva.semester
+        if min_sem != 1:
+            for eva in final_tool:
+                eva.semester = eva.semester - min_sem + 1
+                eva.save()
+    serializer=WorkProgramSerializer(needed_wp, many=True)
+    return Response(serializer.data)
