@@ -1,8 +1,9 @@
 import React from 'react';
 import get from 'lodash/get';
 import {appRouter} from "../../../service/router-service";
-import {withRouter} from "react-router-dom";
+import {withRouter, Link} from "react-router-dom";
 import classNames from "classnames";
+
 // @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
 
@@ -178,13 +179,6 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         const {detailPlan} = this.props;
 
         this.props.actions.openDialog(detailPlan);
-    }
-
-    goToWorkProgramPage = (id: number) => () => {
-        // @ts-ignore
-        const {history} = this.props;
-
-        history.push(appRouter.getWorkProgramLink(id));
     }
 
     handleDownloadFile = (workProgramId: number) => () => {
@@ -392,13 +386,13 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                             {workPrograms && workPrograms.map && workPrograms.map(workProgram =>
                                                                                 <div className={classes.displayFlex}
                                                                                      key={'wp' + workProgram[WorkProgramGeneralFields.ID]}>
-                                                                                    <div
-                                                                                        className={classes.displayFlex}>
-                                                                                        <Typography
-                                                                                            className={classes.workProgramLink}
-                                                                                            onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
+                                                                                    <div className={classes.displayFlex}>
+                                                                                        <Link to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.ID])}
+                                                                                              className={classes.workProgramLink}
+                                                                                              target="_blank"
+                                                                                        >
                                                                                             {workProgram[WorkProgramGeneralFields.TITLE]}
-                                                                                        </Typography>
+                                                                                        </Link>
                                                                                     </div>
                                                                                     <Tooltip
                                                                                         title={'Скачать рабочую программу'}>

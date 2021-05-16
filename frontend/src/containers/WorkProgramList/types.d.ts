@@ -52,5 +52,6 @@ export interface WorkProgramListProps extends WithStyles<typeof styles> {
     searchQuery: string;
     allCount: number;
     sortingField: string;
+    showOnlyMy: boolean;
     sortingMode: SortingType;
 }

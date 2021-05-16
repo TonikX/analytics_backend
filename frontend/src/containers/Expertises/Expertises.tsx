@@ -74,6 +74,7 @@ class Expertises extends React.Component<ExpertisesProps> {
     };
 
     handleSelectStatus = (status: WorkProgramStatusType) => {
+        this.props.actions.changeCurrentPage(1);
         if (this.props.selectedStatus === status){
             this.props.actions.changeSelectedStatus('')
         } else {
@@ -83,6 +84,7 @@ class Expertises extends React.Component<ExpertisesProps> {
     }
 
     handleSelectQualification = (qualification: Array<string>) => {
+        this.props.actions.changeCurrentPage(1);
         this.props.actions.changeSelectedQualification(qualification[0])
         this.props.actions.getExpertisesList()
     }

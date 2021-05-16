@@ -72,6 +72,13 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
     const totalHours = getWorkProgramField(state, fields.WORK_PROGRAM_ALL_HOURS) || getAllHours(lectureHours, practiceHours, labHours, srsHours);
     const currentTotalHours = getTotalHours(sections).toFixed(2);
 
+    const educationalPlans = getWorkProgramField(state, 'work_program_in_change_block')
+
+    if (educationalPlans.length === 0){
+        errors.push('PLAN_ERROR');
+        return errors
+    }
+
     if (!sections.length){
         errors.push('Кол-во разделов должно быть больше 0');
     }

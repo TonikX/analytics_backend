@@ -14,7 +14,11 @@ export default (theme: Theme) => createStyles({
         fontSize: '24px',
         marginBottom: '20px',
         display: 'flex',
-        justifyContent: 'space-between'
+    },
+    showOnlyMy: {
+        display: 'flex',
+        alignItems: 'center',
+        marginLeft: '10px'
     },
     list: {
         width: '100%',
@@ -48,7 +52,8 @@ export default (theme: Theme) => createStyles({
         padding: '0px 20px'
     },
     searchInput: {
-        height: '40px'
+        height: '40px',
+        marginLeft: 'auto'
     },
     addIcon: {
         marginLeft: 'auto',
