@@ -47,6 +47,9 @@ import connect from './WorkProgramList.connect';
 import styles from './WorkProgramList.styles';
 
 import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
+import Switch from "@material-ui/core/Switch";
+import actions from "./actions";
+import {filterFields} from "./enum";
 
 class WorkProgramList extends React.Component<WorkProgramListProps> {
     state = {
@@ -137,8 +140,13 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         this.setState({anchorsEl: {}});
     };
 
+    changeShowOnlyMy = () => {
+        this.props.actions.changeFiltering({[filterFields.ONLY_MY]: !this.props.showOnlyMy});
+        this.props.actions.getWorkProgramList();
+    }
+
     render() {
-        const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode} = this.props;
+        const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode, showOnlyMy} = this.props;
         const {deleteConfirmId, duplicateConfirmId, anchorsEl} = this.state;
 
         return (
@@ -146,8 +154,17 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                 <Typography className={classes.title}>
                     Рабочие программы
 
+                    <Typography className={classes.showOnlyMy}>
+                        <Switch checked={showOnlyMy}
+                                onChange={this.changeShowOnlyMy}
+                                color="primary"
+                        />
+                        Показать только мои РПД
+                    </Typography>
+
                     <TextField placeholder="Поиск"
                                variant="outlined"
+                               className={classes.searchInput}
                                InputProps={{
                                    classes: {
                                        root: classes.searchInput
@@ -320,4 +337,5 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(WorkProgramList));

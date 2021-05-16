@@ -1,9 +1,10 @@
 import json
 import os
 import re
-
 import pandas
 from django.shortcuts import get_object_or_404
+from collections import OrderedDict
+from django.http import HttpResponse
 from rest_framework import filters
 from rest_framework import generics
 from rest_framework import status
@@ -20,7 +21,7 @@ from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeI
     DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy, Certification
 from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
-    Topic, Indicator, Competence, OnlineCourse
+    Topic, Indicator, Competence
 # Права доступа
 from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
@@ -35,7 +36,7 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
 from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
-from .serializers import OnlineCourseSerializer, BibliographicReferenceSerializer, \
+from .serializers import BibliographicReferenceSerializer, \
     WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
     IndicatorListSerializer
@@ -1142,43 +1143,6 @@ class FileUploadWorkProgramAPIView(APIView):
         return Response(status=200)
 
 
-class FileUploadOnlineCoursesAPIView(APIView):
-    """
-    API эндпоинт для добавления данных об онлайн курсах из csv-файла, спарсенного с online.edu.ru
-    """
-
-    def post(self, request):
-
-        serializer = FileUploadSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        data = handle_uploaded_file(request.FILES['file'], str(request.FILES['file']))
-        data.fillna('', inplace=True)
-
-        for i in range(len(data)):
-            try:
-                # получаем список всех объектов-пререквизитов для дисциплины
-                if OnlineCourse.objects.filter(title=data['Название курса'][i]).exists():
-                    # если запись уже есть то апдейтим
-                    oc_obj = OnlineCourse.objects.get(title=data['Название курса'][i])
-                    oc_obj.platform = 'online.edu.ru'
-                    oc_obj.description = data['Содержание курса'][i]
-                    oc_obj.course_url = data['URL'][i]
-
-                else:
-
-                    # если нет, то записываем в БД и апдейтим
-                    oc_obj = OnlineCourse(title=data['Название курса'][i],
-                                          platform='online.edu.ru',
-                                          description=data['Содержание курса'][i],
-                                          course_url=data['URL'][i])
-                    oc_obj.save()
-            except:
-                print(i)
-                continue;
-        return Response(status=200)
-
-
 from discipline_code import IPv4_code_ver2
 
 
@@ -1211,38 +1175,6 @@ def handle_uploaded_csv(file, filename):
     db.to_excel("discipline_code/discipline_bank_updated_{}.xlsx".format(now), index=False)
     print(processed_data.head())
     return processed_data
-
-
-@api_view(['GET'])
-@permission_classes((IsAuthenticated, IsRpdDeveloperOrReadOnly))
-def ChangeModulesNames(request):
-    """
-
-    """
-    def format_component(title):
-        sem_num = re.search('\d( ?)семестр', title)
-        ognp_num = re.match('огнп( ?)[1-7]', title.strip(), flags=re.IGNORECASE)
-        p1 = '[^A-Za-zА-Яа-яёЁ]'
-        p2 = ' +'
-        if ognp_num:
-            return ognp_num.group() + " " + re.sub(p2, ' ', re.sub(p1, ' ', title[ognp_num.end():])).strip()
-        if not sem_num:
-            return re.sub(p2, ' ', re.sub(p1, ' ', title)).strip()
-        else:
-            result = re.sub(p1, ' ', title[:sem_num.start()]) + sem_num.group() + re.sub(p1, ' ', title[sem_num.end():])
-            return re.sub(p2, ' ', result).strip()
-    try:
-        modules = DisciplineBlockModule.objects.filter()
-        print(modules)
-        for module in modules:
-            print('-----')
-            print('старое', module.name)
-            module.name = format_component(module.name)
-            module.save()
-            print('новые', module.name)
-        return Response(status=200)
-    except:
-        return Response(status=400)
 
 
 class FileUploadAPIView(APIView):
@@ -1281,18 +1213,6 @@ class FileUploadAPIView(APIView):
                 else:
                     qualification = 'specialist'
                 print(qualification)
-                def format_component(title):
-                    sem_num = re.search('\d( ?)семестр', title)
-                    ognp_num = re.match('огнп( ?)[1-7]', title.strip(), flags=re.IGNORECASE)
-                    p1 = '[^A-Za-zА-Яа-яёЁ]'
-                    p2 = ' +'
-                    if ognp_num:
-                        return ognp_num.group() + " " + re.sub(p2, ' ', re.sub(p1, ' ', title[ognp_num.end():])).strip()
-                    if not sem_num:
-                        return re.sub(p2, ' ', re.sub(p1, ' ', title)).strip()
-                    else:
-                        result = re.sub(p1, ' ', title[:sem_num.start()]) + sem_num.group() + re.sub(p1, ' ', title[sem_num.end():])
-                        return re.sub(p2, ' ', result).strip()
 
                 credit_units = [0 for i in range(0, 12)]
                 units = data.loc[
@@ -1334,13 +1254,12 @@ class FileUploadAPIView(APIView):
                 #TODO: ОГНП НЕКОРРЕКТНО СООТНОСЯТСЯ
                 wp_list = WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
                                                      zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
-                                                     format_component(data['COMPONENT'][i].strip()),
-                                                     # zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
-                                                     # data['ISOPTION'][i],
-                                                     # credit_units=",".join(
-                                                     #     map(str, credit_units)),
-                                                     discipline_code__iregex=regex
-                                                     ).distinct()
+                                                     data['COMPONENT'][i].strip(),
+                                                     zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
+                                                     data['ISOPTION'][i],
+                                                     credit_units=",".join(
+                                                         map(str, credit_units)),
+                                                     discipline_code__iregex=regex).distinct()
                 print('Найдена РПД: ', wp_list)
                 #print(WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip()))
                 if wp_list.exists():
@@ -1518,13 +1437,12 @@ class FileUploadAPIView(APIView):
                     iap_obj=ImplementationAcademicPlan.objects.get(academic_plan=ap_obj, field_of_study=fs_obj,
                                                               year=data['YEAR'][i])
                     iap_obj.op_isu_id=int(data['OP_ID'][i])
-                    iap_obj.ns_id = int(data['NS_ID'][i])
                     iap_obj.save()
                     # OP_ID - образовательная программа
                     print('ImplementationAcademicPlan exist')
                 else:
                     iap_obj = ImplementationAcademicPlan(academic_plan=ap_obj, field_of_study=fs_obj,
-                                                         year=data['YEAR'][i], op_isu_id=int(data['OP_ID'][i]), ns_id = int(data['NS_ID'][i]))
+                                                         year=data['YEAR'][i], op_isu_id=int(data['OP_ID'][i]))
                     iap_obj.save()
                 print('Связь учебного плана и направления: done')
 
@@ -1537,16 +1455,16 @@ class FileUploadAPIView(APIView):
                 print('Блок: ', db)
 
                 try:
-                    o = order[format_component(data['COMPONENT'][i].strip())]
+                    o = order[data['COMPONENT'][i].strip()]
                 except:
-                    order.update({format_component(data['COMPONENT'][i].strip()): len(order)})
-                    o = order[format_component(data['COMPONENT'][i].strip())]
+                    order.update({data['COMPONENT'][i].strip(): len(order)})
+                    o = order[data['COMPONENT'][i].strip()]
 
-                if DisciplineBlockModule.objects.filter(name=format_component(data['COMPONENT'][i].strip()),
+                if DisciplineBlockModule.objects.filter(name=data['COMPONENT'][i].strip(),
                                                         descipline_block=db).exists():
-                    mdb = DisciplineBlockModule.objects.get(name=format_component(data['COMPONENT'][i].strip()), descipline_block=db)
+                    mdb = DisciplineBlockModule.objects.get(name=data['COMPONENT'][i].strip(), descipline_block=db)
                 else:
-                    mdb = DisciplineBlockModule(name=format_component(data['COMPONENT'][i].strip()), descipline_block=db,
+                    mdb = DisciplineBlockModule(name=data['COMPONENT'][i].strip(), descipline_block=db,
                                                 order=o)
                     mdb.save()
 
@@ -1561,30 +1479,16 @@ class FileUploadAPIView(APIView):
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
-                        wpinfs.id_str_up = int(data['ID_STR_UP'][i])
-                        wpinfs.save()
-                        print('wpinfs', wpinfs.id_str_up)
                     else:
                         wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
                                                            work_program=wp_obj)
-                        wpinfs.id_str_up = int(data['ID_STR_UP'][i])
                         wpinfs.save()
-                        print('wpinfs', wpinfs.id_str_up)
                     # wpchangemdb.work_program.add(wp_obj)
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=mdb,
                                                                              change_type=data['ISOPTION'][i],
                                                                              work_program=wp_obj
                                                                              ).exists():
                     print('exist', wp_obj)
-                    print("ВОТ ТУТ ПРОИСХОДИТ НИЧЕГО!!")
-                    wpinfs = WorkProgramInFieldOfStudy.objects.get(
-                        work_program_change_in_discipline_block_module=WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
-                                                                                                                               change_type=data['ISOPTION'][i],
-                                                                                                                               work_program=wp_obj
-                                                                                                                               ), work_program=wp_obj)
-                    wpinfs.id_str_up = int(data['ID_STR_UP'][i])
-                    wpinfs.save()
-                    print('wpinfs', wpinfs.id_str_up)
 
                 else:
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
@@ -1601,24 +1505,16 @@ class FileUploadAPIView(APIView):
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
-                        wpinfs.id_str_up = int(data['ID_STR_UP'][i])
-                        wpinfs.save()
-                        print("Нашли рпд в направлении", wpinfs)
-                        print('wpinfs', wpinfs.id_str_up)
                     else:
 
 
                         wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
-                                                               work_program=wp_obj, id_str_up = int(data['ID_STR_UP'][i]))
+                                                               work_program=wp_obj)
                         wpinfs.save()
-                        print("Сохранили рпд в направлении", wpinfs)
-                        print('wpinfs', wpinfs.id_str_up)
-
-
                 try:
                     if WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
-                                                  # zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
-                                                  # format_component(data['COMPONENT'][i].strip()),
+                                                  zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
+                                                  data['COMPONENT'][i].strip(),
                                                   # zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
                                                   # data['ISOPTION'][i],
                                                   zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module= mdb,
@@ -1636,7 +1532,6 @@ class FileUploadAPIView(APIView):
                         if clone:
                             print ('УДАЛЯЕТСЯ СКЛОНИРОВАННАЯ рпд')
                             wp_obj.delete()
-                            print(wpchangemdb)
                             wpchangemdb.delete()
                 except:
                     pass
@@ -1875,220 +1770,6 @@ class ZunUpdateView(generics.UpdateAPIView):
 
 
 # Конец блока ендпоинтов рабочей программы
-# Скачивание рпд в формате docx/pdf
-#
-
-from docxtpl import DocxTemplate
-import datetime
-
-from collections import OrderedDict
-
-
-def render_context(context, **kwargs):
-    """ Функция, которая возвращает context с параметрами для шаблона """
-    fs_obj = FieldOfStudy.objects.get(pk=kwargs['field_of_study_id'])
-    ap_obj = AcademicPlan.objects.get(pk=kwargs['academic_plan_id'])
-    try:
-        for wpcb in context['work_program_in_change_block']:
-            if wpcb['discipline_block_module']['descipline_block']['academic_plan'][
-                'educational_profile'] == ap_obj.educational_profile:
-                wpcb_pk = wpcb['id']
-                print(wpcb_pk)
-                semester = [{'s': i, 'c': wpcb['credit_units'][i]} for i in range(len(wpcb['credit_units'])) if
-                            wpcb['credit_units'] if wpcb['credit_units'][i] != 0]
-    except:
-        semester = [{'s': '-', 'c': '-', 'h': '-', 'e': '-'}]
-        wpcb_pk = context['work_program_in_change_block'][0]['id']
-
-    wp_in_fs = WorkProgramInFieldOfStudy.objects.get(work_program_change_in_discipline_block_module__id=wpcb_pk,
-                                                     work_program__id=context['id'])
-    zun_obj = Zun.objects.filter(wp_in_fs=wp_in_fs)
-    tbl_competence = []
-    for z in zun_obj:
-        print(list(z.items.all()))
-        outcomes = [o.item.name for o in z.items.all()]
-        tbl_competence.append(
-            {'competence': str(z.indicator_in_zun.competence.number) + ' ' + str(z.indicator_in_zun.competence.name),
-             'indicator': str(z.indicator_in_zun.number) + ' ' + str(z.indicator_in_zun.name),
-             'outcomes': ', '.join(map(str, set(outcomes)))})
-    print('TBL_COMPETENCE', tbl_competence)
-    contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
-    online_sections, url_online_course, evaluation_tools = [], [], []
-
-    for i in context['discipline_sections']:
-        online_names, topics_list = [], []
-        if i['contact_work'] is None:
-            i['contact_work'] = ''
-        else:
-            contact_work += float(i['contact_work'])
-        if i['lecture_classes'] is None:
-            i['lecture_classes'] = ''
-        else:
-            lecture_classes += float(i['lecture_classes'])
-        if i['laboratory'] is None:
-            i['laboratory'] = ''
-        else:
-            laboratory += float(i['laboratory'])
-        if i['practical_lessons'] is None:
-            i['practical_lessons'] = ''
-        else:
-            practical_lessons += float(i['practical_lessons'])
-        if i['SRO'] is None:
-            i['SRO'] = ''
-        else:
-            SRO += float(i['SRO'])
-        total_hours += 0.0 if i['total_hours'] is None else float(i['total_hours'])
-        evaluation_tools.extend(i['evaluation_tools'])
-        for j in i['topics']:
-            topics_list.append(j['description'])
-            if j['url_online_course'] is None:
-                pass
-            else:
-                online_sections.append(i['ordinal_number'])
-                online_names.append(j['url_online_course']['title'])
-                if j['url_online_course'] not in url_online_course:
-                    url_online_course.append(j['url_online_course'])
-        i['online_list'] = ', '.join(map(str, set(online_names)))
-        i['topics_list'] = ', '.join(map(str, set(topics_list)))
-
-    template_context = OrderedDict()
-    template_context['title'] = context['title']
-    template_context['field_of_study_code'] = fs_obj.number
-    template_context['field_of_study'] = fs_obj.title
-
-    if context['qualification'] == 'bachelor':
-        template_context['QUALIFICATION'] = 'БАКАЛАВР'
-    elif context['qualification'] == 'master':
-        template_context['QUALIFICATION'] = 'МАГИСТР'
-    else:
-        template_context['QUALIFICATION'] = 'ИНЖЕНЕР'
-
-    template_context['academic_plan'] = ap_obj.educational_profile
-    template_context['semester'] = semester
-    template_context['total_hours_1'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO]
-    template_context['year'] = kwargs['year']
-    if context['authors'] is None:
-        template_context['author'] = ''
-        template_context['authors'] = ''
-    else:
-        template_context['author'] = context['authors']
-        template_context['authors'] = context['authors'].split(', ')
-    template_context['tbl_competence'] = tbl_competence
-    template_context['discipline_section'] = context['discipline_sections']
-    template_context['total_hours'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours]
-    template_context['is_no_online'] = True if online_sections == 0 else False
-    template_context['is_online'] = False if online_sections == 0 else True
-    template_context['X'] = 'X'
-    template_context['sections_online'] = ', '.join(map(str, set(online_sections)))
-    template_context['sections_replaced_onl']: ''
-    template_context['bibliographic_reference'] = context['bibliographic_reference']
-    template_context['online_course'] = url_online_course
-    template_context['evaluation_tools'] = evaluation_tools
-    filename = str(fs_obj.number) + '_' + str(context['discipline_code']) + '_' + str(
-        context['qualification']) + '_' + str(kwargs['year']) + '_' + datetime.datetime.today().strftime(
-        "%Y-%m-%d-%H.%M.%S") + '.docx'
-
-    return template_context, filename
-
-
-from django.http import HttpResponse
-
-
-class DocxFileExportView(generics.ListAPIView):
-    """Возвращает РПД в формате docx в браузере"""
-    queryset = WorkProgram.objects.all()
-    serializer = WorkProgramSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        tpl = DocxTemplate('/application/static-backend/export_template/RPD_shablon_2020_new.docx')
-        queryset = WorkProgram.objects.get(pk=kwargs['pk'])
-        serializer = WorkProgramSerializer(queryset)
-        data = dict(serializer.data)
-
-        context, filename = render_context(data, field_of_study_id=kwargs['fs_id'],
-                                           academic_plan_id=kwargs['ap_id'], year=kwargs['year'])
-        tpl.render(context)
-        # tpl.save('/application/'+str(filename)) #-- сохранение в папку локально (нужно указать актуальный путь!)
-
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-        response['Content-Disposition'] = 'inline; filename="%s"' % filename
-
-        tpl.save(response)
-
-        return response
-
-
-def render_context_syllabus(context, **kwargs):
-    """ Функция, которая возвращает context с параметрами для шаблона """
-    fs_obj = FieldOfStudy.objects.get(pk=kwargs['field_of_study_id'])
-    ap_obj = AcademicPlan.objects.get(pk=kwargs['academic_plan_id'])
-    try:
-        for wpcb in context['work_program_in_change_block']:
-            if wpcb['discipline_block_module']['descipline_block']['academic_plan'][
-                'educational_profile'] == ap_obj.educational_profile:
-                semester = [(i, wpcb['credit_units'][i], wpcb['change_type']) for i in range(len(wpcb['credit_units']))
-                            if wpcb['credit_units'] if wpcb['credit_units'][i] != 0]
-    except:
-        semester = [('-', '-', ' ')]
-
-    template_context = OrderedDict()
-    if context['qualification'] == 'bachelor':
-        template_context['Qualification'] = 'Бакалавриат'
-    elif context['qualification'] == 'master':
-        template_context['Qualification'] = 'Магистратура'
-    else:
-        template_context['Qualification'] = 'Специалитет'
-
-    template_context['Name'] = context['title']
-    # template_context['status'] = context['work_program_in_change_block']['change_type']
-    template_context['fs_code'] = str(fs_obj.number) + ' ' + str(fs_obj.title)
-    template_context['academic_plan'] = ap_obj.educational_profile
-    template_context['semester'] = semester[0][0]
-    template_context['credit'] = semester[0][1]
-    template_context['author'] = context['authors']
-    template_context['description'] = context['description']
-    template_context['prerequisites'] = ', '.join(map(str, [i['item']['name'] for i in context['prerequisites']]))
-    template_context['outcomes'] = ', '.join(map(str, [i['item']['name'] for i in context['outcomes']]))
-    template_context['concurent'] = '-'
-    template_context['discipline_section'] = context['discipline_sections']
-    evaluation_tools, temp = [], []
-    for i in context['discipline_sections']:
-        for tool in i['evaluation_tools']:
-            if tool['type'] not in evaluation_tools:
-                evaluation_tools.append(tool['type'])
-        i['topics_list'] = '. '.join(map(str, set([j['description'] for j in i['topics']])))
-
-    template_context['evaluation_tools'] = evaluation_tools
-    template_context['bibliographic_reference'] = context['bibliographic_reference']
-    filename = 'Syllabus_' + str(context['title']) + str(kwargs['year']) + '.docx'
-
-    return template_context, filename
-
-
-class SyllabusExportView(generics.ListAPIView):
-    """Возвращает РПД в формате docx в браузере"""
-    queryset = WorkProgram.objects.all()
-    serializer = WorkProgramSerializer
-    permission_classes = [IsAuthenticated, ]
-
-    def get(self, request, *args, **kwargs):
-        tpl = DocxTemplate('/application/export_template/Syllabus_shablon_2020_new.docx')
-        queryset = WorkProgram.objects.get(pk=kwargs['pk'])
-        serializer = WorkProgramSerializer(queryset)
-        data = dict(serializer.data)
-
-        context, filename = render_context_syllabus(data, field_of_study_id=kwargs['fs_id'],
-                                                    academic_plan_id=kwargs['ap_id'], year=kwargs['year'])
-        tpl.render(context)
-        # tpl.save('/application/upload/'+filename) #-- сохранение в папку локально (нужно указать актуальный путь!)
-
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-        response['Content-Disposition'] = 'inline; filename="%s"' % str(filename)
-
-        tpl.save(response)
-
-        return response
 
 
 class DisciplineBlockModuleShortListView(generics.ListAPIView):
@@ -2128,7 +1809,6 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
 
 
 @api_view(['POST'])
-@permission_classes((IsAuthenticated, IsRpdDeveloperOrReadOnly))
 def CloneWorkProgramm(request):
     """
     Апи для клонирования рабочей программы

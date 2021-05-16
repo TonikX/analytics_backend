@@ -213,7 +213,14 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
                         {canSendToExpertise &&
                             (validateErrors.length ?
-                                <Tooltip title={<div className={classes.tooltip}> Исправьте ошибки, прежде чем отправлять на эспертизу: <br/> {validateErrors.map((item, index) => <>{index  + 1}. {item} <br /></>)} </div>}>
+                                <Tooltip title={
+                                    <div className={classes.tooltip}>
+                                        {validateErrors.length === 1 && validateErrors[0] === 'PLAN_ERROR' ?
+                                            <>Вы не можете отправить рабочую программу на экспертизу, пока она не включена ни в один учебный план</>
+                                            :
+                                            <>Исправьте ошибки, прежде чем отправлять на эспертизу: <br/> {validateErrors.map((item, index) => <>{index  + 1}. {item} <br /></>)} </>
+                                        }
+                                    </div>}>
                                     <Button>
                                         Отправить на экспертизу
                                     </Button>

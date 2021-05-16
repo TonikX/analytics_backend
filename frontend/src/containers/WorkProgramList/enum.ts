@@ -24,4 +24,5 @@ export enum filterFields{
     NAME_OP = 'NAME_OP',
     SPECIALIZATION = 'SPECIALIZATION',
     STRUCTURAL_UNIT = 'STRUCTURAL_UNIT',
+    ONLY_MY = 'ONLY_MY',
 }

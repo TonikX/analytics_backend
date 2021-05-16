@@ -8,6 +8,9 @@ export default (theme: Theme) => createStyles({
         paddingBottom: '105px',
         boxSizing: 'border-box',
     },
+    comments: {
+        height: 'calc(100% - 200px)'
+    },
     comment: {
         padding: '10px',
         display: 'flex',
@@ -25,11 +28,8 @@ export default (theme: Theme) => createStyles({
         paddingBottom: '10px'
     },
     commentTextFieldWrap: {
-        position: 'absolute',
         width: '100%',
         boxSizing: 'border-box',
-        padding: 10,
-        bottom: 0,
         borderTop: '1px solid #ccc',
         background: '#fff',
     },
