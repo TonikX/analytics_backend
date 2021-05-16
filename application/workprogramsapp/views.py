@@ -70,6 +70,23 @@ class WorkProgramsListApi(generics.ListAPIView):
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile', 'qualification']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    # def list(self, request, **kwargs):
+    #     """
+    #     Вывод всех результатов для одной рабочей программы по id
+    #     """
+    #     # Note the use of `get_queryset()` instead of `self.queryset`
+    #     # queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+    #     if request.GET.get('field') == True:
+    #         queryset = WorkProgram.objects.filter(editors=request.use)
+    #     return Response(serializer.data)
+
+    def get_queryset(self):
+        if self.request.GET.get('filter') == 'my':
+            queryset = WorkProgram.objects.filter(editors=self.request.user)
+        else:
+            queryset = WorkProgram.objects.filter()
+        return queryset
+
 
 class IndicatorListAPIView(generics.ListAPIView):
     serializer_class = IndicatorListSerializer
