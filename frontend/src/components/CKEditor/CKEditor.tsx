@@ -1,5 +1,4 @@
 import React from 'react';
-
 //@ts-ignore
 import CKEditor from 'ckeditor4-react'
 
