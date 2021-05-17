@@ -509,7 +509,7 @@ class ImplementationAcademicPlanShortForAPSerializer(serializers.ModelSerializer
 class AcademicPlanSerializer(serializers.ModelSerializer):
     discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, required=False)
     can_edit = BooleanField(read_only=True)
-    academic_plan_in_field_of_study = ImplementationAcademicPlanShortForAPSerializer()
+    academic_plan_in_field_of_study = ImplementationAcademicPlanShortForAPSerializer(many=True)
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
