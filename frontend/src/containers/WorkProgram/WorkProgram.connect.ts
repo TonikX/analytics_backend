@@ -31,7 +31,7 @@ const mapStateToProps = (state:rootState) => {
         canAddToFolder: isCanAddToFolder(state),
         canApprove: isCanApprove(state),
         canSendToExpertise: isCanEdit(state),
-        canComment: getWorkProgramField(state, WorkProgramGeneralFields.TITLE) && true,
+        canComment: isCanComment(state),
         folders: getFolders(state),
         validateErrors: getValidateProgramErrors(state),
     };

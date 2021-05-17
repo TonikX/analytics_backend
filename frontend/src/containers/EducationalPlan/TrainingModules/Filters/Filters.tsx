@@ -1,14 +1,12 @@
 import React, {useState} from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useStyles } from './Filters.styles'
 import cn from 'classnames';
 
 import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
 import SearchSelector from '../../../../components/SearchSelector'
 
 import {languageArray, specialization} from '../../../WorkProgram/constants';
-import { rootState } from '../../../../store/reducers'
 
 import actions from '../actions'
 import {filterFields} from "../../../WorkProgramList/enum";
@@ -18,7 +16,6 @@ const Filters: React.FC = () => {
   const classes = useStyles()
   const [isReset, setIsReset] = useState<boolean>(false)
   const filters: any = {}
-  // const filters: any = useSelector((state: rootState) => getFilters(state))
   const lists = {
     langs: languageArray,
     specialization: specialization,

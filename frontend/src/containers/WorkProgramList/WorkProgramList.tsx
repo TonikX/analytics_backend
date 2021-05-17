@@ -139,6 +139,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
     };
 
     changeShowOnlyMy = () => {
+        this.props.actions.changeCurrentPage(1);
         this.props.actions.changeFiltering({[filterFields.ONLY_MY]: !this.props.showOnlyMy});
         this.props.actions.getWorkProgramList();
     }

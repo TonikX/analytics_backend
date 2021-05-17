@@ -1,5 +1,4 @@
 import React from 'react';
-import get from 'lodash/get'
 //@ts-ignore
 import CKEditor from 'ckeditor4-react'
 
