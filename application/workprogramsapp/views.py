@@ -241,7 +241,7 @@ class OutcomesOfWorkProgramCreateAPIView(generics.CreateAPIView):
     def create(self, request):
         serializer = OutcomesOfWorkProgramCreateSerializer(data=request.data)
 
-        # обновляем value для item 
+        # обновляем value для item
         item = Items.objects.get(id=request.data.get('item'))
         value = item.value
         item.value = int(value) + 1
@@ -364,7 +364,7 @@ class PrerequisitesOfWorkProgramCreateAPIView(generics.CreateAPIView):
 
     def create(self, request):
         serializer = PrerequisitesOfWorkProgramCreateSerializer(data=request.data)
-        # обновляем value для item 
+        # обновляем value для item
         item = Items.objects.get(id=request.data.get('item'))
         value = item.value
         item.value = int(value) + 1
@@ -1167,7 +1167,7 @@ from discipline_code import IPv4_code_ver2
 
 def handle_uploaded_csv(file, filename):
     """
-    Обработка файла csv 
+    Обработка файла csv
     """
 
     if not os.path.exists('upload/'):
@@ -2072,7 +2072,7 @@ class DisciplineBlockModuleDetailListView(generics.ListAPIView):
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleDetailSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+    search_fields = ['name', 'descipline_block__name']
 
 
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
