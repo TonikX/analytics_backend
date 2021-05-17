@@ -9,16 +9,15 @@ EDUC_PROGRAMS = []
 BASE_URL = "https://cas.crp.rocks/backend//rest"
 BASE_HEADERS = {'content-type': 'application/json'}
 
-
-def login():
+def login(setup):
     url = BASE_URL + "/login"
     body = {"login": settings.BARS["BARS_LOGIN"], "password": settings.BARS["BARS_PASSWORD"]}
     headers = {'content-type': 'application/json'}
     r = requests.post(url, data=json.dumps(body), headers=headers)
     BASE_HEADERS['Authorization'] = r.headers['Authorization']
-    body_year = {"name": "current_year", "value": "2021/2022"}
+    body_year = {"name": "current_year", "value": setup[0]}
     r = requests.post("https://cas.crp.rocks/backend//rest/config/personal", data=json.dumps(body_year), headers=BASE_HEADERS)
-    body_term = {"name": "current_term", "value": 0}
+    body_term = {"name": "current_term", "value": setup[1]}
     r = requests.post("https://cas.crp.rocks/backend//rest/config/personal", data=json.dumps(body_term), headers=BASE_HEADERS)
 
 
@@ -47,16 +46,16 @@ def get_one_educational_program(id_disp, term):
     return json.loads(r.text)
 
 
-def get_list_of_regular_checkpoints():
-    login()
+def get_list_of_regular_checkpoints(setup):
+    login(setup)
     url = BASE_URL + "/checkpoint_types?type=regular"
     r = requests.get(url, headers=BASE_HEADERS)
     r.encoding = 'utf-8'
     return json.loads(r.text)
 
 
-def get_list_of_final_checkpoints():
-    login()
+def get_list_of_final_checkpoints(setup):
+    login(setup)
     url = BASE_URL + "/checkpoint_types?type=final"
     r = requests.get(url, headers=BASE_HEADERS)
     r.encoding = 'utf-8'
@@ -76,9 +75,9 @@ def get_educational_program_main():
     educ_programs = (list({v['id']: v for v in EDUC_PROGRAMS}.values()))
     return educ_programs
 
-def post_checkpoint_plan(body):
-    login()
+def post_checkpoint_plan(body, setup):
+    login(setup)
     url = BASE_URL + "/checkpoint_plans"
     r = requests.post(url, data=json.dumps(body), headers=BASE_HEADERS)
-    return r.text
+    return r.text, r.status_code
 
