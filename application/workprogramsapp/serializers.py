@@ -520,7 +520,7 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year', 'education_form', 'qualification','author', 'can_edit']
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year', 'education_form', 'qualification','author', 'can_edit', 'academic_plan_in_field_of_study']
         extra_kwargs = {
             'discipline_blocks_in_academic_plan': {'required': False}
         }
