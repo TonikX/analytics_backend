@@ -31,5 +31,8 @@ export default (theme: Theme) => createStyles({
     },
     bookmarkIcon: {
         color: '#fff'
+    },
+    telegramIcon: {
+        color: '#fff'
     }
 });

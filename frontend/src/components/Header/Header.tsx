@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/MenuOutlined';
 import CloseIcon from '@material-ui/icons/CloseOutlined';
 import BookmarksIcon from '@material-ui/icons/BookmarksOutlined';
+import TelegramIcon from '@material-ui/icons/Telegram';
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
 import NotificationsIcon from '@material-ui/icons/NotificationsNone';
 import TrajectoryIcon from '@material-ui/icons/SchoolOutlined';
@@ -149,11 +150,22 @@ class Header extends React.PureComponent<HeaderProps>{
                                         <Link to={appRouter.getSignInRoute()}
                                               className={classes.link}
                                         >
-                                            Выйти
+                                          Выйти
                                         </Link>
                                     </MenuItem>
                                 </Menu>
                             </div>
+
+                            <Tooltip title="Телеграм">
+                                <a href="https://t.me/op_itmo_ru"
+                                   className={classes.link}
+                                   target="_blank"
+                                >
+                                    <IconButton aria-haspopup="true" className={classes.telegramIcon}>
+                                        <TelegramIcon />
+                                    </IconButton>
+                                </a>
+                            </Tooltip>
                         </div>
                     }
                 </Toolbar>
