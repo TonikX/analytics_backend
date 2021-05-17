@@ -231,17 +231,18 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         return (
             <Paper className={classes.root}>
                 <div className={classes.title}>
-                    <Typography> Учебный план </Typography>
-                    {get(detailPlan[EducationalPlanFields.PROFILE], 'length', 0) ?
-                        <Typography>:&nbsp;{detailPlan[EducationalPlanFields.PROFILE]} / {specializationObject[detailPlan[EducationalPlanFields.QUALIFICATION]]} / {detailPlan[EducationalPlanFields.YEAR]}</Typography>
-                        :
-                        <></>
-                    }
-                    {canEdit &&
-                        <Tooltip title="Изменить учебный план">
-                            <EditIcon className={classes.titleIcon} color="primary" onClick={this.handleChangePlan}/>
-                        </Tooltip>
-                    }
+                    <Typography>
+                        Учебный план: {get(detailPlan, 'academic_plan_in_field_of_study[0].title', '')}&nbsp;
+                        {get(detailPlan, 'academic_plan_in_field_of_study[0].field_of_study', []).map((item: any) =>
+                            <>({specializationObject[get(item, 'qualification', '')]} / {get(item, 'title', '')} ({get(item, 'number', '')}))&nbsp;</>
+                        )}
+                    </Typography>
+
+                    {/*{canEdit &&*/}
+                    {/*    <Tooltip title="Изменить учебный план">*/}
+                    {/*        <EditIcon className={classes.titleIcon} color="primary" onClick={this.handleChangePlan}/>*/}
+                    {/*    </Tooltip>*/}
+                    {/*}*/}
                     <div className={classes.likeIcon}>
                         <LikeButton onClick={this.handleClickLike}
                                     isLiked={Boolean(detailPlan[EducationalPlanFields.ID_RATING])}
