@@ -2,14 +2,12 @@ import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import classNames from 'classnames';
-import {Link} from "react-router-dom";
 
 import Scrollbars from "react-custom-scrollbars";
 
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
-import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
@@ -20,11 +18,8 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 
 import withStyles from '@material-ui/core/styles/withStyles';
-
-import AddIcon from "@material-ui/icons/Add";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 import CreateIcon from "@material-ui/icons/NoteAddOutlined";
 import SettingsIcon from "@material-ui/icons/MoreVert";
@@ -35,19 +30,16 @@ import {SortingType} from "../../components/SortingButton/types";
 import CourseCreateModal from "./CreateModal";
 
 import {DirectionFields} from "../Direction/enum";
-import {EducationalPlanFields} from "../EducationalPlan/enum";
 import {EducationPlanInDirectionFields} from './enum';
-
-import {appRouter} from "../../service/router-service";
 
 import {EducationalPlanInDirectionProps, EducationalPlanInDirectionType} from './types';
 
 import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
+import {specializationObject} from "../WorkProgram/constants";
 import Filters from "./Filters";
 
 import connect from './EducationPlanInDirection.connect';
 import styles from './EducationPlanInDirection.styles';
-import {specializationObject} from "../WorkProgram/constants";
 
 
 class EducationPlanInDirection extends React.Component<EducationalPlanInDirectionProps> {

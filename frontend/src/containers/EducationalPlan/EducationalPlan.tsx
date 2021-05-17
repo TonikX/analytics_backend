@@ -1,7 +1,6 @@
 import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
-import moment from 'moment';
 import {Link, withRouter} from 'react-router-dom'
 
 import Scrollbars from "react-custom-scrollbars";
@@ -23,7 +22,6 @@ import TableBody from "@material-ui/core/TableBody";
 import AddIcon from "@material-ui/icons/Add";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 import EyeIcon from "@material-ui/icons/VisibilityOutlined";
 import SettingsIcon from "@material-ui/icons/MoreVert";
@@ -34,8 +32,7 @@ import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";
 
 import {EducationalPlanProps, EducationalPlanType} from './types';
-import {FULL_DATE_FORMAT} from "../../common/utils";
-import {specialization, specializationObject} from "../WorkProgram/constants";
+import {specializationObject} from "../WorkProgram/constants";
 import {EducationalPlanFields} from './enum';
 
 import {appRouter} from "../../service/router-service";

@@ -34,7 +34,6 @@ import {appRouter} from "../../service/router-service";
 import connect from './Expertises.connect';
 import styles from './Expertises.styles';
 import TableFilter from "../../components/TableFilter/TableFilter";
-import {relations} from "../EntitityToEntitity/constants";
 
 class Expertises extends React.Component<ExpertisesProps> {
     state = {

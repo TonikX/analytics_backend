@@ -14,9 +14,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import {PlansAndDirectionsProps} from './types';
 import {appRouter} from "../../../service/router-service";
-import {DirectionFields} from "../../Direction/enum";
-
-import {specializationObject} from "../constants";
 
 import connect from './PlansAndDirections.connect';
 import styles from './PlansAndDirections.styles';
