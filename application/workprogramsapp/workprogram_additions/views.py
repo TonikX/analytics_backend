@@ -7,6 +7,7 @@ from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Сериализаторы
 from .serializers import AdditionalMaterialSerializer, CreateAdditionalMaterialSerializer, \
@@ -18,8 +19,9 @@ from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 from ..models import WorkProgram, DisciplineSection, PrerequisitesOfWorkProgram, OutcomesOfWorkProgram, \
-    WorkProgramInFieldOfStudy, СertificationEvaluationTool, EvaluationTool, Topic
-from ..serializers import WorkProgramSerializer, WorkProgramShortForExperiseSerializer
+    WorkProgramInFieldOfStudy, СertificationEvaluationTool, EvaluationTool, Topic, Competence
+from ..serializers import WorkProgramSerializer, WorkProgramShortForExperiseSerializer, CompetenceSerializer
+from .serializers import CompetenceFullSerializer
 
 
 class AdditionalMaterialSet(viewsets.ModelViewSet):
@@ -166,6 +168,24 @@ def ReconnectWorkProgram(request):
         return Response(serializer.data)
     except:
         return Response(status=400)
+
+
+class CompetencesSet(viewsets.ModelViewSet):
+    queryset = Competence.objects.all()
+    serializer_class = CompetenceSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+    filterset_fields = []
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CompetenceSerializer
+        if self.action == 'create':
+            return CompetenceSerializer
+        if self.action == 'update':
+            return CompetenceSerializer
+        if self.action == 'retrieve':
+            return CompetenceFullSerializer
+        return CompetenceSerializer
 
 
 

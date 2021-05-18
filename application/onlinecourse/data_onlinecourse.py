@@ -17,7 +17,7 @@ def get_data():
     cert_cert = env('CERT')
     cert_key = env('KEY')
     print(cert_cert, cert_key)
-    platforms = requests.get('https://test.online.edu.ru/api/partners/v0/platform',
+    platforms = requests.get('https://online.edu.ru/api/partners/v0/platform',
                              cert=(cert_cert, cert_key))
     print(platforms)
     platforms_list = platforms.json()['rows']
@@ -35,7 +35,7 @@ def get_data():
     Collecting institutions to DataFrame
     """
 
-    rightholders = requests.get('https://test.online.edu.ru/api/partners/v0/rightholder',
+    rightholders = requests.get('https://online.edu.ru/api/partners/v0/rightholder',
                                 cert=(cert_cert, cert_key))
     rightholders_list = rightholders.json()['rows']
 
@@ -53,7 +53,7 @@ def get_data():
     Collecting onlinecourses to DataFrame
     """
     # сбор ссылок на все страницы с онлайн курсами
-    course_link = 'https://test.online.edu.ru/api/courses/v0/course/'
+    course_link = 'https://online.edu.ru/api/courses/v0/course/'
     course_links = []
     course_links.append(course_link)
     for i in range(1, 53):
@@ -102,7 +102,7 @@ def get_data():
     institution_transfer = []
 
     # сбор данных по каждому онлайн курсов
-    course_link = 'https://test.online.edu.ru/api/courses/v0/course/'
+    course_link = 'https://online.edu.ru/api/courses/v0/course/'
     for i in range(0, len(course_id)):
         current_course_link = course_link + str(course_id[i])
         current_course = requests.get(current_course_link,
