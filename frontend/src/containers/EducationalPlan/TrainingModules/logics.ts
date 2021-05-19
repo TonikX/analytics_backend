@@ -7,7 +7,7 @@ import trainingModuleActions from './actions';
 import Service from './service';
 
 import {fetchingTypes} from "./enum";
-import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode, getShowOnlyMy} from "./getters";
 
 const service = new Service();
 
@@ -21,10 +21,11 @@ const getTrainingModulesList = createLogic({
         const searchQuery = getSearchQuery(state);
         const sortingField = getSortingField(state);
         const sortingMode = getSortingMode(state);
+        const showOnlyMy = getShowOnlyMy(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_TRAINING_MODULES}));
 
-        service.getTrainingModules(currentPage, searchQuery, sortingField, sortingMode)
+        service.getTrainingModules(currentPage, searchQuery, sortingField, sortingMode, showOnlyMy)
             .then((res) => {
                 const results = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));

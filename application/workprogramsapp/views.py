@@ -241,7 +241,7 @@ class OutcomesOfWorkProgramCreateAPIView(generics.CreateAPIView):
     def create(self, request):
         serializer = OutcomesOfWorkProgramCreateSerializer(data=request.data)
 
-        # обновляем value для item 
+        # обновляем value для item
         item = Items.objects.get(id=request.data.get('item'))
         value = item.value
         item.value = int(value) + 1
@@ -364,7 +364,7 @@ class PrerequisitesOfWorkProgramCreateAPIView(generics.CreateAPIView):
 
     def create(self, request):
         serializer = PrerequisitesOfWorkProgramCreateSerializer(data=request.data)
-        # обновляем value для item 
+        # обновляем value для item
         item = Items.objects.get(id=request.data.get('item'))
         value = item.value
         item.value = int(value) + 1
@@ -1167,7 +1167,7 @@ from discipline_code import IPv4_code_ver2
 
 def handle_uploaded_csv(file, filename):
     """
-    Обработка файла csv 
+    Обработка файла csv
     """
 
     if not os.path.exists('upload/'):
@@ -1790,6 +1790,9 @@ class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
     queryset = DisciplineBlockModule.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def perform_create(self, serializer):
+        serializer.save(editor=self.request.user)
+
 
 class DisciplineBlockModuleDestroyView(generics.DestroyAPIView):
     queryset = DisciplineBlockModule.objects.all()
@@ -2073,6 +2076,15 @@ class DisciplineBlockModuleDetailListView(generics.ListAPIView):
     serializer_class = DisciplineBlockModuleDetailSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+
+
+class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
+    serializer_class = DisciplineBlockModuleDetailSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+
+    def get_queryset(self):
+        return DisciplineBlockModule.objects.filter(editors=self.request.user)
 
 
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):

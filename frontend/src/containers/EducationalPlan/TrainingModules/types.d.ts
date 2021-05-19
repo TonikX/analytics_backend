@@ -27,6 +27,8 @@ export interface TrainingModulesActions {
     changeTrainingModule: ActionCreatorWithPayload<ChangeTrainingModulePayload>;
     deleteTrainingModule: ActionCreatorWithPayload;
     changeFiltering: ActionCreatorWithPayload;
+
+    showOnlyMy: ActionCreatorWithPayload<boolean>;
 }
 
 export type OpenDialogPayload = {
@@ -62,6 +64,7 @@ export interface trainingModulesState {
         [fields.IS_OPEN_TRAINING_MODULE_DIALOG]: boolean;
         [fields.TRAINING_MODULE_DIALOG_DATA]: TrainingModuleType|{};
     };
+    [fields.SHOW_ONLY_MY]: boolean;
 }
 
 export interface TrainingModulesProps extends WithStyles<typeof styles>, PropsFromRedux, ActionsFromRedux{}

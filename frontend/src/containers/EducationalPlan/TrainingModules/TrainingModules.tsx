@@ -39,6 +39,7 @@ import connect from './TrainingModules.connect';
 import styles from './TrainingModules.styles';
 
 import Filters from "./Filters";
+import Switch from "@material-ui/core/Switch";
 
 class TrainingModules extends React.Component<TrainingModulesProps> {
     state = {
@@ -113,14 +114,30 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
         });
     };
 
+    onShowOnlyMyChange = () => {
+        const {showOnlyMy} = this.props;
+
+        this.props.actions.showOnlyMy(!showOnlyMy);
+
+        this.props.actions.getTrainingModulesList();
+    }
+
     render() {
-        const {classes, trainingModules, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
+        const {classes, trainingModules, allCount, currentPage, sortingField, sortingMode, canEdit, showOnlyMy} = this.props;
         const {deleteConfirmId, anchorsEl} = this.state;
 
         return (
             <Paper className={classes.root}>
                 <div className={classes.titleWrap}>
                     <Typography className={classes.title}> Образовательные модули </Typography>
+
+                    <Typography className={classes.switch}>
+                        <Switch checked={showOnlyMy}
+                                onChange={this.onShowOnlyMyChange}
+                                color="primary"
+                        />
+                        Показать только мои модули
+                    </Typography>
 
                     <Search handleChangeSearchQuery={this.handleChangeSearchQuery}/>
                 </div>

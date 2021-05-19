@@ -28,7 +28,8 @@ from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAP
     SkillsOfRoleInRoleDestroyView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, \
     AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, DisciplineBlockModuleShortListView, \
-    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailView, DisciplinesByNumber, InsertModule
+    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailListForUserView, DisciplineBlockModuleDetailView, \
+    DisciplinesByNumber, InsertModule
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
@@ -234,6 +235,7 @@ urlpatterns = [
     path('api/disciplineblockmodule/update/<int:pk>', DisciplineBlockModuleUpdateView.as_view()),
     path('api/disciplineblockmodule/short', DisciplineBlockModuleShortListView.as_view()),
     path('api/disciplineblockmodule/detail/list', DisciplineBlockModuleDetailListView.as_view()),
+    path('api/disciplineblockmodule/detail/list/for_this_user', DisciplineBlockModuleDetailListForUserView.as_view()),
     path('api/disciplineblockmodule/detail/<int:pk>', DisciplineBlockModuleDetailView.as_view()),
     path('api/disciplineblockmodule/insert', InsertModule),
     # Работа с образовательными программами
