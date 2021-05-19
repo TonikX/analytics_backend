@@ -19,11 +19,12 @@ import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";
 import Search from "../../components/Search";
 import WorkProgramStatus from "../../components/WorkProgramStatus";
+import TableFilter from "../../components/TableFilter/TableFilter";
 
-import {ExpertisesProps} from './types';
+import {ExpertisesProps, ExpertUserInRPDType} from './types';
 import {ExpertisesFields} from "./enum";
 
-import {FULL_DATE_FORMAT} from "../../common/utils";
+import {FULL_DATE_FORMAT, getUserFullName} from "../../common/utils";
 
 import {WorkProgramGeneralFields} from "../WorkProgram/enum";
 import {WorkProgramStatusType} from "../WorkProgram/types";
@@ -33,8 +34,6 @@ import {appRouter} from "../../service/router-service";
 
 import connect from './Expertises.connect';
 import styles from './Expertises.styles';
-import TableFilter from "../../components/TableFilter/TableFilter";
-import {relations} from "../EntitityToEntitity/constants";
 
 class Expertises extends React.Component<ExpertisesProps> {
     state = {
@@ -126,7 +125,7 @@ class Expertises extends React.Component<ExpertisesProps> {
                                         <TableFilter items={specializationObject} handleSelect={this.handleSelectQualification} />
                                     </TableCell>
                                     <TableCell>
-                                        Авторы
+                                        Эксперты
                                     </TableCell>
                                     <TableCell>
                                         Дата изменения
@@ -149,7 +148,9 @@ class Expertises extends React.Component<ExpertisesProps> {
                                             </Link>
                                         </TableCell>
                                         <TableCell>{specializationObject[expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.QUALIFICATION]]}</TableCell>
-                                        <TableCell>{expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.AUTHORS]}</TableCell>
+                                        <TableCell>
+                                            {expertise[ExpertisesFields.EXPERTS_USERS_IN_RPD].map((item: ExpertUserInRPDType) => getUserFullName(item[ExpertisesFields.EXPERT])).join(', ')}
+                                        </TableCell>
                                         <TableCell>
                                             {moment(expertise[ExpertisesFields.DATE_OF_LAST_CHANGE]).format(FULL_DATE_FORMAT)}
                                         </TableCell>

@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import SearchSelector from '../../../components/SearchSelector'
 
-import {languageArray, specialization} from '../../WorkProgram/constants';
+import { specialization} from '../../WorkProgram/constants';
 import { rootState } from '../../../store/reducers'
 
 import actions from '../actions'
