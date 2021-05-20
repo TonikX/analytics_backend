@@ -1,6 +1,7 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
+import {Link} from "react-router-dom";
 // @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
 
@@ -19,6 +20,9 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import EyeIcon from "@material-ui/icons/VisibilityOutlined";
+
+import {appRouter} from "../../service/router-service";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -132,6 +136,12 @@ class Competences extends React.Component<CompetenceProps> {
                                     <Typography className={classNames(classes.marginRight, classes.numberCell)}> {competence[CompetenceFields.NUMBER]} </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}> {competence[CompetenceFields.TITLE]} </Typography>
                                     <div className={classes.actions}>
+                                        <IconButton>
+                                            <Link style={{textDecoration: 'none', height: '23px', color: 'rgba(0, 0, 0, 0.54)'}}
+                                                  to={appRouter.getCompetenceIndicatorsRouteLink(competence[CompetenceFields.ID])}>
+                                                <EyeIcon />
+                                            </Link>
+                                        </IconButton>
                                         <IconButton onClick={this.handleClickDelete(competence[CompetenceFields.ID])}>
                                             <DeleteIcon />
                                         </IconButton>
