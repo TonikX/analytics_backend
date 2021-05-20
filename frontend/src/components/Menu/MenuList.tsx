@@ -98,12 +98,6 @@ export default (groups: Array<string>) => {
             selectedIcon: CompetencesSelectedIcon,
         },
         {
-            title: 'Индикаторы',
-            link: appRouter.getIndicatorsRoute(),
-            icon: IndicatorsIcon,
-            selectedIcon: IndicatorsSelectedIcon,
-        },
-        {
             title: 'Профессиональные стандарты',
             link: appRouter.getProfessionalStandardsRoute(),
             icon: IndicatorsIcon,

@@ -172,6 +172,13 @@ export default class RouterService {
         return SEPARATOR + PROFESSIONS + SEPARATOR + id + SEPARATOR + SKILLS;
     };
 
+    getCompetenceIndicatorsRouteLink = (id: number) => {
+        return SEPARATOR + COMPETENCES + SEPARATOR + id + SEPARATOR + INDICATORS;
+    };
+    getCompetenceIndicatorsRoute = () => {
+        return SEPARATOR + COMPETENCES + SEPARATOR + ':id' + SEPARATOR + INDICATORS;
+    };
+
     getRoleSkillsRouteLink = (id: number) => {
         return SEPARATOR + ROLES + SEPARATOR + id + SEPARATOR + SKILLS;
     };
