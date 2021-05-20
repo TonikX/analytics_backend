@@ -34,11 +34,9 @@ class OnlineCourseViewSet(viewsets.ModelViewSet):
     queryset = OnlineCourse.objects.all()
     serializer_class = OnlineCourseSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['title', 'platform__title', 'institution__title',
-                     'course_field_of_study__field_of_study__number', 'course_field_of_study__field_of_study__title']
+    search_fields = ['title', 'platform__title', 'institution__title']
     ordering_fields = ['title', 'platform__title', 'institution__title', 'language', 'started_at', 'rating']
-    filterset_fields = ['platform__title', 'institution__title', 'language',
-                        'course_field_of_study__field_of_study__number', 'course_field_of_study__field_of_study__title']
+    filterset_fields = ['platform__title', 'institution__title', 'language']
 
 
 class CourseCreditViewSet(viewsets.ModelViewSet):
@@ -105,100 +103,100 @@ class CourseDataAPIView(APIView):
                                                            language=data_OnlineCourse.language[i],
                                                            )
                 onlinecourse.save()
-            if data_OnlineCourse.started_at[i] != 'None':
+            if data_OnlineCourse.started_at[i] != 'null':
                 onlinecourse.started_at = data_OnlineCourse.started_at[i]
                 onlinecourse.save()
-            if data_OnlineCourse.created_at[i] != 'None':
+            if data_OnlineCourse.created_at[i] != 'null':
                 onlinecourse.created_at = data_OnlineCourse.created_at[i]
                 onlinecourse.save()
-            if data_OnlineCourse.record_end_at[i] != 'None':
+            if data_OnlineCourse.record_end_at[i] != 'null':
                 onlinecourse.record_end_at = data_OnlineCourse.record_end_at[i]
                 onlinecourse.save()
-            if data_OnlineCourse.finished_at[i] != 'None':
+            if data_OnlineCourse.finished_at[i] != 'null':
                 onlinecourse.finished_at = data_OnlineCourse.finished_at[i]
                 onlinecourse.save()
-            if data_OnlineCourse.rating[i] != 'None':
+            if data_OnlineCourse.rating[i] != 'null':
                 onlinecourse.rating = data_OnlineCourse.rating[i]
                 onlinecourse.save()
-            if data_OnlineCourse.experts_rating[i] != 'None':
+            if data_OnlineCourse.experts_rating[i] != 'null':
                 try:
                     onlinecourse.experts_rating = float(data_OnlineCourse.experts_rating[i])
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.visitors_number[i] != 'None':
+            if data_OnlineCourse.visitors_number[i] != 'null':
                 try:
                     onlinecourse.visitors_number = int(data_OnlineCourse.visitors_number[i])
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.total_visitors_number[i] != 'None':
+            if data_OnlineCourse.total_visitors_number[i] != 'null':
                 try:
                     onlinecourse.total_visitors_number = int(data_OnlineCourse.total_visitors_number[i])
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.duration[i] != 'None':
+            if data_OnlineCourse.duration[i] != 'null':
                 try:
                     onlinecourse.duration = int(data_OnlineCourse.duration[i])
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.volume[i] != 'None':
+            if data_OnlineCourse.volume[i] != 'null':
                 try:
                     onlinecourse.volume = int(data_OnlineCourse.volume[i])
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.intensity_per_week[i] != 'None':
+            if data_OnlineCourse.intensity_per_week[i] != 'null':
                 try:
                     onlinecourse.intensity_per_week = int(data_OnlineCourse.intensity_per_week[i])
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.content[i] != 'None':
+            if data_OnlineCourse.content[i] != 'null':
                 try:
                     onlinecourse.content = str(data_OnlineCourse.content[i])
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.lectures_number[i] != 'None':
+            if data_OnlineCourse.lectures_number[i] != 'null':
                 try:
                     onlinecourse.lectures_number = int(data_OnlineCourse.lectures_number[i])
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.external_url[i] != 'None':
+            if data_OnlineCourse.external_url[i] != 'null':
                 try:
                     onlinecourse.external_url = str(data_OnlineCourse.external_url[i])
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.has_certificate[i] != 'None':
+            if data_OnlineCourse.has_certificate[i] != 'null':
                 try:
                     onlinecourse.has_certificate = bool(data_OnlineCourse.has_certificate[i])
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.credits[i] != 'None':
+            if data_OnlineCourse.credits[i] != 'null':
                 try:
                     onlinecourse.credits = float(data_OnlineCourse.credits[i])
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.requirements[i] != 'None':
+            if data_OnlineCourse.requirements[i] != 'null':
                 try:
                     onlinecourse.requirements = data_OnlineCourse.requirements[i]
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.competences[i] != 'None':
+            if data_OnlineCourse.competences[i] != 'null':
                 try:
                     onlinecourse.competences = data_OnlineCourse.competences[i]
                     onlinecourse.save()
                 except:
                     continue
-            if data_OnlineCourse.learning_outcomes[i] != 'None':
+            if data_OnlineCourse.learning_outcomes[i] != 'null':
                 try:
                     onlinecourse.learning_outcomes = data_OnlineCourse.learning_outcomes[i]
                     onlinecourse.save()
