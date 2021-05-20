@@ -7,7 +7,7 @@ def generate_checkpoint_plan(regular_checkpoint: list, programs: list, disciplin
         "additional_points": additional_points,
         "alternate_methods": alternate_methods,
         "has_course_project": has_course_project,
-        "programs": [programs],
+        "programs": programs,
         "status": "SAVED",
         "term": term,
         "regular_checkpoints": regular_checkpoint,

@@ -88,9 +88,9 @@ class ExpertiseListView(generics.ListAPIView):
     permission_classes = [IsMemberOfUserExpertise]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     filterset_fields = ['date_of_last_change', 'expertise_status', 'work_program__title', 'work_program__qualification',
-                        'work_program__discipline_code']
+                        'work_program__discipline_code', "work_program__editors", "expertse_users_in_rpd__expert"]
     search_fields = ['work_program__title', 'work_program__qualification',
-                     'work_program__discipline_code']
+                     'work_program__discipline_code', "work_program__editors", "expertse_users_in_rpd__expert"]
 
     def get_queryset(self):
         # Note the use of `get_queryset()` instead of `self.queryset`
