@@ -594,6 +594,7 @@ class DisciplineBlockDetailAcademicSerializer(serializers.ModelSerializer):
 class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
     change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
     descipline_block = DisciplineBlockDetailAcademicSerializer(many=False)
+    editors = userProfileSerializer(many=True)
 
     class Meta:
         model = DisciplineBlockModule

@@ -23,6 +23,7 @@ import Search from "../../../components/Search";
 import {SortingType} from "../../../components/SortingButton/types";
 import TableSettingsMenu from "../../../components/TableSettingsMenu/TableSettingsMenu";
 import CustomizeExpansionPanel from "../../../components/CustomizeExpansionPanel";
+import { parseJwt } from "../../../common/utils";
 
 import {DirectionFields} from "../../Direction/enum";
 import {DirectionType} from "../../Direction/types";
@@ -30,6 +31,7 @@ import {DirectionType} from "../../Direction/types";
 import TrainingModuleCreateModal from "./TrainingModuleCreateModal";
 
 import {appRouter} from "../../../service/router-service";
+import UserService from "../../../service/user-service";
 
 import {TrainingModulesProps, TrainingModuleType} from './types';
 import {TrainingModuleFields} from "./enum";
@@ -40,6 +42,8 @@ import styles from './TrainingModules.styles';
 
 import Filters from "./Filters";
 import Switch from "@material-ui/core/Switch";
+
+const userService = UserService.factory();
 
 class TrainingModules extends React.Component<TrainingModulesProps> {
     state = {
@@ -120,6 +124,39 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
         this.props.actions.showOnlyMy(!showOnlyMy);
 
         this.props.actions.getTrainingModulesList();
+    }
+
+    getMenuItems = (trainingModule: TrainingModuleType) => {
+        const accessToken = userService.getToken();
+
+        if (!accessToken) {
+            return [];
+        }
+
+        const userId: number = parseJwt(accessToken).user_id;
+        const menuItems = [
+            {
+                text: 'Удалить',
+                icon: <DeleteIcon />,
+                handleClickItem: this.handleClickDelete(trainingModule[TrainingModuleFields.ID])
+            },
+            {
+                text: 'Редактировать',
+                icon: <EditIcon />,
+                handleClickItem: this.handleClickEdit(trainingModule)
+            },
+            {
+                text: 'Смотреть детально',
+                icon: <EyeIcon />,
+                link: appRouter.getTrainingModuleDetailLink(trainingModule[TrainingModuleFields.ID])
+            }
+        ];
+
+        if (!trainingModule.editors.map((editor) => editor.id).includes(userId)) {
+            menuItems.splice(1, 1);
+        }
+
+        return menuItems;
     }
 
     render() {
@@ -207,26 +244,11 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                             </TableCell>
                                             {canEdit &&
                                                 <TableCell>
-                                                    <TableSettingsMenu menuItems={[
-                                                        {
-                                                            text: 'Удалить',
-                                                            icon: <DeleteIcon />,
-                                                            handleClickItem: this.handleClickDelete(trainingModule[TrainingModuleFields.ID])
-                                                        },
-                                                        {
-                                                            text: 'Редактировать',
-                                                            icon: <EditIcon />,
-                                                            handleClickItem: this.handleClickEdit(trainingModule)
-                                                        },
-                                                        {
-                                                            text: 'Смотреть детально',
-                                                            icon: <EyeIcon />,
-                                                            link: appRouter.getTrainingModuleDetailLink(trainingModule[TrainingModuleFields.ID])
-                                                        }
-                                                    ]}
-                                                           handleOpenMenu={this.handleOpenMenu(trainingModule[TrainingModuleFields.ID])}
-                                                           handleCloseMenu={this.handleCloseMenu}
-                                                           anchorEl={get(anchorsEl, trainingModule[TrainingModuleFields.ID])}
+                                                    <TableSettingsMenu
+                                                        menuItems={this.getMenuItems(trainingModule)}
+                                                        handleOpenMenu={this.handleOpenMenu(trainingModule[TrainingModuleFields.ID])}
+                                                        handleCloseMenu={this.handleCloseMenu}
+                                                        anchorEl={get(anchorsEl, trainingModule[TrainingModuleFields.ID])}
                                                     />
                                                 </TableCell>
 

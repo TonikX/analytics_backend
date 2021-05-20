@@ -28,6 +28,8 @@ const changeFiltering = createAction('TRAINING_MODULES_CHANGE_FILTERING');
 
 const showOnlyMy = createAction<boolean>('TRAINING_MODULES_SHOW_ONLY_MY');
 
+const changeEditorList = createAction('TRAINING_MODULES_CHANGE_EDITOR_LIST');
+
 const actions: TrainingModulesActions = {
     changeFiltering,
     getTrainingModulesList,
@@ -48,6 +50,8 @@ const actions: TrainingModulesActions = {
     closeDialog,
 
     showOnlyMy,
+
+    changeEditorList,
 }
 
 export default actions;
