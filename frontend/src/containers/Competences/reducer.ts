@@ -14,6 +14,8 @@ export const initialState: competenceState = {
     [fields.CURRENT_PAGE]: 1,
     [fields.ALL_COUNT]: 1,
     [fields.SEARCH_QUERY]: '',
+    [fields.INDICATORS]: [],
+    [fields.COMPETENCE]: {},
     [fields.COMPETENCE_LIST]: [],
     [fields.COMPETENCE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
@@ -24,6 +26,16 @@ export const initialState: competenceState = {
 const setCompetences = (state: competenceState, {payload}: any): competenceState => ({
     ...state,
     [fields.COMPETENCE_LIST]: payload,
+});
+
+const setCompetence = (state: competenceState, {payload}: any): competenceState => ({
+    ...state,
+    [fields.COMPETENCE]: payload,
+});
+
+const setIndicators = (state: competenceState, {payload}: any): competenceState => ({
+    ...state,
+    [fields.INDICATORS]: payload,
 });
 
 const changeSearchQuery = (state: competenceState, {payload}: any): competenceState => ({
@@ -66,6 +78,8 @@ const changeSorting = (state: competenceState, {payload}: any): competenceState 
 });
 
 export const reducer = createReducer(initialState, {
+    [actions.setCompetence.type]: setCompetence,
+    [actions.setIndicators.type]: setIndicators,
     [actions.setCompetences.type]: setCompetences,
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,

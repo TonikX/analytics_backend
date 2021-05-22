@@ -11,13 +11,13 @@ import Course from './containers/Course';
 import SubjectArea from './containers/SubjectArea';
 import Prerequisites from './containers/TrainingEntities';
 import Competences from './containers/Competences';
+import Indicators from './containers/Competences/Indicators';
 import Direction from './containers/Direction';
 import TrainingModules from './containers/EducationalPlan/TrainingModules';
 import TrainingModuleDetail from './containers/EducationalPlan/TrainingModules/DetailTrainingModule';
 import EducationalPlan from './containers/EducationalPlan';
 import EducationPlanInDirection from './containers/EduationPlanInDirection';
 import EducationPlanDetail from './containers/EducationalPlan/Detail';
-import Indicators from './containers/Indicators';
 import WorkProgramList from "./containers/WorkProgramList";
 import EntitityToEntitity from "./containers/EntitityToEntitity";
 import Professions from "./containers/Professions";
@@ -126,6 +126,9 @@ export default () => (
             <AuthRoute path={routerService.getTrainingEntitiesRoute()}>
                 <Prerequisites />
             </AuthRoute>
+            <AuthRoute path={routerService.getCompetenceIndicatorsRoute()}>
+                <Indicators />
+            </AuthRoute>
             <AuthRoute path={routerService.getCompetencesRoute()}>
                 <Competences />
             </AuthRoute>
@@ -164,9 +167,6 @@ export default () => (
             </AuthRoute>
             <AuthRoute path={routerService.getSkillsProfessionsRoute()}>
                 <SkillsProfessions />
-            </AuthRoute>
-            <AuthRoute path={routerService.getIndicatorsRoute()}>
-                <Indicators />
             </AuthRoute>
             <AuthRoute path={routerService.getEducationalProgramCharacteristic()}>
                 <EducationalProgramCharacteristic />
