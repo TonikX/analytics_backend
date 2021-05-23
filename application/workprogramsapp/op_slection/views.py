@@ -89,17 +89,19 @@ def EducationalProgramRankingByProfessionScientific(request):
         work_program.skills_add = list(set(work_program.outcomes.all()) & set(skills_additional))
 
     # Получение всех УП из списка РПД со скиллами
-    academic_plan_with_skills = AcademicPlan.objects.filter(
-        discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__in=wp_with_skills,
+    academic_plan_with_skills = ImplementationAcademicPlan.objects.filter(
+        academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__in=wp_with_skills,
         year="2020", qualification=qualification).annotate(
         Count('pk'))
+
     # Считаем метрики
     max_coverage = 0
     min_coverage = float('inf')
     max_focus = 0
     min_focus = float('inf')
+    ap_list = []
     for ap in academic_plan_with_skills:
-
+        ap = AcademicPlan.objects.get(pk=ap.academic_plan.id)
         wp_all = WorkProgram.objects.filter(
             zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan=ap)
         set_of_wp = []  # (set(wp_with_skills) & set(wp_all))
@@ -163,20 +165,39 @@ def EducationalProgramRankingByProfessionScientific(request):
         ap.module = module_select
         if ap.coverage > max_coverage:
             max_coverage = ap.coverage
+            print(max_coverage)
         if ap.coverage < min_coverage:
             min_coverage = ap.coverage
+            print(min_coverage)
         if ap.focus > max_focus:
             max_focus = ap.focus
+            print(max_focus)
         if ap.focus < min_focus:
             min_focus = ap.focus
-
+            print(min_focus)
+        ap_list.append(ap)
         # ap.metrics = 2 * (ap.coverage * ap.focus) / (ap.coverage + ap.focus)
-    for ap in academic_plan_with_skills:
+    for ap in ap_list:
+        """if ap.coverage==min_coverage:
+            print("min_coverage")
+            print(ap.coverage)
+        if ap.coverage==max_coverage:
+            print("max_coverage")
+            print(ap.coverage)
+        if ap.focus==min_focus:
+            print("min_focus")
+            
+        if ap.focus==max_focus:
+            print("max_focus")
+            print(ap.focus)"""
         ap.coverage = 0.01 + (ap.coverage - min_coverage) * (1 - 0.01) / (max_coverage - min_coverage)
+        print(ap.coverage)
         ap.focus = 0.01 + (ap.focus - min_focus) * (1 - 0.01) / (max_focus - min_focus)
+        print(ap.focus)
         ap.metrics = 2 * (ap.coverage * ap.focus) / (ap.coverage + ap.focus)
+
     # Cортировка--
-    sorted_academic_plan = sorted(academic_plan_with_skills, key=lambda ac_pl: ac_pl.metrics, reverse=True)
+    sorted_academic_plan = sorted(ap_list, key=lambda ac_pl: ac_pl.metrics, reverse=True)
     # for i in sorted_academic_plan: print(i, i.metrics)
     list_of_educational_program = []
     for s in sorted_academic_plan:
