@@ -1,7 +1,9 @@
 from django.conf.urls import url, include
 from django.urls.conf import path
 from rest_framework.routers import DefaultRouter
-from .views import AdditionalMaterialSet, StructuralUnitSet, UserStructuralUnitSet, CompetencesSet
+from .views import AdditionalMaterialSet, StructuralUnitSet, UserStructuralUnitSet, CompetencesSet, \
+    ChangeSemesterInEvaluationsCorrect
+
 router = DefaultRouter()
 router.register(r'api/general_ch/additional_material_in_topic_of_rpd',
                 AdditionalMaterialSet, basename='additional_material_in_topic_of_rpd')
@@ -14,6 +16,7 @@ router.register(r'api/competences_set',
 
 urlpatterns = [
     url(r'^', include(router.urls)),
+    path('api/workprogram/make_evaluation_tools_correct', ChangeSemesterInEvaluationsCorrect),
 
 
 ]

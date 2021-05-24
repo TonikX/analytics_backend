@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class BarsWorkProgramsAssociate(models.Model):
@@ -13,8 +14,10 @@ class HistoryOfSendingToBars(models.Model):
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE,
                                      verbose_name='РПД',
                                      related_name="wp_in_send_history")
-    date_of_sending = models.DateTimeField(auto_now_add=True)
-    request_text = models.TextField(verbose_name='Текст запроса в БАРС')
+    date_of_sending = models.DateField(default=timezone.now)
+    request_text = models.TextField(verbose_name='Текст запроса в БАРС', blank=True, null=True)
+    request_response = models.TextField(verbose_name='Текст ответа БАРС', blank=True, null=True)
+    request_status = models.IntegerField(verbose_name='Статус запроса в БАРС', blank=True, null=True)
 
 
 class BarsEPAssociate(models.Model):

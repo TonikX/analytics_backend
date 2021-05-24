@@ -324,12 +324,10 @@ urlpatterns = [
     path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
     url(r'^', include('workprogramsapp.educational_program.urls')),
 
-    # Запросы для работы с БАРС
-    path('api/bars_tools/similar_ep', FindSimilarEP),
-    path('api/bars_tools/similar_wp', FindSimilarWP),
-    path('api/bars_tools/post_checkpoint', CreateCheckPoint),
+
     url(r'^', include('workprogramsapp.educational_program.urls')),
     url(r'^', include('workprogramsapp.workprogram_additions.urls')),
+    url(r'^', include('workprogramsapp.bars_merge.urls')),
 
     url(r'^', include('workprogramsapp.individualization.urls')),
     url(r'^', include('workprogramsapp.isu_merge.urls')),
