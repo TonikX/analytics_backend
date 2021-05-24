@@ -7,7 +7,7 @@ environ.Env.read_env()  # reading .env file
 
 cert_cert = env('CERT')
 cert_key = env('KEY')
-print(cert_cert, cert_key)
+online_edu_link = 'https://online.edu.ru/api/'
 
 
 def get_data():
@@ -17,9 +17,8 @@ def get_data():
     cert_cert = env('CERT')
     cert_key = env('KEY')
     print(cert_cert, cert_key)
-    platforms = requests.get('https://online.edu.ru/api/partners/v0/platform',
+    platforms = requests.get(online_edu_link+'partners/v0/platform',
                              cert=(cert_cert, cert_key))
-    print(platforms)
     platforms_list = platforms.json()['rows']
 
     global_id = []
@@ -35,7 +34,7 @@ def get_data():
     Collecting institutions to DataFrame
     """
 
-    rightholders = requests.get('https://online.edu.ru/api/partners/v0/rightholder',
+    rightholders = requests.get(online_edu_link+'partners/v0/rightholder',
                                 cert=(cert_cert, cert_key))
     rightholders_list = rightholders.json()['rows']
 
@@ -53,10 +52,17 @@ def get_data():
     Collecting onlinecourses to DataFrame
     """
     # сбор ссылок на все страницы с онлайн курсами
-    course_link = 'https://online.edu.ru/api/courses/v0/course/'
+    course_link = online_edu_link+'courses/v0/course/'
+    total_count_courses = requests.get(course_link,
+                                       cert=(cert_cert, cert_key)).json()['total_count']
+    count_courses = len(requests.get(course_link,
+                                       cert=(cert_cert, cert_key)).json()['results'])
+    print('Всего онлайн-курсов :', total_count_courses)
+    pages = round(total_count_courses / count_courses) + 1
+    print('Количество страниц - ', pages)
     course_links = []
     course_links.append(course_link)
-    for i in range(1, 53):
+    for i in range(1, pages):
         new_link = course_link + '?page=' + str(i)
         course_links.append(new_link)
 
@@ -68,7 +74,7 @@ def get_data():
         courses_list = course.json()['results']
         for i in courses_list:
             course_id.append(i['global_id'])
-
+    print('Длина course_id', len(course_id))
     title = []
     description = []
     institution = []
@@ -102,7 +108,8 @@ def get_data():
     institution_transfer = []
 
     # сбор данных по каждому онлайн курсов
-    course_link = 'https://online.edu.ru/api/courses/v0/course/'
+    course_link = online_edu_link+'courses/v0/course/'
+
     for i in range(0, len(course_id)):
         current_course_link = course_link + str(course_id[i])
         current_course = requests.get(current_course_link,
@@ -131,21 +138,27 @@ def get_data():
         try:
             if len(current_course.json()['requirements']) != 0:
                 requirements.append(current_course.json()['requirements'][0])
+            else:
+                requirements.append('null')
         except:
             continue
         try:
             if len(current_course.json()['learning_outcomes']) != 0:
                 learning_outcomes.append(current_course.json()['learning_outcomes'][0])
+            else:
+                learning_outcomes.append('null')
         except:
             continue
         try:
             if len(current_course.json()['competences']) != 0:
                 competences.append(current_course.json()['competences'])
+            else:
+                competences.append('null')
         except:
             competences.append('')
 
         """
-        Collecting onlinecourse&field_of_study to DataFrame
+        #Collecting onlinecourse&field_of_study to DataFrame
         """
 
         for j in current_course.json()['directions']:
@@ -161,6 +174,7 @@ def get_data():
             field_of_study_transfer.append(j['direction_id'])
             institution_transfer.append(j['institution_id'])
 
+
     data_OnlineCourse = pd.DataFrame(list(zip(course_id, title, description, institution, platform, language,
                                               started_at, created_at, record_end_at, finished_at, rating,
                                               experts_rating, visitors_number, total_visitors_number, duration, volume,
@@ -172,7 +186,10 @@ def get_data():
                                               'duration', 'volume', 'intensity_per_week', 'content', 'lectures_number',
                                               'external_url', 'has_certificate', 'credits', 'requirements',
                                               'learning_outcomes', 'competences'])
+    print(data_OnlineCourse.shape)
     data_OnlineCourse['id_course'] = data_OnlineCourse.index
+
+    print(data_OnlineCourse.shape)
 
     data_CourseFieldOfStudy = pd.DataFrame(list(zip(course_id_field_of_study, field_of_study)),
                                            columns=['course_id', 'field_of_study'])
@@ -193,9 +210,9 @@ def get_data():
                                                                  format='%Y-%m-%d', errors='ignore')
     data_online_course_platform_inst.finished_at = pd.to_datetime(data_online_course_platform_inst['finished_at'],
                                                                   format='%Y-%m-%d', errors='ignore')
-
-    data_online_course_platform_inst = data_online_course_platform_inst.fillna(value='None')
     data_OnlineCourse = data_online_course_platform_inst.copy()
+    data_OnlineCourse = data_OnlineCourse.fillna('null')
+    print('final shape', data_OnlineCourse.shape)
 
     """
     Adding new id as FK to CourseFieldOfStudy
