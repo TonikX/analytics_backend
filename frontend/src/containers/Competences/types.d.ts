@@ -3,8 +3,16 @@ import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {CompetenceFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
+import {IndicatorType} from "../Indicators/types";
 
 export interface CompetenceActions {
+    changeIndicator: any;
+    createIndicator: any;
+    deleteIndicator: any;
+    getCompetence: any;
+    setCompetence: any;
+    getIndicators: any;
+    setIndicators: any;
     changeSearchQuery: any;
     getCompetences: any;
     setCompetences: any;
@@ -31,6 +39,8 @@ export interface competenceState {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: CompetenceType|{};
     };
+    [fields.INDICATORS]: Array<IndicatorType>,
+    [fields.COMPETENCE]: CompetenceType|{},
 }
 
 export type CompetenceType = {
