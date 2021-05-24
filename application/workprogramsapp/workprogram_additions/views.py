@@ -192,21 +192,25 @@ def ChangeSemesterInEvaluationsCorrect(request):
             work_program__id=wp.id))
         min_sem = 12
         for eva in evaluation_tools:
+            if eva.semester == None:
+                break
             if eva.semester < min_sem:
                 min_sem = eva.semester
-        if min_sem != 1:
+        if min_sem != 1 and eva.semester != None:
             for eva in evaluation_tools:
                 eva.semester = eva.semester - min_sem + 1
                 eva.save()
-        final_tool=СertificationEvaluationTool.objects.filter(work_program=wp)
+        final_tool = СertificationEvaluationTool.objects.filter(work_program=wp)
         min_sem = 12
         for eva in final_tool:
+            if eva.semester == None:
+                break
             if eva.semester < min_sem:
                 min_sem = eva.semester
-        if min_sem != 1:
+        if min_sem != 1 and eva.semester != None:
             for eva in final_tool:
                 eva.semester = eva.semester - min_sem + 1
                 eva.save()
-    serializer=WorkProgramSerializer(needed_wp, many=True)
+    serializer = WorkProgramSerializer(needed_wp, many=True)
     return Response(serializer.data)
 
