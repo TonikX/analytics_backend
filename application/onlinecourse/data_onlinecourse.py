@@ -109,6 +109,7 @@ def get_data():
 
     # сбор данных по каждому онлайн курсов
     course_link = online_edu_link+'courses/v0/course/'
+
     for i in range(0, len(course_id)):
         current_course_link = course_link + str(course_id[i])
         current_course = requests.get(current_course_link,

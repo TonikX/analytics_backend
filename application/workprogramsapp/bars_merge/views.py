@@ -164,17 +164,22 @@ def SendCheckpointsForAcceptedWP(request):
         imp_list = []
         wp_bars_data = WorkProgramIdStrUpForIsu.objects.filter(
             work_program_in_field_of_study__work_program=work_program).distinct()
+        needed_semesters=[]
         for data_isu in wp_bars_data:
             implementation_of_academic_plan = ImplementationAcademicPlan.objects.filter(
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zuns_for_wp=data_isu).distinct()
-
-            for imp in implementation_of_academic_plan:
-                field_of_studies = FieldOfStudy.objects.get(
-                    implementation_academic_plan_in_field_of_study=imp)
-                imp_list.append(generate_fos(data_isu.ns_id, field_of_studies.number, imp.title))
-        semesters = str(data_isu.ze_v_sem).split(",")
+            semesters = str(data_isu.ze_v_sem).split(",")
+            for i, el in enumerate(semesters):
+                # Входная точка: у нас есть все данные - семетр, учебный план, направление, рпд, информация из ИСУ
+                if float(el) > 0:
+                    if ((i + 1) % 2 == 0 and send_semester % 2 == 0) or ((i + 1) % 2 != 0 and send_semester % 2 != 0):
+                        needed_semesters=semesters
+                        for imp in implementation_of_academic_plan:
+                            field_of_studies = FieldOfStudy.objects.get(
+                                implementation_academic_plan_in_field_of_study=imp)
+                            imp_list.append(generate_fos(data_isu.ns_id, field_of_studies.number, imp.title))
         count = 1
-        for i, el in enumerate(semesters):
+        for i, el in enumerate(needed_semesters):
             # Входная точка: у нас есть все данные - семетр, учебный план, направление, рпд, информация из ИСУ
             if float(el) > 0:
                 if ((i + 1) % 2 == 0 and send_semester % 2 == 0) or ((i + 1) % 2 != 0 and send_semester % 2 != 0):

@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
@@ -13,8 +14,9 @@ from .serializers import AdditionalMaterialSerializer, CreateAdditionalMaterialS
     StructuralUnitSerializer, CreateStructuralUnitSerializer, \
     CreateUserStructuralUnitSerializer, UserStructuralUnitSerializer, ShortStructuralUnitSerializer
 from ..models import WorkProgram, DisciplineSection, PrerequisitesOfWorkProgram, OutcomesOfWorkProgram, \
-    СertificationEvaluationTool, EvaluationTool, Topic
-from ..serializers import WorkProgramSerializer
+    WorkProgramInFieldOfStudy, СertificationEvaluationTool, EvaluationTool, Topic, Competence
+from ..serializers import WorkProgramSerializer, WorkProgramShortForExperiseSerializer, CompetenceSerializer
+from .serializers import CompetenceFullSerializer
 
 
 class AdditionalMaterialSet(viewsets.ModelViewSet):
@@ -163,6 +165,24 @@ def ReconnectWorkProgram(request):
         return Response(status=400)
 
 
+class CompetencesSet(viewsets.ModelViewSet):
+    queryset = Competence.objects.all()
+    serializer_class = CompetenceSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+    filterset_fields = []
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CompetenceSerializer
+        if self.action == 'create':
+            return CompetenceSerializer
+        if self.action == 'update':
+            return CompetenceSerializer
+        if self.action == 'retrieve':
+            return CompetenceFullSerializer
+        return CompetenceSerializer
+
+
 @api_view(['POST'])
 @permission_classes((IsAdminUser,))
 def ChangeSemesterInEvaluationsCorrect(request):
@@ -172,20 +192,25 @@ def ChangeSemesterInEvaluationsCorrect(request):
             work_program__id=wp.id))
         min_sem = 12
         for eva in evaluation_tools:
+            if eva.semester == None:
+                break
             if eva.semester < min_sem:
                 min_sem = eva.semester
-        if min_sem != 1:
+        if min_sem != 1 and eva.semester != None:
             for eva in evaluation_tools:
                 eva.semester = eva.semester - min_sem + 1
                 eva.save()
-        final_tool=СertificationEvaluationTool.objects.filter(work_program=wp)
+        final_tool = СertificationEvaluationTool.objects.filter(work_program=wp)
         min_sem = 12
         for eva in final_tool:
+            if eva.semester == None:
+                break
             if eva.semester < min_sem:
                 min_sem = eva.semester
-        if min_sem != 1:
+        if min_sem != 1 and eva.semester != None:
             for eva in final_tool:
                 eva.semester = eva.semester - min_sem + 1
                 eva.save()
-    serializer=WorkProgramSerializer(needed_wp, many=True)
+    serializer = WorkProgramSerializer(needed_wp, many=True)
     return Response(serializer.data)
+
