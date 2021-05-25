@@ -113,17 +113,7 @@ WSGI_APPLICATION = 'analytics_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-#DATABASES = {'default': env.db('DATABASE_URL')}
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "analytics_db",
-        "USER": "postgres",
-        "PASSWORD": "123456",
-        "PORT":"5432",
-        "HOST": "127.0.0.1"
-    }
-}
+DATABASES = {'default': env.db('DATABASE_URL')}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -170,6 +160,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 GRAPH_ROOT = os.path.join(MEDIA_ROOT, 'graphs')
 GRAPH_URL= f'{MEDIA_URL}graphs'
 BACKEND_URL = "http://127.0.0.1:8000"
+
 AUTH_USER_MODEL = 'dataprocessing.User'
 
 REST_FRAMEWORK = {
@@ -288,4 +279,8 @@ ISU = {
     "ISU_CLIENT_ID": env('ISU_CLIENT_ID'),
     "ISU_CLIENT_SECRET": env('ISU_CLIENT_SECRET'),
     "ISU_REDIRECT_URI": env('ISU_REDIRECT_URI'),
+}
+BARS = {
+    "BARS_LOGIN": env('BARS_LOGIN'),
+    "BARS_PASSWORD": env('BARS_PASSWORD'),
 }
