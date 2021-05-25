@@ -1,7 +1,15 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import actions from "./actions";
-import {isFetching, getErrors, getSuccessMessages, getAuth, getUserGroups, isFetchingByKey} from './getters';
+import {
+    isFetching,
+    getErrors,
+    getSuccessMessages,
+    getAuth,
+    getUserGroups,
+    isFetchingByKey,
+    getMockMenu
+} from './getters';
 const mapStateToProps = (state) => {
     return {
         fetching: isFetching(state),
@@ -9,7 +17,8 @@ const mapStateToProps = (state) => {
         errors: getErrors(state),
         successMessages: getSuccessMessages(state),
         auth: getAuth(state),
-        userGroups: getUserGroups(state)
+        userGroups: getUserGroups(state),
+        mockMenu: getMockMenu(state)
     };
 };
 

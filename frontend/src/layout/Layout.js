@@ -50,6 +50,7 @@ class Layout extends React.Component {
             || !shallowEqual(this.props.children, nextProps.children)
             || this.props.fetching !== nextProps.fetching
             || this.props.auth !== nextProps.auth
+            || this.props.mockMenu !== nextProps.mockMenu
             || this.state.openMenu !== nextState.openMenu
             || this.state.isFetchingRefreshToken !== nextState.isFetchingRefreshToken
         ;
@@ -72,7 +73,7 @@ class Layout extends React.Component {
 
     render() {
         const {openMenu} = this.state;
-        const {classes, fetching, errors, successMessages, auth, userGroups, isFetchingRefreshToken} = this.props;
+        const {classes, fetching, errors, successMessages, auth, userGroups, isFetchingRefreshToken, mockMenu} = this.props;
         const isAuth = userService.isAuth() && auth;
         const isWorkProgramPage = this.isWorkProgramPage();
 
@@ -89,7 +90,7 @@ class Layout extends React.Component {
                                 logout={this.logout}
                         />
                         <div className={classes.root}>
-                            {isAuth && <Menu isOpen={openMenu} userGroups={userGroups} />}
+                            {isAuth && <Menu isOpen={openMenu} userGroups={userGroups} mockMenu={mockMenu}/>}
                             <div className={className(classes.content, {
                                 [classes.contentShift]: openMenu,
                                 [classes.noPadding]: isWorkProgramPage

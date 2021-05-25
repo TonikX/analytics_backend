@@ -53,6 +53,7 @@ import Layout from "./layout";
 
 import RouterService from './service/router-service';
 import Notifications from "./containers/Profile/Notifications";
+import Overview from "./containers/Overview";
 
 const routerService = RouterService.factory();
 
@@ -83,6 +84,9 @@ export default () => (
             </Route>
             <Route path={routerService.getSignUpRoute()}>
                 <SignUp />
+            </Route>
+            <Route path='/overview'>
+                <Overview />
             </Route>
             <AuthRoute path={routerService.getSelectDisciplineRoute()}>
                 <SelectDiscipline />

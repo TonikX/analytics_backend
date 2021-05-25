@@ -5,7 +5,6 @@ import moment from "moment";
 import {Link} from "react-router-dom";
 
 import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
 import Typography from "@material-ui/core/Typography";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
@@ -34,6 +33,7 @@ import {appRouter} from "../../service/router-service";
 
 import connect from './Expertises.connect';
 import styles from './Expertises.styles';
+import Pagination from "@material-ui/lab/Pagination";
 
 class Expertises extends React.Component<ExpertisesProps> {
     state = {
@@ -44,8 +44,8 @@ class Expertises extends React.Component<ExpertisesProps> {
         this.props.actions.getExpertisesList();
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any | null, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getExpertisesList();
     }
 
@@ -168,13 +168,10 @@ class Expertises extends React.Component<ExpertisesProps> {
 
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
                 </div>
             </Paper>

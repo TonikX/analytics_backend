@@ -14,6 +14,7 @@ export interface GeneralActions {
     setAllUsers: any;
     getUserGroups: any;
     setUserGroups: any;
+    setMockMenu: any;
 }
 
 export interface layoutState {
@@ -22,6 +23,7 @@ export interface layoutState {
     [fields.SUCCESS_MESSAGES]: Array;
     [fields.USER_GROUPS]: Array;
     [fields.IS_AUTH]: boolean;
+    [fields.MOCK_MENU]: null|number;
     [fields.USERS]: Array<any>; //todo: create user type
 }
 

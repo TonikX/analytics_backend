@@ -19,6 +19,7 @@ import {CoursesProps} from './types';
 
 import connect from './Courses.connect';
 import styles from './Courses.styles';
+import Pagination from "@material-ui/lab/Pagination";
 
 class OnlineCourses extends React.Component<CoursesProps> {
   componentDidMount() {      
@@ -43,8 +44,8 @@ class OnlineCourses extends React.Component<CoursesProps> {
     this.props.actions.getCourses();
   }, 300);
 
-  handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number): void => {
-      this.props.actions.changeCurrentPage(page + 1);
+  handleChangePage = (event: any, page: number): void => {
+      this.props.actions.changeCurrentPage(page);
       this.props.actions.getCourses();
   }
 
@@ -89,15 +90,10 @@ class OnlineCourses extends React.Component<CoursesProps> {
         />
 
         <div className={classes.footer}>
-          <TablePagination 
-            count={allCount}
-            component="div"
-            page={currentPage - 1}
-            rowsPerPageOptions={[]}
-            onChangePage={this.handleChangePage}
-            //@ts-ignore
-            rowsPerPage={10}
-            onChangeRowsPerPage={()=>{}}
+          <Pagination count={Math.ceil(allCount / 10)}
+                      page={currentPage}
+                      onChange={this.handleChangePage}
+                      color="primary"
           />
 
           {/* <Fab 
