@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan
+from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, ImplementationAcademicPlan
 from workprogramsapp.serializers import PrerequisitesOfWorkProgramInWorkProgramSerializer, \
     OutcomesOfWorkProgramInWorkProgramSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
@@ -72,8 +72,15 @@ class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'description']
 
 
+class ImplementationAcademicPlanForStatisticSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = ['id', 'year', 'title']
+
+
 class AcademicPlansDescriptionWpSerializer(serializers.ModelSerializer):
     wp_in_academic_plan = serializers.SerializerMethodField()
+    academic_plan_in_field_of_study = ImplementationAcademicPlanForStatisticSerializer(many=True)
 
     def get_wp_in_academic_plan(self, instance):
         return WorkProgramDescriptionOnlySerializer(
@@ -83,11 +90,12 @@ class AcademicPlansDescriptionWpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'wp_in_academic_plan', ]
+        fields = ['id', 'academic_plan_in_field_of_study', 'wp_in_academic_plan', ]
 
 
 class WorkProgramPrerequisitesAndOutcomesSerializer(serializers.ModelSerializer):
-    prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set',many=True)
+    prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set',
+                                                                      many=True)
     outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
 
     class Meta:
