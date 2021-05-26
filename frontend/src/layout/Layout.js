@@ -56,6 +56,12 @@ class Layout extends React.Component {
         ;
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.mockMenu && !prevProps.mockMenu && !this.state.openMenu){
+            this.setState({openMenu: true})
+        }
+    }
+
     handleOpenMenu = () => {
         this.setState({openMenu: true});
     };

@@ -85,9 +85,9 @@ export default () => (
             <Route path={routerService.getSignUpRoute()}>
                 <SignUp />
             </Route>
-            <Route path='/overview'>
+            <AuthRoute path='/overview'>
                 <Overview />
-            </Route>
+            </AuthRoute>
             <AuthRoute path={routerService.getSelectDisciplineRoute()}>
                 <SelectDiscipline />
             </AuthRoute>
