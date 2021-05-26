@@ -14,6 +14,7 @@ export const initialState = {
     [fields.IS_AUTH]: false,
     [fields.USERS]: [],
     [fields.USER_GROUPS]: [],
+    [fields.MOCK_MENU]: null,
 };
 
 const fetchingTrue = (state, {payload}) => ({
@@ -68,6 +69,11 @@ const setUserGroups = (state, {payload}) => ({
     [fields.USER_GROUPS]: payload,
 });
 
+const setMockMenu = (state, {payload}) => ({
+    ...state,
+    [fields.MOCK_MENU]: payload,
+});
+
 const setAuthTrue = (state) => ({
     ...state,
     [fields.IS_AUTH]: true,
@@ -89,4 +95,5 @@ export const reducer = createReducer(initialState, {
     [actions.setAuthTrue.type]: setAuthTrue,
     [actions.setAllUsers.type]: setAllUsers,
     [actions.setUserGroups.type]: setUserGroups,
+    [actions.setMockMenu.type]: setMockMenu,
 });

@@ -6,6 +6,7 @@ export enum fields {
     FETCHING_COMPONENT = 'FETCHING_COMPONENT',
     USERS = 'USERS',
     USER_GROUPS = 'USER_GROUPS',
+    MOCK_MENU = 'MOCK_MENU',
 }
 
 export enum UserFields{

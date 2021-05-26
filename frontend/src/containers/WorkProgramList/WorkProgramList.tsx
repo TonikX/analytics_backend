@@ -294,7 +294,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                 </Scrollbars>
 
                 <div className={classes.footer}>
-                    <Pagination count={allCount}
+                    <Pagination count={Math.ceil(allCount / 10)}
                                 page={currentPage}
                                 onChange={this.handleChangePage}
                                 color="primary"

@@ -9,7 +9,6 @@ import classNames from 'classnames';
 
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 
@@ -34,6 +33,7 @@ import {CompetenceFields} from './enum';
 
 import connect from './Competences.connect';
 import styles from './Competences.styles';
+import Pagination from "@material-ui/lab/Pagination";
 
 class Competences extends React.Component<CompetenceProps> {
     state = {
@@ -81,8 +81,8 @@ class Competences extends React.Component<CompetenceProps> {
         this.props.actions.getCompetences();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getCompetences();
     }
 
@@ -156,14 +156,10 @@ class Competences extends React.Component<CompetenceProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"

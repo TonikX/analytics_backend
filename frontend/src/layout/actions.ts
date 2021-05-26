@@ -21,7 +21,10 @@ const setUserGroups = createAction('SET_USER_GROUPS');
 
 const refreshToken = createAction('REFRESH_LOGIN');
 
+const setMockMenu = createAction('SET_MOCK_MENU');
+
 const actions: GeneralActions = {
+    setMockMenu,
     refreshToken,
     fetchingComponentFalse,
     fetchingComponentTrue,

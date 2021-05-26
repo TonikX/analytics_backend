@@ -15,6 +15,7 @@ export const getFetchingComponent = (state: rootState): layoutState[fields.FETCH
 export const getErrors = (state: rootState): layoutState[fields.ERRORS] => get(getStateData(state), fields.ERRORS, []);
 export const getSuccessMessages = (state: rootState): layoutState[fields.SUCCESS_MESSAGES] => get(getStateData(state), fields.SUCCESS_MESSAGES, []);
 export const getAuth = (state: rootState): layoutState[fields.IS_AUTH] => get(getStateData(state), fields.IS_AUTH, false);
+export const getMockMenu = (state: rootState): layoutState[fields.MOCK_MENU] => get(getStateData(state), fields.MOCK_MENU, null);
 
 export const getUserGroups = (state: rootState): layoutState[fields.USER_GROUPS] => get(getStateData(state), fields.USER_GROUPS, []);
 export const getUsers = (state: rootState): layoutState[fields.USERS] => get(getStateData(state), fields.USERS, []);
