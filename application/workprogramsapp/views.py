@@ -68,7 +68,9 @@ class WorkProgramsListApi(generics.ListAPIView):
     filterset_fields = ['language',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__title',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__number',
-                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile', 'qualification']
+                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile', 'qualification',
+                        'prerequisites', 'outcomes', 'structural_unit__title',
+                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__title']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     # def list(self, request, **kwargs):
@@ -1650,12 +1652,13 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
                      'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
                      'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
                      ]
-    filterset_fields = ['academic_plan__educational_profile',
+    filterset_fields = ['title',
                         'field_of_study__title',
                         'field_of_study__number',
                         'field_of_study__qualification',
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                        'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__structural_unit__title',
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -1775,8 +1778,14 @@ class ZunUpdateView(generics.UpdateAPIView):
 class DisciplineBlockModuleShortListView(generics.ListAPIView):
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleCreateSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+    filterset_fields = ['change_blocks_of_work_programs_in_modules__work_program__prerequisites',
+                        'change_blocks_of_work_programs_in_modules__work_program__outcomes',
+                        'change_blocks_of_work_programs_in_modules__work_program__structural_unit__title',
+                        'descipline_block__academic_plan__academic_plan_in_field_of_study__qualification']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class DisciplineBlockModuleDetailListView(generics.ListAPIView):

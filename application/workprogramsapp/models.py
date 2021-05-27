@@ -525,7 +525,7 @@ class ImplementationAcademicPlan(models.Model):
     educational_profile = models.CharField(max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
     language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
                                 blank=True, null=True)
-    title = models.CharField(max_length=1024, verbose_name = 'Партнер', blank = True, null = True)
+    title = models.CharField(max_length=1024, verbose_name = 'Название', blank = True, null = True)
 
     def __str__(self):
         return str(self.academic_plan)
@@ -661,7 +661,7 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin,models.Model):
                                                 null=True)
     work_program = models.ManyToManyField('WorkProgram', verbose_name="Рабочая программа",
                                           through='WorkProgramInFieldOfStudy',
-                                          related_name="work_program_in_change_block")
+                                          related_name="change_blocks_of_work_programs_in_module")
     subject_code = models.CharField(max_length=1024, verbose_name="Срок сдачи в неделях", blank=True, null=True)
 
     # zuns = models.ManyToManyField('Zun', verbose_name = "Зуны", through='WorkProgramInFieldOfStudy', related_name="zuns_in_changeblock")
