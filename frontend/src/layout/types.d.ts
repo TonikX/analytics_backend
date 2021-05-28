@@ -23,7 +23,7 @@ export interface layoutState {
     [fields.SUCCESS_MESSAGES]: Array;
     [fields.USER_GROUPS]: Array;
     [fields.IS_AUTH]: boolean;
-    [fields.MOCK_MENU]: null|number;
+    [fields.MOCK_MENU]: Array<number>;
     [fields.USERS]: Array<any>; //todo: create user type
 }
 

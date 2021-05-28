@@ -14,7 +14,7 @@ export const initialState = {
     [fields.IS_AUTH]: false,
     [fields.USERS]: [],
     [fields.USER_GROUPS]: [],
-    [fields.MOCK_MENU]: null,
+    [fields.MOCK_MENU]: [],
 };
 
 const fetchingTrue = (state, {payload}) => ({

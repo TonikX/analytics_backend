@@ -1,3 +1,5 @@
+import uniqBy from 'lodash/uniqBy'
+
 import {appRouter} from "../../service/router-service";
 
 import CompetencesIcon from "./icons/competences.svg";
@@ -46,10 +48,14 @@ import ProfessionsIcon from "./icons/professions.svg";
 import ProfessionsSelectedIcon from "./icons/professions-selected.svg";
 import {isUserCanSeeProfessions, isUserInExpertiseGroup, isUserRpdDev} from "../../common/userRights";
 
-export const getMockMenu = (menuNumber: number): Array<any> => {
-    switch (menuNumber){
+export const getMockMenu = (menuArr: Array<number>): Array<any> => {
+    const selectedMenus = []
+    for (let i = 0; i<menuArr.length; i++) {
+
+    
+    switch (menuArr[i]){
         case 1:
-            return [
+            selectedMenus.push(...[
                 {
                     title: 'Учебные планы',
                     link: appRouter.getEducationPlanRoute(),
@@ -104,9 +110,10 @@ export const getMockMenu = (menuNumber: number): Array<any> => {
                     icon: WorkProgramInDirectionIcon,
                     selectedIcon: WorkProgramInDirectionSelectedIcon,
                 }
-            ]
+            ])
+            break
         case 2:
-            return [
+            selectedMenus.push(...[
                 {
                     title: 'Предметные области',
                     link: appRouter.getSubjectAreaRoute(),
@@ -149,9 +156,10 @@ export const getMockMenu = (menuNumber: number): Array<any> => {
                     icon: WorkProgramIcon,
                     selectedIcon: WorkProgramSelectedIcon,
                 },
-            ]
+            ])
+            break
         case 3:
-            return [
+            selectedMenus.push(...[
                 {
                     title: 'Рабочие программы',
                     link: appRouter.getWorkProgramListRoute(),
@@ -170,9 +178,10 @@ export const getMockMenu = (menuNumber: number): Array<any> => {
                     icon: EducationPlanIcon,
                     selectedIcon: EducationPlanSelectedIcon,
                 },
-            ]
+            ])
+            break
         case 4:
-            return [
+            selectedMenus.push(...[
                 {
                     title: 'Рабочие программы',
                     link: appRouter.getWorkProgramListRoute(),
@@ -203,9 +212,10 @@ export const getMockMenu = (menuNumber: number): Array<any> => {
                     icon: WorkProgramInDirectionIcon,
                     selectedIcon: WorkProgramInDirectionSelectedIcon,
                 },
-            ]
+            ])
+            break
         case 5:
-            return [
+            selectedMenus.push(...[
                 {
                     title: 'Направления',
                     link: appRouter.getDirectionRoute(),
@@ -266,71 +276,23 @@ export const getMockMenu = (menuNumber: number): Array<any> => {
                     icon: WorkProgramInDirectionIcon,
                     selectedIcon: WorkProgramInDirectionSelectedIcon,
                 }
-            ]
+            ])
+            break
         case 6:
-            return [
+            selectedMenus.push(...[
                 {
                     title: 'Онлайн курсы',
                     link: appRouter.getCoursesRoute(),
                     icon: CoursesIcon,
                     selectedIcon: CoursesSelectedIcon,
                 },
-            ]
-        case 7:
-        case 8:
-        default:
-            return [
-                {
-                    title: 'Рабочие программы',
-                    link: appRouter.getWorkProgramListRoute(),
-                    icon: WorkProgramIcon,
-                    selectedIcon: WorkProgramSelectedIcon,
-                },
-                {
-                    title: 'Компетенции',
-                    link: appRouter.getCompetencesRoute(),
-                    icon: CompetencesIcon,
-                    selectedIcon: CompetencesSelectedIcon,
-                },
-                {
-                    title: 'Профессиональные стандарты',
-                    link: appRouter.getProfessionalStandardsRoute(),
-                    icon: IndicatorsIcon,
-                    selectedIcon: IndicatorsSelectedIcon,
-                },
-                {
-                    title: 'Направления',
-                    link: appRouter.getDirectionRoute(),
-                    icon: DirectionsIcon,
-                    selectedIcon: DirectionsSelectedIcon,
-                },
-                {
-                    title: 'Учебные планы',
-                    link: appRouter.getEducationPlanRoute(),
-                    icon: EducationPlanIcon,
-                    selectedIcon: EducationPlanSelectedIcon,
-                },
-                {
-                    title: 'Образовательные модули',
-                    link: appRouter.getTrainingModulesRoute(),
-                    icon: EducationPlanIcon,
-                    selectedIcon: EducationPlanSelectedIcon,
-                },
-                {
-                    title: 'Образовательные программы',
-                    link: appRouter.getEducationPlanInDirectionRoute(),
-                    icon: WorkProgramInDirectionIcon,
-                    selectedIcon: WorkProgramInDirectionSelectedIcon,
-                },
-                {
-                    title: 'Общие характеристики',
-                    link: appRouter.getEducationalProgram(),
-                    icon: WorkProgramInDirectionIcon,
-                    selectedIcon: WorkProgramInDirectionSelectedIcon,
-                },
-            ]
-
+            ])
+            break
+        case 7: break
+        case 8: break
     }
+    }
+    return uniqBy(selectedMenus, 'title')
 }
 
 export default (groups: Array<string>) => {
