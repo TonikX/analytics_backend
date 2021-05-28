@@ -17,6 +17,7 @@ class UserNotification(models.Model):
                               default='unread')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     message = models.CharField(max_length=4096, verbose_name="Сообщение нотификации", blank=True, null=True)
+    notification_date=models.DateTimeField(auto_now_add=True, blank=True, null=True )
 
 
 class ExpertiseNotification(UserNotification):
