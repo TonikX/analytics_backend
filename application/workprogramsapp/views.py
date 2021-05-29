@@ -23,6 +23,7 @@ from .models import FieldOfStudy, BibliographicReference, СertificationEvaluati
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
 # Права доступа
+from .notifications.models import UserNotification
 from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
@@ -1860,7 +1861,8 @@ def UserGroups(request):
     if UserExpertise.objects.filter(expert=request.user) or \
             UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"]):
         groups_names.append("expertise_member")
-    return Response({"groups": groups_names})
+    notification_nums=UserNotification.objects.filter(user=request.user, status="unread").count()
+    return Response({"groups": groups_names, "notification_nums":notification_nums})
 
 
 @api_view(['POST'])

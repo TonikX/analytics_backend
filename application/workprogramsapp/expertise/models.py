@@ -8,6 +8,8 @@ from datetime import datetime
 class UserExpertise(models.Model):
     STUFF_STATUS_CHOICES = [
         ('AU', 'Автор РПД'),
+        ('ED', 'Редактор РПД'),
+        ('SE', 'Отправитель на экспертизу'),
         ('EX', 'Эксперт'),
     ]
     USER_EXPERTISE_STATUS_CHOISES = [
