@@ -34,17 +34,18 @@ class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlan
     }
 
     render() {
-        const {optionsList, noMargin, classes} = this.props;
+        const {optionsList, noMargin, classes, className} = this.props;
         const {value, label} = this.state;
 
         return (
-            <SearchSelector label="Учебный план и направление * "
+            <SearchSelector label="Образовательная программа"
                             changeSearchText={this.handleChangeSearch}
                             list={optionsList}
                             changeItem={this.saveEducationalPlanField}
                             value={value}
                             valueLabel={label}
-                            className={classNames({[classes.marginBottom30]: !noMargin})}
+                            className={classNames({[classes.marginBottom30]: !noMargin, 
+                                [className]: className})}
             />
         );
     }

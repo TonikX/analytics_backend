@@ -8,4 +8,5 @@ export interface EducationPlanInDirectionSelectorType extends WithStyles<typeof 
     optionsList: SelectorListType;
     noMargin: boolean;
     handleChange: Function;
+    className?: any;
 }

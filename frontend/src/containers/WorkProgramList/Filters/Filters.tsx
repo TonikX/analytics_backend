@@ -15,6 +15,7 @@ import { rootState } from '../../../store/reducers'
 import actions from '../actions'
 import {filterFields} from "../enum";
 import StructuralUnitsSelector from "../../StructuralUnits/StructuralUnitsSelector";
+import EducationPlanInDirectionSelector from '../../EduationPlanInDirection/EducationPlanInDirectionSelector/EducationPlanInDirectionSelector'
 
 const Filters: React.FC = () => {
   const dispatch = useDispatch()
@@ -68,7 +69,8 @@ const Filters: React.FC = () => {
         <StructuralUnitsSelector value={filters[filterFields.STRUCTURAL_UNIT]}
                                  onChange={(value: number) => handleFilter(filterFields.STRUCTURAL_UNIT, value)}
         />
-        <SearchSelector
+        <EducationPlanInDirectionSelector noMargin handleChange={() => {}} className={classes.field} />
+        {/* <SearchSelector
             label='Образовательная программа'
             changeSearchText={() => {}}
             list={[]}
@@ -77,7 +79,7 @@ const Filters: React.FC = () => {
             valueLabel={''}
             className={classes.field}
             isReset={isReset}
-        />
+        /> */}
         <SearchSelector
             label='Пререквизиты'
             changeSearchText={() => {}}

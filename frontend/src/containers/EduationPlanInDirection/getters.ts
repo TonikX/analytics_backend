@@ -17,7 +17,7 @@ export const getEducationalPlanInDirection = (state: rootState): Array<Education
 export const getEducationalPlanInDirectionForSelector = (state: rootState): SelectorListType =>
     getEducationalPlanInDirection(state).map((plan: EducationalPlanInDirectionType) => ({
         value: plan[EducationPlanInDirectionFields.ID],
-        label: getEducationPlanInDirectionFullName(plan),
+        label: plan[EducationPlanInDirectionFields.TITLE],
     }))
 
 export const getEducationPlanInDirectionFullName = (plan: EducationalPlanInDirectionType): string =>
