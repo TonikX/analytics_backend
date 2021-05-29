@@ -9,4 +9,5 @@ export interface EducationPlanInDirectionSelectorType extends WithStyles<typeof 
     noMargin: boolean;
     handleChange: Function;
     className?: any;
+    isReset?: boolean;
 }

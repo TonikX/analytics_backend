@@ -68,8 +68,13 @@ const Filters: React.FC = () => {
         />
         <StructuralUnitsSelector value={filters[filterFields.STRUCTURAL_UNIT]}
                                  onChange={(value: number) => handleFilter(filterFields.STRUCTURAL_UNIT, value)}
+                                 isReset={isReset}
         />
-        <EducationPlanInDirectionSelector noMargin handleChange={() => {}} className={classes.field} />
+        <EducationPlanInDirectionSelector 
+          noMargin handleChange={() => {}} 
+          className={classes.field} 
+          isReset={isReset} 
+        />
         {/* <SearchSelector
             label='Образовательная программа'
             changeSearchText={() => {}}

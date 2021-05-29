@@ -34,7 +34,7 @@ class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlan
     }
 
     render() {
-        const {optionsList, noMargin, classes, className} = this.props;
+        const {optionsList, noMargin, classes, className, isReset} = this.props;
         const {value, label} = this.state;
 
         return (
@@ -46,6 +46,7 @@ class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlan
                             valueLabel={label}
                             className={classNames({[classes.marginBottom30]: !noMargin, 
                                 [className]: className})}
+                            isReset={isReset}
             />
         );
     }
