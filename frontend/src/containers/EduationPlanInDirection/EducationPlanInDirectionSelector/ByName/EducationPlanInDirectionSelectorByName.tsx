@@ -3,21 +3,21 @@ import classNames from "classnames";
 
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import SearchSelector from "../../../components/SearchSelector/SearchSelector";
+import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
 
-import connect from './EducationPlanInDirectionSelector.connect';
-import styles from './EducationPlanInDirectionSelector.styles';
+import connect from './EducationPlanInDirectionSelectorByName.connect';
+import styles from '../EducationPlanInDirectionSelector.styles';
 
-import {EducationPlanInDirectionSelectorType} from './type';
+import {EducationPlanInDirectionSelectorType} from '../type';
 
-class EducationPlanInDirectionSelectorByName extends React.PureComponent<EducationPlanInDirectionSelectorType> {
+class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlanInDirectionSelectorType> {
     state = {
         label: '',
         value: ''
     };
 
     componentDidMount() {
-        this.props.actions.getEducationalPlansInDirection();
+        //this.props.actions.getEducationalPlansInDirection();
     }
 
     handleChangeSearch = (searchText: string) => {
@@ -57,4 +57,4 @@ class EducationPlanInDirectionSelectorByName extends React.PureComponent<Educati
     }
 }
 
-export default connect(withStyles(styles)(EducationPlanInDirectionSelectorByName));
+export default connect(withStyles(styles)(EducationPlanInDirectionSelector));
