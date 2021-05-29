@@ -57,19 +57,26 @@ class ExpertiseSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         is_exp_exist = Expertise.objects.filter(work_program=validated_data['work_program'])
+        request = self.context.get('request')
         if is_exp_exist:
             is_exp_exist.update(expertise_status="EX")
             counter = is_exp_exist[0].expertise_counter
             is_exp_exist.update(expertise_counter=counter + 1)
+            all_user_expertise = UserExpertise.objects.filter(expertise=is_exp_exist[0])
+            all_user_expertise.update(user_expertise_status=None)
             print("такая экспертиза уже существует")
             return is_exp_exist[0]
         exp = Expertise.objects.create(**validated_data)
-        request = self.context.get('request')
-        UserExpertise.objects.create(expertise=exp, expert=request.user, stuff_status="AU")  # ???
+        UserExpertise.objects.create(expertise=exp, expert=request.user, stuff_status="SE")  # ???
+        editors = WorkProgram.objects.get(pk=validated_data['work_program'].pk).editors.all()
+        for editor in editors:
+            if editor.pk != request.user.pk:
+                UserExpertise.objects.create(expertise=exp, expert=editor, stuff_status="ED")
         return exp
 
     def to_representation(self, value):
-        self.fields['work_program'] = WorkProgramShortForExperiseSerializerWithStructUnitWithEditors(many=False, read_only=True)
+        self.fields['work_program'] = WorkProgramShortForExperiseSerializerWithStructUnitWithEditors(many=False,
+                                                                                                     read_only=True)
         self.fields['experts'] = userProfileSerializer(many=True, read_only=True)
         self.fields['expertse_users_in_rpd'] = UserExpertiseForExpertiseSerializer(many=True, read_only=True)
         return super().to_representation(value)
