@@ -32,6 +32,7 @@ interface HeaderProps extends WithStyles<typeof styles> {
     handleCloseMenu: Function;
     handleOpenMenu: Function;
     logout: Function;
+    notificationsCount: number;
 }
 
 class Header extends React.PureComponent<HeaderProps>{
@@ -69,7 +70,7 @@ class Header extends React.PureComponent<HeaderProps>{
     };
 
     render() {
-        const {classes, openGeneralMenu, isAuth} = this.props;
+        const {classes, openGeneralMenu, isAuth, notificationsCount} = this.props;
         const {anchorEl} = this.state;
         const isOpenAvatarMenu = Boolean(anchorEl);
 
@@ -106,6 +107,7 @@ class Header extends React.PureComponent<HeaderProps>{
                                 >
                                     <IconButton aria-haspopup="true">
                                         <NotificationsIcon className={classes.bookmarkIcon} />
+                                        {notificationsCount ? <div className={classes.count}>{notificationsCount}</div> : <></>}
                                     </IconButton>
                                 </Link>
                             </Tooltip>

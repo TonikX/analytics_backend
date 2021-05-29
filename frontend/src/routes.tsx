@@ -54,6 +54,7 @@ import Layout from "./layout";
 import RouterService from './service/router-service';
 import Notifications from "./containers/Profile/Notifications";
 import Overview from "./containers/Overview";
+import Landing from "./containers/Landing";
 
 const routerService = RouterService.factory();
 
@@ -213,6 +214,9 @@ export default () => (
             </AuthRoute>
             <Route path={routerService.getForbiddenPage()}>
                 <ForbiddenPage />
+            </Route>
+            <Route path="/landing">
+                <Landing />
             </Route>
             <Route exact>
                 <NotFoundPage />

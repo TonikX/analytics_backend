@@ -8,6 +8,7 @@ import { rootState } from "../../../store/reducers";
 import { appRouter } from "../../../service/router-service";
 
 import actions from "./actions";
+import layoutActions from "../../../layout/actions";
 import { getNotifications } from "./getters";
 
 import { useStyles } from './Notifications.styles'
@@ -20,6 +21,7 @@ export default () => {
     useEffect(() => {
         // eslint-disable-next-line
         dispatch(actions.getNotifications());
+        dispatch(layoutActions.setUserNotificationsCount(0));
     }, []);
 
     return (
