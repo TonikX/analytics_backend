@@ -27,7 +27,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   header: {
     boxShadow: 'none',
     padding: '10px',
-    backgroundColor: 'rgba(31,31,36,.8)'
+    background: "rgba(7, 21, 43, 0.4)",
   },
   link: {
     cursor: 'pointer',
