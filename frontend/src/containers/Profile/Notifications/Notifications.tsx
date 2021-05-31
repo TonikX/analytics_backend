@@ -44,12 +44,12 @@ export default () => {
               if (item.expertise){
                 return (
                   <Link className={classes.notificationItemLink} to={appRouter.getExpertiseRouteLink(get(item, 'expertise.expertise.id', ''))}>
-                    <Typography className={classes.notificationItem} style={{borderRight: `5px solid ${colors.expertise}`}}> <b> {moment(get(item, 'notification_date')).format(FULL_DATE_FORMAT_WITH_TIME)} </b> <br/>{get(item, 'expertise.message', '')} </Typography>
+                    <Typography className={classes.notificationItem} style={{borderRight: `5px solid ${colors.expertise}`}}> <b> {get(item, 'notification_date')} </b> <br/>{get(item, 'expertise.message', '')} </Typography>
                   </Link>
                 )
               }
 
-              return <Typography className={classes.notificationItem} style={{borderRight: `5px solid ${colors.message}`}}> <b> {moment(get(item, 'notification_date')).format(FULL_DATE_FORMAT_WITH_TIME)} </b> <br/>{get(item, 'basic.message', '')} </Typography>
+              return <Typography className={classes.notificationItem} style={{borderRight: `5px solid ${colors.message}`}}> <b> {get(item, 'notification_date')} </b> <br/>{get(item, 'basic.message', '')} </Typography>
             }
             )}
         </div>
