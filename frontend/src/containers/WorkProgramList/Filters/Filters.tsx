@@ -75,9 +75,10 @@ const Filters: React.FC = () => {
                                  isReset={isReset}
         />
         <EducationPlanInDirectionSelectorByName 
-          noMargin handleChange={(value: number) => handleFilter(filterFields.EDU_PROGRAM, value)} 
+          noMargin handleChange={(value: string) => handleFilter(filterFields.EDU_PROGRAM, value)} 
           className={classes.field} 
-          isReset={isReset} 
+          isReset={isReset}
+          value={filters[filterFields.EDU_PROGRAM]}
         />
         <TrainingEntitiesSelector
           label='Пререквизиты'

@@ -11,3 +11,13 @@ export interface EducationPlanInDirectionSelectorType extends WithStyles<typeof 
     className?: any;
     isReset?: boolean;
 }
+
+export interface EducationPlanInDirectionSelectorType2 extends WithStyles<typeof styles>  {
+    actions: EducationalPlanInDirectionActions;
+    optionsList: SelectorListType;
+    noMargin: boolean;
+    handleChange: Function;
+    value: string;
+    className?: any;
+    isReset?: boolean;
+}

@@ -8,17 +8,9 @@ import SearchSelector from "../../../../components/SearchSelector/SearchSelector
 import connect from './EducationPlanInDirectionSelectorByName.connect';
 import styles from '../EducationPlanInDirectionSelector.styles';
 
-import {EducationPlanInDirectionSelectorType} from '../type';
+import {EducationPlanInDirectionSelectorType2} from '../type';
 
-class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlanInDirectionSelectorType> {
-    state = {
-        label: '',
-        value: ''
-    };
-
-    componentDidMount() {
-        //this.props.actions.getEducationalPlansInDirection();
-    }
+class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlanInDirectionSelectorType2> {
 
     handleChangeSearch = (searchText: string) => {
         this.props.actions.changeSearchQuery(searchText);
@@ -30,25 +22,16 @@ class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlan
         this.props.actions.setEducationalPlansInDirection([]);
     }
 
-    saveEducationalPlanField = (value: ReactText) => {
-        this.setState({
-            value: value
-        })
-
-        this.props.handleChange(value);
-    }
-
     render() {
-        const {optionsList, noMargin, classes, className, isReset} = this.props;
-        const {value, label} = this.state;
+        const {optionsList, noMargin, classes, className, isReset, handleChange, value} = this.props;
 
         return (
             <SearchSelector label="Образовательная программа"
                             changeSearchText={this.handleChangeSearch}
                             list={optionsList}
-                            changeItem={this.saveEducationalPlanField}
+                            changeItem={handleChange}
                             value={value}
-                            valueLabel={label}
+                            valueLabel={''}
                             className={classNames({[classes.marginBottom30]: !noMargin, 
                                 [className]: className})}
                             isReset={isReset}
