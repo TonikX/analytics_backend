@@ -10,8 +10,15 @@ import { appRouter } from "../../../service/router-service";
 import actions from "./actions";
 import layoutActions from "../../../layout/actions";
 import { getNotifications } from "./getters";
+import {FULL_DATE_FORMAT_WITH_TIME} from "../../../common/utils";
 
 import { useStyles } from './Notifications.styles'
+import moment from "moment";
+
+const colors = {
+  expertise: 'orange',
+  message: 'blue'
+}
 
 export default () => {
     const dispatch = useDispatch()
@@ -30,12 +37,20 @@ export default () => {
                 Уведомления
             </Typography>
             <div className={classes.roundItem}>
-                <div className={classes.round} /> <Typography className={classes.roundText}> Экспертиза </Typography>
+                <div className={classes.round} style={{background: colors.expertise}} /> <Typography className={classes.roundText}> Экспертиза </Typography>
+                <div className={classes.round} style={{background: colors.message}} /> <Typography className={classes.roundText}> Сообщение </Typography>
             </div>
-            {notifications.map((item: any) =>
-                <Link className={classes.notificationItemLink} to={appRouter.getExpertiseRouteLink(get(item, 'expertise.expertise.id', ''))}>
-                    <Typography className={classes.notificationItem}> <b> 10.04.2021 17:14 </b> <br/>{get(item, 'expertise.message', '')} </Typography>
-                </Link>
+            {notifications.map((item: any) => {
+              if (item.expertise){
+                return (
+                  <Link className={classes.notificationItemLink} to={appRouter.getExpertiseRouteLink(get(item, 'expertise.expertise.id', ''))}>
+                    <Typography className={classes.notificationItem} style={{borderRight: `5px solid ${colors.expertise}`}}> <b> {moment(get(item, 'notification_date')).format(FULL_DATE_FORMAT_WITH_TIME)} </b> <br/>{get(item, 'expertise.message', '')} </Typography>
+                  </Link>
+                )
+              }
+
+              return <Typography className={classes.notificationItem} style={{borderRight: `5px solid ${colors.message}`}}> <b> {moment(get(item, 'notification_date')).format(FULL_DATE_FORMAT_WITH_TIME)} </b> <br/>{get(item, 'basic.message', '')} </Typography>
+            }
             )}
         </div>
     )
