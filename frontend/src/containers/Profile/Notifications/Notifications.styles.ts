@@ -18,7 +18,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         marginBottom: '10px',
         padding: '15px',
         border: '1px solid #ccc',
-        borderRight: '5px solid orange'
     },
     notificationItemLink: {
         color: theme.palette.text.primary,
@@ -33,11 +32,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         display: 'block',
         width: '10px',
         height: '10px',
-        background: 'orange',
         borderRadius: '50%',
         marginRight: '5px'
     },
     roundText: {
-
+        marginRight: '15px'
     }
 }));
