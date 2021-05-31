@@ -40,6 +40,9 @@ const Filters: React.FC = () => {
       [filterFields.NAME_OP]: '',
       [filterFields.SPECIALIZATION]: '',
       [filterFields.STRUCTURAL_UNIT]: '',
+      [filterFields.EDU_PROGRAM]: '',
+      [filterFields.PREREQUISITE]: '',
+      [filterFields.OUTCOMES]: '',
     }))
     dispatch(actions.getWorkProgramList())
   }

@@ -32,7 +32,6 @@ export default ({onChange, value, isReset, label, className}: TrainingEntitiesSe
                         value={value}
                         valueLabel=''
                         isReset={isReset}
-                        // onBlur={resetMenu}
                         className={classNames({ [className]: className })}
         />
     )
