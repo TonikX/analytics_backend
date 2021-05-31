@@ -7,39 +7,74 @@ import actions from '../../layout/actions'
 
 export default () => {
     const classes = useStyles();
-    const [selectedMenu, setSelectedMenu] = useState(1)
+    const [selectedMenu, setSelectedMenu] = useState([1])
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(actions.setMockMenu(selectedMenu))
     }, [selectedMenu])
 
+    const toggleMenu = (id: number): void => {
+        if (!selectedMenu.find((menu) => menu === id)) {
+            setSelectedMenu([...selectedMenu, id])
+        } else {
+            const newSelectedMenu = selectedMenu.filter((menu) => menu !== id)
+            setSelectedMenu(newSelectedMenu)
+        }
+        
+    }
     return (
+        <>
         <div className={classes.cardList}>
-            <div className={classNames(classes.card, {[classes.selectedCard]: selectedMenu === 1})} onClick={() => setSelectedMenu(1)}>
-                <Button> Индивидуальные образовательные траектории </Button>
-            </div>
-            <div className={classNames(classes.card, {[classes.selectedCard]: selectedMenu === 2})} onClick={() => setSelectedMenu(2)}>
-                <Button> Конструктор РПД </Button>
-            </div>
-            <div className={classNames(classes.card, {[classes.selectedCard]: selectedMenu === 3})} onClick={() => setSelectedMenu(3)}>
-                <Button> Навигатор дисциплин </Button>
-            </div>
-            <div className={classNames(classes.card, {[classes.selectedCard]: selectedMenu === 4})} onClick={() => setSelectedMenu(4)}>
-                <Button> Навигатор по образовательным модулям </Button>
-            </div>
-            <div className={classNames(classes.card, {[classes.selectedCard]: selectedMenu === 5})} onClick={() => setSelectedMenu(5)}>
-                <Button> Навигатор по образовательным траекториям </Button>
-            </div>
-            <div className={classNames(classes.card, {[classes.selectedCard]: selectedMenu === 6})} onClick={() => setSelectedMenu(6)}>
-                <Button> Навигатор по онлайн курсам </Button>
-            </div>
-            <div className={classNames(classes.card, {[classes.selectedCard]: selectedMenu === 7})} onClick={() => setSelectedMenu(7)}>
-                <Button> Навигатор по образовательным программам </Button>
-            </div>
-            <div className={classNames(classes.card, {[classes.selectedCard]: selectedMenu === 8})} onClick={() => setSelectedMenu(8)}>
-                <Button> Сервис проектирования образовательным программ </Button>
-            </div>
+            <Button 
+                className={classNames(classes.card, {[classes.selectedCard]: selectedMenu.find((menu) => menu === 1)})}
+                onClick={() => toggleMenu(1)}
+            >
+                Индивидуальные образовательные траектории
+            </Button>
+            <Button 
+                className={classNames(classes.card, {[classes.selectedCard]: selectedMenu.find((menu) => menu === 2)})} 
+                onClick={() => toggleMenu(2)}
+            > 
+                Конструктор РПД
+            </Button>
+            <Button 
+                className={classNames(classes.card, {[classes.selectedCard]: selectedMenu.find((menu) => menu === 3)})} 
+                onClick={() => toggleMenu(3)}
+            > 
+                Навигатор дисциплин 
+            </Button>
+            <Button 
+                className={classNames(classes.card, {[classes.selectedCard]: selectedMenu.find((menu) => menu === 4)})} 
+                onClick={() => toggleMenu(4)}
+            > 
+                Навигатор по образовательным модулям 
+            </Button>
+            <Button 
+                className={classNames(classes.card, {[classes.selectedCard]: selectedMenu.find((menu) => menu === 5)})} 
+                onClick={() => toggleMenu(5)}
+            > 
+                Навигатор по образовательным траекториям 
+            </Button>
+            <Button 
+                className={classNames(classes.card, {[classes.selectedCard]: selectedMenu.find((menu) => menu === 6)})} 
+                onClick={() => toggleMenu(6)}
+            > 
+                Навигатор по онлайн курсам 
+            </Button>
+            <Button 
+                className={classNames(classes.card, {[classes.selectedCard]: selectedMenu.find((menu) => menu === 7)})} 
+                onClick={() => toggleMenu(7)}
+            > 
+                Навигатор по образовательным программам 
+            </Button>
+            <Button 
+                className={classNames(classes.card, {[classes.selectedCard]: selectedMenu.find((menu) => menu === 8)})} 
+                onClick={() => toggleMenu(8)}
+            > 
+                Сервис проектирования образовательным программ 
+            </Button>
         </div>
+        </>
     )
 }
