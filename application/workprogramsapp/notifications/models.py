@@ -19,6 +19,9 @@ class UserNotification(models.Model):
     message = models.CharField(max_length=4096, verbose_name="Сообщение нотификации", blank=True, null=True)
     notification_date=models.DateTimeField(auto_now_add=True, blank=True, null=True )
 
+    class Meta:
+        ordering = ('notification_date',)
+
 
 class ExpertiseNotification(UserNotification):
     """
