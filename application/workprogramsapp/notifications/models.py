@@ -20,7 +20,7 @@ class UserNotification(models.Model):
     notification_date=models.DateTimeField(auto_now_add=True, blank=True, null=True )
 
     class Meta:
-        ordering = ('notification_date',)
+        ordering = ('-notification_date',)
 
 
 class ExpertiseNotification(UserNotification):
