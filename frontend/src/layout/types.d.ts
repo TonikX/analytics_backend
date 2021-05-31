@@ -15,6 +15,7 @@ export interface GeneralActions {
     getUserGroups: any;
     setUserGroups: any;
     setMockMenu: any;
+    setUserNotificationsCount: any;
 }
 
 export interface layoutState {
@@ -23,6 +24,7 @@ export interface layoutState {
     [fields.SUCCESS_MESSAGES]: Array;
     [fields.USER_GROUPS]: Array;
     [fields.IS_AUTH]: boolean;
+    [fields.NOTIFICATIONS_COUNT]: number;
     [fields.MOCK_MENU]: Array<number>;
     [fields.USERS]: Array<any>; //todo: create user type
 }

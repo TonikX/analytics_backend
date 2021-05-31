@@ -11,6 +11,7 @@ export const checkUrl = (url: string) => {
 }
 
 export const FULL_DATE_FORMAT = 'DD.MM.YYYY';
+export const FULL_DATE_FORMAT_WITH_TIME = 'DD.MM.YYYY HH:MM';
 export const YEAR_DATE_FORMAT = 'YYYY';
 
 export const getUserFullName = (user: UserType) => `${get(user, [UserFields.FIRST_NAME], '')} ${get(user, [UserFields.LAST_NAME], '')}`;

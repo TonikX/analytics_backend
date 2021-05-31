@@ -14,6 +14,7 @@ export const initialState = {
     [fields.IS_AUTH]: false,
     [fields.USERS]: [],
     [fields.USER_GROUPS]: [],
+    [fields.NOTIFICATIONS_COUNT]: 0,
     [fields.MOCK_MENU]: [],
 };
 
@@ -74,6 +75,11 @@ const setMockMenu = (state, {payload}) => ({
     [fields.MOCK_MENU]: payload,
 });
 
+const setUserNotificationsCount = (state, {payload}) => ({
+    ...state,
+    [fields.NOTIFICATIONS_COUNT]: payload,
+});
+
 const setAuthTrue = (state) => ({
     ...state,
     [fields.IS_AUTH]: true,
@@ -96,4 +102,5 @@ export const reducer = createReducer(initialState, {
     [actions.setAllUsers.type]: setAllUsers,
     [actions.setUserGroups.type]: setUserGroups,
     [actions.setMockMenu.type]: setMockMenu,
+    [actions.setUserNotificationsCount.type]: setUserNotificationsCount,
 });
