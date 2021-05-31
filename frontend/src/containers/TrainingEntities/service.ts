@@ -7,7 +7,7 @@ class TrainingEntitiesServices extends AnalyticsService{
     getTrainingEntities(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType, domainId: number|null){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
-        return this.get(`/api/item/?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&domain=${domainId || ''}`);
+        return this.get(`/api/item?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&domain=${domainId || ''}`);
     }
 
     deleteTrainingEntities(itemId: number){

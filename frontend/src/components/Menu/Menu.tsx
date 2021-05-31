@@ -18,14 +18,14 @@ import styles from './Menu.styles';
 interface MenuProps extends WithStyles<typeof styles>, RouteComponentProps {
     isOpen: boolean;
     userGroups: Array<string>;
-    mockMenu: Array<number>;
+    mockMenu: null|number;
 }
 
 class Menu extends React.PureComponent<MenuProps>{
     render() {
         const {classes, isOpen, userGroups, mockMenu} = this.props;
         const {pathname} = this.props.location;
-        const menuListMock = mockMenu.length !== 0 ? getMockMenu(mockMenu) : [];
+        const menuListMock = mockMenu ? getMockMenu(mockMenu) : [];
         const menuList = getMenuList(userGroups);
 
         return(
@@ -39,7 +39,7 @@ class Menu extends React.PureComponent<MenuProps>{
             >
                 <Scrollbars>
                     <List className={classes.menuList}>
-                        {mockMenu.length !== 0 ?
+                        {mockMenu ?
                             <>
                                 {menuListMock.map((item: any, itemIndex: number) =>
                                     <Link to={item.link}

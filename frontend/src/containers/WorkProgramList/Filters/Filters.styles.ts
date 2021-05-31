@@ -11,14 +11,14 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     paddingTop: '10px',
   },
   fieldsWrapper: {
-    width: '95%',
-    margin: '0 auto 20px auto',
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr 1fr 1fr',
-    gridGap: '20px',
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-around',
+    flexWrap: 'wrap',
   },
   field: {
-
+    width: '23%',
+    marginBottom: '20px',
   },
   btnsWrapper: {
     display: 'flex',

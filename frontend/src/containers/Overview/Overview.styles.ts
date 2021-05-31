@@ -6,15 +6,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         gridTemplateColumns: '1fr 1fr 1fr 1fr',
         gridColumnGap: '20px',
         gridRowGap: '20px',
-        padding: '20px',
-        [theme.breakpoints.down('md')]: {
-            gridTemplateColumns: '1fr 1fr 1fr',
-        }
+        padding: '20px'
     },
     card: {
-        padding: '55px 50px !important',
-        maxWidth: '378px',
-        display: 'block',
+        padding: 50,
+        display: 'flex',
+        justifyContent: 'center',
         background: '#fff',
         transition: '0.3s background',
         '&:hover': {

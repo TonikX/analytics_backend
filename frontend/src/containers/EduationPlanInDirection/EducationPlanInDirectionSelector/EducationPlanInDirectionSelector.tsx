@@ -10,7 +10,7 @@ import styles from './EducationPlanInDirectionSelector.styles';
 
 import {EducationPlanInDirectionSelectorType} from './type';
 
-class EducationPlanInDirectionSelectorByName extends React.PureComponent<EducationPlanInDirectionSelectorType> {
+class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlanInDirectionSelectorType> {
     state = {
         label: '',
         value: ''
@@ -25,11 +25,6 @@ class EducationPlanInDirectionSelectorByName extends React.PureComponent<Educati
         this.props.actions.getEducationalPlansInDirection();
     }
 
-    componentWillUnmount() {
-        this.props.actions.changeSearchQuery('');
-        this.props.actions.setEducationalPlansInDirection([]);
-    }
-
     saveEducationalPlanField = (value: ReactText) => {
         this.setState({
             value: value
@@ -39,22 +34,20 @@ class EducationPlanInDirectionSelectorByName extends React.PureComponent<Educati
     }
 
     render() {
-        const {optionsList, noMargin, classes, className, isReset} = this.props;
+        const {optionsList, noMargin, classes} = this.props;
         const {value, label} = this.state;
 
         return (
-            <SearchSelector label="Образовательная программа"
+            <SearchSelector label="Учебный план и направление * "
                             changeSearchText={this.handleChangeSearch}
                             list={optionsList}
                             changeItem={this.saveEducationalPlanField}
                             value={value}
                             valueLabel={label}
-                            className={classNames({[classes.marginBottom30]: !noMargin, 
-                                [className]: className})}
-                            isReset={isReset}
+                            className={classNames({[classes.marginBottom30]: !noMargin})}
             />
         );
     }
 }
 
-export default connect(withStyles(styles)(EducationPlanInDirectionSelectorByName));
+export default connect(withStyles(styles)(EducationPlanInDirectionSelector));
