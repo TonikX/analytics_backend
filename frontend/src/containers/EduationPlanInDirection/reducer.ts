@@ -13,9 +13,12 @@ export const initialState: educationalPlanInDirectionState = {
         [fields.SORTING_MODE]: ''
     },
     [fields.FILTERING]: {
-        [filterFields.NUMBER_OP]: '',
-        [filterFields.NAME_OP]: '',
+        [filterFields.NUMBER_DP]: '',
+        [filterFields.NAME_DP]: '',
         [filterFields.SPECIALIZATION]: '',
+        [filterFields.STRUCTURAL_UNIT]: '',
+        [filterFields.PREREQUISITE]: '',
+        [filterFields.OUTCOMES]: '',
     },
     [fields.CURRENT_PAGE]: 1,
     [fields.ALL_COUNT]: 1,

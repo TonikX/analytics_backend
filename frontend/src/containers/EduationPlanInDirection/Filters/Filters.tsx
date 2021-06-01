@@ -8,6 +8,9 @@ import { getFilters } from '../getters'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import SearchSelector from '../../../components/SearchSelector'
+import StructuralUnitsSelector from "../../StructuralUnits/StructuralUnitsSelector";
+import EducationPlanInDirectionSelectorByName from '../../EduationPlanInDirection/EducationPlanInDirectionSelector/ByName/EducationPlanInDirectionSelectorByName'
+import TrainingEntitiesSelector from '../../TrainingEntities/TrainingEntitiesSelector/TrainingEntitiesSelector'
 
 import { specialization} from '../../WorkProgram/constants';
 import { rootState } from '../../../store/reducers'
@@ -23,7 +26,7 @@ const Filters: React.FC = () => {
   const lists = {
     specialization: specialization,
   }
-  const handleFilter = (field: string, value: string): void => {
+  const handleFilter = (field: string, value: string | number): void => {
     isReset && setIsReset(false)
     dispatch(actions.changeFiltering({[field]: value}))
   }
@@ -31,9 +34,12 @@ const Filters: React.FC = () => {
   const resetFilters = (): void => {
     setIsReset(true)
     dispatch(actions.changeFiltering({
-      [filterFields.NUMBER_OP]: '',
-      [filterFields.NAME_OP]: '',
+      [filterFields.NUMBER_DP]: '',
+      [filterFields.NAME_DP]: '',
       [filterFields.SPECIALIZATION]: '',
+      [filterFields.STRUCTURAL_UNIT]: '',
+      [filterFields.PREREQUISITE]: '',
+      [filterFields.OUTCOMES]: '',
     }))
     dispatch(actions.getEducationalPlansInDirection())
   }
@@ -48,68 +54,43 @@ const Filters: React.FC = () => {
             changeItem={(value: string) => handleFilter(filterFields.SPECIALIZATION, value)}
             value={filters[filterFields.SPECIALIZATION]}
             valueLabel={''}
-            className={classes.field}
             isReset={isReset}
         />
-        <SearchSelector
-          label='Структурное подразделение'
-          changeSearchText={() => {}}
-          list={[]}
-          changeItem={(value: string) => {}}
-          value={''}
-          valueLabel={''}
-          className={classes.field}
+         <StructuralUnitsSelector value={filters[filterFields.STRUCTURAL_UNIT]}
+                                 onChange={(value: number) => {handleFilter(filterFields.STRUCTURAL_UNIT, value)}}
+                                 isReset={isReset}
+        />
+        <TrainingEntitiesSelector
+          label='Пререквизиты'
+          onChange={(value: number) => handleFilter(filterFields.PREREQUISITE, value)}
+          value={filters[filterFields.PREREQUISITE]}
           isReset={isReset}
         />
-        <SearchSelector
-            label='Образовательная программа'
-            changeSearchText={() => {}}
-            list={[]}
-            changeItem={(value: string) => {}}
-            value={''}
-            valueLabel={''}
-            className={classes.field}
-            isReset={isReset}
-        />
-        <SearchSelector
-            label='Пререквизиты'
-            changeSearchText={() => {}}
-            list={[]}
-            changeItem={(value: string) => {}}
-            value={''}
-            valueLabel={''}
-            className={classes.field}
-            isReset={isReset}
-        />
-        <SearchSelector
-            label='Результаты'
-            changeSearchText={() => {}}
-            list={[]}
-            changeItem={(value: string) => {}}
-            value={''}
-            valueLabel={''}
-            className={classes.field}
-            isReset={isReset}
+        <TrainingEntitiesSelector
+          label='Результаты'
+          onChange={(value: number) => handleFilter(filterFields.OUTCOMES, value)}
+          value={filters[filterFields.OUTCOMES]}
+          isReset={isReset}
         />
         <TextField label='Номер направления подготовки'
-                   onChange={(e: any) => handleFilter(filterFields.NUMBER_OP, e.target.value)}
+                   onChange={(e: any) => handleFilter(filterFields.NUMBER_DP, e.target.value)}
                    variant="outlined"
-                   className={classes.field}
-                   value={filters[filterFields.NUMBER_OP]}
+                   value={filters[filterFields.NUMBER_DP]}
                    InputLabelProps={{
                      shrink: true,
                    }}
         />
         <TextField label='Название направления подготовки'
-                   onChange={(e: any) => handleFilter(filterFields.NAME_OP, e.target.value)}
+                   onChange={(e: any) => handleFilter(filterFields.NAME_DP, e.target.value)}
                    variant="outlined"
-                   className={classes.field}
-                   value={filters[filterFields.NAME_OP]}
+                   value={filters[filterFields.NAME_DP]}
                    InputLabelProps={{
                      shrink: true,
                    }}
         />
-        <div className={classes.field} style={{display: 'flex'}}>
+       
+      </div>
+      <div style={{display: 'flex'}}>
           <Button
               color="primary"
               variant="outlined"
@@ -128,7 +109,6 @@ const Filters: React.FC = () => {
             Отфильтровать
           </Button>
         </div>
-      </div>
     </div>
   )
 }
