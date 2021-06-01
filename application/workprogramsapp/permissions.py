@@ -33,7 +33,7 @@ class IsRpdDeveloperOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         if request.user.is_superuser:
-
+            return True
         return request.user.groups.filter(name="rpd_developer")
 
 
