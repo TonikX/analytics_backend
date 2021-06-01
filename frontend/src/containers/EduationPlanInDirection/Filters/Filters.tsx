@@ -9,7 +9,6 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import SearchSelector from '../../../components/SearchSelector'
 import StructuralUnitsSelector from "../../StructuralUnits/StructuralUnitsSelector";
-import EducationPlanInDirectionSelectorByName from '../../EduationPlanInDirection/EducationPlanInDirectionSelector/ByName/EducationPlanInDirectionSelectorByName'
 import TrainingEntitiesSelector from '../../TrainingEntities/TrainingEntitiesSelector/TrainingEntitiesSelector'
 
 import { specialization} from '../../WorkProgram/constants';
@@ -88,7 +87,6 @@ const Filters: React.FC = () => {
                      shrink: true,
                    }}
         />
-       
       </div>
       <div style={{display: 'flex'}}>
           <Button
