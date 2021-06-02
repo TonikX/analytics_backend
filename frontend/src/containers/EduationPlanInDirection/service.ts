@@ -9,8 +9,13 @@ class Service extends AnalyticsService{
     getEducationalPlansInDirection(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType, filters: any){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
         const qualification = `field_of_study__qualification=${filters[filterFields.SPECIALIZATION]}`;
+        const outcomes = `academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__id=${filters[filterFields.OUTCOMES]}`
+        const prerequisite = `academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__id=${filters[filterFields.PREREQUISITE]}`
+        const structuralUnit = `academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__structural_unit__title=${filters[filterFields.STRUCTURAL_UNIT]}`
+        const numberDp = `field_of_study__number=${filters[filterFields.NUMBER_DP]}`
+        const nameDp  =`field_of_study__title=${filters[filterFields.NAME_DP]}`
 
-        return this.get(`/api/implementationacademicplan?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&${qualification}`);
+        return this.get(`/api/implementationacademicplan?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&${qualification}&${outcomes}&${prerequisite}&${structuralUnit}&${numberDp}&${nameDp}`);
     }
 
     deleteEducationalPlansInDirection(id: number){
