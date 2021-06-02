@@ -487,7 +487,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 newdata.update({"can_edit": False})
         except Expertise.DoesNotExist:
             if WorkProgram.objects.get(pk=self.kwargs['pk']).owner == request.user or WorkProgram.objects.filter(
-                    pk=self.kwargs['pk'], editors__in=[request.user]):
+                    pk=self.kwargs['pk'], editors__in=[request.user]) or request.user.is_superuser:
                 newdata.update({"can_edit": True, "expertise_status": False})
             else:
                 newdata.update({"can_edit": False, "expertise_status": False})
