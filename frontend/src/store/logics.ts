@@ -25,10 +25,11 @@ import SelectEducationalProgramLogic from '../containers/SelectEducationalProgra
 import TrainingModulesLogic from '../containers/EducationalPlan/TrainingModules/logics';
 import IndividualTrajectoriesLogic from '../containers/IndividualTrajectories/logics';
 import ProfessionalStandardsLogic from '../containers/ProfessionalStandards/logics';
-
+import RecordsLogic from  '../containers/Records/logics';
 import GeneralLogic from '../layout/logics';
 
 export default [
+    ...RecordsLogic,
     ...ProfessionalStandardsLogic,
     ...IndividualTrajectoriesLogic,
     ...TrainingModulesLogic,

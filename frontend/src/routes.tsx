@@ -26,6 +26,7 @@ import ProfessionSkills from "./containers/Professions/Skills";
 import RolesSkills from "./containers/Roles/Skills";
 import EducationalProgram from "./containers/EducationalProgram";
 import EducationalProgramCharacteristic from "./containers/EducationalProgram/Characteristic";
+import Records from "./containers/Records";
 
 import SkillsProfessions from "./containers/SkillsProfessions";
 import SkillsRoles from "./containers/SkillsRoles";
@@ -109,6 +110,9 @@ export default () => (
             </AuthRoute>
             <AuthRoute path={routerService.getDirectionRoute()}>
                 <Direction />
+            </AuthRoute>
+            <AuthRoute path={routerService.getRecordsRoute()}>
+                  <Records />
             </AuthRoute>
             <AuthRoute path={routerService.getEntityToEntityRoute()}>
                 <EntitityToEntitity />

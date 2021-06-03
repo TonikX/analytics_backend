@@ -25,7 +25,7 @@ const EXPERTISES = 'expertises';
 const SELECT_EDUCATIONAL_PROGRAM = 'select-educational-program';
 const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
 const PROFESSIONAL_STANDARDS = 'professional-standards';
-
+const RECORDS = 'records';
 const SEPARATOR = '/';
 
 export default class RouterService {
@@ -84,6 +84,10 @@ export default class RouterService {
 
     getCompetencesRoute = () => {
         return SEPARATOR + COMPETENCES;
+    };
+
+    getRecordsRoute = () => {
+        return SEPARATOR + RECORDS;
     };
 
     getDirectionRoute = () => {

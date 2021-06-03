@@ -81,7 +81,11 @@ import {individualTrajectoriesState} from "../containers/IndividualTrajectories/
 import {GENERAL_PATH as professionalStandardsPath, reducer as professionalStandardsReducer} from "../containers/ProfessionalStandards/reducer";
 import {professionalStandardsState} from "../containers/ProfessionalStandards/types"
 
+import {GENERAL_PATH as recordsPath, reducer as RecordsReducer} from "../containers/Records/reducer";
+import {SimpleStatState} from "../containers/Records/types"
+
 export interface rootState {
+    [recordsPath]: SimpleStatState,
     [professionalStandardsPath]: professionalStandardsState,
     [individualTrajectoriesPath]: individualTrajectoriesState,
     [trainingModulesPath]: trainingModulesState,
@@ -114,6 +118,7 @@ export interface rootState {
 }
 
 export default combineReducers({
+    [recordsPath]: RecordsReducer,
     [professionalStandardsPath]: professionalStandardsReducer,
     [individualTrajectoriesPath]: individualTrajectoriesReducer,
     [trainingModulesPath]: trainingModulesReducer,
