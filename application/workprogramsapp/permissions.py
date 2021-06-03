@@ -17,7 +17,6 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
         if request.user.is_superuser:
             return True
-
         try:
             return request.user in obj.editors.all()
         except:
