@@ -22,6 +22,7 @@ export interface CoursesActions {
     getInstitutions: any;
     setInstitutions: any;
     changeFiltering: any;
+    changeFilerSearchQuery: any;
 }
 
 export interface coursesState {
@@ -42,9 +43,10 @@ export interface coursesState {
 }
 
 export type filteringType = {
-    [filterFields.FILTERING_PLATFORM]: number | '',
-    [filterFields.FILTERING_INSTITUTION]: number | '',
+    [filterFields.FILTERING_PLATFORM]: string,
+    [filterFields.FILTERING_INSTITUTION]: string,
     [filterFields.FILTERING_LANGUAGE]: string,
+    [filterFields.FILTERING_SEARCH_QUERY]: string,
 }
 
 export type PlatformType = {

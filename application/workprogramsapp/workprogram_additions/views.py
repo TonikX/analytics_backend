@@ -11,7 +11,7 @@ from rest_framework.response import Response
 # Сериализаторы
 from .serializers import AdditionalMaterialSerializer, CreateAdditionalMaterialSerializer, \
     StructuralUnitSerializer, CreateStructuralUnitSerializer, \
-    CreateUserStructuralUnitSerializer, UserStructuralUnitSerializer, ShortStructuralUnitSerializer
+    CreateUserStructuralUnitSerializer, UserStructuralUnitSerializer
 
 from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 
@@ -42,12 +42,11 @@ class StructuralUnitSet(viewsets.ModelViewSet):
     queryset = StructuralUnit.objects.all()
     serializer_class = StructuralUnitSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-    search_fields = ['title']
+
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def get_serializer_class(self):
-        if self.action == 'list':
-            return ShortStructuralUnitSerializer
+
         if self.action == 'create':
             return CreateStructuralUnitSerializer
         if self.action == 'update':
@@ -70,6 +69,7 @@ class UserStructuralUnitSet(viewsets.ModelViewSet):
             return CreateUserStructuralUnitSerializer
         if self.action == 'partial_update':
             return CreateUserStructuralUnitSerializer
+
         return UserStructuralUnitSerializer
 
 
@@ -166,3 +166,4 @@ def ReconnectWorkProgram(request):
         return Response(serializer.data)
     except:
         return Response(status=400)
+

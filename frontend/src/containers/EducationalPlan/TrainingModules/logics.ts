@@ -114,7 +114,7 @@ const getTrainingModule = createLogic({
     process({getState, action}: any, dispatch, done) {
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_TRAINING_MODULE}));
 
-        service.getTrainingModule(action.payload.id)
+        service.getTrainingModule(action.payload)
             .then((res) => {
                 dispatch(trainingModuleActions.setTrainingModule(res.data));
                 dispatch(actions.fetchingSuccess());

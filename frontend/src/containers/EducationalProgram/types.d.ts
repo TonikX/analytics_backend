@@ -39,6 +39,8 @@ export interface EducationalProgramActions {
     characteristicDeleteCompetence: ActionCreatorWithPayload<CharacteristicDeleteCompetenceActionType>;
     characteristicSaveCompetenceLaborFunction: ActionCreatorWithPayload<CharacteristicSaveCompetenceLaborFunctionActionType>;
     characteristicDeleteIndicator: ActionCreatorWithPayload<CharacteristicDeleteIndicatorActionType>;
+    characteristicSaveProfessionalStandard: ActionCreatorWithPayload<CharacteristicAddProfessionalStandardActionType>;
+    characteristicDeleteProfessionalStandard: ActionCreatorWithPayload<CharacteristicDeleteProfessionalStandardActionType>;
 }
 
 export interface educationalProgramState {
@@ -118,6 +120,17 @@ export type CharacteristicAddCompetenceActionType = {
 
 export type CharacteristicAddIndicatorActionType = {
     indicatorId: Array<number>;
+    competenceId: number;
+    type: CompetenceTableType;
+}
+
+export type CharacteristicAddProfessionalStandardActionType = {
+    professionalStandardId: number;
+    competenceId: number;
+    type: CompetenceTableType;
+}
+
+export type CharacteristicDeleteProfessionalStandardActionType = {
     competenceId: number;
     type: CompetenceTableType;
 }

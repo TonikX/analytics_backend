@@ -14,7 +14,8 @@ from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderVie
     CreateFolderView, EditFolderView, AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
     AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, \
     ModuleInFolderView, AddToFolderModuleView, \
-    RemoveFromFolderModuleView
+    RemoveFromFolderModuleView, IndividualImplementationAcademicPlanInFolderView, \
+    AddToFolderndividualImplementationAcademicPlanView, RemoveFromFolderImplementationAcademicPlanView
 from .op_slection.views import CreateProfessionByKeywords
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, \
     ProfessionUpdateView, ItemWithProfessions, ItemWithRoles, ProfessionsListWithoutPaginationApi
@@ -311,6 +312,10 @@ urlpatterns = [
     path('api/folders/block_module/content/<int:pk>', ModuleInFolderView.as_view()),
     path('api/folders/block_module/add', AddToFolderModuleView.as_view()),
     path('api/folders/block_module/remove/<int:pk>', RemoveFromFolderModuleView.as_view()),
+    # --Папки для Траекторий
+    path('api/folders/individual_path/content/<int:pk>', IndividualImplementationAcademicPlanInFolderView.as_view()),
+    path('api/folders/individual_path/add', AddToFolderndividualImplementationAcademicPlanView.as_view()),
+    path('api/folders/individual_path/remove/<int:pk>', RemoveFromFolderImplementationAcademicPlanView.as_view()),
     # --прочее
     path('api/workprogram/statistic/<int:pk>', WorkProgramStatistic),
     path('api/folders/real_remove/<int:pk>', DeleteFolderView.as_view()),

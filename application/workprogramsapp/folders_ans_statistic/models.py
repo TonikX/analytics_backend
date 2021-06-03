@@ -52,7 +52,7 @@ class DisciplineBlockModuleInFolder(models.Model):
     folder = models.ForeignKey('Folder', verbose_name='Папка', on_delete=models.CASCADE,
                                related_name="block_module_in_folder")
     block_module = models.ForeignKey("DisciplineBlockModule", verbose_name='модуль в папке', on_delete=models.CASCADE)
-    work_program_rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, verbose_name="Важность модуля",
+    module_rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, verbose_name="Важность модуля",
                                                            blank=True, null=True, default=0)
     comment = models.CharField(max_length=10240, verbose_name="Комментарий", blank=True, null=True)
 
@@ -70,7 +70,7 @@ class IndividualImplementationAcademicPlanInFolder(models.Model):
     folder = models.ForeignKey('Folder', verbose_name='Папка', on_delete=models.CASCADE,
                                related_name="individual_implementation_of_academic_plan_in_folder")
     individual_implementation_of_academic_plan = models.ForeignKey("IndividualImplementationAcademicPlan", verbose_name='траектория в папке', on_delete=models.CASCADE)
-    work_program_rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, verbose_name="Важность траектории",
+    route_rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, verbose_name="Важность траектории",
                                                            blank=True, null=True, default=0)
     comment = models.CharField(max_length=10240, verbose_name="Комментарий", blank=True, null=True)
 

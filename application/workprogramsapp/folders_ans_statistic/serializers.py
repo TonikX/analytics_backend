@@ -3,9 +3,10 @@ from rest_framework import serializers
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder, AcademicPlanInFolder, \
     DisciplineBlockModuleInFolder, IndividualImplementationAcademicPlanInFolder
-from workprogramsapp.individualization.serializers import ShortImplementationAcademicPlanSerializer
+from workprogramsapp.individualization.serializers import ShortImplementationAcademicPlanSerializer, \
+    ShortIndividualImplementationAcademicPlanSerializer
 from workprogramsapp.serializers import WorkProgramShortForExperiseSerializer, AcademicPlanShortSerializer, \
-    DisciplineBlockModuleSerializer
+    DisciplineBlockModuleSerializer, ImplementationAcademicPlanSerializer
 
 
 # ПАПКИ С РПД
@@ -75,7 +76,7 @@ class IndividualImplementationAcademicPlanInFolderSerializer(serializers.ModelSe
         fields = "__all__"
 
     def to_representation(self, value):
-        self.fields['individual_implementation_of_academic_plan'] = ShortImplementationAcademicPlanSerializer(many=False)
+        self.fields['individual_implementation_of_academic_plan'] = ShortIndividualImplementationAcademicPlanSerializer(many=False)
         return super().to_representation(value)
 
 

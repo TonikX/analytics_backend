@@ -12,7 +12,7 @@ import {professionalStandardsState, ProfessionalStandardsType} from "./types";
 const getStateData = (state: rootState): professionalStandardsState => get(state, GENERAL_PATH);
 export const getProfessionalStandards = (state: rootState): Array<ProfessionalStandardsType> => get(getStateData(state), fields.PROFESSIONAL_STANDARD_LIST, []);
 
-export const getCompetencesForSelector = (state: rootState): SelectorListType =>
+export const getProfStandardsForSelector = (state: rootState): SelectorListType =>
     getProfessionalStandards(state).map((professional_standards: ProfessionalStandardsType) => ({
         value: professional_standards[ProfessionalStandardFields.ID],
         label: professional_standards[ProfessionalStandardFields.TITLE],

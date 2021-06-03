@@ -3,11 +3,11 @@ import {SortingType, Types} from "../../components/SortingButton/types";
 import {CompetenceTableType, EducationProgramFields} from "./enum";
 import {
     CharacteristicAddCompetenceActionType,
-    CharacteristicAddIndicatorActionType,
+    CharacteristicAddIndicatorActionType, CharacteristicAddProfessionalStandardActionType,
     CharacteristicCreateGroupActionType,
     CharacteristicDeleteCompetenceActionType,
     CharacteristicDeleteGroupActionType,
-    CharacteristicDeleteIndicatorActionType,
+    CharacteristicDeleteIndicatorActionType, CharacteristicDeleteProfessionalStandardActionType,
     CharacteristicSaveCompetenceLaborFunctionActionType,
     CharacteristicSaveGroupTitleActionType
 } from "./types";
@@ -89,6 +89,18 @@ class Service extends AnalyticsService{
     characteristicSaveCompetenceLaborFunction({competenceId, type, laborFunction}: CharacteristicSaveCompetenceLaborFunctionActionType){
         return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
             labor_functions: laborFunction
+        });
+    }
+
+    characteristicSaveProfessionalStandard({competenceId, type, professionalStandardId}: CharacteristicAddProfessionalStandardActionType){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            professional_standard: professionalStandardId
+        });
+    }
+
+    characteristicDeleteProfessionalStandard({competenceId, type}: CharacteristicDeleteProfessionalStandardActionType){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            professional_standard: null
         });
     }
 

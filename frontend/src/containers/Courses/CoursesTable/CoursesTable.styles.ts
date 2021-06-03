@@ -67,7 +67,4 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
             color: theme.palette.primary.main
         }
     },
-    stickyHeader: {
-        left: 'auto',
-    }
 }));

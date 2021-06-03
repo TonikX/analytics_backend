@@ -4,7 +4,6 @@ from rest_framework import serializers, viewsets
 # Модели данных
 from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 
-
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
 from ..models import WorkProgramInFieldOfStudy, WorkProgram
@@ -13,11 +12,11 @@ from ..models import WorkProgramInFieldOfStudy, WorkProgram
 Материалы тем
 """
 
+
 class AdditionalMaterialSerializer(serializers.ModelSerializer):
     """
     Дополнительный материал в теме РПД
     """
-
 
     class Meta:
         model = AdditionalMaterial
@@ -48,8 +47,8 @@ class UserStructuralUnitSerializer(serializers.ModelSerializer):
     """
     Cериализатор работника в подразделении
     """
-    user = userProfileSerializer()
 
+    user = userProfileSerializer()
 
     class Meta:
         model = UserStructuralUnit
@@ -66,12 +65,10 @@ class CreateUserStructuralUnitSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class StructuralUnitSerializer(serializers.ModelSerializer):
-    user_in_structural_unit = UserStructuralUnitSerializer(many = True)
+class UserStructuralUnitSerializer(serializers.ModelSerializer):
     """
-    Cериализатор подразделения разработчика РПД
+    Cериализатор работника в подразделении
     """
-
 
     class Meta:
         model = StructuralUnit
@@ -83,6 +80,13 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
     Cериализатор подразделения разработчика РПД
     """
 
+    class Meta:
+        model = UserStructuralUnit
+        fields = "__all__"
+
+
+class StructuralUnitSerializer(serializers.ModelSerializer):
+    user_in_structural_unit = UserStructuralUnitSerializer(many=True)
 
     class Meta:
         model = StructuralUnit

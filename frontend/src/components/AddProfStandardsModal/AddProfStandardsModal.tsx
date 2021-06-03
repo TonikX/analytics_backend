@@ -1,7 +1,6 @@
 import React from 'react';
-import get from 'lodash/get';
 
-import {AddCompetenceModalProps} from './types';
+import {AddProfStandardsModalProps} from './types';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,16 +11,18 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 import SearchSelector from "../SearchSelector/SearchSelector";
 
-import connect from './AddCompetenceModal.connect';
-import styles from './AddCompetenceModal.styles';
+import connect from './AddProfStandardsModal.connect';
+import styles from './AddProfStandardsModal.styles';
 
-class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
+class AddProfStandardsModal extends React.PureComponent<AddProfStandardsModalProps> {
     state = {
-        competence: null
+        profStandard: {
+            value: null
+        }
     };
 
     componentDidMount() {
-        this.props.competenceActions.getCompetences();
+        this.props.profStandardsActions.getProfessionalStandards();
     }
 
     handleClose = () => {
@@ -29,29 +30,28 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
     }
 
     handleSave = () => {
-        this.props.saveDialog(this.state.competence);
+        this.props.saveDialog(this.state.profStandard);
         this.props.closeDialog();
 
-        this.setState({competence: null})
+        this.setState({profStandard: null})
     }
 
     save = (value: string) => {
-        const {competenceList} = this.props;
-        const competence = competenceList.find(el => el.value === value);
+        const {profStandardsList} = this.props;
+        const profStandard = profStandardsList.find(el => el.value === value);
 
-        this.setState({competence: competence})
+        this.setState({profStandard: profStandard})
     }
 
     handleChangeSearchText = (searchText: string) => {
-        this.props.competenceActions.changeSearchQuery(searchText);
-        this.props.competenceActions.getCompetences();
+        this.props.profStandardsActions.changeSearchQuery(searchText);
+        this.props.profStandardsActions.getProfessionalStandards();
     }
 
     render() {
-        const {isOpen, classes, competenceList} = this.props;
+        const {isOpen, classes, profStandardsList} = this.props;
 
-        // @ts-ignore
-        const disableButton = get(this, 'state.competence.value', null) === null;
+        const disableButton = !this.state?.profStandard?.value;
 
         return (
             <Dialog
@@ -64,12 +64,12 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
                 maxWidth="sm"
                 fullWidth
             >
-                <DialogTitle>Добавить компетенцию</DialogTitle>
+                <DialogTitle>Добавить профессиональный стандарт</DialogTitle>
 
                 <DialogContent>
-                    <SearchSelector label="Компетенция * "
+                    <SearchSelector label="Профессиональный стандарт * "
                                     changeSearchText={this.handleChangeSearchText}
-                                    list={competenceList}
+                                    list={profStandardsList}
                                     changeItem={this.save}
                                     value={''}
                                     valueLabel={''}
@@ -93,4 +93,4 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
 }
 
 // @ts-ignore
-export default connect(withStyles(styles)(AddCompetenceModal));
+export default connect(withStyles(styles)(AddProfStandardsModal));

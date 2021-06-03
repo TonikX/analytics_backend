@@ -28,6 +28,7 @@ import connect from './Folders.connect';
 import styles from './Folders.styles';
 import {EducationalPlanFields} from "../../EducationalPlan/enum";
 import {specializationObject} from "../../WorkProgram/constants";
+import {TrainingModuleFields} from "../../EducationalPlan/TrainingModules/enum";
 
 function TabPanel(props: any) {
     const { children, value, index, ...other } = props;
@@ -118,6 +119,26 @@ class Folders extends React.PureComponent<FoldersProps> {
         );
     }
 
+    renderBlockModuleList = (folder: FolderType) => {
+        const {classes} = this.props;
+
+        return folder[FoldersFields.BLOCK_MODULE_IN_FOLDER].map(item =>
+            <Link target="_blank"
+                  to={appRouter.getTrainingModuleDetailLink(item[FoldersFields.BLOCK_MODULE][EducationalPlanFields.ID])}
+                  className={classes.workProgramLink}
+            >
+                <div className={classes.workProgram}>
+                    <div> {item[FoldersFields.BLOCK_MODULE][TrainingModuleFields.NAME]} </div>
+                    <div className={classes.rating}>
+                        <ReactStars size={20} value={item[FoldersFields.BLOCK_MODULE_RATING]} />
+                        <LikeButton isLiked={true} onClick={this.deleteFromFolder(item[FoldersFields.ID], FavoriteType.MODULES)} />
+                    </div>
+                    <div> {item[FoldersFields.COMMENT]} </div>
+                </div>
+            </Link>
+        );
+    }
+
     render() {
         const {classes, folders} = this.props;
         const {currentTab, openConfirmDialogId} = this.state;
@@ -160,6 +181,7 @@ class Folders extends React.PureComponent<FoldersProps> {
                             <div className={classes.workPrograms}>
                                 {this.renderWPList(folder)}
                                 {this.renderAcademicPlanList(folder)}
+                                {this.renderBlockModuleList(folder)}
                             </div>
 
                         </TabPanel>
