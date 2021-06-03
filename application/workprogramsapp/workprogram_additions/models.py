@@ -17,15 +17,17 @@ class AdditionalMaterial(models.Model):
 class StructuralUnit(models.Model):
 
     title = models.CharField(max_length=300, verbose_name="Описание")
+    isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID структурного подразделения в ИСУ")
 
 
 class UserStructuralUnit(models.Model):
 
     status_choise = (
-        ('l', 'leader'),
-        ('у', 'employee'),
+        ('leader', 'leader'),
+        ('deputy', 'deputy'),
+        ('employee', 'employee'),
     )
-    topic = models.ForeignKey('StructuralUnit', on_delete=models.CASCADE, verbose_name='Структурное подразделени',
-                              related_name='user_in_structural_unit')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
-    status = models.CharField(max_length=1, choices=status_choise, verbose_name='Архив', default = 'l')
+    structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL, verbose_name='Структурное подразделени',
+                                     related_name='user_in_structural_unit', blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True, related_name='user_for_structural_unit')
+    status = models.CharField(max_length=30, choices=status_choise, verbose_name='Архив', default = 'l')
