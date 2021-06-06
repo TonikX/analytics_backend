@@ -6,6 +6,7 @@ from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkP
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,\
     WorkProgramInFieldOfStudy
 import json
+import re
 from django.db import transaction
 
 
@@ -142,19 +143,77 @@ class FileUploadAPIView(APIView):
                     order.update({(data['МОДУЛЬ'][i].strip()): len(order)})
                     o = order[(data['МОДУЛЬ'][i].strip())]
 
+
+                print('-- Работа с блок-модулем')
+                if data['МОДУЛЬ'][i] == 'Универсальный модуль':
+                    option = 'universal_module'
+                if data['МОДУЛЬ'][i] == 'Университетский фундаментальный модуль':
+                    option = 'universal_fundamental_module'
+                elif data['МОДУЛЬ'][i] == 1:
+                    option = 'physical_culture'
+                elif data['МОДУЛЬ'][i] == 'Модуль «Философия+Мышление»':
+                    option = 'philosophy_thinking'
+                elif data['МОДУЛЬ'][i] == 'Модуль «Цифровая культура»':
+                    option = 'digital_culture'
+                elif data['МОДУЛЬ'][i] == 'Модуль «Предпринимательская культура»':
+                    option = 'entrepreneurial_culture'
+                elif data['МОДУЛЬ'][i] == 'Модуль «Soft Skills»':
+                    option = 'soft_skills'
+                elif data['МОДУЛЬ'][i] == 'Фундаментальный модуль по ОГНП':
+                    option = 'f_ognp'
+                elif 'ОГНП ' in str(data['МОДУЛЬ'][i]):
+                    option = 'ognp'
+                elif data['МОДУЛЬ'][i] == 1:
+                    option = 'natural_science_module'
+                elif data['МОДУЛЬ'][i] == 'Общепрофессиональный модуль':
+                    option = 'general_professional_module'
+                elif data['МОДУЛЬ'][i] == 'Элективный модуль по группе направлений':
+                    option = 'elective_module'
+                elif data['МОДУЛЬ'][i] == 'Межпрофильный модуль факультета':
+                    option = 'interdisciplinary_module_of_the_faculty'
+                elif data['МОДУЛЬ'][i] == 'Факультетский модуль':
+                    option = 'faculty_module'
+                elif data['МОДУЛЬ'][i] == 1:
+                    option = 'profile_professional_module'
+                elif data['МОДУЛЬ'][i] == 'Математический модуль':
+                    option = 'math_module'
+                elif data['МОДУЛЬ'][i] == 'Цифровая культура в профессиональной деятельност':
+                    option = 'digital_culture_in_professional_activities'
+                elif data['МОДУЛЬ'][i] == 'Профильный профессиональный модуль':
+                    option = 'profile_professional_module'
+                elif 'Специализация' in str(data['МОДУЛЬ'][i]):
+                    option = 'specialization_module'
+                elif data['МОДУЛЬ'][i] == 'ГИА':
+                    option = 'gia'
+                elif data['МОДУЛЬ'][i] == 'Практика':
+                    option = 'practice'
+                elif data['МОДУЛЬ'][i] == 'Факультативные дисциплины':
+                    option = 'optional_disciplines'
+
+                print("Выборность модуля", option)
+
+
+
                 if DisciplineBlockModule.objects.filter(name=(data['МОДУЛЬ'][i].strip()),
                                                         descipline_block=db).exists():
                     mdb = DisciplineBlockModule.objects.get(name=(data['МОДУЛЬ'][i].strip()), descipline_block=db)
                 else:
                     mdb = DisciplineBlockModule(name=(data['МОДУЛЬ'][i].strip()), descipline_block=db,
                                                 order=o)
+                    mdb.type = option
                     mdb.save()
                 #print('Модуль в блоке: ', mdb)
                 print('-- Работа с блок-модулем')
-                if (data['ВЫБОР'][i] == '1' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                        discipline_block_module=mdb, change_type=data['ВЫБОР'][i], subject_code = data['НОМЕР'][i]).exists()):
+                if data['ВЫБОР'][i] == 0:
+                    option = 'Required'
+                elif data['ВЫБОР'][i] == 1:
+                    option = 'Optionally'
+                print("Выборность", option)
+
+                if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                        discipline_block_module=mdb, change_type=option, subject_code = data['НОМЕР'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
-                                                                                       change_type=data['ВЫБОР'][i], subject_code = data['НОМЕР'][i]
+                                                                                       change_type=option, subject_code = data['НОМЕР'][i]
                                                                                        )
                     if WorkProgramInFieldOfStudy.objects.filter(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
@@ -168,13 +227,13 @@ class FileUploadAPIView(APIView):
                         #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                         wpinfs.save()
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=mdb,
-                                                                             change_type=data['ВЫБОР'][i],
+                                                                             change_type=option,
                                                                              work_program=wp_obj
                                                                              ).exists():
                     print('exist', wp_obj)
                     wpinfs = WorkProgramInFieldOfStudy.objects.get(
                         work_program_change_in_discipline_block_module=WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
-                                                                                                                            change_type=data['ВЫБОР'][i],
+                                                                                                                            change_type=option,
                                                                                                                             work_program=wp_obj
                                                                                                                             ), work_program=wp_obj)
                     #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
@@ -183,7 +242,7 @@ class FileUploadAPIView(APIView):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
                     wpchangemdb.credit_units = data['ЗЕ_В_СЕМЕСТРАХ'][i].strip("()")
                     print('wpchangemdb.credit_units', wpchangemdb.credit_units)
-                    wpchangemdb.change_type = data['ВЫБОР'][i]
+                    wpchangemdb.change_type = option
                     wpchangemdb.discipline_block_module = mdb
                     wpchangemdb.subject_code = data['НОМЕР'][i]
                     wpchangemdb.save()

@@ -580,8 +580,9 @@ class DisciplineBlockModule(CloneMixin,models.Model):
 
     TYPES = [
         ('universal_module', 'universal_module'),
+        ('universal_fundamental_module', 'universal_fundamental_module'),
         ('physical_culture', 'physical_culture'),
-        ('philosophy_thinking"', 'philosophy_thinking"'),
+        ('philosophy_thinking', 'philosophy_thinking'),
         ('digital_culture', 'digital_culture'),
         ('entrepreneurial_culture', 'entrepreneurial_culture'),
         ('soft_skills', 'soft_skills'),
@@ -598,6 +599,8 @@ class DisciplineBlockModule(CloneMixin,models.Model):
         ('gia', 'gia'),
         ('practice', 'practice'),
         ('optional_disciplines', 'optional_disciplines'),
+        ('profile_professional_module', 'profile_professional_module'),
+        ('f_ognp', 'f_ognp')
     ]
 
     type = models.CharField(choices=TYPES, max_length=100, default='faculty_module')
