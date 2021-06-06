@@ -14,9 +14,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import {PlansAndDirectionsProps} from './types';
 import {appRouter} from "../../../service/router-service";
-import {DirectionFields} from "../../Direction/enum";
-
-import {specializationObject} from "../constants";
 
 import connect from './PlansAndDirections.connect';
 import styles from './PlansAndDirections.styles';
@@ -26,41 +23,40 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
 
     render() {
         const {classes, plans} = this.props;
-        
+
         return (
             <div className={classes.root}>
                 <Scrollbars style={{height: 'calc(100vh - 400px)'}} ref={(el) => {this.scrollBar = el}}>
                     <Table stickyHeader>
                         <TableHead>
                             <TableRow>
-                                <TableCell className={classes.header}>Учебный план</TableCell>
+                                <TableCell className={classes.header}>Образовательная программа</TableCell>
                                 <TableCell className={classes.header}>Направление</TableCell>
-                                <TableCell className={classes.header}>Уровень образования</TableCell>
                                 <TableCell className={classes.header}>Год набора</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {plans.map(plan => (
-                                plan.directions.map((direction: any, index: number) =>
+                            {plans.map(plan => {
+                                const planObject = get(plan, 'discipline_block_module.descipline_block.academic_plan', {});
+
+                                return get(planObject, 'academic_plan_in_field_of_study', []).map((item: any) =>
                                     <TableRow>
-                                        {index === 0 ?
-                                            <TableCell rowSpan={get(plan.directions, 'length')}>
-                                                <Link target="_blank" className={classes.cellLink} to={appRouter.getPlanDetailLink(plan.id)}>{plan.name}</Link>
-                                            </TableCell> : <></>
-                                        }
                                         <TableCell>
-                                            {get(direction, ['field_of_study', DirectionFields.NUMBER], '')} &nbsp;
-                                            {get(direction, ['field_of_study', DirectionFields.TITLE], '')} &nbsp;
+                                            <Link className={classes.link} target="_blank" to={appRouter.getPlanDetailLink(get(planObject, 'id'))}> {get(item, 'title', '')} </Link>
                                         </TableCell>
                                         <TableCell>
-                                            {specializationObject[get(direction, ['field_of_study', DirectionFields.QUALIFICATION])]}
+                                            {get(item, 'field_of_study', []).map((item: any) =>
+                                                <>
+                                                    {get(item, 'title', '')} ({get(item, 'number', '')}) <br/>
+                                                </>
+                                            )}
                                         </TableCell>
                                         <TableCell>
-                                            {get(direction, 'year')}
+                                            {get(item, 'year', '')}
                                         </TableCell>
                                     </TableRow>
                                 )
-                            ))}
+                            })}
                         </TableBody>
                     </Table>
                 </Scrollbars>

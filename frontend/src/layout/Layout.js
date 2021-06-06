@@ -48,11 +48,19 @@ class Layout extends React.Component {
     shouldComponentUpdate(nextProps, nextState){
         return !shallowEqual(this.props.errors, nextProps.errors)
             || !shallowEqual(this.props.children, nextProps.children)
+            || !shallowEqual(this.props.location, nextProps.location)
             || this.props.fetching !== nextProps.fetching
             || this.props.auth !== nextProps.auth
+            || this.props.mockMenu !== nextProps.mockMenu
             || this.state.openMenu !== nextState.openMenu
             || this.state.isFetchingRefreshToken !== nextState.isFetchingRefreshToken
         ;
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.mockMenu && !prevProps.mockMenu && !this.state.openMenu){
+            this.setState({openMenu: true})
+        }
     }
 
     handleOpenMenu = () => {
@@ -69,12 +77,16 @@ class Layout extends React.Component {
     };
 
     isWorkProgramPage = () => this.props.location.pathname.includes('/work-program/');
+    isLandingPage = () => this.props.location.pathname === '/landing';
 
     render() {
         const {openMenu} = this.state;
-        const {classes, fetching, errors, successMessages, auth, userGroups, isFetchingRefreshToken} = this.props;
+        const {classes, fetching, errors, successMessages, auth, userGroups, isFetchingRefreshToken, mockMenu, notificationsCount} = this.props;
         const isAuth = userService.isAuth() && auth;
         const isWorkProgramPage = this.isWorkProgramPage();
+        const isLandingPage = this.isLandingPage();
+
+        if (isLandingPage) return this.props.children
 
         return (
             <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -87,9 +99,10 @@ class Layout extends React.Component {
                                 openGeneralMenu={openMenu}
                                 isAuth={isAuth}
                                 logout={this.logout}
+                                notificationsCount={notificationsCount}
                         />
                         <div className={classes.root}>
-                            {isAuth && <Menu isOpen={openMenu} userGroups={userGroups} />}
+                            {isAuth && <Menu isOpen={openMenu} userGroups={userGroups} mockMenu={mockMenu}/>}
                             <div className={className(classes.content, {
                                 [classes.contentShift]: openMenu,
                                 [classes.noPadding]: isWorkProgramPage

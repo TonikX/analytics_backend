@@ -8,7 +8,6 @@ import classNames from 'classnames';
 
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 
@@ -30,6 +29,7 @@ import {SubjectAreaFields} from './enum';
 
 import connect from './SubjectArea.connect';
 import styles from './SubjectArea.styles';
+import Pagination from "@material-ui/lab/Pagination";
 
 class SubjectArea extends React.Component<SubjectAreaProps> {
     state = {
@@ -77,8 +77,8 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
         this.props.actions.getSubjectArea();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any | null, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getSubjectArea();
     }
 
@@ -140,14 +140,10 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"

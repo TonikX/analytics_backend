@@ -32,6 +32,7 @@ import {relations} from './constants';
 
 import connect from './EntitityToEntitity.connect';
 import styles from './EntitityToEntitity.styles';
+import Pagination from "@material-ui/lab/Pagination";
 
 class EntitityToEntitity extends React.Component<EntityToEntityProps> {
     state = {
@@ -84,8 +85,8 @@ class EntitityToEntitity extends React.Component<EntityToEntityProps> {
         this.props.actions.getEntityToEntityList();
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getEntityToEntityList();
     }
 
@@ -164,14 +165,10 @@ class EntitityToEntitity extends React.Component<EntityToEntityProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"

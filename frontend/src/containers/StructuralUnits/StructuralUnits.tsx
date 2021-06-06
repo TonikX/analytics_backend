@@ -33,6 +33,7 @@ import {StructuralUnitsProps} from "./types";
 
 import connect from './StructuralUnits.connect';
 import styles from './StructuralUnits.styles';
+import Pagination from "@material-ui/lab/Pagination";
 
 class StructuralUnits extends React.Component<StructuralUnitsProps> {
     state = {
@@ -80,8 +81,8 @@ class StructuralUnits extends React.Component<StructuralUnitsProps> {
         this.props.actions.getStructuralUnits();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getStructuralUnits();
     }
 
@@ -147,14 +148,10 @@ class StructuralUnits extends React.Component<StructuralUnitsProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"

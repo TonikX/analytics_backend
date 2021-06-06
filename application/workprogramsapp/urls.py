@@ -78,8 +78,8 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkPr
     FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
     ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView, AcademicPlanListShortAPIView, \
     NewRealtionsForWorkProgramsInFieldOfStudyAPI, WorkProgramsWithOutcomesToPrerequisitesForThisWPView, WorkProgramsWithPrerequisitesToOutocomesForThisWPView, WorkProgramsWithOutocomesForThisWPView
-from .views import DocxFileExportView, SyllabusExportView
-from .views import CloneWorkProgramm, ChangeModulesNames
+from .files_export.views import DocxFileExportView, SyllabusExportView
+from .views import CloneWorkProgramm
 
 from .views import WorkProgramsListApi, UserGroups
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
@@ -199,7 +199,6 @@ urlpatterns = [
     # path('api/export/docx2', DocxFileExportOldView.as_view()),
     path('api/export/docx/<int:pk>/<int:fs_id>/<int:ap_id>/<int:year>', DocxFileExportView.as_view()),
     path('api/export/syllabus/<int:pk>/<int:fs_id>/<int:ap_id>/<int:year>', SyllabusExportView.as_view()),
-    path('api/change_modules_names', ChangeModulesNames),
 
     # Учебный планы
     path('api/academicplan', AcademicPlanListAPIView.as_view()),
@@ -327,18 +326,16 @@ urlpatterns = [
     path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
     url(r'^', include('workprogramsapp.educational_program.urls')),
 
-    # Запросы для работы с БАРС
-    path('api/bars_tools/similar_ep', FindSimilarEP),
-    path('api/bars_tools/similar_wp', FindSimilarWP),
-    path('api/bars_tools/post_checkpoint', CreateCheckPoint),
+
     url(r'^', include('workprogramsapp.educational_program.urls')),
     url(r'^', include('workprogramsapp.workprogram_additions.urls')),
+    url(r'^', include('workprogramsapp.bars_merge.urls')),
 
     url(r'^', include('workprogramsapp.individualization.urls')),
     url(r'^', include('workprogramsapp.isu_merge.urls')),
     url(r'^', include('workprogramsapp.statistic.urls')),
-    # Нотификации
-    path('api/notifications/list', NotificationListView.as_view()),
+    url(r'^', include('workprogramsapp.notifications.urls')),
+
 
 
 ]

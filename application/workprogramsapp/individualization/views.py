@@ -32,6 +32,7 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                         'implementation_of_academic_plan__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
                         'implementation_of_academic_plan__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
                         ]
+    http_method_names = ['get', 'post']
 
     def get_serializer_class(self):
         if self.action == 'list':

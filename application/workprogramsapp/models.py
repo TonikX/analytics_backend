@@ -348,9 +348,9 @@ class AcademicPlan(models.Model):
     )
 
 
-    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = 'Квалификация', blank = True, null = True)
-    educational_profile = models.CharField(max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
-    number = models.CharField(unique=True, max_length=1024, verbose_name = 'Номер учебного плана', blank = True, null = True)
+    qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name = '- Квалификация', blank = True, null = True)
+    educational_profile = models.CharField(max_length=1024, verbose_name = '- Профиль ОП', blank = True, null = True)
+    number = models.CharField(unique=True, max_length=1024, verbose_name = '- Номер учебного плана', blank = True, null = True)
     #field_of_study = models.ManyToManyField('FieldOfStudy', related_name="block_in_academic_plan", blank = True, null = True)
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     year = models.CharField(max_length=1024, blank = True, null = True)
@@ -525,7 +525,7 @@ class ImplementationAcademicPlan(models.Model):
     educational_profile = models.CharField(max_length=1024, verbose_name = 'Профиль ОП', blank = True, null = True)
     language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
                                 blank=True, null=True)
-    title = models.CharField(max_length=1024, verbose_name = 'Партнер', blank = True, null = True)
+    title = models.CharField(max_length=1024, verbose_name = 'Название', blank = True, null = True)
 
     def __str__(self):
         return str(self.academic_plan)
@@ -579,31 +579,34 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     '''
 
     TYPES = [
-        ('universal_module', 'universal_module'),
-        ('physical_culture', 'physical_culture'),
-        ('philosophy_thinking"', 'philosophy_thinking"'),
-        ('digital_culture', 'digital_culture'),
-        ('entrepreneurial_culture', 'entrepreneurial_culture'),
-        ('soft_skills', 'soft_skills'),
+        ('universal_module', 'Универсальный модуль'),
+        ('universal_fundamental_module', 'Университетский фундаментальный модуль'),
+        ('physical_culture', 'Физическая культура'),
+        ('philosophy_thinking', 'Модуль «Философия+Мышление»'),
+        ('digital_culture', 'Модуль «Цифровая культура»'),
+        ('entrepreneurial_culture', 'Модуль «Предпринимательская культура»'),
+        ('soft_skills', 'Модуль «Soft Skills»'),
         ('ognp', 'ognp'),
         ('natural_science_module', 'natural_science_module'),
-        ('general_professional_module', 'general_professional_module'),
-        ('elective_module', 'elective_module'),
-        ('interdisciplinary_module_of_the_faculty', 'interdisciplinary_module_of_the_faculty'),
-        ('faculty_module', 'faculty_module'),
-        ('profile_professional_module', 'profile_professional_module'),
-        ('math_module', 'math_module'),
-        ('digital_culture_in_professional_activities', 'digital_culture_in_professional_activities'),
+        ('general_professional_module', 'Общепрофессиональный модуль'),
+        ('elective_module', 'Элективный модуль по группе направлений'),
+        ('interdisciplinary_module_of_the_faculty', 'Межпрофильный модуль факультета'),
+        ('faculty_module', 'Факультетский модуль'),
+        #('profile_professional_module', 'profile_professional_module'),
+        ('math_module', 'Математический модуль'),
+        ('digital_culture_in_professional_activities', 'Цифровая культура в профессиональной деятельности'),
         ('specialization_module', 'specialization_module'),
-        ('gia', 'gia'),
-        ('practice', 'practice'),
-        ('optional_disciplines', 'optional_disciplines'),
+        ('gia', 'ГИА'),
+        ('practice', 'Практика'),
+        ('optional_disciplines', 'Факультативные дисциплины'),
+        ('profile_professional_module', 'Профильный профессиональный модуль'),
+        ('f_ognp', 'Фундаментальный модуль по ОГНП')
     ]
 
     type = models.CharField(choices=TYPES, max_length=100, default='faculty_module')
     name = models.CharField(max_length=1024)
-    descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name='Модуль в блоке',
-                                         related_name="modules_in_discipline_block", blank=True, null=True)
+    descipline_block = models.ManyToManyField('DisciplineBlock', verbose_name='Модуль в блоке',
+                                             related_name='modules_in_discipline_block', blank=True)
     order = models.IntegerField(blank=True, null=True, verbose_name="Порядок модулей")
     description = models.CharField(max_length=10240, verbose_name="Описания блока модуля дисциплин", blank=True, null=True)
     # work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
@@ -716,8 +719,8 @@ class Competence(models.Model):
     '''
     Модель для компетенций
     '''
-    number = models.CharField(unique=True, max_length=1024)
-    name = models.CharField(unique=True, max_length=1024)
+    number = models.CharField(max_length=1024)
+    name = models.CharField(max_length=1024)
 
     # field_of_study = models.ForeignKey('Indicator', on_delete=models.CASCADE)
     # work_program = models.ForeignKey('work_program', on_delete=models.CASCADE)

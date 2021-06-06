@@ -21,6 +21,10 @@ export const initialState: workProgramListState = {
         [filterFields.SPECIALIZATION]: '',
         [filterFields.LANGUAGE]: '',
         [filterFields.STRUCTURAL_UNIT]: '',
+        [filterFields.ONLY_MY]: false,
+        [filterFields.PREREQUISITE]: '',
+        [filterFields.OUTCOMES]: '',
+        [filterFields.EDU_PROGRAM]: '',
     },
     [fields.WORK_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,

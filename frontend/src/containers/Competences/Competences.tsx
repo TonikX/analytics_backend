@@ -1,6 +1,7 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
+import {Link} from "react-router-dom";
 // @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
 
@@ -8,7 +9,6 @@ import classNames from 'classnames';
 
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 
@@ -19,6 +19,9 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import EyeIcon from "@material-ui/icons/VisibilityOutlined";
+
+import {appRouter} from "../../service/router-service";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -30,6 +33,7 @@ import {CompetenceFields} from './enum';
 
 import connect from './Competences.connect';
 import styles from './Competences.styles';
+import Pagination from "@material-ui/lab/Pagination";
 
 class Competences extends React.Component<CompetenceProps> {
     state = {
@@ -77,8 +81,8 @@ class Competences extends React.Component<CompetenceProps> {
         this.props.actions.getCompetences();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getCompetences();
     }
 
@@ -132,6 +136,12 @@ class Competences extends React.Component<CompetenceProps> {
                                     <Typography className={classNames(classes.marginRight, classes.numberCell)}> {competence[CompetenceFields.NUMBER]} </Typography>
                                     <Typography className={classNames(classes.marginRight, classes.titleCell)}> {competence[CompetenceFields.TITLE]} </Typography>
                                     <div className={classes.actions}>
+                                        <IconButton>
+                                            <Link style={{textDecoration: 'none', height: '23px', color: 'rgba(0, 0, 0, 0.54)'}}
+                                                  to={appRouter.getCompetenceIndicatorsRouteLink(competence[CompetenceFields.ID])}>
+                                                <EyeIcon />
+                                            </Link>
+                                        </IconButton>
                                         <IconButton onClick={this.handleClickDelete(competence[CompetenceFields.ID])}>
                                             <DeleteIcon />
                                         </IconButton>
@@ -146,14 +156,10 @@ class Competences extends React.Component<CompetenceProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"

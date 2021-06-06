@@ -3,7 +3,7 @@ from rest_framework import serializers, viewsets
 
 # Модели данных
 from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
-
+from workprogramsapp.models import Indicator, Competence
 
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
@@ -88,4 +88,34 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
         model = StructuralUnit
         fields = "__all__"
 
+
+class IndicatorSerializer(serializers.ModelSerializer):
+    """Сериализатор Индикаторов"""
+    class Meta:
+        model = Indicator
+        fields = ['id','number', 'name', 'competence']
+
+
+class CompetenceSerializer(serializers.ModelSerializer):
+    """Сериализатор Компетенций"""
+    class Meta:
+        model = Competence
+        fields = ['id','number', 'name']
+
+
+class CompetenceFullSerializer(serializers.ModelSerializer):
+    """Сериализатор Компетенций"""
+    indicator_in_competencse = IndicatorSerializer(many = True)
+
+    class Meta:
+        model = Competence
+        fields = ['id','number', 'name', 'indicator_in_competencse']
+
+
+class IndicatorListSerializer(serializers.ModelSerializer):
+    competence = CompetenceSerializer()
+
+    class Meta:
+        model = Indicator
+        fields = ['id','number', 'name', 'competence']
 

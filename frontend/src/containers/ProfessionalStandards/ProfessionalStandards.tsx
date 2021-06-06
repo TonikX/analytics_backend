@@ -8,7 +8,6 @@ import classNames from 'classnames';
 
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 
@@ -31,6 +30,7 @@ import {ProfessionalStandardsProps} from "./types";
 
 import connect from './ProfessionalStandards.connect';
 import styles from './ProfessionalStandarts.styles';
+import Pagination from "@material-ui/lab/Pagination";
 
 class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> {
     state = {
@@ -78,7 +78,7 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
         this.props.actions.getProfessionalStandards();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
+    handleChangePage = (event: any, page: number) => {
         this.props.actions.changeCurrentPage(page + 1);
         this.props.actions.getProfessionalStandards();
     }
@@ -146,14 +146,10 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"

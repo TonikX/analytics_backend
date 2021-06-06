@@ -62,17 +62,19 @@ class Comments extends React.Component<CommentsProps> {
         return (
             <div className={classes.root}>
                 <Scrollbars>
-                    {comments.map(comment =>
-                        <div className={classes.comment}>
-                            <Typography className={classes.commentName}>
-                                {getUserFullName(comment[CommentFields.USER_EXPERTISE][CommentFields.EXPERT])}
-                            </Typography>
-                            <Typography className={classes.commentDate}>{moment(comment[CommentFields.DATE]).format(FULL_DATE_FORMAT)}</Typography>
-                            <Typography className={classes.commentText}>
-                                {comment[CommentFields.TEXT]}
-                            </Typography>
-                        </div>
-                    )}
+                    <div className={classes.comments}>
+                        {comments.map(comment =>
+                            <div className={classes.comment}>
+                                <Typography className={classes.commentName}>
+                                    {getUserFullName(comment[CommentFields.USER_EXPERTISE][CommentFields.EXPERT])}
+                                </Typography>
+                                <Typography className={classes.commentDate}>{moment(comment[CommentFields.DATE]).format(FULL_DATE_FORMAT)}</Typography>
+                                <Typography className={classes.commentText}>
+                                    {comment[CommentFields.TEXT]}
+                                </Typography>
+                            </div>
+                        )}
+                    </div>
                 </Scrollbars>
                 <div className={classes.commentTextFieldWrap}>
                     <TextField fullWidth

@@ -61,6 +61,7 @@ const getUserGroups = createLogic({
         service.getUserGroups()
             .then((res) => {
                 dispatch(actions.setUserGroups(res.data.groups));
+                dispatch(actions.setUserNotificationsCount(res.data.notification_nums));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {

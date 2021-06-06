@@ -4,7 +4,7 @@ import {rootState} from '../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 
-import {fields} from './enum';
+import {fields, filterFields} from './enum';
 
 import {FiltersType, workProgramListState} from './types';
 
@@ -35,3 +35,4 @@ export const getSortingField = (state: rootState) => get(getSorting(state), fiel
 export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
 
 export const getFilters = (state: rootState): FiltersType => get(getStateData(state), fields.FILTERING)
+export const getShowOnlyMy = (state: rootState): FiltersType => get(getFilters(state), filterFields.ONLY_MY)

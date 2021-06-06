@@ -11,7 +11,6 @@ from .workprogram_additions.serializers import AdditionalMaterialSerializer, Sho
 from onlinecourse.serializers import OnlineCourseSerializer
 
 
-
 class IndicatorSerializer(serializers.ModelSerializer):
     """Сериализатор Индикаторов"""
     class Meta:
@@ -113,7 +112,7 @@ class EvaluationToolForOutcomsSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
     class Meta:
         model = EvaluationTool
-        fields = ['id', 'type', 'name']
+        fields = ['id', 'type', 'name', 'max', 'min', 'deadline', 'check_point', 'description']
 
 
 class СertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
@@ -344,7 +343,7 @@ class ZunSerializer(serializers.ModelSerializer):
 class ZunForDetailAcademicPlanSerializer(serializers.ModelSerializer):
     """Сериализатор Зунов"""
     indicator_in_zun = IndicatorListSerializer()
-    items = OutcomesOfWorkProgramSerializer(many = True)
+    items = OutcomesOfWorkProgramSerializer(many=True)
 
     class Meta:
         model = Zun
@@ -506,9 +505,18 @@ class DisciplineBlockSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'modules_in_discipline_block']
 
 
+class ImplementationAcademicPlanShortForAPSerializer(serializers.ModelSerializer):
+    field_of_study = FieldOfStudyImplementationSerializer(many=True)
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = ['id', 'year', 'qualification', 'title', 'field_of_study']
+
+
 class AcademicPlanSerializer(serializers.ModelSerializer):
     discipline_blocks_in_academic_plan = DisciplineBlockSerializer(many=True, required=False)
     can_edit = BooleanField(read_only=True)
+    academic_plan_in_field_of_study = ImplementationAcademicPlanShortForAPSerializer(many=True)
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -517,9 +525,10 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year', 'education_form', 'qualification','author', 'can_edit']
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year', 'education_form', 'qualification','author', 'can_edit', 'academic_plan_in_field_of_study']
         extra_kwargs = {
-            'discipline_blocks_in_academic_plan': {'required': False}
+            'discipline_blocks_in_academic_plan': {'required': False},
+            'academic_plan_in_field_of_study': {'required': False}
         }
 
 
@@ -571,7 +580,7 @@ class ImplementationAcademicPlanForWPinFSSerializer(serializers.ModelSerializer)
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id', 'year', 'field_of_study']
+        fields = ['id', 'year', 'field_of_study', 'title']
 
 
 class AcademicPlanForWPinFSSerializer(serializers.ModelSerializer):
@@ -701,14 +710,6 @@ class AcademicPlanSerializerForList(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlan
         fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification']
-
-
-class ImplementationAcademicPlanShortForAPSerializer(serializers.ModelSerializer):
-    field_of_study = FieldOfStudyImplementationSerializer(many=True)
-
-    class Meta:
-        model = ImplementationAcademicPlan
-        fields = ['id', 'year', 'qualification', 'title', 'field_of_study']
 
 
 class AcademicPlanShortSerializer(serializers.ModelSerializer):

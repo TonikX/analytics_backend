@@ -10,6 +10,6 @@ from .views import FileUploadAPIView
 urlpatterns = [
 
     # --Общая характеристика
-    path('api/isu_v1/upload/csv', FileUploadAPIView.as_view()),
+    path('api/isu_v1/upload/csv/', FileUploadAPIView.as_view()),
 
 ]

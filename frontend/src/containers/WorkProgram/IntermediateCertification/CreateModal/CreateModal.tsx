@@ -44,6 +44,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     editor = null;
 
     state = {
+        isOpen: false,
         evaluationTool: {
             [IntermediateCertificationFields.ID]: null,
             [IntermediateCertificationFields.DESCRIPTION]: '',
@@ -60,6 +61,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         if (!shallowEqual(this.props, prevProps)){
             this.setState({
+                isOpen: this.props.isOpen,
                 evaluationTool: {
                     [IntermediateCertificationFields.ID]: get(evaluationTool, IntermediateCertificationFields.ID, null),
                     [IntermediateCertificationFields.NAME]: get(evaluationTool, IntermediateCertificationFields.NAME, ''),
@@ -98,27 +100,27 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
-    changeDescription = (event: React.ChangeEvent<HTMLInputElement>, editor: any) => {
+    changeDescription = (event: any) => {
         const {evaluationTool} = this.state;
 
         this.setState({
             evaluationTool: {
                 ...evaluationTool,
-                [IntermediateCertificationFields.DESCRIPTION]: editor.getData()
+                [IntermediateCertificationFields.DESCRIPTION]: event.editor.getData()
             }
         })
     }
 
     render() {
-        const {isOpen, classes} = this.props;
-        const {evaluationTool} = this.state;
+        const {classes} = this.props;
+        const {evaluationTool, isOpen} = this.state;
 
         const disableButton = get(evaluationTool, [IntermediateCertificationFields.NAME, 'length'], 0) === 0
                             || get(evaluationTool, [IntermediateCertificationFields.DESCRIPTION, 'length'], 0) === 0
                             || get(evaluationTool, [IntermediateCertificationFields.TYPE, 'length'], 0) === 0
         ;
         const isEditMode = Boolean(evaluationTool[IntermediateCertificationFields.ID]);
-
+        if (!isOpen) return <></>
         return (
             <div className={classNames(classes.dialog, {[classes.openDialog]: isOpen})}>
                 <AppBar className={classes.appBar}>
@@ -245,10 +247,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                           <div className={classes.rightSide}>
                             <InputLabel className={classes.label}>Описание</InputLabel>
-                            <CKEditor onBlur={this.changeDescription}
+                            <CKEditor onChange={this.changeDescription}
                                       value={evaluationTool[IntermediateCertificationFields.DESCRIPTION] ? evaluationTool[IntermediateCertificationFields.DESCRIPTION] : ''}
                                       toolbarContainerId="toolbar-container"
                                       useFormulas
+                                      height="calc(100vh - 300px)"
                             />
                           </div>
                         </>

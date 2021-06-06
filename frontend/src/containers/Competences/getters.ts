@@ -19,6 +19,8 @@ export const getCompetencesForSelector = (state: rootState): SelectorListType =>
     }))
 
 export const getCourseDialog = (state: rootState) => get(getStateData(state), fields.COMPETENCE_DIALOG, {});
+export const getCompetence = (state: rootState) => get(getStateData(state), fields.COMPETENCE, {});
+export const getIndicators = (state: rootState) => get(getStateData(state), fields.INDICATORS, []);
 
 export const isOpenDialog = (state: rootState) => get(getCourseDialog(state), fields.IS_OPEN_DIALOG, false);
 export const getDialogData = (state: rootState) => get(getCourseDialog(state), fields.DIALOG_DATA, false);

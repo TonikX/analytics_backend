@@ -74,7 +74,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
     };
 
     render() {
-        const {classes, intermediateCertificationList, isCanEdit, isStudent} = this.props;
+        const {classes, intermediateCertificationList, isCanEdit} = this.props;
         const {anchorsEl} = this.state;
         
         return (
@@ -173,13 +173,12 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                                                 </MenuItem>
                                             </Menu>
                                         </div>
-                                        : !isStudent ?
-                                             <div className={classes.eyeIcon}
-                                                  onClick={this.handleClickShowDescription(intermediateCertificationTool[IntermediateCertificationFields.DESCRIPTION])}
-                                             >
-                                                 <EyeIcon className={classes.menuIcon} />
-                                             </div>
-                                        : <></>
+                                        :
+                                         <div className={classes.eyeIcon}
+                                              onClick={this.handleClickShowDescription(intermediateCertificationTool[IntermediateCertificationFields.DESCRIPTION])}
+                                         >
+                                             <EyeIcon className={classes.menuIcon} />
+                                         </div>
                                     }
                                 </div>
                             </div>
@@ -205,7 +204,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                 }
 
                 {isCanEdit && <CreateModal />}
-                {(isCanEdit || !isStudent) && <DescriptionModal />}
+                <DescriptionModal />
             </div>
         );
     }

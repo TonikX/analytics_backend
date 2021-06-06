@@ -8,6 +8,7 @@ import Service from './service';
 
 import {fetchingTypes} from "./enum";
 import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {IndicatorsFields} from "../Indicators/enum";
 
 const service = new Service();
 
@@ -22,7 +23,7 @@ const getCompetences = createLogic({
         const sortingField = getSortingField(state);
         const sortingMode = getSortingMode(state);
 
-        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COMPETENCE}));
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COMPETENCES}));
 
         service.getCompetences(currentPage, searchQuery, sortingField, sortingMode)
             .then((res) => {
@@ -37,7 +38,7 @@ const getCompetences = createLogic({
                 dispatch(actions.fetchingFailed(err));
             })
             .then(() => {
-                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_COMPETENCE}));
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_COMPETENCES}));
                 return done();
             });
     }
@@ -98,7 +99,7 @@ const changeCompetence = createLogic({
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_COMPETENCE}));
 
-        service.updateCourse(course)
+        service.updateCompetence(course)
             .then((res) => {
                 dispatch(competencesActions.getCompetences());
                 dispatch(actions.fetchingSuccess());
@@ -114,9 +115,116 @@ const changeCompetence = createLogic({
     }
 });
 
+const getCompetence = createLogic({
+    type: competencesActions.getCompetence.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COMPETENCE}));
+
+        service.getCompetence(action.payload)
+            .then((res: any) => {
+                dispatch(competencesActions.setCompetence(res.data));
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_COMPETENCE}));
+                return done();
+            });
+    }
+});
+
+const getIndicators = createLogic({
+    type: competencesActions.getIndicators.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_INDICATORS}));
+
+        service.getIndicators(action.payload)
+            .then((res: any) => {
+                dispatch(competencesActions.setIndicators(res.data));
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_INDICATORS}));
+                return done();
+            });
+    }
+});
+
+const createIndicator = createLogic({
+    type: competencesActions.createIndicator.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_INDICATOR}));
+
+        service.createIndicator(action.payload)
+            .then((res: any) => {
+                dispatch(competencesActions.getIndicators(action.payload[IndicatorsFields.COMPETENCE]));
+                dispatch(competencesActions.closeDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_INDICATOR}));
+                return done();
+            });
+    }
+});
+
+const deleteIndicator = createLogic({
+    type: competencesActions.deleteIndicator.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_INDICATOR}));
+
+        service.deleteIndicator(action.payload)
+            .then((res: any) => {
+                dispatch(competencesActions.getIndicators(action.payload[IndicatorsFields.COMPETENCE]));
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_INDICATOR}));
+                return done();
+            });
+    }
+});
+
+const updateIndicator = createLogic({
+    type: competencesActions.changeIndicator.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_INDICATOR}));
+
+        service.updateIndicator(action.payload)
+            .then((res: any) => {
+                dispatch(competencesActions.getIndicators(action.payload[IndicatorsFields.COMPETENCE]));
+                dispatch(competencesActions.closeDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_INDICATOR}));
+                return done();
+            });
+    }
+});
+
 export default [
     getCompetences,
     deleteCompetence,
     createNewCompetence,
     changeCompetence,
+    getCompetence,
+    getIndicators,
+    createIndicator,
+    deleteIndicator,
+    updateIndicator,
 ];

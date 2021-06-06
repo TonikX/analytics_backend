@@ -1,11 +1,17 @@
-import {Dispatch} from "react";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "./actions";
 import workProgramActions from "../WorkProgram/actions";
-import {getWorkProgramList, getCurrentPage, getSearchQuery, getAllCount, getSortingMode, getSortingField} from './getters';
-import {WorkProgramListActions} from "./types";
+import {
+    getWorkProgramList,
+    getCurrentPage,
+    getSearchQuery,
+    getAllCount,
+    getSortingMode,
+    getSortingField,
+    getShowOnlyMy
+} from './getters';
 
 import {rootState} from "../../store/reducers";
 
@@ -17,15 +23,13 @@ const mapStateToProps = (state: rootState) => {
         allCount: getAllCount(state),
         sortingField: getSortingField(state),
         sortingMode: getSortingMode(state),
+        showOnlyMy: getShowOnlyMy(state),
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<WorkProgramListActions>) => ({
-    // @ts-ignore
-    actions: bindActionCreators(actions, dispatch),
-    // @ts-ignore
-    workProgramActions: bindActionCreators(workProgramActions, dispatch),
+const mapDispatchToProps = (dispatch: any) => ({
+    actions: bindActionCreators<any, any>(actions, dispatch),
+    workProgramActions: bindActionCreators<any, any>(workProgramActions, dispatch),
 });
 
-// @ts-ignore
 export default connect(mapStateToProps, mapDispatchToProps);
