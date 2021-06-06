@@ -10,7 +10,7 @@ import styles from './EducationPlanInDirectionSelector.styles';
 
 import {EducationPlanInDirectionSelectorType} from './type';
 
-class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlanInDirectionSelectorType> {
+class EducationPlanInDirectionSelectorByName extends React.PureComponent<EducationPlanInDirectionSelectorType> {
     state = {
         label: '',
         value: ''
@@ -25,6 +25,11 @@ class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlan
         this.props.actions.getEducationalPlansInDirection();
     }
 
+    componentWillUnmount() {
+        this.props.actions.changeSearchQuery('');
+        this.props.actions.setEducationalPlansInDirection([]);
+    }
+
     saveEducationalPlanField = (value: ReactText) => {
         this.setState({
             value: value
@@ -34,20 +39,22 @@ class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlan
     }
 
     render() {
-        const {optionsList, noMargin, classes} = this.props;
+        const {optionsList, noMargin, classes, className, isReset} = this.props;
         const {value, label} = this.state;
 
         return (
-            <SearchSelector label="Учебный план и направление * "
+            <SearchSelector label="Образовательная программа"
                             changeSearchText={this.handleChangeSearch}
                             list={optionsList}
                             changeItem={this.saveEducationalPlanField}
                             value={value}
                             valueLabel={label}
-                            className={classNames({[classes.marginBottom30]: !noMargin})}
+                            className={classNames({[classes.marginBottom30]: !noMargin, 
+                                [className]: className})}
+                            isReset={isReset}
             />
         );
     }
 }
 
-export default connect(withStyles(styles)(EducationPlanInDirectionSelector));
+export default connect(withStyles(styles)(EducationPlanInDirectionSelectorByName));

@@ -1,4 +1,4 @@
-import {fields} from './enum';
+import {fields, filterFields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {WorkProgramActions, WorkProgramGeneralType} from '../WorkProgram/types';
@@ -17,6 +17,7 @@ export interface WorkProgramListActions {
     changeCurrentPage: any;
     changeAllCount: any;
     changeSorting: any;
+    changeFiltering: any;
 }
 
 export interface workProgramListState {
@@ -24,6 +25,7 @@ export interface workProgramListState {
         [fields.SORTING_FIELD]: string,
         [fields.SORTING_MODE]: SortingType;
     };
+    [fields.FILTERING]: any;
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
@@ -33,6 +35,15 @@ export interface workProgramListState {
         [fields.DIALOG_DATA]: WorkProgramGeneralType|{};
     };
 }
+
+export type FiltersType = {
+    [filterFields.NUMBER_OP]: string;
+    [filterFields.NAME_OP]: string;
+    [filterFields.SPECIALIZATION]: string;
+    [filterFields.LANGUAGE]: string;
+    [filterFields.STRUCTURAL_UNIT]: number|'';
+}
+
 export interface WorkProgramListProps extends WithStyles<typeof styles> {
     actions: WorkProgramListActions;
     workProgramActions: WorkProgramActions;
@@ -41,5 +52,6 @@ export interface WorkProgramListProps extends WithStyles<typeof styles> {
     searchQuery: string;
     allCount: number;
     sortingField: string;
+    showOnlyMy: boolean;
     sortingMode: SortingType;
 }

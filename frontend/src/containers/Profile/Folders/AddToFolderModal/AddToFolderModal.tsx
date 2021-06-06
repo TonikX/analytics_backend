@@ -27,7 +27,7 @@ import get from "lodash/get";
 class AddToFolderModal extends React.PureComponent<AddToFolderModalProps> {
     state = {
         rating: 0,
-        comment: 0,
+        comment: '',
         folder: null,
     };
 

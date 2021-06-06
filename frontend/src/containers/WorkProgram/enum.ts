@@ -33,6 +33,7 @@ export enum WorkProgramGeneralFields {
     CODE = 'discipline_code',
     QUALIFICATION = 'qualification',
     LANGUAGE = 'language',
+    STRUCTURAL_UNIT = 'structural_unit',
     APPROVAL_DATE = 'approval_date',
     AUTHORS = 'authors',
     RATING = 'rating',
@@ -48,6 +49,7 @@ export enum WorkProgramGeneralFields {
     CAN_EDIT = 'can_edit',
     EXPERTISE_STATUS = 'status',
     USER_EXPERTISE_ID = 'user_expertise_id',
+    EXPERTISE_ID_2 = 'use_chat_with_id_expertise',
     EXTRA_POINTS = 'extra_points',
     EDITORS = 'editors',
 }

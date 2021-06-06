@@ -10,6 +10,7 @@ export enum fields {
     TRAINING_MODULE_DIALOG = 'TRAINING_MODULE_DIALOG',
     IS_OPEN_TRAINING_MODULE_DIALOG = 'IS_OPEN_TRAINING_MODULE_DIALOG',
     TRAINING_MODULE_DIALOG_DATA = 'TRAINING_MODULE_DIALOG_DATA',
+    SHOW_ONLY_MY = 'SHOW_ONLY_MY',
 }
 
 export enum fetchingTypes {
@@ -30,4 +31,6 @@ export enum TrainingModuleFields {
     ACADEMIC_PLAN_IN_FIELD_OF_STUDY = 'academic_plan_in_field_of_study',
     FIELD_OF_STUDY = 'field_of_study',
     TYPE = 'type',
+    EDITORS = 'editors',
+    CAN_EDIT = 'can_edit',
 }

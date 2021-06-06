@@ -8,7 +8,6 @@ const CanSee = (props: any) => {
     // const isCanSeePage = availableGroup(currentGroups);
     //
     // if (!isCanSeePage) return <Redirect to={appRouter.getForbiddenPage()} />;
-    console.log('props', props);
 
     return (
         <>

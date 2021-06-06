@@ -17,8 +17,14 @@ export const getEducationalPlanInDirection = (state: rootState): Array<Education
 export const getEducationalPlanInDirectionForSelector = (state: rootState): SelectorListType =>
     getEducationalPlanInDirection(state).map((plan: EducationalPlanInDirectionType) => ({
         value: plan[EducationPlanInDirectionFields.ID],
-        label: getEducationPlanInDirectionFullName(plan),
+        label: plan[EducationPlanInDirectionFields.TITLE],
     }))
+
+export const getEducationalPlanInDirectionForSelector2 = (state: rootState): SelectorListType =>
+getEducationalPlanInDirection(state).map((plan: EducationalPlanInDirectionType) => ({
+    value: plan[EducationPlanInDirectionFields.TITLE],
+    label: plan[EducationPlanInDirectionFields.TITLE],
+}))
 
 export const getEducationPlanInDirectionFullName = (plan: EducationalPlanInDirectionType): string =>
     `${plan[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]} (${get(plan, [EducationPlanInDirectionFields.DIRECTION, DirectionFields.NUMBER], '')} "${get(plan, [EducationPlanInDirectionFields.DIRECTION, DirectionFields.FACULTY], '')}")`
@@ -31,6 +37,7 @@ export const getDialogData = (state: rootState) => get(getEducationalPlanInDirec
 export const getAllCount = (state: rootState) => get(getStateData(state), fields.ALL_COUNT, 1);
 export const getCurrentPage = (state: rootState) => get(getStateData(state), fields.CURRENT_PAGE, 1);
 export const getSearchQuery = (state: rootState) => get(getStateData(state), fields.SEARCH_QUERY, '');
+export const getFilters = (state: rootState) => get(getStateData(state), fields.FILTERING, {});
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');

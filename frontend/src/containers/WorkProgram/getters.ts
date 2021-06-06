@@ -17,8 +17,8 @@ export const getWorkProgramEvaluationToolsList = (state: rootState) => get(getSt
 export const getWorkProgramIntermediateCertificationList = (state: rootState) => get(getWorkProgram(state), fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION, []);
 export const getWorkProgramId = (state: rootState) => get(getWorkProgram(state), 'id', '');
 export const getWorkProgramExpertiseStatus = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.EXPERTISE_STATUS, '');
-export const getWorkProgramExpertiseId = (state: rootState) => get(getWorkProgram(state), 'expertise_with_rpd.0.id', null);
-export const getWorkProgramUserExpertiseId = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.USER_EXPERTISE_ID, '');
+export const getWorkProgramExpertiseId = (state: rootState) => get(getWorkProgram(state), 'expertise_with_rpd.0.id', null) || get(getWorkProgram(state), WorkProgramGeneralFields.EXPERTISE_ID_2);
+export const getWorkProgramUserExpertiseId = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.USER_EXPERTISE_ID) || get(getWorkProgram(state), WorkProgramGeneralFields.EXPERTISE_ID_2);
 export const getWorkProgramField = (state: rootState, field: string) => get(getWorkProgram(state), field, '');
 
 export const isCanEdit = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_EDIT);
@@ -65,25 +65,4 @@ export const getEvaluationToolsForSelect = (state: rootState) => {
         label: evaluationTool[EvaluationToolFields.NAME],
         value: evaluationTool[EvaluationToolFields.ID],
     }))
-};
-
-export const getWorkProgramPlans = (state: rootState) => {
-    const blocks = getWorkProgramField(state, 'work_program_in_change_block');
-    const plans: any[] = [];
-
-    blocks.forEach((block: any) => {
-        const academicPlan = get(block, 'discipline_block_module.descipline_block.academic_plan', {});
-
-        if (!plans.find(item => item.id === academicPlan.id)){
-            const directions = get(academicPlan, 'academic_plan_in_field_of_study', []);
-
-            plans.push({
-                id: academicPlan.id,
-                name: academicPlan.educational_profile,
-                directions: directions
-            })
-        }
-    })
-
-    return plans;
 };

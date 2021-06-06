@@ -18,6 +18,7 @@ export interface IndividualTrajectoriesActions {
     changeAllCount: any;
     changeSorting: any;
     showOnlyMy: any;
+    changeFiltering: any;
 }
 
 export interface individualTrajectoriesState {
@@ -29,6 +30,7 @@ export interface individualTrajectoriesState {
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
     [fields.SHOW_ONLY_MY]: boolean;
+    [fields.FILTERING]: any;
     [fields.INDIVIDUAL_TRAJECTORIES]: Array<IndividualTrajectoriesType>;
     [fields.EDUCATION_PLAN_IN_DIRECTION_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;

@@ -24,8 +24,14 @@ const SKILLS = 'skills';
 const EXPERTISES = 'expertises';
 const SELECT_EDUCATIONAL_PROGRAM = 'select-educational-program';
 const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
+const INDIVIDUAL_EDUCATIONAL_PLANS = 'individual-educational-plans';
 const PROFESSIONAL_STANDARDS = 'professional-standards';
+
 const RECORDS = 'records';
+
+const STRUCTURAL_UNITS = 'structural-units';
+const NOTIFICATIONS = 'notifications';
+
 const SEPARATOR = '/';
 
 export default class RouterService {
@@ -52,6 +58,18 @@ export default class RouterService {
 
     getProfessionalStandardsRoute = () => {
         return SEPARATOR + PROFESSIONAL_STANDARDS;
+    };
+
+    getStructuralUnitsRoute = () => {
+        return SEPARATOR + STRUCTURAL_UNITS;
+    };
+
+    getStructuralUnitRouteLink = (id: number) => {
+        return SEPARATOR + STRUCTURAL_UNITS + SEPARATOR + id;
+    };
+
+    getStructuralUnitRoute = () => {
+        return SEPARATOR + STRUCTURAL_UNITS + SEPARATOR + ':id';
     };
 
     getSignUpRoute = () => {
@@ -138,6 +156,14 @@ export default class RouterService {
         return SEPARATOR + INDIVIDUAL_TRAJECTORIES;
     };
 
+    getIndividualEducationalPlansRoute = () => {
+        return SEPARATOR + INDIVIDUAL_EDUCATIONAL_PLANS;
+    };
+
+    getNotificationsRoute = () => {
+        return SEPARATOR + NOTIFICATIONS;
+    };
+
     getSkillsRolesRoute = () => {
         return SEPARATOR + 'skills-roles';
     };
@@ -151,6 +177,13 @@ export default class RouterService {
 
     getProfessionSkillsRouteLink = (id: number) => {
         return SEPARATOR + PROFESSIONS + SEPARATOR + id + SEPARATOR + SKILLS;
+    };
+
+    getCompetenceIndicatorsRouteLink = (id: number) => {
+        return SEPARATOR + COMPETENCES + SEPARATOR + id + SEPARATOR + INDICATORS;
+    };
+    getCompetenceIndicatorsRoute = () => {
+        return SEPARATOR + COMPETENCES + SEPARATOR + ':id' + SEPARATOR + INDICATORS;
     };
 
     getRoleSkillsRouteLink = (id: number) => {

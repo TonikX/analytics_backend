@@ -4,11 +4,13 @@ import {rootState} from '../../store/reducers';
 import {GENERAL_PATH} from "./reducer";
 
 import { fields } from './enum'
-import {courseState, outcomeType, fieldOfStudyType, reqType, wpType } from './types';
+import {courseState, outcomeType, fieldOfStudyType, topicType } from './types';
 
 const getStateData = (state: rootState): courseState => get(state, GENERAL_PATH);
 export const getCourse = (state: rootState): any => getStateData(state);
-export const getOutcomes = (state: rootState): Array<outcomeType> => get(getStateData(state), fields.OUTCOMES, [])
+export const getOutcomes = (state: rootState): string | null => get(getStateData(state), fields.OUTCOMES, null)
+export const getOutcomesList = (state: rootState): Array<outcomeType> => get(getStateData(state), fields.OUTCOMES_LIST, [])
 export const getFieldsOfStudy= (state: rootState): Array<fieldOfStudyType> => get(getStateData(state), fields.FIELDS_OF_STUDY, [])
-export const getRequirements = (state: rootState): Array<reqType> => get(getStateData(state), fields.REQUIREMENTS, [])
-export const getWorkPrograms = (state: rootState): Array<wpType> => get(getStateData(state), fields.WORK_PROGRAMS, [])
+export const getRequirements = (state: rootState): string | null => get(getStateData(state), fields.REQUIREMENTS, null)
+export const getWorkPrograms = (state: rootState): Array<topicType> => get(getStateData(state), fields.TOPIC_WITH_ONLINE_COURSE, [])
+export const getCompetences = (state: rootState): string | null => get(getStateData(state), fields.COMPETENCES, null)

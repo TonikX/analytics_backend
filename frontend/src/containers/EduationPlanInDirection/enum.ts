@@ -9,6 +9,7 @@ export enum fields {
     SORTING = 'SORTING',
     SORTING_FIELD = 'SORTING_FIELD',
     SORTING_MODE = 'SORTING_MODE',
+    FILTERING = 'FILTERING',
 }
 
 export enum fetchingTypes {
@@ -16,12 +17,22 @@ export enum fetchingTypes {
     DELETE_EDUCATION_PLAN_IN_DIRECTION = 'DELETE_EDUCATION_PLAN_IN_DIRECTION',
     UPDATE_EDUCATION_PLAN_IN_DIRECTION = 'UPDATE_EDUCATION_PLAN_IN_DIRECTION',
     CREATE_EDUCATION_PLAN_IN_DIRECTION = 'CREATE_EDUCATION_PLAN_IN_DIRECTION',
+    CREATE_INDIVIDUAL_EDUCATIONAL_PLAN = 'CREATE_INDIVIDUAL_EDUCATIONAL_PLAN',
 }
 
 export enum EducationPlanInDirectionFields {
     ID = 'id',
     DIRECTION = 'field_of_study',
     EDUCATION_PLAN = 'academic_plan',
+    TITLE = 'title',
     YEAR = 'year',
-    NUMBER = 'number',
+}
+
+export enum filterFields{
+    NUMBER_DP = 'NUMBER_DP',
+    NAME_DP = 'NAME_DP',
+    SPECIALIZATION = 'SPECIALIZATION',
+    STRUCTURAL_UNIT = 'STRUCTURAL_UNIT',
+    PREREQUISITE = 'PREREQUISITE',
+    OUTCOMES = 'OUTCOMES',
 }

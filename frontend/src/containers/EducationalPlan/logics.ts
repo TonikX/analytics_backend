@@ -64,7 +64,12 @@ const getEducationalPlanDetail = createLogic({
         service.getEducationalPlanDetail(planId, trajectoryRoute)
             .then((res) => {
                 if (trajectoryRoute){
-                    dispatch(planActions.setEducationalDetail(get(res.data, 'implementation_of_academic_plan.academic_plan', {})));
+                    const data = get(res.data, 'implementation_of_academic_plan.academic_plan', {});
+                    dispatch(planActions.setEducationalDetail({
+                        ...data,
+                        'id_rating': res.data?.id_rating,
+                        'rating': res.data?.rating,
+                    }));
                     dispatch(planActions.planTrajectorySetUserData(get(res.data, 'user', {})));
                     dispatch(planActions.planTrajectorySetDirection(get(res.data, 'implementation_of_academic_plan.field_of_study', {})));
                 } else {
@@ -457,6 +462,72 @@ const deleteWorkProgramFromZun = createLogic({
     }
 });
 
+const planTrajectorySelectOptionalWp = createLogic({
+    type: planActions.planTrajectorySelectOptionalWp.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_OPTIONAL_WP}));
+
+        service.planTrajectorySelectOptionalWp(action.payload)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(action.payload?.planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_OPTIONAL_WP}));
+                return done();
+            });
+    }
+});
+
+const planTrajectorySelectElectives = createLogic({
+    type: planActions.planTrajectorySelectElectives.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_ELECTIVES}));
+
+        service.planTrajectorySelectElectives(action.payload)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(action.payload?.planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_ELECTIVES}));
+                return done();
+            });
+    }
+});
+
+const planTrajectorySelectSpecialization = createLogic({
+    type: planActions.planTrajectorySelectSpecialization.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_SPECIALIZATION}));
+
+        service.planTrajectorySelectSpecialization(action.payload)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(action.payload?.planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_SPECIALIZATION}));
+                return done();
+            });
+    }
+});
+
 const transformDetailPlanData = createLogic({
     type: planActions.openDetailDialog.type,
     latest: true,
@@ -535,4 +606,7 @@ export default [
     deleteCompetenceBlock,
     deleteWorkProgramFromZun,
     transformDetailPlanData,
+    planTrajectorySelectOptionalWp,
+    planTrajectorySelectElectives,
+    planTrajectorySelectSpecialization,
 ];

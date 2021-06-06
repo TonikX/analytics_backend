@@ -3,7 +3,8 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 from .views import IndividualImplementationAcademicPlansSet, SaveImplementationAcademicPlans,  \
     IndividualImplementationAcademicPlanForUser, WorkProgramInWorkProgramChangeInDisciplineBlockModuleSet,\
-    DisciplineBlockModuleInDisciplineBlockSet, ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSet
+    DisciplineBlockModuleInDisciplineBlockSet, ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSet, \
+    ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleCreateAPIView
 
 router = DefaultRouter()
 
@@ -21,6 +22,7 @@ urlpatterns = [
 
     path('api/individualization/individual_path/for_this_user/', IndividualImplementationAcademicPlanForUser.as_view()),
     path('api/individualization/save_for_user', SaveImplementationAcademicPlans),
+    path('api/individualization/individual_path/electives/create', ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleCreateAPIView.as_view()),
 
 
     url(r'^', include(router.urls)),

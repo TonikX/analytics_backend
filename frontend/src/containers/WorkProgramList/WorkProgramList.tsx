@@ -8,7 +8,6 @@ import {Link} from "react-router-dom";
 
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
@@ -21,6 +20,8 @@ import TableBody from "@material-ui/core/TableBody";
 import withStyles from '@material-ui/core/styles/withStyles';
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import Switch from "@material-ui/core/Switch";
+import Pagination from '@material-ui/lab/Pagination';
 
 import AddIcon from "@material-ui/icons/Add";
 import IconButton from "@material-ui/core/IconButton";
@@ -32,15 +33,18 @@ import CopyIcon from "@material-ui/icons/FileCopyOutlined";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";
+import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
 
 import CreateModal from "./CreateModal";
+import Filters from "./Filters";
 
-import {WorkProgramListProps} from './types';
-import {WorkProgramGeneralFields} from '../WorkProgram/enum';
-
-import {appRouter} from "../../service/router-service";
-import {specialization} from "../WorkProgram/constants";
 import {FULL_DATE_FORMAT} from "../../common/utils";
+import {appRouter} from "../../service/router-service";
+
+import {specialization} from "../WorkProgram/constants";
+import {WorkProgramGeneralFields} from '../WorkProgram/enum';
+import {filterFields} from "./enum";
+import {WorkProgramListProps} from './types';
 
 import connect from './WorkProgramList.connect';
 import styles from './WorkProgramList.styles';
@@ -48,7 +52,8 @@ import styles from './WorkProgramList.styles';
 class WorkProgramList extends React.Component<WorkProgramListProps> {
     state = {
         deleteConfirmId: null,
-        anchorsEl: {}
+        duplicateConfirmId: null,
+        anchorsEl: {},
     }
 
     componentDidMount() {
@@ -65,10 +70,23 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         });
     }
 
+    handleClickDuplicate = (id: number) => () => {
+        this.setState({
+            duplicateConfirmId: id
+        });
+    }
+
     handleConfirmDeleteDialog = () => {
         const {deleteConfirmId} = this.state;
 
         this.props.actions.deleteWorkProgram(deleteConfirmId);
+        this.closeConfirmDeleteDialog();
+    }
+
+    handleConfirmDuplicateDialog = () => {
+        const {duplicateConfirmId} = this.state;
+
+        this.props.workProgramActions.cloneWorkProgram(duplicateConfirmId);
         this.closeConfirmDeleteDialog();
     }
 
@@ -78,12 +96,14 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         });
     }
 
-    handleCreate = () => {
-        this.props.actions.openDialog();
+    closeConfirmDuplicateDialog = () => {
+        this.setState({
+            duplicateConfirmId: null
+        });
     }
 
-    handleClickCopy = (id: number) => () => {
-        this.props.workProgramActions.cloneWorkProgram(id);
+    handleCreate = () => {
+        this.props.actions.openDialog();
     }
 
     handleChangeSearchQuery = (event: React.ChangeEvent) => {
@@ -96,8 +116,8 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         this.props.actions.getWorkProgramList();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getWorkProgramList();
     }
 
@@ -118,19 +138,32 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         this.setState({anchorsEl: {}});
     };
 
-    render() {
-        const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode} = this.props;
-        const {deleteConfirmId} = this.state;
+    changeShowOnlyMy = () => {
+        this.props.actions.changeCurrentPage(1);
+        this.props.actions.changeFiltering({[filterFields.ONLY_MY]: !this.props.showOnlyMy});
+        this.props.actions.getWorkProgramList();
+    }
 
-        const {anchorsEl} = this.state;
+    render() {
+        const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode, showOnlyMy} = this.props;
+        const {deleteConfirmId, duplicateConfirmId, anchorsEl} = this.state;
 
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
                     Рабочие программы
 
+                    <Typography className={classes.showOnlyMy}>
+                        <Switch checked={showOnlyMy}
+                                onChange={this.changeShowOnlyMy}
+                                color="primary"
+                        />
+                        Показать только мои РПД
+                    </Typography>
+
                     <TextField placeholder="Поиск"
                                variant="outlined"
+                               className={classes.searchInput}
                                InputProps={{
                                    classes: {
                                        root: classes.searchInput
@@ -140,6 +173,8 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                onChange={this.handleChangeSearchQuery}
                     />
                 </Typography>
+
+                <CustomizeExpansionPanel label="Фильтрация" details={<Filters />}/>
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>
@@ -232,7 +267,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                                         paper: classes.menuPaper
                                                     }}
                                                 >
-                                                    <MenuItem onClick={this.handleClickCopy(workProgram[WorkProgramGeneralFields.ID])}>
+                                                    <MenuItem onClick={this.handleClickDuplicate(workProgram[WorkProgramGeneralFields.ID])}>
                                                         <CopyIcon className={classes.menuIcon}/>
                                                         Клонировать
                                                     </MenuItem>
@@ -259,14 +294,10 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                 </Scrollbars>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                        //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"
@@ -287,10 +318,19 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                confirmButtonText={'Удалить'}
                 />
 
+                <ConfirmDialog onConfirm={this.handleConfirmDuplicateDialog}
+                               onDismiss={this.closeConfirmDuplicateDialog}
+                               confirmText={'Клонируя рабочую программу, вы получите копию этой программы, которая не будет включена ни в один учебный план. Вы уверены, что хотите клонировать программу?'}
+                               isOpen={Boolean(duplicateConfirmId)}
+                               dialogTitle={'Клонировать учебную программу'}
+                               confirmButtonText={'Клонировать'}
+                />
+
                 <CreateModal />
             </Paper>
         );
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(WorkProgramList));

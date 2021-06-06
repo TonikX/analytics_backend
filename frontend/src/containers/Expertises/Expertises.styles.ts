@@ -76,5 +76,9 @@ export default (theme: Theme) => createStyles({
         '& a': {
             color: 'rgb(51, 51, 51) !important'
         }
+    },
+    qualificationCell: {
+        display: 'flex',
+        alignItems: 'center'
     }
 });

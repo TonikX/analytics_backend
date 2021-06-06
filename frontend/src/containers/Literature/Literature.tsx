@@ -30,6 +30,7 @@ import {literatureFields} from './enum';
 
 import connect from './Literature.connect';
 import styles from './Literature.styles';
+import Pagination from "@material-ui/lab/Pagination";
 
 class Literature extends React.Component<LiteratureProps> {
     state = {
@@ -77,8 +78,8 @@ class Literature extends React.Component<LiteratureProps> {
         this.props.actions.getLiterature();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getLiterature();
     }
 
@@ -138,14 +139,10 @@ class Literature extends React.Component<LiteratureProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"

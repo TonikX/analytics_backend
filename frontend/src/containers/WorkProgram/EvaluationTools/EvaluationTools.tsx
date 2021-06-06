@@ -79,7 +79,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
     }
 
     render() {
-        const {classes, evaluationToolsList, isCanEdit, isStudent, extraPoints} = this.props;
+        const {classes, evaluationToolsList, isCanEdit, extraPoints} = this.props;
         const {anchorsEl} = this.state;
 
         return (
@@ -205,13 +205,12 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                                 </MenuItem>
                                             </Menu>
                                         </div>
-                                        : !isStudent ?
-                                             <div className={classes.eyeIcon}
-                                                  onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}
-                                             >
-                                                 <EyeIcon className={classes.menuIcon} />
-                                             </div>
-                                        : <></>
+                                        :
+                                         <div className={classes.eyeIcon}
+                                              onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}
+                                         >
+                                             <EyeIcon className={classes.menuIcon} />
+                                         </div>
                                     }
                                 </div>
 
@@ -241,6 +240,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                 }
 
                 {isCanEdit && <CreateModal />}
+
                 <DescriptionModal />
             </div>
         );

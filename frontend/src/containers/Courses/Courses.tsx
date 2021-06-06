@@ -5,14 +5,11 @@ import get from 'lodash/get';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
-import Button from '@material-ui/core/Button'
 import Typography from "@material-ui/core/Typography";
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Tooltip from '@material-ui/core/Tooltip';
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
-// import CourseCreateModal from "./CourseCreateModal";
+
+import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
 import { CoursesTable } from './CoursesTable/CoursesTable'
 import { Filters } from './Filters/Filters'
 
@@ -22,45 +19,14 @@ import {CoursesProps} from './types';
 
 import connect from './Courses.connect';
 import styles from './Courses.styles';
-
-// через стили (.styles.ts) не удалось сделать чтобы при открытии margin не появлялся
-const ExpansionPanel = withStyles({
-  root: {
-    border: '1px solid rgba(0, 0, 0, .125)',
-    boxShadow: 'none',
-    '&:not(:last-child)': {
-      borderBottom: 0,
-    },
-    '&:before': {
-      display: 'none',
-    },
-    '&$expanded': {
-      // этот margin
-      margin: 0,
-    },
-  },
-  expanded: {},
-})(MuiExpansionPanel);
-
-const ExpansionPanelSummary = withStyles({
-  root: {
-    margin: 0,
-    backgroundColor: 'rgba(0, 0, 0, .03)',
-    height: '48px',
-  }, 
-  expanded: {
-    minHeight: '20px !important'
-  }
-})(MuiExpansionPanelSummary)
+import Pagination from "@material-ui/lab/Pagination";
 
 class OnlineCourses extends React.Component<CoursesProps> {
-  state = {
-      showFilters: false,
-  }
-
   componentDidMount() {      
       this.props.actions.getPlatforms()
       this.props.actions.getInstitutions()
+      this.props.actions.getFieldOfStudyNumbers()
+      this.props.actions.getFieldOfStudyTitles()
       this.props.actions.getCourses();
   }
 
@@ -78,16 +44,11 @@ class OnlineCourses extends React.Component<CoursesProps> {
     this.props.actions.getCourses();
   }, 300);
 
-  handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number): void => {
-      this.props.actions.changeCurrentPage(page + 1);
+  handleChangePage = (event: any, page: number): void => {
+      this.props.actions.changeCurrentPage(page);
       this.props.actions.getCourses();
   }
 
-  handleShowFilters = (): void => {
-    this.setState({
-      showFilters: !this.state.showFilters,
-    })
-  }
   render() {
     const {classes, courses, allCount, currentPage, sortingField, sortingMode } = this.props;
 
@@ -96,40 +57,31 @@ class OnlineCourses extends React.Component<CoursesProps> {
         <Typography className={classes.title}>
             Онлайн курсы
             <div className={classes.searchWrapper}>
-              <Button 
-                onClick={this.handleShowFilters} 
-                variant="contained" 
-                color="primary" 
-                disableElevation 
-                className={classes.filterBtn}
-              >
-                Фильтрация
-              </Button>
-              <TextField 
-                placeholder="Поиск"
-                variant="outlined"
-                InputProps={{
-                    classes: {
-                        root: classes.searchInput
-                    },
-                    startAdornment: <SearchOutlined />,
-                }}
-                onChange={this.handleChangeSearchQuery}
-              />
+                <Tooltip title={
+                  <>
+                    Поиск осуществляется по: <br/>
+                    - нвазвниям онлайн курсов; <br/>
+                    - названиям платформ; <br/>
+                    - направлениям подготовки, связанными с онлайн курсами; <br/>
+                    - ключевым словам, описывающим результаты прохождения онлайн курса. <br/>
+                  </>
+                }>
+                    <TextField
+                        placeholder="Поиск"
+                        variant="outlined"
+                        InputProps={{
+                            classes: {
+                                root: classes.searchInput
+                            },
+                            startAdornment: <SearchOutlined />,
+                        }}
+                        onChange={this.handleChangeSearchQuery}
+                    />
+                </Tooltip>
             </div>
         </Typography>
-        <ExpansionPanel expanded={this.state.showFilters} onChange={this.handleShowFilters}>
-          <ExpansionPanelSummary
-            // classes={{ 'expanded': { height: '48px' }  }}
-            // className={classes.accordionSummary}
-            expandIcon={<ExpandMoreIcon />}
-          >
-            <Typography>Фильтрация</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <Filters />
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+
+        <CustomizeExpansionPanel label="Фильтрация" details={<Filters />}/>
 
         <CoursesTable 
           courses={courses} 
@@ -138,15 +90,10 @@ class OnlineCourses extends React.Component<CoursesProps> {
         />
 
         <div className={classes.footer}>
-          <TablePagination 
-            count={allCount}
-            component="div"
-            page={currentPage - 1}
-            rowsPerPageOptions={[]}
-            onChangePage={this.handleChangePage}
-            //@ts-ignore
-            rowsPerPage={10}
-            onChangeRowsPerPage={()=>{}}
+          <Pagination count={Math.ceil(allCount / 10)}
+                      page={currentPage}
+                      onChange={this.handleChangePage}
+                      color="primary"
           />
 
           {/* <Fab 

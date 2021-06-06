@@ -10,7 +10,10 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/MenuOutlined';
 import CloseIcon from '@material-ui/icons/CloseOutlined';
 import BookmarksIcon from '@material-ui/icons/BookmarksOutlined';
+import TelegramIcon from '@material-ui/icons/Telegram';
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
+import NotificationsIcon from '@material-ui/icons/NotificationsNone';
+import TrajectoryIcon from '@material-ui/icons/SchoolOutlined';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Tooltip from "@material-ui/core/Tooltip";
@@ -29,6 +32,7 @@ interface HeaderProps extends WithStyles<typeof styles> {
     handleCloseMenu: Function;
     handleOpenMenu: Function;
     logout: Function;
+    notificationsCount: number;
 }
 
 class Header extends React.PureComponent<HeaderProps>{
@@ -66,7 +70,7 @@ class Header extends React.PureComponent<HeaderProps>{
     };
 
     render() {
-        const {classes, openGeneralMenu, isAuth} = this.props;
+        const {classes, openGeneralMenu, isAuth, notificationsCount} = this.props;
         const {anchorEl} = this.state;
         const isOpenAvatarMenu = Boolean(anchorEl);
 
@@ -87,6 +91,27 @@ class Header extends React.PureComponent<HeaderProps>{
                     </Typography>
                     {isAuth &&
                         <div className={classes.rightSide}>
+                            <Tooltip title="Индивидуальные учебные планы">
+                                <Link to={appRouter.getIndividualEducationalPlansRoute()}
+                                      className={classes.link}
+                                >
+                                    <IconButton aria-haspopup="true">
+                                        <TrajectoryIcon className={classes.bookmarkIcon} />
+                                    </IconButton>
+                                </Link>
+                            </Tooltip>
+
+                            <Tooltip title="Уведомления">
+                                <Link to={appRouter.getNotificationsRoute()}
+                                      className={classes.link}
+                                >
+                                    <IconButton aria-haspopup="true">
+                                        <NotificationsIcon className={classes.bookmarkIcon} />
+                                        {notificationsCount ? <div className={classes.count}>{notificationsCount}</div> : <></>}
+                                    </IconButton>
+                                </Link>
+                            </Tooltip>
+
                             <Tooltip title="Закладки">
                                 <Link to={appRouter.getFoldersRoute()}
                                       className={classes.link}
@@ -127,11 +152,22 @@ class Header extends React.PureComponent<HeaderProps>{
                                         <Link to={appRouter.getSignInRoute()}
                                               className={classes.link}
                                         >
-                                            Выйти
+                                          Выйти
                                         </Link>
                                     </MenuItem>
                                 </Menu>
                             </div>
+
+                            <Tooltip title="Телеграм">
+                                <a href="https://t.me/op_itmo_ru"
+                                   className={classes.link}
+                                   target="_blank"
+                                >
+                                    <IconButton aria-haspopup="true" className={classes.telegramIcon}>
+                                        <TelegramIcon />
+                                    </IconButton>
+                                </a>
+                            </Tooltip>
                         </div>
                     }
                 </Toolbar>

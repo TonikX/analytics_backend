@@ -3,6 +3,7 @@ from rest_framework import serializers, viewsets
 
 # Модели данных
 from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
+from workprogramsapp.models import Indicator, Competence
 
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
@@ -47,6 +48,7 @@ class UserStructuralUnitSerializer(serializers.ModelSerializer):
     """
     Cериализатор работника в подразделении
     """
+    user = userProfileSerializer()
 
     user = userProfileSerializer()
 
@@ -65,9 +67,10 @@ class CreateUserStructuralUnitSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class UserStructuralUnitSerializer(serializers.ModelSerializer):
+class StructuralUnitSerializer(serializers.ModelSerializer):
+    user_in_structural_unit = UserStructuralUnitSerializer(many = True)
     """
-    Cериализатор работника в подразделении
+    Cериализатор подразделения разработчика РПД
     """
 
     class Meta:
@@ -91,3 +94,35 @@ class StructuralUnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = StructuralUnit
         fields = "__all__"
+
+
+class IndicatorSerializer(serializers.ModelSerializer):
+    """Сериализатор Индикаторов"""
+    class Meta:
+        model = Indicator
+        fields = ['id','number', 'name', 'competence']
+
+
+class CompetenceSerializer(serializers.ModelSerializer):
+    """Сериализатор Компетенций"""
+    class Meta:
+        model = Competence
+        fields = ['id','number', 'name']
+
+
+class CompetenceFullSerializer(serializers.ModelSerializer):
+    """Сериализатор Компетенций"""
+    indicator_in_competencse = IndicatorSerializer(many = True)
+
+    class Meta:
+        model = Competence
+        fields = ['id','number', 'name', 'indicator_in_competencse']
+
+
+class IndicatorListSerializer(serializers.ModelSerializer):
+    competence = CompetenceSerializer()
+
+    class Meta:
+        model = Indicator
+        fields = ['id','number', 'name', 'competence']
+

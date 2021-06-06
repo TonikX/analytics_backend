@@ -134,7 +134,7 @@ class Sections extends React.PureComponent<SectionsProps> {
     }
 
     render() {
-        const {classes, sections, isCanEdit, totalHours} = this.props;
+        const {classes, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours} = this.props;
         const {createNewSectionMode} = this.state;
 
         const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
@@ -148,8 +148,6 @@ class Sections extends React.PureComponent<SectionsProps> {
             parseFloat(totalLaboratoryClassesHours) +
             parseFloat(totalPracticalClassesHours))
             * 1.1).toFixed(2);
-
-        //const currentTotalHours = (parseFloat(totalSPOHours) + parseFloat(totalContactWorkHours)).toFixed(2);
 
         return (
             <div className={classes.secondStep}>
@@ -247,16 +245,16 @@ class Sections extends React.PureComponent<SectionsProps> {
                                     }
                                 </TableCell>
                                 {isCanEdit &&
-                                    <Tooltip title="Пересчитать столбец СРО и всего часов основываясь на введеных значениях">
+                                    <Tooltip title={parseInt(totalHours) <= 0 ? "Всего часов должно быть > 0" : "Пересчитать столбец СРО и всего часов основываясь на введеных значениях"}>
                                         <TableCell className={classes.headerCell}>
-                                            <Button onClick={this.updateValues(parseFloat(totalHours))}>Пересчитать</Button>
+                                            <Button onClick={() => parseInt(totalHours) > 0 && this.updateValues(parseFloat(totalHours))}>Пересчитать</Button>
                                         </TableCell>
                                     </Tooltip>
                                 }
                             </TableRow>
                         </Table>
 
-                        {isCanEdit && sections.length !== 0 &&
+                        {isCanEdit && sections.length !== 0 && parseFloat(totalHours) ?
                             <>
                                 {parseFloat(currentTotalHours) !== parseFloat(totalHours) && parseFloat(currentTotalHours) < parseFloat(totalHours) ?
                                     <div className={classes.totalHourError}>
@@ -272,12 +270,76 @@ class Sections extends React.PureComponent<SectionsProps> {
                                     </div>
                                 }
                             </>
+                            :
+                            <></>
                         }
 
                     </Scrollbars>
                     )}
                     </AutoSizer> 
                 </TableContainer>
+
+                {!lectureHours.length && !practiceHours.length && !labHours.length && !srsHours.length ? <></> :
+                    <>
+                      <Typography className={classes.lastInfo}>
+                        <b> Трудоемкость по данным из ИСУ (справочно):</b>
+                      </Typography>
+
+                      <TableContainer className={classes.table}>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell rowSpan={2} className={classes.headerCell} colSpan={1}>
+                                Занятия
+                              </TableCell>
+                              <TableCell className={classes.headerCell} colSpan={10}>
+                                Семестр
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                {([1,2,3,4,5,6,7,8,9,10]).map((item) =>
+                                    <TableCell className={classes.headerCell}>{item}</TableCell>
+                                )}
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            <TableRow>
+                              <TableCell className={classes.headerCell}>
+                                Лекционные занятия
+                              </TableCell>
+                                {lectureHours.map((item: any) =>
+                                    <TableCell className={classes.cell}>{item}</TableCell>
+                                )}
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className={classes.headerCell}>
+                                Практические занятия
+                              </TableCell>
+                                {practiceHours.map((item: any) =>
+                                    <TableCell className={classes.cell}>{item}</TableCell>
+                                )}
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className={classes.headerCell}>
+                                Лабораторные занятия
+                              </TableCell>
+                                {labHours.map((item: any) =>
+                                    <TableCell className={classes.cell}>{item}</TableCell>
+                                )}
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className={classes.headerCell}>
+                                Самостоятельная работа
+                              </TableCell>
+                                {srsHours.map((item: any) =>
+                                    <TableCell className={classes.cell}>{item}</TableCell>
+                                )}
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </>
+                }
 
                 {!createNewSectionMode && isCanEdit
                     && <div className={classes.iconWrapper}>

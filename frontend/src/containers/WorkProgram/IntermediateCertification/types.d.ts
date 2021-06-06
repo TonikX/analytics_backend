@@ -7,5 +7,8 @@ export interface IntermediateCertificationProps extends WithStyles<typeof styles
     actions: WorkProgramActions;
     intermediateCertificationList: Array<IntermediateCertificationType>;
     isCanEdit: boolean;
-    isStudent: boolean;
+    hasCourseProject: boolean;
+    hasDiffPass: boolean;
+    hasPass: boolean;
+    hasExam: boolean;
 }

@@ -18,10 +18,15 @@ const setAllUsers = createAction('SET_ALL_USERS');
 
 const getUserGroups = createAction('GET_USER_GROUPS');
 const setUserGroups = createAction('SET_USER_GROUPS');
+const setUserNotificationsCount = createAction('SET_USER_NOTIFICATIONS_COUNT');
 
 const refreshToken = createAction('REFRESH_LOGIN');
 
+const setMockMenu = createAction('SET_MOCK_MENU');
+
 const actions: GeneralActions = {
+    setUserNotificationsCount,
+    setMockMenu,
     refreshToken,
     fetchingComponentFalse,
     fetchingComponentTrue,

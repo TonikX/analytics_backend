@@ -24,6 +24,7 @@ import {workProgramTopicFields, fields} from '../../enum';
 
 import connect from './ThemeCreateModal.connect';
 import styles from './ThemeCreateModal.styles';
+import Typography from "@material-ui/core/Typography";
 
 class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
     state = {
@@ -39,7 +40,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
     };
 
     componentDidMount() {
-        this.props.coursesActions.getCourses();
+        //this.props.coursesActions.getCourses();
     }
 
     componentDidUpdate(prevProps: Readonly<ThemeCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
@@ -152,11 +153,11 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                                }}
                     />
                     <SearchSelector label="Онлайн курс"
-                                            changeSearchText={this.handleChangeCourseSearchText}
-                                            list={coursesList}
-                                            changeItem={this.saveCourseField}
-                                            value={get(topic, [workProgramTopicFields.COURSE, CourseFields.ID], '')}
-                                            valueLabel={get(topic, [workProgramTopicFields.COURSE, CourseFields.TITLE], '')}
+                                    changeSearchText={this.handleChangeCourseSearchText}
+                                    list={coursesList}
+                                    changeItem={this.saveCourseField}
+                                    value={get(topic, [workProgramTopicFields.COURSE, CourseFields.ID], '')}
+                                    valueLabel={get(topic, [workProgramTopicFields.COURSE, CourseFields.TITLE], '')}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>

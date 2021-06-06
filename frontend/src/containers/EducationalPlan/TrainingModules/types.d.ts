@@ -8,6 +8,7 @@ import {TrainingModuleFields, fields} from './enum';
 import {DirectionType} from "../../Direction/types";
 
 import styles from "./TrainingModules.styles";
+import {UserType} from '../../../layout/types';
 
 export interface TrainingModulesActions {
     getTrainingModulesList: ActionCreatorWithoutPayload;
@@ -26,6 +27,11 @@ export interface TrainingModulesActions {
     createTrainingModule: ActionCreatorWithPayload<CreateTrainingModulePayload>;
     changeTrainingModule: ActionCreatorWithPayload<ChangeTrainingModulePayload>;
     deleteTrainingModule: ActionCreatorWithPayload;
+    changeFiltering: ActionCreatorWithPayload;
+
+    showOnlyMy: ActionCreatorWithPayload<boolean>;
+
+    changeEditorList: ActionCreatorWithPayload;
 }
 
 export type OpenDialogPayload = {
@@ -61,6 +67,7 @@ export interface trainingModulesState {
         [fields.IS_OPEN_TRAINING_MODULE_DIALOG]: boolean;
         [fields.TRAINING_MODULE_DIALOG_DATA]: TrainingModuleType|{};
     };
+    [fields.SHOW_ONLY_MY]: boolean;
 }
 
 export interface TrainingModulesProps extends WithStyles<typeof styles>, PropsFromRedux, ActionsFromRedux{}
@@ -79,4 +86,6 @@ export type TrainingModuleType = {
             [TrainingModuleFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY]: Array<{[TrainingModuleFields.FIELD_OF_STUDY]: DirectionType}>;
         }
     };
+    [TrainingModuleFields.EDITORS]: Array<UserType>;
+    [TrainingModuleFields.CAN_EDIT]: boolean;
 }

@@ -16,8 +16,13 @@ const changeSearchQuery = createAction('EDUCATIONAL_PLAN_IN_DIRECTION_CHANGE_SEA
 const changeCurrentPage = createAction('EDUCATIONAL_PLAN_IN_DIRECTION_CHANGE_CURRENT_PAGE');
 const changeAllCount = createAction('EDUCATIONAL_PLAN_IN_DIRECTION_CHANGE_ALL_COUNT');
 const changeSorting = createAction('EDUCATIONAL_PLAN_IN_DIRECTION_CHANGE_SORTING');
+const changeFiltering = createAction('EDUCATIONAL_PLAN_IN_DIRECTION_CHANGE_FILTERING');
+
+const createIndividualEducationalPlan = createAction('CREATE_INDIVIDUAL_EDUCATIONAL_PLAN');
 
 const actions: EducationalPlanInDirectionActions = {
+    changeFiltering,
+    createIndividualEducationalPlan,
     getEducationalPlansInDirection,
     setEducationalPlansInDirection,
     createNewEducationalPlanInDirection,

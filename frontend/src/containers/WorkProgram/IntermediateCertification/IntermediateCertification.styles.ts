@@ -15,6 +15,10 @@ export default (theme: Theme) => createStyles({
     item: {
         borderBottom: '1px solid #ccc',
     },
+    eyeIcon: {
+        cursor: "pointer",
+        marginLeft: 'auto'
+    },
     row: {
         [theme.breakpoints.down('md')]: {
             minWidth: '600px',
@@ -110,5 +114,8 @@ export default (theme: Theme) => createStyles({
     menuIcon: {
         marginRight: '10px',
         fill: 'rgba(0, 0, 0, 0.54)'
+    },
+    lastInfo: {
+        marginTop: '20px'
     }
 });

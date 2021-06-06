@@ -59,7 +59,7 @@ class Prerequisites extends React.PureComponent<SixthStepProps> {
                                 </Typography>
 
                                 <Typography>
-                                    {prerequisite[PrerequisiteFields.MASTER_LEVEL] === '1' ? 'Низкий'
+                                    {prerequisite[PrerequisiteFields.MASTER_LEVEL] === '1' ? 'Начальный'
                                     : prerequisite[PrerequisiteFields.MASTER_LEVEL] === '2' ? 'Средний'
                                     : 'Высокий'
                                     }

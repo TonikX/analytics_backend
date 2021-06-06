@@ -11,19 +11,28 @@ from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 from collections import OrderedDict
 from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgramChangeInDisciplineBlockModule,\
     DisciplineBlockModuleInDisciplineBlock, ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .serializers import IndividualImplementationAcademicPlanSerializer,CreateIndividualImplementationAcademicPlanSerializer,\
     ShortIndividualImplementationAcademicPlanSerializer, WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer, \
     DisciplineBlockModuleInDisciplineBlockSerializer, ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
+   # CreateElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
 from ..folders_ans_statistic.models import IndividualImplementationAcademicPlanInFolder
 
 
 class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
     queryset = IndividualImplementationAcademicPlan.objects.all()
     serializer_class = IndividualImplementationAcademicPlanSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+    filterset_fields = ['implementation_of_academic_plan__academic_plan__educational_profile',
+                        'implementation_of_academic_plan__field_of_study__title',
+                        'implementation_of_academic_plan__field_of_study__number',
+                        'implementation_of_academic_plan__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
+                        'implementation_of_academic_plan__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                        ]
+    http_method_names = ['get', 'post']
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -70,25 +79,15 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
 
 
                     if change_block['change_type'] == "Facultativ":
-                        i = 0
-                        delete = []
-                        for work_program in change_block['work_program']:
-                            try:
-                                if work_program['id'] != \
-                                        WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects. \
-                                                get(individual_implementation_of_academic_plan = newdata['id'],
-                                                    work_program_change_in_discipline_block_module = change_block['id']).work_program.id:
-                                    delete.append(i)
-
-                            except:
-                                pass
-                            i +=1
-                        a = 0
-                        for i in delete:
-                            print(i)
-                            del change_block['work_program'][i-a]
-                            a +=1
-
+                        try:
+                            if change_block['id'] == \
+                                    ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule.objects. \
+                                            get(individual_implementation_of_academic_plan = newdata['id'],
+                                                work_program_change_in_discipline_block_module = change_block['id']).work_program_change_in_discipline_block_module.id:
+                                #delete.append(i)
+                                change_block.update({"changed": True})
+                        except:
+                            change_block.update({"changed": False})
 
 
                 if module['type'] == "specialization_module":
@@ -115,10 +114,13 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                 print('dddddd', k)
                 del discipline_block['modules_in_discipline_block'][i]
                 a +=1
+        #TODO: Посмотреть как можно поменять костыль
+        data_order=OrderedDict(newdata)
+        newdata = dict(data_order)
         try:
-            newdata[0].update({"rating": IndividualImplementationAcademicPlanInFolder.objects.get(individual_implementation_of_academic_plan=self.kwargs['pk'],
-                                                                      folder__owner=self.request.user).module_rating})
-            newdata[0].update({"id_rating": IndividualImplementationAcademicPlanInFolder.objects.get(individual_implementation_of_academic_plan=self.kwargs['pk'],
+            newdata.update({"rating": IndividualImplementationAcademicPlanInFolder.objects.get(individual_implementation_of_academic_plan__pk=self.kwargs['pk'],
+                                                                      folder__owner=self.request.user).route_rating})
+            newdata.update({"id_rating": IndividualImplementationAcademicPlanInFolder.objects.get(individual_implementation_of_academic_plan__pk=self.kwargs['pk'],
                                                                          folder__owner=self.request.user).id})
         except:
             newdata.update({"rating": False})
@@ -166,3 +168,19 @@ class ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSet(viewsets.
     queryset = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.all()
     serializer_class = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+
+
+class ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
+    serializer_class = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
+    queryset = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['description']
+    #permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def post(self, request):
+        for data in request.data['electives']:
+            serializer = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

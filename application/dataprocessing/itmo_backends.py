@@ -96,13 +96,14 @@ class  AuthenticateByCodeISU(ListAPIView):
 
             # Если пользователя нет, то регистрируем
             if not is_registered:
-
+                #reg = True
                 User.objects.create_user(
                     username=isu_profile['id'],
                     password=password,
                     first_name=isu_profile['first_name'],
                     last_name=isu_profile['surname'],
-                    isu_number=isu_profile['id']
+                    isu_number=isu_profile['id'],
+                    is_active=True
 
                 )
 
@@ -111,6 +112,7 @@ class  AuthenticateByCodeISU(ListAPIView):
                 except:
                     pass
 
+            #if reg:
                 groups = ["rpd_developer", "education_plan_developer", "op_leader", "student"]
                 User = User.objects.get(username=isu_profile['id'])
                 for group in groups:
@@ -118,7 +120,8 @@ class  AuthenticateByCodeISU(ListAPIView):
 
 
             # Авторизация
-            user = User.objects.filter(username=isu_profile['id'])[0]
+            User = get_user_model()
+            user = User.objects.get(username=isu_profile['id'])
             refresh_token = TokenObtainPairSerializer().get_token(user)
             access_token = AccessToken().for_user(user)
 

@@ -1,7 +1,7 @@
 import {ReactText} from "react";
 import get from 'lodash/get';
 import AnalyticsService from "../../service/analytics-service";
-import {Section, Topic} from "./types";
+import {SectionType, TopicType} from "./types";
 import {
     EvaluationToolFields,
     IntermediateCertificationFields,
@@ -70,7 +70,7 @@ class WorkProgramService extends AnalyticsService{
         });
     }
 
-    saveSection(section: Section){
+    saveSection(section: SectionType){
         const formData = new FormData();
 
         Object.keys(section).forEach((key: string) => {
@@ -87,7 +87,7 @@ class WorkProgramService extends AnalyticsService{
         return this.patch(`/api/sections/${section.id}`, formData);
     }
 
-    createNewSection(section: Section, workProgramId: ReactText){
+    createNewSection(section: SectionType, workProgramId: ReactText){
         const formData = new FormData();
 
         Object.keys(section).forEach((key: string) => {
@@ -149,7 +149,7 @@ class WorkProgramService extends AnalyticsService{
         return this.delete(`/api/general_ch/additional_material_in_topic_of_rpd/${id}/`);
     }
 
-    saveTopic(topic: Topic){
+    saveTopic(topic: TopicType){
         const formData = new FormData();
 
         formData.append(workProgramTopicFields.DESCRIPTION, topic[workProgramTopicFields.DESCRIPTION]);
@@ -164,7 +164,7 @@ class WorkProgramService extends AnalyticsService{
         return this.patch(`/api/topics/${topic[workProgramTopicFields.ID]}`, formData);
     }
 
-    createNewTopic(topic: Topic, workProgramId: ReactText){
+    createNewTopic(topic: TopicType, workProgramId: ReactText){
         const formData = new FormData();
 
         formData.append(workProgramTopicFields.DESCRIPTION, topic[workProgramTopicFields.DESCRIPTION]);
@@ -195,7 +195,11 @@ class WorkProgramService extends AnalyticsService{
     }
 
     addEvaluationTool(evaluationTool: any){
-        return this.post(`/api/tools/`, evaluationTool);
+        return this.post(`/api/tools/`, {
+            ...evaluationTool,
+            min: evaluationTool.min === '' ? 0 : evaluationTool.min,
+            max: evaluationTool.max === '' ? 0 : evaluationTool.max,
+        });
     }
 
     addIntermediateCertification(evaluationTool: any, workProgramId: ReactText){
@@ -216,7 +220,11 @@ class WorkProgramService extends AnalyticsService{
     changeEvaluationTool(evaluationTool: any){
         const id = evaluationTool[EvaluationToolFields.ID];
 
-        return this.patch(`/api/tools/${id}`, evaluationTool);
+        return this.patch(`/api/tools/${id}`, {
+            ...evaluationTool,
+            min: evaluationTool.min === '' ? 0 : evaluationTool.min,
+            max: evaluationTool.max === '' ? 0 : evaluationTool.max,
+        });
     }
 
     changeIntermediateCertification(evaluationTool: any){

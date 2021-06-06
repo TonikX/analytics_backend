@@ -84,7 +84,7 @@ class Expertise extends React.Component<ExpertiseProps> {
                             </TableHead>
                             <TableBody>
                                 {experts.map((expert: any) =>
-                                    <TableRow key={expert.id}>
+                                    <TableRow key={expert[ExpertisesFields.EXPERT].id}>
                                         <TableCell>{expert[ExpertisesFields.EXPERT].first_name} {expert[ExpertisesFields.EXPERT].last_name}</TableCell>
                                         <TableCell>
                                             {get(UserExpertResult, expert[ExpertisesFields.USER_EXPERTISE_STATUS], 'Не проверено')}

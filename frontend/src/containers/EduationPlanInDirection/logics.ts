@@ -7,7 +7,8 @@ import educationalPlanActions from './actions';
 import Service from './service';
 
 import {fetchingTypes} from "./enum";
-import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {getCurrentPage, getFilters, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {appRouter} from "../../service/router-service";
 
 const service = new Service();
 
@@ -21,10 +22,11 @@ const getEducationalPlansInDirection = createLogic({
         const searchQuery = getSearchQuery(state);
         const sortingField = getSortingField(state);
         const sortingMode = getSortingMode(state);
+        const filters = getFilters(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EDUCATION_PLANS_IN_DIRECTION}));
 
-        service.getEducationalPlansInDirection(currentPage, searchQuery, sortingField, sortingMode)
+        service.getEducationalPlansInDirection(currentPage, searchQuery, sortingField, sortingMode, filters)
             .then((res) => {
                 const courses = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));
@@ -114,9 +116,32 @@ const changeEducationalPlanInDirection = createLogic({
     }
 });
 
+const createIndividualEducationalPlan = createLogic({
+    type: educationalPlanActions.createIndividualEducationalPlan.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_INDIVIDUAL_EDUCATIONAL_PLAN}));
+
+        service.createIndividualEducationalPlan(action.payload)
+            .then((res: any) => {
+                window.location.href = appRouter.getTrajectoryPlanDetailLink(res.data.id);
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_INDIVIDUAL_EDUCATIONAL_PLAN}));
+                return done();
+            });
+    }
+});
+
 export default [
     getEducationalPlansInDirection,
     deleteEducationalPlanInDirection,
     createNewEducationalPlanInDirection,
     changeEducationalPlanInDirection,
+    createIndividualEducationalPlan,
 ];

@@ -1,5 +1,6 @@
 import React from 'react';
 import get from 'lodash/get';
+import {withRouter} from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
 import CopyIcon from "@material-ui/icons/FileCopyOutlined";
@@ -36,11 +37,13 @@ import {steps} from "./constants";
 
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
+import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
         activeStep: 0,
-        isOpenComments: false
+        isOpenComments: false,
+        openConfirmDuplicateWPModal: false,
     };
 
     componentDidMount() {
@@ -53,11 +56,24 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         this.props.actions.pageDown();
     }
 
+    openConfirmDuplicateWPModal = () => {
+        this.setState({
+            openConfirmDuplicateWPModal: true
+        })
+    }
+
+    closeConfirmDuplicateWPModal = () => {
+        this.setState({
+            openConfirmDuplicateWPModal: false
+        })
+    }
+
     handleStep = (number: number) => () => {
         this.setState({activeStep: number})
     };
 
     handleCloneProgram = () => {
+        this.closeConfirmDuplicateWPModal();
         this.props.actions.cloneWorkProgram(this.getWorkProgramId());
     }
 
@@ -167,7 +183,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     handleClickLike = () => {
         const {workProgramRating, workProgramRatingId} = this.props;
 
-        if (workProgramRating){
+        if (workProgramRating !== false){
             this.props.foldersActions.removeFromFolder({
                 id: workProgramRatingId,
                 callback: this.props.actions.getWorkProgram,
@@ -184,7 +200,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
     render() {
         const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
-            workProgramRating, canAddToFolder, hoursError, evaluationToolsErrors} = this.props;
+            workProgramRating, canAddToFolder, validateErrors} = this.props;
         const {activeStep, isOpenComments} = this.state;
 
         return (
@@ -196,14 +212,24 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         {canSendToArchive && <Button onClick={this.handleSendToArchive}>Отправить в архив</Button>}
 
                         {canSendToExpertise &&
-                            <Tooltip title={hoursError ? "Ошибка! Часы по разделам заполнены неверно" : evaluationToolsErrors ? "Ошибка! Кол-во баллов в РПД больше 100" : ''}
-                                     disableHoverListener={!hoursError && !evaluationToolsErrors}
-                            >
-                                <Button onClick={() => (!hoursError && !evaluationToolsErrors) && this.handleSendToExpertize}
-                                >
+                            (validateErrors.length ?
+                                <Tooltip title={
+                                    <div className={classes.tooltip}>
+                                        {validateErrors.length === 1 && validateErrors[0] === 'PLAN_ERROR' ?
+                                            <>Вы не можете отправить рабочую программу на экспертизу, пока она не включена ни в один учебный план</>
+                                            :
+                                            <>Исправьте ошибки, прежде чем отправлять на эспертизу: <br/> {validateErrors.map((item, index) => <>{index  + 1}. {item} <br /></>)} </>
+                                        }
+                                    </div>}>
+                                    <Button>
+                                        Отправить на экспертизу
+                                    </Button>
+                                </Tooltip>
+                                :
+                                <Button onClick={this.handleSendToExpertize}>
                                     Отправить на экспертизу
                                 </Button>
-                            </Tooltip>
+                            )
                         }
 
                         {canApprove &&
@@ -215,7 +241,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
                         {canAddToFolder &&
                             <LikeButton onClick={this.handleClickLike}
-                                        isLiked={workProgramRating}
+                                        isLiked={workProgramRating !== false}
                             />
                         }
                     </div>
@@ -243,7 +269,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                     <div className={classes.content}>
                         <Typography className={classes.title}>
                             <div>Описание рабочей программы дисциплины <span style={{fontWeight: 500}}>"{workProgramTitle}"</span></div>
-                            <div className={classes.cloneButton} onClick={this.handleCloneProgram}> <CopyIcon/> Клонировать</div>
+                            <div className={classes.cloneButton} onClick={this.openConfirmDuplicateWPModal}> <CopyIcon/> Клонировать</div>
                         </Typography>
 
                         {this.renderContent()}
@@ -255,7 +281,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                                     {...(isOpenComments ? {timeout: 300} : {})}
                                 >
                                     <Paper className={classes.comments}>
-                                        <Comments currentStep={this.getCurrentStep()} />
+                                        <Comments currentStep={this.getCurrentStep()} closeComments={this.handleClickOnComments} />
                                     </Paper>
                                 </Grow>
                                 <Fab color="secondary"
@@ -268,9 +294,19 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         }
                     </div>
                 </Paper>
+
+
+                <ConfirmDialog onConfirm={this.handleCloneProgram}
+                               onDismiss={this.closeConfirmDuplicateWPModal}
+                               confirmText={'Клонируя рабочую программу, вы получите копию этой программы, которая не будет включена ни в один учебный план. Вы уверены, что хотите клонировать программу?'}
+                               isOpen={this.state.openConfirmDuplicateWPModal}
+                               dialogTitle={'Клонировать учебную программу'}
+                               confirmButtonText={'Клонировать'}
+                />
             </div>
         );
     }
 }
 
-export default connect(withStyles(styles)(WorkProgram));
+// @ts-ignore
+export default connect(withStyles(styles)(withRouter(WorkProgram)));

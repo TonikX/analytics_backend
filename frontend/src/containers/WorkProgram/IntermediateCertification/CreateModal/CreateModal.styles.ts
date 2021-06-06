@@ -1,6 +1,19 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
+    dialog: {
+        height: '100vh',
+        width: '100vw',
+        position: 'fixed',
+        top: '100vh',
+        left: 0,
+        background: '#fff',
+        zIndex: 1000,
+        transition: '0.35s top',
+    },
+    openDialog: {
+        top: '0',
+    },
     //@ts-ignore
     root: {
         //@ts-ignore
@@ -11,9 +24,6 @@ export default (theme: Theme) => createStyles({
     },
     actions: {
         padding: '15px 24px 20px'
-    },
-    dialog: {
-        boxSizing: 'border-box',
     },
     radioGroup: {
         display: 'flex',
@@ -39,7 +49,8 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         padding: '20px 48px',
         justifyContent: 'space-between',
-        overflowX: 'hidden'
+        overflowX: 'hidden',
+        height: 'calc(100% - 100px)'
     },
     leftSide: {
         width: '40%',

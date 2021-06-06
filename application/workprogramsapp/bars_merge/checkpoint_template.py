@@ -15,6 +15,7 @@ def generate_checkpoint_plan(regular_checkpoint: list, programs: list, disciplin
         "final_checkpoint": final_checkpoint,
         "course_project_checkpoint": course_project_checkpoint,
         "point_distribution": point_distribution,
+        "year": "2021/2022"
     }
     return temp
 
@@ -45,6 +46,14 @@ def generate_program(bars_id, code, name):
     temp = {
         "id": bars_id,
         "code": code,
+        "name": name
+    }
+    return temp
+
+def generate_fos(id:int, code:str, name:str):
+    temp = {
+        "id": id,
+        "code": code+".",
         "name": name
     }
     return temp

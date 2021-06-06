@@ -2,6 +2,7 @@ import datetime
 
 from django.db.models import Count
 # Сериализаторы
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
@@ -27,8 +28,15 @@ from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 class EducationalProgramListAPIView(generics.ListAPIView):
     serializer_class = EducationalProgramSerializer
     queryset = EducationalProgram.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['qualification', 'year_of_recruitment', 'manager']
+    # filterset_fields = ['qualification',
+    #                     'implementation_of_academic_plan__academic_plan__educational_profile',
+    #                     'implementation_of_academic_plan__field_of_study__title',
+    #                     'implementation_of_academic_plan__field_of_study__number',
+    #                     'implementation_of_academic_plan__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
+    #                     'implementation_of_academic_plan__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+    #                     ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 

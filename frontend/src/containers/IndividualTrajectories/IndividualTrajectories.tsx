@@ -23,6 +23,7 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
+import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";
@@ -30,19 +31,20 @@ import {SortingType} from "../../components/SortingButton/types";
 import {DirectionFields} from "../Direction/enum";
 import {EducationalPlanFields} from "../EducationalPlan/enum";
 import {IndividualTrajectoryFields} from './enum';
-import {specializationObject} from "../WorkProgram/constants";
 
 import {appRouter} from "../../service/router-service";
 
 import {getUserFullName} from "../../common/utils";
 import {IndividualTrajectoriesProps} from './types';
+import Filters from "./Filters";
 
 import connect from './IndividualTrajectories.connect';
 import styles from './IndividualTrajectories.styles';
 
-class individualTrajectories extends React.Component<IndividualTrajectoriesProps> {
+class IndividualTrajectories extends React.Component<IndividualTrajectoriesProps> {
     state = {
-        deleteConfirmId: null
+        deleteConfirmId: null,
+        showFilters: false
     }
 
     componentDidMount() {
@@ -126,6 +128,8 @@ class individualTrajectories extends React.Component<IndividualTrajectoriesProps
                     />
                 </div>
 
+                <CustomizeExpansionPanel label="Фильтрация" details={<Filters />}/>
+
                 <Scrollbars>
                     <div className={classes.tableWrap}>
                         <Table stickyHeader size='small'>
@@ -173,7 +177,7 @@ class individualTrajectories extends React.Component<IndividualTrajectoriesProps
                                                   className={classNames({[classes.bigRow]: !canEdit})}
                                         >
                                             <TableCell>
-                                                {specializationObject[academicPlan[IndividualTrajectoryFields.DIRECTION][DirectionFields.TITLE]]}
+                                                {academicPlan[IndividualTrajectoryFields.DIRECTION][DirectionFields.TITLE]}
                                             </TableCell>
                                             <TableCell>
                                                 {academicPlan[IndividualTrajectoryFields.DIRECTION][DirectionFields.NUMBER]}
@@ -235,4 +239,4 @@ class individualTrajectories extends React.Component<IndividualTrajectoriesProps
     }
 }
 
-export default connect(withStyles(styles)(individualTrajectories));
+export default connect(withStyles(styles)(IndividualTrajectories));

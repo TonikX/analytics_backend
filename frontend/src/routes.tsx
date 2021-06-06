@@ -7,17 +7,17 @@ import SignIn from './containers/SignIn';
 import SignUp from './containers/SignUp';
 import WorkProgram from './containers/WorkProgram';
 import Courses from './containers/Courses';
-import { Course } from './containers/Course/Course';
+import Course from './containers/Course';
 import SubjectArea from './containers/SubjectArea';
 import Prerequisites from './containers/TrainingEntities';
 import Competences from './containers/Competences';
+import Indicators from './containers/Competences/Indicators';
 import Direction from './containers/Direction';
 import TrainingModules from './containers/EducationalPlan/TrainingModules';
 import TrainingModuleDetail from './containers/EducationalPlan/TrainingModules/DetailTrainingModule';
 import EducationalPlan from './containers/EducationalPlan';
 import EducationPlanInDirection from './containers/EduationPlanInDirection';
 import EducationPlanDetail from './containers/EducationalPlan/Detail';
-import Indicators from './containers/Indicators';
 import WorkProgramList from "./containers/WorkProgramList";
 import EntitityToEntitity from "./containers/EntitityToEntitity";
 import Professions from "./containers/Professions";
@@ -44,12 +44,18 @@ import ForbiddenPage from "./containers/ForbiddenPage";
 import SelectDiscipline from "./containers/SelectDiscipline";
 import SelectEducationalProgram from './containers/SelectEducationalProgram';
 import IndividualTrajectories from './containers/IndividualTrajectories';
+import IndividualEducationalPlans from './containers/IndividualEducationalPlans';
 
 import ProfessionalStandards from './containers/ProfessionalStandards';
+import StructuralUnits from './containers/StructuralUnits';
+import StructuralUnit from './containers/StructuralUnits/StructuralUnit';
 
 import Layout from "./layout";
 
 import RouterService from './service/router-service';
+import Notifications from "./containers/Profile/Notifications";
+import Overview from "./containers/Overview";
+import Landing from "./containers/Landing";
 
 const routerService = RouterService.factory();
 
@@ -58,6 +64,12 @@ export default () => (
         <Layout>
             <Switch>
             <Redirect exact from="/" to={routerService.getEducationPlanRoute()} />
+            <AuthRoute path={routerService.getCoursesRoute()}>
+                <Courses />
+            </AuthRoute>
+            <AuthRoute path={routerService.getCourseRoute()}>
+                <Course />
+            </AuthRoute>
 
             <AuthRoute path={routerService.getTrajectoryPlanDetailRoute()}
                        children={() => (
@@ -75,14 +87,29 @@ export default () => (
             <Route path={routerService.getSignUpRoute()}>
                 <SignUp />
             </Route>
+            <AuthRoute path='/overview'>
+                <Overview />
+            </AuthRoute>
             <AuthRoute path={routerService.getSelectDisciplineRoute()}>
                 <SelectDiscipline />
             </AuthRoute>
             <AuthRoute path={routerService.getProfessionalStandardsRoute()}>
                 <ProfessionalStandards />
             </AuthRoute>
+            <AuthRoute path={routerService.getStructuralUnitRoute()}>
+                <StructuralUnit />
+            </AuthRoute>
+            <AuthRoute path={routerService.getStructuralUnitsRoute()}>
+                <StructuralUnits />
+            </AuthRoute>
             <AuthRoute path={routerService.getIndividualTrajectoriesRoute()}>
                 <IndividualTrajectories />
+            </AuthRoute>
+            <AuthRoute path={routerService.getIndividualEducationalPlansRoute()}>
+                <IndividualEducationalPlans />
+            </AuthRoute>
+            <AuthRoute path={routerService.getNotificationsRoute()}>
+                <Notifications />
             </AuthRoute>
             <AuthRoute path={routerService.getSelectEducationalProgramRoute()}>
                 <SelectEducationalProgram />
@@ -104,6 +131,9 @@ export default () => (
             </AuthRoute>
             <AuthRoute path={routerService.getTrainingEntitiesRoute()}>
                 <Prerequisites />
+            </AuthRoute>
+            <AuthRoute path={routerService.getCompetenceIndicatorsRoute()}>
+                <Indicators />
             </AuthRoute>
             <AuthRoute path={routerService.getCompetencesRoute()}>
                 <Competences />
@@ -147,9 +177,6 @@ export default () => (
             <AuthRoute path={routerService.getSkillsProfessionsRoute()}>
                 <SkillsProfessions />
             </AuthRoute>
-            <AuthRoute path={routerService.getIndicatorsRoute()}>
-                <Indicators />
-            </AuthRoute>
             <AuthRoute path={routerService.getEducationalProgramCharacteristic()}>
                 <EducationalProgramCharacteristic />
             </AuthRoute>
@@ -171,15 +198,9 @@ export default () => (
             <AuthRoute path={routerService.getWorkProgramListRoute()}>
                 <WorkProgramList />
             </AuthRoute>
-            <AuthRoute path={routerService.getWorkProgramRoute()}
-                       children={() => (
-                           <Route
-                               render={({match}) => (
-                                   <WorkProgram match={match}/>
-                               )}
-                           />
-                       )}
-            />
+            <AuthRoute path={routerService.getWorkProgramRoute()}>
+                <WorkProgram />
+            </AuthRoute>
             <AuthRoute path={routerService.getExpertiseRoute()}>
                 <Expertise />
             </AuthRoute>
@@ -197,6 +218,9 @@ export default () => (
             </AuthRoute>
             <Route path={routerService.getForbiddenPage()}>
                 <ForbiddenPage />
+            </Route>
+            <Route path="/landing">
+                <Landing />
             </Route>
             <Route exact>
                 <NotFoundPage />

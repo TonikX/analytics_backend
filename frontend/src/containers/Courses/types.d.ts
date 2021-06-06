@@ -1,7 +1,7 @@
 import {fields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
-import {CourseFields, PlatformFields, InstitutionFields, filterFields} from './enum';
+import {CourseFields, PlatformFields, InstitutionFields, filterFields, FieldOfStudyFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
 
 export interface CoursesActions {
@@ -22,7 +22,11 @@ export interface CoursesActions {
     getInstitutions: any;
     setInstitutions: any;
     changeFiltering: any;
-    changeFilerSearchQuery: any;
+    changeFilterSearchQuery: any;
+    getFieldOfStudyTitles: any;
+    setFieldOfStudyTitles: any;
+    getFieldOfStudyNumbers: any;
+    setFieldOfStudyNumbers: any;
 }
 
 export interface coursesState {
@@ -40,12 +44,16 @@ export interface coursesState {
     };
     [fields.INSTITUTIONS]: Array<InstitutionType> | [],
     [fields.PLATFORMS]: Array<PlatformType> | [],
+    [fields.FIELDS_OF_STUDY_NUMBERS]: Array<FieldOfStudyType> | [],
+    [fields.FIELDS_OF_STUDY_TITLES]: Array<FieldOfStudyType> | [],
 }
 
 export type filteringType = {
     [filterFields.FILTERING_PLATFORM]: string,
     [filterFields.FILTERING_INSTITUTION]: string,
     [filterFields.FILTERING_LANGUAGE]: string,
+    [filterFields.FILTERING_FIELD_OF_STUDY_TITLE]: string,
+    [filterFields.FILTERING_FIELD_OF_STUDY_NUMBER]: string,
     [filterFields.FILTERING_SEARCH_QUERY]: string,
 }
 
@@ -57,6 +65,12 @@ export type PlatformType = {
 export type InstitutionType = {
     [InstitutionFields.ID]: number,
     [InstitutionFields.TITLE]: string,
+}
+
+export type FieldOfStudyType = {
+    [FieldOfStudyFields.ID]: number
+    [FieldOfStudyFields.NUMBER]: string,
+    [FieldOfStudyFields.TITLE]: string,
 }
 
 export type CourseType = {

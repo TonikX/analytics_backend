@@ -7,13 +7,13 @@ import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepButton from '@material-ui/core/StepButton'
 import Typography from '@material-ui/core/Typography'
-import LikeButton from "../../components/LikeButton"
+//import LikeButton from "../../components/LikeButton"
 import { General } from './General/General'
 import { Content } from './Content/Content'
 import { CurrentSession } from './CurrentSession/CurrentSession'
 import { Directions } from './Directions/Directions'
 import { Requirements } from './Requirements/Requirements'
-// import { Competences } from './Competences/Competences'
+import { Competences } from './Competences/Competences'
 import { Results } from './Results/Results'
 
 import actions from './actions'
@@ -48,18 +48,19 @@ export const Course: React.FC = () => {
         return <Directions />
       case 4:
         return <Requirements />
-      // case 5:
-      //   return <Competences />
       case 5:
-        return <Results />
+        return <Competences />
       case 6:
+        return <Results />
+      case 7:
         return <WorkPrograms />
     }
   }
   return (
     <div className={classes.wrap}>
-      <div className={classes.header}>
-        <LikeButton onClick={() => {}} isLiked={false} />
+      {/* высота временно вместов добавления в избранное */}
+      <div className={classes.header} style={{height: '46px'}}>
+        {/* <LikeButton onClick={() => {}} isLiked={false} /> */}
       </div>
       <Paper className={classes.root}>
         <Stepper
@@ -113,7 +114,7 @@ export const Course: React.FC = () => {
               {steps.REQUIREMENTS}
             </StepButton>
           </Step>
-          {/* <Step>
+          <Step>
             <StepButton 
               onClick={() => setActiveStep(5)}
               completed={false} 
@@ -121,10 +122,10 @@ export const Course: React.FC = () => {
             >
               {steps.COMPETENCES}
             </StepButton>
-          </Step> */}
+          </Step>
           <Step>
             <StepButton 
-              onClick={() => setActiveStep(5)}
+              onClick={() => setActiveStep(6)}
               completed={false} 
               style={{textAlign: 'left'}}
             >
@@ -133,7 +134,7 @@ export const Course: React.FC = () => {
           </Step>
           <Step>
             <StepButton 
-              onClick={() => setActiveStep(6)}
+              onClick={() => setActiveStep(7)}
               completed={false} 
               style={{textAlign: 'left'}}
             >
@@ -153,3 +154,5 @@ export const Course: React.FC = () => {
     </div>
   )
 }
+
+export default Course

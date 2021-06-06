@@ -20,13 +20,11 @@ class UserSelector extends React.PureComponent<UserSelectorType> {
         this.props.actions.getAllUsers();
     }
 
-    componentDidUpdate(prevProps: Readonly<UserSelectorType>, prevState: Readonly<{}>, snapshot?: any) {
-        //@ts-ignore
-        if (this.props.value !== this.state.value){
+    componentDidUpdate(prevProps: UserSelectorType, prevState: any, snapshot?: any) {
+        // @ts-ignore
+        if (this.props.value !== this.state.value || this.props.label !== this.state.label){
             this.setState({
-                //@ts-ignore
                 label: this.props.label,
-                //@ts-ignore
                 value: this.props.value,
             })
         }
@@ -36,7 +34,7 @@ class UserSelector extends React.PureComponent<UserSelectorType> {
         this.props.actions.getAllUsers(searchText);
     }
 
-    saveEducationalPlanField = (value: ReactText) => {
+    saveUserField = (value: ReactText) => {
         this.setState({
             value: value
         })
@@ -48,13 +46,11 @@ class UserSelector extends React.PureComponent<UserSelectorType> {
         const {optionsList, noMargin, classes, selectorLabel} = this.props;
         const {value, label} = this.state;
 
-        if (!label || !label.length) return <></>;
-
         return (
             <SearchSelector label={selectorLabel}
                             changeSearchText={this.handleChangeSearch}
                             list={optionsList}
-                            changeItem={this.saveEducationalPlanField}
+                            changeItem={this.saveUserField}
                             value={value}
                             valueLabel={label}
                             className={classNames({[classes.marginBottom30]: !noMargin})}

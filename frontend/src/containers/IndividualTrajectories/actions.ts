@@ -13,6 +13,7 @@ const changeAllCount = createAction('INDIVIDUAL_TRAJECTORIES_CHANGE_ALL_COUNT');
 const changeSorting = createAction('INDIVIDUAL_TRAJECTORIES_CHANGE_SORTING');
 
 const showOnlyMy = createAction('INDIVIDUAL_TRAJECTORIES_SHOW_ONLY_MY');
+const changeFiltering = createAction('INDIVIDUAL_TRAJECTORIES_CHANGE_FILTERING');
 
 const actions: IndividualTrajectoriesActions = {
     getIndividualTrajectories,
@@ -23,6 +24,7 @@ const actions: IndividualTrajectoriesActions = {
     changeAllCount,
     changeSorting,
     showOnlyMy,
+    changeFiltering,
 }
 
 export default actions;

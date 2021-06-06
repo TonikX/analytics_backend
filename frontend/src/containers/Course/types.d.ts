@@ -1,4 +1,4 @@
-import { fields, fieldsOfStudyFields, reqFields, outcomeFields, wpFields } from './enum'
+import { fields, fieldsOfStudyFields, outcomeFields, topicFields, disciplineSectionFields, wpFields } from './enum'
 import { CourseType } from '../Courses/types'
 
 export interface courseState extends CourseType {
@@ -11,14 +11,16 @@ export interface courseState extends CourseType {
   [fields.VOLUME]: number | null,
   [fields.INTENSITY_PER_WEEK]: number | null,
   [fields.LECTURES_NUMBER]: number | null,
-  [fields.CONTENT]: string,
+  [fields.CONTENT]: string | null,
   [fields.VISITORS_NUMBER]: number | null,
   [fields.RECORD_END_AT]: string | null,
   [fields.FINISHED_AT]: string | null,
   [fields.FIELDS_OF_STUDY]: Array<fieldOfStudyType>,
-  [fields.REQUIREMENTS]: Array<reqType>,
-  [fields.OUTCOMES]: Array<outcomeType>,
-  [fields.WORK_PROGRAMS]: Array<wpType>,
+  [fields.REQUIREMENTS]: string | null,
+  [fields.OUTCOMES]: string | null,
+  [fields.OUTCOMES_LIST]: Array<outcomeType>,
+  [fields.TOPIC_WITH_ONLINE_COURSE]: Array<topicType>,
+  [fields.COMPETENCES]: string | null,
 }
 
 export type fieldOfStudyType = {
@@ -31,22 +33,29 @@ export type fieldOfStudyType = {
   },
 }
 
-export type reqType = {
-  [reqFields.ID]: number,
-  [reqFields.COURSE]: string,
-  [reqFields.ITEM]: string,
-}
 
 export type outcomeType = {
   [outcomeFields.ID]: number,
-  [outcomeFields.COURSE]: string,
-  [outcomeFields.LEARNING_OUTCOME]: string,
+  [outcomeFields.NAME]: string,
+}
+
+export type topicType = {
+  [topicFields.ID]: number,
+  [topicFields.NUMBER]: number,
+  [topicFields.DISCIPLINE_SECTION]: disciplineSectionType,
+}
+
+export type disciplineSectionType = {
+  [disciplineSectionFields.ID]: number,
+  [disciplineSectionFields.NAME]: string,
+  [disciplineSectionFields.WORK_PROGRAM]: wpType,
 }
 
 export type wpType = {
   [wpFields.ID]: number,
-  [wpFields.COURSE]: string,
-  [wpFields.WORK_PROGRAM]: string,
+  [wpFields.TITLE]: string,
+  [wpFields.AUTHORS]: string,
+  [wpFields.QUALIFICATION]: string,
 }
 
 export interface CourseActions {

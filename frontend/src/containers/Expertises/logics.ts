@@ -7,7 +7,14 @@ import expertisesActions from './actions';
 import Service from './service';
 
 import {fetchingTypes} from "./enum";
-import {getCurrentPage, getExpertiseId, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {
+    getCurrentPage,
+    getExpertiseId,
+    getSearchQuery, getSelectedQualification,
+    getSelectedStatus,
+    getSortingField,
+    getSortingMode
+} from "./getters";
 
 const service = new Service();
 
@@ -21,10 +28,12 @@ const getExpertisesList = createLogic({
         const searchQuery = getSearchQuery(state);
         const sortingField = getSortingField(state);
         const sortingMode = getSortingMode(state);
+        const selectedStatus = getSelectedStatus(state);
+        const selectedQualification = getSelectedQualification(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EXPERTISES}));
 
-        service.getExpertises(currentPage, searchQuery, sortingField, sortingMode)
+        service.getExpertises(currentPage, searchQuery, sortingField, sortingMode, selectedStatus, selectedQualification)
             .then((res) => {
                 const results = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));
