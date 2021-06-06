@@ -67,7 +67,7 @@ class OneAcademicPlanWithDescriptionWp(generics.RetrieveAPIView):
 
 class RecordOfWorkProgram(APIView):
     # Количество рабочих программ по квалификации
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request, qualification):
         queryset = WorkProgram.objects.all()
@@ -81,7 +81,7 @@ class RecordOfWorkProgramQuality(APIView):
     Сколько РПД имеют редакторов, в скольких РПД заполнены разделы, сколько РПД без пререквизитов.
     Сколько РПД не привязаны к учебному плану, не указан язык реализации, структурное подразделение
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         queryset = WorkProgram.objects.all()
@@ -106,7 +106,7 @@ class RecordOfWorkProgramQuality(APIView):
 
 class RecordOfAcademicPlan(APIView):
     # Количество учебных планов по квалификации и году
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request, qualification, year):
         queryset = AcademicPlan.objects.all()

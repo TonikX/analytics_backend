@@ -16,35 +16,35 @@ class RecordsService extends AnalyticsService{
     getAPWP(pk:number){
 
 
-        return this.get(`api/statistic/academic_plan/academic_wp_description/${pk}`);
+        return this.get(`api/record/academic_plan/academic_wp_description/${pk}`);
     }
 
     getSimpleStatistics(){
 
 
-        return this.get(`api/statistic/simple`);
+        return this.get(`api/record/simple`);
     }
     getSU(){
 
 
-        return this.get(`api/statistic/structural_units`);
+        return this.get(`api/record/structural_units`);
     }
     getAP(){
 
-        return this.get(`api/statistic/academic_plans`);
+        return this.get(`api/record/academic_plans`);
     }
 
     getWPwithoutStructuralUnit(){
-        return this.get('api/statistic/structural/empty')
+        return this.get('api/record/structural/empty')
     }
 
     getStructuralUnitWP(status: string){
 
-        return this.get(`/api/statistic/structural/workprogram${status}`);
+        return this.get(`/api/record/structural/workprogram${status}`);
     }
     getStructuralUnitWPFilter(structural_unit_id: string,year:string,semester:string,status:string){
-        console.log('/api/statistic/structural/workprogram_extend', structural_unit_id,year,semester,status)
-        return this.get(`/api/statistic/structural/workprogram_extend${structural_unit_id}${semester}${year}${status}`);
+        console.log('/api/record/structural/workprogram_extend', structural_unit_id,year,semester,status)
+        return this.get(`/api/record/structural/workprogram_extend${structural_unit_id}${semester}${year}${status}`);
     }
 
 
