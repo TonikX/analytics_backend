@@ -38,6 +38,7 @@ class FileUploadAPIView(APIView):
         with open('workprogramsapp/modules-order.json', 'r', encoding='utf-8') as fh:
             order = json.load(fh)
 
+        self.initialize_educational_module_types()
         self.process_educational_modules(data, order)
 
         print('- Создаем рпд и направления')
@@ -154,38 +155,10 @@ class FileUploadAPIView(APIView):
                 #print('Блок: ', db)
                 print('-- Работа с модулями')
                 print('из данных', str(data['МОДУЛЬ'][i]))
-                types = dict((key, value) for key, value in DisciplineBlockModule.TYPES)
-                if 'ОГНП ' in str(data['МОДУЛЬ'][i]):
-                    type = 'ognp'
-                elif 'Специализация' in str(data['МОДУЛЬ'][i]):
-                    type = 'specialization_module'
-                elif str(data['МОДУЛЬ'][i]) in types.values():
-                    for k, v in types.items():
-                        print(k ,v)
-                        if str(data['МОДУЛЬ'][i]) == v:
-                            type = k
-                print("тип модуля", type)
-                try:
-                    o = order[(data['МОДУЛЬ'][i].strip())]
-                except:
-                    order.update({(data['МОДУЛЬ'][i].strip()): len(order)})
-                    o = order[(data['МОДУЛЬ'][i].strip())]
 
-
-                if DisciplineBlockModule.objects.filter(name=(data['МОДУЛЬ'][i].strip()),
-                                                        descipline_block=db).exists():
-                    mdb = DisciplineBlockModule.objects.get(name=(data['МОДУЛЬ'][i].strip()), descipline_block=db)
-                else:
-                    mdb = DisciplineBlockModule(name=(data['МОДУЛЬ'][i].strip()), descipline_block=db,
-                                                order=o)
-                    mdb.type = type
-                    mdb.save()
-
-                #Код Дениса
-                # mdb_id = self.educational_module_by_row_id[i]
-                # mdb = DisciplineBlockModule.objects.get(pk=mdb_id)
-                # mdb.descipline_block.add(db)
-
+                mdb_id = self.educational_module_by_row_id[i]
+                mdb = DisciplineBlockModule.objects.get(pk=mdb_id)
+                mdb.descipline_block.add(db)
 
                 #print('Модуль в блоке: ', mdb)
                 print('-- Работа с блок-модулем')
@@ -269,6 +242,7 @@ class FileUploadAPIView(APIView):
 
         return Response(status=200)
 
+    educational_module_types = {}
     educational_module_by_row_id = {}
 
     @classmethod
@@ -309,6 +283,7 @@ class FileUploadAPIView(APIView):
                     if FileUploadAPIView.check_if_modules_are_the_same(module1, module2):
                         was_similar_found = True
                         version[academic_plan_id] = list(row_ids)
+                        break
 
                 if not was_similar_found:
                     educational_module_versions.append({
@@ -318,16 +293,22 @@ class FileUploadAPIView(APIView):
             if educational_module not in module_order_by_name:
                 module_order_by_name[educational_module] = len(module_order_by_name)
 
-
-
-
-
-
             module_order = module_order_by_name[educational_module]
-            discipline_block_module = DisciplineBlockModule(name=educational_module, order=module_order)
-            discipline_block_module.save()
 
+            # Предполагается, что в рамках current_module у всех записей одно и то же поле "МОДУЛЬ"
+            educational_module_name = str(current_module.iloc[0]['МОДУЛЬ']).strip()
+            educational_module_type = cls.get_module_type(educational_module_name)
+            print('Полученный тип модуля:', educational_module_type)
+
+            # пробегаемся по каждой из выделенный версий и сохраняем ее в БД
             for module_version in educational_module_versions:
+                discipline_block_module = DisciplineBlockModule(name=educational_module, order=module_order)
+
+                if educational_module_type != '':
+                    discipline_block_module.type = educational_module_type
+
+                discipline_block_module.save()
+
                 for academic_plan_id, row_ids in module_version.items():
                     for row_id in row_ids:
                         cls.educational_module_by_row_id[row_id] = discipline_block_module.pk
@@ -380,3 +361,24 @@ class FileUploadAPIView(APIView):
             return False
 
         return True
+
+    @classmethod
+    def initialize_educational_module_types(cls):
+        for key, value in DisciplineBlockModule.TYPES:
+            cls.educational_module_types[key] = value
+
+    @classmethod
+    def get_module_type(cls, educational_module_name: str) -> str:
+        module_type = ''
+
+        if 'ОГНП ' in educational_module_name:
+            module_type = 'ognp'
+        elif 'Специализация' in educational_module_name:
+            module_type = 'specialization_module'
+        elif educational_module_name in cls.educational_module_types.values():
+            for k, v in cls.educational_module_types.items():
+                print(k, v)
+                if educational_module_name == v:
+                    module_type = k
+
+        return module_type

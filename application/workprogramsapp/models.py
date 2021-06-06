@@ -605,10 +605,8 @@ class DisciplineBlockModule(CloneMixin, models.Model):
 
     type = models.CharField(choices=TYPES, max_length=100, default='faculty_module')
     name = models.CharField(max_length=1024)
-    #descipline_block = models.ManyToManyField('DisciplineBlock', verbose_name='Модуль в блоке',
-    #                                          related_name='modules_in_discipline_block', blank=True)
-    descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name='Модуль в блоке',
-                                                related_name="modules_in_discipline_block", blank=True, null=True)
+    descipline_block = models.ManyToManyField('DisciplineBlock', verbose_name='Модуль в блоке',
+                                             related_name='modules_in_discipline_block', blank=True)
     order = models.IntegerField(blank=True, null=True, verbose_name="Порядок модулей")
     description = models.CharField(max_length=10240, verbose_name="Описания блока модуля дисциплин", blank=True, null=True)
     # work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
