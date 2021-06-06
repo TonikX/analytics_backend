@@ -153,57 +153,23 @@ class FileUploadAPIView(APIView):
 
                 #print('Блок: ', db)
                 print('-- Работа с модулями')
-
-<<<<<<< HEAD
-
-                print('-- Работа с блок-модулем')
-                if data['МОДУЛЬ'][i] == 'Универсальный модуль':
-                    option = 'universal_module'
-                if data['МОДУЛЬ'][i] == 'Университетский фундаментальный модуль':
-                    option = 'universal_fundamental_module'
-                elif data['МОДУЛЬ'][i] == 1:
-                    option = 'physical_culture'
-                elif data['МОДУЛЬ'][i] == 'Модуль «Философия+Мышление»':
-                    option = 'philosophy_thinking'
-                elif data['МОДУЛЬ'][i] == 'Модуль «Цифровая культура»':
-                    option = 'digital_culture'
-                elif data['МОДУЛЬ'][i] == 'Модуль «Предпринимательская культура»':
-                    option = 'entrepreneurial_culture'
-                elif data['МОДУЛЬ'][i] == 'Модуль «Soft Skills»':
-                    option = 'soft_skills'
-                elif data['МОДУЛЬ'][i] == 'Фундаментальный модуль по ОГНП':
-                    option = 'f_ognp'
-                elif 'ОГНП ' in str(data['МОДУЛЬ'][i]):
-                    option = 'ognp'
-                elif data['МОДУЛЬ'][i] == 1:
-                    option = 'natural_science_module'
-                elif data['МОДУЛЬ'][i] == 'Общепрофессиональный модуль':
-                    option = 'general_professional_module'
-                elif data['МОДУЛЬ'][i] == 'Элективный модуль по группе направлений':
-                    option = 'elective_module'
-                elif data['МОДУЛЬ'][i] == 'Межпрофильный модуль факультета':
-                    option = 'interdisciplinary_module_of_the_faculty'
-                elif data['МОДУЛЬ'][i] == 'Факультетский модуль':
-                    option = 'faculty_module'
-                elif data['МОДУЛЬ'][i] == 1:
-                    option = 'profile_professional_module'
-                elif data['МОДУЛЬ'][i] == 'Математический модуль':
-                    option = 'math_module'
-                elif data['МОДУЛЬ'][i] == 'Цифровая культура в профессиональной деятельност':
-                    option = 'digital_culture_in_professional_activities'
-                elif data['МОДУЛЬ'][i] == 'Профильный профессиональный модуль':
-                    option = 'profile_professional_module'
+                print('из данных', str(data['МОДУЛЬ'][i]))
+                types = dict((key, value) for key, value in DisciplineBlockModule.TYPES)
+                if 'ОГНП ' in str(data['МОДУЛЬ'][i]):
+                    type = 'ognp'
                 elif 'Специализация' in str(data['МОДУЛЬ'][i]):
-                    option = 'specialization_module'
-                elif data['МОДУЛЬ'][i] == 'ГИА':
-                    option = 'gia'
-                elif data['МОДУЛЬ'][i] == 'Практика':
-                    option = 'practice'
-                elif data['МОДУЛЬ'][i] == 'Факультативные дисциплины':
-                    option = 'optional_disciplines'
-
-                print("Выборность модуля", option)
-
+                    type = 'specialization_module'
+                elif str(data['МОДУЛЬ'][i]) in types.values():
+                    for k, v in types.items():
+                        print(k ,v)
+                        if str(data['МОДУЛЬ'][i]) == v:
+                            type = k
+                print("тип модуля", type)
+                try:
+                    o = order[(data['МОДУЛЬ'][i].strip())]
+                except:
+                    order.update({(data['МОДУЛЬ'][i].strip()): len(order)})
+                    o = order[(data['МОДУЛЬ'][i].strip())]
 
 
                 if DisciplineBlockModule.objects.filter(name=(data['МОДУЛЬ'][i].strip()),
@@ -212,14 +178,15 @@ class FileUploadAPIView(APIView):
                 else:
                     mdb = DisciplineBlockModule(name=(data['МОДУЛЬ'][i].strip()), descipline_block=db,
                                                 order=o)
-                    mdb.type = option
+                    mdb.type = type
                     mdb.save()
-=======
-                mdb_id = self.educational_module_by_row_id[i]
-                mdb = DisciplineBlockModule.objects.get(pk=mdb_id)
-                mdb.descipline_block.add(db)
 
->>>>>>> e821b6582df79e4f1587f49179dfcd3bb277a437
+                #Код Дениса
+                # mdb_id = self.educational_module_by_row_id[i]
+                # mdb = DisciplineBlockModule.objects.get(pk=mdb_id)
+                # mdb.descipline_block.add(db)
+
+
                 #print('Модуль в блоке: ', mdb)
                 print('-- Работа с блок-модулем')
                 if data['ВЫБОР'][i] == 0:
@@ -350,6 +317,11 @@ class FileUploadAPIView(APIView):
 
             if educational_module not in module_order_by_name:
                 module_order_by_name[educational_module] = len(module_order_by_name)
+
+
+
+
+
 
             module_order = module_order_by_name[educational_module]
             discipline_block_module = DisciplineBlockModule(name=educational_module, order=module_order)
