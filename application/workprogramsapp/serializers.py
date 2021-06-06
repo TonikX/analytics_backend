@@ -487,7 +487,14 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'description','descipline_block']
+        fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors']
+
+    def create(self, validated_data):
+        editor = validated_data.pop('editor')
+        instance = super().create(validated_data)
+        instance.editors.add(editor)
+
+        return instance
 
 
 class DisciplineBlockSerializer(serializers.ModelSerializer):
@@ -594,8 +601,9 @@ class DisciplineBlockDetailAcademicSerializer(serializers.ModelSerializer):
 
 
 class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
-    # change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
-    # descipline_block = DisciplineBlockDetailAcademicSerializer(many=False)
+    change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
+    descipline_block = DisciplineBlockDetailAcademicSerializer(many=False)
+    editors = userProfileSerializer(many=True)
 
     class Meta:
         model = DisciplineBlockModule

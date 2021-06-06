@@ -23,8 +23,8 @@ from .models import FieldOfStudy, BibliographicReference, СertificationEvaluati
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
 # Права доступа
+from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor
 from .notifications.models import UserNotification
-from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, \
@@ -1722,6 +1722,9 @@ class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
     queryset = DisciplineBlockModule.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def perform_create(self, serializer):
+        serializer.save(editor=self.request.user)
+
 
 class DisciplineBlockModuleDestroyView(generics.DestroyAPIView):
     queryset = DisciplineBlockModule.objects.all()
@@ -1799,6 +1802,15 @@ class DisciplineBlockModuleDetailListView(generics.ListAPIView):
     search_fields = ['name', 'descipline_block__name']
 
 
+class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
+    serializer_class = DisciplineBlockModuleDetailSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+
+    def get_queryset(self):
+        return DisciplineBlockModule.objects.filter(editors=self.request.user)
+
+
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleDetailSerializer
@@ -1806,6 +1818,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
     def get(self, request, **kwargs):
         queryset = DisciplineBlockModule.objects.filter(pk=self.kwargs['pk'])
         serializer = DisciplineBlockModuleDetailSerializer(queryset, many=True)
+
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
 
@@ -1817,7 +1830,10 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
                                                                          folder__owner=self.request.user).id})
         except:
             newdata.update({"rating": False})
+
+        newdata['can_edit'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'], self.request.user)
         newdata = OrderedDict(newdata)
+
         return Response(newdata, status=status.HTTP_200_OK)
 
 

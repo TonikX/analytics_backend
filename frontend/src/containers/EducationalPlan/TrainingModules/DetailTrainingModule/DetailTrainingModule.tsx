@@ -32,11 +32,19 @@ import {BlocksOfWorkProgramsType} from "../../types";
 import styles from './DetailTrainingModule.styles';
 import LikeButton from "../../../../components/LikeButton/LikeButton";
 import {FavoriteType} from "../../../Profile/Folders/enum";
+import Chip from "@material-ui/core/Chip";
+import {getUserFullName} from "../../../../common/utils";
+import AddIcon from "@material-ui/icons/Add";
+import {UserType} from "../../../../layout/types";
+import UserSelector from "../../../Profile/UserSelector/UserSelector";
+import Dialog from "@material-ui/core/Dialog";
+import {TrainingModuleFields} from "../enum";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     state = {
         deleteBlockConfirmId: null,
         deletedWorkProgramsLength: 0,
+        addEditorsMode: false,
     }
     componentDidMount() {
         this.props.actions.getTrainingModule(this.getModuleId());
@@ -102,9 +110,37 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         }
     }
 
+    handleAddingEditor = (userId: number) => {
+        const module = this.props.module;
+        const newEditorIds = module[TrainingModuleFields.EDITORS].map((editor: UserType) => editor.id).concat(userId);
+
+        this.props.actions.changeEditorList({data: {
+            [TrainingModuleFields.ID]: module[TrainingModuleFields.ID],
+            [TrainingModuleFields.EDITORS]: newEditorIds,
+        }});
+
+        this.setState({
+            addEditorsMode: false
+        });
+    }
+
+    handleDeletingEditor = (userId: number) => () => {
+        const module = this.props.module;
+        console.log(userId);
+        const newEditorIds = module[TrainingModuleFields.EDITORS]
+            .map((editor: UserType) => editor.id)
+            .filter((editorId: number) => editorId !== userId);
+
+        this.props.actions.changeEditorList({data: {
+            [TrainingModuleFields.ID]: module[TrainingModuleFields.ID],
+            [TrainingModuleFields.EDITORS]: newEditorIds,
+        }});
+    }
+
     render() {
-        const {module, classes, canEdit, moduleRating} = this.props;
-        const {deleteBlockConfirmId, deletedWorkProgramsLength} = this.state;
+        const {module, classes, moduleRating} = this.props;
+        const {deleteBlockConfirmId, deletedWorkProgramsLength, addEditorsMode} = this.state;
+        const canEdit = module.can_edit as boolean;
 
         return (
             <Paper className={classes.root}>
@@ -116,6 +152,34 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                                 isLiked={moduleRating}
                     />
                 </div>
+
+                {Boolean(module.editors && module.editors.length) && (
+                    <div className={classes.editors}>
+                        <Typography className={classes.editorsTitle}>
+                            Редакторы:
+                        </Typography>
+
+                        {module.editors.map((editor: UserType) =>
+                            <Chip
+                                key={editor.id}
+                                label={getUserFullName(editor)}
+                                onDelete={canEdit ? this.handleDeletingEditor(editor.id) : undefined}
+                                className={classes.editorsItem}
+                            />
+                        )}
+
+                        {canEdit && (
+                            <Button
+                                onClick={() => this.setState({addEditorsMode: true})}
+                                variant="text"
+                                className={classes.editorsAdd}
+                                size="small"
+                            >
+                                <AddIcon /> Добавить редактора
+                            </Button>
+                        )}
+                    </div>
+                )}
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>
@@ -206,6 +270,25 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                 <WPBlockCreateModal disableZUN
                                     moduleId={this.getModuleId()}
                 />
+
+                {addEditorsMode && (
+                    <Dialog
+                        open
+                        fullWidth
+                        maxWidth="sm"
+                        classes={{
+                            paper: classes.dialog,
+                        }}
+                        onClose={() => this.setState({addEditorsMode: false})}
+                    >
+                        <UserSelector
+                            handleChange={this.handleAddingEditor}
+                            selectorLabel="Выберите редактора"
+                            label="Выберите редактора"
+                            noMargin
+                        />
+                    </Dialog>
+                )}
             </Paper>
         );
     }

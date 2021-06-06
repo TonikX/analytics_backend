@@ -31,3 +31,5 @@ export const getSortingMode = (state: rootState) => get(getSorting(state), field
 
 export const getDialogData = (state: rootState) => get(getStateData(state), [fields.TRAINING_MODULE_DIALOG, fields.TRAINING_MODULE_DIALOG_DATA], {});
 export const isOpenDialog = (state: rootState) => get(getStateData(state), [fields.TRAINING_MODULE_DIALOG, fields.IS_OPEN_TRAINING_MODULE_DIALOG], false);
+
+export const getShowOnlyMy = (state: rootState) => get(getStateData(state), fields.SHOW_ONLY_MY, false);

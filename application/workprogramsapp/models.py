@@ -610,6 +610,9 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     order = models.IntegerField(blank=True, null=True, verbose_name="Порядок модулей")
     description = models.CharField(max_length=10240, verbose_name="Описания блока модуля дисциплин", blank=True, null=True)
     # work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
+    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='discipline_block_modules',
+                                     verbose_name='Редакторы образовательных модулей', blank=True)
+
     class Meta:
         ordering = ['order']
 
