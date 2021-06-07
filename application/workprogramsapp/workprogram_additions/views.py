@@ -14,7 +14,6 @@ from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 # Сериализаторы
 from .serializers import AdditionalMaterialSerializer, CreateAdditionalMaterialSerializer, \
     StructuralUnitSerializer, CreateStructuralUnitSerializer, \
-
     CreateUserStructuralUnitSerializer, UserStructuralUnitSerializer, ShortStructuralUnitSerializer
 from ..models import WorkProgram, DisciplineSection, PrerequisitesOfWorkProgram, OutcomesOfWorkProgram, \
     WorkProgramInFieldOfStudy, СertificationEvaluationTool, EvaluationTool, Topic, Competence
@@ -219,5 +218,3 @@ def ChangeSemesterInEvaluationsCorrect(request):
                 eva.save()
     serializer = WorkProgramSerializer(needed_wp, many=True)
     return Response(serializer.data)
-
->>>
