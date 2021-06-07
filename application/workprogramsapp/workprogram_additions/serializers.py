@@ -13,11 +13,11 @@ from ..models import WorkProgramInFieldOfStudy, WorkProgram
 Материалы тем
 """
 
-
 class AdditionalMaterialSerializer(serializers.ModelSerializer):
     """
     Дополнительный материал в теме РПД
     """
+
 
     class Meta:
         model = AdditionalMaterial
@@ -50,6 +50,7 @@ class UserStructuralUnitSerializer(serializers.ModelSerializer):
     """
     user = userProfileSerializer()
 
+
     class Meta:
         model = UserStructuralUnit
         fields = "__all__"
@@ -71,6 +72,7 @@ class StructuralUnitSerializer(serializers.ModelSerializer):
     Cериализатор подразделения разработчика РПД
     """
 
+
     class Meta:
         model = StructuralUnit
         fields = "__all__"
@@ -81,11 +83,10 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
     Cериализатор подразделения разработчика РПД
     """
 
+
     class Meta:
-        model = UserStructuralUnit
+        model = StructuralUnit
         fields = "__all__"
-
-
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
