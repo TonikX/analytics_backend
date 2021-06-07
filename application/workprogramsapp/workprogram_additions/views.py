@@ -2,9 +2,7 @@
 from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
-
 from rest_framework.permissions import IsAdminUser
-
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -19,7 +17,6 @@ from ..models import WorkProgram, DisciplineSection, PrerequisitesOfWorkProgram,
     WorkProgramInFieldOfStudy, СertificationEvaluationTool, EvaluationTool, Topic, Competence
 from ..serializers import WorkProgramSerializer, WorkProgramShortForExperiseSerializer, CompetenceSerializer
 from .serializers import CompetenceFullSerializer
-
 
 
 class AdditionalMaterialSet(viewsets.ModelViewSet):
@@ -42,7 +39,6 @@ class StructuralUnitSet(viewsets.ModelViewSet):
     queryset = StructuralUnit.objects.all()
     serializer_class = StructuralUnitSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-
     search_fields = ['title']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -71,7 +67,6 @@ class UserStructuralUnitSet(viewsets.ModelViewSet):
             return CreateUserStructuralUnitSerializer
         if self.action == 'partial_update':
             return CreateUserStructuralUnitSerializer
-
         return UserStructuralUnitSerializer
 
 
