@@ -50,8 +50,6 @@ class UserStructuralUnitSerializer(serializers.ModelSerializer):
     """
     user = userProfileSerializer()
 
-    user = userProfileSerializer()
-
     class Meta:
         model = UserStructuralUnit
         fields = "__all__"
@@ -88,12 +86,6 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class StructuralUnitSerializer(serializers.ModelSerializer):
-    user_in_structural_unit = UserStructuralUnitSerializer(many=True)
-
-    class Meta:
-        model = StructuralUnit
-        fields = "__all__"
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
