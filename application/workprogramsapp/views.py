@@ -33,7 +33,7 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
-    DisciplineBlockModuleDetailSerializer
+    DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer
 from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
@@ -1797,13 +1797,13 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
 
 class DisciplineBlockModuleDetailListView(generics.ListAPIView):
     queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleDetailSerializer
+    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'descipline_block__name']
 
 
 class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
-    serializer_class = DisciplineBlockModuleDetailSerializer
+    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
 
@@ -1813,11 +1813,11 @@ class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
 
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
     queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleDetailSerializer
+    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
 
     def get(self, request, **kwargs):
         queryset = DisciplineBlockModule.objects.filter(pk=self.kwargs['pk'])
-        serializer = DisciplineBlockModuleDetailSerializer(queryset, many=True)
+        serializer = DisciplineBlockModuleForModuleListDetailSerializer(queryset, many=True)
 
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)

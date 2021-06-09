@@ -302,7 +302,7 @@ class FileUploadAPIView(APIView):
 
             # пробегаемся по каждой из выделенный версий и сохраняем ее в БД
             for module_version in educational_module_versions:
-                discipline_block_module = DisciplineBlockModule(name=educational_module, order=module_order)
+                discipline_block_module = DisciplineBlockModule(name=educational_module_name, order=module_order)
 
                 if educational_module_type != '':
                     discipline_block_module.type = educational_module_type

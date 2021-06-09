@@ -593,7 +593,7 @@ class AcademicPlanForWPinFSSerializer(serializers.ModelSerializer):
 
 class DisciplineBlockDetailAcademicSerializer(serializers.ModelSerializer):
     #modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
-    academic_plan=AcademicPlanForWPinFSSerializer(many=False)
+    academic_plan = AcademicPlanForWPinFSSerializer()
 
     class Meta:
         model = DisciplineBlock
@@ -601,8 +601,18 @@ class DisciplineBlockDetailAcademicSerializer(serializers.ModelSerializer):
 
 
 class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = "__all__"
+        extra_kwargs = {
+            'change_blocks_of_work_programs_in_modules': {'required': False}
+        }
+
+
+class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerializer):
     change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
-    descipline_block = DisciplineBlockDetailAcademicSerializer(many=False)
+    descipline_block = DisciplineBlockDetailAcademicSerializer(many=True)
     editors = userProfileSerializer(many=True)
 
     class Meta:
