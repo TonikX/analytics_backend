@@ -633,7 +633,7 @@ class DisciplineBlockForWPinFSSerializer(serializers.ModelSerializer):
 
 
 class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
-    descipline_block = DisciplineBlockForWPinFSSerializer(read_only=True)
+    descipline_block = DisciplineBlockForWPinFSSerializer(read_only=True, many = True)
 
     class Meta:
         model = DisciplineBlockModule
