@@ -37,25 +37,27 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                         </TableHead>
                         <TableBody>
                             {plans.map(plan => {
-                                const planObject = get(plan, 'discipline_block_module.descipline_block.academic_plan', {});
+                                const plans = get(plan, 'discipline_block_module.descipline_block', []);
 
-                                return get(planObject, 'academic_plan_in_field_of_study', []).map((item: any) =>
-                                    <TableRow>
-                                        <TableCell>
-                                            <Link className={classes.link} target="_blank" to={appRouter.getPlanDetailLink(get(planObject, 'id'))}> {get(item, 'title', '')} </Link>
-                                        </TableCell>
-                                        <TableCell>
-                                            {get(item, 'field_of_study', []).map((item: any) =>
+                                return plans.map((plan: any) => (
+                                    get(plan, 'academic_plan.academic_plan_in_field_of_study', []).map((item: any) => (
+                                      <TableRow>
+                                          <TableCell>
+                                              <Link className={classes.link} target="_blank" to={appRouter.getPlanDetailLink(get(item, 'id'))}> {get(item, 'title', '')} </Link>
+                                          </TableCell>
+                                          <TableCell>
+                                              {get(item, 'field_of_study', []).map((item: any) =>
                                                 <>
                                                     {get(item, 'title', '')} ({get(item, 'number', '')}) <br/>
                                                 </>
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            {get(item, 'year', '')}
-                                        </TableCell>
-                                    </TableRow>
-                                )
+                                              )}
+                                          </TableCell>
+                                          <TableCell>
+                                              {get(item, 'year', '')}
+                                          </TableCell>
+                                      </TableRow>
+                                    ))
+                                ))
                             })}
                         </TableBody>
                     </Table>
