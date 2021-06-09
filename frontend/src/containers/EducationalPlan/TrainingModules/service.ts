@@ -5,8 +5,14 @@ import {ChangeTrainingModulePayload, CreateTrainingModulePayload} from "./types"
 import {TrainingModuleFields} from "./enum";
 
 class TrainingModulesService extends AnalyticsService{
-    getTrainingModules(currentPage: number, search: string, sortingField: string, sortingMode: SortingType){
-        return this.get(`/api/disciplineblockmodule/detail/list?page=${currentPage}&ordering=${getSortingSymbol(sortingMode)}${sortingField}&search=${search}`);
+    getTrainingModules(currentPage: number, search: string, sortingField: string, sortingMode: SortingType, showOnlyMy: boolean){
+        const sortingSymbol = getSortingSymbol(sortingMode);
+
+        if (showOnlyMy) {
+            return this.get(`/api/disciplineblockmodule/detail/list/for_this_user?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}`);
+        }
+
+        return this.get(`/api/disciplineblockmodule/detail/list?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}`);
     }
 
     getTrainingModule(id: number){

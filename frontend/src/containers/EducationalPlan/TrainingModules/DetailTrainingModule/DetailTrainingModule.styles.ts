@@ -43,6 +43,25 @@ export default (theme: Theme) => createStyles({
             fontSize: '24px',
         }
     },
+    editors: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    editorsTitle: {
+        fontSize: '14px',
+        fontWeight: 'bold',
+        lineHeight: '32px',
+        marginRight: '10px',
+        marginBottom: '10px',
+    },
+    editorsItem: {
+        marginLeft: '5px',
+        marginBottom: '10px',
+    },
+    editorsAdd: {
+        marginLeft: '10px',
+        height: '32px',
+    },
     hourCell: {
         width: '30px'
     },
@@ -61,5 +80,8 @@ export default (theme: Theme) => createStyles({
     },
     deleteIcon: {
         marginRight: 5
+    },
+    dialog: {
+        padding: '40px',
     },
 });

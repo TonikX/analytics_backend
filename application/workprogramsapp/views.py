@@ -23,8 +23,8 @@ from .models import FieldOfStudy, BibliographicReference, СertificationEvaluati
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
 # Права доступа
+from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor
 from .notifications.models import UserNotification
-from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, \
@@ -33,7 +33,7 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
-    DisciplineBlockModuleDetailSerializer
+    DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer
 from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
@@ -263,7 +263,7 @@ class OutcomesOfWorkProgramCreateAPIView(generics.CreateAPIView):
     def create(self, request):
         serializer = OutcomesOfWorkProgramCreateSerializer(data=request.data)
 
-        # обновляем value для item 
+        # обновляем value для item
         item = Items.objects.get(id=request.data.get('item'))
         value = item.value
         item.value = int(value) + 1
@@ -386,7 +386,7 @@ class PrerequisitesOfWorkProgramCreateAPIView(generics.CreateAPIView):
 
     def create(self, request):
         serializer = PrerequisitesOfWorkProgramCreateSerializer(data=request.data)
-        # обновляем value для item 
+        # обновляем value для item
         item = Items.objects.get(id=request.data.get('item'))
         value = item.value
         item.value = int(value) + 1
@@ -1152,7 +1152,7 @@ from discipline_code import IPv4_code_ver2
 
 def handle_uploaded_csv(file, filename):
     """
-    Обработка файла csv 
+    Обработка файла csv
     """
 
     if not os.path.exists('upload/'):
@@ -1722,6 +1722,9 @@ class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
     queryset = DisciplineBlockModule.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def perform_create(self, serializer):
+        serializer.save(editor=self.request.user)
+
 
 class DisciplineBlockModuleDestroyView(generics.DestroyAPIView):
     queryset = DisciplineBlockModule.objects.all()
@@ -1794,18 +1797,28 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
 
 class DisciplineBlockModuleDetailListView(generics.ListAPIView):
     queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleDetailSerializer
+    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'descipline_block__name']
+
+
+class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
+    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+
+    def get_queryset(self):
+        return DisciplineBlockModule.objects.filter(editors=self.request.user)
 
 
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
     queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleDetailSerializer
+    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
 
     def get(self, request, **kwargs):
         queryset = DisciplineBlockModule.objects.filter(pk=self.kwargs['pk'])
-        serializer = DisciplineBlockModuleDetailSerializer(queryset, many=True)
+        serializer = DisciplineBlockModuleForModuleListDetailSerializer(queryset, many=True)
+
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
 
@@ -1817,7 +1830,10 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
                                                                          folder__owner=self.request.user).id})
         except:
             newdata.update({"rating": False})
+
+        newdata['can_edit'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'], self.request.user)
         newdata = OrderedDict(newdata)
+
         return Response(newdata, status=status.HTTP_200_OK)
 
 

@@ -487,7 +487,14 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'description','descipline_block']
+        fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors']
+
+    def create(self, validated_data):
+        editor = validated_data.pop('editor')
+        instance = super().create(validated_data)
+        instance.editors.add(editor)
+
+        return instance
 
 
 class DisciplineBlockSerializer(serializers.ModelSerializer):
@@ -586,7 +593,7 @@ class AcademicPlanForWPinFSSerializer(serializers.ModelSerializer):
 
 class DisciplineBlockDetailAcademicSerializer(serializers.ModelSerializer):
     #modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
-    academic_plan=AcademicPlanForWPinFSSerializer(many=False)
+    academic_plan = AcademicPlanForWPinFSSerializer()
 
     class Meta:
         model = DisciplineBlock
@@ -594,8 +601,19 @@ class DisciplineBlockDetailAcademicSerializer(serializers.ModelSerializer):
 
 
 class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = "__all__"
+        extra_kwargs = {
+            'change_blocks_of_work_programs_in_modules': {'required': False}
+        }
+
+
+class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerializer):
     change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
-    descipline_block = DisciplineBlockDetailAcademicSerializer(many=False)
+    descipline_block = DisciplineBlockDetailAcademicSerializer(many=True)
+    editors = userProfileSerializer(many=True)
 
     class Meta:
         model = DisciplineBlockModule
@@ -615,7 +633,7 @@ class DisciplineBlockForWPinFSSerializer(serializers.ModelSerializer):
 
 
 class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
-    descipline_block = DisciplineBlockForWPinFSSerializer(read_only=True)
+    descipline_block = DisciplineBlockForWPinFSSerializer(read_only=True, many = True)
 
     class Meta:
         model = DisciplineBlockModule
