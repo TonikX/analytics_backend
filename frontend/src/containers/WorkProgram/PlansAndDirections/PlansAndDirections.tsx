@@ -43,7 +43,7 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                                     get(plan, 'academic_plan.academic_plan_in_field_of_study', []).map((item: any) => (
                                       <TableRow>
                                           <TableCell>
-                                              <Link className={classes.link} target="_blank" to={appRouter.getPlanDetailLink(get(item, 'id'))}> {get(item, 'title', '')} </Link>
+                                              <Link className={classes.link} target="_blank" to={appRouter.getPlanDetailLink(get(plan, 'id'))}> {get(item, 'title', '')} </Link>
                                           </TableCell>
                                           <TableCell>
                                               {get(item, 'field_of_study', []).map((item: any) =>
