@@ -4,8 +4,8 @@ import {Provider} from "react-redux";
 import Routers from './routes';
 
 // @ts-ignore
-export default ({ store }) => (
+export default ({store}) => (
     <Provider store={store}>
-      <Routers />
+        <Routers/>
     </Provider>
 );

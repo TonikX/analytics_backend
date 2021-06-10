@@ -14,7 +14,6 @@ import os
 
 import environ
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env()
@@ -57,6 +56,8 @@ INSTALLED_APPS = [
     'bootstrap_pagination',
     'rest_framework_swagger',
     'onlinecourse',
+    'records',
+    'django_extensions',
     #'oauth2_provider',
     #'social_django',
     #'rest_framework_social_oauth2',
@@ -108,7 +109,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'analytics_project.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -194,7 +194,7 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    #'AUTH_HEADER_TYPES': ('JWT',),
+    # 'AUTH_HEADER_TYPES': ('JWT',),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=480),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
