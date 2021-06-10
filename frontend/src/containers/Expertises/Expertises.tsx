@@ -156,7 +156,7 @@ class Expertises extends React.Component<ExpertisesProps> {
                                             {expertise[ExpertisesFields.EXPERTS_USERS_IN_RPD].map((item: ExpertUserInRPDType) => getUserFullName(item[ExpertisesFields.EXPERT])).join(', ')}
                                         </TableCell>
                                         <TableCell>
-                                            {expertise[ExpertisesFields.EXPERTS].map((item: UserType) => getUserFullName(item)).join(', ')}
+                                            {expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.EDITORS].map((item: UserType) => getUserFullName(item)).join(', ')}
                                         </TableCell>
                                         <TableCell>
                                             {moment(expertise[ExpertisesFields.DATE_OF_LAST_CHANGE]).format(FULL_DATE_FORMAT)}
