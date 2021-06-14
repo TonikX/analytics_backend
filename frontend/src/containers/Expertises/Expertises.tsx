@@ -153,7 +153,9 @@ class Expertises extends React.Component<ExpertisesProps> {
                                         </TableCell>
                                         <TableCell>{specializationObject[expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.QUALIFICATION]]}</TableCell>
                                         <TableCell>
-                                            {expertise[ExpertisesFields.EXPERTS_USERS_IN_RPD].map((item: ExpertUserInRPDType) => getUserFullName(item[ExpertisesFields.EXPERT])).join(', ')}
+                                            {expertise[ExpertisesFields.EXPERTS_USERS_IN_RPD]
+                                                .filter((item: any) => item.stuff_status === 'EX' || item.stuff_status === 'SE' || item.stuff_status === 'AU')
+                                                .map((item: ExpertUserInRPDType) => getUserFullName(item[ExpertisesFields.EXPERT])).join(', ')}
                                         </TableCell>
                                         <TableCell>
                                             {expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.EDITORS].map((item: UserType) => getUserFullName(item)).join(', ')}
