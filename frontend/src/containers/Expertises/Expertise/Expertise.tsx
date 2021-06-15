@@ -52,7 +52,7 @@ class Expertise extends React.Component<ExpertiseProps> {
     }
 
     render() {
-        const {classes, expertise, canEdit} = this.props;
+        const {classes, expertise} = this.props;
 
         const experts = get(expertise, ExpertisesFields.EXPERTS_USERS_IN_RPD, [])
             .filter((item: any) => get(item, "stuff_status") === 'AU' || get(item, "stuff_status") === 'EX');
