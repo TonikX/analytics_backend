@@ -10,6 +10,13 @@ export enum fields {
     IS_OPEN_ADD_EXPERT_MODAL = 'IS_OPEN_ADD_EXPERT_MODAL',
     SELECTED_STATUS = 'SELECTED_STATUS',
     SELECTED_QUALIFICATION = 'SELECTED_QUALIFICATION',
+    USER_STATUS_IN_EX = "user_status_in_expertise",
+}
+
+export enum userStatusesInExFields {
+   EX_MASTER = "expertise_master",
+   EX_MEMBER = "expertise_member",
+   STRUCTURAL_LEADER = "structural_leader",
 }
 
 export enum fetchingTypes {

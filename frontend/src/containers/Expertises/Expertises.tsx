@@ -1,5 +1,6 @@
 import React, {SyntheticEvent} from 'react';
 import Scrollbars from "react-custom-scrollbars";
+import get from "lodash/get";
 
 import moment from "moment";
 import {Link} from "react-router-dom";
@@ -154,7 +155,7 @@ class Expertises extends React.Component<ExpertisesProps> {
                                         <TableCell>{specializationObject[expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.QUALIFICATION]]}</TableCell>
                                         <TableCell>
                                             {expertise[ExpertisesFields.EXPERTS_USERS_IN_RPD]
-                                                .filter((item: any) => item.stuff_status === 'EX' || item.stuff_status === 'SE' || item.stuff_status === 'AU')
+                                                .filter((item: any) => get(item, "stuff_status") === 'EX' || get(item, "stuff_status") === 'SE' || get(item, "stuff_status") === 'AU')
                                                 .map((item: ExpertUserInRPDType) => getUserFullName(item[ExpertisesFields.EXPERT])).join(', ')}
                                         </TableCell>
                                         <TableCell>
