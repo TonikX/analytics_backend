@@ -22,7 +22,7 @@ import WorkProgramStatus from "../../../components/WorkProgramStatus/WorkProgram
 import AddExpertModal from './AddExpertModal';
 
 import {ExpertiseProps} from "./types";
-import {ExpertisesFields, UserExpertResult} from "../enum";
+import {ExpertisesFields, UserExpertResult, fields, userStatusesInExFields} from "../enum";
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
 
 import connect from './Expertise.connect';
@@ -57,6 +57,19 @@ class Expertise extends React.Component<ExpertiseProps> {
         const experts = get(expertise, ExpertisesFields.EXPERTS_USERS_IN_RPD, [])
             .filter((item: any) => get(item, "stuff_status") === 'AU' || get(item, "stuff_status") === 'EX');
 
+        const isExpertiseStatusEX = get(expertise, ExpertisesFields.STATUS) === "EX"
+        const canApproveWP = 
+            isExpertiseStatusEX
+            && (
+                get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.EX_MASTER}`) ||
+                !get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.EX_MEMBER}`)
+            )
+        const canAddDeleteExperts = 
+            isExpertiseStatusEX
+            && (
+                get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.EX_MASTER}`) ||
+                get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.STRUCTURAL_LEADER}`) 
+            )
         return (
             <Paper className={classes.root}>
                 <div className={classes.titleWrap}>
@@ -65,7 +78,7 @@ class Expertise extends React.Component<ExpertiseProps> {
                     </Typography>
                     <WorkProgramStatus status={get(expertise, ExpertisesFields.STATUS, '')} />
 
-                    {canEdit &&
+                    {canApproveWP &&
                         <ButtonGroup className={classes.buttonGroup} variant="contained">
                             <Button onClick={this.handleSendToRework}>Отправить РПД на доработку</Button>
                             <Button color="primary" onClick={this.handleApproveExpertise}>Принять РПД</Button>
@@ -80,7 +93,7 @@ class Expertise extends React.Component<ExpertiseProps> {
                                 <TableRow>
                                     <TableCell>Эксперт</TableCell>
                                     <TableCell>Оценка</TableCell>
-                                    {canEdit && <TableCell className={classes.deleteCell}/>}
+                                    {canAddDeleteExperts && <TableCell className={classes.deleteCell}/>}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -90,7 +103,7 @@ class Expertise extends React.Component<ExpertiseProps> {
                                         <TableCell>
                                             {get(UserExpertResult, expert[ExpertisesFields.USER_EXPERTISE_STATUS], 'Не проверено')}
                                         </TableCell>
-                                        {canEdit &&
+                                        {canAddDeleteExperts &&
                                             <TableCell className={classes.deleteCell}>
                                                 <IconButton onClick={this.handleClickDelete(expert.id)}>
                                                     <DeleteIcon/>
@@ -104,7 +117,7 @@ class Expertise extends React.Component<ExpertiseProps> {
                     </div>
                 </Scrollbars>
 
-                {canEdit &&
+                {canAddDeleteExperts &&
                     <Button className={classes.addExpertButton}
                             onClick={this.handleOpenExpertModal}
                             variant="contained"
@@ -113,7 +126,7 @@ class Expertise extends React.Component<ExpertiseProps> {
                         <AddIcon/> Добавить эксперта
                     </Button>
                 }
-                {canEdit && <AddExpertModal/>}
+                {canAddDeleteExperts && <AddExpertModal/>}
             </Paper>
         );
     }

@@ -4,10 +4,9 @@ import {rootState} from '../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 
-import {ExpertisesFields, fields, userStatusesInExFields} from './enum';
+import {ExpertisesFields, fields} from './enum';
 
 import {expertisesState, ExpertiseType} from './types';
-import {WorkProgramStatusEnum} from "../WorkProgram/enum";
 import {WorkProgramStatusType} from "../WorkProgram/types";
 
 const getStateData = (state: rootState): expertisesState => get(state, GENERAL_PATH);
@@ -17,8 +16,6 @@ export const getExpertise = (state: rootState): ExpertiseType|{} => get(getState
 export const getSelectedStatus = (state: rootState): WorkProgramStatusType|'' => get(getStateData(state), fields.SELECTED_STATUS, '');
 export const getSelectedQualification = (state: rootState): string => get(getStateData(state), fields.SELECTED_QUALIFICATION, '');
 export const getExpertiseId = (state: rootState): number => get(getExpertise(state), ExpertisesFields.ID);
-export const getExpertiseCanEdit = (state: rootState): boolean => get(getExpertise(state), ExpertisesFields.STATUS) === WorkProgramStatusEnum.EXPERTISE
-  && get(getStateData(state), `${fields.EXPERTISE}.${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.EX_MEMBER}`) === false;
 
 export const getIsOpenAddExpertModal = (state: rootState): any => get(getStateData(state), fields.IS_OPEN_ADD_EXPERT_MODAL, false);
 
