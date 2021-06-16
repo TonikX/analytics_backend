@@ -85,7 +85,7 @@ from .views import WorkProgramsListApi, UserGroups
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
 
 from .views import WorkProgramFullDetailsWithDisciplineCodeView
-
+from .visualization import *
 
 # DocxFileExportOldView
 from .workprogram_additions.views import CopyContentOfWorkProgram
@@ -227,6 +227,11 @@ urlpatterns = [
          WorkProgramChangeInDisciplineBlockModuleDestroyView.as_view()),
     path('api/workprogramchangeindisciplineblockmodule/update/<int:pk>',
          WorkProgramChangeInDisciplineBlockModuleUpdateView.as_view()),
+
+    # visualization    
+    path('api/workprogram/same-program/<int:pk>', WorkProgramSameProgramView.as_view()),
+    path('api/workprogram/items/<int:pk>', WorkProgramItemsRelationView.as_view()),
+    path('api/workprogram/profession/<int:pk>', WorkProgramProfessionView.as_view()),
 
     # Работа с модулями в учебном плане
     path('api/disciplineblockmodule/create', DisciplineBlockModuleCreateAPIView.as_view()),

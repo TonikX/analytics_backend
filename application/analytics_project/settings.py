@@ -157,6 +157,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static-backend')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+GRAPH_ROOT = os.path.join(MEDIA_ROOT, 'graphs')
+GRAPH_URL= f'{MEDIA_URL}graphs'
+BACKEND_URL = "http://127.0.0.1:8000"
 
 AUTH_USER_MODEL = 'dataprocessing.User'
 
