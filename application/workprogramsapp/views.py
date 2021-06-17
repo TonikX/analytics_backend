@@ -984,9 +984,11 @@ class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
         """
         Вывод учебных планов для одной рабочей программы по id
         """
+
         try:
             queryset = FieldOfStudy.objects.filter(
-                workprograms_in_fieldofstudy__id=self.kwargs['workprogram_id']).distinct()
+                implementation_academic_plan_in_field_of_study__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__id
+                =self.kwargs['workprogram_id']).distinct()
             serializer = FieldOfStudySerializer(queryset, many=True)
             return Response(serializer.data)
         except:
