@@ -340,6 +340,17 @@ class ZunSerializer(serializers.ModelSerializer):
         fields = ['id', 'indicator_in_zun', 'items']
 
 
+class ZunForManyCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор создания нескольких Зунов"""
+    # def __init__(self, *args, **kwargs):
+    #     many = kwargs.pop('many', True)
+    #     super(ZunForManyCreateSerializer, self).__init__(many=many, *args, **kwargs)
+
+    class Meta:
+        model = Zun
+        fields = ['id', 'indicator_in_zun', 'items', 'wp_in_fs']
+
+
 class ZunForDetailAcademicPlanSerializer(serializers.ModelSerializer):
     """Сериализатор Зунов"""
     indicator_in_zun = IndicatorListSerializer()
@@ -642,7 +653,7 @@ class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
 
 class WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
     discipline_block_module = DisciplineBlockModuleForWPinFSSerializer(read_only=True)
-    zuns_for_wp = ZunSerializer(read_only=True)
+    zuns_for_wp = WorkProgramInFieldOfStudySerializerForCb(many=True, read_only=True)
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule

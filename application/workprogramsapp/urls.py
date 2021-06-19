@@ -84,11 +84,18 @@ from .views import CloneWorkProgramm
 from .views import WorkProgramsListApi, UserGroups
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
 
-from .views import WorkProgramFullDetailsWithDisciplineCodeView
-
+from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet
 
 # DocxFileExportOldView
 from .workprogram_additions.views import CopyContentOfWorkProgram
+
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+
+
+router.register(r'api/zun/many_create',
+                ZunManyViewSet, basename='zun_many_create')
 
 urlpatterns = [
 
@@ -336,6 +343,6 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.statistic.urls')),
     url(r'^', include('workprogramsapp.notifications.urls')),
 
-
+    url(r'^', include(router.urls)),
 
 ]

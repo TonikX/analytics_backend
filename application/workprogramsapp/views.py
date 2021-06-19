@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from collections import OrderedDict
 from django.http import HttpResponse
 from rest_framework import filters
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -35,7 +35,7 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
     DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer
 from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer
-from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
+from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer,  ZunForManyCreateSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import BibliographicReferenceSerializer, \
     WorkProgramBibliographicReferenceUpdateSerializer, \
@@ -124,6 +124,29 @@ class IndicatorDetailsView(generics.RetrieveAPIView):
     queryset = Indicator.objects.all()
     serializer_class = IndicatorListSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class ZunManyViewSet(viewsets.ModelViewSet):
+    model = Zun
+    serializer_class = ZunForManyCreateSerializer
+    http_method_names = ['post', 'delete']
+
+    def create(self, request, *args, **kwargs):
+        """
+        Example:
+            {"wpa_in_fss": [74089, 74090, 74091],
+            "zun": {
+              "indicator_in_zun": 16,
+              "items": []
+                }
+            }
+        """
+
+        for wp_in_fs in request.data['wpa_in_fss']:
+            serializer = self.get_serializer(data=request.data['zun'])
+            serializer.is_valid(raise_exception=True)
+            serializer.save(wp_in_fs = WorkProgramInFieldOfStudy.objects.get(id = wp_in_fs))
+        return Response(status=status.HTTP_201_CREATED)
 
 
 # class IndicatorForCompetence(generics.ListAPIView):
@@ -532,6 +555,29 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                                                                          folder__owner=self.request.user).id})
         except:
             newdata.update({"rating": False})
+        competences = Competence.objects.filter(indicator_in_competencse__zun__wp_in_fs__work_program__id = self.kwargs['pk']).distinct()
+        competences_dict = []
+        for competence in competences:
+            # zuns = Zun.objects.filter(wp_in_fs__work_program__id = self.kwargs['pk'])
+            # zuns_array = []
+            # for zun in zuns:
+            indicators = Indicator.objects.filter(competence = competence.id,
+                                                  zun__wp_in_fs__work_program__id = self.kwargs['pk'])
+            indicators_array = []
+            for indicator in indicators:
+                items_array = []
+                items = Items.objects.filter(item_in_outcomes__item_in_wp__indicator_in_zun__id = indicator.id,
+                                             item_in_outcomes__item_in_wp__wp_in_fs__work_program__id = self.kwargs['pk'],
+                                             item_in_outcomes__item_in_wp__indicator_in_zun__competence__id = competence.id)
+                for item in items:
+                    items_array.append({"id": item .id, "name": item .name})
+                indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number,
+                                         "items": items_array})
+                # zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
+                #                    "attainments": zun.attainments, "indicators": indicators_array, "items": items_array})
+            competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
+                                     "indicators": indicators_array})
+        newdata.update({"competences": competences_dict})
         newdata = OrderedDict(newdata)
         return Response(newdata, status=status.HTTP_200_OK)
 

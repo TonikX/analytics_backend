@@ -204,7 +204,7 @@ class OutcomesOfWorkProgram(CloneMixin,models.Model):
     # class Meta:
     #     auto_created = True
 
-    item = models.ForeignKey(Items, on_delete=models.CASCADE, verbose_name="Постреквизит")
+    item = models.ForeignKey(Items, on_delete=models.CASCADE, verbose_name="Постреквизит", related_name='item_in_outcomes')
     workprogram = models.ForeignKey(WorkProgram, on_delete=models.CASCADE, verbose_name="Рабочая программа")
     MasterylevelChoices = [
         ('1', 'low'),
@@ -704,11 +704,11 @@ class Zun(models.Model):
     Модель для зунов
     '''
     wp_in_fs = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.CASCADE, blank=True, null=True, related_name="zun_in_wp")
-    indicator_in_zun = models.ForeignKey('Indicator', on_delete=models.CASCADE, blank=True, null=True)
+    indicator_in_zun = models.ForeignKey('Indicator', on_delete=models.CASCADE, blank=True, null=True, related_name = "zun")
     knowledge = models.CharField(max_length=1024, blank=True, null=True)
     skills = models.CharField(max_length=1024, blank=True, null=True)
     attainments = models.CharField(max_length=1024, blank=True, null=True)
-    items = models.ManyToManyField('OutcomesOfWorkProgram', verbose_name = "Учебная сущность и уровень освоения", blank=True, null=True)
+    items = models.ManyToManyField('OutcomesOfWorkProgram', verbose_name = "Учебная сущность и уровень освоения", blank=True, null=True, related_name="item_in_wp")
 
     # def __str__(self):
     #     return (str(self.work_program_change_in_discipline_block_module) + str(self.work_program))
