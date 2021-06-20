@@ -1,12 +1,7 @@
-import React, {Component, useEffect} from 'react';
-import {useDispatch, useSelector} from "react-redux";
+import React, {Component} from 'react';
 import {Link} from "react-router-dom";
-import get from "lodash/get";
 import Typography from "@material-ui/core/Typography";
-import {rootState} from "../../store/reducers";
 import {appRouter} from "../../service/router-service";
-import actions from "./actions";
-import {getAP, getCurrentCH, getSimpleStat} from "./getters";
 import styles from './Records.styles';
 import {
     Button, ExpansionPanelDetails,
@@ -32,7 +27,6 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import SearchSelector from "../../components/SearchSelector";
-import TextField from '@material-ui/core/TextField';
 
 
 class Records extends Component<RecordsProops> {
@@ -52,11 +46,9 @@ class Records extends Component<RecordsProops> {
         this.state.AP = this.props.AP
         this.props.actions.GetSU();
         this.state.SU = this.props.SU;
-
     }
 
     handleChange = (event: any): void => {
-
         this.setState({value: event.target.value, isVisible: false, page: 0, expandend: null, height: "100%"});
         this.props.actions.changeQualification("bachelor");
         this.props.actions.changeYear("2021");
@@ -66,44 +58,34 @@ class Records extends Component<RecordsProops> {
         this.props.actions.SetRPDinAP([]);
         this.props.actions.ChangeAP(-1);
         this.props.actions.ChangeSU(-1);
-
     }
+
     changeQual = (event: any): void => {
-
         this.props.actions.changeQualification(event.target.value);
-
     }
 
-    ChangeStatus = (event: any): void => {
-
+    сhangeStatus = (event: any): void => {
         this.props.actions.ChangeStatus(event.target.value);
-
     }
-    ChangeSemester = (event: any): void => {
 
+    сhangeSemester = (event: any): void => {
         this.props.actions.ChangeSemester(event.target.value);
-
     }
 
     changeYear = (event: any): void => {
-
         this.props.actions.changeYear(event.target.value);
-
     }
 
     changeYearForAP = (event: any): void => {
-
         this.props.actions.changeYear(event.target.value);
         this.props.actions.GetAP();
         this.state.AP = this.props.AP
-
     }
 
     handleChangePage = (event: any, page: number): void => {
         this.setState({page: page});
-
-
     }
+
     handleChangePanel = (panel: any) => (event: any, expandend: any) => {
         this.setState({
             expandend: expandend ? panel : false,
@@ -112,10 +94,10 @@ class Records extends Component<RecordsProops> {
     };
 
     getSimpleStat = () => {
-
         this.props.actions.GetSimpleStat();
         this.setState({isVisible: true});
     }
+
     getQuantityRPD = () => {
         this.props.actions.GetQuantityRPD();
         this.setState({isVisible: true});
@@ -135,14 +117,15 @@ class Records extends Component<RecordsProops> {
         this.props.actions.GetRPDinSU();
         this.setState({isVisible: true, page: 0, expandend: null, height: "2500px"});
     }
+
     getRPDinAP = () => {
         this.props.actions.GetRPDinAP();
         this.setState({isVisible: true,  page: 0});
     }
+
     getRPDinSEMESTER = () => {
         this.props.actions.GetRPDinSEMESTER();
         this.setState({isVisible: true,  page: 0, height: "1200px"});
-
     }
 
     handleChangeSearchQuery = (query: string):void => {
@@ -155,18 +138,13 @@ class Records extends Component<RecordsProops> {
         this.setState({SU:changeSU});
     }
 
-    ChangeAP = (value: string|number): void => {
-
+    сhangeAP = (value: string|number): void => {
         this.props.actions.ChangeAP(value);
-
     }
 
-    ChangeSU = (value: string|number): void => {
-
+    сhangeSU = (value: string|number): void => {
         this.props.actions.ChangeSU(value);
-
     }
-
 
     render() {
         const {
@@ -187,7 +165,6 @@ class Records extends Component<RecordsProops> {
             SUuse,
             RPD_IN_SEMESTER
         } = this.props;
-
 
         const style = {height: this.state.height};
 
@@ -413,7 +390,7 @@ class Records extends Component<RecordsProops> {
                 <>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Выберите статус РПД</FormLabel>
-                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.ChangeStatus}
+                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.сhangeStatus}
                                     className={classes.field}>
                             <FormControlLabel value="all" control={<Radio color="primary"/>} label="Все"/>
                             <FormControlLabel value="EX" control={<Radio color="primary"/>} label="На экспертизе"/>
@@ -507,7 +484,7 @@ class Records extends Component<RecordsProops> {
                         label='Выберите структурное подразделение'
                         changeSearchText={this.handleChangeSearchQuerySU}
                         list={this.state.SU}
-                        changeItem={(value: string) => this.ChangeSU(value)}
+                        changeItem={(value: string) => this.сhangeSU(value)}
                         value={SUuse}
                         valueLabel={''}
                         className={classes.field}
@@ -544,7 +521,7 @@ class Records extends Component<RecordsProops> {
                         <Select
                             label="Выберите семестр"
                             value={SEMESTER}
-                            onChange={this.ChangeSemester}
+                            onChange={this.сhangeSemester}
                             className={classes.field}
                             MenuProps={{
                                 anchorOrigin: {
@@ -570,7 +547,7 @@ class Records extends Component<RecordsProops> {
                     </FormControl>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Выберите статус РПД</FormLabel>
-                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.ChangeStatus}
+                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.сhangeStatus}
                                     className={classes.field}>
                             <FormControlLabel value="all" control={<Radio color="primary"/>} label="Все"/>
                             <FormControlLabel value="EX" control={<Radio color="primary"/>} label="На экспертизе"/>
@@ -651,7 +628,7 @@ class Records extends Component<RecordsProops> {
                     label='Выберите учебный план'
                     changeSearchText={this.handleChangeSearchQuery}
                     list={this.state.AP}
-                    changeItem={(value: string) => this.ChangeAP(value)}
+                    changeItem={(value: string) => this.сhangeAP(value)}
                     value={APuse}
                     valueLabel={''}
                     className={classes.field}
@@ -704,11 +681,9 @@ class Records extends Component<RecordsProops> {
                                                 <>{editors.first_name} {editors.last_name}; </>
                                             )}
                                         </TableCell>
-
                                     </TableRow>
                                 )}
                             </TableBody>
-
                         </Table>
                     </div>
 
@@ -716,18 +691,11 @@ class Records extends Component<RecordsProops> {
                         <TablePagination count={RPD_IN_AP.length}
                                          component="div"
                                          page={this.state.page}
-                                         rowsPerPageOptions={[]}
                                          onChangePage={this.handleChangePage}
                                          rowsPerPage={this.state.rowsPerPage}
-                                         onChangeRowsPerPage={() => {
-                                         }}
                         />
-
                     </div>
                 </>}
-
-
-
             </Paper>
         );
     }
