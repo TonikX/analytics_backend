@@ -213,4 +213,3 @@ def ChangeSemesterInEvaluationsCorrect(request):
                 eva.save()
     serializer = WorkProgramSerializer(needed_wp, many=True)
     return Response(serializer.data)
-

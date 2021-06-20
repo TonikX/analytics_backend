@@ -28,7 +28,8 @@ from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAP
     SkillsOfRoleInRoleDestroyView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, \
     AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, DisciplineBlockModuleShortListView, \
-    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailView, DisciplinesByNumber, InsertModule
+    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailListForUserView, DisciplineBlockModuleDetailView, \
+    DisciplinesByNumber, InsertModule
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
@@ -83,11 +84,18 @@ from .views import CloneWorkProgramm
 from .views import WorkProgramsListApi, UserGroups
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
 
-from .views import WorkProgramFullDetailsWithDisciplineCodeView
-
+from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet
 
 # DocxFileExportOldView
 from .workprogram_additions.views import CopyContentOfWorkProgram
+
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+
+
+router.register(r'api/zun/many_create',
+                ZunManyViewSet, basename='zun_many_create')
 
 urlpatterns = [
 
@@ -233,6 +241,7 @@ urlpatterns = [
     path('api/disciplineblockmodule/update/<int:pk>', DisciplineBlockModuleUpdateView.as_view()),
     path('api/disciplineblockmodule/short', DisciplineBlockModuleShortListView.as_view()),
     path('api/disciplineblockmodule/detail/list', DisciplineBlockModuleDetailListView.as_view()),
+    path('api/disciplineblockmodule/detail/list/for_this_user', DisciplineBlockModuleDetailListForUserView.as_view()),
     path('api/disciplineblockmodule/detail/<int:pk>', DisciplineBlockModuleDetailView.as_view()),
     path('api/disciplineblockmodule/insert', InsertModule),
     # Работа с образовательными программами
@@ -334,6 +343,6 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.statistic.urls')),
     url(r'^', include('workprogramsapp.notifications.urls')),
 
-
+    url(r'^', include(router.urls)),
 
 ]

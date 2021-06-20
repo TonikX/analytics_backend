@@ -1,3 +1,4 @@
+  
 from django.db import models
 from workprogramsapp.models import Topic, WorkProgram
 from django.conf import settings
@@ -31,3 +32,4 @@ class UserStructuralUnit(models.Model):
                                      related_name='user_in_structural_unit', blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True, related_name='user_for_structural_unit')
     status = models.CharField(max_length=30, choices=status_choise, verbose_name='Архив', default = 'l')
+

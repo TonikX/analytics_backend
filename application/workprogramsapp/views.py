@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from collections import OrderedDict
 from django.http import HttpResponse
 from rest_framework import filters
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -23,8 +23,8 @@ from .models import FieldOfStudy, BibliographicReference, СertificationEvaluati
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
 # Права доступа
+from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor
 from .notifications.models import UserNotification
-from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, \
@@ -33,9 +33,9 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
-    DisciplineBlockModuleDetailSerializer
+    DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer
 from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer
-from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
+from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer,  ZunForManyCreateSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import BibliographicReferenceSerializer, \
     WorkProgramBibliographicReferenceUpdateSerializer, \
@@ -65,13 +65,14 @@ class WorkProgramsListApi(generics.ListAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['discipline_code', 'title']
+    search_fields = ['discipline_code', 'title', 'editors__last_name', 'editors__first_name' ]
     filterset_fields = ['language',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__title',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__number',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile', 'qualification',
                         'prerequisites', 'outcomes', 'structural_unit__title',
-                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__title'
+                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__title',
+                        'editors__last_name', 'editors__first_name'
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -123,6 +124,29 @@ class IndicatorDetailsView(generics.RetrieveAPIView):
     queryset = Indicator.objects.all()
     serializer_class = IndicatorListSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class ZunManyViewSet(viewsets.ModelViewSet):
+    model = Zun
+    serializer_class = ZunForManyCreateSerializer
+    http_method_names = ['post', 'delete']
+
+    def create(self, request, *args, **kwargs):
+        """
+        Example:
+            {"wpa_in_fss": [74089, 74090, 74091],
+            "zun": {
+              "indicator_in_zun": 16,
+              "items": []
+                }
+            }
+        """
+
+        for wp_in_fs in request.data['wpa_in_fss']:
+            serializer = self.get_serializer(data=request.data['zun'])
+            serializer.is_valid(raise_exception=True)
+            serializer.save(wp_in_fs = WorkProgramInFieldOfStudy.objects.get(id = wp_in_fs))
+        return Response(status=status.HTTP_201_CREATED)
 
 
 # class IndicatorForCompetence(generics.ListAPIView):
@@ -263,7 +287,7 @@ class OutcomesOfWorkProgramCreateAPIView(generics.CreateAPIView):
     def create(self, request):
         serializer = OutcomesOfWorkProgramCreateSerializer(data=request.data)
 
-        # обновляем value для item 
+        # обновляем value для item
         item = Items.objects.get(id=request.data.get('item'))
         value = item.value
         item.value = int(value) + 1
@@ -386,7 +410,7 @@ class PrerequisitesOfWorkProgramCreateAPIView(generics.CreateAPIView):
 
     def create(self, request):
         serializer = PrerequisitesOfWorkProgramCreateSerializer(data=request.data)
-        # обновляем value для item 
+        # обновляем value для item
         item = Items.objects.get(id=request.data.get('item'))
         value = item.value
         item.value = int(value) + 1
@@ -487,7 +511,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 newdata.update({"can_edit": False})
         except Expertise.DoesNotExist:
             if WorkProgram.objects.get(pk=self.kwargs['pk']).owner == request.user or WorkProgram.objects.filter(
-                    pk=self.kwargs['pk'], editors__in=[request.user]):
+                    pk=self.kwargs['pk'], editors__in=[request.user]) or request.user.is_superuser:
                 newdata.update({"can_edit": True, "expertise_status": False})
             else:
                 newdata.update({"can_edit": False, "expertise_status": False})
@@ -531,6 +555,29 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                                                                          folder__owner=self.request.user).id})
         except:
             newdata.update({"rating": False})
+        competences = Competence.objects.filter(indicator_in_competencse__zun__wp_in_fs__work_program__id = self.kwargs['pk']).distinct()
+        competences_dict = []
+        for competence in competences:
+            # zuns = Zun.objects.filter(wp_in_fs__work_program__id = self.kwargs['pk'])
+            # zuns_array = []
+            # for zun in zuns:
+            indicators = Indicator.objects.filter(competence = competence.id,
+                                                  zun__wp_in_fs__work_program__id = self.kwargs['pk'])
+            indicators_array = []
+            for indicator in indicators:
+                items_array = []
+                items = Items.objects.filter(item_in_outcomes__item_in_wp__indicator_in_zun__id = indicator.id,
+                                             item_in_outcomes__item_in_wp__wp_in_fs__work_program__id = self.kwargs['pk'],
+                                             item_in_outcomes__item_in_wp__indicator_in_zun__competence__id = competence.id)
+                for item in items:
+                    items_array.append({"id": item .id, "name": item .name})
+                indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number,
+                                         "items": items_array})
+                # zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
+                #                    "attainments": zun.attainments, "indicators": indicators_array, "items": items_array})
+            competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
+                                     "indicators": indicators_array})
+        newdata.update({"competences": competences_dict})
         newdata = OrderedDict(newdata)
         return Response(newdata, status=status.HTTP_200_OK)
 
@@ -983,9 +1030,11 @@ class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
         """
         Вывод учебных планов для одной рабочей программы по id
         """
+
         try:
             queryset = FieldOfStudy.objects.filter(
-                workprograms_in_fieldofstudy__id=self.kwargs['workprogram_id']).distinct()
+                implementation_academic_plan_in_field_of_study__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__id
+                =self.kwargs['workprogram_id']).distinct()
             serializer = FieldOfStudySerializer(queryset, many=True)
             return Response(serializer.data)
         except:
@@ -1152,7 +1201,7 @@ from discipline_code import IPv4_code_ver2
 
 def handle_uploaded_csv(file, filename):
     """
-    Обработка файла csv 
+    Обработка файла csv
     """
 
     if not os.path.exists('upload/'):
@@ -1660,6 +1709,8 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
                         'field_of_study__qualification',
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                        'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__id',
+                        'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__id',
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__structural_unit__title',
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
@@ -1719,6 +1770,9 @@ class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
     serializer_class = DisciplineBlockModuleCreateSerializer
     queryset = DisciplineBlockModule.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(editor=self.request.user)
 
 
 class DisciplineBlockModuleDestroyView(generics.DestroyAPIView):
@@ -1792,18 +1846,28 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
 
 class DisciplineBlockModuleDetailListView(generics.ListAPIView):
     queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleDetailSerializer
+    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'descipline_block__name']
+
+
+class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
+    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+
+    def get_queryset(self):
+        return DisciplineBlockModule.objects.filter(editors=self.request.user)
 
 
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
     queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleDetailSerializer
+    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
 
     def get(self, request, **kwargs):
         queryset = DisciplineBlockModule.objects.filter(pk=self.kwargs['pk'])
-        serializer = DisciplineBlockModuleDetailSerializer(queryset, many=True)
+        serializer = DisciplineBlockModuleForModuleListDetailSerializer(queryset, many=True)
+
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
 
@@ -1815,7 +1879,10 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
                                                                          folder__owner=self.request.user).id})
         except:
             newdata.update({"rating": False})
+
+        newdata['can_edit'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'], self.request.user)
         newdata = OrderedDict(newdata)
+
         return Response(newdata, status=status.HTTP_200_OK)
 
 

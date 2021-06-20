@@ -13,10 +13,14 @@ export default (theme: Theme) => createStyles({
     titleWrap: {
         marginBottom: '10px',
         display: 'flex',
-        justifyContent: 'space-between',
+        flexWrap: 'wrap',
     },
     title: {
         fontSize: '24px',
+        marginRight: '10px',
+    },
+    switch: {
+        marginRight: 'auto',
     },
     tableWrap: {
         height: 'calc(100% - 60px)'

@@ -12,6 +12,7 @@ SECRET_KEY=СЕКРЕТНЫЙ_КЛЮЧ_ДЖАНГО
 ISU_CLIENT_ID=''
 ISU_CLIENT_SECRET=''
 ISU_REDIRECT_URI=''
+
 BARS_LOGIN=''
 BARS_PASSWORD=''
 ```
@@ -19,6 +20,7 @@ BARS_PASSWORD=''
 ```
 CERT=''
 KEY=''
+
 ```
 
 ### Запуск версии для разработки
@@ -35,7 +37,7 @@ docker-compose up
 В папке / создать файл .env. Настоить в нем режим подключение к БД из Docker-контейнера. Пример:
 
 ```
-PORTS = "6435:5432"
+PORTS = "внешний порт:5432"
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=ПАРОЛЬ
 POSTGRES_DB=analytics_db
@@ -50,6 +52,7 @@ docker-compose -f docker-compose-prod.yml up
 Не забудьте закрыть порты в настройках docker-compose
 
 ## Восстановление данных
+Для восстановления данных использовать [этот дамп](https://drive.google.com/file/d/1uujibvNcLZHorh2bfOeU-3ljX7KaYfjd/view?usp=sharing)
 
 
 

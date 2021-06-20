@@ -26,6 +26,9 @@ const SELECT_EDUCATIONAL_PROGRAM = 'select-educational-program';
 const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
 const INDIVIDUAL_EDUCATIONAL_PLANS = 'individual-educational-plans';
 const PROFESSIONAL_STANDARDS = 'professional-standards';
+
+const RECORDS = 'records';
+
 const STRUCTURAL_UNITS = 'structural-units';
 const NOTIFICATIONS = 'notifications';
 
@@ -99,6 +102,10 @@ export default class RouterService {
 
     getCompetencesRoute = () => {
         return SEPARATOR + COMPETENCES;
+    };
+
+    getRecordsRoute = () => {
+        return SEPARATOR + RECORDS;
     };
 
     getDirectionRoute = () => {

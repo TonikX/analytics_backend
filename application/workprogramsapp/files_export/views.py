@@ -4,7 +4,7 @@ from docxtpl import DocxTemplate
 from django.http import HttpResponse
 from collections import OrderedDict
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy, WorkProgram
 from ..serializers import WorkProgramSerializer
@@ -112,7 +112,7 @@ def render_context(context, **kwargs):
     template_context['bibliographic_reference'] = context['bibliographic_reference']
     template_context['online_course'] = url_online_course
     template_context['evaluation_tools'] = evaluation_tools
-    filename = str(fs_obj.number) + '_' + str(context['discipline_code']) + '_' + str(
+    filename = str(fs_obj.number) + '_' + str(
         context['qualification']) + '_' + str(kwargs['year']) + '_' + datetime.datetime.today().strftime(
         "%Y-%m-%d-%H.%M.%S") + '.docx'
     """Данные для таблицы планирования результатов обучения по дисциплине (БаРС)"""
@@ -120,13 +120,16 @@ def render_context(context, **kwargs):
     current_evaluation_tool = []
     items_max = []
     items_min = []
-    for item in context['outcomes']:
-        item = item['evaluation_tool'][0]
-        current_evaluation_tool.append(item)
-        if item['check_point']:
-            outcomes_evaluation_tool.append(item)
-            items_max.append(item['max'])
-            items_min.append(item['min'])
+    try:
+        for item in context['outcomes']:
+            item = item['evaluation_tool'][0]
+            current_evaluation_tool.append(item)
+            if item['check_point']:
+                outcomes_evaluation_tool.append(item)
+                items_max.append(item['max'])
+                items_min.append(item['min'])
+    except:
+        pass
     template_context['outcomes_evaluation_tool'] = outcomes_evaluation_tool
     template_context['current_evaluation_tool'] = current_evaluation_tool
     certification_evaluation_tools = []
@@ -142,11 +145,15 @@ def render_context(context, **kwargs):
         elif item['type'] == '4':
             item['type'] = 'Coursework'
         certification_evaluation_tools.append(item)
+
     template_context['certification_evaluation_tools'] = certification_evaluation_tools
-    outcomes_max_all = sum(items_max)
-    outcomes_min_all = sum(items_min)
-    template_context['outcomes_max_all'] = outcomes_max_all
-    template_context['outcomes_min_all'] = outcomes_min_all
+    try:
+        outcomes_max_all = sum(items_max)
+        outcomes_min_all = sum(items_min)
+        template_context['outcomes_max_all'] = outcomes_max_all
+        template_context['outcomes_min_all'] = outcomes_min_all
+    except:
+        pass
     return template_context, filename
 
 
@@ -159,7 +166,7 @@ class DocxFileExportView(generics.ListAPIView):
     """
     queryset = WorkProgram.objects.all()
     serializer = WorkProgramSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
         tpl = DocxTemplate('/application/static-backend/export_template/RPD_shablon_2020_new.docx')

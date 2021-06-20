@@ -4,6 +4,8 @@ from workprogramsapp.expertise.models import UserExpertise
 from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder, \
     AcademicPlanInFolder, DisciplineBlockModuleInFolder, IndividualImplementationAcademicPlanInFolder
 from workprogramsapp.workprogram_additions.models import UserStructuralUnit
+from workprogramsapp.models import DisciplineBlockModule
+from dataprocessing.models import User
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -15,7 +17,8 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         if request.method in permissions.SAFE_METHODS:
             return True
-
+        if request.user.is_superuser:
+            return True
         try:
             return request.user in obj.editors.all()
         except:
@@ -31,6 +34,8 @@ class IsRpdDeveloperOrReadOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
+            return True
+        if request.user.is_superuser:
             return True
         return request.user.groups.filter(name="rpd_developer")
 
@@ -160,3 +165,9 @@ class IsOwnerOfFolderWithDisciplineBlockModule(permissions.BasePermission):
             return Folder.objects.filter(owner=request.user, pk=request.data['folder'])
         except KeyError:
             return True
+
+
+class IsDisciplineBlockModuleEditor(permissions.BasePermission):
+    @staticmethod
+    def check_access(module_id: int, user: User) -> bool:
+        return DisciplineBlockModule.objects.filter(pk=module_id, editors=user).exists()

@@ -19,7 +19,8 @@ export const initialState: trainingModulesState = {
         [fields.IS_OPEN_TRAINING_MODULE_DIALOG]: false,
         [fields.TRAINING_MODULE_DIALOG_DATA]: {}
     },
-    [fields.DETAIL_TRAINING_MODULE]: {}
+    [fields.DETAIL_TRAINING_MODULE]: {},
+    [fields.SHOW_ONLY_MY]: false,
 };
 
 const setData = (state: trainingModulesState, {payload}: any): trainingModulesState => ({
@@ -68,6 +69,11 @@ const changeSorting = (state: trainingModulesState, {payload}: any): trainingMod
     }
 });
 
+const showOnlyMy = (state: trainingModulesState, {payload}: {payload: boolean}): trainingModulesState => ({
+    ...state,
+    [fields.SHOW_ONLY_MY]: payload
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setTrainingModulesList.type]: setData,
     [actions.setTrainingModule.type]: setTrainingModule,
@@ -77,4 +83,5 @@ export const reducer = createReducer(initialState, {
     [actions.changeSorting.type]: changeSorting,
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
+    [actions.showOnlyMy.type]: showOnlyMy,
 });
