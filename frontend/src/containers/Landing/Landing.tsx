@@ -14,9 +14,8 @@ import teacherImage from './img/teacher.svg'
 import administrationImage from './img/administration.svg'
 import arrowImage from './img/right-arrow.svg'
 import mailImage from './img/envelope.svg'
-import polinaImage from './img/photo/polina.jpg'
-import nikitaImage from './img/photo/nikita.jpg'
 import {appRouter} from '../../service/router-service'
+import developersList from "./developersList";
 
 export default () => {
   const classes = useStyles();
@@ -150,75 +149,28 @@ export default () => {
         <Typography className={classes.sectionTitle}>
           Команда проекта
         </Typography>
-        <div className={classes.teamList}>
-          <div className={classes.teamItem}>
-            <div className={classes.teamItemImage} />
-            <Typography className={classes.teamItemTitle}> Антон Говоров </Typography>
-            <Typography className={classes.teamItemRole}> Team lead / Backend разработчик </Typography>
-          </div>
-          <div className={classes.teamItem}>
-            <div className={classes.teamItemImage} />
-            <Typography className={classes.teamItemTitle}> Максим Хлопотов </Typography>
-            <Typography className={classes.teamItemRole}> Руководитель проекта </Typography>
-          </div>
-          <div className={classes.teamItem}>
-            <div className={classes.teamItemImage} style={{background: `url(${polinaImage})`}}/>
-            <Typography className={classes.teamItemTitle}> Полина Краснова </Typography>
-            <Typography className={classes.teamItemRole}> Frontend разработчик </Typography>
-          </div>
-          <div className={classes.teamItem}>
-            <div className={classes.teamItemImage} />
-            <Typography className={classes.teamItemTitle}> Сергей Коряков </Typography>
-            <Typography className={classes.teamItemRole}> Backend разработчик </Typography>
-          </div>
-        </div>
-        {showAllTeam &&
-          <>
+        {showAllTeam ?
+          developersList.map((row: any) =>
             <div className={classes.teamList}>
-              <div className={classes.teamItem}>
-                <div className={classes.teamItemImage} style={{background: `url(${nikitaImage})`}}/>
-                <Typography className={classes.teamItemTitle}> Никита Федоров </Typography>
-                <Typography className={classes.teamItemRole}> Frontend разработчик </Typography>
-              </div>
-              <div className={classes.teamItem}>
-                <div className={classes.teamItemImage}/>
-                <Typography className={classes.teamItemTitle}> Егор Скрутелев </Typography>
-                <Typography className={classes.teamItemRole}> Frontend разработчик </Typography>
-              </div>
-              <div className={classes.teamItem}>
-                <div className={classes.teamItemImage}/>
-                <Typography className={classes.teamItemTitle}> Валерия Артамонова </Typography>
-                <Typography className={classes.teamItemRole}> Backend разработчик </Typography>
-              </div>
-              <div className={classes.teamItem}>
-                <div className={classes.teamItemImage}/>
-                <Typography className={classes.teamItemTitle}> Анна Арзуманян </Typography>
-                <Typography className={classes.teamItemRole}> Backend разработчик </Typography>
-              </div>
+              {row.map((item: any) => (
+                <div className={classes.teamItem}>
+                  <div className={classes.teamItemImage} style={{background: `url(${item.image})`}}/>
+                  <Typography className={classes.teamItemTitle}> {item.name} </Typography>
+                  <Typography className={classes.teamItemRole}> {item.role} </Typography>
+                </div>
+              ))}
             </div>
-            <div className={classes.teamList}>
+          )
+          :
+          <div className={classes.teamList}>
+            {developersList[0].map((item: any) => (
               <div className={classes.teamItem}>
-                <div className={classes.teamItemImage}/>
-                <Typography className={classes.teamItemTitle}> Анастасия Крыга </Typography>
-                <Typography className={classes.teamItemRole}> Научный работник </Typography>
+              <div className={classes.teamItemImage} style={{background: `url(${item.image})`}}/>
+              <Typography className={classes.teamItemTitle}> {item.name} </Typography>
+              <Typography className={classes.teamItemRole}> {item.role} </Typography>
               </div>
-              <div className={classes.teamItem}>
-                <div className={classes.teamItemImage}/>
-                <Typography className={classes.teamItemTitle}> Светлана Деркунская </Typography>
-                <Typography className={classes.teamItemRole}> Научный работник </Typography>
-              </div>
-              <div className={classes.teamItem}>
-                <div className={classes.teamItemImage}/>
-                <Typography className={classes.teamItemTitle}> Анастасия Чернышева </Typography>
-                <Typography className={classes.teamItemRole}> Научный работник </Typography>
-              </div>
-              <div className={classes.teamItem}>
-                <div className={classes.teamItemImage}/>
-                <Typography className={classes.teamItemTitle}> Карина Бабаянц </Typography>
-                <Typography className={classes.teamItemRole}> Научный работник </Typography>
-              </div>
-            </div>
-          </>
+              ))}
+          </div>
         }
         {!showAllTeam && <Typography className={classes.showAllTeam} onClick={() => setShowAllTeam(true)}>Показать всю команду <img src={arrowImage} className={classes.arrowImage}/></Typography>}
       </div>
