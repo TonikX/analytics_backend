@@ -8,6 +8,8 @@ import {CompetenceFields, fields} from './enum';
 
 import {competenceState, CompetenceType} from './types';
 import {SelectorListType} from "../../components/SearchSelector/types";
+import {IndicatorType} from "../Indicators/types";
+import {IndicatorsFields} from "../Indicators/enum";
 
 const getStateData = (state: rootState): competenceState => get(state, GENERAL_PATH);
 export const getCompetences = (state: rootState): Array<CompetenceType> => get(getStateData(state), fields.COMPETENCE_LIST, []);
@@ -18,9 +20,15 @@ export const getCompetencesForSelector = (state: rootState): SelectorListType =>
         label: competence[CompetenceFields.TITLE],
     }))
 
+export const getIndicatorsForSelector = (state: rootState): SelectorListType =>
+  getIndicators(state).map((indicator: IndicatorType) => ({
+    value: indicator[IndicatorsFields.ID],
+    label: indicator[IndicatorsFields.TITLE],
+  }))
+
 export const getCourseDialog = (state: rootState) => get(getStateData(state), fields.COMPETENCE_DIALOG, {});
 export const getCompetence = (state: rootState) => get(getStateData(state), fields.COMPETENCE, {});
-export const getIndicators = (state: rootState) => get(getStateData(state), fields.INDICATORS, []);
+export const getIndicators = (state: rootState): Array<any> => get(getStateData(state), fields.INDICATORS, []);
 
 export const isOpenDialog = (state: rootState) => get(getCourseDialog(state), fields.IS_OPEN_DIALOG, false);
 export const getDialogData = (state: rootState) => get(getCourseDialog(state), fields.DIALOG_DATA, false);

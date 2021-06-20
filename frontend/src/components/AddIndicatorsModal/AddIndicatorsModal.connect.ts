@@ -1,10 +1,10 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
-import indicatorsActions from "../../containers/Indicators/actions";
+import indicatorsActions from "../../containers/Competences/actions";
 
 import {rootState} from "../../store/reducers";
-import {getIndicatorsForSelector} from "../../containers/Indicators/getters";
+import {getIndicatorsForSelector} from "../../containers/Competences/getters";
 
 const mapStateToProps = (state: rootState) => {
     return {

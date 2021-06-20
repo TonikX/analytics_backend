@@ -217,6 +217,28 @@ const updateIndicator = createLogic({
     }
 });
 
+const getIndicatorsDependsCompetence = createLogic({
+    type: competencesActions.getIndicatorsDependsCompetence.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_INDICATORS_DEPENDS_COMPETENCE}));
+
+        service.getIndicatorsDependsCompetence(action.payload)
+            .then((res: any) => {
+                const data = get(res, 'data', []);
+                dispatch(competencesActions.setIndicators(data));
+                dispatch(competencesActions.closeDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_INDICATORS_DEPENDS_COMPETENCE}));
+                return done();
+            });
+    }
+});
+
 export default [
     getCompetences,
     deleteCompetence,
@@ -227,4 +249,5 @@ export default [
     createIndicator,
     deleteIndicator,
     updateIndicator,
+    getIndicatorsDependsCompetence,
 ];
