@@ -35,6 +35,7 @@
     "moment": "^2.26.0",
     "notistack": "^0.9.11",
     "react": "^16.13.1",
+    "react-anchor-link-smooth-scroll": "^1.0.12",
     "react-app-rewired": "^2.1.8",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.13.1",
