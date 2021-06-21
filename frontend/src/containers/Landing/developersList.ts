@@ -13,13 +13,13 @@ import svetaImage from './img/photo/sveta.jpg'
 
 export default [
   [{
-    role: 'Team lead / Backend разработчик',
-    image: antonImage,
-    name: 'Антон Говоров'
-  }, {
     role: 'Руководитель проекта',
     image: maximImage,
     name: 'Максим Хлопотов',
+  }, {
+    role: 'Team lead / Backend разработчик',
+    image: antonImage,
+    name: 'Антон Говоров'
   }, {
     role: 'Frontend разработчик',
     image: polinaImage,
