@@ -9,6 +9,10 @@ import Button from '@material-ui/core/Button'
 import { Link } from 'react-router-dom'
 // @ts-ignore
 import screenshotImage from './img/screen.PNG'
+// @ts-ignore
+import op from './img/op.PNG'
+// @ts-ignore
+import onlineCourse from './img/online-course.PNG'
 import studentImage from './img/student.svg'
 import teacherImage from './img/teacher.svg'
 import administrationImage from './img/administration.svg'
@@ -104,11 +108,33 @@ export default () => {
               Сервис предоставляет интерфейсы для заполнения всех элементов РПД, таких, как: разделы, темы, оценочные средства, таблица БАРС и т.д. Настроены различные проверки, помогающие преподавателю быстро и правильно заполнять РПД. Реализованы процессы экспертизы для включения РПД в учебные планы.
             </Typography>
           </div>
-          <div className={classes.processesListContentImage} style={{backgroundImage: `url(${screenshotImage}`}}/>
+          <div className={classes.processesListContentImage}>
+            <div className={classes.videoWrapper}>
+              <iframe width="560"
+                      height="315"
+                      src="https://www.youtube.com/embed/3lK4kItzYTk?&showinfo=0"
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+              />
+            </div>
+          </div>
         </div>
 
         <div className={classes.processesListItem}>
-          <div className={classes.processesListContentImage} style={{marginRight: '50px', backgroundImage: `url(${screenshotImage}`}} />
+          <div className={classes.processesListContentImage}  style={{marginRight: '50px'}}>
+            <div className={classes.videoWrapper}>
+              <iframe width="560"
+                      height="315"
+                      src="https://www.youtube.com/embed/Elf9hFjFiK8"
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+              />
+            </div>
+          </div>
           <div className={classes.processesListContent}>
             <Typography className={classes.processesListContentTitle}>
               Учебные планы
@@ -128,11 +154,11 @@ export default () => {
               Реализуются новые интерфейсы для работы с направлениями, учебными планами, общими характеристиками образовательных программ. Реализованы удобные интерфейсы поиска и навигации. Формат документов соответствует образовательному стандарту Университета ИТМО
             </Typography>
           </div>
-          <div className={classes.processesListContentImage} style={{backgroundImage: `url(${screenshotImage}`}} />
+          <div className={classes.processesListContentImage} style={{backgroundImage: `url(${op}`}} />
         </div>
 
         <div className={classes.processesListItem}>
-          <div className={classes.processesListContentImage} style={{marginRight: '50px', backgroundImage: `url(${screenshotImage}`}} />
+          <div className={classes.processesListContentImage} style={{marginRight: '50px', backgroundImage: `url(${onlineCourse}`}} />
           <div className={classes.processesListContent}>
             <Typography className={classes.processesListContentTitle}>
               Онлайн курсы

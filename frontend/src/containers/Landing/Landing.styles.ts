@@ -137,11 +137,24 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   processesListContentText: {
     lineHeight: '30px'
   },
+  videoWrapper: {
+    position: 'relative',
+    paddingBottom: '56.25%',
+    paddingTop: '25px',
+    height: '0',
+    '& iframe': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+    }
+  },
   processesListContentImage: {
     width: '850px',
     height: '500px',
-    background: '#fff',
     borderRadius: '10px',
+    overflow: 'hidden',
     flex: 'none',
     backgroundSize: 'cover',
   },
