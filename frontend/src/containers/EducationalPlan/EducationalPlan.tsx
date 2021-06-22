@@ -158,8 +158,8 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                        mode={sortingField === 'academic_plan_in_field_of_study__title' ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell className={classes.displayFlex}>
-                                        <div className={classes.headerCellTitle}> Год набора </div>
+                                    <TableCell>
+                                        Год набора
                                         <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__year')}
                                                        mode={sortingField === 'academic_plan_in_field_of_study__year' ? sortingMode : ''}
                                         />
