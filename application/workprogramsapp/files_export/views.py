@@ -1,11 +1,11 @@
 import datetime
-
+import re
 from docxtpl import DocxTemplate
 from django.http import HttpResponse
 from collections import OrderedDict
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
-
+import html2text
 from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy, WorkProgram
 from ..serializers import WorkProgramSerializer
 
@@ -18,13 +18,10 @@ def render_context(context, **kwargs):
     ap_obj = AcademicPlan.objects.get(pk=kwargs['academic_plan_id'])
     try:
         for wpcb in context['work_program_in_change_block']:
-            if wpcb['discipline_block_module']['descipline_block']['academic_plan'][
-                'educational_profile'] == ap_obj.educational_profile:
+            if wpcb['discipline_block_module']['descipline_block']['academic_plan']['educational_profile'] == ap_obj.educational_profile:
                 wpcb_pk = wpcb['id']
-                print(wpcb_pk)
                 semester = [{'s': i, 'c': wpcb['credit_units'][i]} for i in range(len(wpcb['credit_units'])) if
                             wpcb['credit_units'] if wpcb['credit_units'][i] != 0]
-
     except:
         semester = [{'s': '-', 'c': '-', 'h': '-', 'e': '-'}]
         wpcb_pk = context['work_program_in_change_block'][0]['id']
@@ -33,13 +30,11 @@ def render_context(context, **kwargs):
     zun_obj = Zun.objects.filter(wp_in_fs=wp_in_fs)
     tbl_competence = []
     for z in zun_obj:
-        print(list(z.items.all()))
         outcomes = [o.item.name for o in z.items.all()]
         tbl_competence.append(
             {'competence': str(z.indicator_in_zun.competence.number) + ' ' + str(z.indicator_in_zun.competence.name),
              'indicator': str(z.indicator_in_zun.number) + ' ' + str(z.indicator_in_zun.name),
              'outcomes': ', '.join(map(str, set(outcomes)))})
-    print('TBL_COMPETENCE', tbl_competence)
     contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
     online_sections, url_online_course, evaluation_tools = [], [], []
 
@@ -102,17 +97,16 @@ def render_context(context, **kwargs):
         template_context['author'] = context['authors']
         template_context['authors'] = context['authors'].split(', ')
     template_context['tbl_competence'] = tbl_competence
-    template_context['discipline_section'] = context['discipline_sections']
     template_context['total_hours'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours]
     template_context['is_no_online'] = True if online_sections == 0 else False
     template_context['is_online'] = False if online_sections == 0 else True
     template_context['X'] = 'X'
     template_context['sections_online'] = ', '.join(map(str, set(online_sections)))
-    template_context['sections_replaced_onl']: ''
+    template_context['sections_replaced_onl'] = ''
     template_context['bibliographic_reference'] = context['bibliographic_reference']
     template_context['online_course'] = url_online_course
     template_context['evaluation_tools'] = evaluation_tools
-    filename = str(fs_obj.number) + '_' + str(
+    filename = str(fs_obj.number) + '_' + str(context['discipline_code']) + '_' + str(
         context['qualification']) + '_' + str(kwargs['year']) + '_' + datetime.datetime.today().strftime(
         "%Y-%m-%d-%H.%M.%S") + '.docx'
     """Данные для таблицы планирования результатов обучения по дисциплине (БаРС)"""
@@ -120,22 +114,28 @@ def render_context(context, **kwargs):
     current_evaluation_tool = []
     items_max = []
     items_min = []
-    try:
-        for item in context['outcomes']:
-            item = item['evaluation_tool'][0]
-            current_evaluation_tool.append(item)
-            if item['check_point']:
-                outcomes_evaluation_tool.append(item)
-                items_max.append(item['max'])
-                items_min.append(item['min'])
-    except:
-        pass
+    for item in context['discipline_sections']:
+        for i in item['evaluation_tools']:
+            i['description'] = html2text.html2text(i['description'])
+    template_context['discipline_section'] = context['discipline_sections']
+    for item in context['outcomes']:
+        try:
+            for i in item['evaluation_tool']:
+                i['description'] = html2text.html2text(i['description'])
+                current_evaluation_tool.append(i)
+                if i['check_point']:
+                    outcomes_evaluation_tool.append(i)
+                    items_max.append(i['max'])
+                    items_min.append(i['min'])
+        except:
+            continue
     template_context['outcomes_evaluation_tool'] = outcomes_evaluation_tool
     template_context['current_evaluation_tool'] = current_evaluation_tool
     certification_evaluation_tools = []
     for item in context['certification_evaluation_tools']:
         items_max.append(item['max'])
         items_min.append(item['min'])
+        item['description'] = html2text.html2text(item['description'])
         if item['type'] == '1':
             item['type'] = 'Exam'
         elif item['type'] == '2':
@@ -145,15 +145,11 @@ def render_context(context, **kwargs):
         elif item['type'] == '4':
             item['type'] = 'Coursework'
         certification_evaluation_tools.append(item)
-
     template_context['certification_evaluation_tools'] = certification_evaluation_tools
-    try:
-        outcomes_max_all = sum(items_max)
-        outcomes_min_all = sum(items_min)
-        template_context['outcomes_max_all'] = outcomes_max_all
-        template_context['outcomes_min_all'] = outcomes_min_all
-    except:
-        pass
+    outcomes_max_all = sum(items_max)
+    outcomes_min_all = sum(items_min)
+    template_context['outcomes_max_all'] = outcomes_max_all
+    template_context['outcomes_min_all'] = outcomes_min_all
     return template_context, filename
 
 

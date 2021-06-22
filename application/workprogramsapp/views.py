@@ -1249,7 +1249,7 @@ class FileUploadAPIView(APIView):
             order = json.load(fh)
 
         # data['CREDITS'].fillna('0', inplace=True)
-        # берем только первые 3 семестра
+        # берем только первые 3 семестраа
         # data = data[(data['SEMESTER']<5)]
 
         print('============Создаю рпд и направления============')
@@ -1887,6 +1887,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
 
 
 @api_view(['POST'])
+@permission_classes((IsAuthenticated, ))
 def CloneWorkProgramm(request):
     """
     Апи для клонирования рабочей программы
