@@ -77,7 +77,7 @@ class Layout extends React.Component {
     };
 
     isWorkProgramPage = () => this.props.location.pathname.includes('/work-program/');
-    isLandingPage = () => this.props.location.pathname === '/landing';
+    isLandingPage = () => this.props.location.pathname === '/';
 
     render() {
         const {openMenu} = this.state;

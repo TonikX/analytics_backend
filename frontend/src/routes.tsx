@@ -63,7 +63,6 @@ export default () => (
     <Router>
         <Layout>
             <Switch>
-            <Redirect exact from="/" to={routerService.getEducationPlanRoute()} />
             <AuthRoute path={routerService.getCoursesRoute()}>
                 <Courses />
             </AuthRoute>
@@ -219,7 +218,7 @@ export default () => (
             <Route path={routerService.getForbiddenPage()}>
                 <ForbiddenPage />
             </Route>
-            <Route path="/landing">
+            <Route path="/">
                 <Landing />
             </Route>
             <Route exact>
