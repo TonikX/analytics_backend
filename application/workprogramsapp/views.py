@@ -34,7 +34,7 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
     DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer
-from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer
+from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, WorkProgramInFieldOfStudySerializerForCb
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer,  ZunForManyCreateSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import BibliographicReferenceSerializer, \
@@ -558,25 +558,30 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         competences = Competence.objects.filter(indicator_in_competencse__zun__wp_in_fs__work_program__id = self.kwargs['pk']).distinct()
         competences_dict = []
         for competence in competences:
-            # zuns = Zun.objects.filter(wp_in_fs__work_program__id = self.kwargs['pk'])
-            # zuns_array = []
-            # for zun in zuns:
-            indicators = Indicator.objects.filter(competence = competence.id,
-                                                  zun__wp_in_fs__work_program__id = self.kwargs['pk'])
-            indicators_array = []
-            for indicator in indicators:
+            zuns = Zun.objects.filter(wp_in_fs__work_program__id = self.kwargs['pk'])
+            zuns_array = []
+            for zun in zuns:
+                indicators = Indicator.objects.filter(competence = competence.id,
+                                                      zun__id = zun.id)
+                indicators_array = []
+                for indicator in indicators:
+                    indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number})
                 items_array = []
-                items = Items.objects.filter(item_in_outcomes__item_in_wp__indicator_in_zun__id = indicator.id,
+                items = Items.objects.filter(item_in_outcomes__item_in_wp__id = zun.id,
                                              item_in_outcomes__item_in_wp__wp_in_fs__work_program__id = self.kwargs['pk'],
                                              item_in_outcomes__item_in_wp__indicator_in_zun__competence__id = competence.id)
                 for item in items:
                     items_array.append({"id": item .id, "name": item .name})
-                indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number,
-                                         "items": items_array})
-                # zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
-                #                    "attainments": zun.attainments, "indicators": indicators_array, "items": items_array})
+                #serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
+                queryset = ImplementationAcademicPlan.objects.filter(
+                    academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id = zun.id)
+                serializer = ImplementationAcademicPlanSerializer(queryset, many=True)
+                zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
+                                   "attainments": zun.attainments, "indicators": indicators_array,
+                                   "items": items_array, "educational_program": serializer.data,
+                                   "wp_in_fs": WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id)).data["id"]})
             competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
-                                     "indicators": indicators_array})
+                                     "zuns": zuns_array})
         newdata.update({"competences": competences_dict})
         newdata = OrderedDict(newdata)
         return Response(newdata, status=status.HTTP_200_OK)
