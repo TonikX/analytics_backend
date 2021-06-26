@@ -564,7 +564,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 try:
                     indicator = Indicator.objects.get(competence = competence.id,
                                                           zun__id = zun.id)
-                    indicator = Indicator(indicator).data
+                    indicator = IndicatorSerializer(indicator).data
                 except:
                     indicator = None
                 # indicators_array = []
