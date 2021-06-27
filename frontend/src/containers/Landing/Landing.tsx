@@ -68,8 +68,8 @@ export default () => {
       </AppBar>
 
       <div className={classes.mainScreen}>
-        <Typography variant="h1" className={classes.h1}>Конструктор Рабочих Программ</Typography>
-        <Typography className={classes.subTitle}>Удобный конструктор для быстрого создания рабочих программ, отличный инструмент <br/> для сопровождения и планирования учебного процесса<br/></Typography>
+        <Typography variant="h1" className={classes.h1}>Конструктор Образовательных Программ</Typography>
+        <Typography className={classes.subTitle}>Удобный конструктор для быстрого создания образовательных программ, отличный инструмент <br/> для сопровождения и планирования учебного процесса<br/></Typography>
         <div className={classes.mainScreenButtons}>
           <Button className={classes.mainButton}>
             <Link to={appRouter.getSignInRoute()}>

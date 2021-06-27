@@ -24,7 +24,6 @@ class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
     };
 
     componentDidUpdate(prevProps: Readonly<AddIndicatorsModalProps>, prevState: Readonly<{}>, snapshot?: any) {
-        debugger
         if (prevProps.competenceId !== this.props.competenceId && this.props.isOpen){
             this.props.indicatorsActions.getIndicatorsDependsCompetence(this.props.competenceId);
         }
