@@ -211,7 +211,6 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
             workProgramRating, canAddToFolder, validateErrors, workProgram, fetchingBars} = this.props;
         const {activeStep, isOpenComments} = this.state;
-        console.log(workProgram.bars);
         
         return (
             <div className={classes.wrap}>
@@ -219,14 +218,15 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                     <WorkProgramStatus status={workProgramStatus} />
 
                     <div className={classes.headerButtons}>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                            <Typography>Дисциплина реализуется в БАРС 2.0</Typography>
-                            <Switch
-                                checked={workProgram.bars}
-                                onChange={this.handleBars}
-                                disabled={fetchingBars}
-                            />
-                        </div>
+                        {canSendToArchive || canSendToExpertise ? 
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                <Typography>Дисциплина реализуется в БАРС 2.0</Typography>
+                                <Switch
+                                    checked={get(workProgram, [WorkProgramGeneralFields.BARS], false)}
+                                    onChange={this.handleBars}
+                                    disabled={fetchingBars}
+                                />
+                            </div> : null}
                         {canSendToArchive && <Button onClick={this.handleSendToArchive}>Отправить в архив</Button>}
 
                         {canSendToExpertise &&
