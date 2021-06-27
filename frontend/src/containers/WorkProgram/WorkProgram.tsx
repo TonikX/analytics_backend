@@ -84,7 +84,6 @@ class WorkProgram extends React.Component<WorkProgramProps> {
             destination: WorkProgramGeneralFields.BARS,
             value: get(e, "target.checked", false)
         })
-        
     }
 
     getWorkProgramId = () => get(this, 'props.match.params.id');
@@ -210,7 +209,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
     render() {
         const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
-            workProgramRating, canAddToFolder, validateErrors, workProgram} = this.props;
+            workProgramRating, canAddToFolder, validateErrors, workProgram, fetchingBars} = this.props;
         const {activeStep, isOpenComments} = this.state;
         console.log(workProgram.bars);
         
@@ -225,6 +224,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                             <Switch
                                 checked={workProgram.bars}
                                 onChange={this.handleBars}
+                                disabled={fetchingBars}
                             />
                         </div>
                         {canSendToArchive && <Button onClick={this.handleSendToArchive}>Отправить в архив</Button>}

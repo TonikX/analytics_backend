@@ -125,6 +125,7 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     folders: Array<FolderType>
     workProgram: WorkProgramGeneralType;
     validateErrors: Array<string>;
+    fetchingBars: boolean;
 }
 
 
