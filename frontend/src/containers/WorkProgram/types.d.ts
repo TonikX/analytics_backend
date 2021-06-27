@@ -92,6 +92,7 @@ export type WorkProgramGeneralType = {
     [WorkProgramGeneralFields.AUTHORS]: string;
     [WorkProgramGeneralFields.RATING]: boolean;
     [WorkProgramGeneralFields.ZUN]: Array<ZunType>;
+    [WorkProgramGeneralFields.BARS]: boolean;
 };
 
 export type ZunType = {

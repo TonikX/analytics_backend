@@ -76,6 +76,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     }
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
+        console.log("DEBUG field", field);
         this.props.actions.saveWorkProgram({
             destination: field,
             value: get(e, 'target.value')

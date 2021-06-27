@@ -15,6 +15,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 import Grow from '@material-ui/core/Grow';
+import Switch from '@material-ui/core/Switch';
 
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 import LikeButton from "../../components/LikeButton";
@@ -38,6 +39,7 @@ import {steps} from "./constants";
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
 import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
+import { WorkProgramGeneralFields } from './enum';
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
@@ -75,6 +77,14 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     handleCloneProgram = () => {
         this.closeConfirmDuplicateWPModal();
         this.props.actions.cloneWorkProgram(this.getWorkProgramId());
+    }
+
+    handleBars = (e: React.ChangeEvent) => {
+        this.props.actions.saveWorkProgram({
+            destination: WorkProgramGeneralFields.BARS,
+            value: get(e, "target.checked", false)
+        })
+        
     }
 
     getWorkProgramId = () => get(this, 'props.match.params.id');
@@ -200,15 +210,23 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
     render() {
         const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
-            workProgramRating, canAddToFolder, validateErrors} = this.props;
+            workProgramRating, canAddToFolder, validateErrors, workProgram} = this.props;
         const {activeStep, isOpenComments} = this.state;
-
+        console.log(workProgram.bars);
+        
         return (
             <div className={classes.wrap}>
                 <div className={classes.header}>
                     <WorkProgramStatus status={workProgramStatus} />
 
                     <div className={classes.headerButtons}>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                            <Typography>Дисциплина реализуется в БАРС 2.0</Typography>
+                            <Switch
+                                checked={workProgram.bars}
+                                onChange={this.handleBars}
+                            />
+                        </div>
                         {canSendToArchive && <Button onClick={this.handleSendToArchive}>Отправить в архив</Button>}
 
                         {canSendToExpertise &&
