@@ -242,7 +242,7 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours', 'extra_points', 'language', 'structural_unit']
+        fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours', 'extra_points', 'language', 'structural_unit', 'bars']
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }
@@ -711,7 +711,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
                   'bibliographic_reference', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd',
                   'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors', 'language',
                   'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
-                  'practice_hours', 'lab_hours', 'srs_hours']
+                  'practice_hours', 'lab_hours', 'srs_hours', 'bars']
 
     def create(self, validated_data):
         """

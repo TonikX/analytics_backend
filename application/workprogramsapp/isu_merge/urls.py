@@ -3,13 +3,13 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 
-from .views import FileUploadAPIView
+from .views import FileUploadAPIView, FileUploadOldVersionAPIView
 
 
 
 urlpatterns = [
 
     # --Общая характеристика
-    path('api/isu_v1/upload/csv/', FileUploadAPIView.as_view()),
+    path('api/isu_v1/upload/csv/', FileUploadOldVersionAPIView.as_view()),
 
 ]

@@ -114,6 +114,7 @@ class WorkProgram(CloneMixin, models.Model):
                                         verbose_name='Структурное подразделени',
                                         related_name='workprogram_in_structural_unit', blank=True, null=True)
     # language = models.CharField(choices=languages_for_wp, max_length=100, verbose_name='Язык', blank=True, null=True)
+    bars =  models.BooleanField(default = False, verbose_name="Нужно отослать дисциплину в БАРС")
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
