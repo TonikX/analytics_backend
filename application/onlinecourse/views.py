@@ -3,6 +3,7 @@ from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Institution, Platform, OnlineCourse
 from workprogramsapp.models import FieldOfStudy, CourseCredit, CourseFieldOfStudy
@@ -33,6 +34,7 @@ class OnlineCourseViewSet(viewsets.ModelViewSet):
     """Контроллер для модели Онлайн курс"""
     queryset = OnlineCourse.objects.all()
     serializer_class = OnlineCourseSerializer
+    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['title', 'platform__title', 'institution__title',
                      'course_field_of_study__field_of_study__number', 'course_field_of_study__field_of_study__title']
