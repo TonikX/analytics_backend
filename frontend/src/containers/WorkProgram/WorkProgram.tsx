@@ -256,7 +256,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                             <Typography>Дисциплина реализуется в БАРС 2.0</Typography>
                             <Switch
                                 checked={get(workProgram, [WorkProgramGeneralFields.BARS], false)}
-                                onChange={!(canSendToArchive || canSendToExpertise)  ? () => {} : this.handleBars}
+                                onChange={(canSendToArchive || canSendToExpertise)  ? this.handleBars : () => {}}
                                 disabled={fetchingBars}
                             />
                         </div>
