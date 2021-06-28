@@ -41,40 +41,6 @@ import styles from './WorkProgram.styles';
 import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 import { WorkProgramGeneralFields } from './enum';
 
-
-// const CustomSwitch = withStyles({
-//     switchBase: {
-//     //   color: "yellow",
-//     //   '&$checked': {
-//     //     color: "blue",
-//     //   },
-//     //   '&$checked + $track': {
-//     //     backgroundColor: "green",
-//     //   },
-//     },
-//     checked: {},
-//     track: {},
-//     disabled: {
-//         // color: "#fafafa",
-        
-//         '&$checked': {
-//           color: "#ec1946 !important",
-//           opacity: "0.6 !important"
-//         },
-//         '&$track': {
-//             cursor: "pointer !important",
-//              backgroundColor: '#000 !important',
-//             opacity: "0.25 !important"
-//         },
-//         '&$checked + $track': {
-//             cursor: "pointer !important",
-//            // opacity: "1 !important",
-//             backgroundColor: "#ec1946",
-//             opacity: "0.3 !important"
-//         },
-//     }
-//   })(Switch);
-
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
         activeStep: 0,
