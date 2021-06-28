@@ -29,6 +29,7 @@ import Prerequisites from "./Prerequisites";
 import Results from "./Results";
 import PlansAndDirections from "./PlansAndDirections";
 import Comments from "./Comments";
+import Competences from "./Competences";
 
 import {FavoriteType} from "../Profile/Folders/enum";
 import {WorkProgramProps} from './types';
@@ -154,6 +155,14 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                     </Typography>
 
                     <PlansAndDirections />
+                </div>;
+            case 9:
+                return <div className={classes.subItem}>
+                    <Typography className={classes.subTitle}>
+                        Компетенции
+                    </Typography>
+
+                    <Competences />
                 </div>;
         }
     }

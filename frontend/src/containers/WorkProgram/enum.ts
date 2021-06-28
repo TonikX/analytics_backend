@@ -11,6 +11,7 @@ export enum fields {
     WORK_PROGRAM_EVALUATION_TOOLS = 'WORK_PROGRAM_EVALUATION_TOOLS',
     WORK_PROGRAM_INTERMEDIATE_CERTIFICATION = 'certification_evaluation_tools',
     WORK_PROGRAM_ALL_HOURS = 'hours',
+    WORK_PROGRAM_COMPETENCES = 'competences',
 
     DIALOGS = 'DIALOGS',
     CREATE_NEW_TOPIC_DIALOG = 'CREATE_NEW_TOPIC_DIALOG',
@@ -187,6 +188,7 @@ export enum StepsEnum {
     INTERMEDIATE_CERTIFICATION = 'CO',
     RESULTS = 'RE',
     PLANS = 'PL',
+    COMPETENCES = 'CM',
 }
 
 export enum CommentFields {
