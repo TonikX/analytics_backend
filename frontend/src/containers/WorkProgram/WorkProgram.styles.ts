@@ -85,5 +85,19 @@ export default (theme: Theme) => createStyles({
     headerButtons: {
         marginLeft: 'auto',
         display: "flex",
-    }
+    },
+    // barsDisabled: {
+    //     opacity: 1,
+    //     color: "#fafafa",
+    //     '&$checked': {
+    //       color: "#ec1946 !important",
+    //     },
+    //     '&$track': {
+    //          background: '#000',
+    //         opacity: 0.38
+    //     },
+    //     '&$checked + $track': {
+    //         backgroundColor: "#ec1946",
+    //     },
+    // }
 });
