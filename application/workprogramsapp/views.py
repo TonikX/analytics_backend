@@ -34,7 +34,7 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
     DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer
-from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, WorkProgramInFieldOfStudySerializerForCb
+from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, WorkProgramInFieldOfStudySerializerForCb, WorkProgramInFieldOfStudyForCompeteceListSerializer
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer,  ZunForManyCreateSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import BibliographicReferenceSerializer, \
@@ -128,8 +128,9 @@ class IndicatorDetailsView(generics.RetrieveAPIView):
 
 class ZunManyViewSet(viewsets.ModelViewSet):
     model = Zun
+    queryset = Zun.objects.all()
     serializer_class = ZunForManyCreateSerializer
-    http_method_names = ['post', 'delete']
+    http_method_names = ['post', 'delete', 'patch']
 
     def create(self, request, *args, **kwargs):
         """
@@ -559,7 +560,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         competences = Competence.objects.filter(indicator_in_competencse__zun__wp_in_fs__work_program__id = self.kwargs['pk']).distinct()
         competences_dict = []
         for competence in competences:
-            zuns = Zun.objects.filter(wp_in_fs__work_program__id = self.kwargs['pk'])
+            zuns = Zun.objects.filter(wp_in_fs__work_program__id = self.kwargs['pk'], indicator_in_zun__competence__id = competence.id)
             zuns_array = []
             for zun in zuns:
                 try:
@@ -1046,6 +1047,29 @@ class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
                 implementation_academic_plan_in_field_of_study__academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__id
                 =self.kwargs['workprogram_id']).distinct()
             serializer = FieldOfStudySerializer(queryset, many=True)
+            return Response(serializer.data)
+        except:
+            return Response(status=400)
+
+
+class WorkProgramInFieldOfStudyForWorkProgramList(generics.ListAPIView):
+    serializer_class = WorkProgramInFieldOfStudyForCompeteceListSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def list(self, request, **kwargs):
+        """
+        Вывод учебных планов для одной рабочей программы по id
+        """
+        queryset = WorkProgramInFieldOfStudy.objects.filter(
+            work_program__id
+            = self.kwargs['workprogram_id']).distinct()
+        serializer = WorkProgramInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
+        return Response(serializer.data)
+        try:
+            queryset = WorkProgramInFieldOfStudy.objects.filter(
+                work_program__id
+                = self.kwargs['workprogram_id']).distinct()
+            serializer = WorkProgramInFieldOfStudySerializer(queryset, many=True)
             return Response(serializer.data)
         except:
             return Response(status=400)

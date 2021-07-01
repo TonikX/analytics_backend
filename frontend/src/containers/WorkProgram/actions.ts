@@ -56,9 +56,17 @@ const getComments = createAction('WORK_PROGRAM_GET_COMMENTS');
 const setComments = createAction('WORK_PROGRAM_SET_COMMENTS');
 const createComment = createAction('WORK_PROGRAM_CREATE_COMMENT');
 
+const saveZUN = createAction('WORK_PROGRAM_SAVE_ZUN');
+const deleteZUN = createAction('WORK_PROGRAM_DELETE_ZUN');
+const updateZUN = createAction('WORK_PROGRAM_DELETE_ZUN');
+
 const pageDown = createAction('WORK_PROGRAM_PAGE_DOWN');
 
 const actions: WorkProgramActions = {
+    saveZUN,
+    deleteZUN,
+    updateZUN,
+
     pageDown,
 
     addTopicMaterial,

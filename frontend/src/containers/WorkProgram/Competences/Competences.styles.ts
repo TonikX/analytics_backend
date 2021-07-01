@@ -18,5 +18,15 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     '&:hover': {
       color: theme.palette.primary.main,
     }
-  }
+  },
+  addZUNButton: {
+    marginTop: '10px',
+    marginLeft: 'auto'
+  },
+  subTitle: {
+    marginBottom: '10px',
+    fontSize: '20px',
+    display: 'flex',
+    alignItems: 'center'
+  },
 }))

@@ -294,6 +294,36 @@ class WorkProgramService extends AnalyticsService{
             comment_text: comment,
         });
     }
+
+    saveZUN({indicator, plans, results}: any){
+        return this.post(`/api/zun/many_create/`,{
+            wpa_in_fss: plans,
+            zun: {
+                indicator_in_zun: indicator,
+                items: results
+            }
+        });
+    }
+
+    deleteZUN({indicator, plans, results}: any){
+        return this.post(`/api/zun/many_create/`,{
+            wpa_in_fss: plans,
+            zun: {
+                indicator_in_zun: indicator,
+                items: results
+            }
+        });
+    }
+
+    updateZUN({indicator, plans, results}: any){
+        return this.post(`/api/zun/many_create/`,{
+            wpa_in_fss: plans,
+            zun: {
+                indicator_in_zun: indicator,
+                items: results
+            }
+        });
+    }
 }
 
 export default WorkProgramService;

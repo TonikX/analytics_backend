@@ -13,5 +13,18 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   title: {
     padding: 0,
     marginBottom: '30px'
+  },
+  chipsList: {
+    display: 'flex',
+    marginTop: '10px',
+    marginBottom: '20px',
+    flexWrap: 'wrap'
+  },
+  chip: {
+    marginRight: '10px',
+    marginBottom: '10px',
+    '& span': {
+      whiteSpace: 'initial !important'
+    }
   }
 }))
