@@ -154,16 +154,40 @@ def SendCheckpointsForAcceptedWP(request):
     Параметры:
     year : Поле вида 'YYYY/YYYY', указывает учебный год в который надо отправить РПД [str]
     send_semester : 0 - семетр осенний, 1 - семестр весенний [int]
+    one_wp: необязательное поле, указывается id одной РПД для отправки в БАРС
     """
     year = request.data.get('year')
     send_semester = request.data.get('send_semester')
-
+    one_wp = request.data.get('one_wp')
     setup_bars = (year, send_semester)  # Устанавливает корректную дату и семестр в барсе (аргумент для БАРС-функций)
-    needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC', bars=True).distinct()
+    if not one_wp:
+        needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC',
+                                               zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__qualification="bachelor").distinct()  # expertise_with_rpd__expertise_status__contains='AC',
+    else:
+        needed_wp = WorkProgram.objects.filter(pk=one_wp)
     all_sends = []  # Список всего того что отправили в барс, нужен для респонса
 
-    count_relative = -1  # Счетчик относительных семестров (-1 из-за цикла по семестрам с шагом 2)
     for work_program in needed_wp:
+        # Счетчик относительных семестров (-1 из-за цикла по семестрам с шагом 2)
+        relative_bool = True
+        count_relative = 1
+
+        evaluation_tools = EvaluationTool.objects.filter(evaluation_tools__in=DisciplineSection.objects.filter(
+            work_program__id=work_program.id))
+
+        # Проверка для булевой переменной, идет ли дисциплина в нескольких семестрах
+        min_sem = 12
+        max_sem = 1
+        for eva in evaluation_tools:
+            if eva.semester == None:
+                break
+            if eva.semester < min_sem:
+                min_sem = eva.semester
+            if eva.semester > max_sem:
+                max_sem = eva.semester
+        if max_sem != min_sem:
+            relative_bool = False
+
         # Блок отвечающий за поиск оценочных средств только в том типе семестра, который указан при отправке
         for now_semester in range(send_semester, 12, 2):  # Цикл по семестрам, с шагом 2 (все весенние и все осенние
             imp_list = []  # Список всех учебных планов для этого семестра
@@ -184,10 +208,9 @@ def SendCheckpointsForAcceptedWP(request):
             # Получаем все УП для данной информации о РПД (напоминание, она связывается с таблицей впинченджблок)
             implementation_of_academic_plan = ImplementationAcademicPlan.objects.filter(
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=work_program,
-                year=datetime.now().year - now_semester % 2,  # Чтобы Оценочные средства быль актуальны году
+                year=datetime.now().year - now_semester // 2,  # Чтобы Оценочные средства быль актуальны году
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
-            if implementation_of_academic_plan:
-                count_relative+=2
+
             for imp in implementation_of_academic_plan:
                 # создаем список направлений + уп с айдишниками ИСУ для БАРСа
                 field_of_studies = FieldOfStudy.objects.get(
@@ -212,6 +235,9 @@ def SendCheckpointsForAcceptedWP(request):
                                                       request_status=request_status_code)
                 all_sends.append(
                     {"status": request_status_code, "request": request_text, "response": request_response})
+                # Если есть еще семестры, то добавляем плюсик к счетчику относительного семестра
+                if implementation_of_academic_plan and not relative_bool:
+                    count_relative += 2
     return Response(all_sends)
 
 

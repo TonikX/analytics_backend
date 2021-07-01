@@ -171,8 +171,8 @@ class Competences extends React.Component<CompetenceProps> {
                         <AddIcon/>
                     </Fab>
                 </div>
-
-                <CourseCreateModal />
+				
+				<CourseCreateModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

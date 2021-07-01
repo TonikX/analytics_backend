@@ -524,7 +524,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 newdata.update({"user_expertise_id": ue.id})
             else:
                 newdata.update({"can_comment": False})
-            if ue.stuff_status == "AU" or ue.user_expertise_status == "AP" or ue.user_expertise_status == "RE":
+            if ue.stuff_status == "AU" or ue.stuff_status == "ED" or ue.stuff_status == "SE" or \
+                    ue.user_expertise_status == "AP" or ue.user_expertise_status == "RE":
                 newdata.update({"can_approve": False})
                 if ue.user_expertise_status == "AP":
                     newdata.update({"your_approve_status": "AP"})
