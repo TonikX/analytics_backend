@@ -100,21 +100,21 @@ class WorkProgram(CloneMixin, models.Model):
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors", verbose_name="Редакторы РПД", blank=True, null=True)
     language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
                                 blank=True, null=True)
-    have_course_project=models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД курсовой проект")
-    have_diff_pass=models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД дифф. зачет")
+    have_course_project = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД курсовой проект")
+    have_diff_pass = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД дифф. зачет")
     have_pass = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД зачет")
     have_exam = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД экзамен")
-    lecture_hours = models.CharField(max_length=1024, null=True,blank=True, verbose_name="Часы лекций")
-    practice_hours = models.CharField(max_length=1024, null=True,blank=True, verbose_name="Часы Практик")
-    lab_hours = models.CharField(max_length=1024, null=True,blank=True, verbose_name="Часы лабораторных работ")
-    srs_hours = models.CharField(max_length=1024, null=True,blank=True, verbose_name="Часы СРС")
+    lecture_hours = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы лекций")
+    practice_hours = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы Практик")
+    lab_hours = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы лабораторных работ")
+    srs_hours = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы СРС")
     old_discipline_code = models.CharField(max_length=1024, blank=True, null=True)
     wp_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID РПД в ИСУ")
     structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL,
                                         verbose_name='Структурное подразделени',
                                         related_name='workprogram_in_structural_unit', blank=True, null=True)
     # language = models.CharField(choices=languages_for_wp, max_length=100, verbose_name='Язык', blank=True, null=True)
-    bars =  models.BooleanField(default = False, verbose_name="Нужно отослать дисциплину в БАРС")
+    bars = models.BooleanField(default=False, verbose_name="Нужно отослать дисциплину в БАРС")
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
