@@ -559,7 +559,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         competences = Competence.objects.filter(indicator_in_competencse__zun__wp_in_fs__work_program__id = self.kwargs['pk']).distinct()
         competences_dict = []
         for competence in competences:
-            zuns = Zun.objects.filter(wp_in_fs__work_program__id = self.kwargs['pk'])
+            zuns = Zun.objects.filter(wp_in_fs__work_program__id = self.kwargs['pk'], indicator_in_zun__competence__id = competence.id)
             zuns_array = []
             for zun in zuns:
                 try:
