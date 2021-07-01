@@ -50,10 +50,15 @@ export const isOpenDownloadDialog = (state: rootState) => get(getDownloadDialog(
 export const getDownloadDialogData = (state: rootState) => get(getDownloadDialog(state), fields.DIALOG_DATA, {});
 export const getDirectionsDependedOnWorkProgram = (state: rootState): Array<any> => get(getStateData(state), fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM, []);
 
+const titlePath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.title'
+const yearPath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.year'
+const titleDirectionPath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.field_of_study.0.title'
+const numberDirectionPath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.field_of_study.0.number'
+
 export const getDirectionsDependedOnWorkProgramForSelector = (state: rootState): SelectorListType =>
   getDirectionsDependedOnWorkProgram(state).map((plan: EducationalPlanListType) => ({
     value: plan[EducationalPlanFields.ID],
-    label: `${get(plan, [EducationalPlanFields.NUMBER])} ${get(plan, [EducationalPlanFields.TITLE])}`,
+    label: `${get(plan, titlePath, '')} ${get(plan, yearPath, '')}: ${get(plan, titleDirectionPath, '')} ${get(plan, numberDirectionPath, '')}`,
   }))
 
 export const getAllCount = (state: rootState) => get(getStateData(state), fields.ALL_COUNT, 1);

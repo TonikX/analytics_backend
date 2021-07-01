@@ -14,7 +14,7 @@ export default ({onChange, value, isReset, label, className, disabled, valueLabe
   const list = useSelector((state: rootState) => getDirectionsDependedOnWorkProgramForSelector(state))
 
   useEffect(() => {
-    dispatch(actions.getDirectionsDependedOnWorkProgram(workProgramId))
+    dispatch(actions.getCompetenceDirectionsDependedOnWorkProgram(workProgramId))
   }, [])
 
   return (

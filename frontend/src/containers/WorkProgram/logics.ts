@@ -21,6 +21,7 @@ import evaluationToolsLogics from './logics/evaluationTools.logics';
 import intermediateCertificationLogics from './logics/intermediateCertification.logics';
 import resultsLogics from './logics/results.logics';
 import commentsLogics from './logics/comments.logics';
+import zunsLogics from './logics/zuns.logics';
 
 import {appRouter} from "../../service/router-service";
 
@@ -231,6 +232,7 @@ export default [
     ...intermediateCertificationLogics,
     ...resultsLogics,
     ...commentsLogics,
+    ...zunsLogics,
     getWorkProgram,
     saveWorkProgram,
     getWorkProgramEvaluationTools,
@@ -238,5 +240,4 @@ export default [
     sendToExpertise,
     returnWorkProgramToWork,
     approveWorkProgram,
-    saveZUN,
 ];

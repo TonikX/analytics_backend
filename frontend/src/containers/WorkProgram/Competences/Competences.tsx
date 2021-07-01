@@ -7,17 +7,17 @@ import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableBody from '@material-ui/core/TableBody'
-import AddIcon from '@material-ui/icons/Add'
+import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import AddIcon from '@material-ui/icons/Add'
 import DeleteIcon from '@material-ui/icons/DeleteOutlined'
-import actions from '../actions'
-
 import { rootState } from '../../../store/reducers'
+
+import actions from '../actions'
 import {getWorkProgramCompetences, getWorkProgramId} from '../getters'
 
 import IndicatorsDialog from './IndicatorDialog'
 import { useStyles } from './Competences.styles'
-import Typography from "@material-ui/core/Typography";
 
 export default () => {
   const dispatch = useDispatch()
@@ -38,6 +38,7 @@ export default () => {
   }
 
   useEffect(() => {
+    dispatch(actions.getResults(workProgramId))
     dispatch(actions.getResults(workProgramId))
   }, [])
 
@@ -143,7 +144,7 @@ export default () => {
 
       <IndicatorsDialog
         isOpen={isOpenIndicatorDialog}
-        handleClose={() => setIsOpenIndicatorDialog(false)}
+        handleClose={handleCloseDialog}
         defaultCompetence={dialogCompetence}
         workProgramId={workProgramId}
       />
