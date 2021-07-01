@@ -770,3 +770,21 @@ class FieldOfStudyListSerializer(serializers.ModelSerializer):
     class Meta:
         model = FieldOfStudy
         fields = ['id', 'title', 'number', 'qualification', 'educational_profile', 'faculty', 'implementation_academic_plan_in_field_of_study']
+
+
+class WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer(serializers.ModelSerializer):
+    discipline_block_module = DisciplineBlockModuleForWPinFSSerializer(read_only=True)
+    #zuns_for_wp = WorkProgramInFieldOfStudySerializerForCb(many=True, read_only=True)
+
+    class Meta:
+        model = WorkProgramChangeInDisciplineBlockModule
+        fields = ['id', 'code', 'credit_units', 'change_type', 'discipline_block_module']
+
+
+class WorkProgramInFieldOfStudyForCompeteceListSerializer(serializers.ModelSerializer):
+    """Сериализатор Зунов"""
+    work_program_change_in_discipline_block_module =  WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer()
+
+    class Meta:
+        model = WorkProgramInFieldOfStudy
+        fields = ['id', 'work_program_change_in_discipline_block_module', 'zun_in_wp']
