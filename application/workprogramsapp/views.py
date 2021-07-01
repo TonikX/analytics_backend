@@ -128,8 +128,9 @@ class IndicatorDetailsView(generics.RetrieveAPIView):
 
 class ZunManyViewSet(viewsets.ModelViewSet):
     model = Zun
+    queryset = Zun.objects.all()
     serializer_class = ZunForManyCreateSerializer
-    http_method_names = ['post', 'delete']
+    http_method_names = ['post', 'delete', 'patch']
 
     def create(self, request, *args, **kwargs):
         """

@@ -96,6 +96,7 @@ export type WorkProgramGeneralType = {
     [WorkProgramGeneralFields.AUTHORS]: string;
     [WorkProgramGeneralFields.RATING]: boolean;
     [WorkProgramGeneralFields.ZUN]: Array<ZunType>;
+    [WorkProgramGeneralFields.BARS]: boolean;
 };
 
 export type ZunType = {
@@ -128,6 +129,7 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     folders: Array<FolderType>
     workProgram: WorkProgramGeneralType;
     validateErrors: Array<string>;
+    fetchingBars: boolean;
 }
 
 

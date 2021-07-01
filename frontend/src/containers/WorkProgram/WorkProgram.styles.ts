@@ -83,6 +83,7 @@ export default (theme: Theme) => createStyles({
         transition: 'transform 300ms'
     },
     headerButtons: {
-        marginLeft: 'auto'
-    }
+        marginLeft: 'auto',
+        display: "flex",
+    },
 });
