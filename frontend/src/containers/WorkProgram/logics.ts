@@ -199,6 +199,29 @@ const approveWorkProgram = createLogic({
     }
 });
 
+const saveZUN = createLogic({
+    type: workProgramActions.saveZUN.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
+
+        service.saveZUN(action.payload)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram());
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SAVE_ZUN}));
+                return done();
+            });
+    }
+});
+
 export default [
     ...sectionLogics,
     ...topicLogics,
@@ -215,4 +238,5 @@ export default [
     sendToExpertise,
     returnWorkProgramToWork,
     approveWorkProgram,
+    saveZUN,
 ];

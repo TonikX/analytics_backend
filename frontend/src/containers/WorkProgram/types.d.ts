@@ -18,6 +18,10 @@ import {FolderActions, FolderType} from "../Profile/Folders/types";
 export interface WorkProgramActions {
     pageDown: any;
 
+    saveZUN: any;
+    deleteZUN: any;
+    updateZUN: any;
+
     sendWorkProgramToArchive: any;
     sendWorkProgramToExpertise: any;
     returnWorkProgramToWork: any;

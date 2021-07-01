@@ -48,7 +48,13 @@ export const getModuleAddDialogData = (state: rootState) => get(getAddModuleDial
 export const getDownloadDialog = (state: rootState) => get(getStateData(state), fields.DOWNLOAD_DIALOG, {});
 export const isOpenDownloadDialog = (state: rootState) => get(getDownloadDialog(state), fields.IS_OPEN_DIALOG, false);
 export const getDownloadDialogData = (state: rootState) => get(getDownloadDialog(state), fields.DIALOG_DATA, {});
-export const getDirectionsDependedOnWorkProgram = (state: rootState) => get(getStateData(state), fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM, []);
+export const getDirectionsDependedOnWorkProgram = (state: rootState): Array<any> => get(getStateData(state), fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM, []);
+
+export const getDirectionsDependedOnWorkProgramForSelector = (state: rootState): SelectorListType =>
+  getDirectionsDependedOnWorkProgram(state).map((plan: EducationalPlanListType) => ({
+    value: plan[EducationalPlanFields.ID],
+    label: `${get(plan, [EducationalPlanFields.NUMBER])} ${get(plan, [EducationalPlanFields.TITLE])}`,
+  }))
 
 export const getAllCount = (state: rootState) => get(getStateData(state), fields.ALL_COUNT, 1);
 export const getCurrentPage = (state: rootState) => get(getStateData(state), fields.CURRENT_PAGE, 1);

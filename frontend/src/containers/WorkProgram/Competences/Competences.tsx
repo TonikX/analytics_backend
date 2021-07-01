@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, {useEffect, useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import get from 'lodash/get'
 
 import Table from '@material-ui/core/Table'
@@ -8,23 +8,53 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableBody from '@material-ui/core/TableBody'
 import AddIcon from '@material-ui/icons/Add'
+import Button from '@material-ui/core/Button'
+import DeleteIcon from '@material-ui/icons/DeleteOutlined'
+import actions from '../actions'
 
 import { rootState } from '../../../store/reducers'
-import { getWorkProgramCompetences } from '../getters'
+import {getWorkProgramCompetences, getWorkProgramId} from '../getters'
 
 import IndicatorsDialog from './IndicatorDialog'
 import { useStyles } from './Competences.styles'
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import Typography from "@material-ui/core/Typography";
 
 export default () => {
-  const [isOpenCompetencesDialog, setIsOpenCompetencesDialog] = useState(false)
+  const dispatch = useDispatch()
   const [isOpenIndicatorDialog, setIsOpenIndicatorDialog] = useState(false)
+  const [dialogCompetence, setDialogCompetence] = useState<{value: number; label: string} | undefined>(undefined)
 
   const competences = useSelector((state: rootState) => getWorkProgramCompetences(state))
+  const workProgramId = useSelector((state: rootState) => getWorkProgramId(state))
   const classes = useStyles()
 
+  const handleCloseDialog = () => {
+    setDialogCompetence(undefined)
+    setIsOpenIndicatorDialog(false)
+  }
+
+  const handleCreateZUN = () => {
+    setIsOpenIndicatorDialog(true)
+  }
+
+  useEffect(() => {
+    dispatch(actions.getResults(workProgramId))
+  }, [])
+
   return (
-    <div>
+    <>
+      <Typography className={classes.subTitle}>
+        Компетенции
+        <Button
+          onClick={handleCreateZUN}
+          variant="outlined"
+          className={classes.addZUNButton}
+          color="secondary"
+        >
+          Добавить ЗУН
+        </Button>
+      </Typography>
+
       <Table stickyHeader size='small'>
         <TableHead>
           <TableRow>
@@ -47,7 +77,13 @@ export default () => {
             const zuns = get(competence, 'zuns', [])
             const addIndicatorButton = (
               <div className={classes.smallButton}
-                   onClick={() => setIsOpenIndicatorDialog(true)}
+                   onClick={() => {
+                     setIsOpenIndicatorDialog(true)
+                     setDialogCompetence({
+                       label: competence.name,
+                       value: competence.id,
+                     })
+                   }}
               >
                 <AddIcon/> Добавить индикатор
               </div>
@@ -108,7 +144,9 @@ export default () => {
       <IndicatorsDialog
         isOpen={isOpenIndicatorDialog}
         handleClose={() => setIsOpenIndicatorDialog(false)}
+        defaultCompetence={dialogCompetence}
+        workProgramId={workProgramId}
       />
-    </div>
+    </>
   )
 }

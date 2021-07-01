@@ -158,10 +158,6 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                 </div>;
             case 9:
                 return <div className={classes.subItem}>
-                    <Typography className={classes.subTitle}>
-                        Компетенции
-                    </Typography>
-
                     <Competences />
                 </div>;
         }
