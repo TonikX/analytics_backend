@@ -3,7 +3,6 @@ import {createStyles, Theme, makeStyles} from "@material-ui/core";
 export const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     background: '#07152b',
-    //background: '#1f1f24',
     padding: '86px 0px 0px',
     color: '#fff',
   },
@@ -103,11 +102,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
   },
   screenshot: {
+    display: 'block',
     borderRadius: '10px',
     maxWidth: '1410px',
+    width: "90%",
     margin: '0 auto',
-    backgroundSize: 'cover',
-    height: '690px'
+    pointerEvents: 'none',
   },
   partnersList: {
     marginTop: '50px',
@@ -120,6 +120,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   section: {
     margin: '100px auto',
     maxWidth: '1204px',
+    padding: '0 15px'
   },
   processesListItem: {
     display: 'flex',
@@ -127,7 +128,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     marginBottom: '50px'
   },
   processesListContent: {
-    marginRight: '50px'
+    marginRight: '50px',
+    [theme.breakpoints.down('md')]: {
+      marginRight: '10px',
+    }
   },
   processesListContentTitle: {
     fontSize: '30px',
@@ -138,25 +142,22 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     lineHeight: '30px'
   },
   videoWrapper: {
-    position: 'relative',
-    paddingBottom: '56.25%',
-    paddingTop: '25px',
-    height: '0',
-    '& iframe': {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
+    width: '100%',
+    height: '503px',
+    [theme.breakpoints.down('md')]: {
+      height: '353px',
     }
   },
   processesListContentImage: {
-    width: '850px',
-    height: '500px',
+    maxWidth: '850px',
+    width: '70%',
     borderRadius: '10px',
     overflow: 'hidden',
     flex: 'none',
-    backgroundSize: 'cover',
+
+    [theme.breakpoints.down('md')]: {
+      width: '55%',
+    }
   },
   sectionTitle: {
     fontWeight: 'bold',
@@ -230,13 +231,13 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     padding: '20px 0px',
   },
   footerWrap: {
-    width: '100%',
+    width: '95%',
     maxWidth: '1200px',
     margin: '0 auto',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   footerText: {
     color: '#dfdfdf'

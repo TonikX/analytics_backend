@@ -83,8 +83,7 @@ export default () => {
           </Button>
         </div>
       </div>
-
-      <div className={classes.screenshot} style={{backgroundImage: `url(${screenshotImage}`}} />
+      <img className={classes.screenshot} src={screenshotImage} alt="Скриншот главного экрана" />
 
       <section className={classes.section} id="systems">
         <Typography className={classes.sectionTitle}>Внешние системы</Typography>
@@ -110,8 +109,7 @@ export default () => {
           </div>
           <div className={classes.processesListContentImage}>
             <div className={classes.videoWrapper}>
-              <iframe width="560"
-                      height="315"
+              <iframe style={{ width: "100%", height: "100%"}}
                       src="https://www.youtube.com/embed/3lK4kItzYTk?&showinfo=0"
                       title="YouTube video player"
                       frameBorder="0"
@@ -125,8 +123,7 @@ export default () => {
         <div className={classes.processesListItem}>
           <div className={classes.processesListContentImage}  style={{marginRight: '50px'}}>
             <div className={classes.videoWrapper}>
-              <iframe width="560"
-                      height="315"
+              <iframe style={{ width: "100%", height: "100%"}}
                       src="https://www.youtube.com/embed/Elf9hFjFiK8"
                       title="YouTube video player"
                       frameBorder="0"
@@ -154,11 +151,11 @@ export default () => {
               Реализуются новые интерфейсы для работы с направлениями, учебными планами, общими характеристиками образовательных программ. Реализованы удобные интерфейсы поиска и навигации. Формат документов соответствует образовательному стандарту Университета ИТМО
             </Typography>
           </div>
-          <div className={classes.processesListContentImage} style={{backgroundImage: `url(${op}`}} />
+          <img className={classes.processesListContentImage} src={op} alt="Скриншот раздела ОП" />
         </div>
 
         <div className={classes.processesListItem}>
-          <div className={classes.processesListContentImage} style={{marginRight: '50px', backgroundImage: `url(${onlineCourse}`}} />
+          <img src={onlineCourse} className={classes.processesListContentImage} style={{ marginRight: '50px' }} />
           <div className={classes.processesListContent}>
             <Typography className={classes.processesListContentTitle}>
               Онлайн курсы
