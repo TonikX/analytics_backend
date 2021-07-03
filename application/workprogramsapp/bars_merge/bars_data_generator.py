@@ -25,7 +25,6 @@ def generate_single_checkpoint(work_program, absolute_semester, relative_semeste
                 id = el["id"]
                 if el["name"] == "Электронное тестирование (тест в ЦДО)":
                     test_list = get_tests(setup)
-                    print(test_list)
                     for test in test_list:
                         if test['name'] == eva.name:
                             test_id = test['id']
