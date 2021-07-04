@@ -9,6 +9,7 @@ EDUC_PROGRAMS = []
 BASE_URL = "https://cas.crp.rocks/backend//rest"
 BASE_HEADERS = {'content-type': 'application/json'}
 
+
 def login(setup):
     url = BASE_URL + "/login"
     body = {"login": settings.BARS["BARS_LOGIN"], "password": settings.BARS["BARS_PASSWORD"]}
@@ -16,9 +17,11 @@ def login(setup):
     r = requests.post(url, data=json.dumps(body), headers=headers)
     BASE_HEADERS['Authorization'] = r.headers['Authorization']
     body_year = {"name": "current_year", "value": setup[0]}
-    r = requests.post("https://cas.crp.rocks/backend//rest/config/personal", data=json.dumps(body_year), headers=BASE_HEADERS)
+    r = requests.post("https://cas.crp.rocks/backend//rest/config/personal", data=json.dumps(body_year),
+                      headers=BASE_HEADERS)
     body_term = {"name": "current_term", "value": setup[1]}
-    r = requests.post("https://cas.crp.rocks/backend//rest/config/personal", data=json.dumps(body_term), headers=BASE_HEADERS)
+    r = requests.post("https://cas.crp.rocks/backend//rest/config/personal", data=json.dumps(body_term),
+                      headers=BASE_HEADERS)
 
 
 def get_disciplines():
@@ -75,9 +78,33 @@ def get_educational_program_main():
     educ_programs = (list({v['id']: v for v in EDUC_PROGRAMS}.values()))
     return educ_programs
 
+
 def post_checkpoint_plan(body, setup):
     login(setup)
     url = BASE_URL + "/checkpoint_plans"
     r = requests.post(url, data=json.dumps(body), headers=BASE_HEADERS)
     return r.text, r.status_code
 
+
+def get_tests(setup):
+    """if setup[1] == 0:
+        sem = 1
+    else:
+        sem = 0
+    login((setup[0], sem))"""
+    login(setup)
+    url = BASE_URL + "/tests"
+    r = requests.get(url, headers=BASE_HEADERS)
+    return json.loads(r.text)
+
+
+def post_tests(body, setup):
+    """if setup[1] == 0:
+        sem = 1
+    else:
+        sem = 0
+    login((setup[0], sem))"""
+    login(setup)
+    url = BASE_URL + "/tests"
+    r = requests.post(url, data=json.dumps(body), headers=BASE_HEADERS)
+    return json.loads(r.text)
