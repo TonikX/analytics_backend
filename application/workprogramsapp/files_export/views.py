@@ -154,7 +154,6 @@ def render_context(context, **kwargs):
     template_context['outcomes_max_all'] = sum(items_max) + int(context['extra_points'])
     template_context['outcomes_min_all'] = sum(items_min)
     template_context['extra_points'] = context['extra_points']
-    print('extra points - - -- - ', context['extra_points'])
     return template_context, filename
 
 
