@@ -95,6 +95,7 @@ export const steps = {
     [StepsEnum.INTERMEDIATE_CERTIFICATION]: 'Оценочные средства промежуточной аттестации',
     [StepsEnum.RESULTS]: 'Результаты обучения',
     [StepsEnum.PLANS]: 'Связанные с рпд учебные планы и направления',
+    //[StepsEnum.COMPETENCES]: 'Компетенции',
 }
 
 export const years = [

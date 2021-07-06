@@ -19,6 +19,7 @@ import folderActions from "../Profile/Folders/actions";
 import {
     getValidateProgramErrors
 } from "./utils";
+import {isFetchingComponentByKey} from "../../layout/getters";
 
 const mapStateToProps = (state:rootState) => {
     return {
@@ -34,6 +35,7 @@ const mapStateToProps = (state:rootState) => {
         canComment: isCanComment(state),
         folders: getFolders(state),
         validateErrors: getValidateProgramErrors(state),
+        fetchingBars: isFetchingComponentByKey(state, WorkProgramGeneralFields.BARS),
     };
 };
 

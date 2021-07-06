@@ -1,6 +1,7 @@
 import React, {ReactText} from 'react';
 import get from 'lodash/get';
 import debounce from "lodash/debounce";
+import Scrollbars from "react-custom-scrollbars";
 
 import {AutoSizer} from 'react-virtualized';
 
@@ -79,9 +80,9 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
         }
     };
 
-    setItem = (value: ReactText) => (e: React.MouseEvent) => {
-        this.setState({searchText: this.getLabelForValue(value)});
-        this.props.changeItem(value);
+    setItem = (value: ReactText, label: string) => (e: React.MouseEvent) => {
+        this.setState({searchText: label});
+        this.props.changeItem(value, label);
     }
 
     getLabelForValue = (value: ReactText) => {
@@ -132,16 +133,18 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
                             >
                                 {({TransitionProps}: any): any => (
                                     <Fade {...TransitionProps} timeout={350}>
-                                        <Paper className={classes.menu}>
-                                            {list.map((item: SelectorItemType) =>
-                                                <MenuItem key={item.value}
-                                                          onClick={this.setItem(item.value)}
-                                                          selected={value === item.value}
-                                                          className={classes.menuItem}
-                                                >
-                                                    {item.label}
-                                                </MenuItem>
-                                            )}
+                                        <Paper className={classes.menu} style={{height: list.length * 50}}>
+                                            <Scrollbars>
+                                                {list.map((item: SelectorItemType) =>
+                                                    <MenuItem key={item.value}
+                                                              onClick={this.setItem(item.value, item.label)}
+                                                              selected={value === item.value}
+                                                              className={classes.menuItem}
+                                                    >
+                                                        {item.label}
+                                                    </MenuItem>
+                                                )}
+                                            </Scrollbars>
                                         </Paper>
                                     </Fade>
                                 )}

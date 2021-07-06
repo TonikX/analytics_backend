@@ -11,6 +11,7 @@ export enum fields {
     WORK_PROGRAM_EVALUATION_TOOLS = 'WORK_PROGRAM_EVALUATION_TOOLS',
     WORK_PROGRAM_INTERMEDIATE_CERTIFICATION = 'certification_evaluation_tools',
     WORK_PROGRAM_ALL_HOURS = 'hours',
+    WORK_PROGRAM_COMPETENCES = 'competences',
 
     DIALOGS = 'DIALOGS',
     CREATE_NEW_TOPIC_DIALOG = 'CREATE_NEW_TOPIC_DIALOG',
@@ -52,6 +53,7 @@ export enum WorkProgramGeneralFields {
     EXPERTISE_ID_2 = 'use_chat_with_id_expertise',
     EXTRA_POINTS = 'extra_points',
     EDITORS = 'editors',
+    BARS = 'bars',
 }
 
 export enum workProgramSectionFields {
@@ -86,6 +88,9 @@ export enum fetchingTypes {
     SEND_TO_ARCHIVE = 'SEND_TO_ARCHIVE',
     APPROVE_WORK_PROGRAM = 'APPROVE_WORK_PROGRAM',
     SEND_TO_WORK = 'SEND_TO_WORK',
+    SAVE_ZUN = 'SAVE_ZUN',
+    DELETE_ZUN = 'DELETE_ZUN',
+    UPDATE_ZUN = 'UPDATE_ZUN',
 
     GET_WORK_PROGRAM = 'GET_WORK_PROGRAM',
     GET_WORK_PROGRAM_EVALUATION_TOOLS = 'GET_WORK_PROGRAM_EVALUATION_TOOLS',
@@ -187,6 +192,7 @@ export enum StepsEnum {
     INTERMEDIATE_CERTIFICATION = 'CO',
     RESULTS = 'RE',
     PLANS = 'PL',
+    COMPETENCES = 'CM',
 }
 
 export enum CommentFields {

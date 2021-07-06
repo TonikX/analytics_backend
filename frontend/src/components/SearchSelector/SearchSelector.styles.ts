@@ -6,7 +6,8 @@ export default (theme: Theme) => createStyles({
     },
     menu: {
         position: "absolute",
-        width: '100%'
+        width: '100%',
+        maxHeight: '300px'
     },
     //@ts-ignore
     menuItem: {

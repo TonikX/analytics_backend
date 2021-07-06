@@ -6,6 +6,7 @@ import {SortingType} from "../../components/SortingButton/types";
 import {IndicatorType} from "../Indicators/types";
 
 export interface CompetenceActions {
+    getIndicatorsDependsCompetence: any;
     changeIndicator: any;
     createIndicator: any;
     deleteIndicator: any;

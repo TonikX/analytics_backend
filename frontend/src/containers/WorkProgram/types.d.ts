@@ -18,6 +18,10 @@ import {FolderActions, FolderType} from "../Profile/Folders/types";
 export interface WorkProgramActions {
     pageDown: any;
 
+    saveZUN: any;
+    deleteZUN: any;
+    updateZUN: any;
+
     sendWorkProgramToArchive: any;
     sendWorkProgramToExpertise: any;
     returnWorkProgramToWork: any;
@@ -92,6 +96,7 @@ export type WorkProgramGeneralType = {
     [WorkProgramGeneralFields.AUTHORS]: string;
     [WorkProgramGeneralFields.RATING]: boolean;
     [WorkProgramGeneralFields.ZUN]: Array<ZunType>;
+    [WorkProgramGeneralFields.BARS]: boolean;
 };
 
 export type ZunType = {
@@ -124,6 +129,7 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     folders: Array<FolderType>
     workProgram: WorkProgramGeneralType;
     validateErrors: Array<string>;
+    fetchingBars: boolean;
 }
 
 
