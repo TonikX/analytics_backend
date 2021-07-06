@@ -5,6 +5,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     background: '#07152b',
     padding: '86px 0px 0px',
     color: '#fff',
+
   },
   headerWrap: {
     width: '100%',
@@ -14,10 +15,26 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'flex-start',
+    }
+  },
+  menuButton: {
+    display: 'none',
+    [theme.breakpoints.down('sm')]: {
+      display: 'block'
+    }
+  },
+  drawerLink: {
+    textDecoration: 'none',
+    color: 'rgba(0, 0, 0, 0.54)'
   },
   headerLeft: {
     display: 'flex',
     alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
+    }
   },
   logo: {
     fontSize: '25px',
@@ -54,12 +71,18 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     fontSize: '50px',
     fontWeight: 'bold',
     color: '#fff',
-    marginBottom: '30px'
+    marginBottom: '30px',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '30px'
+    }
   },
   subTitle: {
     fontSize: '20px',
     color: '#fff',
-    marginBottom: '30px'
+    marginBottom: '30px',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '15px'
+    }
   },
   mainScreenButtons: {
     display: 'flex',
@@ -125,12 +148,22 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   processesListItem: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: '50px'
+    marginBottom: '50px',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    '&:nth-child(even)': {
+      //background: 'red' 
+    },
+    '&:nth-child(odd)': {
+      //background: 'yellow',
+    }
   },
   processesListContent: {
-    marginRight: '50px',
-    [theme.breakpoints.down('md')]: {
-      marginRight: '10px',
+    // marginRight: '50px',
+    width: '40%',
+    minWidth: '304px',
+    [theme.breakpoints.down(750)]: {
+      width: '100%'
     }
   },
   processesListContentTitle: {
@@ -150,13 +183,18 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   processesListContentImage: {
     maxWidth: '850px',
-    width: '70%',
+    width: '55%',
     borderRadius: '10px',
     overflow: 'hidden',
     flex: 'none',
-
+    minWidth: '420px',
     [theme.breakpoints.down('md')]: {
       width: '55%',
+    },
+    [theme.breakpoints.down(750)]: {
+      width: '100%',
+      order: 2,
+      minWidth: 'auto',
     }
   },
   sectionTitle: {
@@ -168,7 +206,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   usersList: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    flexWrap: 'wrap'
   },
   usersListItem: {
     width: '30%',
@@ -176,8 +215,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     alignItems: 'center',
     background: '#fff',
     padding: '20px',
+    margin: '10px',
     boxSizing: 'border-box',
     borderRadius: '10px',
+    minWidth: '250px',
   },
   usersListItemTitle: {
     marginLeft: '20px',
@@ -212,7 +253,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     textAlign: 'center'
   },
   teamItemRole: {
-
+    textAlign: 'center',
   },
   arrowImage: {
     width: '20px',

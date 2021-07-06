@@ -1,12 +1,22 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+
 import AppBar from '@material-ui/core/AppBar'
 import { useStyles } from './Landing.styles'
 import IconButton from '@material-ui/core/IconButton'
 import TelegramIcon from '@material-ui/icons/Telegram'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import { Link } from 'react-router-dom'
+import Drawer from '@material-ui/core/Drawer'
+import Divider from '@material-ui/core/Divider'
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import List from '@material-ui/core/List';
+
+import MenuIcon from '@material-ui/icons/Menu'
 // @ts-ignore
 import screenshotImage from './img/screen.PNG'
 // @ts-ignore
@@ -27,12 +37,21 @@ import AnchorLink from 'react-anchor-link-smooth-scroll'
 export default () => {
   const classes = useStyles();
   const [showAllTeam, setShowAllTeam] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false)
 
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.header}>
         <div className={classes.headerWrap}>
-
+        <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={() => setOpenDrawer(true)}
+            edge="start"
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
           <Typography className={classes.headerLeft}>
             <Typography className={classes.logo}> <img src={logo} width={70} /> </Typography>
             <AnchorLink offset='100' href='#systems' className={classes.link} style={{marginRight: '25px'}}>Внешние системы</AnchorLink>
@@ -66,7 +85,34 @@ export default () => {
           </Typography>
         </div>
       </AppBar>
-
+      <Drawer open={openDrawer}>
+        <IconButton onClick={() => setOpenDrawer(false)}>
+          <ChevronLeftIcon />
+        </IconButton>
+        <Divider />
+        <List>
+          <ListItem button key="{text}" onClick={() => setOpenDrawer(false)}>
+            <ListItemText>
+              <AnchorLink offset='100' href='#systems' className={classes.drawerLink}>Внешние системы</AnchorLink>
+            </ListItemText>
+          </ListItem>
+          <ListItem button key="{text}" onClick={() => setOpenDrawer(false)}>
+            <ListItemText>
+              <AnchorLink offset='100' href='#systems' className={classes.drawerLink}>Связанные процессы</AnchorLink>
+            </ListItemText>
+          </ListItem>
+          <ListItem button key="{text}" onClick={() => setOpenDrawer(false)}>
+            <ListItemText>
+              <AnchorLink offset='100' href='#systems' className={classes.drawerLink}>Категории пользователей</AnchorLink>
+            </ListItemText>
+          </ListItem>
+          <ListItem button key="{text}" onClick={() => setOpenDrawer(false)}>
+            <ListItemText>
+              <AnchorLink offset='100' href='#systems' className={classes.drawerLink}>Команда</AnchorLink>
+            </ListItemText>
+          </ListItem>
+        </List>
+      </Drawer>
       <div className={classes.mainScreen}>
         <Typography variant="h1" className={classes.h1}>Конструктор Образовательных Программ</Typography>
         <Typography className={classes.subTitle}>Удобный конструктор для быстрого создания образовательных программ, отличный инструмент <br/> для сопровождения и планирования учебного процесса<br/></Typography>
@@ -121,7 +167,7 @@ export default () => {
         </div>
 
         <div className={classes.processesListItem}>
-          <div className={classes.processesListContentImage}  style={{marginRight: '50px'}}>
+          <div className={classes.processesListContentImage}>
             <div className={classes.videoWrapper}>
               <iframe style={{ width: "100%", height: "100%"}}
                       src="https://www.youtube.com/embed/Elf9hFjFiK8"
@@ -155,7 +201,7 @@ export default () => {
         </div>
 
         <div className={classes.processesListItem}>
-          <img src={onlineCourse} className={classes.processesListContentImage} style={{ marginRight: '50px' }} />
+          <img src={onlineCourse} className={classes.processesListContentImage} />
           <div className={classes.processesListContent}>
             <Typography className={classes.processesListContentTitle}>
               Онлайн курсы
