@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import cs from 'classnames'
 
 import AppBar from '@material-ui/core/AppBar'
 import { useStyles } from './Landing.styles'
@@ -15,6 +16,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 
 import MenuIcon from '@material-ui/icons/Menu'
 // @ts-ignore
@@ -43,7 +46,7 @@ export default () => {
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.header}>
         <div className={classes.headerWrap}>
-        <IconButton
+          <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={() => setOpenDrawer(true)}
@@ -64,65 +67,95 @@ export default () => {
             <Tooltip title="Подписаться на телеграм канал">
               <a href="https://t.me/op_itmo_ru"
                  target="_blank"
-                 style={{marginRight: '10px'}}
+                 className={classes.telegramIcon}
               >
-                <IconButton aria-haspopup="true" className={classes.telegramIcon}>
-                  <TelegramIcon />
+                <IconButton aria-haspopup="true" style={{ color: '#fff'}}>
+                  <TelegramIcon  />
                 </IconButton>
               </a>
             </Tooltip>
             <Link to={appRouter.getSignInRoute()}
-                  className={classes.link}
+                  className={cs([classes.link, classes.signInLink])}
                   style={{marginRight: '30px'}}
             >
               Войти
             </Link>
-            <Button className={classes.mainButton}>
+            <Link className={classes.signUpIconBtn} to={appRouter.getSignInRoute()}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={() => setOpenDrawer(true)}
+                edge="start"
+                aria-haspopup="true"
+              >
+                <AssignmentIndIcon />
+              </IconButton>
+          </Link>
+            <Button className={classes.headerSignUpBtn}>
               <Link to={appRouter.getSignUpRoute()}>
                 Зарегистрироваться
               </Link>
             </Button>
+          <Link className={classes.signUpIconBtn} to={appRouter.getSignUpRoute()}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={() => setOpenDrawer(true)}
+              edge="start"
+              aria-haspopup="true"
+            >
+                <PersonAddIcon />
+            </IconButton>
+          </Link>
           </Typography>
         </div>
       </AppBar>
       <Drawer open={openDrawer}>
-        <IconButton onClick={() => setOpenDrawer(false)}>
+        <IconButton style={{ width: '48px', marginLeft: 'auto' }} onClick={() => setOpenDrawer(false)}>
           <ChevronLeftIcon />
         </IconButton>
         <Divider />
         <List>
-          <ListItem button key="{text}" onClick={() => setOpenDrawer(false)}>
-            <ListItemText>
-              <AnchorLink offset='100' href='#systems' className={classes.drawerLink}>Внешние системы</AnchorLink>
-            </ListItemText>
-          </ListItem>
-          <ListItem button key="{text}" onClick={() => setOpenDrawer(false)}>
-            <ListItemText>
-              <AnchorLink offset='100' href='#systems' className={classes.drawerLink}>Связанные процессы</AnchorLink>
-            </ListItemText>
-          </ListItem>
-          <ListItem button key="{text}" onClick={() => setOpenDrawer(false)}>
-            <ListItemText>
-              <AnchorLink offset='100' href='#systems' className={classes.drawerLink}>Категории пользователей</AnchorLink>
-            </ListItemText>
-          </ListItem>
-          <ListItem button key="{text}" onClick={() => setOpenDrawer(false)}>
-            <ListItemText>
-              <AnchorLink offset='100' href='#systems' className={classes.drawerLink}>Команда</AnchorLink>
-            </ListItemText>
-          </ListItem>
+          <AnchorLink offset='100' href='#systems' className={classes.drawerLink}>
+            <ListItem button key="systems" onClick={() => setOpenDrawer(false)}>
+              <ListItemText>
+                Внешние системы
+              </ListItemText>
+            </ListItem>
+          </AnchorLink>
+          <AnchorLink offset='100' href='#processes' className={classes.drawerLink}>
+            <ListItem button key="processes" onClick={() => setOpenDrawer(false)}>
+              <ListItemText>
+                Связанные процессы
+              </ListItemText>
+            </ListItem>
+          </AnchorLink>
+          <AnchorLink offset='100' href='#users' className={classes.drawerLink}>
+            <ListItem button key="users" onClick={() => setOpenDrawer(false)}>
+              <ListItemText>
+                Категории пользователей
+              </ListItemText>
+            </ListItem>
+          </AnchorLink>
+          <AnchorLink offset='100' href='#developers' className={classes.drawerLink}>
+            <ListItem button key="developers" onClick={() => setOpenDrawer(false)}>
+                <ListItemText>
+                  Команда
+                </ListItemText>
+            </ListItem>
+          </AnchorLink>
         </List>
       </Drawer>
       <div className={classes.mainScreen}>
         <Typography variant="h1" className={classes.h1}>Конструктор Образовательных Программ</Typography>
         <Typography className={classes.subTitle}>Удобный конструктор для быстрого создания образовательных программ, отличный инструмент <br/> для сопровождения и планирования учебного процесса<br/></Typography>
         <div className={classes.mainScreenButtons}>
-          <Button className={classes.mainButton}>
+          <Button className={classes.mainButton} style={{ margin: '5px' }}>
             <Link to={appRouter.getSignInRoute()}>
               Войти в систему
             </Link>
           </Button>
-          <Button className={classes.secondaryButton}>
+          <Button className={classes.secondaryButton} style={{ margin: '5px' }}>
             <Link to={appRouter.getSignUpRoute()}>
               Зарегистрироваться
             </Link>

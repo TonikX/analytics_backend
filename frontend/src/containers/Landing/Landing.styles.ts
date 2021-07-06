@@ -27,7 +27,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   drawerLink: {
     textDecoration: 'none',
-    color: 'rgba(0, 0, 0, 0.54)'
+    color: 'rgba(0, 0, 0, 0.54)',
+    border: 'none',
+    outline: 'none',
+    '-webkit-tap-highlight-color': 'transparent',
   },
   headerLeft: {
     display: 'flex',
@@ -55,12 +58,23 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
   },
   telegramIcon: {
-    color: '#fff'
+    color: '#fff',
+    border: 'none',
+    outline: 'none',
+    '-webkit-tap-highlight-color': 'transparent',
+    marginRight: '10px',
+    [theme.breakpoints.down(480)]: {
+      marginRight: '0px'
+    }
   },
   headerRight: {
     width: 'fit-content',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
+    justifyContent: 'flex-end'
   },
   mainScreen: {
     margin: '70px auto',
@@ -89,6 +103,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     maxWidth: '400px',
     justifyContent: 'space-between',
     margin: '0 auto',
+    flexWrap: 'wrap',
+    [theme.breakpoints.down(400)]: {
+      justifyContent: 'center'
+    }
   },
   mainButton: {
     color: '#fff',
@@ -103,6 +121,40 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     '&:hover': {
       background: '#163ea4'
+    }
+  },
+  headerSignUpBtn: {
+    color: '#fff',
+    padding: '14px 25px',
+    textTransform: 'initial',
+    background: '#1d51a3',
+    fontWeight: 'bold',
+    borderRadius: '10px',
+    '& a': {
+      textDecoration: 'none',
+      color: '#fff',
+    },
+    '&:hover': {
+      background: '#163ea4'
+    },
+    [theme.breakpoints.down(480)]: {
+      display: 'none'
+    }
+  },
+  signUpIconBtn: {
+    display: 'none',
+    textDecoration: 'none',
+    color: '#fff',
+    border: 'none',
+    outline: 'none',
+    '-webkit-tap-highlight-color': 'transparent',
+    [theme.breakpoints.down(480)]: {
+      display: 'block'
+    }
+  },
+  signInLink: {
+    [theme.breakpoints.down(480)]: {
+      display: 'none'
     }
   },
   secondaryButton: {
@@ -136,8 +188,14 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     marginTop: '50px',
     display: 'flex',
     justifyContent: 'space-around',
+    flexWrap: 'wrap',
     '& p':{
       fontSize: '30px',
+      whiteSpace: 'nowrap',
+      [theme.breakpoints.down(720)]: {
+        fontSize: '20px',
+        padding: '10px'
+      }
     }
   },
   section: {
@@ -230,7 +288,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   teamList: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    [theme.breakpoints.down(480)]: {
+      flexDirection: 'column',
+      alignItems: 'center'
+    }
   },
   teamItem: {
     marginBottom: '30px',
@@ -278,10 +340,17 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    
   },
   footerText: {
-    color: '#dfdfdf'
+    color: '#dfdfdf',
+    [theme.breakpoints.down(480)]: {
+      fontSize: '12px'
+    },
+    [theme.breakpoints.down(350)]: {
+      fontSize: '10px'
+    }
   },
   mailIcon: {
     width: '20px',
@@ -289,6 +358,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   mailWrap: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    [theme.breakpoints.down(480)]: {
+      fontSize: '12px'
+    },
+    [theme.breakpoints.down(350)]: {
+      fontSize: '10px'
+    }
   }
 }));
