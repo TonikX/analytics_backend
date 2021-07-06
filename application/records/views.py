@@ -264,30 +264,29 @@ def WorkProgramDetailsWithApAndSemesters(request):
     print(structural_unit_id)
     for i in range(12):
         if str(i + 1) in semester:
-            cred_regex += "[^0],"
+            cred_regex += "[^0]\.[0-9],\s"
         else:
-            cred_regex += "[0-9\-],"
-    cred_regex = cred_regex[:-1]
+            cred_regex += "(([0-9]\.[0-9])|[0]),\s"
+    cred_regex = cred_regex[:-3]
     print(cred_regex)
     if status_filter == "WK":
         needed_wp = (WorkProgram.objects.filter(expertise_with_rpd__isnull=True,
-                                                zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
+                                                zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year__in=year,
                                                 structural_unit__in=structural_unit_id,
-                                                zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex) |
+                                                zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=cred_regex) |
                      WorkProgram.objects.filter(
                          expertise_with_rpd__expertise_status__contains=status_filter,
-                         zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
+                         zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year__in=year,
                          structural_unit__in=structural_unit_id,
-                         zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex)).distinct()
+                         zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=cred_regex)).distinct()
     elif status_filter == "":
         needed_wp = WorkProgram.objects.filter(structural_unit__in=structural_unit_id,
-                                               zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
-                                               zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex).distinct()
+                                               zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year__in=year,
+                                               zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
     else:
         needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains=status_filter,
-                                               zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
+                                               zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year__in=year,
                                                structural_unit__in=structural_unit_id,
-                                               zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex).distinct()
-    print(len(WorkProgram.objects.filter(structural_unit=6)))
+                                               zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
     serializer = WorkProgramSerializerForStatisticExtended(needed_wp, many=True)
     return Response(serializer.data)

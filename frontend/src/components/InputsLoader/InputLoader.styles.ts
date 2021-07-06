@@ -9,6 +9,7 @@ export default (theme: Theme) => createStyles({
     },
     loader: {
         position: "absolute",
-        right: '20px'
+        right: '20px',
+        top: '12px'
     }
 });

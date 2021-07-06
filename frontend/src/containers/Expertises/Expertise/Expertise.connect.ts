@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 
 import actions from "../actions";
 import generalActions from "../../../layout/actions";
-import {getExpertise, getExpertiseCanEdit} from '../getters';
+import {getExpertise} from '../getters';
 import {ExpertisesActions} from "../types";
 
 import {rootState} from "../../../store/reducers";
@@ -12,7 +12,6 @@ import {rootState} from "../../../store/reducers";
 const mapStateToProps = (state: rootState) => {
     return {
         expertise: getExpertise(state),
-        canEdit: getExpertiseCanEdit(state),
     };
 };
 

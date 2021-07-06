@@ -385,6 +385,27 @@ const getDirectionsDependedOnWorkProgram = createLogic({
     }
 });
 
+const getCompetenceDirectionsDependedOnWorkProgram = createLogic({
+    type: planActions.getCompetenceDirectionsDependedOnWorkProgram.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM}));
+
+        service.getCompetenceDirectionsDependedOnWorkProgram(action.payload)
+            .then((res) => {
+                dispatch(planActions.setDirectionsDependedOnWorkProgram(res.data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM}));
+                return done();
+            });
+    }
+});
+
 const saveCompetenceBlock = createLogic({
     type: planActions.saveCompetenceBlock.type,
     latest: true,
@@ -602,6 +623,7 @@ export default [
     changeBlockOfWorkPrograms,
     deleteBlockOfWorkPrograms,
     getDirectionsDependedOnWorkProgram,
+    getCompetenceDirectionsDependedOnWorkProgram,
     saveCompetenceBlock,
     deleteCompetenceBlock,
     deleteWorkProgramFromZun,

@@ -139,5 +139,5 @@ const changeIndicator = createLogic({
 });
 
 export default [
-
+    getIndicatorsDependsCompetence,
 ];
