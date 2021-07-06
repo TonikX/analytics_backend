@@ -79,6 +79,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     margin: '70px auto',
     maxWidth: '1204px',
     textAlign: 'center',
+    padding: '0 10px'
   },
   h1: {
     fontSize: '50px',
@@ -103,7 +104,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     justifyContent: 'space-between',
     margin: '0 auto',
     flexWrap: 'wrap',
-    [theme.breakpoints.down(400)]: {
+    [theme.breakpoints.down(420)]: {
       justifyContent: 'center'
     }
   },
