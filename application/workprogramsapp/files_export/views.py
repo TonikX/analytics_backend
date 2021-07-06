@@ -1,5 +1,4 @@
 import datetime
-import re
 from docxtpl import DocxTemplate
 from django.http import HttpResponse
 from collections import OrderedDict
@@ -18,7 +17,8 @@ def render_context(context, **kwargs):
     ap_obj = AcademicPlan.objects.get(pk=kwargs['academic_plan_id'])
     try:
         for wpcb in context['work_program_in_change_block']:
-            if wpcb['discipline_block_module']['descipline_block']['academic_plan']['educational_profile'] == ap_obj.educational_profile:
+            if wpcb['discipline_block_module']['descipline_block']['academic_plan'][
+                'educational_profile'] == ap_obj.educational_profile:
                 wpcb_pk = wpcb['id']
                 semester = [{'s': i, 'c': wpcb['credit_units'][i]} for i in range(len(wpcb['credit_units'])) if
                             wpcb['credit_units'] if wpcb['credit_units'][i] != 0]
@@ -154,7 +154,6 @@ def render_context(context, **kwargs):
     template_context['outcomes_max_all'] = sum(items_max) + int(context['extra_points'])
     template_context['outcomes_min_all'] = sum(items_min)
     template_context['extra_points'] = context['extra_points']
-    print('extra points - - -- - ', context['extra_points'])
     return template_context, filename
 
 
@@ -195,9 +194,10 @@ def render_context_syllabus(context, **kwargs):
     try:
         for wpcb in context['work_program_in_change_block']:
             if wpcb['discipline_block_module']['descipline_block']['academic_plan'][
-                'educational_profile'] == ap_obj.educational_profile:
-                semester = [(i, wpcb['credit_units'][i], wpcb['change_type']) for i in range(len(wpcb['credit_units']))
-                            if wpcb['credit_units'] if wpcb['credit_units'][i] != 0]
+                'educational_profile'] != ap_obj.educational_profile:
+                continue
+            semester = [(i, wpcb['credit_units'][i], wpcb['change_type']) for i in range(len(wpcb['credit_units']))
+                        if wpcb['credit_units'] if wpcb['credit_units'][i] != 0]
     except:
         semester = [('-', '-', ' ')]
 
