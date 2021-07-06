@@ -111,7 +111,7 @@ class ExpertiseListView(generics.ListAPIView):
 class ExpertiseViewById(generics.RetrieveAPIView):
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
-    permission_classes = [IsExpertiseMaster]
+    permission_classes = [IsMemberOfExpertise]
 
 
 class ExpertiseCreateView(generics.CreateAPIView):
