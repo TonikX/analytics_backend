@@ -767,7 +767,7 @@ class EvaluationTool(CloneMixin,models.Model):
     '''
     type = models.CharField(max_length=1024, verbose_name="Тип оценочного средства")
     name = models.CharField(max_length=1024, verbose_name="Наименование оценочного средства")
-    description = models.CharField(max_length=500000, verbose_name="Описание", blank=True, null=True)
+    description = models.CharField(max_length=5000000, verbose_name="Описание", blank=True, null=True)
     check_point = models.BooleanField(verbose_name="Контрольная точка", blank=True, null=True)
     deadline = models.IntegerField(verbose_name="Срок сдачи в неделях", blank=True, null=True)
     semester = models.IntegerField(verbose_name="Семестр в котором сдается оценочное средство", blank=True, null=True)
