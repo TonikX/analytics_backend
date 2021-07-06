@@ -83,7 +83,7 @@ export default () => {
             <Link className={classes.signUpIconBtn} to={appRouter.getSignInRoute()}>
               <IconButton
                 color="inherit"
-                aria-label="open drawer"
+                aria-label="Войти"
                 onClick={() => setOpenDrawer(true)}
                 edge="start"
                 aria-haspopup="true"
@@ -99,7 +99,7 @@ export default () => {
           <Link className={classes.signUpIconBtn} to={appRouter.getSignUpRoute()}>
             <IconButton
               color="inherit"
-              aria-label="open drawer"
+              aria-label="Зарегистрироваться"
               onClick={() => setOpenDrawer(true)}
               edge="start"
               aria-haspopup="true"
