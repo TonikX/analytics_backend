@@ -153,16 +153,22 @@ def SendCheckpointsForAcceptedWP(request):
     Отправка всех прошедших экспертизу РПД, в БАРС
     Параметры:
     year : Поле вида 'YYYY/YYYY', указывает учебный год в который надо отправить РПД [str]
-    send_semester : 0 - семетр осенний, 1 - семестр весенний [int]
+    send_semester : 1 - семетр осенний, 0 - семестр весенний [int]
     one_wp: необязательное поле, указывается id одной РПД для отправки в БАРС
     """
     year = request.data.get('year')
     send_semester = request.data.get('send_semester')
+    # небольшой костыль из-за некоторых ньюансов
+
     one_wp = request.data.get('one_wp')
     setup_bars = (year, send_semester)  # Устанавливает корректную дату и семестр в барсе (аргумент для БАРС-функций)
+    if send_semester == 0:
+        send_semester = 1
+    else:
+        send_semester = 0
     if not one_wp:
         needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC',
-                                               zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__qualification="bachelor").distinct()  # expertise_with_rpd__expertise_status__contains='AC',
+                                               bars=True).distinct()
     else:
         needed_wp = WorkProgram.objects.filter(pk=one_wp)
     all_sends = []  # Список всего того что отправили в барс, нужен для респонса
@@ -241,47 +247,19 @@ def SendCheckpointsForAcceptedWP(request):
     return Response(all_sends)
 
 
-"""    send_semester += 1
-    needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC', bars=True).distinct()
-    print(needed_wp)
-    all_sends = []
-    for work_program in needed_wp:
-        imp_list = []
-        wp_bars_data = WorkProgramIdStrUpForIsu.objects.filter(
-            work_program_in_field_of_study__work_program=work_program).distinct()
-        needed_semesters = []
-        for data_isu in wp_bars_data:
-            implementation_of_academic_plan = ImplementationAcademicPlan.objects.filter(
-                academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zuns_for_wp=data_isu).distinct()
-            semesters = str(data_isu.ze_v_sem).split(",")
-            for i, el in enumerate(semesters):
-                # Входная точка: у нас есть все данные - семетр, учебный план, направление, рпд, информация из ИСУ
-                if float(el) > 0:
-                    if ((i + 1) % 2 == 0 and send_semester % 2 == 0) or ((i + 1) % 2 != 0 and send_semester % 2 != 0):
-                        needed_semesters = semesters
-                        for imp in implementation_of_academic_plan:
-                            if imp.year == int(datetime.now().year):
-                                if imp.title== "Компьютерная графика и дизайн":
-                                    print("fdsfsd!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                                field_of_studies = FieldOfStudy.objects.get(
-                                    implementation_academic_plan_in_field_of_study=imp)
-                                imp_list.append(generate_fos(data_isu.ns_id, field_of_studies.number, imp.title))
-        count = 1
-        for i, el in enumerate(needed_semesters):
-            # Входная точка: у нас есть все данные - семетр, учебный план, направление, рпд, информация из ИСУ
-            if float(el) > 0:
-                if ((i + 1) % 2 == 0 and send_semester % 2 == 0) or ((i + 1) % 2 != 0 and send_semester % 2 != 0):
-                    imp_list = list({v['id']: v for v in imp_list}.values())
-                    request_text = generate_single_checkpoint(absolute_semester=i + 1, relative_semester=count,
-                                                              programs=imp_list,
-                                                              work_program=work_program, setup=setup_bars)
-                    request_response, request_status_code = post_checkpoint_plan(request_text, setup_bars)
-                    if request_status_code != 200:
-                        print(request_text, request_response)
-                    HistoryOfSendingToBars.objects.create(work_program=work_program, request_text=request_text,
-                                                          request_response=request_response,
-                                                          request_status=request_status_code)
-                    all_sends.append(
-                        {"status": request_status_code, "request": request_text, "response": request_response})
-                count += 1
-    return Response(all_sends)"""
+@api_view(['POST'])
+@permission_classes((IsAdminUser,))
+def SetBarsPointerTrueToWP(request):
+    for semester in range(0, 4):
+        cred_regex = r""
+        for i in range(12):
+            if i == semester:
+                cred_regex += "[^0]\.[0-9],\s"
+            else:
+                cred_regex += "(([0-9]\.[0-9])|[0]),\s"
+        cred_regex = cred_regex[:-3]
+        wp = WorkProgram.objects.filter(zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=cred_regex,
+                                        expertise_with_rpd__expertise_status__contains='AC',
+                                        zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__qualification="bachelor").distinct()
+        wp.update(bars=True)
+    return Response("Надеюсь, ничего не сломалось")

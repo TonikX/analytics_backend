@@ -87,11 +87,6 @@ def post_checkpoint_plan(body, setup):
 
 
 def get_tests(setup):
-    """if setup[1] == 0:
-        sem = 1
-    else:
-        sem = 0
-    login((setup[0], sem))"""
     login(setup)
     url = BASE_URL + "/tests"
     r = requests.get(url, headers=BASE_HEADERS)
@@ -99,11 +94,6 @@ def get_tests(setup):
 
 
 def post_tests(body, setup):
-    """if setup[1] == 0:
-        sem = 1
-    else:
-        sem = 0
-    login((setup[0], sem))"""
     login(setup)
     url = BASE_URL + "/tests"
     r = requests.post(url, data=json.dumps(body), headers=BASE_HEADERS)
