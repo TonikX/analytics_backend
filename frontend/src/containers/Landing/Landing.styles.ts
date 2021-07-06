@@ -212,7 +212,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   processesListContent: {
     width: '40%',
     minWidth: '304px',
-    [theme.breakpoints.down(750)]: {
+    [theme.breakpoints.down(760)]: {
       width: '100%'
     }
   },
@@ -241,7 +241,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     [theme.breakpoints.down('md')]: {
       width: '55%',
     },
-    [theme.breakpoints.down(750)]: {
+    [theme.breakpoints.down(760)]: {
       width: '100%',
       order: 2,
       minWidth: 'auto',
