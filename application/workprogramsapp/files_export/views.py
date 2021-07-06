@@ -1,5 +1,4 @@
 import datetime
-import re
 from docxtpl import DocxTemplate
 from django.http import HttpResponse
 from collections import OrderedDict
@@ -9,7 +8,8 @@ import html2text
 from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy, WorkProgram
 from ..serializers import WorkProgramSerializer
 
-"""Скачивание рпд в формате docx/pdf"""
+
+"""Скачивание рпд в формате docx"""
 
 
 def render_context(context, **kwargs):
