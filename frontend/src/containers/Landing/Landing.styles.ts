@@ -5,7 +5,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     background: '#07152b',
     padding: '86px 0px 0px',
     color: '#fff',
-
   },
   headerWrap: {
     width: '100%',
@@ -209,15 +208,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     marginBottom: '50px',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    '&:nth-child(even)': {
-      //background: 'red' 
-    },
-    '&:nth-child(odd)': {
-      //background: 'yellow',
-    }
   },
   processesListContent: {
-    // marginRight: '50px',
     width: '40%',
     minWidth: '304px',
     [theme.breakpoints.down(750)]: {
