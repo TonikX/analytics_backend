@@ -876,6 +876,7 @@ class FieldOfStudyListCreateView(generics.ListCreateAPIView):
 
 
 @api_view(['GET', 'POST'])
+@permission_classes((IsRpdDeveloperOrReadOnly,))
 def NewOrdinalNumbersForDesciplineSectionAPI(request):
     descipline_section = request.data.get('descipline_section')
     new_ordinal_number = request.data.get('new_ordinal_number')
@@ -887,6 +888,7 @@ def NewOrdinalNumbersForDesciplineSectionAPI(request):
 
 
 @api_view(['GET', 'POST'])
+@permission_classes((IsRpdDeveloperOrReadOnly,))
 def NewOrdinalNumbersForTopicAPI(request):
     topic = request.data.get('topic')
     new_ordinal_number = request.data.get('new_ordinal_number')
