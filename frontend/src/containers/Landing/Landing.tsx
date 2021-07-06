@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import { useStyles } from './Landing.styles'
 import IconButton from '@material-ui/core/IconButton'
@@ -10,9 +10,9 @@ import { Link } from 'react-router-dom'
 // @ts-ignore
 import screenshotImage from './img/screen.PNG'
 // @ts-ignore
-import op from './img/op.PNG'
+import op from './img/OP.png'
 // @ts-ignore
-import onlineCourse from './img/online-course.PNG'
+import onlineCourse from './img/online-course.png'
 import studentImage from './img/student.svg'
 import teacherImage from './img/teacher.svg'
 import administrationImage from './img/administration.svg'
