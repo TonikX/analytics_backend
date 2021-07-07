@@ -334,8 +334,9 @@ class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        pk=self.kwargs['pk']
+        pk = self.kwargs['pk']
         return WorkProgram.objects.filter(zuns_for_wp__zuns_for_wp__id_str_up=pk)
+
     def get_object(self):
         queryset = self.get_queryset()
         obj = get_object_or_404(queryset)

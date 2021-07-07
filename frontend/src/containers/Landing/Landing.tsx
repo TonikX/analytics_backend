@@ -1,18 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import cs from 'classnames'
+
 import AppBar from '@material-ui/core/AppBar'
 import { useStyles } from './Landing.styles'
 import IconButton from '@material-ui/core/IconButton'
 import TelegramIcon from '@material-ui/icons/Telegram'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import { Link } from 'react-router-dom'
+import Drawer from '@material-ui/core/Drawer'
+import Divider from '@material-ui/core/Divider'
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import List from '@material-ui/core/List';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+
+import MenuIcon from '@material-ui/icons/Menu'
 // @ts-ignore
 import screenshotImage from './img/screen.PNG'
 // @ts-ignore
-import op from './img/op.PNG'
+import op from './img/OP.png'
 // @ts-ignore
-import onlineCourse from './img/online-course.PNG'
+import onlineCourse from './img/online-course.png'
 import studentImage from './img/student.svg'
 import teacherImage from './img/teacher.svg'
 import administrationImage from './img/administration.svg'
@@ -27,12 +40,21 @@ import AnchorLink from 'react-anchor-link-smooth-scroll'
 export default () => {
   const classes = useStyles();
   const [showAllTeam, setShowAllTeam] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false)
 
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.header}>
         <div className={classes.headerWrap}>
-
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={() => setOpenDrawer(true)}
+            edge="start"
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
           <Typography className={classes.headerLeft}>
             <Typography className={classes.logo}> <img src={logo} width={70} /> </Typography>
             <AnchorLink offset='100' href='#systems' className={classes.link} style={{marginRight: '25px'}}>Внешние системы</AnchorLink>
@@ -45,46 +67,102 @@ export default () => {
             <Tooltip title="Подписаться на телеграм канал">
               <a href="https://t.me/op_itmo_ru"
                  target="_blank"
-                 style={{marginRight: '10px'}}
+                 className={classes.telegramIcon}
               >
-                <IconButton aria-haspopup="true" className={classes.telegramIcon}>
-                  <TelegramIcon />
+                <IconButton aria-haspopup="true" style={{ color: '#fff'}}>
+                  <TelegramIcon  />
                 </IconButton>
               </a>
             </Tooltip>
             <Link to={appRouter.getSignInRoute()}
-                  className={classes.link}
+                  className={cs([classes.link, classes.signInLink])}
                   style={{marginRight: '30px'}}
             >
               Войти
             </Link>
-            <Button className={classes.mainButton}>
+            <Link className={classes.signUpIconBtn} to={appRouter.getSignInRoute()}>
+              <IconButton
+                color="inherit"
+                aria-label="Войти"
+                onClick={() => setOpenDrawer(true)}
+                edge="start"
+                aria-haspopup="true"
+              >
+                <AssignmentIndIcon />
+              </IconButton>
+          </Link>
+            <Button className={classes.headerSignUpBtn}>
               <Link to={appRouter.getSignUpRoute()}>
                 Зарегистрироваться
               </Link>
             </Button>
+          <Link className={classes.signUpIconBtn} to={appRouter.getSignUpRoute()}>
+            <IconButton
+              color="inherit"
+              aria-label="Зарегистрироваться"
+              onClick={() => setOpenDrawer(true)}
+              edge="start"
+              aria-haspopup="true"
+            >
+                <PersonAddIcon />
+            </IconButton>
+          </Link>
           </Typography>
         </div>
       </AppBar>
-
+      <Drawer open={openDrawer}>
+        <IconButton style={{ width: '48px', marginLeft: 'auto' }} onClick={() => setOpenDrawer(false)}>
+          <ChevronLeftIcon />
+        </IconButton>
+        <Divider />
+        <List>
+          <AnchorLink offset='100' href='#systems' className={classes.drawerLink}>
+            <ListItem button key="systems" onClick={() => setOpenDrawer(false)}>
+              <ListItemText>
+                Внешние системы
+              </ListItemText>
+            </ListItem>
+          </AnchorLink>
+          <AnchorLink offset='100' href='#processes' className={classes.drawerLink}>
+            <ListItem button key="processes" onClick={() => setOpenDrawer(false)}>
+              <ListItemText>
+                Связанные процессы
+              </ListItemText>
+            </ListItem>
+          </AnchorLink>
+          <AnchorLink offset='100' href='#users' className={classes.drawerLink}>
+            <ListItem button key="users" onClick={() => setOpenDrawer(false)}>
+              <ListItemText>
+                Категории пользователей
+              </ListItemText>
+            </ListItem>
+          </AnchorLink>
+          <AnchorLink offset='100' href='#developers' className={classes.drawerLink}>
+            <ListItem button key="developers" onClick={() => setOpenDrawer(false)}>
+                <ListItemText>
+                  Команда
+                </ListItemText>
+            </ListItem>
+          </AnchorLink>
+        </List>
+      </Drawer>
       <div className={classes.mainScreen}>
         <Typography variant="h1" className={classes.h1}>Конструктор Образовательных Программ</Typography>
         <Typography className={classes.subTitle}>Удобный конструктор для быстрого создания образовательных программ, отличный инструмент <br/> для сопровождения и планирования учебного процесса<br/></Typography>
         <div className={classes.mainScreenButtons}>
-          <Button className={classes.mainButton}>
+          <Button className={classes.mainButton} style={{ margin: '5px' }}>
             <Link to={appRouter.getSignInRoute()}>
               Войти в систему
             </Link>
           </Button>
-          <Button className={classes.secondaryButton}>
+          <Button className={classes.secondaryButton} style={{ margin: '5px' }}>
             <Link to={appRouter.getSignUpRoute()}>
               Зарегистрироваться
             </Link>
           </Button>
         </div>
       </div>
-
-      <div className={classes.screenshot} style={{backgroundImage: `url(${screenshotImage}`}} />
+      <img className={classes.screenshot} src={screenshotImage} alt="Скриншот главного экрана" />
 
       <section className={classes.section} id="systems">
         <Typography className={classes.sectionTitle}>Внешние системы</Typography>
@@ -110,8 +188,7 @@ export default () => {
           </div>
           <div className={classes.processesListContentImage}>
             <div className={classes.videoWrapper}>
-              <iframe width="560"
-                      height="315"
+              <iframe style={{ width: "100%", height: "100%"}}
                       src="https://www.youtube.com/embed/3lK4kItzYTk?&showinfo=0"
                       title="YouTube video player"
                       frameBorder="0"
@@ -123,10 +200,9 @@ export default () => {
         </div>
 
         <div className={classes.processesListItem}>
-          <div className={classes.processesListContentImage}  style={{marginRight: '50px'}}>
+          <div className={classes.processesListContentImage}>
             <div className={classes.videoWrapper}>
-              <iframe width="560"
-                      height="315"
+              <iframe style={{ width: "100%", height: "100%"}}
                       src="https://www.youtube.com/embed/Elf9hFjFiK8"
                       title="YouTube video player"
                       frameBorder="0"
@@ -154,11 +230,11 @@ export default () => {
               Реализуются новые интерфейсы для работы с направлениями, учебными планами, общими характеристиками образовательных программ. Реализованы удобные интерфейсы поиска и навигации. Формат документов соответствует образовательному стандарту Университета ИТМО
             </Typography>
           </div>
-          <div className={classes.processesListContentImage} style={{backgroundImage: `url(${op}`}} />
+          <img className={classes.processesListContentImage} src={op} alt="Скриншот раздела ОП" />
         </div>
 
         <div className={classes.processesListItem}>
-          <div className={classes.processesListContentImage} style={{marginRight: '50px', backgroundImage: `url(${onlineCourse}`}} />
+          <img src={onlineCourse} className={classes.processesListContentImage} />
           <div className={classes.processesListContent}>
             <Typography className={classes.processesListContentTitle}>
               Онлайн курсы

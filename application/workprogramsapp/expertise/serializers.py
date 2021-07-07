@@ -77,9 +77,13 @@ class ExpertiseSerializer(serializers.ModelSerializer):
     def to_representation(self, value):
         self.fields['work_program'] = WorkProgramShortForExperiseSerializerWithStructUnitWithEditors(many=False,
                                                                                                      read_only=True)
-        self.fields['experts'] = userProfileSerializer(many=True, read_only=True)
+        self.fields['experts'] = serializers.SerializerMethodField()
         self.fields['expertse_users_in_rpd'] = UserExpertiseForExpertiseSerializer(many=True, read_only=True)
         return super().to_representation(value)
+
+    def get_experts(self, instance):
+        experts_instances = instance.experts.filter()
+        return userProfileSerializer(experts_instances, many=True).data
 
     class Meta:
         model = Expertise

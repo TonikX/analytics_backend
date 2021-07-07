@@ -525,7 +525,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 newdata.update({"user_expertise_id": ue.id})
             else:
                 newdata.update({"can_comment": False})
-            if ue.stuff_status == "AU" or ue.user_expertise_status == "AP" or ue.user_expertise_status == "RE":
+            if ue.stuff_status == "AU" or ue.stuff_status == "ED" or ue.stuff_status == "SE" or \
+                    ue.user_expertise_status == "AP" or ue.user_expertise_status == "RE":
                 newdata.update({"can_approve": False})
                 if ue.user_expertise_status == "AP":
                     newdata.update({"your_approve_status": "AP"})
@@ -559,7 +560,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         competences = Competence.objects.filter(indicator_in_competencse__zun__wp_in_fs__work_program__id = self.kwargs['pk']).distinct()
         competences_dict = []
         for competence in competences:
-            zuns = Zun.objects.filter(wp_in_fs__work_program__id = self.kwargs['pk'])
+            zuns = Zun.objects.filter(wp_in_fs__work_program__id = self.kwargs['pk'], indicator_in_zun__competence__id = competence.id)
             zuns_array = []
             for zun in zuns:
                 try:
@@ -875,6 +876,7 @@ class FieldOfStudyListCreateView(generics.ListCreateAPIView):
 
 
 @api_view(['GET', 'POST'])
+@permission_classes((IsRpdDeveloperOrReadOnly,))
 def NewOrdinalNumbersForDesciplineSectionAPI(request):
     descipline_section = request.data.get('descipline_section')
     new_ordinal_number = request.data.get('new_ordinal_number')
@@ -886,6 +888,7 @@ def NewOrdinalNumbersForDesciplineSectionAPI(request):
 
 
 @api_view(['GET', 'POST'])
+@permission_classes((IsRpdDeveloperOrReadOnly,))
 def NewOrdinalNumbersForTopicAPI(request):
     topic = request.data.get('topic')
     new_ordinal_number = request.data.get('new_ordinal_number')

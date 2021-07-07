@@ -20,7 +20,9 @@ def generate_checkpoint_plan(regular_checkpoint: list, programs: list, disciplin
     return temp
 
 
-def generate_checkpoint(name, min, max, week, key, type_id):
+def generate_checkpoint(name, min, max, week, key, type_id, test_id=-1):
+    if type(min) is not int:
+        min = 0
     temp = {
         "name": name,
         "min_grade": min,
@@ -29,6 +31,8 @@ def generate_checkpoint(name, min, max, week, key, type_id):
         "key": key,
         "type_id": type_id,
     }
+    if test_id != -1:
+        temp["test_id"] = test_id
     return temp
 
 
@@ -50,15 +54,26 @@ def generate_program(bars_id, code, name):
     }
     return temp
 
-def generate_fos(id:int, code:str, name:str):
+
+def generate_fos(id: int, code: str, name: str):
     temp = {
         "id": id,
-        "code": code+".",
+        "code": code + ".",
         "name": name
     }
     return temp
 
-#TODO: Придумать как избавиться от этого хардкод-прикола
+
+def generate_test(term: int, year: str, name: str):
+    temp = {
+        "name": name,
+        "year": year,
+        "term": term
+    }
+    return temp
+
+
+# TODO: Придумать как избавиться от этого хардкод-прикола
 def get_checkpoints_type(type):
     types = [{
         "id": 27,

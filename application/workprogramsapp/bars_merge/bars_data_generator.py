@@ -1,6 +1,6 @@
-from workprogramsapp.bars_merge.bars_api_getter import get_list_of_regular_checkpoints
+from workprogramsapp.bars_merge.bars_api_getter import get_list_of_regular_checkpoints, get_tests, post_tests
 from workprogramsapp.bars_merge.checkpoint_template import generate_checkpoint, get_checkpoints_type, \
-    generate_discipline, generate_checkpoint_plan
+    generate_discipline, generate_checkpoint_plan, generate_test
 from workprogramsapp.models import EvaluationTool, DisciplineSection, СertificationEvaluationTool
 
 
@@ -18,12 +18,22 @@ def generate_single_checkpoint(work_program, absolute_semester, relative_semeste
     evaluation_tools = EvaluationTool.objects.filter(evaluation_tools__in=DisciplineSection.objects.filter(
         work_program__id=work_program_id)).distinct().filter(semester=relative_semester)
     for eva in evaluation_tools:
+        id = None
+        test_id = -1
         for el in types_checkpoints:
             if el["name"] == eva.type:
                 id = el["id"]
+                if el["name"] == "Электронное тестирование (тест в ЦДО)":
+                    test_list = get_tests(setup)
+                    for test in test_list:
+                        if test['name'] == eva.name:
+                            test_id = test['id']
+                    if test_id == -1:
+                        body = generate_test(term=absolute_semester, year=setup[0], name=eva.name)
+                        test_id = post_tests(setup=setup, body=body)["id"]
         list_regular.append(
             generate_checkpoint(name=eva.name, min=eva.min, max=eva.max, week=int(eva.deadline), type_id=id,
-                                key=eva.check_point))
+                                key=eva.check_point, test_id=test_id))
     certificate = СertificationEvaluationTool.objects.filter(work_program=work_program_id, semester=relative_semester)
     for cerf in certificate:
         if int(cerf.type) == 4:

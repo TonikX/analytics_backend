@@ -1,13 +1,13 @@
 import datetime
-import re
 from docxtpl import DocxTemplate
 from django.http import HttpResponse
 from collections import OrderedDict
-from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 import html2text
 from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy, WorkProgram
 from ..serializers import WorkProgramSerializer
+from rest_framework import generics
+
 
 """Скачивание рпд в формате docx/pdf"""
 
@@ -133,6 +133,23 @@ def render_context(context, **kwargs):
     template_context['current_evaluation_tool'] = current_evaluation_tool
     certification_evaluation_tools = []
     for item in context['certification_evaluation_tools']:
+        try:
+            if item['max'] is not None:
+                items_max.append(item['max'])
+            if item['min'] is not None:
+                items_min.append(item['min'])
+            item['description'] = html2text.html2text(item['description'])
+            if item['type'] == '1':
+                item['type'] = 'Exam'
+            elif item['type'] == '2':
+                item['type'] = 'Differentiated credit'
+            elif item['type'] == '3':
+                item['type'] = 'Offset'
+            elif item['type'] == '4':
+                item['type'] = 'Coursework'
+            certification_evaluation_tools.append(item)
+        except:
+            continue
         items_max.append(item['max'])
         items_min.append(item['min'])
         item['description'] = html2text.html2text(item['description'])
@@ -146,10 +163,9 @@ def render_context(context, **kwargs):
             item['type'] = 'Coursework'
         certification_evaluation_tools.append(item)
     template_context['certification_evaluation_tools'] = certification_evaluation_tools
-    outcomes_max_all = sum(items_max)
-    outcomes_min_all = sum(items_min)
-    template_context['outcomes_max_all'] = outcomes_max_all
-    template_context['outcomes_min_all'] = outcomes_min_all
+    template_context['outcomes_max_all'] = sum(items_max) + int(context['extra_points'])
+    template_context['outcomes_min_all'] = sum(items_min)
+    template_context['extra_points'] = context['extra_points']
     return template_context, filename
 
 
