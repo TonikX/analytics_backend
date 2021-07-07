@@ -17,6 +17,8 @@ import StepButton from '@material-ui/core/StepButton';
 import Grow from '@material-ui/core/Grow';
 import Switch from '@material-ui/core/Switch';
 
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 import LikeButton from "../../components/LikeButton";
 
@@ -105,8 +107,16 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
                     <Typography className={classes.subTitle}>
                         Пререквизиты
+                        <Tooltip
+                            title={
+                                <span style={{ fontSize: '13px' }}>Пререквезит - объект, отражающий конкретное знание из конкретной области 
+                                (далее "учебная сущность"), которое должно быть у студента перед началом изучения курса.
+                                </span>
+                            }
+                        >
+                            <HelpOutlineIcon color="primary" style={{ marginLeft: '10px' }} />
+                        </Tooltip>
                     </Typography>
-
                     <Prerequisites />
                 </div>;
             case 2:
@@ -153,6 +163,16 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
                         Результаты обучения
+                        <Tooltip
+                            title={
+                                <span style={{ fontSize: '13px' }}>Результат - объект, отражающий конкретное знание 
+                                из конкретной области (далее "учебная сущность"), которое сформируется у студента 
+                                после прохождения курса.
+                                </span>
+                            }
+                        >
+                            <HelpOutlineIcon color="primary" style={{ marginLeft: '10px' }} />
+                        </Tooltip>
                     </Typography>
 
                     <Results />
