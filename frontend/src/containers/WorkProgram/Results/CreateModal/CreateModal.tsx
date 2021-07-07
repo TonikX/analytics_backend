@@ -182,7 +182,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 </span>
                             }
                         >
-                            <HelpOutlineIcon color="primary" style={{ marginLeft: '10px' }} />
+                            <HelpOutlineIcon color="primary" style={{ marginLeft: '10px', paddingTop: '4px' }} />
                         </Tooltip>
                     </div>
                 </DialogTitle>
