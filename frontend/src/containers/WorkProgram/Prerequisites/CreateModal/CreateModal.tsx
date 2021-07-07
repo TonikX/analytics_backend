@@ -151,10 +151,10 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             >
                 <DialogTitle>
                     <div className={classes.dialogTitle}>
-                        <span>{isEditMode ? 'Редактировать' : 'Создать'} пререквизит</span>
+                        {isEditMode ? 'Редактировать' : 'Создать'} пререквизит
                         <Tooltip
                             title={
-                                <span style={{ fontSize: '13px', lineHeight: '1.6' }}>
+                                <span style={{ fontSize: '13px' }}>
                                     Пререквезит - объект, отражающий конкретное знание из конкретной области 
                                     (далее "учебная сущность"), которое должно быть у студента перед началом изучения курса.
                                     <br /><br />Для добавления необходимо выбрать предметную область и учебную сущность в ней. 
