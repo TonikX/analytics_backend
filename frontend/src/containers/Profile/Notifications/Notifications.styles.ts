@@ -37,5 +37,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     roundText: {
         marginRight: '15px'
-    }
+    },
+    footer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: '10px'
+    },
 }));

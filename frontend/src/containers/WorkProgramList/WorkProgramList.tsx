@@ -41,13 +41,15 @@ import Filters from "./Filters";
 import {FULL_DATE_FORMAT} from "../../common/utils";
 import {appRouter} from "../../service/router-service";
 
-import {specialization} from "../WorkProgram/constants";
+import {specialization, workProgramStatusesColors, workProgramStatusesRussian} from "../WorkProgram/constants";
 import {WorkProgramGeneralFields} from '../WorkProgram/enum';
 import {filterFields} from "./enum";
 import {WorkProgramListProps} from './types';
 
 import connect from './WorkProgramList.connect';
 import styles from './WorkProgramList.styles';
+import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
+import {ExpertisesFields} from "../Expertises/enum";
 
 class WorkProgramList extends React.Component<WorkProgramListProps> {
     state = {
@@ -174,6 +176,15 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                     />
                 </Typography>
 
+                <div className={classes.statuses}>
+                    {Object.keys(workProgramStatusesRussian).map(status =>
+                      <WorkProgramStatus
+                        status={status}
+                        key={status}
+                      />
+                    )}
+                </div>
+
                 <CustomizeExpansionPanel label="Фильтрация" details={<Filters />}/>
 
                 <Scrollbars>
@@ -220,9 +231,12 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                             </TableHead>
 
                             <TableBody>
-                                {workProgramList.map(workProgram =>
+                                {workProgramList.map((workProgram: any) =>
                                     <TableRow key={workProgram[WorkProgramGeneralFields.ID]}>
-                                        <TableCell>
+                                        <TableCell
+                                          className={classes.cellStatus}
+                                          style={{borderLeftColor: workProgramStatusesColors[workProgram?.experise_with_rpd?.expertise_status || 'WK']}}
+                                        >
                                             {workProgram[WorkProgramGeneralFields.CODE]}
                                         </TableCell>
                                         <TableCell className={classes.link}>

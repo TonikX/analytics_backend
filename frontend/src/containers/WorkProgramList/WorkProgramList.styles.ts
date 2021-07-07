@@ -95,4 +95,15 @@ export default (theme: Theme) => createStyles({
             color: theme.palette.primary.main
         }
     },
+    statuses: {
+        display: 'flex',
+        marginBottom: '10px',
+    },
+    cellStatus: {
+        borderLeft: '5px solid',
+        '& a': {
+            color: theme.palette.primary.main,
+            textDecoration: 'none'
+        }
+    },
 });
