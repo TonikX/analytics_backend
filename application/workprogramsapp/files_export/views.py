@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 import html2text
 from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy, WorkProgram
 from ..serializers import WorkProgramSerializer
+from rest_framework import generics
 
 
 """Скачивание рпд в формате docx/pdf"""

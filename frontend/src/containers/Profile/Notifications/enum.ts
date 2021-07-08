@@ -4,6 +4,8 @@ export enum fetchingTypes{
 
 export enum fields{
     NOTIFICATIONS = 'NOTIFICATIONS',
+    CURRENT_PAGE = 'CURRENT_PAGE',
+    ALL_COUNT = 'ALL_COUNT',
 }
 
 export enum NotificationsFields{

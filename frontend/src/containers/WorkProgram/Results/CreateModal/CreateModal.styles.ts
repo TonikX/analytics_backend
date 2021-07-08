@@ -7,6 +7,10 @@ export default (theme: Theme) => createStyles({
     dialog: {
         padding: 20,
     },
+    dialogTitle: {
+        display: 'flex',
+        alignItems: 'center'
+    },
     radioGroup: {
         display: 'flex',
         flexDirection: 'row',
