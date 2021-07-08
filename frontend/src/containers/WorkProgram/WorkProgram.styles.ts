@@ -36,7 +36,9 @@ export default (theme: Theme) => createStyles({
     },
     subTitle: {
         marginBottom: '10px',
-        fontSize: '20px'
+        fontSize: '20px',
+        display: 'flex',
+        alignItems: 'center'
     },
     subItem: {},
     specializationSelector: {
