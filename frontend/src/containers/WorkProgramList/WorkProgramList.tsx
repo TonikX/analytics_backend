@@ -235,7 +235,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                     <TableRow key={workProgram[WorkProgramGeneralFields.ID]}>
                                         <TableCell
                                           className={classes.cellStatus}
-                                          style={{borderLeftColor: workProgramStatusesColors[workProgram?.experise_with_rpd?.expertise_status || 'WK']}}
+                                          style={{borderLeftColor: workProgramStatusesColors[get(workProgram, 'expertise_with_rpd.0.expertise_status', 'WK')]}}
                                         >
                                             {workProgram[WorkProgramGeneralFields.CODE]}
                                         </TableCell>
