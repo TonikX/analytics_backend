@@ -16,7 +16,7 @@ from .models import (
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
     Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
-from .notifications.models import ExpertiseNotification, UserNotification
+from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments
 
 from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 
@@ -105,3 +105,4 @@ admin.site.register(CourseCredit)
 admin.site.register(CourseFieldOfStudy)
 admin.site.register(ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule)
 admin.site.register(WorkProgramIdStrUpForIsu)
+admin.site.register(NotificationComments)

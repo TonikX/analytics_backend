@@ -74,6 +74,6 @@ class ExpertiseComments(models.Model):
     ]
 
     comment_block = models.CharField(choices=BLOCK_CHOICES, max_length=1024, verbose_name="Блок комментария")
-    user_expertise = models.ForeignKey('UserExpertise', on_delete=models.CASCADE)
+    user_expertise = models.ForeignKey('UserExpertise', on_delete=models.CASCADE, related_name="user_expertise_comment")
     comment_text = models.CharField(max_length=50000, verbose_name="Комментарий")
     comment_date = models.DateTimeField(auto_now_add=True, blank=True, verbose_name='Дата комментария')
