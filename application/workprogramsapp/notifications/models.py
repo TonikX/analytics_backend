@@ -34,3 +34,4 @@ class ExpertiseNotification(UserNotification):
 
 class NotificationComments(UserNotification):
     comment_new = models.ForeignKey(ExpertiseComments, on_delete=models.CASCADE, blank=True, null=True)
+
