@@ -3,9 +3,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from dataprocessing.models import User
-from workprogramsapp.expertise.models import UserExpertise, Expertise
+from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
 from workprogramsapp.models import WorkProgram
-from workprogramsapp.notifications.models import ExpertiseNotification
+from workprogramsapp.notifications.models import ExpertiseNotification, NotificationComments
 
 
 def populate_models(sender, **kwargs):
@@ -25,7 +25,7 @@ def create_profile(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=Expertise)
-def post_save(sender, instance, created, **kwargs):
+def expertise_notificator(sender, instance, created, **kwargs):
     """Create a matching profile whenever a user object is created."""
     wp_exp = WorkProgram.objects.get(expertise_with_rpd=instance)
     struct_users = User.objects.filter(user_for_structural_unit__status__in=["leader", "deputy"],
@@ -33,3 +33,18 @@ def post_save(sender, instance, created, **kwargs):
     for user in struct_users:
         ExpertiseNotification.objects.create(expertise=instance, user=user,
                                              message=f'Экспертиза для рабочей программы "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}"')
+
+
+@receiver(post_save, sender=ExpertiseComments)
+def comment_notificator(sender, instance, created, **kwargs):
+    wp_exp = WorkProgram.objects.get(expertise_with_rpd__expertse_users_in_rpd__user_expertise_comment=instance)
+    user_sender = User.objects.get(expertse_in_rpd__user_expertise_comment=instance)
+    for editor in User.objects.filter(editors=wp_exp):
+        if editor != user_sender:
+            NotificationComments.objects.create(comment_new=instance, user=editor,
+                                                message=f'В экспертизе для рабочей программы "{wp_exp.title}" в блоке "{instance.get_comment_block_display()}"был оставлен комментарий "{instance.comment_text}"')
+    for user in User.objects.filter(expertse_in_rpd__expertise__work_program=wp_exp, expertse_in_rpd__stuff_status="EX",
+                                    expertse_in_rpd__user_expertise_comment__comment_block=instance.comment_block).distinct():
+        if user != user_sender:
+            NotificationComments.objects.create(comment_new=instance, user=user,
+                                                message=f'В экспертизе для рабочей программы "{wp_exp.title}" в блоке "{instance.get_comment_block_display()}"был оставлен комментарий "{instance.comment_text}"')

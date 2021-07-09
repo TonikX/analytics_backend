@@ -139,3 +139,17 @@ class WorkProgramShortForExperiseSerializerWithStructUnitWithEditors(serializers
         model = WorkProgram
         fields = ['id', 'title', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'structural_unit',
                   'editors']
+
+
+class CommentSerializerFull(serializers.ModelSerializer):
+    """
+    Сериализатор для notifications\serializers.py  ExpertiseCommentsNotificationSerializer
+    """
+
+    def to_representation(self, value):
+        self.fields['user_expertise'] = UserExpertiseForExpertiseSerializer(many=False, read_only=True)
+        return super().to_representation(value)
+
+    class Meta:
+        model = ExpertiseComments
+        fields = "__all__"
