@@ -6,7 +6,7 @@ import {CKEditorProps} from './types';
 
 export const CKEditorComponent: React.FC<CKEditorProps> = 
     ({ value, onChange, useFormulas, onFocus, readOnly = false, onBlur, toolbarIcons, 
-        toolbarContainerId = 'toolbar-container', height, width }) => {
+        toolbarContainerId = 'toolbar-container', height, width, style }) => {
     const config = {
         extraPlugins: [useFormulas ? 'mathjax' : '', 'embed',  'autoembed', 'font', 'justify', 'openlink'],
         embed_provider: '//ckeditor.iframe.ly/api/oembed?url={url}&callback={callback}',
@@ -31,6 +31,7 @@ export const CKEditorComponent: React.FC<CKEditorProps> =
                 CKEDITOR.addCss('.cke_widget_wrapper iframe{z-index:9999;}');
             }
             }
+            style={style}
         />
     )
 }
