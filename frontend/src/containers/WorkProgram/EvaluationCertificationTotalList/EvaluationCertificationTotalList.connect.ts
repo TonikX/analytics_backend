@@ -16,7 +16,8 @@ const mapStateToProps = (state:rootState) => {
     return {
         evaluationToolsMaxSum: getEvaluationToolsMaxSum(getWorkProgramEvaluationToolsList(state)),
         intermediateCertificationMaxSum: getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state)),
-        extraPoints: getWorkProgramField(state, WorkProgramGeneralFields.EXTRA_POINTS) ? 3 : 0,
+        // eslint-disable-next-line
+        extraPoints: getWorkProgramField(state, WorkProgramGeneralFields.EXTRA_POINTS) == 3 ? 3 : 0,
     };
 };
 

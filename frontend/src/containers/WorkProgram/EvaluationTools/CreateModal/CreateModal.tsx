@@ -46,6 +46,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     state = {
         isOpen: false,
+        showErrors: false,
         evaluationTool: {
             [EvaluationToolFields.ID]: null,
             [EvaluationToolFields.DESCRIPTION]: '',
@@ -85,15 +86,25 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     handleClose = () => {
         this.props.actions.closeDialog(fields.CREATE_NEW_EVALUATION_TOOLS);
+        this.setState({ showErrors: false })
     }
 
     handleSave = () => {
         const {evaluationTool} = this.state;
 
+        const disableSave = get(evaluationTool, [EvaluationToolFields.NAME, 'length'], 0) === 0
+                            || get(evaluationTool, [EvaluationToolFields.DESCRIPTION, 'length'], 0) === 0
+                            || get(evaluationTool, [EvaluationToolFields.SECTIONS, 'length'], 0) === 0
+                            || get(evaluationTool, [EvaluationToolFields.TYPE, 'length'], 0) === 0
+        ;
         if (evaluationTool[EvaluationToolFields.ID]){
+            this.setState({ showErrors: false });
             this.props.actions.changeEvaluationTool(evaluationTool);
-        } else {
+        } else if (!disableSave){
+            this.setState({ showErrors: false });
             this.props.actions.addEvaluationTool(evaluationTool);
+        } else if (disableSave) {
+            this.setState({ showErrors: true })
         }
     }
 
@@ -141,17 +152,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             }
         })
     }
-
+    hasError = (field: string) => {
+        const { showErrors, evaluationTool } = this.state;
+        return showErrors && get(evaluationTool, [field, 'length'], 0) === 0
+    }
     render() {
         const {classes, sections, types} = this.props;
         const {evaluationTool, isOpen} = this.state;
-        
-        
-        const disableButton = get(evaluationTool, [EvaluationToolFields.NAME, 'length'], 0) === 0
-                            || get(evaluationTool, [EvaluationToolFields.DESCRIPTION, 'length'], 0) === 0
-                            || get(evaluationTool, [EvaluationToolFields.SECTIONS, 'length'], 0) === 0
-                            || get(evaluationTool, [EvaluationToolFields.TYPE, 'length'], 0) === 0
-        ;
+
         const isEditMode = Boolean(evaluationTool[EvaluationToolFields.ID]);
         if (!isOpen) return <></>
         return (
@@ -168,7 +176,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         <Button autoFocus
                                 color="inherit"
                                 onClick={this.handleSave}
-                                disabled={disableButton}
+                                // disabled={disableButton}
                                 classes={{
                                     disabled: classes.disabledButton
                                 }}
@@ -193,10 +201,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                        InputLabelProps={{
                                                            shrink: true,
                                                        }}
+                                                       error={this.hasError(EvaluationToolFields.NAME)}
                                                        value={evaluationTool[EvaluationToolFields.NAME]}
                                             />
 
-                                            <FormControl className={classes.sectionSelector}>
+                                            <FormControl error={this.hasError(EvaluationToolFields.SECTIONS)} className={classes.sectionSelector}>
                                                 <InputLabel shrink id="section-label">
                                                     Раздел *
                                                 </InputLabel>
@@ -227,7 +236,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                 </Select>
                                             </FormControl>
 
-                                            <FormControl className={classes.typeSelector}>
+                                            <FormControl error={this.hasError(EvaluationToolFields.TYPE)} className={classes.typeSelector}>
                                                 <InputLabel shrink id="section-label">
                                                     Тип *
                                                 </InputLabel>
@@ -266,6 +275,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                                shrink: true,
                                                            }}
                                                            type="number"
+                                                           error={this.hasError(EvaluationToolFields.MIN)}
                                                            value={evaluationTool[EvaluationToolFields.MIN]}
                                                 />
                                                 <TextField label="Максимальное значение"
@@ -276,6 +286,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                                shrink: true,
                                                            }}
                                                            type="number"
+                                                           error={this.hasError(EvaluationToolFields.MAX)}
                                                            value={evaluationTool[EvaluationToolFields.MAX]}
                                                 />
                                             </div>
@@ -332,6 +343,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                     onChange={this.changeDescription}
                                     useFormulas
                                     height="calc(100vh - 280px)"
+                                    style={this.hasError(EvaluationToolFields.DESCRIPTION)? {border: '1px solid #d00000'} : {border: '1px solid #d1d1d1'}}
                                 />
                             </div>
                         </>
@@ -344,7 +356,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     </Button>
                     <Button onClick={this.handleSave}
                             variant="contained"
-                            disabled={disableButton}
+                            //disabled={disableButton}
                             color="primary">
                         Сохранить
                     </Button>
