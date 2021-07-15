@@ -169,7 +169,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 </DialogTitle>
                 <DialogContent>
                     <FormControl component="fieldset">
-                        <FormLabel component="legend">Уровень *</FormLabel>
+                        <FormLabel component="legend">Уровень освоения *</FormLabel>
                         <RadioGroup className={classes.radioGroup}
                                     onChange={this.changeMasterLevelField}
                                     value={prerequisite[PrerequisiteFields.ITEM]}

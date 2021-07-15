@@ -11,4 +11,5 @@ export interface CKEditorProps {
     readOnly?: boolean;
     height?: string | number;
     width?: string | number;
+    style?: any;
 }
