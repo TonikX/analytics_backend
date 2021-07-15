@@ -18,7 +18,7 @@ export const getWorkProgramList = (state: rootState): Array<WorkProgramGeneralTy
 export const getWorkProgramsListForSelector = (state: rootState): SelectorListType =>
     getWorkProgramList(state).map((workProgram: WorkProgramGeneralType) => ({
         value: workProgram[WorkProgramGeneralFields.ID],
-        label: workProgram[WorkProgramGeneralFields.TITLE],
+        label: `${workProgram[WorkProgramGeneralFields.TITLE]} (${workProgram[WorkProgramGeneralFields.ID]})`,
     }))
 
 export const getWorkProgramDialog = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_DIALOG, {});
