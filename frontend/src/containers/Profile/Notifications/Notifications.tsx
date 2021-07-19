@@ -56,8 +56,8 @@ export default () => {
             const splittedMessageExpertise = message.split('экспертизе')
             const experisesMessage = `${splittedMessageExpertise[0]} <a href='${appRouter.getExpertiseRouteLink(get(item, 'expertise_comment.comment_new.expertise.id', ''))}'>экспертизе</a> ${splittedMessageExpertise[1]}`
             const splittedMessage = experisesMessage.split('"')
-            splittedMessage[1] = ` <a href='${appRouter.getWorkProgramLink(get(item, 'expertise_comment.comment_new.expertise.work_program', ''))}'>${splittedMessage[5]}</a> `
-            const fullMessage = splittedMessage.join('')
+            splittedMessage[1] = ` <a href='${appRouter.getWorkProgramLink(get(item, 'expertise_comment.comment_new.expertise.work_program', ''))}'>${splittedMessage[1]}</a> `
+            const fullMessage = splittedMessage.join(' ')
 
             return (
               <div className={classes.notificationItemLink}>
