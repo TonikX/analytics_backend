@@ -51,6 +51,24 @@ export default () => {
         <Typography className={classes.roundText}> Сообщение </Typography>
       </div>
       {notifications.map((item: any) => {
+          if (item.expertise_comment) {
+            const message = get(item, 'expertise_comment.message', '')
+            const splittedMessageExpertise = message.split('экспертизе')
+            const experisesMessage = `${splittedMessageExpertise[0]} <a href='${appRouter.getExpertiseRouteLink(get(item, 'expertise_comment.comment_new.expertise.id', ''))}'>экспертизе</a> ${splittedMessageExpertise[1]}`
+            const splittedMessage = experisesMessage.split('"')
+            splittedMessage[1] = ` <a href='${appRouter.getWorkProgramLink(get(item, 'expertise_comment.comment_new.expertise.work_program', ''))}'>${splittedMessage[1]}</a> `
+            const fullMessage = splittedMessage.join(' ')
+
+            return (
+              <div className={classes.notificationItemLink}>
+                <Typography className={classes.notificationItem} style={{borderRight: `5px solid ${colors.expertise}`}}>
+                  <b> {moment(get(item, 'basic.notification_date')).format(FULL_DATE_FORMAT_WITH_TIME)} </b>
+                  <br/>
+                  <div dangerouslySetInnerHTML={{__html: fullMessage}} />
+                </Typography>
+              </div>
+            )
+          }
           if (item.expertise) {
             return (
               <Link className={classes.notificationItemLink}
