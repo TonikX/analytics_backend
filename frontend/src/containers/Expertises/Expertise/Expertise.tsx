@@ -52,18 +52,25 @@ class Expertise extends React.Component<ExpertiseProps> {
     }
 
     render() {
+        let canApproveWP
         const {classes, expertise} = this.props;
 
         const experts = get(expertise, ExpertisesFields.EXPERTS_USERS_IN_RPD, [])
             .filter((item: any) => get(item, "stuff_status") === 'AU' || get(item, "stuff_status") === 'EX');
 
         const isExpertiseStatusEX = get(expertise, ExpertisesFields.STATUS) === "EX"
-        const canApproveWP = 
-            isExpertiseStatusEX
-            && (
-                get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.EX_MASTER}`) ||
-                !get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.EX_MEMBER}`)
-            )
+        if (get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.EX_MASTER}`) ||
+            get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.EX_MEMBER}`) ||
+            get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.STRUCTURAL_LEADER}`)) {
+            canApproveWP =
+                isExpertiseStatusEX
+                && (
+                    get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.EX_MASTER}`) ||
+                    !get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.EX_MEMBER}`)
+                )
+        } else {
+            canApproveWP = false
+        }
         const canAddDeleteExperts = 
             isExpertiseStatusEX
             && (
