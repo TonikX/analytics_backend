@@ -51,7 +51,7 @@ class GetAuthenticationCodeISU(ListAPIView):
                         f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
                         f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
                         )
-
+        print('Код авторизации получен')
         return HttpResponseRedirect(cas_auth_uri)
 
 class  AuthenticateByCodeISU(ListAPIView):
@@ -124,6 +124,7 @@ class  AuthenticateByCodeISU(ListAPIView):
             user = User.objects.get(username=isu_profile['id'])
             refresh_token = TokenObtainPairSerializer().get_token(user)
             access_token = AccessToken().for_user(user)
+            print('Юзер авторизован')
 
             return HttpResponseRedirect(f'{settings.ISU["ISU_FINISH_URI"]}/{access_token}/{refresh_token}')
 
