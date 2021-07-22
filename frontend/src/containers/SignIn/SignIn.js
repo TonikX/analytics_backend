@@ -18,6 +18,7 @@ import {userService} from '../../service/user-service';
 
 import connect from './SignIn.connect';
 import styles from './SignIn.styles';
+import {config, getEnvVariable} from "../../config/app-config";
 
 class SignIn extends React.PureComponent{
     componentWillUnmount() {
@@ -94,7 +95,7 @@ class SignIn extends React.PureComponent{
                     </Button>
 
                     <div className={classes.noAccount}>
-                        <a href="https://op.itmo.ru/api/cas-redirect/"
+                        <a href={config.apiIsuFinishUrlWithProtocol}
                               className={classes.link}
                         >
                             <Button color="primary"
