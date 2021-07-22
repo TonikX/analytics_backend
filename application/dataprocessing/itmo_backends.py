@@ -46,7 +46,7 @@ class GetAuthenticationCodeISU(ListAPIView):
     def get(self, request):
 
         cas_auth_uri = (
-            'https://login.itmo.ru/cas/oauth2.0/authorize?'
+            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/auth?'
                         'response_type=code&'
                         f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
                         f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
@@ -64,7 +64,7 @@ class  AuthenticateByCodeISU(ListAPIView):
 
         # Отправляем запрос на получение токена
         obtain_isu = requests.post(
-            'https://login.itmo.ru/cas/oauth2.0/accessToken?'
+            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?'
                     'grant_type=authorization_code&'
                     f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
                     f'client_secret={settings.ISU["ISU_CLIENT_SECRET"]}&'
@@ -77,7 +77,7 @@ class  AuthenticateByCodeISU(ListAPIView):
 
             # Получаем информацию о пользователе
             isu_profile = requests.get(
-                'https://login.itmo.ru/cas/oauth2.0/profile?'
+                'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/userinfo?'
                 f'access_token={obtain_isu["access_token"]}'
             ).json()
 
