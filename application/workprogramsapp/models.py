@@ -115,6 +115,10 @@ class WorkProgram(CloneMixin, models.Model):
                                         related_name='workprogram_in_structural_unit', blank=True, null=True)
     # language = models.CharField(choices=languages_for_wp, max_length=100, verbose_name='Язык', blank=True, null=True)
     bars = models.BooleanField(default=False, verbose_name="Нужно отослать дисциплину в БАРС")
+    lecture_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы лекций")
+    practice_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы Практик")
+    lab_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы лабораторных работ")
+    srs_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы СРС")
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
