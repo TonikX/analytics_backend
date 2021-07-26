@@ -61,6 +61,7 @@ class  AuthenticateByCodeISU(ListAPIView):
 
         # Забираем код авторизации из GET параметра
         authorization_code = request.GET['code']
+        print('authorization_code')
 
         # Отправляем запрос на получение токена
         obtain_isu = requests.post(
@@ -71,6 +72,7 @@ class  AuthenticateByCodeISU(ListAPIView):
                     f'code={authorization_code}&'
                     f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
                     ).json()
+        print('code obtained')
 
         # Проверяем правильный ли ответ от ИСУ
         if 'access_token' in obtain_isu:
@@ -80,6 +82,7 @@ class  AuthenticateByCodeISU(ListAPIView):
                 'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/userinfo?'
                 f'access_token={obtain_isu["access_token"]}'
             ).json()
+            print('profile obtained')
 
             User = get_user_model()
 
