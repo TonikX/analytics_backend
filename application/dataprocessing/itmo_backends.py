@@ -89,7 +89,7 @@ class  AuthenticateByCodeISU(ListAPIView):
             data = {'grant_type':'authorization_code', 'client_id':f'{settings.ISU["ISU_CLIENT_ID"]}',
                     'client_secret':f'{settings.ISU["ISU_CLIENT_SECRET"]}', 'redirect_uri':f'{settings.ISU["ISU_REDIRECT_URI"]}',
                     'code': 'openid'}
-        ).data)
+        ).body)
         print('code obtained', print(obtain_isu))
 
         # Проверяем правильный ли ответ от ИСУ
