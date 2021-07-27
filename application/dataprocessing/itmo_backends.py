@@ -62,7 +62,12 @@ class  AuthenticateByCodeISU(ListAPIView):
         # Забираем код авторизации из GET параметра
         authorization_code = request.GET['code']
         print('authorization_code')
-
+        obtain_isu_url = requests.post(
+            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token', params = {'code':{authorization_code}},
+            data = {'grant_type':'authorization_code', 'client_id':f'{settings.ISU["ISU_CLIENT_ID"]}',
+                    'client_secret':f'{settings.ISU["ISU_CLIENT_SECRET"]}', 'redirect_uri':f'{settings.ISU["ISU_REDIRECT_URI"]}',
+                    'code': 'openid'}
+        )
         # Отправляем запрос на получение токена
         obtain_isu = requests.post(
             'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?'f'code={authorization_code}',
@@ -78,18 +83,8 @@ class  AuthenticateByCodeISU(ListAPIView):
         #     f'code={authorization_code}&'
         #     f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
         #     ).url)
-        print('url: ', requests.post(
-            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?',
-            data = {'grant_type':'authorization_code', 'client_id':f'{settings.ISU["ISU_CLIENT_ID"]}',
-                    'client_secret':f'{settings.ISU["ISU_CLIENT_SECRET"]}', 'redirect_uri':f'{settings.ISU["ISU_REDIRECT_URI"]}',
-                    'code': 'openid'}
-        ).url)
-        print('form_data: ', requests.post(
-            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?',
-            data = {'grant_type':'authorization_code', 'client_id':f'{settings.ISU["ISU_CLIENT_ID"]}',
-                    'client_secret':f'{settings.ISU["ISU_CLIENT_SECRET"]}', 'redirect_uri':f'{settings.ISU["ISU_REDIRECT_URI"]}',
-                    'code': 'openid'}
-        ).request.body)
+        print('url: ', obtain_isu_url.url)
+        print('form_data: ', obtain_isu_url.request.body)
         print('code obtained', print(obtain_isu))
 
         # Проверяем правильный ли ответ от ИСУ
