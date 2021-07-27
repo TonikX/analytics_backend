@@ -89,51 +89,52 @@ class  AuthenticateByCodeISU(ListAPIView):
             # Получаем информацию о пользователе
             isu_profile = requests.get(
                 'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/userinfo?'
-                f'access_token={obtain_isu["access_token"]}'
+                f'Bearer={obtain_isu["access_token"]}'
             ).json()
+            print('profile obtained')
             print('profile obtained, user_profile', isu_profile)
 
             User = get_user_model()
 
             # Из чего будем собирать пароль
             password_rule = (
-                f'{isu_profile["isu/preferred_username/id"]}'
-                f'{isu_profile["firstname/given_name"]}'
+                f'{isu_profile["id"]}'
+                f'{isu_profile["first_name"]}'
                 ).encode('utf-8')
 
             password = hashlib.sha256(password_rule).hexdigest()
 
             # Проверяем есть ли пользователь в системе
-            is_registered = User.objects.filter(username=isu_profile['isu/preferred_username/id']).exists()
+            is_registered = User.objects.filter(username=isu_profile['id']).exists()
 
             # Если пользователя нет, то регистрируем
             if not is_registered:
                 #reg = True
                 User.objects.create_user(
-                    username=isu_profile['isu/preferred_username/id'],
+                    username=isu_profile['id'],
                     password=password,
-                    first_name=isu_profile['firstname/given_name'],
-                    last_name=isu_profile['surname/family_name'],
-                    isu_number=isu_profile['isu/preferred_username/id'],
+                    first_name=isu_profile['first_name'],
+                    last_name=isu_profile['surname'],
+                    isu_number=isu_profile['id'],
                     is_active=True
 
                 )
 
                 try:
-                    User.objects.patronymic=isu_profile['middle_name/patronymic']
+                    User.objects.patronymic=isu_profile['patronymic']
                 except:
                     pass
 
             #if reg:
                 groups = ["rpd_developer", "education_plan_developer", "op_leader", "student"]
-                User = User.objects.get(username=isu_profile['isu/preferred_username/id'])
+                User = User.objects.get(username=isu_profile['id'])
                 for group in groups:
                     User.groups.add(Group.objects.get(name=group))
 
 
             # Авторизация
             User = get_user_model()
-            user = User.objects.get(username=isu_profile['isu/preferred_username/id'])
+            user = User.objects.get(username=isu_profile['id'])
             refresh_token = TokenObtainPairSerializer().get_token(user)
             access_token = AccessToken().for_user(user)
             print('Юзер авторизован')
