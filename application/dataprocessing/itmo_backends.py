@@ -63,10 +63,10 @@ class  AuthenticateByCodeISU(ListAPIView):
         authorization_code = request.GET['code']
         print('authorization_code')
         obtain_isu_url = requests.post(
-            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token', params = {'code':{authorization_code}},
+            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token', # params = {'code':{authorization_code}},
             data = {'grant_type':'authorization_code', 'client_id':f'{settings.ISU["ISU_CLIENT_ID"]}',
                     'client_secret':f'{settings.ISU["ISU_CLIENT_SECRET"]}', 'redirect_uri':f'{settings.ISU["ISU_REDIRECT_URI"]}',
-                    'code': 'openid'}
+                    'code':{authorization_code}}
         )
         # Отправляем запрос на получение токена
         obtain_isu = obtain_isu_url.json()
