@@ -80,6 +80,7 @@ class  AuthenticateByCodeISU(ListAPIView):
         #     ).url)
         print('url: ', obtain_isu_url.url)
         print('form_data: ', obtain_isu_url.request.body)
+        print('headers: ', obtain_isu_url.request.headers)
         print('code obtained', print(obtain_isu))
 
         # Проверяем правильный ли ответ от ИСУ
