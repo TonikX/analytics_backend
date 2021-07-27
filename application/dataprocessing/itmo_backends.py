@@ -88,7 +88,7 @@ class  AuthenticateByCodeISU(ListAPIView):
             print('styrt obtained')
             # Получаем информацию о пользователе
             isu_profile = requests.get(
-                'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/userinfo?', headers = {'Bearer': {obtain_isu["access_token"]}}
+                'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/userinfo?', headers = {'Authorization': f'Bearer {obtain_isu["access_token"]}'}
             ).json()
             print('profile obtained')
             print('profile obtained, user_profile', isu_profile)
