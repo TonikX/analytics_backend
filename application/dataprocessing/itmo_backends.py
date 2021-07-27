@@ -97,43 +97,43 @@ class  AuthenticateByCodeISU(ListAPIView):
 
             # Из чего будем собирать пароль
             password_rule = (
-                f'{isu_profile["id"]}'
-                f'{isu_profile["first_name"]}'
+                f'{isu_profile["isu/preferred_username/id"]}'
+                f'{isu_profile["firstname/given_name"]}'
                 ).encode('utf-8')
 
             password = hashlib.sha256(password_rule).hexdigest()
 
             # Проверяем есть ли пользователь в системе
-            is_registered = User.objects.filter(username=isu_profile['id']).exists()
+            is_registered = User.objects.filter(username=isu_profile['isu/preferred_username/id']).exists()
 
             # Если пользователя нет, то регистрируем
             if not is_registered:
                 #reg = True
                 User.objects.create_user(
-                    username=isu_profile['id'],
+                    username=isu_profile['isu/preferred_username/id'],
                     password=password,
-                    first_name=isu_profile['first_name'],
-                    last_name=isu_profile['surname'],
-                    isu_number=isu_profile['id'],
+                    first_name=isu_profile['firstname/given_name'],
+                    last_name=isu_profile['surname/family_name'],
+                    isu_number=isu_profile['isu/preferred_username/id'],
                     is_active=True
 
                 )
 
                 try:
-                    User.objects.patronymic=isu_profile['patronymic']
+                    User.objects.patronymic=isu_profile['middle_name/patronymic']
                 except:
                     pass
 
             #if reg:
                 groups = ["rpd_developer", "education_plan_developer", "op_leader", "student"]
-                User = User.objects.get(username=isu_profile['id'])
+                User = User.objects.get(username=isu_profile['isu/preferred_username/id'])
                 for group in groups:
                     User.groups.add(Group.objects.get(name=group))
 
 
             # Авторизация
             User = get_user_model()
-            user = User.objects.get(username=isu_profile['id'])
+            user = User.objects.get(username=isu_profile['isu/preferred_username/id'])
             refresh_token = TokenObtainPairSerializer().get_token(user)
             access_token = AccessToken().for_user(user)
             print('Юзер авторизован')
