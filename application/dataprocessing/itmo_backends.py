@@ -72,7 +72,7 @@ class  AuthenticateByCodeISU(ListAPIView):
                     f'code={authorization_code}&'
                     f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
                     ).json()
-        print('code url', print(obtain_isu.url))
+        print('code url', obtain_isu.url)
         print('code obtained', print(obtain_isu))
 
         # Проверяем правильный ли ответ от ИСУ
