@@ -72,7 +72,14 @@ class  AuthenticateByCodeISU(ListAPIView):
                     f'code={authorization_code}&'
                     f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
                     ).json()
-        print('code url', obtain_isu.url)
+        print('code url', requests.post(
+            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?'
+            'grant_type=authorization_code&'
+            f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
+            f'client_secret={settings.ISU["ISU_CLIENT_SECRET"]}&'
+            f'code={authorization_code}&'
+            f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
+            ).url)
         print('code obtained', print(obtain_isu))
 
         # Проверяем правильный ли ответ от ИСУ
