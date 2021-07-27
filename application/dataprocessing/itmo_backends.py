@@ -51,7 +51,7 @@ class GetAuthenticationCodeISU(ListAPIView):
                         f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
                         f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
                         )
-        print('Код авторизации получен')
+        print('AuthCode: ', cas_auth_uri.json)
         return HttpResponseRedirect(cas_auth_uri)
 
 class  AuthenticateByCodeISU(ListAPIView):
@@ -65,7 +65,7 @@ class  AuthenticateByCodeISU(ListAPIView):
 
         # Отправляем запрос на получение токена
         obtain_isu = requests.post(
-            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?',
+            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?'f'code={authorization_code}',
                 data = {'grant_type':'authorization_code', 'client_id':f'{settings.ISU["ISU_CLIENT_ID"]}',
                         'client_secret':f'{settings.ISU["ISU_CLIENT_SECRET"]}', 'redirect_uri':f'{settings.ISU["ISU_REDIRECT_URI"]}',
                         'code': 'openid'}
