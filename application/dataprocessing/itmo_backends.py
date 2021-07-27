@@ -98,7 +98,7 @@ class  AuthenticateByCodeISU(ListAPIView):
             # Из чего будем собирать пароль
             password_rule = (
                 f'{isu_profile["id"]}'
-                f'{isu_profile["firstname"]}'
+                f'{isu_profile["given_name"]}'
                 ).encode('utf-8')
 
             password = hashlib.sha256(password_rule).hexdigest()
@@ -112,7 +112,7 @@ class  AuthenticateByCodeISU(ListAPIView):
                 User.objects.create_user(
                     username=isu_profile['id'],
                     password=password,
-                    first_name=isu_profile['firstname'],
+                    first_name=isu_profile['given_name'],
                     last_name=isu_profile['surname'],
                     isu_number=isu_profile['id'],
                     is_active=True
