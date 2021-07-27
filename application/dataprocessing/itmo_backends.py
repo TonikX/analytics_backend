@@ -65,21 +65,19 @@ class  AuthenticateByCodeISU(ListAPIView):
 
         # Отправляем запрос на получение токена
         obtain_isu = requests.post(
-            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?'
-                    'grant_type=authorization_code&'
-                    f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
-                    f'client_secret={settings.ISU["ISU_CLIENT_SECRET"]}&'
-                    f'code={authorization_code}&'
-                    f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
+            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?',
+                data = {'grant_type':'authorization_code', 'client_id':f'{settings.ISU["ISU_CLIENT_ID"]}',
+                        'client_secret':f'{settings.ISU["ISU_CLIENT_SECRET"]}', 'redirect_uri':f'{settings.ISU["ISU_REDIRECT_URI"]}',
+                        'code': 'openid'}
                     ).json()
-        print('code url', requests.post(
-            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?'
-            'grant_type=authorization_code&'
-            f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
-            f'client_secret={settings.ISU["ISU_CLIENT_SECRET"]}&'
-            f'code={authorization_code}&'
-            f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
-            ).url)
+        # print('code url', requests.post(
+        #     'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?'
+        #     'grant_type=authorization_code&'
+        #     f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
+        #     f'client_secret={settings.ISU["ISU_CLIENT_SECRET"]}&'
+        #     f'code={authorization_code}&'
+        #     f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
+        #     ).url)
         print('code obtained', print(obtain_isu))
 
         # Проверяем правильный ли ответ от ИСУ
