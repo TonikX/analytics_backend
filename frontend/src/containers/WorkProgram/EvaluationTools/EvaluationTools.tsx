@@ -20,6 +20,8 @@ import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import EyeIcon from '@material-ui/icons/VisibilityOutlined';
 import CheckIcon from "@material-ui/icons/CheckOutlined";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import DescriptionModal from "./DescriptionModal";
 import EvaluationCertificationTotalList from "../EvaluationCertificationTotalList";
@@ -28,11 +30,10 @@ import CreateModal from "./CreateModal";
 import {SixthStepProps} from './types';
 import {EvaluationToolFields, fields, WorkProgramGeneralFields, workProgramSectionFields} from "../enum";
 import {EvaluationToolType} from "../types";
+import { types } from './constants'
 
 import connect from './EvaluationTools.connect';
 import styles from './EvaluationTools.styles';
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 class EvaluationTools extends React.PureComponent<SixthStepProps> {
     state = {
@@ -142,7 +143,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                         {evaluationTool[EvaluationToolFields.NAME]}
                                     </Typography>
                                     <Typography className={classes.type}>
-                                        {evaluationTool[EvaluationToolFields.TYPE]}
+                                        {evaluationTool[EvaluationToolFields.TYPE]} {types.includes(evaluationTool[EvaluationToolFields.TYPE]) ? '' : '(устаревшее)'}
                                     </Typography>
                                     <Typography className={classes.min}>
                                         {evaluationTool[EvaluationToolFields.MIN]}
