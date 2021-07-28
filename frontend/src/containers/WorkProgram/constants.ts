@@ -36,7 +36,7 @@ export const languageObject: any = {
     [RUSSIAN]: 'Русский',
     [ENGLISH]: 'Английский',
     [RUSSIAN_ENGLISH]: 'Русский/Английский',
-    [KZ]: 'Казахский',
+    /*[KZ]: 'Казахский',*/
     [GERMAN_ENGLISH]: 'Немецкий',
 }
 
@@ -53,10 +53,10 @@ export const languageArray = [
         value: RUSSIAN_ENGLISH,
         label: 'Русский/Английский'
     },
-    {
+/*    {
         value: KZ,
         label: 'Казахский'
-    },
+    },*/
     {
         value: GERMAN_ENGLISH,
         label: 'Немецкий'
