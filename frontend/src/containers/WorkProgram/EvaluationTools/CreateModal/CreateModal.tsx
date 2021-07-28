@@ -257,6 +257,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                         />
                                                     }
                                                     style={{width: width}}
+                                                    renderValue={(value = '') => {
+                                                        //@ts-ignore
+                                                        if (types.includes(value) || value.length === 0){
+                                                            return <>{value}</>
+                                                        }
+                                                        return <>{value} (устаревшее)</>
+                                                    }}
                                                 >
                                                     {types.map((type: any, index: number) =>
                                                         <MenuItem value={type} key={`type-${index}`}>
