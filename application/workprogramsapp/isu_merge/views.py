@@ -86,6 +86,51 @@ class FileUploadAPIView(APIView):
                     # print(wp_obj.id)
                     wp_count += 1
 
+                # print('лекционные часы:', float(str(data['ЛЕК_В_СЕМЕСТРАХ'][i]).replace(",", ".")))
+                # lecture_array = []
+                # lecture_array[int(data['SEMESTER'][i]) - 1] = float(str(data['LECTURE'][i]).replace(",", "."))
+                print('data[ЛЕК_В_СЕМЕСТРАХ]', data['ЛЕК_В_СЕМЕСТРАХ'])
+                for i in float(str(data['ЛЕК_В_СЕМЕСТРАХ'][i]).replace(",", ".")):
+                    print('ffff', i)
+
+                # if not wp_obj.lecture_hours:
+                #     print('попытка создать массивыдля данных о семестрах')
+                #     wp_obj.lecture_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     wp_obj.practice_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     wp_obj.lab_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     wp_obj.srs_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     print('условие длинны лекционных часов прошло')
+                # if len(list(wp_obj.lecture_hours)) < 6:
+                #     print('2 попытка создать массивыдля данных о семестрах')
+                #     wp_obj.lecture_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     wp_obj.practice_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     wp_obj.lab_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     wp_obj.srs_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
+                #     print('2 условие длинны лекционных часов прошло')
+                # print('попытка вбить часы')
+                # lecture_array = [float(x) for x in wp_obj.lecture_hours.split(",")]
+                # practise_array = [float(x) for x in wp_obj.practice_hours.split(",")]
+                # lab_array = [float(x) for x in wp_obj.lab_hours.split(",")]
+                # srs_array = [float(x) for x in wp_obj.srs_hours.split(",")]
+                # print('семестр', data['SEMESTER'][i])
+                # print('лекционные часы:', float(str(data['LECTURE'][i]).replace(",", ".")))
+                # print(lecture_array)
+                # print(lecture_array[int(data['SEMESTER'][i]) - 1])
+                # lecture_array[int(data['SEMESTER'][i]) - 1] = float(str(data['LECTURE'][i]).replace(",", "."))
+                # print('практические часы:', float(str(data['PRACTICE'][i]).replace(",", ".")))
+                # practise_array[int(data['SEMESTER'][i]) - 1] = float(str(data['PRACTICE'][i]).replace(",", "."))
+                # print('лабораторные часы:', float(str(data['LAB'][i]).replace(",", ".")))
+                # lab_array[int(data['SEMESTER'][i]) - 1] = float(str(data['LAB'][i]).replace(",", "."))
+                # print('срс часы:', float(str(data['SRS'][i]).replace(",", ".")))
+                # srs_array[int(data['SEMESTER'][i]) - 1] = float(str(data['SRS'][i]).replace(",", "."))
+                #
+                # wp_obj.lecture_hours = str(lecture_array)[1:-1].replace(" ", "")
+                # wp_obj.practice_hours = str(practise_array)[1:-1].replace(" ", "")
+                # wp_obj.lab_hours = str(lab_array)[1:-1].replace(" ", "")
+                # wp_obj.srs_hours = str(srs_array)[1:-1].replace(" ", "")
+
+
+
                 print('-- Работа с образовательной программой')
 
                 if data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find("Русский") != -1 and data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find(
@@ -439,6 +484,42 @@ class FileUploadOldVersionAPIView(APIView):
                     wp_obj.save()
                     # print(wp_obj.id)
                     wp_count += 1
+
+                def watchmaker(hours, ze):
+                    print('функция вызвана')
+                    ze = ze
+                    sem = 0
+                    all_ze_indexes_in_rpd = 0
+                    lecture_hours_v2 = [0, 0, 0, 0]
+                    for i in hours:
+                        #print('ze', ze)
+                        if ze[all_ze_indexes_in_rpd]>=1.0:
+                            print('условие сработало')
+                            lecture_hours_v2[sem] = i
+                            sem +=1
+                        all_ze_indexes_in_rpd +=1
+
+                    #print('lecture_hours_v2', lecture_hours_v2)
+                    return str(lecture_hours_v2).strip("[]")
+
+                def semesters(ze):
+                    ze = ze
+                    sem = 0
+                    for i in ze:
+                        if i > 0:
+                            sem +=1
+                    return sem
+
+                wp_obj.number_of_semesters = int(semesters([float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")]))
+                wp_obj.lecture_hours_v2 = watchmaker([float(x) for x in (data['ЛЕК_В_СЕМЕСТРАХ'][i]).strip("()").split(",")], [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
+                print('Записаны часы лекций:', wp_obj.lecture_hours_v2)
+                wp_obj.practice_hours_v2 = watchmaker([float(x) for x in (data['ПРАК_В_СЕМЕСТРАХ'][i]).strip("()").split(",")], [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
+                print('Записаны часы практик:', wp_obj.practice_hours_v2)
+                wp_obj.lab_hours_v2 = watchmaker([float(x) for x in (data['ЛАБ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")], [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
+                print('Записаны часы лаб:', wp_obj.lab_hours_v2)
+                wp_obj.srs_hours_v2 = watchmaker([float(x) for x in (data['СРС'][i]).strip("()").split(",")], [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
+                print('Записаны часы срс:', wp_obj.srs_hours_v2)
+                wp_obj.save()
                 print('-- Работа с образовательной программой')
                 if data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find("Русский") != -1 and data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find(
                         "Английский") != -1:

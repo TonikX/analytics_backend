@@ -113,7 +113,7 @@ class  AuthenticateByCodeISU(ListAPIView):
                     username=isu_profile['id'],
                     password=password,
                     first_name=isu_profile['given_name'],
-                    last_name=isu_profile['surname'],
+                    last_name=isu_profile['family_name'],
                     isu_number=isu_profile['id'],
                     is_active=True
 
