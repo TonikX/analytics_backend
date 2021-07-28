@@ -305,14 +305,8 @@ class WorkProgramService extends AnalyticsService{
         });
     }
 
-    deleteZUN({indicator, plans, results}: any){
-        return this.post(`/api/zun/many_create/`,{
-            wpa_in_fss: plans,
-            zun: {
-                indicator_in_zun: indicator,
-                items: results
-            }
-        });
+    deleteZUN(compentenceId: number){
+        return this.delete(`/api/zun/many_create/${compentenceId}`);
     }
 
     updateZUN({indicator, plans, results}: any){

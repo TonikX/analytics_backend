@@ -30,6 +30,7 @@ import Radio from "@material-ui/core/Radio";
 import QuestionIcon from "@material-ui/icons/HelpOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import CKEditor from '../../../../components/CKEditor'
+import { types } from '../constants'
 
 import {
     EvaluationToolFields,
@@ -39,7 +40,6 @@ import {
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     editor = null;
@@ -157,7 +157,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         return showErrors && get(evaluationTool, [field, 'length'], 0) === 0
     }
     render() {
-        const {classes, sections, types} = this.props;
+        const {classes, sections} = this.props;
         const {evaluationTool, isOpen} = this.state;
 
         const isEditMode = Boolean(evaluationTool[EvaluationToolFields.ID]);
@@ -257,6 +257,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                         />
                                                     }
                                                     style={{width: width}}
+                                                    renderValue={(value = '') => {
+                                                        //@ts-ignore
+                                                        if (types.includes(value) || value.length === 0){
+                                                            return <>{value}</>
+                                                        }
+                                                        return <>{value} (устаревшее)</>
+                                                    }}
                                                 >
                                                     {types.map((type: any, index: number) =>
                                                         <MenuItem value={type} key={`type-${index}`}>

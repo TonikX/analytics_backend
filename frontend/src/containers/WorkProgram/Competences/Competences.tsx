@@ -42,6 +42,10 @@ export default () => {
     dispatch(actions.getResults(workProgramId))
   }, [])
 
+  const deleteCompetence = (competenceId: number) => {
+    dispatch(actions.deleteZUN(competenceId))
+  }
+
   return (
     <>
       <Typography className={classes.subTitle}>
@@ -89,14 +93,19 @@ export default () => {
                 <AddIcon/> Добавить индикатор
               </div>
             )
+            const deleteCompetenceButton = (
+              <div className={classes.smallButton}
+                   onClick={() => deleteCompetence(competence.id)}
+              >
+                Удалить компетенцию
+              </div>
+            )
             if (zuns.length === 0){
               return (
                 <TableRow>
                   <TableCell className={classes.cell}>
                     {competence.number} {competence.name}
-                    <DeleteIcon className={classes.deleteIcon}
-                                onClick={() => {}}
-                    />
+                    {deleteCompetenceButton}
                   </TableCell>
                   <TableCell className={classes.cell}>
                     {addIndicatorButton}
@@ -110,10 +119,8 @@ export default () => {
                 {index === 0 ?
                   <TableCell rowSpan={zuns.length} className={classes.cell}>
                     {competence.number} {competence.name}
-                    {/*<DeleteIcon className={classes.deleteIcon}*/}
-                    {/*            onClick={() => {}}*/}
-                    {/*/>*/}
                     {addIndicatorButton}
+                    {deleteCompetenceButton}
                   </TableCell>
                   : <></>
                 }

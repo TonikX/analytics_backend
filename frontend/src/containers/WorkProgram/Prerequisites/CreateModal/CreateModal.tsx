@@ -43,7 +43,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     };
 
     componentDidMount() {
-        this.props.subjectAreaActions.getSubjectArea();
+        // this.props.subjectAreaActions.getSubjectArea();
+
+        this.props.trainingEntitiesActions.getTrainingEntities();
     }
 
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
@@ -180,14 +182,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         </RadioGroup>
                     </FormControl>
 
-                    <SearchSelector label="Предметная область *"
-                                            changeSearchText={this.handleChangeSubjectAreaSearch}
-                                            list={subjectArea}
-                                            changeItem={this.changeSubjectAreaField}
-                                            value={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '')}
-                                            valueLabel={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.TITLE], '')}
-                                            className={classes.marginBottom30}
-                    />
+                    {/*<SearchSelector label="Предметная область *"*/}
+                    {/*                        changeSearchText={this.handleChangeSubjectAreaSearch}*/}
+                    {/*                        list={subjectArea}*/}
+                    {/*                        changeItem={this.changeSubjectAreaField}*/}
+                    {/*                        value={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '')}*/}
+                    {/*                        valueLabel={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.TITLE], '')}*/}
+                    {/*                        className={classes.marginBottom30}*/}
+                    {/*/>*/}
 
                     <SearchSelector label="Учебная сущность *"
                                             changeSearchText={this.handleChangeTrainingEntitySearchText}
@@ -195,7 +197,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             changeItem={this.saveTrainingEntityField}
                                             value={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.ID], '')}
                                             valueLabel={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.TITLE], '')}
-                                            disabled={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '') === ''}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
