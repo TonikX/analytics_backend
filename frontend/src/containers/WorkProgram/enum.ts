@@ -40,6 +40,7 @@ export enum WorkProgramGeneralFields {
     RATING = 'rating',
     RATING_ID = 'id_rating',
     VIDEO_LINK = 'video',
+    SEMESTER_COUNT = 'number_of_semesters',
     DESCRIPTION = 'description',
     ZUN = 'zuns_for_wp',
     CAN_COMMENT = 'can_comment',

@@ -82,13 +82,6 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         this.props.actions.cloneWorkProgram(this.getWorkProgramId());
     }
 
-    handleBars = (e: React.ChangeEvent) => {
-        this.props.actions.saveWorkProgram({
-            destination: WorkProgramGeneralFields.BARS,
-            value: get(e, "target.checked", false)
-        })
-    }
-
     getWorkProgramId = () => get(this, 'props.match.params.id');
 
     renderContent = () => {
@@ -243,14 +236,6 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                     <WorkProgramStatus status={workProgramStatus} />
 
                     <div className={classes.headerButtons}>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                            <Typography>Дисциплина реализуется в БАРС 2.0</Typography>
-                            <Switch
-                                checked={get(workProgram, [WorkProgramGeneralFields.BARS], false)}
-                                onChange={(canSendToArchive || canSendToExpertise)  ? this.handleBars : () => {}}
-                                disabled={fetchingBars}
-                            />
-                        </div>
                         {canSendToArchive && <Button onClick={this.handleSendToArchive}>Отправить в архив</Button>}
 
                         {canSendToExpertise &&

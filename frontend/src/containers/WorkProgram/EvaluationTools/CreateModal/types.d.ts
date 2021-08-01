@@ -9,4 +9,5 @@ export interface CreateModalProps extends WithStyles<typeof styles> {
     handleClose: Function;
     evaluationTool: EvaluationToolType;
     sections: Array<{label: string, value: string}>
+    semesterCount: number;
 }

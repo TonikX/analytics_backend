@@ -23,6 +23,8 @@ const mapStateToProps = (state:rootState) => {
         language: getWorkProgramField(state, WorkProgramGeneralFields.LANGUAGE),
         editors: getWorkProgramField(state, WorkProgramGeneralFields.EDITORS),
         structuralUnit: getWorkProgramField(state, WorkProgramGeneralFields.STRUCTURAL_UNIT),
+        bars: getWorkProgramField(state, WorkProgramGeneralFields.BARS),
+        semesterCount: getWorkProgramField(state, WorkProgramGeneralFields.SEMESTER_COUNT),
 
         isCanEdit: isCanEdit(state),
         structuralUnitsList: getStructuralUnitsForSelector(state),

@@ -157,7 +157,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         return showErrors && get(evaluationTool, [field, 'length'], 0) === 0
     }
     render() {
-        const {classes, sections} = this.props;
+        const {classes, sections, semesterCount} = this.props;
         const {evaluationTool, isOpen} = this.state;
 
         const isEditMode = Boolean(evaluationTool[EvaluationToolFields.ID]);
@@ -310,9 +310,24 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                             value={evaluationTool[EvaluationToolFields.SEMESTER]}
                                                 >
                                                     <FormControlLabel value={'1'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 1} />} label="Первый" />
-                                                    <FormControlLabel value={'2'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 2} />} label="Второй" />
-                                                    <FormControlLabel value={'3'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 3} />} label="Третий" />
-                                                    <FormControlLabel value={'4'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 4} />} label="Четвертый" />
+                                                    <FormControlLabel
+                                                      disabled={semesterCount < 2}
+                                                      value={'2'}
+                                                      control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 2} />}
+                                                      label="Второй"
+                                                    />
+                                                    <FormControlLabel
+                                                      disabled={semesterCount < 3}
+                                                      value={'3'}
+                                                      control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 3} />}
+                                                      label="Третий"
+                                                    />
+                                                    <FormControlLabel
+                                                      disabled={semesterCount < 4}
+                                                      value={'4'}
+                                                      control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 4} />}
+                                                      label="Четвертый"
+                                                    />
                                                 </RadioGroup>
                                             </FormControl>
 
