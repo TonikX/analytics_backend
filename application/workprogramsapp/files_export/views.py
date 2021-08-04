@@ -164,7 +164,10 @@ def render_context(context, **kwargs):
             item['type'] = 'Coursework'
         certification_evaluation_tools.append(item)
     template_context['certification_evaluation_tools'] = certification_evaluation_tools
-    template_context['outcomes_max_all'] = sum(items_max) + int(context['extra_points'])
+    try:
+        template_context['outcomes_max_all'] = sum(items_max) + int(context['extra_points'])
+    except:
+        pass
     template_context['outcomes_min_all'] = sum(items_min)
     template_context['extra_points'] = context['extra_points']
     return template_context, filename
