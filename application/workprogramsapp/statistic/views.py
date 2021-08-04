@@ -1,4 +1,5 @@
 import json
+from pprint import pprint
 
 from django.db.models.aggregates import Count
 from django.shortcuts import get_object_or_404
@@ -14,7 +15,8 @@ from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Acade
     СertificationEvaluationTool
 from workprogramsapp.statistic.serializers import WorkProgramInFieldOfStudySerializerForStatistic, \
     WorkProgramSerializerForStatistic, SuperShortWorkProgramSerializer, WorkProgramSerializerForStatisticExtended, \
-    AcademicPlansDescriptionWpSerializer, WorkProgramPrerequisitesAndOutcomesSerializer
+    AcademicPlansDescriptionWpSerializer, WorkProgramPrerequisitesAndOutcomesSerializer, \
+    WorkProgramDescriptionOnlySerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
@@ -342,3 +344,67 @@ class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
         obj = get_object_or_404(queryset)
         self.check_object_permissions(self.request, obj)
         return obj
+
+
+@api_view(['GET'])
+@permission_classes((AllowAny,))
+def EditorsByWPStatuses(request):
+    """
+    Редакторы с информацией о статусах их РПД (AC: принято, EX: на экспертизе:, WK: на доработке,
+    NO_EXP: не отправлялось на экспертизу)
+    """
+    editors_status_list = []
+    editors = User.objects.filter(editors__isnull=False).distinct()
+    for editor in editors:
+        expertise_of_editor = list(Expertise.objects.filter(work_program__editors=editor).distinct().values(
+            "expertise_status").annotate(total=Count("expertise_status")))
+
+        no_exp = {'expertise_status': 'NO_EXP', 'total': int(
+            WorkProgram.objects.filter(expertise_with_rpd__isnull=True, editors=editor).distinct().count())}
+        if no_exp['total'] == 0:
+            no_exp = []
+        expertise_of_editor.append(no_exp)
+
+        editors_status_list.append(
+            {
+                "editor": {"id": editor.id, "name": editor.first_name + " " + editor.last_name, },
+                "statuses_count": expertise_of_editor
+            }
+        )
+    return Response(editors_status_list)
+
+
+class GetAllWPsByEditor(generics.ListAPIView):
+    """
+    По id редактора показывает все его РПД
+    """
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramDescriptionOnlySerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return WorkProgram.objects.filter(editors__pk=pk)
+
+
+class GetAllWPsWithEmptyField(generics.ListAPIView):
+    """
+    Получить список всех РПД с опредленным пустым полем
+    чтобы указать по какому пустому полю производить фильтрацию надо задать параметр field в запрос
+    На данный момент можно отфильтровать по следующим полям:
+    ED - редакторы
+    LANG - язык
+    --------------------------------------------------------
+    Пример: Получить список всех РПД без редакторов:
+    /api/statistic/workprogram/empty_field_wp?field=ED
+    """
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramDescriptionOnlySerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        field = self.request.query_params["field"]
+        if field == "ED":
+            return WorkProgram.objects.filter(editors__isnull=True)
+        if field == "LANG":
+            return WorkProgram.objects.filter(language__isnull=True)
