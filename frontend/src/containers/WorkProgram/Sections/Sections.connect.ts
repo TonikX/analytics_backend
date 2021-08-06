@@ -7,14 +7,14 @@ import {getWorkProgramField, isCanEdit} from '../getters';
 import {WorkProgramActions} from "../types";
 
 import {rootState} from "../../../store/reducers";
-import {fields} from "../enum";
+import {fields, WorkProgramGeneralFields} from "../enum";
 import {getHoursArray, getAllHours} from "../utils";
 
 const mapStateToProps = (state:rootState) => {
-    const lectureHours = getHoursArray(getWorkProgramField(state, 'lecture_hours'));
-    const practiceHours = getHoursArray(getWorkProgramField(state, 'practice_hours'));
-    const labHours = getHoursArray(getWorkProgramField(state, 'lab_hours'));
-    const srsHours = getHoursArray(getWorkProgramField(state, 'srs_hours'));
+    const lectureHours = getHoursArray(getWorkProgramField(state, 'lecture_hours_v2'));
+    const practiceHours = getHoursArray(getWorkProgramField(state, 'practice_hours_v2'));
+    const labHours = getHoursArray(getWorkProgramField(state, 'lab_hours_v2'));
+    const srsHours = getHoursArray(getWorkProgramField(state, 'srs_hours_v2'));
 
     return {
         sections: getWorkProgramField(state, fields.WORK_PROGRAM_SECTIONS),
@@ -24,6 +24,7 @@ const mapStateToProps = (state:rootState) => {
         practiceHours: practiceHours,
         labHours: labHours,
         srsHours: srsHours,
+        semesterCount: getWorkProgramField(state, WorkProgramGeneralFields.SEMESTER_COUNT) || 1,
     };
 };
 
