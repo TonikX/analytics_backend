@@ -162,8 +162,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const isEditMode = Boolean(evaluationTool[EvaluationToolFields.ID]);
         if (!isOpen) return <></>
+
         return (
-            
             <div className={classNames(classes.dialog, {[classes.openDialog]: isOpen})}>
                 <AppBar className={classes.appBar}>
                     <Toolbar>
@@ -282,7 +282,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                                shrink: true,
                                                            }}
                                                            type="number"
-                                                           error={this.hasError(EvaluationToolFields.MIN)}
                                                            value={evaluationTool[EvaluationToolFields.MIN]}
                                                 />
                                                 <TextField label="Максимальное значение"
@@ -293,7 +292,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                                shrink: true,
                                                            }}
                                                            type="number"
-                                                           error={this.hasError(EvaluationToolFields.MAX)}
                                                            value={evaluationTool[EvaluationToolFields.MAX]}
                                                 />
                                             </div>
@@ -376,12 +374,12 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             variant="text">
                         Отмена
                     </Button>
-                    <Button onClick={this.handleSave}
-                            variant="contained"
-                            //disabled={disableButton}
-                            color="primary">
-                        Сохранить
-                    </Button>
+
+                        <Button onClick={this.handleSave}
+                                variant="contained"
+                                color="primary">
+                            Сохранить
+                        </Button>
                 </DialogActions>
             </div>
         );
