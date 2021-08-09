@@ -1,10 +1,10 @@
 from django.contrib.auth.models import Group
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from dataprocessing.models import User
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
-from workprogramsapp.models import WorkProgram
+from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Zun, WorkProgramIdStrUpForIsu
 from workprogramsapp.notifications.models import ExpertiseNotification, NotificationComments
 
 
@@ -48,3 +48,14 @@ def comment_notificator(sender, instance, created, **kwargs):
         if user != user_sender:
             NotificationComments.objects.create(comment_new=instance, user=user,
                                                 message=f'В экспертизе для рабочей программы "{wp_exp.title}" в блоке "{instance.get_comment_block_display()}"был оставлен комментарий "{instance.comment_text}"')
+
+
+@receiver(pre_delete, sender=WorkProgramInFieldOfStudy)
+def zun_saver(sender, instance, using, **kwargs):
+    wp_in_fs_id_strs = WorkProgramIdStrUpForIsu.objects.filter(work_program_in_field_of_study = instance.id)
+    for wp_in_fs_id_str in wp_in_fs_id_strs:
+        for wp_in_fs in WorkProgramInFieldOfStudy.objects.filter(zuns_for_wp = wp_in_fs_id_str):
+            for zun in Zun.objects.filter(wp_in_fs = wp_in_fs):
+                print(wp_in_fs_id_str.id_str_up)
+                zun.wp_in_fs_saved_fk_id_str_up = wp_in_fs_id_str.id_str_up
+                zun.save()
