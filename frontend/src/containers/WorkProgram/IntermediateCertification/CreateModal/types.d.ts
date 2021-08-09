@@ -8,6 +8,7 @@ export interface CreateModalProps extends WithStyles<typeof styles> {
     isOpen: boolean;
     handleClose: Function;
     evaluationTool: IntermediateCertificationType;
-    sections: Array<{label: string, value: string}>
-    types: Array
+    sections: Array<{label: string, value: string}>;
+    types: Array;
+    semesterCount: number;
 }

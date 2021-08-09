@@ -127,7 +127,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, semesterCount} = this.props;
         const {evaluationTool, isOpen} = this.state;
 
         const isEditMode = Boolean(evaluationTool[IntermediateCertificationFields.ID]);
@@ -240,13 +240,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                 <FormControlLabel value={1} control={<Radio
                                                     checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 1}/>}
                                                                   label="Первый"/>
-                                                <FormControlLabel value={2} control={<Radio
+                                                <FormControlLabel disabled={semesterCount < 2} value={2} control={<Radio
                                                     checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 2}/>}
                                                                   label="Второй"/>
-                                                <FormControlLabel value={3} control={<Radio
+                                                <FormControlLabel disabled={semesterCount < 3} value={3} control={<Radio
                                                     checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 3}/>}
                                                                   label="Третий"/>
-                                                <FormControlLabel value={4} control={<Radio
+                                                <FormControlLabel disabled={semesterCount < 4} value={4} control={<Radio
                                                     checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 4}/>}
                                                                   label="Четвертый"/>
                                             </RadioGroup>
