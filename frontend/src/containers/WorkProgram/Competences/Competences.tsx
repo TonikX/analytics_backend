@@ -60,19 +60,19 @@ export default () => {
         </Button>
       </Typography>
 
-      <Table stickyHeader size='small'>
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.cell}>
+            <TableCell className={classes.header}>
               Компетенция
             </TableCell>
-            <TableCell className={classes.cell}>
+            <TableCell className={classes.header}>
               Индикатор
             </TableCell>
-            <TableCell className={classes.cell}>
+            <TableCell className={classes.header}>
               Результаты
             </TableCell>
-            <TableCell className={classes.cell}>
+            <TableCell className={classes.header}>
               Учебный план
             </TableCell>
           </TableRow>
