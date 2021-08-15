@@ -51,14 +51,15 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
 
   const addResult = useCallback((value: number, label: string) => {
     if (results.find(item => item.value === value)) return
-
-    setResults([
-      ...results,
-      {
-        value,
-        label
-      }
-    ])
+    if (value) {
+      setResults([
+        ...results,
+        {
+          value,
+          label
+        }
+      ])
+    }
   }, [results])
 
   const removeResult = useCallback((value: number) => {
@@ -67,14 +68,15 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
 
   const addPlan = useCallback((value: number, label: string) => {
     if (plans.find(item => item.value === value)) return
-
-    setPlans([
-      ...plans,
-      {
-        value,
-        label
-      }
-    ])
+    if (value) {
+      setPlans([
+        ...plans,
+        {
+          value,
+          label
+        }
+      ])
+    }
   }, [plans])
 
   const removePlan = useCallback((value: number) => {
@@ -109,7 +111,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
       setIndicator(defaultIndicator)
     }
   }, [defaultIndicator])
-
+  console.log("DEBUG IndicatorDialog render")
   return (
     <Dialog
       open={isOpen}
