@@ -46,13 +46,17 @@ import ProfessionsSkillsSelectedIcon from "./icons/professions-skills-selected.s
 
 import ProfessionsIcon from "./icons/professions.svg";
 import ProfessionsSelectedIcon from "./icons/professions-selected.svg";
+
+import ReportsIcon from "./icons/reports.svg";
+import ReportsSelectedIcon from "./icons/reports-selected.svg";
+
 import {isUserCanSeeProfessions, isUserInExpertiseGroup, isUserRpdDev} from "../../common/userRights";
 
 export const getMockMenu = (menuArr: Array<number>): Array<any> => {
     const selectedMenus = []
     for (let i = 0; i<menuArr.length; i++) {
 
-    
+
     switch (menuArr[i]){
         case 1:
             selectedMenus.push(...[
@@ -292,6 +296,15 @@ export const getMockMenu = (menuArr: Array<number>): Array<any> => {
         case 8: break
     }
     }
+
+    selectedMenus.push([
+        {
+            title: 'Отчеты',
+            link: appRouter.getRecordsRoute(),
+            icon: CoursesIcon,
+            selectedIcon: CoursesSelectedIcon,
+        },
+    ])
     return uniqBy(selectedMenus, 'title')
 }
 
@@ -452,6 +465,13 @@ export default (groups: Array<string>) => {
         }
     ];
 
+    const sixthMenu =  [{
+      title: 'Отчеты',
+      link: appRouter.getRecordsRoute(),
+      icon: ReportsIcon,
+      selectedIcon: ReportsSelectedIcon,
+   }]
+
     const menu = [];
 
     if (firstMenu.length){
@@ -469,6 +489,7 @@ export default (groups: Array<string>) => {
     }
 
     menu.push(fifthMenu);
+    menu.push(sixthMenu);
 
     return menu;
 }

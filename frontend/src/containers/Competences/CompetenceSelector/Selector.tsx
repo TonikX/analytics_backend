@@ -12,6 +12,10 @@ export default ({onChange, value, isReset, label, className, valueLabel, disable
   const dispatch = useDispatch()
   const list = useSelector((state: rootState) => getCompetencesForSelector(state))
 
+  useEffect(() => {
+    dispatch(actions.getCompetences())
+  }, [])
+
   const handleChangeSearchQuery = (query: string) => {
     dispatch(actions.changeSearchQuery(query))
     dispatch(actions.getCompetences())

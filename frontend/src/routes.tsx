@@ -141,7 +141,7 @@ export default () => (
                 <Direction />
             </AuthRoute>
             <AuthRoute path={routerService.getRecordsRoute()}>
-                  <Records />
+              <Records />
             </AuthRoute>
             <AuthRoute path={routerService.getEntityToEntityRoute()}>
                 <EntitityToEntitity />
