@@ -8,19 +8,19 @@ import html2text
 from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy, WorkProgram
 from ..serializers import WorkProgramSerializer
 from rest_framework import generics
-from GrabzIt import GrabzItDOCXOptions
-from GrabzIt import GrabzItClient
-import pypandoc
-import os
-import pdfkit
-import codecs
-import os
-from pdf2docx import parse
-from pdf2docx import Converter
-
-import PyPDF2
-import os
-import docx
+# from GrabzIt import GrabzItDOCXOptions
+# from GrabzIt import GrabzItClient
+# import pypandoc
+# import os
+# import pdfkit
+# import codecs
+# import os
+# from pdf2docx import parse
+# from pdf2docx import Converter
+#
+# import PyPDF2
+# import os
+# import docx
 """Скачивание рпд в формате docx/pdf"""
 
 
