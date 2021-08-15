@@ -148,7 +148,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
         ))}
       </div>
       <PlanSelector
-        label="Рабочие планы"
+        label="Учебный план и образовательная программа"
         onChange={addPlan}
         valueLabel=""
         value={0}
