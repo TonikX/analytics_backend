@@ -8,8 +8,19 @@ import html2text
 from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy, WorkProgram
 from ..serializers import WorkProgramSerializer
 from rest_framework import generics
+from GrabzIt import GrabzItDOCXOptions
+from GrabzIt import GrabzItClient
+import pypandoc
+import os
+import pdfkit
+import codecs
+import os
+from pdf2docx import parse
+from pdf2docx import Converter
 
-
+import PyPDF2
+import os
+import docx
 """Скачивание рпд в формате docx/pdf"""
 
 
@@ -115,9 +126,96 @@ def render_context(context, **kwargs):
     current_evaluation_tool = []
     items_max = []
     items_min = []
+    k=0
     for item in context['discipline_sections']:
         for i in item['evaluation_tools']:
-            i['description'] = html2text.html2text(i['description'])
+             print(i['description'])
+#             k=k+1
+#             print('папка', k)
+#             #print(i['description'])
+#             options = {
+#                 #'quiet': ''
+#             }
+#             html_content = """
+# <!DOCTYPE html>
+# <html>
+# <head>
+#     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+# </head>
+# <body>
+# {body}
+# </body>
+# </html>
+# """.format(body =  i['description'])
+#             print(html_content)
+#             #i['description'] = html2text.html2text(i['description'])
+#             #i['description'] = pypandoc.convert_text(i['description'], format='html', to='docx', outputfile='/exp1.docx')
+#             #i['description'] = pypandoc.convert_text(i['description'].replace('<tbody>', '').replace('</tbody>', '').replace('<figure>', '').replace('</figure>', ''), format='html', to='docx', outputfile=('upload/exp{i}.docx'.format(i=k)))
+#             #i['description'] = pdfkit.from_string((i['description'].encode().decode('utf-8')), 'upload/exp{i}.pdf'.format(i=k))
+#             #i['description'] = pdfkit.from_string(html_content, 'upload/exp{i}.pdf'.format(i=k), options=options)
+#             i['description'] = pdfkit.from_file('upload/new_11.html', 'upload/exp{i}.pdf'.format(i=k), options=options)
+#
+#             # import sys
+#             # from PyQt4.QtCore import *
+#             # from PyQt4.QtGui import *
+#             # from PyQt4.QtWebKit import *
+#             #
+#             # app = QApplication(sys.argv)
+#             # w = QWebView()
+#             # w.load(html_content)
+#             # p = Qp()
+#             # p.setPageSize(Qp.A4)
+#             # p.setOutputFormat(Qp.PdfFormat)
+#             # p.setOutputFileName("sample.pdf")
+#             #
+#             # def convertIt():
+#             #     w.print_(p)
+#             #     QApplication.exit()
+#             #
+#             # QObject.connect(w, SIGNAL("loadFinished(bool)"), convertIt)
+#             # sys.exit(app.exec_())
+#
+#             # print(i['description'])
+#             # word = win32com.client.Dispatch("Word.Application")
+#             # word.visible = 0
+#             # # GET FILE NAME AND NORMALIZED PATH
+#             # filename = 'upload/exp{i}.pdf'.format(i=k)
+#             # in_file = os.path.abspath('upload/exp{i}.pdf'.format(i=k))
+#             #
+#             # # CONVERT PDF TO DOCX AND SAVE IT ON THE OUTPUT PATH WITH THE SAME INPUT FILE NAME
+#             # wb = word.Documents.Open(in_file)
+#             # out_file = os.path.abspath('upload/exp_v2{i}.docx'.format(i=k))
+#             # wb.SaveAs2(out_file, FileFormat=16)
+#             # wb.Close()
+#             # word.Quit()
+#             parse('upload/exp{i}.pdf'.format(i=k), 'upload/exp_v2_{i}.doc'.format(i=k), start=0, end=None)
+#             # cv = Converter('upload/exp{i}.pdf'.format(i=k))
+#             # cv.convert('upload/exp_v2_{i}.docx'.format(i=k), start=0, end=None)
+#             # cv.close()
+#             # mydoc = docx.Document() # document type
+#             # pdfFileObj = open('upload/exp{i}.pdf'.format(i=k), 'rb') # pdffile loction
+#             # pdfReader = PyPDF2.PdfFileReader(pdfFileObj) # define pdf reader object
+#             #
+#             #
+#             # # Loop through all the pages
+#             #
+#             # for pageNum in range(1, pdfReader.numPages):
+#             #     pageObj = pdfReader.getPage(pageNum)
+#             #     pdfContent = pageObj.extractText()  #extracts the content from the page.
+#             #     print ('pdfContent         ', pdfContent)
+#             #     print(pdfContent) # print statement to test output in the terminal. codeline optional.
+#             #     mydoc.add_paragraph(pdfContent) # this adds the content to the word document
+#             #
+#             # mydoc.save('upload/exp_v2{i}.docx'.format(i=k)) # Give a name to your output file.
+#             # import os
+#             # import subprocess
+#             # filename = 'upload/exp{i}.pdf'.format(i=k)
+#             # flipfilename = filename[::-1]
+#             # ext,trash = flipfilename.split('.',1)
+#             # if ext = 'pdf':
+#             #     abspath = os.path.join(path, filename)
+#             #     subprocess.call('lowriter --invisible --convert-to doc "{}"'
+#             #                     .format(abspath), shell=True)
     template_context['discipline_section'] = context['discipline_sections']
     for item in context['outcomes']:
         try:
