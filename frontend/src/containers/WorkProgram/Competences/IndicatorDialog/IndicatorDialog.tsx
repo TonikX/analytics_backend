@@ -111,7 +111,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
       setIndicator(defaultIndicator)
     }
   }, [defaultIndicator])
-  console.log("DEBUG IndicatorDialog render")
+
   return (
     <Dialog
       open={isOpen}

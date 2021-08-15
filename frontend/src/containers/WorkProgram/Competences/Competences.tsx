@@ -45,7 +45,7 @@ export default React.memo(() => {
   const deleteCompetence = (competenceId: number) => {
     dispatch(actions.deleteZUN(competenceId))
   }
-  console.log("DEBUG Competences render")
+
   return (
     <>
       <Typography className={classes.subTitle}>

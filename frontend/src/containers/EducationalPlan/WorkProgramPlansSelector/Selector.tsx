@@ -12,8 +12,7 @@ export default ({onChange, value, isReset, label, className, disabled, valueLabe
   const dispatch = useDispatch()
 
   const list = useSelector((state: rootState) => getDirectionsDependedOnWorkProgramForSelector(state))
-  //console.log("DEBUG list", list)
-  console.log("DEBUG PlanSelector render")
+
   useEffect(() => {
     dispatch(actions.getCompetenceDirectionsDependedOnWorkProgram(workProgramId))
   }, [])
