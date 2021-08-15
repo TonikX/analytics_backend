@@ -56,12 +56,10 @@ const titleDirectionPath = 'work_program_change_in_discipline_block_module.disci
 const numberDirectionPath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.field_of_study.0.number'
 
 export const getDirectionsDependedOnWorkProgramForSelector = (state: rootState): SelectorListType =>
-  getDirectionsDependedOnWorkProgram(state).map((plan: EducationalPlanListType) => {
-    //console.log("DEBUG plan", plan)
-    return {
+  getDirectionsDependedOnWorkProgram(state).map((plan: EducationalPlanListType) => ({
     value: plan[EducationalPlanFields.ID],
     label: `${get(plan, titlePath, '')} ${get(plan, yearPath, '')}: ${get(plan, titleDirectionPath, '')} ${get(plan, numberDirectionPath, '')}`,
-  }})
+  }))
 
 export const getAllCount = (state: rootState) => get(getStateData(state), fields.ALL_COUNT, 1);
 export const getCurrentPage = (state: rootState) => get(getStateData(state), fields.CURRENT_PAGE, 1);
