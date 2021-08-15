@@ -7,7 +7,7 @@ from typing import Dict
 
 from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan,\
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,\
-    WorkProgramInFieldOfStudy
+    WorkProgramInFieldOfStudy, Zun
 import json
 import re
 from django.db import transaction
@@ -669,6 +669,9 @@ class FileUploadOldVersionAPIView(APIView):
                     wpinfs_id_str_up.save()
                 except:
                     print('---- Ошибка с количеством WorkProgramIdStrUpForIsu.id_str_up')
+                for zun in Zun.objects.filter(wp_in_fs_saved_fk_id_str_up = int(data['ИД_СТР_УП'][i])):
+                    zun.wp_in_fs =  wpinfs
+                    zun.save()
                 print('Рабочая программа дисциплины записана в модуль: done')
             except Exception as e:
                 print(e)
