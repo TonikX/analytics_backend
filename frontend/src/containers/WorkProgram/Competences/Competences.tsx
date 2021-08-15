@@ -10,7 +10,7 @@ import TableBody from '@material-ui/core/TableBody'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import AddIcon from '@material-ui/icons/Add'
-import DeleteIcon from '@material-ui/icons/DeleteOutlined'
+
 import { rootState } from '../../../store/reducers'
 
 import actions from '../actions'
@@ -19,7 +19,7 @@ import {getWorkProgramCompetences, getWorkProgramId} from '../getters'
 import IndicatorsDialog from './IndicatorDialog'
 import { useStyles } from './Competences.styles'
 
-export default () => {
+export default React.memo(() => {
   const dispatch = useDispatch()
   const [isOpenIndicatorDialog, setIsOpenIndicatorDialog] = useState(false)
   const [dialogCompetence, setDialogCompetence] = useState<{value: number; label: string} | undefined>(undefined)
@@ -60,19 +60,19 @@ export default () => {
         </Button>
       </Typography>
 
-      <Table stickyHeader size='small'>
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.cell}>
+            <TableCell className={classes.header}>
               Компетенция
             </TableCell>
-            <TableCell className={classes.cell}>
+            <TableCell className={classes.header}>
               Индикатор
             </TableCell>
-            <TableCell className={classes.cell}>
+            <TableCell className={classes.header}>
               Результаты
             </TableCell>
-            <TableCell className={classes.cell}>
+            <TableCell className={classes.header}>
               Учебный план
             </TableCell>
           </TableRow>
@@ -157,4 +157,4 @@ export default () => {
       />
     </>
   )
-}
+})

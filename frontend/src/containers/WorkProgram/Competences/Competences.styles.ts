@@ -11,6 +11,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   cell: {
     width: '25%'
   },
+  header: {
+    background: theme.palette.primary.main,
+    color: '#fff',
+    fontWeight: 400,
+    height: '45px'
+  },
   deleteIcon: {
     position: 'relative',
     top: '6px',
@@ -20,11 +26,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
   },
   addZUNButton: {
-    marginTop: '10px',
     marginLeft: 'auto'
   },
   subTitle: {
-    marginBottom: '10px',
+    marginBottom: '6px',
     fontSize: '20px',
     display: 'flex',
     alignItems: 'center'
