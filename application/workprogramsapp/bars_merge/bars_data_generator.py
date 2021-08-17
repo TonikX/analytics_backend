@@ -1,6 +1,7 @@
 from workprogramsapp.bars_merge.bars_api_getter import get_list_of_regular_checkpoints, get_tests, post_tests
 from workprogramsapp.bars_merge.checkpoint_template import generate_checkpoint, get_checkpoints_type, \
     generate_discipline, generate_checkpoint_plan, generate_test
+from workprogramsapp.bars_merge.checkpoints_dict import checkpoint_correspondence
 from workprogramsapp.models import EvaluationTool, DisciplineSection, СertificationEvaluationTool
 
 
@@ -20,10 +21,18 @@ def generate_single_checkpoint(work_program, absolute_semester, relative_semeste
     for eva in evaluation_tools:
         id = None
         test_id = -1
+        checkpoint_name = None
+        if eva.type in checkpoint_correspondence:
+            checkpoint_name = eva.type
+        else:
+            for key, value in checkpoint_correspondence.items():
+                if eva.type in value:
+                    checkpoint_name = key
+                    break
         for el in types_checkpoints:
-            if el["name"] == eva.type:
+            if el["name"] == checkpoint_name:
                 id = el["id"]
-                if el["name"] == "Электронное тестирование (тест в ЦДО)":
+                if el["name"] == "Электронное тестирование в ЦДО":
                     test_list = get_tests(setup)
                     for test in test_list:
                         if test['name'] == eva.name:
@@ -54,3 +63,4 @@ def generate_single_checkpoint(work_program, absolute_semester, relative_semeste
                                                additional_points=extra_points,
                                                alternate_methods=False, has_course_project=has_course_project)
     return checkpoint_plan
+
