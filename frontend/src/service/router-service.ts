@@ -240,7 +240,7 @@ export default class RouterService {
     };
 
     getWorkProgramLink = (id: number) => {
-        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id;
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.GENERAL;
     };
 
     getWorkProgramGeneralLink = (id: number) => {

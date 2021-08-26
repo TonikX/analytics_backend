@@ -78,7 +78,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
             return
         }
         this.setState({
-            activeStep: sectionsValue[section]
+            activeStep: sectionsValue[section] || 0
         })
     }
 
