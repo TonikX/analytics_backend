@@ -6,6 +6,7 @@ import workProgramActions from '../actions';
 import Service from '../service';
 
 import {fetchingTypes, fields} from "../enum";
+import {getWorkProgramId} from "../getters";
 
 const service = new Service();
 
@@ -84,8 +85,31 @@ const deleteEvaluationTool = createLogic({
     }
 });
 
+const getWorkProgramEvaluationTool = createLogic({
+    type: workProgramActions.getWorkProgramEvaluationTool.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EVALUATION_TOOL}));
+
+        service.getEvaluationTool(action.payload)
+            .then((res: any) => {
+                dispatch(workProgramActions.setWorkProgramEvaluationTool(res.data));
+                // @ts-ignore
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_EVALUATION_TOOL}));
+                return done();
+            });
+    }
+});
+
 export default [
     changeEvaluationTool,
     addEvaluationTool,
     deleteEvaluationTool,
+    getWorkProgramEvaluationTool,
 ];

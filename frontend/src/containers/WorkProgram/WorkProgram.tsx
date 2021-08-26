@@ -2,6 +2,7 @@ import React from 'react';
 import get from 'lodash/get';
 import {withRouter} from "react-router-dom";
 
+import {Link} from "react-router-dom";
 import Typography from '@material-ui/core/Typography';
 import CopyIcon from "@material-ui/icons/FileCopyOutlined";
 import CommentIcon from "@material-ui/icons/CommentOutlined";
@@ -15,7 +16,6 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 import Grow from '@material-ui/core/Grow';
-import Switch from '@material-ui/core/Switch';
 
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
@@ -37,12 +37,11 @@ import Competences from "./Competences";
 import {FavoriteType} from "../Profile/Folders/enum";
 import {WorkProgramProps} from './types';
 
-import {steps} from "./constants";
+import {sectionsValue, steps, subSections} from "./constants";
 
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
 import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
-import { WorkProgramGeneralFields } from './enum';
 
 class WorkProgram extends React.Component<WorkProgramProps> {
     state = {
@@ -52,13 +51,35 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     };
 
     componentDidMount() {
+        this.selectActiveStep()
         const id = this.getWorkProgramId();
 
         this.props.actions.getWorkProgram(id);
     }
 
+    componentDidUpdate(prevProps: Readonly<WorkProgramProps>, prevState: Readonly<{}>, snapshot?: any) {
+        if (prevProps.location.pathname !== this.props.location.pathname){
+            this.selectActiveStep()
+        }
+    }
+
     componentWillUnmount() {
         this.props.actions.pageDown();
+    }
+
+    selectActiveStep = () => {
+        const locations = this.props.location.pathname.split('/')
+        const section: subSections = locations[locations.length - 1]
+
+        if (this.props.location.pathname.includes('/evaluation-tools/')){
+            this.setState({
+                activeStep: 5
+            })
+            return
+        }
+        this.setState({
+            activeStep: sectionsValue[section]
+        })
     }
 
     openConfirmDuplicateWPModal = () => {
@@ -225,6 +246,11 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         }
     }
 
+    openStep = (link: string) => {
+        //@ts-ignore
+        this.props.history.push(link)
+    }
+
     render() {
         const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
             workProgramRating, canAddToFolder, validateErrors, workProgram, fetchingBars} = this.props;
@@ -279,14 +305,13 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                              nonLinear
                              className={classes.stepper}
                     >
-                        {Object.values(steps).map((value, index) => {
+                        {Object.values(steps).map(({ label, link }, index) => {
                             return (
-                                <Step key={index}>
-                                    <StepButton onClick={this.handleStep(index)}
-                                                completed={false}
+                                <Step key={index} onClick={() => this.openStep(link(this.getWorkProgramId()))}>
+                                    <StepButton completed={false}
                                                 style={{textAlign: 'left'}}
                                     >
-                                        {value}
+                                        {label}
                                     </StepButton>
                                 </Step>
                             );

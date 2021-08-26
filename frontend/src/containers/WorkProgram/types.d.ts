@@ -16,6 +16,8 @@ import {UserType} from "../../layout/types";
 import {FolderActions, FolderType} from "../Profile/Folders/types";
 
 export interface WorkProgramActions {
+    getWorkProgramEvaluationTool: any;
+    setWorkProgramEvaluationTool: any;
     pageDown: any;
 
     saveZUN: any;
@@ -80,6 +82,7 @@ export interface WorkProgramActions {
 export interface workProgramState {
     [fields.WORK_PROGRAM]: any;
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: Array<EvaluationToolType>;
+    [fields.WORK_PROGRAM_EVALUATION_TOOL]: EvaluationToolType|{};
     [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION]: Array<IntermediateCertificationType>;
     [fields.WORK_PROGRAM_RESULTS]: Array<any>;
     [fields.DIALOGS]: {};
@@ -130,6 +133,7 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     workProgram: WorkProgramGeneralType;
     validateErrors: Array<string>;
     fetchingBars: boolean;
+    location: any;
 }
 
 

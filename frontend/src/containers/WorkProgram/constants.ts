@@ -1,5 +1,7 @@
 import {IntermediateCertificationEnum, StepsEnum, WorkProgramStatusEnum} from "./enum";
 
+import {appRouter} from "../../service/router-service";
+
 export const BACHELOR_QUALIFICATION = 'bachelor';
 export const SPECIALIST_QUALIFICATION = 'specialist';
 export const MASTER_QUALIFICATION = 'master';
@@ -86,16 +88,46 @@ export const workProgramStatusesColors: any = {
 }
 
 export const steps = {
-    [StepsEnum.GENERAL]: 'Главное',
-    [StepsEnum.PREREQUISITES]: 'Пререквизиты',
-    [StepsEnum.SECTIONS]: 'Разделы',
-    [StepsEnum.TOPICS]: 'Темы',
-    [StepsEnum.LITERATURE]: 'Источники',
-    [StepsEnum.EVALUATION]: 'Оценочные средства',
-    [StepsEnum.INTERMEDIATE_CERTIFICATION]: 'Оценочные средства промежуточной аттестации',
-    [StepsEnum.RESULTS]: 'Результаты обучения',
-    [StepsEnum.PLANS]: 'Связанные с рпд учебные планы и направления',
-    [StepsEnum.COMPETENCES]: 'Компетенции',
+    [StepsEnum.GENERAL]: {
+        label: 'Главное',
+        link: (id: number) => appRouter.getWorkProgramGeneralLink(id)
+    },
+    [StepsEnum.PREREQUISITES]: {
+        label: 'Пререквизиты',
+        link: (id: number) => appRouter.getWorkProgramPrerequisitesLink(id)
+    },
+    [StepsEnum.SECTIONS]: {
+        label: 'Разделы',
+        link: (id: number) => appRouter.getWorkProgramSectionsLink(id)
+    },
+    [StepsEnum.TOPICS]: {
+        label: 'Темы',
+        link: (id: number) => appRouter.getWorkProgramTopicsLink(id)
+    },
+    [StepsEnum.LITERATURE]: {
+        label: 'Источники',
+        link: (id: number) => appRouter.getWorkProgramLiteratureLink(id)
+    },
+    [StepsEnum.EVALUATION]: {
+        label: 'Оценочные средства',
+        link: (id: number) => appRouter.getWorkProgramEvaluationToolsLink(id)
+    },
+    [StepsEnum.INTERMEDIATE_CERTIFICATION]: {
+        label: 'Оценочные средства промежуточной аттестации',
+        link: (id: number) => appRouter.getWorkProgramIntermediateCertificationLink(id)
+    },
+    [StepsEnum.RESULTS]: {
+        label: 'Результаты обучения',
+        link: (id: number) => appRouter.getWorkProgramResultsLink(id)
+    },
+    [StepsEnum.PLANS]: {
+        label: 'Связанные с рпд учебные планы и направления',
+        link: (id: number) => appRouter.getWorkProgramPlansLink(id)
+    },
+    [StepsEnum.COMPETENCES]: {
+        label: 'Компетенции',
+        link: (id: number) => appRouter.getWorkProgramCompetencesLink(id)
+    },
 }
 
 export const years = [
@@ -188,3 +220,29 @@ export const years = [
         label: '2022/2023',
     },
 ]
+
+export enum subSections {
+    GENERAL = 'general',
+    PREREQUISITES = 'prerequisites',
+    SECTIONS = 'sections',
+    TOPICS = 'topics',
+    LITERATURE = 'literature',
+    EVALUATION_TOOLS = 'evaluation-tools',
+    INTERMEDIATE_CERTIFICATION = 'intermediate-certification',
+    RESULTS = 'results',
+    PLANS = 'plans',
+    COMPETENCES = 'competences',
+}
+
+export const sectionsValue = {
+    [subSections.GENERAL]: 0,
+    [subSections.PREREQUISITES]: 1,
+    [subSections.SECTIONS]: 2,
+    [subSections.TOPICS]: 3,
+    [subSections.LITERATURE]: 4,
+    [subSections.EVALUATION_TOOLS]: 5,
+    [subSections.INTERMEDIATE_CERTIFICATION]: 6,
+    [subSections.RESULTS]: 7,
+    [subSections.PLANS]: 8,
+    [subSections.COMPETENCES]: 9,
+}

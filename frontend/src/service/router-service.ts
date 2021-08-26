@@ -1,4 +1,5 @@
 import {ReactText} from "react";
+import {subSections} from "../containers/WorkProgram/constants";
 
 const FOLDERS = 'folders';
 const SIGN_IN = 'sign-in';
@@ -240,6 +241,40 @@ export default class RouterService {
 
     getWorkProgramLink = (id: number) => {
         return SEPARATOR + WORK_PROGRAM + SEPARATOR + id;
+    };
+
+    getWorkProgramGeneralLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.GENERAL
+    };
+    getWorkProgramPrerequisitesLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.PREREQUISITES
+    };
+    getWorkProgramSectionsLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.SECTIONS
+    };
+    getWorkProgramTopicsLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.TOPICS
+    };
+    getWorkProgramLiteratureLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.LITERATURE
+    };
+    getWorkProgramEvaluationToolsLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.EVALUATION_TOOLS
+    };
+    getWorkProgramEvaluationToolLink = (wpId: number, id: number) => {
+        return this.getWorkProgramEvaluationToolsLink(wpId) + SEPARATOR + id
+    };
+    getWorkProgramIntermediateCertificationLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.INTERMEDIATE_CERTIFICATION
+    };
+    getWorkProgramResultsLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.RESULTS
+    };
+    getWorkProgramPlansLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.PLANS
+    };
+    getWorkProgramCompetencesLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.COMPETENCES
     };
 
     getPlanDetailLink = (id: ReactText) => {
