@@ -6,7 +6,7 @@ import requests
 from analytics_project import settings
 
 EDUC_PROGRAMS = []
-BASE_URL = "https://cas.crp.rocks/backend//rest"
+BASE_URL = settings.BARS["BARS_URL"]
 BASE_HEADERS = {'content-type': 'application/json'}
 
 
@@ -17,10 +17,10 @@ def login(setup):
     r = requests.post(url, data=json.dumps(body), headers=headers)
     BASE_HEADERS['Authorization'] = r.headers['Authorization']
     body_year = {"name": "current_year", "value": setup[0]}
-    r = requests.post("https://cas.crp.rocks/backend//rest/config/personal", data=json.dumps(body_year),
+    r = requests.post(BASE_URL+"/config/personal", data=json.dumps(body_year),
                       headers=BASE_HEADERS)
     body_term = {"name": "current_term", "value": setup[1]}
-    r = requests.post("https://cas.crp.rocks/backend//rest/config/personal", data=json.dumps(body_term),
+    r = requests.post(BASE_URL+"/config/personal", data=json.dumps(body_term),
                       headers=BASE_HEADERS)
 
 
