@@ -9,22 +9,22 @@ from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy,
     ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule
 from ..serializers import WorkProgramSerializer
 from rest_framework import generics
-from GrabzIt import GrabzItDOCXOptions
-from GrabzIt import GrabzItClient
-import pypandoc
-import os
-import pdfkit
-import codecs
-import os
-from pdf2docx import parse
-from pdf2docx import Converter
-from docx import Document
-
-import PyPDF2
-import os
-import docx
-import lxml.html
-import lxml.html.clean
+# from GrabzIt import GrabzItDOCXOptions
+# from GrabzIt import GrabzItClient
+# import pypandoc
+# import os
+# import pdfkit
+# import codecs
+# import os
+# from pdf2docx import parse
+# from pdf2docx import Converter
+# from docx import Document
+#
+# import PyPDF2
+# import os
+# import docx
+# import lxml.html
+# import lxml.html.clean
 from docx import Document
 """Скачивание рпд в формате docx/pdf"""
 
