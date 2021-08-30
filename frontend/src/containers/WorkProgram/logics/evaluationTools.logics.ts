@@ -6,8 +6,6 @@ import workProgramActions from '../actions';
 import Service from '../service';
 
 import {fetchingTypes, fields} from "../enum";
-import {getWorkProgramId} from "../getters";
-
 const service = new Service();
 
 const addEvaluationTool = createLogic({

@@ -204,6 +204,9 @@ class FirstStep extends React.Component<FirstStepProps> {
       destination: WorkProgramGeneralFields.BARS,
       value: get(e, "target.checked", false)
     })
+    this.setState({
+      [WorkProgramGeneralFields.BARS]: get(e, "target.checked", false)
+    });
   }
 
   render() {
