@@ -134,7 +134,6 @@ def CreateCheckPoint(request):
 
     discipline = generate_discipline(bars_id=bars_id, name=WorkProgram.objects.get(id=work_program_id).title, term=term,
                                      course_project=has_course_project)
-    print(programs)
     checkpoint_plan = generate_checkpoint_plan(regular_checkpoint=list_regular, programs=programs,
                                                discipline=discipline,
                                                final_checkpoint=final_checkpoint,
@@ -142,7 +141,6 @@ def CreateCheckPoint(request):
                                                term=term, point_distribution=point_distribution,
                                                additional_points=extra_points,
                                                alternate_methods=False, has_course_project=has_course_project)
-    print(post_checkpoint_plan(checkpoint_plan))
     return Response(checkpoint_plan)
 
 
@@ -257,7 +255,3 @@ def SetBarsPointerTrueToWP(request):
                                         zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__qualification="bachelor").distinct()
         wp.update(bars=True)
     return Response("Надеюсь, ничего не сломалось")
-
-
-for el in WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC', bars=True):
-    print(el)

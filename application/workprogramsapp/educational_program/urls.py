@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 
 from workprogramsapp.educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
-    EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView
+    EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView, UploadCompetences
 from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
     GeneralCharacteristicsDetailsWithEducationalProgramView
@@ -34,6 +34,10 @@ urlpatterns = [
     path('api/EducationalProgram/update/<int:pk>', EducationalProgramUpdateView.as_view()),
     path('api/EducationalProgram/byprofessions', EducationalProgramRankingByProfession),
     path('api/EducationalProgram/byprofessionsscience', EducationalProgramRankingByProfessionScientific),
+
+    # --Компетенции
+    path('api/competence/upload_comptence_from_csv', UploadCompetences),
+
 
     url(r'^', include(router.urls)),
     url(r'^', include('workprogramsapp.educational_program.key_competences.urls')),

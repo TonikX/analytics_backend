@@ -282,4 +282,5 @@ ISU = {
 BARS = {
     "BARS_LOGIN": env('BARS_LOGIN'),
     "BARS_PASSWORD": env('BARS_PASSWORD'),
+    "BARS_URL":env('BARS_URL'),
 }
