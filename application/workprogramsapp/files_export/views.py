@@ -52,10 +52,13 @@ def render_context(context, **kwargs):
                 if list(wpcb['credit_units'][cu]) != 0:
                     credit_units_list.append(wpcb['credit_units'][cu])
             print('credit_units_list', credit_units_list)
-            for cu in credit_units_list:
-                print(cu)
-                if int(cu) != 0:
-                    semester.append({'s': credit_units_list.index(cu)+1, 'c': cu})
+            try:
+                for cu in credit_units_list:
+                    print(cu)
+                    if int(float(cu)) != 0:
+                        semester.append({'s': credit_units_list.index(cu)+1, 'c': cu})
+            except:
+                pass
     # except:
     #     semester = [{'s': '-', 'c': '-', 'h': '-', 'e': '-'}]
     #     wpcb_pk = context['work_program_in_change_block'][0]['id']
