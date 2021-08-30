@@ -27,7 +27,7 @@ getEducationalPlanInDirection(state).map((plan: EducationalPlanInDirectionType) 
 }))
 
 export const getEducationPlanInDirectionFullName = (plan: EducationalPlanInDirectionType): string =>
-    `${plan[EducationPlanInDirectionFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]} (${get(plan, [EducationPlanInDirectionFields.DIRECTION, DirectionFields.NUMBER], '')} "${get(plan, [EducationPlanInDirectionFields.DIRECTION, DirectionFields.FACULTY], '')}")`
+    `${get(plan, [EducationPlanInDirectionFields.EDUCATION_PLAN, EducationalPlanFields.PROFILE], '')} (${get(plan, [EducationPlanInDirectionFields.DIRECTION, DirectionFields.NUMBER], '')} "${get(plan, [EducationPlanInDirectionFields.DIRECTION, DirectionFields.FACULTY], '')}")`
 
 export const getEducationalPlanInDirectionDialog = (state: rootState) => get(getStateData(state), fields.EDUCATION_PLAN_IN_DIRECTION_DIALOG, {});
 

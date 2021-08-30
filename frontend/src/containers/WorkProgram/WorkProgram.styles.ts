@@ -51,6 +51,10 @@ export default (theme: Theme) => createStyles({
         minWidth: '210px',
         marginRight: '15px',
     },
+    stepLink: {
+        textDecoration: 'none !important',
+        color: '#333 !important',
+    },
     step: {
         background: theme.palette.secondary.main
     },

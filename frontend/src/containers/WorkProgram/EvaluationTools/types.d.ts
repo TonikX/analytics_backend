@@ -9,4 +9,6 @@ export interface SixthStepProps extends WithStyles<typeof styles> {
     evaluationToolsList: Array<EvaluationToolType>;
     isCanEdit: boolean;
     extraPoints: string;
+    workProgramId: number;
+    location: any; //todo: change
 }

@@ -12,6 +12,12 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import DateIcon from "@material-ui/icons/DateRange";
 import AddIcon from "@material-ui/icons/Add";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Radio from "@material-ui/core/Radio";
+import Chip from "@material-ui/core/Chip";
+import Switch from "@material-ui/core/Switch";
+import FormControl from "@material-ui/core/FormControl";
 
 import InputsLoader from '../../../components/InputsLoader';
 import SimpleSelector from '../../../components/SimpleSelector';
@@ -28,8 +34,7 @@ import {UserFields} from "../../../layout/enum";
 
 import connect from './FirstStep.connect';
 import styles from './FirstStep.styles';
-import Chip from "@material-ui/core/Chip";
-import Switch from "@material-ui/core/Switch";
+import FormLabel from "@material-ui/core/FormLabel";
 
 class FirstStep extends React.Component<FirstStepProps> {
   state = {
@@ -43,7 +48,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     [WorkProgramGeneralFields.EXTRA_POINTS]: '',
     [WorkProgramGeneralFields.LANGUAGE]: '',
     [WorkProgramGeneralFields.BARS]: false,
-    [WorkProgramGeneralFields.SEMESTER_COUNT]: '',
+    [WorkProgramGeneralFields.SEMESTER_COUNT]: 1,
     addEditorsMode: false
   };
 
@@ -116,7 +121,11 @@ class FirstStep extends React.Component<FirstStepProps> {
   changeSemesterCount = (e: React.ChangeEvent) => {
     const value = get(e, 'target.value')
     this.setState({
-      [WorkProgramGeneralFields.SEMESTER_COUNT]: value < 5 ? value : 4
+      [WorkProgramGeneralFields.SEMESTER_COUNT]: parseInt(value)
+    });
+    this.props.actions.saveWorkProgram({
+      destination: WorkProgramGeneralFields.SEMESTER_COUNT,
+      value: parseInt(value)
     });
   }
 
@@ -195,6 +204,9 @@ class FirstStep extends React.Component<FirstStepProps> {
       destination: WorkProgramGeneralFields.BARS,
       value: get(e, "target.checked", false)
     })
+    this.setState({
+      [WorkProgramGeneralFields.BARS]: get(e, "target.checked", false)
+    });
   }
 
   render() {
@@ -317,21 +329,34 @@ class FirstStep extends React.Component<FirstStepProps> {
           {/*</Typography>*/}
 
           {isCanEdit ?
-            <TextField variant="outlined"
-                       label="Кол-во семестров"
-                       value={state[WorkProgramGeneralFields.SEMESTER_COUNT]}
-                       className={classes.input}
-                       onBlur={this.saveField(WorkProgramGeneralFields.SEMESTER_COUNT)}
-                       onChange={this.changeSemesterCount}
-                       disabled={!isCanEdit}
-                       InputLabelProps={{
-                         shrink: true,
-                       }}
-                       type="number"
-            />
-            :
-            <Typography className={classes.textItem}> <b>Кол-во семестров: </b> {state[WorkProgramGeneralFields.SEMESTER_COUNT]}</Typography>
-          }
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Кол-во семестров *</FormLabel>
+              <RadioGroup className={classes.radioGroup} onChange={this.changeSemesterCount}>
+                <FormControlLabel
+                  value={1}
+                  control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === 1} />}
+                  label="1"
+                />
+                <FormControlLabel
+                  value={2}
+                  control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === 2} />}
+                  label="2"
+                />
+                <FormControlLabel
+                  value={3}
+                  control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === 3} />}
+                  label="3"
+                />
+                <FormControlLabel
+                  value={4}
+                  control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === 4} />}
+                  label="4"
+                />
+              </RadioGroup>
+            </FormControl>
+              :
+              <Typography className={classes.textItem}> <b>Кол-во семестров: </b> {state[WorkProgramGeneralFields.SEMESTER_COUNT]}</Typography>
+            }
 
           <div style={{display: "flex", alignItems: "center"}}>
             <Typography>Дисциплина реализуется в БАРС 2.0</Typography>

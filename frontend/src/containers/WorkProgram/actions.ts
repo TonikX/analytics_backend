@@ -37,6 +37,8 @@ const getResults = createAction('WORK_PROGRAM_GET_RESULTS');
 const setResults = createAction('WORK_PROGRAM_SET_RESULTS');
 
 const getWorkProgramEvaluationTools = createAction('GET_WORK_PROGRAM_EVALUATION_TOOLS');
+const getWorkProgramEvaluationTool = createAction('GET_WORK_PROGRAM_EVALUATION_TOOL');
+const setWorkProgramEvaluationTool = createAction('SET_WORK_PROGRAM_EVALUATION_TOOL');
 const setWorkProgramEvaluationTools = createAction('SET_WORK_PROGRAM_EVALUATION_TOOLS');
 
 const deleteEvaluationTool = createAction('WORK_PROGRAM_DELETE_EVALUATION_TOOL');
@@ -58,11 +60,13 @@ const createComment = createAction('WORK_PROGRAM_CREATE_COMMENT');
 
 const saveZUN = createAction('WORK_PROGRAM_SAVE_ZUN');
 const deleteZUN = createAction('WORK_PROGRAM_DELETE_ZUN');
-const updateZUN = createAction('WORK_PROGRAM_DELETE_ZUN');
+const updateZUN = createAction('WORK_PROGRAM_UPDATE_ZUN');
 
 const pageDown = createAction('WORK_PROGRAM_PAGE_DOWN');
 
 const actions: WorkProgramActions = {
+    getWorkProgramEvaluationTool,
+    setWorkProgramEvaluationTool,
     saveZUN,
     deleteZUN,
     updateZUN,

@@ -80,7 +80,7 @@ class Sections extends React.PureComponent<SectionsProps> {
         return count;
     };
 
-    updateValues = (totalTotalHours: number) => () => {
+    updateValues = (totalTotalHours: number) => {
         const {sections} = this.props;
         let totalHoursWithoutCPO = 0;
 

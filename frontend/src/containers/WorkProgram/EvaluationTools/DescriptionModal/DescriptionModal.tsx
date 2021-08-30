@@ -12,12 +12,15 @@ import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import {DescriptionModalProps} from './types';
+import {EvaluationToolFields} from "../../enum"
 
 import CKEditor from '../../../../components/CKEditor';
 
 import {
     fields,
 } from '../../enum';
+import {withRouter} from "react-router-dom";
+import {appRouter} from "../../../../service/router-service";
 
 import connect from './DescriptionModal.connect';
 import styles from './DescriptionModal.styles';
@@ -30,11 +33,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
 
     handleClose = () => {
+        this.props.history.push(appRouter.getWorkProgramEvaluationToolsLink(this.props.workProgramId))
         this.props.actions.closeDialog(fields.SHOW_EVALUATION_TOOLS_DESCRIPTION);
     }
 
     render() {
-        const {isOpen, classes, description} = this.props;
+        const {isOpen, classes, evaluationTool} = this.props;
 
         return (
             <Dialog
@@ -61,7 +65,7 @@ class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
 
                 <DialogContent className={classes.dialogContent}>
                     <CKEditor
-                        value={description}
+                        value={evaluationTool[EvaluationToolFields.DESCRIPTION]}
                         readOnly
                         height="calc(100vh - 280px)"
                         useFormulas
@@ -78,5 +82,5 @@ class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
         );
     }
 }
-
-export default connect(withStyles(styles)(DescriptionModal));
+//@ts-ignore
+export default connect(withStyles(styles)(withRouter(DescriptionModal)));

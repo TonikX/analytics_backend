@@ -14,6 +14,7 @@ export const getWorkProgramComments = (state: rootState) => get(getStateData(sta
 export const getWorkProgram = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM, {});
 export const getWorkProgramResults = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_RESULTS, []);
 export const getWorkProgramEvaluationToolsList = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_EVALUATION_TOOLS, []);
+export const getWorkProgramEvaluationTool = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_EVALUATION_TOOL, {});
 export const getWorkProgramCompetences = (state: rootState) => get(getWorkProgram(state), fields.WORK_PROGRAM_COMPETENCES, []);
 export const getWorkProgramIntermediateCertificationList = (state: rootState) => get(getWorkProgram(state), fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION, []);
 export const getWorkProgramId = (state: rootState) => get(getWorkProgram(state), 'id', '');

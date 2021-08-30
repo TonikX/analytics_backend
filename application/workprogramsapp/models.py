@@ -693,6 +693,7 @@ class WorkProgramInFieldOfStudy(CloneMixin,models.Model):
 class WorkProgramIdStrUpForIsu(CloneMixin,models.Model):
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
     ns_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
+    dis_id = models.IntegerField(verbose_name="Id дисциплины в ису", blank=True, null=True)
     work_program_in_field_of_study = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.CASCADE, related_name="zuns_for_wp")
     number = models.CharField(max_length=1024, blank=True, null=True)
     ze_v_sem = models.CharField(max_length=1024, blank=True, null=True)

@@ -5,7 +5,7 @@ import {bindActionCreators} from "redux";
 import {rootState} from "../../../../store/reducers";
 
 import actions from "../../actions";
-import {isOpenDialog, getDialogData} from '../../getters';
+import {isOpenDialog, getDialogData, getWorkProgramEvaluationTool, getWorkProgramId} from '../../getters';
 import {WorkProgramActions} from "../../types";
 import {fields} from "../../enum";
 
@@ -15,6 +15,8 @@ const mapStateToProps = (state: rootState) => {
     return {
         isOpen: isOpenDialog(state, fields.SHOW_EVALUATION_TOOLS_DESCRIPTION),
         description: getDialogData(state, fields.SHOW_EVALUATION_TOOLS_DESCRIPTION),
+        evaluationTool: getWorkProgramEvaluationTool(state),
+        workProgramId: getWorkProgramId(state)
     };
 };
 
