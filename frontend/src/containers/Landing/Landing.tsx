@@ -300,7 +300,7 @@ export default () => {
           <Typography className={classes.footerText}>Разработка © 2021 Факультет ИКТ</Typography>
           <Typography className={classes.mailWrap}>
             <img src={mailImage} className={classes.mailIcon}/>
-            <a href='#' className={classes.link}>rpd@gmail.com</a>
+            <a href='mailto:rpd@itmo.ru' className={classes.link}>rpd@itmo.ru</a>
           </Typography>
         </div>
       </div>

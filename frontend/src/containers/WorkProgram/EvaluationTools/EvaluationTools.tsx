@@ -233,7 +233,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                         </div>
                                         :
                                          <div className={classes.eyeIcon}
-                                              onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}
+                                              onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.ID])}
                                          >
                                              <EyeIcon className={classes.menuIcon} />
                                          </div>
