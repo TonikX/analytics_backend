@@ -166,7 +166,7 @@ class ProfessionalStandardSet(viewsets.ModelViewSet):
 
 
 @api_view(['POST'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAdminUser,))
 def UploadCompetences(request):
     csv_path = "workprogramsapp/educational_program/competence.csv"
     # Генерируем словарь компетенций из CSV

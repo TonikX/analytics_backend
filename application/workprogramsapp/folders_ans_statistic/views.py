@@ -206,7 +206,7 @@ class RemoveFromFolderImplementationAcademicPlanView(generics.DestroyAPIView):
     serializer_class = IndividualImplementationAcademicPlanInFolderSerializer
 
 @api_view(['GET'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAuthenticated,))
 def WorkProgramStatistic(request, pk):
     marks = [0, 0, 0, 0, 0, 0]
     work_programs = WorkProgramInFolder.objects.filter(work_program=pk)

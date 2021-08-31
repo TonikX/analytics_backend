@@ -14,7 +14,7 @@ from django.db import transaction
 
 
 class FileUploadAPIView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     """
     API-endpoint для загрузки файла sub_2019_2020_new
     """
