@@ -267,6 +267,9 @@ export default class RouterService {
     getWorkProgramIntermediateCertificationLink = (id: number) => {
         return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.INTERMEDIATE_CERTIFICATION
     };
+    getWorkProgramIntermediateCertificationToolLink = (wpId: number, id: number) => {
+        return this.getWorkProgramIntermediateCertificationLink(wpId) + SEPARATOR + id
+    };
     getWorkProgramResultsLink = (id: number) => {
         return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.RESULTS
     };

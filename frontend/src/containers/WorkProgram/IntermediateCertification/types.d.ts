@@ -11,4 +11,6 @@ export interface IntermediateCertificationProps extends WithStyles<typeof styles
     hasDiffPass: boolean;
     hasPass: boolean;
     hasExam: boolean;
+    workProgramId: number;
+    location: any; //todo: change type
 }

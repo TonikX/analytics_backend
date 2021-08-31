@@ -5,7 +5,11 @@ import {bindActionCreators} from "redux";
 import {rootState} from "../../../../store/reducers";
 
 import actions from "../../actions";
-import {isOpenDialog, getDialogData} from '../../getters';
+import {
+    isOpenDialog,
+    getDialogData,
+    getWorkProgramIntermediateCertification, getWorkProgramId
+} from '../../getters';
 import {WorkProgramActions} from "../../types";
 import {fields} from "../../enum";
 
@@ -14,7 +18,8 @@ import {TrainingEntitiesActions} from '../../../TrainingEntities/types';
 const mapStateToProps = (state: rootState) => {
     return {
         isOpen: isOpenDialog(state, fields.SHOW_INTERMEDIATE_CERTIFICATION_DESCRIPTION),
-        description: getDialogData(state, fields.SHOW_INTERMEDIATE_CERTIFICATION_DESCRIPTION),
+        evaluationTool: getWorkProgramIntermediateCertification(state),
+        workProgramId: getWorkProgramId(state)
     };
 };
 

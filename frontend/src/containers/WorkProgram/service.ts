@@ -273,6 +273,10 @@ class WorkProgramService extends AnalyticsService{
         return this.delete(`/api/certification_tools/${id}`);
     }
 
+    getIntermediateCertification(id: ReactText){
+        return this.get(`/api/certification_tools/${id}`);
+    }
+
     deleteResult(id: ReactText){
         return this.delete(`/api/outcomesofworkprogram/delete/${id}`);
     }

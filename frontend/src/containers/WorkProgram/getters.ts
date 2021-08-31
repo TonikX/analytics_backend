@@ -16,7 +16,8 @@ export const getWorkProgramResults = (state: rootState) => get(getStateData(stat
 export const getWorkProgramEvaluationToolsList = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_EVALUATION_TOOLS, []);
 export const getWorkProgramEvaluationTool = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_EVALUATION_TOOL, {});
 export const getWorkProgramCompetences = (state: rootState) => get(getWorkProgram(state), fields.WORK_PROGRAM_COMPETENCES, []);
-export const getWorkProgramIntermediateCertificationList = (state: rootState) => get(getWorkProgram(state), fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION, []);
+export const getWorkProgramIntermediateCertificationList = (state: rootState) => get(getWorkProgram(state), fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOLS, []);
+export const getWorkProgramIntermediateCertification = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOL, {});
 export const getWorkProgramId = (state: rootState) => get(getWorkProgram(state), 'id', '');
 export const getWorkProgramExpertiseStatus = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.EXPERTISE_STATUS, '');
 export const getWorkProgramExpertiseId = (state: rootState) => get(getWorkProgram(state), 'expertise_with_rpd.0.id', null) || get(getWorkProgram(state), WorkProgramGeneralFields.EXPERTISE_ID_2);

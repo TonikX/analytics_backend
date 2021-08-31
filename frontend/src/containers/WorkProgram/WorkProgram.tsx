@@ -71,9 +71,15 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         const locations = this.props.location.pathname.split('/')
         const section: subSections = locations[locations.length - 1]
 
-        if (this.props.location.pathname.includes('/evaluation-tools/')){
+        if (this.props.location.pathname.includes([subSections.EVALUATION_TOOLS])){
             this.setState({
-                activeStep: 5
+                activeStep: sectionsValue[subSections.EVALUATION_TOOLS]
+            })
+            return
+        }
+        if (this.props.location.pathname.includes(subSections.INTERMEDIATE_CERTIFICATION)){
+            this.setState({
+                activeStep: sectionsValue[subSections.INTERMEDIATE_CERTIFICATION]
             })
             return
         }

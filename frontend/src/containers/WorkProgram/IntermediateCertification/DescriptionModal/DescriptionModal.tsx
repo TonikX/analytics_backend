@@ -17,11 +17,13 @@ import {DescriptionModalProps} from './types';
 import CKEditor from "../../../../components/CKEditor";
 
 import {
-    fields,
+    fields, IntermediateCertificationFields,
 } from '../../enum';
 
 import connect from './DescriptionModal.connect';
 import styles from './DescriptionModal.styles';
+import {appRouter} from "../../../../service/router-service";
+import {withRouter} from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -29,13 +31,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
-
     handleClose = () => {
+        this.props.history.push(appRouter.getWorkProgramIntermediateCertificationLink(this.props.workProgramId))
         this.props.actions.closeDialog(fields.SHOW_INTERMEDIATE_CERTIFICATION_DESCRIPTION);
     }
 
     render() {
-        const {isOpen, classes, description} = this.props;
+        const {isOpen, classes, evaluationTool} = this.props;
 
         return (
             <Dialog
@@ -63,7 +65,7 @@ class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
                 <DialogContent className={classes.dialogContent}>
                     <InputLabel className={classes.label}>Описание</InputLabel>
                     <CKEditor
-                        value={description}
+                        value={evaluationTool[IntermediateCertificationFields.DESCRIPTION]}
                         readOnly
                         height="calc(100vh - 300px)"
                         useFormulas
@@ -80,5 +82,5 @@ class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
         );
     }
 }
-
-export default connect(withStyles(styles)(DescriptionModal));
+//@ts-ignore
+export default connect(withStyles(styles)(withRouter(DescriptionModal)));

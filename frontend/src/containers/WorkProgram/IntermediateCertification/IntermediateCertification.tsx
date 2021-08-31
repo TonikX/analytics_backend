@@ -2,6 +2,7 @@ import React, {SyntheticEvent} from 'react';
 import get from 'lodash/get';
 import Scrollbars from "react-custom-scrollbars";
 import {AutoSizer} from 'react-virtualized';
+import {withRouter} from "react-router-dom";
 
 import classNames from "classnames";
 
@@ -24,8 +25,9 @@ import EvaluationCertificationTotalList from "../EvaluationCertificationTotalLis
 
 import {IntermediateCertificationProps} from './types';
 import {IntermediateCertificationFields, fields} from "../enum";
-import {IntermediateCertificationTypes} from "../constants";
+import {IntermediateCertificationTypes, subSections} from "../constants";
 import {IntermediateCertificationType} from "../types";
+import {appRouter} from "../../../service/router-service";
 
 import CreateModal from "./CreateModal";
 
@@ -39,6 +41,22 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
 
     componentDidMount() {
         this.props.actions.getWorkProgramEvaluationTools();
+        this.checkLocation()
+    }
+
+    componentDidUpdate(prevProps: Readonly<IntermediateCertificationProps>, prevState: Readonly<{}>, snapshot?: any) {
+         if (prevProps.location.pathname !== this.props.location.pathname){
+             this.checkLocation()
+         }
+    }
+
+    checkLocation = () => {
+        const location = this.props.location.pathname
+        const splittedUrl = location.split('/')
+        if (splittedUrl[splittedUrl.length - 1] !== subSections.INTERMEDIATE_CERTIFICATION && location.includes(subSections.INTERMEDIATE_CERTIFICATION)){
+            this.props.actions.openDialog({dialogType: fields.SHOW_INTERMEDIATE_CERTIFICATION_DESCRIPTION});
+            this.props.actions.getIntermediateCertification(splittedUrl[splittedUrl.length - 1]);
+        }
     }
 
     handleCreateNew = () => {
@@ -56,8 +74,10 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
         this.handleCloseItemMenu();
     };
 
-    handleClickShowDescription = (description: string) => () => {
-        this.props.actions.openDialog({dialogType: fields.SHOW_INTERMEDIATE_CERTIFICATION_DESCRIPTION, data: description});
+    handleClickShowDescription = (id: any) => () => {
+        //@ts-ignore
+        this.props.history.push(appRouter.getWorkProgramIntermediateCertificationToolLink(this.props.workProgramId, id))
+        // this.props.actions.openDialog({dialogType: fields.SHOW_INTERMEDIATE_CERTIFICATION_DESCRIPTION, data: description});
         this.handleCloseItemMenu();
     };
 
@@ -156,7 +176,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                                                 }}
                                             >
                                                 <MenuItem
-                                                    onClick={this.handleClickShowDescription(intermediateCertificationTool[IntermediateCertificationFields.DESCRIPTION])}>
+                                                    onClick={this.handleClickShowDescription(intermediateCertificationTool[IntermediateCertificationFields.ID])}>
                                                     <EyeIcon className={classes.menuIcon} />
                                                     Смотреть описание
                                                 </MenuItem>
@@ -175,7 +195,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                                         </div>
                                         :
                                          <div className={classes.eyeIcon}
-                                              onClick={this.handleClickShowDescription(intermediateCertificationTool[IntermediateCertificationFields.DESCRIPTION])}
+                                              onClick={this.handleClickShowDescription(intermediateCertificationTool[IntermediateCertificationFields.ID])}
                                          >
                                              <EyeIcon className={classes.menuIcon} />
                                          </div>
@@ -210,4 +230,5 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
     }
 }
 
-export default connect(withStyles(styles)(IntermediateCertification));
+//@ts-ignore
+export default connect(withStyles(styles)(withRouter(IntermediateCertification)));
