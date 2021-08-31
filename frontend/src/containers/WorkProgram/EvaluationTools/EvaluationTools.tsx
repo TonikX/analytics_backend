@@ -57,7 +57,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
     checkLocation = () => {
         const location = this.props.location.pathname
         const splittedUrl = location.split('/')
-        if (splittedUrl[splittedUrl.length - 1] !== subSections.EVALUATION_TOOLS){
+        if (splittedUrl[splittedUrl.length - 1] !== subSections.EVALUATION_TOOLS && location.includes(subSections.EVALUATION_TOOLS)){
             this.props.actions.openDialog({dialogType: fields.SHOW_EVALUATION_TOOLS_DESCRIPTION});
             this.props.actions.getWorkProgramEvaluationTool(splittedUrl[splittedUrl.length - 1]);
         }
