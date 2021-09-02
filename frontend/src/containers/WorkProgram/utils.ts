@@ -66,13 +66,12 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
     const errors = [];
     const evaluationToolsList = getWorkProgramEvaluationToolsList(state);
 
-    const lectureHours = getHoursArray(getWorkProgramField(state, 'lecture_hours'));
-    const practiceHours = getHoursArray(getWorkProgramField(state, 'practice_hours'));
-    const labHours = getHoursArray(getWorkProgramField(state, 'lab_hours'));
-    const srsHours = getHoursArray(getWorkProgramField(state, 'srs_hours'));
+    const lectureHours = getHoursArray(getWorkProgramField(state, 'lecture_hours_v2'));
+    const practiceHours = getHoursArray(getWorkProgramField(state, 'practice_hours_v2'));
+    const labHours = getHoursArray(getWorkProgramField(state, 'lab_hours_v2'));
+    const srsHours = getHoursArray(getWorkProgramField(state, 'srs_hours_v2'));
     const totalHours = getWorkProgramField(state, fields.WORK_PROGRAM_ALL_HOURS) || getAllHours(lectureHours, practiceHours, labHours, srsHours);
     const currentTotalHours = getTotalHours(sections).toFixed(2);
-
     const educationalPlans = getWorkProgramField(state, 'work_program_in_change_block')
 
     if (educationalPlans.length === 0){
