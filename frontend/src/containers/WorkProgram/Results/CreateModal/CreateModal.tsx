@@ -112,25 +112,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
-    changeSubjectAreaField = (value: ReactText) => {
-        const {result} = this.state;
-
-        this.props.trainingEntitiesActions.changeSubjectId(value);
-        this.props.trainingEntitiesActions.getTrainingEntities();
-
-        this.setState({
-            result: {
-                ...result,
-                [ResultsFields.ITEM]: {
-                    ...result[ResultsFields.ITEM],
-                    [TrainingEntitiesFields.SUBJECT_AREA]: {
-                        [SubjectAreaFields.ID]: value
-                    }
-                }
-            }
-        })
-    }
-
     changeEvaluationTools = (e: React.ChangeEvent) => {
         const {result} = this.state;
 
@@ -153,7 +134,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     render() {
-        const {isOpen, classes, trainingEntities, subjectArea, evaluationTools} = this.props;
+        const {isOpen, classes, trainingEntities, evaluationTools} = this.props;
         const {result} = this.state;
 
         const disableButton = get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID], '').length === 0;
@@ -199,22 +180,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         </RadioGroup>
                     </FormControl>
 
-                    <SearchSelector label="Предметная область *"
-                                            changeSearchText={this.handleChangeSubjectAreaSearch}
-                                            list={subjectArea}
-                                            changeItem={this.changeSubjectAreaField}
-                                            value={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '')}
-                                            valueLabel={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.TITLE], '')}
-                                            className={classes.marginBottom30}
-                    />
-
-                    <SearchSelector label="Учебная сущность *"
-                                            changeSearchText={this.handleChangeTrainingEntitySearchText}
-                                            list={trainingEntities}
-                                            changeItem={this.saveTrainingEntityField}
-                                            value={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID], '')}
-                                            valueLabel={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.TITLE], '')}
-                                            disabled={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '') === ''}
+                    <SearchSelector
+                        label="Учебная сущность *"
+                        changeSearchText={this.handleChangeTrainingEntitySearchText}
+                        list={trainingEntities}
+                        changeItem={this.saveTrainingEntityField}
+                        value={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID], '')}
+                        valueLabel={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.TITLE], '')}
                     />
 
                     <FormControl className={classes.evaluationToolSelector}>
