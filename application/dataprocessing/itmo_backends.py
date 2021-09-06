@@ -125,6 +125,7 @@ class  AuthenticateByCodeISU(ListAPIView):
                     pass
 
             #if reg:
+                print(isu_profile['groups'])
                 if "/SOTRUDNIK" in isu_profile['groups']:
                     groups = ["rpd_developer", "student"]
                     # "education_plan_developer", "op_leader",
