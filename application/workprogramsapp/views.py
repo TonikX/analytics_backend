@@ -9,7 +9,7 @@ from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
@@ -465,7 +465,7 @@ class WorkProgramCreateAPIView(generics.CreateAPIView):
 class WorkProgramDestroyView(generics.DestroyAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
-    permission_classes = [Is]
+    permission_classes = [IsAdminUser]
 
 
 class WorkProgramUpdateView(generics.UpdateAPIView):
