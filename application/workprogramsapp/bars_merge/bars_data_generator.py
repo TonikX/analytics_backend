@@ -8,7 +8,7 @@ from workprogramsapp.models import EvaluationTool, DisciplineSection, Сertifica
 def generate_single_checkpoint(work_program, absolute_semester, relative_semester, programs, setup):
     # Переменные для формирования запроса к БАРС
     list_regular = []
-    extra_points = True if work_program.extra_points else False
+    extra_points = False if work_program.extra_points == "0" or not work_program.extra_points else True
     work_program_id = work_program.id
     types_checkpoints = get_list_of_regular_checkpoints(setup)
     has_course_project = False
@@ -63,4 +63,3 @@ def generate_single_checkpoint(work_program, absolute_semester, relative_semeste
                                                additional_points=extra_points,
                                                alternate_methods=False, has_course_project=has_course_project)
     return checkpoint_plan
-
