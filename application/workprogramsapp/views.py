@@ -465,7 +465,7 @@ class WorkProgramCreateAPIView(generics.CreateAPIView):
 class WorkProgramDestroyView(generics.DestroyAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [Is]
 
 
 class WorkProgramUpdateView(generics.UpdateAPIView):

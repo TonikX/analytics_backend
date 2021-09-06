@@ -169,10 +169,10 @@ def render_context(context, **kwargs):
     #print('tooools', template_context['evaluation_tools'])
     for i in template_context['evaluation_tools']:
         i['description'] = ''
-        i['url']= 'http://localhost:3002/work-program/{}/evaluation-tools/{}'.format(context['id'], i['id'])
+        i['url']= 'https://op.itmo.ru/work-program/{}/evaluation-tools/{}'.format(context['id'], i['id'])
         tpl
         rt = RichText()
-        rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id('http://localhost:3002/work-program/{}/evaluation-tools/{}'.format(context['id'], i['id'])))
+        rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id('https://op.itmo.ru/work-program/{}/evaluation-tools/{}'.format(context['id'], i['id'])))
         i['url'] = rt
         print('name', i['name'])
         if i['semester'] == 1:
