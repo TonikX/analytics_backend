@@ -67,7 +67,7 @@ class IndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer
 class ShortIndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     """Сериализатор вывода группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
 
-    implementation_of_academic_plan = ShortImplementationAcademicPlanSerializer()
+    implementation_of_academic_plan = ImplementationAcademicPlanSerializer()
     user = userProfileSerializer()
 
     class Meta:

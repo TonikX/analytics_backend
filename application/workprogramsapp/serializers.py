@@ -53,9 +53,11 @@ class FieldOfStudyImplementationSerializer(serializers.ModelSerializer):
     """
         Сериализатор образовательных программ (направлений)
     """
+    #implementation_academic_plan_in_field_of_study = ImplementationAcademicPlanSerializer(many = True)
+
     class Meta:
         model = FieldOfStudy
-        fields = ['id', 'title', 'number', 'qualification', 'educational_profile', 'faculty']
+        fields = ['id', 'title', 'qualification', 'educational_profile', 'faculty']
 
 
 class AcademicPlanInImplementationSerializer(serializers.ModelSerializer):
