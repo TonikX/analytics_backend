@@ -18,7 +18,7 @@ from rest_framework.response import Response
 
 class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     academic_plan = AcademicPlanSerializer()
-    field_of_study = FieldOfStudyImplementationSerializer()
+    field_of_study = FieldOfStudyImplementationSerializer(many = True)
     #user = userProfileSerializer()
 
     class Meta:
