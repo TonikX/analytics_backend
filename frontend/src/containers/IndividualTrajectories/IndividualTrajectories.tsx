@@ -177,22 +177,23 @@ class IndividualTrajectories extends React.Component<IndividualTrajectoriesProps
                                                   className={classNames({[classes.bigRow]: !canEdit})}
                                         >
                                             <TableCell>
-                                                {academicPlan[IndividualTrajectoryFields.DIRECTION][DirectionFields.TITLE]}
+                                                {get(academicPlan, 'field_of_study.0.title', '')}
                                             </TableCell>
                                             <TableCell>
-                                                {academicPlan[IndividualTrajectoryFields.DIRECTION][DirectionFields.NUMBER]}
+                                                {get(academicPlan, 'field_of_study.0.number', '')}
                                             </TableCell>
                                             <TableCell>
-                                                <Link
-                                                    to={appRouter.getTrajectoryPlanDetailLink(individualTrajectories[IndividualTrajectoryFields.ID])}
-                                                    target="_blank"
-                                                    className={classes.link}
-                                                >
-                                                    {academicPlan[IndividualTrajectoryFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]}
-                                                </Link>
+                                                {get(academicPlan, 'academic_plan.academic_plan_in_field_of_study.0.title', '')}
+                                                {/*<Link*/}
+                                                {/*    to={appRouter.getTrajectoryPlanDetailLink(individualTrajectories[IndividualTrajectoryFields.ID])}*/}
+                                                {/*    target="_blank"*/}
+                                                {/*    className={classes.link}*/}
+                                                {/*>*/}
+                                                {/*    {academicPlan[IndividualTrajectoryFields.EDUCATION_PLAN][EducationalPlanFields.PROFILE]}*/}
+                                                {/*</Link>*/}
                                             </TableCell>
                                             <TableCell>
-                                                {academicPlan[IndividualTrajectoryFields.YEAR]}
+                                                {get(academicPlan, 'academic_plan.academic_plan_in_field_of_study.0.year', '')}
                                             </TableCell>
                                             <TableCell>
                                                 {getUserFullName(individualTrajectories[IndividualTrajectoryFields.USER])}
