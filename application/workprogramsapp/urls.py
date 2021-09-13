@@ -343,7 +343,7 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.isu_merge.urls')),
     url(r'^', include('workprogramsapp.statistic.urls')),
     url(r'^', include('workprogramsapp.notifications.urls')),
-
+    url(r'^', include('workprogramsapp.user_management.urls')),
     url(r'^', include(router.urls)),
 
 ]
