@@ -5,7 +5,7 @@ from workprogramsapp.bars_merge.checkpoints_dict import checkpoint_correspondenc
 from workprogramsapp.models import EvaluationTool, DisciplineSection, СertificationEvaluationTool
 
 
-def generate_single_checkpoint(work_program, absolute_semester, relative_semester, programs, setup):
+def generate_single_checkpoint(work_program, absolute_semester, relative_semester, programs, setup, wp_isu_id):
     # Переменные для формирования запроса к БАРС
     list_regular = []
     extra_points = False if work_program.extra_points == "0" or not work_program.extra_points else True
@@ -53,7 +53,7 @@ def generate_single_checkpoint(work_program, absolute_semester, relative_semeste
             point_distribution = 100 - cerf.max
             final_checkpoint = generate_checkpoint(name=cerf.name, min=cerf.min, max=cerf.max, week=None,
                                                    type_id=get_checkpoints_type(int(cerf.type)), key=True)
-    discipline = generate_discipline(bars_id=work_program.wp_isu_id, name=work_program.title, term=absolute_semester,
+    discipline = generate_discipline(bars_id=wp_isu_id, name=work_program.title, term=absolute_semester,
                                      course_project=has_course_project)
     checkpoint_plan = generate_checkpoint_plan(regular_checkpoint=list_regular, programs=programs,
                                                discipline=discipline,
