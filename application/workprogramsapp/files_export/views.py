@@ -52,6 +52,14 @@ def render_context(context, **kwargs):
                 if list(wpcb['credit_units'][cu]) != 0:
                     credit_units_list.append(wpcb['credit_units'][cu])
             print('credit_units_list', credit_units_list)
+            for cu in credit_units_list:
+                print('cu', cu)
+                if int(float(cu)) != 0:
+                    print('cicle cu', cu)
+                    print('nomer semestra', credit_units_list.index(cu)+1)
+                    semester.append({'s': credit_units_list.index(cu)+1, 'c': cu, 'h': int(cu) * 36})
+                credit_units_list[credit_units_list.index(cu)] = 0
+            print(semester)
             try:
                 for cu in credit_units_list:
                     print(cu)
@@ -135,6 +143,7 @@ def render_context(context, **kwargs):
                                         str(FieldOfStudy.objects.get(implementation_academic_plan_in_field_of_study__academic_plan__id = ap_obj.id).number) + ')'
     template_context['semester'] = semester
     template_context['total_hours_1'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO]
+    print(template_context['total_hours_1'])
     template_context['year'] = kwargs['year']
     if context['authors'] is None:
         template_context['author'] = ''
