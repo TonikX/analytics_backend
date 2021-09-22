@@ -48,25 +48,30 @@ def render_context(context, **kwargs):
             print('credit units', wpcb['credit_units'])
             # semester = [{'s': i, 'c': wpcb['credit_units'][i]} for i in range(len(wpcb['credit_units'])) if
             #             wpcb['credit_units'] if wpcb['credit_units'][i] != 0]
+            wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')
+            print(wpcb['credit_units'])
             for cu in range (0, 16, 2):
                 if list(wpcb['credit_units'][cu]) != 0:
                     credit_units_list.append(wpcb['credit_units'][cu])
             print('credit_units_list', credit_units_list)
             for cu in credit_units_list:
                 print('cu', cu)
-                if int(float(cu)) != 0:
-                    print('cicle cu', cu)
-                    print('nomer semestra', credit_units_list.index(cu)+1)
-                    semester.append({'s': credit_units_list.index(cu)+1, 'c': cu, 'h': int(cu) * 36})
-                credit_units_list[credit_units_list.index(cu)] = 0
-            print(semester)
-            try:
-                for cu in credit_units_list:
-                    print(cu)
+                try:
                     if int(float(cu)) != 0:
-                        semester.append({'s': credit_units_list.index(cu)+1, 'c': cu})
-            except:
-                pass
+                        print('cicle cu', cu)
+                        print('nomer semestra', credit_units_list.index(cu)+1)
+                        semester.append({'s': credit_units_list.index(cu)+1, 'c': cu, 'h': int(cu) * 36})
+                    credit_units_list[credit_units_list.index(cu)] = 0
+                except:
+                    pass
+            print(semester)
+            # try:
+            #     for cu in credit_units_list:
+            #         print(cu)
+            #         if int(float(cu)) != 0:
+            #             semester.append({'s': credit_units_list.index(cu)+1, 'c': cu})
+            # except:
+            #     pass
     # except:
     #     semester = [{'s': '-', 'c': '-', 'h': '-', 'e': '-'}]
     #     wpcb_pk = context['work_program_in_change_block'][0]['id']
@@ -82,6 +87,7 @@ def render_context(context, **kwargs):
              'outcomes': ', '.join(map(str, set(outcomes)))})
     contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
     online_sections, url_online_course, evaluation_tools = [], [], []
+    online_list_number = 0
 
     for i in context['discipline_sections']:
         online_names, topics_list = [], []
@@ -114,13 +120,16 @@ def render_context(context, **kwargs):
                 #ev_tool['description'] = ''
                 evaluation_tools.append(ev_tool)
         #('evaluation_tools', evaluation_tools)
+
         for j in i['topics']:
             topics_list.append(j['description'])
             if j['url_online_course'] is None:
                 pass
             else:
                 online_sections.append(i['ordinal_number'])
-                online_names.append(j['url_online_course']['title'])
+                print('online_sections', online_sections)
+                online_list_number +=1
+                online_names.append('{} (url: {})'.format(j['url_online_course']['title'], j['url_online_course']['external_url']))
                 if j['url_online_course'] not in url_online_course:
                     url_online_course.append(j['url_online_course'])
         i['online_list'] = ', '.join(map(str, set(online_names)))
@@ -158,6 +167,13 @@ def render_context(context, **kwargs):
     template_context['X'] = 'X'
     template_context['sections_online'] = ', '.join(map(str, set(online_sections)))
     template_context['sections_replaced_onl'] = ''
+    online_list_number_list = ''
+    for i in range(1, online_list_number+1):
+        online_list_number_list = online_list_number_list + '{}'.format(str(i))
+        if int(i) != int(online_list_number):
+            online_list_number_list = online_list_number_list + ', '
+    print('online_list_number_list', online_list_number, online_list_number_list)
+    template_context['online_list_number_list'] = online_list_number_list
     template_context['bibliographic_reference'] = context['bibliographic_reference']
     template_context['online_course'] = url_online_course
     template_context['evaluation_tools'] = evaluation_tools
