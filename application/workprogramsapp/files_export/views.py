@@ -185,10 +185,16 @@ def render_context(context, **kwargs):
     current_evaluation_tool = []
     evaluation_tool_semester_1 = []
     evaluation_tool_semester_2 = []
+    evaluation_tool_semester_3 = []
+    evaluation_tool_semester_4 = []
     items_max_semester_1 = []
     items_min_semester_1 = []
     items_max_semester_2 = []
     items_min_semester_2 = []
+    items_max_semester_3 = []
+    items_min_semester_3 = []
+    items_max_semester_4 = []
+    items_min_semester_4 = []
     k=0
     evaluation_tools_pdf_docs = []
     #print('tooools', template_context['evaluation_tools'])
@@ -212,16 +218,32 @@ def render_context(context, **kwargs):
                 items_max_semester_2.append(i['max'])
             if i['min'] is not None:
                 items_min_semester_2.append(i['min'])
+        if i['semester'] == 3:
+            evaluation_tool_semester_3.append(i)
+            if i['max'] is not None:
+                items_max_semester_3.append(i['max'])
+            if i['min'] is not None:
+                items_min_semester_3.append(i['min'])
+        if i['semester'] == 2:
+            evaluation_tool_semester_4.append(i)
+            if i['max'] is not None:
+                items_max_semester_4.append(i['max'])
+            if i['min'] is not None:
+                items_min_semester_4.append(i['min'])
         else:
             pass
     #print('semesters', evaluation_tool_semester_1)
     #print('semesters___2', evaluation_tool_semester_2)
     template_context['evaluation_tool_semester_1'] = evaluation_tool_semester_1
     template_context['evaluation_tool_semester_2'] = evaluation_tool_semester_2
+    template_context['evaluation_tool_semester_3'] = evaluation_tool_semester_1
+    template_context['evaluation_tool_semester_4'] = evaluation_tool_semester_2
     template_context['outcomes_evaluation_tool'] = outcomes_evaluation_tool
     template_context['current_evaluation_tool'] = current_evaluation_tool
     certification_evaluation_tools_semestr_1 = []
     certification_evaluation_tools_semestr_2 = []
+    certification_evaluation_tools_semestr_3 = []
+    certification_evaluation_tools_semestr_4 = []
     #print('certification_evaluation_tools_semestr_1', certification_evaluation_tools_semestr_1)
     #print('certification_evaluation_tools_semestr_2', certification_evaluation_tools_semestr_2)
     for item in context['certification_evaluation_tools']:
@@ -255,6 +277,20 @@ def render_context(context, **kwargs):
                 if item['min'] is not None:
                     items_min_semester_2.append(item['min'])
                 certification_evaluation_tools_semestr_2.append(item)
+            if item ['semester'] == 3:
+                print('maxxxxx', item['max'])
+                if item['max'] is not None:
+                    items_max_semester_3.append(item['max'])
+                if item['min'] is not None:
+                    items_min_semester_3.append(item['min'])
+                certification_evaluation_tools_semestr_3.append(item)
+            if item ['semester'] == 4:
+                print('maxxxxx', item['max'])
+                if item['max'] is not None:
+                    items_max_semester_4.append(item['max'])
+                if item['min'] is not None:
+                    items_min_semester_4.append(item['min'])
+                certification_evaluation_tools_semestr_4.append(item)
             else:
                 pass
         except:
@@ -264,13 +300,19 @@ def render_context(context, **kwargs):
     # print('certification_evaluation_tools_semestr_2', certification_evaluation_tools_semestr_2)
     template_context['certification_evaluation_tools_semestr_1'] = certification_evaluation_tools_semestr_1
     template_context['certification_evaluation_tools_semestr_2'] = certification_evaluation_tools_semestr_2
+    template_context['certification_evaluation_tools_semestr_3'] = certification_evaluation_tools_semestr_3
+    template_context['certification_evaluation_tools_semestr_4'] = certification_evaluation_tools_semestr_4
     try:
         template_context['outcomes_max_all_semester_1'] = sum(items_max_semester_1) + int(context['extra_points'])
         template_context['outcomes_max_all_semester_2'] = sum(items_max_semester_2) + int(context['extra_points'])
+        template_context['outcomes_max_all_semester_3'] = sum(items_max_semester_3) + int(context['extra_points'])
+        template_context['outcomes_max_all_semester_4'] = sum(items_max_semester_4) + int(context['extra_points'])
     except:
         pass
     template_context['outcomes_min_all_semester_1'] = sum(items_min_semester_1)
     template_context['outcomes_min_all_semester_2'] = sum(items_min_semester_2)
+    template_context['outcomes_min_all_semester_3'] = sum(items_min_semester_3)
+    template_context['outcomes_min_all_semester_4'] = sum(items_min_semester_4)
     template_context['extra_points'] = context['extra_points']
     #print('outcomes_evaluation_tool', template_context['outcomes_min_all_semester_2'])
     #print(template_context['evaluation_tool_semester_2'])
