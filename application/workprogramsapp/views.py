@@ -1,11 +1,10 @@
 import json
 import os
 import re
-from collections import OrderedDict
-
 import pandas
 from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
+from collections import OrderedDict
+from django.http import HttpResponse
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework import status
@@ -13,18 +12,19 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django_filters.rest_framework import DjangoFilterBackend
 
 from dataprocessing.models import Items
 from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
-    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
+    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy, Certification
 from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
-from .notifications.models import UserNotification
 # Права доступа
 from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor
+from .notifications.models import UserNotification
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, \
@@ -34,19 +34,18 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
     DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer
+from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, WorkProgramInFieldOfStudySerializerForCb, WorkProgramInFieldOfStudyForCompeteceListSerializer
+from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer,  ZunForManyCreateSerializer, \
+    WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import BibliographicReferenceSerializer, \
     WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
     IndicatorListSerializer
-from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, WorkProgramInFieldOfStudySerializerForCb, \
-    WorkProgramInFieldOfStudyForCompeteceListSerializer
-from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
-    ZunForManyCreateSerializer, \
-    WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer
 from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
+from django_filters.rest_framework import DjangoFilterBackend
 
 """"Удалены старые views с использованием джанго рендеринга"""
 """Блок реализации API"""
