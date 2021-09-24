@@ -35,6 +35,7 @@ def render_context(context, **kwargs):
     ap_obj = AcademicPlan.objects.get(pk=kwargs['academic_plan_id'])
     print(context['work_program_in_change_block'])
     #try:
+    semester = []
     for wpcb in context['work_program_in_change_block']:
         print(wpcb['credit_units'])
         # print(wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'])
@@ -42,7 +43,7 @@ def render_context(context, **kwargs):
         # print(WorkProgramChangeInDisciplineBlockModule.objects.filter(id = wpcb['id']))
         #if wpcb['discipline_block_module']['descipline_block']['academic_plan']['id'] == ap_obj.id:
         credit_units_list = []
-        semester = []
+
         if wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'] == ap_obj.id:
             wpcb_pk = wpcb['id']
             print('credit units', wpcb['credit_units'])
