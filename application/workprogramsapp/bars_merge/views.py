@@ -158,10 +158,12 @@ def SendCheckpointsForAcceptedWP(request):
     one_wp = request.data.get('one_wp')
     setup_bars = (year, send_semester)  # Устанавливает корректную дату и семестр в барсе (аргумент для БАРС-функций)
     # небольшой костыль из-за некоторых ньюансов (цикл семестров начинается с 0)
+    types_checkpoints = get_list_of_regular_checkpoints(setup_bars) # получаем список типов чекпоинтов из БАРС
     if send_semester == 0:
         send_semester = 1
     else:
         send_semester = 0
+
     # Отсылаем ли мы одну дисципилну или же все с пометкой "отправить в барс"
     if not one_wp:
         needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC',
@@ -230,13 +232,13 @@ def SendCheckpointsForAcceptedWP(request):
                                                           relative_semester=count_relative,
                                                           programs=imp_list,
                                                           work_program=work_program, setup=setup_bars,
-                                                          wp_isu_id=isu_wp_id)
+                                                          wp_isu_id=isu_wp_id, types_checkpoints=types_checkpoints)
                 isu_wp = None
                 isu_wp_id = None
                 # Получаем вернувшуюся информацию
-                # print(request_text)
+                print(request_text)
                 request_response, request_status_code = post_checkpoint_plan(request_text, setup_bars)
-                if request_status_code != 200:
+                """if request_status_code != 200:
                     #  если почему-то не отправилось продублируем респонс в терминал
                     print(request_text, request_response)
                 # Пишем логи
@@ -245,7 +247,7 @@ def SendCheckpointsForAcceptedWP(request):
                                                       request_status=request_status_code)
                 all_sends.append(
                     {"status": request_status_code, "request": request_text, "response": request_response})
-            # Если дисциплина длинной несколько семестров, то добавляем плюсик к счетчику относительного семестра
+            # Если дисциплина длинной несколько семестров, то добавляем плюсик к счетчику относительного семестра"""
             if implementation_of_academic_plan_all and not relative_bool:
                 count_relative += 1
     return Response(all_sends)
