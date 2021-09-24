@@ -165,7 +165,8 @@ def render_context(context, **kwargs):
     template_context['tbl_competence'] = tbl_competence
     template_context['total_hours'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours]
     template_context['is_no_online'] = True if online_sections == 0 else False
-    template_context['is_online'] = False if online_sections == 0 else True
+    template_context['is_online'] = True if online_sections else False
+    print('is_online', template_context['is_online'])
     template_context['X'] = 'X'
     template_context['sections_online'] = ', '.join(map(str, set(online_sections)))
     template_context['sections_replaced_onl'] = ''
@@ -238,8 +239,8 @@ def render_context(context, **kwargs):
     #print('semesters___2', evaluation_tool_semester_2)
     template_context['evaluation_tool_semester_1'] = evaluation_tool_semester_1
     template_context['evaluation_tool_semester_2'] = evaluation_tool_semester_2
-    template_context['evaluation_tool_semester_3'] = evaluation_tool_semester_1
-    template_context['evaluation_tool_semester_4'] = evaluation_tool_semester_2
+    template_context['evaluation_tool_semester_3'] = evaluation_tool_semester_3
+    template_context['evaluation_tool_semester_4'] = evaluation_tool_semester_4
     template_context['outcomes_evaluation_tool'] = outcomes_evaluation_tool
     template_context['current_evaluation_tool'] = current_evaluation_tool
     certification_evaluation_tools_semestr_1 = []
