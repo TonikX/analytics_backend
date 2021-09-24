@@ -125,21 +125,24 @@ class  AuthenticateByCodeISU(ListAPIView):
                     pass
 
             #if reg:
-                print(isu_profile['groups'])
-                if "/SOTRUDNIK" in isu_profile['groups']:
-                    groups = ["rpd_developer", "student"]
-                    # "education_plan_developer", "op_leader",
-                    User = User.objects.get(username=isu_profile['id'])
-                    for group in groups:
-                        User.groups.add(Group.objects.get(name=group))
-                elif "/STUDENT" in isu_profile['groups']:
-                    groups = ["student"]
-                    User = User.objects.get(username=isu_profile['id'])
-                    for group in groups:
-                        User.groups.add(Group.objects.get(name=group))
-                else:
-                    pass
-
+                # print(isu_profile['groups'])
+                # if "/SOTRUDNIK" in isu_profile['groups']:
+                #     groups = ["rpd_developer", "student"]
+                #     # "education_plan_developer", "op_leader",
+                #     User = User.objects.get(username=isu_profile['id'])
+                #     for group in groups:
+                #         User.groups.add(Group.objects.get(name=group))
+                # elif "/STUDENT" in isu_profile['groups']:
+                #     groups = ["student"]
+                #     User = User.objects.get(username=isu_profile['id'])
+                #     for group in groups:
+                #         User.groups.add(Group.objects.get(name=group))
+                # else:
+                #     pass
+                groups = ["rpd_developer", "education_plan_developer", "op_leader", "student"]
+                User = User.objects.get(username=isu_profile['id'])
+                for group in groups:
+                    User.groups.add(Group.objects.get(name=group))
 
             # Авторизация
             User = get_user_model()
