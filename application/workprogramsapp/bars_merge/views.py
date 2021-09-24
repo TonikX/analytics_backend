@@ -236,9 +236,9 @@ def SendCheckpointsForAcceptedWP(request):
                 isu_wp = None
                 isu_wp_id = None
                 # Получаем вернувшуюся информацию
-                print(request_text)
+                #print(request_text)
                 request_response, request_status_code = post_checkpoint_plan(request_text, setup_bars)
-                """if request_status_code != 200:
+                if request_status_code != 200:
                     #  если почему-то не отправилось продублируем респонс в терминал
                     print(request_text, request_response)
                 # Пишем логи
@@ -247,7 +247,7 @@ def SendCheckpointsForAcceptedWP(request):
                                                       request_status=request_status_code)
                 all_sends.append(
                     {"status": request_status_code, "request": request_text, "response": request_response})
-            # Если дисциплина длинной несколько семестров, то добавляем плюсик к счетчику относительного семестра"""
+            # Если дисциплина длинной несколько семестров, то добавляем плюсик к счетчику относительного семестра
             if implementation_of_academic_plan_all and not relative_bool:
                 count_relative += 1
     return Response(all_sends)
