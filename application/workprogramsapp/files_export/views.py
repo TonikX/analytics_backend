@@ -151,8 +151,9 @@ def render_context(context, **kwargs):
     template_context['academic_plan'] = str(ImplementationAcademicPlan.objects.get(academic_plan__id = ap_obj.id).title) + ' (' + \
                                         str(FieldOfStudy.objects.get(implementation_academic_plan_in_field_of_study__academic_plan__id = ap_obj.id).number) + ')'
     template_context['semester'] = semester
+    print('template_context', template_context['semester'])
     template_context['total_hours_1'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO]
-    print(template_context['total_hours_1'])
+    print('total_hours_1', template_context['total_hours_1'])
     template_context['year'] = kwargs['year']
     if context['authors'] is None:
         template_context['author'] = ''
