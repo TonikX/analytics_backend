@@ -518,7 +518,19 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 newdata.update({"can_edit": False, "expertise_status": False})
             newdata.update({"use_chat_with_id_expertise": None})
         try:
-            ue = UserExpertise.objects.get(expert=request.user, expertise__work_program=self.kwargs['pk'])
+
+            ue = UserExpertise.objects.filter(expert=request.user, expertise__work_program=self.kwargs['pk'])
+            ue_save_obj = None
+            for user_exp_object in ue:
+                ue_save_obj = user_exp_object
+                if user_exp_object.stuff_status == "EX":
+                    ue_save_obj = user_exp_object
+                    break
+            if ue_save_obj:
+                ue = ue_save_obj
+            else:
+                raise ValueError
+
             if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX" or \
                     Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK":
                 newdata.update({"can_comment": True})
