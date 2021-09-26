@@ -14,7 +14,7 @@ class UserListView(generics.ListAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['username', 'first_name', 'last_name', 'email', 'isu_number', "groups", "groups_name"]
+    search_fields = ['username', 'first_name', 'last_name', 'email', 'isu_number', 'groups__name']
 
 
 class UserRetrieveView(generics.RetrieveUpdateDestroyAPIView):
