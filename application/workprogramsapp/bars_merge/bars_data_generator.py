@@ -1,16 +1,16 @@
-from workprogramsapp.bars_merge.bars_api_getter import get_list_of_regular_checkpoints, get_tests, post_tests
+from workprogramsapp.bars_merge.bars_api_getter import get_tests, post_tests
 from workprogramsapp.bars_merge.checkpoint_template import generate_checkpoint, get_checkpoints_type, \
     generate_discipline, generate_checkpoint_plan, generate_test
 from workprogramsapp.bars_merge.checkpoints_dict import checkpoint_correspondence
 from workprogramsapp.models import EvaluationTool, DisciplineSection, СertificationEvaluationTool
 
 
-def generate_single_checkpoint(work_program, absolute_semester, relative_semester, programs, setup, wp_isu_id):
+def generate_single_checkpoint(work_program, absolute_semester, relative_semester, programs, setup, wp_isu_id,
+                               types_checkpoints):
     # Переменные для формирования запроса к БАРС
     list_regular = []
     extra_points = False if work_program.extra_points == "0" or not work_program.extra_points else True
     work_program_id = work_program.id
-    types_checkpoints = get_list_of_regular_checkpoints(setup)
     has_course_project = False
     course_project = None
     final_checkpoint = None
