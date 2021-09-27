@@ -215,19 +215,19 @@ def render_context(context, **kwargs):
                 items_max_semester_1.append(i['max'])
             if i['min'] is not None:
                 items_min_semester_1.append(i['min'])
-        if i['semester'] == 2:
+        elif i['semester'] == 2:
             evaluation_tool_semester_2.append(i)
             if i['max'] is not None:
                 items_max_semester_2.append(i['max'])
             if i['min'] is not None:
                 items_min_semester_2.append(i['min'])
-        if i['semester'] == 3:
+        elif i['semester'] == 3:
             evaluation_tool_semester_3.append(i)
             if i['max'] is not None:
                 items_max_semester_3.append(i['max'])
             if i['min'] is not None:
                 items_min_semester_3.append(i['min'])
-        if i['semester'] == 2:
+        elif i['semester'] == 4:
             evaluation_tool_semester_4.append(i)
             if i['max'] is not None:
                 items_max_semester_4.append(i['max'])
@@ -252,10 +252,10 @@ def render_context(context, **kwargs):
     for item in context['certification_evaluation_tools']:
         print('dfdfdfd', item['name'])
         try:
-            item['url']= 'http://localhost:3002/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])
+            item['url']= 'https://op.itmo.ru/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])
             tpl
             rt = RichText()
-            rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id('http://localhost:3002/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])))
+            rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id('https://op.itmo.ru/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])))
             item['url'] = rt
             item['description'] = html2text.html2text(item['description'])
             if item['type'] == '1':
