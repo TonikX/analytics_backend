@@ -29,6 +29,7 @@ from .educational_program.key_competences.models import GroupOfKeyCompetencesInG
 from .educational_program.general_prof_competencies.models import GroupOfGeneralProfCompetencesInGeneralCharacteristic, \
     GeneralProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
 from .individualization.models import ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
+from .feedback.models import FeedbackRecord
 
 
 admin.site.register(GroupOfPkCompetencesInGeneralCharacteristic)
@@ -106,3 +107,4 @@ admin.site.register(CourseFieldOfStudy)
 admin.site.register(ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule)
 admin.site.register(WorkProgramIdStrUpForIsu)
 admin.site.register(NotificationComments)
+admin.site.register(FeedbackRecord)

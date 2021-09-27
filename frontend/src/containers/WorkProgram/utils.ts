@@ -105,9 +105,9 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
 
     const fullSum = getEvaluationToolsMaxSum(evaluationToolsList) + getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state))
 
-    if (fullSum / semesterCount !== 100 && qualification !== MASTER_QUALIFICATION){
-        errors.push('Заполните до конца раздел оценочные средства');
-    }
+    // if (fullSum / semesterCount !== 100 && qualification !== MASTER_QUALIFICATION){
+    //     errors.push('Заполните до конца раздел оценочные средства');
+    // }
 
     return errors;
 }

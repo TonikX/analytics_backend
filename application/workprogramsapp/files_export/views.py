@@ -35,6 +35,7 @@ def render_context(context, **kwargs):
     ap_obj = AcademicPlan.objects.get(pk=kwargs['academic_plan_id'])
     print(context['work_program_in_change_block'])
     #try:
+    semester = []
     for wpcb in context['work_program_in_change_block']:
         print(wpcb['credit_units'])
         # print(wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'])
@@ -42,23 +43,36 @@ def render_context(context, **kwargs):
         # print(WorkProgramChangeInDisciplineBlockModule.objects.filter(id = wpcb['id']))
         #if wpcb['discipline_block_module']['descipline_block']['academic_plan']['id'] == ap_obj.id:
         credit_units_list = []
-        semester = []
+
         if wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'] == ap_obj.id:
             wpcb_pk = wpcb['id']
             print('credit units', wpcb['credit_units'])
             # semester = [{'s': i, 'c': wpcb['credit_units'][i]} for i in range(len(wpcb['credit_units'])) if
             #             wpcb['credit_units'] if wpcb['credit_units'][i] != 0]
+            wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')
+            print(wpcb['credit_units'])
             for cu in range (0, 16, 2):
                 if list(wpcb['credit_units'][cu]) != 0:
                     credit_units_list.append(wpcb['credit_units'][cu])
             print('credit_units_list', credit_units_list)
-            try:
-                for cu in credit_units_list:
-                    print(cu)
+            for cu in credit_units_list:
+                print('cu', cu)
+                try:
                     if int(float(cu)) != 0:
-                        semester.append({'s': credit_units_list.index(cu)+1, 'c': cu})
-            except:
-                pass
+                        print('cicle cu', cu)
+                        print('nomer semestra', credit_units_list.index(cu)+1)
+                        semester.append({'s': credit_units_list.index(cu)+1, 'c': cu, 'h': int(cu) * 36})
+                    credit_units_list[credit_units_list.index(cu)] = 0
+                except:
+                    pass
+            print(semester)
+            # try:
+            #     for cu in credit_units_list:
+            #         print(cu)
+            #         if int(float(cu)) != 0:
+            #             semester.append({'s': credit_units_list.index(cu)+1, 'c': cu})
+            # except:
+            #     pass
     # except:
     #     semester = [{'s': '-', 'c': '-', 'h': '-', 'e': '-'}]
     #     wpcb_pk = context['work_program_in_change_block'][0]['id']
@@ -74,6 +88,7 @@ def render_context(context, **kwargs):
              'outcomes': ', '.join(map(str, set(outcomes)))})
     contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
     online_sections, url_online_course, evaluation_tools = [], [], []
+    online_list_number = 0
 
     for i in context['discipline_sections']:
         online_names, topics_list = [], []
@@ -106,13 +121,16 @@ def render_context(context, **kwargs):
                 #ev_tool['description'] = ''
                 evaluation_tools.append(ev_tool)
         #('evaluation_tools', evaluation_tools)
+
         for j in i['topics']:
             topics_list.append(j['description'])
             if j['url_online_course'] is None:
                 pass
             else:
                 online_sections.append(i['ordinal_number'])
-                online_names.append(j['url_online_course']['title'])
+                print('online_sections', online_sections)
+                online_list_number +=1
+                online_names.append('{} (url: {})'.format(j['url_online_course']['title'], j['url_online_course']['external_url']))
                 if j['url_online_course'] not in url_online_course:
                     url_online_course.append(j['url_online_course'])
         i['online_list'] = ', '.join(map(str, set(online_names)))
@@ -134,7 +152,9 @@ def render_context(context, **kwargs):
     template_context['academic_plan'] = str(ImplementationAcademicPlan.objects.get(academic_plan__id = ap_obj.id).title) + ' (' + \
                                         str(FieldOfStudy.objects.get(implementation_academic_plan_in_field_of_study__academic_plan__id = ap_obj.id).number) + ')'
     template_context['semester'] = semester
+    print('template_context', template_context['semester'])
     template_context['total_hours_1'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO]
+    print('total_hours_1', template_context['total_hours_1'])
     template_context['year'] = kwargs['year']
     if context['authors'] is None:
         template_context['author'] = ''
@@ -145,10 +165,18 @@ def render_context(context, **kwargs):
     template_context['tbl_competence'] = tbl_competence
     template_context['total_hours'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours]
     template_context['is_no_online'] = True if online_sections == 0 else False
-    template_context['is_online'] = False if online_sections == 0 else True
+    template_context['is_online'] = True if online_sections else False
+    print('is_online', template_context['is_online'])
     template_context['X'] = 'X'
     template_context['sections_online'] = ', '.join(map(str, set(online_sections)))
     template_context['sections_replaced_onl'] = ''
+    online_list_number_list = ''
+    for i in range(1, online_list_number+1):
+        online_list_number_list = online_list_number_list + '{}'.format(str(i))
+        if int(i) != int(online_list_number):
+            online_list_number_list = online_list_number_list + ', '
+    print('online_list_number_list', online_list_number, online_list_number_list)
+    template_context['online_list_number_list'] = online_list_number_list
     template_context['bibliographic_reference'] = context['bibliographic_reference']
     template_context['online_course'] = url_online_course
     template_context['evaluation_tools'] = evaluation_tools
@@ -160,10 +188,16 @@ def render_context(context, **kwargs):
     current_evaluation_tool = []
     evaluation_tool_semester_1 = []
     evaluation_tool_semester_2 = []
+    evaluation_tool_semester_3 = []
+    evaluation_tool_semester_4 = []
     items_max_semester_1 = []
     items_min_semester_1 = []
     items_max_semester_2 = []
     items_min_semester_2 = []
+    items_max_semester_3 = []
+    items_min_semester_3 = []
+    items_max_semester_4 = []
+    items_min_semester_4 = []
     k=0
     evaluation_tools_pdf_docs = []
     #print('tooools', template_context['evaluation_tools'])
@@ -181,31 +215,47 @@ def render_context(context, **kwargs):
                 items_max_semester_1.append(i['max'])
             if i['min'] is not None:
                 items_min_semester_1.append(i['min'])
-        if i['semester'] == 2:
+        elif i['semester'] == 2:
             evaluation_tool_semester_2.append(i)
             if i['max'] is not None:
                 items_max_semester_2.append(i['max'])
             if i['min'] is not None:
                 items_min_semester_2.append(i['min'])
+        elif i['semester'] == 3:
+            evaluation_tool_semester_3.append(i)
+            if i['max'] is not None:
+                items_max_semester_3.append(i['max'])
+            if i['min'] is not None:
+                items_min_semester_3.append(i['min'])
+        elif i['semester'] == 4:
+            evaluation_tool_semester_4.append(i)
+            if i['max'] is not None:
+                items_max_semester_4.append(i['max'])
+            if i['min'] is not None:
+                items_min_semester_4.append(i['min'])
         else:
             pass
     #print('semesters', evaluation_tool_semester_1)
     #print('semesters___2', evaluation_tool_semester_2)
     template_context['evaluation_tool_semester_1'] = evaluation_tool_semester_1
     template_context['evaluation_tool_semester_2'] = evaluation_tool_semester_2
+    template_context['evaluation_tool_semester_3'] = evaluation_tool_semester_3
+    template_context['evaluation_tool_semester_4'] = evaluation_tool_semester_4
     template_context['outcomes_evaluation_tool'] = outcomes_evaluation_tool
     template_context['current_evaluation_tool'] = current_evaluation_tool
     certification_evaluation_tools_semestr_1 = []
     certification_evaluation_tools_semestr_2 = []
+    certification_evaluation_tools_semestr_3 = []
+    certification_evaluation_tools_semestr_4 = []
     #print('certification_evaluation_tools_semestr_1', certification_evaluation_tools_semestr_1)
     #print('certification_evaluation_tools_semestr_2', certification_evaluation_tools_semestr_2)
     for item in context['certification_evaluation_tools']:
         print('dfdfdfd', item['name'])
         try:
-            item['url']= 'http://localhost:3002/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])
+            item['url']= 'https://op.itmo.ru/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])
             tpl
             rt = RichText()
-            rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id('http://localhost:3002/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])))
+            rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id('https://op.itmo.ru/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])))
             item['url'] = rt
             item['description'] = html2text.html2text(item['description'])
             if item['type'] == '1':
@@ -230,6 +280,20 @@ def render_context(context, **kwargs):
                 if item['min'] is not None:
                     items_min_semester_2.append(item['min'])
                 certification_evaluation_tools_semestr_2.append(item)
+            if item ['semester'] == 3:
+                print('maxxxxx', item['max'])
+                if item['max'] is not None:
+                    items_max_semester_3.append(item['max'])
+                if item['min'] is not None:
+                    items_min_semester_3.append(item['min'])
+                certification_evaluation_tools_semestr_3.append(item)
+            if item ['semester'] == 4:
+                print('maxxxxx', item['max'])
+                if item['max'] is not None:
+                    items_max_semester_4.append(item['max'])
+                if item['min'] is not None:
+                    items_min_semester_4.append(item['min'])
+                certification_evaluation_tools_semestr_4.append(item)
             else:
                 pass
         except:
@@ -239,13 +303,19 @@ def render_context(context, **kwargs):
     # print('certification_evaluation_tools_semestr_2', certification_evaluation_tools_semestr_2)
     template_context['certification_evaluation_tools_semestr_1'] = certification_evaluation_tools_semestr_1
     template_context['certification_evaluation_tools_semestr_2'] = certification_evaluation_tools_semestr_2
+    template_context['certification_evaluation_tools_semestr_3'] = certification_evaluation_tools_semestr_3
+    template_context['certification_evaluation_tools_semestr_4'] = certification_evaluation_tools_semestr_4
     try:
         template_context['outcomes_max_all_semester_1'] = sum(items_max_semester_1) + int(context['extra_points'])
         template_context['outcomes_max_all_semester_2'] = sum(items_max_semester_2) + int(context['extra_points'])
+        template_context['outcomes_max_all_semester_3'] = sum(items_max_semester_3) + int(context['extra_points'])
+        template_context['outcomes_max_all_semester_4'] = sum(items_max_semester_4) + int(context['extra_points'])
     except:
         pass
     template_context['outcomes_min_all_semester_1'] = sum(items_min_semester_1)
     template_context['outcomes_min_all_semester_2'] = sum(items_min_semester_2)
+    template_context['outcomes_min_all_semester_3'] = sum(items_min_semester_3)
+    template_context['outcomes_min_all_semester_4'] = sum(items_min_semester_4)
     template_context['extra_points'] = context['extra_points']
     #print('outcomes_evaluation_tool', template_context['outcomes_min_all_semester_2'])
     #print(template_context['evaluation_tool_semester_2'])

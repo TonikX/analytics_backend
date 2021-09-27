@@ -791,3 +791,13 @@ class WorkProgramInFieldOfStudyForCompeteceListSerializer(serializers.ModelSeria
     class Meta:
         model = WorkProgramInFieldOfStudy
         fields = ['id', 'work_program_change_in_discipline_block_module', 'zun_in_wp']
+
+
+class WorkProgramInFieldOfStudyShortSerializer(serializers.ModelSerializer):
+
+    """Сериализатор рабочих программ"""
+    work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title', 'approval_date', 'authors', 'discipline_code', 'work_program_in_change_block']
