@@ -65,7 +65,7 @@ def render_context(context, **kwargs):
                     credit_units_list[credit_units_list.index(cu)] = 0
                 except:
                     pass
-            print('dddd', semester[1]['s'])
+
             # try:
             #     for cu in credit_units_list:
             #         print(cu)
