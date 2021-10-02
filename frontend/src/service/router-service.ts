@@ -5,7 +5,9 @@ const FOLDERS = 'folders';
 const SIGN_IN = 'sign-in';
 const SIGN_UP = 'sign-up';
 const COURSES = 'courses';
-const COURSE = 'course'
+const COURSE = 'course';
+const PERSONALITIES = 'personalities';
+const PERSONALITY = 'personality';
 const LITERATURE = 'literature';
 const SUBJECT_AREA = 'subject-area';
 const WORK_PROGRAM = 'work-program';
@@ -85,9 +87,18 @@ export default class RouterService {
         return SEPARATOR + COURSE + SEPARATOR + ':id';
     };
 
+    getPersonalitiesRoute = () => {
+        return SEPARATOR + PERSONALITIES + SEPARATOR;
+    }
+
+    getPersonalityRoute = () => {
+        return SEPARATOR + PERSONALITY + SEPARATOR + ':id';
+    }
+
     getLiteratureRoute = () => {
         return SEPARATOR + LITERATURE;
     };
+    
 
     getSubjectAreaRoute = () => {
         return SEPARATOR + SUBJECT_AREA;
