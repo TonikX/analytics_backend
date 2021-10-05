@@ -52,11 +52,11 @@ def generate_single_checkpoint(work_program, absolute_semester, relative_semeste
         if int(cerf.type) == 4:
             has_course_project = True
             course_project = generate_checkpoint(name=cerf.name, min=cerf.min, max=cerf.max, week=None, type_id=id,
-                                                 key=True)
+                                                 key=False)
         else:
             point_distribution = 100 - cerf.max
             final_checkpoint = generate_checkpoint(name=cerf.name, min=cerf.min, max=cerf.max, week=None,
-                                                   type_id=get_checkpoints_type(int(cerf.type)), key=True)
+                                                   type_id=get_checkpoints_type(int(cerf.type)), key=False)
     discipline = generate_discipline(bars_id=wp_isu_id, name=work_program.title, term=absolute_semester,
                                      course_project=has_course_project)
     checkpoint_plan = generate_checkpoint_plan(regular_checkpoint=list_regular, programs=programs,

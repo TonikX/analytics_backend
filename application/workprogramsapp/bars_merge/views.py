@@ -1,4 +1,3 @@
-import threading
 from datetime import datetime
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -9,8 +8,7 @@ from rest_framework.response import Response
 
 from workprogramsapp.bars_merge.bars_api_getter import get_educational_program_main, get_disciplines, \
     get_one_educational_program, get_list_of_regular_checkpoints, post_checkpoint_plan
-from workprogramsapp.bars_merge.bars_function_for_threading import generate_single_checkpoint, \
-    bars_optimizer
+from workprogramsapp.bars_merge.bars_function_for_threading import generate_single_checkpoint
 from workprogramsapp.bars_merge.checkpoint_template import generate_checkpoint, get_checkpoints_type, \
     generate_discipline, generate_checkpoint_plan, generate_fos
 from workprogramsapp.bars_merge.models import BarsEPAssociate, BarsWorkProgramsAssociate, HistoryOfSendingToBars
@@ -163,7 +161,7 @@ def SendCheckpointsForAcceptedWP(request):
     one_wp = request.data.get('one_wp')
     setup_bars = (year, send_semester)  # Устанавливает корректную дату и семестр в барсе (аргумент для БАРС-функций)
     # небольшой костыль из-за некоторых ньюансов (цикл семестров начинается с 0)
-    types_checkpoints = get_list_of_regular_checkpoints(setup_bars) # получаем список типов чекпоинтов из БАРС
+    types_checkpoints = get_list_of_regular_checkpoints(setup_bars)  # получаем список типов чекпоинтов из БАРС
     if send_semester == 0:
         send_semester = 1
     else:
@@ -241,7 +239,7 @@ def SendCheckpointsForAcceptedWP(request):
                 isu_wp = None
                 isu_wp_id = None
                 # Получаем вернувшуюся информацию
-                #print(request_text)
+                # print(request_text)
                 request_response, request_status_code = post_checkpoint_plan(request_text, setup_bars)
                 if request_status_code != 200:
                     #  если почему-то не отправилось продублируем респонс в терминал
@@ -256,6 +254,7 @@ def SendCheckpointsForAcceptedWP(request):
             if implementation_of_academic_plan_all and not relative_bool:
                 count_relative += 1
     return Response(all_sends)
+
 
 class BarsHistoryListView(generics.ListAPIView):
     queryset = HistoryOfSendingToBars.objects.all()
