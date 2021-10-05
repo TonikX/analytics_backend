@@ -163,8 +163,7 @@ def SendCheckpointsForAcceptedWP(request):
     one_wp = request.data.get('one_wp')
     setup_bars = (year, send_semester)  # Устанавливает корректную дату и семестр в барсе (аргумент для БАРС-функций)
     # небольшой костыль из-за некоторых ньюансов (цикл семестров начинается с 0)
-    types_checkpoints = get_list_of_regular_checkpoints(setup_bars)  # получаем список типов чекпоинтов из БАРС
-    print(types_checkpoints)
+    types_checkpoints = get_list_of_regular_checkpoints(setup_bars) # получаем список типов чекпоинтов из БАРС
     if send_semester == 0:
         send_semester = 1
     else:
@@ -176,9 +175,8 @@ def SendCheckpointsForAcceptedWP(request):
                                                bars=True).distinct()
     else:
         needed_wp = WorkProgram.objects.filter(pk=one_wp)
-    statuses_count = {}  # Список всего того что отправили в барс, нужен для респонса
-    counter_threads = 0
-    all_sends = []
+    all_sends = []  # Список всего того что отправили в барс, нужен для респонса
+
     for work_program in needed_wp:  # для каждой РПД формируем отдельный запрос в БАРС
         relative_bool = True  # Длится ли дисциплина дольше чем один семестр
         count_relative = 1  # Счетчик относительных семестров
@@ -199,7 +197,6 @@ def SendCheckpointsForAcceptedWP(request):
             relative_bool = False
 
         # Блок отвечающий за поиск оценочных средств в семестре
-        thread_list = []
         for now_semester in range(0, 12):  # Цикл по семестрам
             imp_list = []  # Список всех учебных планов для этого семестра
             # Создание реуглярного выражения для того чтобы отфильтровать УП и инфу о РПД за этот семестр в цикле
@@ -233,7 +230,9 @@ def SendCheckpointsForAcceptedWP(request):
 
             imp_list = list({v['id']: v for v in imp_list}.values())  # Оставляем уникальные значения по айдишникам
 
-            if imp_list and now_semester % 2 == send_semester:  # Если такой существует и соотвествует весне/осени
+            if imp_list and now_semester % 2 == send_semester:  # Если такой существует и соотвествует весне/осени (
+                # Генерируем чекпоинт со всеми УП, прямыми и относиетльным семестром
+
                 request_text = generate_single_checkpoint(absolute_semester=now_semester + 1,
                                                           relative_semester=count_relative,
                                                           programs=imp_list,
@@ -242,7 +241,7 @@ def SendCheckpointsForAcceptedWP(request):
                 isu_wp = None
                 isu_wp_id = None
                 # Получаем вернувшуюся информацию
-                # print(request_text)
+                #print(request_text)
                 request_response, request_status_code = post_checkpoint_plan(request_text, setup_bars)
                 if request_status_code != 200:
                     #  если почему-то не отправилось продублируем респонс в терминал
@@ -253,11 +252,10 @@ def SendCheckpointsForAcceptedWP(request):
                                                       request_status=request_status_code)
                 all_sends.append(
                     {"status": request_status_code, "request": request_text, "response": request_response})
-                # Если дисциплина длинной несколько семестров, то добавляем плюсик к счетчику относительного семестра
+            # Если дисциплина длинной несколько семестров, то добавляем плюсик к счетчику относительного семестра
             if implementation_of_academic_plan_all and not relative_bool:
                 count_relative += 1
-            return Response(all_sends)
-
+    return Response(all_sends)
 
 class BarsHistoryListView(generics.ListAPIView):
     queryset = HistoryOfSendingToBars.objects.all()
