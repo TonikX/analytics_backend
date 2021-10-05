@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
 
-
 class User(AbstractUser):
     '''
     Модель для пользователей

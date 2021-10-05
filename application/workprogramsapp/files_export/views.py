@@ -65,7 +65,7 @@ def render_context(context, **kwargs):
                     credit_units_list[credit_units_list.index(cu)] = 0
                 except:
                     pass
-            print(semester)
+
             # try:
             #     for cu in credit_units_list:
             #         print(cu)
@@ -153,7 +153,7 @@ def render_context(context, **kwargs):
                                         str(FieldOfStudy.objects.get(implementation_academic_plan_in_field_of_study__academic_plan__id = ap_obj.id).number) + ')'
     template_context['semester'] = semester
     print('template_context', template_context['semester'])
-    template_context['total_hours_1'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO]
+    template_context['total_hours_1'] = [round(contact_work, 2), round(lecture_classes, 2), round(laboratory, 2), round(practical_lessons, 2), round(SRO, 2)]
     print('total_hours_1', template_context['total_hours_1'])
     template_context['year'] = kwargs['year']
     if context['authors'] is None:
@@ -215,19 +215,19 @@ def render_context(context, **kwargs):
                 items_max_semester_1.append(i['max'])
             if i['min'] is not None:
                 items_min_semester_1.append(i['min'])
-        if i['semester'] == 2:
+        elif i['semester'] == 2:
             evaluation_tool_semester_2.append(i)
             if i['max'] is not None:
                 items_max_semester_2.append(i['max'])
             if i['min'] is not None:
                 items_min_semester_2.append(i['min'])
-        if i['semester'] == 3:
+        elif i['semester'] == 3:
             evaluation_tool_semester_3.append(i)
             if i['max'] is not None:
                 items_max_semester_3.append(i['max'])
             if i['min'] is not None:
                 items_min_semester_3.append(i['min'])
-        if i['semester'] == 2:
+        elif i['semester'] == 4:
             evaluation_tool_semester_4.append(i)
             if i['max'] is not None:
                 items_max_semester_4.append(i['max'])
@@ -249,13 +249,14 @@ def render_context(context, **kwargs):
     certification_evaluation_tools_semestr_4 = []
     #print('certification_evaluation_tools_semestr_1', certification_evaluation_tools_semestr_1)
     #print('certification_evaluation_tools_semestr_2', certification_evaluation_tools_semestr_2)
+    template_context['control_types_in_semester'] = ['', '', '', '']
     for item in context['certification_evaluation_tools']:
         print('dfdfdfd', item['name'])
         try:
-            item['url']= 'http://localhost:3002/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])
+            item['url']= 'https://op.itmo.ru/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])
             tpl
             rt = RichText()
-            rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id('http://localhost:3002/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])))
+            rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id('https://op.itmo.ru/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])))
             item['url'] = rt
             item['description'] = html2text.html2text(item['description'])
             if item['type'] == '1':
@@ -273,6 +274,7 @@ def render_context(context, **kwargs):
                 if item['min'] is not None:
                     items_min_semester_1.append(item['min'])
                 certification_evaluation_tools_semestr_1.append(item)
+                semester[0]['t'] = item['type']
             if item ['semester'] == 2:
                 print('maxxxxx', item['max'])
                 if item['max'] is not None:
@@ -280,6 +282,7 @@ def render_context(context, **kwargs):
                 if item['min'] is not None:
                     items_min_semester_2.append(item['min'])
                 certification_evaluation_tools_semestr_2.append(item)
+                semester[1]['t'] = item['type']
             if item ['semester'] == 3:
                 print('maxxxxx', item['max'])
                 if item['max'] is not None:
@@ -287,6 +290,7 @@ def render_context(context, **kwargs):
                 if item['min'] is not None:
                     items_min_semester_3.append(item['min'])
                 certification_evaluation_tools_semestr_3.append(item)
+                semester[2]['t'] = item['type']
             if item ['semester'] == 4:
                 print('maxxxxx', item['max'])
                 if item['max'] is not None:
@@ -294,6 +298,7 @@ def render_context(context, **kwargs):
                 if item['min'] is not None:
                     items_min_semester_4.append(item['min'])
                 certification_evaluation_tools_semestr_4.append(item)
+                semester[3]['t'] = item['type']
             else:
                 pass
         except:
