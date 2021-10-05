@@ -1,16 +1,21 @@
+import threading
 from datetime import datetime
 
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 from workprogramsapp.bars_merge.bars_api_getter import get_educational_program_main, get_disciplines, \
     get_one_educational_program, get_list_of_regular_checkpoints, post_checkpoint_plan
-from workprogramsapp.bars_merge.bars_data_generator import generate_single_checkpoint
+from workprogramsapp.bars_merge.bars_function_for_threading import generate_single_checkpoint, \
+    bars_optimizer
 from workprogramsapp.bars_merge.checkpoint_template import generate_checkpoint, get_checkpoints_type, \
     generate_discipline, generate_checkpoint_plan, generate_fos
 from workprogramsapp.bars_merge.models import BarsEPAssociate, BarsWorkProgramsAssociate, HistoryOfSendingToBars
-from workprogramsapp.bars_merge.serializers import BarsEPAssociateSerializer, BarsWorkProgramsAssociateSerializer
+from workprogramsapp.bars_merge.serializers import BarsEPAssociateSerializer, BarsWorkProgramsAssociateSerializer, \
+    HistoryOfSendingBarsSerializer
 from workprogramsapp.models import WorkProgram, FieldOfStudy, ImplementationAcademicPlan, EvaluationTool, \
     DisciplineSection, WorkProgramChangeInDisciplineBlockModule, СertificationEvaluationTool, \
     WorkProgramIdStrUpForIsu
@@ -158,7 +163,8 @@ def SendCheckpointsForAcceptedWP(request):
     one_wp = request.data.get('one_wp')
     setup_bars = (year, send_semester)  # Устанавливает корректную дату и семестр в барсе (аргумент для БАРС-функций)
     # небольшой костыль из-за некоторых ньюансов (цикл семестров начинается с 0)
-    types_checkpoints = get_list_of_regular_checkpoints(setup_bars) # получаем список типов чекпоинтов из БАРС
+    types_checkpoints = get_list_of_regular_checkpoints(setup_bars)  # получаем список типов чекпоинтов из БАРС
+    print(types_checkpoints)
     if send_semester == 0:
         send_semester = 1
     else:
@@ -170,8 +176,9 @@ def SendCheckpointsForAcceptedWP(request):
                                                bars=True).distinct()
     else:
         needed_wp = WorkProgram.objects.filter(pk=one_wp)
-    all_sends = []  # Список всего того что отправили в барс, нужен для респонса
-
+    statuses_count = {}  # Список всего того что отправили в барс, нужен для респонса
+    counter_threads = 0
+    all_sends = []
     for work_program in needed_wp:  # для каждой РПД формируем отдельный запрос в БАРС
         relative_bool = True  # Длится ли дисциплина дольше чем один семестр
         count_relative = 1  # Счетчик относительных семестров
@@ -192,6 +199,7 @@ def SendCheckpointsForAcceptedWP(request):
             relative_bool = False
 
         # Блок отвечающий за поиск оценочных средств в семестре
+        thread_list = []
         for now_semester in range(0, 12):  # Цикл по семестрам
             imp_list = []  # Список всех учебных планов для этого семестра
             # Создание реуглярного выражения для того чтобы отфильтровать УП и инфу о РПД за этот семестр в цикле
@@ -225,9 +233,7 @@ def SendCheckpointsForAcceptedWP(request):
 
             imp_list = list({v['id']: v for v in imp_list}.values())  # Оставляем уникальные значения по айдишникам
 
-            if imp_list and now_semester % 2 == send_semester:  # Если такой существует и соотвествует весне/осени (
-                # Генерируем чекпоинт со всеми УП, прямыми и относиетльным семестром
-
+            if imp_list and now_semester % 2 == send_semester:  # Если такой существует и соотвествует весне/осени
                 request_text = generate_single_checkpoint(absolute_semester=now_semester + 1,
                                                           relative_semester=count_relative,
                                                           programs=imp_list,
@@ -236,7 +242,7 @@ def SendCheckpointsForAcceptedWP(request):
                 isu_wp = None
                 isu_wp_id = None
                 # Получаем вернувшуюся информацию
-                #print(request_text)
+                # print(request_text)
                 request_response, request_status_code = post_checkpoint_plan(request_text, setup_bars)
                 if request_status_code != 200:
                     #  если почему-то не отправилось продублируем респонс в терминал
@@ -247,10 +253,19 @@ def SendCheckpointsForAcceptedWP(request):
                                                       request_status=request_status_code)
                 all_sends.append(
                     {"status": request_status_code, "request": request_text, "response": request_response})
-            # Если дисциплина длинной несколько семестров, то добавляем плюсик к счетчику относительного семестра
+                # Если дисциплина длинной несколько семестров, то добавляем плюсик к счетчику относительного семестра
             if implementation_of_academic_plan_all and not relative_bool:
                 count_relative += 1
-    return Response(all_sends)
+            return Response(all_sends)
+
+
+class BarsHistoryListView(generics.ListAPIView):
+    queryset = HistoryOfSendingToBars.objects.all()
+    serializer_class = HistoryOfSendingBarsSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filterset_fields = ['date_of_sending', 'work_program', "request_status"]
+    search_fields = ["date_of_sending", "work_program", "request_status"]
+    permission_classes = [IsAdminUser]
 
 
 @api_view(['POST'])
