@@ -101,3 +101,34 @@ class WorkProgramPrerequisitesAndOutcomesSerializer(serializers.ModelSerializer)
     class Meta:
         model = WorkProgram
         fields = ['id', 'title', 'prerequisites', 'outcomes']
+
+
+class ImplementationAcademicPlanWpStatisticSerializer(serializers.ModelSerializer):
+    total_count_of_wp = serializers.SerializerMethodField()
+    accepted_wp = serializers.SerializerMethodField()
+    wp_on_expertise = serializers.SerializerMethodField()
+    wp_with_editors = serializers.SerializerMethodField()
+
+    def get_total_count_of_wp(self, obj):
+        return WorkProgram.objects.filter(
+            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj).distinct().count()
+
+    def get_accepted_wp(self, obj):
+        return WorkProgram.objects.filter(
+            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj,
+            expertise_with_rpd__expertise_status="AC").distinct().count()
+
+    def get_wp_on_expertise(self, obj):
+        return WorkProgram.objects.filter(
+            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj,
+            expertise_with_rpd__expertise_status__in=["WK", "EX"]).distinct().count()
+
+    def get_wp_with_editors(self, obj):
+        return WorkProgram.objects.filter(
+            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj,
+            editors__isnull=False).distinct().count()
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = ['academic_plan', 'title', 'year', 'total_count_of_wp', 'wp_with_editors', 'accepted_wp',
+                  'wp_on_expertise']

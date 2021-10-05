@@ -16,7 +16,8 @@ from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Acade
 from workprogramsapp.statistic.serializers import WorkProgramInFieldOfStudySerializerForStatistic, \
     WorkProgramSerializerForStatistic, SuperShortWorkProgramSerializer, WorkProgramSerializerForStatisticExtended, \
     AcademicPlansDescriptionWpSerializer, WorkProgramPrerequisitesAndOutcomesSerializer, \
-    WorkProgramDescriptionOnlySerializer
+    WorkProgramDescriptionOnlySerializer, \
+    ImplementationAcademicPlanWpStatisticSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
@@ -408,3 +409,9 @@ class GetAllWPsWithEmptyField(generics.ListAPIView):
             return WorkProgram.objects.filter(editors__isnull=True)
         if field == "LANG":
             return WorkProgram.objects.filter(language__isnull=True)
+
+
+class AllAcademicPlansWpExpertiseStatisticView(generics.ListAPIView):
+    queryset = ImplementationAcademicPlan.objects.all()
+    serializer_class = ImplementationAcademicPlanWpStatisticSerializer
+    permission_classes = [IsAuthenticated]
