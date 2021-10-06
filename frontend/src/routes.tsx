@@ -56,6 +56,7 @@ import RouterService from './service/router-service';
 import Notifications from "./containers/Profile/Notifications";
 import Overview from "./containers/Overview";
 import Landing from "./containers/Landing";
+import UserProfile from "./containers/UserProfile";
 
 const routerService = RouterService.factory();
 
@@ -109,6 +110,9 @@ export default () => (
             </AuthRoute>
             <AuthRoute path={routerService.getNotificationsRoute()}>
                 <Notifications />
+            </AuthRoute>
+            <AuthRoute path={routerService.getUserProfile()}>
+                <UserProfile />
             </AuthRoute>
             <AuthRoute path={routerService.getSelectEducationalProgramRoute()}>
                 <SelectEducationalProgram />

@@ -20,6 +20,9 @@ const getUserGroups = createAction('GET_USER_GROUPS');
 const setUserGroups = createAction('SET_USER_GROUPS');
 const setUserNotificationsCount = createAction('SET_USER_NOTIFICATIONS_COUNT');
 
+const getUserData = createAction('GET_USER_DATA');
+const setUserData = createAction('SET_USER_DATA');
+
 const refreshToken = createAction('REFRESH_LOGIN');
 
 const setMockMenu = createAction('SET_MOCK_MENU');
@@ -40,6 +43,8 @@ const actions: GeneralActions = {
     setAllUsers,
     getUserGroups,
     setUserGroups,
-}
+    setUserData,
+    getUserData,
+};
 
 export default actions;

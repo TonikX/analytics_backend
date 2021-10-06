@@ -165,6 +165,10 @@ export default class RouterService {
         return SEPARATOR + NOTIFICATIONS;
     };
 
+    getUserProfile = () => {
+      return SEPARATOR + 'user-profile';
+    };
+
     getSkillsRolesRoute = () => {
         return SEPARATOR + 'skills-roles';
     };

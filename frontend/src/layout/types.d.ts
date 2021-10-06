@@ -13,6 +13,8 @@ export interface GeneralActions {
     getAllUsers: any;
     setAllUsers: any;
     getUserGroups: any;
+    setUserData: any;
+    getUserData: any;
     setUserGroups: any;
     setMockMenu: any;
     setUserNotificationsCount: any;
@@ -27,6 +29,7 @@ export interface layoutState {
     [fields.NOTIFICATIONS_COUNT]: number;
     [fields.MOCK_MENU]: Array<number>;
     [fields.USERS]: Array<any>; //todo: create user type
+    [fields.USER_DATA]: any;
 }
 
 export type UserType = {
