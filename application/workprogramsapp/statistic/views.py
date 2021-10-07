@@ -414,4 +414,4 @@ class GetAllWPsWithEmptyField(generics.ListAPIView):
 class AllAcademicPlansWpExpertiseStatisticView(generics.ListAPIView):
     queryset = ImplementationAcademicPlan.objects.all()
     serializer_class = ImplementationAcademicPlanWpStatisticSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
