@@ -62,7 +62,9 @@ export default () => {
                 Вы состоите в группах
             </Typography>
             <Box className={classes.userGroups}>
-                {userGroups.map((userGroup: string) => <Chip className={classes.userGroup} label={userGroup}/>)}
+                {userGroups.map((userGroup: string) => {
+                    return <Chip className={classes.userGroup} key={userGroup} label={userGroup}/>
+                })}
             </Box>
             <MyWorkProgramsList/>
         </Box>
