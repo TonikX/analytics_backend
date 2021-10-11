@@ -1,5 +1,6 @@
 import React, {SyntheticEvent} from 'react';
 import Scrollbars from "react-custom-scrollbars";
+import get from "lodash/get";
 
 import moment from "moment";
 import {Link} from "react-router-dom";
@@ -34,6 +35,7 @@ import {appRouter} from "../../service/router-service";
 import connect from './Expertises.connect';
 import styles from './Expertises.styles';
 import Pagination from "@material-ui/lab/Pagination";
+import {UserType} from "../../layout/types";
 
 class Expertises extends React.Component<ExpertisesProps> {
     state = {
@@ -128,6 +130,9 @@ class Expertises extends React.Component<ExpertisesProps> {
                                         Эксперты
                                     </TableCell>
                                     <TableCell>
+                                        Редакторы
+                                    </TableCell>
+                                    <TableCell>
                                         Дата изменения
                                         <SortingButton changeMode={this.changeSorting(ExpertisesFields.DATE_OF_LAST_CHANGE)}
                                                        mode={sortingField === ExpertisesFields.DATE_OF_LAST_CHANGE ? sortingMode : ''}
@@ -149,7 +154,12 @@ class Expertises extends React.Component<ExpertisesProps> {
                                         </TableCell>
                                         <TableCell>{specializationObject[expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.QUALIFICATION]]}</TableCell>
                                         <TableCell>
-                                            {expertise[ExpertisesFields.EXPERTS_USERS_IN_RPD].map((item: ExpertUserInRPDType) => getUserFullName(item[ExpertisesFields.EXPERT])).join(', ')}
+                                            {expertise[ExpertisesFields.EXPERTS_USERS_IN_RPD]
+                                                .filter((item: any) => get(item, "stuff_status") === 'EX' || get(item, "stuff_status") === 'SE' || get(item, "stuff_status") === 'AU')
+                                                .map((item: ExpertUserInRPDType) => getUserFullName(item[ExpertisesFields.EXPERT])).join(', ')}
+                                        </TableCell>
+                                        <TableCell>
+                                            {expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.EDITORS].map((item: UserType) => getUserFullName(item)).join(', ')}
                                         </TableCell>
                                         <TableCell>
                                             {moment(expertise[ExpertisesFields.DATE_OF_LAST_CHANGE]).format(FULL_DATE_FORMAT)}

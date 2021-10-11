@@ -8,7 +8,8 @@ import {
     getAuth,
     getUserGroups,
     isFetchingByKey,
-    getMockMenu
+    getMockMenu,
+    getNotificationCount
 } from './getters';
 const mapStateToProps = (state) => {
     return {
@@ -18,7 +19,8 @@ const mapStateToProps = (state) => {
         successMessages: getSuccessMessages(state),
         auth: getAuth(state),
         userGroups: getUserGroups(state),
-        mockMenu: getMockMenu(state)
+        mockMenu: getMockMenu(state),
+        notificationsCount: getNotificationCount(state),
     };
 };
 

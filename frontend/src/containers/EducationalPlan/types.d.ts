@@ -45,6 +45,7 @@ export interface EducationalPlanActions {
     openDownloadModal: any;
     closeDownloadModal: any;
     getDirectionsDependedOnWorkProgram: any;
+    getCompetenceDirectionsDependedOnWorkProgram: any;
     setDirectionsDependedOnWorkProgram: any;
 
     setIsTrajectoryRoute: any;

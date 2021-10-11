@@ -40,6 +40,7 @@ const changeModule = createAction('EDUCATIONAL_PLAN_CHANGE_MODULE');
 const deleteModule = createAction('EDUCATIONAL_PLAN_DELETE_MODULE');
 const addModule = createAction('EDUCATIONAL_PLAN_ADD_MODULE');
 
+const getCompetenceDirectionsDependedOnWorkProgram = createAction('GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM');
 const getDirectionsDependedOnWorkProgram = createAction('GET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM');
 const setDirectionsDependedOnWorkProgram = createAction('SET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM');
 
@@ -72,6 +73,7 @@ const actions: EducationalPlanActions = {
     createModule,
     openDownloadModal,
     closeDownloadModal,
+    getCompetenceDirectionsDependedOnWorkProgram,
     getDirectionsDependedOnWorkProgram,
     setDirectionsDependedOnWorkProgram,
     openCreateModuleDialog: openModuleDialog,

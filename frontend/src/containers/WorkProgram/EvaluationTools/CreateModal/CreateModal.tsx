@@ -30,6 +30,7 @@ import Radio from "@material-ui/core/Radio";
 import QuestionIcon from "@material-ui/icons/HelpOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import CKEditor from '../../../../components/CKEditor'
+import { types } from '../constants'
 
 import {
     EvaluationToolFields,
@@ -40,12 +41,12 @@ import {
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 
-
 class CreateModal extends React.PureComponent<CreateModalProps> {
     editor = null;
 
     state = {
         isOpen: false,
+        showErrors: false,
         evaluationTool: {
             [EvaluationToolFields.ID]: null,
             [EvaluationToolFields.DESCRIPTION]: '',
@@ -85,15 +86,25 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     handleClose = () => {
         this.props.actions.closeDialog(fields.CREATE_NEW_EVALUATION_TOOLS);
+        this.setState({ showErrors: false })
     }
 
     handleSave = () => {
         const {evaluationTool} = this.state;
 
+        const disableSave = get(evaluationTool, [EvaluationToolFields.NAME, 'length'], 0) === 0
+                            || get(evaluationTool, [EvaluationToolFields.DESCRIPTION, 'length'], 0) === 0
+                            || get(evaluationTool, [EvaluationToolFields.SECTIONS, 'length'], 0) === 0
+                            || get(evaluationTool, [EvaluationToolFields.TYPE, 'length'], 0) === 0
+        ;
         if (evaluationTool[EvaluationToolFields.ID]){
+            this.setState({ showErrors: false });
             this.props.actions.changeEvaluationTool(evaluationTool);
-        } else {
+        } else if (!disableSave){
+            this.setState({ showErrors: false });
             this.props.actions.addEvaluationTool(evaluationTool);
+        } else if (disableSave) {
+            this.setState({ showErrors: true })
         }
     }
 
@@ -141,21 +152,18 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             }
         })
     }
-
+    hasError = (field: string) => {
+        const { showErrors, evaluationTool } = this.state;
+        return showErrors && get(evaluationTool, [field, 'length'], 0) === 0
+    }
     render() {
-        const {classes, sections, types} = this.props;
+        const {classes, sections, semesterCount} = this.props;
         const {evaluationTool, isOpen} = this.state;
-        
-        
-        const disableButton = get(evaluationTool, [EvaluationToolFields.NAME, 'length'], 0) === 0
-                            || get(evaluationTool, [EvaluationToolFields.DESCRIPTION, 'length'], 0) === 0
-                            || get(evaluationTool, [EvaluationToolFields.SECTIONS, 'length'], 0) === 0
-                            || get(evaluationTool, [EvaluationToolFields.TYPE, 'length'], 0) === 0
-        ;
+
         const isEditMode = Boolean(evaluationTool[EvaluationToolFields.ID]);
         if (!isOpen) return <></>
+
         return (
-            
             <div className={classNames(classes.dialog, {[classes.openDialog]: isOpen})}>
                 <AppBar className={classes.appBar}>
                     <Toolbar>
@@ -168,7 +176,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         <Button autoFocus
                                 color="inherit"
                                 onClick={this.handleSave}
-                                disabled={disableButton}
+                                // disabled={disableButton}
                                 classes={{
                                     disabled: classes.disabledButton
                                 }}
@@ -193,10 +201,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                        InputLabelProps={{
                                                            shrink: true,
                                                        }}
+                                                       error={this.hasError(EvaluationToolFields.NAME)}
                                                        value={evaluationTool[EvaluationToolFields.NAME]}
                                             />
 
-                                            <FormControl className={classes.sectionSelector}>
+                                            <FormControl error={this.hasError(EvaluationToolFields.SECTIONS)} className={classes.sectionSelector}>
                                                 <InputLabel shrink id="section-label">
                                                     Раздел *
                                                 </InputLabel>
@@ -227,7 +236,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                 </Select>
                                             </FormControl>
 
-                                            <FormControl className={classes.typeSelector}>
+                                            <FormControl error={this.hasError(EvaluationToolFields.TYPE)} className={classes.typeSelector}>
                                                 <InputLabel shrink id="section-label">
                                                     Тип *
                                                 </InputLabel>
@@ -248,6 +257,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                         />
                                                     }
                                                     style={{width: width}}
+                                                    renderValue={(value = '') => {
+                                                        //@ts-ignore
+                                                        if (types.includes(value) || value.length === 0){
+                                                            return <>{value}</>
+                                                        }
+                                                        return <>{value} (устаревшее)</>
+                                                    }}
                                                 >
                                                     {types.map((type: any, index: number) =>
                                                         <MenuItem value={type} key={`type-${index}`}>
@@ -292,9 +308,24 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                             value={evaluationTool[EvaluationToolFields.SEMESTER]}
                                                 >
                                                     <FormControlLabel value={'1'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 1} />} label="Первый" />
-                                                    <FormControlLabel value={'2'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 2} />} label="Второй" />
-                                                    <FormControlLabel value={'3'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 3} />} label="Третий" />
-                                                    <FormControlLabel value={'4'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 4} />} label="Четвертый" />
+                                                    <FormControlLabel
+                                                      disabled={semesterCount < 2}
+                                                      value={'2'}
+                                                      control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 2} />}
+                                                      label="Второй"
+                                                    />
+                                                    <FormControlLabel
+                                                      disabled={semesterCount < 3}
+                                                      value={'3'}
+                                                      control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 3} />}
+                                                      label="Третий"
+                                                    />
+                                                    <FormControlLabel
+                                                      disabled={semesterCount < 4}
+                                                      value={'4'}
+                                                      control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 4} />}
+                                                      label="Четвертый"
+                                                    />
                                                 </RadioGroup>
                                             </FormControl>
 
@@ -332,6 +363,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                     onChange={this.changeDescription}
                                     useFormulas
                                     height="calc(100vh - 280px)"
+                                    style={this.hasError(EvaluationToolFields.DESCRIPTION)? {border: '1px solid #d00000'} : {border: '1px solid #d1d1d1'}}
                                 />
                             </div>
                         </>
@@ -342,12 +374,12 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             variant="text">
                         Отмена
                     </Button>
-                    <Button onClick={this.handleSave}
-                            variant="contained"
-                            disabled={disableButton}
-                            color="primary">
-                        Сохранить
-                    </Button>
+
+                        <Button onClick={this.handleSave}
+                                variant="contained"
+                                color="primary">
+                            Сохранить
+                        </Button>
                 </DialogActions>
             </div>
         );

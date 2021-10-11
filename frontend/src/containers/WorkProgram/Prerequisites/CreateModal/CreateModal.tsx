@@ -14,7 +14,10 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Tooltip from "@material-ui/core/Tooltip";
 import withStyles from '@material-ui/core/styles/withStyles';
+
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
 import SearchSelector from '../../../../components/SearchSelector';
 
@@ -40,7 +43,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     };
 
     componentDidMount() {
-        this.props.subjectAreaActions.getSubjectArea();
+        // this.props.subjectAreaActions.getSubjectArea();
+
+        this.props.trainingEntitiesActions.getTrainingEntities();
     }
 
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
@@ -146,10 +151,27 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} пререквизит </DialogTitle>
+                <DialogTitle>
+                    <div className={classes.dialogTitle}>
+                        {isEditMode ? 'Редактировать' : 'Создать'} пререквизит
+                        <Tooltip
+                            title={
+                                <span style={{ fontSize: '13px' }}>
+                                    Пререквезит - объект, отражающий конкретное знание из конкретной области 
+                                    (далее "учебная сущность"), которое должно быть у студента перед началом изучения курса.
+                                    <br /><br />Для добавления необходимо выбрать предметную область и учебную сущность в ней. 
+                                    <br /><br />Если необходимо создать новую учебную сущность, необходимо нажать кнопку "Создать учебную сущность"
+                                     и создать ее в соответствующем интерфейсе.
+                                </span>
+                            }
+                        >
+                            <HelpOutlineIcon color="primary" style={{ marginLeft: '10px', paddingTop: '4px' }} />
+                        </Tooltip>
+                    </div>
+                </DialogTitle>
                 <DialogContent>
                     <FormControl component="fieldset">
-                        <FormLabel component="legend">Уровень *</FormLabel>
+                        <FormLabel component="legend">Уровень освоения *</FormLabel>
                         <RadioGroup className={classes.radioGroup}
                                     onChange={this.changeMasterLevelField}
                                     value={prerequisite[PrerequisiteFields.ITEM]}
@@ -160,14 +182,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         </RadioGroup>
                     </FormControl>
 
-                    <SearchSelector label="Предметная область *"
-                                            changeSearchText={this.handleChangeSubjectAreaSearch}
-                                            list={subjectArea}
-                                            changeItem={this.changeSubjectAreaField}
-                                            value={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '')}
-                                            valueLabel={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.TITLE], '')}
-                                            className={classes.marginBottom30}
-                    />
+                    {/*<SearchSelector label="Предметная область *"*/}
+                    {/*                        changeSearchText={this.handleChangeSubjectAreaSearch}*/}
+                    {/*                        list={subjectArea}*/}
+                    {/*                        changeItem={this.changeSubjectAreaField}*/}
+                    {/*                        value={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '')}*/}
+                    {/*                        valueLabel={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.TITLE], '')}*/}
+                    {/*                        className={classes.marginBottom30}*/}
+                    {/*/>*/}
 
                     <SearchSelector label="Учебная сущность *"
                                             changeSearchText={this.handleChangeTrainingEntitySearchText}
@@ -175,7 +197,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             changeItem={this.saveTrainingEntityField}
                                             value={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.ID], '')}
                                             valueLabel={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.TITLE], '')}
-                                            disabled={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '') === ''}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>

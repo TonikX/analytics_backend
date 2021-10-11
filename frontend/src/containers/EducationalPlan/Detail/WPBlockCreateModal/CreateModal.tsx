@@ -497,7 +497,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     saveToBeCompetence = (workProgramId: number, competence: any, wpChangeBlockId: number ) => () => {
         this.props.actions.saveCompetenceBlock({
             workProgramId: workProgramId,
-            profStandard: competence,
+            competence: competence,
             wpChangeBlockId: wpChangeBlockId,
         })
     }

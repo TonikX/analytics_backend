@@ -10,13 +10,13 @@ import {
 
 import {rootState} from "../../../store/reducers";
 import {WorkProgramGeneralFields} from "../enum";
-import {getEvaluationToolsMaxSum, getIntermediateCertificationMaxSum} from "../utils";
 
 const mapStateToProps = (state:rootState) => {
     return {
-        evaluationToolsMaxSum: getEvaluationToolsMaxSum(getWorkProgramEvaluationToolsList(state)),
-        intermediateCertificationMaxSum: getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state)),
-        extraPoints: getWorkProgramField(state, WorkProgramGeneralFields.EXTRA_POINTS) ? 3 : 0,
+        evaluationToolsList: getWorkProgramEvaluationToolsList(state),
+        intermediateCertificationList: getWorkProgramIntermediateCertificationList(state),
+        extraPoints: getWorkProgramField(state, WorkProgramGeneralFields.EXTRA_POINTS) == 3 ? 3 : 0,
+        semesterCount: getWorkProgramField(state, WorkProgramGeneralFields.SEMESTER_COUNT) || 1,
     };
 };
 

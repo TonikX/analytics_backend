@@ -80,7 +80,7 @@ class Sections extends React.PureComponent<SectionsProps> {
         return count;
     };
 
-    updateValues = (totalTotalHours: number) => () => {
+    updateValues = (totalTotalHours: number) => {
         const {sections} = this.props;
         let totalHoursWithoutCPO = 0;
 
@@ -134,7 +134,7 @@ class Sections extends React.PureComponent<SectionsProps> {
     }
 
     render() {
-        const {classes, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours} = this.props;
+        const {classes, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours, semesterCount} = this.props;
         const {createNewSectionMode} = this.state;
 
         const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
@@ -142,6 +142,8 @@ class Sections extends React.PureComponent<SectionsProps> {
         const totalPracticalClassesHours = this.getTotalHours(workProgramSectionFields.PRACTICAL_LESSONS).toFixed(2);
         const totalSPOHours = this.getTotalHours(workProgramSectionFields.SPO).toFixed(2);
         const currentTotalHours = this.getTotalHours(workProgramSectionFields.TOTAL_HOURS).toFixed(2);
+
+        const semesterColumns = new Array(semesterCount).fill(0)
 
         const totalContactWorkHours = ((
             parseFloat(totalLectureClassesHours) +
@@ -297,8 +299,8 @@ class Sections extends React.PureComponent<SectionsProps> {
                               </TableCell>
                             </TableRow>
                             <TableRow>
-                                {([1,2,3,4,5,6,7,8,9,10]).map((item) =>
-                                    <TableCell className={classes.headerCell}>{item}</TableCell>
+                                {semesterColumns.map((item, index) =>
+                                    <TableCell className={classes.headerCell}>{index + 1}</TableCell>
                                 )}
                             </TableRow>
                           </TableHead>
@@ -307,32 +309,32 @@ class Sections extends React.PureComponent<SectionsProps> {
                               <TableCell className={classes.headerCell}>
                                 Лекционные занятия
                               </TableCell>
-                                {lectureHours.map((item: any) =>
-                                    <TableCell className={classes.cell}>{item}</TableCell>
+                                {semesterColumns.map((item: any, index: number) =>
+                                    <TableCell className={classes.cell}>{lectureHours[index]}</TableCell>
                                 )}
                             </TableRow>
                             <TableRow>
                               <TableCell className={classes.headerCell}>
                                 Практические занятия
                               </TableCell>
-                                {practiceHours.map((item: any) =>
-                                    <TableCell className={classes.cell}>{item}</TableCell>
+                                {semesterColumns.map((item: any, index: number) =>
+                                    <TableCell className={classes.cell}>{practiceHours[index]}</TableCell>
                                 )}
                             </TableRow>
                             <TableRow>
                               <TableCell className={classes.headerCell}>
                                 Лабораторные занятия
                               </TableCell>
-                                {labHours.map((item: any) =>
-                                    <TableCell className={classes.cell}>{item}</TableCell>
+                                {semesterColumns.map((item: any, index: number) =>
+                                    <TableCell className={classes.cell}>{labHours[index]}</TableCell>
                                 )}
                             </TableRow>
                             <TableRow>
                               <TableCell className={classes.headerCell}>
                                 Самостоятельная работа
                               </TableCell>
-                                {srsHours.map((item: any) =>
-                                    <TableCell className={classes.cell}>{item}</TableCell>
+                                {semesterColumns.map((item: any, index: number) =>
+                                    <TableCell className={classes.cell}>{srsHours[index]}</TableCell>
                                 )}
                             </TableRow>
                           </TableBody>

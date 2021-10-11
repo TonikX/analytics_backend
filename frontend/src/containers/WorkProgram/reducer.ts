@@ -11,7 +11,9 @@ export const initialState: workProgramState = {
         [fields.WORK_PROGRAM_SECTIONS]: []
     },
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: [],
-    [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION]: [],
+    [fields.WORK_PROGRAM_EVALUATION_TOOL]: {},
+    [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOLS]: [],
+    [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOL]: {},
     [fields.WORK_PROGRAM_RESULTS]: [],
     [fields.WORK_PROGRAM_COMMENTS]: [],
     [fields.DIALOGS]: {
@@ -38,6 +40,16 @@ const setWorkProgram = (state: workProgramState, {payload}: any): workProgramSta
 const setWorkProgramEvaluationTools = (state: workProgramState, {payload}: any): workProgramState => ({
     ...state,
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: payload
+});
+
+const setWorkProgramEvaluationTool = (state: workProgramState, {payload}: any): workProgramState => ({
+    ...state,
+    [fields.WORK_PROGRAM_EVALUATION_TOOL]: payload
+});
+
+const setIntermediateCertification = (state: workProgramState, {payload}: any): workProgramState => ({
+    ...state,
+    [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOL]: payload
 });
 
 const setComments = (state: workProgramState, {payload}: any): workProgramState => ({
@@ -86,5 +98,7 @@ export const reducer = createReducer(initialState, {
     [actions.setComments.type]: setComments,
 
     [actions.setWorkProgramEvaluationTools.type]: setWorkProgramEvaluationTools,
+    [actions.setWorkProgramEvaluationTool.type]: setWorkProgramEvaluationTool,
+    [actions.setIntermediateCertification.type]: setIntermediateCertification,
     [actions.pageDown.type]: pageDown,
 });

@@ -1,5 +1,5 @@
 import {EvaluationToolType, IntermediateCertificationType, SectionType} from "./types";
-import {EvaluationToolFields, fields, workProgramSectionFields} from "./enum";
+import {EvaluationToolFields, fields, WorkProgramGeneralFields, workProgramSectionFields} from "./enum";
 import {rootState} from "../../store/reducers";
 import {
     getWorkProgramEvaluationToolsList,
@@ -62,16 +62,16 @@ const getTotalHours = (sections: Array<SectionType>) => {
 export const getValidateProgramErrors = (state: rootState): Array<string> => {
     const sections = getWorkProgramField(state, fields.WORK_PROGRAM_SECTIONS);
     const qualification = getWorkProgramField(state, fields.WORK_PROGRAM_QUALIFICATION);
+    const semesterCount = getWorkProgramField(state, WorkProgramGeneralFields.SEMESTER_COUNT);
     const errors = [];
     const evaluationToolsList = getWorkProgramEvaluationToolsList(state);
 
-    const lectureHours = getHoursArray(getWorkProgramField(state, 'lecture_hours'));
-    const practiceHours = getHoursArray(getWorkProgramField(state, 'practice_hours'));
-    const labHours = getHoursArray(getWorkProgramField(state, 'lab_hours'));
-    const srsHours = getHoursArray(getWorkProgramField(state, 'srs_hours'));
+    const lectureHours = getHoursArray(getWorkProgramField(state, 'lecture_hours_v2'));
+    const practiceHours = getHoursArray(getWorkProgramField(state, 'practice_hours_v2'));
+    const labHours = getHoursArray(getWorkProgramField(state, 'lab_hours_v2'));
+    const srsHours = getHoursArray(getWorkProgramField(state, 'srs_hours_v2'));
     const totalHours = getWorkProgramField(state, fields.WORK_PROGRAM_ALL_HOURS) || getAllHours(lectureHours, practiceHours, labHours, srsHours);
     const currentTotalHours = getTotalHours(sections).toFixed(2);
-
     const educationalPlans = getWorkProgramField(state, 'work_program_in_change_block')
 
     if (educationalPlans.length === 0){
@@ -105,9 +105,9 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
 
     const fullSum = getEvaluationToolsMaxSum(evaluationToolsList) + getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state))
 
-    if (fullSum % 100 !== 0 && qualification !== MASTER_QUALIFICATION){
-        errors.push('Количество баллов в РПД должно делиться на 100');
-    }
+    // if (fullSum / semesterCount !== 100 && qualification !== MASTER_QUALIFICATION){
+    //     errors.push('Заполните до конца раздел оценочные средства');
+    // }
 
     return errors;
 }

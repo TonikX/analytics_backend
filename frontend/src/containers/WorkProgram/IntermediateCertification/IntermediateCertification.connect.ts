@@ -2,7 +2,12 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "../actions";
-import {getWorkProgramField, getWorkProgramIntermediateCertificationList, isCanEdit} from '../getters';
+import {
+    getWorkProgramField,
+    getWorkProgramId,
+    getWorkProgramIntermediateCertificationList,
+    isCanEdit
+} from '../getters';
 
 import {rootState} from "../../../store/reducers";
 
@@ -14,6 +19,7 @@ const mapStateToProps = (state:rootState) => {
         hasDiffPass: getWorkProgramField(state, 'have_course_project'),
         hasPass: getWorkProgramField(state, 'have_pass'),
         hasExam: getWorkProgramField(state, 'have_exam'),
+        workProgramId: getWorkProgramId(state)
     };
 };
 

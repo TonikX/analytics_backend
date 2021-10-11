@@ -6,8 +6,8 @@ import trainingModuleActions from './actions';
 
 import Service from './service';
 
-import {fetchingTypes} from "./enum";
-import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {fetchingTypes, TrainingModuleFields} from "./enum";
+import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode, getShowOnlyMy} from "./getters";
 
 const service = new Service();
 
@@ -21,10 +21,11 @@ const getTrainingModulesList = createLogic({
         const searchQuery = getSearchQuery(state);
         const sortingField = getSortingField(state);
         const sortingMode = getSortingMode(state);
+        const showOnlyMy = getShowOnlyMy(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_TRAINING_MODULES}));
 
-        service.getTrainingModules(currentPage, searchQuery, sortingField, sortingMode)
+        service.getTrainingModules(currentPage, searchQuery, sortingField, sortingMode, showOnlyMy)
             .then((res) => {
                 const results = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));
@@ -129,6 +130,26 @@ const getTrainingModule = createLogic({
     }
 });
 
+const changeEditorList = createLogic({
+    type: trainingModuleActions.changeEditorList.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_TRAINING_MODULE}));
+
+        service.changeTrainingModule(action.payload)
+            .then(() => {
+                dispatch(trainingModuleActions.getTrainingModule(action.payload.data[TrainingModuleFields.ID]));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_TRAINING_MODULE}));
+                return done();
+            });
+    }
+});
 
 export default [
     getTrainingModulesList,
@@ -136,4 +157,5 @@ export default [
     changeTrainingModule,
     deleteTrainingModule,
     getTrainingModule,
+    changeEditorList,
 ];

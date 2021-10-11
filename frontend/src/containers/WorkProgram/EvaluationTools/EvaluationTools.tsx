@@ -20,6 +20,10 @@ import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import EyeIcon from '@material-ui/icons/VisibilityOutlined';
 import CheckIcon from "@material-ui/icons/CheckOutlined";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+
+import {appRouter} from '../../../service/router-service'
 
 import DescriptionModal from "./DescriptionModal";
 import EvaluationCertificationTotalList from "../EvaluationCertificationTotalList";
@@ -28,16 +32,36 @@ import CreateModal from "./CreateModal";
 import {SixthStepProps} from './types';
 import {EvaluationToolFields, fields, WorkProgramGeneralFields, workProgramSectionFields} from "../enum";
 import {EvaluationToolType} from "../types";
+import { types } from './constants'
 
 import connect from './EvaluationTools.connect';
 import styles from './EvaluationTools.styles';
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import {withRouter} from "react-router-dom";
+import {subSections} from "../constants";
 
 class EvaluationTools extends React.PureComponent<SixthStepProps> {
     state = {
         anchorsEl: {}
     };
+
+    componentDidUpdate(prevProps: Readonly<SixthStepProps>, prevState: Readonly<{}>, snapshot?: any) {
+        if (prevProps.location.pathname !== this.props.location.pathname){
+            this.checkLocation()
+        }
+    }
+
+    componentDidMount() {
+        this.checkLocation()
+    }
+
+    checkLocation = () => {
+        const location = this.props.location.pathname
+        const splittedUrl = location.split('/')
+        if (splittedUrl[splittedUrl.length - 1] !== subSections.EVALUATION_TOOLS && location.includes(subSections.EVALUATION_TOOLS)){
+            this.props.actions.openDialog({dialogType: fields.SHOW_EVALUATION_TOOLS_DESCRIPTION});
+            this.props.actions.getWorkProgramEvaluationTool(splittedUrl[splittedUrl.length - 1]);
+        }
+    }
 
     handleCreateNew = () => {
         this.props.actions.openDialog({dialogType: fields.CREATE_NEW_EVALUATION_TOOLS, data: {}});
@@ -54,8 +78,10 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
         this.handleCloseItemMenu();
     };
 
-    handleClickShowDescription = (description: string) => () => {
-        this.props.actions.openDialog({dialogType: fields.SHOW_EVALUATION_TOOLS_DESCRIPTION, data: description});
+    handleClickShowDescription = (id: any) => () => {
+        //@ts-ignore
+        this.props.history.push(appRouter.getWorkProgramEvaluationToolLink(this.props.workProgramId, id))
+        // this.props.actions.openDialog({dialogType: fields.SHOW_EVALUATION_TOOLS_DESCRIPTION, data: description});
         this.handleCloseItemMenu();
     };
 
@@ -142,7 +168,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                         {evaluationTool[EvaluationToolFields.NAME]}
                                     </Typography>
                                     <Typography className={classes.type}>
-                                        {evaluationTool[EvaluationToolFields.TYPE]}
+                                        {evaluationTool[EvaluationToolFields.TYPE]} {types.includes(evaluationTool[EvaluationToolFields.TYPE]) ? '' : '(устаревшее)'}
                                     </Typography>
                                     <Typography className={classes.min}>
                                         {evaluationTool[EvaluationToolFields.MIN]}
@@ -188,7 +214,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                                 }}
                                             >
                                                 <MenuItem
-                                                    onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}>
+                                                    onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.ID])}>
                                                     <EyeIcon className={classes.menuIcon} />
                                                     Смотреть описание
                                                 </MenuItem>
@@ -207,7 +233,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                                         </div>
                                         :
                                          <div className={classes.eyeIcon}
-                                              onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.DESCRIPTION])}
+                                              onClick={this.handleClickShowDescription(evaluationTool[EvaluationToolFields.ID])}
                                          >
                                              <EyeIcon className={classes.menuIcon} />
                                          </div>
@@ -246,5 +272,5 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
         );
     }
 }
-
-export default connect(withStyles(styles)(EvaluationTools));
+//@ts-ignore
+export default connect(withStyles(styles)(withRouter(EvaluationTools)));

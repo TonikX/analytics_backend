@@ -32,7 +32,7 @@ import CKEditor from "../../../../components/CKEditor";
 
 import {
     IntermediateCertificationFields,
-    fields,
+    fields, EvaluationToolFields,
 } from '../../enum';
 import {IntermediateCertificationTypes} from "../../constants";
 
@@ -45,6 +45,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     state = {
         isOpen: false,
+        showErrors: false,
         evaluationTool: {
             [IntermediateCertificationFields.ID]: null,
             [IntermediateCertificationFields.DESCRIPTION]: '',
@@ -82,10 +83,19 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     handleSave = () => {
         const {evaluationTool} = this.state;
 
+        const disableSave = get(evaluationTool, [IntermediateCertificationFields.NAME, 'length'], 0) === 0
+          || get(evaluationTool, [IntermediateCertificationFields.DESCRIPTION, 'length'], 0) === 0
+          || get(evaluationTool, [IntermediateCertificationFields.TYPE, 'length'], 0) === 0
+        ;
+
         if (evaluationTool[IntermediateCertificationFields.ID]){
+            this.setState({ showErrors: false });
             this.props.actions.changeIntermediateCertification(evaluationTool);
-        } else {
+        } else if (!disableSave){
+            this.setState({ showErrors: false });
             this.props.actions.addIntermediateCertification(evaluationTool);
+        } else if (disableSave) {
+            this.setState({ showErrors: true })
         }
     }
 
@@ -111,14 +121,15 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
+    hasError = (field: string) => {
+        const { showErrors, evaluationTool } = this.state;
+        return showErrors && get(evaluationTool, [field, 'length'], 0) === 0
+    }
+
     render() {
-        const {classes} = this.props;
+        const {classes, semesterCount} = this.props;
         const {evaluationTool, isOpen} = this.state;
 
-        const disableButton = get(evaluationTool, [IntermediateCertificationFields.NAME, 'length'], 0) === 0
-                            || get(evaluationTool, [IntermediateCertificationFields.DESCRIPTION, 'length'], 0) === 0
-                            || get(evaluationTool, [IntermediateCertificationFields.TYPE, 'length'], 0) === 0
-        ;
         const isEditMode = Boolean(evaluationTool[IntermediateCertificationFields.ID]);
         if (!isOpen) return <></>
         return (
@@ -134,7 +145,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         <Button autoFocus
                                 color="inherit"
                                 onClick={this.handleSave}
-                                disabled={disableButton}
                                 classes={{
                                     disabled: classes.disabledButton
                                 }}
@@ -159,10 +169,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                    InputLabelProps={{
                                                        shrink: true,
                                                    }}
+                                                   error={this.hasError(IntermediateCertificationFields.NAME)}
                                                    value={evaluationTool[IntermediateCertificationFields.NAME]}
                                         />
 
-                                        <FormControl className={classes.typeSelector}>
+                                        <FormControl className={classes.typeSelector} error={this.hasError(IntermediateCertificationFields.TYPE)}>
                                             <InputLabel shrink id="section-label">
                                                 Тип *
                                             </InputLabel>
@@ -229,13 +240,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                 <FormControlLabel value={1} control={<Radio
                                                     checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 1}/>}
                                                                   label="Первый"/>
-                                                <FormControlLabel value={2} control={<Radio
+                                                <FormControlLabel disabled={semesterCount < 2} value={2} control={<Radio
                                                     checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 2}/>}
                                                                   label="Второй"/>
-                                                <FormControlLabel value={3} control={<Radio
+                                                <FormControlLabel disabled={semesterCount < 3} value={3} control={<Radio
                                                     checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 3}/>}
                                                                   label="Третий"/>
-                                                <FormControlLabel value={4} control={<Radio
+                                                <FormControlLabel disabled={semesterCount < 4} value={4} control={<Radio
                                                     checked={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER]) === 4}/>}
                                                                   label="Четвертый"/>
                                             </RadioGroup>
@@ -246,12 +257,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                           </div>
 
                           <div className={classes.rightSide}>
-                            <InputLabel className={classes.label}>Описание</InputLabel>
+                            <InputLabel className={classes.label}>Описание * </InputLabel>
                             <CKEditor onChange={this.changeDescription}
                                       value={evaluationTool[IntermediateCertificationFields.DESCRIPTION] ? evaluationTool[IntermediateCertificationFields.DESCRIPTION] : ''}
                                       toolbarContainerId="toolbar-container"
                                       useFormulas
                                       height="calc(100vh - 300px)"
+                                      style={this.hasError(EvaluationToolFields.DESCRIPTION)? {border: '1px solid #d00000'} : {border: '1px solid #d1d1d1'}}
                             />
                           </div>
                         </>
@@ -264,7 +276,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     </Button>
                     <Button onClick={this.handleSave}
                             variant="contained"
-                            disabled={disableButton}
                             color="primary">
                         Сохранить
                     </Button>

@@ -29,7 +29,10 @@ export enum EducationPlanInDirectionFields {
 }
 
 export enum filterFields{
-    NUMBER_OP = 'NUMBER_OP',
-    NAME_OP = 'NAME_OP',
+    NUMBER_DP = 'NUMBER_DP',
+    NAME_DP = 'NAME_DP',
     SPECIALIZATION = 'SPECIALIZATION',
+    STRUCTURAL_UNIT = 'STRUCTURAL_UNIT',
+    PREREQUISITE = 'PREREQUISITE',
+    OUTCOMES = 'OUTCOMES',
 }

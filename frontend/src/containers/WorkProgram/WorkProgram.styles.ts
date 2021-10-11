@@ -36,7 +36,9 @@ export default (theme: Theme) => createStyles({
     },
     subTitle: {
         marginBottom: '10px',
-        fontSize: '20px'
+        fontSize: '20px',
+        display: 'flex',
+        alignItems: 'center'
     },
     subItem: {},
     specializationSelector: {
@@ -48,6 +50,10 @@ export default (theme: Theme) => createStyles({
         padding: 0,
         minWidth: '210px',
         marginRight: '15px',
+    },
+    stepLink: {
+        textDecoration: 'none !important',
+        color: '#333 !important',
     },
     step: {
         background: theme.palette.secondary.main
@@ -83,6 +89,7 @@ export default (theme: Theme) => createStyles({
         transition: 'transform 300ms'
     },
     headerButtons: {
-        marginLeft: 'auto'
-    }
+        marginLeft: 'auto',
+        display: "flex",
+    },
 });

@@ -1,4 +1,5 @@
 import {ReactText} from "react";
+import {subSections} from "../containers/WorkProgram/constants";
 
 const FOLDERS = 'folders';
 const SIGN_IN = 'sign-in';
@@ -26,6 +27,9 @@ const SELECT_EDUCATIONAL_PROGRAM = 'select-educational-program';
 const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
 const INDIVIDUAL_EDUCATIONAL_PLANS = 'individual-educational-plans';
 const PROFESSIONAL_STANDARDS = 'professional-standards';
+
+const RECORDS = 'records';
+
 const STRUCTURAL_UNITS = 'structural-units';
 const NOTIFICATIONS = 'notifications';
 
@@ -99,6 +103,10 @@ export default class RouterService {
 
     getCompetencesRoute = () => {
         return SEPARATOR + COMPETENCES;
+    };
+
+    getRecordsRoute = () => {
+        return SEPARATOR + RECORDS;
     };
 
     getDirectionRoute = () => {
@@ -232,7 +240,44 @@ export default class RouterService {
     };
 
     getWorkProgramLink = (id: number) => {
-        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id;
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.GENERAL;
+    };
+
+    getWorkProgramGeneralLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.GENERAL
+    };
+    getWorkProgramPrerequisitesLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.PREREQUISITES
+    };
+    getWorkProgramSectionsLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.SECTIONS
+    };
+    getWorkProgramTopicsLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.TOPICS
+    };
+    getWorkProgramLiteratureLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.LITERATURE
+    };
+    getWorkProgramEvaluationToolsLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.EVALUATION_TOOLS
+    };
+    getWorkProgramEvaluationToolLink = (wpId: number, id: number) => {
+        return this.getWorkProgramEvaluationToolsLink(wpId) + SEPARATOR + id
+    };
+    getWorkProgramIntermediateCertificationLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.INTERMEDIATE_CERTIFICATION
+    };
+    getWorkProgramIntermediateCertificationToolLink = (wpId: number, id: number) => {
+        return this.getWorkProgramIntermediateCertificationLink(wpId) + SEPARATOR + id
+    };
+    getWorkProgramResultsLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.RESULTS
+    };
+    getWorkProgramPlansLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.PLANS
+    };
+    getWorkProgramCompetencesLink = (id: number) => {
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + id + SEPARATOR + subSections.COMPETENCES
     };
 
     getPlanDetailLink = (id: ReactText) => {

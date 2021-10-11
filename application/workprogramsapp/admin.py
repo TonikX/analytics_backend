@@ -16,7 +16,7 @@ from .models import (
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
     Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
-from .notifications.models import ExpertiseNotification, UserNotification
+from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments
 
 from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 
@@ -29,6 +29,7 @@ from .educational_program.key_competences.models import GroupOfKeyCompetencesInG
 from .educational_program.general_prof_competencies.models import GroupOfGeneralProfCompetencesInGeneralCharacteristic, \
     GeneralProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
 from .individualization.models import ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
+from .feedback.models import FeedbackRecord
 
 
 admin.site.register(GroupOfPkCompetencesInGeneralCharacteristic)
@@ -105,3 +106,5 @@ admin.site.register(CourseCredit)
 admin.site.register(CourseFieldOfStudy)
 admin.site.register(ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule)
 admin.site.register(WorkProgramIdStrUpForIsu)
+admin.site.register(NotificationComments)
+admin.site.register(FeedbackRecord)

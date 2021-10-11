@@ -6,8 +6,9 @@ import requests
 from analytics_project import settings
 
 EDUC_PROGRAMS = []
-BASE_URL = "https://cas.crp.rocks/backend//rest"
+BASE_URL = settings.BARS["BARS_URL"]
 BASE_HEADERS = {'content-type': 'application/json'}
+
 
 def login(setup):
     url = BASE_URL + "/login"
@@ -16,9 +17,15 @@ def login(setup):
     r = requests.post(url, data=json.dumps(body), headers=headers)
     BASE_HEADERS['Authorization'] = r.headers['Authorization']
     body_year = {"name": "current_year", "value": setup[0]}
-    r = requests.post("https://cas.crp.rocks/backend//rest/config/personal", data=json.dumps(body_year), headers=BASE_HEADERS)
+    requests.post(BASE_URL + "/config/personal", data=json.dumps(body_year),
+                  headers=BASE_HEADERS)
     body_term = {"name": "current_term", "value": setup[1]}
-    r = requests.post("https://cas.crp.rocks/backend//rest/config/personal", data=json.dumps(body_term), headers=BASE_HEADERS)
+    requests.post(BASE_URL + "/config/personal", data=json.dumps(body_term),
+                  headers=BASE_HEADERS)
+    req = requests.get(BASE_URL + "/users/current_user/", headers=BASE_HEADERS)
+    req.encoding = 'utf-8'
+    return {'content-type': 'application/json', 'Authorization': r.headers['Authorization']}
+    # print(json.loads(req.text)["selected_year"], json.loads(req.text)["selected_term"])
 
 
 def get_disciplines():
@@ -47,17 +54,18 @@ def get_one_educational_program(id_disp, term):
 
 
 def get_list_of_regular_checkpoints(setup):
-    login(setup)
+    headers = login(setup)
+    print(headers)
     url = BASE_URL + "/checkpoint_types?type=regular"
-    r = requests.get(url, headers=BASE_HEADERS)
+    r = requests.get(url, headers=headers)
     r.encoding = 'utf-8'
     return json.loads(r.text)
 
 
 def get_list_of_final_checkpoints(setup):
-    login(setup)
+    headers = login(setup)
     url = BASE_URL + "/checkpoint_types?type=final"
-    r = requests.get(url, headers=BASE_HEADERS)
+    r = requests.get(url, headers=headers)
     r.encoding = 'utf-8'
     return json.loads(r.text)
 
@@ -75,9 +83,24 @@ def get_educational_program_main():
     educ_programs = (list({v['id']: v for v in EDUC_PROGRAMS}.values()))
     return educ_programs
 
+
 def post_checkpoint_plan(body, setup):
-    login(setup)
+    headers = login(setup)
     url = BASE_URL + "/checkpoint_plans"
-    r = requests.post(url, data=json.dumps(body), headers=BASE_HEADERS)
+    print(headers)
+    r = requests.post(url, data=json.dumps(body), headers=headers)
     return r.text, r.status_code
 
+
+def get_tests(setup):
+    headers = login(setup)
+    url = BASE_URL + "/tests"
+    r = requests.get(url, headers=headers)
+    return json.loads(r.text)
+
+
+def post_tests(body, setup):
+    headers = login(setup)
+    url = BASE_URL + "/tests"
+    r = requests.post(url, data=json.dumps(body), headers=headers)
+    return json.loads(r.text)

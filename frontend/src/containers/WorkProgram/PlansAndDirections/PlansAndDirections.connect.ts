@@ -10,7 +10,7 @@ import {rootState} from "../../../store/reducers";
 
 const mapStateToProps = (state:rootState) => {
     return {
-        plans: getWorkProgramField(state, 'work_program_in_change_block')
+        plans: getWorkProgramField(state, 'work_program_in_change_block') || []
     };
 };
 

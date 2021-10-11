@@ -158,9 +158,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                                     changeItem={this.saveCourseField}
                                     value={get(topic, [workProgramTopicFields.COURSE, CourseFields.ID], '')}
                                     valueLabel={get(topic, [workProgramTopicFields.COURSE, CourseFields.TITLE], '')}
-                                    disabled
                     />
-                    <Typography> Добавление онлайн-курсов сейчас недоступно. Ведется интеграция курсов с online.edu.ru  </Typography>
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={this.handleClose}

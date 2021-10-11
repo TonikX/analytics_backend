@@ -100,20 +100,26 @@ class WorkProgram(CloneModel, models.Model):
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors", verbose_name="Редакторы РПД", blank=True, null=True)
     language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
                                 blank=True, null=True)
-    have_course_project=models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД курсовой проект")
-    have_diff_pass=models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД дифф. зачет")
+    have_course_project = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД курсовой проект")
+    have_diff_pass = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД дифф. зачет")
     have_pass = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД зачет")
     have_exam = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД экзамен")
-    lecture_hours = models.CharField(max_length=1024, null=True,blank=True, verbose_name="Часы лекций")
-    practice_hours = models.CharField(max_length=1024, null=True,blank=True, verbose_name="Часы Практик")
-    lab_hours = models.CharField(max_length=1024, null=True,blank=True, verbose_name="Часы лабораторных работ")
-    srs_hours = models.CharField(max_length=1024, null=True,blank=True, verbose_name="Часы СРС")
+    lecture_hours = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы лекций")
+    practice_hours = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы Практик")
+    lab_hours = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы лабораторных работ")
+    srs_hours = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы СРС")
     old_discipline_code = models.CharField(max_length=1024, blank=True, null=True)
     wp_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID РПД в ИСУ")
     structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL,
                                         verbose_name='Структурное подразделени',
                                         related_name='workprogram_in_structural_unit', blank=True, null=True)
     # language = models.CharField(choices=languages_for_wp, max_length=100, verbose_name='Язык', blank=True, null=True)
+    bars = models.BooleanField(default=False, verbose_name="Нужно отослать дисциплину в БАРС")
+    lecture_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы лекций")
+    practice_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы Практик")
+    lab_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы лабораторных работ")
+    srs_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы СРС")
+    number_of_semesters = models.IntegerField(blank=True, null=True, verbose_name="Количество семестров в дисциплине")
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
@@ -204,7 +210,7 @@ class OutcomesOfWorkProgram(CloneModel,models.Model):
     # class Meta:
     #     auto_created = True
 
-    item = models.ForeignKey(Items, on_delete=models.CASCADE, verbose_name="Постреквизит")
+    item = models.ForeignKey(Items, on_delete=models.CASCADE, verbose_name="Постреквизит", related_name='item_in_outcomes')
     workprogram = models.ForeignKey(WorkProgram, on_delete=models.CASCADE, verbose_name="Рабочая программа")
     MasterylevelChoices = [
         ('1', 'low'),
@@ -574,39 +580,46 @@ class DisciplineBlock(CloneModel,models.Model):
 
 
 class DisciplineBlockModule(CloneModel,models.Model):
+
     '''
     Модель модуля блока дисциплин
     '''
 
     TYPES = [
-        ('universal_module', 'universal_module'),
-        ('physical_culture', 'physical_culture'),
-        ('philosophy_thinking"', 'philosophy_thinking"'),
-        ('digital_culture', 'digital_culture'),
-        ('entrepreneurial_culture', 'entrepreneurial_culture'),
-        ('soft_skills', 'soft_skills'),
+        ('universal_module', 'Универсальный модуль'),
+        ('universal_fundamental_module', 'Университетский фундаментальный модуль'),
+        ('physical_culture', 'Физическая культура'),
+        ('philosophy_thinking', 'Модуль «Философия+Мышление»'),
+        ('digital_culture', 'Модуль «Цифровая культура»'),
+        ('entrepreneurial_culture', 'Модуль «Предпринимательская культура»'),
+        ('soft_skills', 'Модуль «Soft Skills»'),
         ('ognp', 'ognp'),
         ('natural_science_module', 'natural_science_module'),
-        ('general_professional_module', 'general_professional_module'),
-        ('elective_module', 'elective_module'),
-        ('interdisciplinary_module_of_the_faculty', 'interdisciplinary_module_of_the_faculty'),
-        ('faculty_module', 'faculty_module'),
-        ('profile_professional_module', 'profile_professional_module'),
-        ('math_module', 'math_module'),
-        ('digital_culture_in_professional_activities', 'digital_culture_in_professional_activities'),
+        ('general_professional_module', 'Общепрофессиональный модуль'),
+        ('elective_module', 'Элективный модуль по группе направлений'),
+        ('interdisciplinary_module_of_the_faculty', 'Межпрофильный модуль факультета'),
+        ('faculty_module', 'Факультетский модуль'),
+        #('profile_professional_module', 'profile_professional_module'),
+        ('math_module', 'Математический модуль'),
+        ('digital_culture_in_professional_activities', 'Цифровая культура в профессиональной деятельности'),
         ('specialization_module', 'specialization_module'),
-        ('gia', 'gia'),
-        ('practice', 'practice'),
-        ('optional_disciplines', 'optional_disciplines'),
+        ('gia', 'ГИА'),
+        ('practice', 'Практика'),
+        ('optional_disciplines', 'Факультативные дисциплины'),
+        ('profile_professional_module', 'Профильный профессиональный модуль'),
+        ('f_ognp', 'Фундаментальный модуль по ОГНП')
     ]
 
     type = models.CharField(choices=TYPES, max_length=100, default='faculty_module')
     name = models.CharField(max_length=1024)
-    descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name='Модуль в блоке',
-                                         related_name="modules_in_discipline_block", blank=True, null=True)
+    descipline_block = models.ManyToManyField('DisciplineBlock', verbose_name='Модуль в блоке',
+                                             related_name='modules_in_discipline_block', blank=True)
     order = models.IntegerField(blank=True, null=True, verbose_name="Порядок модулей")
     description = models.CharField(max_length=10240, verbose_name="Описания блока модуля дисциплин", blank=True, null=True)
     # work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
+    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='discipline_block_modules',
+                                     verbose_name='Редакторы образовательных модулей', blank=True)
+
     class Meta:
         ordering = ['order']
 
@@ -681,6 +694,7 @@ class WorkProgramInFieldOfStudy(CloneModel,models.Model):
 class WorkProgramIdStrUpForIsu(CloneModel,models.Model):
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
     ns_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
+    dis_id = models.IntegerField(verbose_name="Id дисциплины в ису", blank=True, null=True)
     work_program_in_field_of_study = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.CASCADE, related_name="zuns_for_wp")
     number = models.CharField(max_length=1024, blank=True, null=True)
     ze_v_sem = models.CharField(max_length=1024, blank=True, null=True)
@@ -697,12 +711,14 @@ class Zun(models.Model):
     '''
     Модель для зунов
     '''
-    wp_in_fs = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.CASCADE, blank=True, null=True, related_name="zun_in_wp")
-    indicator_in_zun = models.ForeignKey('Indicator', on_delete=models.CASCADE, blank=True, null=True)
+    wp_in_fs = models.ForeignKey('WorkProgramInFieldOfStudy', on_delete=models.SET_NULL, blank=True, null=True, related_name="zun_in_wp")
+    indicator_in_zun = models.ForeignKey('Indicator', on_delete=models.CASCADE, blank=True, null=True, related_name = "zun")
     knowledge = models.CharField(max_length=1024, blank=True, null=True)
     skills = models.CharField(max_length=1024, blank=True, null=True)
     attainments = models.CharField(max_length=1024, blank=True, null=True)
-    items = models.ManyToManyField('OutcomesOfWorkProgram', verbose_name = "Учебная сущность и уровень освоения", blank=True, null=True)
+    items = models.ManyToManyField('OutcomesOfWorkProgram', verbose_name = "Учебная сущность и уровень освоения", blank=True, null=True, related_name="item_in_wp")
+    wp_in_fs_saved_fk_id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
+
 
     # def __str__(self):
     #     return (str(self.work_program_change_in_discipline_block_module) + str(self.work_program))
@@ -760,7 +776,7 @@ class EvaluationTool(CloneModel,models.Model):
     '''
     type = models.CharField(max_length=1024, verbose_name="Тип оценочного средства")
     name = models.CharField(max_length=1024, verbose_name="Наименование оценочного средства")
-    description = models.CharField(max_length=50000, verbose_name="Описание", blank=True, null=True)
+    description = models.CharField(max_length=5000000, verbose_name="Описание", blank=True, null=True)
     check_point = models.BooleanField(verbose_name="Контрольная точка", blank=True, null=True)
     deadline = models.IntegerField(verbose_name="Срок сдачи в неделях", blank=True, null=True)
     semester = models.IntegerField(verbose_name="Семестр в котором сдается оценочное средство", blank=True, null=True)
@@ -783,7 +799,7 @@ class СertificationEvaluationTool(CloneModel, models.Model):
     ]
     type = models.CharField(choices=types, default='1',max_length=1024, verbose_name="Тип оценочного средства")
     name = models.CharField(blank=True, null=True, max_length=1024, verbose_name="Наименование оценочного средства", default="No name")
-    description = models.CharField(max_length=50000, verbose_name="Описание", blank=True, null=True)
+    description = models.CharField(max_length=500000, verbose_name="Описание", blank=True, null=True)
     #check_point = models.BooleanField(verbose_name="Контрольная точка", blank=True, null=True)
     deadline = models.IntegerField(verbose_name="Срок сдачи в неделях", blank=True, null=True)
     semester = models.IntegerField(verbose_name="Семестр в котором сдается оценочное средство", blank=True, null=True)

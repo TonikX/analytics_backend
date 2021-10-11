@@ -12,7 +12,6 @@ import folderActions from "../../../Profile/Folders/actions";
 export const mapStateToProps = (state: rootState) => {
     return {
         module: getTrainingModule(state),
-        canEdit: true,
         moduleRating: getModuleRating(state),
         moduleRatingId: getModuleRatingId(state),
     };

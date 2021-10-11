@@ -14,7 +14,6 @@ import os
 
 import environ
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env()
@@ -29,7 +28,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
 
 #ALLOWED_HOSTS = ['94.250.249.177', '94.250.249.177:8000', 'localhost', '127.0.0.1']
 ALLOWED_HOSTS = ['*']
@@ -57,6 +56,8 @@ INSTALLED_APPS = [
     'bootstrap_pagination',
     'rest_framework_swagger',
     'onlinecourse',
+    'records',
+    'django_extensions',
     #'oauth2_provider',
     #'social_django',
     #'rest_framework_social_oauth2',
@@ -108,7 +109,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'analytics_project.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -194,7 +194,7 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    #'AUTH_HEADER_TYPES': ('JWT',),
+    # 'AUTH_HEADER_TYPES': ('JWT',),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=480),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
@@ -276,8 +276,11 @@ ISU = {
     "ISU_CLIENT_ID": env('ISU_CLIENT_ID'),
     "ISU_CLIENT_SECRET": env('ISU_CLIENT_SECRET'),
     "ISU_REDIRECT_URI": env('ISU_REDIRECT_URI'),
+    "ISU_FINISH_URI": env('ISU_FINISH_URI_WITH_PROTOCOL'),
+
 }
 BARS = {
     "BARS_LOGIN": env('BARS_LOGIN'),
     "BARS_PASSWORD": env('BARS_PASSWORD'),
+    "BARS_URL":env('BARS_URL'),
 }

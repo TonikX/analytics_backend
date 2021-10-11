@@ -18,6 +18,10 @@ import {FolderActions, FolderType} from "../Profile/Folders/types";
 export interface WorkProgramActions {
     pageDown: any;
 
+    saveZUN: any;
+    deleteZUN: any;
+    updateZUN: any;
+
     sendWorkProgramToArchive: any;
     sendWorkProgramToExpertise: any;
     returnWorkProgramToWork: any;
@@ -59,10 +63,14 @@ export interface WorkProgramActions {
     deleteEvaluationTool: any;
     addEvaluationTool: any;
     changeEvaluationTool: any;
+    getWorkProgramEvaluationTool: any;
+    setWorkProgramEvaluationTool: any;
 
     deleteIntermediateCertification: any;
     addIntermediateCertification: any;
     changeIntermediateCertification: any;
+    getIntermediateCertification: any;
+    setIntermediateCertification: any;
 
     getComments: any;
     setComments: any;
@@ -76,7 +84,9 @@ export interface WorkProgramActions {
 export interface workProgramState {
     [fields.WORK_PROGRAM]: any;
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: Array<EvaluationToolType>;
-    [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION]: Array<IntermediateCertificationType>;
+    [fields.WORK_PROGRAM_EVALUATION_TOOL]: EvaluationToolType|{};
+    [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOL]: IntermediateCertificationType|{};
+    [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOLS]: Array<IntermediateCertificationType>;
     [fields.WORK_PROGRAM_RESULTS]: Array<any>;
     [fields.DIALOGS]: {};
     [fields.WORK_PROGRAM_COMMENTS]: Array<any>; //todo: change type
@@ -92,6 +102,7 @@ export type WorkProgramGeneralType = {
     [WorkProgramGeneralFields.AUTHORS]: string;
     [WorkProgramGeneralFields.RATING]: boolean;
     [WorkProgramGeneralFields.ZUN]: Array<ZunType>;
+    [WorkProgramGeneralFields.BARS]: boolean;
 };
 
 export type ZunType = {
@@ -124,6 +135,8 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     folders: Array<FolderType>
     workProgram: WorkProgramGeneralType;
     validateErrors: Array<string>;
+    fetchingBars: boolean;
+    location: any;
 }
 
 

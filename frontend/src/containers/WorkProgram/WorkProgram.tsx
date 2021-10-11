@@ -2,6 +2,7 @@ import React from 'react';
 import get from 'lodash/get';
 import {withRouter} from "react-router-dom";
 
+import {Link} from "react-router-dom";
 import Typography from '@material-ui/core/Typography';
 import CopyIcon from "@material-ui/icons/FileCopyOutlined";
 import CommentIcon from "@material-ui/icons/CommentOutlined";
@@ -16,6 +17,8 @@ import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 import Grow from '@material-ui/core/Grow';
 
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 import LikeButton from "../../components/LikeButton";
 
@@ -29,11 +32,12 @@ import Prerequisites from "./Prerequisites";
 import Results from "./Results";
 import PlansAndDirections from "./PlansAndDirections";
 import Comments from "./Comments";
+import Competences from "./Competences";
 
 import {FavoriteType} from "../Profile/Folders/enum";
 import {WorkProgramProps} from './types';
 
-import {steps} from "./constants";
+import {sectionsValue, steps, subSections} from "./constants";
 
 import connect from './WorkProgram.connect';
 import styles from './WorkProgram.styles';
@@ -47,13 +51,41 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     };
 
     componentDidMount() {
+        this.selectActiveStep()
         const id = this.getWorkProgramId();
 
         this.props.actions.getWorkProgram(id);
     }
 
+    componentDidUpdate(prevProps: Readonly<WorkProgramProps>, prevState: Readonly<{}>, snapshot?: any) {
+        if (prevProps.location.pathname !== this.props.location.pathname){
+            this.selectActiveStep()
+        }
+    }
+
     componentWillUnmount() {
         this.props.actions.pageDown();
+    }
+
+    selectActiveStep = () => {
+        const locations = this.props.location.pathname.split('/')
+        const section: subSections = locations[locations.length - 1]
+
+        if (this.props.location.pathname.includes([subSections.EVALUATION_TOOLS])){
+            this.setState({
+                activeStep: sectionsValue[subSections.EVALUATION_TOOLS]
+            })
+            return
+        }
+        if (this.props.location.pathname.includes(subSections.INTERMEDIATE_CERTIFICATION)){
+            this.setState({
+                activeStep: sectionsValue[subSections.INTERMEDIATE_CERTIFICATION]
+            })
+            return
+        }
+        this.setState({
+            activeStep: sectionsValue[section] || 0
+        })
     }
 
     openConfirmDuplicateWPModal = () => {
@@ -95,8 +127,16 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
                     <Typography className={classes.subTitle}>
                         Пререквизиты
+                        <Tooltip
+                            title={
+                                <span style={{ fontSize: '13px' }}>Пререквезит - объект, отражающий конкретное знание из конкретной области 
+                                (далее "учебная сущность"), которое должно быть у студента перед началом изучения курса.
+                                </span>
+                            }
+                        >
+                            <HelpOutlineIcon color="primary" style={{ marginLeft: '10px', paddingTop: '4px' }} />
+                        </Tooltip>
                     </Typography>
-
                     <Prerequisites />
                 </div>;
             case 2:
@@ -143,6 +183,16 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
                         Результаты обучения
+                        <Tooltip
+                            title={
+                                <span style={{ fontSize: '13px' }}>Результат - объект, отражающий конкретное знание 
+                                из конкретной области (далее "учебная сущность"), которое сформируется у студента 
+                                после прохождения курса.
+                                </span>
+                            }
+                        >
+                            <HelpOutlineIcon color="primary" style={{ marginLeft: '10px', paddingTop: '4px' }} />
+                        </Tooltip>
                     </Typography>
 
                     <Results />
@@ -154,6 +204,10 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                     </Typography>
 
                     <PlansAndDirections />
+                </div>;
+            case 9:
+                return <div className={classes.subItem}>
+                    <Competences />
                 </div>;
         }
     }
@@ -198,11 +252,16 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         }
     }
 
+    openStep = (link: string) => {
+        //@ts-ignore
+        this.props.history.push(link)
+    }
+
     render() {
         const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
-            workProgramRating, canAddToFolder, validateErrors} = this.props;
+            workProgramRating, canAddToFolder, validateErrors, workProgram, fetchingBars} = this.props;
         const {activeStep, isOpenComments} = this.state;
-
+        
         return (
             <div className={classes.wrap}>
                 <div className={classes.header}>
@@ -252,14 +311,13 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                              nonLinear
                              className={classes.stepper}
                     >
-                        {Object.values(steps).map((value, index) => {
+                        {Object.values(steps).map(({ label, link }, index) => {
                             return (
-                                <Step key={index}>
-                                    <StepButton onClick={this.handleStep(index)}
-                                                completed={false}
+                                <Step key={index} onClick={() => this.openStep(link(this.getWorkProgramId()))}>
+                                    <StepButton completed={false}
                                                 style={{textAlign: 'left'}}
                                     >
-                                        {value}
+                                        {label}
                                     </StepButton>
                                 </Step>
                             );

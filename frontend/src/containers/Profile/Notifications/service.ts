@@ -1,8 +1,8 @@
 import AnalyticsService from "../../../service/analytics-service";
 
 class Service extends AnalyticsService{
-    getNotifications(){
-        return this.get(`/api/notifications/list`);
+    getNotifications(currentPage: number){
+        return this.get(`/api/notifications/list?page=${currentPage}`);
     }
 }
 

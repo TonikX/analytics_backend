@@ -1,10 +1,11 @@
 import json
+from pprint import pprint
 
 from django.db.models.aggregates import Count
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 from dataprocessing.models import User
@@ -14,12 +15,14 @@ from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Acade
     СertificationEvaluationTool
 from workprogramsapp.statistic.serializers import WorkProgramInFieldOfStudySerializerForStatistic, \
     WorkProgramSerializerForStatistic, SuperShortWorkProgramSerializer, WorkProgramSerializerForStatisticExtended, \
-    AcademicPlansDescriptionWpSerializer, WorkProgramPrerequisitesAndOutcomesSerializer
+    AcademicPlansDescriptionWpSerializer, WorkProgramPrerequisitesAndOutcomesSerializer, \
+    WorkProgramDescriptionOnlySerializer, \
+    ImplementationAcademicPlanWpStatisticSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
 @api_view(['GET'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAuthenticated,))
 def EmptyStringWp(request):
     """
     API-запрос на просмотр РПД, без id строки
@@ -31,7 +34,7 @@ def EmptyStringWp(request):
 
 
 @api_view(['GET'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAuthenticated,))
 def WpWithoutAP(request):
     """
     API-запрос на просмотр РПД, которых нету в УП
@@ -43,7 +46,7 @@ def WpWithoutAP(request):
 
 
 @api_view(['GET'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAuthenticated,))
 def WpWithSimilarCode(request):
     """
     API-запрос на просмотр РПД с одинаковым дисциплин кодом
@@ -60,7 +63,7 @@ def WpWithSimilarCode(request):
 
 
 @api_view(['GET'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAuthenticated,))
 def SimpleStatistic(request):
     """
     API-запрос на просмотр различной статистики по РПД и пользователям
@@ -85,7 +88,7 @@ def SimpleStatistic(request):
 
 
 @api_view(['GET'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAuthenticated,))
 def WpWithoutStructuralUnit(request):
     """
     API-запрос на на просмотр РПД без структурного подразделения
@@ -97,7 +100,7 @@ def WpWithoutStructuralUnit(request):
 
 
 @api_view(['GET'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAuthenticated,))
 def StructuralUnitWp(request):
     """
 
@@ -241,7 +244,7 @@ def FieldOfStudyPlanToISU(request, pk):
 
 
 @api_view(['GET'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAuthenticated,))
 def AllWpShort(request):
     wp = WorkProgram.objects.all()
     serializer = SuperShortWorkProgramSerializer(wp, many=True)
@@ -265,7 +268,7 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
     """
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializerForStatisticExtended
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         print(self.request.query_params)
@@ -280,31 +283,30 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
         print(structural_unit_id)
         for i in range(12):
             if str(i + 1) in semester:
-                cred_regex += "[^0],"
+                cred_regex += "[^0]\.[0-9],\s"
             else:
-                cred_regex += "[0-9\-],"
-        cred_regex = cred_regex[:-1]
+                cred_regex += "(([0-9]\.[0-9])|[0]),\s"
+        cred_regex = cred_regex[:-3]
         print(cred_regex)
         if status_filter == "WK":
             needed_wp = (WorkProgram.objects.filter(expertise_with_rpd__isnull=True,
-                                                    zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
+                                                    zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year__in=year,
                                                     structural_unit__in=structural_unit_id,
-                                                    zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex) |
+                                                    zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=cred_regex) |
                          WorkProgram.objects.filter(
                              expertise_with_rpd__expertise_status__contains=status_filter,
-                             zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
+                             zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year__in=year,
                              structural_unit__in=structural_unit_id,
-                             zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex)).distinct()
+                             zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=cred_regex)).distinct()
         elif status_filter == "":
             needed_wp = WorkProgram.objects.filter(structural_unit__in=structural_unit_id,
-                                                   zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
-                                                   zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex).distinct()
+                                                   zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year__in=year,
+                                                   zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
         else:
             needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains=status_filter,
-                                                   zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__year__in=year,
+                                                   zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year__in=year,
                                                    structural_unit__in=structural_unit_id,
-                                                   zuns_for_wp__work_program_change_in_discipline_block_module__credit_units__iregex=cred_regex).distinct()
-        print(len(WorkProgram.objects.filter(structural_unit=6)))
+                                                   zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
         return needed_wp
 
 
@@ -314,7 +316,7 @@ class OneAcademicPlanWithDescriptionWp(generics.RetrieveAPIView):
     """
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlansDescriptionWpSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class AllAcademicPlanWithDescriptionWp(generics.ListAPIView):
@@ -323,7 +325,7 @@ class AllAcademicPlanWithDescriptionWp(generics.ListAPIView):
     """
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlansDescriptionWpSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
@@ -335,10 +337,81 @@ class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        pk=self.kwargs['pk']
+        pk = self.kwargs['pk']
         return WorkProgram.objects.filter(zuns_for_wp__zuns_for_wp__id_str_up=pk)
+
     def get_object(self):
         queryset = self.get_queryset()
         obj = get_object_or_404(queryset)
         self.check_object_permissions(self.request, obj)
         return obj
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def EditorsByWPStatuses(request):
+    """
+    Редакторы с информацией о статусах их РПД (AC: принято, EX: на экспертизе:, WK: на доработке,
+    NO_EXP: не отправлялось на экспертизу)
+    """
+    editors_status_list = []
+    editors = User.objects.filter(editors__isnull=False).distinct()
+    for editor in editors:
+        expertise_of_editor = list(Expertise.objects.filter(work_program__editors=editor).distinct().values(
+            "expertise_status").annotate(total=Count("expertise_status")))
+
+        no_exp = {'expertise_status': 'NO_EXP', 'total': int(
+            WorkProgram.objects.filter(expertise_with_rpd__isnull=True, editors=editor).distinct().count())}
+        if no_exp['total'] == 0:
+            no_exp = []
+        expertise_of_editor.append(no_exp)
+
+        editors_status_list.append(
+            {
+                "editor": {"id": editor.id, "name": editor.first_name + " " + editor.last_name, },
+                "statuses_count": expertise_of_editor
+            }
+        )
+    return Response(editors_status_list)
+
+
+class GetAllWPsByEditor(generics.ListAPIView):
+    """
+    По id редактора показывает все его РПД
+    """
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramDescriptionOnlySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return WorkProgram.objects.filter(editors__pk=pk)
+
+
+class GetAllWPsWithEmptyField(generics.ListAPIView):
+    """
+    Получить список всех РПД с опредленным пустым полем
+    чтобы указать по какому пустому полю производить фильтрацию надо задать параметр field в запрос
+    На данный момент можно отфильтровать по следующим полям:
+    ED - редакторы
+    LANG - язык
+    --------------------------------------------------------
+    Пример: Получить список всех РПД без редакторов:
+    /api/statistic/workprogram/empty_field_wp?field=ED
+    """
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramDescriptionOnlySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        field = self.request.query_params["field"]
+        if field == "ED":
+            return WorkProgram.objects.filter(editors__isnull=True)
+        if field == "LANG":
+            return WorkProgram.objects.filter(language__isnull=True)
+
+
+class AllAcademicPlansWpExpertiseStatisticView(generics.ListAPIView):
+    queryset = ImplementationAcademicPlan.objects.all()
+    serializer_class = ImplementationAcademicPlanWpStatisticSerializer
+    permission_classes = [AllowAny]

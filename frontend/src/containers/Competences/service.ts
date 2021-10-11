@@ -68,6 +68,10 @@ class CompetenceService extends AnalyticsService{
             indicator_pk: indicator[IndicatorsFields.ID],
         });
     }
+
+    getIndicatorsDependsCompetence(competenceId: number){
+        return this.get(`/api/competenceindicator/${competenceId}`);
+    }
 }
 
 export default CompetenceService;

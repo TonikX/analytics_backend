@@ -9,11 +9,11 @@ from workprogramsapp.folders_ans_statistic.serializers import FolderSerializer, 
     FolderCreateSerializer, AcademicPlanInFolderSerializer, \
     ModuleInFolderSerializer, IndividualImplementationAcademicPlanInFolderSerializer
 from workprogramsapp.notifications.models import UserNotification
-from workprogramsapp.notifications.serializers import NotificationSerializer
+from workprogramsapp.notifications.serializers import NotificationSerializer, NotificationCreateSerializer
 from workprogramsapp.permissions import IsOwnerOfFolder, IsOwnerOfFolderWithWorkProgramm, \
     IsOwnerOfFolderWithAcademicPlan, IsOwnerOfFolderWithDisciplineBlockModule, \
     IsOwnerOfFolderWithIndividualImplementationAcademicPlan
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
 # РПД
@@ -23,8 +23,8 @@ class NotificationListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def list(self, request, **kwargs):
-        # Note the use of `get_queryset()` instead of `self.queryset`
         queryset = UserNotification.objects.filter(user=request.user)
+        queryset.update(status="read")
         print(queryset)
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -33,3 +33,8 @@ class NotificationListView(generics.ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+class CreateCustomNotification(generics.CreateAPIView):
+    queryset = UserNotification.objects.all()
+    serializer_class = NotificationCreateSerializer
+    permission_classes = [IsAdminUser]

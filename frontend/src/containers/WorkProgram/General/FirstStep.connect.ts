@@ -23,16 +23,18 @@ const mapStateToProps = (state:rootState) => {
         language: getWorkProgramField(state, WorkProgramGeneralFields.LANGUAGE),
         editors: getWorkProgramField(state, WorkProgramGeneralFields.EDITORS),
         structuralUnit: getWorkProgramField(state, WorkProgramGeneralFields.STRUCTURAL_UNIT),
+        bars: getWorkProgramField(state, WorkProgramGeneralFields.BARS),
+        semesterCount: getWorkProgramField(state, WorkProgramGeneralFields.SEMESTER_COUNT),
 
         isCanEdit: isCanEdit(state),
         structuralUnitsList: getStructuralUnitsForSelector(state),
 
-        fetchingCode: isFetchingComponentByKey(state, WorkProgramGeneralFields.TITLE),
-        fetchingTitle: isFetchingComponentByKey(state, WorkProgramGeneralFields.CODE),
+        fetchingCode: isFetchingComponentByKey(state, WorkProgramGeneralFields.CODE),
+        fetchingTitle: isFetchingComponentByKey(state, WorkProgramGeneralFields.TITLE),
         fetchingDate: isFetchingComponentByKey(state, WorkProgramGeneralFields.APPROVAL_DATE),
         fetchingAuthors: isFetchingComponentByKey(state, WorkProgramGeneralFields.AUTHORS),
-        fetchingVideoLink: isFetchingComponentByKey(state, WorkProgramGeneralFields.DESCRIPTION),
-        fetchingDescription: isFetchingComponentByKey(state, WorkProgramGeneralFields.VIDEO_LINK),
+        fetchingVideoLink: isFetchingComponentByKey(state, WorkProgramGeneralFields.VIDEO_LINK),
+        fetchingDescription: isFetchingComponentByKey(state, WorkProgramGeneralFields.DESCRIPTION),
     };
 };
 

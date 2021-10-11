@@ -57,5 +57,8 @@ export default (theme: Theme) => createStyles({
     },
     addEditorButton: {
         padding: '0px !important'
+    },
+    radioGroup: {
+        flexDirection: 'row'
     }
 });

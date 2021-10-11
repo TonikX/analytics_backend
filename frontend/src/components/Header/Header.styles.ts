@@ -34,5 +34,19 @@ export default (theme: Theme) => createStyles({
     },
     telegramIcon: {
         color: '#fff'
+    },
+    count: {
+        position: 'absolute',
+        background: '#fff',
+        borderRadius: '50px',
+        fontSize: '10px',
+        width: '15px',
+        height: '15px',
+        bottom: '7px',
+        left: '33px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 'bold',
     }
 });

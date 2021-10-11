@@ -265,8 +265,16 @@ class WorkProgramService extends AnalyticsService{
         return this.delete(`/api/tools/${id}`);
     }
 
+    getEvaluationTool(id: number){
+        return this.get(`/api/tools/${id}`);
+    }
+
     deleteIntermediateCertification(id: ReactText){
         return this.delete(`/api/certification_tools/${id}`);
+    }
+
+    getIntermediateCertification(id: ReactText){
+        return this.get(`/api/certification_tools/${id}`);
     }
 
     deleteResult(id: ReactText){
@@ -292,6 +300,30 @@ class WorkProgramService extends AnalyticsService{
             user_expertise: expertiseId,
             comment_block: step,
             comment_text: comment,
+        });
+    }
+
+    saveZUN({indicator, plans, results}: any){
+        return this.post(`/api/zun/many_create/`,{
+            wpa_in_fss: plans,
+            zun: {
+                indicator_in_zun: indicator,
+                items: results
+            }
+        });
+    }
+
+    deleteZUN(compentenceId: number){
+        return this.delete(`/api/zun/many_create/${compentenceId}`);
+    }
+
+    updateZUN({indicator, plans, results}: any){
+        return this.post(`/api/zun/many_create/`,{
+            wpa_in_fss: plans,
+            zun: {
+                indicator_in_zun: indicator,
+                items: results
+            }
         });
     }
 }

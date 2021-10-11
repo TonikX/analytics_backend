@@ -17,6 +17,8 @@ const createIndicator = createAction('CREATE_INDICATOR');
 const changeIndicator = createAction('CHANGE_INDICATOR');
 const deleteIndicator = createAction('DELETE_INDICATOR');
 
+const getIndicatorsDependsCompetence = createAction('GET_INDICATORS_DEPENDS_COMPETENCE');
+
 const openDialog = createAction('OPEN_COMPETENCE_DIALOG');
 const closeDialog = createAction('CLOSE_COMPETENCE_DIALOG');
 
@@ -26,6 +28,7 @@ const changeAllCount = createAction('COMPETENCE_CHANGE_ALL_COUNT');
 const changeSorting = createAction('COMPETENCE_CHANGE_SORTING');
 
 const actions: CompetenceActions = {
+    getIndicatorsDependsCompetence,
     createIndicator,
     changeIndicator,
     deleteIndicator,

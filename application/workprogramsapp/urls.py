@@ -28,7 +28,8 @@ from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAP
     SkillsOfRoleInRoleDestroyView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, \
     AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, DisciplineBlockModuleShortListView, \
-    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailView, DisciplinesByNumber, InsertModule
+    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailListForUserView, DisciplineBlockModuleDetailView, \
+    DisciplinesByNumber, InsertModule
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
@@ -83,11 +84,18 @@ from .views import CloneWorkProgramm
 from .views import WorkProgramsListApi, UserGroups
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
 
-from .views import WorkProgramFullDetailsWithDisciplineCodeView
-
+from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet, WorkProgramInFieldOfStudyForWorkProgramList
 
 # DocxFileExportOldView
 from .workprogram_additions.views import CopyContentOfWorkProgram
+
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+
+
+router.register(r'api/zun/many_create',
+                ZunManyViewSet, basename='zun_many_create')
 
 urlpatterns = [
 
@@ -143,6 +151,7 @@ urlpatterns = [
 
 
     path('api/workprogram/fieldofstudies/<int:workprogram_id>', FieldOfStudiesForWorkProgramList.as_view()),
+    path('api/workprogram/fieldofstudies_for_competences/<int:workprogram_id>', WorkProgramInFieldOfStudyForWorkProgramList.as_view()),
     path('api/workprograminfieldofstudy/', WorkProgramInFieldOfStudyListAPI.as_view()),
     path('api/workprograminfieldofstudy/<int:pk>', WorkProgramInFieldOfStudyDetailAPI.as_view()),
 
@@ -233,6 +242,7 @@ urlpatterns = [
     path('api/disciplineblockmodule/update/<int:pk>', DisciplineBlockModuleUpdateView.as_view()),
     path('api/disciplineblockmodule/short', DisciplineBlockModuleShortListView.as_view()),
     path('api/disciplineblockmodule/detail/list', DisciplineBlockModuleDetailListView.as_view()),
+    path('api/disciplineblockmodule/detail/list/for_this_user', DisciplineBlockModuleDetailListForUserView.as_view()),
     path('api/disciplineblockmodule/detail/<int:pk>', DisciplineBlockModuleDetailView.as_view()),
     path('api/disciplineblockmodule/insert', InsertModule),
     # Работа с образовательными программами
@@ -332,8 +342,9 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.individualization.urls')),
     url(r'^', include('workprogramsapp.isu_merge.urls')),
     url(r'^', include('workprogramsapp.statistic.urls')),
-    # Нотификации
-    path('api/notifications/list', NotificationListView.as_view()),
-
+    url(r'^', include('workprogramsapp.notifications.urls')),
+    url(r'^', include('workprogramsapp.feedback.urls')),
+    url(r'^', include('workprogramsapp.user_management.urls')),
+    url(r'^', include(router.urls)),
 
 ]

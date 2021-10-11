@@ -8,10 +8,14 @@ import {TrainingModuleType} from "../../EducationalPlan/TrainingModules/types";
 export interface NotificationsActions {
     getNotifications: any;
     setNotifications: any;
+    changeCurrentPage: any;
+    changeAllCount: any;
 }
 
 export interface notificationsState {
     [fields.NOTIFICATIONS]: any;
+    [fields.CURRENT_PAGE]: number;
+    [fields.ALL_COUNT]: number;
 }
 
 export interface FoldersProps extends WithStyles<typeof styles>{

@@ -26,6 +26,7 @@ import ProfessionSkills from "./containers/Professions/Skills";
 import RolesSkills from "./containers/Roles/Skills";
 import EducationalProgram from "./containers/EducationalProgram";
 import EducationalProgramCharacteristic from "./containers/EducationalProgram/Characteristic";
+import Records from "./containers/Records";
 
 import SkillsProfessions from "./containers/SkillsProfessions";
 import SkillsRoles from "./containers/SkillsRoles";
@@ -54,6 +55,7 @@ import Layout from "./layout";
 import RouterService from './service/router-service';
 import Notifications from "./containers/Profile/Notifications";
 import Overview from "./containers/Overview";
+import Landing from "./containers/Landing";
 
 const routerService = RouterService.factory();
 
@@ -61,7 +63,6 @@ export default () => (
     <Router>
         <Layout>
             <Switch>
-            <Redirect exact from="/" to={routerService.getEducationPlanRoute()} />
             <AuthRoute path={routerService.getCoursesRoute()}>
                 <Courses />
             </AuthRoute>
@@ -139,6 +140,9 @@ export default () => (
             <AuthRoute path={routerService.getDirectionRoute()}>
                 <Direction />
             </AuthRoute>
+            <AuthRoute path={routerService.getRecordsRoute()}>
+              <Records />
+            </AuthRoute>
             <AuthRoute path={routerService.getEntityToEntityRoute()}>
                 <EntitityToEntitity />
             </AuthRoute>
@@ -213,6 +217,9 @@ export default () => (
             </AuthRoute>
             <Route path={routerService.getForbiddenPage()}>
                 <ForbiddenPage />
+            </Route>
+            <Route path="/">
+                <Landing />
             </Route>
             <Route exact>
                 <NotFoundPage />

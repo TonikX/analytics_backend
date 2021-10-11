@@ -26,7 +26,7 @@ const signUp = createLogic({
                 dispatch(signUpPageActions.signUpClearAllFields());
             })
             .catch((err) => {
-                dispatch(actions.fetchingFailed(err));
+                dispatch(actions.fetchingFailed(err ? (err[0] || []) : []));
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: Enum.SIGN_UP_FETCHING}));

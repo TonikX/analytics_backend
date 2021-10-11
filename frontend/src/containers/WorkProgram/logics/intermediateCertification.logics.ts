@@ -85,8 +85,30 @@ const deleteIntermediateCertification = createLogic({
     }
 });
 
+const getIntermediateCertification = createLogic({
+    type: workProgramActions.getIntermediateCertification.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_INTERMEDIATE_CERTIFICATION}));
+
+        service.getIntermediateCertification(action.payload)
+            .then((res) => {
+                dispatch(workProgramActions.setIntermediateCertification(res.data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_INTERMEDIATE_CERTIFICATION}));
+                return done();
+            });
+    }
+});
+
 export default [
     changeIntermediateCertification,
     addIntermediateCertification,
     deleteIntermediateCertification,
+    getIntermediateCertification,
 ];

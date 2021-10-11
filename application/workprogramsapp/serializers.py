@@ -53,9 +53,11 @@ class FieldOfStudyImplementationSerializer(serializers.ModelSerializer):
     """
         Сериализатор образовательных программ (направлений)
     """
+    #implementation_academic_plan_in_field_of_study = ImplementationAcademicPlanSerializer(many = True)
+
     class Meta:
         model = FieldOfStudy
-        fields = ['id', 'title', 'number', 'qualification', 'educational_profile', 'faculty']
+        fields = ['number', 'id', 'title', 'qualification', 'educational_profile', 'faculty']
 
 
 class AcademicPlanInImplementationSerializer(serializers.ModelSerializer):
@@ -242,7 +244,7 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours', 'extra_points', 'language', 'structural_unit']
+        fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours', 'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters']
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }
@@ -338,6 +340,17 @@ class ZunSerializer(serializers.ModelSerializer):
     class Meta:
         model = Zun
         fields = ['id', 'indicator_in_zun', 'items']
+
+
+class ZunForManyCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор создания нескольких Зунов"""
+    # def __init__(self, *args, **kwargs):
+    #     many = kwargs.pop('many', True)
+    #     super(ZunForManyCreateSerializer, self).__init__(many=many, *args, **kwargs)
+
+    class Meta:
+        model = Zun
+        fields = ['id', 'indicator_in_zun', 'items', 'wp_in_fs']
 
 
 class ZunForDetailAcademicPlanSerializer(serializers.ModelSerializer):
@@ -487,7 +500,14 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'description','descipline_block']
+        fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors']
+
+    def create(self, validated_data):
+        editor = validated_data.pop('editor')
+        instance = super().create(validated_data)
+        instance.editors.add(editor)
+
+        return instance
 
 
 class DisciplineBlockSerializer(serializers.ModelSerializer):
@@ -586,7 +606,7 @@ class AcademicPlanForWPinFSSerializer(serializers.ModelSerializer):
 
 class DisciplineBlockDetailAcademicSerializer(serializers.ModelSerializer):
     #modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
-    academic_plan=AcademicPlanForWPinFSSerializer(many=False)
+    academic_plan = AcademicPlanForWPinFSSerializer()
 
     class Meta:
         model = DisciplineBlock
@@ -594,8 +614,19 @@ class DisciplineBlockDetailAcademicSerializer(serializers.ModelSerializer):
 
 
 class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = "__all__"
+        extra_kwargs = {
+            'change_blocks_of_work_programs_in_modules': {'required': False}
+        }
+
+
+class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerializer):
     change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
-    descipline_block = DisciplineBlockDetailAcademicSerializer(many=False)
+    descipline_block = DisciplineBlockDetailAcademicSerializer(many=True)
+    editors = userProfileSerializer(many=True)
 
     class Meta:
         model = DisciplineBlockModule
@@ -615,7 +646,7 @@ class DisciplineBlockForWPinFSSerializer(serializers.ModelSerializer):
 
 
 class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
-    descipline_block = DisciplineBlockForWPinFSSerializer(read_only=True)
+    descipline_block = DisciplineBlockForWPinFSSerializer(read_only=True, many = True)
 
     class Meta:
         model = DisciplineBlockModule
@@ -624,7 +655,7 @@ class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
 
 class WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
     discipline_block_module = DisciplineBlockModuleForWPinFSSerializer(read_only=True)
-    zuns_for_wp = ZunSerializer(read_only=True)
+    zuns_for_wp = WorkProgramInFieldOfStudySerializerForCb(many=True, read_only=True)
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
@@ -682,7 +713,8 @@ class WorkProgramSerializer(serializers.ModelSerializer):
                   'bibliographic_reference', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd',
                   'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors', 'language',
                   'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
-                  'practice_hours', 'lab_hours', 'srs_hours']
+                  'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
+                  'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'number_of_semesters']
 
     def create(self, validated_data):
         """
@@ -741,3 +773,31 @@ class FieldOfStudyListSerializer(serializers.ModelSerializer):
     class Meta:
         model = FieldOfStudy
         fields = ['id', 'title', 'number', 'qualification', 'educational_profile', 'faculty', 'implementation_academic_plan_in_field_of_study']
+
+
+class WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer(serializers.ModelSerializer):
+    discipline_block_module = DisciplineBlockModuleForWPinFSSerializer(read_only=True)
+    #zuns_for_wp = WorkProgramInFieldOfStudySerializerForCb(many=True, read_only=True)
+
+    class Meta:
+        model = WorkProgramChangeInDisciplineBlockModule
+        fields = ['id', 'code', 'credit_units', 'change_type', 'discipline_block_module']
+
+
+class WorkProgramInFieldOfStudyForCompeteceListSerializer(serializers.ModelSerializer):
+    """Сериализатор Зунов"""
+    work_program_change_in_discipline_block_module =  WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer()
+
+    class Meta:
+        model = WorkProgramInFieldOfStudy
+        fields = ['id', 'work_program_change_in_discipline_block_module', 'zun_in_wp']
+
+
+class WorkProgramInFieldOfStudyShortSerializer(serializers.ModelSerializer):
+
+    """Сериализатор рабочих программ"""
+    work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title', 'approval_date', 'authors', 'discipline_code', 'work_program_in_change_block']

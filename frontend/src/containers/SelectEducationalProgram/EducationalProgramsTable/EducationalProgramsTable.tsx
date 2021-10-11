@@ -34,7 +34,7 @@ export const EducationalProgramsTable: React.FC<EducationalProgramsTableProps> =
     const rows = educationalPrograms.map((p: any) => (
         <TableRow key={p[EducationProgramFields.ID]}>
             <TableCell>
-                {getEduPlan(p)}
+                {p.title}
             </TableCell>
             <TableCell>
                 {p.year}

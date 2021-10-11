@@ -14,7 +14,10 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Tooltip from "@material-ui/core/Tooltip";
 import withStyles from '@material-ui/core/styles/withStyles';
+
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
 import SearchSelector from '../../../../components/SearchSelector';
 
@@ -109,25 +112,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
-    changeSubjectAreaField = (value: ReactText) => {
-        const {result} = this.state;
-
-        this.props.trainingEntitiesActions.changeSubjectId(value);
-        this.props.trainingEntitiesActions.getTrainingEntities();
-
-        this.setState({
-            result: {
-                ...result,
-                [ResultsFields.ITEM]: {
-                    ...result[ResultsFields.ITEM],
-                    [TrainingEntitiesFields.SUBJECT_AREA]: {
-                        [SubjectAreaFields.ID]: value
-                    }
-                }
-            }
-        })
-    }
-
     changeEvaluationTools = (e: React.ChangeEvent) => {
         const {result} = this.state;
 
@@ -150,7 +134,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     render() {
-        const {isOpen, classes, trainingEntities, subjectArea, evaluationTools} = this.props;
+        const {isOpen, classes, trainingEntities, evaluationTools} = this.props;
         const {result} = this.state;
 
         const disableButton = get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID], '').length === 0;
@@ -165,10 +149,27 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} результат </DialogTitle>
+                <DialogTitle>
+                    <div className={classes.dialogTitle}>
+                        {isEditMode ? 'Редактировать' : 'Создать'} результат
+                        <Tooltip
+                            title={
+                                <span style={{ fontSize: '13px' }}>
+                                    Пререквезит - объект, отражающий конкретное знание из конкретной области 
+                                    (далее "учебная сущность"), которое должно быть у студента перед началом изучения курса.
+                                    <br /><br />Для добавления необходимо выбрать предметную область и учебную сущность в ней. 
+                                    <br /><br />Если необходимо создать новую учебную сущность, необходимо нажать кнопку 
+                                    "Создать учебную сущность" и создать ее в соответствующем интерфейсе.
+                                </span>
+                            }
+                        >
+                            <HelpOutlineIcon color="primary" style={{ marginLeft: '10px', paddingTop: '4px' }} />
+                        </Tooltip>
+                    </div>
+                </DialogTitle>
                 <DialogContent>
                     <FormControl component="fieldset">
-                        <FormLabel component="legend">Уровень *</FormLabel>
+                        <FormLabel component="legend">Уровень освоения *</FormLabel>
                         <RadioGroup className={classes.radioGroup}
                                     onChange={this.changeMasterLevelField}
                                     value={result[ResultsFields.ITEM]}
@@ -179,22 +180,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         </RadioGroup>
                     </FormControl>
 
-                    <SearchSelector label="Предметная область *"
-                                            changeSearchText={this.handleChangeSubjectAreaSearch}
-                                            list={subjectArea}
-                                            changeItem={this.changeSubjectAreaField}
-                                            value={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '')}
-                                            valueLabel={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.TITLE], '')}
-                                            className={classes.marginBottom30}
-                    />
-
-                    <SearchSelector label="Учебная сущность *"
-                                            changeSearchText={this.handleChangeTrainingEntitySearchText}
-                                            list={trainingEntities}
-                                            changeItem={this.saveTrainingEntityField}
-                                            value={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID], '')}
-                                            valueLabel={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.TITLE], '')}
-                                            disabled={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], '') === ''}
+                    <SearchSelector
+                        label="Учебная сущность *"
+                        changeSearchText={this.handleChangeTrainingEntitySearchText}
+                        list={trainingEntities}
+                        changeItem={this.saveTrainingEntityField}
+                        value={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID], '')}
+                        valueLabel={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.TITLE], '')}
                     />
 
                     <FormControl className={classes.evaluationToolSelector}>

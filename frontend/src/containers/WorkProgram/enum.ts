@@ -9,8 +9,11 @@ export enum fields {
     WORK_PROGRAM_COMMENTS = 'comments',
     WORK_PROGRAM_BIBLIOGRAPHIC_REFERENCE = 'bibliographic_reference',
     WORK_PROGRAM_EVALUATION_TOOLS = 'WORK_PROGRAM_EVALUATION_TOOLS',
-    WORK_PROGRAM_INTERMEDIATE_CERTIFICATION = 'certification_evaluation_tools',
+    WORK_PROGRAM_EVALUATION_TOOL = 'WORK_PROGRAM_EVALUATION_TOOL',
+    WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOLS = 'certification_evaluation_tools',
+    WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOL = 'certification_evaluation_tool',
     WORK_PROGRAM_ALL_HOURS = 'hours',
+    WORK_PROGRAM_COMPETENCES = 'competences',
 
     DIALOGS = 'DIALOGS',
     CREATE_NEW_TOPIC_DIALOG = 'CREATE_NEW_TOPIC_DIALOG',
@@ -39,6 +42,7 @@ export enum WorkProgramGeneralFields {
     RATING = 'rating',
     RATING_ID = 'id_rating',
     VIDEO_LINK = 'video',
+    SEMESTER_COUNT = 'number_of_semesters',
     DESCRIPTION = 'description',
     ZUN = 'zuns_for_wp',
     CAN_COMMENT = 'can_comment',
@@ -52,6 +56,7 @@ export enum WorkProgramGeneralFields {
     EXPERTISE_ID_2 = 'use_chat_with_id_expertise',
     EXTRA_POINTS = 'extra_points',
     EDITORS = 'editors',
+    BARS = 'bars',
 }
 
 export enum workProgramSectionFields {
@@ -86,6 +91,9 @@ export enum fetchingTypes {
     SEND_TO_ARCHIVE = 'SEND_TO_ARCHIVE',
     APPROVE_WORK_PROGRAM = 'APPROVE_WORK_PROGRAM',
     SEND_TO_WORK = 'SEND_TO_WORK',
+    SAVE_ZUN = 'SAVE_ZUN',
+    DELETE_ZUN = 'DELETE_ZUN',
+    UPDATE_ZUN = 'UPDATE_ZUN',
 
     GET_WORK_PROGRAM = 'GET_WORK_PROGRAM',
     GET_WORK_PROGRAM_EVALUATION_TOOLS = 'GET_WORK_PROGRAM_EVALUATION_TOOLS',
@@ -111,10 +119,12 @@ export enum fetchingTypes {
     ADD_EVALUATION_TOOL = 'ADD_EVALUATION_TOOL',
     CHANGE_EVALUATION_TOOL = 'CHANGE_EVALUATION_TOOL',
     DELETE_EVALUATION_TOOL = 'DELETE_EVALUATION_TOOL',
+    GET_EVALUATION_TOOL = 'GET_EVALUATION_TOOL',
 
     ADD_INTERMEDIATE_CERTIFICATION = 'ADD_INTERMEDIATE_CERTIFICATION',
     CHANGE_INTERMEDIATE_CERTIFICATION = 'CHANGE_INTERMEDIATE_CERTIFICATION',
     DELETE_INTERMEDIATE_CERTIFICATION = 'DELETE_INTERMEDIATE_CERTIFICATION',
+    GET_INTERMEDIATE_CERTIFICATION = 'GET_INTERMEDIATE_CERTIFICATION',
 
     ADD_RESULT = 'ADD_RESULT',
     CHANGE_RESULT = 'CHANGE_RESULT',
@@ -187,6 +197,7 @@ export enum StepsEnum {
     INTERMEDIATE_CERTIFICATION = 'CO',
     RESULTS = 'RE',
     PLANS = 'PL',
+    COMPETENCES = 'CM',
 }
 
 export enum CommentFields {
