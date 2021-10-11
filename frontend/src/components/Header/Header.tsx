@@ -1,4 +1,4 @@
-import React, {SyntheticEvent} from 'react';
+import React from 'react';
 import {Link} from "react-router-dom";
 import {withRouter} from "react-router-dom";
 
@@ -14,17 +14,11 @@ import TelegramIcon from '@material-ui/icons/Telegram';
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
 import NotificationsIcon from '@material-ui/icons/NotificationsNone';
 import TrajectoryIcon from '@material-ui/icons/SchoolOutlined';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
 import Tooltip from "@material-ui/core/Tooltip";
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import UserService from "../../service/user-service";
-
 import styles from './Header.styles';
 import {appRouter} from "../../service/router-service";
-
-const userService = UserService.factory();
 
 interface HeaderProps extends WithStyles<typeof styles> {
     openGeneralMenu: boolean;
@@ -38,10 +32,6 @@ interface HeaderProps extends WithStyles<typeof styles> {
 class Header extends React.PureComponent<HeaderProps>{
     state = {
         anchorEl: null
-    };
-
-    handleMenu = (event: SyntheticEvent): void => {
-        this.setState({anchorEl: event.currentTarget});
     };
 
     handleClose = () => {
@@ -58,21 +48,9 @@ class Header extends React.PureComponent<HeaderProps>{
         }
     };
 
-    handleLogout = () => {
-        // @ts-ignore
-        const {history} = this.props;
-
-        userService.logout();
-        this.handleClose();
-        this.props.logout();
-
-        history.push(appRouter.getSignInRoute());
-    };
-
     render() {
         const {classes, openGeneralMenu, isAuth, notificationsCount} = this.props;
         const {anchorEl} = this.state;
-        const isOpenAvatarMenu = Boolean(anchorEl);
 
         return(
             <AppBar position="fixed" className={classes.header}>
@@ -122,41 +100,17 @@ class Header extends React.PureComponent<HeaderProps>{
                                 </Link>
                             </Tooltip>
 
-                            <div className={classes.avatar}>
-                                <IconButton
-                                    aria-haspopup="true"
-                                    onClick={this.handleMenu}
-                                    color="inherit"
+                            <Tooltip title="Личный кабинет">
+                                <Link to={appRouter.getUserProfile()}
+                                      className={classes.link}
                                 >
-                                    <AccountCircle/>
-                                </IconButton>
-
-                                <Menu
-                                    anchorEl={anchorEl}
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={isOpenAvatarMenu}
-                                    onClose={this.handleClose}
-                                    PopoverClasses={{
-                                        root: classes.popper
-                                    }}
-                                >
-                                    <MenuItem onClick={this.handleLogout}>
-                                        <Link to={appRouter.getSignInRoute()}
-                                              className={classes.link}
-                                        >
-                                          Выйти
-                                        </Link>
-                                    </MenuItem>
-                                </Menu>
-                            </div>
+                                    <IconButton
+                                        aria-haspopup="true"
+                                    >
+                                        <AccountCircle className={classes.userProfileIcon} />
+                                    </IconButton>
+                                </Link>
+                            </Tooltip>
 
                             <Tooltip title="Телеграм">
                                 <a href="https://t.me/op_itmo_ru"

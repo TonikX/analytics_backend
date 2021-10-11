@@ -14,6 +14,7 @@ export const initialState = {
     [fields.IS_AUTH]: false,
     [fields.USERS]: [],
     [fields.USER_GROUPS]: [],
+    [fields.USER_DATA]: {},
     [fields.NOTIFICATIONS_COUNT]: 0,
     [fields.MOCK_MENU]: [],
 };
@@ -70,6 +71,11 @@ const setUserGroups = (state, {payload}) => ({
     [fields.USER_GROUPS]: payload,
 });
 
+const setUserData = (state, {payload}) => ({
+    ...state,
+    [fields.USER_DATA]: payload,
+});
+
 const setMockMenu = (state, {payload}) => ({
     ...state,
     [fields.MOCK_MENU]: payload,
@@ -101,6 +107,7 @@ export const reducer = createReducer(initialState, {
     [actions.setAuthTrue.type]: setAuthTrue,
     [actions.setAllUsers.type]: setAllUsers,
     [actions.setUserGroups.type]: setUserGroups,
+    [actions.setUserData.type]: setUserData,
     [actions.setMockMenu.type]: setMockMenu,
     [actions.setUserNotificationsCount.type]: setUserNotificationsCount,
 });
