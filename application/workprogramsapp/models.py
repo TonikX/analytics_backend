@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from model_clone.models import CloneModel
+from model_clone import CloneMixin
 from django.contrib.postgres.fields import ArrayField
 
 from dataprocessing.models import Items
@@ -31,7 +31,7 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
-class WorkProgram(CloneModel, models.Model):
+class WorkProgram(CloneMixin, models.Model):
     '''
     Модель для рабочей программы
     '''
@@ -203,7 +203,7 @@ class PrerequisitesOfWorkProgram(models.Model):
     #     return self.item
 
 
-class OutcomesOfWorkProgram(CloneModel,models.Model):
+class OutcomesOfWorkProgram(CloneMixin,models.Model):
     '''
     Модель для результатов обучения по рабочей программе
     '''
@@ -537,7 +537,7 @@ class ImplementationAcademicPlan(models.Model):
         return str(self.academic_plan)
 
 
-class DisciplineBlock(CloneModel,models.Model):
+class DisciplineBlock(CloneMixin,models.Model):
     '''
     Модель блока дисциплин
     '''
@@ -579,8 +579,7 @@ class DisciplineBlock(CloneModel,models.Model):
 #         return (str(self.name) + str(self.descipline_block))
 
 
-class DisciplineBlockModule(CloneModel,models.Model):
-
+class DisciplineBlockModule(CloneMixin, models.Model):
     '''
     Модель модуля блока дисциплин
     '''
@@ -638,7 +637,7 @@ class DisciplineBlockModule(CloneModel,models.Model):
         return clone_module
 
 
-class WorkProgramChangeInDisciplineBlockModule(CloneModel,models.Model):
+class WorkProgramChangeInDisciplineBlockModule(CloneMixin,models.Model):
     '''
     Модель хранения блоков выбора в модуле
     '''
@@ -683,7 +682,7 @@ class WorkProgramChangeInDisciplineBlockModule(CloneModel,models.Model):
         return (str(self.discipline_block_module) + str(self.work_program))
 
 
-class WorkProgramInFieldOfStudy(CloneModel,models.Model):
+class WorkProgramInFieldOfStudy(CloneMixin,models.Model):
     work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
                                                                        on_delete=models.CASCADE, related_name="zuns_for_cb")
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
@@ -691,7 +690,7 @@ class WorkProgramInFieldOfStudy(CloneModel,models.Model):
     # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
 
 
-class WorkProgramIdStrUpForIsu(CloneModel,models.Model):
+class WorkProgramIdStrUpForIsu(CloneMixin,models.Model):
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
     ns_id = models.PositiveIntegerField(verbose_name = "ID учебного плана в ИСУ", blank=True, null=True)
     dis_id = models.IntegerField(verbose_name="Id дисциплины в ису", blank=True, null=True)
@@ -770,7 +769,7 @@ class Indicator(models.Model):
         return self.name
 
 
-class EvaluationTool(CloneModel,models.Model):
+class EvaluationTool(CloneMixin,models.Model):
     '''
     Модель для оценочных средств
     '''
@@ -787,7 +786,7 @@ class EvaluationTool(CloneModel,models.Model):
         return self.name
 
 
-class СertificationEvaluationTool(CloneModel, models.Model):
+class СertificationEvaluationTool(CloneMixin, models.Model):
     '''
     Модель для аттестационных оценочных средств
     '''
@@ -811,7 +810,7 @@ class СertificationEvaluationTool(CloneModel, models.Model):
         return self.name
 
 
-class DisciplineSection(CloneModel, models.Model):
+class DisciplineSection(CloneMixin, models.Model):
     '''
     Модель для разделов дисциплин
     '''
@@ -884,7 +883,7 @@ class BibliographicReference(models.Model):
     # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
 
-class Topic(CloneModel, models.Model):
+class Topic(CloneMixin, models.Model):
     '''
     Модель для темы
     '''
