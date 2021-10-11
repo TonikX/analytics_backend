@@ -12,6 +12,7 @@ from .serializers import InstitutionSerializer, PlatformSerializer, OnlineCourse
     CourseCreditSerializer, CourseFieldOfStudySerializer
 
 from .data_onlinecourse import get_data
+from .course_recommendations import get_recommendation, get_topics, prepare_courses
 
 
 class InstitutionViewSet(viewsets.ModelViewSet):
@@ -246,3 +247,31 @@ class CourseDataAPIView(APIView):
                     onlinecourse_credit.save()
 
         return Response(status=200)
+
+
+class CourseRecommendView(APIView):
+    """
+    Контроллер для рекомендаций онлайн курсов
+    """
+
+    def get(self, request, pk):
+        # Получение всех тем
+        all_topics = get_topics(pk)
+        # Подготовка всех курсов
+        course_data, titles, urls = prepare_courses()
+        # Получение рекомендаций: пустой список либо содержит тему, число близости, название и ссылку на курс
+        recommendation_topic = get_recommendation(course_data, titles, urls, all_topics)
+        resp = recommendation_topic  # список списков
+        if len(recommendation_topic) < 1:
+            response = 'Нет подходящего курса'
+        else:
+            response = []
+            for rec in resp:
+                # topic, score, course, url
+                sentence1 = 'Тема: ' + str(rec[0])
+                sentence2 = 'Подходящий курс: ' + str(rec[2])
+                sentence3 = 'Ссылка на курс: ' + str(rec[3])
+                sentence4 = 'Степень близости курса и темы: ' + str(round(rec[1], 2))
+                response.append([sentence1, sentence2, sentence3, sentence4])
+
+        return Response(response)
