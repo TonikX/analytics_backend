@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .bars_merge.models import BarsWorkProgramsAssociate, HistoryOfSendingToBars, BarsEPAssociate
+from .bars_merge.models import BarsWorkProgramsAssociate, HistoryOfSendingToBars, BarsEPAssociate, AcceptedBarsInWp
 from .expertise.models import UserExpertise, ExpertiseComments, Expertise
 from .folders_ans_statistic.models import Folder, WorkProgramInFolder
 from .individualization.models import IndividualImplementationAcademicPlan, \
@@ -108,3 +108,4 @@ admin.site.register(ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModul
 admin.site.register(WorkProgramIdStrUpForIsu)
 admin.site.register(NotificationComments)
 admin.site.register(FeedbackRecord)
+admin.site.register(AcceptedBarsInWp)

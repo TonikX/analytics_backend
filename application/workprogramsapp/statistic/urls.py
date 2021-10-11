@@ -24,6 +24,7 @@ urlpatterns = [
     path('api/statistic/workprogram/editors_statuses', EditorsByWPStatuses),
     path('api/statistic/workprogram/editors_wp/<int:pk>', GetAllWPsByEditor.as_view()),
     path('api/statistic/workprogram/empty_field_wp', GetAllWPsWithEmptyField.as_view()),
-    path('api/statistic/academic_plan/wp_statistic_for_academic_paln',
+    path('api/statistic/academic_plan/wp_statistic_for_academic_plan',
          AllAcademicPlansWpExpertiseStatisticView.as_view()),
+
 ]

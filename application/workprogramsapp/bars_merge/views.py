@@ -11,7 +11,8 @@ from workprogramsapp.bars_merge.bars_api_getter import get_educational_program_m
 from workprogramsapp.bars_merge.bars_function_for_threading import generate_single_checkpoint
 from workprogramsapp.bars_merge.checkpoint_template import generate_checkpoint, get_checkpoints_type, \
     generate_discipline, generate_checkpoint_plan, generate_fos
-from workprogramsapp.bars_merge.models import BarsEPAssociate, BarsWorkProgramsAssociate, HistoryOfSendingToBars
+from workprogramsapp.bars_merge.models import BarsEPAssociate, BarsWorkProgramsAssociate, HistoryOfSendingToBars, \
+    AcceptedBarsInWp
 from workprogramsapp.bars_merge.serializers import BarsEPAssociateSerializer, BarsWorkProgramsAssociateSerializer, \
     HistoryOfSendingBarsSerializer
 from workprogramsapp.models import WorkProgram, FieldOfStudy, ImplementationAcademicPlan, EvaluationTool, \
@@ -166,16 +167,22 @@ def SendCheckpointsForAcceptedWP(request):
         send_semester = 1
     else:
         send_semester = 0
-
+    # Список уже отправленных РПД
+    just_accepted_wp = []
     # Отсылаем ли мы одну дисципилну или же все с пометкой "отправить в барс"
     if not one_wp:
         needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC',
                                                bars=True).distinct()
+        just_accepted_wp = WorkProgram.objects.filter(accepted_wp_in_bars__year_of_study=setup_bars[0],
+                                                      accepted_wp_in_bars__semester_of_sending=setup_bars[1]).distinct()
     else:
         needed_wp = WorkProgram.objects.filter(pk=one_wp)
     all_sends = []  # Список всего того что отправили в барс, нужен для респонса
 
     for work_program in needed_wp:  # для каждой РПД формируем отдельный запрос в БАРС
+        if work_program in just_accepted_wp:
+            # Если РПД уже отправлена в этом учебном семестре, то игнорируем
+            continue
         relative_bool = True  # Длится ли дисциплина дольше чем один семестр
         count_relative = 1  # Счетчик относительных семестров
 
@@ -244,10 +251,16 @@ def SendCheckpointsForAcceptedWP(request):
                 if request_status_code != 200:
                     #  если почему-то не отправилось продублируем респонс в терминал
                     print(request_text, request_response)
+                else:
+                    # Если РПД отправилась со статусом 200, то записываем ее в отправленные
+                    AcceptedBarsInWp.objects.get_or_create(work_program=work_program,
+                                                           year_of_study=setup_bars[0]
+                                                           , semester_of_sending=setup_bars[1])
                 # Пишем логи
                 HistoryOfSendingToBars.objects.create(work_program=work_program, request_text=request_text,
                                                       request_response=request_response,
                                                       request_status=request_status_code)
+
                 all_sends.append(
                     {"status": request_status_code, "request": request_text, "response": request_response})
             # Если дисциплина длинной несколько семестров, то добавляем плюсик к счетчику относительного семестра
@@ -263,6 +276,21 @@ class BarsHistoryListView(generics.ListAPIView):
     filterset_fields = ['date_of_sending', 'work_program', "request_status"]
     search_fields = ["date_of_sending", "work_program", "request_status"]
     permission_classes = [IsAdminUser]
+
+
+@api_view(['POST'])
+@permission_classes((IsAdminUser,))
+def AddAcceptedWpToTableForAcceptedWp(request):
+    try:
+        status_filter = request.data.get("code_for_execute")
+    except KeyError:
+        return Response("Введите ключевое слово, чтобы выполнить запрос")
+    if status_filter == "superkick":
+        for wp in WorkProgram.objects.filter(wp_in_send_history__request_status=200).distinct():
+            AcceptedBarsInWp.objects.create(work_program=wp, year_of_study="2021/2022", semester_of_sending=1)
+        return Response("Надеюсь, ничего не сломалось")
+    else:
+        return Response("Неправильное ключевое слово")
 
 
 @api_view(['POST'])
