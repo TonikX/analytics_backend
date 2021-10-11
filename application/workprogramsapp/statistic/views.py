@@ -334,7 +334,7 @@ class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
     """
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramPrerequisitesAndOutcomesSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         pk = self.kwargs['pk']
