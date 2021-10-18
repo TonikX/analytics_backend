@@ -347,7 +347,7 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.user_management.urls')),
     url(r'^', include(router.urls)),
 
-    path('api/nginx_timeout_test', TimeoutTest),
+    path('api/nginx_timeout_test/', TimeoutTest),
 
 
 ]
