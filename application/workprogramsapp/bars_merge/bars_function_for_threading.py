@@ -12,17 +12,20 @@ from workprogramsapp.models import EvaluationTool, DisciplineSection, Сertifica
 def generate_single_checkpoint(work_program, absolute_semester, relative_semester, programs, setup, wp_isu_id,
                                types_checkpoints):
     # Переменные для формирования запроса к БАРС
-    list_regular = []
-    extra_points = False if work_program.extra_points == "0" or not work_program.extra_points else True
-    work_program_id = work_program.id
-    has_course_project = False
-    course_project = None
-    final_checkpoint = None
-    point_distribution = 0
+    list_regular = []  # Список контрольных точек
+    extra_points = False if work_program.extra_points == "0" or not work_program.extra_points else True  # 3 доп. балла
+    work_program_id = work_program.id  # id РПД в явном виде
+    has_course_project = False  # Переменная, отвечающая за наличие курсового проекта
+    course_project = None  # Объект курсового проекта
+    final_checkpoint = None  # объект ОС ПА
+    point_distribution = 0  # Сколько баллов уходит на оценочные средства
 
+    # Получаем обычные оценочные средства
     evaluation_tools = EvaluationTool.objects.filter(evaluation_tools__in=DisciplineSection.objects.filter(
         work_program__id=work_program_id)).distinct().filter(semester=relative_semester)
+
     for eva in evaluation_tools:
+        # Приводим старые типы чекпоинтов к новому виду (см. checkpoint_dict.py)
         id = None
         test_id = -1
         checkpoint_name = None
@@ -33,22 +36,34 @@ def generate_single_checkpoint(work_program, absolute_semester, relative_semeste
                 if eva.type in value:
                     checkpoint_name = key
                     break
+
+        # В фуккцию был передан список типов чекпоинтов из БАРСА (types_checkpoints), мы пытаемся теперь достать его id
         for el in types_checkpoints:
             if el["name"] == checkpoint_name:
                 id = el["id"]
+
+                # Отдельно рассматриваем кейс электронного тестирования в ЦДО - нам нужно прикрепить тест к чекпионту
                 if el["name"] == "Электронное тестирование в ЦДО":
+                    # Получаем тесты за  текущий год+семестр
                     test_list = get_tests(setup)
+
                     for test in test_list:
-                        if test['name'] == eva.name:
+                        # Пытаемся найти существующий тест, соответсвующий семестру
+                        if (test['name'] == eva.name) and (test["term"] == absolute_semester):
                             test_id = test['id']
+                            break
+                    # Если не нашли, то создаем сами
                     if test_id == -1:
                         body = generate_test(term=absolute_semester, year=setup[0], name=eva.name)
                         test_id = post_tests(setup=setup, body=body)["id"]
+        # После всех процедур, добавляем в список регулярный ОС новую сгенерированную ОС из полученных параметров
         list_regular.append(
             generate_checkpoint(name=eva.name, min=eva.min, max=eva.max, week=int(eva.deadline), type_id=id,
                                 key=eva.check_point, test_id=test_id))
+    # Получаем все ОС ПА
     certificate = СertificationEvaluationTool.objects.filter(work_program=work_program_id, semester=relative_semester)
     for cerf in certificate:
+        # Отдельно обрабатываем случай наличия курсовика
         if int(cerf.type) == 4:
             has_course_project = True
             course_project = generate_checkpoint(name=cerf.name, min=cerf.min, max=cerf.max, week=None, type_id=id,
