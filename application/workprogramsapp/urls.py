@@ -81,7 +81,7 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkPr
 from .files_export.views import DocxFileExportView, SyllabusExportView
 from .views import CloneWorkProgramm
 
-from .views import WorkProgramsListApi, UserGroups
+from .views import WorkProgramsListApi, UserGroups, TimeoutTest
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
 
 from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet, WorkProgramInFieldOfStudyForWorkProgramList
@@ -346,5 +346,8 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.feedback.urls')),
     url(r'^', include('workprogramsapp.user_management.urls')),
     url(r'^', include(router.urls)),
+
+    path('api/nginx_timeout_test/', TimeoutTest),
+
 
 ]

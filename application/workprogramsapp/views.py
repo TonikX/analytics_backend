@@ -1994,3 +1994,17 @@ def DisciplinesByNumber(request):
 
     except:
         return Response(status=400)
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def TimeoutTest(request):
+    import time
+    timer = 0
+    while True:
+        print("It took {} sec".format(timer))
+        time.sleep(30)
+        if timer < 7200:
+            timer +=30
+        else:
+            break
+    return Response(status=200)

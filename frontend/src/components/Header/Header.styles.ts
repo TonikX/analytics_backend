@@ -35,6 +35,9 @@ export default (theme: Theme) => createStyles({
     telegramIcon: {
         color: '#fff'
     },
+    userProfileIcon: {
+        color: '#fff',
+    },
     count: {
         position: 'absolute',
         background: '#fff',
