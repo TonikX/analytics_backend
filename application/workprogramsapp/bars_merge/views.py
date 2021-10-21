@@ -1,4 +1,5 @@
-from datetime import datetime
+import threading
+from datetime import datetime, date
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
@@ -8,7 +9,8 @@ from rest_framework.response import Response
 
 from workprogramsapp.bars_merge.bars_api_getter import get_educational_program_main, get_disciplines, \
     get_one_educational_program, get_list_of_regular_checkpoints, post_checkpoint_plan
-from workprogramsapp.bars_merge.bars_function_for_threading import generate_single_checkpoint
+from workprogramsapp.bars_merge.bars_function_for_threading import generate_single_checkpoint, \
+    academicNTCheckpointGenerator
 from workprogramsapp.bars_merge.checkpoint_template import generate_checkpoint, get_checkpoints_type, \
     generate_discipline, generate_checkpoint_plan, generate_fos
 from workprogramsapp.bars_merge.models import BarsEPAssociate, BarsWorkProgramsAssociate, HistoryOfSendingToBars, \
@@ -267,6 +269,51 @@ def SendCheckpointsForAcceptedWP(request):
             if implementation_of_academic_plan_all and not relative_bool:
                 count_relative += 1
     return Response(all_sends)
+
+
+@api_view(['POST'])
+@permission_classes((IsAdminUser,))
+def postAcademicNTCheckpoints(request):
+    """
+        Отправка всех прошедших экспертизу РПД, в БАРС
+        Параметры:
+        year : Поле вида 'YYYY/YYYY', указывает учебный год в который надо отправить РПД [str]
+        send_semester : 1 - семетр осенний, 0 - семестр весенний [int]
+        from_date: поле вида "DD.MM.YYYY", обознает отсчет с даты принятия на экспертизу РПД
+    """
+    year = request.data.get('year')
+    send_semester = request.data.get('send_semester')
+    from_date = request.data.get('from_date')
+    setup_bars = (year, -1)
+    # types_checkpoints = get_list_of_regular_checkpoints(setup_bars)  # получаем список типов чекпоинтов из БАРС
+    if send_semester == 0:
+        send_semester = 1
+    else:
+        send_semester = 0
+    date_split = from_date.split(".")
+    needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC',
+                                           expertise_with_rpd__date_of_last_change__gte=date(year=int(date_split[2]),
+                                                                                             month=int(date_split[1]),
+                                                                                             day=int(date_split[
+                                                                                                         0]))).distinct()
+    all_sends = []  # Список всего того что отправили в барс, нужен для респонса
+    thread_list = []
+    for number_of_wp, work_program in enumerate(needed_wp):  # для каждой РПД формируем отдельный запрос в БАРС
+        new_generate_checkpoint_thread = threading.Thread(target=academicNTCheckpointGenerator,
+                                                          args=(work_program, send_semester,
+                                                                setup_bars, all_sends))
+
+        new_generate_checkpoint_thread.start()
+        thread_list.append(new_generate_checkpoint_thread)
+        if number_of_wp % 10 == 0:
+            for thread_to_end in thread_list:
+                thread_to_end.join()
+            thread_list = []
+    for thread_to_end in thread_list:
+        thread_to_end.join()
+    # all_sends.extend(academicNTCheckpointGenerator(work_program=work_program, send_semester=send_semester,setup_bars=setup_bars, from_date=from_date))
+
+    return Response({"rpd": all_sends})
 
 
 class BarsHistoryListView(generics.ListAPIView):

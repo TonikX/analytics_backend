@@ -1,11 +1,12 @@
 # Запросы для работы с БАРС
-from django.urls import path
+from django.urls import path, include
 
 from workprogramsapp.bars_merge.views import FindSimilarEP, FindSimilarWP, CreateCheckPoint, \
-    SendCheckpointsForAcceptedWP, SetBarsPointerTrueToWP, BarsHistoryListView, AddAcceptedWpToTableForAcceptedWp
+    SendCheckpointsForAcceptedWP, SetBarsPointerTrueToWP, BarsHistoryListView, AddAcceptedWpToTableForAcceptedWp, \
+    postAcademicNTCheckpoints
 
 urlpatterns = [
-
+    path('api/bars_tools/academicntcheckpoints', postAcademicNTCheckpoints),
     path('api/bars_tools/similar_ep', FindSimilarEP),
     path('api/bars_tools/similar_wp', FindSimilarWP),
     path('api/bars_tools/post_checkpoint', CreateCheckPoint),
