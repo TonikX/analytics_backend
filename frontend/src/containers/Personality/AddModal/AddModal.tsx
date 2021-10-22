@@ -47,9 +47,9 @@ export const AddModal: React.FC<AddProps> = ({persId, groups, modal, setModal}: 
         return allGroups.map(group => 
             !groups.some(groupAdded => groupAdded.name === group.name) ? 
             <div id={group.name} className={notAddedGroupClass} 
-            onClick={() => {
+            onClick={(ev) => {
                 const isSelected = rolesAdd.includes(group)
-                changeRoleForAddStyle(group?.name, isSelected);
+                changeRoleForAddStyle(ev.target as HTMLDivElement, isSelected);
                 if (!(rolesAdd.includes(group))) {
                     setRolesAdd(prev => [...prev, group])} else {
                         setRolesAdd(prev => prev.filter(role => role != group))
@@ -58,13 +58,10 @@ export const AddModal: React.FC<AddProps> = ({persId, groups, modal, setModal}: 
         )
     }
 
-    const changeRoleForAddStyle = (id: string, isSelected: boolean) => {
-        const button = document.getElementById(id);
-        if (button) {
+    const changeRoleForAddStyle = (node: HTMLDivElement, isSelected: boolean) => {
             if (isSelected) {
-                button.className = `${classes.role} btn btn-outline-primary`;
-            } else button.className = `${classes.role} btn btn-primary`;
-        } 
+                node.className = `${classes.role} btn btn-outline-primary`;
+            } else node.className = `${classes.role} btn btn-primary`;
     }
 
     const addRoles = () => {

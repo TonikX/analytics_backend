@@ -93,7 +93,6 @@ export const Personality: React.FC = () => {
     const updateRoles = () => dispatch(actions.updateGroups({newGroups: getGroupsId(), id: personality.id}))
 
     const changeProcess = () => setIsDeletingProcess(!isDelitingProcess)
-    
 
     const handleConfirmDeleteDialog = () => {
         deleteRoles()
@@ -101,9 +100,8 @@ export const Personality: React.FC = () => {
         changeProcess()
     }
 
-    const confirmDeleteDialog = () => setConfirmDialog(!confirmDialog)
+    const confirmDeleteDialog = () => rolesDel.length ===1 ? alert("Вы не выбрали группы для удаления"): setConfirmDialog(!confirmDialog)
     
-  
     return(
         <div className={classes.wrap}>
             <Paper className={classes.root}>
@@ -123,7 +121,11 @@ export const Personality: React.FC = () => {
                             <div className = {classes.groups}> {getGroups(personality[fields.GROUPS])}
                                {getAddButton()}
                             </div>
-                            <Button style={{display: `${groups.length === 0 ? 'none': ''}`}} variant="contained" color="secondary" className = {classes.del} onClick = {getDelButtonAction()}>{deleteText()}</Button>
+                            <Button style={{display: `${groups.length === 0 ? 'none': ''}`}} 
+                                    variant="contained" 
+                                    color="secondary" 
+                                    className = {classes.del} 
+                                    onClick = {getDelButtonAction()}>{deleteText()}</Button>
                             {getCancelButton()}
                         </Typography>
                     </div>
