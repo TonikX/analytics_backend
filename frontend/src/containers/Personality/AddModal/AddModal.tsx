@@ -23,7 +23,6 @@ export const AddModal: React.FC<AddProps> = ({persId, groups, modal, setModal}: 
     const dispatch = useDispatch()
     const [rolesAdd, setRolesAdd] = useState([{id: -1, name: '', permissions: [-1]}])
     const [errVisible, setErrVisible] = useState(false)
-    const [i, setI] = useState(0)
 
     const classes = useStyles()
 
