@@ -9,7 +9,6 @@ import {PersonalitiesActions} from "./types";
 import {rootState} from "../../store/reducers";
 
 const mapStateToProps = (state: rootState) => {
-    // console.log("conn: ", getPersonalities(state))
     return {
         personalities: getPersonalities(state),
         currentPage: getCurrentPage(state),

@@ -1,25 +1,15 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import {shallowEqual} from "recompose";
-import get from "lodash/get";
+import React, { useState } from 'react';
 import { groupType } from './types';
 import actions from '../actions';
 import {useDispatch} from 'react-redux'
-
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
 import {allGroups} from './AllGroups'
-
-// import {CompetenceFields} from '../enum';
 import { useStyles } from './AddModal.styles'
-import classNames from "classnames";
-import { useStore } from 'react-redux';
-import { group } from 'console';
+
 
 interface AddProps {
     persId: number,
@@ -28,7 +18,7 @@ interface AddProps {
     setModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const AddModal: React.FC<AddProps> = ({persId, groups, modal, setModal}: AddProps,) => {
+export const AddModal: React.FC<AddProps> = ({persId, groups, modal, setModal}: AddProps) => {
 
     const dispatch = useDispatch()
     const [rolesAdd, setRolesAdd] = useState([{id: -1, name: '', permissions: [-1]}])
@@ -37,7 +27,7 @@ export const AddModal: React.FC<AddProps> = ({persId, groups, modal, setModal}: 
 
     const classes = useStyles()
 
-    const Toggle = () => setModal(!modal)
+    const toggle = () => setModal(!modal)
 
     const getGroupsId = () => {
         const newRoles = [...rolesAdd, ...groups]
@@ -51,11 +41,11 @@ export const AddModal: React.FC<AddProps> = ({persId, groups, modal, setModal}: 
         return groups.map(group => 
             !allGroups.includes(group) ?
              <div className={addedGroupClass}>{group?.name}</div>:<></>)
-    } 
+    }
 
     const getGroupsToAdd = () => {
         return allGroups.map(group => 
-            !groups.some(groupAdded => groupAdded.name == group.name) ? 
+            !groups.some(groupAdded => groupAdded.name === group.name) ? 
             <div id={group.name} className={notAddedGroupClass} 
             onClick={() => {
                 const isSelected = rolesAdd.includes(group)
@@ -81,18 +71,17 @@ export const AddModal: React.FC<AddProps> = ({persId, groups, modal, setModal}: 
         if (rolesAdd.length > 1) {
             updateRoles()
             setRolesAdd([{id: -1, name: '', permissions: [-1]}]);
-            Toggle()
+            toggle()
         } else setErrVisible(!errVisible)
-        
     }
 
-    const updateRoles = useCallback(() => {
+    const updateRoles = () => {
         dispatch(actions.updateGroups({newGroups: getGroupsId(), id: persId}))
-    }, [rolesAdd])
+    }
 
     const changeProcess = () => {
         setRolesAdd([{id: -1, name: '', permissions: [-1]}]);
-        Toggle()
+        toggle()
     }
 
     return (

@@ -22,7 +22,6 @@ export const initialState: personalitiesState = {
 }
 
 const setPersonalities = (state: personalitiesState, {payload}: any): personalitiesState => {
-    // console.log("reduc: ", payload)
     return{
     ...state,
     [fields.PERSONALITIES_LIST]: payload

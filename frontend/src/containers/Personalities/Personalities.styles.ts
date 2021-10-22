@@ -73,15 +73,5 @@ export default (theme: Theme) => createStyles({
     },
     accordionSummary: {
         backgroundColor: 'rgba(0, 0, 0, .03)',
-        // '&$root': {
-        //     // // этот margin
-        //     // margin: 0,
-        //     height: '48px',
-        //   },
-
-        //   '&$expanded': {
-        //     // этот margin
-        //     height: '48px',
-        //   },
     }
 });

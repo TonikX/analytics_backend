@@ -7,7 +7,6 @@ class PersonalityServices extends AnalyticsService{
     }
 
     updateGroups({newGroups, id}: any) {
-        console.log("serv upd: ", newGroups)
         return this.patch(`/api/user_management/crud_single_user/${id}`,{
             groups: newGroups
         })

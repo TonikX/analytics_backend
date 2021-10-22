@@ -27,7 +27,7 @@ export const Personality: React.FC = () => {
         dispatch(actions.getPersonality(get(params, 'id', null)))
       }, [])
 
-    const Toggle = () => setModal(!modal);
+    const toggle = () => setModal(!modal);
     const groups: Array<groupType> = personality[fields.GROUPS];
 
     const getGroups = (groups: Array<groupType>) => {
@@ -35,9 +35,9 @@ export const Personality: React.FC = () => {
         if (isDelitingProcess) {
             roleClass = `${classes.role} btn btn-outline-danger`;
             return groups.map(group => {
-            return(<div id={group?.name} className={roleClass} onClick={() => {
+            return(<div id={group?.name} className={roleClass} onClick={(ev) => {
                 const isSelected = rolesDel.includes(group)
-                changeRoleForDelStyle(group?.name, isSelected);
+                changeRoleForDelStyle(ev.target as HTMLDivElement, isSelected);
                 if (!(rolesDel.includes(group))) {
                     setRolesDel(prev => [...prev, group])} else {
                         setRolesDel(prev => prev.filter(role => role != group))
@@ -49,13 +49,10 @@ export const Personality: React.FC = () => {
         }
     }
 
-    const changeRoleForDelStyle = (id: string, isSelected: boolean) => {
-        const button = document.getElementById(id);
-        if (button) {
+    const changeRoleForDelStyle = (node: HTMLDivElement, isSelected: boolean) => {
             if (isSelected) {
-                button.className = `${classes.role} btn btn-outline-danger`;
-            } else button.className = `${classes.role} btn btn-danger`;
-        } 
+                node.className = `${classes.role} btn btn-outline-danger`;
+            } else node.className = `${classes.role} btn btn-danger`;
     }
 
     const getGroupsId = () => {
@@ -63,21 +60,15 @@ export const Personality: React.FC = () => {
         return newRoles.map(role => role.id)
     }
 
-    const getEmail = () => {
-       return personality[fields.EMAIL] != '' ? personality[fields.EMAIL] : "Не указана"
-    }
+    const getEmail = () => personality[fields.EMAIL] != '' ? personality[fields.EMAIL] : "Не указана"
 
-    const getISU = () => {
-    return personality[fields.ISU_NUMBER] != null ? personality[fields.ISU_NUMBER] : "Не указан"
-    }
+    const getISU = () => personality[fields.ISU_NUMBER] != null ? personality[fields.ISU_NUMBER] : "Не указан"
 
-    const deleteText = () => {
-        return isDelitingProcess ? "Удалить выбранные группы": "Выбрать группы для удаления"
-    }
+    const deleteText = () => isDelitingProcess ? "Удалить выбранные группы": "Выбрать группы для удаления"
 
     const getAddButton = () => {
         if (!isDelitingProcess && groups.length < 8) {
-            return (<Button onClick={Toggle} variant="contained" color="primary" className={classes.add}>+</Button>)
+            return (<Button onClick={toggle} variant="contained" color="primary" className={classes.add}>+</Button>)
         } else {
             return <></>
         }
@@ -91,23 +82,18 @@ export const Personality: React.FC = () => {
         }
     }
 
-    const getDelButtonAction = () => {
-        return isDelitingProcess ? confirmDeleteDialog: changeProcess;
-    }
-
+    const getDelButtonAction = () => isDelitingProcess ? confirmDeleteDialog: changeProcess;
+    
     const deleteRoles = () => {
         updateRoles()
         setRolesDel([{id: -1, name: '', permissions: [-1]}]);
         setIsDeletingProcess(!isDelitingProcess)
     }
 
-    const updateRoles = useCallback(() => {
-        dispatch(actions.updateGroups({newGroups: getGroupsId(), id: personality.id}))
-    }, [rolesDel])
+    const updateRoles = () => dispatch(actions.updateGroups({newGroups: getGroupsId(), id: personality.id}))
 
-    const changeProcess = () => {
-        setIsDeletingProcess(!isDelitingProcess)
-    }
+    const changeProcess = () => setIsDeletingProcess(!isDelitingProcess)
+    
 
     const handleConfirmDeleteDialog = () => {
         deleteRoles()
@@ -115,9 +101,8 @@ export const Personality: React.FC = () => {
         changeProcess()
     }
 
-    const confirmDeleteDialog = () => {
-        setConfirmDialog(!confirmDialog)
-    }
+    const confirmDeleteDialog = () => setConfirmDialog(!confirmDialog)
+    
   
     return(
         <div className={classes.wrap}>
@@ -138,7 +123,7 @@ export const Personality: React.FC = () => {
                             <div className = {classes.groups}> {getGroups(personality[fields.GROUPS])}
                                {getAddButton()}
                             </div>
-                            <Button style={{display: `${groups.length == 0 ? 'none': ''}`}} variant="contained" color="secondary" className = {classes.del} onClick = {getDelButtonAction()}>{deleteText()}</Button>
+                            <Button style={{display: `${groups.length === 0 ? 'none': ''}`}} variant="contained" color="secondary" className = {classes.del} onClick = {getDelButtonAction()}>{deleteText()}</Button>
                             {getCancelButton()}
                         </Typography>
                     </div>

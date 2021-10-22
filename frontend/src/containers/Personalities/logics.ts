@@ -28,7 +28,6 @@ const getPersonalities = createLogic({
         .then((res) => {
             const personalities = get(res, 'data.results', []);
             const allPages = Math.ceil(get(res, 'data.count', 0));
-            // console.log("logic:", personalities)
             
             dispatch(personalityActions.setPersonalities(personalities));
             

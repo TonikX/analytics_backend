@@ -17,20 +17,17 @@ export const getPersonalities = (state: rootState): Array<PersonalityType> => {
 };
 
 export const getPersonalitiesForSelector = (state: rootState): SelectorListType =>
-    getPersonalities(state).map((personality: any) => {
-        return({
+    getPersonalities(state).map((personality: any) => ({
         value: personality[PersonalityFields.ID],
         label: personality[PersonalityFields.USERNAME],
         })
-    })
+    )
 
 export const getAllCount = (state: rootState): number => get(getStateData(state), fields.ALL_COUNT, 1);
 export const getCurrentPage = (state: rootState): number => get(getStateData(state), fields.CURRENT_PAGE, 1);
 export const getSearchQuery = (state: rootState): string => get(getStateData(state), fields.SEARCH_QUERY, '');
-    
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState): string => get(getSorting(state), fields.SORTING_FIELD, '');
 export const getSortingMode = (state: rootState): SortingType => get(getSorting(state), fields.SORTING_MODE, '');
-    
 export const getFilters = (state: rootState): filteringType => get(getStateData(state), fields.FILTERING)
 export const getFilterSearchQuery = (state: rootState): string => get(getFilters(state), filterFields.FILTERING_SEARCH_QUERY, '')
