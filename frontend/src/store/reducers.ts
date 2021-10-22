@@ -12,6 +12,12 @@ import {coursesState} from "../containers/Courses/types";
 import {GENERAL_PATH as coursePath, reducer as CourseReducer} from "../containers/Course/reducer";
 import {courseState as CourseState} from "../containers/Course/types";
 
+import {GENERAL_PATH as personalitiesPath, reducer as PersonalitiesReducer} from "../containers/Personalities/reducer";
+import {personalitiesState as PersonalitiesState} from "../containers/Personalities/types";
+
+import {GENERAL_PATH as personalityPath, reducer as PersonalityReducer} from "../containers/Personality/reducer";
+import {personalityState as PersonalityState} from "../containers/Personality/types";
+
 import {GENERAL_PATH as literaturePath, reducer as LiteratureReducer} from "../containers/Literature/reducer";
 import {literatureState} from "../containers/Literature/types";
 
@@ -129,6 +135,8 @@ export interface rootState {
     [selectDisciplinePath]: selectDisciplineState,
     [selectEducationalProgramPath]: selectEducationalProgramState,
     [coursePath]: CourseState,
+    [personalitiesPath]: PersonalitiesState,
+    [personalityPath]: PersonalityState
 }
 
 export default combineReducers({
@@ -164,4 +172,6 @@ export default combineReducers({
     [workProgramListPath]: workProgramListReducer,
     [selectEducationalProgramPath]: selectEducationalProgramReducer,
     [coursePath]: CourseReducer,
+    [personalitiesPath]: PersonalitiesReducer,
+    [personalityPath]: PersonalityReducer
 });

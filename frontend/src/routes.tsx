@@ -4,6 +4,8 @@ import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom
 import AuthRoute from './hoc/AuthRoute'
 
 import SignIn from './containers/SignIn';
+import Personalities from './containers/Personalities'
+import Personality from './containers/Personality'
 import SignUp from './containers/SignUp';
 import WorkProgram from './containers/WorkProgram';
 import Courses from './containers/Courses';
@@ -69,6 +71,12 @@ export default () => (
             </AuthRoute>
             <AuthRoute path={routerService.getCourseRoute()}>
                 <Course />
+            </AuthRoute>
+            <AuthRoute path={routerService.getPersonalitiesRoute()}>
+                <Personalities />
+            </AuthRoute>
+            <AuthRoute path={routerService.getPersonalityRoute()}>
+                <Personality />
             </AuthRoute>
 
             <AuthRoute path={routerService.getTrajectoryPlanDetailRoute()}
