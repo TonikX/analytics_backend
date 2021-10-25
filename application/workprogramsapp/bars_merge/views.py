@@ -275,10 +275,9 @@ def SendCheckpointsForAcceptedWP(request):
 @permission_classes((IsAdminUser,))
 def postAcademicNTCheckpoints(request):
     """
-        Отправка всех прошедших экспертизу РПД, в БАРС
+        Отправка всех прошедших экспертизу РПД в ЦДО
         Параметры:
         year : Поле вида 'YYYY/YYYY', указывает учебный год в который надо отправить РПД [str]
-        send_semester : 1 - семетр осенний, 0 - семестр весенний [int]
         from_date: поле вида "DD.MM.YYYY", обознает отсчет с даты принятия на экспертизу РПД
     """
     year = request.data.get('year')
