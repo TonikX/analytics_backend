@@ -40,12 +40,14 @@ class WorkProgram(CloneMixin, models.Model):
     BACHELOR = 'bachelor'
     SPECIALIST = 'specialist'
     MASTER = 'master'
+    All_LEVELS = 'All_levels'
     QUALIFICATION_CHOICES = (
         (PRIMARY_VOCATIONAL_EDUCATION, 'Primary vocational education'),
         (SECONADARY_VOCATIONAL_EDUCATION, 'Secondary vocational education'),
         (BACHELOR, 'Bachelor'),
         (SPECIALIST, 'Specialist'),
-        (MASTER, 'Master')
+        (MASTER, 'Master'),
+        (All_LEVELS, 'All_levels')
     )
     status_choise = (
         ('w', 'inwork'),

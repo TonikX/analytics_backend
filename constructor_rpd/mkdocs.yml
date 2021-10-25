@@ -1,0 +1,7 @@
+site_name: Документация к сервису "Конструктор РПД"
+nav:
+  - Работа с внешними сервисами:
+      - Работа с БАРС 1.0: external_services/bars.md
+
+theme:
+  name: material
