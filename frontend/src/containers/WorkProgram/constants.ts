@@ -5,11 +5,13 @@ import {appRouter} from "../../service/router-service";
 export const BACHELOR_QUALIFICATION = 'bachelor';
 export const SPECIALIST_QUALIFICATION = 'specialist';
 export const MASTER_QUALIFICATION = 'master';
+export const ALL_LEVELS_QUALIFICATION = 'All_levels';
 
 export const specializationObject: any = {
     [BACHELOR_QUALIFICATION]: 'Бакалавриат',
     [SPECIALIST_QUALIFICATION]: 'Специалитет',
     [MASTER_QUALIFICATION]: 'Магистратура',
+    [ALL_LEVELS_QUALIFICATION]: 'Все уровни',
 }
 
 export const specialization = [
@@ -24,6 +26,10 @@ export const specialization = [
     {
         value: MASTER_QUALIFICATION,
         label: 'Магистратура'
+    },
+    {
+        value: ALL_LEVELS_QUALIFICATION,
+        label: 'Все уровни'
     }
 ];
 
