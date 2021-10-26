@@ -20,7 +20,7 @@ def generate_checkpoint_plan(regular_checkpoint: list, programs: list, disciplin
     return temp
 
 
-def generate_checkpoint(name, min, max, week, key, type_id, test_id=-1):
+def generate_checkpoint(name, min, max, week, key, type_id=-1, test_id=-1):
     if type(min) is not int:
         min = 0
     temp = {
@@ -33,6 +33,9 @@ def generate_checkpoint(name, min, max, week, key, type_id, test_id=-1):
     }
     if test_id != -1:
         temp["test_id"] = test_id
+    if type_id != -1:
+        temp["type_id"] = type_id
+
     return temp
 
 
