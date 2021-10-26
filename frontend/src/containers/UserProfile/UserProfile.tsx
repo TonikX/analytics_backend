@@ -33,7 +33,6 @@ const userService = UserService.factory();
 export default () => {
     const classes = useStyles();
     const userData = useSelector(getUserData);
-    const userGroups = useSelector(getUserGroups);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -58,6 +57,22 @@ export default () => {
             <Typography className={classes.userTitle}>
                 Здравствуйте, {composeUserName()}
             </Typography>
+            <MyGroups/>
+            <MyWorkProgramsList/>
+        </Box>
+    )
+};
+
+const MyGroups = () => {
+    const classes = useStyles();
+    const userGroups = useSelector(getUserGroups);
+
+    if (!userGroups.length) {
+        return null;
+    }
+
+    return (
+        <Box>
             <Typography className={classes.itemTitle}>
                 Вы состоите в группах
             </Typography>
@@ -66,7 +81,6 @@ export default () => {
                     return <Chip className={classes.userGroup} key={userGroup} label={userGroup}/>
                 })}
             </Box>
-            <MyWorkProgramsList/>
         </Box>
     )
 };
@@ -95,7 +109,7 @@ const MyWorkProgramsList = () => {
             <Typography className={classes.itemTitle}>
                 Ваши рабочие программы
             </Typography>
-            <Table stickyHeader size='small'>
+            {workProgramList.length > 0 ? <Table stickyHeader size='small'>
                 <TableHead>
                     <TableRow>
                         {TABLE_HEADERS.map(({title, key}) => {
@@ -130,7 +144,7 @@ const MyWorkProgramsList = () => {
                         </TableRow>
                     )}
                 </TableBody>
-            </Table>
+            </Table> : <Typography>У вас пока нет рабочих программ</Typography>}
         </Box>
     )
 };
