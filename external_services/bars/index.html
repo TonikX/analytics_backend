@@ -217,9 +217,46 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Работа с БАРС 1.0
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Работа с БАРС 1.0
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    Формат запроса
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#success-responses" class="md-nav__link">
+    Success Responses
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -251,6 +288,28 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    Формат запроса
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#success-responses" class="md-nav__link">
+    Success Responses
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -262,7 +321,162 @@
               
                 
                 
-                <h1 id="10">Получение данных об РПД специалистами БАРС 1.0</h1>
+                <h1 id="10">Список РПД прошедших экспертизу для БАРС 1.0</h1>
+<p><strong>URL</strong> : <code>api/bars_tools/academicntcheckpoints</code></p>
+<p><strong>Method</strong> : <code>POST</code></p>
+<p><strong>Auth required</strong> : YES</p>
+<p><strong>Permissions required</strong> : IsAdminUser</p>
+<h2 id="_1">Формат запроса</h2>
+<p><strong>Параметры:</strong><br />
+ <strong>year </strong>: <code>Поле вида 'YYYY/YYYY', указывает учебный год в который реализована РПД</code><br />
+<strong>from_date</strong>: <code>поле вида "DD.MM.YYYY", обознает отсчет с даты принятия на экспертизу РПД</code><br /></p>
+<p><strong>Data constraints</strong> : <code>{}</code></p>
+<pre><code class="language-json">{
+   &quot;year&quot;:&quot;2021/2022&quot;,
+   &quot;from_date&quot;:&quot;01.09.2021&quot; 
+}
+</code></pre>
+<h2 id="success-responses">Success Responses</h2>
+<p><strong>Code</strong> : <code>200 OK</code></p>
+<p><strong>Content</strong> : <code>{[]}</code></p>
+<pre><code class="language-json">{
+    &quot;rpd&quot;: [ {
+            &quot;id&quot;: 3915,
+            &quot;dis_id&quot;: 25191,
+            &quot;bars2&quot;: &quot;Bars2&quot;,
+            &quot;date&quot;: &quot;14.09.2021&quot;,
+            &quot;apprenticeship&quot;: &quot;2021/2022&quot;,
+            &quot;programs&quot;: [
+                {
+                    &quot;id&quot;: 1981,
+                    &quot;code&quot;: &quot;38.03.05.&quot;,
+                    &quot;name&quot;: &quot;Бизнес-информатика&quot;
+                }
+            ],
+            &quot;term&quot;: 1,
+            &quot;checkpoints&quot;: [
+                {
+                    &quot;name&quot;: &quot;Реферат 1&quot;,
+                    &quot;min_grade&quot;: 12,
+                    &quot;max_grade&quot;: 18,
+                    &quot;week&quot;: 3,
+                    &quot;key&quot;: false,
+                    &quot;type_id&quot;: &quot;Реферат&quot;,
+                    &quot;term&quot;: 1,
+                    &quot;certification_type&quot;: &quot;regular&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;Тест 1&quot;,
+                    &quot;min_grade&quot;: 13,
+                    &quot;max_grade&quot;: 24,
+                    &quot;week&quot;: 7,
+                    &quot;key&quot;: true,
+                    &quot;type_id&quot;: &quot;Тест&quot;,
+                    &quot;term&quot;: 1,
+                    &quot;certification_type&quot;: &quot;regular&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;Тест 2&quot;,
+                    &quot;min_grade&quot;: 11,
+                    &quot;max_grade&quot;: 20,
+                    &quot;week&quot;: 11,
+                    &quot;key&quot;: false,
+                    &quot;type_id&quot;: &quot;Тест&quot;,
+                    &quot;term&quot;: 1,
+                    &quot;certification_type&quot;: &quot;regular&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;Реферат 2&quot;,
+                    &quot;min_grade&quot;: 12,
+                    &quot;max_grade&quot;: 18,
+                    &quot;week&quot;: 14,
+                    &quot;key&quot;: false,
+                    &quot;type_id&quot;: &quot;Реферат&quot;,
+                    &quot;term&quot;: 1,
+                    &quot;certification_type&quot;: &quot;regular&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;Устный экзамен&quot;,
+                    &quot;min_grade&quot;: 12,
+                    &quot;max_grade&quot;: 20,
+                    &quot;week&quot;: null,
+                    &quot;key&quot;: false,
+                    &quot;type_id&quot;: 25,
+                    &quot;term&quot;: 1,
+                    &quot;certification_type&quot;: &quot;final&quot;
+                }
+            ]
+        },
+        {
+            &quot;id&quot;: 4164,
+            &quot;dis_id&quot;: 25201,
+            &quot;bars2&quot;: &quot;Bars2&quot;,
+            &quot;date&quot;: &quot;21.09.2021&quot;,
+            &quot;apprenticeship&quot;: &quot;2021/2022&quot;,
+            &quot;programs&quot;: [
+                {
+                    &quot;id&quot;: 4390,
+                    &quot;code&quot;: &quot;12.03.03.&quot;,
+                    &quot;name&quot;: &quot;Фотоника и оптоинформатика&quot;
+                }
+            ],
+            &quot;term&quot;: 1,
+            &quot;checkpoints&quot;: [
+                {
+                    &quot;name&quot;: &quot;Домашние задания&quot;,
+                    &quot;min_grade&quot;: 0,
+                    &quot;max_grade&quot;: 33,
+                    &quot;week&quot;: 7,
+                    &quot;key&quot;: true,
+                    &quot;type_id&quot;: &quot;Домашнее задание&quot;,
+                    &quot;term&quot;: 1,
+                    &quot;certification_type&quot;: &quot;regular&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;Практическая задача&quot;,
+                    &quot;min_grade&quot;: 6,
+                    &quot;max_grade&quot;: 14,
+                    &quot;week&quot;: 17,
+                    &quot;key&quot;: true,
+                    &quot;type_id&quot;: &quot;Домашнее задание&quot;,
+                    &quot;term&quot;: 1,
+                    &quot;certification_type&quot;: &quot;regular&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;Реферат&quot;,
+                    &quot;min_grade&quot;: 0,
+                    &quot;max_grade&quot;: 23,
+                    &quot;week&quot;: 14,
+                    &quot;key&quot;: true,
+                    &quot;type_id&quot;: &quot;Реферат&quot;,
+                    &quot;term&quot;: 1,
+                    &quot;certification_type&quot;: &quot;regular&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;Тест&quot;,
+                    &quot;min_grade&quot;: 2,
+                    &quot;max_grade&quot;: 10,
+                    &quot;week&quot;: 12,
+                    &quot;key&quot;: true,
+                    &quot;type_id&quot;: &quot;Тест&quot;,
+                    &quot;term&quot;: 1,
+                    &quot;certification_type&quot;: &quot;regular&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;Письменный зачет&quot;,
+                    &quot;min_grade&quot;: 0,
+                    &quot;max_grade&quot;: 20,
+                    &quot;week&quot;: null,
+                    &quot;key&quot;: false,
+                    &quot;type_id&quot;: 26,
+                    &quot;term&quot;: 1,
+                    &quot;certification_type&quot;: &quot;final&quot;
+                }
+            ]
+        }
+    ]
+}
+</code></pre>
                 
               
               
