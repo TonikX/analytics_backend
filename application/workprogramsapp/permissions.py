@@ -45,6 +45,11 @@ class IsEducationPlanDeveloper(permissions.BasePermission):
         return request.user.groups.filter(name="education_plan_developer")
 
 
+class IsExternalUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.groups.filter(name="external_user")
+
+
 class IsOpLeader(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.groups.filter(name="op_leader")
@@ -71,10 +76,10 @@ class IsExpertiseMaster(permissions.BasePermission):
             return True
         if 'pk' in dict(view.kwargs):
             return (UserExpertise.objects.filter(
-                        expertise__work_program__structural_unit__user_in_structural_unit__user=request.user,
-                        expertise__work_program__structural_unit__user_in_structural_unit__status__in=["leader",
-                                                                                                       "deputy"],
-                        expertise=view.kwargs['pk']))
+                expertise__work_program__structural_unit__user_in_structural_unit__user=request.user,
+                expertise__work_program__structural_unit__user_in_structural_unit__status__in=["leader",
+                                                                                               "deputy"],
+                expertise=view.kwargs['pk']))
         return UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"])
 
 

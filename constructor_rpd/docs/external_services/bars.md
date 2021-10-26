@@ -8,7 +8,7 @@
 
 **Auth required** : Yes
 
-**Permissions required** : IsRpdDeveloperOrReadOnly
+**Permissions required** : IsAdminUser, IsExternalUser
 
 ## Request format
 ###Параметры:<br />
