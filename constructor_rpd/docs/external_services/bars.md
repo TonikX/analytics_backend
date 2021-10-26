@@ -6,12 +6,12 @@
 
 **Method** : `POST`
 
-**Auth required** : YES
+**Auth required** : Yes
 
-**Permissions required** : IsAdminUser
+**Permissions required** : IsRpdDeveloperOrReadOnly
 
-## Формат запроса
-**Параметры:**<br />
+## Request format
+###Параметры:<br />
  **year **: `Поле вида 'YYYY/YYYY', указывает учебный год в который реализована РПД`<br />
 **from_date**: `поле вида "DD.MM.YYYY", обознает отсчет с даты принятия на экспертизу РПД`<br />
 
