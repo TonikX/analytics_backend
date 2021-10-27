@@ -20,6 +20,7 @@ from workprogramsapp.bars_merge.serializers import BarsEPAssociateSerializer, Ba
 from workprogramsapp.models import WorkProgram, FieldOfStudy, ImplementationAcademicPlan, EvaluationTool, \
     DisciplineSection, WorkProgramChangeInDisciplineBlockModule, СertificationEvaluationTool, \
     WorkProgramIdStrUpForIsu
+from workprogramsapp.permissions import IsExternalUser
 
 
 @api_view(['POST'])
@@ -272,7 +273,7 @@ def SendCheckpointsForAcceptedWP(request):
 
 
 @api_view(['POST'])
-@permission_classes((IsAdminUser,))
+@permission_classes((IsAdminUser, IsExternalUser))
 def postAcademicNTCheckpoints(request):
     """
         Отправка всех прошедших экспертизу РПД в ЦДО

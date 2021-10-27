@@ -1,7 +1,11 @@
 site_name: Документация к сервису "Конструктор РПД"
 nav:
+  - Авторизация и данные для обращения к API:
+      - Общий формат API: auth/api_data.md
+      - Авторизация (Получение токена): auth/token.md
   - Работа с внешними сервисами:
       - Работа с БАРС 1.0: external_services/bars.md
+
 
 theme:
   name: material
