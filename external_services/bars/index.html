@@ -178,6 +178,68 @@
 
   
   
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Авторизация и данные для обращения к API
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Авторизация и данные для обращения к API" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Авторизация и данные для обращения к API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../auth/api_data/" class="md-nav__link">
+        Общий формат API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../auth/token/" class="md-nav__link">
+        Авторизация (Получение токена)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
     
   
   
@@ -185,18 +247,18 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_1">
+        <label class="md-nav__link" for="__nav_2">
           Работа с внешними сервисами
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Работа с внешними сервисами" data-md-level="1">
-        <label class="md-nav__title" for="__nav_1">
+        <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
           Работа с внешними сервисами
         </label>
@@ -241,9 +303,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    Формат запроса
+  <a href="#request-format" class="md-nav__link">
+    Request format
   </a>
+  
+    <nav class="md-nav" aria-label="Request format">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    Параметры:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -295,9 +370,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    Формат запроса
+  <a href="#request-format" class="md-nav__link">
+    Request format
   </a>
+  
+    <nav class="md-nav" aria-label="Request format">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    Параметры:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -324,11 +412,11 @@
                 <h1 id="10">Список РПД прошедших экспертизу для БАРС 1.0</h1>
 <p><strong>URL</strong> : <code>api/bars_tools/academicntcheckpoints</code></p>
 <p><strong>Method</strong> : <code>POST</code></p>
-<p><strong>Auth required</strong> : YES</p>
-<p><strong>Permissions required</strong> : IsAdminUser</p>
-<h2 id="_1">Формат запроса</h2>
-<p><strong>Параметры:</strong><br />
- <strong>year </strong>: <code>Поле вида 'YYYY/YYYY', указывает учебный год в который реализована РПД</code><br />
+<p><strong>Auth required</strong> : Yes</p>
+<p><strong>Permissions required</strong> : IsAdminUser, IsExternalUser</p>
+<h2 id="request-format">Request format</h2>
+<h3 id="_1">Параметры:<br /></h3>
+<p><strong>year </strong>: <code>Поле вида 'YYYY/YYYY', указывает учебный год в который реализована РПД</code><br />
 <strong>from_date</strong>: <code>поле вида "DD.MM.YYYY", обознает отсчет с даты принятия на экспертизу РПД</code><br /></p>
 <p><strong>Data constraints</strong> : <code>{}</code></p>
 <pre><code class="language-json">{
@@ -492,6 +580,26 @@
       
         
 <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../../auth/token/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Авторизация (Получение токена)" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Авторизация (Получение токена)
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
