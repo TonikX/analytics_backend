@@ -3,10 +3,14 @@ from rest_framework import generics, filters
 from rest_framework.exceptions import NotFound
 
 from workprogramsapp.expertise.models import UserExpertise, ExpertiseComments, Expertise
+from workprogramsapp.models import WorkProgram
 from workprogramsapp.expertise.serializers import UserExpertiseSerializer, CommentSerializer, ExpertiseSerializer
 from workprogramsapp.permissions import IsMemberOfExpertise, IsRpdDeveloperOrReadOnly, IsMemberOfUserExpertise, \
-    IsExpertiseMaster, IsWorkProgramMemberOfExpertise
+    IsExpertiseMaster, IsWorkProgramMemberOfExpertise, IsOwnerOrReadOnly
 from workprogramsapp.workprogram_additions.models import UserStructuralUnit
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+import distutils
 
 
 class UserExpertiseListView(generics.ListAPIView):
@@ -152,3 +156,33 @@ class DeleteUserExpertise(generics.DestroyAPIView):
     queryset = UserExpertise.objects.all()
     serializer_class = UserExpertiseSerializer
     permission_classes = [IsExpertiseMaster]
+
+
+@api_view(['POST'])
+@permission_classes((IsRpdDeveloperOrReadOnly,))
+def UpdateCommentStatus(request):
+    try:
+        wp = WorkProgram.objects.get(id=request.data.get('wp'))
+        block = request.data.get('block')
+        read_notifications_array = [True if str(x) == 'True' else False for x in wp.read_notifications.split(', ')]
+        if block == 'MA':
+            read_notifications_array[0] = False
+        elif block == 'PR':
+            read_notifications_array[1] = False
+        elif block == 'SE':
+            read_notifications_array[2] = False
+        elif block == 'TH':
+            read_notifications_array[3] = False
+        elif block == 'SO':
+            read_notifications_array[4] = False
+        elif block == 'EV':
+            read_notifications_array[5] = False
+        elif block == 'RE':
+            read_notifications_array[7] = False
+        elif block == 'CO':
+            read_notifications_array[8] = False
+        wp.read_notifications = str(read_notifications_array).replace('[', '').replace(']', '')
+        wp.save()
+        return Response(status=201)
+    except:
+        return Response(status=400)

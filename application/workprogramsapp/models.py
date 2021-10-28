@@ -122,6 +122,7 @@ class WorkProgram(CloneMixin, models.Model):
     lab_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы лабораторных работ")
     srs_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы СРС")
     number_of_semesters = models.IntegerField(blank=True, null=True, verbose_name="Количество семестров в дисциплине")
+    read_notifications = models.CharField(max_length=256, default='False, False, False, False, False, False, False, False, False, False', verbose_name="Прочитанность уведомлений")
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 

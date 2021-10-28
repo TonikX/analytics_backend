@@ -55,6 +55,26 @@ def comment_notificator(sender, instance, created, **kwargs):
             NotificationComments.objects.create(comment_new=instance, user=user,
                                                 message=f'В экспертизе для рабочей программы "{wp_exp.title}" в блоке "{instance.get_comment_block_display()}"был оставлен комментарий "{instance.comment_text}"')
 
+    read_notifications_array = [True if str(x) == 'True' else False for x in wp_exp.read_notifications.split(', ')]
+    if instance.comment_block == 'MA':
+        read_notifications_array[0] = True
+    elif instance.comment_block == 'PR':
+        read_notifications_array[1] = True
+    elif instance.comment_block == 'SE':
+        read_notifications_array[2] = True
+    elif instance.comment_block == 'TH':
+        read_notifications_array[3] = True
+    elif instance.comment_block == 'SO':
+        read_notifications_array[4] = True
+    elif instance.comment_block == 'EV':
+        read_notifications_array[5] = True
+    elif instance.comment_block == 'RE':
+        read_notifications_array[7] = True
+    elif instance.comment_blockk == 'CO':
+        read_notifications_array[8] = True
+    wp_exp.read_notifications = str(read_notifications_array).replace('[', '').replace(']', '')
+    wp_exp.save()
+
 
 @receiver(pre_delete, sender=WorkProgramInFieldOfStudy)
 def zun_saver(sender, instance, using, **kwargs):

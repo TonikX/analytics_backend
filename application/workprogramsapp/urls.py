@@ -344,10 +344,12 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.statistic.urls')),
     url(r'^', include('workprogramsapp.notifications.urls')),
     url(r'^', include('workprogramsapp.feedback.urls')),
-    url(r'^', include('workprogramsapp.user_management.urls')),
+    path('api/nginx_timeout_test/', TimeoutTest),
     url(r'^', include(router.urls)),
 
     path('api/nginx_timeout_test/', TimeoutTest),
+    url(r'^', include('workprogramsapp.expertise.urls')),
+
 
 
 ]
