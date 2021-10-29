@@ -273,7 +273,7 @@ def SendCheckpointsForAcceptedWP(request):
 
 
 @api_view(['POST'])
-@permission_classes((IsAdminUser, IsExternalUser))
+@permission_classes(IsExternalUser)
 def postAcademicNTCheckpoints(request):
     """
         Отправка всех прошедших экспертизу РПД в ЦДО
