@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete, pre_save
 from django.dispatch import receiver
 
 from dataprocessing.models import User
@@ -26,13 +26,19 @@ def create_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Expertise)
 def expertise_notificator(sender, instance, created, **kwargs):
-    """Create a matching profile whenever a user object is created."""
+    """Create a matching profile whenever a user object is created and updated."""
     wp_exp = WorkProgram.objects.get(expertise_with_rpd=instance)
     struct_users = User.objects.filter(user_for_structural_unit__status__in=["leader", "deputy"],
                                        user_for_structural_unit__structural_unit__workprogram_in_structural_unit__expertise_with_rpd=instance).distinct()
     for user in struct_users:
         ExpertiseNotification.objects.create(expertise=instance, user=user,
                                              message=f'Экспертиза для рабочей программы "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}"')
+    if instance.expertise_status == 'WK':
+        wp_exp = WorkProgram.objects.get(expertise_with_rpd=instance)
+        users = User.objects.filter(expertse_in_rpd__expertise__work_program=wp_exp).distinct()
+        for user in users:
+            ExpertiseNotification.objects.create(expertise=instance, user=user,
+                                                 message=f'Рабочую программу "{wp_exp.title}" вернули на доработку (Статус: "{instance.get_expertise_status_display()}")')
 
 
 @receiver(post_save, sender=ExpertiseComments)
@@ -48,6 +54,26 @@ def comment_notificator(sender, instance, created, **kwargs):
         if user != user_sender:
             NotificationComments.objects.create(comment_new=instance, user=user,
                                                 message=f'В экспертизе для рабочей программы "{wp_exp.title}" в блоке "{instance.get_comment_block_display()}"был оставлен комментарий "{instance.comment_text}"')
+
+    read_notifications_array = [True if str(x) == 'True' else False for x in wp_exp.read_notifications.split(', ')]
+    if instance.comment_block == 'MA':
+        read_notifications_array[0] = True
+    elif instance.comment_block == 'PR':
+        read_notifications_array[1] = True
+    elif instance.comment_block == 'SE':
+        read_notifications_array[2] = True
+    elif instance.comment_block == 'TH':
+        read_notifications_array[3] = True
+    elif instance.comment_block == 'SO':
+        read_notifications_array[4] = True
+    elif instance.comment_block == 'EV':
+        read_notifications_array[5] = True
+    elif instance.comment_block == 'RE':
+        read_notifications_array[7] = True
+    elif instance.comment_blockk == 'CO':
+        read_notifications_array[8] = True
+    wp_exp.read_notifications = str(read_notifications_array).replace('[', '').replace(']', '')
+    wp_exp.save()
 
 
 @receiver(pre_delete, sender=WorkProgramInFieldOfStudy)
