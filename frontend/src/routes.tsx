@@ -1,4 +1,4 @@
-import React from "react";
+ import React from "react";
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 
 import AuthRoute from './hoc/AuthRoute'
@@ -57,6 +57,8 @@ import Notifications from "./containers/Profile/Notifications";
 import Overview from "./containers/Overview";
 import Landing from "./containers/Landing";
 import UserProfile from "./containers/UserProfile";
+import DodProfile from "./containers/DodProfile";
+
 
 const routerService = RouterService.factory();
 
@@ -219,6 +221,10 @@ export default () => (
             <AuthRoute path={routerService.getTrainingModulesRoute()}>
                 <TrainingModules />
             </AuthRoute>
+                <AuthRoute path={routerService.getDodProfileRoute()}>
+                    <DodProfile />
+                </AuthRoute>
+
             <Route path={routerService.getForbiddenPage()}>
                 <ForbiddenPage />
             </Route>

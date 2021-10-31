@@ -95,6 +95,9 @@ import {individualEducationalPlansState} from "../containers/IndividualEducation
 import {GENERAL_PATH as profileNotificationsPath, reducer as profileNotificationsReducer} from "../containers/Profile/Notifications/reducer";
 import {notificationsState} from "../containers/Profile/Notifications/types"
 
+import {GENERAL_PATH as dodProfilePath, reducer as dodProfileReducer} from "../containers/DodProfile/reducer"
+import {dodProfileState} from "../containers/DodProfile/types"
+
 export interface rootState {
     [profileNotificationsPath]: notificationsState,
     [individualEducationalPlansPath]: individualEducationalPlansState,
@@ -129,6 +132,7 @@ export interface rootState {
     [selectDisciplinePath]: selectDisciplineState,
     [selectEducationalProgramPath]: selectEducationalProgramState,
     [coursePath]: CourseState,
+    [dodProfilePath] : dodProfileState,
 }
 
 export default combineReducers({
@@ -164,4 +168,5 @@ export default combineReducers({
     [workProgramListPath]: workProgramListReducer,
     [selectEducationalProgramPath]: selectEducationalProgramReducer,
     [coursePath]: CourseReducer,
+    [dodProfilePath]: dodProfileReducer,
 });
