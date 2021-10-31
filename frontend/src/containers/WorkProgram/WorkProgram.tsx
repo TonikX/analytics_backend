@@ -221,7 +221,13 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     }
 
     handleClickOnComments = () => {
+        const {notificationsRead} = this.props
+
         this.setState({isOpenComments: !this.state.isOpenComments});
+
+        if (!this.state.isOpenComments && notificationsRead[this.state.activeStep]) {
+            this.props.actions.updateUnreadCommentStatus(this.getCurrentStep());
+        }
     }
 
     handleSendToRework = () => {
@@ -259,9 +265,9 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
     render() {
         const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
-            workProgramRating, canAddToFolder, validateErrors, workProgram, fetchingBars} = this.props;
+            workProgramRating, canAddToFolder, validateErrors, notificationsRead} = this.props;
         const {activeStep, isOpenComments} = this.state;
-        
+
         return (
             <div className={classes.wrap}>
                 <div className={classes.header}>
@@ -315,9 +321,9 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                             return (
                                 <Step key={index} onClick={() => this.openStep(link(this.getWorkProgramId()))}>
                                     <StepButton completed={false}
-                                                style={{textAlign: 'left'}}
+                                                style={{textAlign: 'left',}}
                                     >
-                                        {label}
+                                        {notificationsRead[index] && <Tooltip title="Есть непрочитанные комментарии"><CommentIcon className={classes.commentIcon} /></Tooltip>} {label}
                                     </StepButton>
                                 </Step>
                             );

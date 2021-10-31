@@ -92,4 +92,9 @@ export default (theme: Theme) => createStyles({
         marginLeft: 'auto',
         display: "flex",
     },
+    commentIcon: {
+        position: 'absolute',
+        top: '10px',
+        left: '-25px',
+    }
 });

@@ -75,6 +75,7 @@ export interface WorkProgramActions {
     getComments: any;
     setComments: any;
     createComment: any;
+    updateUnreadCommentStatus: any;
 
     addTopicMaterial: any;
     updateTopicMaterial: any;
@@ -137,6 +138,7 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     validateErrors: Array<string>;
     fetchingBars: boolean;
     location: any;
+    notificationsRead: Array<boolean>
 }
 
 

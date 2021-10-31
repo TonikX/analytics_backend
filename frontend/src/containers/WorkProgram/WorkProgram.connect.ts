@@ -9,7 +9,7 @@ import {
     isCanArchive,
     isCanComment,
     isCanEdit,
-    isCanAddToFolder,
+    isCanAddToFolder, getWorkProgramNotificationsUnread,
 } from './getters';
 
 import {rootState} from "../../store/reducers";
@@ -28,6 +28,7 @@ const mapStateToProps = (state:rootState) => {
         workProgramRating: getWorkProgramField(state, WorkProgramGeneralFields.RATING),
         workProgramRatingId: getWorkProgramField(state, WorkProgramGeneralFields.RATING_ID),
         workProgramStatus: getWorkProgramField(state, 'expertise_status') || 'WK',
+        notificationsRead: getWorkProgramNotificationsUnread(state),
         canSendToArchive: isCanArchive(state),
         canAddToFolder: isCanAddToFolder(state),
         canApprove: isCanApprove(state),
