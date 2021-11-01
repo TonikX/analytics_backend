@@ -1,10 +1,14 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from rest_framework.exceptions import NotFound
+from rest_framework.permissions import AllowAny
+from rest_framework.test import APIRequestFactory, force_authenticate
 
+from dataprocessing.models import User
 from workprogramsapp.expertise.models import UserExpertise, ExpertiseComments, Expertise
 from workprogramsapp.models import WorkProgram
 from workprogramsapp.expertise.serializers import UserExpertiseSerializer, CommentSerializer, ExpertiseSerializer
+from workprogramsapp.notifications.models import ExpertiseNotification
 from workprogramsapp.permissions import IsMemberOfExpertise, IsRpdDeveloperOrReadOnly, IsMemberOfUserExpertise, \
     IsExpertiseMaster, IsWorkProgramMemberOfExpertise, IsOwnerOrReadOnly
 from workprogramsapp.workprogram_additions.models import UserStructuralUnit
@@ -92,10 +96,12 @@ class ExpertiseListView(generics.ListAPIView):
     permission_classes = [IsMemberOfUserExpertise]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     filterset_fields = ['date_of_last_change', 'expertise_status', 'work_program__title', 'work_program__qualification',
-                        'work_program__discipline_code', 'work_program__editors__first_name', 'expertse_users_in_rpd__expert__first_name',
+                        'work_program__discipline_code', 'work_program__editors__first_name',
+                        'expertse_users_in_rpd__expert__first_name',
                         'work_program__editors__last_name', 'expertse_users_in_rpd__expert__last_name']
     search_fields = ['work_program__title', 'work_program__qualification',
-                     'work_program__discipline_code', 'work_program__editors__first_name', 'expertse_users_in_rpd__expert__first_name',
+                     'work_program__discipline_code', 'work_program__editors__first_name',
+                     'expertse_users_in_rpd__expert__first_name',
                      'work_program__editors__last_name', 'expertse_users_in_rpd__expert__last_name']
 
     def get_queryset(self):
@@ -111,6 +117,7 @@ class ExpertiseListView(generics.ListAPIView):
         else:
             queryset = Expertise.objects.filter(expertse_users_in_rpd__expert=request.user)
         return queryset
+
 
 class ExpertiseViewById(generics.RetrieveAPIView):
     queryset = Expertise.objects.all()
@@ -128,7 +135,6 @@ class ExpertiseCreateView(generics.CreateAPIView):
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
 
 
 class ChangeExpertiseView(generics.UpdateAPIView):
@@ -186,3 +192,29 @@ def UpdateCommentStatus(request):
         return Response(status=201)
     except:
         return Response(status=400)
+
+
+@api_view(['GET'])
+@permission_classes([IsRpdDeveloperOrReadOnly, ])
+def ExpertiseHistory(request, pk=None):
+    """
+    По id Экспертизы получаем полную ее историю
+    """
+    if not pk:
+        return Response(status=400)
+
+    queryset = ExpertiseNotification.objects.filter(expertise=pk).order_by('notification_date')
+    history_response = []
+    previous_date = None,
+    previous_message = None
+    for history_el in queryset:
+        print(history_el.notification_date, history_el.message)
+        date_formatted_str = str(history_el.notification_date.strftime("%Y-%m-%d %H:%M:%S"))
+        if previous_date != date_formatted_str:
+            history_response.append({
+                "message": history_el.message.replace('Вы добавлены', f'Пользователь {str(history_el.user)} добавлен', 1),
+                "date": date_formatted_str
+            })
+            previous_date = date_formatted_str
+
+    return Response(history_response, status=200)

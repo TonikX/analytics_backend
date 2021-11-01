@@ -30,9 +30,13 @@ def expertise_notificator(sender, instance, created, **kwargs):
     wp_exp = WorkProgram.objects.get(expertise_with_rpd=instance)
     struct_users = User.objects.filter(user_for_structural_unit__status__in=["leader", "deputy"],
                                        user_for_structural_unit__structural_unit__workprogram_in_structural_unit__expertise_with_rpd=instance).distinct()
+    if not struct_users:
+        ExpertiseNotification.objects.create(expertise=instance, user=None,
+                                             message=f'Экспертиза для рабочей программы "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}"')
     for user in struct_users:
         ExpertiseNotification.objects.create(expertise=instance, user=user,
                                              message=f'Экспертиза для рабочей программы "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}"')
+
     if instance.expertise_status == 'WK':
         wp_exp = WorkProgram.objects.get(expertise_with_rpd=instance)
         users = User.objects.filter(expertse_in_rpd__expertise__work_program=wp_exp).distinct()
