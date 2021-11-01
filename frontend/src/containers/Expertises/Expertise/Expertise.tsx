@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {withRouter} from "react-router-dom";
+import {withRouter, Link} from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars";
 import get from "lodash/get";
 
@@ -19,6 +19,7 @@ import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
 
 import WorkProgramStatus from "../../../components/WorkProgramStatus/WorkProgramStatus";
+import {appRouter} from "../../../service/router-service";
 import AddExpertModal from './AddExpertModal';
 
 import {ExpertiseProps} from "./types";
@@ -81,7 +82,9 @@ class Expertise extends React.Component<ExpertiseProps> {
             <Paper className={classes.root}>
                 <div className={classes.titleWrap}>
                     <Typography className={classes.title}>
-                        <b>{get(expertise, [ExpertisesFields.WORK_PROGRAM, WorkProgramGeneralFields.TITLE])}</b>
+                        <Link target="_blank" to={appRouter.getWorkProgramLink(get(expertise, [ExpertisesFields.WORK_PROGRAM, WorkProgramGeneralFields.ID]))}>
+                            <b>{get(expertise, [ExpertisesFields.WORK_PROGRAM, WorkProgramGeneralFields.TITLE])}</b>
+                        </Link>
                     </Typography>
                     <WorkProgramStatus status={get(expertise, ExpertisesFields.STATUS, '')} />
 

@@ -32,9 +32,25 @@ const getWorkProgram = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState();
-        const id = action.payload || getWorkProgramId(state);
+        let id
+        let quiteLoad = false
+        let getEvaluationToolsList = true
 
-        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_WORK_PROGRAM}));
+        if (typeof action.payload === 'object') {
+            id = action?.payload?.id ||  getWorkProgramId(state)
+            quiteLoad = action?.payload?.quiteLoad
+            getEvaluationToolsList = action?.payload?.getEvaluationToolsList
+
+            if (getEvaluationToolsList === undefined) {
+                getEvaluationToolsList = true
+            }
+        } else {
+            id = action.payload || getWorkProgramId(state);
+        }
+
+        if (!quiteLoad) {
+            dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_WORK_PROGRAM}));
+        }
 
         service.getWorkProgram(id)
             .then((res) => {
@@ -46,7 +62,9 @@ const getWorkProgram = createLogic({
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_WORK_PROGRAM}));
-                dispatch(workProgramActions.getWorkProgramEvaluationTools());
+                if (getEvaluationToolsList) {
+                    dispatch(workProgramActions.getWorkProgramEvaluationTools());
+                }
                 return done();
             });
     }

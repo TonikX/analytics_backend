@@ -59,6 +59,7 @@ const approveWorkProgram = createAction('WORK_PROGRAM_APPROVE');
 const getComments = createAction('WORK_PROGRAM_GET_COMMENTS');
 const setComments = createAction('WORK_PROGRAM_SET_COMMENTS');
 const createComment = createAction('WORK_PROGRAM_CREATE_COMMENT');
+const updateUnreadCommentStatus = createAction('WORK_PROGRAM_UPDATE_UNREAD_COMMENT_STATUS');
 
 const saveZUN = createAction('WORK_PROGRAM_SAVE_ZUN');
 const deleteZUN = createAction('WORK_PROGRAM_DELETE_ZUN');
@@ -80,6 +81,7 @@ const actions: WorkProgramActions = {
     getComments,
     setComments,
     createComment,
+    updateUnreadCommentStatus,
 
     sendWorkProgramToArchive,
     sendWorkProgramToExpertise,

@@ -85,6 +85,7 @@ export enum workProgramTopicFields {
 
 export enum fetchingTypes {
     GET_RESULTS = 'GET_RESULTS',
+    UPDATE_UNREAD_COMMENT_STATUS = 'UPDATE_UNREAD_COMMENT_STATUS',
     CLONE_WORK_PROGRAM = 'CLONE_WORK_PROGRAM',
 
     SEND_TO_EXPERTISE = 'SEND_TO_EXPERTISE',
