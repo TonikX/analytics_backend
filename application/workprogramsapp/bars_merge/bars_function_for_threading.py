@@ -111,8 +111,7 @@ def bars_optimizer(now_semester, count_relative, imp_list, work_program, setup_b
                                           request_status=request_status_code)
 
 
-def academicNTCheckpointGenerator(work_program: WorkProgram, send_semester: int, setup_bars: tuple,
-                                  return_list: list) -> None:
+def academicNTCheckpointGenerator(work_program: WorkProgram, send_semester: int, setup_bars: tuple) -> list:
     request_text_list: list = []
     relative_bool: bool = True  # Длится ли дисциплина дольше чем один семестр
     count_relative = 1  # Счетчик относительных семестров
@@ -221,4 +220,4 @@ def academicNTCheckpointGenerator(work_program: WorkProgram, send_semester: int,
         if implementation_of_academic_plan_all and not relative_bool:
             count_relative += 1
 
-    return_list.extend(request_text_list)
+    return request_text_list
