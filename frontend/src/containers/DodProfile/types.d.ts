@@ -6,6 +6,8 @@ export interface dodProfileState {
     allCount: number,
     currentPage: number,
     tableMode: number,
+   userName: any,
+    userGroups: Array,
 }
 
 export interface dodProfileActions {
@@ -13,7 +15,11 @@ export interface dodProfileActions {
     setDodWorkProgramsList: any,
     changeAllCount: any,
     changeCurrentPage: any,
-    changeTableMode: any
+    changeTableMode: any,
+    getUserName: any,
+    setUserName: any,
+    getUserGroups: any,
+    setUserGroups: any
 }
 
 export interface dodProfileProps extends WithStyles<typeof styles>{
@@ -22,4 +28,6 @@ export interface dodProfileProps extends WithStyles<typeof styles>{
     currentPage: number;
     allCount: number;
     tableMode:number;
+    userName: any;
+    userGroups: Array;
 }

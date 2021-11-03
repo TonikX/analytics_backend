@@ -28,6 +28,44 @@ const getDodProfile = createLogic({
     }
 });
 
+const getCurrentUserName = createLogic({
+    type: dodProfileActions.getUserName.type,
+    process({getState, action}: any, dispatch, done) {
+
+
+        dispatch(actions.fetchingTrue({destination: "getUserName"}));
+
+        service.getCurrentUserName()
+            .then((res) => {
+                const userName = get(res, 'data', {});
+                dispatch(dodProfileActions.setUserName(userName))
+                dispatch(actions.fetchingSuccess());
+                dispatch(actions.fetchingFalse({destination: "getUserName"}));
+                return done();
+            })
+    }
+});
+
+const getCurrentUserGroups = createLogic({
+    type: dodProfileActions.getUserGroups.type,
+    process({getState, action}: any, dispatch, done) {
+
+
+        dispatch(actions.fetchingTrue({destination: "getUserGroups"}));
+
+        service.getCurrentUserGroups()
+            .then((res) => {
+                 const userGroups = get(res, 'data.groups', []);
+                dispatch(dodProfileActions.setUserGroups(userGroups))
+                dispatch(actions.fetchingSuccess());
+                dispatch(actions.fetchingFalse({destination: "getUserGroups"}));
+                return done();
+            })
+    }
+});
+
 export default [
-    getDodProfile
+    getDodProfile,
+    getCurrentUserName,
+    getCurrentUserGroups
 ];

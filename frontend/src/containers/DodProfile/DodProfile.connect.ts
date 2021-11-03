@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import actions from "./actions";
-import {getAllCount, getCurrentPage, getTableMode, getWorkProgramList} from "./getters";
+import {getAllCount, getCurrentPage, getTableMode, getUserGroups, getUserName, getWorkProgramList} from "./getters";
 
 const mapStateToProps = (state: any) => {
     return {
@@ -9,6 +9,8 @@ const mapStateToProps = (state: any) => {
         allCount: getAllCount(state),
         currentPage: getCurrentPage(state),
         tableMode: getTableMode(state),
+        userName: getUserName(state),
+        userGroups: getUserGroups(state),
 
     }
 }

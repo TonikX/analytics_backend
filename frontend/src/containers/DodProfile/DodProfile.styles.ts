@@ -8,7 +8,8 @@ export default (theme: Theme) => createStyles({
         height: '100%',
         boxSizing: 'border-box',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+
     },
     title: {
         fontSize: '24px',
@@ -59,5 +60,21 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center',
         marginLeft: '10px',
     },
+    mainContainer: {
+        display: 'flex',
+    },
+    notificationsContainer: {
+        display: 'flex',
+        marginTop: '-12px',
+        width:'20%'
 
+    },
+    dodProfileContainer: {
+        width:'80%'
+    },
+    userTitle: {
+        fontSize: '16px',
+        marginBottom: '40px',
+        marginTop: '40px'
+    },
 });

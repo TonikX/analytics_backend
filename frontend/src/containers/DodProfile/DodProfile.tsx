@@ -14,13 +14,17 @@ import Pagination from '@material-ui/lab/Pagination';
 import {specializationObject} from "../WorkProgram/constants";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Switch from "@material-ui/core/Switch";
-import {filterFields} from "../WorkProgramList/enum";
+import Notifications from "../Profile/Notifications/Notifications";
+import {FULL_DATE_FORMAT} from "../../common/utils";
+import moment from "moment";
+import Chip from "@material-ui/core/Chip";
 
 class DodProfile extends React.Component<dodProfileProps> {
 
     componentDidMount() {
         this.props.actions.getDodWorkProgramsList()
+        this.props.actions.getUserName()
+        this.props.actions.getUserGroups()
     };
 
     handleChangePage = (event: any, page: number) => {
@@ -29,7 +33,7 @@ class DodProfile extends React.Component<dodProfileProps> {
     };
 
 
-    changeTableMode =  (event: any, newValue: any) => {
+    changeTableMode = (event: any, newValue: any) => {
         this.props.actions.changeTableMode(newValue);
     }
 
@@ -37,71 +41,93 @@ class DodProfile extends React.Component<dodProfileProps> {
     render() {
 
 
-        const {workProgramList, classes, currentPage, allCount, tableMode} = this.props;
+        const {workProgramList, classes, currentPage, allCount, tableMode, userName, userGroups} = this.props;
+console.log("dodprofile",userName)
 
         return (
             <Paper className={classes.root}>
+                <div className={classes.mainContainer}>
 
-                <Typography className={classes.title}> hello
-                    <Tabs value={tableMode}
-                          onChange={this.changeTableMode}
-                          indicatorColor="primary"
-                                          >
-                        <Tab
-                             value={1}
-                             label="я эксперт"/>
-                        <Tab
-                             value={2}
-                             label="я редактор"/>
-                    </Tabs>
-                </Typography>
+                    <div className={classes.dodProfileContainer}>
+                        <Typography className={classes.title}>
 
-                <div className={classes.tableWrap}>
-                    <Table stickyHeader size='small'>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>
-                                    Код
-                                </TableCell>
-                                <TableCell>
-                                    Название
-                                </TableCell>
-                                <TableCell>
-                                    Авторский состав
-                                </TableCell>
-                                <TableCell>
-                                    Уровень образования
-                                </TableCell>
-                                <TableCell>
-                                    Дата
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
+                            <Tabs value={tableMode}
+                                  onChange={this.changeTableMode}
+                                  indicatorColor="primary"
+                            >
+                                <Tab
+                                    value={1}
+                                    label="я эксперт"/>
+                                <Tab
+                                    value={2}
+                                    label="я редактор"/>
+                            </Tabs>
+                        </Typography>
 
-                        <TableBody>
-                            {workProgramList.map((item: any) =>
-                                <TableRow>
-                                    <TableCell> {item.discipline_code}  </TableCell>
-                                    <TableCell> {item.title}  </TableCell>
-                                    <TableCell> {item.authors} </TableCell>
-                                    <TableCell> {specializationObject[item.qualification]}</TableCell>
-                                    <TableCell> {item.approval_date}  </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
+                        <div className={classes.tableWrap}>
+                            <Table stickyHeader size='small'>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>
+                                            Код
+                                        </TableCell>
+                                        <TableCell>
+                                            Название
+                                        </TableCell>
+                                        <TableCell>
+                                            Авторский состав
+                                        </TableCell>
+                                        <TableCell>
+                                            Уровень образования
+                                        </TableCell>
+                                        <TableCell>
+                                            Дата
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
 
-                <div className={classes.footer}>
-                    <Pagination count={Math.ceil(allCount / 10)}
-                                page={currentPage}
-                                onChange={this.handleChangePage}
-                                color="primary"
-                    />
+                                <TableBody>
+                                    {workProgramList.map((item: any) =>
+                                        <TableRow>
+                                            <TableCell> {item.discipline_code}  </TableCell>
+                                            <TableCell> {item.title}  </TableCell>
+                                            <TableCell> {item.authors} </TableCell>
+                                            <TableCell> {specializationObject[item.qualification]}</TableCell>
+                                            <TableCell> {moment(item.approval_date).format(FULL_DATE_FORMAT)}  </TableCell>
+
+
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+
+                            </Table>
+                            <div>
+                                <div className={classes.userTitle}> {userName.first_name}  {userName.last_name}</div>
+
+                                {userGroups.map((item: any) =>
+                                    <Chip label={item}> </Chip>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className={classes.footer}>
+                            <Pagination count={Math.ceil(allCount / 10)}
+                                        page={currentPage}
+                                        onChange={this.handleChangePage}
+                                        color="primary"
+                            />
+                        </div>
+                    </div>
+
+
+                    <div className={classes.notificationsContainer}>
+                        <Notifications/>
+                    </div>
                 </div>
 
 
             </Paper>
+
         )
     }
 }

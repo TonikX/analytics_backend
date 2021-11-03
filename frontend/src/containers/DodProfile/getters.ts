@@ -9,4 +9,6 @@ export const getWorkProgramList = (state: rootState): Array<any> => get(getState
 export const getAllCount = (state: rootState): number => get(getStateData(state),"allCount", 0)
 export const getCurrentPage = (state: rootState): number => get(getStateData(state),"currentPage", 1)
 export const getTableMode = (state: rootState): number => get(getStateData(state),"tableMode", 1)
+export const getUserName = (state: rootState): object => get(getStateData(state),"userName", {})
+export const getUserGroups = (state: rootState): Array<any> => get(getStateData(state),"userGroups", [])
 
