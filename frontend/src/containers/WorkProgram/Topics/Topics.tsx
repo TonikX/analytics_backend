@@ -181,7 +181,7 @@ const SortableItem = SortableElement(({topic, section, classes, handleClickDelet
                 </>}
             </div>
 
-            {isCanEdit &&
+            {isCanEdit ?
                 <div className={classes.actions}>
                     <IconButton onClick={handleClickDelete(topic[workProgramTopicFields.ID])}>
                         <DeleteIcon/>
@@ -195,7 +195,15 @@ const SortableItem = SortableElement(({topic, section, classes, handleClickDelet
                         </IconButton>
                     </Tooltip>
                 </div>
-            }
+            : (
+                <div className={classes.actions}>
+                    <Tooltip title="Материалы">
+                        <IconButton onClick={handleClickMaterial(topicId)}>
+                            <DescriptionIcon />
+                        </IconButton>
+                    </Tooltip>
+                </div>
+            )}
         </div>
 
         {showMaterial[topic[workProgramTopicFields.ID]] &&
