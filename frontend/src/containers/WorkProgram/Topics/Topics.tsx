@@ -212,18 +212,20 @@ const SortableItem = SortableElement(({topic, section, classes, handleClickDelet
                 {topic[workProgramTopicFields.MATERIALS].map((material: any) =>
                     <Typography className={classes.materialItem} key={`material-${material[workProgramTopicFields.ID]}`}>
                         {material[workProgramTopicFields.MATERIAL_TITLE]}:&nbsp;&nbsp;<a href={material[workProgramTopicFields.MATERIAL_URL]}> ссылка </a>
-                        <DeleteIcon className={classes.materialItemIcon} onClick={handleClickDeleteMaterial(material[workProgramTopicFields.ID])}/>
-                        <EditIcon className={classes.materialItemIcon} onClick={handleClickUpdateMaterial(material, topicId)} />
+                        {isCanEdit && <DeleteIcon className={classes.materialItemIcon} onClick={handleClickDeleteMaterial(material[workProgramTopicFields.ID])}/>}
+                        {isCanEdit && <EditIcon className={classes.materialItemIcon} onClick={handleClickUpdateMaterial(material, topicId)} />}
                     </Typography>
                 )}
 
-                <Button size="small"
-                        onClick={handleClickAddMaterial(topicId)}
-                        className={classes.addMaterialButton}
-                        variant="text"
-                >
-                    Добавить материал
-                </Button>
+                {isCanEdit && (
+                    <Button size="small"
+                            onClick={handleClickAddMaterial(topicId)}
+                            className={classes.addMaterialButton}
+                            variant="text"
+                    >
+                        Добавить материал
+                    </Button>
+                )}
             </div>
         }
     </div>
