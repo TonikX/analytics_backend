@@ -23,6 +23,9 @@ export interface FoldersProps extends WithStyles<typeof styles>{
     actions: NotificationsActions;
 }
 
+export interface NotificationProps  {
+    hideTitle?: boolean
+}
 
 export type FolderType = {
     [NotificationsFields.ID]: number;

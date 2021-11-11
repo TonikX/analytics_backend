@@ -42,12 +42,18 @@ class DodProfile extends React.Component<dodProfileProps> {
 
 
         const {workProgramList, classes, currentPage, allCount, tableMode, userName, userGroups} = this.props;
-console.log("dodprofile",userName)
+
 
         return (
             <Paper className={classes.root}>
-                <div className={classes.mainContainer}>
+                <div>
+                    <div className={classes.userTitle}> {userName.first_name} {userName.last_name}</div>
 
+                    {userGroups.map((item: any) =>
+                        <Chip label={item}> </Chip>
+                    )}
+                </div>
+                <div className={classes.mainContainer}>
                     <div className={classes.dodProfileContainer}>
                         <Typography className={classes.title}>
 
@@ -101,13 +107,7 @@ console.log("dodprofile",userName)
                                 </TableBody>
 
                             </Table>
-                            <div>
-                                <div className={classes.userTitle}> {userName.first_name}  {userName.last_name}</div>
 
-                                {userGroups.map((item: any) =>
-                                    <Chip label={item}> </Chip>
-                                )}
-                            </div>
                         </div>
 
                         <div className={classes.footer}>
@@ -118,14 +118,10 @@ console.log("dodprofile",userName)
                             />
                         </div>
                     </div>
-
-
                     <div className={classes.notificationsContainer}>
-                        <Notifications/>
+                        <Notifications hideTitle={true}/>
                     </div>
                 </div>
-
-
             </Paper>
 
         )
