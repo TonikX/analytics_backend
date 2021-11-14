@@ -285,7 +285,6 @@ def postAcademicNTCheckpoints(request):
     send_semester = request.data.get('send_semester')
     from_date = request.data.get('from_date')
     setup_bars = (year, -1)
-    # types_checkpoints = get_list_of_regular_checkpoints(setup_bars)  # получаем список типов чекпоинтов из БАРС
     if send_semester == 0:
         send_semester = 1
     else:
@@ -297,8 +296,7 @@ def postAcademicNTCheckpoints(request):
                                                                                              day=int(date_split[
                                                                                                          0]))).distinct()
     all_sends = []  # Список всего того что отправили в барс, нужен для респонса
-    thread_list = []
-    for number_of_wp, work_program in enumerate(needed_wp):  # для каждой РПД формируем отдельный запрос в БАРС
+    for work_program in needed_wp:  # для каждой РПД формируем отдельный запрос в БАРС
         all_sends.extend(academicNTCheckpointGenerator(work_program=work_program, send_semester=send_semester,
                                                        setup_bars=setup_bars))
     return Response({"rpd": all_sends})
