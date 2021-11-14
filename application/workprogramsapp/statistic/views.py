@@ -72,11 +72,12 @@ def SimpleStatistic(request):
     rpd_users = User.objects.filter(editors__isnull=False).distinct().count()
     on_expertise = Expertise.objects.filter(expertise_status="EX").count()
     approved = Expertise.objects.filter(expertise_status="AC").count()
-    in_work = Expertise.objects.filter(expertise_status="WK").count() + WorkProgram.objects.filter(
-        expertise_with_rpd__isnull=True).distinct().count()
-    editors_rpd = WorkProgram.objects.filter(editors__isnull=False).count()
+    in_work = Expertise.objects.filter(expertise_status="WK").count()
+    editors_rpd = WorkProgram.objects.filter(editors__isnull=False).distinct().count()
+    total_rpd=WorkProgram.objects.all().count()
     return Response(
         {
+            "total_rpd":total_rpd,
             "registered_users": registered_users,
             "users_in_rpd": rpd_users,
             "rpd_with_editors": editors_rpd,
