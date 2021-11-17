@@ -87,6 +87,7 @@ def render_context(context, **kwargs):
              'indicator': str(z.indicator_in_zun.number) + ' ' + str(z.indicator_in_zun.name),
              'outcomes': ', '.join(map(str, set(outcomes)))})
     contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    all_contact_work, all_lecture_classes, all_laboratory, all_practical_lessons, all_SRO, all_total_hours = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
     online_sections, url_online_course, evaluation_tools = [], [], []
     online_list_number = 0
 
@@ -96,24 +97,31 @@ def render_context(context, **kwargs):
             i['contact_work'] = ''
         else:
             contact_work += float(i['contact_work'])/context['number_of_semesters']
+            all_contact_work += float(i['contact_work'])
         if i['lecture_classes'] is None:
             i['lecture_classes'] = ''
         else:
             lecture_classes += float(i['lecture_classes'])/context['number_of_semesters']
+            all_lecture_classes += float(i['lecture_classes'])
         if i['laboratory'] is None:
             i['laboratory'] = ''
         else:
             laboratory += float(i['laboratory'])/context['number_of_semesters']
+            all_laboratory += float(i['laboratory'])
         if i['practical_lessons'] is None:
             i['practical_lessons'] = ''
         else:
             practical_lessons += float(i['practical_lessons'])/context['number_of_semesters']
+            all_laboratory += float(i['laboratory'])
         if i['SRO'] is None:
             i['SRO'] = ''
         else:
             SRO += float(i['SRO'])/context['number_of_semesters']
+            all_SRO += float(i['SRO'])/context['number_of_semesters']
         total_hours += 0.0 if i['total_hours'] is None else float(i['total_hours'])/context['number_of_semesters']
-        # if i['evaluation_tools'] not in evaluation_tools:
+        all_total_hours += 0.0 if i['total_hours'] is None else float(i['total_hours'])
+
+         # if i['evaluation_tools'] not in evaluation_tools:
         #     i['evaluation_tools']['description'] = ''
         #     evaluation_tools.extend(i['evaluation_tools'])
         for ev_tool in i['evaluation_tools']:
@@ -164,6 +172,7 @@ def render_context(context, **kwargs):
         template_context['authors'] = context['authors'].split(', ')
     template_context['tbl_competence'] = tbl_competence
     template_context['total_hours'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours]
+    template_context['all_total_hours'] = [all_contact_work, all_lecture_classes, all_laboratory, all_practical_lessons, all_SRO, all_total_hours]
     template_context['is_no_online'] = True if online_sections == 0 else False
     template_context['is_online'] = True if online_sections else False
     print('is_online', template_context['is_online'])

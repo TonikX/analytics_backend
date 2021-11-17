@@ -429,7 +429,7 @@ class FileUploadAPIView(APIView):
         return module_type
 
 
-class FileUploadOldVersionAPIView(APIView):
+class   FileUploadOldVersionAPIView(APIView):
     """
     API-endpoint для загрузки файла sub_2019_2020_new
     """
@@ -519,6 +519,7 @@ class FileUploadOldVersionAPIView(APIView):
                 print('Записаны часы лаб:', wp_obj.lab_hours_v2)
                 wp_obj.srs_hours_v2 = watchmaker([float(x) for x in (data['СРС'][i]).strip("()").split(",")], [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
                 print('Записаны часы срс:', wp_obj.srs_hours_v2)
+                wp_obj.discipline_code = data['DISC_DISC_ID'][i]
                 wp_obj.save()
                 print('-- Работа с образовательной программой')
                 if data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find("Русский") != -1 and data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find(
