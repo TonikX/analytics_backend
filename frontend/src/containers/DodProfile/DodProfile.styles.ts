@@ -1,6 +1,6 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {createStyles, makeStyles, Theme} from "@material-ui/core";
 
-export default (theme: Theme) => createStyles({
+export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
         padding: '20px 50px 20px 50px',
         boxShadow: 'none',
@@ -77,4 +77,4 @@ export default (theme: Theme) => createStyles({
         marginBottom: '40px',
         marginTop: '40px'
     },
-});
+}));
