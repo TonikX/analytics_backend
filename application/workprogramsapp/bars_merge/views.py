@@ -205,7 +205,13 @@ def SendCheckpointsForAcceptedWP(request):
             relative_bool = False
 
         # Блок отвечающий за поиск оценочных средств в семестре
-        for now_semester in range(0, 12):  # Цикл по семестрам
+        for now_semester in range(0, 12):  # Цикл по семестрам\
+            wp_for_many_terms_list = [14928, 14924, 14925, 5232, 14926, 14927, 14935, 14936, 14937, 14938, 14939, 14929,
+                                      14940, 15720, 14941, 14942, 14943, 14944, 14945, 14946, 14947, 14948, 14949,
+                                      14930,
+                                      14950, 14951, 14952, 14953, 14954, 14963, 14955, 14956, 14957, 14958, 14931,
+                                      14959,
+                                      14960, 14961, 14962, 15441, 14932, 14933, 14934, 14922, 14923, 15106]
             imp_list = []  # Список всех учебных планов для этого семестра
             # Создание реуглярного выражения для того чтобы отфильтровать УП и инфу о РПД за этот семестр в цикле
             cred_regex = r""
@@ -246,6 +252,16 @@ def SendCheckpointsForAcceptedWP(request):
                                                           programs=imp_list,
                                                           work_program=work_program, setup=setup_bars,
                                                           wp_isu_id=isu_wp_id, types_checkpoints=types_checkpoints)
+
+                # Если РПД "Особая" (общеуниверситетский факультатив/английский язык)
+                if work_program.id in wp_for_many_terms_list:
+                    request_text.pop('term', None)
+                    if max_sem == min_sem:
+                        request_text["terms"] = [i for i in range(1, 7 + 1)]
+                    else:
+                        request_text["terms"] = [i for i in range(min_sem, max_sem + 1)]
+                    #now_semester = 13  # чтобы не писать break и для выполнения кода ниже делаем несуществующий семестр
+                    print(max_sem,min_sem)
                 isu_wp = None
                 isu_wp_id = None
                 # Получаем вернувшуюся информацию
@@ -266,6 +282,8 @@ def SendCheckpointsForAcceptedWP(request):
 
                 all_sends.append(
                     {"status": request_status_code, "request": request_text, "response": request_response})
+            if work_program.id in wp_for_many_terms_list:
+                break
             # Если дисциплина длинной несколько семестров, то добавляем плюсик к счетчику относительного семестра
             if implementation_of_academic_plan_all and not relative_bool:
                 count_relative += 1
