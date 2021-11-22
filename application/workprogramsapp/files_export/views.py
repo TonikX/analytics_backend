@@ -49,22 +49,24 @@ def render_context(context, **kwargs):
             print('credit units', wpcb['credit_units'])
             # semester = [{'s': i, 'c': wpcb['credit_units'][i]} for i in range(len(wpcb['credit_units'])) if
             #             wpcb['credit_units'] if wpcb['credit_units'][i] != 0]
-            wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')
-            print(wpcb['credit_units'])
-            for cu in range (0, 16, 2):
-                if list(wpcb['credit_units'][cu]) != 0:
-                    credit_units_list.append(wpcb['credit_units'][cu])
-            print('credit_units_list', credit_units_list)
-            for cu in credit_units_list:
-                print('cu', cu)
-                try:
-                    if int(float(cu)) != 0:
-                        print('cicle cu', cu)
-                        print('nomer semestra', credit_units_list.index(cu)+1)
-                        semester.append({'s': credit_units_list.index(cu)+1, 'c': cu, 'h': int(cu) * 36})
-                    credit_units_list[credit_units_list.index(cu)] = 0
-                except:
-                    pass
+            if wpcb['credit_units'] != None:
+                wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')
+
+                print(wpcb['credit_units'])
+                for cu in range (0, 16, 2):
+                    if list(wpcb['credit_units'][cu]) != 0:
+                        credit_units_list.append(wpcb['credit_units'][cu])
+                print('credit_units_list', credit_units_list)
+                for cu in credit_units_list:
+                    print('cu', cu)
+                    try:
+                        if int(float(cu)) != 0:
+                            print('cicle cu', cu)
+                            print('nomer semestra', credit_units_list.index(cu)+1)
+                            semester.append({'s': credit_units_list.index(cu)+1, 'c': cu, 'h': int(cu) * 36})
+                        credit_units_list[credit_units_list.index(cu)] = 0
+                    except:
+                        pass
 
             # try:
             #     for cu in credit_units_list:
