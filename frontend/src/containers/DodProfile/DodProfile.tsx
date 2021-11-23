@@ -44,7 +44,9 @@ export default () => {
     };
 
     const changeTableMode = (event: any, newValue: any) => {
+        dispatch(actions.changeCurrentPage(1))
         dispatch(actions.changeTableMode(newValue))
+        dispatch(actions.getDodWorkProgramsList())
     };
 
    return (
