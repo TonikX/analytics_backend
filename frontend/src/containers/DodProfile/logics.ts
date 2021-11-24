@@ -16,7 +16,7 @@ const getDodProfile = createLogic({
 
         dispatch(actions.fetchingTrue({destination: "getDodWorkProgramsList"}));
 
-            service.getDodProfile(currentPage, tableMode)
+        service.getDodProfile(currentPage, tableMode)
             .then((res) => {
                 console.log(res)
                 const workProgramList = get(res, 'data.results', []);
@@ -33,8 +33,6 @@ const getDodProfile = createLogic({
 const getCurrentUserName = createLogic({
     type: dodProfileActions.getUserName.type,
     process({getState, action}: any, dispatch, done) {
-
-
         dispatch(actions.fetchingTrue({destination: "getUserName"}));
 
         service.getCurrentUserName()
@@ -51,8 +49,6 @@ const getCurrentUserName = createLogic({
 const getCurrentUserGroups = createLogic({
     type: dodProfileActions.getUserGroups.type,
     process({getState, action}: any, dispatch, done) {
-
-
         dispatch(actions.fetchingTrue({destination: "getUserGroups"}));
 
         service.getCurrentUserGroups()

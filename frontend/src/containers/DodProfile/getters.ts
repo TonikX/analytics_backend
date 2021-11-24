@@ -12,4 +12,3 @@ export const getCurrentPage = (state: rootState): number => get(getStateData(sta
 export const getTableMode = (state: rootState): number => get(getStateData(state),"tableMode", 1)
 export const getUserName = (state: rootState): UserType => get(getStateData(state),"userName", {})
 export const getUserGroups = (state: rootState): Array<any> => get(getStateData(state),"userGroups", [])
-

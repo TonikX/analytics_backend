@@ -11,7 +11,6 @@ const setUserName = createAction('SET_USER_NAME')
 const getUserGroups = createAction('GET_USER_GROUPS')
 const setUserGroups = createAction('SET_USER_GROUPS')
 
-
 const actions: dodProfileActions = {
     getDodWorkProgramsList,
     setDodWorkProgramsList,

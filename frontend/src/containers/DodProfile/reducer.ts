@@ -50,6 +50,4 @@ export const reducer = createReducer(initialState, {
     [actions.changeTableMode.type] : changeTableMode,
     [actions.setUserName.type] : setUserName,
     [actions.setUserGroups.type] : setUserGroups,
-
-
 })

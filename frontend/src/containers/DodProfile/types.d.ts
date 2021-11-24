@@ -6,7 +6,7 @@ export interface dodProfileState {
     allCount: number,
     currentPage: number,
     tableMode: number,
-   userName: any,
+    userName: any,
     userGroups: Array,
 }
 

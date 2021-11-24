@@ -66,15 +66,21 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     notificationsContainer: {
         display: 'flex',
         marginTop: '-12px',
-        width:'20%'
-
+        width:'20%',
+        height: 'calc(100vh - 300px)',
     },
     dodProfileContainer: {
         width:'80%'
     },
     userTitle: {
         fontSize: '16px',
-        marginBottom: '40px',
-        marginTop: '40px'
+        marginBottom: '20px',
     },
+    groupsList: {
+        marginTop: '20px',
+        marginBottom: '20px',
+    },
+    group: {
+        marginRight: '10px',
+    }
 }));

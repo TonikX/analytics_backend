@@ -1,4 +1,5 @@
 import * as React from "react";
+import Scrollbars from "react-custom-scrollbars";
 import {Typography} from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
@@ -53,10 +54,9 @@ export default () => {
         <Paper className={classes.root}>
             <div>
                 <div className={classes.userTitle}> {userName?.first_name} {userName?.last_name}</div>
-
-                {userGroups.map((item: any) =>
-                    <Chip label={item}> </Chip>
-                )}
+                <div className={classes.groupsList}>
+                    {userGroups.map((item: any) => <Chip label={item} className={classes.group} />)}
+                </div>
             </div>
             <div className={classes.mainContainer}>
                 <div className={classes.dodProfileContainer}>
@@ -124,7 +124,9 @@ export default () => {
                     </div>
                 </div>
                 <div className={classes.notificationsContainer}>
-                    <Notifications hideTitle={true}/>
+                    <Scrollbars>
+                        <Notifications hideTitle={true}/>
+                    </Scrollbars>
                 </div>
             </div>
         </Paper>
