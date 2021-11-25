@@ -9,6 +9,7 @@ from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy,
     ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule
 from ..serializers import WorkProgramSerializer
 from rest_framework import generics
+import re
 # from GrabzIt import GrabzItDOCXOptions
 # from GrabzIt import GrabzItClient
 # import pypandoc
@@ -188,7 +189,7 @@ def render_context(context, **kwargs):
             online_list_number_list = online_list_number_list + ', '
     print('online_list_number_list', online_list_number, online_list_number_list)
     template_context['online_list_number_list'] = online_list_number_list
-    template_context['bibliographic_reference'] = context['bibliographic_reference']
+    template_context['bibliographic_reference'] = re.sub('<[^>]*>', '', str(context['bibliographic_reference']))
     template_context['online_course'] = url_online_course
     template_context['evaluation_tools'] = evaluation_tools
     filename = str(fs_obj.number) + '_' + str(context['discipline_code']) + '_' + str(
