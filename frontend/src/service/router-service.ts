@@ -27,6 +27,7 @@ const SELECT_EDUCATIONAL_PROGRAM = 'select-educational-program';
 const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
 const INDIVIDUAL_EDUCATIONAL_PLANS = 'individual-educational-plans';
 const PROFESSIONAL_STANDARDS = 'professional-standards';
+const DODPROFILE = 'dod-profile'
 
 const RECORDS = 'records';
 
@@ -290,6 +291,10 @@ export default class RouterService {
 
     getTrajectoryPlanDetailLink = (id: ReactText) => {
         return SEPARATOR + INDIVIDUAL_TRAJECTORIES + SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + id;
+    };
+
+    getDodProfileRoute = () => {
+        return SEPARATOR + DODPROFILE;
     };
 }
 
