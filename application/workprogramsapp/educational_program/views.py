@@ -174,61 +174,62 @@ def UploadCompetences(request):
 
     for op in dict_of_competences:
         # Существует ли генеральная характеристика и таблица EducationalProgram или же ее надо создавать для УП
-        print(op["id_op"])
-        try:
-            educational_program = EducationalProgram.objects.get(academic_plan_for_ep__academic_plan__pk=op["id_op"])
-            general_characteristic = GeneralCharacteristics.objects.get(educational_program=educational_program)
-        except EducationalProgram.DoesNotExist:
-            academic_plan_for_ep = ImplementationAcademicPlan.objects.get(pk=op["id_op"])
-            educational_program = EducationalProgram.objects.create(academic_plan_for_ep=academic_plan_for_ep)
-            general_characteristic = GeneralCharacteristics.objects.create(educational_program=educational_program)
-        except GeneralCharacteristics.DoesNotExist:
-            general_characteristic = GeneralCharacteristics.objects.create(educational_program=educational_program)
+        for op_current in op["id_op"]:
+            print(op["id_op"])
+            try:
+                educational_program = EducationalProgram.objects.get(academic_plan_for_ep__academic_plan__pk=op_current)
+                general_characteristic = GeneralCharacteristics.objects.get(educational_program=educational_program)
+            except EducationalProgram.DoesNotExist:
+                academic_plan_for_ep = ImplementationAcademicPlan.objects.get(academic_plan__pk=op_current)
+                educational_program = EducationalProgram.objects.create(academic_plan_for_ep=academic_plan_for_ep)
+                general_characteristic = GeneralCharacteristics.objects.create(educational_program=educational_program)
+            except GeneralCharacteristics.DoesNotExist:
+                general_characteristic = GeneralCharacteristics.objects.create(educational_program=educational_program)
 
-        # Объект характеристики есть, идем по списку компетенций
-        for competence in op["competence_list"]:
-            competence_to_add = None
-            indicator_from_db = []
-            competence_from_db = Competence.objects.filter(name__iexact=competence["competence_name"].lower())
-            if competence_from_db:
-                for db_competence in competence_from_db:
-                    indicator_from_db = list(Indicator.objects.filter(competence=db_competence))
-                    indicator_from_db_name_list = [ind.name.lower() for ind in indicator_from_db].sort()
-                    indicators_add_list = [ind["indicator_name"].lower() for ind in
-                                           competence["indicators_list"]].sort()
-                    if indicator_from_db_name_list == indicators_add_list:
-                        competence_to_add = db_competence
-                        break
+            # Объект характеристики есть, идем по списку компетенций
+            for competence in op["competence_list"]:
+                competence_to_add = None
+                indicator_from_db = []
+                competence_from_db = Competence.objects.filter(name__iexact=competence["competence_name"].lower())
+                if competence_from_db:
+                    for db_competence in competence_from_db:
+                        indicator_from_db = list(Indicator.objects.filter(competence=db_competence))
+                        indicator_from_db_name_list = [ind.name.lower() for ind in indicator_from_db].sort()
+                        indicators_add_list = [ind["indicator_name"].lower() for ind in
+                                               competence["indicators_list"]].sort()
+                        if indicator_from_db_name_list == indicators_add_list:
+                            competence_to_add = db_competence
+                            break
 
-            if not competence_to_add:
-                competence_to_add = Competence.objects.create(number=competence["id_competence"],
-                                                              name=competence["competence_name"])
-                for indicator in competence["indicators_list"]:
-                    indicator_from_db.append(
-                        Indicator.objects.create(number=indicator["id_indicator"], name=indicator["indicator_name"],
-                                                 competence=competence_to_add))
+                if not competence_to_add:
+                    competence_to_add = Competence.objects.create(number=competence["id_competence"],
+                                                                  name=competence["competence_name"])
+                    for indicator in competence["indicators_list"]:
+                        indicator_from_db.append(
+                            Indicator.objects.create(number=indicator["id_indicator"], name=indicator["indicator_name"],
+                                                     competence=competence_to_add))
 
-            if competence["competence_type"] == "Профессиональные компетенции":
-                CompGroupModel = GroupOfPkCompetencesInGeneralCharacteristic
-                CompGeneralModel = PkCompetencesInGroupOfGeneralCharacteristic
-                CompIndicatorModel = IndicatorInPkCompetenceInGeneralCharacteristic
-            elif competence["competence_type"] == "Надпрофессиональные компетенции":
-                CompGroupModel = GroupOfOverProfCompetencesInGeneralCharacteristic
-                CompGeneralModel = OverProfCompetencesInGroupOfGeneralCharacteristic
-                CompIndicatorModel = IndicatorInOverProfCompetenceInGeneralCharacteristic
-            elif competence["competence_type"] == "Ключевые компетенции":
-                CompGroupModel = GroupOfKeyCompetencesInGeneralCharacteristic
-                CompGeneralModel = KeyCompetencesInGroupOfGeneralCharacteristic
-                CompIndicatorModel = IndicatorInKeyCompetenceInGeneralCharacteristic
-            elif competence["competence_type"] == "Общепрофессиональные компетенции":
-                CompGroupModel = GroupOfGeneralProfCompetencesInGeneralCharacteristic
-                CompGeneralModel = GeneralProfCompetencesInGroupOfGeneralCharacteristic
-                CompIndicatorModel = IndicatorInGeneralProfCompetenceInGeneralCharacteristic
-            pprint(competence_to_add)
-            pprint(indicator_from_db)
-            comp_group, created = CompGroupModel.objects.get_or_create(name=competence["competence_group"],
-                                                                       general_characteristic=general_characteristic)
-            comp_general = CompGeneralModel.objects.create(group_of_pk=comp_group, competence=competence_to_add)
-            for indicator in indicator_from_db:
-                CompIndicatorModel.objects.create(competence_in_group_of_pk=comp_general, indicator=indicator)
+                if competence["competence_type"] == "Профессиональные компетенции":
+                    CompGroupModel = GroupOfPkCompetencesInGeneralCharacteristic
+                    CompGeneralModel = PkCompetencesInGroupOfGeneralCharacteristic
+                    CompIndicatorModel = IndicatorInPkCompetenceInGeneralCharacteristic
+                elif competence["competence_type"] == "Надпрофессиональные компетенции":
+                    CompGroupModel = GroupOfOverProfCompetencesInGeneralCharacteristic
+                    CompGeneralModel = OverProfCompetencesInGroupOfGeneralCharacteristic
+                    CompIndicatorModel = IndicatorInOverProfCompetenceInGeneralCharacteristic
+                elif competence["competence_type"] == "Ключевые компетенции":
+                    CompGroupModel = GroupOfKeyCompetencesInGeneralCharacteristic
+                    CompGeneralModel = KeyCompetencesInGroupOfGeneralCharacteristic
+                    CompIndicatorModel = IndicatorInKeyCompetenceInGeneralCharacteristic
+                elif competence["competence_type"] == "Общепрофессиональные компетенции":
+                    CompGroupModel = GroupOfGeneralProfCompetencesInGeneralCharacteristic
+                    CompGeneralModel = GeneralProfCompetencesInGroupOfGeneralCharacteristic
+                    CompIndicatorModel = IndicatorInGeneralProfCompetenceInGeneralCharacteristic
+                pprint(competence_to_add)
+                pprint(indicator_from_db)
+                comp_group, created = CompGroupModel.objects.get_or_create(name=competence["competence_group"],
+                                                                           general_characteristic=general_characteristic)
+                comp_general = CompGeneralModel.objects.create(group_of_pk=comp_group, competence=competence_to_add)
+                for indicator in indicator_from_db:
+                    CompIndicatorModel.objects.create(competence_in_group_of_pk=comp_general, indicator=indicator)
     return Response("γοητεία")

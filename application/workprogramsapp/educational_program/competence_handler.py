@@ -30,18 +30,29 @@ def generate_indicator_dict(id_indicator, indicator_name):
 
 
 def competence_dict_generator(file_path):
-    competences = pd.read_csv(file_path, delimiter=',')
+    competences = pd.read_csv(file_path, delimiter=';', encoding="utf-8")
     competence_list = []
     for i, row in competences.iterrows():
         main_dict_find_bool = False
         competence_find_bool = False
         indicator_find_bool = False
         main_dict = None
-        id_op = int(row["ИД ОП"])
-        competence_id, competence_name = row["Название компетенции"].split(" ", 1)
+        try:
+            id_op = list(map(int, row["ИД ОП"].split(",")))
+        except AttributeError:
+            id_op = [2613]
+        try:
+            competence_id, competence_name = row["Название компетенции"].split(" ", 1)
+        except AttributeError:
+            competence_id, competence_name = "Без ИД компетенции", "Без названия компетенции"
+            print(row["Название индикатора"])
         competence_group = row["Название группы компетенций"]
         competence_type = row["Тип компетенции"]
-        indicator_id, indicator_name = row["Название индикатора"].split(" ", 1)
+        try:
+            indicator_id, indicator_name = row["Название индикатора"].split(" ", 1)
+        except AttributeError:
+            indicator_id, indicator_name = "Без ИД индикатора", "Без названия индикатора"
+            print(row["Название компетенции"])
         for el in competence_list:
             if el["id_op"] == id_op:
                 main_dict = el
