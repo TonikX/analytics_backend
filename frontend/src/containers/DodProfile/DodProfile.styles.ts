@@ -62,15 +62,26 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     mainContainer: {
         display: 'flex',
+        '@media (max-width: 1250px)': {
+            flexDirection: 'column-reverse',
+        }
+
     },
     notificationsContainer: {
         display: 'flex',
         marginTop: '-12px',
-        width:'20%',
+        width: '20%',
         height: 'calc(100vh - 300px)',
+        '@media (max-width: 1250px)': {
+            width: '100%',
+            height: 'calc(100vh - 600px)',
+        }
     },
     dodProfileContainer: {
-        width:'80%'
+        width: '80%',
+        '@media (max-width: 1250px)': {
+            width: '100%'
+        }
     },
     userTitle: {
         fontSize: '16px',
