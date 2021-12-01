@@ -67,6 +67,7 @@ def WpWithSimilarCode(request):
 def SimpleStatistic(request):
     """
     API-запрос на просмотр различной статистики по РПД и пользователям
+    '+'
     """
     registered_users = User.objects.count()
     rpd_users = User.objects.filter(editors__isnull=False).distinct().count()
