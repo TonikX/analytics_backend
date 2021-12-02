@@ -9,6 +9,7 @@ from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy,
     ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule
 from ..serializers import WorkProgramSerializer
 from rest_framework import generics
+import re
 # from GrabzIt import GrabzItDOCXOptions
 # from GrabzIt import GrabzItClient
 # import pypandoc
@@ -33,51 +34,23 @@ def render_context(context, **kwargs):
     """ Функция, которая возвращает context с параметрами для шаблона """
     fs_obj = FieldOfStudy.objects.get(pk=kwargs['field_of_study_id'])
     ap_obj = AcademicPlan.objects.get(pk=kwargs['academic_plan_id'])
-    print(context['work_program_in_change_block'])
-    #try:
     semester = []
     for wpcb in context['work_program_in_change_block']:
-        print(wpcb['credit_units'])
-        # print(wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'])
-        # print(wpcb['discipline_block_module']['descipline_block']['academic_plan'])
-        # print(WorkProgramChangeInDisciplineBlockModule.objects.filter(id = wpcb['id']))
-        #if wpcb['discipline_block_module']['descipline_block']['academic_plan']['id'] == ap_obj.id:
         credit_units_list = []
-
         if wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'] == ap_obj.id:
             wpcb_pk = wpcb['id']
-            print('credit units', wpcb['credit_units'])
-            # semester = [{'s': i, 'c': wpcb['credit_units'][i]} for i in range(len(wpcb['credit_units'])) if
-            #             wpcb['credit_units'] if wpcb['credit_units'][i] != 0]
             if wpcb['credit_units'] != None:
                 wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')
-
-                print(wpcb['credit_units'])
                 for cu in range (0, 16, 2):
                     if list(wpcb['credit_units'][cu]) != 0:
                         credit_units_list.append(wpcb['credit_units'][cu])
-                print('credit_units_list', credit_units_list)
                 for cu in credit_units_list:
-                    print('cu', cu)
                     try:
                         if int(float(cu)) != 0:
-                            print('cicle cu', cu)
-                            print('nomer semestra', credit_units_list.index(cu)+1)
                             semester.append({'s': credit_units_list.index(cu)+1, 'c': cu, 'h': int(cu) * 36})
                         credit_units_list[credit_units_list.index(cu)] = 0
                     except:
                         pass
-
-            # try:
-            #     for cu in credit_units_list:
-            #         print(cu)
-            #         if int(float(cu)) != 0:
-            #             semester.append({'s': credit_units_list.index(cu)+1, 'c': cu})
-            # except:
-            #     pass
-    # except:
-    #     semester = [{'s': '-', 'c': '-', 'h': '-', 'e': '-'}]
-    #     wpcb_pk = context['work_program_in_change_block'][0]['id']
     wp_in_fs = WorkProgramInFieldOfStudy.objects.get(work_program_change_in_discipline_block_module__id=wpcb_pk,
                                                      work_program__id=context['id'])
     zun_obj = Zun.objects.filter(wp_in_fs=wp_in_fs)
@@ -94,6 +67,7 @@ def render_context(context, **kwargs):
     online_list_number = 0
 
     for i in context['discipline_sections']:
+        print(context['discipline_sections'])
         online_names, topics_list = [], []
         if i['contact_work'] is None:
             i['contact_work'] = ''
@@ -114,7 +88,7 @@ def render_context(context, **kwargs):
             i['practical_lessons'] = ''
         else:
             practical_lessons += float(i['practical_lessons'])/context['number_of_semesters']
-            all_laboratory += float(i['laboratory'])
+            all_laboratory += float(i['practical_lessons'])
         if i['SRO'] is None:
             i['SRO'] = ''
         else:
@@ -122,16 +96,9 @@ def render_context(context, **kwargs):
             all_SRO += float(i['SRO'])/context['number_of_semesters']
         total_hours += 0.0 if i['total_hours'] is None else float(i['total_hours'])/context['number_of_semesters']
         all_total_hours += 0.0 if i['total_hours'] is None else float(i['total_hours'])
-
-         # if i['evaluation_tools'] not in evaluation_tools:
-        #     i['evaluation_tools']['description'] = ''
-        #     evaluation_tools.extend(i['evaluation_tools'])
         for ev_tool in i['evaluation_tools']:
             if ev_tool not in evaluation_tools:
-                #ev_tool['description'] = ''
                 evaluation_tools.append(ev_tool)
-        #('evaluation_tools', evaluation_tools)
-
         for j in i['topics']:
             topics_list.append(j['description'])
             if j['url_online_course'] is None:
@@ -145,26 +112,20 @@ def render_context(context, **kwargs):
                     url_online_course.append(j['url_online_course'])
         i['online_list'] = ', '.join(map(str, set(online_names)))
         i['topics_list'] = ', '.join(map(str, set(topics_list)))
-
     template_context = OrderedDict()
     template_context['title'] = context['title']
     template_context['field_of_study_code'] = fs_obj.number
     template_context['field_of_study'] = fs_obj.title
-
     if context['qualification'] == 'bachelor':
         template_context['QUALIFICATION'] = 'БАКАЛАВР'
     elif context['qualification'] == 'master':
         template_context['QUALIFICATION'] = 'МАГИСТР'
     else:
         template_context['QUALIFICATION'] = 'ИНЖЕНЕР'
-
-    #template_context['academic_plan'] = ap_obj.academic_plan_in_field_of_study
     template_context['academic_plan'] = str(ImplementationAcademicPlan.objects.get(academic_plan__id = ap_obj.id).title) + ' (' + \
                                         str(FieldOfStudy.objects.get(implementation_academic_plan_in_field_of_study__academic_plan__id = ap_obj.id).number) + ')'
     template_context['semester'] = semester
-    print('template_context', template_context['semester'])
     template_context['total_hours_1'] = [round(contact_work, 2), round(lecture_classes, 2), round(laboratory, 2), round(practical_lessons, 2), round(SRO, 2)]
-    print('total_hours_1', template_context['total_hours_1'])
     template_context['year'] = kwargs['year']
     if context['authors'] is None:
         template_context['author'] = ''
@@ -174,10 +135,10 @@ def render_context(context, **kwargs):
         template_context['authors'] = context['authors'].split(', ')
     template_context['tbl_competence'] = tbl_competence
     template_context['total_hours'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours]
+    print('ff',all_laboratory)
     template_context['all_total_hours'] = [all_contact_work, all_lecture_classes, all_laboratory, all_practical_lessons, all_SRO, all_total_hours]
     template_context['is_no_online'] = True if online_sections == 0 else False
     template_context['is_online'] = True if online_sections else False
-    print('is_online', template_context['is_online'])
     template_context['X'] = 'X'
     template_context['sections_online'] = ', '.join(map(str, set(online_sections)))
     template_context['sections_replaced_onl'] = ''
@@ -186,9 +147,10 @@ def render_context(context, **kwargs):
         online_list_number_list = online_list_number_list + '{}'.format(str(i))
         if int(i) != int(online_list_number):
             online_list_number_list = online_list_number_list + ', '
-    print('online_list_number_list', online_list_number, online_list_number_list)
     template_context['online_list_number_list'] = online_list_number_list
     template_context['bibliographic_reference'] = context['bibliographic_reference']
+    for bib in template_context['bibliographic_reference']:
+        bib['description'] =  re.sub('<[^>]*>', '', str(bib['description']))
     template_context['online_course'] = url_online_course
     template_context['evaluation_tools'] = evaluation_tools
     filename = str(fs_obj.number) + '_' + str(context['discipline_code']) + '_' + str(
@@ -210,8 +172,6 @@ def render_context(context, **kwargs):
     items_max_semester_4 = []
     items_min_semester_4 = []
     k=0
-    evaluation_tools_pdf_docs = []
-    #print('tooools', template_context['evaluation_tools'])
     for i in template_context['evaluation_tools']:
         i['description'] = ''
         i['url']= 'https://op.itmo.ru/work-program/{}/evaluation-tools/{}'.format(context['id'], i['id'])
@@ -219,7 +179,6 @@ def render_context(context, **kwargs):
         rt = RichText()
         rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id('https://op.itmo.ru/work-program/{}/evaluation-tools/{}'.format(context['id'], i['id'])))
         i['url'] = rt
-        print('name', i['name'])
         if i['semester'] == 1:
             evaluation_tool_semester_1.append(i)
             if i['max'] is not None:
@@ -246,8 +205,6 @@ def render_context(context, **kwargs):
                 items_min_semester_4.append(i['min'])
         else:
             pass
-    #print('semesters', evaluation_tool_semester_1)
-    #print('semesters___2', evaluation_tool_semester_2)
     template_context['evaluation_tool_semester_1'] = evaluation_tool_semester_1
     template_context['evaluation_tool_semester_2'] = evaluation_tool_semester_2
     template_context['evaluation_tool_semester_3'] = evaluation_tool_semester_3
@@ -258,11 +215,8 @@ def render_context(context, **kwargs):
     certification_evaluation_tools_semestr_2 = []
     certification_evaluation_tools_semestr_3 = []
     certification_evaluation_tools_semestr_4 = []
-    #print('certification_evaluation_tools_semestr_1', certification_evaluation_tools_semestr_1)
-    #print('certification_evaluation_tools_semestr_2', certification_evaluation_tools_semestr_2)
     template_context['control_types_in_semester'] = ['', '', '', '']
     for item in context['certification_evaluation_tools']:
-        print('dfdfdfd', item['name'])
         try:
             item['url']= 'https://op.itmo.ru/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])
             tpl
@@ -339,6 +293,7 @@ def render_context(context, **kwargs):
     #     for i in item['evaluation_tools']:
 
     template_context['discipline_section'] = context['discipline_sections']
+    print('bib', template_context['bibliographic_reference'])
     return template_context, filename
         #, evaluation_tools_pdf_docs
 
@@ -452,8 +407,9 @@ def render_context_syllabus(context, **kwargs):
         i['topics_list'] = '. '.join(map(str, set([j['description'] for j in i['topics']])))
 
     template_context['evaluation_tools'] = evaluation_tools
-    template_context['bibliographic_reference'] = context['bibliographic_reference']
+    template_context['bibliographic_reference'] = re.sub('<[^>]*>', '', str(context['bibliographic_reference']))
     filename = 'Syllabus_' + str(context['title']) + str(kwargs['year']) + '.docx'
+    print('bib', template_context['bibliographic_reference'])
 
     return template_context, filename
 
