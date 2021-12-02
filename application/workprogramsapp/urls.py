@@ -341,7 +341,6 @@ urlpatterns = [
 
     url(r'^', include('workprogramsapp.individualization.urls')),
     url(r'^', include('workprogramsapp.isu_merge.urls')),
-    url(r'^', include('workprogramsapp.statistic.urls')),
     url(r'^', include('workprogramsapp.notifications.urls')),
     url(r'^', include('workprogramsapp.feedback.urls')),
     path('api/nginx_timeout_test/', TimeoutTest),
