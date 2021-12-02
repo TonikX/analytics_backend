@@ -27,6 +27,7 @@ interface HeaderProps extends WithStyles<typeof styles> {
     handleOpenMenu: Function;
     logout: Function;
     notificationsCount: number;
+    isDodProfile: boolean;
 }
 
 class Header extends React.PureComponent<HeaderProps>{
@@ -49,7 +50,7 @@ class Header extends React.PureComponent<HeaderProps>{
     };
 
     render() {
-        const {classes, openGeneralMenu, isAuth, notificationsCount} = this.props;
+        const {classes, openGeneralMenu, isAuth, notificationsCount, isDodProfile} = this.props;
         const {anchorEl} = this.state;
 
         return(
@@ -101,7 +102,7 @@ class Header extends React.PureComponent<HeaderProps>{
                             </Tooltip>
 
                             <Tooltip title="Личный кабинет">
-                                <Link to={appRouter.getUserProfile()}
+                                <Link to={isDodProfile ? appRouter.getDodProfileRoute() : appRouter.getUserProfile()}
                                       className={classes.link}
                                 >
                                     <IconButton
