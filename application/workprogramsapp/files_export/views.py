@@ -67,6 +67,7 @@ def render_context(context, **kwargs):
     online_list_number = 0
 
     for i in context['discipline_sections']:
+        print(context['discipline_sections'])
         online_names, topics_list = [], []
         if i['contact_work'] is None:
             i['contact_work'] = ''
@@ -87,7 +88,7 @@ def render_context(context, **kwargs):
             i['practical_lessons'] = ''
         else:
             practical_lessons += float(i['practical_lessons'])/context['number_of_semesters']
-            all_laboratory += float(i['laboratory'])
+            all_laboratory += float(i['practical_lessons'])
         if i['SRO'] is None:
             i['SRO'] = ''
         else:
@@ -134,6 +135,7 @@ def render_context(context, **kwargs):
         template_context['authors'] = context['authors'].split(', ')
     template_context['tbl_competence'] = tbl_competence
     template_context['total_hours'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours]
+    print('ff',all_laboratory)
     template_context['all_total_hours'] = [all_contact_work, all_lecture_classes, all_laboratory, all_practical_lessons, all_SRO, all_total_hours]
     template_context['is_no_online'] = True if online_sections == 0 else False
     template_context['is_online'] = True if online_sections else False
