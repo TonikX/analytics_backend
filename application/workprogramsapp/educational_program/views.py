@@ -175,7 +175,7 @@ def UploadCompetences(request):
     for op in dict_of_competences:
         # Существует ли генеральная характеристика и таблица EducationalProgram или же ее надо создавать для УП
         for op_current in op["id_op"]:
-            print(op["id_op"])
+            #print(op["id_op"])
             try:
                 educational_program = EducationalProgram.objects.get(academic_plan_for_ep__academic_plan__pk=op_current)
                 general_characteristic = GeneralCharacteristics.objects.get(educational_program=educational_program)
@@ -225,6 +225,7 @@ def UploadCompetences(request):
                     CompGroupModel = GroupOfGeneralProfCompetencesInGeneralCharacteristic
                     CompGeneralModel = GeneralProfCompetencesInGroupOfGeneralCharacteristic
                     CompIndicatorModel = IndicatorInGeneralProfCompetenceInGeneralCharacteristic
+
                 pprint(competence_to_add)
                 pprint(indicator_from_db)
                 comp_group, created = CompGroupModel.objects.get_or_create(name=competence["competence_group"],
