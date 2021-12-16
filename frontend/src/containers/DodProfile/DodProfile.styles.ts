@@ -62,15 +62,32 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     mainContainer: {
         display: 'flex',
+        '@media (max-width: 1250px)': {
+            flexDirection: 'column-reverse',
+        }
     },
     notificationsContainer: {
         display: 'flex',
         marginTop: '-12px',
-        width:'20%',
+        width: '30%',
         height: 'calc(100vh - 300px)',
+        '@media (max-width: 1250px)': {
+            width: '100%',
+            height: 'calc(100vh - 600px)',
+            '&>div': {
+                '&>div': {
+                    '&>div': {
+                        padding: '0px 20px 0px 0px'
+                    }
+                }
+            }
+        }
     },
     dodProfileContainer: {
-        width:'80%'
+        width: '70%',
+        '@media (max-width: 1250px)': {
+            width: '100%',
+        }
     },
     userTitle: {
         fontSize: '16px',
@@ -82,5 +99,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     group: {
         marginRight: '10px',
+        marginBottom: '10px',
     }
 }));
