@@ -11,7 +11,7 @@ urlpatterns = [
     path('api/record/workprograms/quality', RecordOfWorkProgramQuality.as_view(), name='RecordWorkProgramQuality'),
     path('api/record/academicplans/quantity/<str:qualification>/<str:year>', number_of_academplans_by_qualification_and_year), #'+'
     path('api/record/simple', SimpleStatistic), #'+'
-    path('api/record/workprogram/getemptystring', EmptyStringWp),#'-'
+    path('api/record/workprogram/getemptystring', EmptyStringWp),#'-' ???
     path('api/record/workprogram/wpwithoutap', WpWithoutAP),#'-'
     path('api/record/workprogram/similarcode', WpWithSimilarCode),#'-'
     path('api/record/structural/workprogram', StructuralUnitWp), #'+'

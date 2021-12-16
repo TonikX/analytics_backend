@@ -244,7 +244,7 @@ class WorkProgramDetailsWithApAndSemesters1(generics.ListAPIView):
     """
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializerForStatisticExtended
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 @api_view(['GET'])
