@@ -763,7 +763,7 @@ class Indicator(models.Model):
     '''
     Модель для индикаторов
     '''
-    number = models.CharField(unique=True, max_length=1024)
+    number = models.CharField(max_length=1024)
     name = models.CharField(max_length=1024)
     # work_programs = models.ManyToManyField('WorkProgram', through=IndicatorWorkProgram, blank=True, null=True)
     competence = models.ForeignKey('Competence', on_delete=models.CASCADE, related_name = "indicator_in_competencse")

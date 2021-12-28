@@ -473,7 +473,7 @@ class WorkProgramDestroyView(generics.DestroyAPIView):
 
 class WorkProgramUpdateView(generics.UpdateAPIView):
     queryset = WorkProgram.objects.all()
-    serializer_class = WorkProgramCreateSerializer
+    serializer_class = WorkProgramCreateSerializerequest.user
     permission_classes = [IsOwnerOrReadOnly]
 
 
