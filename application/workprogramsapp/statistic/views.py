@@ -74,10 +74,10 @@ def SimpleStatistic(request):
     approved = Expertise.objects.filter(expertise_status="AC").count()
     in_work = Expertise.objects.filter(expertise_status="WK").count()
     editors_rpd = WorkProgram.objects.filter(editors__isnull=False).distinct().count()
-    total_rpd=WorkProgram.objects.all().count()
+    total_rpd = WorkProgram.objects.all().count()
     return Response(
         {
-            "total_rpd":total_rpd,
+            "total_rpd": total_rpd,
             "registered_users": registered_users,
             "users_in_rpd": rpd_users,
             "rpd_with_editors": editors_rpd,
