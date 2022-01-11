@@ -89,6 +89,9 @@ class WorkProgramsListApi(generics.ListAPIView):
     def get_queryset(self):
         if self.request.GET.get('filter') == 'my':
             queryset = WorkProgram.objects.filter(editors=self.request.user)
+        elif self.request.GET.get('filter') == 'iamexpert':
+            queryset = WorkProgram.objects.filter(expertise_with_rpd__expertse_users_in_rpd__expert = self.request.user,
+                                                  expertise_with_rpd__expertse_users_in_rpd__stuff_status = 'EX')
         else:
             queryset = WorkProgram.objects.filter()
         return queryset
@@ -1935,7 +1938,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
 
 
 @api_view(['POST'])
-@permission_classes((IsAuthenticated, ))
+@permission_classes((IsAdminUser, ))
 def CloneWorkProgramm(request):
     """
     Апи для клонирования рабочей программы

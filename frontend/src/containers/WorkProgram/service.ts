@@ -295,9 +295,9 @@ class WorkProgramService extends AnalyticsService{
         return this.get(`/api/expertise/comments/${expertiseId}?block=${step}`);
     }
 
-    updateUnreadCommentStatus(wp: number, step: string){
+    updateUnreadCommentStatus(wp: number, block: string){
         return this.post(`/api/experise/comment/statusupdate`, {
-            step,
+            block,
             wp
         });
     }

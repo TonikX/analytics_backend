@@ -15,13 +15,14 @@ import {FULL_DATE_FORMAT_WITH_TIME} from "../../../common/utils";
 import {useStyles} from './Notifications.styles'
 import moment from "moment";
 import Pagination from "@material-ui/lab/Pagination";
+import {NotificationProps} from "./types";
 
 const colors = {
   expertise: 'orange',
   message: 'blue'
 }
 
-export default () => {
+export default (props : NotificationProps) => {
   const dispatch = useDispatch()
   const classes = useStyles()
   const notifications = useSelector((state: rootState) => getNotifications(state))
@@ -41,9 +42,10 @@ export default () => {
 
   return (
     <div className={classes.root}>
+      {props.hideTitle ? <> </> :
       <Typography className={classes.title}>
         Уведомления
-      </Typography>
+      </Typography>}
       <div className={classes.roundItem}>
         <div className={classes.round} style={{background: colors.expertise}}/>
         <Typography className={classes.roundText}> Экспертиза </Typography>

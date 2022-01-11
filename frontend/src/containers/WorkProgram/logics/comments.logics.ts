@@ -65,11 +65,10 @@ const updateUnreadCommentStatus = createLogic({
     type: workProgramActions.updateUnreadCommentStatus.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const {currentStep} = action.payload;
         const state = getState();
         const wpId = getWorkProgramId(state);
 
-        service.updateUnreadCommentStatus(wpId, currentStep)
+        service.updateUnreadCommentStatus(wpId, action.payload)
             .then((res) => {
                 dispatch(workProgramActions.getWorkProgram({ id: wpId, quiteLoad: true, getEvaluationToolsList: false }));
                 dispatch(actions.fetchingSuccess());
