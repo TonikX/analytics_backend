@@ -115,7 +115,7 @@ def academicNTCheckpointGenerator(work_program: WorkProgram, send_semester: int,
     request_text_list: list = []
     relative_bool: bool = True  # Длится ли дисциплина дольше чем один семестр
     count_relative = 1  # Счетчик относительных семестров
-
+    year_of_sending = setup_bars[0].split("/")[0]
     # Проверка для булевой переменной, идет ли дисциплина в нескольких семестрах
     evaluation_tools = EvaluationTool.objects.filter(evaluation_tools__in=DisciplineSection.objects.filter(
         work_program__id=work_program.id))
@@ -149,7 +149,7 @@ def academicNTCheckpointGenerator(work_program: WorkProgram, send_semester: int,
             academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
         # Список УП с учетом актуального семестра отправки в БАРС
         implementation_of_academic_plan = implementation_of_academic_plan_all.filter(
-            year=datetime.now().year - now_semester // 2)
+            year=int(year_of_sending) - now_semester // 2)
         isu_wp_id = None
         for imp in implementation_of_academic_plan:
             # создаем список направлений + уп с айдишниками ИСУ для БАРСа
@@ -212,7 +212,7 @@ def academicNTCheckpointGenerator(work_program: WorkProgram, send_semester: int,
                 if request_element["programs"] == additional_info_for_academicnt["programs"] and \
                         request_element["apprenticeship"] == additional_info_for_academicnt["apprenticeship"]:
                     request_element["checkpoints"].extend(additional_info_for_academicnt["checkpoints"])
-                    #print(work_program.id)
+                    # print(work_program.id)
                     break
             else:
                 request_text_list.append(additional_info_for_academicnt)
