@@ -164,6 +164,8 @@ def SendCheckpointsForAcceptedWP(request):
     send_semester = request.data.get('send_semester')
     one_wp = request.data.get('one_wp')
     setup_bars = (year, send_semester)  # Устанавливает корректную дату и семестр в барсе (аргумент для БАРС-функций)
+    year_of_sending = setup_bars[0].split("/")[0]
+    print(year_of_sending)
     # небольшой костыль из-за некоторых ньюансов (цикл семестров начинается с 0)
     types_checkpoints = get_list_of_regular_checkpoints(setup_bars)  # получаем список типов чекпоинтов из БАРС
     if send_semester == 0:
@@ -181,7 +183,6 @@ def SendCheckpointsForAcceptedWP(request):
     else:
         needed_wp = WorkProgram.objects.filter(pk=one_wp)
     all_sends = []  # Список всего того что отправили в барс, нужен для респонса
-
     for work_program in needed_wp:  # для каждой РПД формируем отдельный запрос в БАРС
         if work_program in just_accepted_wp:
             # Если РПД уже отправлена в этом учебном семестре, то игнорируем
@@ -221,19 +222,19 @@ def SendCheckpointsForAcceptedWP(request):
                 else:
                     cred_regex += "(([0-9]\.[0-9])|[0]),\s"
             cred_regex = cred_regex[:-3]
-
             # Получаем все УП для данного семестра РПД (нужно для каунтера отнсительного семестра)
             implementation_of_academic_plan_all = ImplementationAcademicPlan.objects.filter(
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=work_program,
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
             # Список УП с учетом актуального семестра отправки в БАРС
             implementation_of_academic_plan = implementation_of_academic_plan_all.filter(
-                year=datetime.now().year - now_semester // 2)
+                year=int(year_of_sending) - now_semester//2)
             isu_wp_id = None
             for imp in implementation_of_academic_plan:
                 # создаем список направлений + уп с айдишниками ИСУ для БАРСа
                 field_of_studies = FieldOfStudy.objects.get(
                     implementation_academic_plan_in_field_of_study=imp)
+                print(field_of_studies)
                 imp_list.append(generate_fos(imp.ns_id, field_of_studies.number, imp.title))
                 isu_wp = \
                     list(WorkProgramIdStrUpForIsu.objects.filter(
@@ -260,8 +261,8 @@ def SendCheckpointsForAcceptedWP(request):
                         request_text["terms"] = [i for i in range(1, 7 + 1)]
                     else:
                         request_text["terms"] = [i for i in range(min_sem, max_sem + 1)]
-                    #now_semester = 13  # чтобы не писать break и для выполнения кода ниже делаем несуществующий семестр
-                    print(max_sem,min_sem)
+                    # now_semester = 13  # чтобы не писать break и для выполнения кода ниже делаем несуществующий семестр
+                    print(max_sem, min_sem)
                 isu_wp = None
                 isu_wp_id = None
                 # Получаем вернувшуюся информацию
