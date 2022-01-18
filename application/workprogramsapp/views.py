@@ -46,6 +46,10 @@ from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializ
 from .serializers import WorkProgramSerializer
 from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db import transaction
+from django.db.models import Model, Field
+from django_super_deduper.merge import MergedModelInstance
+
 
 """"Удалены старые views с использованием джанго рендеринга"""
 """Блок реализации API"""
@@ -923,6 +927,175 @@ def NewRealtionsForWorkProgramsInFieldOfStudyAPI(request):
         return Response(status=200)
     except:
         return Response(status=400)
+
+
+# def merge(queryset):
+#     main = queryset[0]
+#     tail = queryset[1:]
+#
+#     related = main._meta.get_fields()
+#
+#     valnames = dict()
+#     for r in related:
+#         valnames.setdefault(r.model, []).append(r.field.name)
+#
+#     for place in tail:
+#         for model, field_names in valnames.iteritems():
+#             for field_name in field_names:
+#                 print(**{field_name: place})
+#                 print(**{field_name: main})
+#                 print()
+#                 model.objects.filter(**{field_name: place}).update(**{field_name: main})
+#
+#         place.delete()
+
+    #self.message_user(request, "%s is merged with other places, now you can give it a canonical name." % main)
+
+
+#class MyMergedModelInstance(MergedModelInstance):
+    # """
+    #     Custom way to handle Issue #11: Ignore models with managed = False
+    #     Also, ignore auditlog models.
+    # """
+    # def _handle_o2m_related_field(self, related_field: Field, alias_object: Model):
+    #     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
+    #         return super()._handle_o2m_related_field(related_field, alias_object)
+    #
+    # def _handle_m2m_related_field(self, related_field: Field, alias_object: Model):
+    #     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
+    #         return super()._handle_m2m_related_field(related_field, alias_object)
+    #
+    # def _handle_o2o_related_field(self, related_field: Field, alias_object: Model):
+    #     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
+    #         return super()._handle_o2o_related_field(related_field, alias_object)
+
+@transaction.atomic()
+def merge(primary_object, alias_objects):
+    # if not isinstance(alias_objects, list):
+    #     alias_objects = [alias_objects]
+    MergedModelInstance.create(primary_object, alias_objects, keep_old=False)
+    return primary_object
+
+from django.apps import apps
+from django.contrib.contenttypes.fields import GenericForeignKey
+
+
+def get_generic_fields():
+    """Return a list of all GenericForeignKeys in all models."""
+    generic_fields = []
+    for model in apps.get_models():
+        for field_name, field in model.__dict__.items():
+            if isinstance(field, GenericForeignKey):
+                generic_fields.append(field)
+    return generic_fields
+
+
+@transaction.atomic()
+def merge_model_instances(primary_object, alias_objects):
+    """
+    Merge several model instances into one, the `primary_object`.
+    Use this function to merge model objects and migrate all of the related
+    fields from the alias objects the primary object.
+    """
+    generic_fields = get_generic_fields()
+
+    # get related fields
+    related_fields = list(filter(
+        lambda x: x.is_relation is True,
+        primary_object._meta.get_fields()))
+
+    many_to_many_fields = list(filter(
+        lambda x: x.many_to_many is True, related_fields))
+
+    related_fields = list(filter(
+        lambda x: x.many_to_many is False, related_fields))
+
+    # Loop through all alias objects and migrate their references to the
+    # primary object
+    deleted_objects = []
+    deleted_objects_count = 0
+    for alias_object in alias_objects:
+        # Migrate all foreign key references from alias object to primary
+        # object.
+        for many_to_many_field in many_to_many_fields:
+            alias_varname = many_to_many_field.name
+            related_objects = getattr(alias_object, alias_varname)
+            for obj in related_objects.all():
+                try:
+                    # Handle regular M2M relationships.
+                    getattr(alias_object, alias_varname).remove(obj)
+                    getattr(primary_object, alias_varname).add(obj)
+                except AttributeError:
+                    # Handle M2M relationships with a 'through' model.
+                    # This does not delete the 'through model.
+                    # TODO: Allow the user to delete a duplicate 'through' model.
+                    through_model = getattr(alias_object, alias_varname).through
+                    kwargs = {
+                        many_to_many_field.m2m_reverse_field_name(): obj,
+                        many_to_many_field.m2m_field_name(): alias_object,
+                    }
+                    through_model_instances = through_model.objects.filter(**kwargs)
+                    for instance in through_model_instances:
+                        # Re-attach the through model to the primary_object
+                        setattr(
+                            instance,
+                            many_to_many_field.m2m_field_name(),
+                            primary_object)
+                        instance.save()
+                        # TODO: Here, try to delete duplicate instances that are
+                        # disallowed by a unique_together constraint
+
+        for related_field in related_fields:
+            if related_field.one_to_many:
+                alias_varname = related_field.get_accessor_name()
+                related_objects = getattr(alias_object, alias_varname)
+                for obj in related_objects.all():
+                    field_name = related_field.field.name
+                    setattr(obj, field_name, primary_object)
+                    obj.save()
+            elif related_field.one_to_one or related_field.many_to_one:
+                alias_varname = related_field.name
+                related_object = getattr(alias_object, alias_varname)
+                primary_related_object = getattr(primary_object, alias_varname)
+                if primary_related_object is None:
+                    setattr(primary_object, alias_varname, related_object)
+                    primary_object.save()
+                elif related_field.one_to_one:
+                    # self.stdout.write("Deleted {} with id {}\n".format(
+                    #     related_object, related_object.id))
+                    related_object.delete()
+
+        for field in generic_fields:
+            filter_kwargs = {}
+            filter_kwargs[field.fk_field] = alias_object._get_pk_val()
+            filter_kwargs[field.ct_field] = field.get_content_type(alias_object)
+            related_objects = field.model.objects.filter(**filter_kwargs)
+            for generic_related_object in related_objects:
+                setattr(generic_related_object, field.name, primary_object)
+                generic_related_object.save()
+
+        if alias_object.id:
+            print('!!')
+            deleted_objects += [alias_object]
+            # self.stdout.write("Deleted {} with id {}\n".format(
+            #     alias_object, alias_object.id))
+            alias_object.delete()
+            deleted_objects_count += 1
+
+@api_view(['GET', 'POST'])
+def ChangeItemsView(request):
+    item = Items.objects.filter(id = request.data.get('old_item_id'))[0]
+    print('1', Items.objects.filter(name = item.name))
+    other_item = Items.objects.filter(name = item.name).exclude(id = item.id)
+    merge(item, other_item)
+    print('1', Items.objects.filter(name = item.name))
+    # try:
+    #     item = Items.objects.filter(id = request.data.get('old_item_id'))
+    #     merge(Items.objects.filter(name = item.name))
+    #     return Response(status=200)
+    # except:
+    #     return Response(status=400)
+    return Response(status=200)
 
 
 class FileUploadWorkProgramOutcomesAPIView(APIView):

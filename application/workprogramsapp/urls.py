@@ -84,7 +84,7 @@ from .views import CloneWorkProgramm
 from .views import WorkProgramsListApi, UserGroups, TimeoutTest
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
 
-from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet, WorkProgramInFieldOfStudyForWorkProgramList
+from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet, WorkProgramInFieldOfStudyForWorkProgramList, ChangeItemsView
 
 # DocxFileExportOldView
 from .workprogram_additions.views import CopyContentOfWorkProgram
@@ -141,6 +141,7 @@ urlpatterns = [
     path('api/workprogram/merge_content', CopyContentOfWorkProgram),
     path('api/workprogramsinfieldofstudy', WorkProgramInFieldOfStudyListView.as_view()),
     path('api/workprogram/change_relations', NewRealtionsForWorkProgramsInFieldOfStudyAPI),
+    path('api/workprogram/change_items', ChangeItemsView),
     # path('api/workprogram/itemrelations/<char:discipline_code>', WorkProgramDetailsWithDisciplineCodeView.as_view()),
     url(r'^api/workprogram/itemrelations/(?P<discipline_code>[0-9.]+)/$',
         WorkProgramDetailsWithDisciplineCodeView.as_view()),

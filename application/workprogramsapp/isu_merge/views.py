@@ -656,6 +656,7 @@ class   FileUploadOldVersionAPIView(APIView):
                         print("Сохранили рпд в направлении", wpinfs)
                 try:
                     WorkProgramIdStrUpForIsu.objects.get(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs)
+                    print('ddddddddddddddddd', WorkProgramIdStrUpForIsu.objects.get(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs))
                 except WorkProgramIdStrUpForIsu.DoesNotExist:
                     wpinfs_id_str_up = WorkProgramIdStrUpForIsu(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs)
                     wpinfs_id_str_up.number = data['НОМЕР'][i]
