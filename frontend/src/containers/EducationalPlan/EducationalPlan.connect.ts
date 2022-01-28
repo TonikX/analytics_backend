@@ -7,8 +7,8 @@ import {getEducationalPlan, getCurrentPage, getSearchQuery, getAllCount, getSort
 import {EducationalPlanActions} from "./types";
 
 import {rootState} from "../../store/reducers";
-// import {isUserInOpGroup} from "../../common/userRights";
-// import {getUserGroups} from "../../layout/getters";
+import {isUserInOpGroup} from "../../common/userRights";
+import {getUserGroups} from "../../layout/getters";
 
 const mapStateToProps = (state: rootState) => {
     return {
@@ -18,8 +18,7 @@ const mapStateToProps = (state: rootState) => {
         allCount: getAllCount(state),
         sortingField: getSortingField(state),
         sortingMode: getSortingMode(state),
-        canAddNewPlan: false
-        // canAddNewPlan: isUserInOpGroup(getUserGroups(state))
+        canAddNewPlan: isUserInOpGroup(getUserGroups(state))
     };
 };
 
