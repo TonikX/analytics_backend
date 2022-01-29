@@ -1,6 +1,7 @@
 import datetime
 from pprint import pprint
 
+from django.db import transaction
 from django.db.models import Count
 # Сериализаторы
 from django_filters.rest_framework import DjangoFilterBackend
@@ -28,7 +29,7 @@ from .serializers import ProfessionalStandardSerializer
 
 # --Работа с образовательной программой
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
-    ImplementationAcademicPlan, Competence, Indicator
+    ImplementationAcademicPlan, Competence, Indicator, WorkProgramInFieldOfStudy, Zun
 from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
@@ -167,21 +168,24 @@ class ProfessionalStandardSet(viewsets.ModelViewSet):
 
 @api_view(['POST'])
 @permission_classes((IsAdminUser,))
+@transaction.atomic
 def UploadCompetences(request):
     csv_path = "workprogramsapp/educational_program/competence.csv"
     # Генерируем словарь компетенций из CSV
     dict_of_competences = competence_dict_generator(csv_path)
-
     for op in dict_of_competences:
         # Существует ли генеральная характеристика и таблица EducationalProgram или же ее надо создавать для УП
         for op_current in op["id_op"]:
-            #print(op["id_op"])
+            op_year, op_name = op["op_name"].split(" ", 1)
+            print(op_name)
+            op_real_object = ImplementationAcademicPlan.objects.get(year=int(op_year), title=op_name)
+            # print(op["id_op"])
             try:
-                educational_program = EducationalProgram.objects.get(academic_plan_for_ep__academic_plan__pk=op_current)
+                educational_program = EducationalProgram.objects.get(academic_plan_for_ep=op_real_object)
                 general_characteristic = GeneralCharacteristics.objects.get(educational_program=educational_program)
             except EducationalProgram.DoesNotExist:
-                academic_plan_for_ep = ImplementationAcademicPlan.objects.get(academic_plan__pk=op_current)
-                educational_program = EducationalProgram.objects.create(academic_plan_for_ep=academic_plan_for_ep)
+                # academic_plan_for_ep = ImplementationAcademicPlan.objects.get(academic_plan__pk=op_current)
+                educational_program = EducationalProgram.objects.create(academic_plan_for_ep=op_real_object)
                 general_characteristic = GeneralCharacteristics.objects.create(educational_program=educational_program)
             except GeneralCharacteristics.DoesNotExist:
                 general_characteristic = GeneralCharacteristics.objects.create(educational_program=educational_program)
@@ -205,9 +209,15 @@ def UploadCompetences(request):
                     competence_to_add = Competence.objects.create(number=competence["id_competence"],
                                                                   name=competence["competence_name"])
                     for indicator in competence["indicators_list"]:
-                        indicator_from_db.append(
-                            Indicator.objects.create(number=indicator["id_indicator"], name=indicator["indicator_name"],
-                                                     competence=competence_to_add))
+                        created_indicator = Indicator.objects.create(number=indicator["id_indicator"],
+                                                                     name=indicator["indicator_name"],
+                                                                     competence=competence_to_add)
+                        for wp in indicator["wp_list"]:
+                            wp_in_fos = WorkProgramInFieldOfStudy.objects.filter(work_program_id=wp,
+                                                                                 work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=op_real_object).distinct()
+                            for fs in wp_in_fos:
+                                Zun.objects.create(wp_in_fs=fs, indicator_in_zun=created_indicator)
+                        indicator_from_db.append(created_indicator)
 
                 if competence["competence_type"] == "Профессиональные компетенции":
                     CompGroupModel = GroupOfPkCompetencesInGeneralCharacteristic
