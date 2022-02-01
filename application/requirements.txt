@@ -59,7 +59,7 @@ openpyxl==3.0.4
 pandas==1.2.0
 pdf2docx==0.5.2
 pdfkit==0.6.1
-Pillow==7.0.0
+Pillow==9.0.0
 psycopg2==2.8.4
 pycparser==2.20
 PyJWT==1.7.1
