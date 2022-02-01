@@ -204,14 +204,23 @@ def SendCheckpointsForAcceptedWP(request):
         if max_sem != min_sem:
             relative_bool = False
 
+        wp_for_many_terms_list = [14928, 14929, 14930, 14931, 14932, 14933, 14934, 14922, 14923, 14924, 14925, 14926,
+                                  14927, 14935, 14936,
+                                  14937, 14938, 14939, 14940, 15720, 14941, 14942, 14943, 14946, 14947, 14948, 14949,
+                                  14950, 14951,
+                                  14953, 14954, 14963, 14955, 14956, 14957, 14958, 14959, 14960, 14961, 14962, 15441,
+                                  15924, 15944, 15947,
+                                  15937, 15941, 15926, 15939, 15917, 15925, 15932, 15921, 15922, 15940, 15943, 15933,
+                                  15935, 15948, 15938, 15919,
+                                  15929, 15930, 15934, 15936, 15949, 15923, 15931, 15920, 15945, 15918, 15928, 15927,
+                                  15946, 15942, 15676, 15704,
+                                  15950, 15951, 15952, 15106]
+        minimal_sem_for_many_term = 0
+        maximal_sem_for_many_term = 0
+        isu_wp_id_for_many_term = None
+        imp_list_for_many_term = []
         # Блок отвечающий за поиск оценочных средств в семестре
         for now_semester in range(0, 12):  # Цикл по семестрам\
-            wp_for_many_terms_list = [14928, 14924, 14925, 5232, 14926, 14927, 14935, 14936, 14937, 14938, 14939, 14929,
-                                      14940, 15720, 14941, 14942, 14943, 14944, 14945, 14946, 14947, 14948, 14949,
-                                      14930,
-                                      14950, 14951, 14952, 14953, 14954, 14963, 14955, 14956, 14957, 14958, 14931,
-                                      14959,
-                                      14960, 14961, 14962, 15441, 14932, 14933, 14934, 14922, 14923, 15106, 15676]
             imp_list = []  # Список всех учебных планов для этого семестра
             # Создание реуглярного выражения для того чтобы отфильтровать УП и инфу о РПД за этот семестр в цикле
             cred_regex = r""
@@ -225,9 +234,10 @@ def SendCheckpointsForAcceptedWP(request):
             implementation_of_academic_plan_all = ImplementationAcademicPlan.objects.filter(
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=work_program,
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
+            print(implementation_of_academic_plan_all)
             # Список УП с учетом актуального семестра отправки в БАРС
             implementation_of_academic_plan = implementation_of_academic_plan_all.filter(
-                year=int(year_of_sending) - now_semester//2)
+                year=int(year_of_sending) - now_semester // 2)
             print([imp.academic_plan.pk for imp in implementation_of_academic_plan_all])
             isu_wp_id = None
             for imp in implementation_of_academic_plan:
@@ -245,7 +255,20 @@ def SendCheckpointsForAcceptedWP(request):
 
             imp_list = list({v['id']: v for v in imp_list}.values())  # Оставляем уникальные значения по айдишникам
 
-            if imp_list and now_semester % 2 == send_semester:  # Если такой существует и соотвествует весне/осени (
+            # Трагичные Факультативы и прочая гадость собирается в общий ком из УП и в отдельном блоке кода отправляется
+            if work_program.id in wp_for_many_terms_list:
+                imp_list_for_many_term.extend(imp_list)
+                imp_list_for_many_term = list({v['id']: v for v in imp_list_for_many_term}.values())
+                imp_list = list({v['id']: v for v in imp_list}.values())
+                if isu_wp_id and not isu_wp_id_for_many_term:
+                    isu_wp_id_for_many_term = isu_wp_id
+                if imp_list and minimal_sem_for_many_term == 0:
+                    minimal_sem_for_many_term = now_semester + 1
+                if imp_list:
+                    maximal_sem_for_many_term = now_semester + 1
+
+            # Если существует список УП, соответствует текущему семестру и не является специальной РПД
+            if imp_list and now_semester % 2 == send_semester and not (work_program.id in wp_for_many_terms_list):
                 # Генерируем чекпоинт со всеми УП, прямыми и относиетльным семестром
 
                 request_text = generate_single_checkpoint(absolute_semester=now_semester + 1,
@@ -253,16 +276,6 @@ def SendCheckpointsForAcceptedWP(request):
                                                           programs=imp_list,
                                                           work_program=work_program, setup=setup_bars,
                                                           wp_isu_id=isu_wp_id, types_checkpoints=types_checkpoints)
-
-                # Если РПД "Особая" (общеуниверситетский факультатив/английский язык)
-                if work_program.id in wp_for_many_terms_list:
-                    request_text.pop('term', None)
-                    if max_sem == min_sem:
-                        request_text["terms"] = [i for i in range(1, 7 + 1)]
-                    else:
-                        request_text["terms"] = [i for i in range(min_sem, max_sem + 1)]
-                    # now_semester = 13  # чтобы не писать break и для выполнения кода ниже делаем несуществующий семестр
-                    print(max_sem, min_sem)
                 isu_wp = None
                 isu_wp_id = None
                 # Получаем вернувшуюся информацию
@@ -283,11 +296,46 @@ def SendCheckpointsForAcceptedWP(request):
 
                 all_sends.append(
                     {"status": request_status_code, "request": request_text, "response": request_response})
-            if work_program.id in wp_for_many_terms_list:
-                break
+
             # Если дисциплина длинной несколько семестров, то добавляем плюсик к счетчику относительного семестра
             if implementation_of_academic_plan_all and not relative_bool:
                 count_relative += 1
+
+        # Выход из цикла по семестрам
+        # Если РПД "особая" (реализуется в нескольких семестрах одновременно (как факультативы))
+        if work_program.id in wp_for_many_terms_list:
+            if not relative_bool:
+                count_relative = send_semester + 1
+                absolute_semester = send_semester + 1
+
+            else:
+                count_relative = 1
+                absolute_semester = minimal_sem_for_many_term
+            request_text = generate_single_checkpoint(absolute_semester=absolute_semester,
+                                                      relative_semester=count_relative,
+                                                      programs=imp_list_for_many_term,
+                                                      work_program=work_program, setup=setup_bars,
+                                                      wp_isu_id=isu_wp_id_for_many_term,
+                                                      types_checkpoints=types_checkpoints)
+            request_text["terms"] = [i for i in range(minimal_sem_for_many_term, maximal_sem_for_many_term + 1)]
+
+            request_response, request_status_code = post_checkpoint_plan(request_text, setup_bars)
+            print(request_text)
+            if request_status_code != 200:
+                #  если почему-то не отправилось продублируем респонс в терминал
+                print(request_text, request_response)
+            else:
+                # Если РПД отправилась со статусом 200, то записываем ее в отправленные
+                AcceptedBarsInWp.objects.get_or_create(work_program=work_program,
+                                                       year_of_study=setup_bars[0]
+                                                       , semester_of_sending=setup_bars[1])
+            # Пишем логи
+            HistoryOfSendingToBars.objects.create(work_program=work_program, request_text=request_text,
+                                                  request_response=request_response,
+                                                  request_status=request_status_code)
+
+            all_sends.append(
+                {"status": request_status_code, "request": request_text, "response": request_response})
     return Response(all_sends)
 
 
