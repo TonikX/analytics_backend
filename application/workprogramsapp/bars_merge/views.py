@@ -165,7 +165,6 @@ def SendCheckpointsForAcceptedWP(request):
     one_wp = request.data.get('one_wp')
     setup_bars = (year, send_semester)  # Устанавливает корректную дату и семестр в барсе (аргумент для БАРС-функций)
     year_of_sending = setup_bars[0].split("/")[0]
-    print(year_of_sending)
     # небольшой костыль из-за некоторых ньюансов (цикл семестров начинается с 0)
     types_checkpoints = get_list_of_regular_checkpoints(setup_bars)  # получаем список типов чекпоинтов из БАРС
     if send_semester == 0:
@@ -212,7 +211,7 @@ def SendCheckpointsForAcceptedWP(request):
                                       14930,
                                       14950, 14951, 14952, 14953, 14954, 14963, 14955, 14956, 14957, 14958, 14931,
                                       14959,
-                                      14960, 14961, 14962, 15441, 14932, 14933, 14934, 14922, 14923, 15106]
+                                      14960, 14961, 14962, 15441, 14932, 14933, 14934, 14922, 14923, 15106, 15676]
             imp_list = []  # Список всех учебных планов для этого семестра
             # Создание реуглярного выражения для того чтобы отфильтровать УП и инфу о РПД за этот семестр в цикле
             cred_regex = r""
@@ -229,6 +228,7 @@ def SendCheckpointsForAcceptedWP(request):
             # Список УП с учетом актуального семестра отправки в БАРС
             implementation_of_academic_plan = implementation_of_academic_plan_all.filter(
                 year=int(year_of_sending) - now_semester//2)
+            print([imp.academic_plan.pk for imp in implementation_of_academic_plan_all])
             isu_wp_id = None
             for imp in implementation_of_academic_plan:
                 # создаем список направлений + уп с айдишниками ИСУ для БАРСа
