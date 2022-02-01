@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 
 from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, \
 ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer, \
-RelationCreateSerializer, userProfileSerializer
+RelationCreateSerializer, userProfileSerializer, ItemWithRelationForSearchDuplicatesSerializer
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -471,3 +471,20 @@ class HighValuePrerequisitesListAPIView(generics.ListAPIView):
                 result.append(obj)
 
         return Items.objects.filter(name__in = set(result))
+
+
+class ItemsDetailForDuplicateSearchAPIView(generics.RetrieveAPIView):
+    """
+    API endpoint to retrieve list of the items
+    """
+    queryset = Items.objects.all()
+    serializer_class = ItemWithRelationForSearchDuplicatesSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object() # here the object is retrieved
+        serializer = self.get_serializer(instance)
+        serializer_for_duplicates = self.get_serializer(Items.objects.filter(name = instance.name), many=True)
+
+        return Response(data=[serializer.data, serializer_for_duplicates.data], status=status.HTTP_200_OK)

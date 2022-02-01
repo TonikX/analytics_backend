@@ -1,5 +1,6 @@
 from rest_framework import serializers, viewsets
 from .models import User, Items, Domain, Relation
+from workprogramsapp.models import WorkProgram
 
 class userProfileSerializer(serializers.ModelSerializer):
     """Сериализатор для работы с акканутами"""
@@ -110,3 +111,20 @@ class FileUploadSerializer(serializers.Serializer):
     """Сериализатор для добавления связей"""
     file = serializers.FileField(use_url=False)
 
+
+class WorkProgramShortSerializer(serializers.ModelSerializer):
+    """Сериализатор рабочих программ"""
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title']
+
+
+class ItemWithRelationForSearchDuplicatesSerializer(serializers.ModelSerializer):
+    """Сериализатор Ключевого слова со связями"""
+    WorkProgramPrerequisites = WorkProgramShortSerializer(many=True)
+    WorkProgramOutcomes = WorkProgramShortSerializer(many=True)
+
+    class Meta:
+        model = Items
+        fields = ('id','name','domain','value', 'WorkProgramPrerequisites', 'WorkProgramOutcomes')

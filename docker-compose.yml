@@ -41,7 +41,7 @@ services:
             - ./frontend:/app
             - node-modules:/app/node_modules
         ports:
-            - "3002:3000"
+            - "3003:3000"
         environment:
             - REACT_APP_API_HOST=${BACKEND_URL_FOR_REACT}
             - REACT_APP_API_SCHEMA=http

@@ -14,7 +14,7 @@
     
     
       
-        <title>Общий формат API - Документация к сервису "Конструктор РПД"</title>
+        <title>Сервис для объединения учебных сущностей - Документация к сервису "Конструктор РПД"</title>
       
     
     
@@ -93,7 +93,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Общий формат API
+              Сервис для объединения учебных сущностей
             
           </span>
         </div>
@@ -178,14 +178,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
       
       
       
@@ -206,47 +204,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Общий формат API
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../auth/api_data/" class="md-nav__link">
         Общий формат API
       </a>
-      
-        
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    Поля заголовков
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -258,7 +220,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../token/" class="md-nav__link">
+      <a href="../../auth/token/" class="md-nav__link">
         Авторизация (Получение токена)
       </a>
     </li>
@@ -326,12 +288,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       
       
@@ -352,11 +316,54 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../item_services/item/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Сервис для объединения учебных сущностей
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Сервис для объединения учебных сущностей
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    Поиск дубликатов учебных сущностей
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    Удаление дубликатов учебных сущностей (версия 1)
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -393,7 +400,14 @@
       
         <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
-    Поля заголовков
+    Поиск дубликатов учебных сущностей
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    Удаление дубликатов учебных сущностей (версия 1)
   </a>
   
 </li>
@@ -411,13 +425,49 @@
               
                 
                 
-                  <h1>Общий формат API</h1>
+                  <h1>Сервис для объединения учебных сущностей</h1>
                 
-                <p>Практически все взаимодейсвтие с API в сервисе реализовано в формате REST.</p>
-<h2 id="_1">Поля заголовков</h2>
-<p>При отправки любого запроса на сервер необходимо указывать  в его заголовках следующие поля:</p>
-<p><strong>Content-Type</strong> : <code>application/json</code></p>
-<p><strong>Authorization</strong> : <code>Token [token_number]</code></p>
+                <h2 id="_1">Поиск дубликатов учебных сущностей</h2>
+<p>[GET] /api/item/search_duplicate/{id}
+id - индентификатор учебной сущности.</p>
+<p>Пример вывода:</p>
+<pre><code class="language-json">[
+  {
+    &quot;id&quot;: 21332,
+    &quot;name&quot;: &quot;Принципы проектной деятельности в области фотоники&quot;,
+    &quot;domain&quot;: 223,
+    &quot;value&quot;: 1,
+    &quot;WorkProgramPrerequisites&quot;: [],
+    &quot;WorkProgramOutcomes&quot;: [
+      {
+        &quot;id&quot;: 9709,
+        &quot;title&quot;: &quot;Проекты фотоники&quot;
+      }
+    ]
+  },
+  [
+    {
+      &quot;id&quot;: 21333,
+      &quot;name&quot;: &quot;Принципы проектной деятельности в области фотоники&quot;,
+      &quot;domain&quot;: 223,
+      &quot;value&quot;: 1,
+      &quot;WorkProgramPrerequisites&quot;: [],
+      &quot;WorkProgramOutcomes&quot;: [
+        {
+          &quot;id&quot;: 9709,
+          &quot;title&quot;: &quot;Проекты фотоники&quot;
+        }
+      ]
+    }
+  ]
+]
+</code></pre>
+<p>Первый массив - искомая учебная сущность.
+Второй массив - ее дубликаты.
+Информация приводистся со ссылками на РПД, в которых используется учебная сущность.</p>
+<h2 id="1">Удаление дубликатов учебных сущностей (версия 1)</h2>
+<p>[POST] /api/workprogram/change_items</p>
+<p>В параметрах передать old_item_id. Будут удалены все дубликаты указанной учебной сущности. Связи "перекинуты" на нее.</p>
                 
               
               
@@ -436,21 +486,21 @@
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-      
         
-        <a href="../token/" class="md-footer__link md-footer__link--next" aria-label="Next: Авторизация (Получение токена)" rel="next">
+        <a href="../../external_services/bars/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Работа с БАРС 1.0" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
-                Next
+                Previous
               </span>
-              Авторизация (Получение токена)
+              Работа с БАРС 1.0
             </div>
           </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-          </div>
         </a>
+      
       
     </nav>
   

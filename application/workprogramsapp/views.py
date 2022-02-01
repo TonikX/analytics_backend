@@ -1084,18 +1084,14 @@ def merge_model_instances(primary_object, alias_objects):
 
 @api_view(['GET', 'POST'])
 def ChangeItemsView(request):
-    item = Items.objects.filter(id = request.data.get('old_item_id'))[0]
-    print('1', Items.objects.filter(name = item.name))
-    other_item = Items.objects.filter(name = item.name).exclude(id = item.id)
-    merge(item, other_item)
-    print('1', Items.objects.filter(name = item.name))
-    # try:
-    #     item = Items.objects.filter(id = request.data.get('old_item_id'))
-    #     merge(Items.objects.filter(name = item.name))
-    #     return Response(status=200)
-    # except:
-    #     return Response(status=400)
+    try:
+        item = Items.objects.filter(id = request.data.get('old_item_id'))[0]
+        other_item = Items.objects.filter(name = item.name).exclude(id = item.id)
+        merge(item, other_item)
+    except:
+        return Response(status=400)
     return Response(status=200)
+
 
 
 class FileUploadWorkProgramOutcomesAPIView(APIView):
