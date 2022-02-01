@@ -3,9 +3,10 @@ import re
 import pandas as pd
 
 
-def generate_main_dict(id_op):
+def generate_main_dict(id_op, op_name):
     competence_main_dict = {
         "id_op": id_op,
+        "op_name": op_name,
         "competence_list": []
     }
     return competence_main_dict
@@ -25,8 +26,8 @@ def generate_competence_dict(id_comp, comp_name, comp_group, comp_type):
 def generate_indicator_dict(id_indicator, indicator_name):
     indicator_dict = {
         "id_indicator": id_indicator,
-        "indicator_name": indicator_name
-
+        "indicator_name": indicator_name,
+        "wp_list": []
     }
     return indicator_dict
 
@@ -61,10 +62,7 @@ def competence_dict_generator(file_path):
         competence_find_bool = False
         indicator_find_bool = False
         main_dict = None
-        try:
-            id_op = list(map(int, row["ИД ОП"].split(",")))
-        except AttributeError:
-            id_op = [2613]
+        id_op = list(map(int, str(row["ИД ОП"]).split(",")))
         try:
             competence_id, competence_name = names_with_id_handler(row["Название компетенции"])
             print(competence_id)
@@ -87,7 +85,8 @@ def competence_dict_generator(file_path):
                 main_dict_find_bool = True
                 break
         if not main_dict:
-            main_dict = generate_main_dict(id_op)
+            op_name = row["ОП"]
+            main_dict = generate_main_dict(id_op, op_name)
             competence_list.append(main_dict)
 
         competence = None
@@ -100,7 +99,11 @@ def competence_dict_generator(file_path):
         if not competence:
             competence = generate_competence_dict(competence_id, competence_name, competence_group, competence_type)
             main_dict["competence_list"].append(competence)
-
+        # Добавление  ид РПД для компетенции
         indicator = generate_indicator_dict(indicator_id, indicator_name)
+        try:
+            indicator["wp_list"] = list(map(int, str(row["ИД РПД"]).split(",")))
+        except ValueError:
+            indicator["wp_list"] = []
         competence["indicators_list"].append(indicator)
     return competence_list
