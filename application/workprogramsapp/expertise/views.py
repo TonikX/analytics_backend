@@ -10,7 +10,7 @@ from workprogramsapp.models import WorkProgram
 from workprogramsapp.expertise.serializers import UserExpertiseSerializer, CommentSerializer, ExpertiseSerializer
 from workprogramsapp.notifications.models import ExpertiseNotification
 from workprogramsapp.permissions import IsMemberOfExpertise, IsRpdDeveloperOrReadOnly, IsMemberOfUserExpertise, \
-    IsExpertiseMaster, IsWorkProgramMemberOfExpertise, IsOwnerOrReadOnly
+    IsExpertiseMaster, IsWorkProgramMemberOfExpertise, IsOwnerOrReadOnly, IsExpertiseMasterStrict
 from workprogramsapp.workprogram_additions.models import UserStructuralUnit
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -143,7 +143,7 @@ class ChangeExpertiseView(generics.UpdateAPIView):
     """
     queryset = Expertise.objects.all()
     serializer_class = ExpertiseSerializer
-    permission_classes = [IsExpertiseMaster]
+    permission_classes = [IsExpertiseMasterStrict]
 
 
 class ChangeUserExpertiseView(generics.UpdateAPIView):
