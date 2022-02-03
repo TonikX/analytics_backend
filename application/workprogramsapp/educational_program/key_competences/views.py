@@ -9,19 +9,22 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 # Сериализаторы
-from .serializers import KeyCompetencesInGroupOfGeneralCharacteristicSerializer, IndicatorInKeyCompetenceInGeneralCharacteristicSerializer,\
-    CreateKeyCompetencesInGroupOfGeneralCharacteristicSerializer, CreateGroupOfKeyCompetencesInGeneralCharacteristicSerializer, \
-    GroupOfKeyCompetencesInGeneralCharacteristicSerializer, CreateIndicatorInKeyCompetenceInGeneralCharacteristicSerializer
+from .serializers import KeyCompetencesInGroupOfGeneralCharacteristicSerializer, \
+    IndicatorInKeyCompetenceInGeneralCharacteristicSerializer, \
+    CreateKeyCompetencesInGroupOfGeneralCharacteristicSerializer, \
+    CreateGroupOfKeyCompetencesInGeneralCharacteristicSerializer, \
+    GroupOfKeyCompetencesInGeneralCharacteristicSerializer, \
+    CreateIndicatorInKeyCompetenceInGeneralCharacteristicSerializer
 
-
-from .models import GroupOfKeyCompetencesInGeneralCharacteristic, KeyCompetencesInGroupOfGeneralCharacteristic, IndicatorInKeyCompetenceInGeneralCharacteristic
+from .models import GroupOfKeyCompetencesInEducationalStandard, KeyCompetencesInGroupOfGeneralCharacteristic, \
+    IndicatorInKeyCompetenceInGeneralCharacteristic
 
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 
 
 class KeyCompetencesInGroupOfGeneralCharacteristicSet(viewsets.ModelViewSet):
-    queryset = KeyCompetencesInGroupOfGeneralCharacteristic.objects.all()
+    queryset = GroupOfKeyCompetencesInEducationalStandard.objects.all()
     serializer_class = KeyCompetencesInGroupOfGeneralCharacteristicSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
@@ -37,7 +40,7 @@ class KeyCompetencesInGroupOfGeneralCharacteristicSet(viewsets.ModelViewSet):
 
 
 class GroupOfKeyCompetencesInGeneralCharacteristicsSet(viewsets.ModelViewSet):
-    queryset = GroupOfKeyCompetencesInGeneralCharacteristic.objects.all()
+    queryset = GroupOfKeyCompetencesInEducationalStandard.objects.all()
     serializer_class = GroupOfKeyCompetencesInGeneralCharacteristicSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]

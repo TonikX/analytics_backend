@@ -9,12 +9,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 # Сериализаторы
-from .serializers import GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer, IndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer,\
-    CreateGeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer, CreateGroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer, \
-    GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer, CreateIndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer
+from .serializers import GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer, \
+    IndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer, \
+    CreateGeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer, \
+    CreateGroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer, \
+    GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer, \
+    CreateIndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer
 
-
-from .models import GroupOfGeneralProfCompetencesInGeneralCharacteristic, GeneralProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
+from .models import GroupOfGeneralProfCompetencesInEducationalStandard, \
+    GeneralProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
 
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
@@ -37,7 +40,7 @@ class GeneralProfCompetencesInGroupOfGeneralCharacteristicSet(viewsets.ModelView
 
 
 class GroupOfGeneralProfCompetencesInGeneralCharacteristicsSet(viewsets.ModelViewSet):
-    queryset = GroupOfGeneralProfCompetencesInGeneralCharacteristic.objects.all()
+    queryset = GroupOfGeneralProfCompetencesInEducationalStandard.objects.all()
     serializer_class = GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
