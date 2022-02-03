@@ -2,6 +2,7 @@ import datetime
 
 from django.db.models import Count
 # Сериализаторы
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
@@ -26,7 +27,16 @@ from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 class PkCompetencesInGroupOfGeneralCharacteristicSet(viewsets.ModelViewSet):
     queryset = PkCompetencesInGroupOfGeneralCharacteristic.objects.all()
     serializer_class = PkCompetencesInGroupOfGeneralCharacteristicSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+    permission_classes = (IsRpdDeveloperOrReadOnly,)
+
+    def get_queryset(self):
+        type_pk = self.request.query_params.get('type_of_pk_competence')
+        if type_pk:
+            queryset = PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(type_of_pk_competence=type_pk)
+        else:
+            queryset = PkCompetencesInGroupOfGeneralCharacteristic.objects.all()
+        return queryset
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -42,6 +52,7 @@ class GroupOfPkCompetencesInGeneralCharacteristicsSet(viewsets.ModelViewSet):
     queryset = GroupOfPkCompetencesInGeneralCharacteristic.objects.all()
     serializer_class = GroupOfPkCompetencesInGeneralCharacteristicSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = (IsRpdDeveloperOrReadOnly,)
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -57,6 +68,7 @@ class IndicatorGroupOfPkCompetencesInGeneralCharacteristicSet(viewsets.ModelView
     queryset = IndicatorInPkCompetenceInGeneralCharacteristic.objects.all()
     serializer_class = IndicatorInPkCompetenceInGeneralCharacteristicSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = (IsRpdDeveloperOrReadOnly,)
 
     def get_serializer_class(self):
         if self.action == 'create':

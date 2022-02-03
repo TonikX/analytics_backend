@@ -457,8 +457,8 @@ class GeneralCharacteristics(models.Model):
         ('offline', 'offline'),
     )
 
-    educational_program = models.ForeignKey('EducationalProgram', on_delete=models.SET_NULL, verbose_name = 'Образовательная программа', related_name="general_characteristics_in_educational_program", blank = True, null = True)
-    area_of_activity = models.ManyToManyField('ProfessionalStandard', verbose_name = 'Проф. Стандарт/Область профессиональной деятельности')
+    educational_program = models.ManyToManyField('ImplementationAcademicPlan', verbose_name = 'Образовательная программа', related_name="general_characteristics_in_educational_program", blank = True, null = True)
+    area_of_activity = models.ManyToManyField('ProfessionalStandard', verbose_name = 'Проф. Стандарт/Область профессиональной деятельности', blank=True, null=True )
     objects_of_activity = models.CharField(max_length=512, verbose_name="Объекты профессиональной деятельности", blank=True, null=True)
     kinds_of_activity = models.ManyToManyField(KindsOfActivity, verbose_name="Сферы профессиональной деятельности, к которому (которым) готовятся выпускники", blank=True, null=True)
     tasks_of_activity = models.CharField(max_length=512, verbose_name="Задачи профессиональной деятельности ", blank=True, null=True)
