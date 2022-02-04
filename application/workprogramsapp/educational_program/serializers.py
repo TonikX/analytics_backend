@@ -2,7 +2,8 @@
 from rest_framework import serializers, viewsets
 
 # Модели данных
-from workprogramsapp.models import ProfessionalStandard, GeneralizedLaborFunctions, KindsOfActivity
+from workprogramsapp.models import ProfessionalStandard, GeneralizedLaborFunctions, KindsOfActivity, \
+    EmployerRepresentative
 
 # --Работа с образовательной программой
 from rest_framework.fields import BooleanField, SerializerMethodField
@@ -13,11 +14,12 @@ from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, D
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
-from .educational_standart.serializers import  TasksForProfStandardSerializer, \
+from .educational_standart.serializers import TasksForProfStandardSerializer, \
     EducationalStandardSingleObjectSerializer
 from .general_prof_competencies.models import GroupOfGeneralProfCompetencesInEducationalStandard
 from .key_competences.models import GroupOfKeyCompetencesInEducationalStandard
 from .over_professional_competencies.models import GroupOfOverProfCompetencesInEducationalStandard
+from .pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic
 from .pk_comptencies.serializers import GroupOfPkCompetencesInGeneralCharacteristicSerializer
 from .general_prof_competencies.serializers import GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer
 from .over_professional_competencies.serializers import GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
@@ -89,18 +91,41 @@ class ProfessionalStandardSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class EmployerSerializer(serializers.ModelSerializer):
+    """Сериализатор Представителей работодателей"""
+
+    class Meta:
+        model = EmployerRepresentative
+        fields = "__all__"
+
 class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     """Сериализатор образовательной программы"""
 
     group_of_general_prof_competences = SerializerMethodField(required=False)
     group_of_key_competences = SerializerMethodField()
     group_of_over_prof_competences = SerializerMethodField()
-    group_of_pk_competences = GroupOfPkCompetencesInGeneralCharacteristicSerializer(many=True, required=False)
-    developers = userProfileSerializer(many=True, required=False)
-    employers_representatives = userProfileSerializer(many=True, required=False)
-    director_of_megafaculty = userProfileSerializer(required=False)
+    # group_of_pk_competences = GroupOfPkCompetencesInGeneralCharacteristicSerializer(many=True, required=False)
+    group_of_pk_competences_prof = SerializerMethodField()
+    group_of_pk_competences_foresight = SerializerMethodField()
+    group_of_pk_competences_minor = SerializerMethodField()
+
+    ep_supervisor = userProfileSerializer(required=False)
     dean_of_the_faculty = userProfileSerializer(required=False)
-    scientific_supervisor_of_the_educational_program = userProfileSerializer(required=False)
+
+    def get_group_of_pk_competences_prof(self, instance):
+        return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
+            instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic=instance,
+            competence_in_group_of_pk_competences__type_of_pk_competence="prof"), many=True).data
+
+    def get_group_of_pk_competences_foresight(self, instance):
+        return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
+            instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic=instance,
+            competence_in_group_of_pk_competences__type_of_pk_competence="fore"), many=True).data
+
+    def get_group_of_pk_competences_minor(self, instance):
+        return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
+            instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic=instance,
+            competence_in_group_of_pk_competences__type_of_pk_competence="min"), many=True).data
 
     def get_group_of_general_prof_competences(self, instance):
         try:
@@ -132,22 +157,23 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         self.fields['area_of_activity'] = ProfessionalStandardSerializer(many=True)
         self.fields['kinds_of_activity'] = KindsOfActivitySerializer(many=True)
         self.fields['educational_program'] = ImplementationAcademicPlanSerializer(many=True)
-        self.fields['educational_standard'] = EducationalStandardSingleObjectSerializer(many=True)
-
+        self.fields['educational_standard'] = EducationalStandardSingleObjectSerializer()
+        self.fields['employers_in_characteristic'] = EmployerSerializer(many=True)
         return super().to_representation(value)
 
     class Meta:
         model = GeneralCharacteristics
-        fields = ['id', 'area_of_activity', 'educational_program', 'group_of_pk_competences',
+        fields = ['id', 'area_of_activity', 'educational_program',
                   'group_of_over_prof_competences', 'group_of_key_competences', 'group_of_general_prof_competences',
-                  'developers', 'employers_representatives', 'director_of_megafaculty', 'dean_of_the_faculty',
-                  'scientific_supervisor_of_the_educational_program',
-                  'objects_of_activity', 'kinds_of_activity', 'tasks_of_activity', 'type_of_activity', 'annotation',
+                  'objects_of_activity', 'kinds_of_activity', 'tasks_of_activity', 'annotation',
 
                   'educational_standard', 'tasks_for_prof_standards', 'language', 'is_only_in_university',
                   'is_global_educational_program', 'is_online_format', 'collaboration_russian_in_online_format',
                   'is_collaboration_foreign', 'collaboration_foreign', 'realization_format',
-                  'structural_unit_implementer']
+                  'structural_unit_implementer',
+                  'group_of_pk_competences_prof', 'group_of_pk_competences_foresight', 'group_of_pk_competences_minor',
+                  'employers_in_characteristic', 'ep_supervisor', 'directors_position', 'dean_of_the_faculty',
+                  'cluster_name']
 
 
 class DepartmentSerializer(serializers.ModelSerializer):

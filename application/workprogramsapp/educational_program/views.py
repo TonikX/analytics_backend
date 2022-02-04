@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
     EducationalProgramSerializer, \
     GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
-    GeneralLaborFunctionsSerializer, KindsOfActivitySerializer
+    GeneralLaborFunctionsSerializer, KindsOfActivitySerializer, EmployerSerializer
 from .competence_handler import competence_dict_generator
 from .general_prof_competencies.models import IndicatorInGeneralProfCompetenceInGeneralCharacteristic, \
     GeneralProfCompetencesInGroupOfGeneralCharacteristic, GroupOfGeneralProfCompetencesInEducationalStandard
@@ -31,7 +31,7 @@ from .serializers import ProfessionalStandardSerializer
 # --Работа с образовательной программой
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
     ImplementationAcademicPlan, Competence, Indicator, WorkProgramInFieldOfStudy, Zun, GeneralizedLaborFunctions, \
-    KindsOfActivity
+    KindsOfActivity, EmployerRepresentative
 from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
@@ -184,6 +184,16 @@ class KindsOfActivitySet(viewsets.ModelViewSet):
     """
     queryset = KindsOfActivity.objects.all()
     serializer_class = KindsOfActivitySerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class EmployerSet(viewsets.ModelViewSet):
+    """
+    CRUD представителей работодателей
+    """
+    queryset = EmployerRepresentative.objects.all()
+    serializer_class = EmployerSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
