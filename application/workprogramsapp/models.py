@@ -9,6 +9,7 @@ from django.contrib.postgres.fields import ArrayField
 
 from dataprocessing.models import Items
 from onlinecourse.models import OnlineCourse, Institution
+from django.contrib.postgres.fields import JSONField
 '''
 class FieldOfStudyWorkProgram(models.Model):
 
@@ -535,6 +536,8 @@ class ImplementationAcademicPlan(models.Model):
     language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
                                 blank=True, null=True)
     title = models.CharField(max_length=1024, verbose_name = 'Название', blank = True, null = True)
+    old_json = JSONField(blank=True, null=True)
+    new_json = JSONField(blank=True, null=True)
 
     def __str__(self):
         return str(self.academic_plan)
