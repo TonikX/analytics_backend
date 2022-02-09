@@ -9,6 +9,8 @@ from django.contrib.postgres.fields import ArrayField
 
 from dataprocessing.models import Items
 from onlinecourse.models import OnlineCourse, Institution
+from workprogramsapp.educational_program.educational_standart.models import EducationalStandard, TasksForProfStandard
+
 '''
 class FieldOfStudyWorkProgram(models.Model):
 
@@ -427,32 +429,101 @@ class EducationalProgram(models.Model):
     academic_plan_for_ep = models.ForeignKey('ImplementationAcademicPlan', on_delete=models.SET_NULL, verbose_name = 'Учебный план_1', related_name="academic_plan_in_educational_program", blank = True, null = True)
 
 
+class KindsOfActivity(models.Model):
+    """
+    Сферы проф. деятельности
+    """
+    name = models.CharField(max_length=1024, verbose_name='имя сферы проф. деятельности', blank=True, null=True)
+
+    def __str__(self):
+        return str(self.name)
+
+
+class EmployerRepresentative(models.Model):
+    organization_name = models.CharField(max_length=512, verbose_name="Наименование организации", blank=True,
+                                         null=True)
+    employer_position = models.CharField(max_length=512, verbose_name="Позиция работодателя", blank=True,
+                                         null=True)
+
+    fio_employer = models.CharField(max_length=512, verbose_name="ФИО работодателя", blank=True,
+                                    null=True)
+    general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.SET_NULL,
+                                               related_name='employers_in_characteristic',
+                                               verbose_name="Общая характеристика", blank=True,null=True)
+
+
 class GeneralCharacteristics(models.Model):
     '''
     Модель описания характеристики образовтаельной программы
     '''
-    educational_program = models.ForeignKey('EducationalProgram', on_delete=models.SET_NULL, verbose_name = 'Образовательная программа', related_name="general_characteristics_in_educational_program", blank = True, null = True)
-    area_of_activity = models.ManyToManyField('ProfessionalAreaOfGeneralCharacteristics', verbose_name = 'Область профессиональной деятельности')
-    objects_of_activity = models.CharField(max_length=512, verbose_name="Объекты профессиональной деятельности", blank=True, null=True)
-    kinds_of_activity = models.CharField(max_length=512, verbose_name="Сферы профессиональной деятельности, к которому (которым) готовятся выпускники", blank=True, null=True)
-    tasks_of_activity = models.CharField(max_length=512, verbose_name="Задачи профессиональной деятельности ", blank=True, null=True)
-    type_of_activity = models.CharField(max_length=512, verbose_name="Тип основной профессиональной образовательной программы", blank=True, null=True)
+
+    languages_for_gc = (
+        ('ru', 'ru'),
+        ('en', 'en'),
+        ('kz', 'kz'),
+        ('de', 'de'),
+        ('ru/en', 'ru/en'),
+    )
+
+    format_choices = (
+        ('online', 'online'),
+        ('offline', 'offline'),
+    )
+
+    educational_program = models.ManyToManyField('ImplementationAcademicPlan', verbose_name = 'Образовательная программа', related_name="general_characteristics_in_educational_program", blank = True, null = True)
+    area_of_activity = models.ManyToManyField('ProfessionalStandard', verbose_name = 'Проф. Стандарт/Область профессиональной деятельности', blank=True, null=True )
+    objects_of_activity = models.CharField(max_length=4096, verbose_name="Объекты профессиональной деятельности", blank=True, null=True)
+    kinds_of_activity = models.ManyToManyField(KindsOfActivity, verbose_name="Сферы профессиональной деятельности, к которому (которым) готовятся выпускники", blank=True, null=True)
+    tasks_of_activity = models.ForeignKey(TasksForProfStandard, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Тип (типы) профессиональных задач, к решению которых готовятся выпускники")
     # ok_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕКУЛЬТУРНЫЕ КОМПЕТЕНЦИИ", related_name="ok_competences_in_gh", blank=True)
     # kc_competences = models.ManyToManyField('Competence', verbose_name="Ключевые компетенции", related_name="kc_competences_in_gh", blank=True)
     #pk_competences = models.ManyToManyField('Indicator', verbose_name="ПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ", through = 'PkCompetencesInGeneralCharacteristics', related_name="pk_competences_in_gh", blank=True)
     # np_competences = models.ManyToManyField('Competence', verbose_name="Надпрофессиональные компетенции", related_name="np_competences_in_gh", blank=True,)
     #pps = ArrayField(models.CharField(max_length=512, verbose_name="Сведения о профессорско-преподавательском составе, необходимом для реализации основной профессиональной образовательной программы"), blank=True, null=True)
-    pps = models.TextField(max_length=55512, verbose_name="Сведения о профессорско-преподавательском составе, необходимом для реализации ", blank=True, null=True)
     annotation = models.TextField(max_length=55512, verbose_name="Аннотация основной профессиональной образовательной программы", blank=True, null=True)
-    developers = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Сотрудники Университета ИТМО", related_name="ok_competences_in_gh", blank=True)
-    employers_representatives = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Представители работодателей", related_name="employers_representatives_in_gh", blank=True)
-    director_of_megafaculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Директор мегафакультета", related_name="director_of_megafaculty_in_gh", blank=True, null=True)
-    dean_of_the_faculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Декан факультета", related_name="dean_of_the_faculty_in_gh", blank=True, null=True)
-    scientific_supervisor_of_the_educational_program = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Научный руководитель образовательной программы",
-                                                                         related_name="scientific_supervisor_of_the_educational_program_in_gh", blank=True, null=True)
+
+    #########################################
+    educational_standard = models.ForeignKey(EducationalStandard, on_delete=models.SET_NULL,
+                                             verbose_name='Образовательный стандарт',
+                                             related_name="educational_standard_in_educational_program", blank=True,
+                                             null=True)
+    tasks_for_prof_standards = models.ManyToManyField(TasksForProfStandard,
+                                                      verbose_name='Список задач образовательного стандарта',
+                                                      related_name="tasks_for_prof_standards_in_educational_program",
+                                                      blank=True, null=True)
+    language = models.CharField(choices=languages_for_gc, max_length=15, verbose_name='Языки',
+                                blank=True, null=True)
+    is_only_in_university = models.BooleanField(blank=True, null=True, verbose_name="Тольков в университете итмо?")
+    is_global_educational_program = models.BooleanField(blank=True, null=True,
+                                                        verbose_name="Имеет статус международной ОП?")
+
+    is_online_format = models.BooleanField(blank=True, null=True, verbose_name="В сетевой форме?")
+    collaboration_russian_in_online_format = models.CharField(max_length=2048,blank=True, null=True,
+                                                              verbose_name="Совместно с российскими партнерами:")
+
+    is_collaboration_foreign = models.BooleanField(blank=True, null=True, verbose_name="В форме совместной ОП?")
+    collaboration_foreign = models.CharField(max_length=2048, blank=True, null=True, verbose_name="Совместно с иностранными партнерами:")
+
+    realization_format = models.CharField(choices=format_choices, max_length=15, verbose_name='Языки',
+                                          blank=True, null=True)
+
+    structural_unit_implementer = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL, blank=True, null=True,
+                                                    verbose_name='Подразделение-реализатор')
+
+    ep_supervisor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+                                      verbose_name="руководитель ОП", related_name="director_of_megafaculty_in_gh",
+                                      blank=True, null=True)
+    directors_position = models.CharField(max_length=512, verbose_name="должность руководителя ОП", blank=True,
+                                          null=True)
+    dean_of_the_faculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+                                            verbose_name="Декан факультета", related_name="dean_of_the_faculty_in_gh",
+                                            blank=True, null=True)
+    cluster_name = models.CharField(max_length=512, verbose_name="Имя подразделения, кластера, института", blank=True,
+                                    null=True)
+
 
     def __str__(self):
-        return str(self.educational_program) + str(self.director_of_megafaculty) + str(self.scientific_supervisor_of_the_educational_program)
+        return str(self.educational_program)
 
 
 class Department(models.Model):
@@ -467,16 +538,12 @@ class Department(models.Model):
         return str(self.title)
 
 
-class ProfessionalAreaOfGeneralCharacteristics(models.Model):
-    """
-    Профессиональный стандарт
-    """
-    # general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="ОХ", blank=True, null=True)
-    title = models.CharField(max_length=512, verbose_name="Наименование бласти проф деятельности", blank=True, null=True)
-    professional_standard = models.ManyToManyField('ProfessionalStandard', verbose_name="Профессиональный стандарт", blank=True)
+
+class GeneralizedLaborFunctions(models.Model):
+    name = models.CharField(max_length=512, verbose_name="обобщенные трудовые функции", blank=True, null=True)
 
     def __str__(self):
-        return str(self.title)
+        return str(self.name)
 
 
 class ProfessionalStandard(models.Model):
@@ -484,7 +551,13 @@ class ProfessionalStandard(models.Model):
     Профессиональный стандарт
     """
     title = models.CharField(max_length=512, verbose_name="Наименование профессионального стандарта из данной области")
-    code = models.CharField(max_length=512, verbose_name="Код профессионального стандарта из данной области", blank=True, null=True)
+    code = models.CharField(max_length=512, verbose_name="Код профессионального стандарта из данной области",
+                            blank=True, null=True)
+    name_and_code_of_prof_area = models.CharField(max_length=512,
+                                                  verbose_name="Наименование и код области проф. деятельности",
+                                                  blank=True, null=True)
+    generalized_labor_functions = models.ManyToManyField(GeneralizedLaborFunctions,
+                                                         verbose_name="обобщенные трудовые функции", blank=True)
 
     def __str__(self):
         return str(self.title)

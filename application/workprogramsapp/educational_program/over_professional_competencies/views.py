@@ -9,12 +9,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 # Сериализаторы
-from .serializers import OverProfCompetencesInGroupOfGeneralCharacteristicSerializer, IndicatorInOverProfCompetenceInGeneralCharacteristicSerializer,\
-    CreateOverProfCompetencesInGroupOfGeneralCharacteristicSerializer, CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer, \
-    GroupOfOverProfCompetencesInGeneralCharacteristicSerializer, CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer
+from .serializers import OverProfCompetencesInGroupOfGeneralCharacteristicSerializer, \
+    IndicatorInOverProfCompetenceInGeneralCharacteristicSerializer, \
+    CreateOverProfCompetencesInGroupOfGeneralCharacteristicSerializer, \
+    CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer, \
+    GroupOfOverProfCompetencesInGeneralCharacteristicSerializer, \
+    CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer
 
-
-from .models import GroupOfOverProfCompetencesInGeneralCharacteristic, OverProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInOverProfCompetenceInGeneralCharacteristic
+from .models import GroupOfOverProfCompetencesInEducationalStandard, OverProfCompetencesInGroupOfGeneralCharacteristic, \
+    IndicatorInOverProfCompetenceInGeneralCharacteristic
 
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
@@ -37,7 +40,7 @@ class OverProfCompetencesInGroupOfGeneralCharacteristicSet(viewsets.ModelViewSet
 
 
 class GroupOfOverProfCompetencesInGeneralCharacteristicsSet(viewsets.ModelViewSet):
-    queryset = GroupOfOverProfCompetencesInGeneralCharacteristic.objects.all()
+    queryset = GroupOfOverProfCompetencesInEducationalStandard.objects.all()
     serializer_class = GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]

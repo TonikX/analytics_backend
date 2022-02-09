@@ -14,13 +14,14 @@ from rest_framework.response import Response
 # Сериализаторы
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
     EducationalProgramSerializer, \
-    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer
+    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
+    GeneralLaborFunctionsSerializer, KindsOfActivitySerializer, EmployerSerializer
 from .competence_handler import competence_dict_generator
 from .general_prof_competencies.models import IndicatorInGeneralProfCompetenceInGeneralCharacteristic, \
-    GeneralProfCompetencesInGroupOfGeneralCharacteristic, GroupOfGeneralProfCompetencesInGeneralCharacteristic
+    GeneralProfCompetencesInGroupOfGeneralCharacteristic, GroupOfGeneralProfCompetencesInEducationalStandard
 from .key_competences.models import IndicatorInKeyCompetenceInGeneralCharacteristic, \
-    KeyCompetencesInGroupOfGeneralCharacteristic, GroupOfKeyCompetencesInGeneralCharacteristic
-from .over_professional_competencies.models import GroupOfOverProfCompetencesInGeneralCharacteristic, \
+    KeyCompetencesInGroupOfGeneralCharacteristic, GroupOfKeyCompetencesInEducationalStandard
+from .over_professional_competencies.models import GroupOfOverProfCompetencesInEducationalStandard, \
     OverProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInOverProfCompetenceInGeneralCharacteristic
 from .pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
     PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
@@ -29,7 +30,8 @@ from .serializers import ProfessionalStandardSerializer
 
 # --Работа с образовательной программой
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
-    ImplementationAcademicPlan, Competence, Indicator, WorkProgramInFieldOfStudy, Zun
+    ImplementationAcademicPlan, Competence, Indicator, WorkProgramInFieldOfStudy, Zun, GeneralizedLaborFunctions, \
+    KindsOfActivity, EmployerRepresentative
 from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
@@ -166,6 +168,36 @@ class ProfessionalStandardSet(viewsets.ModelViewSet):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+class GeneralizedLaborFunctionsSet(viewsets.ModelViewSet):
+    """
+    CRUD для обобщенных трудовых сущностей
+    """
+    queryset = GeneralizedLaborFunctions.objects.all()
+    serializer_class = GeneralLaborFunctionsSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class KindsOfActivitySet(viewsets.ModelViewSet):
+    """
+    CRUD для сфер деятельности
+    """
+    queryset = KindsOfActivity.objects.all()
+    serializer_class = KindsOfActivitySerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class EmployerSet(viewsets.ModelViewSet):
+    """
+    CRUD представителей работодателей
+    """
+    queryset = EmployerRepresentative.objects.all()
+    serializer_class = EmployerSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
 @api_view(['POST'])
 @permission_classes((IsAdminUser,))
 @transaction.atomic
@@ -224,15 +256,15 @@ def UploadCompetences(request):
                     CompGeneralModel = PkCompetencesInGroupOfGeneralCharacteristic
                     CompIndicatorModel = IndicatorInPkCompetenceInGeneralCharacteristic
                 elif competence["competence_type"] == "Надпрофессиональные компетенции":
-                    CompGroupModel = GroupOfOverProfCompetencesInGeneralCharacteristic
+                    CompGroupModel = GroupOfOverProfCompetencesInEducationalStandard
                     CompGeneralModel = OverProfCompetencesInGroupOfGeneralCharacteristic
                     CompIndicatorModel = IndicatorInOverProfCompetenceInGeneralCharacteristic
                 elif competence["competence_type"] == "Ключевые компетенции":
-                    CompGroupModel = GroupOfKeyCompetencesInGeneralCharacteristic
+                    CompGroupModel = GroupOfKeyCompetencesInEducationalStandard
                     CompGeneralModel = KeyCompetencesInGroupOfGeneralCharacteristic
                     CompIndicatorModel = IndicatorInKeyCompetenceInGeneralCharacteristic
                 elif competence["competence_type"] == "Общепрофессиональные компетенции":
-                    CompGroupModel = GroupOfGeneralProfCompetencesInGeneralCharacteristic
+                    CompGroupModel = GroupOfGeneralProfCompetencesInEducationalStandard
                     CompGeneralModel = GeneralProfCompetencesInGroupOfGeneralCharacteristic
                     CompIndicatorModel = IndicatorInGeneralProfCompetenceInGeneralCharacteristic
 
