@@ -7,7 +7,7 @@ from rest_framework import serializers, viewsets
 # Модели данных
 from .models import PkCompetencesInGroupOfGeneralCharacteristic, \
     GroupOfPkCompetencesInGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
-from workprogramsapp.models import ProfessionalStandard
+from workprogramsapp.models import ProfessionalStandard, GeneralizedLaborFunctions, KindsOfActivity
 from workprogramsapp.models import Indicator
 
 # Другие сериализаторы
@@ -19,9 +19,25 @@ from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcad
 Вспомогательные
 """
 
+
+class GeneralLaborFunctionsSerializer(serializers.ModelSerializer):
+    """Сериализатор обобщенных трудовых функций"""
+
+    class Meta:
+        model = GeneralizedLaborFunctions
+        fields = "__all__"
+
+
+class KindsOfActivitySerializer(serializers.ModelSerializer):
+    """Сериализатор сфер проф. деятельности"""
+
+    class Meta:
+        model = KindsOfActivity
+        fields = "__all__"
+
+
 class ShortProfessionalStandardSerializer(serializers.ModelSerializer):
     """Сериализатор образовательной программы"""
-
 
     class Meta:
         model = ProfessionalStandard
@@ -31,6 +47,7 @@ class ShortProfessionalStandardSerializer(serializers.ModelSerializer):
 """
 Профессиональные компетенции
 """
+
 
 class IndicatorInPkCompetenceInGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """
@@ -54,29 +71,34 @@ class CreateIndicatorInPkCompetenceInGeneralCharacteristicSerializer(serializers
     )
 
     def create(self, validated_data):
-        competence = PkCompetencesInGroupOfGeneralCharacteristic.objects.get(pk = validated_data.pop('competence_in_group_of_pk'))
+        competence = PkCompetencesInGroupOfGeneralCharacteristic.objects.get(
+            pk=validated_data.pop('competence_in_group_of_pk'))
         indicators = validated_data.pop('indicator')
 
         for ind in indicators:
             try:
                 IndicatorInPkCompetenceInGeneralCharacteristic. \
-                    objects.create(competence_in_group_of_pk =
-                                                   PkCompetencesInGroupOfGeneralCharacteristic.objects.get
-                                   (pk = competence.id), indicator = Indicator.objects.get(pk = ind))
+                    objects.create(competence_in_group_of_pk=
+                                   PkCompetencesInGroupOfGeneralCharacteristic.objects.get
+                                   (pk=competence.id), indicator=Indicator.objects.get(pk=ind))
             except:
-                raise serializers.ValidationError({"error":"indicator not found"})
+                raise serializers.ValidationError({"error": "indicator not found"})
         return Response(status=status.HTTP_201_CREATED)
 
 
 class PkCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """Сериализатор просмотра профессиональных компетенций"""
-    indicator_of_competence_in_group_of_pk_competences = IndicatorInPkCompetenceInGeneralCharacteristicSerializer(many=True)
+    indicator_of_competence_in_group_of_pk_competences = IndicatorInPkCompetenceInGeneralCharacteristicSerializer(
+        many=True)
     competence = CompetenceSerializer()
     professional_standard = ShortProfessionalStandardSerializer()
+    generalized_labor_functions = GeneralLaborFunctionsSerializer(many=True)
+    kinds_of_activity = KindsOfActivitySerializer()
 
     class Meta:
         model = PkCompetencesInGroupOfGeneralCharacteristic
-        fields = ['id', 'indicator_of_competence_in_group_of_pk_competences', 'competence', 'professional_standard', 'labor_functions']
+        fields = ['id', 'type_of_pk_competence', 'indicator_of_competence_in_group_of_pk_competences', 'competence', 'professional_standard',
+                  'generalized_labor_functions', 'kinds_of_activity']
 
 
 class CreatePkCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
@@ -94,7 +116,7 @@ class GroupOfPkCompetencesInGeneralCharacteristicSerializer(serializers.ModelSer
 
     class Meta:
         model = GroupOfPkCompetencesInGeneralCharacteristic
-        fields = ['id','name', 'competence_in_group_of_pk_competences']
+        fields = ['id', 'name', 'competence_in_group_of_pk_competences']
 
 
 class CreateGroupOfPkCompetencesInGeneralCharacteristicSerializer(serializers.ModelSerializer):
@@ -102,5 +124,4 @@ class CreateGroupOfPkCompetencesInGeneralCharacteristicSerializer(serializers.Mo
 
     class Meta:
         model = GroupOfPkCompetencesInGeneralCharacteristic
-        fields = ['id','name', 'general_characteristic']
-
+        fields = ['id', 'name', 'general_characteristic']

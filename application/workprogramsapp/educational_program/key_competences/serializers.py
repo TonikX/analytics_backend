@@ -5,16 +5,18 @@ from rest_framework import response, status
 from rest_framework import serializers, viewsets
 
 # Модели данных
-from .models import KeyCompetencesInGroupOfGeneralCharacteristic, GroupOfKeyCompetencesInGeneralCharacteristic, IndicatorInKeyCompetenceInGeneralCharacteristic
+from .models import KeyCompetencesInGroupOfGeneralCharacteristic, GroupOfKeyCompetencesInEducationalStandard, \
+    IndicatorInKeyCompetenceInGeneralCharacteristic
 from workprogramsapp.models import Indicator
 
 # Другие сериализаторы
-from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer, CompetenceForEPSerializer, IndicatorListSerializer, IndicatorListWithoutCompetenceSerializer
-
+from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer, \
+    CompetenceForEPSerializer, IndicatorListSerializer, IndicatorListWithoutCompetenceSerializer
 
 """
 Ключевые компетенции
 """
+
 
 class IndicatorInKeyCompetenceInGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """
@@ -38,29 +40,31 @@ class CreateIndicatorInKeyCompetenceInGeneralCharacteristicSerializer(serializer
     )
 
     def create(self, validated_data):
-        competence = KeyCompetencesInGroupOfGeneralCharacteristic.objects.get(pk = validated_data.pop('competence_in_group_of_pk'))
+        competence = KeyCompetencesInGroupOfGeneralCharacteristic.objects.get(
+            pk=validated_data.pop('competence_in_group_of_pk'))
         indicators = validated_data.pop('indicator')
 
         for ind in indicators:
             try:
                 IndicatorInKeyCompetenceInGeneralCharacteristic. \
-                    objects.create(competence_in_group_of_pk =
-                                                   KeyCompetencesInGroupOfGeneralCharacteristic.objects.get
-                                   (pk = competence.id), indicator = Indicator.objects.get(pk = ind))
+                    objects.create(competence_in_group_of_pk=
+                                   KeyCompetencesInGroupOfGeneralCharacteristic.objects.get
+                                   (pk=competence.id), indicator=Indicator.objects.get(pk=ind))
             except:
-                raise serializers.ValidationError({"error":"indicator not found"})
+                raise serializers.ValidationError({"error": "indicator not found"})
         return Response(status=status.HTTP_201_CREATED)
-
 
 
 class KeyCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """Сериализатор просмотра ключевых компетенций"""
-    indicator_of_competence_in_group_of_key_competences = IndicatorInKeyCompetenceInGeneralCharacteristicSerializer(many=True)
+    indicator_of_competence_in_group_of_key_competences = IndicatorInKeyCompetenceInGeneralCharacteristicSerializer(
+        many=True)
     competence = CompetenceSerializer()
 
     class Meta:
         model = KeyCompetencesInGroupOfGeneralCharacteristic
         fields = ['id', 'indicator_of_competence_in_group_of_key_competences', 'competence']
+
 
 class CreateKeyCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """Сериализатор создания и изменения ключевых компетенций"""
@@ -76,7 +80,7 @@ class GroupOfKeyCompetencesInGeneralCharacteristicSerializer(serializers.ModelSe
     competence_in_group_of_key_competences = KeyCompetencesInGroupOfGeneralCharacteristicSerializer(many=True)
 
     class Meta:
-        model = GroupOfKeyCompetencesInGeneralCharacteristic
+        model = GroupOfKeyCompetencesInEducationalStandard
         fields = ['id', 'name', 'competence_in_group_of_key_competences']
 
 
@@ -84,6 +88,5 @@ class CreateGroupOfKeyCompetencesInGeneralCharacteristicSerializer(serializers.M
     """Сериализатор создания и редактирования группы ключевых куомпетенций в общей характеристике образовтаельной программы"""
 
     class Meta:
-        model = GroupOfKeyCompetencesInGeneralCharacteristic
-        fields = ['id', 'name', 'general_characteristic']
-
+        model = GroupOfKeyCompetencesInEducationalStandard
+        fields = ['id', 'name', 'educational_standard']

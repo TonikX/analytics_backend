@@ -14,40 +14,39 @@ from .models import (
     OnlineCourse, WorkProgramIdStrUpForIsu
 )
 # FieldOfStudyWorkProgram,
-from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
-    Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
+from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, \
+    SkillsOfRole, \
+    Role, ProfessionalStandard
 from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments
 
 from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 
 from .educational_program.pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
     PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
-from .educational_program.over_professional_competencies.models import GroupOfOverProfCompetencesInGeneralCharacteristic, \
+from .educational_program.over_professional_competencies.models import GroupOfOverProfCompetencesInEducationalStandard, \
     OverProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInOverProfCompetenceInGeneralCharacteristic
-from .educational_program.key_competences.models import GroupOfKeyCompetencesInGeneralCharacteristic, \
+from .educational_program.key_competences.models import GroupOfKeyCompetencesInEducationalStandard, \
     KeyCompetencesInGroupOfGeneralCharacteristic, IndicatorInKeyCompetenceInGeneralCharacteristic
-from .educational_program.general_prof_competencies.models import GroupOfGeneralProfCompetencesInGeneralCharacteristic, \
+from .educational_program.general_prof_competencies.models import GroupOfGeneralProfCompetencesInEducationalStandard, \
     GeneralProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
 from .individualization.models import ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .feedback.models import FeedbackRecord
-
 
 admin.site.register(GroupOfPkCompetencesInGeneralCharacteristic)
 admin.site.register(PkCompetencesInGroupOfGeneralCharacteristic)
 admin.site.register(IndicatorInPkCompetenceInGeneralCharacteristic)
 
-admin.site.register(GroupOfOverProfCompetencesInGeneralCharacteristic)
+admin.site.register(GroupOfOverProfCompetencesInEducationalStandard)
 admin.site.register(OverProfCompetencesInGroupOfGeneralCharacteristic)
 admin.site.register(IndicatorInOverProfCompetenceInGeneralCharacteristic)
 
-admin.site.register(GroupOfKeyCompetencesInGeneralCharacteristic)
+admin.site.register(GroupOfKeyCompetencesInEducationalStandard)
 admin.site.register(KeyCompetencesInGroupOfGeneralCharacteristic)
 admin.site.register(IndicatorInKeyCompetenceInGeneralCharacteristic)
 
-admin.site.register(GroupOfGeneralProfCompetencesInGeneralCharacteristic)
+admin.site.register(GroupOfGeneralProfCompetencesInEducationalStandard)
 admin.site.register(GeneralProfCompetencesInGroupOfGeneralCharacteristic)
 admin.site.register(IndicatorInGeneralProfCompetenceInGeneralCharacteristic)
-
 
 admin.site.register(Zun)
 admin.site.register(WorkProgram)
@@ -60,7 +59,7 @@ admin.site.register(Competence)
 # admin.site.register(IndicatorWorkProgram)
 admin.site.register(Indicator)
 admin.site.register(EvaluationTool)
-#admin.site.register(FieldOfStudyWorkProgram)
+# admin.site.register(FieldOfStudyWorkProgram)
 admin.site.register(DisciplineSection)
 admin.site.register(Topic)
 admin.site.register(RouteComposition)
@@ -83,7 +82,6 @@ admin.site.register(Profession)
 admin.site.register(Role)
 admin.site.register(SkillsOfProfession)
 admin.site.register(SkillsOfRole)
-admin.site.register(ProfessionalAreaOfGeneralCharacteristics)
 admin.site.register(ProfessionalStandard)
 
 admin.site.register(Folder)

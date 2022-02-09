@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from workprogramsapp.expertise.models import UserExpertise
+from workprogramsapp.expertise.models import UserExpertise, Expertise
 from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder, \
     AcademicPlanInFolder, DisciplineBlockModuleInFolder, IndividualImplementationAcademicPlanInFolder
 from workprogramsapp.workprogram_additions.models import UserStructuralUnit
@@ -70,16 +70,22 @@ class IsAcademicPlanDeveloper(permissions.BasePermission):
         return request.user.groups.filter(name="academic_plan_developer")
 
 
+class IsExpertiseMasterStrict(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.groups.filter(name="expertise_master"):
+            return True
+
+
 class IsExpertiseMaster(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.groups.filter(name="expertise_master"):
             return True
         if 'pk' in dict(view.kwargs):
-            return (UserExpertise.objects.filter(
-                expertise__work_program__structural_unit__user_in_structural_unit__user=request.user,
-                expertise__work_program__structural_unit__user_in_structural_unit__status__in=["leader",
+            return (Expertise.objects.filter(
+                work_program__structural_unit__user_in_structural_unit__user=request.user,
+                work_program__structural_unit__user_in_structural_unit__status__in=["leader",
                                                                                                "deputy"],
-                expertise=view.kwargs['pk']))
+                expertse_users_in_rpd=view.kwargs['pk']))
         return UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"])
 
 
