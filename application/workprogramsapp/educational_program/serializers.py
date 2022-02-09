@@ -14,7 +14,7 @@ from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, D
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
-from .educational_standart.serializers import TasksForProfStandardSerializer, \
+from .educational_standart.serializers import TasksForEducationalStandardSerializer, \
     EducationalStandardSingleObjectSerializer
 from .general_prof_competencies.models import GroupOfGeneralProfCompetencesInEducationalStandard
 from .key_competences.models import GroupOfKeyCompetencesInEducationalStandard
@@ -152,7 +152,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
             return None
 
     def to_representation(self, value):
-        self.fields['tasks_for_prof_standards'] = TasksForProfStandardSerializer(many=True, required=False)
+        self.fields['tasks_for_prof_standards'] = TasksForEducationalStandardSerializer(many=True, required=False)
         self.fields['structural_unit_implementer'] = ShortStructuralUnitSerializer(many=False, required=False)
         self.fields['area_of_activity'] = ProfessionalStandardSerializer(many=True)
         self.fields['kinds_of_activity'] = KindsOfActivitySerializer(many=True)

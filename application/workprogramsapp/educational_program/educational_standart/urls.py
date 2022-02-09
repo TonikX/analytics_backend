@@ -3,8 +3,8 @@ from django.urls.conf import path
 from rest_framework.routers import DefaultRouter
 from .views import EducationalStandardListView, \
     EducationalStandardCreateView, EducationalStandardSingleObjectView, EducationalStandardSingleObjectDeleteView, \
-    EducationalStandardSingleObjectEditView, TasksForProfStandardListView, TasksForProfStandardCreateView, \
-    TasksForProfStandardSingleObjectView, TasksForProfStandardDeleteView, TasksForProfStandardEditView
+    EducationalStandardSingleObjectEditView, TasksForEducationalStandardListView, TasksForEducationalStandardCreateView, \
+    TasksForEducationalStandardSingleObjectView, TasksForEducationalStandardDeleteView, TasksForEducationalStandardEditView
 
 urlpatterns = [
 
@@ -16,10 +16,10 @@ urlpatterns = [
     path('api/educational_standarts/update/<int:pk>', EducationalStandardSingleObjectEditView.as_view()),
 
     # --задачи проф. стандарта
-    path('api/task_prof_standarts', TasksForProfStandardListView.as_view()),
-    path('api/task_prof_standarts/create', TasksForProfStandardCreateView.as_view()),
-    path('api/task_prof_standarts/detail/<int:pk>', TasksForProfStandardSingleObjectView.as_view()),
-    path('api/task_prof_standarts/delete/<int:pk>', TasksForProfStandardDeleteView.as_view()),
-    path('api/task_prof_standarts/update/<int:pk>', TasksForProfStandardEditView.as_view()),
+    path('api/task_prof_standarts', TasksForEducationalStandardListView.as_view()),
+    path('api/task_prof_standarts/create', TasksForEducationalStandardCreateView.as_view()),
+    path('api/task_prof_standarts/detail/<int:pk>', TasksForEducationalStandardSingleObjectView.as_view()),
+    path('api/task_prof_standarts/delete/<int:pk>', TasksForEducationalStandardDeleteView.as_view()),
+    path('api/task_prof_standarts/update/<int:pk>', TasksForEducationalStandardEditView.as_view()),
 
 ]

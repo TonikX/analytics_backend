@@ -182,6 +182,7 @@ def SendCheckpointsForAcceptedWP(request):
     else:
         needed_wp = WorkProgram.objects.filter(pk=one_wp)
     all_sends = []  # Список всего того что отправили в барс, нужен для респонса
+
     for work_program in needed_wp:  # для каждой РПД формируем отдельный запрос в БАРС
         if work_program in just_accepted_wp:
             # Если РПД уже отправлена в этом учебном семестре, то игнорируем
@@ -194,6 +195,7 @@ def SendCheckpointsForAcceptedWP(request):
             work_program__id=work_program.id))
         min_sem = 12
         max_sem = 1
+
         for eva in evaluation_tools:
             if eva.semester == None:
                 break
@@ -254,7 +256,6 @@ def SendCheckpointsForAcceptedWP(request):
                 isu_wp_id = isu_wp.dis_id
 
             imp_list = list({v['id']: v for v in imp_list}.values())  # Оставляем уникальные значения по айдишникам
-
             # Трагичные Факультативы и прочая гадость собирается в общий ком из УП и в отдельном блоке кода отправляется
             if work_program.id in wp_for_many_terms_list:
                 imp_list_for_many_term.extend(imp_list)

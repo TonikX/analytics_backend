@@ -8,12 +8,12 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import EducationalStandard, TasksForProfStandard
+from .models import EducationalStandard, TasksForEducationalStandard
 
 # Права доступа
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsExpertiseMasterStrict
 from .serializers import EducationalStandardListSerializer, EducationalStandardSingleObjectSerializer, \
-    TasksForProfStandardSerializer
+    TasksForEducationalStandardSerializer
 
 
 class EducationalStandardListView(generics.ListAPIView):
@@ -49,7 +49,7 @@ class EducationalStandardSingleObjectDeleteView(generics.DestroyAPIView):
     """
     queryset = EducationalStandard.objects.all()
     serializer_class = EducationalStandardSingleObjectSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsExpertiseMasterStrict]
 
 
 class EducationalStandardCreateView(generics.CreateAPIView):
@@ -58,50 +58,50 @@ class EducationalStandardCreateView(generics.CreateAPIView):
     """
     queryset = EducationalStandard.objects.all()
     serializer_class = EducationalStandardSingleObjectSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsExpertiseMasterStrict]
 
 
-class TasksForProfStandardListView(generics.ListAPIView):
+class TasksForEducationalStandardListView(generics.ListAPIView):
     """
     Просмотр списка объектов проф.  задач образовательного стандарта
     """
-    queryset = TasksForProfStandard.objects.all()
-    serializer_class = TasksForProfStandardSerializer
+    queryset = TasksForEducationalStandard.objects.all()
+    serializer_class = TasksForEducationalStandardSerializer
     permission_classes = [IsAuthenticated]
 
 
-class TasksForProfStandardSingleObjectView(generics.RetrieveAPIView):
+class TasksForEducationalStandardSingleObjectView(generics.RetrieveAPIView):
     """
     Просмотр объекта проф. задач образовательного стандарта
     """
-    queryset = TasksForProfStandard.objects.all()
-    serializer_class = TasksForProfStandardSerializer
+    queryset = TasksForEducationalStandard.objects.all()
+    serializer_class = TasksForEducationalStandardSerializer
     permission_classes = [IsAuthenticated]
 
 
-class TasksForProfStandardDeleteView(generics.DestroyAPIView):
+class TasksForEducationalStandardDeleteView(generics.DestroyAPIView):
     """
     Удаление объекта проф. задач образовательного стандарта
     """
-    queryset = TasksForProfStandard.objects.all()
-    serializer_class = TasksForProfStandardSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    queryset = TasksForEducationalStandard.objects.all()
+    serializer_class = TasksForEducationalStandardSerializer
+    permission_classes = [IsExpertiseMasterStrict]
 
 
-class TasksForProfStandardEditView(generics.UpdateAPIView):
+class TasksForEducationalStandardEditView(generics.UpdateAPIView):
     """
     Изменение объекта проф. задач образовательного стандарта
     """
-    queryset = TasksForProfStandard.objects.all()
-    serializer_class = TasksForProfStandardSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    queryset = TasksForEducationalStandard.objects.all()
+    serializer_class = TasksForEducationalStandardSerializer
+    permission_classes = [IsExpertiseMasterStrict]
 
 
-class TasksForProfStandardCreateView(generics.CreateAPIView):
+class TasksForEducationalStandardCreateView(generics.CreateAPIView):
     """
     Создание объекта проф. задач образовательного стандарта
     """
-    queryset = TasksForProfStandard.objects.all()
-    serializer_class = TasksForProfStandardSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    queryset = TasksForEducationalStandard.objects.all()
+    serializer_class = TasksForEducationalStandardSerializer
+    permission_classes = [IsExpertiseMasterStrict]
 
