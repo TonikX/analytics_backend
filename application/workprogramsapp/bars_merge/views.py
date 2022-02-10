@@ -175,8 +175,7 @@ def SendCheckpointsForAcceptedWP(request):
     just_accepted_wp = []
     # Отсылаем ли мы одну дисципилну или же все с пометкой "отправить в барс"
     if not one_wp:
-        needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC',
-                                               bars=True).distinct()
+        needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC',bars=True).distinct()
         just_accepted_wp = WorkProgram.objects.filter(accepted_wp_in_bars__year_of_study=setup_bars[0],
                                                       accepted_wp_in_bars__semester_of_sending=setup_bars[1]).distinct()
     else:
@@ -228,25 +227,24 @@ def SendCheckpointsForAcceptedWP(request):
             cred_regex = r""
             for i in range(12):
                 if i == now_semester:
-                    cred_regex += "[^0]\.[0-9],\s"
+                    cred_regex += "(([^0]\.[0-9])|([^0])),\s"
                 else:
-                    cred_regex += "(([0-9]\.[0-9])|[0]),\s"
+                    cred_regex += "(([0-9]\.[0-9])|[0-9]),\s"
             cred_regex = cred_regex[:-3]
             # Получаем все УП для данного семестра РПД (нужно для каунтера отнсительного семестра)
             implementation_of_academic_plan_all = ImplementationAcademicPlan.objects.filter(
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=work_program,
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
-            print(implementation_of_academic_plan_all)
+
             # Список УП с учетом актуального семестра отправки в БАРС
             implementation_of_academic_plan = implementation_of_academic_plan_all.filter(
                 year=int(year_of_sending) - now_semester // 2)
-            print([imp.academic_plan.pk for imp in implementation_of_academic_plan_all])
+
             isu_wp_id = None
             for imp in implementation_of_academic_plan:
                 # создаем список направлений + уп с айдишниками ИСУ для БАРСа
                 field_of_studies = FieldOfStudy.objects.get(
                     implementation_academic_plan_in_field_of_study=imp)
-                print(field_of_studies)
                 imp_list.append(generate_fos(imp.ns_id, field_of_studies.number, imp.title))
                 isu_wp = \
                     list(WorkProgramIdStrUpForIsu.objects.filter(
@@ -260,7 +258,7 @@ def SendCheckpointsForAcceptedWP(request):
             if work_program.id in wp_for_many_terms_list:
                 imp_list_for_many_term.extend(imp_list)
                 imp_list_for_many_term = list({v['id']: v for v in imp_list_for_many_term}.values())
-                imp_list = list({v['id']: v for v in imp_list}.values())
+                # imp_list = list({v['id']: v for v in imp_list}.values())
                 if isu_wp_id and not isu_wp_id_for_many_term:
                     isu_wp_id_for_many_term = isu_wp_id
                 if imp_list and minimal_sem_for_many_term == 0:
