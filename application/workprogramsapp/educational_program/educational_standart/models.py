@@ -16,11 +16,13 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
-class TasksForProfStandard(models.Model):
+class TasksForEducationalStandard(models.Model):
     """
-    Список задач проф. стандарта
+    Список задач обоазовательного стандарта
     """
     name = models.CharField(max_length=512, verbose_name="Наименование")
+    educational_standard = models.ForeignKey("EducationalStandard", on_delete=models.CASCADE,
+                                             related_name="tasks_prof_standard", blank=True, null=True)
 
     def __str__(self):
         return str(self.name)
@@ -34,8 +36,6 @@ class EducationalStandard(models.Model):
     standard_date = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year], blank=True, null=True,
         verbose_name="Дата образовательного стандарта")
-    tasks_prof_standard = models.ManyToManyField(TasksForProfStandard, verbose_name="Список задач проф. стандарта",
-                                                 related_name="standard_for_tasks")
 
     def __str__(self):
         return str(self.name) + " " + str(self.standard_date)
