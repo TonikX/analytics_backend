@@ -22,4 +22,6 @@ export enum ProfessionalStandardFields {
     ID = 'id',
     TITLE = 'title',
     NUMBER = 'code',
+    CODE = 'code_of_prof_area',
+    NAME = 'name_of_prof_area',
 }

@@ -18,6 +18,8 @@ class ProfessionalStandardsService extends AnalyticsService{
 
         formData.append(ProfessionalStandardFields.TITLE, ProfessionalStandard[ProfessionalStandardFields.TITLE]);
         formData.append(ProfessionalStandardFields.NUMBER, ProfessionalStandard[ProfessionalStandardFields.NUMBER]);
+        formData.append(ProfessionalStandardFields.CODE, ProfessionalStandard[ProfessionalStandardFields.CODE]);
+        formData.append(ProfessionalStandardFields.NAME, ProfessionalStandard[ProfessionalStandardFields.NAME]);
 
         return this.post(`api/professionalstandard/`, formData);
     }
@@ -28,6 +30,8 @@ class ProfessionalStandardsService extends AnalyticsService{
 
         formData.append(ProfessionalStandardFields.TITLE, ProfessionalStandard[ProfessionalStandardFields.TITLE]);
         formData.append(ProfessionalStandardFields.NUMBER, ProfessionalStandard[ProfessionalStandardFields.NUMBER]);
+        formData.append(ProfessionalStandardFields.CODE, ProfessionalStandard[ProfessionalStandardFields.CODE]);
+        formData.append(ProfessionalStandardFields.NAME, ProfessionalStandard[ProfessionalStandardFields.NAME]);
 
         return this.put(`/api/professionalstandard/${id}/`, formData);
     }

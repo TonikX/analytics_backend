@@ -34,11 +34,14 @@ export default (theme: Theme) => createStyles({
     },
     titleCell: {
         minWidth: 200,
-        width: '70%',
+        width: 600
     },
     numberCell: {
         width: 115,
         flex: 'none'
+    },
+    codeCell: {
+        width: 400,
     },
     actions: {
         display: 'flex',

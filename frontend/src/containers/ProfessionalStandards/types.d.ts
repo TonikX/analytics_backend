@@ -37,6 +37,8 @@ export type ProfessionalStandardsType = {
     [ProfessionalStandardFields.ID]: number,
     [ProfessionalStandardFields.TITLE]: string,
     [ProfessionalStandardFields.NUMBER]: string,
+    [ProfessionalStandardFields.CODE]: string,
+    [ProfessionalStandardFields.NAME]: string,
 };
 
 export interface ProfessionalStandardsProps extends WithStyles<typeof styles> {
