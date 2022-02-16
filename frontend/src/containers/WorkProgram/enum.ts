@@ -35,6 +35,7 @@ export enum WorkProgramGeneralFields {
     TITLE = 'title',
     CODE = 'discipline_code',
     QUALIFICATION = 'qualification',
+    IMPLEMENTATION_FORMAT = 'implementation_format',
     LANGUAGE = 'language',
     STRUCTURAL_UNIT = 'structural_unit',
     APPROVAL_DATE = 'approval_date',
@@ -207,4 +208,10 @@ export enum CommentFields {
     ID = 'id',
     USER_EXPERTISE = 'user_expertise',
     EXPERT = 'expert',
+}
+
+export enum ImplementationFormatsEnum {
+    ONLINE = 'online',
+    MIXED = 'mixed',
+    OFFLINE = 'offline',
 }

@@ -15,7 +15,7 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
-import {specialization} from "../../WorkProgram/constants";
+import {implementationFormats, specialization} from "../../WorkProgram/constants";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
@@ -32,6 +32,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [WorkProgramGeneralFields.CODE]: '',
             [WorkProgramGeneralFields.QUALIFICATION]: '',
             [WorkProgramGeneralFields.AUTHORS]: '',
+            [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: undefined,
             [WorkProgramGeneralFields.APPROVAL_DATE]: moment().format(),
         },
     };
@@ -132,7 +133,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         format={FULL_DATE_FORMAT}
                         label={'Дата создания *'}
                     />
-                    <div>
+                    <div className={classes.marginBottom20}>
                         <InputLabel className={classes.label}> Уровень образовательной программы * </InputLabel>
                         <Select
                             className={classes.specializationSelector}
@@ -142,6 +143,22 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             variant="outlined"
                         >
                             {specialization.map(item =>
+                                <MenuItem value={item.value} key={`group-${item.value}`}>
+                                    {item.label}
+                                </MenuItem>
+                            )}
+                        </Select>
+                    </div>
+                    <div>
+                        <InputLabel className={classes.label}> Формат реализации * </InputLabel>
+                        <Select
+                            className={classes.specializationSelector}
+                            value={workProgram[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]}
+                          // @ts-ignore
+                            onChange={this.saveField(WorkProgramGeneralFields.IMPLEMENTATION_FORMAT)}
+                            variant="outlined"
+                        >
+                            {implementationFormats.map(item =>
                                 <MenuItem value={item.value} key={`group-${item.value}`}>
                                     {item.label}
                                 </MenuItem>

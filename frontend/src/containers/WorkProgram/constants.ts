@@ -1,6 +1,7 @@
 import {IntermediateCertificationEnum, StepsEnum, WorkProgramStatusEnum} from "./enum";
 
 import {appRouter} from "../../service/router-service";
+import { ImplementationFormatsEnum } from './enum'
 
 export const BACHELOR_QUALIFICATION = 'bachelor';
 export const SPECIALIST_QUALIFICATION = 'specialist';
@@ -31,6 +32,22 @@ export const specialization = [
         value: ALL_LEVELS_QUALIFICATION,
         label: 'Все уровни'
     }
+];
+
+
+export const implementationFormats = [
+    {
+        value: ImplementationFormatsEnum.ONLINE,
+        label: 'Онлайн'
+    },
+    {
+        value: ImplementationFormatsEnum.MIXED,
+        label: 'Смешанный'
+    },
+    {
+        value: ImplementationFormatsEnum.OFFLINE,
+        label: 'Оффлайн'
+    },
 ];
 
 

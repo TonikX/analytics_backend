@@ -29,7 +29,7 @@ import SearchSelector from "../../../components/SearchSelector";
 import {FirstStepProps} from './types';
 import {WorkProgramGeneralFields} from "../enum";
 import {FULL_DATE_FORMAT, getUserFullName} from "../../../common/utils";
-import {languageObject, specializationObject, languageArray} from "../constants";
+import {languageObject, specializationObject, languageArray, implementationFormats} from "../constants";
 import {UserFields} from "../../../layout/enum";
 
 import connect from './FirstStep.connect';
@@ -49,6 +49,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     [WorkProgramGeneralFields.LANGUAGE]: '',
     [WorkProgramGeneralFields.BARS]: false,
     [WorkProgramGeneralFields.SEMESTER_COUNT]: 1,
+    [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: undefined,
     addEditorsMode: false
   };
 
@@ -66,6 +67,7 @@ class FirstStep extends React.Component<FirstStepProps> {
       [WorkProgramGeneralFields.LANGUAGE]: this.props.language,
       [WorkProgramGeneralFields.SEMESTER_COUNT]: this.props.semesterCount,
       [WorkProgramGeneralFields.BARS]: this.props.bars,
+      [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: this.props.implementationFormat,
     })
   }
 
@@ -83,6 +85,7 @@ class FirstStep extends React.Component<FirstStepProps> {
         [WorkProgramGeneralFields.LANGUAGE]: this.props.language,
         [WorkProgramGeneralFields.SEMESTER_COUNT]: this.props.semesterCount,
         [WorkProgramGeneralFields.BARS]: this.props.bars,
+        [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: this.props.implementationFormat,
       })
     }
   }
@@ -143,6 +146,17 @@ class FirstStep extends React.Component<FirstStepProps> {
     this.props.actions.saveWorkProgram({
       destination: WorkProgramGeneralFields.LANGUAGE,
       value: language
+    });
+  }
+
+  changeImplementationFormat = (implementationFormat: string) => {
+    this.setState({
+      [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: implementationFormat
+    });
+
+    this.props.actions.saveWorkProgram({
+      destination: WorkProgramGeneralFields.IMPLEMENTATION_FORMAT,
+      value: implementationFormat
     });
   }
 
@@ -435,6 +449,13 @@ class FirstStep extends React.Component<FirstStepProps> {
                           value={state[WorkProgramGeneralFields.LANGUAGE]}
                           wrapClass={classes.selectorWrap}
                           onChange={this.changeLanguage}
+          />
+
+          <SimpleSelector label="Формат реализации"
+                          metaList={implementationFormats}
+                          value={state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]}
+                          wrapClass={classes.selectorWrap}
+                          onChange={this.changeImplementationFormat}
           />
 
           <InputsLoader loading={fetchingDate}>

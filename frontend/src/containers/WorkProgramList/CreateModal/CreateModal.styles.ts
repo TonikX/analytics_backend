@@ -27,5 +27,8 @@ export default (theme: Theme) => createStyles({
     datePicker: {
         width: '100%',
         marginBottom: '30px',
+    },
+    marginBottom20: {
+        marginBottom: '20px',
     }
 });
