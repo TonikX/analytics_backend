@@ -146,14 +146,14 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
                                 color="primary"
                     />
 
-                    <Fab color="secondary"
-                         classes={{
-                             root: classes.addIcon
-                         }}
-                         onClick={this.handleCreate}
-                    >
-                        <AddIcon/>
-                    </Fab>
+                    {/*<Fab color="secondary"*/}
+                    {/*     classes={{*/}
+                    {/*         root: classes.addIcon*/}
+                    {/*     }}*/}
+                    {/*     onClick={this.handleCreate}*/}
+                    {/*>*/}
+                    {/*    <AddIcon/>*/}
+                    {/*</Fab>*/}
                 </div>
 
                 <SubjectAreaCreateModal />

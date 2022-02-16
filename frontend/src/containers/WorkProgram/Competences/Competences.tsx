@@ -38,9 +38,10 @@ export default React.memo(() => {
   }
 
   useEffect(() => {
-    dispatch(actions.getResults(workProgramId))
-    dispatch(actions.getResults(workProgramId))
-  }, [])
+    if (workProgramId) {
+      dispatch(actions.getResults(workProgramId))
+    }
+  }, [workProgramId]);
 
   const deleteCompetence = (competenceId: number) => {
     dispatch(actions.deleteZUN(competenceId))

@@ -10,7 +10,7 @@ from django.contrib.postgres.fields import ArrayField
 from dataprocessing.models import Items
 from onlinecourse.models import OnlineCourse, Institution
 from django.contrib.postgres.fields import JSONField
-from workprogramsapp.educational_program.educational_standart.models import EducationalStandard, TasksForProfStandard
+from workprogramsapp.educational_program.educational_standart.models import EducationalStandard, TasksForEducationalStandard
 
 '''
 class FieldOfStudyWorkProgram(models.Model):
@@ -483,7 +483,7 @@ class GeneralCharacteristics(models.Model):
     area_of_activity = models.ManyToManyField('ProfessionalStandard', verbose_name = 'Проф. Стандарт/Область профессиональной деятельности', blank=True, null=True )
     objects_of_activity = models.CharField(max_length=4096, verbose_name="Объекты профессиональной деятельности", blank=True, null=True)
     kinds_of_activity = models.ManyToManyField(KindsOfActivity, verbose_name="Сферы профессиональной деятельности, к которому (которым) готовятся выпускники", blank=True, null=True)
-    tasks_of_activity = models.ForeignKey(TasksForProfStandard, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Тип (типы) профессиональных задач, к решению которых готовятся выпускники")
+    tasks_of_activity = models.ForeignKey(TasksForEducationalStandard, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Тип (типы) профессиональных задач, к решению которых готовятся выпускники")
     # ok_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕКУЛЬТУРНЫЕ КОМПЕТЕНЦИИ", related_name="ok_competences_in_gh", blank=True)
     # kc_competences = models.ManyToManyField('Competence', verbose_name="Ключевые компетенции", related_name="kc_competences_in_gh", blank=True)
     #pk_competences = models.ManyToManyField('Indicator', verbose_name="ПРОФЕССИОНАЛЬНЫЕ КОМПЕТЕНЦИИ", through = 'PkCompetencesInGeneralCharacteristics', related_name="pk_competences_in_gh", blank=True)
@@ -496,7 +496,7 @@ class GeneralCharacteristics(models.Model):
                                              verbose_name='Образовательный стандарт',
                                              related_name="educational_standard_in_educational_program", blank=True,
                                              null=True)
-    tasks_for_prof_standards = models.ManyToManyField(TasksForProfStandard,
+    tasks_for_prof_standards = models.ManyToManyField(TasksForEducationalStandard,
                                                       verbose_name='Список задач образовательного стандарта',
                                                       related_name="tasks_for_prof_standards_in_educational_program",
                                                       blank=True, null=True)
@@ -549,8 +549,21 @@ class Department(models.Model):
 
 
 class GeneralizedLaborFunctions(models.Model):
+    qualification_choice = (
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
+        ('6', '6'),
+        ('7', '7'),
+        ('8', '8'),
+    )
+
+
+    code = models.CharField(max_length=512, verbose_name="Код обощенной трудовой функции",
+                            blank=True, null=True)
     name = models.CharField(max_length=512, verbose_name="обобщенные трудовые функции", blank=True, null=True)
 
+    qualification_level = models.CharField(choices=qualification_choice,max_length=512, verbose_name="обобщенные трудовые функции", blank=True, null=True)
     def __str__(self):
         return str(self.name)
 
@@ -562,9 +575,11 @@ class ProfessionalStandard(models.Model):
     title = models.CharField(max_length=512, verbose_name="Наименование профессионального стандарта из данной области")
     code = models.CharField(max_length=512, verbose_name="Код профессионального стандарта из данной области",
                             blank=True, null=True)
-    name_and_code_of_prof_area = models.CharField(max_length=512,
-                                                  verbose_name="Наименование и код области проф. деятельности",
+    name_of_prof_area = models.CharField(max_length=512,
+                                                  verbose_name="Наименование  области проф. деятельности",
                                                   blank=True, null=True)
+    code_of_prof_area=models.CharField(max_length=512, verbose_name="Код обощенной трудовой функции",
+                            blank=True, null=True)
     generalized_labor_functions = models.ManyToManyField(GeneralizedLaborFunctions,
                                                          verbose_name="обобщенные трудовые функции", blank=True)
 

@@ -134,14 +134,14 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
-                    <Link to={appRouter.getSubjectAreaRoute()}
-                          className={classes.link}
-                          target="_blank"
-                    >
-                        <Typography>
-                            Создать предметную область
-                        </Typography>
-                    </Link>
+                    {/*<Link to={appRouter.getSubjectAreaRoute()}*/}
+                    {/*      className={classes.link}*/}
+                    {/*      target="_blank"*/}
+                    {/*>*/}
+                    {/*    <Typography>*/}
+                    {/*        Создать предметную область*/}
+                    {/*    </Typography>*/}
+                    {/*</Link>*/}
                     <Button onClick={this.handleClose}
                             variant="text">
                         Отмена

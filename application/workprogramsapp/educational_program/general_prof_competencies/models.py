@@ -13,7 +13,7 @@ class GroupOfGeneralProfCompetencesInEducationalStandard(models.Model):
     """
     name = models.CharField(max_length=512, verbose_name="трудовая функция")
     educational_standard = models.ForeignKey(EducationalStandard, on_delete=models.CASCADE,
-                                             verbose_name="Общая характеристика",
+                                             verbose_name="Образовательный стандарт",
                                              related_name="group_of_general_prof_competences",
                                              blank=True, null=True)
 
@@ -27,7 +27,7 @@ class GeneralProfCompetencesInGroupOfGeneralCharacteristic(models.Model):
     """
 
     group_of_pk = models.ForeignKey('GroupOfGeneralProfCompetencesInEducationalStandard', on_delete=models.CASCADE,
-                                    verbose_name="Группа общепрофессиональных компетенций в ОХ",
+                                    verbose_name="Группа общепрофессиональных компетенций в ОС",
                                     related_name="competence_in_group_of_general_prof_competences")
     # labor_functions = models.CharField(max_length=512, verbose_name="Трудовая функция")
     competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Компетенция",
@@ -44,7 +44,7 @@ class IndicatorInGeneralProfCompetenceInGeneralCharacteristic(models.Model):
 
     competence_in_group_of_pk = models.ForeignKey('GeneralProfCompetencesInGroupOfGeneralCharacteristic',
                                                   on_delete=models.CASCADE,
-                                                  verbose_name="Группа общепрофессиональных компетенций в ОХ",
+                                                  verbose_name="Группа общепрофессиональных компетенций в ОС",
                                                   related_name="indicator_of_competence_in_group_of_general_prof_competences")
     indicator = models.ForeignKey('Indicator', on_delete=models.CASCADE, verbose_name="Индикатор ПК компетенции в ОХ")
 
