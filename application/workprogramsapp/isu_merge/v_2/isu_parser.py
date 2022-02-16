@@ -191,6 +191,7 @@ class FileUploadAPIView_v2(APIView):
 
         for i in ids:
             get_up(i)
+            #ToDo: Сделать проверку на наличие разницы в жсонах и размер датафрейма с УП
 
         # Чистим названия дисциплин от лишних пробелов
         def clean_text(text):

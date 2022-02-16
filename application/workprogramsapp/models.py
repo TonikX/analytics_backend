@@ -126,6 +126,14 @@ class WorkProgram(CloneMixin, models.Model):
     srs_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы СРС")
     number_of_semesters = models.IntegerField(blank=True, null=True, verbose_name="Количество семестров в дисциплине")
     read_notifications = models.CharField(max_length=256, default='False, False, False, False, False, False, False, False, False, False', verbose_name="Прочитанность уведомлений")
+    implementation_format_choise = (
+        ('online', 'online'),
+        ('mixed', 'mixed'),
+        ('offline', 'offline'),
+    )
+    implementation_format = models.CharField(choices=implementation_format_choise, max_length=15, verbose_name='формат реализации',
+                                            blank=True, null=True)
+
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
@@ -908,6 +916,8 @@ class DisciplineSection(CloneMixin, models.Model):
     laboratory = models.DecimalField(verbose_name="Лабораторные занятия", max_digits=5, decimal_places=2, blank=True,
                                      null=True)
     practical_lessons = models.DecimalField(verbose_name="Практические занятия", max_digits=5, decimal_places=2,
+                                            blank=True, null=True)
+    consultations = models.DecimalField(verbose_name="Консультации", max_digits=5, decimal_places=2,
                                             blank=True, null=True)
     SRO = models.DecimalField(verbose_name="СРО", max_digits=5, decimal_places=2, blank=True, null=True)
     total_hours = models.DecimalField(verbose_name="Всего часов", max_digits=5, decimal_places=2, blank=True, null=True)

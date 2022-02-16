@@ -218,7 +218,7 @@ class DisciplineSectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineSection
-        fields = ['id', 'ordinal_number', 'name', 'topics', 'evaluation_tools', 'contact_work', 'lecture_classes', 'laboratory', 'practical_lessons', 'SRO', 'total_hours']
+        fields = ['id', 'ordinal_number', 'name', 'topics', 'evaluation_tools', 'contact_work', 'lecture_classes', 'laboratory', 'practical_lessons', 'SRO', 'total_hours', 'consultations']
 
 
 class CertificationSerializer(serializers.ModelSerializer):
@@ -714,7 +714,8 @@ class WorkProgramSerializer(serializers.ModelSerializer):
                   'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors', 'language',
                   'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
                   'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
-                  'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'number_of_semesters', 'read_notifications']
+                  'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'number_of_semesters', 'read_notifications',
+                  'implementation_format']
 
     def create(self, validated_data):
         """
