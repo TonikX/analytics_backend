@@ -2,8 +2,10 @@
 from rest_framework import serializers, viewsets
 
 # Модели данных
+from dataprocessing.models import Items
 from workprogramsapp.models import ProfessionalStandard, GeneralizedLaborFunctions, KindsOfActivity, \
-    EmployerRepresentative
+    EmployerRepresentative, WorkProgram, Competence, Zun, Indicator, ImplementationAcademicPlan, \
+    WorkProgramInFieldOfStudy
 
 # --Работа с образовательной программой
 from rest_framework.fields import BooleanField, SerializerMethodField
@@ -13,7 +15,8 @@ from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, D
 
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
+from workprogramsapp.serializers import ImplementationAcademicPlanSerializer, IndicatorSerializer, \
+    WorkProgramInFieldOfStudySerializerForCb
 from .educational_standart.serializers import TasksForEducationalStandardSerializer, \
     EducationalStandardSingleObjectSerializer
 from .general_prof_competencies.models import GroupOfGeneralProfCompetencesInEducationalStandard
@@ -109,9 +112,6 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     group_of_pk_competences_foresight = SerializerMethodField()
     group_of_pk_competences_minor = SerializerMethodField()
 
-    ep_supervisor = userProfileSerializer(required=False)
-    dean_of_the_faculty = userProfileSerializer(required=False)
-
     def get_group_of_pk_competences_prof(self, instance):
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
             instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic=instance,
@@ -158,7 +158,9 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         self.fields['kinds_of_activity'] = KindsOfActivitySerializer(many=True)
         self.fields['educational_program'] = ImplementationAcademicPlanSerializer(many=True)
         self.fields['educational_standard'] = EducationalStandardSingleObjectSerializer()
-        self.fields['employers_in_characteristic'] = EmployerSerializer(many=True)
+        self.fields['employers_in_characteristic'] = EmployerSerializer(many=True,required=False)
+        self.fields['ep_supervisor'] = userProfileSerializer(required=False)
+        self.fields['dean_of_the_faculty'] = userProfileSerializer(required=False)
         return super().to_representation(value)
 
     class Meta:
@@ -174,6 +176,46 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
                   'group_of_pk_competences_prof', 'group_of_pk_competences_foresight', 'group_of_pk_competences_minor',
                   'employers_in_characteristic', 'ep_supervisor', 'directors_position', 'dean_of_the_faculty',
                   'cluster_name']
+
+
+class WorkProgramCompetenceIndicatorSerializer(serializers.ModelSerializer):
+    """Сериализатор образовательной программы"""
+    competences=SerializerMethodField()
+
+    def get_competences(self, instance):
+        competences = Competence.objects.filter(
+            indicator_in_competencse__zun__wp_in_fs__work_program=instance).distinct()
+        competences_dict = []
+        for competence in competences:
+            zuns = Zun.objects.filter(wp_in_fs__work_program=instance,
+                                      indicator_in_zun__competence__id=competence.id)
+            zuns_array = []
+            for zun in zuns:
+                try:
+                    indicator = Indicator.objects.get(competence=competence.id,
+                                                      zun__id=zun.id)
+                    indicator = IndicatorSerializer(indicator).data
+                except:
+                    indicator = None
+                # indicators_array = []
+                # for indicator in indicators:
+                #     indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number})
+                # serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
+
+                zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
+                                   "attainments": zun.attainments, "indicator": indicator,
+                                   "wp_in_fs": WorkProgramInFieldOfStudySerializerForCb(
+                                       WorkProgramInFieldOfStudy.objects.get(zun_in_wp=zun.id)).data["id"]})
+            competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
+                                     "zuns": zuns_array})
+        return {"competences": competences_dict}
+
+
+    class Meta:
+        model = WorkProgram
+        fields = ["id", "title", "competences"]
+
+
 
 
 class DepartmentSerializer(serializers.ModelSerializer):

@@ -20,7 +20,7 @@ class TasksForEducationalStandardSerializer(serializers.ModelSerializer):
 class EducationalStandardListSerializer(serializers.ModelSerializer):
     class Meta:
         model = EducationalStandard
-        fields = ['name', 'standard_date']
+        fields = ['id','name', 'standard_date']
 
 
 class EducationalStandardSingleObjectSerializer(serializers.ModelSerializer):

@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 from workprogramsapp.educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
     EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView, UploadCompetences, \
-    GeneralizedLaborFunctionsSet, KindsOfActivitySet, EmployerSet
+    GeneralizedLaborFunctionsSet, KindsOfActivitySet, EmployerSet, GetCompetenceMatrix
 from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, \
     GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
@@ -41,6 +41,9 @@ urlpatterns = [
 
     # --Компетенции
     path('api/competence/upload_comptence_from_csv', UploadCompetences),
+
+    # --Матрица компетенций
+    path('api/GeneralCharacteristics/competence_matrix/<int:gen_pk>', GetCompetenceMatrix),
 
     url(r'^', include(router.urls)),
     url(r'^', include('workprogramsapp.educational_program.key_competences.urls')),

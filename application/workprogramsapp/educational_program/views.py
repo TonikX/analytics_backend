@@ -15,23 +15,29 @@ from rest_framework.response import Response
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
     EducationalProgramSerializer, \
     GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
-    GeneralLaborFunctionsSerializer, KindsOfActivitySerializer, EmployerSerializer
+    GeneralLaborFunctionsSerializer, KindsOfActivitySerializer, EmployerSerializer, \
+    WorkProgramCompetenceIndicatorSerializer
 from .competence_handler import competence_dict_generator
 from .general_prof_competencies.models import IndicatorInGeneralProfCompetenceInGeneralCharacteristic, \
     GeneralProfCompetencesInGroupOfGeneralCharacteristic, GroupOfGeneralProfCompetencesInEducationalStandard
+from .general_prof_competencies.serializers import GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer
 from .key_competences.models import IndicatorInKeyCompetenceInGeneralCharacteristic, \
     KeyCompetencesInGroupOfGeneralCharacteristic, GroupOfKeyCompetencesInEducationalStandard
+from .key_competences.serializers import GroupOfKeyCompetencesInGeneralCharacteristicSerializer
 from .over_professional_competencies.models import GroupOfOverProfCompetencesInEducationalStandard, \
     OverProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInOverProfCompetenceInGeneralCharacteristic
+from .over_professional_competencies.serializers import GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
 from .pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
     PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
+from .pk_comptencies.serializers import GroupOfPkCompetencesInGeneralCharacteristicSerializer
 
 from .serializers import ProfessionalStandardSerializer
 
 # --Работа с образовательной программой
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
     ImplementationAcademicPlan, Competence, Indicator, WorkProgramInFieldOfStudy, Zun, GeneralizedLaborFunctions, \
-    KindsOfActivity, EmployerRepresentative
+    KindsOfActivity, EmployerRepresentative, DisciplineBlockModule, DisciplineBlock, \
+    WorkProgramChangeInDisciplineBlockModule
 from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
@@ -276,3 +282,59 @@ def UploadCompetences(request):
                 for indicator in indicator_from_db:
                     CompIndicatorModel.objects.create(competence_in_group_of_pk=comp_general, indicator=indicator)
     return Response("γοητεία")
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def GetCompetenceMatrix(request, gen_pk):
+    unique_wp = []  # Уникальные РПД в нескольких УП
+    gen_characteristic = GeneralCharacteristics.objects.get(pk=gen_pk)
+    academic_plans = gen_characteristic.educational_program.all()
+    pk_competences = GroupOfPkCompetencesInGeneralCharacteristicSerializer(
+        instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic_id=gen_pk),
+        many=True).data
+    general_prof_competences = GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer(
+        instance=GroupOfGeneralProfCompetencesInEducationalStandard.objects.filter(
+            educational_standard=gen_characteristic.educational_standard), many=True).data
+    key_competences = GroupOfKeyCompetencesInGeneralCharacteristicSerializer(
+        instance=GroupOfKeyCompetencesInEducationalStandard.objects.filter(
+            educational_standard=gen_characteristic.educational_standard), many=True).data
+    over_prof_competences = GroupOfOverProfCompetencesInGeneralCharacteristicSerializer(
+        instance=GroupOfOverProfCompetencesInEducationalStandard.objects.filter(
+            educational_standard=gen_characteristic.educational_standard), many=True).data
+    competence_matrix={"pk_competences":pk_competences, "general_prof_competences":general_prof_competences, "key_competences":key_competences, "over_prof_competences":over_prof_competences, }
+    matrix_list = []
+    for ap in academic_plans:
+        academic_plan = ap.academic_plan
+        academic_plan_matrix_dict = {"academic_plan": ap.title, "discipline_blocks_in_academic_plan": []}
+        matrix_list.append(academic_plan_matrix_dict)
+        for block in DisciplineBlock.objects.filter(academic_plan=academic_plan):
+            block_dict = {"name": block.name, "modules_in_discipline_block": []}
+            # academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
+            for block_module in DisciplineBlockModule.objects.filter(descipline_block=block):
+                block_module_dict = {"name": block_module.name, "type": block_module.type,
+                                     "change_blocks_of_work_programs_in_modules": []}
+                # block_dict["modules_in_discipline_block"].append(block_module_dict)
+                for change_block in WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                        discipline_block_module=block_module):
+                    change_block_dict = {"change_type": change_block.change_type,
+                                         "credit_units": change_block.credit_units, "work_program": []}
+                    # block_module_dict["change_blocks_of_work_programs_in_modules"].append(change_block_dict)
+                    for work_program in WorkProgram.objects.filter(work_program_in_change_block=change_block):
+                        if work_program.id not in unique_wp:
+
+                            serializer = WorkProgramCompetenceIndicatorSerializer(work_program)
+                            change_block_dict["work_program"].append(serializer.data)
+                            unique_wp.append(work_program.id)
+                        else:
+                            pass
+                            # print(work_program)
+                    if change_block_dict["work_program"]:
+                        block_module_dict["change_blocks_of_work_programs_in_modules"].append(change_block_dict)
+                if block_module_dict["change_blocks_of_work_programs_in_modules"]:
+                    block_dict["modules_in_discipline_block"].append(block_module_dict)
+            if block_dict["modules_in_discipline_block"]:
+                academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
+    competence_matrix["wp_matrix"]=matrix_list
+    # print(matrix_list)
+    return Response(competence_matrix)
