@@ -9,6 +9,10 @@ class ProfessionalStandardsService extends AnalyticsService{
         return this.get(`/api/professionalstandard?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
+    getProfessionalStandard(id: number){
+        return this.get(`/api/professionalstandard/${id}/`)
+    }
+
     deleteProfessionalStandards(id: number){
         return this.delete(`/api/professionalstandard/${id}`);
     }

@@ -16,6 +16,8 @@ export interface ProfessionalStandardsActions {
     changeCurrentPage: any;
     changeAllCount: any;
     changeSorting: any;
+    getProfessionalStandard: any;
+    setProfessionalStandard: any;
 }
 
 export interface professionalStandardsState {
@@ -31,6 +33,8 @@ export interface professionalStandardsState {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: ProfessionalStandardsType|{};
     };
+    [fields.PROFESSIONAL_STANDARD]: any;
+
 }
 
 export type ProfessionalStandardsType = {
@@ -49,4 +53,5 @@ export interface ProfessionalStandardsProps extends WithStyles<typeof styles> {
     allCount: number;
     sortingField: string;
     sortingMode: SortingType;
+    professionalStandard: any;
 }

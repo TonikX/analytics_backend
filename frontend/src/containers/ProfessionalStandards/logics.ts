@@ -95,7 +95,7 @@ const changeProfessionalStandards = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const professionalStandard = action.payload;
-
+console.log(professionalStandard)
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_PROFESSIONAL_STANDARDS}));
 
         service.changeProfessionalStandards(professionalStandard)
@@ -109,14 +109,42 @@ const changeProfessionalStandards = createLogic({
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_PROFESSIONAL_STANDARDS}));
+                dispatch(ProfessionalStandardsActions.getProfessionalStandard(professionalStandard.id))
                 return done();
             });
     }
 });
+
+
+const getProfessionalStandard = createLogic({
+    type: ProfessionalStandardsActions.getProfessionalStandard.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+       // dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_PROFESSIONAL_STANDARDS}));
+
+        service.getProfessionalStandard(action.payload)
+            .then((res) => {
+                const professionalStandart = get(res, 'data', {});
+
+                dispatch(ProfessionalStandardsActions.setProfessionalStandard(professionalStandart));
+          //      dispatch(actions.fetchingSuccess());
+            })
+            // .catch((err) => {
+            //     dispatch(actions.fetchingFailed(err));
+            // })
+            .then(() => {
+                //   dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_PROFESSIONAL_STANDARDS}));
+                return done();
+
+            });
+    }
+    })
 
 export default [
     getProfessionalStandards,
     deleteProfessionalStandards,
     createProfessionalStandards,
     changeProfessionalStandards,
+    getProfessionalStandard
 ];
