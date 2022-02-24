@@ -44,7 +44,7 @@ const WorkProgramSelect = ({type, onChange, workPrograms}: WorkProgramSelectProp
 
 type ModalProps = {
     open: boolean;
-    handleClose: (open: boolean) => void;
+    handleClose: () => void;
     confirm: () => void;
 };
 const CopyWorkProgramsModal = ({open, handleClose, confirm}: ModalProps) => {
@@ -60,7 +60,7 @@ const CopyWorkProgramsModal = ({open, handleClose, confirm}: ModalProps) => {
                 </Typography>
                 <div className={classes.modalFooter}>
                     <Button color="primary" onClick={confirm}>Да</Button>
-                    <Button color="secondary" onClick={() => handleClose(false)}>Отмена</Button>
+                    <Button color="secondary" onClick={handleClose}>Отмена</Button>
                 </div>
             </Box>
         </Modal>
