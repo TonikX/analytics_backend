@@ -101,7 +101,6 @@ const mergeWorkProgram = createLogic({
 
         service.mergeContent(sourceId, targetId)
             .then(() => {
-                dispatch(workProgramActions.getWorkProgramList());
                 dispatch(actions.fetchingSuccess(['Копирование успешно']));
             })
             .catch(() => {
