@@ -562,8 +562,12 @@ class GeneralizedLaborFunctions(models.Model):
     code = models.CharField(max_length=512, verbose_name="Код обощенной трудовой функции",
                             blank=True, null=True)
     name = models.CharField(max_length=512, verbose_name="обобщенные трудовые функции", blank=True, null=True)
+    qualification_level = models.CharField(choices=qualification_choice,max_length=512,
+                                           verbose_name="обобщенные трудовые функции", blank=True, null=True)
+    professional_standard = models.ForeignKey('ProfessionalStandard', on_delete=models.CASCADE, verbose_name="Профессиональный стандарт",
+                             blank=True, null=True, related_name = 'generalized_labor_functions')
 
-    qualification_level = models.CharField(choices=qualification_choice,max_length=512, verbose_name="обобщенные трудовые функции", blank=True, null=True)
+
     def __str__(self):
         return str(self.name)
 
@@ -580,8 +584,8 @@ class ProfessionalStandard(models.Model):
                                                   blank=True, null=True)
     code_of_prof_area=models.CharField(max_length=512, verbose_name="Код обощенной трудовой функции",
                             blank=True, null=True)
-    generalized_labor_functions = models.ManyToManyField(GeneralizedLaborFunctions,
-                                                         verbose_name="обобщенные трудовые функции", blank=True)
+    # generalized_labor_functions = models.ManyToManyField(GeneralizedLaborFunctions,
+    #                                                      verbose_name="обобщенные трудовые функции", blank=True)
 
     def __str__(self):
         return str(self.title)

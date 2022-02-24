@@ -71,7 +71,7 @@ class GeneralLaborFunctionsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GeneralizedLaborFunctions
-        fields = "__all__"
+        fields = ['id', 'code', 'name', 'qualification_level', 'professional_standard']
 
 
 class KindsOfActivitySerializer(serializers.ModelSerializer):
