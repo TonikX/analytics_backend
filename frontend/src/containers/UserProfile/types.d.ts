@@ -1,4 +1,5 @@
 import {WorkProgramGeneralFields} from '../WorkProgram/enum';
+import {WorkProgramGeneralType} from "../WorkProgram/types";
 
 export type WorkProgram = {
     [WorkProgramGeneralFields.ID]: number;
@@ -8,3 +9,7 @@ export type WorkProgram = {
     [WorkProgramGeneralFields.APPROVAL_DATE]: string;
     [WorkProgramGeneralFields.AUTHORS]: string;
 };
+
+export type WorkProgramList = {
+    workPrograms: Array<WorkProgramGeneralType>
+}

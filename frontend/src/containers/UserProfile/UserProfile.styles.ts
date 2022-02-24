@@ -15,6 +15,9 @@ export const useStyles = makeStyles(() => createStyles({
         marginBottom: '20px',
         alignItems: 'baseline'
     },
+    copyRpdContainer: {
+        margin: '20px 0 40px',
+    },
     link: {
         '& a': {
             textDecoration: 'none',

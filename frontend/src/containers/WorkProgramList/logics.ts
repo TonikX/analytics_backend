@@ -91,8 +91,32 @@ const createNewWorkProgram = createLogic({
     }
 });
 
+const mergeWorkProgram = createLogic({
+    type: workProgramActions.mergeWorkProgram.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {sourceId, targetId} = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.MERGE_WORK_PROGRAM}));
+
+        service.mergeContent(sourceId, targetId)
+            .then(() => {
+                dispatch(workProgramActions.getWorkProgramList());
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.MERGE_WORK_PROGRAM}));
+                return done();
+            });
+    }
+});
+
 export default [
     getWorkProgramList,
     deleteWorkProgram,
     createNewWorkProgram,
+    mergeWorkProgram,
 ];

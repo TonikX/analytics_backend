@@ -1,0 +1,27 @@
+import {createStyles, makeStyles} from "@material-ui/core";
+
+export const useStyles = makeStyles(() => createStyles({
+    root: {
+        display: 'flex',
+        gap: '0 10px',
+    },
+    controls: {
+        width: '80%',
+        display: 'flex',
+        gap: '0 15px',
+    },
+    modal: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        background: 'white',
+        padding: '24px',
+    },
+    modalFooter: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginTop: '20px',
+    }
+}));
