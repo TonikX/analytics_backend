@@ -56,7 +56,7 @@ const CopyWorkProgramsModal = ({open, handleClose, confirm}: ModalProps) => {
         >
             <Box className={classes.modal}>
                 <Typography variant="h6" component="h2">
-                    Вы уверенны, что хотите скопировать содержимое рабочих программ дисциплин?
+                    Вы уверенны, что хотите скопировать содержимое рабочей программы дисциплины?
                 </Typography>
                 <div className={classes.modalFooter}>
                     <Button color="primary" onClick={confirm}>Да</Button>
