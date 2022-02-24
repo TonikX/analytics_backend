@@ -10,6 +10,10 @@ export const useStyles = makeStyles(() => createStyles({
         display: 'flex',
         gap: '0 15px',
     },
+    itemTitle: {
+        fontSize: '16px',
+        marginBottom: '6px'
+    },
     modal: {
         position: 'absolute',
         top: '50%',

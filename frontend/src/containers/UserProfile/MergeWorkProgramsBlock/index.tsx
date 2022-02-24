@@ -15,7 +15,7 @@ const WorkProgramSelect = ({type, onChange, workPrograms}: WorkProgramSelectProp
     const [value, setValue] = React.useState('');
     const labelId = `merge-work-programs-block-label-${type}`;
 
-    const labelText = type === 'source' ? 'Откуда скопировать' : 'Куда скопировать';
+    const labelText = type === 'source' ? 'Откуда' : 'Куда';
 
     const handleChange = (event: any) => {
         setValue(event.target.value);
@@ -97,12 +97,15 @@ export default ({workPrograms}: WorkProgramList) => {
     };
     return (
         <>
+            <Typography className={classes.itemTitle}>
+                Скопировать содержимое рабочей программы дисциплины
+            </Typography>
             <div className={classes.root}>
                 <div className={classes.controls}>
                     <WorkProgramSelect workPrograms={workPrograms} type="source" onChange={selectWorkProgram}/>
                     <WorkProgramSelect workPrograms={workPrograms} type="target" onChange={selectWorkProgram}/>
                 </div>
-                <Button disabled={disabled} color="secondary" onClick={openModal}>Копировать содержимое</Button>
+                <Button disabled={disabled} color="secondary" onClick={openModal}>Копировать</Button>
             </div>
             <CopyWorkProgramsModal
                 open={modalIsOpen}
