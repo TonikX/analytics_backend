@@ -19,7 +19,8 @@ export const initialState: educationalProgramState = {
     [fields.EDUCATION_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
-    }
+    },
+    [fields.COMPETENCE_MATRIX]: {}
 };
 
 const setEducationalProgramList = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
@@ -31,6 +32,12 @@ const setEducationalProgramCharacteristic = (state: educationalProgramState, {pa
     ...state,
     [fields.EDUCATION_PROGRAM_CHARACTERISTIC]: payload,
 });
+
+const setCompetenceMatrix = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+    ...state,
+    [fields.COMPETENCE_MATRIX]: payload,
+});
+
 
 const changeSearchQuery = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
     ...state,
@@ -74,6 +81,7 @@ const changeSorting = (state: educationalProgramState, {payload}: any): educatio
 export const reducer = createReducer(initialState, {
     [actions.setEducationalProgramList.type]: setEducationalProgramList,
     [actions.setEducationalProgramCharacteristic.type]: setEducationalProgramCharacteristic,
+    [actions.setCompetenceMatrix.type]: setCompetenceMatrix,
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
     [actions.changeSearchQuery.type]: changeSearchQuery,

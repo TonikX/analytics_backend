@@ -31,6 +31,10 @@ class Service extends AnalyticsService{
         return this.get(`/api/GeneralCharacteristics/detail_with_educational_program/${id}`);
     }
 
+    getCompetenceMatrix(id: number) {
+        return this.get(`/api/GeneralCharacteristics/competence_matrix/${id}`);
+    }
+
     createEducationProgram(program: any){
         return this.post(`/api/EducationalProgram/create`, {
             "academic_plan_for_ep": program[EducationProgramFields.ACADEMIC_PLAN_FOR_EP][EducationProgramFields.ID],

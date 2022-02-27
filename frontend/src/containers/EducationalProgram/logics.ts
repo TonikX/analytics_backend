@@ -124,6 +124,27 @@ const changeEducationalProgram = createLogic({
     }
 });
 
+const getCompetenceMatrix = createLogic({
+    type: educationalPlanActions.getCompetenceMatrix.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COMPETENCE_MATRIX}));
+
+        service.getCompetenceMatrix(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.setCompetenceMatrix(res.data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_COMPETENCE_MATRIX}));
+                return done();
+            });
+    }
+});
+
 const getEducationalProgramCharacteristic = createLogic({
     type: educationalPlanActions.getEducationalProgramCharacteristic.type,
     latest: true,
@@ -132,6 +153,7 @@ const getEducationalProgramCharacteristic = createLogic({
 
         service.getEducationalProgramCharacteristic(action.payload)
             .then((res) => {
+                console.log(res.data);
                 dispatch(educationalPlanActions.setEducationalProgramCharacteristic(res.data));
                 dispatch(actions.fetchingSuccess());
             })
@@ -423,4 +445,6 @@ export default [
 
     characteristicSaveProfessionalStandard,
     characteristicDeleteProfessionalStandard,
+
+    getCompetenceMatrix,
 ];
