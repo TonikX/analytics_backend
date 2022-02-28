@@ -95,7 +95,7 @@ const changeProfessionalStandards = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const professionalStandard = action.payload;
-console.log(professionalStandard)
+        console.log(professionalStandard)
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_PROFESSIONAL_STANDARDS}));
 
         service.changeProfessionalStandards(professionalStandard)
@@ -121,14 +121,14 @@ const getProfessionalStandard = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState();
-       // dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_PROFESSIONAL_STANDARDS}));
+        // dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_PROFESSIONAL_STANDARDS}));
 
         service.getProfessionalStandard(action.payload)
             .then((res) => {
                 const professionalStandart = get(res, 'data', {});
 
                 dispatch(ProfessionalStandardsActions.setProfessionalStandard(professionalStandart));
-          //      dispatch(actions.fetchingSuccess());
+                //      dispatch(actions.fetchingSuccess());
             })
             // .catch((err) => {
             //     dispatch(actions.fetchingFailed(err));
@@ -139,12 +139,34 @@ const getProfessionalStandard = createLogic({
 
             });
     }
-    })
+})
+
+const createProfessionalStandard = createLogic({
+    type: ProfessionalStandardsActions.createProfessionalStandardAdditionalFields.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        console.log(action.payload)
+        service.createProfessionalStandard(action.payload.id, action.payload.code, action.payload.name, action.payload.qualificationLevel)
+            .then(() => {
+                dispatch(ProfessionalStandardsActions.getProfessionalStandard(action.payload.id))
+                dispatch(actions.fetchingSuccess());
+
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                return done();
+            });
+    }
+})
+
 
 export default [
     getProfessionalStandards,
     deleteProfessionalStandards,
     createProfessionalStandards,
     changeProfessionalStandards,
-    getProfessionalStandard
+    getProfessionalStandard,
+    createProfessionalStandard
 ];

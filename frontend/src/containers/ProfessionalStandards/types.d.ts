@@ -18,6 +18,7 @@ export interface ProfessionalStandardsActions {
     changeSorting: any;
     getProfessionalStandard: any;
     setProfessionalStandard: any;
+    createProfessionalStandardAdditionalFields: any;
 }
 
 export interface professionalStandardsState {

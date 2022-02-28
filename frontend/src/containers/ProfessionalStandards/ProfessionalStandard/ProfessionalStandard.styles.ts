@@ -30,5 +30,26 @@ export const useStyles = makeStyles( (theme) => createStyles ({
     actions: {
        float: 'right'
     },
+    header: {
+        background: theme.palette.primary.main,
+        color: '#fff',
 
+    },
+    row: {
+        width: '100%',
+        display: 'flex',
+        borderBottom: '1px solid #ccc',
+        alignItems: 'center',
+        padding: '0 0 0 20px',
+        boxSizing: 'border-box',
+        minHeight: '50px'
+    },
+    marginRight: {
+        marginRight: 20,
+        width: '100%',
+    },
+    addIcon: {
+        float: 'right' ,
+        marginTop: '1%'
+    },
 }));

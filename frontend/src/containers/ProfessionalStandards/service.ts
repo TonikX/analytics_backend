@@ -2,22 +2,22 @@ import AnalyticsService from "../../service/analytics-service";
 import {ProfessionalStandardFields} from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
-class ProfessionalStandardsService extends AnalyticsService{
-    getProfessionalStandards(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
+class ProfessionalStandardsService extends AnalyticsService {
+    getProfessionalStandards(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType) {
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
         return this.get(`/api/professionalstandard?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
-    getProfessionalStandard(id: number){
+    getProfessionalStandard(id: number) {
         return this.get(`/api/professionalstandard/${id}/`)
     }
 
-    deleteProfessionalStandards(id: number){
+    deleteProfessionalStandards(id: number) {
         return this.delete(`/api/professionalstandard/${id}`);
     }
 
-    createProfessionalStandards(ProfessionalStandard: any){
+    createProfessionalStandards(ProfessionalStandard: any) {
         const formData = new FormData();
 
         formData.append(ProfessionalStandardFields.TITLE, ProfessionalStandard[ProfessionalStandardFields.TITLE]);
@@ -28,7 +28,7 @@ class ProfessionalStandardsService extends AnalyticsService{
         return this.post(`api/professionalstandard/`, formData);
     }
 
-    changeProfessionalStandards(ProfessionalStandard: any){
+    changeProfessionalStandards(ProfessionalStandard: any) {
         const formData = new FormData();
         const id = ProfessionalStandard[ProfessionalStandardFields.ID];
 
@@ -39,6 +39,16 @@ class ProfessionalStandardsService extends AnalyticsService{
 
         return this.put(`/api/professionalstandard/${id}/`, formData);
     }
-}
 
+
+    createProfessionalStandard(id:number, name: string, code: string, qualificationLevel: string) {
+
+        return this.post(`/api/generalizedlaborfunction/`, {professional_standard: id, name, code, qualification_level:qualificationLevel}  );
+    }
+
+    deleteProfessionalStandard(id:number){
+        return this.delete(`/api/generalizedlaborfunction/${id}/`)
+    }
+
+}
 export default ProfessionalStandardsService;
