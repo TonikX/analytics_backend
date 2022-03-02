@@ -24,6 +24,13 @@ class WorkProgramListService extends AnalyticsService{
     createWorkProgram(workProgram: any){
         return this.post(`/api/workprogram/create`, workProgram);
     }
+
+    mergeContent(sourceId: number, targetId: number) {
+        return this.post(`/api/workprogram/merge_content`, {
+            from_copy_id: sourceId,
+            to_copy_id: targetId,
+        });
+    }
 }
 
 export default WorkProgramListService;
