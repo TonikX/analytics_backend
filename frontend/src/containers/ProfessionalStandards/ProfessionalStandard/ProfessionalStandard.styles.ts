@@ -52,4 +52,16 @@ export const useStyles = makeStyles( (theme) => createStyles ({
         float: 'right' ,
         marginTop: '1%'
     },
+    field: {
+        width: '50%',
+        marginBottom: '20px',
+    },
+    input: {
+        width: '550px',
+        marginBottom: '30px',
+    },
+    select: {
+
+    },
+
 }));

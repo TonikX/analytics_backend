@@ -6,13 +6,11 @@ import {rootState} from "../../../store/reducers";
 import Typography from "@material-ui/core/Typography";
 import {useParams} from 'react-router-dom'
 import {useStyles} from "./ProfessionalStandard.styles"
-import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import {ProfessionalStandardsType} from "../types";
 import ProfessionalStandardCreateModal from "./ProfessionalStandardCreateModal";
 import classNames from "classnames";
-import SortingButton from "../../../components/SortingButton/SortingButton";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 
@@ -22,7 +20,6 @@ export default () => {
     const profStandard = useSelector((state: rootState) => getProfStandard(state))
     const {id} = useParams()
     const [isOpenModal, setIsOpenModal] = useState(false)
-
 
 
     useEffect(() => {
@@ -37,7 +34,7 @@ export default () => {
         setIsOpenModal(true)
     }
 
-    const handleCloseModal =() => {
+    const handleCloseModal = () => {
         setIsOpenModal(false)
     }
     // @ts-ignore
@@ -67,21 +64,21 @@ export default () => {
                     <Typography className={classes.marginRight}> Уровень квалификации </Typography>
 
                 </div>
-<div>
+                <div >
 
-    {profStandard.generalized_labor_functions?.map((item: any) =>
-        <div>
-        <Typography className={classes.codeCell}>  {item.code} </Typography>
-        <Typography className={classes.codeCell}> {item.name} </Typography>
-        <Typography className={classes.codeCell}> {item.qualificationLevel} </Typography>
-        </div>
-        )}
-</div>
+                    {profStandard.generalized_labor_functions?.map((item: any) =>
+                        <div className={classes.row}>
+                            <Typography className={classes.codeCell}>  {item.code} </Typography>
+                            <Typography className={classes.codeCell}> {item.name} </Typography>
+                            <Typography className={classes.codeCell}> {item.qualificationLevel} </Typography>
+                        </div>
+                    )}
+                </div>
 
 
                 <Fab color="secondary"
                      classes={{
-                       root: classes.addIcon
+                         root: classes.addIcon
                      }}
                      onClick={handleCreate}
                 >
