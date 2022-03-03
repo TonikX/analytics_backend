@@ -91,8 +91,31 @@ const createNewWorkProgram = createLogic({
     }
 });
 
+const mergeWorkProgram = createLogic({
+    type: workProgramActions.mergeWorkProgram.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {sourceId, targetId} = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.MERGE_WORK_PROGRAM}));
+
+        service.mergeContent(sourceId, targetId)
+            .then(() => {
+                dispatch(actions.fetchingSuccess(['Копирование успешно']));
+            })
+            .catch(() => {
+                dispatch(actions.fetchingFailed(['Не удалось скопировать РПД']));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.MERGE_WORK_PROGRAM}));
+                return done();
+            });
+    }
+});
+
 export default [
     getWorkProgramList,
     deleteWorkProgram,
     createNewWorkProgram,
+    mergeWorkProgram,
 ];
