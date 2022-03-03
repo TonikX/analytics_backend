@@ -72,17 +72,19 @@ export default () => {
           Обобщенные трудовые функции
         </Typography>
         <div className={classNames(classes.row, classes.header)}>
-          <Typography className={classes.marginRight}> Код </Typography>
-          <Typography className={classes.marginRight}> Наименование </Typography>
-          <Typography className={classes.marginRight}> Уровень квалификации </Typography>
+          <Typography className={classes.tableCell}> Код </Typography>
+          <Typography className={classes.tableCell}> Наименование </Typography>
+          <Typography className={classes.tableCell}> Уровень квалификации </Typography>
         </div>
         {profStandard.generalized_labor_functions?.map((item: any) =>
           <div className={classes.row}>
             <Typography className={classes.tableCell}> {item.code} </Typography>
             <Typography className={classes.tableCell}> {item.name} </Typography>
             <Typography className={classes.tableCell}> {item.qualification_level} </Typography>
-            <DeleteIcon className={classes.iconButton} onClick={handleDeleteLaborFunction(item.id)} />
-            <EditIcon className={classes.iconButton} onClick={handleEditLaborFunction(item)} />
+            <div className={classes.actions}>
+              <DeleteIcon className={classes.iconButton} onClick={handleDeleteLaborFunction(item.id)} />
+              <EditIcon className={classes.iconButton} onClick={handleEditLaborFunction(item)} />
+            </div>
           </div>
         )}
         <Fab color="secondary"

@@ -95,7 +95,6 @@ const changeProfessionalStandards = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const professionalStandard = action.payload;
-        console.log(professionalStandard)
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_PROFESSIONAL_STANDARDS}));
 
         service.changeProfessionalStandards(professionalStandard)
@@ -121,22 +120,21 @@ const getProfessionalStandard = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState();
-        // dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_PROFESSIONAL_STANDARDS}));
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_PROFESSIONAL_STANDARDS}));
 
         service.getProfessionalStandard(action.payload)
             .then((res) => {
-                const professionalStandart = get(res, 'data', {});
+                const professionalStandard = get(res, 'data', {});
 
-                dispatch(ProfessionalStandardsActions.setProfessionalStandard(professionalStandart));
-                //      dispatch(actions.fetchingSuccess());
+                dispatch(ProfessionalStandardsActions.setProfessionalStandard(professionalStandard));
+                dispatch(actions.fetchingSuccess());
             })
-            // .catch((err) => {
-            //     dispatch(actions.fetchingFailed(err));
-            // })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
             .then(() => {
-                //   dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_PROFESSIONAL_STANDARDS}));
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_PROFESSIONAL_STANDARDS}));
                 return done();
-
             });
     }
 })
@@ -146,9 +144,10 @@ const createProfessionalStandardAdditionalFields = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const { profStandardId, name, code, qualificationLevel } = action.payload
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_PROFESSIONAL_STANDARDS_LABOR_FUNCTION}));
         service.createProfessionalStandardAdditionalFields(profStandardId, name, code, qualificationLevel)
             .then(() => {
-                dispatch(ProfessionalStandardsActions.getProfessionalStandard(action.payload.id))
+                dispatch(ProfessionalStandardsActions.getProfessionalStandard(profStandardId))
                 dispatch(actions.fetchingSuccess());
 
             })
@@ -156,6 +155,7 @@ const createProfessionalStandardAdditionalFields = createLogic({
                 dispatch(actions.fetchingFailed(err));
             })
             .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_PROFESSIONAL_STANDARDS_LABOR_FUNCTION}));
                 return done();
             });
     }
@@ -166,6 +166,7 @@ const updateProfessionalStandardAdditionalFields = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const { id, name, code, qualificationLevel, profStandardId } = action.payload
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.EDIT_PROFESSIONAL_STANDARDS_LABOR_FUNCTION}));
         service.updateProfessionalStandardAdditionalFields(id, name, code, qualificationLevel)
             .then(() => {
                 dispatch(ProfessionalStandardsActions.getProfessionalStandard(profStandardId))
@@ -175,6 +176,7 @@ const updateProfessionalStandardAdditionalFields = createLogic({
                 dispatch(actions.fetchingFailed(err));
             })
             .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.EDIT_PROFESSIONAL_STANDARDS_LABOR_FUNCTION}));
                 return done();
             });
     }
@@ -184,6 +186,7 @@ const deleteProfessionalStandardAdditionalFields = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const { id, laborFunctionId } = action.payload
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_PROFESSIONAL_STANDARDS_LABOR_FUNCTION}));
         service.deleteProfessionalStandardAdditionalFields(laborFunctionId)
             .then(() => {
                 dispatch(ProfessionalStandardsActions.getProfessionalStandard(id))
@@ -193,6 +196,7 @@ const deleteProfessionalStandardAdditionalFields = createLogic({
                 dispatch(actions.fetchingFailed(err));
             })
             .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_PROFESSIONAL_STANDARDS_LABOR_FUNCTION}));
                 return done();
             });
     }

@@ -74,8 +74,8 @@ class CreateModal extends React.PureComponent<ProfessionalStandardsCreateModalPr
         const {isOpen, classes} = this.props;
         const {professionalStandard} = this.state;
 
-        const disableButton = professionalStandard[ProfessionalStandardFields.TITLE].length === 0 || professionalStandard[ProfessionalStandardFields.NUMBER].length === 0
-            || professionalStandard[ProfessionalStandardFields.CODE].length === 0 || professionalStandard[ProfessionalStandardFields.NAME].length === 0 ;
+        const disableButton = professionalStandard[ProfessionalStandardFields.TITLE]?.length === 0 || professionalStandard[ProfessionalStandardFields.NUMBER]?.length === 0
+            || professionalStandard[ProfessionalStandardFields.CODE]?.length === 0 || professionalStandard[ProfessionalStandardFields.NAME]?.length === 0 ;
 
         const isEditMode = Boolean(professionalStandard[ProfessionalStandardFields.ID]);
 
@@ -122,7 +122,7 @@ class CreateModal extends React.PureComponent<ProfessionalStandardsCreateModalPr
                     <TextField label="Профессиональный стандарт *"
                                onChange={this.saveField(ProfessionalStandardFields.NAME)}
                                variant="outlined"
-                          className={classes.input}
+                               className={classes.input}
                                fullWidth
                                value={professionalStandard[ProfessionalStandardFields.NAME]}
                                InputLabelProps={{
@@ -131,7 +131,7 @@ class CreateModal extends React.PureComponent<ProfessionalStandardsCreateModalPr
                     />
 
                 </DialogContent>
-                <DialogActions className={classes.actions}>
+                <DialogActions>
                     <Button onClick={this.handleClose}
                             variant="text">
                         Отмена
@@ -139,7 +139,8 @@ class CreateModal extends React.PureComponent<ProfessionalStandardsCreateModalPr
                     <Button onClick={this.handleSave}
                             variant="contained"
                             disabled={disableButton}
-                            color="primary">
+                            color="primary"
+                    >
                         Сохранить
                     </Button>
                 </DialogActions>

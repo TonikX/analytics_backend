@@ -25,10 +25,7 @@ export const useStyles = makeStyles( (theme) => createStyles ({
         width: '100%'
     },
     tableCell: {
-        width: '100%'
-    },
-    actions: {
-       float: 'right'
+        width: '30%'
     },
     header: {
         background: theme.palette.primary.main,
@@ -60,7 +57,8 @@ export const useStyles = makeStyles( (theme) => createStyles ({
         marginBottom: '30px',
     },
     select: {
-
+        width: '550px',
+        marginBottom: '10px',
     },
     subTitle: {
         marginTop: 20,
@@ -72,4 +70,13 @@ export const useStyles = makeStyles( (theme) => createStyles ({
             color: theme.palette.primary.main,
         }
     },
+    actions: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        width: '10%',
+    },
+    buttonActions: {
+        float: 'right',
+        marginBottom: '10px',
+    }
 }));

@@ -41,11 +41,11 @@ export default ({ isOpen, handleCloseModal, laborFunction }: any,) => {
         handleCloseModal()
     }
 
-    const disableButton = code.length === 0 && name.length === 0 && qualificationLevel.length == 0;
+    const disableButton = code.length === 0 || name.length === 0 || qualificationLevel.length === 0;
 
     return (
         <Dialog open={isOpen}>
-            <DialogTitle> Трудовая функция </DialogTitle>
+            <DialogTitle> {laborFunction?.id ? 'Редактировать трудовую функцию' : 'Создать трудовую функцию'} </DialogTitle>
             <DialogContent>
                 <TextField
                     label="Код"
@@ -68,7 +68,7 @@ export default ({ isOpen, handleCloseModal, laborFunction }: any,) => {
 
                 <FormControl variant="outlined">
                     <InputLabel>Выберите уровень квалификации </InputLabel>
-                    <Select className={classes.input}
+                    <Select className={classes.select}
                             label="Выберите уровень квалификации"
                             value={qualificationLevel}
                             onChange={(e: any) => setQualificationLevel(e.target.value)}
@@ -94,11 +94,13 @@ export default ({ isOpen, handleCloseModal, laborFunction }: any,) => {
                 </FormControl>
             </DialogContent>
 
-            <DialogActions className={classes.actions}>
+            <DialogActions className={classes.buttonActions}>
                 <Button onClick={handleCancel}>Отмена</Button>
                 <Button
                   onClick={handleSave}
                   disabled={disableButton}
+                  color="primary"
+                  variant="contained"
                 >
                   Сохранить
                 </Button>
