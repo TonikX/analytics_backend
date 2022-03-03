@@ -23,35 +23,18 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     constructor(props: EditedRowProps) {
         super(props);
 
-        const canEditConsultation = props.implementationFormat === ImplementationFormatsEnum.ONLINE
-
         this.state = {
             isEditMode: !props.section.id,
-            section: {
-                ...props.section,
-                [workProgramSectionFields.LECTURE_CLASSES]: canEditConsultation ? 0 : props.section[workProgramSectionFields.LECTURE_CLASSES],
-                [workProgramSectionFields.PRACTICAL_LESSONS]: canEditConsultation ? 0 : props.section[workProgramSectionFields.PRACTICAL_LESSONS],
-                [workProgramSectionFields.LABORATORY]: canEditConsultation ? 0 : props.section[workProgramSectionFields.LABORATORY],
-                [workProgramSectionFields.SPO]: canEditConsultation ? 0 : props.section[workProgramSectionFields.SPO],
-                [workProgramSectionFields.CONSULTATIONS]: canEditConsultation ? props.section[workProgramSectionFields.CONSULTATIONS] || 0 : 0,
-            }
+            section: props.section,
         };
     }
 
     componentDidUpdate(prevProps: Readonly<EditedRowProps>, prevState: Readonly<EditedRowState>, snapshot?: any) {
         const { implementationFormat, section } = this.props
-        const canEditConsultation = implementationFormat === ImplementationFormatsEnum.ONLINE
 
         if (!shallowEqual(prevProps.section, this.props.section)){
             this.setState({
-                section: {
-                    ...section,
-                    [workProgramSectionFields.LECTURE_CLASSES]: canEditConsultation ? 0 : section[workProgramSectionFields.LECTURE_CLASSES],
-                    [workProgramSectionFields.PRACTICAL_LESSONS]: canEditConsultation ? 0 : section[workProgramSectionFields.PRACTICAL_LESSONS],
-                    [workProgramSectionFields.LABORATORY]: canEditConsultation ? 0 : section[workProgramSectionFields.LABORATORY],
-                    [workProgramSectionFields.SPO]: canEditConsultation ? 0 : section[workProgramSectionFields.SPO],
-                    [workProgramSectionFields.CONSULTATIONS]: canEditConsultation ? section[workProgramSectionFields.CONSULTATIONS] || 0 : 0,
-                }
+                section: section,
             })
         }
     }
