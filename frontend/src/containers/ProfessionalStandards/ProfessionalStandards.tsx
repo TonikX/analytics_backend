@@ -145,26 +145,27 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
                                            mode={sortingField === ProfessionalStandardFields.NAME ? sortingMode : ''}
                             />
                         </Typography>
-
-
                     </div>
 
                     <div className={classes.list}>
                         <Scrollbars>
                             {professionalStandards.map(professionalStandard =>
-                                <div className={classes.row} key={professionalStandard[ProfessionalStandardFields.ID]}
-                                >
-
+                                <div className={classes.row} key={professionalStandard[ProfessionalStandardFields.ID]}>
+                                    <Typography className={classNames(classes.marginRight, classes.numberCell)} >
+                                        {professionalStandard[ProfessionalStandardFields.NUMBER]}
+                                    </Typography>
                                     <Typography
-                                        className={classNames(classes.marginRight, classes.numberCell)}> {professionalStandard[ProfessionalStandardFields.NUMBER]} </Typography>
-                                    <Typography
-                                        className={classNames(classes.marginRight, classes.titleCell)}
-                                        onClick={this.changeRoute(professionalStandard[ProfessionalStandardFields.ID])} > {professionalStandard[ProfessionalStandardFields.TITLE]} </Typography>
-                                    <Typography
-                                        className={classNames(classes.marginRight, classes.codeCell)}> {professionalStandard[ProfessionalStandardFields.CODE]} </Typography>
-                                    <Typography
-                                        className={classes.marginRight}> {professionalStandard[ProfessionalStandardFields.NAME]} </Typography>
-
+                                        className={classNames(classes.marginRight, classes.titleCell, classes.pointerCell)}
+                                        onClick={this.changeRoute(professionalStandard[ProfessionalStandardFields.ID])}
+                                    >
+                                        {professionalStandard[ProfessionalStandardFields.TITLE]}
+                                    </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.codeCell)}>
+                                        {professionalStandard[ProfessionalStandardFields.CODE]}
+                                    </Typography>
+                                    <Typography className={classes.marginRight}>
+                                        {professionalStandard[ProfessionalStandardFields.NAME]}
+                                    </Typography>
                                     <div className={classes.actions}>
                                         <IconButton
                                             onClick={this.handleClickDelete(professionalStandard[ProfessionalStandardFields.ID])}>

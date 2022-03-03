@@ -19,7 +19,10 @@ const changeSorting = createAction('PROFESSIONAL_STANDARDS_CHANGE_SORTING');
 
 const getProfessionalStandard = createAction('GET_PROFESSIONAL_STANDARD');
 const setProfessionalStandard = createAction('SET_PROFESSIONAL_STANDARD');
+
 const createProfessionalStandardAdditionalFields = createAction('CREATE_PROFESSIONAL_STANDARD_ADDITIONAL_FIELDS');
+const updateProfessionalStandardAdditionalFields = createAction('UPDATE_PROFESSIONAL_STANDARD_ADDITIONAL_FIELDS');
+const deleteProfessionalStandardAdditionalFields = createAction('DELETE_PROFESSIONAL_STANDARD_ADDITIONAL_FIELDS');
 
 const actions: ProfessionalStandardsActions = {
     getProfessionalStandards,
@@ -35,7 +38,9 @@ const actions: ProfessionalStandardsActions = {
     changeSorting,
     getProfessionalStandard,
     setProfessionalStandard,
-    createProfessionalStandardAdditionalFields
+    createProfessionalStandardAdditionalFields,
+    updateProfessionalStandardAdditionalFields,
+    deleteProfessionalStandardAdditionalFields
 }
 
 export default actions;

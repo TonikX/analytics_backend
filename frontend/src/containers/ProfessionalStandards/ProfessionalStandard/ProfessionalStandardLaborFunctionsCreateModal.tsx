@@ -11,24 +11,29 @@ import Select from "@material-ui/core/Select";
 import {useStyles} from "./ProfessionalStandard.styles"
 import DialogActions from "@material-ui/core/DialogActions";
 
-
-export default ({isOpen, handleCloseModal}: any,) => {
+export default ({ isOpen, handleCloseModal, laborFunction }: any,) => {
     const dispatch = useDispatch()
     const classes = useStyles()
-    const {id} = useParams()
-    const [code, setCode] = useState('')
-    const [name, setName] = useState('')
-    const [qualificationLevel, setQualificationLevel] = useState('')
-
-    const professionalStandardFields = {
-        id: id,
-        name: name,
-        code: code,
-        qualificationLevel: qualificationLevel
-    }
+    const { id: profStandardId } = useParams()
+    const [code, setCode] = useState(laborFunction?.code || '')
+    const [name, setName] = useState(laborFunction?.name || '')
+    const [qualificationLevel, setQualificationLevel] = useState(laborFunction?.qualification_level || '')
 
     const handleSave = () => {
-        dispatch(actions.createProfessionalStandardAdditionalFields(professionalStandardFields))
+        const professionalStandardFields = {
+            profStandardId,
+            name: name,
+            code: code,
+            id: laborFunction?.id,
+            qualificationLevel: qualificationLevel
+        }
+
+        if (laborFunction?.id) {
+            dispatch(actions.updateProfessionalStandardAdditionalFields(professionalStandardFields))
+        } else {
+            dispatch(actions.createProfessionalStandardAdditionalFields(professionalStandardFields))
+        }
+
         handleCloseModal()
     }
 
@@ -38,13 +43,10 @@ export default ({isOpen, handleCloseModal}: any,) => {
 
     const disableButton = code.length === 0 && name.length === 0 && qualificationLevel.length == 0;
 
-
     return (
-
         <Dialog open={isOpen}>
-            <DialogTitle> Профессиональный стандарт </DialogTitle>
+            <DialogTitle> Трудовая функция </DialogTitle>
             <DialogContent>
-
                 <TextField
                     label="Код"
                     onChange={e => setCode(e.target.value)}
@@ -82,25 +84,25 @@ export default ({isOpen, handleCloseModal}: any,) => {
                                 getContentAnchorEl: null
                             }}
                     >
-                        <MenuItem value="1">1</MenuItem>
-                        <MenuItem value="2">2</MenuItem>
                         <MenuItem value="3">3</MenuItem>
+                        <MenuItem value="4">4</MenuItem>
+                        <MenuItem value="5">5</MenuItem>
+                        <MenuItem value="6">6</MenuItem>
+                        <MenuItem value="7">7</MenuItem>
+                        <MenuItem value="8">8</MenuItem>
                     </Select>
                 </FormControl>
-
-
             </DialogContent>
 
-
             <DialogActions className={classes.actions}>
-
                 <Button onClick={handleCancel}>Отмена</Button>
-                <Button onClick={handleSave}
-                        disabled={disableButton}
-                >Сохранить</Button>
+                <Button
+                  onClick={handleSave}
+                  disabled={disableButton}
+                >
+                  Сохранить
+                </Button>
             </DialogActions>
         </Dialog>
-
     )
-
 }

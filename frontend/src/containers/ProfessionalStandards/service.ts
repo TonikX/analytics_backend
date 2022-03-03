@@ -40,13 +40,24 @@ class ProfessionalStandardsService extends AnalyticsService {
         return this.put(`/api/professionalstandard/${id}/`, formData);
     }
 
-
-    createProfessionalStandard(id:number, name: string, code: string, qualificationLevel: string) {
-
-        return this.post(`/api/generalizedlaborfunction/`, {professional_standard: id, name, code, qualification_level:qualificationLevel}  );
+    createProfessionalStandardAdditionalFields(id:number, name: string, code: string, qualificationLevel: string) {
+        return this.post(`/api/generalizedlaborfunction/`, {
+            professional_standard: id,
+            name,
+            code,
+            qualification_level:qualificationLevel
+        });
     }
 
-    deleteProfessionalStandard(id:number){
+    updateProfessionalStandardAdditionalFields(id:number, name: string, code: string, qualificationLevel: string) {
+        return this.put(`/api/generalizedlaborfunction/${id}/`, {
+            name,
+            code,
+            qualification_level:qualificationLevel
+        });
+    }
+
+    deleteProfessionalStandardAdditionalFields(id:number){
         return this.delete(`/api/generalizedlaborfunction/${id}/`)
     }
 

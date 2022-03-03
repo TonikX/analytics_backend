@@ -34,7 +34,11 @@ export default (theme: Theme) => createStyles({
     },
     titleCell: {
         minWidth: 200,
-        width: 600
+        width: 600,
+    },
+    pointerCell: {
+        cursor: 'pointer',
+        color: '#1d51a3'
     },
     numberCell: {
         width: 115,

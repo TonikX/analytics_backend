@@ -19,6 +19,8 @@ export interface ProfessionalStandardsActions {
     getProfessionalStandard: any;
     setProfessionalStandard: any;
     createProfessionalStandardAdditionalFields: any;
+    updateProfessionalStandardAdditionalFields: any;
+    deleteProfessionalStandardAdditionalFields: any;
 }
 
 export interface professionalStandardsState {

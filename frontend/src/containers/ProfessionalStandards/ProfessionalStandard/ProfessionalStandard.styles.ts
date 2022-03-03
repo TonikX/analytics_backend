@@ -17,15 +17,15 @@ export const useStyles = makeStyles( (theme) => createStyles ({
         display: 'flex',
         justifyContent: 'space-between'
     },
-
     titleCell: {
         width: 600
     },
-
-    codeCell: {
+    infoCell: {
         marginTop: '10px',
         width: '100%'
-
+    },
+    tableCell: {
+        width: '100%'
     },
     actions: {
        float: 'right'
@@ -33,7 +33,6 @@ export const useStyles = makeStyles( (theme) => createStyles ({
     header: {
         background: theme.palette.primary.main,
         color: '#fff',
-
     },
     row: {
         width: '100%',
@@ -63,5 +62,14 @@ export const useStyles = makeStyles( (theme) => createStyles ({
     select: {
 
     },
-
+    subTitle: {
+        marginTop: 20,
+        fontSize: '20px',
+    },
+    iconButton: {
+        cursor: "pointer",
+        '&:hover': {
+            color: theme.palette.primary.main,
+        }
+    },
 }));
