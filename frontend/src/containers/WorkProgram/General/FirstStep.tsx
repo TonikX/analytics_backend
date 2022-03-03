@@ -226,7 +226,7 @@ class FirstStep extends React.Component<FirstStepProps> {
   render() {
     const {
       classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription,
-      isCanEdit, editors, structuralUnit, structuralUnitsList
+      isCanEdit, editors, structuralUnit, structuralUnitsList, canAddEditors
     } = this.props;
     const {state} = this;
     const {addEditorsMode} = state;
@@ -410,7 +410,7 @@ class FirstStep extends React.Component<FirstStepProps> {
               />
             </Dialog>
             :
-            isCanEdit
+            canAddEditors
               ?
               <Button onClick={() => this.setState({addEditorsMode: true})}
                       variant="text"

@@ -6,11 +6,13 @@ import actions from "../../actions";
 import {WorkProgramActions} from "../../types";
 
 import {rootState} from "../../../../store/reducers";
-import {isCanEdit} from "../../getters";
+import {getWorkProgramField, isCanEdit} from "../../getters";
+import {WorkProgramGeneralFields} from "../../enum";
 
 const mapStateToProps = (state:rootState) => {
     return {
         isCanEdit: isCanEdit(state),
+        implementationFormat: getWorkProgramField(state, WorkProgramGeneralFields.IMPLEMENTATION_FORMAT),
     };
 };
 

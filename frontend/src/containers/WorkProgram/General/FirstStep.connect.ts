@@ -6,10 +6,11 @@ import {WorkProgramGeneralFields} from "../enum";
 import actions from "../actions";
 import {getWorkProgramField, isCanEdit} from '../getters';
 
-import {isFetchingComponentByKey} from "../../../layout/getters";
+import {getUserGroups, isFetchingComponentByKey} from "../../../layout/getters";
 
 import {rootState} from "../../../store/reducers";
 import {getStructuralUnitsForSelector} from "../../StructuralUnits/getters";
+import {EXPERTISE_MASTER} from "../../../common/userRights";
 
 const mapStateToProps = (state:rootState) => {
     return {
@@ -36,6 +37,7 @@ const mapStateToProps = (state:rootState) => {
         fetchingAuthors: isFetchingComponentByKey(state, WorkProgramGeneralFields.AUTHORS),
         fetchingVideoLink: isFetchingComponentByKey(state, WorkProgramGeneralFields.VIDEO_LINK),
         fetchingDescription: isFetchingComponentByKey(state, WorkProgramGeneralFields.DESCRIPTION),
+        canAddEditors: isCanEdit(state) || getUserGroups(state)?.includes(EXPERTISE_MASTER),
     };
 };
 
