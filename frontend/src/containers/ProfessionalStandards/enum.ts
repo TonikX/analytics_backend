@@ -9,6 +9,7 @@ export enum fields {
     SORTING = 'SORTING',
     SORTING_FIELD = 'SORTING_FIELD',
     SORTING_MODE = 'SORTING_MODE',
+    PROFESSIONAL_STANDARD = 'PROFESSIONAL_STANDARD',
 }
 
 export enum fetchingTypes {
@@ -22,4 +23,6 @@ export enum ProfessionalStandardFields {
     ID = 'id',
     TITLE = 'title',
     NUMBER = 'code',
+    CODE = 'code_of_prof_area',
+    NAME = 'name_of_prof_area',
 }

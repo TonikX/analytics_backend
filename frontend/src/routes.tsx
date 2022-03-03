@@ -58,6 +58,7 @@ import Overview from "./containers/Overview";
 import Landing from "./containers/Landing";
 import UserProfile from "./containers/UserProfile";
 import DodProfile from "./containers/DodProfile";
+ import ProfessionalStandardId from "./containers/ProfessionalStandards/ProfessionalStandard/ProfessionalStandard";
 
 
 const routerService = RouterService.factory();
@@ -95,6 +96,10 @@ export default () => (
             <AuthRoute path={routerService.getSelectDisciplineRoute()}>
                 <SelectDiscipline />
             </AuthRoute>
+                <AuthRoute path={routerService.getProfessionalStandardIDRoute(':id')}>
+                    <ProfessionalStandardId />
+                </AuthRoute>
+
             <AuthRoute path={routerService.getProfessionalStandardsRoute()}>
                 <ProfessionalStandards />
             </AuthRoute>

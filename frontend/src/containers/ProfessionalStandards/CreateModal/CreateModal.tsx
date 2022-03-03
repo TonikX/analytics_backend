@@ -24,6 +24,8 @@ class CreateModal extends React.PureComponent<ProfessionalStandardsCreateModalPr
             [ProfessionalStandardFields.ID]: null,
             [ProfessionalStandardFields.TITLE]: '',
             [ProfessionalStandardFields.NUMBER]: '',
+            [ProfessionalStandardFields.CODE]: '',
+            [ProfessionalStandardFields.NAME]: '',
         },
     };
 
@@ -36,6 +38,8 @@ class CreateModal extends React.PureComponent<ProfessionalStandardsCreateModalPr
                     [ProfessionalStandardFields.ID]: get(professionalStandard, ProfessionalStandardFields.ID),
                     [ProfessionalStandardFields.TITLE]: get(professionalStandard, ProfessionalStandardFields.TITLE, ''),
                     [ProfessionalStandardFields.NUMBER]: get(professionalStandard, ProfessionalStandardFields.NUMBER, ''),
+                    [ProfessionalStandardFields.CODE]: get(professionalStandard, ProfessionalStandardFields.CODE, ''),
+                    [ProfessionalStandardFields.NAME]: get(professionalStandard, ProfessionalStandardFields.NAME, ''),
                 }
             });
         }
@@ -70,7 +74,8 @@ class CreateModal extends React.PureComponent<ProfessionalStandardsCreateModalPr
         const {isOpen, classes} = this.props;
         const {professionalStandard} = this.state;
 
-        const disableButton = professionalStandard[ProfessionalStandardFields.TITLE].length === 0 || professionalStandard[ProfessionalStandardFields.NUMBER].length === 0;
+        const disableButton = professionalStandard[ProfessionalStandardFields.TITLE].length === 0 || professionalStandard[ProfessionalStandardFields.NUMBER].length === 0
+            || professionalStandard[ProfessionalStandardFields.CODE].length === 0 || professionalStandard[ProfessionalStandardFields.NAME].length === 0 ;
 
         const isEditMode = Boolean(professionalStandard[ProfessionalStandardFields.ID]);
 
@@ -97,13 +102,34 @@ class CreateModal extends React.PureComponent<ProfessionalStandardsCreateModalPr
                     <TextField label="Номер профессионального стандарта *"
                                onChange={this.saveField(ProfessionalStandardFields.NUMBER)}
                                variant="outlined"
-                               className={classes.input}
+                               className={classNames(classes.input, classes.marginBottom30)}
                                fullWidth
                                value={professionalStandard[ProfessionalStandardFields.NUMBER]}
                                InputLabelProps={{
                                    shrink: true,
                                }}
                     />
+                    <TextField label="Код ПС *"
+                               onChange={this.saveField(ProfessionalStandardFields.CODE)}
+                               variant="outlined"
+                               className={classNames(classes.input, classes.marginBottom30)}
+                               fullWidth
+                               value={professionalStandard[ProfessionalStandardFields.CODE]}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}
+                    />
+                    <TextField label="Профессиональный стандарт *"
+                               onChange={this.saveField(ProfessionalStandardFields.NAME)}
+                               variant="outlined"
+                          className={classes.input}
+                               fullWidth
+                               value={professionalStandard[ProfessionalStandardFields.NAME]}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}
+                    />
+
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={this.handleClose}
