@@ -900,7 +900,8 @@ class СertificationEvaluationTool(CloneMixin, models.Model):
         ('1', 'Exam'),
         ('2', 'Differentiated credit'),
         ('3', 'Offset'),
-        ('4', 'Coursework')
+        ('4', 'Coursework'),
+        ('5', 'course_project')
     ]
     type = models.CharField(choices=types, default='1',max_length=1024, verbose_name="Тип оценочного средства")
     name = models.CharField(blank=True, null=True, max_length=1024, verbose_name="Наименование оценочного средства", default="No name")
