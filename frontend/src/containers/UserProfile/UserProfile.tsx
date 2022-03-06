@@ -14,6 +14,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 
+import MergeWorkProgramsBlock from "./MergeWorkProgramsBlock";
 import {getUserData, getUserGroups} from '../../layout/getters';
 import layoutActions from '../../layout/actions';
 import {appRouter} from '../../service/router-service';
@@ -25,7 +26,7 @@ import {WorkProgramGeneralFields} from '../WorkProgram/enum';
 import {specialization} from '../WorkProgram/constants';
 import {FULL_DATE_FORMAT} from '../../common/utils';
 
-import {WorkProgram} from './types';
+import {WorkProgram, WorkProgramList} from './types';
 import {useStyles} from './UserProfile.styles';
 
 const userService = UserService.factory();
@@ -35,6 +36,13 @@ export default () => {
     const userData = useSelector(getUserData);
     const dispatch = useDispatch();
     const history = useHistory();
+    const workProgramList = useSelector(getWorkProgramList);
+
+    useEffect(() => {
+        dispatch(workProgramActions.changeCurrentPage(1));
+        dispatch(workProgramActions.changeFiltering({[filterFields.ONLY_MY]: true}));
+        dispatch(workProgramActions.getWorkProgramList())
+    }, []);
 
     const handleLogout = () => {
         userService.logout();
@@ -58,7 +66,14 @@ export default () => {
                 Здравствуйте, {composeUserName()}
             </Typography>
             <MyGroups/>
-            <MyWorkProgramsList/>
+            {
+                workProgramList.length > 0 && (
+                    <div className={classes.copyRpdContainer}>
+                        <MergeWorkProgramsBlock workPrograms={workProgramList}/>
+                    </div>
+                )
+            }
+            <MyWorkProgramsList workPrograms={workProgramList}/>
         </Box>
     )
 };
@@ -85,7 +100,7 @@ const MyGroups = () => {
     )
 };
 
-const MyWorkProgramsList = () => {
+const MyWorkProgramsList = ({workPrograms}: WorkProgramList) => {
     const TABLE_HEADERS = [
         {title: 'Код', key: 'code'},
         {title: 'Название', key: 'title'},
@@ -95,21 +110,13 @@ const MyWorkProgramsList = () => {
     ];
 
     const classes = useStyles();
-    const dispatch = useDispatch();
-    const workProgramList = useSelector(getWorkProgramList);
-
-    useEffect(() => {
-        dispatch(workProgramActions.changeCurrentPage(1));
-        dispatch(workProgramActions.changeFiltering({[filterFields.ONLY_MY]: true}));
-        dispatch(workProgramActions.getWorkProgramList())
-    }, []);
 
     return (
         <Box className={classes.tableWrap}>
             <Typography className={classes.itemTitle}>
                 Ваши рабочие программы
             </Typography>
-            {workProgramList.length > 0 ? <Table stickyHeader size='small'>
+            {workPrograms.length > 0 ? <Table stickyHeader size='small'>
                 <TableHead>
                     <TableRow>
                         {TABLE_HEADERS.map(({title, key}) => {
@@ -119,7 +126,7 @@ const MyWorkProgramsList = () => {
                 </TableHead>
 
                 <TableBody>
-                    {workProgramList.map((workProgram: WorkProgram) =>
+                    {workPrograms.map((workProgram: WorkProgram) =>
                         <TableRow key={workProgram[WorkProgramGeneralFields.ID]}>
                             <TableCell>
                                 {workProgram[WorkProgramGeneralFields.CODE]}

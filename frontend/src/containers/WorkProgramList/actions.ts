@@ -8,6 +8,7 @@ const setWorkProgramList = createAction('SET_WORK_PROGRAM_LIST');
 const createNewWorkProgram = createAction('CREATE_NEW_WORK_PROGRAM');
 const changeWorkProgram = createAction('CHANGE_WORK_PROGRAM');
 const deleteWorkProgram = createAction('DELETE_WORK_PROGRAM');
+const mergeWorkProgram = createAction('MERGE_WORK_PROGRAM');
 
 const openDialog = createAction('OPEN_WORK_PROGRAM_DIALOG');
 const closeDialog = createAction('CLOSE_WORK_PROGRAM_DIALOG');
@@ -27,6 +28,7 @@ const actions: WorkProgramListActions = {
     setWorkProgramList,
     createNewWorkProgram,
     changeWorkProgram,
+    mergeWorkProgram,
     deleteWorkProgram,
     openDialog,
     closeDialog,
