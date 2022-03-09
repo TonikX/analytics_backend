@@ -18,7 +18,8 @@ export const initialState: professionalStandardsState = {
     [fields.PROFESSIONAL_STANDARD_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
-    }
+    },
+    [fields.PROFESSIONAL_STANDARD]: {},
 };
 
 const setProfessionalStandards = (state: professionalStandardsState, {payload}: any): professionalStandardsState => {
@@ -68,6 +69,13 @@ const changeSorting = (state: professionalStandardsState, {payload}: any): profe
     }
 });
 
+const setProfessionalStandard = (state: professionalStandardsState, {payload}: any): professionalStandardsState => {
+
+    return ({
+        ...state,
+        [fields.PROFESSIONAL_STANDARD]: payload,
+    });
+}
 export const reducer = createReducer(initialState, {
     [actions.setProfessionalStandards.type]: setProfessionalStandards,
     [actions.openDialog.type]: openDialog,
@@ -76,4 +84,6 @@ export const reducer = createReducer(initialState, {
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
+    [actions.setProfessionalStandard.type]: setProfessionalStandard,
 });
+
