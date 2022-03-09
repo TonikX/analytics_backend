@@ -187,6 +187,7 @@ export enum IntermediateCertificationEnum {
     DIF_CREDIT = '2',
     CREDIT = '3',
     COURSE_WORK = '4',
+    COURSE_PROJECT = '5',
 }
 
 export enum StepsEnum {
