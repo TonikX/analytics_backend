@@ -25,18 +25,16 @@ import SelectEducationalProgramLogic from '../containers/SelectEducationalProgra
 import TrainingModulesLogic from '../containers/EducationalPlan/TrainingModules/logics';
 import IndividualTrajectoriesLogic from '../containers/IndividualTrajectories/logics';
 import ProfessionalStandardsLogic from '../containers/ProfessionalStandards/logics';
-
+import EducationalStandardsLogic from '../containers/EducationalStandards/logics';
 import RecordsLogic from  '../containers/Records/logics';
-
-
 import StructuralUnitsLogic from '../containers/StructuralUnits/logics';
 import IndividualEducationalPlansLogic from '../containers/IndividualEducationalPlans/logics';
 import ProfileNotificationsLogic from '../containers/Profile/Notifications/logics';
-
 import GeneralLogic from '../layout/logics';
 import DodProfile from  '../containers/DodProfile/logics';
 
 export default [
+    ...EducationalStandardsLogic,
     ...ProfileNotificationsLogic,
     ...IndividualEducationalPlansLogic,
     ...StructuralUnitsLogic,

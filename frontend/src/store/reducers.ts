@@ -98,7 +98,11 @@ import {notificationsState} from "../containers/Profile/Notifications/types"
 import {GENERAL_PATH as dodProfilePath, reducer as dodProfileReducer} from "../containers/DodProfile/reducer"
 import {dodProfileState} from "../containers/DodProfile/types"
 
+import {GENERAL_PATH as educationalStandardPath, reducer as educationalStandardReducer} from "../containers/EducationalStandards/reducer"
+import {educationalStandardsState} from "../containers/EducationalStandards/types"
+
 export interface rootState {
+    [educationalStandardPath]: educationalStandardsState,
     [profileNotificationsPath]: notificationsState,
     [individualEducationalPlansPath]: individualEducationalPlansState,
     [structuralUnitsPath]: structuralUnitsState,
@@ -136,6 +140,7 @@ export interface rootState {
 }
 
 export default combineReducers({
+    [educationalStandardPath]: educationalStandardReducer,
     [recordsPath]: RecordsReducer,
     [profileNotificationsPath]: profileNotificationsReducer,
     [individualEducationalPlansPath]: individualEducationalPlansReducer,
