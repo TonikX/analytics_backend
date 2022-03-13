@@ -153,7 +153,6 @@ const getEducationalProgramCharacteristic = createLogic({
 
         service.getEducationalProgramCharacteristic(action.payload)
             .then((res) => {
-                console.log(res.data);
                 dispatch(educationalPlanActions.setEducationalProgramCharacteristic(res.data));
                 dispatch(actions.fetchingSuccess());
             })
