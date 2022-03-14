@@ -488,28 +488,29 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         #print(request.data['id'])
-        if request.data['implementation_format']=='online':
-            DisciplineSection.objects.filter(work_program = serializer.data['id'])
-            for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
-                section.consultations = section.contact_work + section.lecture_classes + section.laboratory + \
-                                        section.practical_lessons + section.SRO
-                section.contact_work = 0
-                section.lecture_classes = 0
-                section.laboratory = 0
-                section.practical_lessons = 0
-                section.SRO = 0
-                section.save()
-        elif request.data['implementation_format']=='mixed' or request.data['implementation_format']=='offline':
-            DisciplineSection.objects.filter(work_program = serializer.data['id'])
-            for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
-                section.contact_work = (section.consultations/21*11)
-                section.lecture_classes = (section.consultations/21*2)
-                section.laboratory = (section.consultations/21*2)
-                section.practical_lessons = (section.consultations/21*2)
-                section.SRO = (section.consultations/21*2)
-                section.consultations = (section.consultations/21*2)
-                section.save()
-        response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id = serializer.data['id']))
+        if request.data['implementation_format']:
+            if request.data['implementation_format']=='online':
+                DisciplineSection.objects.filter(work_program = serializer.data['id'])
+                for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
+                    section.consultations = section.contact_work + section.lecture_classes + section.laboratory + \
+                                            section.practical_lessons + section.SRO
+                    section.contact_work = 0
+                    section.lecture_classes = 0
+                    section.laboratory = 0
+                    section.practical_lessons = 0
+                    section.SRO = 0
+                    section.save()
+            elif request.data['implementation_format']=='mixed' or request.data['implementation_format']=='offline':
+                DisciplineSection.objects.filter(work_program = serializer.data['id'])
+                for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
+                    section.contact_work = (section.consultations/21*11)
+                    section.lecture_classes = (section.consultations/21*2)
+                    section.laboratory = (section.consultations/21*2)
+                    section.practical_lessons = (section.consultations/21*2)
+                    section.SRO = (section.consultations/21*2)
+                    section.consultations = (section.consultations/21*2)
+                    section.save()
+            response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id = serializer.data['id']))
         return Response(response_serializer.data)
 
 
