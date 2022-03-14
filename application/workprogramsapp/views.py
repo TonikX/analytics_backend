@@ -510,9 +510,9 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
                     section.SRO = (section.consultations/21*2)
                     section.consultations = (section.consultations/21*2)
                     section.save()
-            response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id = serializer.data['id']))
         except:
             pass
+        response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id = serializer.data['id']))
         return Response(response_serializer.data)
 
 
