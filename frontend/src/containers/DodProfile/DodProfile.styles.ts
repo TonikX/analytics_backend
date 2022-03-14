@@ -66,6 +66,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
             flexDirection: 'column-reverse',
         }
     },
+    copyRpdContainer: {
+        margin: '20px 0 40px',
+    },
     notificationsContainer: {
         display: 'flex',
         marginTop: '-12px',

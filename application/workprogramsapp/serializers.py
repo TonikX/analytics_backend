@@ -114,7 +114,7 @@ class EvaluationToolForOutcomsSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
     class Meta:
         model = EvaluationTool
-        fields = ['id', 'type', 'name', 'max', 'min', 'deadline', 'check_point', 'description']
+        fields = ['id', 'type', 'name', 'max', 'min', 'deadline', 'check_point', 'description', 'evaluation_criteria']
 
 
 class СertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
@@ -122,7 +122,7 @@ class СertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSeri
 
     class Meta:
         model = СertificationEvaluationTool
-        fields = ['id', 'type', 'name', 'description', 'deadline', 'min', 'max', 'semester']
+        fields = ['id', 'type', 'name', 'description', 'deadline', 'min', 'max', 'semester', 'evaluation_criteria']
 
 
 class СertificationEvaluationToolCreateSerializer(serializers.ModelSerializer):
@@ -130,7 +130,7 @@ class СertificationEvaluationToolCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = СertificationEvaluationTool
-        fields = ['type', 'name', 'description', 'deadline', 'semester', 'min', 'max', 'work_program']
+        fields = ['type', 'name', 'description', 'deadline', 'semester', 'min', 'max', 'work_program', 'evaluation_criteria']
 
 
 class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
@@ -322,7 +322,7 @@ class EvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EvaluationTool
-        fields = ['id', 'type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections', 'semester']
+        fields = ['id', 'type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections', 'semester', 'evaluation_criteria']
 
 
 class EvaluationToolCreateSerializer(serializers.ModelSerializer):
@@ -332,7 +332,7 @@ class EvaluationToolCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EvaluationTool
-        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'semester', 'min', 'max', 'descipline_sections']
+        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'semester', 'min', 'max', 'descipline_sections', 'evaluation_criteria']
 
 
 class ZunSerializer(serializers.ModelSerializer):
