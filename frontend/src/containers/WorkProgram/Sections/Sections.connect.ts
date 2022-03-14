@@ -25,6 +25,7 @@ const mapStateToProps = (state:rootState) => {
         labHours: labHours,
         srsHours: srsHours,
         semesterCount: getWorkProgramField(state, WorkProgramGeneralFields.SEMESTER_COUNT) || 1,
+        implementationFormat: getWorkProgramField(state, WorkProgramGeneralFields.IMPLEMENTATION_FORMAT),
     };
 };
 
