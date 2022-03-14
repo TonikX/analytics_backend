@@ -488,7 +488,7 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         #print(request.data['id'])
-        if request.data['implementation_format']:
+        try:
             if request.data['implementation_format']=='online':
                 DisciplineSection.objects.filter(work_program = serializer.data['id'])
                 for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
@@ -511,6 +511,8 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
                     section.consultations = (section.consultations/21*2)
                     section.save()
             response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id = serializer.data['id']))
+        except:
+            pass
         return Response(response_serializer.data)
 
 
