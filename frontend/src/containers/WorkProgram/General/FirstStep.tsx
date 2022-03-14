@@ -35,6 +35,9 @@ import {UserFields} from "../../../layout/enum";
 import connect from './FirstStep.connect';
 import styles from './FirstStep.styles';
 import FormLabel from "@material-ui/core/FormLabel";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 class FirstStep extends React.Component<FirstStepProps> {
   state = {
@@ -451,12 +454,12 @@ class FirstStep extends React.Component<FirstStepProps> {
                           onChange={this.changeLanguage}
           />
 
-          <SimpleSelector label="Формат реализации"
+          {state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] && <SimpleSelector label="Формат реализации"
                           metaList={implementationFormats}
                           value={state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]}
                           wrapClass={classes.selectorWrap}
                           onChange={this.changeImplementationFormat}
-          />
+          />}
 
           <InputsLoader loading={fetchingDate}>
             <DatePicker

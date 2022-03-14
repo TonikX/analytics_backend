@@ -77,7 +77,7 @@ class Sections extends React.PureComponent<SectionsProps> {
     if (field === workProgramSectionFields.TOTAL_HOURS && canEditConsultation) {
       sections.forEach((section) => {
         //@ts-ignore
-        count += parseFloat(section[workProgramSectionFields.CONSULTATIONS] || 0) + parseFloat(this.calculateContactWork(section))
+        count += parseFloat(section[workProgramSectionFields.CONSULTATIONS] || 0)
       })
       return count
     }
@@ -124,7 +124,7 @@ class Sections extends React.PureComponent<SectionsProps> {
 
       this.props.actions.saveSection({
         ...section,
-        [canEditConsultation ? workProgramSectionFields.CONSULTATIONS : workProgramSectionFields.SPO]: index === sections.length - 1 ?
+        [workProgramSectionFields.SPO]: index === sections.length - 1 ?
           cpoLastValue :
           cpoValue,
         [workProgramSectionFields.TOTAL_HOURS]: index === sections.length - 1 ?
@@ -162,13 +162,12 @@ class Sections extends React.PureComponent<SectionsProps> {
   render() {
     const {classes, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours, semesterCount, implementationFormat} = this.props;
     const {createNewSectionMode} = this.state;
-    const canEditConsultation = this.props.implementationFormat === ImplementationFormatsEnum.ONLINE
 
-    const totalLectureClassesHours = canEditConsultation ? '0' : this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
-    const totalLaboratoryClassesHours = canEditConsultation ? '0' : this.getTotalHours(workProgramSectionFields.LABORATORY).toFixed(2);
-    const totalPracticalClassesHours = canEditConsultation ? '0' : this.getTotalHours(workProgramSectionFields.PRACTICAL_LESSONS).toFixed(2);
-    const totalSPOHours = canEditConsultation ? '0' : this.getTotalHours(workProgramSectionFields.SPO).toFixed(2);
-    const totalConsultationsHours = !canEditConsultation ? '0' : this.getTotalHours(workProgramSectionFields.CONSULTATIONS).toFixed(2);
+    const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
+    const totalLaboratoryClassesHours = this.getTotalHours(workProgramSectionFields.LABORATORY).toFixed(2);
+    const totalPracticalClassesHours = this.getTotalHours(workProgramSectionFields.PRACTICAL_LESSONS).toFixed(2);
+    const totalSPOHours = this.getTotalHours(workProgramSectionFields.SPO).toFixed(2);
+    const totalConsultationsHours = this.getTotalHours(workProgramSectionFields.CONSULTATIONS).toFixed(2);
 
     const currentTotalHours = this.getTotalHours(workProgramSectionFields.TOTAL_HOURS).toFixed(2);
 

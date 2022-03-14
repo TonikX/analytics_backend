@@ -30,7 +30,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     }
 
     componentDidUpdate(prevProps: Readonly<EditedRowProps>, prevState: Readonly<EditedRowState>, snapshot?: any) {
-        const { implementationFormat, section } = this.props
+        const { section } = this.props
 
         if (!shallowEqual(prevProps.section, this.props.section)){
             this.setState({
@@ -41,9 +41,8 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
 
     calculateTotalHours = () => {
         const {section} = this.state;
-        const canEditConsultation = this.props.implementationFormat === ImplementationFormatsEnum.ONLINE
         const contactWork = this.calculateContactWork();
-        const spo = canEditConsultation ? 0 : parseFloat(section[workProgramSectionFields.SPO]);
+        const spo = parseFloat(section[workProgramSectionFields.SPO]);
 
         return ((contactWork ? parseFloat(contactWork) : 0) + (spo ? spo : 0)).toFixed(2);
     }
@@ -188,7 +187,6 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                                    className={classes.smallInput}
                                    type="number"
                                    onChange={this.handleChangeField(workProgramSectionFields.SPO)}
-                                   disabled={canEditConsultation}
                         />
                         :
                         <>{section.SRO}</>
@@ -209,7 +207,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     }
                 </TableCell>
                 <TableCell className={classes.centerCell}>
-                    <>{canEditConsultation ? (parseFloat(section[workProgramSectionFields.CONSULTATIONS]) + parseFloat(contactWork)) || 0 : section.total_hours}</>
+                    <>{section.total_hours}</>
                 </TableCell>
                 {isCanEdit &&
                     <TableCell className={classes.centerCell}>
