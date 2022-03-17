@@ -35,7 +35,7 @@ const WorkProgramSelect = ({type, onChange, workPrograms}: WorkProgramSelectProp
             >
                 {workPrograms.map((item: WorkProgram) => {
                         return <MenuItem value={item.id} key={`work-program-${item.id}`}>
-                            {item.title}
+                            {item.title} ({item.code})
                         </MenuItem>;
                     }
                 )}
