@@ -18,7 +18,7 @@ export const getSupraProfessionalCompetencies = (state: rootState): EducationalP
 ;
 export const getEducationalProgramList = (state: rootState): Array<EducationalProgramType> => get(getStateData(state), fields.EDUCATION_PROGRAM_LIST, []);
 
-export const getCompetenceMatrix = (state: rootState): any => get(getStateData(state), fields.COMPETENCE_MATRIX, {});
+export const getCompetenceMatrix = (state: rootState): CompetenceMatrix => get(getStateData(state), fields.COMPETENCE_MATRIX, {});
 // export const getEducationalProgramCharacteristicForSelector = (state: rootState): SelectorListType =>
 //     getEducationalProgramCharacteristic(state).map((indicator: EducationalProgramCharacteristicType) => ({
 //         value: indicator[EducationPlanInDirectionFields.ID],
