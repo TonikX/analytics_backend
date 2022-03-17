@@ -233,7 +233,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     } = this.props;
     const {state} = this;
     const {addEditorsMode} = state;
-
+    console.log('test console')
     return (
       <div className={classes.container}>
         <div className={classNames(classes.side, {[classes.fullWidth]: !isCanEdit})}>
@@ -454,7 +454,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                           onChange={this.changeLanguage}
           />
 
-          {state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] && <SimpleSelector label="Формат реализации"
+          {(state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] || state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] === null) && <SimpleSelector label="Формат реализации"
                           metaList={implementationFormats}
                           value={state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]}
                           wrapClass={classes.selectorWrap}
