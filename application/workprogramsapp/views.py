@@ -1,6 +1,7 @@
 import json
 import os
 import re
+from decimal import *
 import pandas
 from django.shortcuts import get_object_or_404
 from collections import OrderedDict
@@ -493,22 +494,22 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
                 DisciplineSection.objects.filter(work_program = serializer.data['id'])
                 for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
                     section.consultations = section.lecture_classes + section.laboratory + \
-                                            section.practical_lessons + section.SRO
+                                            section.practical_lessons
                     #section.contact_work = 0
                     section.lecture_classes = 0
                     section.laboratory = 0
                     section.practical_lessons = 0
-                    section.SRO = 0
+                    #section.SRO = 0
                     section.save()
             elif request.data['implementation_format']=='mixed' or request.data['implementation_format']=='offline':
                 DisciplineSection.objects.filter(work_program = serializer.data['id'])
                 for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
                     #section.contact_work = (section.consultations/21*11)
-                    section.lecture_classes = (section.consultations/21*2)
-                    section.laboratory = (section.consultations/21*2)
-                    section.practical_lessons = (section.consultations/21*2)
-                    section.SRO = (section.consultations/21*2)
-                    section.consultations = (section.consultations/21*2)
+                    section.lecture_classes = (section.consultations/3)
+                    section.laboratory = (section.consultations/3)
+                    section.practical_lessons = (section.consultations/3)
+                    #section.SRO = (section.consultations/8*2)
+                    section.consultations = 0
                     section.save()
         except:
             pass
