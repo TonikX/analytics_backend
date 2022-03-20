@@ -6,4 +6,15 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         background: theme.palette.primary.main,
         color: 'white',
     },
+    rowWithPadding: {
+        paddingLeft: '50px !important',
+    },
+    competenceHeader: {
+        display: 'flex',
+        justifyContent: 'space-between',
+
+    },
+    competenceHeaderCell: {
+        flexGrow: 1,
+    }
 }));

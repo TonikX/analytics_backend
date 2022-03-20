@@ -7,7 +7,7 @@ interface CompetenceMatrix {
     wp_matrix: AcademicPlan[];
     pk_competences: Array;
     key_competences: KeyCompetence[];
-    general_prof_competences: Array;
+    general_prof_competences: ProfCompetence[];
     over_prof_competences: Array;
 }
 
@@ -73,9 +73,21 @@ interface AcademicPlan {
     discipline_blocks_in_academic_plan: Discipline[]
 }
 
-interface CompetenceInGroupOfCompetences {
+interface CompetenceInGroupOfKeyCompetences {
     id: number;
     indicator_of_competence_in_group_of_key_competences: Array;
+    competence: Competence;
+}
+
+interface CompetenceInGroupOfGeneralProfCompetences {
+    id: number;
+    indicator_of_competence_in_group_of_general_prof_competences: Array;
+    competence: Competence;
+}
+
+interface CompetenceInGroupOfOverProfCompetences {
+    id: number;
+    indicator_of_competence_in_group_of_over_prof_competences: Array;
     competence: Competence;
 }
 
@@ -88,5 +100,17 @@ interface Competence {
 interface KeyCompetence {
     id: null;
     name: string;
-    competence_in_group_of_key_competences: CompetenceInGroupOfCompetences[]
+    competence_in_group_of_key_competences: CompetenceInGroupOfKeyCompetences[]
+}
+
+interface ProfCompetence {
+    id: null;
+    name: string;
+    competence_in_group_of_general_prof_competences: CompetenceInGroupOfGeneralProfCompetences[]
+}
+
+interface OverProfCompetence {
+    id: null;
+    name: string;
+    competence_in_group_of_over_prof_competences: CompetenceInGroupOfOverProfCompetences[]
 }
