@@ -153,6 +153,7 @@ export type SectionType = {
     contact_work: number;
     lecture_classes: number;
     practical_lessons: number;
+    consultations: number;
     total_hours: number;
     laboratory: number;
     topics: Array<TopicType>;

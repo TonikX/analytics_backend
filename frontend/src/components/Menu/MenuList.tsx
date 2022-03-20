@@ -366,6 +366,12 @@ export default (groups: Array<string>) => {
             selectedIcon: IndicatorsSelectedIcon,
         },
         {
+            title: 'Образовательные стандарты',
+            link: appRouter.getEducationalStandardsRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
+        {
             title: 'Структурные подразделения',
             link: appRouter.getStructuralUnitsRoute(),
             icon: IndicatorsIcon,

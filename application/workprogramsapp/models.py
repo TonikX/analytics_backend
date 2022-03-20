@@ -887,7 +887,7 @@ class EvaluationTool(CloneMixin,models.Model):
     semester = models.IntegerField(verbose_name="Семестр в котором сдается оценочное средство", blank=True, null=True)
     min = models.IntegerField(verbose_name="Максимальное значение", blank=True, null=True)
     max = models.IntegerField(verbose_name="Минимальное значение", blank=True, null=True)
-
+    evaluation_criteria = models.CharField(max_length=2048, verbose_name="Критерии оценивания", blank=True, null=True)
     def __str__(self):
         return self.name
 
@@ -900,7 +900,8 @@ class СertificationEvaluationTool(CloneMixin, models.Model):
         ('1', 'Exam'),
         ('2', 'Differentiated credit'),
         ('3', 'Offset'),
-        ('4', 'Coursework')
+        ('4', 'Coursework'),
+        ('5', 'course_project')
     ]
     type = models.CharField(choices=types, default='1',max_length=1024, verbose_name="Тип оценочного средства")
     name = models.CharField(blank=True, null=True, max_length=1024, verbose_name="Наименование оценочного средства", default="No name")
@@ -911,7 +912,7 @@ class СertificationEvaluationTool(CloneMixin, models.Model):
     min = models.IntegerField(verbose_name="Максимальное значение", blank=True, null=True)
     max = models.IntegerField(verbose_name="Минимальное значение", blank=True, null=True)
     work_program = models.ForeignKey("WorkProgram", verbose_name='Аттестационное оценочное средство', related_name = "certification_evaluation_tools", on_delete=models.CASCADE)
-
+    evaluation_criteria = models.CharField(max_length=2048, verbose_name="Критерии оценивания", blank=True, null=True)
     def __str__(self):
         return self.name
 

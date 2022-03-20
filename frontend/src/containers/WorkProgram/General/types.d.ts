@@ -32,4 +32,5 @@ export interface FirstStepProps extends WithStyles<typeof styles> {
     fetchingDate: boolean;
     fetchingDescription: boolean;
     fetchingVideoLink: boolean;
+    canAddEditors: boolean;
 }

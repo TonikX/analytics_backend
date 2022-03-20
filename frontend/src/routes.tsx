@@ -47,6 +47,7 @@ import IndividualTrajectories from './containers/IndividualTrajectories';
 import IndividualEducationalPlans from './containers/IndividualEducationalPlans';
 
 import ProfessionalStandards from './containers/ProfessionalStandards';
+import ProfessionalStandard from "./containers/ProfessionalStandards/ProfessionalStandard";
 import StructuralUnits from './containers/StructuralUnits';
 import StructuralUnit from './containers/StructuralUnits/StructuralUnit';
 
@@ -58,8 +59,8 @@ import Overview from "./containers/Overview";
 import Landing from "./containers/Landing";
 import UserProfile from "./containers/UserProfile";
 import DodProfile from "./containers/DodProfile";
- import ProfessionalStandardId from "./containers/ProfessionalStandards/ProfessionalStandard/ProfessionalStandard";
 
+import EducationalStandards from "./containers/EducationalStandards";
 
 const routerService = RouterService.factory();
 
@@ -96,12 +97,14 @@ export default () => (
             <AuthRoute path={routerService.getSelectDisciplineRoute()}>
                 <SelectDiscipline />
             </AuthRoute>
-                <AuthRoute path={routerService.getProfessionalStandardIDRoute(':id')}>
-                    <ProfessionalStandardId />
-                </AuthRoute>
-
+            <AuthRoute path={routerService.getProfessionalStandardIDRoute(':id')}>
+                <ProfessionalStandard />
+            </AuthRoute>
             <AuthRoute path={routerService.getProfessionalStandardsRoute()}>
                 <ProfessionalStandards />
+            </AuthRoute>
+            <AuthRoute path={routerService.getEducationalStandardsRoute()}>
+                <EducationalStandards />
             </AuthRoute>
             <AuthRoute path={routerService.getStructuralUnitRoute()}>
                 <StructuralUnit />

@@ -1,9 +1,11 @@
-import React from 'react';
-import {useDispatch} from "react-redux";
-import {Select, FormControl, InputLabel, MenuItem, Button, Modal, Box, Typography} from "@material-ui/core";
-import {WorkProgram, WorkProgramList} from "../types";
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Select, FormControl, InputLabel, MenuItem, Button, Modal, Box, Typography} from '@material-ui/core';
+import {WorkProgram, WorkProgramList} from '../UserProfile/types';
 import {useStyles} from './MergeWorkProgramsBlock.styles';
-import actions from "../../WorkProgramList/actions";
+import actions from '../WorkProgramList/actions';
+import {filterFields} from '../WorkProgramList/enum';
+import {getWorkProgramList} from '../WorkProgramList/getters';
 
 type WorkProgramSelectType = 'source' | 'target'
 type WorkProgramSelectProps = {
@@ -67,12 +69,19 @@ const CopyWorkProgramsModal = ({open, handleClose, confirm}: ModalProps) => {
     )
 };
 
-export default ({workPrograms}: WorkProgramList) => {
+export default ({className}: {className: string}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [sourceId, setSource] = React.useState(0);
     const [targetId, setTarget] = React.useState(0);
     const [modalIsOpen, handleModalOpen] = React.useState(false);
+    const workPrograms = useSelector(getWorkProgramList);
+
+    useEffect(() => {
+        dispatch(actions.changeCurrentPage(1));
+        dispatch(actions.changeFiltering({[filterFields.ONLY_MY]: true}));
+        dispatch(actions.getWorkProgramList())
+    }, []);
 
     const closeModal = () => handleModalOpen(false);
     const openModal = () => handleModalOpen(true);
@@ -95,8 +104,13 @@ export default ({workPrograms}: WorkProgramList) => {
                 break;
         }
     };
+
+    if (workPrograms.length === 0) {
+        return null;
+    }
+
     return (
-        <>
+        <Box className={className}>
             <Typography className={classes.itemTitle}>
                 Скопировать содержимое рабочей программы дисциплины
             </Typography>
@@ -112,6 +126,6 @@ export default ({workPrograms}: WorkProgramList) => {
                 handleClose={closeModal}
                 confirm={mergeContent}
             />
-        </>
+        </Box>
     )
 }

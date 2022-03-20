@@ -14,7 +14,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 
-import MergeWorkProgramsBlock from "./MergeWorkProgramsBlock";
+import MergeWorkProgramsBlock from "../MergeWorkPrograms";
 import {getUserData, getUserGroups} from '../../layout/getters';
 import layoutActions from '../../layout/actions';
 import {appRouter} from '../../service/router-service';
@@ -66,13 +66,7 @@ export default () => {
                 Здравствуйте, {composeUserName()}
             </Typography>
             <MyGroups/>
-            {
-                workProgramList.length > 0 && (
-                    <div className={classes.copyRpdContainer}>
-                        <MergeWorkProgramsBlock workPrograms={workProgramList}/>
-                    </div>
-                )
-            }
+            <MergeWorkProgramsBlock className={classes.copyRpdContainer}/>
             <MyWorkProgramsList workPrograms={workProgramList}/>
         </Box>
     )

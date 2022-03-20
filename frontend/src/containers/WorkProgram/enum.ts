@@ -65,6 +65,7 @@ export enum workProgramSectionFields {
     ORDINAL_NUMBER = 'ordinal_number',
     NAME = 'name',
     SPO = 'SRO',
+    CONSULTATIONS = 'consultations',
     CONTACT_WORK = 'contact_work',
     LECTURE_CLASSES = 'lecture_classes',
     PRACTICAL_LESSONS = 'practical_lessons',
@@ -187,6 +188,7 @@ export enum IntermediateCertificationEnum {
     DIF_CREDIT = '2',
     CREDIT = '3',
     COURSE_WORK = '4',
+    COURSE_PROJECT = '5',
 }
 
 export enum StepsEnum {

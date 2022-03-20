@@ -159,7 +159,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             variant="outlined"
                         >
                             {implementationFormats.map(item =>
-                                <MenuItem value={item.value} key={`group-${item.value}`}>
+                                <MenuItem value={item.value} key={`format-${item.value}`}>
                                     {item.label}
                                 </MenuItem>
                             )}

@@ -31,6 +31,7 @@ from .educational_program.general_prof_competencies.models import GroupOfGeneral
     GeneralProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
 from .individualization.models import ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .feedback.models import FeedbackRecord
+from .educational_program.educational_standart.models import EducationalStandard, TasksForEducationalStandard
 
 admin.site.register(GroupOfPkCompetencesInGeneralCharacteristic)
 admin.site.register(PkCompetencesInGroupOfGeneralCharacteristic)
@@ -108,3 +109,5 @@ admin.site.register(NotificationComments)
 admin.site.register(FeedbackRecord)
 admin.site.register(AcceptedBarsInWp)
 admin.site.register(GeneralizedLaborFunctions)
+admin.site.register(EducationalStandard)
+admin.site.register(TasksForEducationalStandard)

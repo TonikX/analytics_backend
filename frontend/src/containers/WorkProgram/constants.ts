@@ -101,6 +101,7 @@ export const IntermediateCertificationTypes: any = {
     [IntermediateCertificationEnum.DIF_CREDIT]: 'Дифференцированный зачет',
     [IntermediateCertificationEnum.CREDIT]: 'Зачет',
     [IntermediateCertificationEnum.COURSE_WORK]: 'Курсовая работа',
+    [IntermediateCertificationEnum.COURSE_PROJECT]: 'Курсовой проект',
 }
 
 export const workProgramStatusesColors: any = {
