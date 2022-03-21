@@ -4,6 +4,7 @@ import {WorkProgramActions} from "../../types";
 import {SectionType} from '../types';
 
 import styles from "./EditedRow.styles";
+import {ImplementationFormatsEnum} from "../../enum";
 
 export interface EditedRowProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
@@ -11,6 +12,7 @@ export interface EditedRowProps extends WithStyles<typeof styles> {
     removeNewSection: Function;
     count: number;
     isCanEdit: boolean;
+    implementationFormat: ImplementationFormatsEnum;
 }
 
 export interface EditedRowState {

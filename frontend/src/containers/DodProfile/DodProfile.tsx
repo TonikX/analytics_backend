@@ -12,6 +12,7 @@ import {specializationObject} from "../WorkProgram/constants";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Notifications from "../Profile/Notifications/Notifications";
+import MergeWorkProgramsBlock from "../MergeWorkPrograms";
 import {FULL_DATE_FORMAT} from "../../common/utils";
 import moment from "moment";
 import Chip from "@material-ui/core/Chip";
@@ -58,6 +59,7 @@ export default () => {
                     {userGroups.map((item: any) => <Chip label={item} className={classes.group} />)}
                 </div>
             </div>
+            <MergeWorkProgramsBlock className={classes.copyRpdContainer}/>
             <div className={classes.mainContainer}>
                 <div className={classes.dodProfileContainer}>
                     <Typography className={classes.title}>

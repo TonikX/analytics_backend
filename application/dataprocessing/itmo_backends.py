@@ -3,8 +3,8 @@
 # class ItmoOAuth2(BaseOAuth2):
 #     """Itmo OAuth authentication backend"""
 #     name = 'itmo_o'
-#     AUTHORIZATION_URL = 'https://login.itmo.ru/cas/oauth2.0/authorize'
-#     ACCESS_TOKEN_URL = 'https://login.itmo.ru/cas/oauth2.0/accessToken'
+#     AUTHORIZATION_URL = 'https://id.itmo.ru/cas/oauth2.0/authorize'
+#     ACCESS_TOKEN_URL = 'https://id.itmo.ru/cas/oauth2.0/accessToken'
 #     ACCESS_TOKEN_METHOD = 'POST'
 #     RESPONSE_TYPE = 'code'
 #     SCOPE_SEPARATOR = ','
@@ -46,10 +46,11 @@ class GetAuthenticationCodeISU(ListAPIView):
     def get(self, request):
 
         cas_auth_uri = (
-            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/auth?'
+            'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/auth?'
                         'response_type=code&'
                         f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
-                        f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
+                        f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}&'
+                        f'scope=profile'
                         )
         #print('AuthCode: ', cas_auth_uri.json)
         return HttpResponseRedirect(cas_auth_uri)
@@ -63,7 +64,7 @@ class  AuthenticateByCodeISU(ListAPIView):
         authorization_code = request.GET['code']
         print('authorization_code: ', authorization_code)
         obtain_isu_url = requests.post(
-            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token', # params = {'code':{authorization_code}},
+            'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token', # params = {'code':{authorization_code}},
             data = {'grant_type':'authorization_code', 'client_id':f'{settings.ISU["ISU_CLIENT_ID"]}',
                     'client_secret':f'{settings.ISU["ISU_CLIENT_SECRET"]}', 'redirect_uri':f'{settings.ISU["ISU_REDIRECT_URI"]}',
                     'code':{authorization_code}}
@@ -71,7 +72,7 @@ class  AuthenticateByCodeISU(ListAPIView):
         # Отправляем запрос на получение токена
         obtain_isu = obtain_isu_url.json()
         # print('code url', requests.post(
-        #     'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?'
+        #     'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?'
         #     'grant_type=authorization_code&'
         #     f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
         #     f'client_secret={settings.ISU["ISU_CLIENT_SECRET"]}&'
@@ -88,7 +89,7 @@ class  AuthenticateByCodeISU(ListAPIView):
             print('styrt obtained')
             # Получаем информацию о пользователе
             isu_profile = requests.get(
-                'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/userinfo?', headers = {'Authorization': f'Bearer {obtain_isu["access_token"]}'}
+                'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/userinfo?', headers = {'Authorization': f'Bearer {obtain_isu["access_token"]}'}
             ).json()
             print('profile obtained')
             print('profile obtained, user_profile', isu_profile)
@@ -97,24 +98,24 @@ class  AuthenticateByCodeISU(ListAPIView):
 
             # Из чего будем собирать пароль
             password_rule = (
-                f'{isu_profile["id"]}'
+                f'{isu_profile["isu"]}'
                 f'{isu_profile["given_name"]}'
                 ).encode('utf-8')
 
             password = hashlib.sha256(password_rule).hexdigest()
 
             # Проверяем есть ли пользователь в системе
-            is_registered = User.objects.filter(username=isu_profile['id']).exists()
+            is_registered = User.objects.filter(username=isu_profile['isu']).exists()
 
             # Если пользователя нет, то регистрируем
             if not is_registered:
                 #reg = True
                 User.objects.create_user(
-                    username=isu_profile['id'],
+                    username=isu_profile['isu'],
                     password=password,
                     first_name=isu_profile['given_name'],
                     last_name=isu_profile['family_name'],
-                    isu_number=isu_profile['id'],
+                    isu_number=isu_profile['isu'],
                     is_active=True
 
                 )
@@ -140,13 +141,13 @@ class  AuthenticateByCodeISU(ListAPIView):
                 # else:
                 #     pass
                 groups = ["rpd_developer", "education_plan_developer", "op_leader", "student"]
-                User = User.objects.get(username=isu_profile['id'])
+                User = User.objects.get(username=isu_profile['isu'])
                 for group in groups:
                     User.groups.add(Group.objects.get(name=group))
 
             # Авторизация
             User = get_user_model()
-            user = User.objects.get(username=isu_profile['id'])
+            user = User.objects.get(username=isu_profile['isu'])
             refresh_token = TokenObtainPairSerializer().get_token(user)
             access_token = AccessToken().for_user(user)
             print('Юзер авторизован')
