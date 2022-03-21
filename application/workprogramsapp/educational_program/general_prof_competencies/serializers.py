@@ -58,7 +58,7 @@ class CreateIndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer(se
 class GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """Сериализатор просмотра общепрофессиональных компетенций"""
     indicator_of_competence_in_group_of_general_prof_competences = IndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer(
-        many=True)
+ many=True)
     competence = CompetenceSerializer()
 
     class Meta:

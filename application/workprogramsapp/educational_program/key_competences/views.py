@@ -24,7 +24,7 @@ from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 
 
 class KeyCompetencesInGroupOfGeneralCharacteristicSet(viewsets.ModelViewSet):
-    queryset = GroupOfKeyCompetencesInEducationalStandard.objects.all()
+    queryset = KeyCompetencesInGroupOfGeneralCharacteristic.objects.all()
     serializer_class = KeyCompetencesInGroupOfGeneralCharacteristicSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
