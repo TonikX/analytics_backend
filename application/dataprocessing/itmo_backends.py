@@ -3,8 +3,8 @@
 # class ItmoOAuth2(BaseOAuth2):
 #     """Itmo OAuth authentication backend"""
 #     name = 'itmo_o'
-#     AUTHORIZATION_URL = 'https://login.itmo.ru/cas/oauth2.0/authorize'
-#     ACCESS_TOKEN_URL = 'https://login.itmo.ru/cas/oauth2.0/accessToken'
+#     AUTHORIZATION_URL = 'https://id.itmo.ru/cas/oauth2.0/authorize'
+#     ACCESS_TOKEN_URL = 'https://id.itmo.ru/cas/oauth2.0/accessToken'
 #     ACCESS_TOKEN_METHOD = 'POST'
 #     RESPONSE_TYPE = 'code'
 #     SCOPE_SEPARATOR = ','
@@ -46,7 +46,7 @@ class GetAuthenticationCodeISU(ListAPIView):
     def get(self, request):
 
         cas_auth_uri = (
-            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/auth?'
+            'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/auth?'
                         'response_type=code&'
                         f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
                         f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
@@ -63,7 +63,7 @@ class  AuthenticateByCodeISU(ListAPIView):
         authorization_code = request.GET['code']
         print('authorization_code: ', authorization_code)
         obtain_isu_url = requests.post(
-            'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token', # params = {'code':{authorization_code}},
+            'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token', # params = {'code':{authorization_code}},
             data = {'grant_type':'authorization_code', 'client_id':f'{settings.ISU["ISU_CLIENT_ID"]}',
                     'client_secret':f'{settings.ISU["ISU_CLIENT_SECRET"]}', 'redirect_uri':f'{settings.ISU["ISU_REDIRECT_URI"]}',
                     'code':{authorization_code}}
@@ -71,7 +71,7 @@ class  AuthenticateByCodeISU(ListAPIView):
         # Отправляем запрос на получение токена
         obtain_isu = obtain_isu_url.json()
         # print('code url', requests.post(
-        #     'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?'
+        #     'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?'
         #     'grant_type=authorization_code&'
         #     f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
         #     f'client_secret={settings.ISU["ISU_CLIENT_SECRET"]}&'
@@ -88,7 +88,7 @@ class  AuthenticateByCodeISU(ListAPIView):
             print('styrt obtained')
             # Получаем информацию о пользователе
             isu_profile = requests.get(
-                'https://login.itmo.ru/auth/realms/itmo/protocol/openid-connect/userinfo?', headers = {'Authorization': f'Bearer {obtain_isu["access_token"]}'}
+                'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/userinfo?scope=profile', headers = {'Authorization': f'Bearer {obtain_isu["access_token"]}'}
             ).json()
             print('profile obtained')
             print('profile obtained, user_profile', isu_profile)
