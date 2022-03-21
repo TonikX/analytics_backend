@@ -70,6 +70,7 @@ class  AuthenticateByCodeISU(ListAPIView):
         )
         # Отправляем запрос на получение токена
         obtain_isu = obtain_isu_url.json()
+        print(obtain_isu_url)
         # print('code url', requests.post(
         #     'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token?'
         #     'grant_type=authorization_code&'
