@@ -92,7 +92,7 @@ class  AuthenticateByCodeISU(ListAPIView):
                 'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/userinfo?', headers = {'Authorization': f'Bearer {obtain_isu["access_token"]}'}
             ).json()
             print('profile obtained')
-            print('profile obtained, user_profile', isu_profile)
+            print('profile obtained, user_profile', isu_profile.json())
 
             User = get_user_model()
 
