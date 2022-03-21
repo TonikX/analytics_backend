@@ -105,7 +105,7 @@ class  AuthenticateByCodeISU(ListAPIView):
             password = hashlib.sha256(password_rule).hexdigest()
 
             # Проверяем есть ли пользователь в системе
-            is_registered = User.objects.filter(username=isu_profile['id']).exists()
+            is_registered = User.objects.filter(username=isu_profile['isu']).exists()
 
             # Если пользователя нет, то регистрируем
             if not is_registered:
@@ -141,13 +141,13 @@ class  AuthenticateByCodeISU(ListAPIView):
                 # else:
                 #     pass
                 groups = ["rpd_developer", "education_plan_developer", "op_leader", "student"]
-                User = User.objects.get(username=isu_profile['id'])
+                User = User.objects.get(username=isu_profile['isu'])
                 for group in groups:
                     User.groups.add(Group.objects.get(name=group))
 
             # Авторизация
             User = get_user_model()
-            user = User.objects.get(username=isu_profile['id'])
+            user = User.objects.get(username=isu_profile['isu'])
             refresh_token = TokenObtainPairSerializer().get_token(user)
             access_token = AccessToken().for_user(user)
             print('Юзер авторизован')
