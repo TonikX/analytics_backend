@@ -111,11 +111,11 @@ class  AuthenticateByCodeISU(ListAPIView):
             if not is_registered:
                 #reg = True
                 User.objects.create_user(
-                    username=isu_profile['id'],
+                    username=isu_profile['isu'],
                     password=password,
                     first_name=isu_profile['given_name'],
                     last_name=isu_profile['family_name'],
-                    isu_number=isu_profile['id'],
+                    isu_number=isu_profile['isu'],
                     is_active=True
 
                 )
