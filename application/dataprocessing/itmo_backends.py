@@ -49,7 +49,8 @@ class GetAuthenticationCodeISU(ListAPIView):
             'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/auth?'
                         'response_type=code&'
                         f'client_id={settings.ISU["ISU_CLIENT_ID"]}&'
-                        f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}'
+                        f'redirect_uri={settings.ISU["ISU_REDIRECT_URI"]}&'
+                        f'scope=profile'
                         )
         #print('AuthCode: ', cas_auth_uri.json)
         return HttpResponseRedirect(cas_auth_uri)
@@ -88,7 +89,7 @@ class  AuthenticateByCodeISU(ListAPIView):
             print('styrt obtained')
             # Получаем информацию о пользователе
             isu_profile = requests.get(
-                'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/userinfo?scope=profile', headers = {'Authorization': f'Bearer {obtain_isu["access_token"]}'}
+                'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/userinfo?', headers = {'Authorization': f'Bearer {obtain_isu["access_token"]}'}
             ).json()
             print('profile obtained')
             print('profile obtained, user_profile', isu_profile)
