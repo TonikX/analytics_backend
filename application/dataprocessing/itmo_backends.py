@@ -98,7 +98,7 @@ class  AuthenticateByCodeISU(ListAPIView):
 
             # Из чего будем собирать пароль
             password_rule = (
-                f'{isu_profile["id"]}'
+                f'{isu_profile["isu"]}'
                 f'{isu_profile["given_name"]}'
                 ).encode('utf-8')
 
