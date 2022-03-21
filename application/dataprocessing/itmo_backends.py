@@ -93,6 +93,7 @@ class  AuthenticateByCodeISU(ListAPIView):
             ).json()
             print('profile obtained')
             print('profile obtained, user_profile', isu_profile.json())
+            print('given_name', isu_profile["given_name")
 
             User = get_user_model()
 
