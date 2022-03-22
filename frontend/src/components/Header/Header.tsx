@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {SyntheticEvent} from 'react';
 import {Link} from "react-router-dom";
 import {withRouter} from "react-router-dom";
 
@@ -14,11 +14,16 @@ import TelegramIcon from '@material-ui/icons/Telegram';
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
 import NotificationsIcon from '@material-ui/icons/NotificationsNone';
 import TrajectoryIcon from '@material-ui/icons/SchoolOutlined';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
 import Tooltip from "@material-ui/core/Tooltip";
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import styles from './Header.styles';
+import UserService from "../../service/user-service";
 import {appRouter} from "../../service/router-service";
+import styles from './Header.styles';
+
+const userService = UserService.factory();
 
 interface HeaderProps extends WithStyles<typeof styles> {
     openGeneralMenu: boolean;
@@ -35,6 +40,10 @@ class Header extends React.PureComponent<HeaderProps>{
         anchorEl: null
     };
 
+    handleMenu = (event: SyntheticEvent): void => {
+        this.setState({anchorEl: event.currentTarget});
+    };
+
     handleClose = () => {
         this.setState({anchorEl: null});
     };
@@ -49,9 +58,21 @@ class Header extends React.PureComponent<HeaderProps>{
         }
     };
 
+    handleLogout = () => {
+        // @ts-ignore
+        const {history} = this.props;
+
+        userService.logout();
+        this.handleClose();
+        this.props.logout();
+
+        history.push(appRouter.getSignInRoute());
+    };
+
     render() {
         const {classes, openGeneralMenu, isAuth, notificationsCount, isDodProfile} = this.props;
         const {anchorEl} = this.state;
+        const isOpenAvatarMenu = Boolean(anchorEl);
 
         return(
             <AppBar position="fixed" className={classes.header}>
@@ -101,17 +122,50 @@ class Header extends React.PureComponent<HeaderProps>{
                                 </Link>
                             </Tooltip>
 
-                            <Tooltip title="Личный кабинет">
-                                <Link to={isDodProfile ? appRouter.getDodProfileRoute() : appRouter.getUserProfile()}
-                                      className={classes.link}
+
+                            <div className={classes.avatar}>
+                                <IconButton
+                                    aria-haspopup="true"
+                                    onClick={this.handleMenu}
+                                    color="inherit"
                                 >
-                                    <IconButton
-                                        aria-haspopup="true"
-                                    >
-                                        <AccountCircle className={classes.userProfileIcon} />
-                                    </IconButton>
-                                </Link>
-                            </Tooltip>
+                                    <AccountCircle/>
+                                </IconButton>
+
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={isOpenAvatarMenu}
+                                    onClose={this.handleClose}
+                                    PopoverClasses={{
+                                        root: classes.popper
+                                    }}
+                                >
+                                    <MenuItem onClick={this.handleClose}>
+                                        <Link to={isDodProfile ? appRouter.getDodProfileRoute() : appRouter.getUserProfile()}
+                                              className={classes.link}
+                                        >
+                                            Личный кабинет
+                                        </Link>
+                                    </MenuItem>
+                                    <MenuItem onClick={this.handleLogout}>
+                                        <Link to={appRouter.getSignInRoute()}
+                                              className={classes.link}
+                                        >
+                                            Выйти
+                                        </Link>
+                                    </MenuItem>
+                                </Menu>
+                            </div>
+
 
                             <Tooltip title="Телеграм">
                                 <a href="https://t.me/op_itmo_ru"

@@ -54,7 +54,7 @@ export default () => {
    return (
         <Paper className={classes.root}>
             <div>
-                <div className={classes.userTitle}> {userName?.first_name} {userName?.last_name}</div>
+                <Typography className={classes.userTitle}> {userName?.first_name} {userName?.last_name}</Typography>
                 <div className={classes.groupsList}>
                     {userGroups.map((item: any) => <Chip label={item} className={classes.group} />)}
                 </div>
