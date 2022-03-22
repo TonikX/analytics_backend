@@ -57,8 +57,7 @@ class CreateIndicatorInKeyCompetenceInGeneralCharacteristicSerializer(serializer
 
 class KeyCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """Сериализатор просмотра ключевых компетенций"""
-    indicator_of_competence_in_group_of_key_competences = IndicatorInKeyCompetenceInGeneralCharacteristicSerializer(
-        many=True)
+    indicator_of_competence_in_group_of_key_competences = IndicatorInKeyCompetenceInGeneralCharacteristicSerializer(many=True)
     competence = CompetenceSerializer()
 
     class Meta:
