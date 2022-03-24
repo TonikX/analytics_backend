@@ -18,6 +18,8 @@ from .models import EducationalProgram, GeneralCharacteristics, Department, Prof
     SkillsOfRole, \
     Role, ProfessionalStandard
 from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments
+from .workprogram_additions.GIA.models import GIABaseTemplate, CriteriaVKR, GIA
+from .workprogram_additions.Practice.models import Practice, PracticeTemplate
 
 from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 
@@ -111,3 +113,9 @@ admin.site.register(AcceptedBarsInWp)
 admin.site.register(GeneralizedLaborFunctions)
 admin.site.register(EducationalStandard)
 admin.site.register(TasksForEducationalStandard)
+
+admin.site.register(GIABaseTemplate)
+admin.site.register(CriteriaVKR)
+admin.site.register(GIA)
+admin.site.register(Practice)
+admin.site.register(PracticeTemplate)

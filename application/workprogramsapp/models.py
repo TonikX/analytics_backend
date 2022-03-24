@@ -513,7 +513,7 @@ class GeneralCharacteristics(models.Model):
     is_collaboration_foreign = models.BooleanField(blank=True, null=True, verbose_name="В форме совместной ОП?")
     collaboration_foreign = models.CharField(max_length=2048, blank=True, null=True, verbose_name="Совместно с иностранными партнерами:")
 
-    realization_format = models.CharField(choices=format_choices, max_length=15, verbose_name='Языки',
+    realization_format = models.CharField(choices=format_choices, max_length=15, verbose_name='Формат реализации',
                                           blank=True, null=True)
 
     structural_unit_implementer = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL, blank=True, null=True,
