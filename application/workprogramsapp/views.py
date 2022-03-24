@@ -24,7 +24,7 @@ from .models import FieldOfStudy, BibliographicReference, СertificationEvaluati
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
 # Права доступа
-from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor
+from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsExpertiseMaster
 from .notifications.models import UserNotification
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
@@ -44,7 +44,7 @@ from .serializers import BibliographicReferenceSerializer, \
     IndicatorListSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
-from .serializers import WorkProgramSerializer
+from .serializers import WorkProgramSerializer, WorkProgramEditorsUpdateSerializer
 from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import transaction
@@ -516,6 +516,11 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
         response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id = serializer.data['id']))
         return Response(response_serializer.data)
 
+
+class WorkProgramEditorsUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramEditorsUpdateSerializer
+    permission_classes = [IsExpertiseMaster, IsRpdDeveloperOrReadOnly]
 
 
 class WorkProgramDetailsView(generics.RetrieveAPIView):
