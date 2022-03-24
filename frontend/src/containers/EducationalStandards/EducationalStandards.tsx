@@ -5,6 +5,7 @@ import get from 'lodash/get';
 import Scrollbars from "react-custom-scrollbars";
 
 import classNames from 'classnames';
+import {Link} from "react-router-dom";
 
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
@@ -138,8 +139,10 @@ class EducationalStandards extends React.Component<EducationalStandardsProps> {
                         <Scrollbars>
                             {educationalStandards.map((educationalStandard: EducationalStandardType) =>
                                 <div className={classes.row} key={educationalStandard[EducationalStandardFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.cell)} >
-                                        {educationalStandard[EducationalStandardFields.TITLE]}
+                                    <Typography className={classNames(classes.marginRight, classes.cell, classes.link)} >
+                                        <Link to={appRouter.getEducationalStandardRoute(educationalStandard[EducationalStandardFields.ID])}>
+                                            {educationalStandard[EducationalStandardFields.TITLE]}
+                                        </Link>
                                     </Typography>
                                     <Typography
                                         className={classNames(classes.marginRight, classes.cell)}
