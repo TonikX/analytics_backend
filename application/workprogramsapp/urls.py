@@ -81,7 +81,7 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkPr
 from .files_export.views import DocxFileExportView, SyllabusExportView
 from .views import CloneWorkProgramm
 
-from .views import WorkProgramsListApi, UserGroups, TimeoutTest
+from .views import WorkProgramsListApi, UserGroups, TimeoutTest, WorkProgramEditorsUpdateView
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
 
 from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet, WorkProgramInFieldOfStudyForWorkProgramList, ChangeItemsView
@@ -136,6 +136,7 @@ urlpatterns = [
     path('api/workprogram/detail/<int:pk>', WorkProgramDetailsView.as_view()),
     path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
+    path('api/workprogram/update_editors/<int:pk>', WorkProgramEditorsUpdateView.as_view()),
     path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
     path('api/workprogram/clone', CloneWorkProgramm),
     path('api/workprogram/merge_content', CopyContentOfWorkProgram),

@@ -22,12 +22,12 @@ router.register(r'api/generalcharacteristic/employers', EmployerSet, basename='e
 urlpatterns = [
 
     # --Общая характеристика
-    path('api/GeneralCharacteristics', GeneralCharacteristicsListAPIView.as_view()),
-    path('api/GeneralCharacteristics/create', GeneralCharacteristicsCreateAPIView.as_view()),
-    path('api/GeneralCharacteristics/detail/<int:pk>', GeneralCharacteristicsDetailsView.as_view()),
-    path('api/GeneralCharacteristics/delete/<int:pk>', GeneralCharacteristicsDestroyView.as_view()),
-    path('api/GeneralCharacteristics/update/<int:pk>', GeneralCharacteristicsUpdateView.as_view()),
-    path('api/GeneralCharacteristics/detail_with_educational_program/<int:pk>',
+    path('api/general_characteristic', GeneralCharacteristicsListAPIView.as_view()),
+    path('api/general_characteristic/create', GeneralCharacteristicsCreateAPIView.as_view()),
+    path('api/general_characteristic/detail/<int:pk>', GeneralCharacteristicsDetailsView.as_view()),
+    path('api/general_characteristic/delete/<int:pk>', GeneralCharacteristicsDestroyView.as_view()),
+    path('api/general_characteristic/update/<int:pk>', GeneralCharacteristicsUpdateView.as_view()),
+    path('api/general_characteristic/detail_with_educational_program/<int:pk>',
          GeneralCharacteristicsDetailsWithEducationalProgramView.as_view()),
 
     # --Образовательная программа
@@ -43,7 +43,7 @@ urlpatterns = [
     path('api/competence/upload_comptence_from_csv', UploadCompetences),
 
     # --Матрица компетенций
-    path('api/GeneralCharacteristics/competence_matrix/<int:gen_pk>', GetCompetenceMatrix),
+    path('api/general_characteristic/competence_matrix/<int:gen_pk>', GetCompetenceMatrix),
 
     url(r'^', include(router.urls)),
     url(r'^', include('workprogramsapp.educational_program.key_competences.urls')),

@@ -16,7 +16,7 @@ from .models import (
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, \
     SkillsOfRole, \
-    Role, ProfessionalStandard
+    Role, ProfessionalStandard, KindsOfActivity
 from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments
 
 from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
@@ -111,3 +111,4 @@ admin.site.register(AcceptedBarsInWp)
 admin.site.register(GeneralizedLaborFunctions)
 admin.site.register(EducationalStandard)
 admin.site.register(TasksForEducationalStandard)
+admin.site.register(KindsOfActivity)

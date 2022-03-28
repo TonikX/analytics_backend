@@ -1,6 +1,7 @@
 import json
 import os
 import re
+from decimal import *
 import pandas
 from django.shortcuts import get_object_or_404
 from collections import OrderedDict
@@ -23,7 +24,7 @@ from .models import FieldOfStudy, BibliographicReference, СertificationEvaluati
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
 # Права доступа
-from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor
+from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsExpertiseMaster
 from .notifications.models import UserNotification
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
@@ -43,7 +44,7 @@ from .serializers import BibliographicReferenceSerializer, \
     IndicatorListSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
-from .serializers import WorkProgramSerializer
+from .serializers import WorkProgramSerializer, WorkProgramEditorsUpdateSerializer
 from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import transaction
@@ -493,28 +494,48 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
                 DisciplineSection.objects.filter(work_program = serializer.data['id'])
                 for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
                     section.consultations = section.lecture_classes + section.laboratory + \
-                                            section.practical_lessons + section.SRO
+                                            section.practical_lessons
                     #section.contact_work = 0
                     section.lecture_classes = 0
                     section.laboratory = 0
                     section.practical_lessons = 0
-                    section.SRO = 0
+                    #section.SRO = 0
                     section.save()
             elif request.data['implementation_format']=='mixed' or request.data['implementation_format']=='offline':
                 DisciplineSection.objects.filter(work_program = serializer.data['id'])
                 for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
                     #section.contact_work = (section.consultations/21*11)
-                    section.lecture_classes = (section.consultations/21*2)
-                    section.laboratory = (section.consultations/21*2)
-                    section.practical_lessons = (section.consultations/21*2)
-                    section.SRO = (section.consultations/21*2)
-                    section.consultations = (section.consultations/21*2)
+                    section.lecture_classes = (section.consultations/3)
+                    section.laboratory = (section.consultations/3)
+                    section.practical_lessons = (section.consultations/3)
+                    #section.SRO = (section.consultations/8*2)
+                    section.consultations = 0
                     section.save()
         except:
             pass
         response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id = serializer.data['id']))
         return Response(response_serializer.data)
 
+
+class WorkProgramEditorsUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramEditorsUpdateSerializer
+    permission_classes = [IsExpertiseMaster, IsRpdDeveloperOrReadOnly]
+
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(WorkProgramSerializer(instance).data)
 
 
 class WorkProgramDetailsView(generics.RetrieveAPIView):
