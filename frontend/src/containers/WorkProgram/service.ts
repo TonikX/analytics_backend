@@ -6,7 +6,7 @@ import {
     EvaluationToolFields,
     IntermediateCertificationFields,
     PrerequisiteFields,
-    ResultsFields,
+    ResultsFields, WorkProgramGeneralFields,
     workProgramTopicFields
 } from "./enum";
 import {CourseFields} from "../Courses/enum";
@@ -53,17 +53,11 @@ class WorkProgramService extends AnalyticsService{
     }
 
     saveWorkProgram(destination: string, value: string|Array<number>, id: string){
-        // const formData = new FormData();
-        //
-        // if (typeof value === 'string'){
-        //     formData.append(destination, value);
-        // }
-        //
-        // if (Array.isArray(value)){
-        //     value.forEach((value, index) => {
-        //         formData.append(`${destination}[${index}]`, value.toString());
-        //     });
-        // }
+        if (destination === WorkProgramGeneralFields.EDITORS) {
+            return this.patch(`/api/workprogram/update_editors/${id}`, {
+                [WorkProgramGeneralFields.EDITORS]: value,
+            });
+        }
 
         return this.patch(`/api/workprogram/update/${id}`, {
             [destination]: value

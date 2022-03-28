@@ -11,7 +11,7 @@ import {
     getWorkProgramId
 } from './getters';
 
-import {fetchingTypes} from "./enum";
+import {fetchingTypes, WorkProgramGeneralFields} from "./enum";
 
 import sectionLogics from './logics/sections.logics';
 import topicLogics from './logics/topics.logics';

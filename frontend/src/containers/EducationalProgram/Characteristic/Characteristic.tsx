@@ -318,21 +318,8 @@ class Characteristic extends React.Component<CharacteristicProps> {
                 </>;
 
             case 4:
-                return <CompetenceTable competenceTableType={CompetenceTableType.KEY_COMPETENCES}
-                                        tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.KEY_COMPETENCES, [])}
-                />;
-            case 5:
-                return <CompetenceTable competenceTableType={CompetenceTableType.SUPRA_PROFESSIONAL_COMPETENCES}
-                                        tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.SUPRA_PROFESSIONAL_COMPETENCES, [])}
-                />;
-            case 6:
-                return <CompetenceTable competenceTableType={CompetenceTableType.GENERAL_PROFESSIONAL_COMPETENCES}
-                                        tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.GENERAL_PROFESSIONAL_COMPETENCES, [])}
-                />;
-
-            case 7:
                 return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PROFESSIONAL_COMPETENCES, [])} />;
-            case 8:
+            case 5:
                 return <div className={classes.editorWrap}>
                         <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
                         <CKEditor 
@@ -341,7 +328,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
                             toolbarContainerId="toolbar-container"
                         />
                 </div>
-            case 9:
+            case 6:
                 return <>
                     <UserSelector selectorLabel='Разработчики'
                                   value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEVELOPERS, 0, UserFields.ID], '')}
