@@ -448,6 +448,11 @@ class KindsOfActivity(models.Model):
         return str(self.name)
 
 
+    class Meta:
+        verbose_name = '1.1 Сферы деятельности в проф стандарте'
+        verbose_name_plural = '1.1 Сферы деятельности в проф стандарте'
+
+
 class EmployerRepresentative(models.Model):
     organization_name = models.CharField(max_length=512, verbose_name="Наименование организации", blank=True,
                                          null=True)
@@ -533,6 +538,10 @@ class GeneralCharacteristics(models.Model):
 
     def __str__(self):
         return str(self.educational_program)
+
+    class Meta:
+        verbose_name = '1. Общая характеристика'
+        verbose_name_plural = '1. Общая характеристика'
 
 
 class Department(models.Model):
