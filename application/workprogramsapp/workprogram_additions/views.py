@@ -220,13 +220,19 @@ def ChangeSemesterInEvaluationsCorrect(request):
 @permission_classes((IsAuthenticated,))
 def WorkProgramShortInfo(request, isu_id):
     newdata = {}
+
     try:
         work_program = WorkProgram.objects.get(discipline_code=str(isu_id))
+        newdata.update(
+            {"title": work_program.title})
         try:
+            status = Expertise.objects.get(work_program=work_program).get_expertise_status_display()
+            if not status:
+                status = "В работе"
             newdata.update(
-                {"expertise_status": Expertise.objects.get(work_program=work_program).expertise_status})
+                {"expertise_status": status})
         except Expertise.DoesNotExist:
-                newdata.update({"expertise_status": False})
+            newdata.update({"expertise_status": "В работе"})
         newdata.update({"wp_url": f"https://op.itmo.ru/work-program/{work_program.id}"})
         return Response(newdata)
     except WorkProgram.DoesNotExist:
