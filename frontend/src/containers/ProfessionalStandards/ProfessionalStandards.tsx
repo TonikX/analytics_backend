@@ -93,7 +93,7 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
 
     changeRoute = (id: any) => () => {
         //@ts-ignore
-        this.props.history.push(appRouter.getProfessionalStandardIDRoute(id))
+        this.props.history.push(appRouter.getProfessionalStandardRoute(id))
     }
 
     render() {

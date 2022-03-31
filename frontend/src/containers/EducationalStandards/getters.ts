@@ -31,6 +31,7 @@ export const getSorting = (state: rootState) => get(getStateData(state), fields.
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
 export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
 
-export const getProfStandard = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_STANDARD, {});
+export const getEducationalStandard = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_STANDARD, {});
+export const getEducationalStandardId = (state: rootState) => get(getStateData(state), [fields.EDUCATIONAL_STANDARD, EducationalStandardFields.ID], {});
 
 

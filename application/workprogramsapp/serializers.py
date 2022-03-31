@@ -252,6 +252,14 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
         }
 
 
+class WorkProgramEditorsUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания рабочих программ"""
+
+    class Meta:
+        model = WorkProgram
+        fields = ['editors']
+
+
 class BibliographicReferenceForWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор Разделов"""
 

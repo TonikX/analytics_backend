@@ -27,6 +27,27 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         return obj.owner == request.user
 
 
+class IsOwnerOrDodWorkerOrReadOnly(permissions.BasePermission):
+    """
+    Custom permission to only allow owners of an object to edit it.
+    """
+
+    def has_object_permission(self, request, view, obj):
+
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if request.user.groups.filter(name="expertise_master"):
+            return True
+        if request.user.is_superuser:
+            return True
+        try:
+            return request.user in obj.editors.all()
+        except:
+            pass
+
+        return obj.owner == request.user
+
+
 class IsRpdDeveloperOrReadOnly(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.
@@ -87,6 +108,7 @@ class IsExpertiseMaster(permissions.BasePermission):
                                                                                                "deputy"],
                 expertse_users_in_rpd=view.kwargs['pk']))
         return UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"])
+
 
 
 class IsMemberOfExpertise(permissions.BasePermission):

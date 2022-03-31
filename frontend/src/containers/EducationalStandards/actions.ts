@@ -1,10 +1,19 @@
 import {createAction} from "@reduxjs/toolkit";
+import {
+    EducationalStandardAddCompetenceActionType,
+    EducationalStandardAddIndicatorActionType,
+    EducationalStandardCreateGroupActionType,
+    EducationalStandardDeleteCompetenceActionType,
+    EducationalStandardDeleteGroupActionType,
+    EducationalStandardDeleteIndicatorActionType,
+    EducationalStandardSaveGroupTitleActionType
+} from "./types";
 
 const getEducationalStandards = createAction('GET_EDUCATIONAL_STANDARDS');
 const setEducationalStandards = createAction('SET_EDUCATIONAL_STANDARDS');
 
-const getEducationalStandard = createAction('GET_EDUCATIONAL_STANDARD');
-const setEducationalStandard = createAction('SET_EDUCATIONAL_STANDARD');
+const getEducationalStandard = createAction<any>('GET_EDUCATIONAL_STANDARD');
+const setEducationalStandard = createAction<any>('SET_EDUCATIONAL_STANDARD');
 
 const createNewEducationalStandard = createAction('CREATE_NEW_EDUCATIONAL_STANDARD');
 const changeEducationalStandard = createAction('CHANGE_EDUCATIONAL_STANDARD');
@@ -18,7 +27,28 @@ const changeCurrentPage = createAction('EDUCATIONAL_STANDARDS_CHANGE_CURRENT_PAG
 const changeAllCount = createAction('EDUCATIONAL_STANDARDS_CHANGE_ALL_COUNT');
 const changeSorting = createAction('EDUCATIONAL_STANDARDS_CHANGE_SORTING');
 
+const educationalStandardCreateGroup = createAction<EducationalStandardCreateGroupActionType>('EDUCATIONAL_STANDARD_COMPETENCIES_CREATE_GROUP');
+const educationalStandardDeleteGroup = createAction<EducationalStandardDeleteGroupActionType>('EDUCATIONAL_STANDARD_COMPETENCIES_DELETE_GROUP');
+const educationalStandardSaveGroupTitle = createAction<EducationalStandardSaveGroupTitleActionType>('EDUCATIONAL_STANDARD_COMPETENCIES_SAVE_GROUP_TITLE');
+
+const educationalStandardSaveCompetence = createAction<EducationalStandardAddCompetenceActionType>('EDUCATIONAL_STANDARD_COMPETENCIES_SAVE_COMPETENCE');
+const educationalStandardDeleteCompetence = createAction<EducationalStandardDeleteCompetenceActionType>('EDUCATIONAL_STANDARD_COMPETENCIES_DELETE_COMPETENCE');
+
+const educationalStandardSaveIndicator = createAction<EducationalStandardAddIndicatorActionType>('EDUCATIONAL_STANDARD_COMPETENCIES_SAVE_INDICATOR');
+const educationalStandardDeleteIndicator = createAction<EducationalStandardDeleteIndicatorActionType>('EDUCATIONAL_STANDARD_COMPETENCIES_DELETE_INDICATOR');
+
+
 const actions = {
+    educationalStandardCreateGroup,
+    educationalStandardSaveGroupTitle,
+    educationalStandardDeleteGroup,
+
+    educationalStandardSaveCompetence,
+    educationalStandardDeleteCompetence,
+
+    educationalStandardSaveIndicator,
+    educationalStandardDeleteIndicator,
+
     getEducationalStandards,
     getEducationalStandard,
     setEducationalStandard,
