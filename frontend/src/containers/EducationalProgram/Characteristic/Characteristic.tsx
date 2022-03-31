@@ -36,6 +36,7 @@ import {IndicatorsFields} from "../../Indicators/enum";
 import {UserFields} from "../../../layout/enum";
 import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
 import {ProfessionalCompetences} from "./ProfessionalCompetences/ProfessionalCompetences";
+import AreaOfActivity from "./AreaOfActivity";
 import InputLabel from '@material-ui/core/InputLabel'
 
 class Characteristic extends React.Component<CharacteristicProps> {
@@ -224,79 +225,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
                             />
                         </div>
             case 2:
-                return <>
-                    <Typography className={classes.label}>Область профессиональной деятельности</Typography>
-                    <Table stickyHeader size='small'>
-                        <TableHead className={classes.header}>
-                            <TableRow>
-                                <TableCell>
-                                    №
-                                </TableCell>
-                                <TableCell>
-                                    Код и наименования области профессиональной деятельности
-                                </TableCell>
-                                <TableCell>
-                                    Код профессионального стандарта из данной области
-                                </TableCell>
-                                <TableCell>
-                                    Наименование профессионального стандарта из данной области
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.AREA_OF_ACTIVITY, []).map((item: any, index: number) => {
-                                const standards = get(item, 'professional_standard', []);
-
-                                if (standards.length === 0) {
-                                    return <TableRow>
-                                        <TableCell>
-                                            {index}
-                                        </TableCell>
-                                        <TableCell>
-                                            {item.title}
-                                        </TableCell>
-                                        <TableCell />
-                                        <TableCell />
-                                    </TableRow>
-                                }
-
-                                return standards.map((standard: any, standardIndex: number) =>
-                                    <TableRow>
-                                        {standardIndex === 0 &&
-                                            <TableCell rowSpan={standards.length}>
-                                                {index}
-                                            </TableCell>
-                                        }
-                                        {standardIndex === 0 &&
-                                            <TableCell rowSpan={standards.length}>
-                                                {item.title}
-                                            </TableCell>
-                                        }
-
-                                        <TableCell>
-                                            {get(standard, 'code')}
-                                        </TableCell>
-                                        <TableCell>
-                                            {get(standard, 'title')}
-                                        </TableCell>
-                                    </TableRow>
-                                )
-                            })}
-                        </TableBody>
-                    </Table>
-                    <div style={{display: 'flex'}}>
-                        <Button variant="outlined" style={{marginLeft: 'auto', marginTop: '20px'}}>Добавить</Button>
-                    </div>
-                    <br/> <br/>
-                    <div className={classes.editorWrap}>
-                        <InputLabel className={classes.label}>Сферы профессиональной деятельности</InputLabel>
-                        <CKEditor 
-                            value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES, '')}
-                            onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES)}
-                            toolbarContainerId="toolbar-container2"
-                        />
-                    </div>
-                </>
+                return <AreaOfActivity characteristic={educationalProgramCharacteristic} />
             case 3:
                 return <>
                         <div className={classes.editorWrap}>

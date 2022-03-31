@@ -120,7 +120,7 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Образовательные программы
+                    Общие характеристики
 
                     <TextField placeholder="Поиск"
                                variant="outlined"
