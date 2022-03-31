@@ -59,7 +59,8 @@ class ExpertiseSerializer(serializers.ModelSerializer):
         is_exp_exist = Expertise.objects.filter(work_program=validated_data['work_program'])
         request = self.context.get('request')
         if is_exp_exist:
-            is_exp_exist.update(expertise_status="EX")
+            is_exp_exist[0].expertise_status = "EX"
+            is_exp_exist[0].save()
             counter = is_exp_exist[0].expertise_counter
             is_exp_exist.update(expertise_counter=counter + 1)
             all_user_expertise = UserExpertise.objects.filter(expertise=is_exp_exist[0])
