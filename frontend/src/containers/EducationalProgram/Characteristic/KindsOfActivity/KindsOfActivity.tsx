@@ -19,7 +19,7 @@ import ProfessionalStandardSelector from '../../../ProfessionalStandards/Profess
 import actions from '../../actions';
 import {EducationProgramCharacteristicFields} from "../../enum";
 
-import useStyles from './AreaOfActivity.styles'
+import useStyles from './KindsOfActivity.styles'
 
 export default ({ characteristic }: any) => {
   const classes = useStyles()
@@ -55,21 +55,12 @@ export default ({ characteristic }: any) => {
 
   return (
     <>
-      <Typography className={classes.label}>Области профессиональной деятельности</Typography>
+      <Typography className={classes.label}>Объекты профессиональной деятельности</Typography>
       <Table stickyHeader size='small'>
         <TableHead className={classes.header}>
           <TableRow>
             <TableCell>
-              №
-            </TableCell>
-            <TableCell>
-              Код и наименования области профессиональной деятельности
-            </TableCell>
-            <TableCell>
-              Код профессионального стандарта из данной области
-            </TableCell>
-            <TableCell>
-              Наименование профессионального стандарта из данной области
+              Название
             </TableCell>
             <TableCell />
           </TableRow>
@@ -79,15 +70,6 @@ export default ({ characteristic }: any) => {
             <TableRow>
               <TableCell>
                 {index + 1}
-              </TableCell>
-              <TableCell>
-                {item?.code_of_prof_area} {item?.name_of_prof_area}
-              </TableCell>
-              <TableCell>
-                {item?.code}
-              </TableCell>
-              <TableCell>
-                {item?.title}
               </TableCell>
               <TableCell>
                 <IconButton onClick={() => handleRemoveItem(item?.id)}>
@@ -115,7 +97,7 @@ export default ({ characteristic }: any) => {
           paper: classes.dialog
         }}
       >
-        <DialogTitle className={classes.title}>Добавить область</DialogTitle>
+        <DialogTitle className={classes.title}>Добавить профессиональный стандарт</DialogTitle>
         <ProfessionalStandardSelector
           onChange={setProfStandard}
           label="Профессиональный стандарт"

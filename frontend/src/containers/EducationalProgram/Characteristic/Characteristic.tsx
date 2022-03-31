@@ -37,6 +37,7 @@ import {UserFields} from "../../../layout/enum";
 import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
 import {ProfessionalCompetences} from "./ProfessionalCompetences/ProfessionalCompetences";
 import AreaOfActivity from "./AreaOfActivity";
+import KindsOfActivity from "./KindsOfActivity";
 import InputLabel from '@material-ui/core/InputLabel'
 
 class Characteristic extends React.Component<CharacteristicProps> {
@@ -227,25 +228,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             case 2:
                 return <AreaOfActivity characteristic={educationalProgramCharacteristic} />
             case 3:
-                return <>
-                        <div className={classes.editorWrap}>
-                            <InputLabel className={classes.label}>Объекты профессиональной деятельности</InputLabel>
-                            <CKEditor 
-                                value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY, '')}
-                                onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY)}
-                                toolbarContainerId="toolbar-container1"
-                            />
-                        </div>
-                        <div className={classes.editorWrap}>
-                            <InputLabel className={classes.label}>Задачи профессиональной деятельности</InputLabel>
-                            <CKEditor 
-                                value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.TASKS_OF_ACTIVITY, '')}
-                                onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.TASKS_OF_ACTIVITY)}
-                                toolbarContainerId="toolbar-container3"
-                            />
-                        </div>
-                </>;
-
+                return <KindsOfActivity characteristic={educationalProgramCharacteristic} />
             case 4:
                 return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PROFESSIONAL_COMPETENCES, [])} />;
             case 5:
