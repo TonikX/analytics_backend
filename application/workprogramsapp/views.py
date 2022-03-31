@@ -24,7 +24,7 @@ from .models import FieldOfStudy, BibliographicReference, СertificationEvaluati
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
 # Права доступа
-from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsExpertiseMaster
+from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsExpertiseMaster, IsOwnerOrDodWorkerOrReadOnly
 from .notifications.models import UserNotification
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
@@ -520,7 +520,7 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
 class WorkProgramEditorsUpdateView(generics.UpdateAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramEditorsUpdateSerializer
-    permission_classes = [IsExpertiseMaster, IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
 
 
     def update(self, request, *args, **kwargs):

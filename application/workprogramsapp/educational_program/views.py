@@ -20,16 +20,20 @@ from workprogramsapp.educational_program.serializers import EducationalCreatePro
 from .competence_handler import competence_dict_generator
 from .general_prof_competencies.models import IndicatorInGeneralProfCompetenceInGeneralCharacteristic, \
     GeneralProfCompetencesInGroupOfGeneralCharacteristic, GroupOfGeneralProfCompetencesInEducationalStandard
-from .general_prof_competencies.serializers import GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer
+from .general_prof_competencies.serializers import GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer, \
+    GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer
 from .key_competences.models import IndicatorInKeyCompetenceInGeneralCharacteristic, \
     KeyCompetencesInGroupOfGeneralCharacteristic, GroupOfKeyCompetencesInEducationalStandard
-from .key_competences.serializers import GroupOfKeyCompetencesInGeneralCharacteristicSerializer
+from .key_competences.serializers import GroupOfKeyCompetencesInGeneralCharacteristicSerializer, \
+    KeyCompetencesInGroupOfGeneralCharacteristicSerializer
 from .over_professional_competencies.models import GroupOfOverProfCompetencesInEducationalStandard, \
     OverProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInOverProfCompetenceInGeneralCharacteristic
-from .over_professional_competencies.serializers import GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
+from .over_professional_competencies.serializers import GroupOfOverProfCompetencesInGeneralCharacteristicSerializer, \
+    OverProfCompetencesInGroupOfGeneralCharacteristicSerializer
 from .pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
     PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
-from .pk_comptencies.serializers import GroupOfPkCompetencesInGeneralCharacteristicSerializer
+from .pk_comptencies.serializers import GroupOfPkCompetencesInGeneralCharacteristicSerializer, \
+    PkCompetencesInGroupOfGeneralCharacteristicSerializer
 
 from .serializers import ProfessionalStandardSerializer
 
@@ -211,10 +215,10 @@ def UploadCompetences(request):
     csv_path = "workprogramsapp/educational_program/competences.csv"
     # Генерируем словарь компетенций из CSV
     dict_of_competences = competence_dict_generator(csv_path)
-    #pprint(dict_of_competences)
+    # pprint(dict_of_competences)
     for op in dict_of_competences:
         # Существует ли генеральная характеристика и таблица EducationalProgram или же ее надо создавать для УП
-        #op_real_object = ImplementationAcademicPlan.objects.get(year=int(op_year), title=op_name)
+        # op_real_object = ImplementationAcademicPlan.objects.get(year=int(op_year), title=op_name)
         # print(op["id_op"])
         print(op["id_op"])
         try:
@@ -257,8 +261,8 @@ def UploadCompetences(request):
             CompGeneralModel = PkCompetencesInGroupOfGeneralCharacteristic
             CompIndicatorModel = IndicatorInPkCompetenceInGeneralCharacteristic
 
-            #pprint(competence_to_add)
-            #pprint(indicator_from_db)
+            # pprint(competence_to_add)
+            # pprint(indicator_from_db)
             comp_group, created = CompGroupModel.objects.get_or_create(name=competence["competence_group"],
                                                                        general_characteristic=general_characteristic)
             comp_general = CompGeneralModel.objects.create(group_of_pk=comp_group, competence=competence_to_add)
@@ -273,19 +277,21 @@ def GetCompetenceMatrix(request, gen_pk):
     unique_wp = []  # Уникальные РПД в нескольких УП
     gen_characteristic = GeneralCharacteristics.objects.get(pk=gen_pk)
     academic_plans = gen_characteristic.educational_program.all()
-    pk_competences = GroupOfPkCompetencesInGeneralCharacteristicSerializer(
-        instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic_id=gen_pk),
+    pk_competences = PkCompetencesInGroupOfGeneralCharacteristicSerializer(
+        instance=PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+            group_of_pk__general_characteristic_id=gen_pk).distinct(),
         many=True).data
-    general_prof_competences = GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer(
-        instance=GroupOfGeneralProfCompetencesInEducationalStandard.objects.filter(
-            educational_standard=gen_characteristic.educational_standard), many=True).data
-    key_competences = GroupOfKeyCompetencesInGeneralCharacteristicSerializer(
-        instance=GroupOfKeyCompetencesInEducationalStandard.objects.filter(
-            educational_standard=gen_characteristic.educational_standard), many=True).data
-    over_prof_competences = GroupOfOverProfCompetencesInGeneralCharacteristicSerializer(
-        instance=GroupOfOverProfCompetencesInEducationalStandard.objects.filter(
-            educational_standard=gen_characteristic.educational_standard), many=True).data
-    competence_matrix={"pk_competences":pk_competences, "general_prof_competences":general_prof_competences, "key_competences":key_competences, "over_prof_competences":over_prof_competences, }
+    general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(
+        instance=GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+            group_of_pk__educational_standard=gen_characteristic.educational_standard).distinct(), many=True).data
+    key_competences = KeyCompetencesInGroupOfGeneralCharacteristicSerializer(
+        instance=KeyCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+            group_of_pk__educational_standard=gen_characteristic.educational_standard).distinct(), many=True).data
+    over_prof_competences = OverProfCompetencesInGroupOfGeneralCharacteristicSerializer(
+        instance=OverProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+            group_of_pk__educational_standard=gen_characteristic.educational_standard).distinct(), many=True).data
+    competence_matrix = {"pk_competences": pk_competences, "general_prof_competences": general_prof_competences,
+                         "key_competences": key_competences, "over_prof_competences": over_prof_competences, }
     matrix_list = []
     for ap in academic_plans:
         academic_plan = ap.academic_plan
@@ -318,6 +324,6 @@ def GetCompetenceMatrix(request, gen_pk):
                     block_dict["modules_in_discipline_block"].append(block_module_dict)
             if block_dict["modules_in_discipline_block"]:
                 academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
-    competence_matrix["wp_matrix"]=matrix_list
+    competence_matrix["wp_matrix"] = matrix_list
     # print(matrix_list)
     return Response(competence_matrix)
