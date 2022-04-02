@@ -1,19 +1,19 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 
-from workprogramsapp.workprogram_additions.Practice.models import Practice
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
+from workprogramsapp.workprogram_additions.Practice.models import Practice, PracticeTemplate
+from workprogramsapp.workprogram_additions.Practice.serializers import PracticeSerializer, PracticeTemplateSerializer
 
 
 class PracticeSet(viewsets.ModelViewSet):
     queryset = Practice.objects.all()
-    serializer_class = GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
+    serializer_class = PracticeSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer
-        if self.action == 'update':
-            return CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer
-        if self.action == 'partial_update':
-            return CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer
-        return GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
+
+class PracticeTemplateSet(viewsets.ModelViewSet):
+    queryset = PracticeTemplate.objects.all()
+    serializer_class = PracticeTemplateSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = [IsRpdDeveloperOrReadOnly]
