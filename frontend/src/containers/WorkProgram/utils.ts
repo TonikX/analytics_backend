@@ -6,7 +6,12 @@ import {
     getWorkProgramField,
     getWorkProgramIntermediateCertificationList
 } from "./getters";
-import {MASTER_QUALIFICATION} from "./constants";
+import {
+    ALL_LEVELS_QUALIFICATION,
+    BACHELOR_QUALIFICATION,
+    MASTER_QUALIFICATION,
+    specializationObject
+} from "./constants";
 
 export const getEvaluationToolsMaxSum = (evaluationTools: Array<EvaluationToolType>) => {
     let sum = 0;
@@ -75,6 +80,8 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
     const educationalPlans = getWorkProgramField(state, 'work_program_in_change_block')
 
     const authors = getWorkProgramField(state, WorkProgramGeneralFields.AUTHORS);
+    const description = getWorkProgramField(state, WorkProgramGeneralFields.DESCRIPTION);
+    const isBarsOn = getWorkProgramField(state, WorkProgramGeneralFields.BARS);
 
     if (educationalPlans.length === 0){
         errors.push('PLAN_ERROR');
@@ -112,7 +119,19 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
     // }
 
     if (!authors.length) {
-        errors.push('Авторский состав не может быть пустым')
+        errors.push('Авторский состав не может быть пустым');
+    }
+
+    if (description.length < 700) {
+        errors.push('Описание не может быть меньше 700 знаков');
+    }
+
+    if (qualification === ALL_LEVELS_QUALIFICATION || qualification === BACHELOR_QUALIFICATION) {
+        // bars must be on
+        if (!isBarsOn) {
+            errors.push(`Если уровень образовательной программы "${specializationObject[BACHELOR_QUALIFICATION]}" 
+            или "${specializationObject[ALL_LEVELS_QUALIFICATION]}", то дисциплина должна реализовываться в БаРС`);
+        }
     }
 
     return errors;
