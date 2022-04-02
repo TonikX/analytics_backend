@@ -1,7 +1,9 @@
+import get from 'lodash/get';
 import {EvaluationToolType, IntermediateCertificationType, SectionType} from "./types";
 import {EvaluationToolFields, fields, WorkProgramGeneralFields, workProgramSectionFields} from "./enum";
 import {rootState} from "../../store/reducers";
 import {
+    getPlanQualifications,
     getWorkProgramEvaluationToolsList,
     getWorkProgramField,
     getWorkProgramIntermediateCertificationList
@@ -12,6 +14,7 @@ import {
     MASTER_QUALIFICATION,
     specializationObject
 } from "./constants";
+
 
 export const getEvaluationToolsMaxSum = (evaluationTools: Array<EvaluationToolType>) => {
     let sum = 0;
@@ -144,7 +147,12 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
         errors.push('Должен быть хотя бы один источник');
     }
 
-    console.log(state);
+    if (qualification !== ALL_LEVELS_QUALIFICATION) {
+        const planQualifications = getPlanQualifications(state).filter((p: string) => p !== ALL_LEVELS_QUALIFICATION);
+        if (planQualifications.some((q: string) => q !== qualification)) {
+            errors.push('Уровень образовательной программы должен соответствовать уровню каждого из учебных планов')
+        }
+    }
 
     return errors;
 }

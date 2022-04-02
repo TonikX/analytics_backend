@@ -72,3 +72,9 @@ export const getEvaluationToolsForSelect = (state: rootState) => {
         value: evaluationTool[EvaluationToolFields.ID],
     }))
 };
+
+export const getPlanQualifications = (state: rootState) => {
+    const plans = getWorkProgramField(state, 'work_program_in_change_block');
+    const path = 'discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.field_of_study.0.qualification';
+    return plans.map((p: any) => get(p, path, ''))
+}
