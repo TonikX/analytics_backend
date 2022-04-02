@@ -74,6 +74,8 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
     const currentTotalHours = getTotalHours(sections).toFixed(2);
     const educationalPlans = getWorkProgramField(state, 'work_program_in_change_block')
 
+    const authors = getWorkProgramField(state, WorkProgramGeneralFields.AUTHORS);
+
     if (educationalPlans.length === 0){
         errors.push('PLAN_ERROR');
         return errors
@@ -108,6 +110,10 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
     // if (fullSum / semesterCount !== 100 && qualification !== MASTER_QUALIFICATION){
     //     errors.push('Заполните до конца раздел оценочные средства');
     // }
+
+    if (!authors.length) {
+        errors.push('Авторский состав не может быть пустым')
+    }
 
     return errors;
 }
