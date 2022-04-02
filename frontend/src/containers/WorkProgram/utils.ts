@@ -82,6 +82,7 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
     const authors = getWorkProgramField(state, WorkProgramGeneralFields.AUTHORS);
     const description = getWorkProgramField(state, WorkProgramGeneralFields.DESCRIPTION);
     const isBarsOn = getWorkProgramField(state, WorkProgramGeneralFields.BARS);
+    const prerequisites = getWorkProgramField(state, WorkProgramGeneralFields.PREREQUISITES);
 
     if (educationalPlans.length === 0){
         errors.push('PLAN_ERROR');
@@ -118,11 +119,11 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
     //     errors.push('Заполните до конца раздел оценочные средства');
     // }
 
-    if (!authors.length) {
+    if (!authors || !authors.length) {
         errors.push('Авторский состав не может быть пустым');
     }
 
-    if (description.length < 700) {
+    if (!description || description.length < 700) {
         errors.push('Описание не может быть меньше 700 знаков');
     }
 
@@ -132,6 +133,10 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
             errors.push(`Если уровень образовательной программы "${specializationObject[BACHELOR_QUALIFICATION]}" 
             или "${specializationObject[ALL_LEVELS_QUALIFICATION]}", то дисциплина должна реализовываться в БаРС`);
         }
+    }
+
+    if (!prerequisites || !prerequisites.length) {
+        errors.push('Должен быть хотя бы один пререквизит')
     }
 
     return errors;

@@ -58,6 +58,7 @@ export enum WorkProgramGeneralFields {
     EXTRA_POINTS = 'extra_points',
     EDITORS = 'editors',
     BARS = 'bars',
+    PREREQUISITES = 'prerequisites'
 }
 
 export enum workProgramSectionFields {
