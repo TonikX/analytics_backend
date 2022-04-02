@@ -82,7 +82,8 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
     const authors = getWorkProgramField(state, WorkProgramGeneralFields.AUTHORS);
     const description = getWorkProgramField(state, WorkProgramGeneralFields.DESCRIPTION);
     const isBarsOn = getWorkProgramField(state, WorkProgramGeneralFields.BARS);
-    const prerequisites = getWorkProgramField(state, WorkProgramGeneralFields.PREREQUISITES);
+    const prerequisites = getWorkProgramField(state, fields.WORK_PROGRAM_PREREQUISITES);
+    const references = getWorkProgramField(state, fields.WORK_PROGRAM_BIBLIOGRAPHIC_REFERENCE);
 
     if (educationalPlans.length === 0){
         errors.push('PLAN_ERROR');
@@ -136,8 +137,14 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
     }
 
     if (!prerequisites || !prerequisites.length) {
-        errors.push('Должен быть хотя бы один пререквизит')
+        errors.push('Должен быть хотя бы один пререквизит');
     }
+
+    if (!references || !references.length) {
+        errors.push('Должен быть хотя бы один источник');
+    }
+
+    console.log(state);
 
     return errors;
 }
