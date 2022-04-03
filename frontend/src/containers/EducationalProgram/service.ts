@@ -28,11 +28,11 @@ class Service extends AnalyticsService{
     }
 
     getEducationalProgramCharacteristic(id: number){
-        return this.get(`/api/GeneralCharacteristics/detail/${id}`);
+        return this.get(`/api/general_characteristic/detail/${id}`);
     }
 
     getCompetenceMatrix(id: number) {
-        return this.get(`/api/GeneralCharacteristics/competence_matrix/${id}`);
+        return this.get(`/api/general_characteristic/competence_matrix/${id}`);
     }
 
     createEducationProgram(program: any){
