@@ -117,6 +117,10 @@ class Service extends AnalyticsService{
             "indicator": indicatorId
         });
     }
+
+    getCompetenceMatrix(id: number) {
+        return this.get(`/api/general_characteristic/competence_matrix/${id}`);
+    }
 }
 
 export default Service;
