@@ -171,13 +171,13 @@ const changeEducationalProgramCharacteristic = createLogic({
     type: educationalPlanActions.changeEducationalProgramCharacteristic.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const {payload, id, educationalProgramId} = action.payload;
+        const {payload, id} = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_EDUCATION_PROGRAM}));
 
         service.updateEducationProgramCharacteristic(id, payload)
             .then((res) => {
-                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(id));
                 dispatch(actions.fetchingSuccess());
                 dispatch(educationalPlanActions.closeDialog());
             })

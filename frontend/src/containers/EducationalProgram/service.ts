@@ -31,10 +31,6 @@ class Service extends AnalyticsService{
         return this.get(`/api/general_characteristic/detail/${id}`);
     }
 
-    getCompetenceMatrix(id: number) {
-        return this.get(`/api/general_characteristic/competence_matrix/${id}`);
-    }
-
     createEducationProgram(program: any){
         return this.post(`/api/EducationalProgram/create`, {
             "academic_plan_for_ep": program[EducationProgramFields.ACADEMIC_PLAN_FOR_EP][EducationProgramFields.ID],
@@ -49,7 +45,7 @@ class Service extends AnalyticsService{
     }
 
     updateEducationProgramCharacteristic(id: any, payload: any){
-        return this.patch(`/api/GeneralCharacteristics/update/${id}`, payload);
+        return this.patch(`/api/general_characteristic/update/${id}`, payload);
     }
 
     getCompetenceTableUrl(type: CompetenceTableType){

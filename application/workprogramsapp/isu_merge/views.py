@@ -471,8 +471,12 @@ class   FileUploadOldVersionAPIView(APIView):
                     fs_obj.save()
                     fs_count += 1
                 try:
-                    wp = WorkProgram.objects.get(id = int(data['ИД_НАШ'][i]))
-                    wp_obj = wp
+                    try:
+                        wp = WorkProgram.objects.get(id = int(data['ИД_НАШ'][i]))
+                        wp_obj = wp
+                    except:
+                        wp = WorkProgram.objects.get(discipline_code = int(data['DISC_DISC_ID'][i]))
+                        wp_obj = wp
                     print('--- РПД найдена')
                 except:
                     print('--- РПД не найдена')

@@ -7,6 +7,8 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool
+from .workprogram_additions.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
+from .workprogram_additions.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
 from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer
 from onlinecourse.serializers import OnlineCourseSerializer
 
@@ -252,6 +254,14 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
         }
 
 
+class WorkProgramEditorsUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания рабочих программ"""
+
+    class Meta:
+        model = WorkProgram
+        fields = ['editors']
+
+
 class BibliographicReferenceForWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор Разделов"""
 
@@ -476,9 +486,15 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
     #work_program = serializers.SerializerMethodField('get_id_of_wpcb')
     work_program = serializers.SerializerMethodField('get_id_of_wpcb')
 
+    def to_representation(self, value):
+        self.fields['gia'] = GIASerializer(required=False, many=True)
+        self.fields['practice'] = PracticeSerializer(required=False, many=True)
+        return super().to_representation(value)
+
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module', 'gia',
+                  'practice']
 
 
     def get_id_of_wpcb(self, obj):
@@ -581,9 +597,14 @@ class WorkProgramChangeInDisciplineBlockModuleSerializerDetail(serializers.Model
 class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.ModelSerializer):
     work_program = serializers.PrimaryKeyRelatedField(many=True, queryset=WorkProgram.objects.all())
 
+    def to_representation(self, value):
+        self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
+        self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
+        return super().to_representation(value)
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'gia',
+                  'practice']
         extra_kwargs = {
             'work_program': {'required': False}
         }

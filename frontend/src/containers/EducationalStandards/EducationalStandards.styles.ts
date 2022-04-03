@@ -16,6 +16,12 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         justifyContent: 'space-between'
     },
+    link: {
+        '& a': {
+            textDecoration: 'none',
+            color: theme.palette.primary.main
+        }
+    },
     list: {
         width: '100%',
         height: 'calc(100% - 50px)'

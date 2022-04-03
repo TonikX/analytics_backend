@@ -61,6 +61,7 @@ import UserProfile from "./containers/UserProfile";
 import DodProfile from "./containers/DodProfile";
 
 import EducationalStandards from "./containers/EducationalStandards";
+import EducationalStandard from "./containers/EducationalStandards/EducationalStandard";
 
 const routerService = RouterService.factory();
 
@@ -97,11 +98,14 @@ export default () => (
             <AuthRoute path={routerService.getSelectDisciplineRoute()}>
                 <SelectDiscipline />
             </AuthRoute>
-            <AuthRoute path={routerService.getProfessionalStandardIDRoute(':id')}>
+            <AuthRoute path={routerService.getProfessionalStandardRoute(':id')}>
                 <ProfessionalStandard />
             </AuthRoute>
             <AuthRoute path={routerService.getProfessionalStandardsRoute()}>
                 <ProfessionalStandards />
+            </AuthRoute>
+            <AuthRoute path={routerService.getEducationalStandardRoute(':id')}>
+                <EducationalStandard />
             </AuthRoute>
             <AuthRoute path={routerService.getEducationalStandardsRoute()}>
                 <EducationalStandards />

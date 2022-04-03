@@ -67,7 +67,11 @@ export default class RouterService {
         return SEPARATOR + EDUCATIONAL_STANDARDS;
     };
 
-    getProfessionalStandardIDRoute = (id: number| string) => {
+    getEducationalStandardRoute = (id: number | string) => {
+        return SEPARATOR + EDUCATIONAL_STANDARDS + SEPARATOR + id;
+    };
+
+    getProfessionalStandardRoute = (id: number | string) => {
         return SEPARATOR + PROFESSIONAL_STANDARDS + SEPARATOR + id;
     };
 

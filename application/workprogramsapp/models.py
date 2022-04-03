@@ -2,15 +2,15 @@ import datetime
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.fields import JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from model_clone import CloneMixin
-from django.contrib.postgres.fields import ArrayField
 
 from dataprocessing.models import Items
 from onlinecourse.models import OnlineCourse, Institution
-from django.contrib.postgres.fields import JSONField
-from workprogramsapp.educational_program.educational_standart.models import EducationalStandard, TasksForEducationalStandard
+from workprogramsapp.educational_program.educational_standart.models import EducationalStandard, \
+    TasksForEducationalStandard
 
 '''
 class FieldOfStudyWorkProgram(models.Model):
@@ -518,7 +518,7 @@ class GeneralCharacteristics(models.Model):
     is_collaboration_foreign = models.BooleanField(blank=True, null=True, verbose_name="В форме совместной ОП?")
     collaboration_foreign = models.CharField(max_length=2048, blank=True, null=True, verbose_name="Совместно с иностранными партнерами:")
 
-    realization_format = models.CharField(choices=format_choices, max_length=15, verbose_name='Языки',
+    realization_format = models.CharField(choices=format_choices, max_length=15, verbose_name='Формат реализации',
                                           blank=True, null=True)
 
     structural_unit_implementer = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL, blank=True, null=True,
@@ -789,9 +789,14 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin,models.Model):
     work_program = models.ManyToManyField('WorkProgram', verbose_name="Рабочая программа",
                                           through='WorkProgramInFieldOfStudy',
                                           related_name="work_program_in_change_block")
+    gia = models.ManyToManyField('GIA', verbose_name="Гиа",
+                                 related_name="gia_in_change_block", blank=True, null=True)
+    practice = models.ManyToManyField('Practice', verbose_name="Практики",
+                                      related_name="practice_in_change_block", blank=True, null=True)
     subject_code = models.CharField(max_length=1024, verbose_name="Срок сдачи в неделях", blank=True, null=True)
 
     # zuns = models.ManyToManyField('Zun', verbose_name = "Зуны", through='WorkProgramInFieldOfStudy', related_name="zuns_in_changeblock")
+
 
     def __str__(self):
         return (str(self.discipline_block_module) + str(self.work_program))
