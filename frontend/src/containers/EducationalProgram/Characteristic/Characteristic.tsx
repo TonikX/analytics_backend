@@ -36,6 +36,7 @@ import {IndicatorsFields} from "../../Indicators/enum";
 import {UserFields} from "../../../layout/enum";
 import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
 import {ProfessionalCompetences} from "./ProfessionalCompetences/ProfessionalCompetences";
+import CompetenceMatrix from "./CompetenceMatrix/CompetenceMatrix";
 import AreaOfActivity from "./AreaOfActivity";
 import KindsOfActivity from "./KindsOfActivity";
 import InputLabel from '@material-ui/core/InputLabel'
@@ -219,7 +220,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             case 1:
                 return <div className={classes.editorWrap}>
                             <InputLabel className={classes.label}>Аннотация</InputLabel>
-                            <CKEditor 
+                            <CKEditor
                                 value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
                                 onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
                                 toolbarContainerId="toolbar-container"
@@ -232,15 +233,17 @@ class Characteristic extends React.Component<CharacteristicProps> {
             case 4:
                 return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PROFESSIONAL_COMPETENCES, [])} />;
             case 5:
+                return <CompetenceMatrix />;
+            case 6:
                 return <div className={classes.editorWrap}>
                         <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
-                        <CKEditor 
+                        <CKEditor
                             value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PPS, '')}
                             onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.PPS)}
                             toolbarContainerId="toolbar-container"
                         />
                 </div>
-            case 6:
+            case 7:
                 return <>
                     <UserSelector selectorLabel='Разработчики'
                                   value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEVELOPERS, 0, UserFields.ID], '')}
