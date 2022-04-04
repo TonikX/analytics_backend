@@ -117,6 +117,16 @@ class Service extends AnalyticsService{
             "indicator": indicatorId
         });
     }
+
+    getKindsOfActivity(name: string){
+        return this.get(`/api/generalcharacteristic/kindsofactivity?search=${name}`);
+    }
+
+    createKindOfActivity(name: string){
+        return this.post(`/api/generalcharacteristic/kindsofactivity/`, {
+            name,
+        });
+    }
 }
 
 export default Service;

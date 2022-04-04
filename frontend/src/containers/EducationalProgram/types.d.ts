@@ -30,6 +30,9 @@ export interface EducationalProgramActions {
     deleteEducationalProgram: any;
     changeEducationalProgram: any;
     setEducationalProgramList: any;
+    createKindOfActivity: any;
+    getKindsOfActivity: any;
+    setKindsOfActivity: any;
 
     characteristicCreateGroup: ActionCreatorWithPayload<CharacteristicCreateGroupActionType>;
     characteristicSaveGroupTitle: ActionCreatorWithPayload<CharacteristicSaveGroupTitleActionType>;
@@ -51,6 +54,7 @@ export interface educationalProgramState {
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
+    [fields.KINDS_OF_ACTIVITIES]: Array<{ id: number; name: string; }>;
     [fields.EDUCATION_PROGRAM_LIST]: Array<EducationalProgramType>;
     [fields.EDUCATION_PROGRAM_CHARACTERISTIC]: EducationalProgramCharacteristicType|{};
     [fields.EDUCATION_PROGRAM_DIALOG]: {

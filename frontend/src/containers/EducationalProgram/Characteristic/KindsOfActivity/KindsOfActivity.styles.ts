@@ -30,6 +30,9 @@ export default makeStyles((theme: Theme) => createStyles({
   },
   title: {
     padding: 0,
-    marginBottom: '30px'
+    marginBottom: '10px'
   },
+  deleteButtonWrap: {
+    textAlign: 'right',
+  }
 }));

@@ -48,8 +48,15 @@ const changeCurrentPage = createAction('EDUCATIONAL_PROGRAM_LIST_CURRENT_PAGE');
 const changeAllCount = createAction('EDUCATIONAL_PROGRAM_LIST_CHANGE_ALL_COUNT');
 const changeSorting = createAction('EDUCATIONAL_PROGRAM_LIST_CHANGE_SORTING');
 
+const createKindOfActivity = createAction('CREATE_KIND_OF_ACTIVITY');
+const getKindsOfActivity = createAction('GET_KINDS_OF_ACTIVITY');
+const setKindsOfActivity = createAction('SET_KINDS_OF_ACTIVITY');
 
 const actions: EducationalProgramActions = {
+    createKindOfActivity,
+    getKindsOfActivity,
+    setKindsOfActivity,
+
     characteristicSaveProfessionalStandard,
     characteristicDeleteProfessionalStandard,
 
