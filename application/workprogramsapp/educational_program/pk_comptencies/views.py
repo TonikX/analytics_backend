@@ -30,14 +30,6 @@ class PkCompetencesInGroupOfGeneralCharacteristicSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
     permission_classes = (IsRpdDeveloperOrReadOnly,)
 
-    def get_queryset(self):
-        type_pk = self.request.query_params.get('type_of_pk_competence')
-        if type_pk:
-            queryset = PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(type_of_pk_competence=type_pk)
-        else:
-            queryset = PkCompetencesInGroupOfGeneralCharacteristic.objects.all()
-        return queryset
-
     def get_serializer_class(self):
         if self.action == 'create':
             return CreatePkCompetencesInGroupOfGeneralCharacteristicSerializer
@@ -53,6 +45,14 @@ class GroupOfPkCompetencesInGeneralCharacteristicsSet(viewsets.ModelViewSet):
     serializer_class = GroupOfPkCompetencesInGeneralCharacteristicSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = (IsRpdDeveloperOrReadOnly,)
+
+    def get_queryset(self):
+        type_pk = self.request.query_params.get('type_of_pk_competence')
+        if type_pk:
+            queryset = GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(type_of_pk_competence=type_pk)
+        else:
+            queryset = GroupOfPkCompetencesInGeneralCharacteristic.objects.all()
+        return queryset
 
     def get_serializer_class(self):
         if self.action == 'create':
