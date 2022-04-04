@@ -115,17 +115,17 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     def get_group_of_pk_competences_prof(self, instance):
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
             instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic=instance,
-            competence_in_group_of_pk_competences__type_of_pk_competence="prof"), many=True).data
+            type_of_pk_competence="prof"), many=True).data
 
     def get_group_of_pk_competences_foresight(self, instance):
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
             instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic=instance,
-            competence_in_group_of_pk_competences__type_of_pk_competence="fore"), many=True).data
+            type_of_pk_competence="fore"), many=True).data
 
     def get_group_of_pk_competences_minor(self, instance):
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
             instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic=instance,
-            competence_in_group_of_pk_competences__type_of_pk_competence="min"), many=True).data
+            type_of_pk_competence="min"), many=True).data
 
     def get_group_of_general_prof_competences(self, instance):
         try:
