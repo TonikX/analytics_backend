@@ -1,8 +1,9 @@
 # Сериализаторы
+from django.http import Http404
 from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -13,6 +14,7 @@ from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 from .serializers import AdditionalMaterialSerializer, CreateAdditionalMaterialSerializer, \
     StructuralUnitSerializer, CreateStructuralUnitSerializer, \
     CreateUserStructuralUnitSerializer, UserStructuralUnitSerializer, ShortStructuralUnitSerializer
+from ..expertise.models import Expertise
 from ..models import WorkProgram, DisciplineSection, PrerequisitesOfWorkProgram, OutcomesOfWorkProgram, \
     WorkProgramInFieldOfStudy, СertificationEvaluationTool, EvaluationTool, Topic, Competence
 from ..serializers import WorkProgramSerializer, WorkProgramShortForExperiseSerializer, CompetenceSerializer
@@ -213,3 +215,25 @@ def ChangeSemesterInEvaluationsCorrect(request):
                 eva.save()
     serializer = WorkProgramSerializer(needed_wp, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def WorkProgramShortInfo(request, isu_id):
+    newdata = {}
+
+    try:
+        work_program = WorkProgram.objects.get(discipline_code=str(isu_id))
+        newdata.update(
+            {"title": work_program.title})
+        try:
+            status = Expertise.objects.get(work_program=work_program).get_expertise_status_display()
+            if not status:
+                status = "В работе"
+            newdata.update(
+                {"expertise_status": status})
+        except Expertise.DoesNotExist:
+            newdata.update({"expertise_status": "В работе"})
+        newdata.update({"wp_url": f"https://op.itmo.ru/work-program/{work_program.id}"})
+        return Response(newdata)
+    except WorkProgram.DoesNotExist:
+        raise Http404

@@ -351,7 +351,8 @@ urlpatterns = [
     path('api/nginx_timeout_test/', TimeoutTest),
     url(r'^', include('workprogramsapp.expertise.urls')),
     url(r'^', include('workprogramsapp.educational_program.educational_standart.urls')),
-
+    url(r'^', include('workprogramsapp.workprogram_additions.GIA.urls')),
+    url(r'^', include('workprogramsapp.workprogram_additions.Practice.urls')),
 
 
 ]
