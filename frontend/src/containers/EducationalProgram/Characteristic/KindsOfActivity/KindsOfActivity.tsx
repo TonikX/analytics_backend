@@ -13,8 +13,9 @@ import IconButton from "@material-ui/core/IconButton";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
+import TextField from "@material-ui/core/TextField";
 
-import ProfessionalStandardSelector from '../../../ProfessionalStandards/ProfessionalStandardSelector'
+import KindOfActivitySelector from '../KindOfActivitySelector'
 
 import actions from '../../actions';
 import {EducationProgramCharacteristicFields} from "../../enum";
@@ -24,29 +25,35 @@ import useStyles from './KindsOfActivity.styles'
 export default ({ characteristic }: any) => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const [openAddProfStandardModal, setOpenAddProfStandardModal] = useState(false)
-  const [profStandard, setProfStandard] = useState()
+  const [openModal, setOpenModal] = useState(false)
+  const [selectedObject, setSelectedObject] = useState()
+  const [newObject, setNewObject] = useState()
 
-  const handleAddNewItem = useCallback((item: any) => {
-    const allActivities = characteristic?.[EducationProgramCharacteristicFields.AREA_OF_ACTIVITY].map((item: any) => item.id)
-    dispatch(actions.changeEducationalProgramCharacteristic({
-      id: characteristic.id,
-      payload: {
-        [EducationProgramCharacteristicFields.AREA_OF_ACTIVITY]: [
-          ...allActivities,
-          profStandard,
-        ]
-      }
-    }))
-    setOpenAddProfStandardModal(false)
-  }, [profStandard, characteristic])
+  const handleSave = useCallback(() => {
+    const allActivities = characteristic[EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES].map((item: any) => item.id)
+    if (newObject?.length) {
+      dispatch(actions.createKindOfActivity(newObject))
+    } else {
+      dispatch(actions.changeEducationalProgramCharacteristic({
+        payload: {
+          [EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES]: [
+            ...allActivities,
+            selectedObject,
+          ]
+        }
+      }))
+    }
+    setOpenModal(false)
+    setNewObject(undefined)
+    setSelectedObject(undefined)
+  }, [selectedObject, characteristic, newObject])
 
   const handleRemoveItem = useCallback((id: any) => {
     dispatch(actions.changeEducationalProgramCharacteristic({
       id: characteristic.id,
       payload: {
-        [EducationProgramCharacteristicFields.AREA_OF_ACTIVITY]:
-          characteristic?.[EducationProgramCharacteristicFields.AREA_OF_ACTIVITY]
+        [EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES]:
+          characteristic?.[EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES]
             .map((item: any) => item.id)
             .filter((item: any) => item !== id)
       }
@@ -66,12 +73,12 @@ export default ({ characteristic }: any) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {characteristic?.[EducationProgramCharacteristicFields.AREA_OF_ACTIVITY]?.map((item: any, index: number) => (
+          {characteristic?.[EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES]?.map((item: any, index: number) => (
             <TableRow>
               <TableCell>
-                {index + 1}
+                {item.name}
               </TableCell>
-              <TableCell>
+              <TableCell className={classes.deleteButtonWrap}>
                 <IconButton onClick={() => handleRemoveItem(item?.id)}>
                   <DeleteIcon />
                 </IconButton>
@@ -84,33 +91,47 @@ export default ({ characteristic }: any) => {
         <Button
           variant="outlined"
           style={{marginLeft: 'auto', marginTop: '20px'}}
-          onClick={() => setOpenAddProfStandardModal(true)}
+          onClick={() => setOpenModal(true)}
         >
           Добавить
         </Button>
       </div>
       <Dialog
-        open={openAddProfStandardModal}
+        open={openModal}
         fullWidth
         maxWidth="sm"
         classes={{
           paper: classes.dialog
         }}
       >
-        <DialogTitle className={classes.title}>Добавить профессиональный стандарт</DialogTitle>
-        <ProfessionalStandardSelector
-          onChange={setProfStandard}
-          label="Профессиональный стандарт"
-          value={profStandard}
+        <DialogTitle className={classes.title}>Добавить объект профессиональной деятельности</DialogTitle>
+        <Typography className={classes.marginBottom30}>
+          Выберите существующий объект профессиональной деятельности или введите название нового
+        </Typography>
+        <KindOfActivitySelector
+          onChange={setSelectedObject}
+          label="Выберите объект профессиональной деятельности"
+          value={selectedObject}
+          className={classes.marginBottom30}
+        />
+        <TextField
+          value={newObject}
+          onChange={(e) => setNewObject(e.target.value)}
+          label="Новый объект профессиональной деятельности"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+          fullWidth
         />
         <DialogActions className={classes.actions}>
-          <Button onClick={() => setOpenAddProfStandardModal(false)}
+          <Button onClick={() => setOpenModal(false)}
                   variant="text">
             Отмена
           </Button>
-          <Button onClick={handleAddNewItem}
+          <Button onClick={handleSave}
                   variant="contained"
-                  disabled={!profStandard}
+                  disabled={!selectedObject && !newObject?.length}
                   color="primary"
           >
             Сохранить

@@ -359,18 +359,18 @@ export default (groups: Array<string>) => {
             icon: CompetencesIcon,
             selectedIcon: CompetencesSelectedIcon,
         },
-        {
-            title: 'Профессиональные стандарты',
-            link: appRouter.getProfessionalStandardsRoute(),
-            icon: IndicatorsIcon,
-            selectedIcon: IndicatorsSelectedIcon,
-        },
-        {
-            title: 'Образовательные стандарты',
-            link: appRouter.getEducationalStandardsRoute(),
-            icon: IndicatorsIcon,
-            selectedIcon: IndicatorsSelectedIcon,
-        },
+        // {
+        //     title: 'Профессиональные стандарты',
+        //     link: appRouter.getProfessionalStandardsRoute(),
+        //     icon: IndicatorsIcon,
+        //     selectedIcon: IndicatorsSelectedIcon,
+        // },
+        // {
+        //     title: 'Образовательные стандарты',
+        //     link: appRouter.getEducationalStandardsRoute(),
+        //     icon: IndicatorsIcon,
+        //     selectedIcon: IndicatorsSelectedIcon,
+        // },
         {
             title: 'Структурные подразделения',
             link: appRouter.getStructuralUnitsRoute(),
@@ -415,12 +415,12 @@ export default (groups: Array<string>) => {
             icon: WorkProgramInDirectionIcon,
             selectedIcon: WorkProgramInDirectionSelectedIcon,
         },
-        {
-            title: 'Общие характеристики',
-            link: appRouter.getEducationalProgram(),
-            icon: WorkProgramInDirectionIcon,
-            selectedIcon: WorkProgramInDirectionSelectedIcon,
-        },
+        // {
+        //     title: 'Общие характеристики',
+        //     link: appRouter.getEducationalProgram(),
+        //     icon: WorkProgramInDirectionIcon,
+        //     selectedIcon: WorkProgramInDirectionSelectedIcon,
+        // },
     ];
 
     const fourthMenu = isUserCanSeeProfessions(groups) ? [

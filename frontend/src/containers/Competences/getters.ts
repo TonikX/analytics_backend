@@ -17,13 +17,13 @@ export const getCompetences = (state: rootState): Array<CompetenceType> => get(g
 export const getCompetencesForSelector = (state: rootState): SelectorListType =>
     getCompetences(state).map((competence: CompetenceType) => ({
         value: competence[CompetenceFields.ID],
-        label: competence[CompetenceFields.TITLE],
+        label: competence[CompetenceFields.NUMBER] + ' ' + competence[CompetenceFields.TITLE],
     }))
 
 export const getIndicatorsForSelector = (state: rootState): SelectorListType =>
   getIndicators(state).map((indicator: IndicatorType) => ({
     value: indicator[IndicatorsFields.ID],
-    label: indicator[IndicatorsFields.TITLE],
+    label: indicator[IndicatorsFields.NUMBER] + ' ' + indicator[IndicatorsFields.TITLE],
   }))
 
 export const getCourseDialog = (state: rootState) => get(getStateData(state), fields.COMPETENCE_DIALOG, {});
