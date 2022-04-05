@@ -98,7 +98,7 @@ class PkCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSer
     class Meta:
         model = PkCompetencesInGroupOfGeneralCharacteristic
         fields = ['id', 'indicator_of_competence_in_group_of_pk_competences', 'competence', 'professional_standard',
-                  'generalized_labor_functions', 'kinds_of_activity']
+                  'generalized_labor_functions', 'kinds_of_activity', 'kinds_of_activity_for_miner']
 
 
 class CreatePkCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):

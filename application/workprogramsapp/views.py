@@ -1250,6 +1250,7 @@ class BibliographicReferenceInWorkProgramList(generics.ListAPIView):
 class EvaluationToolInWorkProgramList(generics.ListAPIView):
     serializer_class = EvaluationToolForWorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    queryset = EvaluationTool
 
     def list(self, request, **kwargs):
         """
@@ -1262,6 +1263,8 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
             return Response(serializer.data)
         except:
             return Response(status=400)
+
+
 
 
 class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
