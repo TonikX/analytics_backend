@@ -161,6 +161,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         self.fields['employers_in_characteristic'] = EmployerSerializer(many=True,required=False)
         self.fields['ep_supervisor'] = userProfileSerializer(required=False)
         self.fields['dean_of_the_faculty'] = userProfileSerializer(required=False)
+        self.fields['directors_position'] = userProfileSerializer(required=False)
         return super().to_representation(value)
 
     class Meta:
