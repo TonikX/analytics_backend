@@ -30,11 +30,13 @@ const characteristicSaveCompetence = createAction<CharacteristicAddCompetenceAct
 const characteristicDeleteCompetence = createAction<CharacteristicDeleteCompetenceActionType>('CHARACTERISTIC_COMPETENCIES_DELETE_COMPETENCE');
 const characteristicSaveCompetenceLaborFunction = createAction<CharacteristicSaveCompetenceLaborFunctionActionType>('CHARACTERISTIC_COMPETENCIES_SAVE_COMPETENCE_LABOR_FUNCTION');
 
+const characteristicSaveCompetenceKindsOfActivity = createAction<any>('CHARACTERISTIC_COMPETENCIES_SAVE_COMPETENCE_KINDS_OF_ACTIVITY');
+
 const characteristicSaveIndicator = createAction<CharacteristicAddIndicatorActionType>('CHARACTERISTIC_COMPETENCIES_SAVE_INDICATOR');
 const characteristicDeleteIndicator = createAction<CharacteristicDeleteIndicatorActionType>('CHARACTERISTIC_COMPETENCIES_DELETE_INDICATOR');
 
 const characteristicSaveKindOfActivity = createAction<any>('CHARACTERISTIC_COMPETENCIES_SAVE_KIND_OF_ACTIVITY');
-const characteristicDeleteKindOfActivity = createAction<any>('CHARACTERISTIC_COMPETENCIES_SAVE_KIND_OF_ACTIVITY');
+const characteristicDeleteKindOfActivity = createAction<any>('CHARACTERISTIC_COMPETENCIES_DELETE_KIND_OF_ACTIVITY');
 
 const characteristicSaveProfessionalStandard = createAction<CharacteristicAddProfessionalStandardActionType>('CHARACTERISTIC_COMPETENCIES_SAVE_PROFESSIONAL_STANDARD');
 const characteristicDeleteProfessionalStandard = createAction<CharacteristicDeleteProfessionalStandardActionType>('CHARACTERISTIC_COMPETENCIES_DELETE_PROFESSIONAL_STANDARD');
@@ -71,6 +73,7 @@ const actions: EducationalProgramActions = {
     characteristicSaveCompetence,
     characteristicDeleteCompetence,
     characteristicSaveCompetenceLaborFunction,
+    characteristicSaveCompetenceKindsOfActivity,
 
     characteristicSaveIndicator,
     characteristicDeleteIndicator,

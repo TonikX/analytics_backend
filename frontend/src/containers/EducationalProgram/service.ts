@@ -92,6 +92,11 @@ class Service extends AnalyticsService{
             labor_functions: laborFunction
         });
     }
+    characteristicSaveCompetenceKindOfActivity({competenceId, type, kindOfActivity}: any){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            kinds_of_activity_for_miner: kindOfActivity
+        });
+    }
 
     characteristicSaveProfessionalStandard({competenceId, type, professionalStandardId}: CharacteristicAddProfessionalStandardActionType){
         return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
@@ -100,6 +105,7 @@ class Service extends AnalyticsService{
     }
 
     characteristicSaveKindOfActivity({competenceId, type, kindOfActivity}: any){
+        console.log('kindOfActivity', kindOfActivity)
         return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
             kinds_of_activity: kindOfActivity
         });

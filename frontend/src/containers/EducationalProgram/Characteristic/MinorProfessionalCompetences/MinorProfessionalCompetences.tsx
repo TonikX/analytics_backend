@@ -23,12 +23,11 @@ import EditableText from "../../../../components/EditableText/EditableText";
 
 import AddCompetenceModal from "../../../../components/AddCompetenceModal";
 import AddIndicatorsModal from "../../../../components/AddIndicatorsModal";
-import AddKindsOfActivityModal from "../AddKindsOfActivityModal";
 
-import useStyles from './ForsitesProfessionalCompetences.style';
+import useStyles from './MinorProfessionalCompetences.style';
 import useStylesReusable  from '../CompetencesTable/CompetencesTable.style';
 
-export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableData}) => {
+export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableData}) => {
   const dispatch = useDispatch();
   const classes = {
     ...useStylesReusable(),
@@ -38,13 +37,12 @@ export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = (
   const competenceTableType = CompetenceTableType.PROFESSIONAL_COMPETENCES;
 
   const [competenceModalData, changeCompetenceOpenModal] = useState({isOpen: false, groupId: 0});
-  const [kindOfActivityModalData, changeKindOfActivityModalData] = useState({isOpen: false, competenceId: 0, competenceIdRelation: 0});
   const [indicatorModalData, changeIndicatorOpenModal] = useState({isOpen: false, competenceId: 0, competenceIdRelation: 0});
   const [editGroupTitleData, changeEditGroupTitle] = useState({isEdit: false, groupId: 0});
   const [editCompetenceLaborFunctionData, changeEditCompetenceLaborFunction] = useState({isEdit: false, competenceId: 0});
 
   const createNewGroup = (): void => {
-    dispatch(actions.characteristicCreateGroup({name: 'Новая категория', type: competenceTableType, subType: 'fore'}));
+    dispatch(actions.characteristicCreateGroup({name: 'Новая категория', type: competenceTableType, subType: 'min'}));
   };
 
   const saveCompetence = ({value}: { value: number, label: string }): void => {
@@ -77,21 +75,6 @@ export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = (
     }));
   }
 
-  const saveKindOfActivity = (value: any): void => {
-    dispatch(actions.characteristicSaveKindOfActivity({
-      kindOfActivity: value,
-      competenceId: kindOfActivityModalData.competenceIdRelation,
-      type: competenceTableType,
-    }));
-  }
-
-  const deleteKindOfActivity = (competenceIdRelation: number) => () => {
-    dispatch(actions.characteristicDeleteKindOfActivity({
-      competenceId: competenceIdRelation,
-      type: competenceTableType,
-    }));
-  }
-
   const saveGroupTitle = (title: string): void => {
     dispatch(actions.characteristicSaveGroupTitle({
       title,
@@ -102,9 +85,9 @@ export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = (
     changeEditGroupTitle({isEdit: false, groupId: 0})
   };
 
-  const saveGroupLaborFunctions = (laborFunction: string): void => {
-    dispatch(actions.characteristicSaveCompetenceLaborFunction({
-      laborFunction,
+  const saveGroupLaborFunctions = (kindOfActivity: string): void => {
+    dispatch(actions.characteristicSaveCompetenceKindsOfActivity({
+      kindOfActivity,
       type: competenceTableType,
       competenceId: editCompetenceLaborFunctionData.competenceId
     }));
@@ -128,7 +111,7 @@ export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = (
               Код и наименование индикатора достижения компетенции
             </TableCell>
             <TableCell className={classes.standardCell}>
-              Наименование сопряженной сферы профессиональной деятельности
+              Наименование сферы профессиональной деятельности
             </TableCell>
           </TableRow>
         </TableHead>
@@ -220,27 +203,16 @@ export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = (
                       </Button>
                     </TableCell>
                     <TableCell className={classes.standardCell}>
-                      {competenceItem.kinds_of_activity ?
-                        <>
-                          {get(competenceItem, 'kinds_of_activity.name')}
-                          <Tooltip title="Удалить объект профессиональной деятельности" onClick={deleteKindOfActivity(competenceItem.id)}>
-                            <DeleteIcon className={classes.deleteIcon}/>
-                          </Tooltip>
-                        </>
-                        :
-                        <Button color="primary"
-                                variant="text"
-                                size="small"
-                                className={classes.addSmallButton}
-                                onClick={() => changeKindOfActivityModalData({
-                                  isOpen: true,
-                                  competenceId: get(competenceItem, 'competence.id'),
-                                  competenceIdRelation: competenceItem.id,
-                                })}
-                        >
-                          <AddIcon/> Добавить сферу деятельности
-                        </Button>
-                      }
+
+                      <EditableText value={get(competenceItem, 'labor_functions') || 'трудовая функция'}
+                                    isEditMode={editCompetenceLaborFunctionData.isEdit
+                                      && editCompetenceLaborFunctionData.competenceId === competenceItem.id
+                                    }
+                                    onClickDone={saveGroupLaborFunctions}
+                                    onClickCancel={() => changeEditCompetenceLaborFunction({isEdit: false, competenceId: 0})}
+                                    onValueClick={() => changeEditCompetenceLaborFunction({isEdit: true, competenceId: competenceItem.id})}
+                                    fullWidth
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -269,13 +241,8 @@ export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = (
                           saveDialog={saveIndicator}
                           competenceId={indicatorModalData.competenceId}
       />
-      <AddKindsOfActivityModal
-        closeDialog={() => changeKindOfActivityModalData({isOpen: false, competenceId: 0, competenceIdRelation: 0 })}
-        isOpen={kindOfActivityModalData.isOpen}
-        saveDialog={saveKindOfActivity}
-      />
     </div>
   )
 };
 
-export default ForsitesProfessionalCompetences
+export default MinorProfessionalCompetences

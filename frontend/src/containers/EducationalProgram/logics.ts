@@ -353,6 +353,29 @@ const characteristicSaveCompetenceLaborFunction = createLogic({
     }
 });
 
+const characteristicSaveCompetenceKindsOfActivity = createLogic({
+    type: educationalPlanActions.characteristicSaveCompetenceKindsOfActivity.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_COMPETENCE_KIND_OF_ACTIVITY}));
+
+        service.characteristicSaveCompetenceKindOfActivity(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_SAVE_COMPETENCE_KIND_OF_ACTIVITY}));
+                return done();
+            });
+    }
+});
+
 const characteristicSaveProfessionalStandard = createLogic({
     type: educationalPlanActions.characteristicSaveProfessionalStandard.type,
     latest: true,
@@ -521,6 +544,7 @@ export default [
 
     characteristicSaveGroupTitle,
     characteristicSaveCompetenceLaborFunction,
+    characteristicSaveCompetenceKindsOfActivity,
 
     characteristicSaveProfessionalStandard,
     characteristicDeleteProfessionalStandard,
