@@ -43,7 +43,7 @@ class PkCompetencesInGroupOfGeneralCharacteristic(models.Model):
                                                          verbose_name="Выбранные обобщенные трудовые функции", blank=True, null=True)
     kinds_of_activity = models.ForeignKey('KindsOfActivity', on_delete=models.SET_NULL,
                                           verbose_name="Сферы проф. деятельности", blank=True, null=True)
-    kinds_of_activity_for_miner = models.CharField(max_length=2048, verbose_name="трудовая функция")
+    kinds_of_activity_for_miner = models.CharField(max_length=2048, verbose_name="трудовая функция", blank=True, null=True)
 
     def __str__(self):
         return str(self.group_of_pk) + '/' + str(self.competence)
