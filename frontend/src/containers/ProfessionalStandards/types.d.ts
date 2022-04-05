@@ -39,6 +39,7 @@ export interface professionalStandardsState {
         [fields.DIALOG_DATA]: ProfessionalStandardsType|{};
     };
     [fields.PROFESSIONAL_STANDARD]: any;
+    [fields.LABOR_FUNCTIONS]: Array<any>;
 
 }
 

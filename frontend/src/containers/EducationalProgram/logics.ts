@@ -399,6 +399,53 @@ const characteristicSaveProfessionalStandard = createLogic({
     }
 });
 
+const characteristicSaveProfessionalStandardLaborFunction = createLogic({
+    type: educationalPlanActions.characteristicSaveProfessionalStandardLaborFunction.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_PROFESSIONAL_STANDARD_LABOR_FUNCTION}));
+
+        service.characteristicSaveProfessionalStandardLaborFunction(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_SAVE_PROFESSIONAL_STANDARD_LABOR_FUNCTION}));
+                return done();
+            });
+    }
+});
+
+
+const characteristicDeleteProfessionalStandardLaborFunction = createLogic({
+    type: educationalPlanActions.characteristicDeleteProfessionalStandardLaborFunction.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_PROFESSIONAL_STANDARD_LABOR_FUNCTION}));
+
+        service.characteristicDeleteProfessionalStandardLaborFunction(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_DELETE_PROFESSIONAL_STANDARD_LABOR_FUNCTION}));
+                return done();
+            });
+    }
+});
+
 const characteristicSaveKindOfActivity = createLogic({
     type: educationalPlanActions.characteristicSaveKindOfActivity.type,
     latest: true,
@@ -548,6 +595,9 @@ export default [
 
     characteristicSaveProfessionalStandard,
     characteristicDeleteProfessionalStandard,
+
+    characteristicSaveProfessionalStandardLaborFunction,
+    characteristicDeleteProfessionalStandardLaborFunction,
 
     characteristicSaveKindOfActivity,
     characteristicDeleteKindOfActivity,

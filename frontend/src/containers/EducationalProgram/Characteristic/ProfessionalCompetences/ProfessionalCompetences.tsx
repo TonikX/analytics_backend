@@ -27,6 +27,7 @@ import AddProfStandardsModal from "../../../../components/AddProfStandardsModal"
 
 import useStyles from './ProfessionalCompetences.style';
 import useStylesReusable  from '../CompetencesTable/CompetencesTable.style';
+import AddLaborFunctionModal from "../../../ProfessionalStandards/AddLaborFunctionModal";
 
 export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableData}) => {
     const dispatch = useDispatch();
@@ -40,6 +41,7 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
     const [competenceModalData, changeCompetenceOpenModal] = useState({isOpen: false, groupId: 0});
     const [indicatorModalData, changeIndicatorOpenModal] = useState({isOpen: false, competenceId: 0, competenceIdRelation: 0});
     const [professionalStandardModalData, changeProfessionalStandardOpenModal] = useState({isOpen: false, competenceId: 0, competenceIdRelation: 0});
+    const [laborFunctionModalData, changeLaborFunctionModalData] = useState({isOpen: false, competenceId: 0, competenceIdRelation: 0, laborFunctions: []});
     const [editGroupTitleData, changeEditGroupTitle] = useState({isEdit: false, groupId: 0});
     const [editCompetenceLaborFunctionData, changeEditCompetenceLaborFunction] = useState({isEdit: false, competenceId: 0});
 
@@ -85,8 +87,27 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
         }));
     }
 
+    const saveLaborFunction = (laborFunction: any): void => {
+        dispatch(actions.characteristicSaveProfessionalStandardLaborFunction({
+            laborFunction: [
+              ...laborFunctionModalData.laborFunctions.map((item: any) => item.id),
+              laborFunction
+            ],
+            competenceId: laborFunctionModalData.competenceIdRelation,
+            type: competenceTableType,
+        }));
+    }
+
     const deleteProfessionalStandard = (competenceIdRelation: number) => () => {
         dispatch(actions.characteristicDeleteProfessionalStandard({
+            competenceId: competenceIdRelation,
+            type: competenceTableType,
+        }));
+    }
+
+    const deleteLaborFunction = ({ id, competenceIdRelation, laborFunctions }: any) => () => {
+        dispatch(actions.characteristicSaveProfessionalStandardLaborFunction({
+            laborFunction:  laborFunctions.map((item: any) => item.id).filter((item: any) => item !== id),
             competenceId: competenceIdRelation,
             type: competenceTableType,
         }));
@@ -248,10 +269,16 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
                                         <TableCell className={classes.functionsCell}>
                                               <>
                                                   {competenceItem.generalized_labor_functions?.map((item: any) => (
-                                                    <div style={{ display: 'flex' }}>
-                                                        {item?.code} {item?.name} <br />
-                                                        <Tooltip title="Удалить трудовую функцию" onClick={deleteProfessionalStandard(competenceItem.id)}>
-                                                            <DeleteIcon className={classes.deleteIcon}/>
+                                                    <div style={{ display: 'flex', alignItems: "center" }}>
+                                                        {item?.code} {item?.name}
+                                                        <Tooltip title="Удалить трудовую функцию"
+                                                                 onClick={deleteLaborFunction({
+                                                                     id: item.id,
+                                                                     competenceId: get(competenceItem, 'competence.id'),
+                                                                     competenceIdRelation: competenceItem.id,
+                                                                     laborFunctions: competenceItem.generalized_labor_functions,
+                                                                 })}>
+                                                            <DeleteIcon style={{ top: '0px' }} className={classes.deleteIcon}/>
                                                         </Tooltip>
                                                     </div>
                                                   ))}
@@ -259,10 +286,11 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
                                                           variant="text"
                                                           size="small"
                                                           className={classes.addSmallButton}
-                                                          onClick={() => changeProfessionalStandardOpenModal({
+                                                          onClick={() => changeLaborFunctionModalData({
                                                               isOpen: true,
                                                               competenceId: get(competenceItem, 'competence.id'),
                                                               competenceIdRelation: competenceItem.id,
+                                                              laborFunctions: competenceItem.generalized_labor_functions,
                                                           })}
                                                   >
                                                       <AddIcon/> Добавить трудовую функцию
@@ -308,6 +336,10 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
             <AddProfStandardsModal closeDialog={() => changeProfessionalStandardOpenModal({isOpen: false, competenceId: 0, competenceIdRelation: 0})}
                                    isOpen={professionalStandardModalData.isOpen}
                                    saveDialog={saveProfessionalStandard}
+            />
+            <AddLaborFunctionModal closeDialog={() => changeLaborFunctionModalData({isOpen: false, competenceId: 0, competenceIdRelation: 0, laborFunctions: []})}
+                                   isOpen={laborFunctionModalData.isOpen}
+                                   saveDialog={saveLaborFunction}
             />
         </div>
     )
