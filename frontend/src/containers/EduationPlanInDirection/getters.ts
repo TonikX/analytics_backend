@@ -10,6 +10,7 @@ import {educationalPlanInDirectionState, EducationalPlanInDirectionType} from '.
 import {SelectorListType} from "../../components/SearchSelector/types";
 import {EducationalPlanFields} from "../EducationalPlan/enum";
 import {DirectionFields} from "../Direction/enum";
+import {specializationObject} from "../WorkProgram/constants";
 
 const getStateData = (state: rootState): educationalPlanInDirectionState => get(state, GENERAL_PATH);
 export const getEducationalPlanInDirection = (state: rootState): Array<EducationalPlanInDirectionType> => get(getStateData(state), fields.EDUCATION_PLAN_IN_DIRECTION, []);
@@ -17,8 +18,15 @@ export const getEducationalPlanInDirection = (state: rootState): Array<Education
 export const getEducationalPlanInDirectionForSelector = (state: rootState): SelectorListType =>
     getEducationalPlanInDirection(state).map((plan: EducationalPlanInDirectionType) => ({
         value: plan[EducationPlanInDirectionFields.ID],
-        label: plan[EducationPlanInDirectionFields.TITLE],
+        label: getEducationalProgramFullNameForSelect(plan),
     }))
+
+export const getEducationalProgramFullNameForSelect = (plan: EducationalPlanInDirectionType) =>
+  (plan[EducationPlanInDirectionFields.TITLE] || ' ') + ' ('
+  + (plan?.[EducationPlanInDirectionFields.DIRECTION]?.[0]?.[DirectionFields.TITLE] || ' ') + ' '
+  + (plan?.[EducationPlanInDirectionFields.DIRECTION]?.[0]?.[DirectionFields.NUMBER] || ' ') + ' '
+  + specializationObject[plan?.[EducationPlanInDirectionFields.DIRECTION]?.[0]?.[DirectionFields.QUALIFICATION] || ' '] + ' '
+  + (plan?.[EducationPlanInDirectionFields.YEAR] + ')')
 
 export const getEducationalPlanInDirectionForSelector2 = (state: rootState): SelectorListType =>
 getEducationalPlanInDirection(state).map((plan: EducationalPlanInDirectionType) => ({
