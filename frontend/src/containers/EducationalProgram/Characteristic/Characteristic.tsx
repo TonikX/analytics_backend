@@ -41,6 +41,7 @@ import MinorProfessionalCompetences from "./MinorProfessionalCompetences";
 import AreaOfActivity from "./AreaOfActivity";
 import KindsOfActivity from "./KindsOfActivity";
 import InputLabel from '@material-ui/core/InputLabel'
+import {getEducationalProgramFullNameForSelect} from "../../EduationPlanInDirection/getters";
 
 class Characteristic extends React.Component<CharacteristicProps> {
     state = {
@@ -73,6 +74,25 @@ class Characteristic extends React.Component<CharacteristicProps> {
         })
     }
 
+    handleChangePlan = (value: string) => {
+        this.props.actions.changeEducationalProgram({
+            id: this.getEducationalProgramId(),
+            payload: {
+                [EducationProgramFields.EDUCATIONAL_PROGRAM]: [value]
+            }
+        })
+    }
+
+    handleChangeHead = (value: string) => {
+        console.log('value', value)
+        this.props.actions.changeEducationalProgram({
+            id: this.getEducationalProgramId(),
+            payload: {
+                [EducationProgramFields.DIRECTOR]: value
+            }
+        })
+    }
+
     handleChangeSKEEditorField = (field: string) => (event: any) => {
         const data: string = event.editor.getData()
         this.props.actions.changeEducationalProgramCharacteristic({
@@ -84,7 +104,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
         })
     }
 
-    getEducationalProgramId = () => get(this.props.educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.ID], '');
+    getEducationalProgramId = () => get(this.props.educationalProgramCharacteristic, EducationProgramFields.ID, '');
 
     getEducationalProgramCharacteristicId = () => get(this.props.educationalProgramCharacteristic, EducationProgramCharacteristicFields.ID, '');
 
@@ -198,25 +218,31 @@ class Characteristic extends React.Component<CharacteristicProps> {
     renderContent = () => {
         const {educationalProgramCharacteristic, classes} = this.props;
         const {activeStep} = this.state;
+        const educationalProgramId = get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, '0', 'id'], '')
 
+        if (!educationalProgramId) return
         switch (activeStep){
             case 0:
                 return <>
-                    <EducationPlanInDirectionSelector value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.ACADEMIC_PLAN_FOR_EP, 'id'], '')}
-                                                      handleChange={() => {}} />
+                    <EducationPlanInDirectionSelector
+                      value={educationalProgramId}
+                      label={getEducationalProgramFullNameForSelect(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, '0'], {}))}
+                      handleChange={this.handleChangePlan}
+                    />
                     <UserSelector selectorLabel="Руководитель"
                                   value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.MANAGER, 'id'], '').toString()}
                                   label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.MANAGER], ''))}
+                                  handleChange={this.handleChangeHead}
                     />
-                    <DatePickerComponent label="Год *"
-                                         views={["year"]}
-                                         value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.YEAR], '').toString()}
-                                         onChange={this.handleChangeEducationProgramYear}
-                                         format={YEAR_DATE_FORMAT}
-                    />
-                    <QualificationSelector onChange={this.handleChangeQualification}
-                                           value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.QUALIFICATION], '')}
-                    />
+                    {/*<DatePickerComponent label="Год *"*/}
+                    {/*                     views={["year"]}*/}
+                    {/*                     value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.YEAR], '').toString()}*/}
+                    {/*                     onChange={this.handleChangeEducationProgramYear}*/}
+                    {/*                     format={YEAR_DATE_FORMAT}*/}
+                    {/*/>*/}
+                    {/*<QualificationSelector onChange={this.handleChangeQualification}*/}
+                    {/*                       value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.QUALIFICATION], '')}*/}
+                    {/*/>*/}
                 </>
             case 1:
                 return <div className={classes.editorWrap}>

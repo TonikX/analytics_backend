@@ -73,6 +73,8 @@ export enum EducationProgramFields {
     QUALIFICATION = 'qualification',
     MANAGER = 'manager',
     CAN_EDIT = 'can_edit',
+    DIRECTOR = 'directors_position',
+    EDUCATIONAL_PROGRAM = 'educational_program',
 }
 
 export enum CompetenceTableType {

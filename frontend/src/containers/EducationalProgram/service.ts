@@ -41,7 +41,7 @@ class Service extends AnalyticsService{
     }
 
     updateEducationProgram(id: any, payload: any){
-        return this.patch(`/api/EducationalProgram/update/${id}`, payload);
+        return this.patch(`/api/general_characteristic/update/${id}`, payload);
     }
 
     updateEducationProgramCharacteristic(id: any, payload: any){
