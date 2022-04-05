@@ -176,6 +176,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
                   'group_of_pk_competences_prof', 'group_of_pk_competences_foresight', 'group_of_pk_competences_minor',
                   'employers_in_characteristic', 'ep_supervisor', 'directors_position', 'dean_of_the_faculty',
                   'cluster_name']
+        extra_kwargs = {"employers_in_characteristic": {"required": False}}
 
 
 class WorkProgramCompetenceIndicatorSerializer(serializers.ModelSerializer):
