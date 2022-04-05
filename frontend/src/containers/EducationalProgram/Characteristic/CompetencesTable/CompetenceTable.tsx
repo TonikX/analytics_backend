@@ -34,7 +34,7 @@ export const CompetenceTable: React.FC<CompetenceTableProps> = ({competenceTable
     const [editGroupTitleData, changeEditGroupTitle] = useState({isEdit: false, groupId: 0});
 
     const createNewGroup = (): void => {
-        dispatch(actions.characteristicCreateGroup({name: 'Новая категория', type: competenceTableType}));
+        dispatch(actions.characteristicCreateGroup({name: 'Новая категория', type: competenceTableType, subType: 'prof'}));
     };
 
     const saveCompetence = ({value}: { value: number, label: string }): void => {

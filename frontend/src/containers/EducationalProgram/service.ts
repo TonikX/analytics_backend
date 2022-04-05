@@ -16,7 +16,7 @@ class Service extends AnalyticsService{
     getEducationalProgramList(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
-        return this.get(`/api/EducationalProgram?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+        return this.get(`/api/general_characteristic?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
     deleteEducationProgram(id: number){
@@ -61,10 +61,11 @@ class Service extends AnalyticsService{
         }
     }
 
-    characteristicCreateGroup({name, type}: CharacteristicCreateGroupActionType, characteristicId: number){
+    characteristicCreateGroup({name, type, subType}: CharacteristicCreateGroupActionType, characteristicId: number ){
         return this.post(`/api/general_ch/${this.getCompetenceTableUrl(type)}/`, {
             name,
-            general_characteristic: characteristicId
+            general_characteristic: characteristicId,
+            type_of_pk_competence: subType,
         });
     }
 
@@ -98,9 +99,21 @@ class Service extends AnalyticsService{
         });
     }
 
+    characteristicSaveKindOfActivity({competenceId, type, kindOfActivity}: any){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            kinds_of_activity: kindOfActivity
+        });
+    }
+
     characteristicDeleteProfessionalStandard({competenceId, type}: CharacteristicDeleteProfessionalStandardActionType){
         return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
             professional_standard: null
+        });
+    }
+
+    characteristicDeleteKindOfActivity({competenceId, type}: CharacteristicDeleteProfessionalStandardActionType){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            kinds_of_activity: null
         });
     }
 

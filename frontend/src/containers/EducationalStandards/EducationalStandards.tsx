@@ -19,6 +19,7 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import EyeIcon from '@material-ui/icons/VisibilityOutlined';
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -151,12 +152,18 @@ class EducationalStandards extends React.Component<EducationalStandardsProps> {
                                         {educationalStandard[EducationalStandardFields.YEAR]}
                                     </Typography>
                                     <div className={classes.actions}>
+                                        <IconButton>
+                                            <Link style={{textDecoration: 'none', height: '23px', color: 'rgba(0, 0, 0, 0.54)'}}
+                                                  to={appRouter.getEducationalStandardRoute(educationalStandard[EducationalStandardFields.ID])}>
+                                                <EyeIcon />
+                                            </Link>
+                                        </IconButton>
                                         <IconButton
                                             onClick={this.handleClickDelete(educationalStandard[EducationalStandardFields.ID])}>
-                                            <DeleteIcon/>
+                                            <DeleteIcon />
                                         </IconButton>
                                         <IconButton onClick={this.handleClickEdit(educationalStandard)}>
-                                            <EditIcon/>
+                                            <EditIcon />
                                         </IconButton>
                                     </div>
                                 </div>

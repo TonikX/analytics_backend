@@ -376,6 +376,29 @@ const characteristicSaveProfessionalStandard = createLogic({
     }
 });
 
+const characteristicSaveKindOfActivity = createLogic({
+    type: educationalPlanActions.characteristicSaveKindOfActivity.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_KIND_OF_ACTIVITY}));
+
+        service.characteristicSaveKindOfActivity(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_SAVE_KIND_OF_ACTIVITY}));
+                return done();
+            });
+    }
+});
+
 const characteristicDeleteProfessionalStandard = createLogic({
     type: educationalPlanActions.characteristicDeleteProfessionalStandard.type,
     latest: true,
@@ -394,6 +417,29 @@ const characteristicDeleteProfessionalStandard = createLogic({
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_DELETE_PROFESSIONAL_STANDARD}));
+                return done();
+            });
+    }
+});
+
+const characteristicDeleteKindOfActivity = createLogic({
+    type: educationalPlanActions.characteristicDeleteKindOfActivity.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_KIND_OF_ACTIVITY}));
+
+        service.characteristicDeleteKindOfActivity(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_DELETE_KIND_OF_ACTIVITY}));
                 return done();
             });
     }
@@ -478,6 +524,10 @@ export default [
 
     characteristicSaveProfessionalStandard,
     characteristicDeleteProfessionalStandard,
+
+    characteristicSaveKindOfActivity,
+    characteristicDeleteKindOfActivity,
+
     createKindOfActivity,
     getKindsOfActivity,
 ];

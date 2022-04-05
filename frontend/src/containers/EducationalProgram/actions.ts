@@ -33,6 +33,9 @@ const characteristicSaveCompetenceLaborFunction = createAction<CharacteristicSav
 const characteristicSaveIndicator = createAction<CharacteristicAddIndicatorActionType>('CHARACTERISTIC_COMPETENCIES_SAVE_INDICATOR');
 const characteristicDeleteIndicator = createAction<CharacteristicDeleteIndicatorActionType>('CHARACTERISTIC_COMPETENCIES_DELETE_INDICATOR');
 
+const characteristicSaveKindOfActivity = createAction<any>('CHARACTERISTIC_COMPETENCIES_SAVE_KIND_OF_ACTIVITY');
+const characteristicDeleteKindOfActivity = createAction<any>('CHARACTERISTIC_COMPETENCIES_SAVE_KIND_OF_ACTIVITY');
+
 const characteristicSaveProfessionalStandard = createAction<CharacteristicAddProfessionalStandardActionType>('CHARACTERISTIC_COMPETENCIES_SAVE_PROFESSIONAL_STANDARD');
 const characteristicDeleteProfessionalStandard = createAction<CharacteristicDeleteProfessionalStandardActionType>('CHARACTERISTIC_COMPETENCIES_DELETE_PROFESSIONAL_STANDARD');
 
@@ -53,6 +56,8 @@ const getKindsOfActivity = createAction('GET_KINDS_OF_ACTIVITY');
 const setKindsOfActivity = createAction('SET_KINDS_OF_ACTIVITY');
 
 const actions: EducationalProgramActions = {
+    characteristicSaveKindOfActivity,
+    characteristicDeleteKindOfActivity,
     createKindOfActivity,
     getKindsOfActivity,
     setKindsOfActivity,

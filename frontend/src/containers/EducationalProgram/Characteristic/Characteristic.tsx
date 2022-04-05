@@ -36,6 +36,7 @@ import {IndicatorsFields} from "../../Indicators/enum";
 import {UserFields} from "../../../layout/enum";
 import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
 import {ProfessionalCompetences} from "./ProfessionalCompetences/ProfessionalCompetences";
+import ForsitesProfessionalCompetences from "./ForsitesProfessionalCompetences";
 import AreaOfActivity from "./AreaOfActivity";
 import KindsOfActivity from "./KindsOfActivity";
 import InputLabel from '@material-ui/core/InputLabel'
@@ -230,8 +231,10 @@ class Characteristic extends React.Component<CharacteristicProps> {
             case 3:
                 return <KindsOfActivity characteristic={educationalProgramCharacteristic} />
             case 4:
-                return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PROFESSIONAL_COMPETENCES, [])} />;
+                return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_prof', [])} />;
             case 5:
+                return <ForsitesProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_foresight', [])} />;
+            case 6:
                 return <div className={classes.editorWrap}>
                         <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
                         <CKEditor 
@@ -240,7 +243,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
                             toolbarContainerId="toolbar-container"
                         />
                 </div>
-            case 6:
+            case 7:
                 return <>
                     <UserSelector selectorLabel='Разработчики'
                                   value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEVELOPERS, 0, UserFields.ID], '')}

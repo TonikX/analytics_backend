@@ -35,6 +35,7 @@ export enum EducationalStandardFields {
     GENERAL_PROFESSIONAL_COMPETENCES = 'group_of_general_prof_competences',
     SUPRA_PROFESSIONAL_COMPETENCES = 'group_of_over_prof_competences',
     KEY_COMPETENCES = 'group_of_key_competences',
+    TASKS = 'tasks_prof_standard',
 }
 
 

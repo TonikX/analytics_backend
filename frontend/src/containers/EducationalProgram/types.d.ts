@@ -33,6 +33,8 @@ export interface EducationalProgramActions {
     createKindOfActivity: any;
     getKindsOfActivity: any;
     setKindsOfActivity: any;
+    characteristicSaveKindOfActivity: any;
+    characteristicDeleteKindOfActivity: any;
 
     characteristicCreateGroup: ActionCreatorWithPayload<CharacteristicCreateGroupActionType>;
     characteristicSaveGroupTitle: ActionCreatorWithPayload<CharacteristicSaveGroupTitleActionType>;
@@ -98,6 +100,7 @@ export interface CharacteristicProps extends WithStyles<typeof characterisicStyl
 export type CharacteristicCreateGroupActionType = {
     name: string;
     type: CompetenceTableType;
+    subType: 'prof' | 'fore';
 }
 
 export type CharacteristicSaveGroupTitleActionType = {
