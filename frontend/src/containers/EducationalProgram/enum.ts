@@ -74,6 +74,7 @@ export enum EducationProgramFields {
     MANAGER = 'manager',
     CAN_EDIT = 'can_edit',
     DIRECTOR = 'directors_position',
+    EP_SUPERVISOR = 'ep_supervisor',
     EDUCATIONAL_PROGRAM = 'educational_program',
 }
 

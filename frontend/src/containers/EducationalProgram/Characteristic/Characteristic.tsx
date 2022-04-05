@@ -84,11 +84,10 @@ class Characteristic extends React.Component<CharacteristicProps> {
     }
 
     handleChangeHead = (value: string) => {
-        console.log('value', value)
         this.props.actions.changeEducationalProgram({
             id: this.getEducationalProgramId(),
             payload: {
-                [EducationProgramFields.DIRECTOR]: value
+                [EducationProgramFields.EP_SUPERVISOR]: value
             }
         })
     }
@@ -231,7 +230,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
                     />
                     <UserSelector selectorLabel="Руководитель"
                                   value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.MANAGER, 'id'], '').toString()}
-                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.MANAGER], ''))}
+                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.EP_SUPERVISOR], ''))}
                                   handleChange={this.handleChangeHead}
                     />
                     {/*<DatePickerComponent label="Год *"*/}
