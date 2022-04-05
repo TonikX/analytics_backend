@@ -246,15 +246,37 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
                                             }
                                         </TableCell>
                                         <TableCell className={classes.functionsCell}>
-                                            <EditableText value={get(competenceItem, 'labor_functions') || 'трудовая функция'}
-                                                          isEditMode={editCompetenceLaborFunctionData.isEdit
-                                                                && editCompetenceLaborFunctionData.competenceId === competenceItem.id
-                                                          }
-                                                          onClickDone={saveGroupLaborFunctions}
-                                                          onClickCancel={() => changeEditCompetenceLaborFunction({isEdit: false, competenceId: 0})}
-                                                          onValueClick={() => changeEditCompetenceLaborFunction({isEdit: true, competenceId: competenceItem.id})}
-                                                          fullWidth
-                                            />
+                                              <>
+                                                  {competenceItem.generalized_labor_functions?.map((item: any) => (
+                                                    <div style={{ display: 'flex' }}>
+                                                        {item?.code} {item?.name} <br />
+                                                        <Tooltip title="Удалить трудовую функцию" onClick={deleteProfessionalStandard(competenceItem.id)}>
+                                                            <DeleteIcon className={classes.deleteIcon}/>
+                                                        </Tooltip>
+                                                    </div>
+                                                  ))}
+                                                  <Button color="primary"
+                                                          variant="text"
+                                                          size="small"
+                                                          className={classes.addSmallButton}
+                                                          onClick={() => changeProfessionalStandardOpenModal({
+                                                              isOpen: true,
+                                                              competenceId: get(competenceItem, 'competence.id'),
+                                                              competenceIdRelation: competenceItem.id,
+                                                          })}
+                                                  >
+                                                      <AddIcon/> Добавить трудовую функцию
+                                                  </Button>
+                                              </>
+                                            {/*<EditableText value={get(competenceItem, 'labor_functions') || 'трудовая функция'}*/}
+                                            {/*              isEditMode={editCompetenceLaborFunctionData.isEdit*/}
+                                            {/*                    && editCompetenceLaborFunctionData.competenceId === competenceItem.id*/}
+                                            {/*              }*/}
+                                            {/*              onClickDone={saveGroupLaborFunctions}*/}
+                                            {/*              onClickCancel={() => changeEditCompetenceLaborFunction({isEdit: false, competenceId: 0})}*/}
+                                            {/*              onValueClick={() => changeEditCompetenceLaborFunction({isEdit: true, competenceId: competenceItem.id})}*/}
+                                            {/*              fullWidth*/}
+                                            {/*/>*/}
                                         </TableCell>
                                     </TableRow>
                                 ))}

@@ -61,5 +61,9 @@ class ProfessionalStandardsService extends AnalyticsService {
         return this.delete(`/api/generalizedlaborfunction/${id}/`)
     }
 
+    getLaborFunction(search: string){
+        return this.get(`/api/generalizedlaborfunction?search=${search}`, )
+    }
+
 }
 export default ProfessionalStandardsService;
