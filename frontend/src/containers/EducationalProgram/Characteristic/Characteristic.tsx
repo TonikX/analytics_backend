@@ -232,12 +232,22 @@ class Characteristic extends React.Component<CharacteristicProps> {
             case 3:
                 return <KindsOfActivity characteristic={educationalProgramCharacteristic} />
             case 4:
-                return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_prof', [])} />;
+                return <CompetenceTable
+                  tableData={get(educationalProgramCharacteristic, 'group_of_key_competences', [])}
+                  competenceTableType={CompetenceTableType.KEY_COMPETENCES}
+                /> ;
             case 5:
-                return <ForsitesProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_foresight', [])} />;
+                return <CompetenceTable
+                  tableData={get(educationalProgramCharacteristic, 'group_of_over_prof_competences', [])}
+                  competenceTableType={CompetenceTableType.SUPRA_PROFESSIONAL_COMPETENCES}
+                />;
             case 6:
-                return <MinorProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_minor', [])} />;
+                return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_prof', [])} />;
             case 7:
+                return <ForsitesProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_foresight', [])} />;
+            case 8:
+                return <MinorProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_minor', [])} />;
+            case 9:
                 return <div className={classes.editorWrap}>
                         <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
                         <CKEditor 
@@ -246,7 +256,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
                             toolbarContainerId="toolbar-container"
                         />
                 </div>
-            case 8:
+            case 10:
                 return <>
                     <UserSelector selectorLabel='Разработчики'
                                   value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEVELOPERS, 0, UserFields.ID], '')}

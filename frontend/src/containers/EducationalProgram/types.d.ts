@@ -16,6 +16,8 @@ import {characterisicStyles} from './Сharacteristic/Сharacteristic.styles';
 import styles from "./WorkProgram.styles";
 
 export interface EducationalProgramActions {
+    characteristicSaveProfessionalStandardLaborFunction: any;
+    characteristicDeleteProfessionalStandardLaborFunction: any;
     changeSearchQuery: any;
     getEducationalProgramCharacteristic: any;
     setEducationalProgramCharacteristic: any;

@@ -104,8 +104,19 @@ class Service extends AnalyticsService{
         });
     }
 
+    characteristicSaveProfessionalStandardLaborFunction({competenceId, type, laborFunction}: any){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            generalized_labor_functions: laborFunction
+        });
+    }
+
+    characteristicDeleteProfessionalStandardLaborFunction({competenceId, type, laborFunction}: any){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            generalized_labor_functions: null
+        });
+    }
+
     characteristicSaveKindOfActivity({competenceId, type, kindOfActivity}: any){
-        console.log('kindOfActivity', kindOfActivity)
         return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
             kinds_of_activity: kindOfActivity
         });

@@ -202,6 +202,26 @@ const deleteProfessionalStandardAdditionalFields = createLogic({
     }
 })
 
+const getLaborFunctions = createLogic({
+    type: ProfessionalStandardsActions.getLaborFunctions.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_LABOR_FUNCTION}));
+        service.getLaborFunction(action.payload)
+            .then((res) => {
+                dispatch(ProfessionalStandardsActions.setLaborFunctions(res?.data?.results || []))
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_LABOR_FUNCTION}));
+                return done();
+            });
+    }
+})
+
 
 export default [
     getProfessionalStandards,
@@ -212,4 +232,5 @@ export default [
     createProfessionalStandardAdditionalFields,
     updateProfessionalStandardAdditionalFields,
     deleteProfessionalStandardAdditionalFields,
+    getLaborFunctions,
 ];

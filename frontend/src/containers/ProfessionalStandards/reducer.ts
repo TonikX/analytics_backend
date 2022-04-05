@@ -20,6 +20,7 @@ export const initialState: professionalStandardsState = {
         [fields.DIALOG_DATA]: {}
     },
     [fields.PROFESSIONAL_STANDARD]: {},
+    [fields.LABOR_FUNCTIONS]: [],
 };
 
 const setProfessionalStandards = (state: professionalStandardsState, {payload}: any): professionalStandardsState => {
@@ -69,8 +70,12 @@ const changeSorting = (state: professionalStandardsState, {payload}: any): profe
     }
 });
 
-const setProfessionalStandard = (state: professionalStandardsState, {payload}: any): professionalStandardsState => {
+const setLaborFunctions = (state: professionalStandardsState, {payload}: any): professionalStandardsState => ({
+    ...state,
+    [fields.LABOR_FUNCTIONS]: payload
+});
 
+const setProfessionalStandard = (state: professionalStandardsState, {payload}: any): professionalStandardsState => {
     return ({
         ...state,
         [fields.PROFESSIONAL_STANDARD]: payload,
@@ -85,5 +90,6 @@ export const reducer = createReducer(initialState, {
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
     [actions.setProfessionalStandard.type]: setProfessionalStandard,
+    [actions.setLaborFunctions.type]: setLaborFunctions,
 });
 
