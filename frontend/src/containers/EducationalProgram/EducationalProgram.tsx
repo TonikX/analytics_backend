@@ -140,46 +140,47 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                             <TableHead className={classes.header}>
                                 <TableRow>
                                     <TableCell>
-                                        Учебный план
-                                        <SortingButton changeMode={this.changeSorting(EducationProgramFields.ACADEMIC_PLAN_FOR_EP)}
-                                                       mode={sortingField === EducationProgramFields.ACADEMIC_PLAN_FOR_EP ? sortingMode : ''}
-                                        />
+                                        Образовательная программа
+                                        {/*<SortingButton changeMode={this.changeSorting(EducationProgramFields.ACADEMIC_PLAN_FOR_EP)}*/}
+                                        {/*               mode={sortingField === EducationProgramFields.ACADEMIC_PLAN_FOR_EP ? sortingMode : ''}*/}
+                                        {/*/>*/}
                                     </TableCell>
                                     <TableCell>
                                         Уровень образования
-                                        <SortingButton changeMode={this.changeSorting(EducationProgramFields.QUALIFICATION)}
-                                                       mode={sortingField === EducationProgramFields.QUALIFICATION ? sortingMode : ''}
-                                        />
+                                        {/*<SortingButton changeMode={this.changeSorting(EducationProgramFields.QUALIFICATION)}*/}
+                                        {/*               mode={sortingField === EducationProgramFields.QUALIFICATION ? sortingMode : ''}*/}
+                                        {/*/>*/}
                                     </TableCell>
                                     <TableCell>
                                         Год начала
-                                        <SortingButton changeMode={this.changeSorting(EducationProgramFields.YEAR)}
-                                                       mode={sortingField === EducationProgramFields.YEAR ? sortingMode : ''}
-                                        />
+                                        {/*<SortingButton changeMode={this.changeSorting(EducationProgramFields.YEAR)}*/}
+                                        {/*               mode={sortingField === EducationProgramFields.YEAR ? sortingMode : ''}*/}
+                                        {/*/>*/}
                                     </TableCell>
                                     <TableCell>
-                                        Руководитель
-                                        <SortingButton changeMode={this.changeSorting(EducationProgramFields.MANAGER)}
-                                                       mode={sortingField === EducationProgramFields.MANAGER ? sortingMode : ''}
-                                        />
+                                        Направление подготовки
+                                        {/*<SortingButton changeMode={this.changeSorting(EducationProgramFields.MANAGER)}*/}
+                                        {/*               mode={sortingField === EducationProgramFields.MANAGER ? sortingMode : ''}*/}
+                                        {/*/>*/}
                                     </TableCell>
                                     <TableCell />
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {educationalProgram.map(educationalProgram =>
+                                {educationalProgram.map((educationalProgram: any) =>
                                     <TableRow key={educationalProgram[EducationProgramFields.ID]}>
                                         <TableCell>
-                                            {getEducationPlanInDirectionFullName(educationalProgram[EducationProgramFields.ACADEMIC_PLAN_FOR_EP])}
+                                            {educationalProgram?.educational_program?.[0]?.title}
                                         </TableCell>
                                         <TableCell>
-                                            {get(specializationObject, educationalProgram[EducationProgramFields.QUALIFICATION], '')}
+                                            {specializationObject[educationalProgram?.educational_program?.[0]?.qualification]}
                                         </TableCell>
                                         <TableCell>
-                                            {educationalProgram[EducationProgramFields.YEAR]}
+                                            {educationalProgram?.educational_program?.[0]?.year}
                                         </TableCell>
                                         <TableCell>
-                                            {getUserFullName(educationalProgram[EducationProgramFields.MANAGER])}
+                                            {educationalProgram?.educational_program?.[0]?.field_of_study?.[0]?.title}&nbsp;
+                                            ({educationalProgram?.educational_program?.[0]?.field_of_study?.[0]?.number})
                                         </TableCell>
                                         <TableCell>
                                             <TableSettingsMenu menuItems={[

@@ -119,7 +119,7 @@ class CreateModal extends React.PureComponent<ProfessionalStandardsCreateModalPr
                                    shrink: true,
                                }}
                     />
-                    <TextField label="Профессиональный стандарт *"
+                    <TextField label="Профессиональные стандарты *"
                                onChange={this.saveField(ProfessionalStandardFields.NAME)}
                                variant="outlined"
                                className={classes.input}

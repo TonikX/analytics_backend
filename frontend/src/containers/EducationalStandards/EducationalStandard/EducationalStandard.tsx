@@ -13,12 +13,14 @@ import { getEducationalStandard } from '../getters'
 import useStyles from './EducationalStandard.styles'
 import Typography from "@material-ui/core/Typography";
 import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
+import TasksTable from "./TasksTable";
 import {CompetenceTableType, EducationalStandardFields} from "../enum";
 
 export const steps = [
   'Ключевые компетенции', // group_of_key_competences
   'Надпрофессиональные компетенции', // group_of_over_prof_competences
   'Общепрофессиональные компетенции', // group_of_general_prof_competences
+  'Типы профессиональных задач', // group_of_general_prof_competences
 ];
 
 export default () => {
@@ -54,6 +56,12 @@ export default () => {
           <CompetenceTable
             competenceTableType={CompetenceTableType.GENERAL_PROFESSIONAL_COMPETENCES}
             tableData={educationalStandard?.[EducationalStandardFields.GENERAL_PROFESSIONAL_COMPETENCES]}
+          />
+        )
+      case 3:
+        return (
+          <TasksTable
+            tableData={educationalStandard?.[EducationalStandardFields.TASKS]}
           />
         )
     }

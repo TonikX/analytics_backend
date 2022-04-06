@@ -50,7 +50,12 @@ import ProfessionsSelectedIcon from "./icons/professions-selected.svg";
 import ReportsIcon from "./icons/reports.svg";
 import ReportsSelectedIcon from "./icons/reports-selected.svg";
 
-import {isUserCanSeeProfessions, isUserInExpertiseGroup, isUserRpdDev} from "../../common/userRights";
+import {
+    isUserCanSeeCharacteristic,
+    isUserCanSeeProfessions,
+    isUserInExpertiseGroup,
+    isUserRpdDev
+} from "../../common/userRights";
 
 export const getMockMenu = (menuArr: Array<number>): Array<any> => {
     const selectedMenus = []
@@ -360,18 +365,6 @@ export default (groups: Array<string>) => {
             selectedIcon: CompetencesSelectedIcon,
         },
         {
-            title: 'Профессиональные стандарты',
-            link: appRouter.getProfessionalStandardsRoute(),
-            icon: IndicatorsIcon,
-            selectedIcon: IndicatorsSelectedIcon,
-        },
-        {
-            title: 'Образовательные стандарты',
-            link: appRouter.getEducationalStandardsRoute(),
-            icon: IndicatorsIcon,
-            selectedIcon: IndicatorsSelectedIcon,
-        },
-        {
             title: 'Структурные подразделения',
             link: appRouter.getStructuralUnitsRoute(),
             icon: IndicatorsIcon,
@@ -412,12 +405,6 @@ export default (groups: Array<string>) => {
         {
             title: 'Образовательные программы',
             link: appRouter.getEducationPlanInDirectionRoute(),
-            icon: WorkProgramInDirectionIcon,
-            selectedIcon: WorkProgramInDirectionSelectedIcon,
-        },
-        {
-            title: 'Общие характеристики',
-            link: appRouter.getEducationalProgram(),
             icon: WorkProgramInDirectionIcon,
             selectedIcon: WorkProgramInDirectionSelectedIcon,
         },
@@ -478,6 +465,27 @@ export default (groups: Array<string>) => {
       selectedIcon: ReportsSelectedIcon,
    }]
 
+    const characteristicMenu = isUserCanSeeCharacteristic(groups) ? [
+        {
+            title: 'Общие характеристики',
+            link: appRouter.getEducationalProgram(),
+            icon: WorkProgramInDirectionIcon,
+            selectedIcon: WorkProgramInDirectionSelectedIcon,
+        },
+        {
+            title: 'Профессиональные стандарты',
+            link: appRouter.getProfessionalStandardsRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
+        {
+            title: 'Образовательные стандарты',
+            link: appRouter.getEducationalStandardsRoute(),
+            icon: IndicatorsIcon,
+            selectedIcon: IndicatorsSelectedIcon,
+        },
+    ] : []
+
     const menu = [];
 
     if (firstMenu.length){
@@ -488,6 +496,10 @@ export default (groups: Array<string>) => {
 
     if (thirdMenu.length){
         menu.push(thirdMenu);
+    }
+
+    if (characteristicMenu.length){
+        menu.push(characteristicMenu);
     }
 
     if (fourthMenu.length){

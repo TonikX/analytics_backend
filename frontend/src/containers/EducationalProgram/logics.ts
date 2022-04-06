@@ -6,13 +6,13 @@ import educationalPlanActions from './actions';
 
 import Service from './service';
 
-import {fetchingTypes} from "./enum";
+import {EducationProgramCharacteristicFields, fetchingTypes} from "./enum";
 import {
     getCurrentPage,
     getEducationalProgramCharacteristicId,
-    getEducationalProgramId,
     getSearchQuery,
     getSortingField,
+    getEducationalProgramCharacteristic,
     getSortingMode
 } from "./getters";
 
@@ -168,7 +168,7 @@ const saveZun = createLogic({
     }
 });
 
-const getEducationalProgramCharacteristic = createLogic({
+const getEducationalProgramCharacteristicLogic = createLogic({
     type: educationalPlanActions.getEducationalProgramCharacteristic.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
@@ -218,14 +218,13 @@ const characteristicCreateGroup = createLogic({
     type: educationalPlanActions.characteristicCreateGroup.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const educationalProgramId = getEducationalProgramId(getState());
         const characteristicId = getEducationalProgramCharacteristicId(getState());
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_CREATE_COMPETENCE_GROUP}));
 
         service.characteristicCreateGroup(action.payload, characteristicId)
             .then((res) => {
-                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -241,13 +240,13 @@ const characteristicDeleteGroup = createLogic({
     type: educationalPlanActions.characteristicDeleteGroup.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const educationalProgramId = getEducationalProgramId(getState());
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_COMPETENCE_GROUP}));
 
         service.characteristicDeleteGroup(action.payload)
             .then((res) => {
-                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -264,13 +263,13 @@ const characteristicSaveCompetence = createLogic({
     type: educationalPlanActions.characteristicSaveCompetence.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const educationalProgramId = getEducationalProgramId(getState());
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_COMPETENCE}));
 
         service.characteristicSaveCompetence(action.payload)
             .then((res) => {
-                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -287,13 +286,13 @@ const characteristicDeleteCompetence = createLogic({
     type: educationalPlanActions.characteristicDeleteCompetence.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const educationalProgramId = getEducationalProgramId(getState());
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_COMPETENCE}));
 
         service.characteristicDeleteCompetence(action.payload)
             .then((res) => {
-                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -310,13 +309,13 @@ const characteristicSaveIndicator = createLogic({
     type: educationalPlanActions.characteristicSaveIndicator.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const educationalProgramId = getEducationalProgramId(getState());
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_INDICATOR}));
 
         service.characteristicSaveIndicator(action.payload)
             .then((res) => {
-                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -333,13 +332,13 @@ const characteristicDeleteIndicator = createLogic({
     type: educationalPlanActions.characteristicDeleteIndicator.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const educationalProgramId = getEducationalProgramId(getState());
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_INDICATOR}));
 
         service.characteristicDeleteIndicator(action.payload)
             .then((res) => {
-                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -356,13 +355,13 @@ const characteristicSaveGroupTitle = createLogic({
     type: educationalPlanActions.characteristicSaveGroupTitle.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const educationalProgramId = getEducationalProgramId(getState());
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_GROUP_TITLE}));
 
         service.characteristicSaveGroupTitle(action.payload)
             .then((res) => {
-                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -379,13 +378,13 @@ const characteristicSaveCompetenceLaborFunction = createLogic({
     type: educationalPlanActions.characteristicSaveCompetenceLaborFunction.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const educationalProgramId = getEducationalProgramId(getState());
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_COMPETENCE_LABOR_FUNCTION}));
 
         service.characteristicSaveCompetenceLaborFunction(action.payload)
             .then((res) => {
-                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -398,17 +397,40 @@ const characteristicSaveCompetenceLaborFunction = createLogic({
     }
 });
 
+const characteristicSaveCompetenceKindsOfActivity = createLogic({
+    type: educationalPlanActions.characteristicSaveCompetenceKindsOfActivity.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_COMPETENCE_KIND_OF_ACTIVITY}));
+
+        service.characteristicSaveCompetenceKindOfActivity(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_SAVE_COMPETENCE_KIND_OF_ACTIVITY}));
+                return done();
+            });
+    }
+});
+
 const characteristicSaveProfessionalStandard = createLogic({
     type: educationalPlanActions.characteristicSaveProfessionalStandard.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const educationalProgramId = getEducationalProgramId(getState());
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_PROFESSIONAL_STANDARD}));
 
         service.characteristicSaveProfessionalStandard(action.payload)
             .then((res) => {
-                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -421,17 +443,87 @@ const characteristicSaveProfessionalStandard = createLogic({
     }
 });
 
+const characteristicSaveProfessionalStandardLaborFunction = createLogic({
+    type: educationalPlanActions.characteristicSaveProfessionalStandardLaborFunction.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_PROFESSIONAL_STANDARD_LABOR_FUNCTION}));
+
+        service.characteristicSaveProfessionalStandardLaborFunction(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_SAVE_PROFESSIONAL_STANDARD_LABOR_FUNCTION}));
+                return done();
+            });
+    }
+});
+
+
+const characteristicDeleteProfessionalStandardLaborFunction = createLogic({
+    type: educationalPlanActions.characteristicDeleteProfessionalStandardLaborFunction.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_PROFESSIONAL_STANDARD_LABOR_FUNCTION}));
+
+        service.characteristicDeleteProfessionalStandardLaborFunction(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_DELETE_PROFESSIONAL_STANDARD_LABOR_FUNCTION}));
+                return done();
+            });
+    }
+});
+
+const characteristicSaveKindOfActivity = createLogic({
+    type: educationalPlanActions.characteristicSaveKindOfActivity.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_SAVE_KIND_OF_ACTIVITY}));
+
+        service.characteristicSaveKindOfActivity(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_SAVE_KIND_OF_ACTIVITY}));
+                return done();
+            });
+    }
+});
+
 const characteristicDeleteProfessionalStandard = createLogic({
     type: educationalPlanActions.characteristicDeleteProfessionalStandard.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const educationalProgramId = getEducationalProgramId(getState());
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_PROFESSIONAL_STANDARD}));
 
         service.characteristicDeleteProfessionalStandard(action.payload)
             .then((res) => {
-                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(educationalProgramId));
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -444,6 +536,85 @@ const characteristicDeleteProfessionalStandard = createLogic({
     }
 });
 
+const characteristicDeleteKindOfActivity = createLogic({
+    type: educationalPlanActions.characteristicDeleteKindOfActivity.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTIC_DELETE_KIND_OF_ACTIVITY}));
+
+        service.characteristicDeleteKindOfActivity(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTIC_DELETE_KIND_OF_ACTIVITY}));
+                return done();
+            });
+    }
+});
+
+const createKindOfActivity = createLogic({
+    type: educationalPlanActions.createKindOfActivity.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const characteristic = getEducationalProgramCharacteristic(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_KIND_OF_ACTIVITY}));
+
+        service.createKindOfActivity(action.payload)
+            .then((res: any) => {
+                //@ts-ignore
+                const allActivities = characteristic[EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES]?.map((item: any) => item.id)
+
+                dispatch(educationalPlanActions.changeEducationalProgramCharacteristic({
+                    //@ts-ignore
+                    id: characteristic?.id,
+                    payload: {
+                        [EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES]: [
+                            res?.data?.id,
+                            ...allActivities,
+                        ]
+                    }
+                }));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_KIND_OF_ACTIVITY}));
+                return done();
+            });
+    }
+});
+
+const getKindsOfActivity = createLogic({
+    type: educationalPlanActions.getKindsOfActivity.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_KIND_OF_ACTIVITY}));
+
+        service.getKindsOfActivity(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.setKindsOfActivity(res?.data?.results));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_KIND_OF_ACTIVITY}));
+                return done();
+            });
+    }
+});
+
 export default [
     getEducationalProgramList,
     deleteEducationalProgram,
@@ -451,7 +622,7 @@ export default [
     changeEducationalProgram,
 
     changeEducationalProgramCharacteristic,
-    getEducationalProgramCharacteristic,
+    getEducationalProgramCharacteristicLogic,
 
     characteristicCreateGroup,
     characteristicDeleteGroup,
@@ -464,9 +635,19 @@ export default [
 
     characteristicSaveGroupTitle,
     characteristicSaveCompetenceLaborFunction,
+    characteristicSaveCompetenceKindsOfActivity,
 
     characteristicSaveProfessionalStandard,
     characteristicDeleteProfessionalStandard,
+
+    characteristicSaveProfessionalStandardLaborFunction,
+    characteristicDeleteProfessionalStandardLaborFunction,
+
+    characteristicSaveKindOfActivity,
+    characteristicDeleteKindOfActivity,
+
+    createKindOfActivity,
+    getKindsOfActivity,
 
     getCompetenceMatrix,
     saveZun,

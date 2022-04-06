@@ -37,6 +37,8 @@ from .pk_comptencies.serializers import GroupOfPkCompetencesInGeneralCharacteris
 
 from .serializers import ProfessionalStandardSerializer
 
+from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
+
 # --Работа с образовательной программой
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
     ImplementationAcademicPlan, Competence, Indicator, WorkProgramInFieldOfStudy, Zun, GeneralizedLaborFunctions, \
@@ -325,5 +327,6 @@ def GetCompetenceMatrix(request, gen_pk):
             if block_dict["modules_in_discipline_block"]:
                 academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
     competence_matrix["wp_matrix"] = matrix_list
+    competence_matrix["educational_program"] = ImplementationAcademicPlanSerializer(gen_characteristic.educational_program.all(), many = True).data
     # print(matrix_list)
     return Response(competence_matrix)

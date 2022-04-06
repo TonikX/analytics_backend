@@ -11,7 +11,7 @@ import {rootState} from "../../../store/reducers";
 const mapStateToProps = (state: rootState) => {
     return {
         isOpen: isOpenDialog(state),
-        educationalStandard: getDialogData(state),
+        professionalStandard: getDialogData(state),
     };
 };
 

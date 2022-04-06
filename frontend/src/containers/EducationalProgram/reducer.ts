@@ -16,6 +16,7 @@ export const initialState: educationalProgramState = {
     [fields.ALL_COUNT]: 1,
     [fields.SEARCH_QUERY]: '',
     [fields.EDUCATION_PROGRAM_LIST]: [],
+    [fields.KINDS_OF_ACTIVITIES]: [],
     [fields.EDUCATION_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
@@ -78,6 +79,11 @@ const changeSorting = (state: educationalProgramState, {payload}: any): educatio
     }
 });
 
+const setKindsOfActivity = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+    ...state,
+    [fields.KINDS_OF_ACTIVITIES]: payload
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setEducationalProgramList.type]: setEducationalProgramList,
     [actions.setEducationalProgramCharacteristic.type]: setEducationalProgramCharacteristic,
@@ -88,4 +94,5 @@ export const reducer = createReducer(initialState, {
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
+    [actions.setKindsOfActivity.type]: setKindsOfActivity,
 });

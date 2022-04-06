@@ -10,6 +10,7 @@ export interface EducationPlanInDirectionSelectorType extends WithStyles<typeof 
     handleChange: Function;
     className?: any;
     isReset?: boolean;
+    label?: string;
 }
 
 export interface EducationPlanInDirectionSelectorType2 extends WithStyles<typeof styles>  {

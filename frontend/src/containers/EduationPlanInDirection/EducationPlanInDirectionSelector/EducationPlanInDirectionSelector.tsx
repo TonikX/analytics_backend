@@ -18,6 +18,12 @@ class EducationPlanInDirectionSelectorByName extends React.PureComponent<Educati
 
     componentDidMount() {
         this.props.actions.getEducationalPlansInDirection();
+
+        if (this.props.label) {
+            this.setState({
+                label: this.props.label
+            })
+        }
     }
 
     handleChangeSearch = (searchText: string) => {

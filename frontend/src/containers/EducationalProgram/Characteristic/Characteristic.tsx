@@ -36,10 +36,12 @@ import {IndicatorsFields} from "../../Indicators/enum";
 import {UserFields} from "../../../layout/enum";
 import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
 import {ProfessionalCompetences} from "./ProfessionalCompetences/ProfessionalCompetences";
-import CompetenceMatrix from "./CompetenceMatrix";
+import ForsitesProfessionalCompetences from "./ForsitesProfessionalCompetences";
+import MinorProfessionalCompetences from "./MinorProfessionalCompetences";
 import AreaOfActivity from "./AreaOfActivity";
 import KindsOfActivity from "./KindsOfActivity";
 import InputLabel from '@material-ui/core/InputLabel'
+import {getEducationalProgramFullNameForSelect} from "../../EduationPlanInDirection/getters";
 
 class Characteristic extends React.Component<CharacteristicProps> {
     state = {
@@ -72,6 +74,24 @@ class Characteristic extends React.Component<CharacteristicProps> {
         })
     }
 
+    handleChangePlan = (value: string) => {
+        this.props.actions.changeEducationalProgram({
+            id: this.getEducationalProgramId(),
+            payload: {
+                [EducationProgramFields.EDUCATIONAL_PROGRAM]: [value]
+            }
+        })
+    }
+
+    handleChangeHead = (value: string) => {
+        this.props.actions.changeEducationalProgram({
+            id: this.getEducationalProgramId(),
+            payload: {
+                [EducationProgramFields.EP_SUPERVISOR]: value
+            }
+        })
+    }
+
     handleChangeSKEEditorField = (field: string) => (event: any) => {
         const data: string = event.editor.getData()
         this.props.actions.changeEducationalProgramCharacteristic({
@@ -83,7 +103,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
         })
     }
 
-    getEducationalProgramId = () => get(this.props.educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.ID], '');
+    getEducationalProgramId = () => get(this.props.educationalProgramCharacteristic, EducationProgramFields.ID, '');
 
     getEducationalProgramCharacteristicId = () => get(this.props.educationalProgramCharacteristic, EducationProgramCharacteristicFields.ID, '');
 
@@ -197,30 +217,36 @@ class Characteristic extends React.Component<CharacteristicProps> {
     renderContent = () => {
         const {educationalProgramCharacteristic, classes} = this.props;
         const {activeStep} = this.state;
+        const educationalProgramId = get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, '0', 'id'], '')
 
+        if (!educationalProgramId) return
         switch (activeStep){
             case 0:
                 return <>
-                    <EducationPlanInDirectionSelector value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.ACADEMIC_PLAN_FOR_EP, 'id'], '')}
-                                                      handleChange={() => {}} />
+                    <EducationPlanInDirectionSelector
+                      value={educationalProgramId}
+                      label={getEducationalProgramFullNameForSelect(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, '0'], {}))}
+                      handleChange={this.handleChangePlan}
+                    />
                     <UserSelector selectorLabel="Руководитель"
                                   value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.MANAGER, 'id'], '').toString()}
-                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.MANAGER], ''))}
+                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.EP_SUPERVISOR], ''))}
+                                  handleChange={this.handleChangeHead}
                     />
-                    <DatePickerComponent label="Год *"
-                                         views={["year"]}
-                                         value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.YEAR], '').toString()}
-                                         onChange={this.handleChangeEducationProgramYear}
-                                         format={YEAR_DATE_FORMAT}
-                    />
-                    <QualificationSelector onChange={this.handleChangeQualification}
-                                           value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.QUALIFICATION], '')}
-                    />
+                    {/*<DatePickerComponent label="Год *"*/}
+                    {/*                     views={["year"]}*/}
+                    {/*                     value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.YEAR], '').toString()}*/}
+                    {/*                     onChange={this.handleChangeEducationProgramYear}*/}
+                    {/*                     format={YEAR_DATE_FORMAT}*/}
+                    {/*/>*/}
+                    {/*<QualificationSelector onChange={this.handleChangeQualification}*/}
+                    {/*                       value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.QUALIFICATION], '')}*/}
+                    {/*/>*/}
                 </>
             case 1:
                 return <div className={classes.editorWrap}>
                             <InputLabel className={classes.label}>Аннотация</InputLabel>
-                            <CKEditor
+                            <CKEditor 
                                 value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
                                 onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
                                 toolbarContainerId="toolbar-container"
@@ -231,19 +257,31 @@ class Characteristic extends React.Component<CharacteristicProps> {
             case 3:
                 return <KindsOfActivity characteristic={educationalProgramCharacteristic} />
             case 4:
-                return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PROFESSIONAL_COMPETENCES, [])} />;
+                return <CompetenceTable
+                  tableData={get(educationalProgramCharacteristic, 'group_of_key_competences', [])}
+                  competenceTableType={CompetenceTableType.KEY_COMPETENCES}
+                /> ;
             case 5:
-                return <CompetenceMatrix />;
+                return <CompetenceTable
+                  tableData={get(educationalProgramCharacteristic, 'group_of_over_prof_competences', [])}
+                  competenceTableType={CompetenceTableType.SUPRA_PROFESSIONAL_COMPETENCES}
+                />;
             case 6:
+                return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_prof', [])} />;
+            case 7:
+                return <ForsitesProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_foresight', [])} />;
+            case 8:
+                return <MinorProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_minor', [])} />;
+            case 9:
                 return <div className={classes.editorWrap}>
                         <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
-                        <CKEditor
+                        <CKEditor 
                             value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PPS, '')}
                             onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.PPS)}
                             toolbarContainerId="toolbar-container"
                         />
                 </div>
-            case 7:
+            case 10:
                 return <>
                     <UserSelector selectorLabel='Разработчики'
                                   value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEVELOPERS, 0, UserFields.ID], '')}

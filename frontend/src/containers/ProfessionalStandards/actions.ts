@@ -24,7 +24,12 @@ const createProfessionalStandardAdditionalFields = createAction('CREATE_PROFESSI
 const updateProfessionalStandardAdditionalFields = createAction('UPDATE_PROFESSIONAL_STANDARD_ADDITIONAL_FIELDS');
 const deleteProfessionalStandardAdditionalFields = createAction('DELETE_PROFESSIONAL_STANDARD_ADDITIONAL_FIELDS');
 
+const getLaborFunctions = createAction('GET_LABOR_FUNCTIONS');
+const setLaborFunctions = createAction('SET_LABOR_FUNCTIONS');
+
 const actions: ProfessionalStandardsActions = {
+    getLaborFunctions,
+    setLaborFunctions,
     getProfessionalStandards,
     setProfessionalStandards,
     createNewProfessionalStandard,

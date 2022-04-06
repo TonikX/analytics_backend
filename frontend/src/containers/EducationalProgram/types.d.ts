@@ -16,6 +16,8 @@ import {characterisicStyles} from './Сharacteristic/Сharacteristic.styles';
 import styles from "./WorkProgram.styles";
 
 export interface EducationalProgramActions {
+    characteristicSaveProfessionalStandardLaborFunction: any;
+    characteristicDeleteProfessionalStandardLaborFunction: any;
     changeSearchQuery: any;
     getEducationalProgramCharacteristic: any;
     setEducationalProgramCharacteristic: any;
@@ -30,6 +32,13 @@ export interface EducationalProgramActions {
     deleteEducationalProgram: any;
     changeEducationalProgram: any;
     setEducationalProgramList: any;
+    createKindOfActivity: any;
+    getKindsOfActivity: any;
+    setKindsOfActivity: any;
+    characteristicSaveKindOfActivity: any;
+    characteristicDeleteKindOfActivity: any;
+
+    characteristicSaveCompetenceKindsOfActivity: any;
 
     getCompetenceMatrix: any;
     setCompetenceMatrix: any;
@@ -56,6 +65,7 @@ export interface educationalProgramState {
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
+    [fields.KINDS_OF_ACTIVITIES]: Array<{ id: number; name: string; }>;
     [fields.EDUCATION_PROGRAM_LIST]: Array<EducationalProgramType>;
     [fields.EDUCATION_PROGRAM_CHARACTERISTIC]: EducationalProgramCharacteristicType|{};
     [fields.EDUCATION_PROGRAM_DIALOG]: {
@@ -100,6 +110,7 @@ export interface CharacteristicProps extends WithStyles<typeof characterisicStyl
 export type CharacteristicCreateGroupActionType = {
     name: string;
     type: CompetenceTableType;
+    subType: 'prof' | 'fore' | 'min';
 }
 
 export type CharacteristicSaveGroupTitleActionType = {

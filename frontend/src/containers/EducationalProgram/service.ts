@@ -16,7 +16,7 @@ class Service extends AnalyticsService{
     getEducationalProgramList(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
-        return this.get(`/api/EducationalProgram?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+        return this.get(`/api/general_characteristic?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
     deleteEducationProgram(id: number){
@@ -41,7 +41,7 @@ class Service extends AnalyticsService{
     }
 
     updateEducationProgram(id: any, payload: any){
-        return this.patch(`/api/EducationalProgram/update/${id}`, payload);
+        return this.patch(`/api/general_characteristic/update/${id}`, payload);
     }
 
     updateEducationProgramCharacteristic(id: any, payload: any){
@@ -61,10 +61,11 @@ class Service extends AnalyticsService{
         }
     }
 
-    characteristicCreateGroup({name, type}: CharacteristicCreateGroupActionType, characteristicId: number){
+    characteristicCreateGroup({name, type, subType}: CharacteristicCreateGroupActionType, characteristicId: number ){
         return this.post(`/api/general_ch/${this.getCompetenceTableUrl(type)}/`, {
             name,
-            general_characteristic: characteristicId
+            general_characteristic: characteristicId,
+            type_of_pk_competence: subType,
         });
     }
 
@@ -91,6 +92,11 @@ class Service extends AnalyticsService{
             labor_functions: laborFunction
         });
     }
+    characteristicSaveCompetenceKindOfActivity({competenceId, type, kindOfActivity}: any){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            kinds_of_activity_for_miner: kindOfActivity
+        });
+    }
 
     characteristicSaveProfessionalStandard({competenceId, type, professionalStandardId}: CharacteristicAddProfessionalStandardActionType){
         return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
@@ -98,9 +104,33 @@ class Service extends AnalyticsService{
         });
     }
 
+    characteristicSaveProfessionalStandardLaborFunction({competenceId, type, laborFunction}: any){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            generalized_labor_functions: laborFunction
+        });
+    }
+
+    characteristicDeleteProfessionalStandardLaborFunction({competenceId, type, laborFunction}: any){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            generalized_labor_functions: null
+        });
+    }
+
+    characteristicSaveKindOfActivity({competenceId, type, kindOfActivity}: any){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            kinds_of_activity: kindOfActivity
+        });
+    }
+
     characteristicDeleteProfessionalStandard({competenceId, type}: CharacteristicDeleteProfessionalStandardActionType){
         return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
             professional_standard: null
+        });
+    }
+
+    characteristicDeleteKindOfActivity({competenceId, type}: CharacteristicDeleteProfessionalStandardActionType){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            kinds_of_activity: null
         });
     }
 
@@ -115,6 +145,16 @@ class Service extends AnalyticsService{
         return this.post(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/indicator/`, {
             "competence_in_group_of_pk": competenceId,
             "indicator": indicatorId
+        });
+    }
+
+    getKindsOfActivity(name: string){
+        return this.get(`/api/generalcharacteristic/kindsofactivity?search=${name}`);
+    }
+
+    createKindOfActivity(name: string){
+        return this.post(`/api/generalcharacteristic/kindsofactivity/`, {
+            name,
         });
     }
 

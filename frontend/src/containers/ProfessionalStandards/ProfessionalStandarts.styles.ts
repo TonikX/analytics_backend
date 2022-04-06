@@ -33,8 +33,11 @@ export default (theme: Theme) => createStyles({
         minHeight: '50px'
     },
     titleCell: {
+        width: '20%',
+    },
+    profCell: {
         minWidth: 200,
-        width: 600,
+        width: '25%',
     },
     pointerCell: {
         cursor: 'pointer',
@@ -45,7 +48,7 @@ export default (theme: Theme) => createStyles({
         flex: 'none'
     },
     codeCell: {
-        width: 400,
+        width: '20%',
     },
     actions: {
         display: 'flex',

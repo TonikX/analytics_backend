@@ -43,7 +43,7 @@ export default (theme: Theme) => createStyles({
         color: '#1d51a3'
     },
     cell: {
-        width: '45%',
+        width: '40%',
         flex: 'none'
     },
     actions: {

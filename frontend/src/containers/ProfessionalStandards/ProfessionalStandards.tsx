@@ -18,6 +18,7 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import EyeIcon from '@material-ui/icons/VisibilityOutlined';
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -139,7 +140,7 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
                                            mode={sortingField === ProfessionalStandardFields.CODE ? sortingMode : ''}
                             />
                         </Typography>
-                        <Typography className={classes.marginRight}>
+                        <Typography className={classes.profCell}>
                             Профессиональный стандарт
                             <SortingButton changeMode={this.changeSorting(ProfessionalStandardFields.NAME)}
                                            mode={sortingField === ProfessionalStandardFields.NAME ? sortingMode : ''}
@@ -163,13 +164,20 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
                                     <Typography className={classNames(classes.marginRight, classes.codeCell)}>
                                         {professionalStandard[ProfessionalStandardFields.CODE]}
                                     </Typography>
-                                    <Typography className={classes.marginRight}>
+                                    <Typography className={classes.profCell}>
                                         {professionalStandard[ProfessionalStandardFields.NAME]}
                                     </Typography>
                                     <div className={classes.actions}>
+                                        <IconButton>
+                                            <Link style={{textDecoration: 'none', height: '23px', color: 'rgba(0, 0, 0, 0.54)'}}
+                                                  to={appRouter.getProfessionalStandardRoute(professionalStandard[ProfessionalStandardFields.ID])}
+                                            >
+                                                <EyeIcon />
+                                            </Link>
+                                        </IconButton>
                                         <IconButton
                                             onClick={this.handleClickDelete(professionalStandard[ProfessionalStandardFields.ID])}>
-                                            <DeleteIcon/>
+                                            <DeleteIcon />
                                         </IconButton>
                                         <IconButton onClick={this.handleClickEdit(professionalStandard)}>
                                             <EditIcon/>

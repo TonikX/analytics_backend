@@ -5,6 +5,8 @@ import {ProfessionalStandardFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
 
 export interface ProfessionalStandardsActions {
+    setLaborFunctions: any;
+    getLaborFunctions: any;
     changeSearchQuery: any;
     getProfessionalStandards: any;
     setProfessionalStandards: any;
@@ -37,6 +39,7 @@ export interface professionalStandardsState {
         [fields.DIALOG_DATA]: ProfessionalStandardsType|{};
     };
     [fields.PROFESSIONAL_STANDARD]: any;
+    [fields.LABOR_FUNCTIONS]: Array<any>;
 
 }
 
