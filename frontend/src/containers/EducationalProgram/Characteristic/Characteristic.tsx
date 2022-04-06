@@ -40,6 +40,7 @@ import ForsitesProfessionalCompetences from "./ForsitesProfessionalCompetences";
 import MinorProfessionalCompetences from "./MinorProfessionalCompetences";
 import AreaOfActivity from "./AreaOfActivity";
 import KindsOfActivity from "./KindsOfActivity";
+import CompetenceMatrix from "./CompetenceMatrix";
 import InputLabel from '@material-ui/core/InputLabel'
 import {getEducationalProgramFullNameForSelect} from "../../EduationPlanInDirection/getters";
 
@@ -246,7 +247,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             case 1:
                 return <div className={classes.editorWrap}>
                             <InputLabel className={classes.label}>Аннотация</InputLabel>
-                            <CKEditor 
+                            <CKEditor
                                 value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
                                 onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
                                 toolbarContainerId="toolbar-container"
@@ -275,7 +276,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             case 9:
                 return <div className={classes.editorWrap}>
                         <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
-                        <CKEditor 
+                        <CKEditor
                             value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PPS, '')}
                             onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.PPS)}
                             toolbarContainerId="toolbar-container"
@@ -304,6 +305,8 @@ class Characteristic extends React.Component<CharacteristicProps> {
                                   handleChange={()=>{}}
                     />
                 </>
+            case 11:
+                return <CompetenceMatrix/>
         }
     }
 

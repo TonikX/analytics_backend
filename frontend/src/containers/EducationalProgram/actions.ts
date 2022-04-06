@@ -23,6 +23,11 @@ const changeEducationalProgram = createAction('CHANGE_EDUCATIONAL_PROGRAM');
 const getEducationalProgramCharacteristic = createAction('GET_EDUCATIONAL_PROGRAM_CHARACTERISTIC');
 const setEducationalProgramCharacteristic = createAction('SET_EDUCATIONAL_PROGRAM_CHARACTERISTIC');
 
+const getCompetenceMatrix = createAction('GET_COMPETENCE_MATRIX');
+const setCompetenceMatrix = createAction('SET_COMPETENCE_MATRIX');
+
+const saveZun = createAction('SAVE_ZUN');
+
 const characteristicCreateGroup = createAction<CharacteristicCreateGroupActionType>('CHARACTERISTIC_COMPETENCIES_CREATE_GROUP');
 const characteristicSaveGroupTitle = createAction<CharacteristicSaveGroupTitleActionType>('CHARACTERISTIC_COMPETENCIES_SAVE_GROUP_TITLE');
 
@@ -84,6 +89,11 @@ const actions: EducationalProgramActions = {
     characteristicSaveIndicator,
     characteristicDeleteIndicator,
     characteristicDeleteGroup,
+
+    getCompetenceMatrix,
+    setCompetenceMatrix,
+
+    saveZun,
 
     getEducationalProgramList,
     setEducationalProgramList,
