@@ -204,7 +204,7 @@ export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({ta
                     </TableCell>
                     <TableCell className={classes.standardCell}>
 
-                      <EditableText value={get(competenceItem, 'labor_functions') || 'трудовая функция'}
+                      <EditableText value={get(competenceItem, 'kinds_of_activity_for_miner') || 'трудовая функция'}
                                     isEditMode={editCompetenceLaborFunctionData.isEdit
                                       && editCompetenceLaborFunctionData.competenceId === competenceItem.id
                                     }

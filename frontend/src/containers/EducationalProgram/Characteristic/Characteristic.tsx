@@ -311,7 +311,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, educationalProgramCharacteristic} = this.props;
         const {activeStep} = this.state;
 
         return (
@@ -336,7 +336,11 @@ class Characteristic extends React.Component<CharacteristicProps> {
                 </Stepper>
                 <div className={classes.content}>
                     <Typography className={classes.title}>
-                        <div>Характеристика образовательной программы <span style={{fontWeight: 500}}>"Название"</span></div>
+                        <div>Характеристика образовательной программы
+                            <span style={{fontWeight: 500}}>
+                            &nbsp;"{get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, '0', 'title'])}"
+                            </span>
+                        </div>
                     </Typography>
 
                     {this.renderContent()}
