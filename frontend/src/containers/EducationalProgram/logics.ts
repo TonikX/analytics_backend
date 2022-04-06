@@ -124,6 +124,50 @@ const changeEducationalProgram = createLogic({
     }
 });
 
+const getCompetenceMatrix = createLogic({
+    type: educationalPlanActions.getCompetenceMatrix.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COMPETENCE_MATRIX}));
+
+        service.getCompetenceMatrix(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.setCompetenceMatrix(res.data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_COMPETENCE_MATRIX}));
+                return done();
+            });
+    }
+});
+
+const saveZun = createLogic({
+    type: educationalPlanActions.saveZun.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
+
+        const competenceMatrixId = getEducationalProgramCharacteristicId(getState());
+
+        service.saveZUN(action.payload)
+            .then(() => {
+                dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SAVE_ZUN}));
+                return done();
+            });
+    }
+});
+
 const getEducationalProgramCharacteristicLogic = createLogic({
     type: educationalPlanActions.getEducationalProgramCharacteristic.type,
     latest: true,
@@ -604,4 +648,7 @@ export default [
 
     createKindOfActivity,
     getKindsOfActivity,
+
+    getCompetenceMatrix,
+    saveZun,
 ];

@@ -157,6 +157,20 @@ class Service extends AnalyticsService{
             name,
         });
     }
+
+    getCompetenceMatrix(id: number) {
+        return this.get(`/api/general_characteristic/competence_matrix/${id}`);
+    }
+
+    saveZUN({indicator, plans, results}: any){
+        return this.post(`/api/zun/many_create/`,{
+            wpa_in_fss: plans,
+            zun: {
+                indicator_in_zun: indicator,
+                items: results
+            }
+        });
+    }
 }
 
 export default Service;

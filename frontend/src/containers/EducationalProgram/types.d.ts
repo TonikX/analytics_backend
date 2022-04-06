@@ -40,6 +40,11 @@ export interface EducationalProgramActions {
 
     characteristicSaveCompetenceKindsOfActivity: any;
 
+    getCompetenceMatrix: any;
+    setCompetenceMatrix: any;
+
+    saveZun: any;
+
     characteristicCreateGroup: ActionCreatorWithPayload<CharacteristicCreateGroupActionType>;
     characteristicSaveGroupTitle: ActionCreatorWithPayload<CharacteristicSaveGroupTitleActionType>;
     characteristicSaveCompetence: ActionCreatorWithPayload<CharacteristicAddCompetenceActionType>;
@@ -67,6 +72,7 @@ export interface educationalProgramState {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: EducationalProgramType|{};
     };
+    [fields.COMPETENCE_MATRIX]: any;
 }
 
 export type EducationalProgramCharacteristicType = {
