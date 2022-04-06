@@ -1,15 +1,45 @@
+import {EducationalPlanType} from "../../../EducationalPlan/types";
+import {DirectionType} from "../../../Direction/types";
+
+type AttachIndicatorProps = {
+    workProgramId: number;
+    competence?: {
+        value: number;
+        label: string;
+    };
+};
+
+type TableContentProps = {
+    attachIndicator: (props: AttachIndicatorProps) => void;
+    keyCompetences: Competence[];
+    generalProfCompetences: Competence[];
+    profCompetences: Competence[];
+    overProfCompetences: Competence[];
+};
+
+type CompetencesHeaderProps = {
+    competences: Competence[];
+}
+
+type ContentByAcademicPlanProps = {
+    academicPlan: AcademicPlan;
+} & TableContentProps;
+
 interface Discipline {
     name: string;
     modules_in_discipline_block: DisciplineModule[]
 }
 
 interface CompetenceMatrix {
+    educational_program: EducationalProgram[];
     wp_matrix: AcademicPlan[];
-    pk_competences: Array;
+    pk_competences: ProfCompetence[];
     key_competences: KeyCompetence[];
-    general_prof_competences: ProfCompetence[];
-    over_prof_competences: Array;
+    general_prof_competences: GeneralProfCompetence[];
+    over_prof_competences: OverProfCompetence[];
 }
+
+type CommonCompetence = KeyCompetence | GeneralProfCompetence | OverProfCompetence | ProfCompetence;
 
 enum DISCIPLINE_MODULE_TYPE {
     universal_module = 'universal_module',
@@ -52,8 +82,17 @@ interface DisciplineModule {
     change_blocks_of_work_programs_in_modules: WorkProgramChangeInDisciplineBlockModule[]
 }
 
+interface EducationalProgram {
+    id: number;
+    academic_plan: EducationalPlanType;
+    year: number;
+    qualification: string;
+    title: string;
+    field_of_study: Array<DirectionType>;
+}
+
 interface Competences {
-    competences: any[]
+    competences: Competence[]
 }
 
 interface ModuleWorkProgram {
@@ -73,19 +112,31 @@ interface AcademicPlan {
     discipline_blocks_in_academic_plan: Discipline[]
 }
 
-interface CompetenceInGroupOfKeyCompetences {
+interface ProfCompetence {
+    id: number;
+    indicator_of_competence_in_group_of_prof_competences: Array;
+    competence: Competence;
+}
+
+interface KeyCompetence {
     id: number;
     indicator_of_competence_in_group_of_key_competences: Array;
     competence: Competence;
 }
 
-interface CompetenceInGroupOfGeneralProfCompetences {
+interface OverProfCompetence {
+    id: number;
+    indicator_of_competence_in_group_of_over_prof_competences: Array;
+    competence: Competence;
+}
+
+interface GeneralProfCompetence {
     id: number;
     indicator_of_competence_in_group_of_general_prof_competences: Array;
     competence: Competence;
 }
 
-interface CompetenceInGroupOfOverProfCompetences {
+interface OverProfCompetence {
     id: number;
     indicator_of_competence_in_group_of_over_prof_competences: Array;
     competence: Competence;
@@ -95,22 +146,19 @@ interface Competence {
     id: number;
     number: string;
     name: string;
+    zuns: Zun[]
 }
 
-interface KeyCompetence {
-    id: null;
-    name: string;
-    competence_in_group_of_key_competences: CompetenceInGroupOfKeyCompetences[]
-}
-
-interface ProfCompetence {
-    id: null;
-    name: string;
-    competence_in_group_of_general_prof_competences: CompetenceInGroupOfGeneralProfCompetences[]
-}
-
-interface OverProfCompetence {
-    id: null;
-    name: string;
-    competence_in_group_of_over_prof_competences: CompetenceInGroupOfOverProfCompetences[]
+interface Zun {
+    id: number;
+    knowledge: string;
+    skills: string;
+    attainments: string;
+    indicator: {
+        id: number;
+        number: string;
+        name: string;
+        competence: number;
+    };
+    wp_in_fs: number;
 }

@@ -145,6 +145,29 @@ const getCompetenceMatrix = createLogic({
     }
 });
 
+const saveZun = createLogic({
+    type: educationalPlanActions.saveZun.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
+
+        const competenceMatrixId = getEducationalProgramCharacteristicId(getState());
+
+        service.saveZUN(action.payload)
+            .then(() => {
+                dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SAVE_ZUN}));
+                return done();
+            });
+    }
+});
+
 const getEducationalProgramCharacteristic = createLogic({
     type: educationalPlanActions.getEducationalProgramCharacteristic.type,
     latest: true,
@@ -446,4 +469,5 @@ export default [
     characteristicDeleteProfessionalStandard,
 
     getCompetenceMatrix,
+    saveZun,
 ];

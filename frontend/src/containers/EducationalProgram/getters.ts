@@ -7,6 +7,7 @@ import {GENERAL_PATH} from "./reducer";
 import {fields} from './enum';
 
 import {educationalProgramState, EducationalProgramCharacteristicType, EducationalProgramType} from './types';
+import {AcademicPlan, CompetenceMatrix} from './Characteristic/CompetenceMatrix/types';
 
 const getStateData = (state: rootState): educationalProgramState => get(state, GENERAL_PATH);
 export const getEducationalProgramCharacteristic = (state: rootState): EducationalProgramCharacteristicType|{} => get(getStateData(state), fields.EDUCATION_PROGRAM_CHARACTERISTIC, {});
@@ -19,6 +20,7 @@ export const getSupraProfessionalCompetencies = (state: rootState): EducationalP
 export const getEducationalProgramList = (state: rootState): Array<EducationalProgramType> => get(getStateData(state), fields.EDUCATION_PROGRAM_LIST, []);
 
 export const getCompetenceMatrix = (state: rootState): CompetenceMatrix => get(getStateData(state), fields.COMPETENCE_MATRIX, {});
+export const getMatrixAcademicPlans = (state: rootState): AcademicPlan[] => get(getCompetenceMatrix(state), 'wp_matrix', []);
 // export const getEducationalProgramCharacteristicForSelector = (state: rootState): SelectorListType =>
 //     getEducationalProgramCharacteristic(state).map((indicator: EducationalProgramCharacteristicType) => ({
 //         value: indicator[EducationPlanInDirectionFields.ID],

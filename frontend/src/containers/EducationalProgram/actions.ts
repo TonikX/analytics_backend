@@ -51,6 +51,8 @@ const changeCurrentPage = createAction('EDUCATIONAL_PROGRAM_LIST_CURRENT_PAGE');
 const changeAllCount = createAction('EDUCATIONAL_PROGRAM_LIST_CHANGE_ALL_COUNT');
 const changeSorting = createAction('EDUCATIONAL_PROGRAM_LIST_CHANGE_SORTING');
 
+const saveZun = createAction('SAVE_ZUN');
+
 
 const actions: EducationalProgramActions = {
     characteristicSaveProfessionalStandard,
@@ -83,6 +85,7 @@ const actions: EducationalProgramActions = {
     changeCurrentPage,
     changeAllCount,
     changeSorting,
+    saveZun,
 }
 
 export default actions;
