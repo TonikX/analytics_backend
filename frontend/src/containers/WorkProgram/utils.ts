@@ -14,6 +14,7 @@ import {
     MASTER_QUALIFICATION,
     specializationObject
 } from "./constants";
+import {parseInt} from "lodash";
 
 
 export const getEvaluationToolsMaxSum = (evaluationTools: Array<EvaluationToolType>) => {
@@ -87,6 +88,8 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
     const isBarsOn = getWorkProgramField(state, WorkProgramGeneralFields.BARS);
     const prerequisites = getWorkProgramField(state, fields.WORK_PROGRAM_PREREQUISITES);
     const references = getWorkProgramField(state, fields.WORK_PROGRAM_BIBLIOGRAPHIC_REFERENCE);
+    const results = getWorkProgramField(state, fields.WORK_PROGRAM_RESULTS);
+
 
     if (educationalPlans.length === 0){
         errors.push('PLAN_ERROR');
@@ -151,6 +154,21 @@ export const getValidateProgramErrors = (state: rootState): Array<string> => {
         const planQualifications = getPlanQualifications(state).filter((p: string) => p !== ALL_LEVELS_QUALIFICATION);
         if (planQualifications.some((q: string) => q !== qualification)) {
             errors.push('Уровень образовательной программы должен соответствовать уровню каждого из учебных планов')
+        }
+    }
+
+    if (!results || !results.length) {
+        errors.push('Должен быть хотя бы один результат обучения');
+    }
+
+    for (const result of results) {
+        for (const prerequisite of prerequisites) {
+            const resLevel = parseInt(result.masterylevel);
+            const preLevel = parseInt(prerequisite.masterylevel);
+            if (result.item.id == prerequisite.item.id && resLevel <= preLevel) {
+                const resultName = result.item.name;
+                errors.push(`Уровень освоения "${resultName}" в результате обучения должен повыситься`);
+            }
         }
     }
 
