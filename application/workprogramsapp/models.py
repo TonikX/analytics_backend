@@ -453,6 +453,20 @@ class KindsOfActivity(models.Model):
         verbose_name_plural = '1.1 Сферы деятельности в проф стандарте'
 
 
+class ObjectsOfActivity(models.Model):
+    """
+    Объекты проф. деятельности
+    """
+    name = models.CharField(max_length=1024, verbose_name='имя объекта проф. деятельности', blank=True, null=True)
+
+    def __str__(self):
+        return str(self.name)
+
+    class Meta:
+        verbose_name = '2.2 Объекты проф. деятельности выпускников'
+        verbose_name_plural = '2.2 Объекты проф. деятельности выпускников'
+
+
 class EmployerRepresentative(models.Model):
     organization_name = models.CharField(max_length=512, verbose_name="Наименование организации", blank=True,
                                          null=True)
@@ -486,7 +500,7 @@ class GeneralCharacteristics(models.Model):
 
     educational_program = models.ManyToManyField('ImplementationAcademicPlan', verbose_name = 'Образовательная программа', related_name="general_characteristics_in_educational_program", blank = True, null = True)
     area_of_activity = models.ManyToManyField('ProfessionalStandard', verbose_name = 'Проф. Стандарт/Область профессиональной деятельности', blank=True, null=True )
-    objects_of_activity = models.CharField(max_length=4096, verbose_name="Объекты профессиональной деятельности", blank=True, null=True)
+    objects_of_activity = models.ManyToManyField(ObjectsOfActivity, verbose_name="Объекты проф. деятельности выпускников", blank=True, null=True)
     kinds_of_activity = models.ManyToManyField(KindsOfActivity, verbose_name="Сферы профессиональной деятельности, к которому (которым) готовятся выпускники", blank=True, null=True)
     tasks_of_activity = models.ForeignKey(TasksForEducationalStandard, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Тип (типы) профессиональных задач, к решению которых готовятся выпускники")
     # ok_competences = models.ManyToManyField('Competence', verbose_name="ОБЩЕКУЛЬТУРНЫЕ КОМПЕТЕНЦИИ", related_name="ok_competences_in_gh", blank=True)

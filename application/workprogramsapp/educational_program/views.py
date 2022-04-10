@@ -16,7 +16,7 @@ from workprogramsapp.educational_program.serializers import EducationalCreatePro
     EducationalProgramSerializer, \
     GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
     GeneralLaborFunctionsSerializer, KindsOfActivitySerializer, EmployerSerializer, \
-    WorkProgramCompetenceIndicatorSerializer
+    WorkProgramCompetenceIndicatorSerializer, ObjectsOfActivitySerializer
 from .competence_handler import competence_dict_generator
 from .general_prof_competencies.models import IndicatorInGeneralProfCompetenceInGeneralCharacteristic, \
     GeneralProfCompetencesInGroupOfGeneralCharacteristic, GroupOfGeneralProfCompetencesInEducationalStandard
@@ -43,7 +43,7 @@ from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
     ImplementationAcademicPlan, Competence, Indicator, WorkProgramInFieldOfStudy, Zun, GeneralizedLaborFunctions, \
     KindsOfActivity, EmployerRepresentative, DisciplineBlockModule, DisciplineBlock, \
-    WorkProgramChangeInDisciplineBlockModule
+    WorkProgramChangeInDisciplineBlockModule, ObjectsOfActivity
 from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
@@ -196,6 +196,16 @@ class KindsOfActivitySet(viewsets.ModelViewSet):
     """
     queryset = KindsOfActivity.objects.all()
     serializer_class = KindsOfActivitySerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class ObjectsOfActivitySet(viewsets.ModelViewSet):
+    """
+    CRUD для сфер деятельности
+    """
+    queryset = ObjectsOfActivity.objects.all()
+    serializer_class = ObjectsOfActivitySerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
