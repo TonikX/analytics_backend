@@ -1,5 +1,10 @@
 import {rootState} from "../../store/reducers";
-import {getPlanQualifications, getWorkProgramEvaluationToolsList, getWorkProgramField} from "./getters";
+import {
+    getPlanQualifications,
+    getWorkProgramEvaluationToolsList,
+    getWorkProgramField,
+    getWorkProgramIntermediateCertificationList
+} from "./getters";
 import {fields, WorkProgramGeneralFields, workProgramSectionFields} from "./enum";
 import {SectionType} from "./types";
 import {getAllHours, getHoursArray} from "./utils";
@@ -21,6 +26,7 @@ export const getValidationErrors = (state: rootState): string[] => {
         addPrerequisitesErrors,
         addResultsErrors,
         addReferencesErrors,
+        addIntermediateCertificationErrors,
     ]
 
     const errors: string[] = [];
@@ -226,3 +232,26 @@ const addReferencesErrors = (state: rootState, errors: string[]) => {
     }
 }
 
+const addIntermediateCertificationErrors = (state: rootState, errors: string[]) => {
+    const certificationTools = getWorkProgramIntermediateCertificationList(state) as Array<any>;
+    const evaluationTools = getWorkProgramEvaluationToolsList(state) as Array<any>;
+    const isBarsOn = getWorkProgramField(state, WorkProgramGeneralFields.BARS);
+
+    if (certificationTools.some((tool: any) => tool.description.length < 300)) {
+        errors.push('Оценочные средства промежуточной аттестации должны иметь описание не короче 300 знаков');
+    }
+
+    if (isBarsOn) {
+        const evalSum = getToolsMaxSum(evaluationTools);
+        const certSum = getToolsMaxSum(certificationTools);
+        if (evalSum + certSum !== 100) {
+            errors.push(`Сумма баллов по разделам 6 и 7 должна быть 100, сейчас ${evalSum + certSum}`);
+        }
+    }
+}
+
+const getToolsMaxSum = (tools: Array<any>) => {
+    return tools.map(t => t.max)
+        .map(parseInt)
+        .reduce((sum, current) => sum + current, 0);
+}
