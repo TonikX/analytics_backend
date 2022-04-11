@@ -102,7 +102,6 @@ const addEvaluationToolsErrors = (state: rootState, errors: string[]) => {
     if (sections.some((s: any) => s.evaluation_tools.length === 0)) {
         errors.push('У каждого раздела должно быть оценочное средство');
     }
-    console.log(isBarsOn);
     if (isBarsOn) {
         addEvaluationToolsErrorsWithBars(state, errors);
     } else {
@@ -113,7 +112,6 @@ const addEvaluationToolsErrors = (state: rootState, errors: string[]) => {
 
 const addEvaluationToolsErrorsWithoutBars = (state: rootState, errors: string[]) => {
     const evaluationToolsList = getWorkProgramEvaluationToolsList(state);
-    console.log(evaluationToolsList);
     if (evaluationToolsList.some((tool: any) => tool.description.length < 300)) {
         errors.push('Описание каждого из оценочных средств должно быть не короче 300 знаков');
     }
