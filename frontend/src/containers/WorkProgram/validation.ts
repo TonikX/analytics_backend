@@ -11,12 +11,12 @@ export const getValidationErrors = (state: rootState): string[] => {
 
     const rules = [
         addPlanError,
+        addAuthorsErrors,
+        addDescriptionErrors,
         addSectionErrors,
         addTopicsErrors,
         addTotalHoursErrors,
         addEvaluationToolsErrors,
-        addAuthorsErrors,
-        addDescriptionErrors,
         addQualificationErrors,
         addPrerequisitesErrors,
         addResultsErrors,
@@ -85,10 +85,44 @@ const addTotalHoursErrors = (state: rootState, errors: string[]) => {
 }
 
 const addEvaluationToolsErrors = (state: rootState, errors: string[]) => {
+    const sections = getWorkProgramField(state, fields.WORK_PROGRAM_SECTIONS);
     const evaluationToolsList = getWorkProgramEvaluationToolsList(state);
+    const isBarsOn = getWorkProgramField(state, WorkProgramGeneralFields.BARS);
 
     if (!evaluationToolsList.length){
         errors.push('В РПД отсутствуют оценочные средства');
+    }
+
+    if (sections.some((s: any) => s.evaluation_tools.length === 0)) {
+        errors.push('У каждого раздела должно быть оценочное средство');
+    }
+    console.log(isBarsOn);
+    if (isBarsOn) {
+        addEvaluationToolsErrorsWithBars(state, errors);
+    } else {
+        addEvaluationToolsErrorsWithoutBars(state, errors);
+    }
+
+}
+
+const addEvaluationToolsErrorsWithoutBars = (state: rootState, errors: string[]) => {
+    const evaluationToolsList = getWorkProgramEvaluationToolsList(state);
+    console.log(evaluationToolsList);
+    if (evaluationToolsList.some((tool: any) => tool.description.length < 300)) {
+        errors.push('Описание каждого из оценочных средств должно быть не короче 300 знаков');
+    }
+}
+
+const addEvaluationToolsErrorsWithBars = (state: rootState, errors: string[]) => {
+    const evaluationToolsList = getWorkProgramEvaluationToolsList(state) as Array<any>;
+    if (evaluationToolsList.length < 2) {
+        errors.push(`Дисциплина реализуется в БаРС, необходимо хотя бы два оценочных средства (сейчас ${evaluationToolsList.length})`);
+    }
+    const maxSum = evaluationToolsList.map(t => t.max)
+        .map(parseInt)
+        .reduce((sum, current) => sum + current, 0); // no sum function on number[] ??
+    if (maxSum < 60 || maxSum > 80) {
+        errors.push(`Сумма баллов по оценочным средствам должна быть между 60 и 80, сейчас ${maxSum}`);
     }
 }
 
