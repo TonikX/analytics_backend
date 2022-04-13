@@ -152,8 +152,12 @@ class Service extends AnalyticsService{
         return this.get(`/api/generalcharacteristic/kindsofactivity?search=${name}`);
     }
 
-    geObjectsOfActivity(name: string){
+    getObjectsOfActivity(name: string){
         return this.get(`/api/generalcharacteristic/objectsofactivity?search=${name}`);
+    }
+
+    getTaskTypes(name: string){
+        return this.get(`/api/generalcharacteristic/tasktypes?search=${name}`);
     }
 
     createKindOfActivity(name: string){
@@ -164,6 +168,12 @@ class Service extends AnalyticsService{
 
     createObjectOfActivity(name: string){
         return this.post(`/api/generalcharacteristic/objectsofactivity/`, {
+            name,
+        });
+    }
+
+    createTaskType(name: string){
+        return this.post(`/api/generalcharacteristic/tasktypes/`, {
             name,
         });
     }

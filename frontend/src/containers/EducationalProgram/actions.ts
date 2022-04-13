@@ -66,10 +66,18 @@ const createObjectOfActivity = createAction('CREATE_OBJECT_OF_ACTIVITY');
 const getObjectsOfActivity = createAction('GET_OBJECTS_OF_ACTIVITY');
 const setObjectsOfActivity = createAction('SET_OBJECTS_OF_ACTIVITY');
 
+const createTaskType = createAction('CREATE_TASK_TYPE');
+const getTasksTypes = createAction('GET_TASKS_TYPES');
+const setTasksTypes = createAction('SET_TASKS_TYPES');
+
 const characteristicSaveProfessionalStandardLaborFunction = createAction('CHARACTERISTIC_COMPETENCIES_SAVE_PROFESSIONAL_STANDARD_LABOR_FUNCTION');
 const characteristicDeleteProfessionalStandardLaborFunction = createAction('CHARACTERISTIC_COMPETENCIES_DELETE_PROFESSIONAL_STANDARD_LABOR_FUNCTION');
 
 const actions: EducationalProgramActions = {
+    createTaskType,
+    getTasksTypes,
+    setTasksTypes,
+
     createObjectOfActivity,
     getObjectsOfActivity,
     setObjectsOfActivity,

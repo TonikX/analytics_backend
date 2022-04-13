@@ -42,6 +42,7 @@ import MinorProfessionalCompetences from "./MinorProfessionalCompetences";
 import AreaOfActivity from "./AreaOfActivity";
 import KindsOfActivity from "./KindsOfActivity";
 import ObjectsOfActivity from "./ObjectsOfActivity";
+import TasksTypes from "./TasksTypes";
 import CompetenceMatrix from "./CompetenceMatrix";
 import InputLabel from '@material-ui/core/InputLabel'
 import {getEducationalProgramFullNameForSelect} from "../../EduationPlanInDirection/getters";
@@ -296,22 +297,24 @@ class Characteristic extends React.Component<CharacteristicProps> {
             case 4:
                 return <ObjectsOfActivity characteristic={educationalProgramCharacteristic} />
             case 5:
+                return <TasksTypes characteristic={educationalProgramCharacteristic} />
+            case 6:
                 return <CompetenceTable
                   tableData={get(educationalProgramCharacteristic, 'group_of_key_competences', [])}
                   competenceTableType={CompetenceTableType.KEY_COMPETENCES}
                 /> ;
-            case 6:
+            case 7:
                 return <CompetenceTable
                   tableData={get(educationalProgramCharacteristic, 'group_of_over_prof_competences', [])}
                   competenceTableType={CompetenceTableType.SUPRA_PROFESSIONAL_COMPETENCES}
                 />;
-            case 7:
-                return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_prof', [])} />;
             case 8:
-                return <ForsitesProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_foresight', [])} />;
+                return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_prof', [])} />;
             case 9:
-                return <MinorProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_minor', [])} />;
+                return <ForsitesProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_foresight', [])} />;
             case 10:
+                return <MinorProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_minor', [])} />;
+            case 11:
                 return <div className={classes.editorWrap}>
                         <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
                         <CKEditor
@@ -320,7 +323,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
                             toolbarContainerId="toolbar-container"
                         />
                 </div>
-            case 11:
+            case 12:
                 return <>
                     <UserSelector selectorLabel='Разработчики'
                                   value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEVELOPERS, 0, UserFields.ID], '')}
@@ -343,7 +346,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
                                   handleChange={()=>{}}
                     />
                 </>
-            case 12:
+            case 13:
                 return <CompetenceMatrix/>
         }
     }
