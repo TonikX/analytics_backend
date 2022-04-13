@@ -37,8 +37,15 @@ const educationalStandardDeleteCompetence = createAction<EducationalStandardDele
 const educationalStandardSaveIndicator = createAction<EducationalStandardAddIndicatorActionType>('EDUCATIONAL_STANDARD_COMPETENCIES_SAVE_INDICATOR');
 const educationalStandardDeleteIndicator = createAction<EducationalStandardDeleteIndicatorActionType>('EDUCATIONAL_STANDARD_COMPETENCIES_DELETE_INDICATOR');
 
+const educationalStandardAddTask = createAction<any>('EDUCATIONAL_STANDARD_ADD_TASK');
+const educationalStandardDeleteTask = createAction<any>('EDUCATIONAL_STANDARD_DELETE_TASK');
+const educationalStandardUpdateTask = createAction<any>('EDUCATIONAL_STANDARD_UPDATE_TASK');
 
 const actions = {
+    educationalStandardAddTask,
+    educationalStandardDeleteTask,
+    educationalStandardUpdateTask,
+
     educationalStandardCreateGroup,
     educationalStandardSaveGroupTitle,
     educationalStandardDeleteGroup,

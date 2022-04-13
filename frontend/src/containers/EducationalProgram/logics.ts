@@ -594,6 +594,41 @@ const createKindOfActivity = createLogic({
     }
 });
 
+const createObjectOfActivity = createLogic({
+    type: educationalPlanActions.createObjectOfActivity.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const characteristic = getEducationalProgramCharacteristic(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_OBJECT_OF_ACTIVITY}));
+
+        service.createObjectOfActivity(action.payload)
+            .then((res: any) => {
+                //@ts-ignore
+                const allActivities = characteristic[EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY]?.map((item: any) => item.id)
+
+                dispatch(educationalPlanActions.changeEducationalProgramCharacteristic({
+                    //@ts-ignore
+                    id: characteristic?.id,
+                    payload: {
+                        [EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY]: [
+                            res?.data?.id,
+                            ...allActivities,
+                        ]
+                    }
+                }));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_OBJECT_OF_ACTIVITY}));
+                return done();
+            });
+    }
+});
+
 const getKindsOfActivity = createLogic({
     type: educationalPlanActions.getKindsOfActivity.type,
     latest: true,
@@ -610,6 +645,27 @@ const getKindsOfActivity = createLogic({
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_KIND_OF_ACTIVITY}));
+                return done();
+            });
+    }
+});
+
+const getObjectsOfActivity = createLogic({
+    type: educationalPlanActions.getObjectsOfActivity.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_OBJECTS_OF_ACTIVITY}));
+
+        service.geObjectsOfActivity(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.setObjectsOfActivity(res?.data?.results));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_OBJECTS_OF_ACTIVITY}));
                 return done();
             });
     }
@@ -648,6 +704,9 @@ export default [
 
     createKindOfActivity,
     getKindsOfActivity,
+
+    createObjectOfActivity,
+    getObjectsOfActivity,
 
     getCompetenceMatrix,
     saveZun,

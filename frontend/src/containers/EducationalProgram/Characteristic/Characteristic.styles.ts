@@ -1,6 +1,9 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
+    opSelector: {
+        marginBottom: '5px'
+    },
     root: {
         padding: '20px 50px 20px 50px',
         boxShadow: 'none',

@@ -152,8 +152,18 @@ class Service extends AnalyticsService{
         return this.get(`/api/generalcharacteristic/kindsofactivity?search=${name}`);
     }
 
+    geObjectsOfActivity(name: string){
+        return this.get(`/api/generalcharacteristic/objectsofactivity?search=${name}`);
+    }
+
     createKindOfActivity(name: string){
         return this.post(`/api/generalcharacteristic/kindsofactivity/`, {
+            name,
+        });
+    }
+
+    createObjectOfActivity(name: string){
+        return this.post(`/api/generalcharacteristic/objectsofactivity/`, {
             name,
         });
     }
