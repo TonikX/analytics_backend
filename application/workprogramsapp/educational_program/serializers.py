@@ -1,32 +1,27 @@
 # Библиотеки для сариализации
-from rest_framework import serializers, viewsets
-
-# Модели данных
-from dataprocessing.models import Items
-from workprogramsapp.models import ProfessionalStandard, GeneralizedLaborFunctions, KindsOfActivity, \
-    EmployerRepresentative, WorkProgram, Competence, Zun, Indicator, ImplementationAcademicPlan, \
-    WorkProgramInFieldOfStudy
-
+from rest_framework import serializers
 # --Работа с образовательной программой
 from rest_framework.fields import BooleanField, SerializerMethodField
 
-from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, \
-    ProfessionalStandard
-
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
+from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, \
+    ProfessionalStandard
+# Модели данных
+from workprogramsapp.models import GeneralizedLaborFunctions, KindsOfActivity, \
+    EmployerRepresentative, WorkProgram, Competence, Zun, Indicator, WorkProgramInFieldOfStudy, ObjectsOfActivity
 from workprogramsapp.serializers import ImplementationAcademicPlanSerializer, IndicatorSerializer, \
     WorkProgramInFieldOfStudySerializerForCb
 from .educational_standart.serializers import TasksForEducationalStandardSerializer, \
     EducationalStandardSingleObjectSerializer
 from .general_prof_competencies.models import GroupOfGeneralProfCompetencesInEducationalStandard
+from .general_prof_competencies.serializers import GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer
 from .key_competences.models import GroupOfKeyCompetencesInEducationalStandard
+from .key_competences.serializers import GroupOfKeyCompetencesInGeneralCharacteristicSerializer
 from .over_professional_competencies.models import GroupOfOverProfCompetencesInEducationalStandard
+from .over_professional_competencies.serializers import GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
 from .pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic
 from .pk_comptencies.serializers import GroupOfPkCompetencesInGeneralCharacteristicSerializer
-from .general_prof_competencies.serializers import GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer
-from .over_professional_competencies.serializers import GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
-from .key_competences.serializers import GroupOfKeyCompetencesInGeneralCharacteristicSerializer
 from ..workprogram_additions.serializers import ShortStructuralUnitSerializer
 
 
@@ -82,6 +77,14 @@ class KindsOfActivitySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ObjectsOfActivitySerializer(serializers.ModelSerializer):
+    """Сериализатор Объектов проф. деятельности"""
+
+    class Meta:
+        model = ObjectsOfActivity
+        fields = "__all__"
+
+
 class ProfessionalStandardSerializer(serializers.ModelSerializer):
     """Сериализатор Проф. стандартов"""
 
@@ -101,6 +104,7 @@ class EmployerSerializer(serializers.ModelSerializer):
         model = EmployerRepresentative
         fields = "__all__"
 
+
 class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     """Сериализатор образовательной программы"""
 
@@ -115,17 +119,20 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     def get_group_of_pk_competences_prof(self, instance):
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
             instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic=instance,
-            type_of_pk_competence="prof"), many=True).data
+                                                                                type_of_pk_competence="prof"),
+            many=True).data
 
     def get_group_of_pk_competences_foresight(self, instance):
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
             instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic=instance,
-            type_of_pk_competence="fore"), many=True).data
+                                                                                type_of_pk_competence="fore"),
+            many=True).data
 
     def get_group_of_pk_competences_minor(self, instance):
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
             instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic=instance,
-            type_of_pk_competence="min"), many=True).data
+                                                                                type_of_pk_competence="min"),
+            many=True).data
 
     def get_group_of_general_prof_competences(self, instance):
         try:
@@ -156,9 +163,10 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         self.fields['structural_unit_implementer'] = ShortStructuralUnitSerializer(many=False, required=False)
         self.fields['area_of_activity'] = ProfessionalStandardSerializer(many=True)
         self.fields['kinds_of_activity'] = KindsOfActivitySerializer(many=True)
+        self.fields['objects_of_activity'] = ObjectsOfActivitySerializer(many=True)
         self.fields['educational_program'] = ImplementationAcademicPlanSerializer(many=True)
         self.fields['educational_standard'] = EducationalStandardSingleObjectSerializer()
-        self.fields['employers_in_characteristic'] = EmployerSerializer(many=True,required=False)
+        self.fields['employers_in_characteristic'] = EmployerSerializer(many=True, required=False)
         self.fields['ep_supervisor'] = userProfileSerializer(required=False)
         self.fields['dean_of_the_faculty'] = userProfileSerializer(required=False)
         return super().to_representation(value)
@@ -181,7 +189,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
 
 class WorkProgramCompetenceIndicatorSerializer(serializers.ModelSerializer):
     """Сериализатор образовательной программы"""
-    competences=SerializerMethodField()
+    competences = SerializerMethodField()
 
     def get_competences(self, instance):
         competences = Competence.objects.filter(
@@ -211,12 +219,9 @@ class WorkProgramCompetenceIndicatorSerializer(serializers.ModelSerializer):
                                      "zuns": zuns_array})
         return {"competences": competences_dict}
 
-
     class Meta:
         model = WorkProgram
         fields = ["id", "title", "competences"]
-
-
 
 
 class DepartmentSerializer(serializers.ModelSerializer):

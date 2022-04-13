@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 from workprogramsapp.educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
     EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView, UploadCompetences, \
-    GeneralizedLaborFunctionsSet, KindsOfActivitySet, EmployerSet, GetCompetenceMatrix
+    GeneralizedLaborFunctionsSet, KindsOfActivitySet, EmployerSet, GetCompetenceMatrix, ObjectsOfActivitySet
 from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, \
     GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
@@ -17,6 +17,7 @@ router.register(r'api/professionalstandard', ProfessionalStandardSet, basename='
 router.register(r'api/generalizedlaborfunction', GeneralizedLaborFunctionsSet,
                 basename='generalized-labor-function')
 router.register(r'api/generalcharacteristic/kindsofactivity', KindsOfActivitySet, basename='kinds-of-activity')
+router.register(r'api/generalcharacteristic/objectsofactivity', ObjectsOfActivitySet, basename='objects-of-activity')
 router.register(r'api/generalcharacteristic/employers', EmployerSet, basename='employers')
 
 urlpatterns = [
