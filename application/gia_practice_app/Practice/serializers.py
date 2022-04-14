@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from workprogramsapp.workprogram_additions.Practice.models import PracticeTemplate, Practice
+from gia_practice_app.Practice.models import PracticeTemplate, Practice
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 

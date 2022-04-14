@@ -5,7 +5,7 @@ from analytics_project import settings
 
 import datetime
 
-from workprogramsapp.workprogram_additions.Practice.consts_for_models import *
+from .consts_for_models import *
 
 
 def current_year():
@@ -94,7 +94,7 @@ class Practice(models.Model):
     authors = models.CharField(max_length=1024, verbose_name="Авторский состав")
     # Это поле пока оставляем текстовым, когда станет понятно что ОХ, сделаем подтягиеваемым программно (или нет?)
     op_leader = models.CharField(max_length=1024, verbose_name="Руководитель образовательной программы")
-    structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL,
+    structural_unit = models.ForeignKey('workprogramsapp.StructuralUnit', on_delete=models.SET_NULL,
                                         verbose_name='Структурное подразделени',
                                         related_name='practice_in_structural_unit', blank=True, null=True)
 
@@ -131,6 +131,6 @@ class Practice(models.Model):
                                                   verbose_name="Зачтено (удовлетворительно)")
     not_passed_mark = models.TextField(max_length=4096, default=UNSATISF,
                                        verbose_name="Не зачтено (неудовлетворительно)")
-    bibliographic_reference = models.ManyToManyField('BibliographicReference', blank=True, null=True,
+    bibliographic_reference = models.ManyToManyField('workprogramsapp.BibliographicReference', blank=True, null=True,
                                                      verbose_name='Рекомендуемые источники',
                                                      related_name='practise_refs')

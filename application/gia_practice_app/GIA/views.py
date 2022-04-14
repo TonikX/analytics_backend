@@ -1,11 +1,9 @@
 from rest_framework import viewsets, filters
 
+from gia_practice_app.GIA.models import GIA, GIABaseTemplate, CriteriaVKR
+from gia_practice_app.GIA.serializers import GIASerializer, GIABaseTemplateSerializer, CriteriaVKRSerializer
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
-from workprogramsapp.workprogram_additions.GIA.models import GIA, GIABaseTemplate, CriteriaVKR
-from workprogramsapp.workprogram_additions.GIA.serializers import GIASerializer, GIABaseTemplateSerializer, \
-    CriteriaVKRSerializer
-from workprogramsapp.workprogram_additions.Practice.models import Practice, PracticeTemplate
-from workprogramsapp.workprogram_additions.Practice.serializers import PracticeSerializer, PracticeTemplateSerializer
+
 
 
 class GIASet(viewsets.ModelViewSet):

@@ -1,8 +1,9 @@
 from rest_framework import viewsets, filters
 
+from gia_practice_app.Practice.models import Practice, PracticeTemplate
+from gia_practice_app.Practice.serializers import PracticeSerializer, PracticeTemplateSerializer
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
-from workprogramsapp.workprogram_additions.Practice.models import Practice, PracticeTemplate
-from workprogramsapp.workprogram_additions.Practice.serializers import PracticeSerializer, PracticeTemplateSerializer
+
 
 
 class PracticeSet(viewsets.ModelViewSet):
