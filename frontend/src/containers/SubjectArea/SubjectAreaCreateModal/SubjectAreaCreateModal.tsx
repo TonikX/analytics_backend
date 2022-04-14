@@ -70,7 +70,7 @@ class SubjectAreaCreateModal extends React.PureComponent<SubjectAreaCreateModalP
         const disableButton = subjectArea[SubjectAreaFields.TITLE].length === 0;
 
         const isEditMode = Boolean(subjectArea[SubjectAreaFields.ID]);
-
+        return <></>
         return (
             <Dialog
                 open={isOpen}
