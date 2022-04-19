@@ -107,6 +107,9 @@ import {mergeWorkProgramsState} from "../containers/MergeWorkPrograms/types"
 import {GENERAL_PATH as educationalStandardPath, reducer as educationalStandardReducer} from "../containers/EducationalStandards/reducer"
 import {educationalStandardsState} from "../containers/EducationalStandards/types"
 
+import {GENERAL_PATH as practiceListPath, reducer as practiceListReducer} from "../containers/PracticeList/reducers";
+import {practiceListState} from "../containers/PracticeList/types";
+
 export interface rootState {
     [educationalStandardPath]: educationalStandardsState,
     [profileNotificationsPath]: notificationsState,
@@ -145,6 +148,7 @@ export interface rootState {
     [dodProfilePath] : dodProfileState,
     [userProfilePath]: userProfileState,
     [mergeWorkProgramsPath]: mergeWorkProgramsState,
+    [practiceListPath]: practiceListState,
 }
 
 export default combineReducers({
@@ -184,4 +188,5 @@ export default combineReducers({
     [dodProfilePath]: dodProfileReducer,
     [userProfilePath]: userProfileReducer,
     [mergeWorkProgramsPath]: mergeWorkProgramsReducer,
+    [practiceListPath]: practiceListReducer,
 });
