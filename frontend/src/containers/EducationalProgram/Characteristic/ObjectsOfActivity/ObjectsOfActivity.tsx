@@ -15,12 +15,12 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import TextField from "@material-ui/core/TextField";
 
-import KindOfActivitySelector from '../KindOfActivitySelector'
+import ObjectOfActivitySelector from '../ObjectOfActivitySelector'
 
 import actions from '../../actions';
 import {EducationProgramCharacteristicFields} from "../../enum";
 
-import useStyles from './KindsOfActivity.styles'
+import useStyles from './ObjectsOfActivity.styles'
 
 export default ({ characteristic }: any) => {
   const classes = useStyles()
@@ -30,14 +30,14 @@ export default ({ characteristic }: any) => {
   const [newObject, setNewObject] = useState()
 
   const handleSave = useCallback(() => {
-    const allActivities = characteristic[EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES].map((item: any) => item.id)
+    const allActivities = characteristic[EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY].map((item: any) => item.id)
     if (newObject?.length) {
-      dispatch(actions.createKindOfActivity(newObject))
+      dispatch(actions.createObjectOfActivity(newObject))
     } else {
       dispatch(actions.changeEducationalProgramCharacteristic({
         id: characteristic.id,
         payload: {
-          [EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES]: [
+          [EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY]: [
             ...allActivities,
             selectedObject,
           ]
@@ -53,8 +53,8 @@ export default ({ characteristic }: any) => {
     dispatch(actions.changeEducationalProgramCharacteristic({
       id: characteristic.id,
       payload: {
-        [EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES]:
-          characteristic?.[EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES]
+        [EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY]:
+          characteristic?.[EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY]
             .map((item: any) => item.id)
             .filter((item: any) => item !== id)
       }
@@ -63,7 +63,7 @@ export default ({ characteristic }: any) => {
 
   return (
     <>
-      <Typography className={classes.label}>Сферы профессиональной деятельности</Typography>
+      <Typography className={classes.label}>Объекты профессиональной деятельности</Typography>
       <Table stickyHeader size='small'>
         <TableHead className={classes.header}>
           <TableRow>
@@ -74,7 +74,7 @@ export default ({ characteristic }: any) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {characteristic?.[EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES]?.map((item: any, index: number) => (
+          {characteristic?.[EducationProgramCharacteristicFields.OBJECTS_OF_ACTIVITY]?.map((item: any, index: number) => (
             <TableRow>
               <TableCell>
                 {item.name}
@@ -105,20 +105,20 @@ export default ({ characteristic }: any) => {
           paper: classes.dialog
         }}
       >
-        <DialogTitle className={classes.title}>Добавить сферу профессиональной деятельности</DialogTitle>
+        <DialogTitle className={classes.title}>Добавить объект профессиональной деятельности</DialogTitle>
         <Typography className={classes.marginBottom30}>
-          Выберите существующий сферу профессиональной деятельности или введите название нового
+          Выберите существующий объект профессиональной деятельности или введите название нового
         </Typography>
-        <KindOfActivitySelector
+        <ObjectOfActivitySelector
           onChange={setSelectedObject}
-          label="Выберите сферу профессиональной деятельности"
+          label="Выберите объект профессиональной деятельности"
           value={selectedObject}
           className={classes.marginBottom30}
         />
         <TextField
           value={newObject}
           onChange={(e) => setNewObject(e.target.value)}
-          label="Новая сфера профессиональной деятельности"
+          label="Новый объект профессиональной деятельности"
           InputLabelProps={{
             shrink: true,
           }}

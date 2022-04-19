@@ -16,6 +16,12 @@ import {characterisicStyles} from './Сharacteristic/Сharacteristic.styles';
 import styles from "./WorkProgram.styles";
 
 export interface EducationalProgramActions {
+    createTaskType: any,
+    getTasksTypes: any,
+    setTasksTypes: any,
+    createObjectOfActivity: any,
+    getObjectsOfActivity: any,
+    setObjectsOfActivity: any,
     characteristicSaveProfessionalStandardLaborFunction: any;
     characteristicDeleteProfessionalStandardLaborFunction: any;
     changeSearchQuery: any;
@@ -66,6 +72,8 @@ export interface educationalProgramState {
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
     [fields.KINDS_OF_ACTIVITIES]: Array<{ id: number; name: string; }>;
+    [fields.OBJECTS_OF_ACTIVITIES]: Array<{ id: number; name: string; }>;
+    [fields.TASKS_TYPES]: Array<{ id: number; name: string; }>;
     [fields.EDUCATION_PROGRAM_LIST]: Array<EducationalProgramType>;
     [fields.EDUCATION_PROGRAM_CHARACTERISTIC]: EducationalProgramCharacteristicType|{};
     [fields.EDUCATION_PROGRAM_DIALOG]: {

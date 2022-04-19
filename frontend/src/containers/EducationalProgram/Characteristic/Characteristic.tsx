@@ -9,6 +9,7 @@ import StepButton from "@material-ui/core/StepButton";
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import Chip from "@material-ui/core/Chip";
 
 import {CharacteristicProps,} from '../types';
 import {steps} from './constants';
@@ -40,13 +41,16 @@ import ForsitesProfessionalCompetences from "./ForsitesProfessionalCompetences";
 import MinorProfessionalCompetences from "./MinorProfessionalCompetences";
 import AreaOfActivity from "./AreaOfActivity";
 import KindsOfActivity from "./KindsOfActivity";
+import ObjectsOfActivity from "./ObjectsOfActivity";
+import TasksTypes from "./TasksTypes";
 import CompetenceMatrix from "./CompetenceMatrix";
 import InputLabel from '@material-ui/core/InputLabel'
 import {getEducationalProgramFullNameForSelect} from "../../EduationPlanInDirection/getters";
 
 class Characteristic extends React.Component<CharacteristicProps> {
     state = {
-        activeStep: 0
+        activeStep: 0,
+        addNewOP: false,
     };
 
     componentDidMount() {
@@ -76,10 +80,15 @@ class Characteristic extends React.Component<CharacteristicProps> {
     }
 
     handleChangePlan = (value: string) => {
+        const { educationalProgramCharacteristic } = this.props
+        this.setState({ addNewOP: false })
         this.props.actions.changeEducationalProgram({
             id: this.getEducationalProgramId(),
             payload: {
-                [EducationProgramFields.EDUCATIONAL_PROGRAM]: [value]
+                [EducationProgramFields.EDUCATIONAL_PROGRAM]: [
+                  ...get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, []).map((item: any) => item.id),
+                    value,
+                ]
             }
         })
     }
@@ -215,20 +224,48 @@ class Characteristic extends React.Component<CharacteristicProps> {
         </>
     }
 
+    deleteEducationalProgram = (id: number) => () => {
+        const { educationalProgramCharacteristic } = this.props
+
+        this.props.actions.changeEducationalProgram({
+            id: this.getEducationalProgramId(),
+            payload: {
+                [EducationProgramFields.EDUCATIONAL_PROGRAM]:
+                    get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])
+                        .map((item: any) => item.id)
+                        .filter((item: any) => item !== id)
+            }
+        })
+    }
+
     renderContent = () => {
         const {educationalProgramCharacteristic, classes} = this.props;
-        const {activeStep} = this.state;
+        const {activeStep, addNewOP} = this.state;
         const educationalProgramId = get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, '0', 'id'], '')
 
         if (!educationalProgramId) return
         switch (activeStep){
             case 0:
                 return <>
-                    <EducationPlanInDirectionSelector
-                      value={educationalProgramId}
-                      label={getEducationalProgramFullNameForSelect(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, '0'], {}))}
-                      handleChange={this.handleChangePlan}
-                    />
+                    <Typography>
+                        Образовательные программы:
+                    </Typography>
+                    <br/>
+                    {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, []).map((item: any) => (
+                        <Chip label={getEducationalProgramFullNameForSelect(item)} onDelete={this.deleteEducationalProgram(item.id)} style={{marginRight: 10, marginBottom: 10}}/>
+                    ))}
+                    <br />
+                    {addNewOP ? <>
+                        <EducationPlanInDirectionSelector
+                          value={educationalProgramId}
+                          handleChange={this.handleChangePlan}
+                          className={classes.opSelector}
+                        />
+                      <Button variant="outlined" size="small" onClick={() => this.setState({ addNewOP: false })}>Отменить</Button>
+                      </>:
+                      <Button variant="outlined" size="small" onClick={() => this.setState({ addNewOP: true })}>Добавить образовательную программу</Button>
+                    }
+                    <br /><br /><br />
                     <UserSelector selectorLabel="Руководитель"
                                   value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.MANAGER, 'id'], '').toString()}
                                   label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.EP_SUPERVISOR], ''))}
@@ -258,22 +295,26 @@ class Characteristic extends React.Component<CharacteristicProps> {
             case 3:
                 return <KindsOfActivity characteristic={educationalProgramCharacteristic} />
             case 4:
+                return <ObjectsOfActivity characteristic={educationalProgramCharacteristic} />
+            case 5:
+                return <TasksTypes characteristic={educationalProgramCharacteristic} />
+            case 6:
                 return <CompetenceTable
                   tableData={get(educationalProgramCharacteristic, 'group_of_key_competences', [])}
                   competenceTableType={CompetenceTableType.KEY_COMPETENCES}
                 /> ;
-            case 5:
+            case 7:
                 return <CompetenceTable
                   tableData={get(educationalProgramCharacteristic, 'group_of_over_prof_competences', [])}
                   competenceTableType={CompetenceTableType.SUPRA_PROFESSIONAL_COMPETENCES}
                 />;
-            case 6:
-                return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_prof', [])} />;
-            case 7:
-                return <ForsitesProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_foresight', [])} />;
             case 8:
-                return <MinorProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_minor', [])} />;
+                return <ProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_prof', [])} />;
             case 9:
+                return <ForsitesProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_foresight', [])} />;
+            case 10:
+                return <MinorProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_minor', [])} />;
+            case 11:
                 return <div className={classes.editorWrap}>
                         <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
                         <CKEditor
@@ -282,7 +323,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
                             toolbarContainerId="toolbar-container"
                         />
                 </div>
-            case 10:
+            case 12:
                 return <>
                     <UserSelector selectorLabel='Разработчики'
                                   value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEVELOPERS, 0, UserFields.ID], '')}
@@ -305,7 +346,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
                                   handleChange={()=>{}}
                     />
                 </>
-            case 11:
+            case 13:
                 return <CompetenceMatrix/>
         }
     }
@@ -336,10 +377,12 @@ class Characteristic extends React.Component<CharacteristicProps> {
                 </Stepper>
                 <div className={classes.content}>
                     <Typography className={classes.title}>
-                        <div>Характеристика образовательной программы
-                            <span style={{fontWeight: 500}}>
-                            &nbsp;"{get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, '0', 'title'])}"
-                            </span>
+                        <div>
+                            Характеристика образовательных программ {' '}
+                            {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])
+                              .map((item: any) => '"' + item.title + '"')
+                              .join(', ')
+                            }
                         </div>
                     </Typography>
 

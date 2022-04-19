@@ -235,7 +235,7 @@ const addIntermediateCertificationErrors = (state: rootState, errors: string[]) 
     const evaluationTools = getWorkProgramEvaluationToolsList(state) as Array<any>;
     const isBarsOn = getWorkProgramField(state, WorkProgramGeneralFields.BARS);
 
-    if (certificationTools.some((tool: any) => tool.description.length < 300)) {
+    if (certificationTools.some((tool: any) => tool?.description?.length < 300)) {
         errors.push('Оценочные средства промежуточной аттестации должны иметь описание не короче 300 знаков');
     }
 

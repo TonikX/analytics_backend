@@ -98,6 +98,23 @@ class EducationalStandardsService extends AnalyticsService {
             name: title
         });
     }
+
+    educationalStandardAddTask(id: number, task: string) {
+        return this.post(`/api/task_prof_standarts/create`, {
+            name: task,
+            educational_standard: id,
+        });
+    }
+
+    educationalStandardDeleteTask(taskId: string) {
+        return this.delete(`/api/task_prof_standarts/delete/${taskId}`);
+    }
+
+    educationalStandardUpdateTask({ id, name }: any) {
+        return this.patch(`/api/task_prof_standarts/update/${id}`, {
+            name,
+        });
+    }
 }
 
 export default EducationalStandardsService;
