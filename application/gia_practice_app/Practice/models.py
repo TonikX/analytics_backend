@@ -86,6 +86,7 @@ class Practice(models.Model):
         ('senior-inter', 'эксплуатационная; преддипломная, преддипломная / Senior internship'),
         ('inter', 'стажировка'),
     )
+    title = models.CharField(max_length=1024, verbose_name="Наименование", blank=True, null=True)
     practice_base = models.ForeignKey('PracticeTemplate', on_delete=models.SET_NULL,
                                  verbose_name='Базовый шаблон Практики',
                                  related_name='practice_heir', blank=True, null=True)
