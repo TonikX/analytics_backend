@@ -29,6 +29,7 @@ const INDIVIDUAL_EDUCATIONAL_PLANS = 'individual-educational-plans';
 const PROFESSIONAL_STANDARDS = 'professional-standards';
 const EDUCATIONAL_STANDARDS = 'educational-standards';
 const DODPROFILE = 'dod-profile'
+const PRACTICE_LIST = 'practice-list'
 
 const RECORDS = 'records';
 
@@ -309,6 +310,10 @@ export default class RouterService {
     getDodProfileRoute = () => {
         return SEPARATOR + DODPROFILE;
     };
+
+    getPracticeListRoute = () => {
+        return SEPARATOR + PRACTICE_LIST;
+    }
 }
 
 export const appRouter = RouterService.factory();
