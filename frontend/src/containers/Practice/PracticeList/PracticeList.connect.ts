@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {rootState} from "../../store/reducers";
+import {rootState} from "../../../store/reducers";
 import {getPracticeList} from "./getters"
 import {bindActionCreators} from "redux";
 import actions from "./actions";

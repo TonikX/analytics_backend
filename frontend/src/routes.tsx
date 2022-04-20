@@ -1,5 +1,5 @@
  import React from "react";
-import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
 import AuthRoute from './hoc/AuthRoute'
 
@@ -62,7 +62,7 @@ import DodProfile from "./containers/DodProfile";
 
 import EducationalStandards from "./containers/EducationalStandards";
 import EducationalStandard from "./containers/EducationalStandards/EducationalStandard";
- import PracticeList from "./containers/PracticeList";
+ import PracticeList from "./containers/Practice/PracticeList";
 
 const routerService = RouterService.factory();
 

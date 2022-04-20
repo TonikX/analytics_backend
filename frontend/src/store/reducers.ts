@@ -107,8 +107,8 @@ import {mergeWorkProgramsState} from "../containers/MergeWorkPrograms/types"
 import {GENERAL_PATH as educationalStandardPath, reducer as educationalStandardReducer} from "../containers/EducationalStandards/reducer"
 import {educationalStandardsState} from "../containers/EducationalStandards/types"
 
-import {GENERAL_PATH as practiceListPath, reducer as practiceListReducer} from "../containers/PracticeList/reducers";
-import {practiceListState} from "../containers/PracticeList/types";
+import {GENERAL_PATH as practiceListPath, reducer as practiceListReducer} from "../containers/Practice/PracticeList/reducers";
+import {practiceListState} from "../containers/Practice/PracticeList/types";
 
 export interface rootState {
     [educationalStandardPath]: educationalStandardsState,
