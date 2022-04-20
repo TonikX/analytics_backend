@@ -1,6 +1,6 @@
 import {WithStyles} from "@material-ui/core";
 import styles from './PracticeList.styles'
-import {practiceState} from "../types";
+import {PracticeState} from "../types";
 
 export interface PracticeListProps extends WithStyles<typeof styles> {
     actions: PracticeListActions,
@@ -8,7 +8,7 @@ export interface PracticeListProps extends WithStyles<typeof styles> {
 }
 
 export interface practiceListState {
-    results: Array<practiceState>;
+    results: Array<PracticeState>;
     modal: {
         isModalOpen: boolean,
     }

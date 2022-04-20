@@ -62,7 +62,9 @@ import DodProfile from "./containers/DodProfile";
 
 import EducationalStandards from "./containers/EducationalStandards";
 import EducationalStandard from "./containers/EducationalStandards/EducationalStandard";
- import PracticeList from "./containers/Practice/PracticeList";
+
+import PracticeList from "./containers/Practice/PracticeList";
+import Practice from "./containers/Practice";
 
 const routerService = RouterService.factory();
 
@@ -239,6 +241,9 @@ export default () => (
                 </AuthRoute>
                 <AuthRoute path={routerService.getPracticeListRoute()}>
                     <PracticeList />
+                </AuthRoute>
+                <AuthRoute path={routerService.getPracticeRoute()}>
+                    <Practice />
                 </AuthRoute>
 
             <Route path={routerService.getForbiddenPage()}>

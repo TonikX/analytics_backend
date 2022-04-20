@@ -9,6 +9,10 @@ class PracticeService extends AnalyticsService{
     createPractice(state: MinimalPracticeState) {
         return this.post(`/api/practice/`, state);
     }
+
+    getPractice(id: number) {
+        return this.get(`/api/practice/${id}/`)
+    }
 }
 
 export default PracticeService;

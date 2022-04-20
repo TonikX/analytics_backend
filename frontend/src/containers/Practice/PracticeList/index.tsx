@@ -8,6 +8,9 @@ import {PracticeListProps} from "./types";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import CreateModal from "./CreateModal";
+import {appRouter} from "../../../service/router-service";
+import {Link} from "react-router-dom";
+import {PracticeFields} from "../enum";
 
 class PracticeList extends React.Component<PracticeListProps> {
 
@@ -24,6 +27,13 @@ class PracticeList extends React.Component<PracticeListProps> {
         const {classes, practiceList} = this.props;
         return (
             <Paper className={classes.root}>
+                {
+                    practiceList.map(practice => (
+                        <Link target="_blank" to={appRouter.getPracticeLink(practice[PracticeFields.ID])}>
+                            {practice[PracticeFields.ID]}
+                        </Link>
+                    ))
+                }
                 Hello, found {practiceList.length} items!
                 <Fab color="secondary"
                      classes={{

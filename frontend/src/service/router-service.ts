@@ -28,8 +28,9 @@ const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
 const INDIVIDUAL_EDUCATIONAL_PLANS = 'individual-educational-plans';
 const PROFESSIONAL_STANDARDS = 'professional-standards';
 const EDUCATIONAL_STANDARDS = 'educational-standards';
-const DODPROFILE = 'dod-profile'
-const PRACTICE_LIST = 'practice-list'
+const DODPROFILE = 'dod-profile';
+const PRACTICE_LIST = 'practice-list';
+const PRACTICE = 'practice';
 
 const RECORDS = 'records';
 
@@ -313,6 +314,14 @@ export default class RouterService {
 
     getPracticeListRoute = () => {
         return SEPARATOR + PRACTICE_LIST;
+    }
+
+    getPracticeRoute = () => {
+        return SEPARATOR + PRACTICE + SEPARATOR + ':id'
+    }
+
+    getPracticeLink = (id: number) => {
+        return SEPARATOR + PRACTICE + SEPARATOR + id;
     }
 }
 

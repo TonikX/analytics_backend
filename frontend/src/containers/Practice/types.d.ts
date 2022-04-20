@@ -1,8 +1,11 @@
 import {PracticeFields} from "./enum";
+import {WithStyles} from "@material-ui/core";
+import styles from "./Practice.styles";
+import {RouteComponentProps} from "react-router-dom";
 
 export type Id = number;
 
-export interface practiceState {
+export interface PracticeState {
     [PracticeFields.ID]: Id,
     [PracticeFields.YEAR]: number,
     [PracticeFields.AUTHORS]: string,
@@ -26,6 +29,10 @@ export interface practiceState {
     [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: Array<Id>,
 }
 
+export interface practicePageState {
+    practice: PracticeState;
+}
+
 export interface MinimalPracticeState {
     [PracticeFields.YEAR]: number,
     [PracticeFields.OP_LEADER]: string,
@@ -34,5 +41,11 @@ export interface MinimalPracticeState {
 }
 
 export interface PracticeActions {
-    createPractice: any
+    getPractice: any;
+    setPractice: any;
+}
+
+export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {
+    actions: PracticeActions;
+    practice: PracticeState;
 }
