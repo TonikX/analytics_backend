@@ -24,9 +24,9 @@ export const getValidationErrors = (state: rootState): string[] => {
         addEvaluationToolsErrors,
         addQualificationErrors,
         addPrerequisitesErrors,
-        addResultsErrors,
+        // addResultsErrors,
         addReferencesErrors,
-        addIntermediateCertificationErrors,
+        // addIntermediateCertificationErrors,
     ]
 
     const errors: string[] = [];
@@ -99,14 +99,14 @@ const addEvaluationToolsErrors = (state: rootState, errors: string[]) => {
         errors.push('В РПД отсутствуют оценочные средства');
     }
 
-    if (sections.some((s: any) => s.evaluation_tools.length === 0)) {
-        errors.push('У каждого раздела должно быть оценочное средство');
-    }
-    if (isBarsOn) {
-        addEvaluationToolsErrorsWithBars(state, errors);
-    } else {
-        addEvaluationToolsErrorsWithoutBars(state, errors);
-    }
+    // if (sections.some((s: any) => s.evaluation_tools.length === 0)) {
+    //     errors.push('У каждого раздела должно быть оценочное средство');
+    // }
+    // if (isBarsOn) {
+    //     addEvaluationToolsErrorsWithBars(state, errors);
+    // } else {
+    //     addEvaluationToolsErrorsWithoutBars(state, errors);
+    // }
 
 }
 
