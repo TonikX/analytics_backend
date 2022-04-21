@@ -18,7 +18,6 @@ const getDodProfile = createLogic({
 
         service.getDodProfile(currentPage, tableMode)
             .then((res) => {
-                console.log(res)
                 const workProgramList = get(res, 'data.results', []);
                 const allCount = Math.ceil(get(res, 'data.count', 0));
                 dispatch(dodProfileActions.setDodWorkProgramsList(workProgramList))

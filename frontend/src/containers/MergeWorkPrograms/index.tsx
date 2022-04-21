@@ -1,45 +1,64 @@
-import React, {useEffect} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Select, FormControl, InputLabel, MenuItem, Button, Modal, Box, Typography} from '@material-ui/core';
-import {WorkProgram, WorkProgramList} from '../UserProfile/types';
+import {Autocomplete} from "@material-ui/lab";
+import {FormControl, Button, Modal, Box, Typography, TextField} from '@material-ui/core';
 import {useStyles} from './MergeWorkProgramsBlock.styles';
-import actions from '../WorkProgramList/actions';
-import {filterFields} from '../WorkProgramList/enum';
-import {getWorkProgramList} from '../WorkProgramList/getters';
+import actions from './actions';
+import {getWorkProgramList} from './getters';
 
 type WorkProgramSelectType = 'source' | 'target'
 type WorkProgramSelectProps = {
     type: WorkProgramSelectType;
-    onChange: (x: number, type: WorkProgramSelectType) => void;
-} & WorkProgramList;
+    onChange: (x: string, type: WorkProgramSelectType) => void;
+};
+type OptionItem = {id: string; label: string} | null;
 
-const WorkProgramSelect = ({type, onChange, workPrograms}: WorkProgramSelectProps) => {
-    const [value, setValue] = React.useState('');
-    const labelId = `merge-work-programs-block-label-${type}`;
+const WorkProgramSelect = ({type, onChange}: WorkProgramSelectProps) => {
+    const dispatch = useDispatch();
+    const [inputValue, setInputValue] = useState('');
+    const workPrograms = useSelector(getWorkProgramList);
 
     const labelText = type === 'source' ? 'Откуда' : 'Куда';
+    const options = workPrograms.map((item) => ({
+        label: `${item.title} (${item.discipline_code})`,
+        id: item.id.toString(),
+    }))
 
-    const handleChange = (event: any) => {
-        setValue(event.target.value);
-        onChange(event.target.value, type);
+    useEffect(() => {
+        dispatch(actions.getWorkProgramsList())
+    }, []);
+
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            dispatch(actions.setSearchQuery(inputValue));
+            dispatch(actions.getWorkProgramsList())
+            dispatch(actions.setSearchQuery(''));
+        }, 700)
+
+        return () => clearTimeout(delayDebounceFn)
+    }, [inputValue])
+
+    const handleChange = (event: ChangeEvent<{}>, item: OptionItem) => {
+        if (item) {
+            onChange(item.id, type);
+        }
     };
+
+    const changeSearch = (event: ChangeEvent<{}>, value: string) => {
+        setInputValue(value);
+    }
 
     return (
         <FormControl fullWidth variant="outlined">
-            <InputLabel id={labelId}>{labelText}</InputLabel>
-            <Select
-                labelId={labelId}
-                value={value}
-                label={labelText}
+            <Autocomplete
+                inputValue={inputValue}
+                options={options}
                 onChange={handleChange}
-            >
-                {workPrograms.map((item: WorkProgram) => {
-                        return <MenuItem value={item.id} key={`work-program-${item.id}`}>
-                            {item.title} ({item.discipline_code})
-                        </MenuItem>;
-                    }
-                )}
-            </Select>
+                onInputChange={changeSearch}
+                getOptionLabel={option => option.label}
+                getOptionSelected={(option, value) => option.id === value.id}
+                renderInput={(params) => <TextField {...params} label={labelText}/>}
+            />
         </FormControl>
     )
 };
@@ -49,6 +68,7 @@ type ModalProps = {
     handleClose: () => void;
     confirm: () => void;
 };
+
 const CopyWorkProgramsModal = ({open, handleClose, confirm}: ModalProps) => {
     const classes = useStyles();
     return (
@@ -72,27 +92,20 @@ const CopyWorkProgramsModal = ({open, handleClose, confirm}: ModalProps) => {
 export default ({className}: {className: string}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [sourceId, setSource] = React.useState(0);
-    const [targetId, setTarget] = React.useState(0);
-    const [modalIsOpen, handleModalOpen] = React.useState(false);
-    const workPrograms = useSelector(getWorkProgramList);
-
-    useEffect(() => {
-        dispatch(actions.changeCurrentPage(1));
-        dispatch(actions.changeFiltering({[filterFields.ONLY_MY]: true}));
-        dispatch(actions.getWorkProgramList())
-    }, []);
+    const [sourceId, setSource] = useState('');
+    const [targetId, setTarget] = useState('');
+    const [modalIsOpen, handleModalOpen] = useState(false);
 
     const closeModal = () => handleModalOpen(false);
     const openModal = () => handleModalOpen(true);
     const mergeContent = () => {
         closeModal();
-        dispatch(actions.mergeWorkProgram({sourceId, targetId}));
+        dispatch(actions.mergeWorkPrograms({sourceId, targetId}));
     };
 
     const disabled = !sourceId || !targetId;
 
-    const selectWorkProgram = (val: number, type: WorkProgramSelectType) => {
+    const selectWorkProgram = (val: string, type: WorkProgramSelectType) => {
         switch (type) {
             case "source":
                 setSource(val);
@@ -105,10 +118,6 @@ export default ({className}: {className: string}) => {
         }
     };
 
-    if (workPrograms.length === 0) {
-        return null;
-    }
-
     return (
         <Box className={className}>
             <Typography className={classes.itemTitle}>
@@ -116,8 +125,8 @@ export default ({className}: {className: string}) => {
             </Typography>
             <div className={classes.root}>
                 <div className={classes.controls}>
-                    <WorkProgramSelect workPrograms={workPrograms} type="source" onChange={selectWorkProgram}/>
-                    <WorkProgramSelect workPrograms={workPrograms} type="target" onChange={selectWorkProgram}/>
+                    <WorkProgramSelect type="source" onChange={selectWorkProgram}/>
+                    <WorkProgramSelect type="target" onChange={selectWorkProgram}/>
                 </div>
                 <Button disabled={disabled} color="secondary" onClick={openModal}>Копировать</Button>
             </div>

@@ -56,7 +56,7 @@ export default () => {
             <div>
                 <Typography className={classes.userTitle}> {userName?.first_name} {userName?.last_name}</Typography>
                 <div className={classes.groupsList}>
-                    {userGroups.map((item: any) => <Chip label={item} className={classes.group} />)}
+                    {userGroups.map((item: any, key: number) => <Chip key={key} label={item} className={classes.group} />)}
                 </div>
             </div>
             <MergeWorkProgramsBlock className={classes.copyRpdContainer}/>

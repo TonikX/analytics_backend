@@ -11,7 +11,6 @@ export interface WorkProgramListActions {
     setWorkProgramList: any;
     createNewWorkProgram: any;
     changeWorkProgram: any;
-    mergeWorkProgram: any;
     deleteWorkProgram: any;
     openDialog: any;
     closeDialog: any;
