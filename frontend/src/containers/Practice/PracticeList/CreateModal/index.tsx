@@ -40,6 +40,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {minimalPracticeState} = this.state;
 
         this.setState({
+            ...this.state,
             minimalPracticeState: {
                 ...minimalPracticeState,
                 [field]: get(e, 'target.value')
@@ -53,6 +54,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         if (Number.isNaN(value)) return;
 
         this.setState({
+            ...this.state,
             minimalPracticeState: {
                 ...minimalPracticeState,
                 [field]: value,

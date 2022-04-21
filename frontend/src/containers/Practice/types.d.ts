@@ -5,28 +5,42 @@ import {RouteComponentProps} from "react-router-dom";
 
 export type Id = number;
 
-export interface PracticeState {
-    [PracticeFields.ID]: Id,
-    [PracticeFields.YEAR]: number,
-    [PracticeFields.AUTHORS]: string,
+export type GeneralInfoState = {
+    [PracticeFields.YEAR]: number;
+    [PracticeFields.AUTHORS]: string;
     [PracticeFields.OP_LEADER]: string,
     [PracticeFields.LANGUAGE]: string,
     [PracticeFields.QUALIFICATION]: string,
     [PracticeFields.KIND_OF_PRACTICE]: string,
     [PracticeFields.TYPE_OF_PRACTICE]: string,
+}
+
+export type FeaturesState = {
     [PracticeFields.WAY_OF_DOING_PRACTICE]: string,
     [PracticeFields.FORMAT_PRACTICE]: string,
     [PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP]: string,
-    [PracticeFields.FEATURES_INTERNSHIP]: string,
     [PracticeFields.ADDITIONAL_REPORTING_MATERIALS]: string,
+}
+
+export type AssessmentState = {
     [PracticeFields.FORM_OF_CERTIFICATION_TOOLS]: string,
     [PracticeFields.PASSED_GREAT_MARK]: string,
     [PracticeFields.PASSED_GOOD_MARK]: string,
     [PracticeFields.PASSED_SATISFACTORILY_MARK]: string,
     [PracticeFields.NOT_PASSED_MARK]: string,
-    [PracticeFields.PRACTICE_BASE]: number,
-    [PracticeFields.STRUCTURAL_UNIT]: number,
+}
+
+export type ReferencesState = {
     [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: Array<Id>,
+}
+
+export type PracticeState = GeneralInfoState
+    & FeaturesState
+    & AssessmentState
+    & ReferencesState
+    & {
+    [PracticeFields.ID]: Id,
+
 }
 
 export interface practicePageState {

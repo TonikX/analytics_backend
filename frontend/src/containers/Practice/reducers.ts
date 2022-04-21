@@ -8,7 +8,7 @@ export const GENERAL_PATH = 'practice';
 export const initialState: practicePageState = {
     practice: {
         [PracticeFields.ID]: 1,
-        [PracticeFields.YEAR]: 2022,
+        [PracticeFields.YEAR]: 0,
         [PracticeFields.AUTHORS]: "",
         [PracticeFields.OP_LEADER]: "",
         [PracticeFields.LANGUAGE]: "",
@@ -18,15 +18,12 @@ export const initialState: practicePageState = {
         [PracticeFields.WAY_OF_DOING_PRACTICE]: "",
         [PracticeFields.FORMAT_PRACTICE]: "",
         [PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP]: "",
-        [PracticeFields.FEATURES_INTERNSHIP]: "",
         [PracticeFields.ADDITIONAL_REPORTING_MATERIALS]: "",
         [PracticeFields.FORM_OF_CERTIFICATION_TOOLS]: "",
         [PracticeFields.PASSED_GREAT_MARK]: "",
         [PracticeFields.PASSED_GOOD_MARK]: "",
         [PracticeFields.PASSED_SATISFACTORILY_MARK]: "",
         [PracticeFields.NOT_PASSED_MARK]: "",
-        [PracticeFields.PRACTICE_BASE]: 1,
-        [PracticeFields.STRUCTURAL_UNIT]: 1,
         [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: [],
     }
 }

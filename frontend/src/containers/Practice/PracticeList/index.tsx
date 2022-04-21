@@ -19,7 +19,6 @@ class PracticeList extends React.Component<PracticeListProps> {
     }
 
     handleOpenModal = () => {
-        console.log(this.props);
         this.props.actions.openModal();
     }
 
