@@ -8,7 +8,6 @@ export const GENERAL_PATH = 'mergeWorkPrograms';
 
 export const initialState: mergeWorkProgramsState = {
     [fields.WORK_PROGRAM_LIST]: [],
-    [fields.SEARCH_QUERY]: ''
 };
 
 const setData = (state: mergeWorkProgramsState, {payload}: any): mergeWorkProgramsState => {
@@ -18,12 +17,6 @@ const setData = (state: mergeWorkProgramsState, {payload}: any): mergeWorkProgra
     });
 };
 
-const changeSearchQuery = (state: mergeWorkProgramsState, {payload}: any): mergeWorkProgramsState => ({
-    ...state,
-    [fields.SEARCH_QUERY]: payload,
-});
-
 export const reducer = createReducer(initialState, {
     [actions.setWorkProgramsList.type]: setData,
-    [actions.setSearchQuery.type]: changeSearchQuery,
 });
