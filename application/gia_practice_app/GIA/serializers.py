@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from workprogramsapp.workprogram_additions.GIA.models import CriteriaVKR, GIABaseTemplate, GIA
-from workprogramsapp.workprogram_additions.Practice.models import PracticeTemplate, Practice
+from gia_practice_app.GIA.models import CriteriaVKR, GIABaseTemplate, GIA
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 

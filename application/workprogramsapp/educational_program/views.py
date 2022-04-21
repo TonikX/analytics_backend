@@ -336,6 +336,9 @@ def GetCompetenceMatrix(request, gen_pk):
                     block_dict["modules_in_discipline_block"].append(block_module_dict)
             if block_dict["modules_in_discipline_block"]:
                 academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
+        list_to_sort = academic_plan_matrix_dict["discipline_blocks_in_academic_plan"]
+        newlist = sorted(list_to_sort, key=lambda d: d['name'])
+        academic_plan_matrix_dict["discipline_blocks_in_academic_plan"] = newlist
     competence_matrix["wp_matrix"] = matrix_list
     competence_matrix["educational_program"] = ImplementationAcademicPlanSerializer(gen_characteristic.educational_program.all(), many = True).data
     # print(matrix_list)

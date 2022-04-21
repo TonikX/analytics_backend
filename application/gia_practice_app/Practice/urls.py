@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from workprogramsapp.workprogram_additions.Practice.views import PracticeSet, PracticeTemplateSet
+from gia_practice_app.Practice.views import PracticeSet, PracticeTemplateSet
 
 router = DefaultRouter()
 router.register(r'api/practice', PracticeSet, basename='practice')

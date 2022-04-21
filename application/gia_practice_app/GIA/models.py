@@ -5,7 +5,7 @@ from analytics_project import settings
 
 import datetime
 
-from workprogramsapp.workprogram_additions.GIA.consts_for_models import *
+from .consts_for_models import *
 
 
 def current_year():
@@ -76,7 +76,7 @@ class GIA(models.Model):
     # Это поле пока оставляем текстовым, когда станет понятно что ОХ, сделаем подтягиеваемым программно (или нет?)
     op_leader = models.CharField(max_length=1024, verbose_name="Руководитель образовательной программы", blank=True,
                                  null=True)
-    structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL,
+    structural_unit = models.ForeignKey('workprogramsapp.StructuralUnit', on_delete=models.SET_NULL,
                                         verbose_name='Структурное подразделени',
                                         related_name='gia_in_structural_unit', blank=True, null=True)
 

@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
 
-from workprogramsapp.workprogram_additions.GIA.views import GIASet, GIABaseTemplateSet, CriteriaVKRSet
+from gia_practice_app.GIA.views import GIASet, GIABaseTemplateSet, CriteriaVKRSet
 
 router = DefaultRouter()
 router.register(r'api/gia', GIASet, basename='gia')
