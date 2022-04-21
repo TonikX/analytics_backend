@@ -142,7 +142,7 @@ const addDescriptionErrors = (state: rootState, errors: string[]) => {
     const description = getWorkProgramField(state, WorkProgramGeneralFields.DESCRIPTION);
 
     if (!description || !description.length) {
-        errors.push('Авторский состав не может быть пустым');
+        errors.push('Описание программы не может быть пустым');
     }
 }
 
@@ -180,7 +180,7 @@ const addResultsErrors = (state: rootState, errors: string[]) => {
     const evaluationToolsList = getWorkProgramEvaluationToolsList(state);
 
     if (!results || !results.length) {
-        errors.push('Должен быть хотя бы один пререквизит');
+        errors.push('Должен быть хотя бы один результат обучения');
     }
 
     for (const result of results) {
@@ -226,7 +226,7 @@ const addReferencesErrors = (state: rootState, errors: string[]) => {
     const references = getWorkProgramField(state, fields.WORK_PROGRAM_BIBLIOGRAPHIC_REFERENCE);
 
     if (!references || !references.length) {
-        errors.push('Должен быть хотя бы один пререквизит');
+        errors.push('Должен быть хотя бы один источник');
     }
 }
 
