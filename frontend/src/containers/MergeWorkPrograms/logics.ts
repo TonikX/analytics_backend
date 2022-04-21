@@ -4,7 +4,6 @@ import workProgramActions from "./actions";
 import actions from "../../layout/actions";
 import Service from "./service";
 import {fetchingTypes} from "./enum";
-import {getSearchQuery} from "./getters";
 
 const service = new Service();
 
@@ -12,8 +11,7 @@ const getWorkProgramList = createLogic({
     type: workProgramActions.getWorkProgramsList.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const state = getState();
-        const searchQuery = getSearchQuery(state);
+        const searchQuery = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_WORK_PROGRAM_LIST}));
 
