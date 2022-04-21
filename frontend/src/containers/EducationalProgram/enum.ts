@@ -67,7 +67,7 @@ export enum EducationProgramCharacteristicFields {
     EDUCATION_PROGRAM = 'educational_program',
     KINDS_OF_ACTIVITIES = 'kinds_of_activity',
     OBJECTS_OF_ACTIVITY = 'objects_of_activity',
-    TASKS_OF_ACTIVITY = 'tasks_of_activity',
+    TASKS_OF_ACTIVITY = 'tasks_for_prof_standards',
     AREA_OF_ACTIVITY = 'area_of_activity',
     PPS = 'pps',
     ANNOTATION = 'annotation',

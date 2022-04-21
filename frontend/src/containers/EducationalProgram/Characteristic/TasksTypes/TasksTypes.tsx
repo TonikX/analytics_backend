@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import {useDispatch} from "react-redux";
 
 import Typography from "@material-ui/core/Typography";
@@ -13,9 +13,11 @@ import IconButton from "@material-ui/core/IconButton";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
-import TextField from "@material-ui/core/TextField";
-
-import ObjectOfActivitySelector from '../ObjectOfActivitySelector'
+import FormControl from "@material-ui/core/FormControl";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
 
 import actions from '../../actions';
 import {EducationProgramCharacteristicFields} from "../../enum";
@@ -27,27 +29,22 @@ export default ({ characteristic }: any) => {
   const dispatch = useDispatch()
   const [openModal, setOpenModal] = useState(false)
   const [selectedObject, setSelectedObject] = useState()
-  const [newObject, setNewObject] = useState()
 
   const handleSave = useCallback(() => {
+    debugger
     const allActivities = characteristic[EducationProgramCharacteristicFields.TASKS_OF_ACTIVITY].map((item: any) => item.id)
-    if (newObject?.length) {
-      dispatch(actions.createObjectOfActivity(newObject))
-    } else {
-      dispatch(actions.changeEducationalProgramCharacteristic({
-        id: characteristic.id,
-        payload: {
-          [EducationProgramCharacteristicFields.TASKS_OF_ACTIVITY]: [
-            ...allActivities,
-            selectedObject,
-          ]
-        }
-      }))
-    }
+    dispatch(actions.changeEducationalProgramCharacteristic({
+      id: characteristic.id,
+      payload: {
+        [EducationProgramCharacteristicFields.TASKS_OF_ACTIVITY]: [
+          ...allActivities,
+          selectedObject,
+        ]
+      }
+    }))
     setOpenModal(false)
-    setNewObject(undefined)
     setSelectedObject(undefined)
-  }, [selectedObject, characteristic, newObject, characteristic])
+  }, [selectedObject, characteristic, characteristic])
 
   const handleRemoveItem = useCallback((id: any) => {
     dispatch(actions.changeEducationalProgramCharacteristic({
@@ -60,6 +57,11 @@ export default ({ characteristic }: any) => {
       }
     }))
   }, [characteristic])
+
+  const tasksList = useMemo(() => characteristic?.educational_standard?.tasks_prof_standard.map((item: any) => ({
+    value: item.id,
+    label: item.name,
+  })), [characteristic])
 
   return (
     <>
@@ -106,25 +108,30 @@ export default ({ characteristic }: any) => {
         }}
       >
         <DialogTitle className={classes.title}>Добавить тип профессиональной задачи</DialogTitle>
-        <Typography className={classes.marginBottom30}>
-          Выберите существующий тип профессиональной задачи или введите название нового
-        </Typography>
-        <ObjectOfActivitySelector
-          onChange={setSelectedObject}
-          label="Выберите тип профессиональной задачи"
-          value={selectedObject}
-          className={classes.marginBottom30}
-        />
-        <TextField
-          value={newObject}
-          onChange={(e) => setNewObject(e.target.value)}
-          label="Новый тип профессиональной задачи"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-          fullWidth
-        />
+        <FormControl className={classes.wrapSelector}>
+          <InputLabel shrink id="selected-object">
+            Тип профессиональной задачи *
+          </InputLabel>
+          <Select
+            variant="outlined"
+            onChange={(e) => setSelectedObject(e.target.value)}
+            value={selectedObject}
+            fullWidth
+            input={
+              <OutlinedInput
+                notched
+                labelWidth={100}
+                id="selected-object"
+              />
+            }
+          >
+            {tasksList.map((item: any) =>
+              <MenuItem value={item.value} key={`type-${item.value}`}>
+                {item.label}
+              </MenuItem>
+            )}
+          </Select>
+        </FormControl>
         <DialogActions className={classes.actions}>
           <Button onClick={() => setOpenModal(false)}
                   variant="text">
@@ -132,7 +139,7 @@ export default ({ characteristic }: any) => {
           </Button>
           <Button onClick={handleSave}
                   variant="contained"
-                  disabled={!selectedObject && !newObject?.length}
+                  disabled={!selectedObject}
                   color="primary"
           >
             Сохранить

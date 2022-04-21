@@ -195,7 +195,7 @@ const changeEducationalProgramCharacteristic = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const {payload, id} = action.payload;
-
+        debugger
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_EDUCATION_PROGRAM}));
 
         service.updateEducationProgramCharacteristic(id, payload)

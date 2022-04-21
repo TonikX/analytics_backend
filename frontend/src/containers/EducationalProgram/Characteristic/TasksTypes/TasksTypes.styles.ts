@@ -26,13 +26,21 @@ export default makeStyles((theme: Theme) => createStyles({
     marginBottom: '30px'
   },
   actions: {
-    marginTop: '30px'
+    marginTop: '10px'
   },
   title: {
     padding: 0,
-    marginBottom: '10px'
+    marginBottom: '30px'
   },
   deleteButtonWrap: {
     textAlign: 'right',
+  },
+  wrapSelector: {
+    '& .MuiInputLabel-shrink': {
+      transform: 'translate(13px, -6.5px) scale(0.75) !important',
+    },
+    '& .MuiOutlinedInput-notchedOutline legend': {
+      width: '170px !important'
+    },
   }
 }));
