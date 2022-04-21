@@ -487,14 +487,15 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
     work_program = serializers.SerializerMethodField('get_id_of_wpcb')
 
     def to_representation(self, value):
-        self.fields['gia'] = GIASerializer(required=False, many=True)
-        self.fields['practice'] = PracticeSerializer(required=False, many=True)
+        # self.fields['gia'] = GIASerializer(required=False, many=True)
+        # self.fields['practice'] = PracticeSerializer(required=False, many=True)
         return super().to_representation(value)
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module', 'gia',
-                  'practice']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module', #'gia',
+                  #'practice'
+                  ]
 
 
     def get_id_of_wpcb(self, obj):
@@ -598,13 +599,14 @@ class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.Model
     work_program = serializers.PrimaryKeyRelatedField(many=True, queryset=WorkProgram.objects.all())
 
     def to_representation(self, value):
-        self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
-        self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
+        # self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
+        # self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
         return super().to_representation(value)
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'gia',
-                  'practice']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', #'gia',
+                  #'practice'
+                  ]
         extra_kwargs = {
             'work_program': {'required': False}
         }
