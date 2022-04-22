@@ -65,9 +65,11 @@ const getIntermediateCertificationMaxSum = (evaluationTools: Array<IntermediateC
 const addTotalHoursWithEvaluationCertificationHours = (state: rootState, errors: string[]) => {
     const semesterCount = getWorkProgramField(state, WorkProgramGeneralFields.SEMESTER_COUNT);
     const evaluationToolsList = getWorkProgramEvaluationToolsList(state);
+    const qualification = getWorkProgramField(state, fields.WORK_PROGRAM_QUALIFICATION);
+    const bars = getWorkProgramField(state, WorkProgramGeneralFields.BARS);
     const fullSum = getEvaluationToolsMaxSum(evaluationToolsList) + getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state))
 
-    if (fullSum !== semesterCount * 100) {
+    if (fullSum !== semesterCount * 100 && qualification === BACHELOR_QUALIFICATION && bars) {
         errors.push('Сумма баллов за оценочные средства и оценочные средства промежуточной аттестации не 100 за каждый семестр');
     }
 }
