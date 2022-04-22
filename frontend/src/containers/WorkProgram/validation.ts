@@ -69,7 +69,7 @@ const addTotalHoursWithEvaluationCertificationHours = (state: rootState, errors:
     const bars = getWorkProgramField(state, WorkProgramGeneralFields.BARS);
     const fullSum = getEvaluationToolsMaxSum(evaluationToolsList) + getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state))
 
-    if (fullSum !== semesterCount * 100 && qualification === BACHELOR_QUALIFICATION && bars) {
+    if (fullSum % 100 !== 0 && qualification === BACHELOR_QUALIFICATION && bars) {
         errors.push('Сумма баллов за оценочные средства и оценочные средства промежуточной аттестации не 100 за каждый семестр');
     }
 }
