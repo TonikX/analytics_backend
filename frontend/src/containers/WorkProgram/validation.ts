@@ -78,7 +78,7 @@ const addPlanError = (state: rootState, errors: string[]) => {
     const educationalPlans = getWorkProgramField(state, 'work_program_in_change_block')
 
     if (educationalPlans.length === 0){
-        errors.push('PLAN_ERROR');
+        errors.push('Дисциплина не включена ни в один учебный план');
     }
 }
 
