@@ -1,5 +1,6 @@
 export enum fields {
     WORK_PROGRAM_LIST = 'WORK_PROGRAM_LIST',
+    SEARCH_QUERY = 'SEARCH_QUERY',
 }
 
 export enum fetchingTypes {
