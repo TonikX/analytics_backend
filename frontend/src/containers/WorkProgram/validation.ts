@@ -68,7 +68,7 @@ const addTotalHoursWithEvaluationCertificationHours = (state: rootState, errors:
     const fullSum = getEvaluationToolsMaxSum(evaluationToolsList) + getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state))
 
     if (fullSum !== semesterCount * 100) {
-        errors.push('Заполните до конца раздел оценочные средства');
+        errors.push('Сумма баллов за оценочные средства и оценочные средства промежуточной аттестации не 100 за каждый семестр');
     }
 }
 
