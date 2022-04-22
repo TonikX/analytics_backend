@@ -1,5 +1,4 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import debounce from 'lodash/debounce';
 import {useDispatch, useSelector} from 'react-redux';
 import {Autocomplete} from "@material-ui/lab";
 import {FormControl, Button, Modal, Box, Typography, TextField} from '@material-ui/core';
@@ -26,19 +25,17 @@ const WorkProgramSelect = ({type, onChange}: WorkProgramSelectProps) => {
     }))
 
     useEffect(() => {
-        dispatch(actions.getWorkProgramsList(''))
+        dispatch(actions.getWorkProgramsList())
     }, []);
 
-    const debounceSearch = debounce((value: string): void => {
-        dispatch(actions.getWorkProgramsList(value))
-    }, 500);
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            dispatch(actions.setSearchQuery(inputValue));
+            dispatch(actions.getWorkProgramsList())
+        }, 700)
 
-    const resetSearch = (_event: ChangeEvent<{}>) => {
-        if (inputValue) {
-            setInputValue('')
-            dispatch(actions.getWorkProgramsList(''))
-        }
-    }
+        return () => clearTimeout(delayDebounceFn)
+    }, [inputValue])
 
     const handleChange = (event: ChangeEvent<{}>, item: OptionItem) => {
         if (item) {
@@ -48,16 +45,12 @@ const WorkProgramSelect = ({type, onChange}: WorkProgramSelectProps) => {
 
     const changeSearch = (event: ChangeEvent<{}>, value: string) => {
         setInputValue(value);
-        if (event && event.constructor.name === "SyntheticEvent") {
-            debounceSearch(value);
-        }
     }
 
     return (
         <FormControl fullWidth variant="outlined">
             <Autocomplete
                 inputValue={inputValue}
-                onClose={resetSearch}
                 options={options}
                 onChange={handleChange}
                 onInputChange={changeSearch}
