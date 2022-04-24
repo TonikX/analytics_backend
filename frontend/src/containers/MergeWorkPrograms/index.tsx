@@ -32,7 +32,6 @@ const WorkProgramSelect = ({type, onChange}: WorkProgramSelectProps) => {
         const delayDebounceFn = setTimeout(() => {
             dispatch(actions.setSearchQuery(inputValue));
             dispatch(actions.getWorkProgramsList())
-            dispatch(actions.setSearchQuery(''));
         }, 700)
 
         return () => clearTimeout(delayDebounceFn)

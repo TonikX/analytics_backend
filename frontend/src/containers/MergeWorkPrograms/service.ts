@@ -2,7 +2,7 @@ import AnalyticsService from "../../service/analytics-service";
 
 class MergeWorkProgramsService extends AnalyticsService {
     getWorkPrograms(searchQuery: string) {
-        return this.get(`/api/workprograms?page=1&filter=my&search=${searchQuery}`);
+        return this.get(`/api/workprograms?filter=my&search=${searchQuery}`);
     }
 
     mergeContent(sourceId: number, targetId: number) {

@@ -5,8 +5,8 @@ import {
     getWorkProgramField,
     getWorkProgramIntermediateCertificationList
 } from "./getters";
-import {fields, WorkProgramGeneralFields, workProgramSectionFields} from "./enum";
-import {SectionType} from "./types";
+import {EvaluationToolFields, fields, WorkProgramGeneralFields, workProgramSectionFields} from "./enum";
+import {EvaluationToolType, IntermediateCertificationType, SectionType} from "./types";
 import {getAllHours, getHoursArray} from "./utils";
 import {ALL_LEVELS_QUALIFICATION, BACHELOR_QUALIFICATION, specializationObject} from "./constants";
 import {parseInt} from "lodash";
@@ -24,9 +24,10 @@ export const getValidationErrors = (state: rootState): string[] => {
         addEvaluationToolsErrors,
         addQualificationErrors,
         addPrerequisitesErrors,
-        addResultsErrors,
+        // addResultsErrors,
         addReferencesErrors,
-        addIntermediateCertificationErrors,
+        // addIntermediateCertificationErrors,
+        addTotalHoursWithEvaluationCertificationHours,
     ]
 
     const errors: string[] = [];
@@ -45,11 +46,39 @@ const getTotalHours = (sections: Array<SectionType>) => {
     return count;
 };
 
+const getEvaluationToolsMaxSum = (evaluationTools: Array<EvaluationToolType>) => {
+    let sum = 0;
+    evaluationTools.forEach((item) => {
+        sum += item[EvaluationToolFields.MAX];
+    });
+    return sum;
+}
+
+const getIntermediateCertificationMaxSum = (evaluationTools: Array<IntermediateCertificationType>) => {
+    let sum = 0;
+    evaluationTools.forEach((item) => {
+        sum += item[EvaluationToolFields.MAX];
+    });
+    return sum;
+}
+
+const addTotalHoursWithEvaluationCertificationHours = (state: rootState, errors: string[]) => {
+    const semesterCount = getWorkProgramField(state, WorkProgramGeneralFields.SEMESTER_COUNT);
+    const evaluationToolsList = getWorkProgramEvaluationToolsList(state);
+    const qualification = getWorkProgramField(state, fields.WORK_PROGRAM_QUALIFICATION);
+    const bars = getWorkProgramField(state, WorkProgramGeneralFields.BARS);
+    const fullSum = getEvaluationToolsMaxSum(evaluationToolsList) + getIntermediateCertificationMaxSum(getWorkProgramIntermediateCertificationList(state))
+
+    if (fullSum % 100 !== 0 && qualification === BACHELOR_QUALIFICATION && bars) {
+        errors.push('Сумма баллов за оценочные средства и оценочные средства промежуточной аттестации не 100 за каждый семестр');
+    }
+}
+
 const addPlanError = (state: rootState, errors: string[]) => {
     const educationalPlans = getWorkProgramField(state, 'work_program_in_change_block')
 
     if (educationalPlans.length === 0){
-        errors.push('PLAN_ERROR');
+        errors.push('Дисциплина не включена ни в один учебный план');
     }
 }
 
@@ -99,14 +128,14 @@ const addEvaluationToolsErrors = (state: rootState, errors: string[]) => {
         errors.push('В РПД отсутствуют оценочные средства');
     }
 
-    if (sections.some((s: any) => s.evaluation_tools.length === 0)) {
-        errors.push('У каждого раздела должно быть оценочное средство');
-    }
-    if (isBarsOn) {
-        addEvaluationToolsErrorsWithBars(state, errors);
-    } else {
-        addEvaluationToolsErrorsWithoutBars(state, errors);
-    }
+    // if (sections.some((s: any) => s.evaluation_tools.length === 0)) {
+    //     errors.push('У каждого раздела должно быть оценочное средство');
+    // }
+    // if (isBarsOn) {
+    //     addEvaluationToolsErrorsWithBars(state, errors);
+    // } else {
+    //     addEvaluationToolsErrorsWithoutBars(state, errors);
+    // }
 
 }
 
