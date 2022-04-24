@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'onlinecourse',
     'records',
-    'gia_practice_app',
+    #'gia_practice_app',
     'django_extensions',
     #'oauth2_provider',
     #'social_django',
