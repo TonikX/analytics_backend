@@ -6,8 +6,3 @@ import {GeneralInfoState, practicePageState, PracticeState} from "./types";
 const getStateData = (state: rootState): practicePageState => get(state, GENERAL_PATH);
 
 export const getPractice = (state: rootState): PracticeState => get(getStateData(state), 'practice', initialState.practice);
-
-export const getGeneralInfo = (state: rootState): GeneralInfoState => {
-    const practice = getPractice(state);
-    return practice as GeneralInfoState;
-}

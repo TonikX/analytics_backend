@@ -6,53 +6,30 @@ import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "./styles";
 import {Typography, WithStyles} from "@material-ui/core";
-import {FeaturesState} from "../../types";
+import {PracticeActions, PracticeState} from "../../types";
 
 interface FeaturesProps extends WithStyles<typeof styles> {
-
+    actions: PracticeActions;
+    fields: PracticeState;
 }
 
 class Features extends React.Component<FeaturesProps> {
-    state = {
-        fields: {
-            [PracticeFields.WAY_OF_DOING_PRACTICE]: '',
-            [PracticeFields.FORMAT_PRACTICE]: '',
-            [PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP]: '',
-            [PracticeFields.ADDITIONAL_REPORTING_MATERIALS]: '',
-        } as FeaturesState
-    }
-
     saveField = (field: string) => (e: React.ChangeEvent) => {
-        const {fields} = this.state;
+        const value = get(e, 'target.value')
 
-        this.setState({
-            ...this.state,
-            fields: {
-                ...fields,
-                [field]: get(e, 'target.value')
-            }
-        })
+        this.props.actions.setField({field, value});
     }
 
     saveNumberField = (field: string) => (e: React.ChangeEvent) => {
-        const {fields} = this.state;
-        const parsedValue = parseInt(get(e, 'target.value'));
-        if (Number.isNaN(parsedValue)) return;
+        const value = get(e, 'target.value')
 
-        this.setState({
-            ...this.state,
-            fields: {
-                ...fields,
-                [field]: parsedValue,
-            }
-        })
+        this.props.actions.setField({field, value});
     }
 
     render() {
 
-        const {classes} = this.props;
-        const {fields} = this.state;
-        
+        const {classes, fields} = this.props;
+
         return (
             <div className={classes.content}>
                 <Typography variant='h5'>

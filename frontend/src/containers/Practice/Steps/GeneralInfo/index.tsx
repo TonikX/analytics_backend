@@ -6,75 +6,30 @@ import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "./styles";
 import {Typography, WithStyles} from "@material-ui/core";
-import {GeneralInfoState} from "../../types";
+import {PracticeActions, PracticeState} from "../../types";
 
 interface GeneralInfoProps extends WithStyles<typeof styles> {
-    generalInfo: GeneralInfoState;
+    actions: PracticeActions;
+    fields: PracticeState;
 }
 
 class GeneralInfo extends React.Component<GeneralInfoProps> {
-    state = {
-        fields: {
-            [PracticeFields.YEAR]: 0,
-            [PracticeFields.AUTHORS]: '',
-            [PracticeFields.OP_LEADER]: '',
-            [PracticeFields.LANGUAGE]: '',
-            [PracticeFields.QUALIFICATION]: '',
-            [PracticeFields.KIND_OF_PRACTICE]: '',
-            [PracticeFields.TYPE_OF_PRACTICE]: '',
-        } as GeneralInfoState
-    }
-
-    componentDidMount() {
-        this.updateState()
-    }
-
-    componentDidUpdate(prevProps: Readonly<GeneralInfoProps>, prevState: Readonly<{}>, snapshot?: any) {
-        if (prevProps !== this.props) {
-            this.updateState();
-        }
-    }
-
-    updateState() {
-        const generalInfo = this.props.generalInfo;
-        this.setState({
-            ...this.state,
-            fields: {
-                ...generalInfo,
-            }
-        })
-    }
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
-        const {fields} = this.state;
+        const value = get(e, 'target.value')
 
-        this.setState({
-            ...this.state,
-            fields: {
-                ...fields,
-                [field]: get(e, 'target.value')
-            }
-        })
+        this.props.actions.setField({field, value});
     }
 
     saveNumberField = (field: string) => (e: React.ChangeEvent) => {
-        const {fields} = this.state;
-        const parsedValue = parseInt(get(e, 'target.value'));
-        if (Number.isNaN(parsedValue)) return;
+        const value = get(e, 'target.value')
 
-        this.setState({
-            ...this.state,
-            fields: {
-                ...fields,
-                [field]: parsedValue,
-            }
-        })
+        this.props.actions.setField({field, value});
     }
 
     render() {
 
-        const {classes} = this.props;
-        const {fields} = this.state;
+        const {classes, fields} = this.props;
 
         return (
             <div className={classes.content}>

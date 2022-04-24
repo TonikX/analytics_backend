@@ -57,6 +57,7 @@ export interface MinimalPracticeState {
 export interface PracticeActions {
     getPractice: any;
     setPractice: any;
+    setField: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {

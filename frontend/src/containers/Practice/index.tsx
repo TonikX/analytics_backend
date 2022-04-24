@@ -23,7 +23,7 @@ class Practice extends React.Component<PracticeProps> {
 
     stepNameList = PracticeStepsRussianList;
 
-    stepList = [<GeneralInfo/>, <Features />, <Assessment />, undefined]
+    stepList = [<GeneralInfo/>, <Features/>, <Assessment/>, undefined]
 
     getPracticeId = () => get(this, 'props.match.params.id');
 

@@ -6,54 +6,31 @@ import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "./styles";
 import {Typography, WithStyles} from "@material-ui/core";
-import {AssessmentState} from "../../types";
+import {AssessmentState, PracticeActions, PracticeState} from "../../types";
 
 interface AssessmentProps extends WithStyles<typeof styles> {
-
+    actions: PracticeActions;
+    fields: PracticeState;
 }
 
 class Assessment extends React.Component<AssessmentProps> {
-    state = {
-        fields: {
-            [PracticeFields.FORM_OF_CERTIFICATION_TOOLS]: '',
-            [PracticeFields.PASSED_GREAT_MARK]: '',
-            [PracticeFields.PASSED_GOOD_MARK]: '',
-            [PracticeFields.PASSED_SATISFACTORILY_MARK]: '',
-            [PracticeFields.NOT_PASSED_MARK]: '',
-        } as AssessmentState
-    }
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
-        const {fields} = this.state;
+        const value = get(e, 'target.value')
 
-        this.setState({
-            ...this.state,
-            fields: {
-                ...fields,
-                [field]: get(e, 'target.value')
-            }
-        })
+        this.props.actions.setField({field, value});
     }
 
     saveNumberField = (field: string) => (e: React.ChangeEvent) => {
-        const {fields} = this.state;
-        const parsedValue = parseInt(get(e, 'target.value'));
-        if (Number.isNaN(parsedValue)) return;
+        const value = get(e, 'target.value')
 
-        this.setState({
-            ...this.state,
-            fields: {
-                ...fields,
-                [field]: parsedValue,
-            }
-        })
+        this.props.actions.setField({field, value});
     }
 
     render() {
 
-        const {classes} = this.props;
-        const {fields} = this.state;
-        
+        const {classes, fields} = this.props;
+
         return (
             <div className={classes.content}>
                 <Typography variant='h5'>
