@@ -58,6 +58,7 @@ export interface PracticeActions {
     getPractice: any;
     setPractice: any;
     setField: any;
+    savePractice: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {

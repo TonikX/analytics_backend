@@ -20,5 +20,20 @@ const getPractice = createLogic({
     }
 });
 
+const savePractice = createLogic({
+    type: PracticeActions.savePractice.type,
+    latest: true,
 
-export default [getPractice];
+    process({getState, action}: any, dispatch, done) {
+        const {id, practice} = action.payload;
+        service.savePractice(practice, id)
+            .then((res) => {
+            })
+            .finally(() => {
+                return done();
+            });
+    }
+});
+
+
+export default [getPractice, savePractice];

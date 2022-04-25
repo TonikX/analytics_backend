@@ -1,5 +1,5 @@
 import AnalyticsService from "../../service/analytics-service";
-import {MinimalPracticeState} from "./types";
+import {MinimalPracticeState, PracticeState} from "./types";
 
 class PracticeService extends AnalyticsService{
     getPracticeList() {
@@ -12,6 +12,10 @@ class PracticeService extends AnalyticsService{
 
     getPractice(id: number) {
         return this.get(`/api/practice/${id}/`)
+    }
+
+    savePractice(practice: PracticeState, id: number) {
+        return this.put(`/api/practice/${id}/`, practice);
     }
 }
 

@@ -7,13 +7,14 @@ import styles from "./Practice.styles";
 import connect from './Practice.connect';
 import {PracticeProps} from "./types";
 import get from "lodash/get";
-import {PracticeFields, PracticeStepsRussianList} from "./enum";
+import {PracticeStepsRussianList} from "./enum";
 import Step from "@material-ui/core/Step";
 import StepButton from "@material-ui/core/StepButton";
 import Stepper from "@material-ui/core/Stepper";
 import GeneralInfo from "./Steps/GeneralInfo";
 import Assessment from "./Steps/Assessment";
 import Features from "./Steps/Features";
+import {Button} from "@material-ui/core";
 
 class Practice extends React.Component<PracticeProps> {
 
@@ -27,6 +28,11 @@ class Practice extends React.Component<PracticeProps> {
 
     getPracticeId = () => get(this, 'props.match.params.id');
 
+    handleSave = () => {
+        const practice = this.props.practice;
+        this.props.actions.savePractice({practice, id: this.getPracticeId()});
+    }
+
     componentDidMount() {
         this.props.actions.getPractice(this.getPracticeId());
     }
@@ -39,7 +45,7 @@ class Practice extends React.Component<PracticeProps> {
     }
 
     render() {
-        const {classes, practice} = this.props;
+        const {classes} = this.props;
         const {activeStep} = this.state;
 
         return (
@@ -62,13 +68,14 @@ class Practice extends React.Component<PracticeProps> {
                     })}
                 </Stepper>
                 <div className={classes.content}>
-                    Welcome to practice page,
-                    id: {practice[PracticeFields.ID]},
-                    authors: {practice[PracticeFields.AUTHORS]}
                     {
                         this.stepList[activeStep]
                     }
-
+                </div>
+                <div className={classes.rightPanel}>
+                    <Button variant='contained' onClick={this.handleSave}>
+                        Сохранить
+                    </Button>
                 </div>
             </Paper>
         )

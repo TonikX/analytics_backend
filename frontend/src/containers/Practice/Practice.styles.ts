@@ -98,5 +98,9 @@ export default (theme: Theme) => createStyles({
         position: 'absolute',
         top: '10px',
         left: '-25px',
-    }
+    },
+    rightPanel: {
+        width: '250px',
+        height: 'fit-content',
+    },
 });
