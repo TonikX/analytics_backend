@@ -6,7 +6,7 @@ import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "./styles";
 import {Typography, WithStyles} from "@material-ui/core";
-import {AssessmentState, PracticeActions, PracticeState} from "../../types";
+import {PracticeActions, PracticeState} from "../../types";
 
 interface AssessmentProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -16,12 +16,6 @@ interface AssessmentProps extends WithStyles<typeof styles> {
 class Assessment extends React.Component<AssessmentProps> {
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
-        const value = get(e, 'target.value')
-
-        this.props.actions.setField({field, value});
-    }
-
-    saveNumberField = (field: string) => (e: React.ChangeEvent) => {
         const value = get(e, 'target.value')
 
         this.props.actions.setField({field, value});
@@ -37,7 +31,7 @@ class Assessment extends React.Component<AssessmentProps> {
                     {PracticeStepsRussian.ASSESSMENT}
                 </Typography>
                 <TextField label="Форма аттестации"
-                           onChange={this.saveNumberField(PracticeFields.FORM_OF_CERTIFICATION_TOOLS)}
+                           onChange={this.saveField(PracticeFields.FORM_OF_CERTIFICATION_TOOLS)}
                            variant="outlined"
                            className={classes.input}
                            fullWidth

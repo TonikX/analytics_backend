@@ -21,12 +21,6 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
         this.props.actions.setField({field, value});
     }
 
-    saveNumberField = (field: string) => (e: React.ChangeEvent) => {
-        const value = get(e, 'target.value')
-
-        this.props.actions.setField({field, value});
-    }
-
     render() {
 
         const {classes, fields} = this.props;
@@ -37,7 +31,7 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                     {PracticeStepsRussian.GENERAL}
                 </Typography>
                 <TextField label="Год проведения"
-                           onChange={this.saveNumberField(PracticeFields.YEAR)}
+                           onChange={this.saveField(PracticeFields.YEAR)}
                            variant="outlined"
                            className={classes.input}
                            fullWidth

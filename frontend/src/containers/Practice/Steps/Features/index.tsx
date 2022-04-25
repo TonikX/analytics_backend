@@ -20,12 +20,6 @@ class Features extends React.Component<FeaturesProps> {
         this.props.actions.setField({field, value});
     }
 
-    saveNumberField = (field: string) => (e: React.ChangeEvent) => {
-        const value = get(e, 'target.value')
-
-        this.props.actions.setField({field, value});
-    }
-
     render() {
 
         const {classes, fields} = this.props;
@@ -36,7 +30,7 @@ class Features extends React.Component<FeaturesProps> {
                     {PracticeStepsRussian.ASSESSMENT}
                 </Typography>
                 <TextField label="Способ прохождения практики"
-                           onChange={this.saveNumberField(PracticeFields.WAY_OF_DOING_PRACTICE)}
+                           onChange={this.saveField(PracticeFields.WAY_OF_DOING_PRACTICE)}
                            variant="outlined"
                            className={classes.input}
                            fullWidth
