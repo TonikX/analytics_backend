@@ -34,6 +34,10 @@ class Practice extends React.Component<PracticeProps> {
     }
 
     componentDidMount() {
+        this.getPractice();
+    }
+
+    getPractice = () => {
         this.props.actions.getPractice(this.getPracticeId());
     }
 
@@ -73,8 +77,14 @@ class Practice extends React.Component<PracticeProps> {
                     }
                 </div>
                 <div className={classes.rightPanel}>
-                    <Button variant='contained' onClick={this.handleSave}>
+                    <Button variant='contained'
+                            onClick={this.handleSave}>
                         Сохранить
+                    </Button>
+                    <Button variant='contained'
+                            onClick={this.getPractice}
+                            className={classes.resetButton}>
+                        Отменить изменения
                     </Button>
                 </div>
             </Paper>

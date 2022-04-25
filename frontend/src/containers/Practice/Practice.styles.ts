@@ -102,5 +102,10 @@ export default (theme: Theme) => createStyles({
     rightPanel: {
         width: '250px',
         height: 'fit-content',
+        display: 'flex',
+        flexDirection: 'column',
     },
+    resetButton: {
+        marginTop: '20px',
+    }
 });
