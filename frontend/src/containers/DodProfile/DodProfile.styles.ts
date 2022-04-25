@@ -78,7 +78,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         display: 'flex',
         marginTop: '-12px',
         width: '30%',
-        height: 'calc(100vh - 300px)',
+        minHeight: 'calc(100vh - 300px)',
         '@media (max-width: 1250px)': {
             width: '100%',
             height: 'calc(100vh - 600px)',
