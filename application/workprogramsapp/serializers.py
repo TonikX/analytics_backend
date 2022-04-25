@@ -2,8 +2,8 @@ from rest_framework import serializers
 from rest_framework.fields import BooleanField
 
 from dataprocessing.serializers import ItemSerializer, userProfileSerializer
-from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
-from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
+#from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
+#from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
 from .expertise.common_serializers import ShortExpertiseSerializer
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
