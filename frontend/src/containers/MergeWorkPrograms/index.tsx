@@ -1,5 +1,6 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import debounce from 'lodash/debounce';
 import {Autocomplete} from "@material-ui/lab";
 import {FormControl, Button, Modal, Box, Typography, TextField} from '@material-ui/core';
 import {useStyles} from './MergeWorkProgramsBlock.styles';
@@ -11,7 +12,7 @@ type WorkProgramSelectProps = {
     type: WorkProgramSelectType;
     onChange: (x: string, type: WorkProgramSelectType) => void;
 };
-type OptionItem = {id: string; label: string} | null;
+type OptionItem = { id: string; label: string } | null;
 
 const WorkProgramSelect = ({type, onChange}: WorkProgramSelectProps) => {
     const dispatch = useDispatch();
@@ -28,14 +29,10 @@ const WorkProgramSelect = ({type, onChange}: WorkProgramSelectProps) => {
         dispatch(actions.getWorkProgramsList())
     }, []);
 
-    useEffect(() => {
-        const delayDebounceFn = setTimeout(() => {
-            dispatch(actions.setSearchQuery(inputValue));
-            dispatch(actions.getWorkProgramsList())
-        }, 700)
-
-        return () => clearTimeout(delayDebounceFn)
-    }, [inputValue])
+    const debounceSearch = debounce((value: string): void => {
+        dispatch(actions.setSearchQuery(inputValue));
+        dispatch(actions.getWorkProgramsList(value))
+    }, 500);
 
     const handleChange = (event: ChangeEvent<{}>, item: OptionItem) => {
         if (item) {
@@ -45,11 +42,21 @@ const WorkProgramSelect = ({type, onChange}: WorkProgramSelectProps) => {
 
     const changeSearch = (event: ChangeEvent<{}>, value: string) => {
         setInputValue(value);
-    }
+        if (event && event.type === "change") {
+            debounceSearch(value);
+        }
+    };
+
+    const resetSearch = (_event: ChangeEvent<{}>) => {
+        setInputValue('');
+        dispatch(actions.setSearchQuery(''));
+        dispatch(actions.getWorkProgramsList())
+    };
 
     return (
         <FormControl fullWidth variant="outlined">
             <Autocomplete
+                onClose={resetSearch}
                 inputValue={inputValue}
                 options={options}
                 onChange={handleChange}
@@ -88,7 +95,7 @@ const CopyWorkProgramsModal = ({open, handleClose, confirm}: ModalProps) => {
     )
 };
 
-export default ({className}: {className: string}) => {
+export default ({className}: { className: string }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [sourceId, setSource] = useState('');
