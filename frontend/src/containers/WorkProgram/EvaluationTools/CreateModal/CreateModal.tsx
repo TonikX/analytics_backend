@@ -362,7 +362,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             ? evaluationTool[EvaluationToolFields.DESCRIPTION] : ''}
                                     onChange={this.changeDescription}
                                     useFormulas
-                                    height="calc(100vh - 280px)"
+                                    height="400px"
                                     style={this.hasError(EvaluationToolFields.DESCRIPTION)? {border: '1px solid #d00000'} : {border: '1px solid #d1d1d1'}}
                                 />
                             </div>
