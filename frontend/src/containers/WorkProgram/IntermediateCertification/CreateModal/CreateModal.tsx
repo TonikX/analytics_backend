@@ -262,8 +262,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                       value={evaluationTool[IntermediateCertificationFields.DESCRIPTION] ? evaluationTool[IntermediateCertificationFields.DESCRIPTION] : ''}
                                       toolbarContainerId="toolbar-container"
                                       useFormulas
-                                      height="400px"
-                                      // height="calc(100vh - 300px)"
+                                      height="calc(100vh - 280px)"
                                       style={this.hasError(EvaluationToolFields.DESCRIPTION)? {border: '1px solid #d00000'} : {border: '1px solid #d1d1d1'}}
                             />
                           </div>

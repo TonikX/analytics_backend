@@ -67,8 +67,7 @@ class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
                     <CKEditor
                         value={evaluationTool[EvaluationToolFields.DESCRIPTION]}
                         readOnly
-                        // height="calc(100vh - 280px)"
-                        height="400px"
+                        height="calc(100vh - 280px)"
                         useFormulas
                     />
                 </DialogContent>
