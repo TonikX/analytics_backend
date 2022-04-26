@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography  from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import Tooltip from "@material-ui/core/Tooltip";
 
 import {appRouter} from '../../service/router-service';
 
@@ -98,12 +99,14 @@ class SignIn extends React.PureComponent{
                         <a href={config.apiIsuFinishUrlWithProtocol}
                               className={classes.link}
                         >
-                            <Button color="primary"
-                                    variant="outlined"
-                                    className={classes.button}
-                            >
-                                Войти через ИСУ
-                            </Button>
+                            <Tooltip title="Если Вы перешли по ссылке и у Вас открылось окно с авторизацией через ИСУ, дальнейшие проблемы с авторизацией не связаны с Конструктором ОП, а связаны с системой авторизации ИСУ">
+                                <Button color="primary"
+                                        variant="outlined"
+                                        className={classes.button}
+                                >
+                                        Войти через ИСУ
+                                </Button>
+                            </Tooltip>
                         </a>
                     </div>
                 </div>
