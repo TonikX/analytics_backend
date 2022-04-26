@@ -19,6 +19,7 @@ import {PracticeFields} from "../../enum";
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
         minimalPracticeState: {
+            [PracticeFields.TITLE]: '',
             [PracticeFields.YEAR]: 2022, // todo current year using moment
             [PracticeFields.OP_LEADER]: '',
             [PracticeFields.AUTHORS]: '',
@@ -82,6 +83,16 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             >
                 <DialogTitle> Создать практику </DialogTitle>
                 <DialogContent>
+                    <TextField label="Название"
+                               onChange={this.saveField(PracticeFields.TITLE)}
+                               variant="outlined"
+                               className={classes.input}
+                               fullWidth
+                               value={minimalPracticeState[PracticeFields.TITLE]}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}
+                    />
                     <TextField label="Год"
                                onChange={this.saveNumberField(PracticeFields.YEAR)}
                                variant="outlined"

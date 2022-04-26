@@ -1,5 +1,6 @@
 export enum PracticeFields {
     ID = 'id',
+    TITLE = 'title',
     YEAR = 'year',
     AUTHORS = 'authors',
     OP_LEADER = 'op_leader',
@@ -26,4 +27,4 @@ export enum PracticeStepsRussian {
     REFERENCES = 'Источники',
 }
 
-export const PracticeStepsRussianList = Object.entries(PracticeStepsRussian).map(([key, value]) => value);
+export const PracticeStepsRussianList = Object.entries(PracticeStepsRussian).map(([, value]) => value);

@@ -29,7 +29,7 @@ class PracticeList extends React.Component<PracticeListProps> {
                 {
                     practiceList.map(practice => (
                         <Link target="_blank" to={appRouter.getPracticeLink(practice[PracticeFields.ID])}>
-                            {practice[PracticeFields.ID]}
+                            {practice[PracticeFields.TITLE]}
                         </Link>
                     ))
                 }

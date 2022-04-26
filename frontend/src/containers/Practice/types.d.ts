@@ -6,6 +6,7 @@ import {RouteComponentProps} from "react-router-dom";
 export type Id = number;
 
 export type GeneralInfoState = {
+    [PracticeFields.TITLE]: string,
     [PracticeFields.YEAR]: number;
     [PracticeFields.AUTHORS]: string;
     [PracticeFields.OP_LEADER]: string,
@@ -48,6 +49,7 @@ export interface practicePageState {
 }
 
 export interface MinimalPracticeState {
+    [PracticeFields.TITLE]: string,
     [PracticeFields.YEAR]: number,
     [PracticeFields.OP_LEADER]: string,
     [PracticeFields.AUTHORS]: string,

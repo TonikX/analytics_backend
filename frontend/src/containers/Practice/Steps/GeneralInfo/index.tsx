@@ -30,6 +30,16 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                 <Typography variant='h5'>
                     {PracticeStepsRussian.GENERAL}
                 </Typography>
+                <TextField label="Название"
+                           onChange={this.saveField(PracticeFields.TITLE)}
+                           variant="outlined"
+                           className={classes.input}
+                           fullWidth
+                           value={fields[PracticeFields.TITLE]}
+                           InputLabelProps={{
+                               shrink: true,
+                           }}
+                />
                 <TextField label="Год проведения"
                            onChange={this.saveField(PracticeFields.YEAR)}
                            variant="outlined"
