@@ -1,5 +1,6 @@
+from django.core.mail import send_mail
 from rest_framework import generics
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
@@ -12,7 +13,7 @@ from workprogramsapp.notifications.models import UserNotification
 from workprogramsapp.notifications.serializers import NotificationSerializer, NotificationCreateSerializer
 from workprogramsapp.permissions import IsOwnerOfFolder, IsOwnerOfFolderWithWorkProgramm, \
     IsOwnerOfFolderWithAcademicPlan, IsOwnerOfFolderWithDisciplineBlockModule, \
-    IsOwnerOfFolderWithIndividualImplementationAcademicPlan
+    IsOwnerOfFolderWithIndividualImplementationAcademicPlan, IsRpdDeveloperOrReadOnly
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
@@ -38,3 +39,9 @@ class CreateCustomNotification(generics.CreateAPIView):
     queryset = UserNotification.objects.all()
     serializer_class = NotificationCreateSerializer
     permission_classes = [IsAdminUser]
+
+@api_view(['GET'])
+@permission_classes([IsRpdDeveloperOrReadOnly, ])
+def mailtest(request):
+
+    return Response(str("result"), status=200)
