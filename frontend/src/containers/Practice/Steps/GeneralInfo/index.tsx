@@ -7,6 +7,8 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "./styles";
 import {Typography, WithStyles} from "@material-ui/core";
 import {PracticeActions, PracticeState} from "../../types";
+import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
+import {languageArray, specialization} from "../../../WorkProgram/constants";
 
 interface GeneralInfoProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -15,10 +17,14 @@ interface GeneralInfoProps extends WithStyles<typeof styles> {
 
 class GeneralInfo extends React.Component<GeneralInfoProps> {
 
-    saveField = (field: string) => (e: React.ChangeEvent) => {
+    saveInput = (field: string) => (e: React.ChangeEvent) => {
         const value = get(e, 'target.value')
 
         this.props.actions.setField({field, value});
+    }
+
+    saveSelect = (field: string) => (value: string) => {
+        this.props.actions.setField({field, value})
     }
 
     render() {
@@ -31,7 +37,7 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                     {PracticeStepsRussian.GENERAL}
                 </Typography>
                 <TextField label="Название"
-                           onChange={this.saveField(PracticeFields.TITLE)}
+                           onChange={this.saveInput(PracticeFields.TITLE)}
                            variant="outlined"
                            className={classes.input}
                            fullWidth
@@ -41,7 +47,7 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                            }}
                 />
                 <TextField label="Год проведения"
-                           onChange={this.saveField(PracticeFields.YEAR)}
+                           onChange={this.saveInput(PracticeFields.YEAR)}
                            variant="outlined"
                            className={classes.input}
                            fullWidth
@@ -51,7 +57,7 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                            }}
                 />
                 <TextField label="Руководитель образовательной программы"
-                           onChange={this.saveField(PracticeFields.OP_LEADER)}
+                           onChange={this.saveInput(PracticeFields.OP_LEADER)}
                            variant="outlined"
                            className={classes.input}
                            fullWidth
@@ -60,18 +66,14 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                                shrink: true,
                            }}
                 />
-                <TextField label="Язык реализации"
-                           onChange={this.saveField(PracticeFields.LANGUAGE)}
-                           variant="outlined"
-                           className={classes.input}
-                           fullWidth
-                           value={fields[PracticeFields.LANGUAGE]}
-                           InputLabelProps={{
-                               shrink: true,
-                           }}
+                <SimpleSelector label="Язык реализации"
+                                metaList={languageArray}
+                                value={fields[PracticeFields.LANGUAGE]}
+                                wrapClass={classes.selectorWrap}
+                                onChange={this.saveSelect(PracticeFields.LANGUAGE)}
                 />
                 <TextField label="Авторский состав"
-                           onChange={this.saveField(PracticeFields.AUTHORS)}
+                           onChange={this.saveInput(PracticeFields.AUTHORS)}
                            variant="outlined"
                            className={classes.input}
                            fullWidth
@@ -80,18 +82,14 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                                shrink: true,
                            }}
                 />
-                <TextField label="Квалификация"
-                           onChange={this.saveField(PracticeFields.QUALIFICATION)}
-                           variant="outlined"
-                           className={classes.input}
-                           fullWidth
-                           value={fields[PracticeFields.QUALIFICATION]}
-                           InputLabelProps={{
-                               shrink: true,
-                           }}
+                <SimpleSelector label="Уровень образования"
+                                metaList={specialization}
+                                value={fields[PracticeFields.QUALIFICATION]}
+                                wrapClass={classes.selectorWrap}
+                                onChange={this.saveSelect(PracticeFields.QUALIFICATION)}
                 />
                 <TextField label="Вид практики"
-                           onChange={this.saveField(PracticeFields.KIND_OF_PRACTICE)}
+                           onChange={this.saveInput(PracticeFields.KIND_OF_PRACTICE)}
                            variant="outlined"
                            className={classes.input}
                            fullWidth
@@ -101,7 +99,7 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                            }}
                 />
                 <TextField label="Тип практики"
-                           onChange={this.saveField(PracticeFields.TYPE_OF_PRACTICE)}
+                           onChange={this.saveInput(PracticeFields.TYPE_OF_PRACTICE)}
                            variant="outlined"
                            className={classes.input}
                            fullWidth
