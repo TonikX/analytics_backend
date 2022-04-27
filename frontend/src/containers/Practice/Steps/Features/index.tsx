@@ -34,6 +34,8 @@ class Features extends React.Component<FeaturesProps> {
                            variant="outlined"
                            className={classes.input}
                            fullWidth
+                           multiline
+                           rows={2}
                            value={fields[PracticeFields.WAY_OF_DOING_PRACTICE]}
                            InputLabelProps={{
                                shrink: true,
@@ -64,6 +66,8 @@ class Features extends React.Component<FeaturesProps> {
                            variant="outlined"
                            className={classes.input}
                            fullWidth
+                           multiline
+                           rows={2}
                            value={fields[PracticeFields.ADDITIONAL_REPORTING_MATERIALS]}
                            InputLabelProps={{
                                shrink: true,

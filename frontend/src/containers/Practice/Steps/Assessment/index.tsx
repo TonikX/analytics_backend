@@ -40,46 +40,60 @@ class Assessment extends React.Component<AssessmentProps> {
                                shrink: true,
                            }}
                 />
-                <TextField label='Критерий оценки "отлично"'
-                           onChange={this.saveField(PracticeFields.PASSED_GREAT_MARK)}
-                           variant="outlined"
-                           className={classes.input}
-                           fullWidth
-                           value={fields[PracticeFields.PASSED_GREAT_MARK]}
-                           InputLabelProps={{
-                               shrink: true,
-                           }}
-                />
-                <TextField label='Критерий оценки "хорошо"'
-                           onChange={this.saveField(PracticeFields.PASSED_GOOD_MARK)}
-                           variant="outlined"
-                           className={classes.input}
-                           fullWidth
-                           value={fields[PracticeFields.PASSED_GOOD_MARK]}
-                           InputLabelProps={{
-                               shrink: true,
-                           }}
-                />
-                <TextField label='Критерий оценки "удовлетворительно"'
-                           onChange={this.saveField(PracticeFields.PASSED_SATISFACTORILY_MARK)}
-                           variant="outlined"
-                           className={classes.input}
-                           fullWidth
-                           value={fields[PracticeFields.PASSED_SATISFACTORILY_MARK]}
-                           InputLabelProps={{
-                               shrink: true,
-                           }}
-                />
-                <TextField label='Критерий оценки "неудовлетворительно"'
-                           onChange={this.saveField(PracticeFields.NOT_PASSED_MARK)}
-                           variant="outlined"
-                           className={classes.input}
-                           fullWidth
-                           value={fields[PracticeFields.NOT_PASSED_MARK]}
-                           InputLabelProps={{
-                               shrink: true,
-                           }}
-                />
+                <div className={classes.columns}>
+                    <div>
+                        <TextField label='Критерий оценки "отлично"'
+                                   onChange={this.saveField(PracticeFields.PASSED_GREAT_MARK)}
+                                   variant="outlined"
+                                   className={classes.input}
+                                   fullWidth
+                                   multiline
+                                   rows={10}
+                                   value={fields[PracticeFields.PASSED_GREAT_MARK]}
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}
+                        />
+                        <TextField label='Критерий оценки "хорошо"'
+                                   onChange={this.saveField(PracticeFields.PASSED_GOOD_MARK)}
+                                   variant="outlined"
+                                   className={classes.input}
+                                   fullWidth
+                                   multiline
+                                   rows={10}
+                                   value={fields[PracticeFields.PASSED_GOOD_MARK]}
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}
+                        />
+                    </div>
+                    <div className={classes.rightColumn}>
+                        <TextField label='Критерий оценки "удовлетворительно"'
+                                   onChange={this.saveField(PracticeFields.PASSED_SATISFACTORILY_MARK)}
+                                   variant="outlined"
+                                   className={classes.input}
+                                   fullWidth
+                                   multiline
+                                   rows={10}
+                                   value={fields[PracticeFields.PASSED_SATISFACTORILY_MARK]}
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}
+                        />
+                        <TextField label='Критерий оценки "неудовлетворительно"'
+                                   onChange={this.saveField(PracticeFields.NOT_PASSED_MARK)}
+                                   variant="outlined"
+                                   className={classes.input}
+                                   fullWidth
+                                   multiline
+                                   rows={10}
+                                   value={fields[PracticeFields.NOT_PASSED_MARK]}
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}
+                        />
+                    </div>
+                </div>
             </div>
         );
     }
