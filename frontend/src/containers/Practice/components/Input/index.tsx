@@ -7,6 +7,7 @@ import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import TextField from "@material-ui/core/TextField";
 import get from "lodash/get";
+import {validate} from "../../validation";
 
 interface InputProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -19,14 +20,34 @@ interface InputProps extends WithStyles<typeof styles> {
 
 class Input extends React.Component<InputProps> {
 
+    state = {
+        errorMessage: '',
+    }
+
+    setErrorMessage = (errorMessage: string) => {
+        this.setState({
+            ...this.state,
+            errorMessage,
+        });
+    }
+
     setInput = (field: string) => (e: React.ChangeEvent) => {
+        this.setErrorMessage('');
+
         const value = get(e, 'target.value')
 
         this.props.actions.setField({field, value});
     }
 
-    saveInput = (field: string) => (e: React.ChangeEvent) => {
+    saveInput = (field: PracticeFields) => (e: React.ChangeEvent) => {
         const value = get(e, 'target.value')
+
+        const error = validate(field, value);
+
+        if (error) {
+            this.setErrorMessage(error.message);
+            return;
+        }
 
         this.props.actions.saveField({field, value});
     }
@@ -34,6 +55,7 @@ class Input extends React.Component<InputProps> {
 
     render() {
         const {fields, fieldName, label, classes, multiline, rows} = this.props;
+        const {errorMessage} = this.state;
 
         return (
             <TextField label={label}
@@ -45,6 +67,8 @@ class Input extends React.Component<InputProps> {
                        multiline={multiline}
                        rows={rows ? rows : 1}
                        value={fields[fieldName]}
+                       error={Boolean(errorMessage)}
+                       helperText={errorMessage}
                        InputLabelProps={{
                            shrink: true,
                        }}
