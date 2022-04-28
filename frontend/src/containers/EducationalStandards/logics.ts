@@ -294,6 +294,75 @@ const educationalStandardSaveGroupTitle = createLogic({
     }
 });
 
+const educationalStandardAddTask = createLogic({
+    type: EducationalStandardsActions.educationalStandardAddTask.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalStandardId = getEducationalStandardId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.EDUCATIONAL_STANDARD_ADD_TASK}));
+
+        service.educationalStandardAddTask(educationalStandardId, action.payload)
+          .then((res) => {
+              dispatch(EducationalStandardsActions.getEducationalStandard(educationalStandardId));
+              dispatch(actions.fetchingSuccess());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.EDUCATIONAL_STANDARD_ADD_TASK}));
+              return done();
+          });
+    }
+});
+
+const educationalStandardUpdateTask = createLogic({
+    type: EducationalStandardsActions.educationalStandardUpdateTask.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalStandardId = getEducationalStandardId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.EDUCATIONAL_STANDARD_UPDATE_TASK}));
+
+        service.educationalStandardUpdateTask(action.payload)
+          .then((res) => {
+              dispatch(EducationalStandardsActions.getEducationalStandard(educationalStandardId));
+              dispatch(actions.fetchingSuccess());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.EDUCATIONAL_STANDARD_UPDATE_TASK}));
+              return done();
+          });
+    }
+});
+
+const educationalStandardDeleteTask = createLogic({
+    type: EducationalStandardsActions.educationalStandardDeleteTask.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalStandardId = getEducationalStandardId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.EDUCATIONAL_STANDARD_DELETE_TASK}));
+
+        service.educationalStandardDeleteTask(action.payload)
+          .then((res) => {
+              dispatch(EducationalStandardsActions.getEducationalStandard(educationalStandardId));
+              dispatch(actions.fetchingSuccess());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.EDUCATIONAL_STANDARD_DELETE_TASK}));
+              return done();
+          });
+    }
+});
+
 export default [
     getEducationalStandards,
     getEducationalStandard,
@@ -311,4 +380,8 @@ export default [
     educationalStandardDeleteIndicator,
 
     educationalStandardSaveGroupTitle,
+
+    educationalStandardAddTask,
+    educationalStandardDeleteTask,
+    educationalStandardUpdateTask,
 ];

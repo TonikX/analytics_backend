@@ -233,7 +233,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     } = this.props;
     const {state} = this;
     const {addEditorsMode} = state;
-    console.log('test console')
+
     return (
       <div className={classes.container}>
         <div className={classNames(classes.side, {[classes.fullWidth]: !isCanEdit})}>
@@ -454,12 +454,17 @@ class FirstStep extends React.Component<FirstStepProps> {
                           onChange={this.changeLanguage}
           />
 
-          {(state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] || state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] === null) && <SimpleSelector label="Формат реализации"
-                          metaList={implementationFormats}
-                          value={state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]}
-                          wrapClass={classes.selectorWrap}
-                          onChange={this.changeImplementationFormat}
-          />}
+          {(state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] || state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] === null) && (
+            <SimpleSelector
+              label="Формат реализации"
+              metaList={implementationFormats}
+              value={state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]}
+              wrapClass={classes.selectorWrap}
+              onChange={this.changeImplementationFormat}
+              noMargin
+            />
+          )}
+          <Typography className={classes.marginBottom20}>Обратите внимание, при выборе онлайн формата все ваши введенные часы будут обнулены</Typography>
 
           <InputsLoader loading={fetchingDate}>
             <DatePicker

@@ -52,4 +52,10 @@ export const useStyles = makeStyles(() => createStyles({
             fontSize: '14px'
         },
     },
+    footer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: '10px'
+    },
 }));

@@ -8,7 +8,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     marginBottom: '30px'
   },
   actions: {
-    marginTop: '30px'
+    marginTop: '10px'
   },
   title: {
     padding: 0,

@@ -328,7 +328,7 @@ class OutcomesOfWorkProgramDestroyView(generics.DestroyAPIView):
 
             return self.destroy(request, *args, **kwargs)
         except:
-            return Response(status=400)
+            return self.destroy(request, *args, **kwargs)
 
 
 class OutcomesOfWorkProgramUpdateView(generics.UpdateAPIView):

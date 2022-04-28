@@ -17,8 +17,8 @@ import {WorkProgramGeneralFields} from "./enum";
 import {getFolders} from "../Profile/Folders/getters";
 import folderActions from "../Profile/Folders/actions";
 import {
-    getValidateProgramErrors
-} from "./utils";
+    getValidationErrors
+} from "./validation";
 import {isFetchingComponentByKey} from "../../layout/getters";
 
 const mapStateToProps = (state:rootState) => {
@@ -35,7 +35,7 @@ const mapStateToProps = (state:rootState) => {
         canSendToExpertise: isCanEdit(state),
         canComment: isCanComment(state),
         folders: getFolders(state),
-        validateErrors: getValidateProgramErrors(state),
+        validateErrors: getValidationErrors(state),
         fetchingBars: isFetchingComponentByKey(state, WorkProgramGeneralFields.BARS),
     };
 };

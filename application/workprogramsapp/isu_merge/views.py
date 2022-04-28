@@ -4,7 +4,7 @@ import pandas
 from rest_framework.response import Response
 from rest_framework import permissions
 from typing import Dict
-
+from workprogramsapp.workprogram_additions.models import StructuralUnit
 from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan,\
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,\
     WorkProgramInFieldOfStudy, Zun
@@ -524,6 +524,14 @@ class   FileUploadOldVersionAPIView(APIView):
                 wp_obj.srs_hours_v2 = watchmaker([float(x) for x in (data['СРС'][i]).strip("()").split(",")], [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
                 print('Записаны часы срс:', wp_obj.srs_hours_v2)
                 wp_obj.discipline_code = data['DISC_DISC_ID'][i]
+                if StructuralUnit.objects.filter(title=str(data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip())):
+                    st_unit = StructuralUnit.objects.filter(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip())[0]
+                    st_unit.isu_id = int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i])
+                    st_unit.save()
+                else:
+                    StructuralUnit.objects.create(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip(), isu_id=int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i]))
+                    st_unit = StructuralUnit.objects.get(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip(), isu_id=int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i]))
+                wp_obj.structural_unit = st_unit
                 wp_obj.save()
                 print('-- Работа с образовательной программой')
                 if data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find("Русский") != -1 and data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find(

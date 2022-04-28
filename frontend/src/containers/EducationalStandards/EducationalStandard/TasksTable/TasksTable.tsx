@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useCallback, useState} from 'react'
 import {useDispatch} from 'react-redux';
 
 import Table from "@material-ui/core/Table";
@@ -9,13 +9,32 @@ import TableBody from "@material-ui/core/TableBody";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
 
+import actions from '../../actions'
 import useStyles from './TasksTable.style';
+import EditableText from "../../../../components/EditableText/EditableText";
+import get from "lodash/get";
 
 export const TasksTable: React.FC<any> = ({ tableData }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const [editNameId, setEditNameId] = useState()
+
+  const handleAddTask = () => {
+    dispatch(actions.educationalStandardAddTask('Новая задача'))
+  }
+
+  const deleteTask = (id: number) => {
+    dispatch(actions.educationalStandardDeleteTask(id))
+  }
+
+  const editTask = useCallback((value) => {
+    dispatch(actions.educationalStandardUpdateTask({
+      name: value,
+      id: editNameId
+    }))
+    setEditNameId(undefined)
+  }, [editNameId])
 
   return (
     <div className={classes.root}>
@@ -32,14 +51,17 @@ export const TasksTable: React.FC<any> = ({ tableData }) => {
           {tableData.map((item: any) => (
             <TableRow>
               <TableCell>
-                {item.name}
+                <EditableText value={get(item, 'name')}
+                              isEditMode={editNameId === item.id}
+                              onClickDone={editTask}
+                              onClickCancel={() => setEditNameId(undefined)}
+                              onValueClick={() => setEditNameId(item.id)}
+                              fullWidth
+                />
               </TableCell>
               <TableCell className={classes.actions}>
                 <Tooltip title="Удалить тип">
-                  <DeleteIcon className={classes.deleteIcon} onClick={() => {}} />
-                </Tooltip>
-                <Tooltip title="Редактировать тип">
-                  <EditIcon className={classes.deleteIcon} onClick={() => {}} />
+                  <DeleteIcon className={classes.deleteIcon} onClick={() => deleteTask(item.id)} />
                 </Tooltip>
               </TableCell>
             </TableRow>
@@ -48,7 +70,7 @@ export const TasksTable: React.FC<any> = ({ tableData }) => {
       </Table>
 
       <Button className={classes.addButton}
-              onClick={() => {}}
+              onClick={handleAddTask}
               variant="outlined"
               size="small"
       >
