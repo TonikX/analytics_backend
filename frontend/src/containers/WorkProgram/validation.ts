@@ -8,7 +8,12 @@ import {
 import {EvaluationToolFields, fields, WorkProgramGeneralFields, workProgramSectionFields} from "./enum";
 import {EvaluationToolType, IntermediateCertificationType, SectionType} from "./types";
 import {getAllHours, getHoursArray} from "./utils";
-import {ALL_LEVELS_QUALIFICATION, BACHELOR_QUALIFICATION, specializationObject} from "./constants";
+import {
+    ALL_LEVELS_QUALIFICATION,
+    BACHELOR_QUALIFICATION,
+    SPECIALIST_QUALIFICATION,
+    specializationObject
+} from "./constants";
 import {parseInt} from "lodash";
 
 
@@ -189,8 +194,13 @@ const addQualificationErrors = (state: rootState, errors: string[]) => {
 
     if (qualification !== ALL_LEVELS_QUALIFICATION) {
         const planQualifications = getPlanQualifications(state).filter((p: string) => p !== ALL_LEVELS_QUALIFICATION);
-        if (planQualifications.some((q: string) => q !== qualification)) {
-            errors.push('Уровень образовательной программы должен соответствовать уровню каждого из учебных планов')
+        for (const planQualification of planQualifications) {
+            if (planQualification === BACHELOR_QUALIFICATION && qualification === SPECIALIST_QUALIFICATION) continue;
+            if (planQualification === SPECIALIST_QUALIFICATION && qualification === BACHELOR_QUALIFICATION) continue;
+            // bachelors and specialist accept each other
+            if (planQualification !== qualification) {
+                errors.push('Уровень образовательной программы должен соответствовать уровню каждого из учебных планов')
+            }
         }
     }
 }
