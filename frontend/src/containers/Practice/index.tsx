@@ -15,6 +15,7 @@ import GeneralInfo from "./Steps/GeneralInfo";
 import Assessment from "./Steps/Assessment";
 import Features from "./Steps/Features";
 import {Button} from "@material-ui/core";
+import Literature from "./Steps/Literature";
 
 class Practice extends React.Component<PracticeProps> {
 
@@ -24,7 +25,7 @@ class Practice extends React.Component<PracticeProps> {
 
     stepNameList = PracticeStepsRussianList;
 
-    stepList = [<GeneralInfo/>, <Features/>, <Assessment/>, undefined]
+    stepList = [<GeneralInfo/>, <Features/>, <Assessment/>, <Literature/>]
 
     getPracticeId = () => get(this, 'props.match.params.id');
 

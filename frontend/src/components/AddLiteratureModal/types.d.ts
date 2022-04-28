@@ -18,5 +18,5 @@ export interface AddLiteratureModalProps extends  WithStyles<typeof styles> {
     allCount: number;
     literatureActions: LiteratureActions;
     handleClose: () => void;
-    handleSave: (ids: Array<string>) => void;
+    handleSave: (ids: Array<LiteratureType>) => void;
 }

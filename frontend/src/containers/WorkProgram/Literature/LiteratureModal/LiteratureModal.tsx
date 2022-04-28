@@ -10,8 +10,8 @@ class LiteratureModal extends React.PureComponent<LiteratureModalProps> {
         this.props.actions.closeDialog(fields.ADD_NEW_LITERATURE);
     }
 
-    handleSave = (ids: Array<string>) => {
-        this.props.actions.addLiterature(ids);
+    handleSave = (refs: Array<string>) => {
+        this.props.actions.addLiterature(refs);
     }
 
     render() {
