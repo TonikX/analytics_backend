@@ -2,7 +2,7 @@ import {createStyles} from "@material-ui/core";
 
 export default () => createStyles({
     selectorWrap: {
-        width: '550px',
+        width: '500px',
         marginTop: '30px',
         display: "block",
         '& .MuiInputLabel-shrink': {

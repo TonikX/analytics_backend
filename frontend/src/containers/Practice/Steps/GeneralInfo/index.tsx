@@ -25,14 +25,21 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                 <Typography variant='h5'>
                     {PracticeStepsRussian.GENERAL}
                 </Typography>
-                <Input label='Название' fieldName={PracticeFields.TITLE}/>
-                <Input label='Год проведения' fieldName={PracticeFields.YEAR}/>
-                <Input label='Руководитель образовательной программы' fieldName={PracticeFields.OP_LEADER}/>
-                <Select label='Язык реализации' fieldName={PracticeFields.LANGUAGE} metaList={languageArray}/>
-                <Input label='Авторский состав' fieldName={PracticeFields.AUTHORS}/>
-                <Select label='Уровень образования' fieldName={PracticeFields.QUALIFICATION} metaList={specialization}/>
-                <Input label='Вид практики' fieldName={PracticeFields.KIND_OF_PRACTICE}/>
-                <Input label='Тип практики' fieldName={PracticeFields.TYPE_OF_PRACTICE}/>
+                <div className={classes.columns}>
+                    <div>
+                        <Input label='Название' fieldName={PracticeFields.TITLE}/>
+                        <Input label='Год проведения' fieldName={PracticeFields.YEAR}/>
+                        <Input label='Руководитель образовательной программы' fieldName={PracticeFields.OP_LEADER}/>
+                        <Select label='Язык реализации' fieldName={PracticeFields.LANGUAGE} metaList={languageArray}/>
+                    </div>
+                    <div className={classes.rightColumn}>
+                        <Input label='Авторский состав' fieldName={PracticeFields.AUTHORS}/>
+                        <Select label='Уровень образования' fieldName={PracticeFields.QUALIFICATION}
+                                metaList={specialization}/>
+                        <Input label='Вид практики' fieldName={PracticeFields.KIND_OF_PRACTICE}/>
+                        <Input label='Тип практики' fieldName={PracticeFields.TYPE_OF_PRACTICE}/>
+                    </div>
+                </div>
             </div>
         );
     }

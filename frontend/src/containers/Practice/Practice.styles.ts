@@ -9,9 +9,9 @@ export default (theme: Theme) => createStyles({
         fontSize: '14px'
     },
     content: {
-        width: '100%',
+        width: '70vw',
         alignSelf: 'stretch',
-        marginLeft: '30px',
+        marginLeft: '10px',
     },
     header: {
         display: 'flex',
@@ -47,7 +47,7 @@ export default (theme: Theme) => createStyles({
         width: '465px'
     },
     stepper: {
-        width: '250px',
+        width: '10vw',
         height: 'fit-content',
         padding: 0,
         minWidth: '210px',

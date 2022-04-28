@@ -20,4 +20,10 @@ export default () => createStyles({
             width: '100px !important'
         }
     },
+    columns: {
+        display: "flex",
+    },
+    rightColumn: {
+        marginLeft: '30px',
+    }
 });
