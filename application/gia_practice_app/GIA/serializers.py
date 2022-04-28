@@ -1,6 +1,9 @@
 from rest_framework import serializers
+from rest_framework.fields import SerializerMethodField
 
 from gia_practice_app.GIA.models import CriteriaVKR, GIABaseTemplate, GIA
+from workprogramsapp.models import WorkProgramChangeInDisciplineBlockModule
+from workprogramsapp.serializers import WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
@@ -30,7 +33,15 @@ class GIABaseTemplateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+
+
 class GIASerializer(serializers.ModelSerializer):
+    gia_in_change_block = SerializerMethodField()
+
+    def get_gia_in_change_block(self, instance):
+        return WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(
+            instance=WorkProgramChangeInDisciplineBlockModule.objects.filter(gia=instance), many=True).data
+
     def to_representation(self, value):
         self.fields['structural_unit'] = ShortStructuralUnitSerializer(required=False)
         self.fields['content_correspondence_marks'] = CriteriaVKRSerializer(required=False)

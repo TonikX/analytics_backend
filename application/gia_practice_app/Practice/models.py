@@ -86,6 +86,7 @@ class Practice(models.Model):
         ('senior-inter', 'эксплуатационная; преддипломная, преддипломная / Senior internship'),
         ('inter', 'стажировка'),
     )
+    discipline_code = models.IntegerField(max_length=1024, blank=True, null=True)
     title = models.CharField(max_length=1024, verbose_name="Наименование", blank=True, null=True)
     practice_base = models.ForeignKey('PracticeTemplate', on_delete=models.SET_NULL,
                                  verbose_name='Базовый шаблон Практики',
