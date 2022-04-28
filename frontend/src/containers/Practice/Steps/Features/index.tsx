@@ -1,12 +1,12 @@
 import React from "react";
 import {PracticeFields, PracticeStepsRussian} from "../../enum";
-import TextField from "@material-ui/core/TextField";
 import get from "lodash/get";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "./styles";
 import {Typography, WithStyles} from "@material-ui/core";
 import {PracticeActions, PracticeState} from "../../types";
+import Input from "../../components/Input";
 
 interface FeaturesProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -22,57 +22,24 @@ class Features extends React.Component<FeaturesProps> {
 
     render() {
 
-        const {classes, fields} = this.props;
+        const {classes} = this.props;
 
         return (
             <div className={classes.content}>
                 <Typography variant='h5'>
                     {PracticeStepsRussian.ASSESSMENT}
                 </Typography>
-                <TextField label="Способ прохождения практики"
-                           onChange={this.saveField(PracticeFields.WAY_OF_DOING_PRACTICE)}
-                           variant="outlined"
-                           className={classes.input}
-                           fullWidth
-                           multiline
-                           rows={2}
-                           value={fields[PracticeFields.WAY_OF_DOING_PRACTICE]}
-                           InputLabelProps={{
-                               shrink: true,
-                           }}
-                />
-                <TextField label='Формат прохождения практики'
-                           onChange={this.saveField(PracticeFields.FORMAT_PRACTICE)}
-                           variant="outlined"
-                           className={classes.input}
-                           fullWidth
-                           value={fields[PracticeFields.FORMAT_PRACTICE]}
-                           InputLabelProps={{
-                               shrink: true,
-                           }}
-                />
-                <TextField label='Особенности содержания и прохождения практики'
-                           onChange={this.saveField(PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP)}
-                           variant="outlined"
-                           className={classes.input}
-                           fullWidth
-                           value={fields[PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP]}
-                           InputLabelProps={{
-                               shrink: true,
-                           }}
-                />
-                <TextField label='Дополнительные отчетные материалы'
-                           onChange={this.saveField(PracticeFields.ADDITIONAL_REPORTING_MATERIALS)}
-                           variant="outlined"
-                           className={classes.input}
-                           fullWidth
-                           multiline
-                           rows={2}
-                           value={fields[PracticeFields.ADDITIONAL_REPORTING_MATERIALS]}
-                           InputLabelProps={{
-                               shrink: true,
-                           }}
-                />
+                <Input label='Способ прохождения практики'
+                       fieldName={PracticeFields.WAY_OF_DOING_PRACTICE}
+                       multiline
+                       rows={2}/>
+                <Input label='Формат прохождения практики' fieldName={PracticeFields.FORMAT_PRACTICE}/>
+                <Input label='Особенности содержания и прохождения практики'
+                       fieldName={PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP}/>
+                <Input label='Дополнительные отчётные материалы'
+                       fieldName={PracticeFields.ADDITIONAL_REPORTING_MATERIALS}
+                       multiline
+                       rows={2}/>
             </div>
         );
     }

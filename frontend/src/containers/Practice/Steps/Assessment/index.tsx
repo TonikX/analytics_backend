@@ -1,12 +1,11 @@
 import React from "react";
 import {PracticeFields, PracticeStepsRussian} from "../../enum";
-import TextField from "@material-ui/core/TextField";
-import get from "lodash/get";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "./styles";
 import {Typography, WithStyles} from "@material-ui/core";
 import {PracticeActions, PracticeState} from "../../types";
+import Input from "../../components/Input";
 
 interface AssessmentProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -15,83 +14,36 @@ interface AssessmentProps extends WithStyles<typeof styles> {
 
 class Assessment extends React.Component<AssessmentProps> {
 
-    saveField = (field: string) => (e: React.ChangeEvent) => {
-        const value = get(e, 'target.value')
-
-        this.props.actions.setField({field, value});
-    }
-
     render() {
 
-        const {classes, fields} = this.props;
+        const {classes} = this.props;
 
         return (
             <div className={classes.content}>
                 <Typography variant='h5'>
                     {PracticeStepsRussian.ASSESSMENT}
                 </Typography>
-                <TextField label="Форма аттестации"
-                           onChange={this.saveField(PracticeFields.FORM_OF_CERTIFICATION_TOOLS)}
-                           variant="outlined"
-                           className={classes.input}
-                           fullWidth
-                           value={fields[PracticeFields.FORM_OF_CERTIFICATION_TOOLS]}
-                           InputLabelProps={{
-                               shrink: true,
-                           }}
-                />
+                <Input label='Форма аттестации' fieldName={PracticeFields.FORM_OF_CERTIFICATION_TOOLS}/>
                 <div className={classes.columns}>
                     <div>
-                        <TextField label='Критерий оценки "отлично"'
-                                   onChange={this.saveField(PracticeFields.PASSED_GREAT_MARK)}
-                                   variant="outlined"
-                                   className={classes.input}
-                                   fullWidth
-                                   multiline
-                                   rows={10}
-                                   value={fields[PracticeFields.PASSED_GREAT_MARK]}
-                                   InputLabelProps={{
-                                       shrink: true,
-                                   }}
-                        />
-                        <TextField label='Критерий оценки "хорошо"'
-                                   onChange={this.saveField(PracticeFields.PASSED_GOOD_MARK)}
-                                   variant="outlined"
-                                   className={classes.input}
-                                   fullWidth
-                                   multiline
-                                   rows={10}
-                                   value={fields[PracticeFields.PASSED_GOOD_MARK]}
-                                   InputLabelProps={{
-                                       shrink: true,
-                                   }}
-                        />
+                        <Input label='Критерий оценки "отлично"'
+                               fieldName={PracticeFields.PASSED_GREAT_MARK}
+                               multiline
+                               rows={10}/>
+                        <Input label='Критерий оценки "хорошо"'
+                               fieldName={PracticeFields.PASSED_GOOD_MARK}
+                               multiline
+                               rows={10}/>
                     </div>
                     <div className={classes.rightColumn}>
-                        <TextField label='Критерий оценки "удовлетворительно"'
-                                   onChange={this.saveField(PracticeFields.PASSED_SATISFACTORILY_MARK)}
-                                   variant="outlined"
-                                   className={classes.input}
-                                   fullWidth
-                                   multiline
-                                   rows={10}
-                                   value={fields[PracticeFields.PASSED_SATISFACTORILY_MARK]}
-                                   InputLabelProps={{
-                                       shrink: true,
-                                   }}
-                        />
-                        <TextField label='Критерий оценки "неудовлетворительно"'
-                                   onChange={this.saveField(PracticeFields.NOT_PASSED_MARK)}
-                                   variant="outlined"
-                                   className={classes.input}
-                                   fullWidth
-                                   multiline
-                                   rows={10}
-                                   value={fields[PracticeFields.NOT_PASSED_MARK]}
-                                   InputLabelProps={{
-                                       shrink: true,
-                                   }}
-                        />
+                        <Input label='Критерий оценки "удовлетворительно"'
+                               fieldName={PracticeFields.PASSED_SATISFACTORILY_MARK}
+                               multiline
+                               rows={10}/>
+                        <Input label='Критерий оценки "неудовлетворительно"'
+                               fieldName={PracticeFields.NOT_PASSED_MARK}
+                               multiline
+                               rows={10}/>
                     </div>
                 </div>
             </div>

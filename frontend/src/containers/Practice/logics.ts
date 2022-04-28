@@ -1,6 +1,7 @@
 import {createLogic} from "redux-logic";
 import PracticeActions from "./actions";
 import PracticeService from "./service";
+import {getId} from "./getters";
 
 const service = new PracticeService();
 
@@ -35,5 +36,27 @@ const savePractice = createLogic({
     }
 });
 
+const saveField = createLogic({
+    type: PracticeActions.saveField.type,
+    latest: true,
 
-export default [getPractice, savePractice];
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const practiceId = getId(state);
+        const {field, value} = action.payload;
+        service.patchPractice({[field]: value}, practiceId)
+            .then((res) => {
+                dispatch(PracticeActions.setField({field, value}));
+            })
+            .catch((err) => {
+                console.error(`could not save field: ${field}`);
+                dispatch(PracticeActions.getPractice(practiceId));
+            })
+            .finally(() => {
+                return done();
+            });
+    }
+});
+
+
+export default [getPractice, savePractice, saveField];

@@ -14,7 +14,6 @@ import Stepper from "@material-ui/core/Stepper";
 import GeneralInfo from "./Steps/GeneralInfo";
 import Assessment from "./Steps/Assessment";
 import Features from "./Steps/Features";
-import {Button} from "@material-ui/core";
 import Literature from "./Steps/Literature";
 
 class Practice extends React.Component<PracticeProps> {
@@ -76,17 +75,6 @@ class Practice extends React.Component<PracticeProps> {
                     {
                         this.stepList[activeStep]
                     }
-                </div>
-                <div className={classes.rightPanel}>
-                    <Button variant='contained'
-                            onClick={this.handleSave}>
-                        Сохранить
-                    </Button>
-                    <Button variant='contained'
-                            onClick={this.getPractice}
-                            className={classes.resetButton}>
-                        Отменить изменения
-                    </Button>
                 </div>
             </Paper>
         )
