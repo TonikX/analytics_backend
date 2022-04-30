@@ -5,7 +5,7 @@ import {PracticeFields} from "../../enum";
 import React, {ReactText} from "react";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
-import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
+import SimpleSelector from "../../../../components/SimpleSelector";
 
 type SelectOption = {
     label: string;

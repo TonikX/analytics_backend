@@ -45,8 +45,8 @@ const saveField = createLogic({
         const practiceId = getId(state);
         const {field, value} = action.payload;
         service.patchPractice({[field]: value}, practiceId)
-            .then((res) => {
-                dispatch(PracticeActions.setField({field, value}));
+            .then((res: any) => {
+                dispatch(PracticeActions.setPractice(res.data));
             })
             .catch((err) => {
                 console.error(`could not save field: ${field}`);

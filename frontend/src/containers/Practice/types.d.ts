@@ -1,9 +1,15 @@
-import {PracticeFields} from "./enum";
+import {PracticeFields, StructuralUnitFields} from "./enum";
 import {WithStyles} from "@material-ui/core";
 import styles from "./Practice.styles";
 import {RouteComponentProps} from "react-router-dom";
 
 export type Id = number;
+
+export type StructuralUnitType = {
+    [StructuralUnitFields.ID]: Id,
+    [StructuralUnitFields.TITLE]: string,
+    [StructuralUnitFields.ISU_ID]: Id,
+}
 
 export type GeneralInfoState = {
     [PracticeFields.TITLE]: string,
@@ -14,6 +20,7 @@ export type GeneralInfoState = {
     [PracticeFields.QUALIFICATION]: string,
     [PracticeFields.KIND_OF_PRACTICE]: string,
     [PracticeFields.TYPE_OF_PRACTICE]: string,
+    [PracticeFields.STRUCTURAL_UNIT]: StructuralUnitType | null,
 }
 
 export type FeaturesState = {

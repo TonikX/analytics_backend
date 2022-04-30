@@ -8,17 +8,35 @@ import {PracticeActions, PracticeState} from "../../types";
 import {languageArray, specialization} from "../../../WorkProgram/constants";
 import Input from "../../components/Input";
 import Select from "../../components/Select";
+import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
+import {SelectorListType} from "../../../../components/SearchSelector/types";
+import {StructuralUnitsActions} from "../../../StructuralUnits/types";
 
 interface GeneralInfoProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
     fields: PracticeState;
+    structuralUnitsList: SelectorListType;
+    structuralUnitActions: StructuralUnitsActions;
 }
 
 class GeneralInfo extends React.Component<GeneralInfoProps> {
 
+    componentDidMount() {
+        this.props.structuralUnitActions.getStructuralUnits();
+    }
+
+    handleChangeStructuralUnitSearchText = (search: string) => {
+        this.props.structuralUnitActions.changeSearchQuery(search);
+        this.props.structuralUnitActions.getStructuralUnits();
+    }
+
+    changeStructuralUnit = (value: string) => {
+        this.props.actions.saveField({field: PracticeFields.STRUCTURAL_UNIT, value})
+    }
+
     render() {
 
-        const {classes} = this.props;
+        const {classes, structuralUnitsList, fields} = this.props;
 
         return (
             <div className={classes.content}>
@@ -38,6 +56,14 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                                 metaList={specialization}/>
                         <Input label='Вид практики' fieldName={PracticeFields.KIND_OF_PRACTICE}/>
                         <Input label='Тип практики' fieldName={PracticeFields.TYPE_OF_PRACTICE}/>
+                        <SearchSelector label="Структурное подразделение"
+                                        changeSearchText={this.handleChangeStructuralUnitSearchText}
+                                        list={structuralUnitsList}
+                                        className={classes.input}
+                                        changeItem={this.changeStructuralUnit}
+                                        value={String(fields[PracticeFields.STRUCTURAL_UNIT]?.id)}
+                                        valueLabel={fields[PracticeFields.STRUCTURAL_UNIT]?.title ?? ''}
+                        />
                     </div>
                 </div>
             </div>

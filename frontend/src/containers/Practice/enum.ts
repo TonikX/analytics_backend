@@ -17,7 +17,14 @@ export enum PracticeFields {
     PASSED_GOOD_MARK = "passed_good_mark",
     PASSED_SATISFACTORILY_MARK = "passed_satisfactorily_mark",
     NOT_PASSED_MARK = "not_passed_mark",
+    STRUCTURAL_UNIT = "structural_unit",
     BIBLIOGRAPHIC_REFERENCE = "bibliographic_reference",
+}
+
+export enum StructuralUnitFields {
+    ID = "id",
+    TITLE = "title",
+    ISU_ID = "isu_id",
 }
 
 export enum PracticeStepsRussian {

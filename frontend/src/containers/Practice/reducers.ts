@@ -25,6 +25,7 @@ export const initialState: practicePageState = {
         [PracticeFields.PASSED_GOOD_MARK]: '',
         [PracticeFields.PASSED_SATISFACTORILY_MARK]: '',
         [PracticeFields.NOT_PASSED_MARK]: '',
+        [PracticeFields.STRUCTURAL_UNIT]: null,
         [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: [],
     }
 }
