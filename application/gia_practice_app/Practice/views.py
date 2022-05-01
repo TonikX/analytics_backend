@@ -11,6 +11,7 @@ class PracticeSet(viewsets.ModelViewSet):
     queryset = Practice.objects.all()
     serializer_class = PracticeSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ["discipline_code", "title"]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def get_serializer_class(self):
