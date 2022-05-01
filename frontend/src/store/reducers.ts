@@ -98,6 +98,12 @@ import {notificationsState} from "../containers/Profile/Notifications/types"
 import {GENERAL_PATH as dodProfilePath, reducer as dodProfileReducer} from "../containers/DodProfile/reducer"
 import {dodProfileState} from "../containers/DodProfile/types"
 
+import {GENERAL_PATH as userProfilePath, reducer as userProfileReducer} from "../containers/UserProfile/reducer"
+import {userProfileState} from "../containers/UserProfile/types"
+
+import {GENERAL_PATH as mergeWorkProgramsPath, reducer as mergeWorkProgramsReducer} from "../containers/MergeWorkPrograms/reducer"
+import {mergeWorkProgramsState} from "../containers/MergeWorkPrograms/types"
+
 import {GENERAL_PATH as educationalStandardPath, reducer as educationalStandardReducer} from "../containers/EducationalStandards/reducer"
 import {educationalStandardsState} from "../containers/EducationalStandards/types"
 
@@ -137,6 +143,8 @@ export interface rootState {
     [selectEducationalProgramPath]: selectEducationalProgramState,
     [coursePath]: CourseState,
     [dodProfilePath] : dodProfileState,
+    [userProfilePath]: userProfileState,
+    [mergeWorkProgramsPath]: mergeWorkProgramsState,
 }
 
 export default combineReducers({
@@ -174,4 +182,6 @@ export default combineReducers({
     [selectEducationalProgramPath]: selectEducationalProgramReducer,
     [coursePath]: CourseReducer,
     [dodProfilePath]: dodProfileReducer,
+    [userProfilePath]: userProfileReducer,
+    [mergeWorkProgramsPath]: mergeWorkProgramsReducer,
 });

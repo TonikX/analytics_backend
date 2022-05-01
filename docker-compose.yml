@@ -11,6 +11,8 @@ services:
             - POSTGRES_DB=analytics_db
         volumes:
             - ./dbs/postgres-data:/var/lib/postgresql
+#        networks:
+#            - djangonetwork
     web:
         container_name: analytics_web
         build: ./application
@@ -30,6 +32,8 @@ services:
         restart: always
         depends_on:
             - db
+#        networks:
+#            - djangonetwork
     frontend:
         stdin_open: true
         tty: true
@@ -47,6 +51,8 @@ services:
             - REACT_APP_API_SCHEMA=http
             - REACT_APP_API_PORT=8003
             - PORT=3000
+#        networks:
+#            - djangonetwork
 
 volumes:
     node-modules:

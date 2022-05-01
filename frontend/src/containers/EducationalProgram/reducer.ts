@@ -17,6 +17,8 @@ export const initialState: educationalProgramState = {
     [fields.SEARCH_QUERY]: '',
     [fields.EDUCATION_PROGRAM_LIST]: [],
     [fields.KINDS_OF_ACTIVITIES]: [],
+    [fields.OBJECTS_OF_ACTIVITIES]: [],
+    [fields.TASKS_TYPES]: [],
     [fields.EDUCATION_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
@@ -84,6 +86,16 @@ const setKindsOfActivity = (state: educationalProgramState, {payload}: any): edu
     [fields.KINDS_OF_ACTIVITIES]: payload
 });
 
+const setObjectsOfActivity = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+    ...state,
+    [fields.OBJECTS_OF_ACTIVITIES]: payload
+});
+
+const setTasksTypes = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+    ...state,
+    [fields.TASKS_TYPES]: payload
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setEducationalProgramList.type]: setEducationalProgramList,
     [actions.setEducationalProgramCharacteristic.type]: setEducationalProgramCharacteristic,
@@ -95,4 +107,6 @@ export const reducer = createReducer(initialState, {
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
     [actions.setKindsOfActivity.type]: setKindsOfActivity,
+    [actions.setObjectsOfActivity.type]: setObjectsOfActivity,
+    [actions.setTasksTypes.type]: setTasksTypes,
 });

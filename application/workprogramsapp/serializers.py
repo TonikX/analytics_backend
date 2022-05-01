@@ -4,7 +4,8 @@ from rest_framework.fields import BooleanField
 from dataprocessing.serializers import ItemSerializer, userProfileSerializer
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
-
+#from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
+#from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
 from .expertise.common_serializers import ShortExpertiseSerializer
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
@@ -490,12 +491,15 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
     def to_representation(self, value):
         self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
         self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
+        # self.fields['gia'] = GIASerializer(required=False, many=True)
+        # self.fields['practice'] = PracticeSerializer(required=False, many=True)
         return super().to_representation(value)
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module', 'gia',
-                  'practice']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module', #'gia',
+                  #'practice'
+                  ]
 
 
     def get_id_of_wpcb(self, obj):
@@ -610,13 +614,14 @@ class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.Model
     work_program = serializers.PrimaryKeyRelatedField(many=True, queryset=WorkProgram.objects.all())
 
     def to_representation(self, value):
-        self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
-        self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
+        # self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
+        # self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
         return super().to_representation(value)
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'gia',
-                  'practice']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', #'gia',
+                  #'practice'
+                  ]
         extra_kwargs = {
             'work_program': {'required': False}
         }

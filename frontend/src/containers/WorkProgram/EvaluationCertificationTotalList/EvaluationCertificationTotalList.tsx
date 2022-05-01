@@ -55,7 +55,8 @@ const EvaluationCertificationTotalList = ({
             {columns.map((sem, index) => {
               const sum = getEvaluationToolsMaxSum(intermediateCertificationList.filter(((item: any) => item[EvaluationToolFields.SEMESTER] === index + 1)))
               return (
-                <TableCell className={cn({[classes.error]: sum !== 20})}>
+                // <TableCell className={cn({[classes.error]: sum !== 20})}>
+                <TableCell>
                   {sum}
                 </TableCell>
               )

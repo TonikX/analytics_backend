@@ -1,5 +1,6 @@
 import * as React from "react";
 import Scrollbars from "react-custom-scrollbars";
+import {Link} from 'react-router-dom';
 import {Typography} from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
@@ -22,6 +23,7 @@ import actions from "./actions";
 import {useStyles} from "./DodProfile.styles";
 import {getAllCount, getCurrentPage, getTableMode, getUserGroups, getUserName, getWorkProgramList} from "./getters";
 import {rootState} from "../../store/reducers";
+import {appRouter} from "../../service/router-service";
 
 export default () => {
     const dispatch = useDispatch()
@@ -56,7 +58,7 @@ export default () => {
             <div>
                 <Typography className={classes.userTitle}> {userName?.first_name} {userName?.last_name}</Typography>
                 <div className={classes.groupsList}>
-                    {userGroups.map((item: any) => <Chip label={item} className={classes.group} />)}
+                    {userGroups.map((item: any, key: number) => <Chip key={key} label={item} className={classes.group} />)}
                 </div>
             </div>
             <MergeWorkProgramsBlock className={classes.copyRpdContainer}/>
@@ -103,7 +105,14 @@ export default () => {
                                 {workProgramList.map((item: any) =>
                                     <TableRow>
                                         <TableCell> {item.discipline_code}  </TableCell>
-                                        <TableCell> {item.title}  </TableCell>
+                                        <TableCell className={classes.link}>
+                                            <Link
+                                                target="_blank"
+                                                to={appRouter.getWorkProgramLink(item.id)}
+                                            >
+                                                {item.title}
+                                            </Link>
+                                        </TableCell>
                                         <TableCell> {item.authors} </TableCell>
                                         <TableCell> {specializationObject[item.qualification]}</TableCell>
                                         <TableCell> {moment(item.approval_date).format(FULL_DATE_FORMAT)}  </TableCell>

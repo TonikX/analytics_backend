@@ -1,11 +1,13 @@
 import {createStyles, makeStyles, Theme} from "@material-ui/core";
+import {PRIMARY} from "../../layout/themeMaterialUi";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
         padding: '20px 50px 20px 50px',
         boxShadow: 'none',
         borderRadius: '0px',
-        height: '100%',
+        minHeight: '100%',
+        background: '#fff',
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
@@ -28,8 +30,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         }
     },
     tableWrap: {
-        height: 'calc(100% - 60px)',
-        maxheight: 'calc(100% - 60px)',
         '& td': {
             padding: '5px 10px !important',
             fontSize: '14px'
@@ -38,7 +38,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
             fontSize: '14px'
         }
     },
-
+    link: {
+        '& a': {
+            textDecoration: 'none',
+            color: PRIMARY
+        }
+    },
     cellStatus: {
         borderLeft: '5px solid',
         '& a': {
@@ -73,7 +78,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         display: 'flex',
         marginTop: '-12px',
         width: '30%',
-        height: 'calc(100vh - 300px)',
+        minHeight: 'calc(100vh - 300px)',
         '@media (max-width: 1250px)': {
             width: '100%',
             height: 'calc(100vh - 600px)',

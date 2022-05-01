@@ -35,6 +35,7 @@ export default ({ characteristic }: any) => {
       dispatch(actions.createKindOfActivity(newObject))
     } else {
       dispatch(actions.changeEducationalProgramCharacteristic({
+        id: characteristic.id,
         payload: {
           [EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES]: [
             ...allActivities,
@@ -46,7 +47,7 @@ export default ({ characteristic }: any) => {
     setOpenModal(false)
     setNewObject(undefined)
     setSelectedObject(undefined)
-  }, [selectedObject, characteristic, newObject])
+  }, [selectedObject, characteristic, newObject, characteristic])
 
   const handleRemoveItem = useCallback((id: any) => {
     dispatch(actions.changeEducationalProgramCharacteristic({
@@ -62,7 +63,7 @@ export default ({ characteristic }: any) => {
 
   return (
     <>
-      <Typography className={classes.label}>Объекты профессиональной деятельности</Typography>
+      <Typography className={classes.label}>Сферы профессиональной деятельности</Typography>
       <Table stickyHeader size='small'>
         <TableHead className={classes.header}>
           <TableRow>
@@ -104,20 +105,20 @@ export default ({ characteristic }: any) => {
           paper: classes.dialog
         }}
       >
-        <DialogTitle className={classes.title}>Добавить объект профессиональной деятельности</DialogTitle>
+        <DialogTitle className={classes.title}>Добавить сферу профессиональной деятельности</DialogTitle>
         <Typography className={classes.marginBottom30}>
-          Выберите существующий объект профессиональной деятельности или введите название нового
+          Выберите существующий сферу профессиональной деятельности или введите название нового
         </Typography>
         <KindOfActivitySelector
           onChange={setSelectedObject}
-          label="Выберите объект профессиональной деятельности"
+          label="Выберите сферу профессиональной деятельности"
           value={selectedObject}
           className={classes.marginBottom30}
         />
         <TextField
           value={newObject}
           onChange={(e) => setNewObject(e.target.value)}
-          label="Новый объект профессиональной деятельности"
+          label="Новая сфера профессиональной деятельности"
           InputLabelProps={{
             shrink: true,
           }}
