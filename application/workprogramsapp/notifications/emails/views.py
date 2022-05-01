@@ -1,12 +1,11 @@
-from django.core.mail import send_mail
 from rest_framework import viewsets, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from analytics_project import settings
 from dataprocessing.models import User
 from workprogramsapp.notifications.emails.models import SentMail
+from workprogramsapp.notifications.emails.send_mail import mail_sender
 from workprogramsapp.notifications.emails.serializers import BaseEmailSerializer, EmailSerializer
 
 
@@ -28,15 +27,8 @@ def CreateMail(request):
             user_for_structural_unit__structural_unit__in=serializer.validated_data["faculties"]) | User.objects.filter(
             id__in=serializer.validated_data["users"])).distinct()
         emails = [user.email for user in users_all]
-        result = send_mail(
-            serializer.validated_data["topic"],
-            serializer.validated_data["text"],
-            settings.DEFAULT_FROM_EMAIL,
-            emails,
-            fail_silently=False,
-        )
-        mail = SentMail.objects.create(topic=serializer.validated_data["topic"], text=serializer.validated_data["text"])
-        mail.users.add(*users_all)
+        mail = mail_sender(topic=serializer.validated_data["topic"], text=serializer.validated_data["text"],
+                           emails=emails, users=users_all)
         return Response(EmailSerializer(mail).data, status=200)
     return Response(serializer.errors, status=500)
 
