@@ -1,4 +1,5 @@
 from django.core.mail import send_mail
+from rest_framework import viewsets, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -38,3 +39,10 @@ def CreateMail(request):
         mail.users.add(*users_all)
         return Response(EmailSerializer(mail).data, status=200)
     return Response(serializer.errors, status=500)
+
+
+class EmailSet(viewsets.ModelViewSet):
+    queryset = SentMail.objects.all()
+    serializer_class = EmailSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = [IsAdminUser]
