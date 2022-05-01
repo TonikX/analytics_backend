@@ -1,11 +1,12 @@
 from django.urls import path
 
-from workprogramsapp.notifications.views import NotificationListView, CreateCustomNotification, mailtest
+from workprogramsapp.notifications.emails.views import CreateMail
+from workprogramsapp.notifications.views import NotificationListView, CreateCustomNotification
 
 urlpatterns = [
 
     path('api/notifications/list', NotificationListView.as_view()),
     path('api/notifications/create', CreateCustomNotification.as_view()),
-    path('api/mailtest', mailtest, name="mailtest")
+    path('api/send_email', CreateMail, name="mail_creation")
 
     ]

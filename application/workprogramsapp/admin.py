@@ -17,6 +17,7 @@ from .models import (
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, \
     SkillsOfRole, \
     Role, ProfessionalStandard, KindsOfActivity
+from .notifications.emails.models import SentMail
 from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments
 
 
@@ -112,5 +113,5 @@ admin.site.register(AcceptedBarsInWp)
 admin.site.register(GeneralizedLaborFunctions)
 admin.site.register(EducationalStandard)
 admin.site.register(TasksForEducationalStandard)
-
+admin.site.register(SentMail)
 
