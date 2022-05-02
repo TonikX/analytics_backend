@@ -1,7 +1,8 @@
 from rest_framework import viewsets, filters
 
 from gia_practice_app.GIA.models import GIA, GIABaseTemplate, CriteriaVKR
-from gia_practice_app.GIA.serializers import GIASerializer, GIABaseTemplateSerializer, CriteriaVKRSerializer
+from gia_practice_app.GIA.serializers import GIASerializer, GIABaseTemplateSerializer, CriteriaVKRSerializer, \
+    GIAPrimitiveSerializer
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 
 
@@ -11,6 +12,11 @@ class GIASet(viewsets.ModelViewSet):
     serializer_class = GIASerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    search_fields = ["discipline_code", "title"]
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return GIAPrimitiveSerializer
+        return GIASerializer
 
 
 class GIABaseTemplateSet(viewsets.ModelViewSet):

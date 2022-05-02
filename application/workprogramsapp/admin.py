@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .bars_merge.models import BarsWorkProgramsAssociate, HistoryOfSendingToBars, BarsEPAssociate, AcceptedBarsInWp
-from .expertise.models import UserExpertise, ExpertiseComments, Expertise
+from .expertise.models import UserExpertise, ExpertiseComments, Expertise, ExpertsOnStructuralUnit
 from .folders_ans_statistic.models import Folder, WorkProgramInFolder
 from .individualization.models import IndividualImplementationAcademicPlan, \
     WorkProgramInWorkProgramChangeInDisciplineBlockModule, DisciplineBlockModuleInDisciplineBlock
@@ -17,6 +17,7 @@ from .models import (
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, \
     SkillsOfRole, \
     Role, ProfessionalStandard, KindsOfActivity
+from .notifications.emails.models import SentMail
 from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments
 
 
@@ -115,15 +116,20 @@ admin.site.register(EducationalStandard)
 admin.site.register(TasksForEducationalStandard)
 
 
-class EvaluationToolInLine(admin.StackedInline):
-    model = EvaluationTool
-    extra = 1
 
+# class EvaluationToolInLine(admin.StackedInline):
+#     model = EvaluationTool
+#     extra = 1
+#
+#
+# @admin.register(DisciplineSection)
+# class DisciplineSectionAdmin(admin.ModelAdmin):
+#     list_display = ('name', 'ordinal_number', 'work_program')
+#     list_filter = ('name', 'ordinal_number', 'work_program')
+#     inlines = [EvaluationToolInLine]
+#     save_on_top = True
+#     save_as = True
 
-@admin.register(DisciplineSection)
-class DisciplineSectionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'ordinal_number', 'work_program')
-    list_filter = ('name', 'ordinal_number', 'work_program')
-    inlines = [EvaluationToolInLine]
-    save_on_top = True
-    save_as = True
+admin.site.register(SentMail)
+admin.site.register(ExpertsOnStructuralUnit)
+

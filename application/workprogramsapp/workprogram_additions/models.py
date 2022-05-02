@@ -20,6 +20,9 @@ class StructuralUnit(models.Model):
     title = models.CharField(max_length=300, verbose_name="Описание")
     isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID структурного подразделения в ИСУ")
 
+    def __str__(self):
+        return self.title
+
 
 class UserStructuralUnit(models.Model):
 
