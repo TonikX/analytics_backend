@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .bars_merge.models import BarsWorkProgramsAssociate, HistoryOfSendingToBars, BarsEPAssociate, AcceptedBarsInWp
-from .expertise.models import UserExpertise, ExpertiseComments, Expertise
+from .expertise.models import UserExpertise, ExpertiseComments, Expertise, ExpertsOnStructuralUnit
 from .folders_ans_statistic.models import Folder, WorkProgramInFolder
 from .individualization.models import IndividualImplementationAcademicPlan, \
     WorkProgramInWorkProgramChangeInDisciplineBlockModule, DisciplineBlockModuleInDisciplineBlock
@@ -17,6 +17,7 @@ from .models import (
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, \
     SkillsOfRole, \
     Role, ProfessionalStandard, KindsOfActivity
+from .notifications.emails.models import SentMail
 from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments
 
 
@@ -112,5 +113,5 @@ admin.site.register(AcceptedBarsInWp)
 admin.site.register(GeneralizedLaborFunctions)
 admin.site.register(EducationalStandard)
 admin.site.register(TasksForEducationalStandard)
-
-
+admin.site.register(SentMail)
+admin.site.register(ExpertsOnStructuralUnit)

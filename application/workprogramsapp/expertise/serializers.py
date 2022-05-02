@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from dataprocessing.models import User
 from dataprocessing.serializers import userProfileSerializer
 # from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
@@ -69,6 +70,12 @@ class ExpertiseSerializer(serializers.ModelSerializer):
             return is_exp_exist[0]
         exp = Expertise.objects.create(**validated_data)
         UserExpertise.objects.create(expertise=exp, expert=request.user, stuff_status="SE")  # ???
+        try:
+            expert = User.objects.get(
+                experts_with_units__structural_units__workprogram_in_structural_unit=validated_data['work_program'])
+            UserExpertise.objects.create(expertise=exp, expert=expert, stuff_status="EX")
+        except User.DoesNotExist:
+            pass
         editors = WorkProgram.objects.get(pk=validated_data['work_program'].pk).editors.all()
         for editor in editors:
             if editor.pk != request.user.pk:

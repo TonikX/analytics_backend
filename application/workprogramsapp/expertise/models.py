@@ -2,8 +2,6 @@ from django.db import models
 
 from analytics_project import settings
 
-from datetime import datetime
-
 
 class UserExpertise(models.Model):
     STUFF_STATUS_CHOICES = [
@@ -43,7 +41,8 @@ class Expertise(models.Model):
                                      related_name='experts_in_expertise')
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     date_of_last_change = models.DateTimeField(editable=True, auto_now=True, blank=True, null=True)
-    expertise_counter=models.IntegerField(blank=True, null=True, verbose_name="Счетчик отправки на экспертизу", default=0)
+    expertise_counter = models.IntegerField(blank=True, null=True, verbose_name="Счетчик отправки на экспертизу",
+                                            default=0)
 
     #
     #
@@ -77,3 +76,9 @@ class ExpertiseComments(models.Model):
     user_expertise = models.ForeignKey('UserExpertise', on_delete=models.CASCADE, related_name="user_expertise_comment")
     comment_text = models.CharField(max_length=50000, verbose_name="Комментарий")
     comment_date = models.DateTimeField(auto_now_add=True, blank=True, verbose_name='Дата комментария')
+
+
+class ExpertsOnStructuralUnit(models.Model):
+    expert = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='experts_with_units', on_delete=models.CASCADE)
+    structural_units = models.ManyToManyField('StructuralUnit', verbose_name='Эксперты',
+                                              related_name='structural_units_with_experts')

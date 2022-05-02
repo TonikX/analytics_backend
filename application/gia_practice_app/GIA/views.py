@@ -12,7 +12,7 @@ class GIASet(viewsets.ModelViewSet):
     serializer_class = GIASerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
+    search_fields = ["discipline_code", "title"]
     def get_serializer_class(self):
         if self.action == 'list':
             return GIAPrimitiveSerializer
