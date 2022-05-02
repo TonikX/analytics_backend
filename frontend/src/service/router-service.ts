@@ -31,6 +31,7 @@ const EDUCATIONAL_STANDARDS = 'educational-standards';
 const DODPROFILE = 'dod-profile';
 const PRACTICE_LIST = 'practice-list';
 const PRACTICE = 'practice';
+const FINAL_CERTIFICATION = 'gia';
 
 const RECORDS = 'records';
 
@@ -317,11 +318,19 @@ export default class RouterService {
     }
 
     getPracticeRoute = () => {
-        return SEPARATOR + PRACTICE + SEPARATOR + ':id'
+        return SEPARATOR + PRACTICE + SEPARATOR + ':id';
     }
 
     getPracticeLink = (id: number) => {
         return SEPARATOR + PRACTICE + SEPARATOR + id;
+    }
+
+    getFinalCertificationRoute = () => {
+        return SEPARATOR + FINAL_CERTIFICATION + SEPARATOR + ':id';
+    }
+
+    getFinalCertificationLink = (id: number) => {
+        return SEPARATOR + FINAL_CERTIFICATION + SEPARATOR + id;
     }
 }
 

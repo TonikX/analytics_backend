@@ -65,6 +65,7 @@ import EducationalStandard from "./containers/EducationalStandards/EducationalSt
 
 import PracticeList from "./containers/Practice/PracticeList";
 import Practice from "./containers/Practice";
+ import FinalCertification from "./containers/FinalCertification";
 
 const routerService = RouterService.factory();
 
@@ -244,6 +245,9 @@ export default () => (
                 </AuthRoute>
                 <AuthRoute path={routerService.getPracticeRoute()}>
                     <Practice />
+                </AuthRoute>
+                <AuthRoute path={routerService.getFinalCertificationRoute()}>
+                    <FinalCertification />
                 </AuthRoute>
 
             <Route path={routerService.getForbiddenPage()}>

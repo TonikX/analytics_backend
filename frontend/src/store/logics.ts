@@ -36,6 +36,7 @@ import PracticeLogic from '../containers/Practice/logics';
 import PracticeListLogic from '../containers/Practice/PracticeList/logics'
 import UserProfile from  '../containers/UserProfile/logics';
 import MergeWorkProgramsLogic from  '../containers/MergeWorkPrograms/logics';
+import FinalCertificationLogic from '../containers/FinalCertification/logics';
 
 export default [
     ...EducationalStandardsLogic,
@@ -76,4 +77,5 @@ export default [
     ...MergeWorkProgramsLogic,
     ...PracticeListLogic,
     ...PracticeLogic,
+    ...FinalCertificationLogic,
 ];

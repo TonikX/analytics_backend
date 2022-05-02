@@ -113,6 +113,9 @@ import {practiceListState} from "../containers/Practice/PracticeList/types";
 import {GENERAL_PATH as practicePath, reducer as practiceReducer} from "../containers/Practice/reducers";
 import {practicePageState} from "../containers/Practice/types";
 
+import {GENERAL_PATH as finalCertificationPath, reducer as finalCertificationReducer} from "../containers/FinalCertification/reducers";
+import {certificationPageState as finalCertificationPageState} from "../containers/FinalCertification/types";
+
 export interface rootState {
     [educationalStandardPath]: educationalStandardsState,
     [profileNotificationsPath]: notificationsState,
@@ -153,6 +156,7 @@ export interface rootState {
     [mergeWorkProgramsPath]: mergeWorkProgramsState,
     [practiceListPath]: practiceListState,
     [practicePath]: practicePageState,
+    [finalCertificationPath]: finalCertificationPageState,
 }
 
 export default combineReducers({
@@ -194,4 +198,5 @@ export default combineReducers({
     [mergeWorkProgramsPath]: mergeWorkProgramsReducer,
     [practiceListPath]: practiceListReducer,
     [practicePath]: practiceReducer,
+    [finalCertificationPath]: finalCertificationReducer,
 });
