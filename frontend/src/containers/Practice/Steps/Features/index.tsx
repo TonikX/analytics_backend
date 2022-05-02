@@ -7,6 +7,8 @@ import styles from "./styles";
 import {Typography, WithStyles} from "@material-ui/core";
 import {PracticeActions, PracticeState} from "../../types";
 import Input from "../../components/Input";
+import {PRACTICE_FORMATS, PRACTICE_WAYS} from "../../constants";
+import Select from "../../components/Select";
 
 interface FeaturesProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -29,11 +31,10 @@ class Features extends React.Component<FeaturesProps> {
                 <Typography variant='h5'>
                     {PracticeStepsRussian.ASSESSMENT}
                 </Typography>
-                <Input label='Способ прохождения практики'
-                       fieldName={PracticeFields.WAY_OF_DOING_PRACTICE}
-                       multiline
-                       rows={2}/>
-                <Input label='Формат прохождения практики' fieldName={PracticeFields.FORMAT_PRACTICE}/>
+                <Select label='Способ прохождения практики' fieldName={PracticeFields.WAY_OF_DOING_PRACTICE}
+                        metaList={PRACTICE_WAYS}/>
+                <Select label='Формат прохождения практики' fieldName={PracticeFields.FORMAT_PRACTICE}
+                        metaList={PRACTICE_FORMATS}/>
                 <Input label='Особенности содержания и прохождения практики'
                        fieldName={PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP}/>
                 <Input label='Дополнительные отчётные материалы'

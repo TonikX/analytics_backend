@@ -35,3 +35,58 @@ export enum PracticeStepsRussian {
 }
 
 export const PracticeStepsRussianList = Object.entries(PracticeStepsRussian).map(([, value]) => value);
+
+export enum Languages {
+    RUSSIAN = 'ru',
+    ENGLISH = 'en',
+    KAZAKH = 'kz',
+    GERMAN = 'de',
+    RUSSIAN_ENGLISH = 'ru/en',
+}
+
+export enum Qualifications {
+    PRIMARY_VOCATIONAL_EDUCATION = 'primary_vocational_education',
+    SECONDARY_VOCATIONAL_EDUCATION = 'secondary_vocational_education',
+    BACHELOR = 'bachelor',
+    SPECIALIST = 'specialist',
+    MASTER = 'master',
+    ALL_LEVELS = 'All_levels',
+}
+
+export enum PracticeKinds {
+    EDUCATIONAL = 'educational',
+    PRODUCTION = 'production',
+}
+
+export enum PracticeTypes {
+    INTRO = 'intro',
+    STD_INTRO = 'std-intro',
+    TECH = 'tech',
+    CONSTR = 'constr',
+    SCI_RES = 'sci-res',
+    SCI_RES_WORK = 'sci-res-work',
+    CONS_EXP = 'cons-exp',
+    RES_INTER = 'res-inter',
+    ORG_CONTR = 'org-contr',
+    SCI_PED = 'sci_ped',
+    EXP_RES = 'exp-res',
+    PROJ_CONSTR = 'proj-constr',
+    TECH_PROJ_INTER = 'tech-proj-inter',
+    PROD_TECH = 'prod-tech',
+    IND_TECH = 'ind-tech',
+    TEH_PROJ_TECH_INTET = 'teh-proj-tech-intet',
+    TECH_PROJ_TECH = 'tech-proj-tech',
+    SENIOR_INTER = 'senior-inter',
+    INTER = 'inter',
+}
+
+export enum PracticeWays {
+    STATIONARY = 'stationary',
+    EXTERNAL = 'external',
+    STATIONARY_EXTERNAL = 'stationary-external',
+}
+
+export enum PracticeFormats {
+    DEDICATED = 'dedicated',
+    DISPERSED = 'dispersed',
+}

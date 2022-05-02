@@ -6,6 +6,13 @@ export const GENERAL_PATH = 'practiceList';
 
 export const initialState: practiceListState = {
     results: [],
+    searchText: '',
+    sorting: {
+        field: '',
+        mode: '',
+    },
+    practiceCount: 0,
+    currentPage: 1,
     modal: {
         isModalOpen: false,
     }
@@ -32,8 +39,44 @@ const closeModal = (state: practiceListState): practiceListState => ({
     }
 });
 
+const setSearchText = (state: practiceListState, {payload}: any): practiceListState => ({
+    ...state,
+    searchText: payload,
+});
+
+const setSortingField = (state: practiceListState, {payload}: any): practiceListState => ({
+    ...state,
+    sorting: {
+        ...state.sorting,
+        field: payload,
+    }
+});
+
+const setSortingMode = (state: practiceListState, {payload}: any): practiceListState => ({
+    ...state,
+    sorting: {
+        ...state.sorting,
+        mode: payload,
+    }
+});
+
+const setCurrentPage = (state: practiceListState, {payload}: any): practiceListState => ({
+    ...state,
+    currentPage: payload,
+});
+
+const setPracticeCount = (state: practiceListState, {payload}: any): practiceListState => ({
+    ...state,
+    practiceCount: payload,
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setPracticeList.type]: setPracticeList,
     [actions.openModal.type]: openModal,
     [actions.closeModal.type]: closeModal,
+    [actions.setSearchText.type]: setSearchText,
+    [actions.setSortingField.type]: setSortingField,
+    [actions.setSortingMode.type]: setSortingMode,
+    [actions.setCurrentPage.type]: setCurrentPage,
+    [actions.setPracticeCount.type]: setPracticeCount,
 });

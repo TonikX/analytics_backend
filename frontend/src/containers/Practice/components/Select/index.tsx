@@ -34,7 +34,7 @@ class Select extends React.Component<SelectProps> {
                             metaList={metaList}
                             value={fields[fieldName]}
                             wrapClass={classes.selectorWrap}
-                            onChange={this.saveSelect(PracticeFields.LANGUAGE)}
+                            onChange={this.saveSelect(fieldName)}
             />
         );
     }

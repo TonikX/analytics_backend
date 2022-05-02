@@ -2,8 +2,8 @@ import AnalyticsService from "../../service/analytics-service";
 import {MinimalPracticeState, PracticeState} from "./types";
 
 class PracticeService extends AnalyticsService {
-    getPracticeList() {
-        return this.get(`/api/practice/`)
+    getPracticeList(searchText: string, sortingField: string, currentPage: number) {
+        return this.get(`/api/practice/?search=${searchText}&ordering=${sortingField}&page=${currentPage}`)
     }
 
     createPractice(state: MinimalPracticeState) {

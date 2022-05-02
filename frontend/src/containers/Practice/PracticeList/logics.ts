@@ -2,18 +2,27 @@ import {createLogic} from "redux-logic";
 import PracticeListActions from "./actions";
 import get from "lodash/get";
 import PracticeService from "../service";
+import {getCurrentPage, getSearchText, getSortingField, getSortingMode} from "./getters";
 
 const service = new PracticeService();
 
-const getWorkProgramList = createLogic({
+const getPracticeList = createLogic({
     type: PracticeListActions.getPracticeList.type,
     latest: true,
 
     process({getState, action}: any, dispatch, done) {
-        service.getPracticeList()
+        const state = getState();
+        const searchText = getSearchText(state);
+        const sortingField = getSortingField(state);
+        const sortingMode = getSortingMode(state);
+        const currentPage = getCurrentPage(state);
+
+        service.getPracticeList(searchText, sortingField, currentPage)
             .then((res) => {
                 const results = get(res, 'data.results', []);
+                const count = get(res, 'data.count', 0);
                 dispatch(PracticeListActions.setPracticeList(results));
+                dispatch(PracticeListActions.setPracticeCount(count));
             })
             .finally(() => {
                 return done();
@@ -43,4 +52,4 @@ const createPractice = createLogic({
     }
 });
 
-export default [getWorkProgramList, createPractice];
+export default [getPracticeList, createPractice];
