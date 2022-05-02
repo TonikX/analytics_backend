@@ -33,6 +33,7 @@ from .educational_program.general_prof_competencies.models import GroupOfGeneral
 from .individualization.models import ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .feedback.models import FeedbackRecord
 from .educational_program.educational_standart.models import EducationalStandard, TasksForEducationalStandard
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 admin.site.register(GroupOfPkCompetencesInGeneralCharacteristic)
 admin.site.register(PkCompetencesInGroupOfGeneralCharacteristic)
@@ -62,7 +63,7 @@ admin.site.register(Competence)
 admin.site.register(Indicator)
 admin.site.register(EvaluationTool)
 # admin.site.register(FieldOfStudyWorkProgram)
-admin.site.register(DisciplineSection)
+# admin.site.register(DisciplineSection)
 admin.site.register(Topic)
 admin.site.register(RouteComposition)
 admin.site.register(Route)
@@ -114,3 +115,15 @@ admin.site.register(EducationalStandard)
 admin.site.register(TasksForEducationalStandard)
 
 
+class EvaluationToolInLine(admin.StackedInline):
+    model = EvaluationTool
+    extra = 1
+
+
+@admin.register(DisciplineSection)
+class DisciplineSectionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'ordinal_number', 'work_program')
+    list_filter = ('name', 'ordinal_number', 'work_program')
+    inlines = [EvaluationToolInLine]
+    save_on_top = True
+    save_as = True
