@@ -2,6 +2,8 @@ from rest_framework import serializers
 from rest_framework.fields import BooleanField
 
 from dataprocessing.serializers import ItemSerializer, userProfileSerializer
+from gia_practice_app.GIA.models import GIA
+from gia_practice_app.Practice.models import Practice
 #from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
 #from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
 from .expertise.common_serializers import ShortExpertiseSerializer
@@ -487,6 +489,8 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
     work_program = serializers.SerializerMethodField('get_id_of_wpcb')
 
     def to_representation(self, value):
+        self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
+        self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
         # self.fields['gia'] = GIASerializer(required=False, many=True)
         # self.fields['practice'] = PracticeSerializer(required=False, many=True)
         return super().to_representation(value)
@@ -592,6 +596,17 @@ class WorkProgramChangeInDisciplineBlockModuleSerializerDetail(serializers.Model
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
+        fields = "__all__"
+
+class PracticePrimitiveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Practice
+        fields = "__all__"
+
+class GIAPrimitiveSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = GIA
         fields = "__all__"
 
 

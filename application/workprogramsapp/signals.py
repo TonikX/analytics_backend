@@ -1,10 +1,11 @@
 from django.contrib.auth.models import Group
-from django.db.models.signals import post_save, pre_delete, pre_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from dataprocessing.models import User
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
 from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Zun, WorkProgramIdStrUpForIsu
+from workprogramsapp.notifications.emails.send_mail import mail_sender
 from workprogramsapp.notifications.models import ExpertiseNotification, NotificationComments
 
 
@@ -40,15 +41,30 @@ def expertise_notificator(sender, instance, created, **kwargs):
     if instance.expertise_status == 'WK':
         wp_exp = WorkProgram.objects.get(expertise_with_rpd=instance)
         users = User.objects.filter(expertse_in_rpd__expertise__work_program=wp_exp).distinct()
+
+        user_to_send = users.filter(expertise_status_notification=True)
+        user_email = [user.email for user in user_to_send]
+        mail_sender(topic=f'Статус вашей радочей программы "{wp_exp.title}" изменился',
+                    text=f'Рабочую программу "{wp_exp.title}" вернули на доработку (Статус: "{instance.get_expertise_status_display()}")',
+                    emails=user_email, users=user_to_send)
+
         for user in users:
             ExpertiseNotification.objects.create(expertise=instance, user=user,
-                                                 message=f'Рабочую программу "{wp_exp.title}" вернули на доработку (Статус: "{instance.get_expertise_status_display()}")')
+                                                 message=f'Рабочую программу "{wp_exp.title}" (https://op.itmo.ru/work-program/{wp_exp.id}) вернули на доработку (Статус: "{instance.get_expertise_status_display()}")')
 
 
 @receiver(post_save, sender=ExpertiseComments)
 def comment_notificator(sender, instance, created, **kwargs):
     wp_exp = WorkProgram.objects.get(expertise_with_rpd__expertse_users_in_rpd__user_expertise_comment=instance)
     user_sender = User.objects.get(expertse_in_rpd__user_expertise_comment=instance)
+
+    user_to_send = User.objects.filter(editors=wp_exp, expertise_comments_notification=True)
+    user_to_send = user_to_send.exclude(id=user_sender.id)
+    user_email = [user.email for user in user_to_send]
+    mail_sender(topic=f'В экспертизе для рабочей программы "{wp_exp.title}" был оставлен новый комментарий',
+                text=f'В экспертизе для рабочей программы "{wp_exp.title}" (https://op.itmo.ru/work-program/{wp_exp.id}) в блоке "{instance.get_comment_block_display()}" был оставлен комментарий: "{instance.comment_text}"',
+                emails=user_email, users=user_to_send)
+
     for editor in User.objects.filter(editors=wp_exp):
         if editor != user_sender:
             NotificationComments.objects.create(comment_new=instance, user=editor,
@@ -57,7 +73,7 @@ def comment_notificator(sender, instance, created, **kwargs):
                                     expertse_in_rpd__user_expertise_comment__comment_block=instance.comment_block).distinct():
         if user != user_sender:
             NotificationComments.objects.create(comment_new=instance, user=user,
-                                                message=f'В экспертизе для рабочей программы "{wp_exp.title}" в блоке "{instance.get_comment_block_display()}"был оставлен комментарий "{instance.comment_text}"')
+                                                message=f'В экспертизе для рабочей программы "{wp_exp.title}" в блоке "{instance.get_comment_block_display()}" был оставлен комментарий "{instance.comment_text}"')
 
     read_notifications_array = [True if str(x) == 'True' else False for x in wp_exp.read_notifications.split(', ')]
     if instance.comment_block == 'MA':
@@ -82,10 +98,10 @@ def comment_notificator(sender, instance, created, **kwargs):
 
 @receiver(pre_delete, sender=WorkProgramInFieldOfStudy)
 def zun_saver(sender, instance, using, **kwargs):
-    wp_in_fs_id_strs = WorkProgramIdStrUpForIsu.objects.filter(work_program_in_field_of_study = instance.id)
+    wp_in_fs_id_strs = WorkProgramIdStrUpForIsu.objects.filter(work_program_in_field_of_study=instance.id)
     for wp_in_fs_id_str in wp_in_fs_id_strs:
-        for wp_in_fs in WorkProgramInFieldOfStudy.objects.filter(zuns_for_wp = wp_in_fs_id_str):
-            for zun in Zun.objects.filter(wp_in_fs = wp_in_fs):
+        for wp_in_fs in WorkProgramInFieldOfStudy.objects.filter(zuns_for_wp=wp_in_fs_id_str):
+            for zun in Zun.objects.filter(wp_in_fs=wp_in_fs):
                 print(wp_in_fs_id_str.id_str_up)
                 zun.wp_in_fs_saved_fk_id_str_up = wp_in_fs_id_str.id_str_up
                 zun.save()

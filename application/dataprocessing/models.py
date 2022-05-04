@@ -15,6 +15,8 @@ class User(AbstractUser):
     is_rpd_developer = models.BooleanField(default = False)
     is_expertise_master = models.BooleanField(default = False)
 
+    expertise_status_notification = models.BooleanField(default=False)
+    expertise_comments_notification = models.BooleanField(default=False)
     # def __str__(self):
     #     return self.first_name + ' ' + self.last_name
 
