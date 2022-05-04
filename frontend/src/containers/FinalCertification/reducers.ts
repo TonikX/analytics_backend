@@ -1,5 +1,5 @@
 import {certificationPageState} from "./types";
-import {CertificationFields} from "./enum";
+import {CertificationFields, CertificationMarkFields} from "./enum";
 import createReducer from "../../store/createReducer";
 import actions from "./actions";
 
@@ -8,6 +8,7 @@ export const GENERAL_PATH = 'certification';
 export const initialState: certificationPageState = {
     certification: {
         [CertificationFields.ID]: 1,
+        [CertificationFields.DISCIPLINE_CODE]: '',
         [CertificationFields.TITLE]: '',
         [CertificationFields.YEAR]: 0,
         [CertificationFields.AUTHORS]: '',
@@ -55,7 +56,32 @@ const setField = (state: certificationPageState, {payload}: any): certificationP
     }
 });
 
+type SetMarkCriteriaArgs = {
+    field: CertificationFields,
+    markType: CertificationMarkFields,
+    value: string,
+}
+
+const setMarkCriteria = (state: certificationPageState, {payload}: any): certificationPageState => {
+
+    const {field, markType, value}: SetMarkCriteriaArgs = payload;
+
+    const mark = state?.certification[field] as any;
+
+    return {
+        ...state,
+        certification: {
+            ...state?.certification,
+            [field]: {
+                ...mark,
+                [markType]: value,
+            },
+        }
+    }
+};
+
 export const reducer = createReducer(initialState, {
     [actions.setCertification.type]: setCertification,
     [actions.setField.type]: setField,
+    [actions.setMarkCriteria.type]: setMarkCriteria,
 });

@@ -15,6 +15,7 @@ export type GeneralInfoState = {
     [CertificationFields.OP_LEADER]: string,
     [CertificationFields.STRUCTURAL_UNIT]: StructuralUnitType | null,
     [CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS]: string,
+    [CertificationFields.DISCIPLINE_CODE]: string,
 }
 
 export type DatesState = {
@@ -50,7 +51,6 @@ export type AssessmentState = {
     [CertificationFields.QUALITY_AND_LOGIC_MARKS]: CertificationMark,
     [CertificationFields.VALIDITY_MARKS]: CertificationMark,
     [CertificationFields.SIGNIFICANCE_MARKS]: CertificationMark,
-    [CertificationFields.SIGNIFICANCE_MARKS]: CertificationMark,
     [CertificationFields.IMPLEMENTATION_MARKS]: CertificationMark,
     [CertificationFields.REPORT_QUALITY_MARKS]: CertificationMark,
     [CertificationFields.PRESENTATION_QUALITY_MARKS]: CertificationMark,
@@ -75,4 +75,6 @@ export interface CertificationActions {
     saveField: any;
     setCertification: any;
     setField: any;
+    saveMarkCriteria: any;
+    setMarkCriteria: any;
 }

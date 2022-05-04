@@ -1,5 +1,5 @@
 import {createLogic} from "redux-logic";
-import {getId} from "./getters";
+import {getId, getMarkCriteriaId} from "./getters";
 import CertificationActions from "./actions";
 import CertificationService from "./service";
 
@@ -58,5 +58,31 @@ const saveField = createLogic({
     }
 });
 
+const saveMarkCriteria = createLogic({
+    type: CertificationActions.saveMarkCriteria.type,
+    latest: true,
 
-export default [getCertification, saveCertification, saveField];
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const {field, markType, value} = action.payload;
+        const markCriteriaId = getMarkCriteriaId(field)(state);
+        const fields = {
+            [markType]: value,
+        }
+        service.patchMarkCriteria(fields, markCriteriaId)
+            .then((res: any) => {
+                dispatch(CertificationActions.setField({field, value: res.data}));
+            })
+            .catch((err) => {
+                console.error(`could not save field: ${field}`);
+                const id = getId(state);
+                dispatch(CertificationActions.getCertification(id));
+            })
+            .finally(() => {
+                return done();
+            });
+    }
+});
+
+
+export default [getCertification, saveCertification, saveField, saveMarkCriteria];

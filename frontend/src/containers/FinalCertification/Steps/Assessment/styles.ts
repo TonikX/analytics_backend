@@ -14,5 +14,8 @@ export default () => createStyles({
     },
     rightColumn: {
         marginLeft: '30px',
+    },
+    select: {
+        marginTop: '20px',
     }
 });

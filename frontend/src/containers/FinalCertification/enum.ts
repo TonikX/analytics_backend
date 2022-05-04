@@ -16,7 +16,6 @@ export enum CertificationFields {
     OPTIONAL_DESIGN_REQUIREMENTS= "optional_design_requirements",
     CONTENT_REQUIREMENTS= "content_requirements",
     DEFENCE_PRESENTATION_REQUIREMENTS= "defence_presentation_requirements",
-    GIA_BASE= "gia_base",
     STRUCTURAL_UNIT= "structural_unit",
     CONTENT_CORRESPONDENCE_MARKS= "content_correspondence_marks",
     RELEVANCE_MARKS= "relevance_marks",

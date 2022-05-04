@@ -18,6 +18,10 @@ class CertificationService extends AnalyticsService {
     patchCertification(fields: any, id: number) {
         return this.patch(`/api/gia/${id}/`, fields);
     }
+
+    patchMarkCriteria(fields: any, id: number) {
+        return this.patch(`/api/gia/vkr_criteria/${id}/`, fields);
+    }
 }
 
 export default CertificationService;
