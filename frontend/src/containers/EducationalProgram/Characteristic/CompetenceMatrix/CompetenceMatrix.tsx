@@ -53,6 +53,7 @@ const CompetencesHeader = ({competences}: CompetencesHeaderProps) => {
 const ContentByAcademicPlan = (
     {
         attachIndicator,
+        setIndicators,
         academicPlan,
         keyCompetences,
         profCompetences,
@@ -104,6 +105,22 @@ const ContentByAcademicPlan = (
             return zuns.map((zun => zun.indicator.number)).join(" ")
         };
 
+        const onItemCellClick = (sourceCompetence: Competence) => {
+            if (intersect(sourceCompetence)) {
+                const indicators = ownCompetences.find(it => it.id === sourceCompetence.id)?.zuns.map(it => {
+                    return {
+                        label: `${it.indicator.number}`,
+                        value: it.indicator.id,
+                    }
+                }) || [];
+                setIndicators(indicators);
+            }
+            setModalData({
+                label: sourceCompetence.name,
+                value: sourceCompetence.id,
+            });
+        };
+
 
         return <div className={classes.competenceCellHolder}>
             {
@@ -117,10 +134,8 @@ const ContentByAcademicPlan = (
                         >
                             <div className={
                                 intersect(sourceCompetence) ? classes.intersection : classes.noIntersection
-                            } onClick={() => setModalData({
-                                label: sourceCompetence.name,
-                                value: sourceCompetence.id,
-                            })}>x</div>
+                            } onClick={() => onItemCellClick(sourceCompetence)}>x
+                            </div>
                         </Tooltip>
                     )
                 })
@@ -146,7 +161,7 @@ const ContentByAcademicPlan = (
                                     .fill(EMPTY)
                                     .map((item, index) => {
                                         // В одной ячейке заголовок, остальные ячейки пустые
-                                        return <TableCell>{index === 0 ? moduleBlock.name : item}</TableCell>
+                                        return <TableCell key={index}>{index === 0 ? moduleBlock.name : item}</TableCell>
                                     })
                             }
                         </TableRow>
@@ -193,6 +208,7 @@ export default () => {
     const competenceMatrixId = useSelector(getEducationalProgramCharacteristicId);
     const [isOpen, setIsOpen] = useState(false);
     const [defaultCompetence, setDefaultCompetence] = useState();
+    const [indicators, setIndicators] = useState([] as {label: string; value: number} []);
     const [workProgramId, setWorkProgramId] = useState(-1);
 
     useEffect(() => {
@@ -236,6 +252,7 @@ export default () => {
                     </TableHead>
                     <TableBody className={classes.table}>
                         <TableContent
+                            setIndicators={setIndicators}
                             attachIndicator={attachIndicator}
                             keyCompetences={keyCompetences}
                             profCompetences={profCompetences}
@@ -249,6 +266,7 @@ export default () => {
             <IndicatorsDialog
                 isOpen={isOpen}
                 handleClose={() => setIsOpen(false)}
+                addedIndicators={indicators}
                 defaultCompetence={defaultCompetence}
                 workProgramId={workProgramId}
             />

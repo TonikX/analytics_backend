@@ -22,11 +22,15 @@ interface IndicatorsProps {
         value: number;
         label: string;
     };
+    addedIndicators: {
+        value: number;
+        label: string;
+    }[];
     isEditMode?: boolean;
     handleClose: () => void;
 }
 
-export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, workProgramId}: IndicatorsProps) => {
+export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, workProgramId, addedIndicators}: IndicatorsProps) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [competence, setCompetence] = useState<{ value: number; label: string }>({value: 0, label: ''});
@@ -43,6 +47,10 @@ export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndi
     const removePlan = useCallback((value: number) => {
         setPlans(plans.filter(plan => plan.value !== value))
     }, [plans]);
+
+    const removeIndicator = (value: number) => {
+        // TODO: remove indicators
+    };
 
     const addPlan = useCallback((value: number, label: string) => {
         if (plans.find(item => item.value === value)) return;
@@ -102,7 +110,7 @@ export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndi
                 paper: classes.dialog
             }}
         >
-            <DialogTitle className={classes.title}> {isEditMode ? 'Редактировать' : 'Добавить'} индикатор</DialogTitle>
+            <DialogTitle className={classes.title}> {addedIndicators.length > 0 ? 'Редактировать' : 'Добавить'} индикатор</DialogTitle>
             <CompetenceSelector
                 onChange={addCompetence}
                 value={competence.value}
@@ -115,10 +123,16 @@ export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndi
                 onChange={addIndicator}
                 value={0}
                 label="Индикатор"
-                className={classes.marginBottom30}
+                className={classes.marginBottom10}
                 competenceId={competence.value}
                 disabled={competence.value === 0 || Boolean(defaultIndicator)}
             />
+            <div className={classes.chipsList}>
+                {addedIndicators.map(item => (
+                    <Chip key={`indicator-${item.value}`} className={classes.chip} onDelete={() => removeIndicator(item.value)}
+                          label={item.label}/>
+                ))}
+            </div>
             <PlanSelector
                 label="Учебный план и образовательная программа"
                 onChange={addPlan}
