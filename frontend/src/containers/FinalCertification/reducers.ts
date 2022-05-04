@@ -47,6 +47,15 @@ const setCertification = (state: certificationPageState, {payload}: any): certif
     }
 });
 
+const setField = (state: certificationPageState, {payload}: any): certificationPageState => ({
+    ...state,
+    certification: {
+        ...state?.certification,
+        [payload.field]: payload.value,
+    }
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setCertification.type]: setCertification,
+    [actions.setField.type]: setField,
 });

@@ -74,4 +74,5 @@ export interface CertificationActions {
     saveCertification: any;
     saveField: any;
     setCertification: any;
+    setField: any;
 }

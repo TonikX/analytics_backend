@@ -29,7 +29,7 @@ class Features extends React.Component<FeaturesProps> {
         return (
             <div className={classes.content}>
                 <Typography variant='h5'>
-                    {PracticeStepsRussian.ASSESSMENT}
+                    {PracticeStepsRussian.FEATURES}
                 </Typography>
                 <Select label='Способ прохождения практики' fieldName={PracticeFields.WAY_OF_DOING_PRACTICE}
                         metaList={PRACTICE_WAYS}/>

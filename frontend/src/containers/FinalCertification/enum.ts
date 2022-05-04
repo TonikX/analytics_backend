@@ -38,3 +38,18 @@ export enum CertificationMarkFields {
     SATISFACTORILY = 'satisfactorily',
     UNSATISFACTORY = 'unsatisfactory',
 }
+
+export enum StructuralUnitFields {
+    ID = "id",
+    TITLE = "title",
+    ISU_ID = "isu_id",
+}
+
+export enum CertificationStepsRussian {
+    GENERAL = 'Главное',
+    DATES = 'Даты',
+    FEATURES = 'Особенности',
+    ASSESSMENT = 'Оценка',
+}
+
+export const CertificationStepsRussianList = Object.entries(CertificationStepsRussian).map(([, value]) => value);

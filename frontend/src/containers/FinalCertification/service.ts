@@ -3,6 +3,10 @@ import {CertificationState} from "./types";
 
 class CertificationService extends AnalyticsService {
 
+    getCertificationList(searchText: string, sortingField: string, currentPage: number) {
+        return this.get(`/api/gia/?search=${searchText}&ordering=${sortingField}&page=${currentPage}`)
+    }
+
     getCertification(id: number) {
         return this.get(`/api/gia/${id}/`)
     }
@@ -12,7 +16,7 @@ class CertificationService extends AnalyticsService {
     }
 
     patchCertification(fields: any, id: number) {
-        return this.patch(`/api/practice/${id}/`, fields);
+        return this.patch(`/api/gia/${id}/`, fields);
     }
 }
 

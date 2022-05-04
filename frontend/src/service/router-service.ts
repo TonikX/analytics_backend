@@ -32,6 +32,7 @@ const DODPROFILE = 'dod-profile';
 const PRACTICE_LIST = 'practice-list';
 const PRACTICE = 'practice';
 const FINAL_CERTIFICATION = 'gia';
+const FINAL_CERTIFICATION_LIST = 'gia-list';
 
 const RECORDS = 'records';
 
@@ -331,6 +332,10 @@ export default class RouterService {
 
     getFinalCertificationLink = (id: number) => {
         return SEPARATOR + FINAL_CERTIFICATION + SEPARATOR + id;
+    }
+
+    getFinalCertificationListRoute = () => {
+        return SEPARATOR + FINAL_CERTIFICATION_LIST;
     }
 }
 
