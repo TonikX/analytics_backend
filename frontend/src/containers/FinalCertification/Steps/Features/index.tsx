@@ -29,12 +29,36 @@ class Features extends React.Component<FeaturesProps> {
                 <Typography variant='h5'>
                     {CertificationStepsRussian.FEATURES}
                 </Typography>
-                <Input label='Предзащита' fieldName={CertificationFields.PRELIMINARY_DEFENSE}/>
-                <Input label='Антиплагиат' fieldName={CertificationFields.ANTI_PLAGIARISM}/>
-                <Input label='Опциональные требования к оформлению ВКР' fieldName={CertificationFields.STRUCTURE_ELEMENTS_OPTIONAL}/>
-                <Input label='Дополнительные требования к оформлению ВКР' fieldName={CertificationFields.PRELIMINARY_DEFENSE}/>
-                <Input label='Требования к содержанию ВКР' fieldName={CertificationFields.CONTENT_REQUIREMENTS}/>
-                <Input label='Требования к представлению ВКР' fieldName={CertificationFields.DEFENCE_PRESENTATION_REQUIREMENTS}/>
+                <div className={classes.columns}>
+                    <div>
+                        <Input label='Предзащита'
+                               multiline
+                               rows={2}
+                               fieldName={CertificationFields.PRELIMINARY_DEFENSE}/>
+                        <Input label='Антиплагиат'
+                               multiline
+                               rows={2}
+                               fieldName={CertificationFields.ANTI_PLAGIARISM}/>
+                        <Input label='Опциональные требования к оформлению ВКР'
+                               multiline
+                               rows={2}
+                               fieldName={CertificationFields.STRUCTURE_ELEMENTS_OPTIONAL}/>
+                    </div>
+                    <div className={classes.rightColumn}>
+                        <Input label='Дополнительные требования к оформлению ВКР'
+                               multiline
+                               rows={2}
+                               fieldName={CertificationFields.PRELIMINARY_DEFENSE}/>
+                        <Input label='Требования к содержанию ВКР'
+                               multiline
+                               rows={2}
+                               fieldName={CertificationFields.CONTENT_REQUIREMENTS}/>
+                        <Input label='Требования к представлению ВКР'
+                               multiline
+                               rows={2}
+                               fieldName={CertificationFields.DEFENCE_PRESENTATION_REQUIREMENTS}/>
+                    </div>
+                </div>
             </div>
         );
     }

@@ -8,5 +8,11 @@ export default () => createStyles({
     },
     content: {
         height: '600px',
-    }
+    },
+    columns: {
+        display: "flex",
+    },
+    rightColumn: {
+        marginLeft: '30px',
+    },
 });
