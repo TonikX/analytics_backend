@@ -93,6 +93,7 @@ export const workProgramStatusesRussian: any = {
     [WorkProgramStatusEnum.EXPERTISE]: 'На экспертизе',
     [WorkProgramStatusEnum.APPROVE]: 'Одобрено',
     [WorkProgramStatusEnum.ARCHIVE]: 'В архиве',
+    [WorkProgramStatusEnum.REWORK]: 'На доработке',
 }
 
 
@@ -109,6 +110,7 @@ export const workProgramStatusesColors: any = {
     [WorkProgramStatusEnum.EXPERTISE]: '#C000FF',
     [WorkProgramStatusEnum.APPROVE]: '#2abb00',
     [WorkProgramStatusEnum.ARCHIVE]: '#ccc',
+    [WorkProgramStatusEnum.REWORK]: '#f30707',
 }
 
 export const steps = {
