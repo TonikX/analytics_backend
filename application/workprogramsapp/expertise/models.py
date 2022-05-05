@@ -31,7 +31,8 @@ class Expertise(models.Model):
         ('WK', 'В работе'),
         ('EX', 'На экспертизе'),
         ('AC', 'Одобрено'),
-        ('AR', 'Архив')
+        ('AR', 'Архив'),
+        ('RE', 'На доработке')
     ]
 
     work_program = models.ForeignKey('WorkProgram', related_name='expertise_with_rpd', on_delete=models.CASCADE)
