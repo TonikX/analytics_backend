@@ -7,7 +7,7 @@ const getStateData = (state: rootState): practicePageState => get(state, GENERAL
 
 export const getPractice = (state: rootState): PracticeState => get(getStateData(state), 'practice', initialState.practice);
 
-export const getLiteratureIdList = (state: rootState): PracticeState =>
+export const getLiteratureList = (state: rootState): PracticeState =>
     get(getStateData(state), 'practice.bibliographic_reference', initialState.practice.bibliographic_reference);
 
 export const getId = (state: rootState): Id => get(getStateData(state), 'practice.id', initialState.practice.id);

@@ -45,6 +45,9 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
 
     componentDidMount() {
         this.props.literatureActions.getLiterature();
+        this.setState({
+            selectedLiterature: this.props.selectedItems,
+        });
     }
 
     componentDidUpdate(prevProps: Readonly<AddLiteratureModalProps>, prevState: Readonly<{}>, snapshot?: any) {

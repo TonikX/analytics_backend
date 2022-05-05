@@ -17,7 +17,6 @@ import AddLiteratureModal from "../../../../components/AddLiteratureModal";
 import {literatureFields} from "../../../Literature/enum";
 import {LiteratureType} from "../../../Literature/types";
 import {PracticeFields, PracticeStepsRussian} from "../../enum";
-import get from "lodash/get";
 
 class Literature extends React.PureComponent<LiteratureProps> {
 
@@ -32,20 +31,14 @@ class Literature extends React.PureComponent<LiteratureProps> {
     };
 
     handleClickDelete = (id: string) => () => {
-        const ids = this.props.literatureIdList.filter(litId => litId !== id);
-        this.props.actions.setField({field: PracticeFields.BIBLIOGRAPHIC_REFERENCE, value: ids});
+        const refs = this.props.literatureList.filter(ref => ref.id !== id).map(ref => ref.id);
+        this.props.actions.saveField({field: PracticeFields.BIBLIOGRAPHIC_REFERENCE, value: refs});
     };
 
     handleSave = (refs: Array<LiteratureType>) => {
-        const ids = refs.map(ref => ref[literatureFields.ID]);
-        this.props.actions.setField({field: PracticeFields.BIBLIOGRAPHIC_REFERENCE, value: ids});
+        const ids = refs.map(ref => ref.id);
+        this.props.actions.saveField({field: PracticeFields.BIBLIOGRAPHIC_REFERENCE, value: ids});
         this.handleClose();
-    }
-
-    saveInput = (field: string) => (e: React.ChangeEvent) => {
-        const value = get(e, 'target.value')
-
-        this.props.actions.setField({field, value});
     }
 
     handleClose = () => {
@@ -55,14 +48,12 @@ class Literature extends React.PureComponent<LiteratureProps> {
     }
 
     render() {
-        const {classes, literatureIdList} = this.props;
+        const {classes, literatureList} = this.props;
+
+        console.log('in lit');
+        console.log(literatureList);
 
         const {isModalOpen} = this.state;
-
-        const literatureList = literatureIdList.map(id => ({
-            [literatureFields.ID]: id,
-            [literatureFields.DESCRIPTION]: `empty description, id: ${id}`
-        }))
 
         return (
             <div className={classes.root}>

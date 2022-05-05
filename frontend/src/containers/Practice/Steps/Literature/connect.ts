@@ -6,11 +6,11 @@ import actions from "../../actions";
 
 import {rootState} from "../../../../store/reducers";
 import {PracticeActions} from "../../types";
-import {getLiteratureIdList} from "../../getters";
+import {getLiteratureList} from "../../getters";
 
 const mapStateToProps = (state:rootState) => {
     return {
-        literatureIdList: getLiteratureIdList(state),
+        literatureList: getLiteratureList(state),
     };
 };
 

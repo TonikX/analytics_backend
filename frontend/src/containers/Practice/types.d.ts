@@ -2,6 +2,7 @@ import {PracticeFields, StructuralUnitFields} from "./enum";
 import {WithStyles} from "@material-ui/core";
 import styles from "./Practice.styles";
 import {RouteComponentProps} from "react-router-dom";
+import {LiteratureType} from "../Literature/types";
 
 export type Id = number;
 
@@ -40,7 +41,7 @@ export type AssessmentState = {
 }
 
 export type ReferencesState = {
-    [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: Array<Id>,
+    [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: Array<LiteratureType>,
 }
 
 export type PracticeState = GeneralInfoState

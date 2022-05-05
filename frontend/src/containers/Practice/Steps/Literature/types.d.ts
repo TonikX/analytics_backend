@@ -5,5 +5,5 @@ import {PracticeActions} from "../../types";
 
 export interface LiteratureProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
-    literatureIdList: Array<string>;
+    literatureList: Array<any>;
 }
