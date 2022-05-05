@@ -353,6 +353,12 @@ export default (groups: Array<string>) => {
             selectedIcon: WorkProgramSelectedIcon,
         },
         {
+            title: 'ГИА',
+            link: appRouter.getFinalCertificationListRoute(),
+            icon: WorkProgramIcon,
+            selectedIcon: WorkProgramSelectedIcon,
+        },
+        {
             title: 'Онлайн курсы',
             link: appRouter.getCoursesRoute(),
             icon: CoursesIcon,
