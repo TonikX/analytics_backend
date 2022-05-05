@@ -2,7 +2,7 @@ import React from "react";
 import {CertificationFields, CertificationMarkFields, CertificationStepsRussian} from "../../enum";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
-import styles from "./styles";
+import styles from "../styles";
 import {FormControl, MenuItem, TextField, Typography, WithStyles} from "@material-ui/core";
 import {CertificationActions, CertificationMark, CertificationState} from "../../types";
 import get from "lodash/get";
@@ -57,7 +57,7 @@ class Assessment extends React.Component<AssessmentProps> {
                 <Typography variant='h5'>
                     {CertificationStepsRussian.ASSESSMENT}
                 </Typography>
-                <FormControl fullWidth className={classes.select}>
+                <FormControl fullWidth className={classes.markTypeSelect}>
                     <TextField
                             value={activeField}
                             label='Вид оценки'
@@ -73,7 +73,7 @@ class Assessment extends React.Component<AssessmentProps> {
                     </TextField>
                 </FormControl>
                 <div className={classes.columns}>
-                    <div>
+                    <div className={classes.leftColumn}>
                         <TextField value={marks ? marks[CertificationMarkFields.GREAT] : ''}
                                    label='Оценка "отлично"'
                                    fullWidth

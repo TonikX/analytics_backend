@@ -2,7 +2,7 @@ import React from "react";
 import {CertificationFields, CertificationStepsRussian} from "../../enum";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
-import styles from "./styles";
+import styles from "../styles";
 import {Typography, WithStyles} from "@material-ui/core";
 import {CertificationActions, CertificationState} from "../../types";
 import Input from "../../components/Input";
@@ -42,7 +42,7 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                     {CertificationStepsRussian.GENERAL}
                 </Typography>
                 <div className={classes.columns}>
-                    <div>
+                    <div className={classes.leftColumn}>
                         <Input label='Код дисциплины' fieldName={CertificationFields.DISCIPLINE_CODE}/>
                         <Input label='Название' fieldName={CertificationFields.TITLE}/>
                         <Input label='Год проведения' fieldName={CertificationFields.YEAR}/>

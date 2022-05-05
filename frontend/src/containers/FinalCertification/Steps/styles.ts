@@ -2,7 +2,7 @@ import {createStyles} from "@material-ui/core";
 
 export default () => createStyles({
     input: {
-        width: '500px',
+        width: '100%',
         marginTop: '30px',
         display: "block",
     },
@@ -23,7 +23,14 @@ export default () => createStyles({
     columns: {
         display: "flex",
     },
+    leftColumn: {
+      width: '50%',
+    },
     rightColumn: {
+        width: '50%',
         marginLeft: '30px',
+    },
+    markTypeSelect: {
+        marginTop: '20px',
     }
 });

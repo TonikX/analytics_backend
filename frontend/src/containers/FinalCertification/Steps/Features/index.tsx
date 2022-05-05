@@ -3,7 +3,7 @@ import {CertificationFields, CertificationStepsRussian} from "../../enum";
 import get from "lodash/get";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
-import styles from "./styles";
+import styles from "../styles";
 import {Typography, WithStyles} from "@material-ui/core";
 import {CertificationActions, CertificationState} from "../../types";
 import Input from "../../components/Input";
@@ -30,7 +30,7 @@ class Features extends React.Component<FeaturesProps> {
                     {CertificationStepsRussian.FEATURES}
                 </Typography>
                 <div className={classes.columns}>
-                    <div>
+                    <div className={classes.leftColumn}>
                         <Input label='Предзащита'
                                multiline
                                rows={2}

@@ -2,7 +2,7 @@ import {createStyles} from "@material-ui/core";
 
 export default () => createStyles({
     input: {
-        width: '500px',
+        width: '100%',
         marginTop: '30px',
         display: "block",
     },
@@ -10,7 +10,7 @@ export default () => createStyles({
         height: '600px',
     },
     selectorWrap: {
-        width: '550px',
+        width: '100%',
         marginTop: '30px',
         display: "block",
         '& .MuiInputLabel-shrink': {
@@ -23,7 +23,11 @@ export default () => createStyles({
     columns: {
         display: "flex",
     },
+    leftColumn: {
+        width: '50%',
+    },
     rightColumn: {
         marginLeft: '30px',
+        width: '50%',
     }
 });
