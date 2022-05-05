@@ -250,7 +250,8 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
         model = WorkProgram
         fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester',
                   'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours',
-                  'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format']
+                  'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format',
+                  'work_status']
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }

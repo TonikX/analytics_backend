@@ -77,7 +77,7 @@ class WorkProgramsListApi(generics.ListAPIView):
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile', 'qualification',
                         'prerequisites', 'outcomes', 'structural_unit__title',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__title',
-                        'editors__last_name', 'editors__first_name'
+                        'editors__last_name', 'editors__first_name', 'work_status'
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
