@@ -145,6 +145,11 @@ class ChangeExpertiseView(generics.UpdateAPIView):
     serializer_class = ExpertiseSerializer
     permission_classes = [IsExpertiseMasterStrict]
 
+    #
+    # def perform_update(self, serializer):
+    #     if
+    #     serializer.save()
+
 
 class ChangeUserExpertiseView(generics.UpdateAPIView):
     """

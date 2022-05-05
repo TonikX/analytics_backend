@@ -34,7 +34,7 @@ from .educational_program.general_prof_competencies.models import GroupOfGeneral
 from .individualization.models import ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .feedback.models import FeedbackRecord
 from .educational_program.educational_standart.models import EducationalStandard, TasksForEducationalStandard
-from ckeditor_uploader.widgets import CKEditorUploadingWidget
+#from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 admin.site.register(GroupOfPkCompetencesInGeneralCharacteristic)
 admin.site.register(PkCompetencesInGroupOfGeneralCharacteristic)
