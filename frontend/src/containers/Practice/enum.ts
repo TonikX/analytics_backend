@@ -1,5 +1,6 @@
 export enum PracticeFields {
     ID = 'id',
+    DISCIPLINE_CODE = 'discipline_code',
     TITLE = 'title',
     YEAR = 'year',
     AUTHORS = 'authors',

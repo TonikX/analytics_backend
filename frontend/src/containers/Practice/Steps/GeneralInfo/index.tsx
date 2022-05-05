@@ -45,6 +45,7 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                 </Typography>
                 <div className={classes.columns}>
                     <div>
+                        <Input label='Код дисциплины' fieldName={PracticeFields.DISCIPLINE_CODE}/>
                         <Input label='Название' fieldName={PracticeFields.TITLE}/>
                         <Input label='Год проведения' fieldName={PracticeFields.YEAR}/>
                         <Input label='Руководитель образовательной программы' fieldName={PracticeFields.OP_LEADER}/>

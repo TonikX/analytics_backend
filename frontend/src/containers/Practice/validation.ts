@@ -8,6 +8,10 @@ const presence = {
     message: 'Поле обязательно для заполнения',
 }
 
+const number = {
+    message: 'Введите число',
+}
+
 const validationRules = {
     [PracticeFields.TITLE]: {
         presence,
@@ -20,13 +24,23 @@ const validationRules = {
     },
     [PracticeFields.YEAR]: {
         presence,
-        range: {
+        year: {
             min: 1990,
             max: 2030,
             message: 'Введите год между 1990 и 2030',
         }
+    },
+    [PracticeFields.DISCIPLINE_CODE]: {
+        presence,
+        number,
     }
 } as any;
+
+const validateNumber = (value: string) => {
+    if (Number.isNaN(Number(value)) || !Number.isInteger(Number(value))) {
+        return number;
+    }
+}
 
 export const validate = (field: PracticeFields, value: string): Error => {
     const rules = validationRules[field];
@@ -40,26 +54,29 @@ export const validate = (field: PracticeFields, value: string): Error => {
         }
     }
 
-    if (rules.range) {
-        if (Number.isNaN(Number(value))) {
-            return {
-                message: 'Введите число',
-            };
-        }
+    if (rules.year) {
+        const err = validateNumber(value);
+        if (err) return err;
+
         const regex = /^[1-9]\d{3}$/
         if (!regex.test(value)) {
             return {
-                message: rules.range.message,
+                message: rules.year.message,
             }
         }
         const num = Number(value);
-        const min = rules.range.min;
-        const max = rules.range.max;
+        const min = rules.year.min;
+        const max = rules.year.max;
         if (!Number.isInteger(num) || num < min || num > max) {
             return {
-                message: rules.range.message,
+                message: rules.year.message,
             }
         }
+    }
+
+    if (rules.number) {
+        const err = validateNumber(value);
+        if (err) return err;
     }
 
     return null;

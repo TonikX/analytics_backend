@@ -8,6 +8,7 @@ export const GENERAL_PATH = 'practice';
 export const initialState: practicePageState = {
     practice: {
         [PracticeFields.ID]: 1,
+        [PracticeFields.DISCIPLINE_CODE]: '',
         [PracticeFields.TITLE]: '',
         [PracticeFields.YEAR]: 0,
         [PracticeFields.AUTHORS]: '',

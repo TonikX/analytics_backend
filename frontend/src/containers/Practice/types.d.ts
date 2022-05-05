@@ -12,6 +12,7 @@ export type StructuralUnitType = {
 }
 
 export type GeneralInfoState = {
+    [PracticeFields.DISCIPLINE_CODE]: string,
     [PracticeFields.TITLE]: string,
     [PracticeFields.YEAR]: number;
     [PracticeFields.AUTHORS]: string;
