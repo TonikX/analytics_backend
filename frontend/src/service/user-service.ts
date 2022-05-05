@@ -1,4 +1,5 @@
 const STORAGE_ITEM = 'analytics';
+const STORAGE_ITEM_DATE = 'analytics-save-token-time';
 const STORAGE_ITEM_REFRESH = 'refresh-token-analytics';
 
 export default class UserService {
@@ -17,6 +18,7 @@ export default class UserService {
 
     setToken(token: string) {
         localStorage.setItem(STORAGE_ITEM, JSON.stringify(token));
+        localStorage.setItem(STORAGE_ITEM_DATE, JSON.stringify(new Date().getTime()));
     }
 
     setRefreshToken(token: string) {
@@ -25,6 +27,14 @@ export default class UserService {
 
     getToken(): string | null {
         if (localStorage.getItem(STORAGE_ITEM) === null) return null;
+        // @ts-ignore
+        const saveTime = localStorage.getItem(STORAGE_ITEM_DATE) ? parseInt(localStorage.getItem(STORAGE_ITEM_DATE)) : 0
+        const lastTime = saveTime + 480 * 60 * 1000
+
+        if (new Date().getTime() > lastTime) {
+            this.logout()
+            return null
+        }
 
         // @ts-ignore
         return localStorage.getItem(STORAGE_ITEM).replace('"', '').replace('"', '');
@@ -40,6 +50,7 @@ export default class UserService {
     logout() {
         localStorage.removeItem(STORAGE_ITEM);
         localStorage.removeItem(STORAGE_ITEM_REFRESH);
+        localStorage.removeItem(STORAGE_ITEM_DATE);
     }
 
     isAuth(): boolean {
