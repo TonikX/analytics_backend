@@ -146,8 +146,14 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         this.props.actions.getWorkProgramList();
     }
 
+    changeShowArchive = () => {
+        this.props.actions.changeCurrentPage(1);
+        this.props.actions.changeFiltering({[filterFields.ARCHIVE]: !this.props.showArchive});
+        this.props.actions.getWorkProgramList();
+    }
+
     render() {
-        const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode, showOnlyMy} = this.props;
+        const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode, showOnlyMy, showArchive} = this.props;
         const {deleteConfirmId, duplicateConfirmId, anchorsEl} = this.state;
 
         return (
@@ -161,6 +167,14 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                 color="primary"
                         />
                         Показать только мои РПД
+                    </Typography>
+
+                    <Typography className={classes.showOnlyMy}>
+                        <Switch checked={showArchive}
+                                onChange={this.changeShowArchive}
+                                color="primary"
+                        />
+                        Отобразить дисциплины в архиве
                     </Typography>
 
                     <TextField placeholder="Поиск"
@@ -235,7 +249,7 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                                     <TableRow key={workProgram[WorkProgramGeneralFields.ID]}>
                                         <TableCell
                                           className={classes.cellStatus}
-                                          style={{borderLeftColor: workProgramStatusesColors[get(workProgram, 'expertise_with_rpd.0.expertise_status', 'WK')]}}
+                                          style={{borderLeftColor: workProgramStatusesColors[get(workProgram, 'expertise_with_rpd.0.expertise_status', workProgram.work_status)]}}
                                         >
                                             {workProgram[WorkProgramGeneralFields.CODE]}
                                         </TableCell>

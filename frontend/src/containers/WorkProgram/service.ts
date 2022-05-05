@@ -40,6 +40,12 @@ class WorkProgramService extends AnalyticsService{
         });
     }
 
+    sendToArchive(id: string){
+        return this.patch(`/api/workprogram/update/${id}`, {
+            'work_status': 'a'
+        });
+    }
+
     returnWorkProgramToWork(expertiseId: number){
         return this.patch(`/api/expertise/user/update/${expertiseId}`, {
             user_expertise_status: UserExpertResultEnum.REWORK,

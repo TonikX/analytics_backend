@@ -5,7 +5,11 @@ import classNames from "classnames";
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from "@material-ui/core/Typography";
 
-import {workProgramStatusesColors, workProgramStatusesRussian} from "../../containers/WorkProgram/constants";
+import {
+    simpleWorkProgramStatusesRussian,
+    workProgramStatusesColors,
+    workProgramStatusesRussian
+} from "../../containers/WorkProgram/constants";
 import {WorkProgramStatusProps} from './types';
 
 import styles from './WorkProgramStatus.styles';
@@ -15,7 +19,7 @@ const WorkProgramStatus = ({classes, status, onClick, disabledStyle}: WorkProgra
          onClick={() => typeof onClick === 'function' && onClick(status)}
     >
         <div className={classes.statusPoint} style={{backgroundColor: disabledStyle ? 'grey' : workProgramStatusesColors[status]}}/>
-        <Typography> {workProgramStatusesRussian[status]} </Typography>
+        <Typography> {workProgramStatusesRussian[status] || simpleWorkProgramStatusesRussian[status]} </Typography>
     </div>
 ;
 

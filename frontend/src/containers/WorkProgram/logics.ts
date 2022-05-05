@@ -170,6 +170,30 @@ const sendToExpertise = createLogic({
     }
 });
 
+const sendWorkProgramToArchive = createLogic({
+    type: workProgramActions.sendWorkProgramToArchive.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SEND_TO_ARCHIVE}));
+
+        service.sendToArchive(workProgramId)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram());
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SEND_TO_ARCHIVE}));
+                return done();
+            });
+    }
+});
+
 const returnWorkProgramToWork = createLogic({
     type: workProgramActions.returnWorkProgramToWork.type,
     latest: true,
@@ -258,4 +282,5 @@ export default [
     sendToExpertise,
     returnWorkProgramToWork,
     approveWorkProgram,
+    sendWorkProgramToArchive,
 ];

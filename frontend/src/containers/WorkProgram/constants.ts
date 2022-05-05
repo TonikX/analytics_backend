@@ -96,6 +96,11 @@ export const workProgramStatusesRussian: any = {
     [WorkProgramStatusEnum.REWORK]: 'На доработке',
 }
 
+export const simpleWorkProgramStatusesRussian: any = {
+    w: 'В работе',
+    a: 'В архиве',
+}
+
 
 export const IntermediateCertificationTypes: any = {
     [IntermediateCertificationEnum.EXAM]: 'Экзамен',
@@ -111,6 +116,8 @@ export const workProgramStatusesColors: any = {
     [WorkProgramStatusEnum.APPROVE]: '#2abb00',
     [WorkProgramStatusEnum.ARCHIVE]: '#ccc',
     [WorkProgramStatusEnum.REWORK]: '#f30707',
+    'w': '#009aff',
+    'a': '#ccc',
 }
 
 export const steps = {
