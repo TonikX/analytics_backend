@@ -1,32 +1,3 @@
-# from social_core.backends.oauth import BaseOAuth2
-
-# class ItmoOAuth2(BaseOAuth2):
-#     """Itmo OAuth authentication backend"""
-#     name = 'itmo_o'
-#     AUTHORIZATION_URL = 'https://id.itmo.ru/cas/oauth2.0/authorize'
-#     ACCESS_TOKEN_URL = 'https://id.itmo.ru/cas/oauth2.0/accessToken'
-#     ACCESS_TOKEN_METHOD = 'POST'
-#     RESPONSE_TYPE = 'code'
-#     SCOPE_SEPARATOR = ','
-#     EXTRA_DATA = [
-#         ('id', 'user_id'),
-#         ('expires', 'expires')
-#     ]
-
-#     #
-#     # def get_user_details(self, response):
-#     #     """Return user details from GitHub account"""
-#     #     return {'username': response.get('login'),
-#     #             'email': response.get('email') or '',
-#     #             'first_name': response.get('name')}
-#     #
-#     # def user_data(self, access_token, *args, **kwargs):
-#     #     """Loads user data from service"""
-#     #     url = 'https://api.github.com/user?' + urlencode({
-#     #         'access_token': access_token
-#     #     })
-#     #     return self.get_json(url)
-
 import requests
 from rest_framework.generics import ListAPIView
 from django.conf import settings
@@ -154,3 +125,20 @@ class  AuthenticateByCodeISU(ListAPIView):
 
             return HttpResponseRedirect(f'{settings.ISU["ISU_FINISH_URI"]}/{access_token}/{refresh_token}')
 
+
+def isu_client_credentials_request(url):
+    print(settings.ISU["ISU_CLIENT_ID"], settings.ISU["ISU_CLIENT_SECRET"])
+    obtain_isu_url = requests.post(
+        'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token',  # params = {'code':{authorization_code}},
+        data={'grant_type': 'client_credentials',
+              'client_id': f'{settings.ISU["ISU_CLIENT_ID"]}',
+              'client_secret': f'{settings.ISU["ISU_CLIENT_SECRET"]}'})
+    obtain_isu = obtain_isu_url.json()
+    print('url: ', obtain_isu_url.url)
+    print('form_data: ', obtain_isu_url.request.body)
+    print('headers: ', obtain_isu_url.request.headers)
+    print(obtain_isu)
+    if 'access_token' in obtain_isu:
+        req = requests.post(url)
+        print(req)
+        print('сработало')

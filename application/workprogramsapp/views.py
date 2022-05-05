@@ -555,8 +555,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 {"expertise_status": Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status})
             newdata.update(
                 {"use_chat_with_id_expertise": Expertise.objects.get(work_program__id=self.kwargs['pk']).pk})
-            if Expertise.objects.get(
-                    work_program__id=self.kwargs['pk']).expertise_status == "WK" and (WorkProgram.objects.get(
+            if (Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK" or
+                Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "RE") and (WorkProgram.objects.get(
                 pk=self.kwargs['pk']).owner == request.user or WorkProgram.objects.filter(pk=self.kwargs['pk'],
                                                                                           editors__in=[request.user])):
                 newdata.update({"can_edit": True})
@@ -604,7 +604,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         except:
             newdata.update({"can_comment": False})
             newdata.update({"can_approve": False})
-        if request.user.is_expertise_master == True:
+        if request.user.is_expertise_master == True and queryset[0].work_status == "w":
             newdata.update({"can_archive": True})
         else:
             newdata.update({"can_archive": False})
