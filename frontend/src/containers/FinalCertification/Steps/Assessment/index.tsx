@@ -83,8 +83,8 @@ class Assessment extends React.Component<AssessmentProps> {
                                    onBlur={this.handleInputBlur(CertificationMarkFields.GREAT)}
                                    onChange={this.handleInputChange(CertificationMarkFields.GREAT)}
                                    className={classes.input}/>
-                        <TextField value={marks ? marks[CertificationMarkFields.GOOD] : ''}
-                                   label='Оценка "хорошо"'
+                        <TextField value={marks ? marks[CertificationMarkFields.SATISFACTORILY] : ''}
+                                   label='Оценка "удовлетворительно"'
                                    fullWidth
                                    multiline
                                    rows={5}
@@ -94,8 +94,8 @@ class Assessment extends React.Component<AssessmentProps> {
                                    className={classes.input}/>
                     </div>
                     <div className={classes.rightColumn}>
-                        <TextField value={marks ? marks[CertificationMarkFields.SATISFACTORILY] : ''}
-                                   label='Оценка "удовлетворительно"'
+                        <TextField value={marks ? marks[CertificationMarkFields.GOOD] : ''}
+                                   label='Оценка "хорошо"'
                                    fullWidth
                                    multiline
                                    rows={5}
