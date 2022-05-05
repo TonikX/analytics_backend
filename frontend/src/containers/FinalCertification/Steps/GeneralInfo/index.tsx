@@ -20,7 +20,7 @@ interface GeneralInfoProps extends WithStyles<typeof styles> {
 class GeneralInfo extends React.Component<GeneralInfoProps> {
 
     componentDidMount() {
-        // this.props.structuralUnitActions.getStructuralUnits();
+        this.props.structuralUnitActions.getStructuralUnits();
     }
 
     handleChangeStructuralUnitSearchText = (search: string) => {
@@ -43,11 +43,13 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                 </Typography>
                 <div className={classes.columns}>
                     <div>
+                        <Input label='Код дисциплины' fieldName={CertificationFields.DISCIPLINE_CODE}/>
                         <Input label='Название' fieldName={CertificationFields.TITLE}/>
                         <Input label='Год проведения' fieldName={CertificationFields.YEAR}/>
-                        <Input label='Руководитель образовательной программы' fieldName={CertificationFields.OP_LEADER}/>
                     </div>
                     <div className={classes.rightColumn}>
+                        <Input label='Руководитель образовательной программы'
+                               fieldName={CertificationFields.OP_LEADER}/>
                         <Input label='Авторский состав' fieldName={CertificationFields.AUTHORS}/>
                         <SearchSelector label="Структурное подразделение"
                                         changeSearchText={this.handleChangeStructuralUnitSearchText}
@@ -57,7 +59,8 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                                         value={String(fields[CertificationFields.STRUCTURAL_UNIT]?.id)}
                                         valueLabel={fields[CertificationFields.STRUCTURAL_UNIT]?.title ?? ''}
                         />
-                        <Input label='Другие нормативные документы' fieldName={CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS}/>
+                        <Input label='Другие нормативные документы'
+                               fieldName={CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS}/>
                     </div>
                 </div>
             </div>

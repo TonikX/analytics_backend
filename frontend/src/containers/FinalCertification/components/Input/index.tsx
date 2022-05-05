@@ -7,6 +7,7 @@ import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import TextField from "@material-ui/core/TextField";
 import get from "lodash/get";
+import {validate} from "../../validation";
 
 interface InputProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
@@ -41,12 +42,12 @@ class Input extends React.Component<InputProps> {
     saveInput = (field: CertificationFields) => (e: React.ChangeEvent) => {
         const value = get(e, 'target.value')
 
-        // const error = validate(field, value);
-        //
-        // if (error) {
-        //     this.setErrorMessage(error.message);
-        //     return;
-        // }
+        const error = validate(field, value);
+
+        if (error) {
+            this.setErrorMessage(error.message);
+            return;
+        }
 
         this.props.actions.saveField({field, value});
     }

@@ -1,6 +1,6 @@
 export enum CertificationFields {
-    DISCIPLINE_CODE= "discipline_code",
     ID = "id",
+    DISCIPLINE_CODE= "discipline_code",
     TITLE= "title",
     YEAR= "year",
     AUTHORS= "authors",

@@ -9,6 +9,7 @@ export type StructuralUnitType = {
 }
 
 export type GeneralInfoState = {
+    [CertificationFields.DISCIPLINE_CODE]: string,
     [CertificationFields.TITLE]: string,
     [CertificationFields.YEAR]: number;
     [CertificationFields.AUTHORS]: string;
