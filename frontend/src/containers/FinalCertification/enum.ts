@@ -51,4 +51,18 @@ export enum CertificationStepsRussian {
     ASSESSMENT = 'Оценка',
 }
 
+export enum OptionalRequirements {
+    ACRONYMS = 'acronyms',
+    DEFINITIONS = 'definitions',
+    ILLUSTRATIONS = 'illustrations',
+    APPENDIX = 'appendix',
+}
+
+export const OptionalRequirementsRussian = new Map(Object.entries({
+    [OptionalRequirements.ACRONYMS]: 'Список сокращений и условных обозначений',
+    [OptionalRequirements.DEFINITIONS]: 'Термины и определения',
+    [OptionalRequirements.ILLUSTRATIONS]: 'Список иллюстративного материала',
+    [OptionalRequirements.APPENDIX]: 'Приложения',
+}))
+
 export const CertificationStepsRussianList = Object.entries(CertificationStepsRussian).map(([, value]) => value);

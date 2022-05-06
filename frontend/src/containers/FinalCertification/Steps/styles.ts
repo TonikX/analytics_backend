@@ -32,5 +32,12 @@ export default () => createStyles({
     },
     markTypeSelect: {
         marginTop: '20px',
+    },
+    fieldLabel: {
+        color: 'rgba(0, 0, 0, 0.54)',
+        fontSize: '0.8rem',
+    },
+    optionalRequirements: {
+        margin: '30px 0 0 10px',
     }
 });
