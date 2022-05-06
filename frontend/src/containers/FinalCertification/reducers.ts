@@ -1,5 +1,5 @@
 import {certificationPageState} from "./types";
-import {CertificationFields, CertificationMarkFields} from "./enum";
+import {CertificationFields, CertificationMarkFields, TemplateTextCertificationFields} from "./enum";
 import createReducer from "../../store/createReducer";
 import actions from "./actions";
 
@@ -37,6 +37,30 @@ export const initialState: certificationPageState = {
         [CertificationFields.REPORT_QUALITY_MARKS]: null,
         [CertificationFields.PRESENTATION_QUALITY_MARKS]: null,
         [CertificationFields.ANSWERS_QUALITY_MARKS]: null,
+        [CertificationFields.GIA_BASE]: 1,
+    },
+    templateText: {
+        [TemplateTextCertificationFields.ID]: 1,
+        [TemplateTextCertificationFields.GIA_COMPONENTS]: '',
+        [TemplateTextCertificationFields.GENERAL_PROVISIONS]: '',
+        [TemplateTextCertificationFields.VKR_THEME_CHOICE_TIME]: '',
+        [TemplateTextCertificationFields.CORRECTION_THEME_TIME]: '',
+        [TemplateTextCertificationFields.UPLOAD_TO_ISU_TIME]: '',
+        [TemplateTextCertificationFields.MANAGER_FEEDBACK_TIME]: '',
+        [TemplateTextCertificationFields.MANAGER_FEEDBACK_ACCEPTION_TIME]: '',
+        [TemplateTextCertificationFields.PRESENTATION_OF_MATERIALS_TIME]: '',
+        [TemplateTextCertificationFields.VKR_DEFENCE_TIME]: '',
+        [TemplateTextCertificationFields.STRUCTURE_ELEMENTS]: '',
+        [TemplateTextCertificationFields.VKR_MARK]: '',
+        [TemplateTextCertificationFields.GIA_OVZ]: '',
+        [TemplateTextCertificationFields.TEMPLATE_YEAR]: 0,
+        [TemplateTextCertificationFields.PROFESSIONAL_PROBLEMS_MARKS]: {
+            [CertificationMarkFields.ID]: 1,
+            [CertificationMarkFields.GREAT]: '',
+            [CertificationMarkFields.GOOD]: '',
+            [CertificationMarkFields.SATISFACTORILY]: '',
+            [CertificationMarkFields.UNSATISFACTORY]: '',
+        },
     }
 }
 
@@ -80,8 +104,17 @@ const setMarkCriteria = (state: certificationPageState, {payload}: any): certifi
     }
 };
 
+const setTemplateText = (state: certificationPageState, {payload}: any): certificationPageState => ({
+    ...state,
+    templateText: {
+        ...state?.templateText,
+        ...payload,
+    }
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setCertification.type]: setCertification,
     [actions.setField.type]: setField,
     [actions.setMarkCriteria.type]: setMarkCriteria,
+    [actions.setTemplateText.type]: setTemplateText,
 });

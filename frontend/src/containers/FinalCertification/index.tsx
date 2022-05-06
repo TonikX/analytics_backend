@@ -9,11 +9,13 @@ import get from "lodash/get";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepButton from "@material-ui/core/StepButton";
-import {CertificationStepsRussianList} from "./enum";
-import GeneralInfo from "./Steps/GeneralInfo";
+import {CertificationFields, CertificationStepsRussianList} from "./enum";
+import MainInfo from "./Steps/MainInfo";
 import Features from "./Steps/Features";
 import Assessment from "./Steps/Assessment";
 import Dates from "./Steps/Dates";
+import GeneralProvisions from "./Steps/GeneralProvisions";
+import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
 
 export interface FinalCertificationProps extends WithStyles<typeof styles>, RouteComponentProps {
     actions: CertificationActions,
@@ -28,7 +30,7 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
 
     stepNameList = CertificationStepsRussianList;
 
-    stepList = [<GeneralInfo/>, <Dates />, <Features/>, <Assessment/>]
+    stepList = [<MainInfo/>, <GeneralProvisions/>, <Dates/>, <Features/>, <Assessment/>, <DisabledPeopleInfo/>]
 
     getCertificationId = () => get(this, 'props.match.params.id');
 
@@ -39,6 +41,12 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
 
     componentDidMount() {
         this.getCertification();
+        this.getTemplateText();
+    }
+
+    getTemplateText = () => {
+        const id = this.props.certification[CertificationFields.GIA_BASE];
+        this.props.actions.getTemplateText(id);
     }
 
     getCertification = () => {

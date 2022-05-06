@@ -10,14 +10,14 @@ import SearchSelector from "../../../../components/SearchSelector/SearchSelector
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 import {StructuralUnitsActions} from "../../../StructuralUnits/types";
 
-interface GeneralInfoProps extends WithStyles<typeof styles> {
+interface MainInfoProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
     fields: CertificationState;
     structuralUnitsList: SelectorListType;
     structuralUnitActions: StructuralUnitsActions;
 }
 
-class GeneralInfo extends React.Component<GeneralInfoProps> {
+class MainInfo extends React.Component<MainInfoProps> {
 
     componentDidMount() {
         this.props.structuralUnitActions.getStructuralUnits();
@@ -39,7 +39,7 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
         return (
             <div className={classes.content}>
                 <Typography variant='h5'>
-                    {CertificationStepsRussian.GENERAL}
+                    {CertificationStepsRussian.MAIN}
                 </Typography>
                 <div className={classes.columns}>
                     <div className={classes.leftColumn}>
@@ -59,8 +59,6 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                                         value={String(fields[CertificationFields.STRUCTURAL_UNIT]?.id)}
                                         valueLabel={fields[CertificationFields.STRUCTURAL_UNIT]?.title ?? ''}
                         />
-                        <Input label='Другие нормативные документы'
-                               fieldName={CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS}/>
                     </div>
                 </div>
             </div>
@@ -68,4 +66,4 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
     }
 }
 
-export default connect(withStyles(styles)(GeneralInfo));
+export default connect(withStyles(styles)(MainInfo));

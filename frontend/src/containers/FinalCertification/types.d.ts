@@ -1,4 +1,9 @@
-import {CertificationFields, CertificationMarkFields, StructuralUnitFields} from "./enum";
+import {
+    CertificationFields,
+    CertificationMarkFields,
+    StructuralUnitFields,
+    TemplateTextCertificationFields
+} from "./enum";
 
 export type Id = number;
 
@@ -8,15 +13,18 @@ export type StructuralUnitType = {
     [StructuralUnitFields.ISU_ID]: Id,
 }
 
-export type GeneralInfoState = {
+export type MainInfoState = {
     [CertificationFields.DISCIPLINE_CODE]: string,
     [CertificationFields.TITLE]: string,
     [CertificationFields.YEAR]: number;
     [CertificationFields.AUTHORS]: string;
     [CertificationFields.OP_LEADER]: string,
     [CertificationFields.STRUCTURAL_UNIT]: StructuralUnitType | null,
-    [CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS]: string,
     [CertificationFields.DISCIPLINE_CODE]: string,
+}
+
+export type GeneralProvisionsState = {
+    [CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS]: string,
 }
 
 export type DatesState = {
@@ -58,16 +66,37 @@ export type AssessmentState = {
     [CertificationFields.ANSWERS_QUALITY_MARKS]: CertificationMark,
 }
 
-export type CertificationState = GeneralInfoState
+export type TemplateTextState = {
+    [TemplateTextCertificationFields.ID]: number,
+    [TemplateTextCertificationFields.GIA_COMPONENTS]: string,
+    [TemplateTextCertificationFields.GENERAL_PROVISIONS]: string,
+    [TemplateTextCertificationFields.VKR_THEME_CHOICE_TIME]: string,
+    [TemplateTextCertificationFields.CORRECTION_THEME_TIME]: string,
+    [TemplateTextCertificationFields.UPLOAD_TO_ISU_TIME]: string,
+    [TemplateTextCertificationFields.MANAGER_FEEDBACK_TIME]: string,
+    [TemplateTextCertificationFields.MANAGER_FEEDBACK_ACCEPTION_TIME]: string,
+    [TemplateTextCertificationFields.PRESENTATION_OF_MATERIALS_TIME]: string,
+    [TemplateTextCertificationFields.VKR_DEFENCE_TIME]: string,
+    [TemplateTextCertificationFields.STRUCTURE_ELEMENTS]: string,
+    [TemplateTextCertificationFields.VKR_MARK]: string,
+    [TemplateTextCertificationFields.GIA_OVZ]: string,
+    [TemplateTextCertificationFields.TEMPLATE_YEAR]: number,
+    [TemplateTextCertificationFields.PROFESSIONAL_PROBLEMS_MARKS]: CertificationMark,
+}
+
+export type CertificationState = MainInfoState
+    & GeneralProvisionsState
     & DatesState
     & FeaturesState
     & AssessmentState
     & {
     [CertificationFields.ID]: Id,
+    [CertificationFields.GIA_BASE]: Id,
 }
 
 export interface certificationPageState {
     certification: CertificationState,
+    templateText: TemplateTextState,
 }
 
 export interface CertificationActions {
@@ -78,4 +107,6 @@ export interface CertificationActions {
     setField: any;
     saveMarkCriteria: any;
     setMarkCriteria: any;
+    getTemplateText: any;
+    setTemplateText: any,
 }

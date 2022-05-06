@@ -3,20 +3,22 @@ import {
     CertificationFields,
     CertificationStepsRussian,
     OptionalRequirements,
-    OptionalRequirementsRussian
+    OptionalRequirementsRussian, TemplateTextCertificationFields
 } from "../../enum";
 import get from "lodash/get";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "../styles";
 import {Checkbox, FormControlLabel, FormGroup, FormLabel, Typography, WithStyles} from "@material-ui/core";
-import {CertificationActions, CertificationState} from "../../types";
+import {CertificationActions, CertificationState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
 import {shallowEqual} from "recompose";
+import Scrollbars from "react-custom-scrollbars";
 
 interface FeaturesProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
     fields: CertificationState;
+    templateText: TemplateTextState;
 }
 
 class Features extends React.Component<FeaturesProps> {
@@ -30,13 +32,11 @@ class Features extends React.Component<FeaturesProps> {
         },
     }
 
-    componentDidUpdate(prevProps: Readonly<FeaturesProps>, prevState: Readonly<{}>, snapshot?: any) {
-        const {fields} = this.props;
+    componentDidMount() {
+        this.setRequirements();
+    }
 
-        if (shallowEqual(fields, prevProps.fields)) {
-            return;
-        }
-
+    setRequirements = () => {
         const requirements = this.props.fields[CertificationFields.STRUCTURE_ELEMENTS_OPTIONAL]
             .split(';')
             .map(str => str.toLowerCase());
@@ -57,6 +57,16 @@ class Features extends React.Component<FeaturesProps> {
                 ...reqs,
             }
         });
+    }
+
+    componentDidUpdate(prevProps: Readonly<FeaturesProps>, prevState: Readonly<{}>, snapshot?: any) {
+        const {fields} = this.props;
+
+        if (shallowEqual(fields, prevProps.fields)) {
+            return;
+        }
+
+        this.setRequirements();
     }
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
@@ -90,64 +100,58 @@ class Features extends React.Component<FeaturesProps> {
 
     render() {
 
-        const {classes} = this.props;
+        const {classes, templateText} = this.props;
 
         const requirements = this.state.optionalRequirements;
 
         return (
             <div className={classes.content}>
-                <Typography variant='h5'>
-                    {CertificationStepsRussian.FEATURES}
-                </Typography>
-                <div className={classes.columns}>
-                    <div className={classes.leftColumn}>
-                        <Input label='Предзащита'
-                               multiline
-                               rows={2}
-                               fieldName={CertificationFields.PRELIMINARY_DEFENSE}/>
-                        <Input label='Антиплагиат'
-                               multiline
-                               rows={2}
-                               fieldName={CertificationFields.ANTI_PLAGIARISM}/>
-                        <Input label='Требования к содержанию ВКР'
-                               multiline
-                               rows={2}
-                               fieldName={CertificationFields.CONTENT_REQUIREMENTS}/>
-                        <Input label='Требования к представлению ВКР'
-                               multiline
-                               rows={2}
-                               fieldName={CertificationFields.DEFENCE_PRESENTATION_REQUIREMENTS}/>
-                        <Input label='Дополнительные требования к оформлению ВКР'
-                               multiline
-                               rows={2}
-                               fieldName={CertificationFields.PRELIMINARY_DEFENSE}/>
+                <Scrollbars>
+                    <Typography variant='h5'>
+                        {CertificationStepsRussian.FEATURES}
+                    </Typography>
+
+                    <div className={classes.columns}>
+                        <div className={classes.singleColumn}>
+                            <Input label='Предварительная защита ВКР'
+                                   fieldName={CertificationFields.PRELIMINARY_DEFENSE}/>
+                            <Input label='Проверка текста ВКР в системе “Антиплагиат”'
+                                   fieldName={CertificationFields.ANTI_PLAGIARISM}/>
+                            <Typography style={{marginTop: '30px'}}>
+                                {templateText[TemplateTextCertificationFields.STRUCTURE_ELEMENTS]}
+                            </Typography>
+                            <FormGroup className={classes.optionalRequirements}>
+                                <FormLabel component="legend">Опциональные требования к оформлению ВКР</FormLabel>
+                                <FormControlLabel
+                                    control={<Checkbox checked={requirements[OptionalRequirements.ACRONYMS]}
+                                                       onChange={this.handleChangeCheckbox(OptionalRequirements.ACRONYMS)}
+                                                       size='small'/>}
+                                    label={OptionalRequirementsRussian.get(OptionalRequirements.ACRONYMS)}/>
+                                <FormControlLabel
+                                    control={<Checkbox checked={requirements[OptionalRequirements.DEFINITIONS]}
+                                                       onChange={this.handleChangeCheckbox(OptionalRequirements.DEFINITIONS)}
+                                                       size='small'/>}
+                                    label={OptionalRequirementsRussian.get(OptionalRequirements.DEFINITIONS)}/>
+                                <FormControlLabel
+                                    control={<Checkbox checked={requirements[OptionalRequirements.ILLUSTRATIONS]}
+                                                       onChange={this.handleChangeCheckbox(OptionalRequirements.ILLUSTRATIONS)}
+                                                       size='small'/>}
+                                    label={OptionalRequirementsRussian.get(OptionalRequirements.ILLUSTRATIONS)}/>
+                                <FormControlLabel
+                                    control={<Checkbox checked={requirements[OptionalRequirements.APPENDIX]}
+                                                       onChange={this.handleChangeCheckbox(OptionalRequirements.APPENDIX)}
+                                                       size='small'/>}
+                                    label={OptionalRequirementsRussian.get(OptionalRequirements.APPENDIX)}/>
+                            </FormGroup>
+                            <Input label='Дополнительные требования к оформлению ВКР'
+                                   fieldName={CertificationFields.PRELIMINARY_DEFENSE}/>
+                            <Input label='Требования к содержанию ВКР'
+                                   fieldName={CertificationFields.CONTENT_REQUIREMENTS}/>
+                            <Input label='Требования к представлению ВКР на защите'
+                                   fieldName={CertificationFields.DEFENCE_PRESENTATION_REQUIREMENTS}/>
+                        </div>
                     </div>
-                    <div className={classes.rightColumn}>
-                        <FormGroup className={classes.optionalRequirements}>
-                            <FormLabel component="legend">Опциональные требования к оформлению ВКР</FormLabel>
-                            <FormControlLabel
-                                control={<Checkbox checked={requirements[OptionalRequirements.ACRONYMS]}
-                                                   onChange={this.handleChangeCheckbox(OptionalRequirements.ACRONYMS)}
-                                                   size='small'/>}
-                                label={OptionalRequirementsRussian.get(OptionalRequirements.ACRONYMS)}/>
-                            <FormControlLabel
-                                control={<Checkbox checked={requirements[OptionalRequirements.DEFINITIONS]}
-                                                   onChange={this.handleChangeCheckbox(OptionalRequirements.DEFINITIONS)}
-                                                   size='small'/>}
-                                label={OptionalRequirementsRussian.get(OptionalRequirements.DEFINITIONS)}/>
-                            <FormControlLabel
-                                control={<Checkbox checked={requirements[OptionalRequirements.ILLUSTRATIONS]}
-                                                   onChange={this.handleChangeCheckbox(OptionalRequirements.ILLUSTRATIONS)}
-                                                   size='small'/>}
-                                label={OptionalRequirementsRussian.get(OptionalRequirements.ILLUSTRATIONS)}/>
-                            <FormControlLabel
-                                control={<Checkbox checked={requirements[OptionalRequirements.APPENDIX]}
-                                                   onChange={this.handleChangeCheckbox(OptionalRequirements.APPENDIX)}
-                                                   size='small'/>}
-                                label={OptionalRequirementsRussian.get(OptionalRequirements.APPENDIX)}/>
-                        </FormGroup>
-                    </div>
-                </div>
+                </Scrollbars>
             </div>
         );
     }

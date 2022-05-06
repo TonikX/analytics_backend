@@ -84,5 +84,21 @@ const saveMarkCriteria = createLogic({
     }
 });
 
+const getTemplateText = createLogic({
+    type: CertificationActions.getTemplateText.type,
+    latest: true,
 
-export default [getCertification, saveCertification, saveField, saveMarkCriteria];
+    process({getState, action}: any, dispatch, done) {
+        const id = action.payload;
+        service.getTemplateText(id)
+            .then((res) => {
+                dispatch(CertificationActions.setTemplateText(res.data));
+            })
+            .finally(() => {
+                return done();
+            });
+    }
+});
+
+
+export default [getCertification, saveCertification, saveField, saveMarkCriteria, getTemplateText];

@@ -8,6 +8,8 @@ const setCertification = createAction('SET_CERTIFICATION');
 const setField = createAction('SET_FIELD');
 const saveMarkCriteria = createAction('SAVE_MARK_CRITERIA');
 const setMarkCriteria = createAction('SET_MARK_CRITERIA');
+const getTemplateText = createAction('GET_TEMPLATE_TEXT');
+const setTemplateText = createAction('SET_TEMPLATE_TEXT');
 
 export const actions: CertificationActions = {
     getCertification,
@@ -17,6 +19,8 @@ export const actions: CertificationActions = {
     setField,
     saveMarkCriteria,
     setMarkCriteria,
+    getTemplateText,
+    setTemplateText,
 }
 
 export default actions;

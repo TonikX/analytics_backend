@@ -27,7 +27,26 @@ export enum CertificationFields {
     IMPLEMENTATION_MARKS= "implementation_marks",
     REPORT_QUALITY_MARKS= "report_quality_marks",
     PRESENTATION_QUALITY_MARKS= "presentation_quality_marks",
-    ANSWERS_QUALITY_MARKS= "answers_quality_marks"
+    ANSWERS_QUALITY_MARKS= "answers_quality_marks",
+    GIA_BASE= "gia_base",
+}
+
+export enum TemplateTextCertificationFields {
+    ID = "id",
+    GIA_COMPONENTS= "gia_components",
+    GENERAL_PROVISIONS = "general_provisions",
+    VKR_THEME_CHOICE_TIME= "vkr_theme_choice_time",
+    CORRECTION_THEME_TIME = "correction_theme_time",
+    UPLOAD_TO_ISU_TIME = "upload_to_isu_time",
+    MANAGER_FEEDBACK_TIME = "manager_feedback_time",
+    MANAGER_FEEDBACK_ACCEPTION_TIME = "manager_feedback_acception_time",
+    PRESENTATION_OF_MATERIALS_TIME = "presentation_of_materials_time",
+    VKR_DEFENCE_TIME = "vkr_defence_time",
+    STRUCTURE_ELEMENTS = "structure_elements",
+    VKR_MARK = "vkr_mark",
+    GIA_OVZ = "gia_ovz",
+    TEMPLATE_YEAR = "template_year",
+    PROFESSIONAL_PROBLEMS_MARKS = "professional_problems_marks",
 }
 
 export enum CertificationMarkFields {
@@ -45,10 +64,12 @@ export enum StructuralUnitFields {
 }
 
 export enum CertificationStepsRussian {
-    GENERAL = 'Главное',
-    DATES = 'Даты',
-    FEATURES = 'Особенности',
-    ASSESSMENT = 'Оценка',
+    MAIN = 'Главное',
+    GENERAL_PROVISIONS = 'Общие положения',
+    DATES = 'Основные этапы и сроки подготовки ВКР',
+    FEATURES = 'Особенности подготовки ВКР',
+    ASSESSMENT = 'Оценка ВКР на заседании ГЭК',
+    DISABLED_PEOPLE = 'Проведение ГИА для лиц с ОВЗ'
 }
 
 export enum OptionalRequirements {

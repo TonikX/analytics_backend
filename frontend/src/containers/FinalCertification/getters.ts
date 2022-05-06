@@ -1,7 +1,7 @@
 import {rootState} from "../../store/reducers";
 import get from "lodash/get";
 import {GENERAL_PATH} from "./reducers";
-import {certificationPageState, CertificationState, Id} from "./types";
+import {certificationPageState, CertificationState, Id, TemplateTextState} from "./types";
 import {initialState} from "./reducers";
 import {CertificationFields} from "./enum";
 
@@ -14,3 +14,6 @@ export const getId = (state: rootState): Id => getCertification(state).id;
 
 export const getMarkCriteriaId = (fieldName: CertificationFields) => (state: rootState): Id =>
     (getCertification(state) as any)[fieldName].id;
+
+export const getTemplateText = (state: rootState): TemplateTextState =>
+    get(getStateData(state), 'templateText', initialState.templateText);

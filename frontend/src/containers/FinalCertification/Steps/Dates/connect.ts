@@ -1,13 +1,14 @@
 import {connect} from 'react-redux';
 
 import {rootState} from "../../../../store/reducers";
-import {getCertification} from "../../getters";
+import {getCertification, getTemplateText} from "../../getters";
 import {bindActionCreators} from "redux";
 import actions from "../../actions";
 
 const mapStateToProps = (state: rootState) => {
     return {
         fields: getCertification(state),
+        templateText: getTemplateText(state),
     }
 };
 

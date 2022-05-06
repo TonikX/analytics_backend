@@ -7,7 +7,7 @@ export default () => createStyles({
         display: "block",
     },
     content: {
-        height: '600px',
+        height: '100%',
     },
     selectorWrap: {
         width: '550px',
@@ -30,6 +30,9 @@ export default () => createStyles({
         width: '50%',
         marginLeft: '30px',
     },
+    singleColumn: {
+      width: '70%',
+    },
     markTypeSelect: {
         marginTop: '20px',
     },
@@ -38,6 +41,20 @@ export default () => createStyles({
         fontSize: '0.8rem',
     },
     optionalRequirements: {
-        margin: '30px 0 0 10px',
+        marginTop: '30px',
+    },
+    generalProvisionsText: {
+        marginTop: '20px',
+    },
+    datesReadonlyRow: {
+        display: "flex",
+        justifyContent: 'space-between',
+        marginTop: '30px'
+    },
+    datesReadOnlyLabel: {
+        width: '65%',
+    },
+    datesReadOnlyValue: {
+        width: '30%',
     }
 });
