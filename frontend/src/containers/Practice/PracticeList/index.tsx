@@ -15,9 +15,7 @@ import Scrollbars from "react-custom-scrollbars";
 import {Table} from "@material-ui/core";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import SortingButton from "../../../components/SortingButton/SortingButton";
 import TableHead from "@material-ui/core/TableHead";
-import {SortingType} from "../../../components/SortingButton/types";
 import TableBody from "@material-ui/core/TableBody";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -25,6 +23,8 @@ import SearchOutlined from "@material-ui/icons/SearchOutlined";
 import get from "lodash/get";
 import debounce from "lodash/debounce";
 import Pagination from "@material-ui/lab/Pagination";
+import classNames from "classnames";
+import ArrowDown from "@material-ui/icons/ArrowDropDown";
 
 class PracticeList extends React.Component<PracticeListProps> {
 
@@ -36,9 +36,13 @@ class PracticeList extends React.Component<PracticeListProps> {
         this.props.actions.openModal();
     }
 
-    changeSorting = (field: string) => (mode: SortingType) => {
-        this.props.actions.setSortingField(field);
-        this.props.actions.setSortingMode(mode);
+    changeSorting = (field: string) => () => {
+        const {sortingField} = this.props;
+        if (sortingField === field) {
+            this.props.actions.setSortingField('');
+        } else {
+            this.props.actions.setSortingField(field);
+        }
         this.props.actions.getPracticeList();
     }
 
@@ -59,7 +63,7 @@ class PracticeList extends React.Component<PracticeListProps> {
 
 
     render() {
-        const {classes, practiceList, sortingField, sortingMode, practiceCount, currentPage} = this.props;
+        const {classes, practiceList, sortingField, practiceCount, currentPage} = this.props;
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
@@ -83,22 +87,37 @@ class PracticeList extends React.Component<PracticeListProps> {
                             <TableHead className={classes.header}>
                                 <TableRow>
                                     <TableCell>
-                                        ID
-                                        <SortingButton changeMode={this.changeSorting(PracticeFields.ID)}
-                                                       mode={sortingField === PracticeFields.ID ? sortingMode : ''}
-                                        />
+                                        <div className={classes.fieldCell}>
+                                            <Typography>
+                                                ID
+                                            </Typography>
+                                            <ArrowDown onClick={this.changeSorting(PracticeFields.ID)}
+                                                       className={classNames(classes.sortingArrow,
+                                                           {[classes.selectedFieldArrow]: sortingField === PracticeFields.ID})}
+                                            />
+                                        </div>
                                     </TableCell>
                                     <TableCell>
-                                        Название
-                                        <SortingButton changeMode={this.changeSorting(PracticeFields.TITLE)}
-                                                       mode={sortingField === PracticeFields.TITLE ? sortingMode : ''}
-                                        />
+                                        <div className={classes.fieldCell}>
+                                            <Typography>
+                                                Название
+                                            </Typography>
+                                            <ArrowDown onClick={this.changeSorting(PracticeFields.TITLE)}
+                                                       className={classNames(classes.sortingArrow,
+                                                           {[classes.selectedFieldArrow]: sortingField === PracticeFields.TITLE})}
+                                            />
+                                        </div>
                                     </TableCell>
                                     <TableCell>
-                                        Авторский состав
-                                        <SortingButton changeMode={this.changeSorting(PracticeFields.AUTHORS)}
-                                                       mode={sortingField === PracticeFields.AUTHORS ? sortingMode : ''}
-                                        />
+                                        <div className={classes.fieldCell}>
+                                            <Typography>
+                                                Авторский состав
+                                            </Typography>
+                                            <ArrowDown onClick={this.changeSorting(PracticeFields.AUTHORS)}
+                                                       className={classNames(classes.sortingArrow,
+                                                           {[classes.selectedFieldArrow]: sortingField === PracticeFields.AUTHORS})}
+                                            />
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             </TableHead>

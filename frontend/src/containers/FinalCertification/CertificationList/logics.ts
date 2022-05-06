@@ -1,7 +1,7 @@
 import {createLogic} from "redux-logic";
 import CertificationListActions from "./actions";
 import get from "lodash/get";
-import {getCurrentPage, getSearchText, getSortingField, getSortingMode} from "./getters";
+import {getCurrentPage, getSearchText, getSortingField} from "./getters";
 import CertificationService from "../service";
 
 const service = new CertificationService();
@@ -14,7 +14,6 @@ const getCertificationList = createLogic({
         const state = getState();
         const searchText = getSearchText(state);
         const sortingField = getSortingField(state);
-        const sortingMode = getSortingMode(state);
         const currentPage = getCurrentPage(state);
 
         service.getCertificationList(searchText, sortingField, currentPage)

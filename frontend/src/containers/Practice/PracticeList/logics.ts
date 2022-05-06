@@ -2,7 +2,7 @@ import {createLogic} from "redux-logic";
 import PracticeListActions from "./actions";
 import get from "lodash/get";
 import PracticeService from "../service";
-import {getCurrentPage, getSearchText, getSortingField, getSortingMode} from "./getters";
+import {getCurrentPage, getSearchText, getSortingField} from "./getters";
 
 const service = new PracticeService();
 
@@ -14,7 +14,6 @@ const getPracticeList = createLogic({
         const state = getState();
         const searchText = getSearchText(state);
         const sortingField = getSortingField(state);
-        const sortingMode = getSortingMode(state);
         const currentPage = getCurrentPage(state);
 
         service.getPracticeList(searchText, sortingField, currentPage)

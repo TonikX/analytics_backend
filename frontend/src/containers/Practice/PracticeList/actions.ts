@@ -9,7 +9,6 @@ const openModal = createAction('PRACTICE_LIST_OPEN_MODAL');
 const closeModal = createAction('PRACTICE_LIST_CLOSE_MODAL');
 const setSearchText = createAction('SET_SEARCH_TEXT');
 const setSortingField = createAction('SET_SORTING_FIELD');
-const setSortingMode = createAction('SET_SORTING_MODE');
 const setPracticeCount = createAction('SET_PRACTICE_COUNT');
 const setCurrentPage = createAction('SET_CURRENT_PAGE');
 
@@ -21,7 +20,6 @@ export const actions: PracticeListActions = {
     closeModal,
     setSearchText,
     setSortingField,
-    setSortingMode,
     setPracticeCount,
     setCurrentPage,
 }

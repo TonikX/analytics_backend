@@ -7,7 +7,6 @@ export interface PracticeListProps extends WithStyles<typeof styles> {
     actions: PracticeListActions,
     practiceList: Array<any>,
     sortingField: string,
-    sortingMode: SortingType,
     practiceCount: number,
     currentPage: number,
 }
@@ -35,7 +34,6 @@ export interface PracticeListActions {
     closeModal: any;
     setSearchText: any;
     setSortingField: any;
-    setSortingMode: any;
     setPracticeCount: any;
     setCurrentPage: any;
 }

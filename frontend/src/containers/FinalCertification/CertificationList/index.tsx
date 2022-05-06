@@ -12,9 +12,7 @@ import Scrollbars from "react-custom-scrollbars";
 import {Table} from "@material-ui/core";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import SortingButton from "../../../components/SortingButton/SortingButton";
 import TableHead from "@material-ui/core/TableHead";
-import {SortingType} from "../../../components/SortingButton/types";
 import TableBody from "@material-ui/core/TableBody";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -22,6 +20,8 @@ import SearchOutlined from "@material-ui/icons/SearchOutlined";
 import get from "lodash/get";
 import debounce from "lodash/debounce";
 import Pagination from "@material-ui/lab/Pagination";
+import ArrowDown from "@material-ui/icons/ArrowDropDown";
+import classNames from "classnames";
 
 class FinalCertificationList extends React.Component<CertificationListProps> {
 
@@ -29,9 +29,13 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
         this.props.actions.getCertificationList();
     }
 
-    changeSorting = (field: string) => (mode: SortingType) => {
-        this.props.actions.setSortingField(field);
-        this.props.actions.setSortingMode(mode);
+    changeSorting = (field: string) => () => {
+        const {sortingField} = this.props;
+        if (sortingField === field) {
+            this.props.actions.setSortingField('');
+        } else {
+            this.props.actions.setSortingField(field);
+        }
         this.props.actions.getCertificationList();
     }
 
@@ -52,7 +56,7 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
 
 
     render() {
-        const {classes, certificationList, sortingField, sortingMode, certificationCount, currentPage} = this.props;
+        const {classes, certificationList, sortingField, certificationCount, currentPage} = this.props;
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
@@ -76,22 +80,37 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
                             <TableHead className={classes.header}>
                                 <TableRow>
                                     <TableCell>
-                                        ID
-                                        <SortingButton changeMode={this.changeSorting(CertificationFields.ID)}
-                                                       mode={sortingField === CertificationFields.ID ? sortingMode : ''}
-                                        />
+                                        <div className={classes.fieldCell}>
+                                            <Typography>
+                                                ID
+                                            </Typography>
+                                            <ArrowDown onClick={this.changeSorting(CertificationFields.ID)}
+                                                       className={classNames(classes.sortingArrow,
+                                                           {[classes.selectedFieldArrow]: sortingField === CertificationFields.ID})}
+                                            />
+                                        </div>
                                     </TableCell>
                                     <TableCell>
-                                        Название
-                                        <SortingButton changeMode={this.changeSorting(CertificationFields.TITLE)}
-                                                       mode={sortingField === CertificationFields.TITLE ? sortingMode : ''}
-                                        />
+                                        <div className={classes.fieldCell}>
+                                            <Typography>
+                                                Название
+                                            </Typography>
+                                            <ArrowDown onClick={this.changeSorting(CertificationFields.TITLE)}
+                                                       className={classNames(classes.sortingArrow,
+                                                           {[classes.selectedFieldArrow]: sortingField === CertificationFields.TITLE})}
+                                            />
+                                        </div>
                                     </TableCell>
                                     <TableCell>
-                                        Авторский состав
-                                        <SortingButton changeMode={this.changeSorting(CertificationFields.AUTHORS)}
-                                                       mode={sortingField === CertificationFields.AUTHORS ? sortingMode : ''}
-                                        />
+                                        <div className={classes.fieldCell}>
+                                            <Typography>
+                                                Авторский состав
+                                            </Typography>
+                                            <ArrowDown onClick={this.changeSorting(CertificationFields.AUTHORS)}
+                                                       className={classNames(classes.sortingArrow,
+                                                           {[classes.selectedFieldArrow]: sortingField === CertificationFields.AUTHORS})}
+                                            />
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             </TableHead>

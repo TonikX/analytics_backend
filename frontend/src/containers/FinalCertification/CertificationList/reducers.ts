@@ -33,14 +33,6 @@ const setSortingField = (state: certificationListState, {payload}: any): certifi
     }
 });
 
-const setSortingMode = (state: certificationListState, {payload}: any): certificationListState => ({
-    ...state,
-    sorting: {
-        ...state.sorting,
-        mode: payload,
-    }
-});
-
 const setCurrentPage = (state: certificationListState, {payload}: any): certificationListState => ({
     ...state,
     currentPage: payload,
@@ -55,7 +47,6 @@ export const reducer = createReducer(initialState, {
     [actions.setCertificationList.type]: setCertificationList,
     [actions.setSearchText.type]: setSearchText,
     [actions.setSortingField.type]: setSortingField,
-    [actions.setSortingMode.type]: setSortingMode,
     [actions.setCurrentPage.type]: setCurrentPage,
     [actions.setCertificationCount.type]: setCertificationCount,
 });

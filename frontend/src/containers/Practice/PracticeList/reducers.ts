@@ -52,14 +52,6 @@ const setSortingField = (state: practiceListState, {payload}: any): practiceList
     }
 });
 
-const setSortingMode = (state: practiceListState, {payload}: any): practiceListState => ({
-    ...state,
-    sorting: {
-        ...state.sorting,
-        mode: payload,
-    }
-});
-
 const setCurrentPage = (state: practiceListState, {payload}: any): practiceListState => ({
     ...state,
     currentPage: payload,
@@ -76,7 +68,6 @@ export const reducer = createReducer(initialState, {
     [actions.closeModal.type]: closeModal,
     [actions.setSearchText.type]: setSearchText,
     [actions.setSortingField.type]: setSortingField,
-    [actions.setSortingMode.type]: setSortingMode,
     [actions.setCurrentPage.type]: setCurrentPage,
     [actions.setPracticeCount.type]: setPracticeCount,
 });

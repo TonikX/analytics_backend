@@ -7,7 +7,6 @@ export interface CertificationListProps extends WithStyles<typeof styles> {
     actions: CertificationListActions,
     certificationList: Array<any>,
     sortingField: string,
-    sortingMode: SortingType,
     certificationCount: number,
     currentPage: number,
 }
@@ -29,7 +28,6 @@ export interface CertificationListActions {
     setCertificationList: any;
     setSearchText: any;
     setSortingField: any;
-    setSortingMode: any;
     setCertificationCount: any;
     setCurrentPage: any;
 }

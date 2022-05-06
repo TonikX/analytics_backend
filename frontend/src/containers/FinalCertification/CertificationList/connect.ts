@@ -5,7 +5,6 @@ import {
     getCertificationList,
     getCurrentPage,
     getSortingField,
-    getSortingMode
 } from "./getters"
 import {bindActionCreators} from "redux";
 import actions from "./actions";
@@ -14,7 +13,6 @@ const mapStateToProps = (state: rootState) => {
     return {
         certificationList: getCertificationList(state),
         sortingField: getSortingField(state),
-        sortingMode: getSortingMode(state),
         currentPage: getCurrentPage(state),
         certificationCount: getCertificationCount(state),
     };

@@ -31,9 +31,6 @@ export default (theme: Theme) => createStyles({
             padding: '5px 10px !important',
             fontSize: '14px'
         },
-        '& p': {
-            fontSize: '14px'
-        }
     },
     header: {
         background: theme.palette.primary.main,
@@ -106,4 +103,17 @@ export default (theme: Theme) => createStyles({
             textDecoration: 'none'
         }
     },
+    fieldCell: {
+        display: 'flex',
+        alignItems: 'center',
+        margin: '10px 0 10px 0'
+    },
+    sortingArrow: {
+        marginLeft: '5px',
+        cursor: 'pointer',
+        color: '#9f9f9f',
+    },
+    selectedFieldArrow: {
+        color: 'white',
+    }
 });

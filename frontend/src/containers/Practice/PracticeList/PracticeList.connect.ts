@@ -5,7 +5,6 @@ import {
     getPracticeCount,
     getPracticeList,
     getSortingField,
-    getSortingMode
 } from "./getters"
 import {bindActionCreators} from "redux";
 import actions from "./actions";
@@ -14,7 +13,6 @@ const mapStateToProps = (state: rootState) => {
     return {
         practiceList: getPracticeList(state),
         sortingField: getSortingField(state),
-        sortingMode: getSortingMode(state),
         currentPage: getCurrentPage(state),
         practiceCount: getPracticeCount(state),
     };
