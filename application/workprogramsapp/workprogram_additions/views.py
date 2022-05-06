@@ -237,3 +237,4 @@ def WorkProgramShortInfo(request, isu_id):
         return Response(newdata)
     except WorkProgram.DoesNotExist:
         raise Http404
+
