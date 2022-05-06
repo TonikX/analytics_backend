@@ -7,6 +7,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     marginBottom30: {
         marginBottom: '30px'
     },
+    marginBottom10: {
+        marginBottom: '10px'
+    },
     actions: {
         marginTop: '30px'
     },
