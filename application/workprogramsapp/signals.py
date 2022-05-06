@@ -53,7 +53,7 @@ def expertise_notificator(sender, instance, created, **kwargs):
             ExpertiseNotification.objects.create(expertise=instance, user=user,
                                                  message=f'Рабочую программу "{wp_exp.title}" (https://op.itmo.ru/work-program/{wp_exp.id}) вернули на доработку (Статус: "{instance.get_expertise_status_display()}")')
 
-    #isu_client_credentials_request('https://dev.disc.itmo.su/api/v1/disciplines/:disc_id?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(status=instance.expertise_status, wp_id=wp_exp.id))
+    isu_client_credentials_request('https://disc.itmo.su/api/v1/disciplines/{disc_id}?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(disc_id=wp_exp.discipline_code, status=instance.get_expertise_status_display(), wp_id=wp_exp.id))
 
 @receiver(post_save, sender=ExpertiseComments)
 def comment_notificator(sender, instance, created, **kwargs):
