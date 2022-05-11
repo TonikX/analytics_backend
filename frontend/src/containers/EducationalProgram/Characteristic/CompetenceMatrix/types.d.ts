@@ -18,6 +18,13 @@ type TableContentProps = {
     overProfCompetences: Competence[];
 };
 
+type CompetencesRowProps = {
+    keyCompetences: Competence[];
+    generalProfCompetences: Competence[];
+    profCompetences: Competence[];
+    overProfCompetences: Competence[];
+}
+
 type CompetencesHeaderProps = {
     competences: Competence[];
 }
