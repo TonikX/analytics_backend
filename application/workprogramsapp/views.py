@@ -583,8 +583,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             else:
                 raise ValueError
 
-            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX" or \
-                    Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK":
+            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status in ["EX", "WK", "RE"]:
                 newdata.update({"can_comment": True})
                 newdata.update({"user_expertise_id": ue.id})
             else:
