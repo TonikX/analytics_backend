@@ -144,7 +144,7 @@ class Features extends React.Component<FeaturesProps> {
                                     label={OptionalRequirementsRussian.get(OptionalRequirements.APPENDIX)}/>
                             </FormGroup>
                             <Input label='Дополнительные требования к оформлению ВКР'
-                                   fieldName={CertificationFields.PRELIMINARY_DEFENSE}/>
+                                   fieldName={CertificationFields.OPTIONAL_DESIGN_REQUIREMENTS}/>
                             <Input label='Требования к содержанию ВКР'
                                    fieldName={CertificationFields.CONTENT_REQUIREMENTS}/>
                             <Input label='Требования к представлению ВКР на защите'

@@ -2,6 +2,8 @@ import {createLogic} from "redux-logic";
 import {getId, getMarkCriteriaId} from "./getters";
 import CertificationActions from "./actions";
 import CertificationService from "./service";
+import actions from "../../layout/actions";
+import {fetchingTypes} from "./enum";
 
 const service = new CertificationService();
 
@@ -11,11 +13,14 @@ const getCertification = createLogic({
 
     process({getState, action}: any, dispatch, done) {
         const id = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_CERTIFICATION}));
         service.getCertification(id)
             .then((res) => {
                 dispatch(CertificationActions.setCertification(res.data));
             })
             .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_CERTIFICATION}));
                 return done();
             });
     }
@@ -90,11 +95,13 @@ const getTemplateText = createLogic({
 
     process({getState, action}: any, dispatch, done) {
         const id = action.payload;
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_TEMPLATE_TEXT}));
         service.getTemplateText(id)
             .then((res) => {
                 dispatch(CertificationActions.setTemplateText(res.data));
             })
             .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_TEMPLATE_TEXT}));
                 return done();
             });
     }

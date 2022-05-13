@@ -3,6 +3,8 @@ import PracticeListActions from "./actions";
 import get from "lodash/get";
 import PracticeService from "../service";
 import {getCurrentPage, getSearchText, getSortingField} from "./getters";
+import actions from "../../../layout/actions";
+import {fetchingTypes} from "../enum";
 
 const service = new PracticeService();
 
@@ -16,6 +18,7 @@ const getPracticeList = createLogic({
         const sortingField = getSortingField(state);
         const currentPage = getCurrentPage(state);
 
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_PRACTICE_LIST}));
         service.getPracticeList(searchText, sortingField, currentPage)
             .then((res) => {
                 const results = get(res, 'data.results', []);
@@ -24,6 +27,7 @@ const getPracticeList = createLogic({
                 dispatch(PracticeListActions.setPracticeCount(count));
             })
             .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_PRACTICE_LIST}));
                 return done();
             });
     }

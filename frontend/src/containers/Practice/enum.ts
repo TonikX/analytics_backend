@@ -91,3 +91,10 @@ export enum PracticeFormats {
     DEDICATED = 'dedicated',
     DISPERSED = 'dispersed',
 }
+
+export enum fetchingTypes {
+    GET_PRACTICE = 'GET_PRACTICE',
+    GET_TEMPLATE_TEXT = 'GET_TEMPLATE_TEXT',
+
+    GET_PRACTICE_LIST = 'GET_PRACTICE_LIST',
+}

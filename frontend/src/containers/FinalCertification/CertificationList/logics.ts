@@ -3,6 +3,8 @@ import CertificationListActions from "./actions";
 import get from "lodash/get";
 import {getCurrentPage, getSearchText, getSortingField} from "./getters";
 import CertificationService from "../service";
+import actions from "../../../layout/actions";
+import {fetchingTypes} from "../enum";
 
 const service = new CertificationService();
 
@@ -16,6 +18,7 @@ const getCertificationList = createLogic({
         const sortingField = getSortingField(state);
         const currentPage = getCurrentPage(state);
 
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_CERTIFICATION_LIST}));
         service.getCertificationList(searchText, sortingField, currentPage)
             .then((res) => {
                 const results = get(res, 'data.results', []);
@@ -24,6 +27,7 @@ const getCertificationList = createLogic({
                 dispatch(CertificationListActions.setCertificationCount(count));
             })
             .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_CERTIFICATION_LIST}));
                 return done();
             });
     }

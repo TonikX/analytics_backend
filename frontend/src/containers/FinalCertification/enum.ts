@@ -79,6 +79,13 @@ export enum OptionalRequirements {
     APPENDIX = 'appendix',
 }
 
+export enum fetchingTypes {
+    GET_CERTIFICATION = 'GET_CERTIFICATION',
+    GET_TEMPLATE_TEXT = 'GET_TEMPLATE_TEXT',
+
+    GET_CERTIFICATION_LIST = 'GET_CERTIFICATION_LIST',
+}
+
 export const OptionalRequirementsRussian = new Map(Object.entries({
     [OptionalRequirements.ACRONYMS]: 'Список сокращений и условных обозначений',
     [OptionalRequirements.DEFINITIONS]: 'Термины и определения',

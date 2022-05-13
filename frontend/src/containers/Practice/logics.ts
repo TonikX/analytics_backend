@@ -2,6 +2,8 @@ import {createLogic} from "redux-logic";
 import PracticeActions from "./actions";
 import PracticeService from "./service";
 import {getId} from "./getters";
+import actions from "../../layout/actions";
+import {fetchingTypes} from "./enum";
 
 const service = new PracticeService();
 
@@ -11,11 +13,13 @@ const getPractice = createLogic({
 
     process({getState, action}: any, dispatch, done) {
         const id = action.payload;
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_PRACTICE}));
         service.getPractice(id)
             .then((res) => {
                 dispatch(PracticeActions.setPractice(res.data));
             })
             .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_PRACTICE}));
                 return done();
             });
     }
