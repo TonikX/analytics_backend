@@ -15,6 +15,8 @@ import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import {MinimalPracticeState} from "../../types";
 import {PracticeFields} from "../../enum";
+import {withRouter} from "react-router-dom";
+import {appRouter} from "../../../../service/router-service";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -23,7 +25,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [PracticeFields.YEAR]: 2022, // todo current year using moment
             [PracticeFields.OP_LEADER]: '',
             [PracticeFields.AUTHORS]: '',
-            [PracticeFields.FORM_OF_CERTIFICATION_TOOLS]: '',
         } as MinimalPracticeState,
     };
 
@@ -33,8 +34,12 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     handleSave = () => {
         const {minimalPracticeState} = this.state;
-
-        this.props.actions.createPractice(minimalPracticeState);
+        minimalPracticeState[PracticeFields.FORM_OF_CERTIFICATION_TOOLS] = 'exam';
+        const history = this.props.history;
+        const callback = (id: number) => {
+            history.push(appRouter.getPracticeLink(id));
+        }
+        this.props.actions.createPractice({state: minimalPracticeState, callback});
     }
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
@@ -70,7 +75,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const disableButton = !minimalPracticeState[PracticeFields.YEAR]
             || minimalPracticeState[PracticeFields.AUTHORS].length === 0
             || minimalPracticeState[PracticeFields.OP_LEADER].length === 0
-            || minimalPracticeState[PracticeFields.FORM_OF_CERTIFICATION_TOOLS].length === 0
         ;
 
         return (
@@ -123,16 +127,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                    shrink: true,
                                }}
                     />
-                    <TextField label="Форма промежуточной аттестации"
-                               onChange={this.saveField(PracticeFields.FORM_OF_CERTIFICATION_TOOLS)}
-                               variant="outlined"
-                               className={classes.input}
-                               fullWidth
-                               value={minimalPracticeState[PracticeFields.FORM_OF_CERTIFICATION_TOOLS]}
-                               InputLabelProps={{
-                                   shrink: true,
-                               }}
-                    />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={this.handleClose}
@@ -151,4 +145,4 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 }
 
-export default connect(withStyles(styles)(CreateModal));
+export default connect(withStyles(styles)(withRouter(CreateModal)));

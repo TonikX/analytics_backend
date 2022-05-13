@@ -38,15 +38,15 @@ const createPractice = createLogic({
     latest: true,
 
     process({getState, action}: any, dispatch, done) {
-        const state = action.payload;
+        const {state, callback} = action.payload;
 
         service.createPractice(state)
-            .then(() => {
+            .then((res: any) => {
                 // new program added
-                dispatch(PracticeListActions.getPracticeList());
-                dispatch(PracticeListActions.closeModal());
+                callback(res.data.id);
             })
             .catch(() => {
+                console.error('could not create practice')
                 dispatch(PracticeListActions.closeModal());
             })
             .finally(() => {
