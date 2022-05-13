@@ -4,10 +4,14 @@ import {rootState} from "../../../../store/reducers";
 import {getPractice} from "../../getters";
 import {bindActionCreators} from "redux";
 import actions from "../../actions";
+import {isFetchingComponentByKey} from "../../../../layout/getters";
 
 const mapStateToProps = (state: rootState) => {
     return {
         fields: getPractice(state),
+        getLoading: (fieldName: string) => {
+            return isFetchingComponentByKey(state, fieldName);
+        },
     }
 };
 

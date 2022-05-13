@@ -3,7 +3,7 @@ import PracticeActions from "./actions";
 import PracticeService from "./service";
 import {getId} from "./getters";
 import actions from "../../layout/actions";
-import {fetchingTypes} from "./enum";
+import {fetchingTypes, PracticeFields} from "./enum";
 
 const service = new PracticeService();
 
@@ -40,6 +40,22 @@ const savePractice = createLogic({
     }
 });
 
+const startLoading = (dispatch: any, field: string) => {
+    if (field === PracticeFields.BIBLIOGRAPHIC_REFERENCE) {
+        dispatch(actions.fetchingTrue({destination: field}));
+    } else {
+        dispatch(actions.fetchingComponentTrue({destination: field}));
+    }
+}
+
+const stopLoading = (dispatch: any, field: string) => {
+    if (field === PracticeFields.BIBLIOGRAPHIC_REFERENCE) {
+        dispatch(actions.fetchingFalse({destination: field}));
+    } else {
+        dispatch(actions.fetchingComponentFalse({destination: field}));
+    }
+}
+
 const saveField = createLogic({
     type: PracticeActions.saveField.type,
     latest: true,
@@ -48,6 +64,7 @@ const saveField = createLogic({
         const state = getState();
         const practiceId = getId(state);
         const {field, value} = action.payload;
+        startLoading(dispatch, field);
         service.patchPractice({[field]: value}, practiceId)
             .then((res: any) => {
                 dispatch(PracticeActions.setPractice(res.data));
@@ -57,6 +74,7 @@ const saveField = createLogic({
                 dispatch(PracticeActions.getPractice(practiceId));
             })
             .finally(() => {
+                stopLoading(dispatch, field)
                 return done();
             });
     }

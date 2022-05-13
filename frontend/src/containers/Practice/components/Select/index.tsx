@@ -6,6 +6,7 @@ import React, {ReactText} from "react";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import SimpleSelector from "../../../../components/SimpleSelector";
+import InputsLoader from "../../../../components/InputsLoader";
 
 type SelectOption = {
     label: string;
@@ -18,6 +19,7 @@ interface SelectProps extends WithStyles<typeof styles> {
     fields: any;
     metaList: Array<SelectOption>;
     label: string;
+    getLoading: (fieldName: string) => boolean,
 }
 
 class Select extends React.Component<SelectProps> {
@@ -27,15 +29,20 @@ class Select extends React.Component<SelectProps> {
     }
 
     render() {
-        const {fields, classes, metaList, fieldName, label} = this.props;
+        const {fields, classes, metaList, fieldName, label, getLoading} = this.props;
 
         return (
-            <SimpleSelector label={label}
-                            metaList={metaList}
-                            value={fields[fieldName]}
-                            wrapClass={classes.selectorWrap}
-                            onChange={this.saveSelect(fieldName)}
-            />
+            <div style={{marginTop: '30px'}}>
+                <InputsLoader loading={getLoading(fieldName)}>
+                    <SimpleSelector label={label}
+                                    metaList={metaList}
+                                    value={fields[fieldName]}
+                                    wrapClass={classes.selectorWrap}
+                                    noMargin
+                                    onChange={this.saveSelect(fieldName)}
+                    />
+                </InputsLoader>
+            </div>
         );
     }
 }

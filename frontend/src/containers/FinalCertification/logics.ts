@@ -49,6 +49,7 @@ const saveField = createLogic({
         const state = getState();
         const id = getId(state);
         const {field, value} = action.payload;
+        dispatch(actions.fetchingComponentTrue({destination: field}));
         service.patchCertification({[field]: value}, id)
             .then((res: any) => {
                 dispatch(CertificationActions.setCertification(res.data));
@@ -58,6 +59,7 @@ const saveField = createLogic({
                 dispatch(CertificationActions.getCertification(id));
             })
             .finally(() => {
+                dispatch(actions.fetchingComponentFalse({destination: field}));
                 return done();
             });
     }

@@ -98,8 +98,8 @@ class Assessment extends React.Component<AssessmentProps> {
                                        multiline
                                        rows={5}
                                        variant='outlined'
-                                       onBlur={this.handleInputBlur(CertificationMarkFields.GREAT)}
-                                       onChange={this.handleInputChange(CertificationMarkFields.GREAT)}
+                                       onBlur={this.handleInputBlur(CertificationMarkFields.SATISFACTORILY)}
+                                       onChange={this.handleInputChange(CertificationMarkFields.SATISFACTORILY)}
                                        className={classes.input}/>
                         </div>
                         <div className={classes.rightColumn}>
@@ -109,8 +109,8 @@ class Assessment extends React.Component<AssessmentProps> {
                                        multiline
                                        rows={5}
                                        variant='outlined'
-                                       onBlur={this.handleInputBlur(CertificationMarkFields.GREAT)}
-                                       onChange={this.handleInputChange(CertificationMarkFields.GREAT)}
+                                       onBlur={this.handleInputBlur(CertificationMarkFields.GOOD)}
+                                       onChange={this.handleInputChange(CertificationMarkFields.GOOD)}
                                        className={classes.input}/>
                             <TextField value={marks ? marks[CertificationMarkFields.UNSATISFACTORY] : ''}
                                        label='Оценка "неудовлетворительно"'
@@ -118,8 +118,8 @@ class Assessment extends React.Component<AssessmentProps> {
                                        multiline
                                        rows={5}
                                        variant='outlined'
-                                       onBlur={this.handleInputBlur(CertificationMarkFields.GREAT)}
-                                       onChange={this.handleInputChange(CertificationMarkFields.GREAT)}
+                                       onBlur={this.handleInputBlur(CertificationMarkFields.UNSATISFACTORY)}
+                                       onChange={this.handleInputChange(CertificationMarkFields.UNSATISFACTORY)}
                                        className={classes.input}/>
                         </div>
                     </div>

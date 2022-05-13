@@ -8,6 +8,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import TextField from "@material-ui/core/TextField";
 import get from "lodash/get";
 import {validate} from "../../validation";
+import InputsLoader from "../../../../components/InputsLoader";
 
 interface InputProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -16,6 +17,7 @@ interface InputProps extends WithStyles<typeof styles> {
     fields: PracticeState;
     multiline?: boolean;
     rows?: number;
+    getLoading: (fieldName: string) => boolean,
 }
 
 class Input extends React.Component<InputProps> {
@@ -54,25 +56,28 @@ class Input extends React.Component<InputProps> {
 
 
     render() {
-        const {fields, fieldName, label, classes, multiline, rows} = this.props;
+        const {fields, fieldName, label, classes, multiline, rows, getLoading} = this.props;
         const {errorMessage} = this.state;
 
         return (
-            <TextField label={label}
-                       onBlur={this.saveInput(fieldName)}
-                       onChange={this.setInput(fieldName)}
-                       variant="outlined"
-                       className={classes.input}
-                       fullWidth
-                       multiline={multiline}
-                       rows={rows ? rows : 1}
-                       value={fields[fieldName]}
-                       error={Boolean(errorMessage)}
-                       helperText={errorMessage}
-                       InputLabelProps={{
-                           shrink: true,
-                       }}
-            />
+            <div className={classes.input}>
+                <InputsLoader loading={getLoading(fieldName)}>
+                    <TextField label={label}
+                               onBlur={this.saveInput(fieldName)}
+                               onChange={this.setInput(fieldName)}
+                               variant="outlined"
+                               fullWidth
+                               multiline={multiline}
+                               rows={rows ? rows : 1}
+                               value={fields[fieldName]}
+                               error={Boolean(errorMessage)}
+                               helperText={errorMessage}
+                               InputLabelProps={{
+                                   shrink: true,
+                               }}
+                    />
+                </InputsLoader>
+            </div>
         );
     }
 }
