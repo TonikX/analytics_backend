@@ -21,12 +21,12 @@ import {
     ModuleWorkProgram, ContentByAcademicPlanProps,
     WorkProgramChangeInDisciplineBlockModule,
     TableContentProps, CompetencesHeaderProps,
-    AttachIndicatorProps,
+    AttachIndicatorProps, CompetencesRowProps,
 } from "./types";
 
 const EMPTY = '\u00A0';
 
-const CompetencesHeader = ({competences}: CompetencesHeaderProps) => {
+const CompetencesCell = ({competences}: CompetencesHeaderProps) => {
     const classes = useStyles();
     return (
         <TableCell variant="head" className={classes.competenceTableHeading}>
@@ -47,6 +47,19 @@ const CompetencesHeader = ({competences}: CompetencesHeaderProps) => {
                 }
             </div>
         </TableCell>
+    )
+};
+
+const CompetencesRow = (
+    {keyCompetences, overProfCompetences, generalProfCompetences, profCompetences}: CompetencesRowProps
+) => {
+    return (
+        <>
+            <CompetencesCell competences={keyCompetences}/>
+            <CompetencesCell competences={overProfCompetences}/>
+            <CompetencesCell competences={generalProfCompetences}/>
+            <CompetencesCell competences={profCompetences}/>
+        </>
     )
 };
 
@@ -156,14 +169,13 @@ const ContentByAcademicPlan = (
                         <TableRow
                             key={`row-${blockIndex}`} selected={true} className={classes.sectionRow}
                         >
-                            {
-                                new Array(5)
-                                    .fill(EMPTY)
-                                    .map((item, index) => {
-                                        // В одной ячейке заголовок, остальные ячейки пустые
-                                        return <TableCell key={index}>{index === 0 ? moduleBlock.name : item}</TableCell>
-                                    })
-                            }
+                            <TableCell>{moduleBlock.name}</TableCell>
+                            <CompetencesRow
+                                overProfCompetences={overProfCompetences}
+                                keyCompetences={keyCompetences}
+                                profCompetences={profCompetences}
+                                generalProfCompetences={generalProfCompetences}
+                            />
                         </TableRow>
                         {/*Дисциплины*/}
                         {moduleBlock.change_blocks_of_work_programs_in_modules.map((block: WorkProgramChangeInDisciplineBlockModule) =>
@@ -208,7 +220,7 @@ export default () => {
     const competenceMatrixId = useSelector(getEducationalProgramCharacteristicId);
     const [isOpen, setIsOpen] = useState(false);
     const [defaultCompetence, setDefaultCompetence] = useState();
-    const [indicators, setIndicators] = useState([] as {label: string; value: number} []);
+    const [indicators, setIndicators] = useState([] as { label: string; value: number } []);
     const [workProgramId, setWorkProgramId] = useState(-1);
 
     useEffect(() => {
@@ -244,10 +256,12 @@ export default () => {
                         </TableRow>
                         <TableRow>
                             <TableCell className={classes.competenceTableHeading} variant="head">{EMPTY}</TableCell>
-                            <CompetencesHeader competences={keyCompetences}/>
-                            <CompetencesHeader competences={profCompetences}/>
-                            <CompetencesHeader competences={generalProfCompetences}/>
-                            <CompetencesHeader competences={overProfCompetences}/>
+                            <CompetencesRow
+                                overProfCompetences={overProfCompetences}
+                                keyCompetences={keyCompetences}
+                                profCompetences={profCompetences}
+                                generalProfCompetences={generalProfCompetences}
+                            />
                         </TableRow>
                     </TableHead>
                     <TableBody className={classes.table}>
