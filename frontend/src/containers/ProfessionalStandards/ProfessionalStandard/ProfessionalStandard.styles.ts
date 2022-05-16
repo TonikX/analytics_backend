@@ -25,7 +25,9 @@ export const useStyles = makeStyles( (theme) => createStyles ({
         width: '100%'
     },
     tableCell: {
-        width: '30%'
+        width: '30%',
+        boxSizing: 'border-box',
+        paddingRight: '10px',
     },
     header: {
         background: theme.palette.primary.main,
