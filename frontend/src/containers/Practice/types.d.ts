@@ -1,4 +1,4 @@
-import {PracticeFields, StructuralUnitFields} from "./enum";
+import {PracticeFields, StructuralUnitFields, TemplateTextPracticeFields} from "./enum";
 import {WithStyles} from "@material-ui/core";
 import styles from "./Practice.styles";
 import {RouteComponentProps} from "react-router-dom";
@@ -44,6 +44,15 @@ export type ReferencesState = {
     [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: Array<LiteratureType>,
 }
 
+export type TemplateTextState = {
+    [TemplateTextPracticeFields.ID]: number,
+    [TemplateTextPracticeFields.GENERAL_PROVISIONS]: string,
+    [TemplateTextPracticeFields.STRUCTURE_AND_CONTENT]: string,
+    [TemplateTextPracticeFields.REPORTING_MATERIALS]: string,
+    [TemplateTextPracticeFields.OVZ]: string,
+    [TemplateTextPracticeFields.EVALUATION_TOOLS_CURRENT_CONTROL]: string,
+}
+
 export type PracticeState = GeneralInfoState
     & FeaturesState
     & AssessmentState
@@ -55,6 +64,7 @@ export type PracticeState = GeneralInfoState
 
 export interface practicePageState {
     practice: PracticeState;
+    templateText: TemplateTextState;
 }
 
 export interface MinimalPracticeState {
@@ -71,6 +81,8 @@ export interface PracticeActions {
     setField: any;
     savePractice: any;
     saveField: any;
+    getTemplateText: any;
+    setTemplateText: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {

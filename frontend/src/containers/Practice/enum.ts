@@ -92,6 +92,15 @@ export enum PracticeFormats {
     DISPERSED = 'dispersed',
 }
 
+export enum TemplateTextPracticeFields {
+    ID = 'id',
+    GENERAL_PROVISIONS = 'general_provisions',
+    STRUCTURE_AND_CONTENT = 'structure_and_content',
+    REPORTING_MATERIALS = 'reporting_materials',
+    OVZ = 'ovz',
+    EVALUATION_TOOLS_CURRENT_CONTROL = 'evaluation_tools_current_control',
+}
+
 export enum fetchingTypes {
     GET_PRACTICE = 'GET_PRACTICE',
     GET_TEMPLATE_TEXT = 'GET_TEMPLATE_TEXT',

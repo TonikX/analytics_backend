@@ -1,6 +1,6 @@
 import {practicePageState} from "./types";
 import createReducer from "../../store/createReducer";
-import {PracticeFields} from "./enum";
+import {PracticeFields, TemplateTextPracticeFields} from "./enum";
 import actions from "./actions";
 
 export const GENERAL_PATH = 'practice';
@@ -28,6 +28,14 @@ export const initialState: practicePageState = {
         [PracticeFields.NOT_PASSED_MARK]: '',
         [PracticeFields.STRUCTURAL_UNIT]: null,
         [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: [],
+    },
+    templateText: {
+        [TemplateTextPracticeFields.ID]: 1,
+        [TemplateTextPracticeFields.GENERAL_PROVISIONS]: '',
+        [TemplateTextPracticeFields.STRUCTURE_AND_CONTENT]: '',
+        [TemplateTextPracticeFields.REPORTING_MATERIALS]: '',
+        [TemplateTextPracticeFields.OVZ]: '',
+        [TemplateTextPracticeFields.EVALUATION_TOOLS_CURRENT_CONTROL]: '',
     }
 }
 
@@ -47,7 +55,16 @@ const setField = (state: practicePageState, {payload}: any): practicePageState =
         }
 });
 
+const setTemplateText = (state: practicePageState, {payload}: any): practicePageState => ({
+    ...state,
+    templateText: {
+        ...state?.templateText,
+        ...payload,
+    }
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setPractice.type]: setPractice,
     [actions.setField.type]: setField,
+    [actions.setTemplateText.type]: setTemplateText,
 });

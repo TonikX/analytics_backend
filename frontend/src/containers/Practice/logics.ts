@@ -80,5 +80,23 @@ const saveField = createLogic({
     }
 });
 
+const getTemplateText = createLogic({
+    type: PracticeActions.getTemplateText.type,
+    latest: true,
 
-export default [getPractice, savePractice, saveField];
+    process({getState, action}: any, dispatch, done) {
+        const id = action.payload;
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_TEMPLATE_TEXT}));
+        service.getTemplateText(id)
+            .then((res) => {
+                dispatch(PracticeActions.setTemplateText(res.data));
+            })
+            .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_TEMPLATE_TEXT}));
+                return done();
+            });
+    }
+});
+
+
+export default [getPractice, savePractice, saveField, getTemplateText];

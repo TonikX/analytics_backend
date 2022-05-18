@@ -7,6 +7,8 @@ const setPractice = createAction('SET_PRACTICE');
 const setField = createAction('SET_FIELD');
 const savePractice = createAction('SAVE_PRACTICE');
 const saveField = createAction('SAVE_FIELD');
+const getTemplateText = createAction('GET_TEMPLATE_TEXT');
+const setTemplateText = createAction('SET_TEMPLATE_TEXT');
 
 export const actions: PracticeActions = {
     getPractice,
@@ -14,6 +16,8 @@ export const actions: PracticeActions = {
     setField,
     savePractice,
     saveField,
+    setTemplateText,
+    getTemplateText,
 }
 
 export default actions;

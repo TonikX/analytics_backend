@@ -21,6 +21,10 @@ class PracticeService extends AnalyticsService {
     patchPractice(fields: any, id: number) {
         return this.patch(`/api/practice/${id}/`, fields);
     }
+
+    getTemplateText(id: number) {
+        return this.get(`/api/practice/practice_template/${id}/`)
+    }
 }
 
 export default PracticeService;
