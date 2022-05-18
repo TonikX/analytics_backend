@@ -10,7 +10,14 @@ import Select from "../../components/Select";
 import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 import {StructuralUnitsActions} from "../../../StructuralUnits/types";
-import {LANGUAGES, PRACTICE_KINDS, PRACTICE_TYPES, QUALIFICATIONS} from "../../constants";
+import {
+    LANGUAGES,
+    PRACTICE_FORMATS,
+    PRACTICE_KINDS,
+    PRACTICE_TYPES,
+    PRACTICE_WAYS,
+    QUALIFICATIONS
+} from "../../constants";
 
 interface GeneralInfoProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -50,15 +57,19 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                         <Input label='Год проведения' fieldName={PracticeFields.YEAR}/>
                         <Input label='Руководитель образовательной программы' fieldName={PracticeFields.OP_LEADER}/>
                         <Select label='Язык реализации' fieldName={PracticeFields.LANGUAGE} metaList={LANGUAGES}/>
+                        <Input label='Авторский состав' fieldName={PracticeFields.AUTHORS}/>
                     </div>
                     <div className={classes.rightColumn}>
-                        <Input label='Авторский состав' fieldName={PracticeFields.AUTHORS}/>
                         <Select label='Уровень образования' fieldName={PracticeFields.QUALIFICATION}
                                 metaList={QUALIFICATIONS}/>
                         <Select label='Вид практики' fieldName={PracticeFields.KIND_OF_PRACTICE}
                                 metaList={PRACTICE_KINDS}/>
                         <Select label='Тип практики' fieldName={PracticeFields.TYPE_OF_PRACTICE}
                                 metaList={PRACTICE_TYPES}/>
+                        <Select label='Способ прохождения практики' fieldName={PracticeFields.WAY_OF_DOING_PRACTICE}
+                                metaList={PRACTICE_WAYS}/>
+                        <Select label='Формат прохождения практики' fieldName={PracticeFields.FORMAT_PRACTICE}
+                                metaList={PRACTICE_FORMATS}/>
                         <SearchSelector label="Структурное подразделение"
                                         changeSearchText={this.handleChangeStructuralUnitSearchText}
                                         list={structuralUnitsList}

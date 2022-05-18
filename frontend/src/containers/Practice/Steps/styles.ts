@@ -29,5 +29,11 @@ export default () => createStyles({
     rightColumn: {
         marginLeft: '30px',
         width: '50%',
+    },
+    generalProvisionsText: {
+        marginTop: '20px',
+    },
+    singleColumn: {
+        width: '70%',
     }
 });

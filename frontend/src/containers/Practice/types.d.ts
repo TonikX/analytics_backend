@@ -28,6 +28,7 @@ export type GeneralInfoState = {
 export type FeaturesState = {
     [PracticeFields.WAY_OF_DOING_PRACTICE]: string,
     [PracticeFields.FORMAT_PRACTICE]: string,
+    [PracticeFields.FEATURES_INTERNSHIP]: string,
     [PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP]: string,
     [PracticeFields.ADDITIONAL_REPORTING_MATERIALS]: string,
 }
@@ -59,7 +60,7 @@ export type PracticeState = GeneralInfoState
     & ReferencesState
     & {
     [PracticeFields.ID]: Id,
-
+    [PracticeFields.PRACTICE_BASE]: Id,
 }
 
 export interface practicePageState {

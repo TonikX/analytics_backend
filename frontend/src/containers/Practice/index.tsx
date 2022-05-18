@@ -7,14 +7,18 @@ import styles from "./Practice.styles";
 import connect from './Practice.connect';
 import {PracticeProps} from "./types";
 import get from "lodash/get";
-import {PracticeStepsRussianList} from "./enum";
+import {PracticeFields, PracticeStepsRussianList} from "./enum";
 import Step from "@material-ui/core/Step";
 import StepButton from "@material-ui/core/StepButton";
 import Stepper from "@material-ui/core/Stepper";
 import GeneralInfo from "./Steps/GeneralInfo";
 import Assessment from "./Steps/Assessment";
-import Features from "./Steps/Features";
 import Literature from "./Steps/Literature";
+import GeneralProvisions from "./Steps/GeneralProvisions";
+import Structure from "./Steps/Structure";
+import ReportingMaterials from "./Steps/ReportingMaterials";
+import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
+import {CertificationFields} from "../FinalCertification/enum";
 
 class Practice extends React.Component<PracticeProps> {
 
@@ -24,9 +28,15 @@ class Practice extends React.Component<PracticeProps> {
 
     stepNameList = PracticeStepsRussianList;
 
-    stepList = [<GeneralInfo/>, <Features/>, <Assessment/>, <Literature/>]
+    stepList = [<GeneralInfo/>, <GeneralProvisions/>, <Structure/>, <ReportingMaterials/>, <DisabledPeopleInfo/>,
+        <Assessment/>, <Literature/>]
 
     getPracticeId = () => get(this, 'props.match.params.id');
+
+    getTemplateText = () => {
+        const id = this.props.practice[PracticeFields.PRACTICE_BASE];
+        this.props.actions.getTemplateText(id);
+    }
 
     handleSave = () => {
         const practice = this.props.practice;
@@ -35,6 +45,7 @@ class Practice extends React.Component<PracticeProps> {
 
     componentDidMount() {
         this.getPractice();
+        this.getTemplateText();
     }
 
     getPractice = () => {
