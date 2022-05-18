@@ -13,19 +13,18 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-import {MinimalPracticeState} from "../../types";
-import {PracticeFields} from "../../enum";
+import {CertificationFields} from "../../enum";
 import {withRouter} from "react-router-dom";
 import {appRouter} from "../../../../service/router-service";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
-        minimalPracticeState: {
-            [PracticeFields.TITLE]: '',
-            [PracticeFields.YEAR]: 2022, // todo current year using moment
-            [PracticeFields.OP_LEADER]: '',
-            [PracticeFields.AUTHORS]: '',
-        } as MinimalPracticeState,
+        state: {
+            [CertificationFields.TITLE]: '',
+            [CertificationFields.YEAR]: 2022, // todo current year using moment
+            [CertificationFields.OP_LEADER]: '',
+            [CertificationFields.AUTHORS]: '',
+        } as any,
     };
 
     handleClose = () => {
@@ -33,36 +32,35 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     handleSave = () => {
-        const {minimalPracticeState} = this.state;
-        minimalPracticeState[PracticeFields.FORM_OF_CERTIFICATION_TOOLS] = 'exam';
+        const {state} = this.state;
         const history = this.props.history;
         const callback = (id: number) => {
-            history.push(appRouter.getPracticeLink(id));
+            history.push(appRouter.getFinalCertificationLink(id));
         }
-        this.props.actions.createPractice({state: minimalPracticeState, callback});
+        this.props.actions.createCertification({state: state, callback});
     }
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
-        const {minimalPracticeState} = this.state;
+        const {state} = this.state;
 
         this.setState({
             ...this.state,
-            minimalPracticeState: {
-                ...minimalPracticeState,
+            state: {
+                ...state,
                 [field]: get(e, 'target.value')
             }
         })
     }
 
     saveNumberField = (field: string) => (e: React.ChangeEvent) => {
-        const {minimalPracticeState} = this.state;
+        const {state} = this.state;
         const value = parseInt(get(e, 'target.value'));
         if (Number.isNaN(value)) return;
 
         this.setState({
             ...this.state,
-            minimalPracticeState: {
-                ...minimalPracticeState,
+            state: {
+                ...state,
                 [field]: value,
             }
         })
@@ -70,12 +68,12 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     render() {
         const {isOpen, classes} = this.props;
-        const {minimalPracticeState} = this.state;
+        const {state} = this.state;
 
-        const disableButton = !minimalPracticeState[PracticeFields.YEAR]
-            || minimalPracticeState[PracticeFields.AUTHORS].length === 0
-            || minimalPracticeState[PracticeFields.OP_LEADER].length === 0
-            || minimalPracticeState[PracticeFields.TITLE].length === 0
+        const disableButton = !state[CertificationFields.YEAR]
+            || state[CertificationFields.AUTHORS].length === 0
+            || state[CertificationFields.OP_LEADER].length === 0
+            || state[CertificationFields.TITLE].length === 0
         ;
 
         return (
@@ -86,44 +84,44 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     paper: classes.dialog
                 }}
             >
-                <DialogTitle> Создать рабочую программу практики </DialogTitle>
+                <DialogTitle> Создать рабочую программу ГИА </DialogTitle>
                 <DialogContent>
                     <TextField label="Название"
-                               onChange={this.saveField(PracticeFields.TITLE)}
+                               onChange={this.saveField(CertificationFields.TITLE)}
                                variant="outlined"
                                className={classes.input}
                                fullWidth
-                               value={minimalPracticeState[PracticeFields.TITLE]}
+                               value={state[CertificationFields.TITLE]}
                                InputLabelProps={{
                                    shrink: true,
                                }}
                     />
                     <TextField label="Год"
-                               onChange={this.saveNumberField(PracticeFields.YEAR)}
+                               onChange={this.saveNumberField(CertificationFields.YEAR)}
                                variant="outlined"
                                className={classes.input}
                                fullWidth
-                               value={minimalPracticeState[PracticeFields.YEAR]}
+                               value={state[CertificationFields.YEAR]}
                                InputLabelProps={{
                                    shrink: true,
                                }}
                     />
                     <TextField label="Руководитель образовательной программы"
-                               onChange={this.saveField(PracticeFields.OP_LEADER)}
+                               onChange={this.saveField(CertificationFields.OP_LEADER)}
                                variant="outlined"
                                className={classes.input}
                                fullWidth
-                               value={minimalPracticeState[PracticeFields.OP_LEADER]}
+                               value={state[CertificationFields.OP_LEADER]}
                                InputLabelProps={{
                                    shrink: true,
                                }}
                     />
                     <TextField label="Авторский состав"
-                               onChange={this.saveField(PracticeFields.AUTHORS)}
+                               onChange={this.saveField(CertificationFields.AUTHORS)}
                                variant="outlined"
                                className={classes.input}
                                fullWidth
-                               value={minimalPracticeState[PracticeFields.AUTHORS]}
+                               value={state[CertificationFields.AUTHORS]}
                                InputLabelProps={{
                                    shrink: true,
                                }}

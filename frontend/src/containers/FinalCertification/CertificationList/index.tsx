@@ -22,6 +22,9 @@ import debounce from "lodash/debounce";
 import Pagination from "@material-ui/lab/Pagination";
 import ArrowDown from "@material-ui/icons/ArrowDropDown";
 import classNames from "classnames";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
+import CreateModal from "./CreateModal";
 
 class FinalCertificationList extends React.Component<CertificationListProps> {
 
@@ -37,6 +40,10 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
             this.props.actions.setSortingField(field);
         }
         this.props.actions.getCertificationList();
+    }
+
+    handleOpenModal = () => {
+        this.props.actions.openModal();
     }
 
     handleChangeSearchQuery = (event: React.ChangeEvent) => {
@@ -60,7 +67,7 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Рабочие программы
+                    Рабочие программы ГИА
 
                     <TextField placeholder="Поиск"
                                variant="outlined"
@@ -142,6 +149,15 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
                                 onChange={this.handleChangePage}
                                 color="primary"
                     />
+                    <Fab color="secondary"
+                         classes={{
+                             root: classes.addIcon
+                         }}
+                         onClick={this.handleOpenModal}
+                    >
+                        <AddIcon/>
+                    </Fab>
+                    <CreateModal/>
                 </div>
             </Paper>
         )

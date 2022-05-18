@@ -11,3 +11,5 @@ export const getSortingField = (state: rootState): string => get(getStateData(st
 export const getSearchText = (state: rootState): string => get(getStateData(state), 'searchText', '');
 export const getCertificationCount = (state: rootState): number => get(getStateData(state), 'certificationCount', 0);
 export const getCurrentPage = (state: rootState): number => get(getStateData(state), 'currentPage', 1);
+
+export const getIsModalOpen = (state: rootState): boolean => get(getStateData(state), 'modal.isModalOpen', false);

@@ -20,6 +20,9 @@ export interface certificationListState {
         mode: SortingType,
     },
     searchText: string,
+    modal: {
+        isModalOpen: boolean,
+    }
 }
 
 
@@ -30,4 +33,7 @@ export interface CertificationListActions {
     setSortingField: any;
     setCertificationCount: any;
     setCurrentPage: any;
+    openModal: any;
+    closeModal: any;
+    createCertification: any;
 }

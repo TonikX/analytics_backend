@@ -33,4 +33,27 @@ const getCertificationList = createLogic({
     }
 });
 
-export default [getCertificationList];
+
+const createCertification = createLogic({
+    type: CertificationListActions.createCertification.type,
+    latest: true,
+
+    process({getState, action}: any, dispatch, done) {
+        const {state, callback} = action.payload;
+
+        service.createPractice(state)
+            .then((res: any) => {
+                // new program added
+                callback(res.data.id);
+            })
+            .catch(() => {
+                console.error('could not create practice')
+                dispatch(CertificationListActions.closeModal());
+            })
+            .finally(() => {
+                return done();
+            })
+    }
+});
+
+export default [getCertificationList, createCertification];

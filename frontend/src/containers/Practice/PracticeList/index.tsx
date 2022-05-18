@@ -67,7 +67,7 @@ class PracticeList extends React.Component<PracticeListProps> {
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
-                    Рабочие программы
+                    Рабочие программы практики
 
                     <TextField placeholder="Поиск"
                                variant="outlined"

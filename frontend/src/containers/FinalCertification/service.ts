@@ -26,6 +26,10 @@ class CertificationService extends AnalyticsService {
     getTemplateText(id: number) {
         return this.get(`/api/gia/gia_template/${id}/`)
     }
+
+    createPractice(state: CertificationState) {
+        return this.post(`/api/gia/`, state);
+    }
 }
 
 export default CertificationService;

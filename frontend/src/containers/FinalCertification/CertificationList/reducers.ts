@@ -1,6 +1,7 @@
 import {certificationListState} from "./types";
 import createReducer from "../../../store/createReducer";
 import actions from "./actions";
+import {practiceListState} from "../../Practice/PracticeList/types";
 
 export const GENERAL_PATH = 'certificationList';
 
@@ -13,6 +14,9 @@ export const initialState: certificationListState = {
     },
     certificationCount: 0,
     currentPage: 1,
+    modal: {
+        isModalOpen: false,
+    }
 }
 
 const setCertificationList = (state: certificationListState, {payload}: any): certificationListState => ({
@@ -43,10 +47,28 @@ const setCertificationCount = (state: certificationListState, {payload}: any): c
     certificationCount: payload,
 });
 
+const openModal = (state: practiceListState): practiceListState => ({
+    ...state,
+    modal: {
+        ...state.modal,
+        isModalOpen: true,
+    }
+});
+
+const closeModal = (state: practiceListState): practiceListState => ({
+    ...state,
+    modal: {
+        ...state.modal,
+        isModalOpen: false,
+    }
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setCertificationList.type]: setCertificationList,
     [actions.setSearchText.type]: setSearchText,
     [actions.setSortingField.type]: setSortingField,
     [actions.setCurrentPage.type]: setCurrentPage,
     [actions.setCertificationCount.type]: setCertificationCount,
+    [actions.openModal.type]: openModal,
+    [actions.closeModal.type]: closeModal,
 });
