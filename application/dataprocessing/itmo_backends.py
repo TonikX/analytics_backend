@@ -127,18 +127,14 @@ class  AuthenticateByCodeISU(ListAPIView):
 
 
 def isu_client_credentials_request(url):
-    print(settings.ISU["ISU_CLIENT_ID"], settings.ISU["ISU_CLIENT_SECRET"])
     obtain_isu_url = requests.post(
-        'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token',  # params = {'code':{authorization_code}},
+        'https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token',
         data={'grant_type': 'client_credentials',
               'client_id': f'{settings.ISU["ISU_CLIENT_ID"]}',
               'client_secret': f'{settings.ISU["ISU_CLIENT_SECRET"]}'})
     obtain_isu = obtain_isu_url.json()
-    print('url: ', obtain_isu_url.url)
-    print('form_data: ', obtain_isu_url.request.body)
-    print('headers: ', obtain_isu_url.request.headers)
-    print(obtain_isu)
     if 'access_token' in obtain_isu:
-        req = requests.post(url)
+        print(url)
+        req = requests.post(url, headers={'Authorization': 'Bearer ' + obtain_isu['access_token']})
         print(req)
         print('сработало')
