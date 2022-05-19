@@ -61,7 +61,7 @@ export default ({ characteristic }: any) => {
   const tasksList = useMemo(() => characteristic?.educational_standard?.tasks_prof_standard.map((item: any) => ({
     value: item.id,
     label: item.name,
-  })), [characteristic])
+  })) || [], [characteristic])
 
   return (
     <>
