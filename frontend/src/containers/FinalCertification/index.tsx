@@ -34,11 +34,6 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
 
     getCertificationId = () => get(this, 'props.match.params.id');
 
-    handleSave = () => {
-        const certification = this.props.certification;
-        this.props.actions.saveCertification({certification, id: this.getCertificationId()});
-    }
-
     componentDidMount() {
         this.getCertification();
         this.getTemplateText();

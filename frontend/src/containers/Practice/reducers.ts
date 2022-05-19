@@ -6,6 +6,7 @@ import actions from "./actions";
 export const GENERAL_PATH = 'practice';
 
 export const initialState: practicePageState = {
+    isError: false,
     practice: {
         [PracticeFields.ID]: 1,
         [PracticeFields.PRACTICE_BASE]: 1,
@@ -65,8 +66,14 @@ const setTemplateText = (state: practicePageState, {payload}: any): practicePage
     }
 });
 
+const setError = (state: practicePageState, {payload}: any): practicePageState => ({
+    ...state,
+    isError: payload,
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setPractice.type]: setPractice,
     [actions.setField.type]: setField,
     [actions.setTemplateText.type]: setTemplateText,
+    [actions.setError.type]: setError,
 });

@@ -64,6 +64,7 @@ export type PracticeState = GeneralInfoState
 }
 
 export interface practicePageState {
+    isError: boolean;
     practice: PracticeState;
     templateText: TemplateTextState;
 }
@@ -80,13 +81,14 @@ export interface PracticeActions {
     getPractice: any;
     setPractice: any;
     setField: any;
-    savePractice: any;
     saveField: any;
     getTemplateText: any;
     setTemplateText: any;
+    setError: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {
     actions: PracticeActions;
     practice: PracticeState;
+    isError: boolean;
 }

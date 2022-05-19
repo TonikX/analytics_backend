@@ -26,21 +26,6 @@ const getCertification = createLogic({
     }
 });
 
-const saveCertification = createLogic({
-    type: CertificationActions.saveCertification.type,
-    latest: true,
-
-    process({getState, action}: any, dispatch, done) {
-        const {id, certification} = action.payload;
-        service.saveCertification(certification, id)
-            .then((res) => {
-            })
-            .finally(() => {
-                return done();
-            });
-    }
-});
-
 const saveField = createLogic({
     type: CertificationActions.saveField.type,
     latest: true,
@@ -54,9 +39,9 @@ const saveField = createLogic({
             .then((res: any) => {
                 dispatch(CertificationActions.setCertification(res.data));
             })
-            .catch((err) => {
+            .catch(() => {
+                dispatch(actions.fetchingFailed([`Поле не удалось сохранить. Пожалуйста, перезагрузите страницу или попробуйте позже.`]));
                 console.error(`could not save field: ${field}`);
-                dispatch(CertificationActions.getCertification(id));
             })
             .finally(() => {
                 dispatch(actions.fetchingComponentFalse({destination: field}));
@@ -80,7 +65,7 @@ const saveMarkCriteria = createLogic({
             .then((res: any) => {
                 dispatch(CertificationActions.setField({field, value: res.data}));
             })
-            .catch((err) => {
+            .catch(() => {
                 console.error(`could not save field: ${field}`);
                 const id = getId(state);
                 dispatch(CertificationActions.getCertification(id));
@@ -110,4 +95,4 @@ const getTemplateText = createLogic({
 });
 
 
-export default [getCertification, saveCertification, saveField, saveMarkCriteria, getTemplateText];
+export default [getCertification, saveField, saveMarkCriteria, getTemplateText];

@@ -18,7 +18,7 @@ import GeneralProvisions from "./Steps/GeneralProvisions";
 import Structure from "./Steps/Structure";
 import ReportingMaterials from "./Steps/ReportingMaterials";
 import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
-import {CertificationFields} from "../FinalCertification/enum";
+import ErrorPage from "../../components/ErrorPage";
 
 class Practice extends React.Component<PracticeProps> {
 
@@ -38,11 +38,6 @@ class Practice extends React.Component<PracticeProps> {
         this.props.actions.getTemplateText(id);
     }
 
-    handleSave = () => {
-        const practice = this.props.practice;
-        this.props.actions.savePractice({practice, id: this.getPracticeId()});
-    }
-
     componentDidMount() {
         this.getPractice();
         this.getTemplateText();
@@ -60,8 +55,12 @@ class Practice extends React.Component<PracticeProps> {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, isError} = this.props;
         const {activeStep} = this.state;
+
+        if (isError) {
+            return <ErrorPage/>;
+        }
 
         return (
             <Paper className={classes.root} component="div">

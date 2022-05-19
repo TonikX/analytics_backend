@@ -18,23 +18,12 @@ const getPractice = createLogic({
             .then((res) => {
                 dispatch(PracticeActions.setPractice(res.data));
             })
-            .finally(() => {
-                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_PRACTICE}));
-                return done();
-            });
-    }
-});
-
-const savePractice = createLogic({
-    type: PracticeActions.savePractice.type,
-    latest: true,
-
-    process({getState, action}: any, dispatch, done) {
-        const {id, practice} = action.payload;
-        service.savePractice(practice, id)
-            .then((res) => {
+            .catch(() => {
+                dispatch(actions.fetchingFailed('Не удалось загрузить рабочую программу'));
+                dispatch(PracticeActions.setError(true));
             })
             .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_PRACTICE}));
                 return done();
             });
     }
@@ -69,9 +58,9 @@ const saveField = createLogic({
             .then((res: any) => {
                 dispatch(PracticeActions.setPractice(res.data));
             })
-            .catch((err) => {
+            .catch(() => {
                 console.error(`could not save field: ${field}`);
-                dispatch(PracticeActions.getPractice(practiceId));
+                dispatch(actions.fetchingFailed([`Поле не удалось сохранить. Пожалуйста, перезагрузите страницу или попробуйте позже.`]));
             })
             .finally(() => {
                 stopLoading(dispatch, field)
@@ -99,4 +88,4 @@ const getTemplateText = createLogic({
 });
 
 
-export default [getPractice, savePractice, saveField, getTemplateText];
+export default [getPractice, saveField, getTemplateText];

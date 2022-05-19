@@ -101,7 +101,6 @@ export interface certificationPageState {
 
 export interface CertificationActions {
     getCertification: any;
-    saveCertification: any;
     saveField: any;
     setCertification: any;
     setField: any;
