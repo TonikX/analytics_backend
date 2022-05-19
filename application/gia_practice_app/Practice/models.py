@@ -88,6 +88,10 @@ class Practice(models.Model):
     )
     discipline_code = models.IntegerField(max_length=1024, blank=True, null=True)
     title = models.CharField(max_length=1024, verbose_name="Наименование", blank=True, null=True)
+
+    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors_practice", verbose_name="Редакторы РПД",
+                                     blank=True, null=True)
+
     practice_base = models.ForeignKey('PracticeTemplate', on_delete=models.SET_NULL,
                                  verbose_name='Базовый шаблон Практики',
                                  related_name='practice_heir', blank=True, null=True)
