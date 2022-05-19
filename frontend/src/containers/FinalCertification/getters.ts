@@ -10,6 +10,9 @@ const getStateData = (state: rootState): certificationPageState => get(state, GE
 export const getCertification = (state: rootState): CertificationState =>
     get(getStateData(state), 'certification', initialState.certification);
 
+export const getIsError = (state: rootState): boolean =>
+    get(getStateData(state), 'isError', initialState.isError);
+
 export const getId = (state: rootState): Id => getCertification(state).id;
 
 export const getMarkCriteriaId = (fieldName: CertificationFields) => (state: rootState): Id =>

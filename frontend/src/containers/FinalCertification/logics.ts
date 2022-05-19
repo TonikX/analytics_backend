@@ -19,6 +19,9 @@ const getCertification = createLogic({
             .then((res) => {
                 dispatch(CertificationActions.setCertification(res.data));
             })
+            .catch(() => {
+                dispatch(CertificationActions.setError(true));
+            })
             .finally(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_CERTIFICATION}));
                 return done();
@@ -67,8 +70,7 @@ const saveMarkCriteria = createLogic({
             })
             .catch(() => {
                 console.error(`could not save field: ${field}`);
-                const id = getId(state);
-                dispatch(CertificationActions.getCertification(id));
+                dispatch(actions.fetchingFailed([`Поле не удалось сохранить. Пожалуйста, перезагрузите страницу или попробуйте позже.`]));
             })
             .finally(() => {
                 return done();

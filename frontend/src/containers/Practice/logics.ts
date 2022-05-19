@@ -19,7 +19,6 @@ const getPractice = createLogic({
                 dispatch(PracticeActions.setPractice(res.data));
             })
             .catch(() => {
-                dispatch(actions.fetchingFailed('Не удалось загрузить рабочую программу'));
                 dispatch(PracticeActions.setError(true));
             })
             .finally(() => {

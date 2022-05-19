@@ -6,6 +6,7 @@ import actions from "./actions";
 export const GENERAL_PATH = 'certification';
 
 export const initialState: certificationPageState = {
+    isError: false,
     certification: {
         [CertificationFields.ID]: 1,
         [CertificationFields.DISCIPLINE_CODE]: '',
@@ -112,9 +113,15 @@ const setTemplateText = (state: certificationPageState, {payload}: any): certifi
     }
 });
 
+const setError = (state: certificationPageState, {payload}: any): certificationPageState => ({
+    ...state,
+    isError: payload,
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setCertification.type]: setCertification,
     [actions.setField.type]: setField,
     [actions.setMarkCriteria.type]: setMarkCriteria,
     [actions.setTemplateText.type]: setTemplateText,
+    [actions.setError.type]: setError,
 });

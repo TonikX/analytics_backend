@@ -16,10 +16,12 @@ import Assessment from "./Steps/Assessment";
 import Dates from "./Steps/Dates";
 import GeneralProvisions from "./Steps/GeneralProvisions";
 import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
+import ErrorPage from "../../components/ErrorPage";
 
 export interface FinalCertificationProps extends WithStyles<typeof styles>, RouteComponentProps {
     actions: CertificationActions,
     certification: CertificationState,
+    isError: boolean,
 }
 
 class FinalCertification extends React.Component<FinalCertificationProps> {
@@ -56,8 +58,12 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, isError} = this.props;
         const {activeStep} = this.state;
+
+        if (isError) {
+            return <ErrorPage/>
+        }
 
         return (
             <Paper className={classes.root} component="div">

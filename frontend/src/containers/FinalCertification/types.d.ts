@@ -95,6 +95,7 @@ export type CertificationState = MainInfoState
 }
 
 export interface certificationPageState {
+    isError: boolean,
     certification: CertificationState,
     templateText: TemplateTextState,
 }
@@ -108,4 +109,5 @@ export interface CertificationActions {
     setMarkCriteria: any;
     getTemplateText: any;
     setTemplateText: any,
+    setError: any;
 }
