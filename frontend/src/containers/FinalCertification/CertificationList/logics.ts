@@ -41,16 +41,19 @@ const createCertification = createLogic({
     process({getState, action}: any, dispatch, done) {
         const {state, callback} = action.payload;
 
-        service.createPractice(state)
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_CERTIFICATION}));
+        service.createCertification(state)
             .then((res: any) => {
                 // new program added
                 callback(res.data.id);
             })
             .catch(() => {
-                console.error('could not create practice')
+                console.error('could not create certification');
+                dispatch(actions.fetchingFailed([`Ошибка при создании программы, попробуйте перезагрузить страницу или попробовать позже`]));
                 dispatch(CertificationListActions.closeModal());
             })
             .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_CERTIFICATION}));
                 return done();
             })
     }

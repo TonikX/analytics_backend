@@ -40,6 +40,7 @@ const createPractice = createLogic({
     process({getState, action}: any, dispatch, done) {
         const {state, callback} = action.payload;
 
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_PRACTICE}));
         service.createPractice(state)
             .then((res: any) => {
                 // new program added
@@ -47,9 +48,11 @@ const createPractice = createLogic({
             })
             .catch(() => {
                 console.error('could not create practice')
+                dispatch(actions.fetchingFailed([`Ошибка при создании программы, попробуйте перезагрузить страницу или попробовать позже`]));
                 dispatch(PracticeListActions.closeModal());
             })
             .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_PRACTICE}));
                 return done();
             })
     }

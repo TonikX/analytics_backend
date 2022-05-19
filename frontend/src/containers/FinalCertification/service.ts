@@ -27,7 +27,7 @@ class CertificationService extends AnalyticsService {
         return this.get(`/api/gia/gia_template/${id}/`)
     }
 
-    createPractice(state: CertificationState) {
+    createCertification(state: CertificationState) {
         return this.post(`/api/gia/`, state);
     }
 }

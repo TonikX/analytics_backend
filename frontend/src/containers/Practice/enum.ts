@@ -109,6 +109,6 @@ export enum TemplateTextPracticeFields {
 export enum fetchingTypes {
     GET_PRACTICE = 'GET_PRACTICE',
     GET_TEMPLATE_TEXT = 'GET_TEMPLATE_TEXT',
-
     GET_PRACTICE_LIST = 'GET_PRACTICE_LIST',
+    CREATE_PRACTICE = 'CREATE_PRACTICE',
 }
