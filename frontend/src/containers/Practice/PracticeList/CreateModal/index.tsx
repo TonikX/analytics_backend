@@ -99,7 +99,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                }}
                     />
                     <TextField label="Год"
-                               onChange={this.saveNumberField(PracticeFields.YEAR)}
+                               onChange={this.saveField(PracticeFields.YEAR)}
                                variant="outlined"
                                className={classes.input}
                                fullWidth
