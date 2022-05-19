@@ -19,6 +19,7 @@ import Structure from "./Steps/Structure";
 import ReportingMaterials from "./Steps/ReportingMaterials";
 import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
 import ErrorPage from "../../components/ErrorPage";
+import Download from "./components/Download";
 
 class Practice extends React.Component<PracticeProps> {
 
@@ -85,6 +86,9 @@ class Practice extends React.Component<PracticeProps> {
                     {
                         this.stepList[activeStep]
                     }
+                </div>
+                <div>
+                    <Download/>
                 </div>
             </Paper>
         )
