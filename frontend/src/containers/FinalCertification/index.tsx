@@ -17,6 +17,7 @@ import Dates from "./Steps/Dates";
 import GeneralProvisions from "./Steps/GeneralProvisions";
 import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
 import ErrorPage from "../../components/ErrorPage";
+import Download from "./components/Download";
 
 export interface FinalCertificationProps extends WithStyles<typeof styles>, RouteComponentProps {
     actions: CertificationActions,
@@ -88,6 +89,9 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
                     {
                         this.stepList[activeStep]
                     }
+                </div>
+                <div>
+                    <Download/>
                 </div>
             </Paper>
         )

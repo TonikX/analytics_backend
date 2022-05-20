@@ -86,14 +86,12 @@ class Features extends React.Component<FeaturesProps> {
         };
         this.setState(state);
 
-        let value = '';
         const options: any = state.optionalRequirements;
 
-        for (const field of Object.keys(options)) {
-            if (options[field]) {
-                value += `${OptionalRequirementsRussian.get(field)};`
-            }
-        }
+        const value = Object.keys(options)
+            .filter(field => !!(options[field]))
+            .map(field => OptionalRequirementsRussian.get(field))
+            .join(';')
 
         this.props.actions.saveField({field: CertificationFields.STRUCTURE_ELEMENTS_OPTIONAL, value});
     };

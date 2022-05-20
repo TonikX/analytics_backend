@@ -10,7 +10,7 @@ import Button from "@material-ui/core/Button";
 
 
 // @ts-ignore
-import rawFile from '../../template.docx'
+import rawFile from '../../template-practice.docx'
 import {PracticeFields, PracticeTypes} from "../../enum";
 import {
     LANGUAGES,
