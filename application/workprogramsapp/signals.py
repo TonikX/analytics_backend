@@ -3,11 +3,12 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from dataprocessing.models import User
+from gia_practice_app.GIA.models import GIA
+from gia_practice_app.Practice.models import Practice
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
 from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Zun, WorkProgramIdStrUpForIsu
 from workprogramsapp.notifications.emails.send_mail import mail_sender
 from workprogramsapp.notifications.models import ExpertiseNotification, NotificationComments
-from dataprocessing.itmo_backends import isu_client_credentials_request
 
 
 def populate_models(sender, **kwargs):
@@ -21,37 +22,62 @@ def populate_models(sender, **kwargs):
 def create_profile(sender, instance, created, **kwargs):
     """Create a matching profile whenever a user object is created."""
     if created:
-        wp_exp = WorkProgram.objects.get(expertise_with_rpd=instance.expertise)
+        expertise=Expertise.objects.get(expertse_users_in_rpd=instance)
+        if expertise.expertise_type == "WP" or not expertise.expertise_type:
+            name_of_object = "рабочей программы"
+            wp_exp = WorkProgram.objects.get(expertise_with_rpd__expertse_users_in_rpd=instance)
+        elif expertise.expertise_type == "GIA":
+            name_of_object = "ГИА"
+            wp_exp = GIA.objects.get(expertise_with_gia__expertse_users_in_rpd=instance)
+        elif expertise.expertise_type == "PRAC":
+            name_of_object = "Практики"
+            wp_exp = Practice.objects.get(expertise_with_practice__expertse_users_in_rpd=instance)
         ExpertiseNotification.objects.create(expertise=instance.expertise, user=instance.expert,
-                                             message=f'Вы добавлены в экспертизу для рабочей программы "{wp_exp.title}"')
+                                             message=f'Вы добавлены в экспертизу для {name_of_object} "{wp_exp.title}"')
 
 
 @receiver(post_save, sender=Expertise)
 def expertise_notificator(sender, instance, created, **kwargs):
     """Create a matching profile whenever a user object is created and updated."""
-    wp_exp = WorkProgram.objects.get(expertise_with_rpd=instance)
-    struct_users = User.objects.filter(user_for_structural_unit__status__in=["leader", "deputy"],
-                                       user_for_structural_unit__structural_unit__workprogram_in_structural_unit__expertise_with_rpd=instance).distinct()
+    if instance.expertise_type == "WP" or not instance.expertise_type:
+        name_of_object = "рабочей программы"
+        wp_exp = WorkProgram.objects.get(expertise_with_rpd=instance)
+        struct_users = User.objects.filter(user_for_structural_unit__status__in=["leader", "deputy"],
+                                           user_for_structural_unit__structural_unit__workprogram_in_structural_unit__expertise_with_rpd=instance).distinct()
+        users = User.objects.filter(expertse_in_rpd__expertise__work_program=wp_exp).distinct()
+    elif instance.expertise_type == "GIA":
+        name_of_object = "ГИА"
+        wp_exp = GIA.objects.get(expertise_with_gia=instance)
+        struct_users = User.objects.filter(user_for_structural_unit__status__in=["leader", "deputy"],
+                                           user_for_structural_unit__structural_unit__gia_in_structural_unit__expertise_with_gia=instance).distinct()
+        users = User.objects.filter(expertse_in_rpd__expertise__gia=wp_exp).distinct()
+    elif instance.expertise_type == "PRAC":
+        name_of_object = "Практики"
+        wp_exp = Practice.objects.get(expertise_with_practice=instance)
+        struct_users = User.objects.filter(user_for_structural_unit__status__in=["leader", "deputy"],
+                                           user_for_structural_unit__structural_unit__practice_in_structural_unit__expertise_with_practice=instance).distinct()
+        users = User.objects.filter(expertse_in_rpd__expertise__practice=wp_exp).distinct()
+
     if not struct_users:
         ExpertiseNotification.objects.create(expertise=instance, user=None,
-                                             message=f'Экспертиза для рабочей программы "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}"')
+                                             message=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}"')
     for user in struct_users:
         ExpertiseNotification.objects.create(expertise=instance, user=user,
-                                             message=f'Экспертиза для рабочей программы "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}"')
+                                             message=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}"')
 
     if instance.expertise_status == 'WK':
-        wp_exp = WorkProgram.objects.get(expertise_with_rpd=instance)
-        users = User.objects.filter(expertse_in_rpd__expertise__work_program=wp_exp).distinct()
 
         user_to_send = users.filter(expertise_status_notification=True)
         user_email = [user.email for user in user_to_send]
-        mail_sender(topic=f'Статус вашей радочей программы "{wp_exp.title}" изменился',
-                    text=f'Рабочую программу "{wp_exp.title}" вернули на доработку (Статус: "{instance.get_expertise_status_display()}")',
+        mail_sender(topic=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус.',
+                    text=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}")',
                     emails=user_email, users=user_to_send)
 
         for user in users:
             ExpertiseNotification.objects.create(expertise=instance, user=user,
-                                                 message=f'Рабочую программу "{wp_exp.title}" (https://op.itmo.ru/work-program/{wp_exp.id}) вернули на доработку (Статус: "{instance.get_expertise_status_display()}")')
+                                                 message=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}')
+
+    # isu_client_credentials_request('https://dev.disc.itmo.su/api/v1/disciplines/:disc_id?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(status=instance.expertise_status, wp_id=wp_exp.id))
 
     isu_client_credentials_request('https://disc.itmo.su/api/v1/disciplines/{disc_id}?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(disc_id=wp_exp.discipline_code, status=instance.get_expertise_status_display(), wp_id=wp_exp.id))
 
