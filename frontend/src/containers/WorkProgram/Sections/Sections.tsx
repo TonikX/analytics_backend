@@ -351,18 +351,18 @@ class Sections extends React.PureComponent<SectionsProps> {
                   </TableRow>
                   <TableRow>
                     <TableCell className={classes.headerCell}>
-                      Практические занятия
-                    </TableCell>
-                    {semesterColumns.map((item: any, index: number) =>
-                      <TableCell className={classes.cell}>{practiceHours[index]}</TableCell>
-                    )}
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className={classes.headerCell}>
                       Лабораторные занятия
                     </TableCell>
                     {semesterColumns.map((item: any, index: number) =>
                       <TableCell className={classes.cell}>{labHours[index]}</TableCell>
+                    )}
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className={classes.headerCell}>
+                      Практические занятия
+                    </TableCell>
+                    {semesterColumns.map((item: any, index: number) =>
+                      <TableCell className={classes.cell}>{practiceHours[index]}</TableCell>
                     )}
                   </TableRow>
                   <TableRow>
