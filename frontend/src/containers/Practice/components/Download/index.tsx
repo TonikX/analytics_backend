@@ -20,7 +20,6 @@ import {
     PRACTICE_WAYS,
     QUALIFICATIONS
 } from "../../constants";
-import {LiteratureType} from "../../../Literature/types";
 
 interface DownloadProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -40,12 +39,21 @@ class Download extends React.Component<DownloadProps> {
             [PracticeFields.FORMAT_PRACTICE]: this.findRussianLabel(PRACTICE_FORMATS, fields[PracticeFields.FORMAT_PRACTICE]),
             [PracticeFields.STRUCTURAL_UNIT]: fields[PracticeFields.STRUCTURAL_UNIT]?.title ?? '',
             isSeniorInter: fields[PracticeFields.TYPE_OF_PRACTICE] === PracticeTypes.SENIOR_INTER,
+            [PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP]:
+                this.multilineToList(fields[PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP]),
+            [PracticeFields.FEATURES_INTERNSHIP]:
+                this.multilineToList(fields[PracticeFields.FEATURES_INTERNSHIP]),
+            [PracticeFields.ADDITIONAL_REPORTING_MATERIALS]:
+                this.multilineToList(fields[PracticeFields.ADDITIONAL_REPORTING_MATERIALS]),
         }
     }
 
-    getIndexedReferences = (refs: Array<LiteratureType>) => {
-        return refs.map((ref, index) => ({ref, index: index + 1}));
+
+    multilineToList = (str: string) => {
+        if (str.length === 0) return [];
+        return str.split(/\r?\n/g);
     }
+
 
     findRussianLabel = (list: any, field: any) => {
         for (const {value, label} of list) {
@@ -61,10 +69,13 @@ class Download extends React.Component<DownloadProps> {
         const arrayBuffer = await fetch(rawFile).then(r => r.arrayBuffer())
         const template = new Buffer(arrayBuffer);
         const preparedFields = this.getPreparedFields(fields);
-        const report = await createReport({template, data: {...preparedFields}})
+        const report = await createReport({
+            template,
+            data: {...preparedFields},
+        });
 
-        const saveDataToFile = (data:any, fileName:any, mimeType:any) => {
-            const blob = new Blob([data], { type: mimeType });
+        const saveDataToFile = (data: any, fileName: any, mimeType: any) => {
+            const blob = new Blob([data], {type: mimeType});
             const url = window.URL.createObjectURL(blob);
             downloadURL(url, fileName);
             setTimeout(() => {
@@ -72,7 +83,7 @@ class Download extends React.Component<DownloadProps> {
             }, 1000);
         };
 
-        const downloadURL = (data:any, fileName:any) => {
+        const downloadURL = (data: any, fileName: any) => {
             const a = document.createElement('a');
             a.href = data;
             a.download = fileName;
@@ -84,7 +95,7 @@ class Download extends React.Component<DownloadProps> {
 
         saveDataToFile(
             report,
-            'report.docx',
+            'work-program-practice.docx',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         );
     }
