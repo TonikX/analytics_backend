@@ -40,13 +40,10 @@ class Dates extends React.Component<DatesProps> {
                             value={templateText[TemplateTextCertificationFields.VKR_THEME_CHOICE_TIME]}/>
                         <ReadonlyRow label='Корректировка / уточнение темы ВКР'
                                      value={templateText[TemplateTextCertificationFields.CORRECTION_THEME_TIME]}/>
-                        <Input label='Заполнение и согласование задания на ВКР в ИСУ'
-                               fieldName={CertificationFields.FILLING_AND_APPROVAL_TIME}/>
-                        <Input label='Работа над содержанием ВКР'
-                               fieldName={CertificationFields.WORK_ON_VKR_CONTENT_TIME}/>
-                        <Input label='Предварительная защита ВКР' fieldName={CertificationFields.PRE_DEFENCE_TIME}/>
-                        <Input label='Проверка текста ВКР в системе “Антиплагиат”'
-                               fieldName={CertificationFields.ANTI_PLAGIARISM_ANALYSIS_TIME}/>
+                        <Input fieldName={CertificationFields.FILLING_AND_APPROVAL_TIME}/>
+                        <Input fieldName={CertificationFields.WORK_ON_VKR_CONTENT_TIME}/>
+                        <Input fieldName={CertificationFields.PRE_DEFENCE_TIME}/>
+                        <Input fieldName={CertificationFields.ANTI_PLAGIARISM_ANALYSIS_TIME}/>
                         <ReadonlyRow label='Загрузка итоговой работы в ИСУ'
                                      value={templateText[TemplateTextCertificationFields.UPLOAD_TO_ISU_TIME]}/>
                         <ReadonlyRow label='Предоставление отзыва руководителем ВКР'

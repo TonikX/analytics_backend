@@ -113,10 +113,8 @@ class Features extends React.Component<FeaturesProps> {
 
                     <div className={classes.columns}>
                         <div className={classes.singleColumn}>
-                            <Input label='Предварительная защита ВКР'
-                                   fieldName={CertificationFields.PRELIMINARY_DEFENSE}/>
-                            <Input label='Проверка текста ВКР в системе “Антиплагиат”'
-                                   fieldName={CertificationFields.ANTI_PLAGIARISM}/>
+                            <Input fieldName={CertificationFields.PRELIMINARY_DEFENSE}/>
+                            <Input fieldName={CertificationFields.ANTI_PLAGIARISM}/>
                             <Typography style={{marginTop: '30px'}}>
                                 {templateText[TemplateTextCertificationFields.STRUCTURE_ELEMENTS]}
                             </Typography>
@@ -143,12 +141,9 @@ class Features extends React.Component<FeaturesProps> {
                                                        size='small'/>}
                                     label={OptionalRequirementsRussian.get(OptionalRequirements.APPENDIX)}/>
                             </FormGroup>
-                            <Input label='Дополнительные требования к оформлению ВКР'
-                                   fieldName={CertificationFields.OPTIONAL_DESIGN_REQUIREMENTS}/>
-                            <Input label='Требования к содержанию ВКР'
-                                   fieldName={CertificationFields.CONTENT_REQUIREMENTS}/>
-                            <Input label='Требования к представлению ВКР на защите'
-                                   fieldName={CertificationFields.DEFENCE_PRESENTATION_REQUIREMENTS}/>
+                            <Input fieldName={CertificationFields.OPTIONAL_DESIGN_REQUIREMENTS}/>
+                            <Input fieldName={CertificationFields.CONTENT_REQUIREMENTS}/>
+                            <Input fieldName={CertificationFields.DEFENCE_PRESENTATION_REQUIREMENTS}/>
                         </div>
                     </div>
                 </Scrollbars>

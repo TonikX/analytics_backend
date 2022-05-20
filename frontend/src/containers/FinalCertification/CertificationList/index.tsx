@@ -25,6 +25,7 @@ import classNames from "classnames";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import CreateModal from "./CreateModal";
+import {RussianCertificationFields} from "../constants";
 
 class FinalCertificationList extends React.Component<CertificationListProps> {
 
@@ -89,7 +90,7 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
                                     <TableCell>
                                         <div className={classes.fieldCell}>
                                             <Typography>
-                                                ID
+                                                {RussianCertificationFields[CertificationFields.ID]}
                                             </Typography>
                                             <ArrowDown onClick={this.changeSorting(CertificationFields.ID)}
                                                        className={classNames(classes.sortingArrow,
@@ -100,7 +101,7 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
                                     <TableCell>
                                         <div className={classes.fieldCell}>
                                             <Typography>
-                                                Название
+                                                {RussianCertificationFields[CertificationFields.TITLE]}
                                             </Typography>
                                             <ArrowDown onClick={this.changeSorting(CertificationFields.TITLE)}
                                                        className={classNames(classes.sortingArrow,
@@ -111,7 +112,7 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
                                     <TableCell>
                                         <div className={classes.fieldCell}>
                                             <Typography>
-                                                Авторский состав
+                                                {RussianCertificationFields[CertificationFields.AUTHORS]}
                                             </Typography>
                                             <ArrowDown onClick={this.changeSorting(CertificationFields.AUTHORS)}
                                                        className={classNames(classes.sortingArrow,
@@ -127,7 +128,7 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
                                     <TableRow key={certification[CertificationFields.ID]}>
                                         <TableCell className={classes.cellStatus}>
                                             {certification[CertificationFields.ID]}
-                                        </TableCell>
+                                      z  </TableCell>
                                         <TableCell className={classes.link}>
                                             <Link target="_blank"
                                                   to={appRouter.getFinalCertificationLink(certification[CertificationFields.ID])}>

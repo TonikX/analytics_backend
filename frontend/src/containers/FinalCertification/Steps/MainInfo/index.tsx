@@ -9,6 +9,7 @@ import Input from "../../components/Input";
 import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 import {StructuralUnitsActions} from "../../../StructuralUnits/types";
+import {RussianCertificationFields} from "../../constants";
 
 interface MainInfoProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
@@ -43,15 +44,14 @@ class MainInfo extends React.Component<MainInfoProps> {
                 </Typography>
                 <div className={classes.columns}>
                     <div className={classes.leftColumn}>
-                        <Input label='Код дисциплины' fieldName={CertificationFields.DISCIPLINE_CODE}/>
-                        <Input label='Название' fieldName={CertificationFields.TITLE}/>
-                        <Input label='Год проведения' fieldName={CertificationFields.YEAR}/>
+                        <Input fieldName={CertificationFields.DISCIPLINE_CODE}/>
+                        <Input fieldName={CertificationFields.TITLE}/>
+                        <Input fieldName={CertificationFields.YEAR}/>
                     </div>
                     <div className={classes.rightColumn}>
-                        <Input label='Руководитель образовательной программы'
-                               fieldName={CertificationFields.OP_LEADER}/>
-                        <Input label='Авторский состав' fieldName={CertificationFields.AUTHORS}/>
-                        <SearchSelector label="Структурное подразделение"
+                        <Input fieldName={CertificationFields.OP_LEADER}/>
+                        <Input fieldName={CertificationFields.AUTHORS}/>
+                        <SearchSelector label={RussianCertificationFields[CertificationFields.STRUCTURAL_UNIT]}
                                         changeSearchText={this.handleChangeStructuralUnitSearchText}
                                         list={structuralUnitsList}
                                         className={classes.input}

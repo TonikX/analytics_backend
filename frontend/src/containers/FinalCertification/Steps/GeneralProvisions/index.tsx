@@ -26,8 +26,7 @@ class GeneralProvisions extends React.Component<GeneralProvisionsProps> {
                     <Typography className={classes.generalProvisionsText}>
                         {templateText[TemplateTextCertificationFields.GENERAL_PROVISIONS]}
                     </Typography>
-                    <Input label='Другие нормативные документы'
-                           fieldName={CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS}/>
+                    <Input fieldName={CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS}/>
                 </div>
             </div>
         );

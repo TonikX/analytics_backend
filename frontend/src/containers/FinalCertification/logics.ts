@@ -43,7 +43,7 @@ const saveField = createLogic({
                 dispatch(CertificationActions.setCertification(res.data));
             })
             .catch(() => {
-                dispatch(actions.fetchingFailed([`Поле не удалось сохранить. Пожалуйста, перезагрузите страницу или попробуйте позже.`]));
+                dispatch(actions.fetchingFailed([`Поле ${field} не удалось сохранить. Пожалуйста, перезагрузите страницу или попробуйте позже.`]));
                 console.error(`could not save field: ${field}`);
             })
             .finally(() => {
@@ -70,7 +70,7 @@ const saveMarkCriteria = createLogic({
             })
             .catch(() => {
                 console.error(`could not save field: ${field}`);
-                dispatch(actions.fetchingFailed([`Поле не удалось сохранить. Пожалуйста, перезагрузите страницу или попробуйте позже.`]));
+                dispatch(actions.fetchingFailed([`Поле ${markType} не удалось сохранить. Пожалуйста, перезагрузите страницу или попробуйте позже.`]));
             })
             .finally(() => {
                 return done();

@@ -54,7 +54,6 @@ class Download extends React.Component<DownloadProps> {
         return str.split(/\r?\n/g);
     }
 
-
     findRussianLabel = (list: any, field: any) => {
         for (const {value, label} of list) {
             if (value === field) {
