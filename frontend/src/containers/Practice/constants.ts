@@ -1,4 +1,12 @@
-import {Languages, PracticeFormats, PracticeKinds, PracticeTypes, PracticeWays, Qualifications} from "./enum";
+import {
+    Languages,
+    PracticeFields,
+    PracticeFormats,
+    PracticeKinds,
+    PracticeTypes,
+    PracticeWays,
+    Qualifications
+} from "./enum";
 
 export const LANGUAGES = [
     {
@@ -166,3 +174,29 @@ export const PRACTICE_FORMATS = [
         label: 'Рассредоточенная',
     },
 ]
+
+export const RussianPracticeFields = {
+    [PracticeFields.ID]: 'ID',
+    [PracticeFields.PRACTICE_BASE]: 'ID шаблона',
+    [PracticeFields.DISCIPLINE_CODE]: 'Код дисциплины',
+    [PracticeFields.TITLE]: 'Название',
+    [PracticeFields.YEAR]: 'Год проведения',
+    [PracticeFields.AUTHORS]: 'Авторский состав',
+    [PracticeFields.OP_LEADER]: 'Руководитель образовательной программы',
+    [PracticeFields.LANGUAGE]: 'Язык реализации',
+    [PracticeFields.QUALIFICATION]: 'Уровень образования',
+    [PracticeFields.KIND_OF_PRACTICE]: 'Вид практики',
+    [PracticeFields.TYPE_OF_PRACTICE]: 'Тип практики',
+    [PracticeFields.WAY_OF_DOING_PRACTICE]: 'Способ прохождения практики',
+    [PracticeFields.FORMAT_PRACTICE]: 'Формат прохождения практики',
+    [PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP]: 'Особенности прохождения практики',
+    [PracticeFields.FEATURES_INTERNSHIP]: 'Особенности содержания практики',
+    [PracticeFields.ADDITIONAL_REPORTING_MATERIALS]: 'Дополнительные отчетные материалы',
+    [PracticeFields.FORM_OF_CERTIFICATION_TOOLS]: 'Форма аттестации',
+    [PracticeFields.PASSED_GREAT_MARK]: 'Критерий оценки "отлично"',
+    [PracticeFields.PASSED_GOOD_MARK]: 'Критерий оценки "хорошо"',
+    [PracticeFields.PASSED_SATISFACTORILY_MARK]: 'Критерий оценки "удовлетворительно"',
+    [PracticeFields.NOT_PASSED_MARK]: 'Критерий оценки "неудовлетворительно"',
+    [PracticeFields.STRUCTURAL_UNIT]: 'Структурное подразделение',
+    [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: 'Источники',
+}

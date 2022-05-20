@@ -28,8 +28,7 @@ class GeneralProvisions extends React.Component<GeneralProvisionsProps> {
                     <Typography className={classes.generalProvisionsText}>
                         {templateText[TemplateTextPracticeFields.GENERAL_PROVISIONS]}
                     </Typography>
-                    <Input label='Особенности прохождения практики'
-                           fieldName={PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP}
+                    <Input fieldName={PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP}
                            multiline
                            rows={2}/>
                 </div>

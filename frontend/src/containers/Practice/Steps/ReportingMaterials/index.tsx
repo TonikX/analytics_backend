@@ -28,8 +28,7 @@ class Structure extends React.Component<ReportingMaterialsProps> {
                     <Typography className={classes.generalProvisionsText}>
                         {templateText[TemplateTextPracticeFields.REPORTING_MATERIALS]}
                     </Typography>
-                    <Input label='Особенности содержания практики'
-                           fieldName={PracticeFields.ADDITIONAL_REPORTING_MATERIALS}
+                    <Input fieldName={PracticeFields.ADDITIONAL_REPORTING_MATERIALS}
                            multiline
                            rows={2}/>
                 </div>

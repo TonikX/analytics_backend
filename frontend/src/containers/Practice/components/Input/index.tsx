@@ -9,10 +9,10 @@ import TextField from "@material-ui/core/TextField";
 import get from "lodash/get";
 import {validate} from "../../validation";
 import InputsLoader from "../../../../components/InputsLoader";
+import {RussianPracticeFields} from "../../constants";
 
 interface InputProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
-    label: string;
     fieldName: PracticeFields;
     fields: PracticeState;
     multiline?: boolean;
@@ -56,13 +56,13 @@ class Input extends React.Component<InputProps> {
 
 
     render() {
-        const {fields, fieldName, label, classes, multiline, rows, getLoading} = this.props;
+        const {fields, fieldName, classes, multiline, rows, getLoading} = this.props;
         const {errorMessage} = this.state;
 
         return (
             <div className={classes.input}>
                 <InputsLoader loading={getLoading(fieldName)}>
-                    <TextField label={label}
+                    <TextField label={RussianPracticeFields[fieldName]}
                                onBlur={this.saveInput(fieldName)}
                                onChange={this.setInput(fieldName)}
                                variant="outlined"

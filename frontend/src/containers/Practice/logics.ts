@@ -4,6 +4,7 @@ import PracticeService from "./service";
 import {getId} from "./getters";
 import actions from "../../layout/actions";
 import {fetchingTypes, PracticeFields} from "./enum";
+import {RussianPracticeFields} from "./constants";
 
 const service = new PracticeService();
 
@@ -59,7 +60,7 @@ const saveField = createLogic({
             })
             .catch(() => {
                 console.error(`could not save field: ${field}`);
-                dispatch(actions.fetchingFailed([`Поле не удалось сохранить. Пожалуйста, перезагрузите страницу или попробуйте позже.`]));
+                dispatch(actions.fetchingFailed([`Поле "${(RussianPracticeFields as any)[field]}" не удалось сохранить. Пожалуйста, перезагрузите страницу или попробуйте позже.`]));
             })
             .finally(() => {
                 stopLoading(dispatch, field)

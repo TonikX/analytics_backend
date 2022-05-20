@@ -28,8 +28,7 @@ class Structure extends React.Component<StructureProps> {
                     <Typography className={classes.generalProvisionsText}>
                         {templateText[TemplateTextPracticeFields.STRUCTURE_AND_CONTENT]}
                     </Typography>
-                    <Input label='Особенности содержания практики'
-                           fieldName={PracticeFields.FEATURES_INTERNSHIP}
+                    <Input fieldName={PracticeFields.FEATURES_INTERNSHIP}
                            multiline
                            rows={2}/>
                 </div>

@@ -27,27 +27,27 @@ class Assessment extends React.Component<AssessmentProps> {
                 <Typography className={classes.generalProvisionsText}>
                     {templateText[TemplateTextPracticeFields.REPORTING_MATERIALS]}
                 </Typography>
-                <Input label='Форма аттестации' fieldName={PracticeFields.FORM_OF_CERTIFICATION_TOOLS}/>
+                <Input fieldName={PracticeFields.FORM_OF_CERTIFICATION_TOOLS}/>
                 <div className={classes.columns}>
                     <div className={classes.leftColumn}>
-                        <Input label='Критерий оценки "отлично"'
-                               fieldName={PracticeFields.PASSED_GREAT_MARK}
-                               multiline
-                               rows={10}/>
-                        <Input label='Критерий оценки "хорошо"'
-                               fieldName={PracticeFields.PASSED_GOOD_MARK}
-                               multiline
-                               rows={10}/>
+                        <Input
+                            fieldName={PracticeFields.PASSED_GREAT_MARK}
+                            multiline
+                            rows={10}/>
+                        <Input
+                            fieldName={PracticeFields.PASSED_GOOD_MARK}
+                            multiline
+                            rows={10}/>
                     </div>
                     <div className={classes.rightColumn}>
-                        <Input label='Критерий оценки "удовлетворительно"'
-                               fieldName={PracticeFields.PASSED_SATISFACTORILY_MARK}
-                               multiline
-                               rows={10}/>
-                        <Input label='Критерий оценки "неудовлетворительно"'
-                               fieldName={PracticeFields.NOT_PASSED_MARK}
-                               multiline
-                               rows={10}/>
+                        <Input
+                            fieldName={PracticeFields.PASSED_SATISFACTORILY_MARK}
+                            multiline
+                            rows={10}/>
+                        <Input
+                            fieldName={PracticeFields.NOT_PASSED_MARK}
+                            multiline
+                            rows={10}/>
                     </div>
                 </div>
             </div>

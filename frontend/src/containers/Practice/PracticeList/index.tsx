@@ -25,6 +25,7 @@ import debounce from "lodash/debounce";
 import Pagination from "@material-ui/lab/Pagination";
 import classNames from "classnames";
 import ArrowDown from "@material-ui/icons/ArrowDropDown";
+import {RussianPracticeFields} from "../constants";
 
 class PracticeList extends React.Component<PracticeListProps> {
 
@@ -89,7 +90,7 @@ class PracticeList extends React.Component<PracticeListProps> {
                                     <TableCell>
                                         <div className={classes.fieldCell}>
                                             <Typography>
-                                                ID
+                                                {RussianPracticeFields[PracticeFields.ID]}
                                             </Typography>
                                             <ArrowDown onClick={this.changeSorting(PracticeFields.ID)}
                                                        className={classNames(classes.sortingArrow,
@@ -100,7 +101,7 @@ class PracticeList extends React.Component<PracticeListProps> {
                                     <TableCell>
                                         <div className={classes.fieldCell}>
                                             <Typography>
-                                                Название
+                                                {RussianPracticeFields[PracticeFields.TITLE]}
                                             </Typography>
                                             <ArrowDown onClick={this.changeSorting(PracticeFields.TITLE)}
                                                        className={classNames(classes.sortingArrow,
@@ -111,7 +112,7 @@ class PracticeList extends React.Component<PracticeListProps> {
                                     <TableCell>
                                         <div className={classes.fieldCell}>
                                             <Typography>
-                                                Авторский состав
+                                                {RussianPracticeFields[PracticeFields.AUTHORS]}
                                             </Typography>
                                             <ArrowDown onClick={this.changeSorting(PracticeFields.AUTHORS)}
                                                        className={classNames(classes.sortingArrow,

@@ -7,6 +7,7 @@ import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import SimpleSelector from "../../../../components/SimpleSelector";
 import InputsLoader from "../../../../components/InputsLoader";
+import {RussianPracticeFields} from "../../constants";
 
 type SelectOption = {
     label: string;
@@ -18,7 +19,6 @@ interface SelectProps extends WithStyles<typeof styles> {
     fieldName: PracticeFields;
     fields: any;
     metaList: Array<SelectOption>;
-    label: string;
     getLoading: (fieldName: string) => boolean,
 }
 
@@ -29,12 +29,12 @@ class Select extends React.Component<SelectProps> {
     }
 
     render() {
-        const {fields, classes, metaList, fieldName, label, getLoading} = this.props;
+        const {fields, classes, metaList, fieldName, getLoading} = this.props;
 
         return (
             <div style={{marginTop: '30px'}}>
                 <InputsLoader loading={getLoading(fieldName)}>
-                    <SimpleSelector label={label}
+                    <SimpleSelector label={RussianPracticeFields[fieldName]}
                                     metaList={metaList}
                                     value={fields[fieldName]}
                                     wrapClass={classes.selectorWrap}

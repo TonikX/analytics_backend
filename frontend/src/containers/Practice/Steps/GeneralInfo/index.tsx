@@ -52,23 +52,23 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                 </Typography>
                 <div className={classes.columns}>
                     <div className={classes.leftColumn}>
-                        <Input label='Код дисциплины' fieldName={PracticeFields.DISCIPLINE_CODE}/>
-                        <Input label='Название' fieldName={PracticeFields.TITLE}/>
-                        <Input label='Год проведения' fieldName={PracticeFields.YEAR}/>
-                        <Input label='Руководитель образовательной программы' fieldName={PracticeFields.OP_LEADER}/>
-                        <Select label='Язык реализации' fieldName={PracticeFields.LANGUAGE} metaList={LANGUAGES}/>
-                        <Input label='Авторский состав' fieldName={PracticeFields.AUTHORS}/>
+                        <Input fieldName={PracticeFields.DISCIPLINE_CODE}/>
+                        <Input fieldName={PracticeFields.TITLE}/>
+                        <Input fieldName={PracticeFields.YEAR}/>
+                        <Input fieldName={PracticeFields.OP_LEADER}/>
+                        <Select fieldName={PracticeFields.LANGUAGE} metaList={LANGUAGES}/>
+                        <Input fieldName={PracticeFields.AUTHORS}/>
                     </div>
                     <div className={classes.rightColumn}>
-                        <Select label='Уровень образования' fieldName={PracticeFields.QUALIFICATION}
+                        <Select fieldName={PracticeFields.QUALIFICATION}
                                 metaList={QUALIFICATIONS}/>
-                        <Select label='Вид практики' fieldName={PracticeFields.KIND_OF_PRACTICE}
+                        <Select fieldName={PracticeFields.KIND_OF_PRACTICE}
                                 metaList={PRACTICE_KINDS}/>
-                        <Select label='Тип практики' fieldName={PracticeFields.TYPE_OF_PRACTICE}
+                        <Select fieldName={PracticeFields.TYPE_OF_PRACTICE}
                                 metaList={PRACTICE_TYPES}/>
-                        <Select label='Способ прохождения практики' fieldName={PracticeFields.WAY_OF_DOING_PRACTICE}
+                        <Select fieldName={PracticeFields.WAY_OF_DOING_PRACTICE}
                                 metaList={PRACTICE_WAYS}/>
-                        <Select label='Формат прохождения практики' fieldName={PracticeFields.FORMAT_PRACTICE}
+                        <Select fieldName={PracticeFields.FORMAT_PRACTICE}
                                 metaList={PRACTICE_FORMATS}/>
                         <SearchSelector label="Структурное подразделение"
                                         changeSearchText={this.handleChangeStructuralUnitSearchText}
