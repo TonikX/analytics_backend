@@ -1,20 +1,17 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import NotFound
-from rest_framework.permissions import AllowAny
-from rest_framework.test import APIRequestFactory, force_authenticate
+from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
 
-from dataprocessing.models import User
 from workprogramsapp.expertise.models import UserExpertise, ExpertiseComments, Expertise
-from workprogramsapp.models import WorkProgram
 from workprogramsapp.expertise.serializers import UserExpertiseSerializer, CommentSerializer, ExpertiseSerializer
+from workprogramsapp.models import WorkProgram
 from workprogramsapp.notifications.models import ExpertiseNotification
 from workprogramsapp.permissions import IsMemberOfExpertise, IsRpdDeveloperOrReadOnly, IsMemberOfUserExpertise, \
-    IsExpertiseMaster, IsWorkProgramMemberOfExpertise, IsOwnerOrReadOnly, IsExpertiseMasterStrict
+    IsExpertiseMaster, IsWorkProgramMemberOfExpertise, IsExpertiseMasterStrict
 from workprogramsapp.workprogram_additions.models import UserStructuralUnit
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-import distutils
 
 
 class UserExpertiseListView(generics.ListAPIView):
@@ -145,6 +142,11 @@ class ChangeExpertiseView(generics.UpdateAPIView):
     serializer_class = ExpertiseSerializer
     permission_classes = [IsExpertiseMasterStrict]
 
+    #
+    # def perform_update(self, serializer):
+    #     if
+    #     serializer.save()
+
 
 class ChangeUserExpertiseView(generics.UpdateAPIView):
     """
@@ -218,3 +220,15 @@ def ExpertiseHistory(request, pk=None):
             previous_date = date_formatted_str
 
     return Response(history_response, status=200)
+
+
+@api_view(['POST'])
+@permission_classes((IsAdminUser,))
+def ChangeStatusesOfExpertiseWP(request):
+    try:
+        wk_status = Expertise.objects.filter(expertise_status="WK")
+        wk_status.update(expertise_status="RE")
+        return Response("Господи, пусть оно ничего не сломает", status=200)
+
+    except:
+        return Response(status=400)

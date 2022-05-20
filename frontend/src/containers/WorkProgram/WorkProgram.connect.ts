@@ -27,7 +27,7 @@ const mapStateToProps = (state:rootState) => {
         workProgramTitle: getWorkProgramField(state, WorkProgramGeneralFields.TITLE),
         workProgramRating: getWorkProgramField(state, WorkProgramGeneralFields.RATING),
         workProgramRatingId: getWorkProgramField(state, WorkProgramGeneralFields.RATING_ID),
-        workProgramStatus: getWorkProgramField(state, 'expertise_status') || 'WK',
+        workProgramStatus: getWorkProgramField(state, 'expertise_status') || getWorkProgramField(state, 'work_status'),
         notificationsRead: getWorkProgramNotificationsUnread(state),
         canSendToArchive: isCanArchive(state),
         canAddToFolder: isCanAddToFolder(state),

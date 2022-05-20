@@ -181,6 +181,7 @@ export enum WorkProgramStatusEnum {
     EXPERTISE = 'EX',
     APPROVE = 'AC',
     ARCHIVE = 'AR',
+    REWORK = 'RE',
 }
 
 export enum IntermediateCertificationEnum {

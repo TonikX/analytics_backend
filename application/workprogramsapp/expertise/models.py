@@ -31,10 +31,23 @@ class Expertise(models.Model):
         ('WK', 'В работе'),
         ('EX', 'На экспертизе'),
         ('AC', 'Одобрено'),
-        ('AR', 'Архив')
+        ('AR', 'Архив'),
+        ('RE', 'На доработке')
     ]
 
-    work_program = models.ForeignKey('WorkProgram', related_name='expertise_with_rpd', on_delete=models.CASCADE)
+    TYPE_CHOICES = [
+        ('WP', 'Рабочая программа'),
+        ('GIA', 'ГИА'),
+        ('PRAC', 'Практики'),
+    ]
+
+    work_program = models.ForeignKey('WorkProgram', related_name='expertise_with_rpd', on_delete=models.CASCADE, blank=True, null=True)
+    gia = models.ForeignKey('gia_practice_app.GIA', related_name='expertise_with_gia', on_delete=models.CASCADE, blank=True, null=True)
+    practice = models.ForeignKey('gia_practice_app.Practice', related_name='expertise_with_practice', on_delete=models.CASCADE,
+                                 blank=True, null=True)
+
+    expertise_type = models.CharField(choices=TYPE_CHOICES, max_length=1024, verbose_name="Тип экспертизы", blank=True,
+                                      null=True)
     expertise_status = models.CharField(choices=STATUS_CHOICES, max_length=1024, verbose_name="Статус экспертизы",
                                         default='EX')
     experts = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Эксперты', through=UserExpertise,

@@ -1,10 +1,9 @@
+import datetime
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from analytics_project import settings
-
-import datetime
-
 from .consts_for_models import *
 
 
@@ -72,6 +71,9 @@ class GIA(models.Model):
     gia_base = models.ForeignKey('GIABaseTemplate', on_delete=models.SET_NULL,
                                  verbose_name='Базовый шаблон ГИА',
                                  related_name='gia_heir', blank=True, null=True)
+
+    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors_gia", verbose_name="Редакторы РПД",
+                                     blank=True, null=True)
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year], blank=True, null=True)
     authors = models.CharField(max_length=1024, verbose_name="Авторский состав")

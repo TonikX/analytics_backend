@@ -77,7 +77,7 @@ class WorkProgramsListApi(generics.ListAPIView):
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile', 'qualification',
                         'prerequisites', 'outcomes', 'structural_unit__title',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__title',
-                        'editors__last_name', 'editors__first_name'
+                        'editors__last_name', 'editors__first_name', 'work_status'
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -555,8 +555,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 {"expertise_status": Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status})
             newdata.update(
                 {"use_chat_with_id_expertise": Expertise.objects.get(work_program__id=self.kwargs['pk']).pk})
-            if Expertise.objects.get(
-                    work_program__id=self.kwargs['pk']).expertise_status == "WK" and (WorkProgram.objects.get(
+            if (Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK" or
+                Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "RE") and (WorkProgram.objects.get(
                 pk=self.kwargs['pk']).owner == request.user or WorkProgram.objects.filter(pk=self.kwargs['pk'],
                                                                                           editors__in=[request.user])):
                 newdata.update({"can_edit": True})
@@ -583,8 +583,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             else:
                 raise ValueError
 
-            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX" or \
-                    Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK":
+            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status in ["EX", "WK", "RE"]:
                 newdata.update({"can_comment": True})
                 newdata.update({"user_expertise_id": ue.id})
             else:

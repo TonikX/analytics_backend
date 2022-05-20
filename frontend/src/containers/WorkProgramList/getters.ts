@@ -36,3 +36,4 @@ export const getSortingMode = (state: rootState) => get(getSorting(state), field
 
 export const getFilters = (state: rootState): FiltersType => get(getStateData(state), fields.FILTERING)
 export const getShowOnlyMy = (state: rootState): FiltersType => get(getFilters(state), filterFields.ONLY_MY)
+export const getShowArchive = (state: rootState): FiltersType => get(getFilters(state), filterFields.ARCHIVE)

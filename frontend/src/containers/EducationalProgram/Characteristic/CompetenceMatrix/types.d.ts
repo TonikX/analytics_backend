@@ -11,11 +11,19 @@ type AttachIndicatorProps = {
 
 type TableContentProps = {
     attachIndicator: (props: AttachIndicatorProps) => void;
+    setIndicators: (indicators : {label: string, value: number}[]) => void;
     keyCompetences: Competence[];
     generalProfCompetences: Competence[];
     profCompetences: Competence[];
     overProfCompetences: Competence[];
 };
+
+type CompetencesRowProps = {
+    keyCompetences: Competence[];
+    generalProfCompetences: Competence[];
+    profCompetences: Competence[];
+    overProfCompetences: Competence[];
+}
 
 type CompetencesHeaderProps = {
     competences: Competence[];

@@ -10,7 +10,8 @@ import {
     getAllCount,
     getSortingMode,
     getSortingField,
-    getShowOnlyMy
+    getShowOnlyMy,
+    getShowArchive
 } from './getters';
 
 import {rootState} from "../../store/reducers";
@@ -24,6 +25,7 @@ const mapStateToProps = (state: rootState) => {
         sortingField: getSortingField(state),
         sortingMode: getSortingMode(state),
         showOnlyMy: getShowOnlyMy(state),
+        showArchive: getShowArchive(state),
     };
 };
 
