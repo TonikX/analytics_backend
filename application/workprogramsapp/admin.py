@@ -13,6 +13,7 @@ from .models import (
     СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
     OnlineCourse, WorkProgramIdStrUpForIsu
 )
+from .models import WorkProgramSource
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, SkillsOfRole, \
     Role, ProfessionalAreaOfGeneralCharacteristics, ProfessionalStandard
@@ -65,6 +66,7 @@ admin.site.register(Topic)
 admin.site.register(RouteComposition)
 admin.site.register(Route)
 admin.site.register(Certification)
+admin.site.register(WorkProgramSource)
 admin.site.register(BibliographicReference)
 admin.site.register(AcademicPlan)
 admin.site.register(DisciplineBlock)

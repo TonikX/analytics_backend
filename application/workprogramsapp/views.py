@@ -2,6 +2,8 @@ import json
 import os
 import re
 import pandas
+import requests as rq
+from html import unescape
 from django.shortcuts import get_object_or_404
 from collections import OrderedDict
 from django.http import HttpResponse
@@ -22,6 +24,7 @@ from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeI
 from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
+from .models import WorkProgramSource
 # Права доступа
 from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor
 from .notifications.models import UserNotification
@@ -37,10 +40,10 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
 from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, WorkProgramInFieldOfStudySerializerForCb, WorkProgramInFieldOfStudyForCompeteceListSerializer
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer,  ZunForManyCreateSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
+from .serializers import SourceSerializer, SourceForWorkProgramSerializer, WorkProgramSourceUpdateSerializer
 from .serializers import BibliographicReferenceSerializer, \
-    WorkProgramBibliographicReferenceUpdateSerializer, \
-    PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
-    IndicatorListSerializer
+    WorkProgramBibliographicReferenceUpdateSerializer, PrerequisitesOfWorkProgramCreateSerializer, \
+    EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer
@@ -970,6 +973,52 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
 
 # Блок эндпоинтов рабочей программы
 
+class WorkProgramSourceListCreateAPIView(generics.ListCreateAPIView):
+    serializer_class = SourceSerializer
+    queryset = WorkProgramSource.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['author', 'description']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class WorkProgramSourceDestroyView(generics.DestroyAPIView):
+    queryset = WorkProgramSource.objects.all()
+    serializer_class = SourceSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class WorkProgramSourceUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgramSource.objects.all()
+    serializer_class = SourceSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class WorkProgramSourceDetailsView(generics.RetrieveAPIView):
+    queryset = WorkProgramSource.objects.all()
+    serializer_class = SourceSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class WorkProgramWorkProgramSourceUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramSourceUpdateSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class WorkProgramSourceInWorkProgramList(generics.ListAPIView):
+    serializer_class = SourceSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def list(self, request, **kwargs):
+        """
+        Вывод всех результатов для одной рабочей программы по id
+        """
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        # queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        queryset = WorkProgram.objects.get(id=self.kwargs['workprogram_id']).source.all()
+        serializer = SourceSerializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 class BibliographicReferenceListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = BibliographicReferenceSerializer
@@ -1016,6 +1065,139 @@ class BibliographicReferenceInWorkProgramList(generics.ListAPIView):
         queryset = WorkProgram.objects.get(id=self.kwargs['workprogram_id']).bibliographic_reference.all()
         serializer = BibliographicReferenceSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+def SearchInEBSCO(request):
+
+    # auth
+    def get_auth_token(user_id, password):
+        headers = {"Content-Type": "application/json", "Accept": "application/json"}
+        data = {"UserId": user_id, "Password": password, "interfaceid": "edsapi"}
+        url = f"https://eds-api.ebscohost.com/authservice/rest/uidauth"
+
+        request = rq.post(url, headers=headers, data=json.dumps(data))
+        return request.text
+
+    # create session
+    def get_session_token(profile_id, auth_token):
+        headers = {"Content-Type": "application/json", "Accept": "application/json",
+                   "x-authenticationToken": json.loads(auth_token)["AuthToken"]}
+        url = f"https://eds-api.ebscohost.com/edsapi/rest/createsession?profile={profile_id}"
+
+        request = rq.get(url, headers=headers)
+        return request.text
+
+    # search request
+    def search(term, auth_token, session_token):
+        headers = {"Content-Type": "application/json", "Accept": "application/json",
+                   "x-authenticationToken": json.loads(auth_token)["AuthToken"],
+                   "x-sessionToken": json.loads(session_token)["SessionToken"]}
+        url = f"https://eds-api.ebscohost.com/edsapi/rest/search?query={term}&view=detailed&highlight=n"
+
+        request = rq.get(url, headers=headers)
+        print(request.text)
+        return request.text
+
+    # parse data from response
+    # Обработка ЭБС Лань из Сводного Каталога ИТМО
+    def extract_ref_from_lan(record_data):
+        ab_list = []
+        for item in record_data["Items"]:
+            if item["Name"] == "Abstract":
+                ab_list.append(item["Data"])
+        for abstract in ab_list:
+            if "Библиографичекское описание:" in abstract:
+                ref = abstract[29:]
+                return ref
+
+    # Очистка библиографической ссылки от ненужных символов
+    def clean_text(bib_ref):
+        # clean_bib_ref = bib_ref
+        # elements_to_delete = []
+        # for elem in elements_to_delete:
+        #     clean_bib_ref = clean_bib_ref.replace(elem, "")
+        if bib_ref is not None:
+            bib_ref = delete_html(unescape(bib_ref))
+
+        return bib_ref
+
+    def search_author(record):
+        item_list = []
+        for item in record["Items"]:
+            if item["Label"] == "Authors":
+                item_list.append(item["Data"])
+
+        items = ''
+
+        for item in item_list:
+            items += item
+        return items
+
+    def search_title(record):
+        item_list = []
+        for item in record["Items"]:
+            if item["Label"] == "Title":
+                item_list.append(item["Data"])
+
+        items = ''
+
+        for item in item_list:
+            items += item
+        return items
+
+    def search_publishing(record):
+        pass
+
+    def delete_html(text):
+        return re.sub(r'<.*?>', '', text)
+
+    def search_year(record):
+        year = None
+        try:
+            year = record["RecordInfo"]["BibRecord"]["BibRelationships"]["IsPartOfRelationships"][0]["BibEntity"]["Dates"][0]["Y"]
+            return year
+        except Exception as e:
+            print(e)
+
+
+    def make_object(record):
+        object = {
+            "Author": clean_text(search_author(record)),
+            "Title": clean_text(search_title(record)),
+            "Publishing": clean_text(search_publishing(record)),
+            "Year": clean_text(search_year(record))
+        }
+
+        return object
+
+    query = request.query_params["query"]
+
+    userid = "|ocy(tb.e2k_c)~xf*pi"
+    pwd = "C4bfek8Mo7.BpPpGuO-M"
+    profile = "edsapi"
+
+    auth_token = get_auth_token(userid, pwd)
+
+    session_token = get_session_token(profile, auth_token)
+
+    s = json.loads(search(query, auth_token, session_token))
+
+    records = s["SearchResult"]["Data"]["Records"]
+    sources = []
+
+    for record in records:
+        sources.append(make_object(record))
+    return Response({"sources": sources})
+
+    # refs = []
+    #
+    # for record in records:
+    #     ref = clean_ref(extract_ref_from_lan(record))
+    #     if ref is not None:
+    #         refs.append(ref)
+
+    # return Response({"sources": refs})
 
 
 class EvaluationToolInWorkProgramList(generics.ListAPIView):

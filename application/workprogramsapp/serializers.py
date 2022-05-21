@@ -9,6 +9,7 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool
 from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer
 from onlinecourse.serializers import OnlineCourseSerializer
+from .models import WorkProgramSource
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
@@ -203,6 +204,13 @@ class SectionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class SourceSerializer(serializers.ModelSerializer):
+   """Сериализатор Источников РПД"""
+
+   class Meta:
+       model = WorkProgramSource
+       fields = "__all__"
+
 class BibliographicReferenceSerializer(serializers.ModelSerializer):
     """Сериализатор Разделов"""
 
@@ -244,14 +252,26 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester', 'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours', 'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters']
+        fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester',
+                  'hoursSecondSemester', 'work_program_source', 'bibliographic_reference', 'description', 'video',
+                  'owner', 'editors', 'hours', 'extra_points', 'language', 'structural_unit', 'bars',
+                  'number_of_semesters']
         extra_kwargs = {
+            'work_program_source': {'required': False},
             'bibliographic_reference': {'required': False}
         }
 
 
+class SourceForWorkProgramSerializer(serializers.ModelSerializer):
+    """Сериализатор """
+
+    class Meta:
+        model = WorkProgramSource
+        fields = ['id']
+
+
 class BibliographicReferenceForWorkProgramSerializer(serializers.ModelSerializer):
-    """Сериализатор Разделов"""
+    """Сериализатор """
 
     class Meta:
         model = BibliographicReference
@@ -262,6 +282,13 @@ class Geeks(object):
     def __init__(self, dictonary):
         self.dict = bibliographic_references
 
+
+class WorkProgramSourceUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания рабочих программ"""
+
+    class Meta:
+        model = WorkProgram
+        fields = ['source']
 
 class WorkProgramBibliographicReferenceUpdateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания рабочих программ"""
@@ -699,6 +726,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     #discipline_sections = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
     discipline_sections = DisciplineSectionSerializer(many = True)
     discipline_certification = CertificationSerializer(many = True)
+    source = SourceSerializer(many=True, required=False)
     bibliographic_reference = BibliographicReferenceSerializer(many = True, required=False)
     work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many = True)
     expertise_with_rpd = ShortExpertiseSerializer(many = True, read_only=True)
@@ -710,11 +738,11 @@ class WorkProgramSerializer(serializers.ModelSerializer):
         model = WorkProgram
         fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes',
                   'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification',
-                  'bibliographic_reference', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd',
-                  'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors', 'language',
-                  'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
-                  'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
-                  'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'number_of_semesters']
+                  'source', 'bibliographic_reference', 'description', 'video', 'work_program_in_change_block',
+                  'expertise_with_rpd', 'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors',
+                  'language', 'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
+                  'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2', 'practice_hours_v2',
+                  'lab_hours_v2', 'srs_hours_v2', 'number_of_semesters']
 
     def create(self, validated_data):
         """

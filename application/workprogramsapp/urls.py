@@ -69,7 +69,9 @@ from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateVie
 from .views import NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
-    FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, FileUploadWorkProgramOutcomesAPIView
+    FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, FileUploadWorkProgramOutcomesAPIView, SearchInEBSCO
+from .views import WorkProgramSourceListCreateAPIView, WorkProgramSourceDetailsView, WorkProgramSourceDestroyView, \
+    WorkProgramSourceUpdateView, WorkProgramWorkProgramSourceUpdateView, WorkProgramSourceInWorkProgramList
 from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, IndicatorUpdateView
 from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlanDetailsView, ImplementationAcademicPlanDestroyView, ImplementationAcademicPlanUpdateView, ImplementationAcademicPlanListAPIView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
@@ -189,6 +191,16 @@ urlpatterns = [
     # Работа с образовательными программами
     path('api/fieldofstudy/', FieldOfStudyListCreateView.as_view()),
     path('api/fieldofstudy/<int:pk>', FieldOfStudyDetailUpdateDeleteView.as_view()),
+
+    # Источники
+    path('api/WorkProgramSources', WorkProgramSourceListCreateAPIView.as_view()),
+    path('api/WorkProgramSources/create', WorkProgramSourceListCreateAPIView.as_view()),
+    path('api/WorkProgramSources/detail/<int:pk>', WorkProgramSourceDetailsView.as_view()),
+    path('api/WorkProgramSources/delete/<int:pk>', WorkProgramSourceDestroyView.as_view()),
+    path('api/WorkProgramSources/update/<int:pk>', WorkProgramSourceUpdateView.as_view()),
+    path('api/WorkProgramSources/SearchInEbsco', SearchInEBSCO),
+    path('api/SourceInWorkprogram/<int:workprogram_id>',
+         WorkProgramSourceInWorkProgramList.as_view()),
 
     # Библиографическая ссылка
     path('api/BibliographicReference', BibliographicReferenceListCreateAPIView.as_view()),
