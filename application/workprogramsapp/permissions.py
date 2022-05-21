@@ -224,3 +224,5 @@ class IsDisciplineBlockModuleEditor(permissions.BasePermission):
     @staticmethod
     def check_access(module_id: int, user: User) -> bool:
         return DisciplineBlockModule.objects.filter(pk=module_id, editors=user).exists()
+
+

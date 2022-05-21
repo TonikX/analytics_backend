@@ -83,7 +83,8 @@ class Practice(models.Model):
         ('ind-tech', 'технологическая (проектно-технологическая) / Industrial and tech Internship'),
         ('teh-proj-tech-intet', 'технологическая (проектно-технологическая)/ Tech Project Internship'),
         ('tech-proj-tech', 'технологическая (проектно-технологическая)'),
-        ('senior-inter', 'эксплуатационная; преддипломная, преддипломная / Senior internship'),
+        ("expl", 'эксплуатационная'),
+        ('senior-inter', 'преддипломная, преддипломная / Senior internship'),
         ('inter', 'стажировка'),
     )
     discipline_code = models.IntegerField(max_length=1024, blank=True, null=True)
