@@ -141,7 +141,7 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
                             />
                         </Typography>
                         <Typography className={classes.profCell}>
-                            Профессиональный стандарт
+                            Наименование области проф. деятельности
                             <SortingButton changeMode={this.changeSorting(ProfessionalStandardFields.NAME)}
                                            mode={sortingField === ProfessionalStandardFields.NAME ? sortingMode : ''}
                             />

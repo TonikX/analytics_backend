@@ -51,6 +51,6 @@ export default makeStyles((theme: Theme) => createStyles({
         width: '200px',
     },
     competenceCell: {
-        width: '50%'
+        width: '30%'
     }
 }));

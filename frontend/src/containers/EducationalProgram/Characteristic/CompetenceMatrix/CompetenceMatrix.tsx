@@ -21,19 +21,28 @@ import {
     ModuleWorkProgram, ContentByAcademicPlanProps,
     WorkProgramChangeInDisciplineBlockModule,
     TableContentProps, CompetencesHeaderProps,
-    AttachIndicatorProps,
+    AttachIndicatorProps, CompetencesRowProps,
 } from "./types";
 
 const EMPTY = '\u00A0';
 
-const CompetencesHeader = ({competences}: CompetencesHeaderProps) => {
+const CompetencesCell = ({competences}: CompetencesHeaderProps) => {
     const classes = useStyles();
     return (
-        <TableCell variant="head">
+        <TableCell variant="head" className={classes.competenceTableHeading}>
             <div className={classes.competenceHeader}>
                 {
-                    competences.map((el, index) =>
-                        <div className={classes.competenceHeaderCell} key={index}>{el.number}</div>
+                    competences.map((el, index) => {
+                            return (
+                                <Tooltip
+                                    key={index}
+                                    title={el.name}
+                                    className={classes.competenceCell}
+                                    arrow
+                                >
+                                    <div className={classes.competenceHeaderCell} key={index}>{el.number}</div>
+                                </Tooltip>)
+                        }
                     )
                 }
             </div>
@@ -41,9 +50,23 @@ const CompetencesHeader = ({competences}: CompetencesHeaderProps) => {
     )
 };
 
+const CompetencesRow = (
+    {keyCompetences, overProfCompetences, generalProfCompetences, profCompetences}: CompetencesRowProps
+) => {
+    return (
+        <>
+            <CompetencesCell competences={keyCompetences}/>
+            <CompetencesCell competences={overProfCompetences}/>
+            <CompetencesCell competences={generalProfCompetences}/>
+            <CompetencesCell competences={profCompetences}/>
+        </>
+    )
+};
+
 const ContentByAcademicPlan = (
     {
         attachIndicator,
+        setIndicators,
         academicPlan,
         keyCompetences,
         profCompetences,
@@ -75,24 +98,40 @@ const ContentByAcademicPlan = (
         }
 
         const intersect = (sourceCompetence: Competence) => {
-            let textContent = EMPTY;
+            let intersects = false;
             for (const competence of ownCompetences) {
                 if (competence.id === sourceCompetence.id) {
-                    textContent = 'x';
+                    intersects = true;
                     break;
                 }
             }
 
-            return textContent;
+            return intersects;
         };
 
-        const setModalData = (competence: {value: number; label: string}) => {
+        const setModalData = (competence: { value: number; label: string }) => {
             attachIndicator({competence, workProgramId: workProgram.id});
         };
 
         const getTooltipTitle = (sourceCompetence: Competence) => {
             const zuns = ownCompetences.find(it => it.id === sourceCompetence.id)?.zuns || [];
             return zuns.map((zun => zun.indicator.number)).join(" ")
+        };
+
+        const onItemCellClick = (sourceCompetence: Competence) => {
+            if (intersect(sourceCompetence)) {
+                const indicators = ownCompetences.find(it => it.id === sourceCompetence.id)?.zuns.map(it => {
+                    return {
+                        label: `${it.indicator.number}`,
+                        value: it.indicator.id,
+                    }
+                }) || [];
+                setIndicators(indicators);
+            }
+            setModalData({
+                label: sourceCompetence.name,
+                value: sourceCompetence.id,
+            });
         };
 
 
@@ -106,10 +145,10 @@ const ContentByAcademicPlan = (
                             className={classes.competenceCell}
                             arrow
                         >
-                            <div className={classes.intersection} onClick={() => setModalData({
-                                label: sourceCompetence.name,
-                                value: sourceCompetence.id,
-                            })}>{intersect(sourceCompetence)}</div>
+                            <div className={
+                                intersect(sourceCompetence) ? classes.intersection : classes.noIntersection
+                            } onClick={() => onItemCellClick(sourceCompetence)}>x
+                            </div>
                         </Tooltip>
                     )
                 })
@@ -117,45 +156,44 @@ const ContentByAcademicPlan = (
         </div>
     };
 
-    return (
-        <>
-            {academicPlan.discipline_blocks_in_academic_plan.map((item, itemIndex) =>
-                <React.Fragment key={itemIndex}>
-                    {/*Учебный план*/}
-                    <TableRow className={classes.tableHeading}>
-                        <TableCell align="center" colSpan={7}>{item.name}</TableCell>
-                    </TableRow>
-                    {/*Модули учебного плана*/}
-                    {item.modules_in_discipline_block.map((moduleBlock: DisciplineModule, blockIndex: number) =>
-                        <React.Fragment key={blockIndex}>
-                            <TableRow
-                                key={`row-${blockIndex}`} selected={true}
-                            >
-                                {
-                                    new Array(7)
-                                        .fill(EMPTY)
-                                        .map((item, index) => {
-                                            // В одной ячейке заголовок, остальные ячейки пустые
-                                            return <TableCell>{index === 2 ? moduleBlock.name : item}</TableCell>
-                                        })
-                                }
-                            </TableRow>
-                            {/*Дисциплины*/}
-                            {moduleBlock.change_blocks_of_work_programs_in_modules.map((block: WorkProgramChangeInDisciplineBlockModule) =>
-                                block.work_program.map((wp: ModuleWorkProgram, elIndex: number) =>
-                                    <TableRow key={`wp-${elIndex}`}>
-                                        <TableCell>{EMPTY}</TableCell>
-                                        <TableCell>{EMPTY}</TableCell>
-                                        <TableCell className={classes.rowWithPadding}>{wp.title}</TableCell>
-                                        <TableCell>{getCompetencesContent(wp, 'key')}</TableCell>
-                                        <TableCell>{getCompetencesContent(wp, 'prof')}</TableCell>
-                                        <TableCell>{getCompetencesContent(wp, 'general-prof')}</TableCell>
-                                        <TableCell>{getCompetencesContent(wp, 'over-prof')}</TableCell>
-                                    </TableRow>))}
-                        </React.Fragment>)}
-                </React.Fragment>)}
-        </>
-    )
+    return <>
+        {academicPlan.discipline_blocks_in_academic_plan.map((item, itemIndex) =>
+            <React.Fragment key={itemIndex}>
+                {/*Учебный план*/}
+                <TableRow className={classes.tableHeading}>
+                    <TableCell align="center" colSpan={7}>{item.name}</TableCell>
+                </TableRow>
+                {/*Модули учебного плана*/}
+                {item.modules_in_discipline_block.map((moduleBlock: DisciplineModule, blockIndex: number) =>
+                    <React.Fragment key={blockIndex}>
+                        <TableRow
+                            key={`row-${blockIndex}`} selected={true} className={classes.sectionRow}
+                        >
+                            <TableCell>{moduleBlock.name}</TableCell>
+                            <CompetencesRow
+                                overProfCompetences={overProfCompetences}
+                                keyCompetences={keyCompetences}
+                                profCompetences={profCompetences}
+                                generalProfCompetences={generalProfCompetences}
+                            />
+                        </TableRow>
+                        {/*Дисциплины*/}
+                        {moduleBlock.change_blocks_of_work_programs_in_modules.map((block: WorkProgramChangeInDisciplineBlockModule) =>
+                            block.work_program.map((wp: ModuleWorkProgram, elIndex: number) =>
+                                <TableRow key={`wp-${elIndex}`}>
+                                    <TableCell className={classes.rowWithPadding}>{wp.title}</TableCell>
+                                    <TableCell
+                                        className={classes.noPaddingCells}>{getCompetencesContent(wp, 'key')}</TableCell>
+                                    <TableCell
+                                        className={classes.noPaddingCells}>{getCompetencesContent(wp, 'over-prof')}</TableCell>
+                                    <TableCell
+                                        className={classes.noPaddingCells}>{getCompetencesContent(wp, 'general-prof')}</TableCell>
+                                    <TableCell
+                                        className={classes.noPaddingCells}>{getCompetencesContent(wp, 'prof')}</TableCell>
+                                </TableRow>))}
+                    </React.Fragment>)}
+            </React.Fragment>)}
+    </>
 };
 
 const transformCompetences = (items: CommonCompetence[]): Competence[] => items.map(it => it.competence);
@@ -178,9 +216,11 @@ const TableContent = (tableContentProps: TableContentProps) => {
 
 export default () => {
     const dispatch = useDispatch();
+    const classes = useStyles();
     const competenceMatrixId = useSelector(getEducationalProgramCharacteristicId);
     const [isOpen, setIsOpen] = useState(false);
     const [defaultCompetence, setDefaultCompetence] = useState();
+    const [indicators, setIndicators] = useState([] as { label: string; value: number } []);
     const [workProgramId, setWorkProgramId] = useState(-1);
 
     useEffect(() => {
@@ -206,25 +246,27 @@ export default () => {
     return (
         <div>
             <TableContainer>
-                <Table stickyHeader size='small'>
+                <Table size='small' className={classes.tableHeight}>
                     <TableHead>
                         <TableRow>
                             {
-                                MATRIX_HEADINGS.map((heading, index) => <TableCell key={index}>{heading}</TableCell>)
+                                MATRIX_HEADINGS.map((heading, index) => <TableCell
+                                    className={classes.competenceTableHeading} key={index}>{heading}</TableCell>)
                             }
                         </TableRow>
                         <TableRow>
-                            <TableCell variant="head">{EMPTY}</TableCell>
-                            <TableCell variant="head">{EMPTY}</TableCell>
-                            <TableCell variant="head">{EMPTY}</TableCell>
-                            <CompetencesHeader competences={keyCompetences}/>
-                            <CompetencesHeader competences={profCompetences}/>
-                            <CompetencesHeader competences={generalProfCompetences}/>
-                            <CompetencesHeader competences={overProfCompetences}/>
+                            <TableCell className={classes.competenceTableHeading} variant="head">{EMPTY}</TableCell>
+                            <CompetencesRow
+                                overProfCompetences={overProfCompetences}
+                                keyCompetences={keyCompetences}
+                                profCompetences={profCompetences}
+                                generalProfCompetences={generalProfCompetences}
+                            />
                         </TableRow>
                     </TableHead>
-                    <TableBody>
+                    <TableBody className={classes.table}>
                         <TableContent
+                            setIndicators={setIndicators}
                             attachIndicator={attachIndicator}
                             keyCompetences={keyCompetences}
                             profCompetences={profCompetences}
@@ -238,6 +280,7 @@ export default () => {
             <IndicatorsDialog
                 isOpen={isOpen}
                 handleClose={() => setIsOpen(false)}
+                addedIndicators={indicators}
                 defaultCompetence={defaultCompetence}
                 workProgramId={workProgramId}
             />
