@@ -6,6 +6,8 @@ import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Button from "@material-ui/core/Button";
 import {fieldToStep, STEPS} from "../../constants";
+import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
 
 interface SendToExpertiseProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -43,12 +45,16 @@ class SendToExpertise extends React.Component<SendToExpertiseProps> {
                 </Button>
             )
         }
-         // todo тултип с информацией про кнопку
-        // Для отправления на экспертизу нужно исправить ошибки. Нажмите, чтобы к ним перейти
         return (
-            <Button variant='outlined' onClick={this.handleClick}>
-                Перейти к ошибкам
-            </Button>
+            <Tooltip title={
+                <Typography variant='body1'>
+                    Для отправления на экспертизу нужно исправить ошибки. Нажмите, чтобы к ним перейти
+                </Typography>
+            }>
+                <Button variant='outlined' onClick={this.handleClick}>
+                    Перейти к ошибкам
+                </Button>
+            </Tooltip>
         )
     }
 }
