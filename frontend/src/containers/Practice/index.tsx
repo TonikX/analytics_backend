@@ -7,19 +7,14 @@ import styles from "./Practice.styles";
 import connect from './Practice.connect';
 import {PracticeProps} from "./types";
 import get from "lodash/get";
-import {PracticeFields, PracticeStepsRussianList} from "./enum";
+import {PracticeFields} from "./enum";
 import Step from "@material-ui/core/Step";
 import StepButton from "@material-ui/core/StepButton";
 import Stepper from "@material-ui/core/Stepper";
-import GeneralInfo from "./Steps/GeneralInfo";
-import Assessment from "./Steps/Assessment";
-import Literature from "./Steps/Literature";
-import GeneralProvisions from "./Steps/GeneralProvisions";
-import Structure from "./Steps/Structure";
-import ReportingMaterials from "./Steps/ReportingMaterials";
-import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
 import ErrorPage from "../../components/ErrorPage";
 import Download from "./components/Download";
+import SendToExpertise from "./components/SendToExpertise";
+import {STEPS} from "./constants";
 
 class Practice extends React.Component<PracticeProps> {
 
@@ -27,10 +22,8 @@ class Practice extends React.Component<PracticeProps> {
         activeStep: 0,
     };
 
-    stepNameList = PracticeStepsRussianList;
-
-    stepList = [<GeneralInfo/>, <GeneralProvisions/>, <Structure/>, <ReportingMaterials/>, <DisabledPeopleInfo/>,
-        <Assessment/>, <Literature/>]
+    stepList = STEPS.map(step => step.component);
+    stepNameList = STEPS.map(step => step.name);
 
     getPracticeId = () => get(this, 'props.match.params.id');
 
@@ -48,12 +41,20 @@ class Practice extends React.Component<PracticeProps> {
         this.props.actions.getPractice(this.getPracticeId());
     }
 
-    openStep = (index: number) => () => {
+    handleOpenStep = (index: number) => () => {
         this.setState({
             ...this.state,
             activeStep: index,
         })
     }
+
+    openStep = (index: number) => {
+        this.setState({
+            ...this.state,
+            activeStep: index,
+        })
+    }
+
 
     render() {
         const {classes, isError} = this.props;
@@ -72,7 +73,7 @@ class Practice extends React.Component<PracticeProps> {
                 >
                     {Object.values(this.stepNameList).map((label, index) => {
                         return (
-                            <Step key={index} onClick={this.openStep(index)}>
+                            <Step key={index} onClick={this.handleOpenStep(index)}>
                                 <StepButton completed={false}
                                             style={{textAlign: 'left',}}
                                 >
@@ -89,6 +90,7 @@ class Practice extends React.Component<PracticeProps> {
                 </div>
                 <div>
                     <Download/>
+                    <SendToExpertise openStep={this.openStep}/>
                 </div>
             </Paper>
         )

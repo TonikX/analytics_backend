@@ -2,11 +2,19 @@ import {
     Languages,
     PracticeFields,
     PracticeFormats,
-    PracticeKinds,
+    PracticeKinds, PracticeSteps,
     PracticeTypes,
     PracticeWays,
     Qualifications
 } from "./enum";
+import GeneralInfo from "./Steps/GeneralInfo";
+import GeneralProvisions from "./Steps/GeneralProvisions";
+import Structure from "./Steps/Structure";
+import ReportingMaterials from "./Steps/ReportingMaterials";
+import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
+import Assessment from "./Steps/Assessment";
+import Literature from "./Steps/Literature";
+import React from "react";
 
 export const LANGUAGES = [
     {
@@ -199,4 +207,61 @@ export const RussianPracticeFields = {
     [PracticeFields.NOT_PASSED_MARK]: 'Критерий оценки "неудовлетворительно"',
     [PracticeFields.STRUCTURAL_UNIT]: 'Структурное подразделение',
     [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: 'Источники',
-}
+};
+
+export const fieldToStep = new Map(Object.entries({
+    [PracticeFields.ID]: PracticeSteps.GENERAL,
+    [PracticeFields.PRACTICE_BASE]: PracticeSteps.GENERAL,
+    [PracticeFields.DISCIPLINE_CODE]: PracticeSteps.GENERAL,
+    [PracticeFields.TITLE]: PracticeSteps.GENERAL,
+    [PracticeFields.YEAR]: PracticeSteps.GENERAL,
+    [PracticeFields.AUTHORS]: PracticeSteps.GENERAL,
+    [PracticeFields.OP_LEADER]: PracticeSteps.GENERAL,
+    [PracticeFields.LANGUAGE]: PracticeSteps.GENERAL,
+    [PracticeFields.QUALIFICATION]: PracticeSteps.GENERAL,
+    [PracticeFields.KIND_OF_PRACTICE]: PracticeSteps.GENERAL,
+    [PracticeFields.TYPE_OF_PRACTICE]: PracticeSteps.GENERAL,
+    [PracticeFields.WAY_OF_DOING_PRACTICE]: PracticeSteps.GENERAL,
+    [PracticeFields.FORMAT_PRACTICE]: PracticeSteps.GENERAL,
+    [PracticeFields.STRUCTURAL_UNIT]: PracticeSteps.GENERAL,
+    [PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP]: PracticeSteps.GENERAL_PROVISIONS,
+    [PracticeFields.FEATURES_INTERNSHIP]: PracticeSteps.STRUCTURE,
+    [PracticeFields.ADDITIONAL_REPORTING_MATERIALS]: PracticeSteps.REPORTING_MATERIALS,
+    [PracticeFields.FORM_OF_CERTIFICATION_TOOLS]: PracticeSteps.EVALUATION_METHODS,
+    [PracticeFields.PASSED_GREAT_MARK]: PracticeSteps.EVALUATION_METHODS,
+    [PracticeFields.PASSED_GOOD_MARK]: PracticeSteps.EVALUATION_METHODS,
+    [PracticeFields.PASSED_SATISFACTORILY_MARK]: PracticeSteps.EVALUATION_METHODS,
+    [PracticeFields.NOT_PASSED_MARK]: PracticeSteps.EVALUATION_METHODS,
+    [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: PracticeSteps.REFERENCES,
+}));
+
+export const STEPS = [
+    {
+        name: PracticeSteps.GENERAL,
+        component: <GeneralInfo/>,
+    },
+    {
+        name: PracticeSteps.GENERAL_PROVISIONS,
+        component: <GeneralProvisions/>,
+    },
+    {
+        name: PracticeSteps.STRUCTURE,
+        component: <Structure/>,
+    },
+    {
+        name: PracticeSteps.REPORTING_MATERIALS,
+        component: <ReportingMaterials/>,
+    },
+    {
+        name: PracticeSteps.OVZ,
+        component: <DisabledPeopleInfo/>,
+    },
+    {
+        name: PracticeSteps.EVALUATION_METHODS,
+        component: <Assessment/>,
+    },
+    {
+        name: PracticeSteps.REFERENCES,
+        component: <Literature/>,
+    },
+];

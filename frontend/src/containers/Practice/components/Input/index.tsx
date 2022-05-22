@@ -18,12 +18,23 @@ interface InputProps extends WithStyles<typeof styles> {
     multiline?: boolean;
     rows?: number;
     getLoading: (fieldName: string) => boolean,
+    validation: any;
 }
 
 class Input extends React.Component<InputProps> {
 
     state = {
         errorMessage: '',
+    }
+
+    componentDidMount() {
+        const field = this.props.fieldName;
+        if (this.props.validation.showErrors && this.props.validation.erroredFields.includes(field)) {
+            const value = this.props.fields[field];
+            const error = validate(field, value);
+
+            this.setErrorMessage(error?.message ?? '');
+        }
     }
 
     setErrorMessage = (errorMessage: string) => {
@@ -47,10 +58,12 @@ class Input extends React.Component<InputProps> {
         const error = validate(field, value);
 
         if (error) {
+            this.props.actions.addToErroredFields(field);
             this.setErrorMessage(error.message);
             return;
         }
 
+        this.props.actions.removeFromErroredFields(field);
         this.props.actions.saveField({field, value});
     }
 

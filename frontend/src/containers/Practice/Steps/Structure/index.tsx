@@ -1,5 +1,5 @@
 import React from "react";
-import {PracticeFields, PracticeStepsRussian, TemplateTextPracticeFields} from "../../enum";
+import {PracticeFields, PracticeSteps, TemplateTextPracticeFields} from "../../enum";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "../styles";
@@ -22,7 +22,7 @@ class Structure extends React.Component<StructureProps> {
         return (
             <div className={classes.content}>
                 <Typography variant='h5'>
-                    {PracticeStepsRussian.STRUCTURE}
+                    {PracticeSteps.STRUCTURE}
                 </Typography>
                 <div className={classes.singleColumn}>
                     <Typography className={classes.generalProvisionsText}>

@@ -16,7 +16,7 @@ import styles from './styles';
 import AddLiteratureModal from "../../../../components/AddLiteratureModal";
 import {literatureFields} from "../../../Literature/enum";
 import {LiteratureType} from "../../../Literature/types";
-import {PracticeFields, PracticeStepsRussian} from "../../enum";
+import {PracticeFields, PracticeSteps} from "../../enum";
 
 class Literature extends React.PureComponent<LiteratureProps> {
 
@@ -55,7 +55,7 @@ class Literature extends React.PureComponent<LiteratureProps> {
         return (
             <div className={classes.root}>
                 <Typography variant='h5'>
-                    {PracticeStepsRussian.REFERENCES}
+                    {PracticeSteps.REFERENCES}
                 </Typography>
                 <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
                     <div className={classes.list}>

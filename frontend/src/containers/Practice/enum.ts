@@ -30,7 +30,7 @@ export enum StructuralUnitFields {
     ISU_ID = "isu_id",
 }
 
-export enum PracticeStepsRussian {
+export enum PracticeSteps {
     GENERAL = 'Главное',
     GENERAL_PROVISIONS = 'Общие положения',
     STRUCTURE = 'Содержание и структура практики',
@@ -40,7 +40,7 @@ export enum PracticeStepsRussian {
     REFERENCES = 'Источники',
 }
 
-export const PracticeStepsRussianList = Object.entries(PracticeStepsRussian).map(([, value]) => value);
+export const PracticeStepsRussianList = Object.entries(PracticeSteps).map(([, value]) => value);
 
 export enum Languages {
     RUSSIAN = 'ru',

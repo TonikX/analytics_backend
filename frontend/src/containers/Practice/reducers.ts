@@ -6,6 +6,10 @@ import actions from "./actions";
 export const GENERAL_PATH = 'practice';
 
 export const initialState: practicePageState = {
+    validation: {
+        showErrors: false,
+        erroredFields: [],
+    },
     isError: false,
     practice: {
         [PracticeFields.ID]: 1,
@@ -51,11 +55,11 @@ const setPractice = (state: practicePageState, {payload}: any): practicePageStat
 });
 
 const setField = (state: practicePageState, {payload}: any): practicePageState => ({
-        ...state,
-        practice: {
-            ...state?.practice,
-            [payload.field]: payload.value,
-        }
+    ...state,
+    practice: {
+        ...state?.practice,
+        [payload.field]: payload.value,
+    }
 });
 
 const setTemplateText = (state: practicePageState, {payload}: any): practicePageState => ({
@@ -71,9 +75,55 @@ const setError = (state: practicePageState, {payload}: any): practicePageState =
     isError: payload,
 });
 
+const setErroredFields = (state: practicePageState, {payload}: any): practicePageState => ({
+    ...state,
+    validation: {
+        ...state.validation,
+        erroredFields: payload,
+    },
+});
+
+const addToErroredFields = (state: practicePageState, {payload}: any): practicePageState => {
+    let erroredFields = state.validation.erroredFields;
+    if (!erroredFields.includes(payload)) {
+        erroredFields = erroredFields.concat([payload]);
+    }
+    return {
+        ...state,
+        validation: {
+            ...state.validation,
+            erroredFields,
+        },
+    }
+};
+
+const removeFromErroredFields = (state: practicePageState, {payload}: any): practicePageState => {
+    return {
+        ...state,
+        validation: {
+            ...state.validation,
+            erroredFields: state.validation.erroredFields.filter(field => field !== payload),
+        },
+    }
+};
+
+const showErrors = (state: practicePageState): practicePageState => {
+    return {
+        ...state,
+        validation: {
+            ...state.validation,
+            showErrors: true,
+        },
+    }
+};
+
 export const reducer = createReducer(initialState, {
     [actions.setPractice.type]: setPractice,
     [actions.setField.type]: setField,
     [actions.setTemplateText.type]: setTemplateText,
     [actions.setError.type]: setError,
+    [actions.setErroredFields.type]: setErroredFields,
+    [actions.addToErroredFields.type]: addToErroredFields,
+    [actions.removeFromErroredFields.type]: removeFromErroredFields,
+    [actions.showErrors.type]: showErrors,
 });

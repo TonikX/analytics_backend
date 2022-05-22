@@ -1,5 +1,5 @@
 import React from "react";
-import {PracticeFields, PracticeStepsRussian} from "../../enum";
+import {PracticeFields, PracticeSteps} from "../../enum";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "../styles";
@@ -48,7 +48,7 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
         return (
             <div className={classes.content}>
                 <Typography variant='h5'>
-                    {PracticeStepsRussian.GENERAL}
+                    {PracticeSteps.GENERAL}
                 </Typography>
                 <div className={classes.columns}>
                     <div className={classes.leftColumn}>

@@ -5,6 +5,7 @@ import {getId} from "./getters";
 import actions from "../../layout/actions";
 import {fetchingTypes, PracticeFields} from "./enum";
 import {RussianPracticeFields} from "./constants";
+import {getErroredFields} from "./validation";
 
 const service = new PracticeService();
 
@@ -17,7 +18,9 @@ const getPractice = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_PRACTICE}));
         service.getPractice(id)
             .then((res) => {
+                const erroredFields = getErroredFields(res.data);
                 dispatch(PracticeActions.setPractice(res.data));
+                dispatch(PracticeActions.setErroredFields(erroredFields));
             })
             .catch(() => {
                 dispatch(PracticeActions.setError(true));

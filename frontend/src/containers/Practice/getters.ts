@@ -8,6 +8,8 @@ const getStateData = (state: rootState): practicePageState => get(state, GENERAL
 
 export const getPractice = (state: rootState): PracticeState => get(getStateData(state), 'practice', initialState.practice);
 export const getIsError = (state: rootState): boolean => get(getStateData(state), 'isError', initialState.isError);
+export const getValidation = (state: rootState): any =>
+    get(getStateData(state), 'validation', initialState.validation);
 
 export const getLiteratureList = (state: rootState): PracticeState =>
     get(getStateData(state), 'practice.bibliographic_reference', initialState.practice.bibliographic_reference);

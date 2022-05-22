@@ -63,8 +63,14 @@ export type PracticeState = GeneralInfoState
     [PracticeFields.PRACTICE_BASE]: Id,
 }
 
+export type Validation = {
+    showErrors: boolean;
+    erroredFields: PracticeFields[];
+}
+
 export interface practicePageState {
     isError: boolean;
+    validation: Validation;
     practice: PracticeState;
     templateText: TemplateTextState;
 }
@@ -85,6 +91,10 @@ export interface PracticeActions {
     getTemplateText: any;
     setTemplateText: any;
     setError: any;
+    setErroredFields: any;
+    addToErroredFields: any;
+    removeFromErroredFields: any;
+    showErrors: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {

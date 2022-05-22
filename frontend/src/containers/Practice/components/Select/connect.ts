@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 
 import {rootState} from "../../../../store/reducers";
-import {getPractice} from "../../getters";
+import {getPractice, getValidation} from "../../getters";
 import {bindActionCreators} from "redux";
 import actions from "../../actions";
 import {isFetchingComponentByKey} from "../../../../layout/getters";
@@ -12,6 +12,7 @@ const mapStateToProps = (state: rootState) => {
         getLoading: (fieldName: string) => {
             return isFetchingComponentByKey(state, fieldName);
         },
+        validation: getValidation(state),
     }
 };
 

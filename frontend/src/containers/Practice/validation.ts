@@ -33,7 +33,22 @@ const validationRules = {
     [PracticeFields.DISCIPLINE_CODE]: {
         presence,
         number,
-    }
+    },
+    [PracticeFields.FORM_OF_CERTIFICATION_TOOLS]: {
+        presence,
+    },
+    [PracticeFields.PASSED_GREAT_MARK]: {
+        presence,
+    },
+    [PracticeFields.PASSED_GOOD_MARK]: {
+        presence,
+    },
+    [PracticeFields.PASSED_SATISFACTORILY_MARK]: {
+        presence,
+    },
+    [PracticeFields.NOT_PASSED_MARK]: {
+        presence,
+    },
 } as any;
 
 const validateNumber = (value: string) => {
@@ -42,7 +57,7 @@ const validateNumber = (value: string) => {
     }
 }
 
-export const validate = (field: PracticeFields, value: string): Error => {
+export const validate = (field: PracticeFields, value: any): Error => {
     const rules = validationRules[field];
     if (!rules) return null;
 
@@ -80,4 +95,16 @@ export const validate = (field: PracticeFields, value: string): Error => {
     }
 
     return null;
+}
+
+export const getErroredFields = (state: any) => {
+    const erroredFields = [];
+    for (const [,field] of Object.entries(PracticeFields)) {
+        const value = state[field];
+        const error = validate(field, value);
+        if (error) {
+            erroredFields.push(field);
+        }
+    }
+    return erroredFields;
 }

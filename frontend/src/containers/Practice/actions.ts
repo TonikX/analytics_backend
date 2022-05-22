@@ -8,7 +8,11 @@ const setField = createAction('SET_FIELD_PRACTICE');
 const saveField = createAction('SAVE_FIELD_PRACTICE');
 const getTemplateText = createAction('GET_TEMPLATE_TEXT_PRACTICE');
 const setTemplateText = createAction('SET_TEMPLATE_TEXT_PRACTICE');
-const setError = createAction('SET_ERROR');
+const setError = createAction('PRACTICE_SET_ERROR');
+const setErroredFields = createAction('PRACTICE_SET_ERRORED_FIELDS');
+const addToErroredFields = createAction('PRACTICE_ADD_TO_ERRORED_FIELDS');
+const removeFromErroredFields = createAction('PRACTICE_REMOVE_FROM_ERRORED_FIELDS');
+const showErrors = createAction('PRACTICE_SHOW_ERRORS');
 
 export const actions: PracticeActions = {
     getPractice,
@@ -18,6 +22,10 @@ export const actions: PracticeActions = {
     setTemplateText,
     getTemplateText,
     setError,
+    setErroredFields,
+    addToErroredFields,
+    removeFromErroredFields,
+    showErrors,
 }
 
 export default actions;

@@ -1,5 +1,5 @@
 import React from "react";
-import {PracticeFields, PracticeStepsRussian, TemplateTextPracticeFields} from "../../enum";
+import {PracticeFields, PracticeSteps, TemplateTextPracticeFields} from "../../enum";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "../styles";
@@ -22,7 +22,7 @@ class Assessment extends React.Component<AssessmentProps> {
         return (
             <div className={classes.content}>
                 <Typography variant='h5'>
-                    {PracticeStepsRussian.EVALUATION_METHODS}
+                    {PracticeSteps.EVALUATION_METHODS}
                 </Typography>
                 <Typography className={classes.generalProvisionsText}>
                     {templateText[TemplateTextPracticeFields.REPORTING_MATERIALS]}
