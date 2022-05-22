@@ -83,6 +83,8 @@ class ExpertiseSerializer(serializers.ModelSerializer):
             is_exp_exist[0].expertise_status = "EX"
             is_exp_exist[0].save()
             counter = is_exp_exist[0].expertise_counter
+            if not counter:
+                counter=0
             is_exp_exist.update(expertise_counter=counter + 1)
             all_user_expertise = UserExpertise.objects.filter(expertise=is_exp_exist[0])
             all_user_expertise.update(user_expertise_status=None)
