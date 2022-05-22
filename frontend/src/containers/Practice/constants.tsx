@@ -149,7 +149,11 @@ export const PRACTICE_TYPES = [
     },
     {
         value: PracticeTypes.SENIOR_INTER,
-        label: 'эксплуатационная; преддипломная, преддипломная / Senior internship',
+        label: 'преддипломная, преддипломная / Senior internship',
+    },
+    {
+        value: PracticeTypes.EXPL,
+        label: 'эксплуатационная',
     },
     {
         value: PracticeTypes.INTER,
