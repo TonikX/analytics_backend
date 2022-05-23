@@ -21,7 +21,7 @@ from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
     DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy, Certification
-from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
+from .models import FieldOfStudy, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
 from .models import WorkProgramSource
@@ -41,8 +41,9 @@ from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, Wor
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer,  ZunForManyCreateSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import SourceSerializer, SourceForWorkProgramSerializer, WorkProgramSourceUpdateSerializer
-from .serializers import BibliographicReferenceSerializer, \
-    WorkProgramBibliographicReferenceUpdateSerializer, PrerequisitesOfWorkProgramCreateSerializer, \
+# from .serializers import BibliographicReferenceSerializer, \
+#     WorkProgramBibliographicReferenceUpdateSerializer,
+from .serializers import PrerequisitesOfWorkProgramCreateSerializer, \
     EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
@@ -1020,57 +1021,58 @@ class WorkProgramSourceInWorkProgramList(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class BibliographicReferenceListCreateAPIView(generics.ListCreateAPIView):
-    serializer_class = BibliographicReferenceSerializer
-    queryset = BibliographicReference.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['description']
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+# class BibliographicReferenceListCreateAPIView(generics.ListCreateAPIView):
+#     serializer_class = BibliographicReferenceSerializer
+#     queryset = BibliographicReference.objects.all()
+#     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+#     search_fields = ['description']
+#     permission_classes = [IsRpdDeveloperOrReadOnly]
+#
+#
+# class BibliographicReferenceDestroyView(generics.DestroyAPIView):
+#     queryset = BibliographicReference.objects.all()
+#     serializer_class = BibliographicReferenceSerializer
+#     permission_classes = [IsRpdDeveloperOrReadOnly]
+#
+#
+# class BibliographicReferenceUpdateView(generics.UpdateAPIView):
+#     queryset = BibliographicReference.objects.all()
+#     serializer_class = BibliographicReferenceSerializer
+#     permission_classes = [IsRpdDeveloperOrReadOnly]
+#
+#
+# class BibliographicReferenceDetailsView(generics.RetrieveAPIView):
+#     queryset = BibliographicReference.objects.all()
+#     serializer_class = BibliographicReferenceSerializer
+#     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class BibliographicReferenceDestroyView(generics.DestroyAPIView):
-    queryset = BibliographicReference.objects.all()
-    serializer_class = BibliographicReferenceSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+# class WorkProgramBibliographicReferenceUpdateView(generics.UpdateAPIView):
+#     queryset = WorkProgram.objects.all()
+#     serializer_class = WorkProgramBibliographicReferenceUpdateSerializer
+#     permission_classes = [IsRpdDeveloperOrReadOnly]
+#
+#
+# class BibliographicReferenceInWorkProgramList(generics.ListAPIView):
+#     serializer_class = BibliographicReferenceSerializer
+#     permission_classes = [IsRpdDeveloperOrReadOnly]
+#
+#     def list(self, request, **kwargs):
+#         """
+#         Вывод всех результатов для одной рабочей программы по id
+#         """
+#         # Note the use of `get_queryset()` instead of `self.queryset`
+#         # queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+#         queryset = WorkProgram.objects.get(id=self.kwargs['workprogram_id']).bibliographic_reference.all()
+#         serializer = BibliographicReferenceSerializer(queryset, many=True)
+#         return Response(serializer.data)
 
 
-class BibliographicReferenceUpdateView(generics.UpdateAPIView):
-    queryset = BibliographicReference.objects.all()
-    serializer_class = BibliographicReferenceSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class BibliographicReferenceDetailsView(generics.RetrieveAPIView):
-    queryset = BibliographicReference.objects.all()
-    serializer_class = BibliographicReferenceSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class WorkProgramBibliographicReferenceUpdateView(generics.UpdateAPIView):
-    queryset = WorkProgram.objects.all()
-    serializer_class = WorkProgramBibliographicReferenceUpdateSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class BibliographicReferenceInWorkProgramList(generics.ListAPIView):
-    serializer_class = BibliographicReferenceSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-    def list(self, request, **kwargs):
-        """
-        Вывод всех результатов для одной рабочей программы по id
-        """
-        # Note the use of `get_queryset()` instead of `self.queryset`
-        # queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
-        queryset = WorkProgram.objects.get(id=self.kwargs['workprogram_id']).bibliographic_reference.all()
-        serializer = BibliographicReferenceSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-
+# Поиск ресурса (книги, публикации) в электронно-библиотечной системе
 @api_view(['GET'])
 def SearchInEBSCO(request):
 
-    # auth
+    # Получение токена аутентификации
     def get_auth_token(user_id, password):
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
         data = {"UserId": user_id, "Password": password, "interfaceid": "edsapi"}
@@ -1079,7 +1081,7 @@ def SearchInEBSCO(request):
         request = rq.post(url, headers=headers, data=json.dumps(data))
         return request.text
 
-    # create session
+    # Получение токена сессии
     def get_session_token(profile_id, auth_token):
         headers = {"Content-Type": "application/json", "Accept": "application/json",
                    "x-authenticationToken": json.loads(auth_token)["AuthToken"]}
@@ -1088,7 +1090,7 @@ def SearchInEBSCO(request):
         request = rq.get(url, headers=headers)
         return request.text
 
-    # search request
+    # Поиск ресурса по базе EBSCO
     def search(term, auth_token, session_token):
         headers = {"Content-Type": "application/json", "Accept": "application/json",
                    "x-authenticationToken": json.loads(auth_token)["AuthToken"],
@@ -1096,10 +1098,9 @@ def SearchInEBSCO(request):
         url = f"https://eds-api.ebscohost.com/edsapi/rest/search?query={term}&view=detailed&highlight=n"
 
         request = rq.get(url, headers=headers)
-        print(request.text)
+        # print(request.text)
         return request.text
 
-    # parse data from response
     # Обработка ЭБС Лань из Сводного Каталога ИТМО
     def extract_ref_from_lan(record_data):
         ab_list = []
@@ -1108,8 +1109,8 @@ def SearchInEBSCO(request):
                 ab_list.append(item["Data"])
         for abstract in ab_list:
             if "Библиографичекское описание:" in abstract:
-                ref = abstract[29:]
-                return ref
+                # ref = abstract[29:]
+                return abstract
 
     # Очистка библиографической ссылки от ненужных символов
     def clean_text(bib_ref):
@@ -1119,21 +1120,33 @@ def SearchInEBSCO(request):
         #     clean_bib_ref = clean_bib_ref.replace(elem, "")
         if bib_ref is not None:
             bib_ref = delete_html(unescape(bib_ref))
-
         return bib_ref
 
+    # Удаление тегов
+    def delete_html(text):
+        return re.sub(r'<.*?>', '', text)
+
+# Поиск автора
     def search_author(record):
         item_list = []
         for item in record["Items"]:
             if item["Label"] == "Authors":
                 item_list.append(item["Data"])
 
-        items = ''
+        items = ", ".join(item_list)
 
-        for item in item_list:
-            items += item
+        # for item in item_list:
+        #     items += item
         return items
 
+    def extract_main_author(authors):
+        # если запятая разделяет авторов, то взять первого автора
+        try:
+            return authors[:authors.index(',')]
+        except Exception:
+            return authors
+
+# Поиск названия
     def search_title(record):
         item_list = []
         for item in record["Items"]:
@@ -1146,30 +1159,78 @@ def SearchInEBSCO(request):
             items += item
         return items
 
+    # Поиск издательства
     def search_publishing(record):
-        pass
+        return ""
 
-    def delete_html(text):
-        return re.sub(r'<.*?>', '', text)
+    def search_city(record):
+        return ""
+
+    def search_number_of_edition(record):
+        return None
 
     def search_year(record):
         year = None
         try:
             year = record["RecordInfo"]["BibRecord"]["BibRelationships"]["IsPartOfRelationships"][0]["BibEntity"]["Dates"][0]["Y"]
-            return year
         except Exception as e:
-            print(e)
+            return year
+        return year
 
+    def search_type_of_text(record):
+        for item in record["Items"]:
+            if item["Label"] == "Publication Type":
+                pub_type = item["Data"]
+                if "eBook" in pub_type:
+                    return "Электронные ресурсы"
+                return "Печатный экземпляр"
 
     def make_object(record):
-        object = {
-            "Author": clean_text(search_author(record)),
-            "Title": clean_text(search_title(record)),
-            "Publishing": clean_text(search_publishing(record)),
-            "Year": clean_text(search_year(record))
+        source = {
+            "authors": search_author(record),
+            "title": search_title(record),
+            "publishing_company": "",
+            "year": search_year(record),
+            "number_of_edition": None,
+            "pages": None,
+            "format": search_type_of_text(record),
+            "publication_type": "Учебные издания",
         }
 
-        return object
+        for key, val in source.items():
+            source[key] = clean_text(val)
+
+        source["main_author"] = extract_main_author(source["authors"])
+        source["bib_reference"] = make_bib_reference(source)
+
+        return source
+
+    def make_bib_reference(source):
+        if source['format'] == "Электронные ресурсы":
+            text_format = "электронный"
+        else:
+            text_format = "непосредственный"
+
+        if source["year"] is None:
+            year = ""
+        else:
+            year = f" : {source['year']}"
+
+
+        return f"{source['main_author']}, {source['title']} / {source['authors']}" \
+               f"{year}. — Текст : {text_format}."
+
+    def make_object_lan(record):
+        print(record)
+        source = dict()
+        source["name"] = record.split(':')[2].split('/')[0].strip(' ')
+        source["author"] = record.split('/')[1].split(';')[0].strip(' ')
+        source["contributors"] = record.split(':')[1].strip(' ')
+        source["city"] = record.split('—')[1].split(':')[0].strip(' ')
+        source["izd"] = record.split(':')[2].split(',')[0].strip(' ')
+        source["year"] = record.split(':')[2].split(',')[1].strip(' ')
+        source["bib_ref"] = record[29:]
+        return source
 
     query = request.query_params["query"]
 
@@ -1184,20 +1245,21 @@ def SearchInEBSCO(request):
     s = json.loads(search(query, auth_token, session_token))
 
     records = s["SearchResult"]["Data"]["Records"]
+
     sources = []
 
     for record in records:
         sources.append(make_object(record))
     return Response({"sources": sources})
 
-    # refs = []
+    # sources = []
     #
     # for record in records:
-    #     ref = clean_ref(extract_ref_from_lan(record))
+    #     ref = clean_text(extract_ref_from_lan(record))
     #     if ref is not None:
-    #         refs.append(ref)
-
-    # return Response({"sources": refs})
+    #         sources.append(make_object_lan(ref))
+    #
+    # return Response({"sources": sources})
 
 
 class EvaluationToolInWorkProgramList(generics.ListAPIView):

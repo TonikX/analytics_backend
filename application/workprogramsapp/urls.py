@@ -30,10 +30,11 @@ from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicP
     AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, DisciplineBlockModuleShortListView, \
     DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailListForUserView, DisciplineBlockModuleDetailView, \
     DisciplinesByNumber, InsertModule
-from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
-    BibliographicReferenceDestroyView, \
-    BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
-    BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
+# from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
+#     BibliographicReferenceDestroyView, \
+#     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
+#     BibliographicReferenceInWorkProgramList
+from .views import EvaluationToolInWorkProgramList, \
     FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, \
     FileUploadWorkProgramOutcomesAPIView
 from .views import CloneWorkProgramm
@@ -67,8 +68,10 @@ from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreate
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
 from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateView
 from .views import NewOrdinalNumbersForTopicAPI, TopicCreateAPI
-from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
-    BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
+# from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
+#     BibliographicReferenceUpdateView
+# from .views import WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList
+from .views import\
     FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, FileUploadWorkProgramOutcomesAPIView, SearchInEBSCO
 from .views import WorkProgramSourceListCreateAPIView, WorkProgramSourceDetailsView, WorkProgramSourceDestroyView, \
     WorkProgramSourceUpdateView, WorkProgramWorkProgramSourceUpdateView, WorkProgramSourceInWorkProgramList
@@ -138,7 +141,7 @@ urlpatterns = [
     path('api/workprogram/detail/<int:pk>', WorkProgramDetailsView.as_view()),
     path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
-    path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
+    # path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
     path('api/workprogram/clone', CloneWorkProgramm),
     path('api/workprogram/merge_content', CopyContentOfWorkProgram),
     path('api/workprogramsinfieldofstudy', WorkProgramInFieldOfStudyListView.as_view()),
@@ -203,13 +206,13 @@ urlpatterns = [
          WorkProgramSourceInWorkProgramList.as_view()),
 
     # Библиографическая ссылка
-    path('api/BibliographicReference', BibliographicReferenceListCreateAPIView.as_view()),
-    path('api/BibliographicReference/create', BibliographicReferenceListCreateAPIView.as_view()),
-    path('api/BibliographicReference/detail/<int:pk>', BibliographicReferenceDetailsView.as_view()),
-    path('api/BibliographicReference/delete/<int:pk>', BibliographicReferenceDestroyView.as_view()),
-    path('api/BibliographicReference/update/<int:pk>', BibliographicReferenceUpdateView.as_view()),
-    path('api/bibliographicreferenceinworkprogram/<int:workprogram_id>',
-         BibliographicReferenceInWorkProgramList.as_view()),
+    # path('api/BibliographicReference', BibliographicReferenceListCreateAPIView.as_view()),
+    # path('api/BibliographicReference/create', BibliographicReferenceListCreateAPIView.as_view()),
+    # path('api/BibliographicReference/detail/<int:pk>', BibliographicReferenceDetailsView.as_view()),
+    # path('api/BibliographicReference/delete/<int:pk>', BibliographicReferenceDestroyView.as_view()),
+    # path('api/BibliographicReference/update/<int:pk>', BibliographicReferenceUpdateView.as_view()),
+    # path('api/bibliographicreferenceinworkprogram/<int:workprogram_id>',
+    #      BibliographicReferenceInWorkProgramList.as_view()),
 
     # Работа с файлами (загрузка/экспорт)
     path('api/upload/wp', FileUploadWorkProgramAPIView.as_view()),

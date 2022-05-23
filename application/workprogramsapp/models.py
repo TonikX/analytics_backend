@@ -85,8 +85,8 @@ class WorkProgram(CloneMixin, models.Model):
     #field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram,
     #                                          verbose_name="Предметная область",
     #                                          related_name='workprograms_in_fieldofstudy')
-    source = models.ManyToManyField('WorkProgramSource', blank=True, null=True, verbose_name='Источник РПД', related_name='source')
-    bibliographic_reference = models.ManyToManyField('BibliographicReference', blank=True, null=True, verbose_name='Библиогравическая_ссылка',
+    # source = models.ManyToManyField('WorkProgramSource', blank=True, null=True, verbose_name='Источник РПД', related_name='source')
+    source = models.ManyToManyField('WorkProgramSource', blank=True, null=True, verbose_name='Источник РПД',
                                                      related_name='bibrefs')
     # evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
     description = models.CharField(max_length=5000, blank=True, null=True)
@@ -122,7 +122,7 @@ class WorkProgram(CloneMixin, models.Model):
     srs_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы СРС")
     number_of_semesters = models.IntegerField(blank=True, null=True, verbose_name="Количество семестров в дисциплине")
 
-    _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'source', 'bibliographic_reference', 'editors']
+    _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'source', 'editors']
 
 
 
@@ -876,12 +876,48 @@ class DisciplineSection(CloneMixin, models.Model):
         ordering = ['ordinal_number']
 
 
+# class WorkProgramSource(models.Model):
+#     '''
+#     Модель для источника в РПД
+#     '''
+#     EDUCATIONAL = 'Educational Publication'
+#     SCIENTIFIC = 'Scientific Publication'
+#     PUBLICATION_TYPE_CHOICES = [
+#         (EDUCATIONAL, 'Учебные издания'),
+#         (SCIENTIFIC, 'Научные издания')
+#     ]
+#     publication_type = models.CharField(max_length=1024,
+#         choices=PUBLICATION_TYPE_CHOICES,
+#         blank=False,
+#         default=EDUCATIONAL
+#     )
+#
+#     PRINTED = 'Печатный экземпляр'
+#     ELECTRONIC = 'Электронные ресурсы'
+#     FORMAT_CHOICES = [
+#         (PRINTED, 'Печатный экземпляр'),
+#         (ELECTRONIC, 'Электронные ресурсы')
+#     ]
+#     format = models.CharField(max_length=1024,
+#         choices=FORMAT_CHOICES,
+#         blank=False,
+#         default=EDUCATIONAL
+#     )
+#     author = models.CharField(max_length=1024, verbose_name="Автор", blank=True, null=False)
+#     title = models.CharField(max_length=2048, verbose_name="Название", blank=False, null=False)
+#     publishing_company = models.CharField(max_length=1024, verbose_name="Издательство", blank=True, null=True)
+#     year = models.PositiveSmallIntegerField(verbose_name="Год издания", blank=True, null=True)
+#
+#     def __str__(self):
+#         return f"{self.author} {self.title} {self.publishing_company} {self.year}"
+
+
 class WorkProgramSource(models.Model):
     '''
-    Модель для источника в РПД
+    Модель для источника РПД
     '''
-    EDUCATIONAL = 'Educational Publication'
-    SCIENTIFIC = 'Scientific Publication'
+    EDUCATIONAL = 'Учебные издания'
+    SCIENTIFIC = 'Научные издания'
     PUBLICATION_TYPE_CHOICES = [
         (EDUCATIONAL, 'Учебные издания'),
         (SCIENTIFIC, 'Научные издания')
@@ -901,23 +937,54 @@ class WorkProgramSource(models.Model):
     format = models.CharField(max_length=1024,
         choices=FORMAT_CHOICES,
         blank=False,
-        default=EDUCATIONAL
+        default=PRINTED
     )
-    author = models.CharField(max_length=1024, verbose_name="Автор", blank=True, null=False)
-    title = models.CharField(max_length=2048, verbose_name="Название", blank=False, null=False)
-    publishing_company = models.CharField(max_length=1024, verbose_name="Издательство", blank=True, null=True)
+
+    bib_reference = models.CharField(max_length=5000, verbose_name="Библиографическая ссылка", blank=True, null=False, default="")
+    authors = models.CharField(max_length=2048, verbose_name="Авторы через запятую", blank=True, null=False, default="")
+    title = models.CharField(max_length=2048, verbose_name="Название", blank=False, null=False, default="")
+    publishing_company = models.CharField(max_length=1024, verbose_name="Издательство", blank=True, null=False, default="")
     year = models.PositiveSmallIntegerField(verbose_name="Год издания", blank=True, null=True)
+    pages = models.PositiveIntegerField(verbose_name="Число страниц", blank=True, null=True)
+    number_of_edition = models.PositiveSmallIntegerField(verbose_name="Номер издания", blank=True, null=True)
+    city_of_publishing = models.CharField(max_length=1024, verbose_name="Город издания", blank=True, null=False, default="")
+    main_author = models.CharField(max_length=1024, verbose_name="Главный автор", blank=True, null=False, default="")
+    # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
+
+    def save(self, *args, **kwargs):
+        if self.format == "Электронные ресурсы":
+            text = "электронный"
+        else:
+            text = "непосредственный"
+
+        if self.number_of_edition is None:
+            edition = ""
+        else:
+            edition = self.number_of_edition
+
+        if self.year is None:
+            year = ""
+        else:
+            year = f", {self.year}"
+
+        if self.pages is None:
+            pages = ""
+        else:
+            pages = f" — {self.pages} c."
+
+        if not self.main_author:
+            try:
+                self.main_author = self.authors[:self.index(",")]
+            except Exception:
+                self.main_author = self.authors
+        if self.bib_reference == "":
+            self.bib_reference = f"{self.main_author}, {self.title} / {self.authors}. — {edition} " \
+                   f" : {self.publishing_company}{year}.{pages} — Текст : {text}"
+        super(WorkProgramSource, self).save(*args, **kwargs)
+
 
     def __str__(self):
-        return f"{self.author} {self.title} {self.publishing_company} {self.year}"
-
-
-class BibliographicReference(models.Model):
-    '''
-    Модель описания онлайн курса
-    '''
-    description = models.CharField(max_length=5000, verbose_name="Описание", blank=True, null=True)
-    # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
+        return self.bib_reference
 
 
 class Topic(CloneMixin, models.Model):
