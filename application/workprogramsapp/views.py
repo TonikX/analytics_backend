@@ -604,7 +604,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         except:
             newdata.update({"can_comment": False})
             newdata.update({"can_approve": False})
-        if request.user.is_expertise_master == True:
+        if request.user.is_expertise_master == True or WorkProgram.objects.filter(pk=self.kwargs['pk'], editors__in=[request.user]):
             newdata.update({"can_archive": True})
         else:
             newdata.update({"can_archive": False})

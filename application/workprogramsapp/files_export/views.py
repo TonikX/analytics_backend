@@ -88,7 +88,7 @@ def render_context(context, **kwargs):
             i['practical_lessons'] = ''
         else:
             practical_lessons += float(i['practical_lessons'])/context['number_of_semesters']
-            all_laboratory += float(i['practical_lessons'])
+            all_practical_lessons += float(i['practical_lessons'])
         if i['SRO'] is None:
             i['SRO'] = ''
         else:
