@@ -14,6 +14,7 @@ interface SendToExpertiseProps extends WithStyles<typeof styles> {
     fields: PracticeState;
     openStep: (index: number) => void;
     validation: Validation;
+    practiceId: number;
 }
 
 class SendToExpertise extends React.Component<SendToExpertiseProps> {
@@ -35,7 +36,7 @@ class SendToExpertise extends React.Component<SendToExpertiseProps> {
     }
 
     handleSend = () => {
-        console.log('sent to expertise');
+        this.props.actions.createExpertise({id: this.props.practiceId});
     }
 
     render() {

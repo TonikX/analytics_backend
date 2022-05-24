@@ -25,6 +25,10 @@ class PracticeService extends AnalyticsService {
     getTemplateText(id: number) {
         return this.get(`/api/practice/practice_template/${id}/`)
     }
+
+    createExpertise(practiceId: number) {
+        return this.post(`/api/expertise/create`, {practice: practiceId, ['expertise_type']: 'PRAC'})
+    }
 }
 
 export default PracticeService;

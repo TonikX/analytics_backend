@@ -91,7 +91,7 @@ class Practice extends React.Component<PracticeProps> {
                 <div>
                     <Download/>
                     <div className={classes.sendToExpertise}>
-                        <SendToExpertise openStep={this.openStep}/>
+                        <SendToExpertise openStep={this.openStep} practiceId={this.getPracticeId()}/>
                     </div>
                 </div>
             </Paper>

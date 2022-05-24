@@ -97,6 +97,7 @@ export interface PracticeActions {
     showErrors: any;
     showErroredField: any;
     hideErroredField: any;
+    createExpertise: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {

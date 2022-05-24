@@ -90,5 +90,29 @@ const getTemplateText = createLogic({
     }
 });
 
+const createExpertise = createLogic({
+    type: PracticeActions.createExpertise.type,
+    latest: true,
 
-export default [getPractice, saveField, getTemplateText];
+    process({getState, action}: any, dispatch, done) {
+
+        const {id} = action.payload;
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_EXPERTISE}));
+
+        service.createExpertise(id)
+            .then(() => {
+                // dispatch(actions.fetchingFailed([`"Экспертиза создана"`]));
+                // todo update status and other stuff
+            })
+            .catch(() => {
+                dispatch(actions.fetchingFailed([`Не удалось отправить на экспертизу`]));
+            })
+            .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_EXPERTISE}));
+                return done();
+            })
+    }
+});
+
+
+export default [getPractice, saveField, getTemplateText, createExpertise];
