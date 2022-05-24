@@ -16,6 +16,7 @@ interface InputListProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
     fieldName: CertificationFields;
     fields: CertificationState;
+    maxRows?: number;
 }
 
 type InputListState = {
@@ -23,9 +24,14 @@ type InputListState = {
     currentText: string,
 }
 
-class InputList extends React.Component<InputListProps> {
+const DELIMITER = "|`|";
 
-    DELIMITER = "|`|"
+export const getInputListArray = (text: string) => {
+    if (!text) return [];
+    return text.split(DELIMITER);
+}
+
+class InputList extends React.Component<InputListProps> {
 
     state: InputListState = {
         textList: [],
@@ -37,8 +43,7 @@ class InputList extends React.Component<InputListProps> {
     }
 
     setTextList = (text: string) => {
-        if (!text) return;
-        const textList = text.split(this.DELIMITER);
+        const textList = getInputListArray(text);
         this.setState({
             ...this.state,
             textList: textList,
@@ -64,7 +69,7 @@ class InputList extends React.Component<InputListProps> {
     }
 
     saveField = (textList: Array<string>) => {
-        const value = textList.join(this.DELIMITER);
+        const value = textList.join(DELIMITER);
         console.log('saving value: ' + value);
         this.props.actions.saveField({field: this.props.fieldName, value});
     }
@@ -90,7 +95,7 @@ class InputList extends React.Component<InputListProps> {
 
 
     render() {
-        const {fieldName, classes} = this.props as any;
+        const {fieldName, classes, maxRows = 5} = this.props as any;
         const {textList, currentText} = this.state;
 
         return (
@@ -116,6 +121,7 @@ class InputList extends React.Component<InputListProps> {
                                onKeyPress={this.onKeyPress}
                                variant="outlined"
                                value={currentText}
+                               disabled={textList.length === maxRows}
                                InputLabelProps={{
                                    shrink: true,
                                }}

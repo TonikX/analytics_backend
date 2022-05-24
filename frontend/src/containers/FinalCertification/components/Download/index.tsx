@@ -13,6 +13,7 @@ import Button from "@material-ui/core/Button";
 import rawFile from '../../template-gia.docx'
 import {CertificationFields, CertificationMarkFields} from "../../enum";
 import {markTypesRussian} from "../../constants";
+import {getInputListArray} from "../InputList";
 
 interface DownloadProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
@@ -27,6 +28,8 @@ class Download extends React.Component<DownloadProps> {
             [CertificationFields.STRUCTURAL_UNIT]: fields[CertificationFields.STRUCTURAL_UNIT]?.title ?? '',
             [CertificationFields.STRUCTURE_ELEMENTS_OPTIONAL]:
                 fields[CertificationFields.STRUCTURE_ELEMENTS_OPTIONAL].split(';').map(str => str.toLowerCase()),
+            [CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS]:
+                getInputListArray(fields[CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS]),
             ...(this.getPreparedMarks(fields)),
         }
     }
