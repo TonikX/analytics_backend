@@ -47,7 +47,7 @@ export const validate = (field: CertificationFields, value: string): Error => {
     if (!rules) return null;
 
     if (rules.presence) {
-        if (!value) {
+        if (/^\s*$/.test(value)) {
             return {
                 message: presence.message,
             };

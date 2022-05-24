@@ -80,6 +80,13 @@ export const validate = (field: PracticeFields, value: any): Error => {
     if (!rules) return null;
 
     if (rules.presence) {
+        if (typeof value === "string") {
+            if (/^\s*$/.test(value)) {
+                return {
+                    message: presence.message,
+                };
+            }
+        }
         if (!value) {
             return {
                 message: presence.message,
