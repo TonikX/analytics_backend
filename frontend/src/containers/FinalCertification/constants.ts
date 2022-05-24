@@ -79,4 +79,5 @@ export const RussianCertificationFields = {
     [CertificationFields.PRESENTATION_QUALITY_MARKS]: '',
     [CertificationFields.ANSWERS_QUALITY_MARKS]: '',
     [CertificationFields.GIA_BASE]: 'текст шаблона',
+    [CertificationFields.EDITORS]: 'Редакторы',
 }

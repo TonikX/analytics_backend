@@ -92,6 +92,7 @@ export type CertificationState = MainInfoState
     & {
     [CertificationFields.ID]: Id,
     [CertificationFields.GIA_BASE]: Id,
+    [CertificationFields.EDITORS]: any,
 }
 
 export interface certificationPageState {

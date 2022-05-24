@@ -39,6 +39,7 @@ export const initialState: certificationPageState = {
         [CertificationFields.PRESENTATION_QUALITY_MARKS]: null,
         [CertificationFields.ANSWERS_QUALITY_MARKS]: null,
         [CertificationFields.GIA_BASE]: 1,
+        [CertificationFields.EDITORS]: [],
     },
     templateText: {
         [TemplateTextCertificationFields.ID]: 1,

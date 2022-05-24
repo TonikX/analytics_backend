@@ -211,6 +211,7 @@ export const RussianPracticeFields = {
     [PracticeFields.NOT_PASSED_MARK]: 'Критерий оценки "неудовлетворительно"',
     [PracticeFields.STRUCTURAL_UNIT]: 'Структурное подразделение',
     [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: 'Источники',
+    [PracticeFields.EDITORS]: 'Редакторы',
 };
 
 export const fieldToStep = new Map(Object.entries({

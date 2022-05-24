@@ -61,6 +61,7 @@ export type PracticeState = GeneralInfoState
     & {
     [PracticeFields.ID]: Id,
     [PracticeFields.PRACTICE_BASE]: Id,
+    [PracticeFields.EDITORS]: any,
 }
 
 export type Validation = {

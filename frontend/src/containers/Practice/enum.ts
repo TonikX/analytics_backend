@@ -22,6 +22,7 @@ export enum PracticeFields {
     STRUCTURAL_UNIT = "structural_unit",
     PRACTICE_BASE = 'practice_base',
     BIBLIOGRAPHIC_REFERENCE = "bibliographic_reference",
+    EDITORS = 'editors',
 }
 
 export enum StructuralUnitFields {

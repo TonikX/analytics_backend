@@ -35,6 +35,7 @@ export const initialState: practicePageState = {
         [PracticeFields.NOT_PASSED_MARK]: '',
         [PracticeFields.STRUCTURAL_UNIT]: null,
         [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: [],
+        [PracticeFields.EDITORS]: [],
     },
     templateText: {
         [TemplateTextPracticeFields.ID]: 1,
