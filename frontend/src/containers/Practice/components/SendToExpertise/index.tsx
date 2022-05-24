@@ -34,13 +34,17 @@ class SendToExpertise extends React.Component<SendToExpertiseProps> {
         }
     }
 
+    handleSend = () => {
+        console.log('sent to expertise');
+    }
+
     render() {
 
         const {validation} = this.props;
 
         if (validation.erroredFields.length === 0) {
             return (
-                <Button variant='outlined'>
+                <Button variant='outlined' onClick={this.handleSend}>
                     Отправить на экспертизу
                 </Button>
             )

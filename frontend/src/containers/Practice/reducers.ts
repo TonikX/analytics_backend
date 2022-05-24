@@ -7,7 +7,7 @@ export const GENERAL_PATH = 'practice';
 
 export const initialState: practicePageState = {
     validation: {
-        showErrors: false,
+        shownErroredFields: [],
         erroredFields: [],
     },
     isError: false,
@@ -103,6 +103,7 @@ const removeFromErroredFields = (state: practicePageState, {payload}: any): prac
         validation: {
             ...state.validation,
             erroredFields: state.validation.erroredFields.filter(field => field !== payload),
+            shownErroredFields: state.validation.shownErroredFields.filter(field => field !== payload),
         },
     }
 };
@@ -112,7 +113,29 @@ const showErrors = (state: practicePageState): practicePageState => {
         ...state,
         validation: {
             ...state.validation,
-            showErrors: true,
+            shownErroredFields: [...state.validation.erroredFields],
+        },
+    }
+};
+
+const showErroredField = (state: practicePageState, {payload}: any): practicePageState => {
+    if (!state.validation.erroredFields.includes(payload)) throw new Error('trying to show a correct field as errored')
+    if (state.validation.shownErroredFields.includes(payload)) return state; // already shown
+    return {
+        ...state,
+        validation: {
+            ...state.validation,
+            shownErroredFields: [...state.validation.shownErroredFields, payload],
+        },
+    }
+};
+
+const hideErroredField = (state: practicePageState, {payload}: any): practicePageState => {
+    return {
+        ...state,
+        validation: {
+            ...state.validation,
+            shownErroredFields: state.validation.shownErroredFields.filter(field => field !== payload),
         },
     }
 };
@@ -126,4 +149,6 @@ export const reducer = createReducer(initialState, {
     [actions.addToErroredFields.type]: addToErroredFields,
     [actions.removeFromErroredFields.type]: removeFromErroredFields,
     [actions.showErrors.type]: showErrors,
+    [actions.showErroredField.type]: showErroredField,
+    [actions.hideErroredField.type]: hideErroredField,
 });

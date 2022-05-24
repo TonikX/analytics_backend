@@ -28,28 +28,28 @@ class Assessment extends React.Component<AssessmentProps> {
                     {templateText[TemplateTextPracticeFields.REPORTING_MATERIALS]}
                 </Typography>
                 <Input fieldName={PracticeFields.FORM_OF_CERTIFICATION_TOOLS}/>
-                <div className={classes.columns}>
-                    <div className={classes.leftColumn}>
-                        <Input
-                            fieldName={PracticeFields.PASSED_GREAT_MARK}
-                            multiline
-                            rows={10}/>
-                        <Input
-                            fieldName={PracticeFields.PASSED_GOOD_MARK}
-                            multiline
-                            rows={10}/>
-                    </div>
-                    <div className={classes.rightColumn}>
-                        <Input
-                            fieldName={PracticeFields.PASSED_SATISFACTORILY_MARK}
-                            multiline
-                            rows={10}/>
-                        <Input
-                            fieldName={PracticeFields.NOT_PASSED_MARK}
-                            multiline
-                            rows={10}/>
-                    </div>
-                </div>
+                {/*<div className={classes.columns}>*/}
+                {/*    <div className={classes.leftColumn}>*/}
+                {/*        <Input*/}
+                {/*            fieldName={PracticeFields.PASSED_GREAT_MARK}*/}
+                {/*            multiline*/}
+                {/*            rows={10}/>*/}
+                {/*        <Input*/}
+                {/*            fieldName={PracticeFields.PASSED_GOOD_MARK}*/}
+                {/*            multiline*/}
+                {/*            rows={10}/>*/}
+                {/*    </div>*/}
+                {/*    <div className={classes.rightColumn}>*/}
+                {/*        <Input*/}
+                {/*            fieldName={PracticeFields.PASSED_SATISFACTORILY_MARK}*/}
+                {/*            multiline*/}
+                {/*            rows={10}/>*/}
+                {/*        <Input*/}
+                {/*            fieldName={PracticeFields.NOT_PASSED_MARK}*/}
+                {/*            multiline*/}
+                {/*            rows={10}/>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </div>
         );
     }

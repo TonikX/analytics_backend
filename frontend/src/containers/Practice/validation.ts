@@ -34,6 +34,24 @@ const validationRules = {
         presence,
         number,
     },
+    [PracticeFields.LANGUAGE]: {
+        presence,
+    },
+    [PracticeFields.QUALIFICATION]: {
+        presence,
+    },
+    [PracticeFields.FORMAT_PRACTICE]: {
+        presence,
+    },
+    [PracticeFields.KIND_OF_PRACTICE]: {
+        presence,
+    },
+    [PracticeFields.TYPE_OF_PRACTICE]: {
+        presence,
+    },
+    [PracticeFields.WAY_OF_DOING_PRACTICE]: {
+        presence,
+    },
     [PracticeFields.FORM_OF_CERTIFICATION_TOOLS]: {
         presence,
     },

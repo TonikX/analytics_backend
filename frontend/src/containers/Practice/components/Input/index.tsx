@@ -1,6 +1,6 @@
 import {WithStyles} from "@material-ui/core";
 import styles from "./styles";
-import {PracticeActions, PracticeState} from "../../types";
+import {PracticeActions, PracticeState, Validation} from "../../types";
 import {PracticeFields} from "../../enum";
 import React from "react";
 import connect from "./connect";
@@ -18,22 +18,46 @@ interface InputProps extends WithStyles<typeof styles> {
     multiline?: boolean;
     rows?: number;
     getLoading: (fieldName: string) => boolean,
-    validation: any;
+    validation: Validation;
 }
 
 class Input extends React.Component<InputProps> {
 
     state = {
+        value: '',
         errorMessage: '',
     }
 
     componentDidMount() {
         const field = this.props.fieldName;
-        if (this.props.validation.showErrors && this.props.validation.erroredFields.includes(field)) {
+        const newValue = this.props.fields[field]
+        let errorMessage = '';
+        if (this.props.validation.shownErroredFields.includes(field)) {
             const value = this.props.fields[field];
             const error = validate(field, value);
+            errorMessage = error?.message ?? '';
+        }
+        this.setState({
+            ...this.state,
+            value: newValue,
+            errorMessage,
+        });
+    }
 
-            this.setErrorMessage(error?.message ?? '');
+    componentDidUpdate(prevProps: Readonly<InputProps>, prevState: Readonly<{}>, snapshot?: any) {
+        const field = this.props.fieldName;
+        const newValue = this.props.fields[field];
+        if (prevProps.fields[field] !== newValue || this.props.validation !== prevProps.validation) {
+            let errorMessage = '';
+            if (this.props.validation.shownErroredFields.includes(field)) {
+                const error = validate(field, newValue);
+                errorMessage = error?.message ?? '';
+            }
+            this.setState({
+                ...this.state,
+                value: newValue,
+                errorMessage,
+            })
         }
     }
 
@@ -44,22 +68,26 @@ class Input extends React.Component<InputProps> {
         });
     }
 
-    setInput = (field: string) => (e: React.ChangeEvent) => {
-        this.setErrorMessage('');
-
+    setInput = (e: React.ChangeEvent) => {
         const value = get(e, 'target.value')
 
-        this.props.actions.setField({field, value});
+        this.setState({
+            ...this.state,
+            value,
+            errorMessage: '',
+        })
     }
 
     saveInput = (field: PracticeFields) => (e: React.ChangeEvent) => {
         const value = get(e, 'target.value')
 
         const error = validate(field, value);
+        this.props.actions.setField({field, value});
 
         if (error) {
+            this.setErrorMessage(error.message ?? '');
             this.props.actions.addToErroredFields(field);
-            this.setErrorMessage(error.message);
+            this.props.actions.showErroredField(field);
             return;
         }
 
@@ -69,7 +97,7 @@ class Input extends React.Component<InputProps> {
 
 
     render() {
-        const {fields, fieldName, classes, multiline, rows, getLoading} = this.props;
+        const {fieldName, classes, multiline, rows, getLoading} = this.props;
         const {errorMessage} = this.state;
 
         return (
@@ -77,12 +105,12 @@ class Input extends React.Component<InputProps> {
                 <InputsLoader loading={getLoading(fieldName)}>
                     <TextField label={RussianPracticeFields[fieldName]}
                                onBlur={this.saveInput(fieldName)}
-                               onChange={this.setInput(fieldName)}
+                               onChange={this.setInput}
                                variant="outlined"
                                fullWidth
                                multiline={multiline}
                                rows={rows ? rows : 1}
-                               value={fields[fieldName]}
+                               value={this.state.value}
                                error={Boolean(errorMessage)}
                                helperText={errorMessage}
                                InputLabelProps={{

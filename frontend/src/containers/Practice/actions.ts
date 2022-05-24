@@ -13,6 +13,8 @@ const setErroredFields = createAction('PRACTICE_SET_ERRORED_FIELDS');
 const addToErroredFields = createAction('PRACTICE_ADD_TO_ERRORED_FIELDS');
 const removeFromErroredFields = createAction('PRACTICE_REMOVE_FROM_ERRORED_FIELDS');
 const showErrors = createAction('PRACTICE_SHOW_ERRORS');
+const showErroredField = createAction('PRACTICE_SHOW_ERRORED_FIELD');
+const hideErroredField = createAction('PRACTICE_HIDE_ERRORED_FIELD');
 
 export const actions: PracticeActions = {
     getPractice,
@@ -26,6 +28,8 @@ export const actions: PracticeActions = {
     addToErroredFields,
     removeFromErroredFields,
     showErrors,
+    showErroredField,
+    hideErroredField,
 }
 
 export default actions;

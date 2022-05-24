@@ -90,7 +90,9 @@ class Practice extends React.Component<PracticeProps> {
                 </div>
                 <div>
                     <Download/>
-                    <SendToExpertise openStep={this.openStep}/>
+                    <div className={classes.sendToExpertise}>
+                        <SendToExpertise openStep={this.openStep}/>
+                    </div>
                 </div>
             </Paper>
         )
