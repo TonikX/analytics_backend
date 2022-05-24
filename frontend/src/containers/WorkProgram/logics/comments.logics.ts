@@ -7,7 +7,7 @@ import workProgramActions from '../actions';
 import Service from '../service';
 
 import {fetchingTypes} from "../enum";
-import {getWorkProgramUserExpertiseId, getWorkProgramExpertiseId} from "../getters";
+import {getWorkProgramUserExpertiseId, getWorkProgramExpertiseId, getWorkProgramId} from "../getters";
 
 const service = new Service();
 
@@ -61,7 +61,29 @@ const createComment = createLogic({
     }
 });
 
+const updateUnreadCommentStatus = createLogic({
+    type: workProgramActions.updateUnreadCommentStatus.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const wpId = getWorkProgramId(state);
+
+        service.updateUnreadCommentStatus(wpId, action.payload)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram({ id: wpId, quiteLoad: true, getEvaluationToolsList: false }));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                return done();
+            });
+    }
+});
+
 export default [
     getComments,
     createComment,
+    updateUnreadCommentStatus,
 ];

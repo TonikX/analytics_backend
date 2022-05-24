@@ -1,15 +1,18 @@
 import {IntermediateCertificationEnum, StepsEnum, WorkProgramStatusEnum} from "./enum";
 
 import {appRouter} from "../../service/router-service";
+import { ImplementationFormatsEnum } from './enum'
 
 export const BACHELOR_QUALIFICATION = 'bachelor';
 export const SPECIALIST_QUALIFICATION = 'specialist';
 export const MASTER_QUALIFICATION = 'master';
+export const ALL_LEVELS_QUALIFICATION = 'All_levels';
 
 export const specializationObject: any = {
     [BACHELOR_QUALIFICATION]: 'Бакалавриат',
     [SPECIALIST_QUALIFICATION]: 'Специалитет',
     [MASTER_QUALIFICATION]: 'Магистратура',
+    [ALL_LEVELS_QUALIFICATION]: 'Все уровни',
 }
 
 export const specialization = [
@@ -24,7 +27,27 @@ export const specialization = [
     {
         value: MASTER_QUALIFICATION,
         label: 'Магистратура'
+    },
+    {
+        value: ALL_LEVELS_QUALIFICATION,
+        label: 'Все уровни'
     }
+];
+
+
+export const implementationFormats = [
+    {
+        value: ImplementationFormatsEnum.ONLINE,
+        label: 'Онлайн'
+    },
+    {
+        value: ImplementationFormatsEnum.MIXED,
+        label: 'Смешанный'
+    },
+    {
+        value: ImplementationFormatsEnum.OFFLINE,
+        label: 'Оффлайн'
+    },
 ];
 
 
@@ -70,6 +93,12 @@ export const workProgramStatusesRussian: any = {
     [WorkProgramStatusEnum.EXPERTISE]: 'На экспертизе',
     [WorkProgramStatusEnum.APPROVE]: 'Одобрено',
     [WorkProgramStatusEnum.ARCHIVE]: 'В архиве',
+    [WorkProgramStatusEnum.REWORK]: 'На доработке',
+}
+
+export const simpleWorkProgramStatusesRussian: any = {
+    w: 'В работе',
+    a: 'В архиве',
 }
 
 
@@ -78,6 +107,7 @@ export const IntermediateCertificationTypes: any = {
     [IntermediateCertificationEnum.DIF_CREDIT]: 'Дифференцированный зачет',
     [IntermediateCertificationEnum.CREDIT]: 'Зачет',
     [IntermediateCertificationEnum.COURSE_WORK]: 'Курсовая работа',
+    [IntermediateCertificationEnum.COURSE_PROJECT]: 'Курсовой проект',
 }
 
 export const workProgramStatusesColors: any = {
@@ -85,6 +115,9 @@ export const workProgramStatusesColors: any = {
     [WorkProgramStatusEnum.EXPERTISE]: '#C000FF',
     [WorkProgramStatusEnum.APPROVE]: '#2abb00',
     [WorkProgramStatusEnum.ARCHIVE]: '#ccc',
+    [WorkProgramStatusEnum.REWORK]: '#f30707',
+    'w': '#009aff',
+    'a': '#ccc',
 }
 
 export const steps = {

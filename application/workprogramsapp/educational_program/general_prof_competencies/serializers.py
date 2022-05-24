@@ -5,16 +5,18 @@ from rest_framework import response, status
 from rest_framework import serializers, viewsets
 
 # Модели данных
-from .models import GeneralProfCompetencesInGroupOfGeneralCharacteristic, GroupOfGeneralProfCompetencesInGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
+from .models import GeneralProfCompetencesInGroupOfGeneralCharacteristic, \
+    GroupOfGeneralProfCompetencesInEducationalStandard, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
 from workprogramsapp.models import Indicator
 
 # Другие сериализаторы
-from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer, CompetenceForEPSerializer, IndicatorListSerializer, IndicatorListWithoutCompetenceSerializer
-
+from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcademicPlanSerializer, \
+    CompetenceForEPSerializer, IndicatorListSerializer, IndicatorListWithoutCompetenceSerializer
 
 """
 Ключевые компетенции
 """
+
 
 class IndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """
@@ -38,23 +40,25 @@ class CreateIndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer(se
     )
 
     def create(self, validated_data):
-        competence = GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.get(pk = validated_data.pop('competence_in_group_of_pk'))
+        competence = GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.get(
+            pk=validated_data.pop('competence_in_group_of_pk'))
         indicators = validated_data.pop('indicator')
 
         for ind in indicators:
             try:
-                IndicatorInGeneralProfCompetenceInGeneralCharacteristic.\
-                    objects.create(competence_in_group_of_pk =
-                                                   GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.get
-                                                   (pk = competence.id), indicator = Indicator.objects.get(pk = ind))
+                IndicatorInGeneralProfCompetenceInGeneralCharacteristic. \
+                    objects.create(competence_in_group_of_pk=
+                                   GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.get
+                                   (pk=competence.id), indicator=Indicator.objects.get(pk=ind))
             except:
-                raise serializers.ValidationError({"error":"indicator not found"})
+                raise serializers.ValidationError({"error": "indicator not found"})
         return Response(status=status.HTTP_201_CREATED)
 
 
 class GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """Сериализатор просмотра общепрофессиональных компетенций"""
-    indicator_of_competence_in_group_of_general_prof_competences = IndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer(many=True)
+    indicator_of_competence_in_group_of_general_prof_competences = IndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer(
+ many=True)
     competence = CompetenceSerializer()
 
     class Meta:
@@ -73,10 +77,11 @@ class CreateGeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(seria
 class GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """Сериализатор вывода группы общепрофессиональных куомпетенций в общей характеристике образовтаельной программы"""
 
-    competence_in_group_of_general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(many=True)
+    competence_in_group_of_general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(
+        many=True)
 
     class Meta:
-        model = GroupOfGeneralProfCompetencesInGeneralCharacteristic
+        model = GroupOfGeneralProfCompetencesInEducationalStandard
         fields = ['id', 'name', 'competence_in_group_of_general_prof_competences']
 
 
@@ -84,6 +89,5 @@ class CreateGroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer(seria
     """Сериализатор создания и редактирования группы общепрофессиональных куомпетенций в общей характеристике образовтаельной программы"""
 
     class Meta:
-        model = GroupOfGeneralProfCompetencesInGeneralCharacteristic
-        fields = ['id', 'name', 'general_characteristic']
-
+        model = GroupOfGeneralProfCompetencesInEducationalStandard
+        fields = ['id', 'name', 'educational_standard']

@@ -4,6 +4,7 @@ import {StructuralUnitsActions, StructuralUnitType} from '../../StructuralUnits/
 import styles from './FirstStep.styles';
 import {UserType} from "../../../layout/types";
 import {SelectorListType} from "../../../components/SearchSelector/types";
+import {ImplementationFormatsEnum} from "../enum";
 
 export interface FirstStepProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
@@ -23,6 +24,7 @@ export interface FirstStepProps extends WithStyles<typeof styles> {
     semesterCount: number;
 
     isCanEdit: boolean;
+    implementationFormat: ImplementationFormatsEnum | null;
 
     fetchingCode: boolean;
     fetchingTitle: boolean;
@@ -30,4 +32,5 @@ export interface FirstStepProps extends WithStyles<typeof styles> {
     fetchingDate: boolean;
     fetchingDescription: boolean;
     fetchingVideoLink: boolean;
+    canAddEditors: boolean;
 }

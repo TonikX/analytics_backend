@@ -11,11 +11,18 @@ import {professionalStandardsState, ProfessionalStandardsType} from "./types";
 
 const getStateData = (state: rootState): professionalStandardsState => get(state, GENERAL_PATH);
 export const getProfessionalStandards = (state: rootState): Array<ProfessionalStandardsType> => get(getStateData(state), fields.PROFESSIONAL_STANDARD_LIST, []);
+export const getLaborFunctions = (state: rootState): Array<any> => get(getStateData(state), fields.LABOR_FUNCTIONS, []);
 
 export const getProfStandardsForSelector = (state: rootState): SelectorListType =>
     getProfessionalStandards(state).map((professional_standards: ProfessionalStandardsType) => ({
         value: professional_standards[ProfessionalStandardFields.ID],
         label: professional_standards[ProfessionalStandardFields.TITLE],
+    }))
+
+export const getLaborFunctionsForSelector = (state: rootState): SelectorListType =>
+  getLaborFunctions(state).map((item: any) => ({
+        value: item?.id,
+        label: item.code + ' ' + item.name,
     }))
 
 export const getCourseDialog = (state: rootState) => get(getStateData(state), fields.PROFESSIONAL_STANDARD_DIALOG, {});
@@ -30,5 +37,7 @@ export const getSearchQuery = (state: rootState) => get(getStateData(state), fie
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
 export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+
+export const getProfStandard = (state: rootState) => get(getStateData(state), fields.PROFESSIONAL_STANDARD, {});
 
 

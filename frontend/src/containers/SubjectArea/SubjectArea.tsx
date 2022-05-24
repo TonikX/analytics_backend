@@ -125,14 +125,14 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
                                     <Typography className={classNames(classes.marginRight, classes.courseTitle)}>
                                         {item[SubjectAreaFields.TITLE]}
                                     </Typography>
-                                    <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(item[SubjectAreaFields.ID])}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        <IconButton onClick={this.handleClickEdit(item)}>
-                                            <EditIcon />
-                                        </IconButton>
-                                    </div>
+                                    {/*<div className={classes.actions}>*/}
+                                    {/*    <IconButton onClick={this.handleClickDelete(item[SubjectAreaFields.ID])}>*/}
+                                    {/*        <DeleteIcon />*/}
+                                    {/*    </IconButton>*/}
+                                    {/*    <IconButton onClick={this.handleClickEdit(item)}>*/}
+                                    {/*        <EditIcon />*/}
+                                    {/*    </IconButton>*/}
+                                    {/*</div>*/}
                                 </div>
                             )}
                         </Scrollbars>
@@ -146,17 +146,17 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
                                 color="primary"
                     />
 
-                    <Fab color="secondary"
-                         classes={{
-                             root: classes.addIcon
-                         }}
-                         onClick={this.handleCreate}
-                    >
-                        <AddIcon/>
-                    </Fab>
+                    {/*<Fab color="secondary"*/}
+                    {/*     classes={{*/}
+                    {/*         root: classes.addIcon*/}
+                    {/*     }}*/}
+                    {/*     onClick={this.handleCreate}*/}
+                    {/*>*/}
+                    {/*    <AddIcon/>*/}
+                    {/*</Fab>*/}
                 </div>
 
-                <SubjectAreaCreateModal />
+                {/*<SubjectAreaCreateModal />*/}
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

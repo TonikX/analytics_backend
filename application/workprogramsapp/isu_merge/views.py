@@ -4,7 +4,7 @@ import pandas
 from rest_framework.response import Response
 from rest_framework import permissions
 from typing import Dict
-
+from workprogramsapp.workprogram_additions.models import StructuralUnit
 from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan,\
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,\
     WorkProgramInFieldOfStudy, Zun
@@ -429,7 +429,7 @@ class FileUploadAPIView(APIView):
         return module_type
 
 
-class FileUploadOldVersionAPIView(APIView):
+class   FileUploadOldVersionAPIView(APIView):
     """
     API-endpoint для загрузки файла sub_2019_2020_new
     """
@@ -471,8 +471,12 @@ class FileUploadOldVersionAPIView(APIView):
                     fs_obj.save()
                     fs_count += 1
                 try:
-                    wp = WorkProgram.objects.get(id = int(data['ИД_НАШ'][i]))
-                    wp_obj = wp
+                    try:
+                        wp = WorkProgram.objects.get(id = int(data['ИД_НАШ'][i]))
+                        wp_obj = wp
+                    except:
+                        wp = WorkProgram.objects.get(discipline_code = int(data['DISC_DISC_ID'][i]))
+                        wp_obj = wp
                     print('--- РПД найдена')
                 except:
                     print('--- РПД не найдена')
@@ -519,6 +523,15 @@ class FileUploadOldVersionAPIView(APIView):
                 print('Записаны часы лаб:', wp_obj.lab_hours_v2)
                 wp_obj.srs_hours_v2 = watchmaker([float(x) for x in (data['СРС'][i]).strip("()").split(",")], [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
                 print('Записаны часы срс:', wp_obj.srs_hours_v2)
+                wp_obj.discipline_code = data['DISC_DISC_ID'][i]
+                if StructuralUnit.objects.filter(title=str(data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip())):
+                    st_unit = StructuralUnit.objects.filter(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip())[0]
+                    st_unit.isu_id = int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i])
+                    st_unit.save()
+                else:
+                    StructuralUnit.objects.create(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip(), isu_id=int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i]))
+                    st_unit = StructuralUnit.objects.get(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip(), isu_id=int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i]))
+                wp_obj.structural_unit = st_unit
                 wp_obj.save()
                 print('-- Работа с образовательной программой')
                 if data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find("Русский") != -1 and data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find(
@@ -655,6 +668,7 @@ class FileUploadOldVersionAPIView(APIView):
                         print("Сохранили рпд в направлении", wpinfs)
                 try:
                     WorkProgramIdStrUpForIsu.objects.get(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs)
+                    print('ddddddddddddddddd', WorkProgramIdStrUpForIsu.objects.get(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs))
                 except WorkProgramIdStrUpForIsu.DoesNotExist:
                     wpinfs_id_str_up = WorkProgramIdStrUpForIsu(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs)
                     wpinfs_id_str_up.number = data['НОМЕР'][i]

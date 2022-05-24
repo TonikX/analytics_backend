@@ -11,7 +11,7 @@ import {
     getWorkProgramId
 } from './getters';
 
-import {fetchingTypes} from "./enum";
+import {fetchingTypes, WorkProgramGeneralFields} from "./enum";
 
 import sectionLogics from './logics/sections.logics';
 import topicLogics from './logics/topics.logics';
@@ -32,9 +32,25 @@ const getWorkProgram = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState();
-        const id = action.payload || getWorkProgramId(state);
+        let id
+        let quiteLoad = false
+        let getEvaluationToolsList = true
 
-        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_WORK_PROGRAM}));
+        if (typeof action.payload === 'object') {
+            id = action?.payload?.id ||  getWorkProgramId(state)
+            quiteLoad = action?.payload?.quiteLoad
+            getEvaluationToolsList = action?.payload?.getEvaluationToolsList
+
+            if (getEvaluationToolsList === undefined) {
+                getEvaluationToolsList = true
+            }
+        } else {
+            id = action.payload || getWorkProgramId(state);
+        }
+
+        if (!quiteLoad) {
+            dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_WORK_PROGRAM}));
+        }
 
         service.getWorkProgram(id)
             .then((res) => {
@@ -46,7 +62,9 @@ const getWorkProgram = createLogic({
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_WORK_PROGRAM}));
-                dispatch(workProgramActions.getWorkProgramEvaluationTools());
+                if (getEvaluationToolsList) {
+                    dispatch(workProgramActions.getWorkProgramEvaluationTools());
+                }
                 return done();
             });
     }
@@ -152,6 +170,30 @@ const sendToExpertise = createLogic({
     }
 });
 
+const sendWorkProgramToArchive = createLogic({
+    type: workProgramActions.sendWorkProgramToArchive.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SEND_TO_ARCHIVE}));
+
+        service.sendToArchive(workProgramId)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram());
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SEND_TO_ARCHIVE}));
+                return done();
+            });
+    }
+});
+
 const returnWorkProgramToWork = createLogic({
     type: workProgramActions.returnWorkProgramToWork.type,
     latest: true,
@@ -240,4 +282,5 @@ export default [
     sendToExpertise,
     returnWorkProgramToWork,
     approveWorkProgram,
+    sendWorkProgramToArchive,
 ];

@@ -2,8 +2,6 @@ from django.db import models
 
 from analytics_project import settings
 
-from datetime import datetime
-
 
 class UserExpertise(models.Model):
     STUFF_STATUS_CHOICES = [
@@ -33,17 +31,31 @@ class Expertise(models.Model):
         ('WK', 'В работе'),
         ('EX', 'На экспертизе'),
         ('AC', 'Одобрено'),
-        ('AR', 'Архив')
+        ('AR', 'Архив'),
+        ('RE', 'На доработке')
     ]
 
-    work_program = models.ForeignKey('WorkProgram', related_name='expertise_with_rpd', on_delete=models.CASCADE)
+    TYPE_CHOICES = [
+        ('WP', 'Рабочая программа'),
+        ('GIA', 'ГИА'),
+        ('PRAC', 'Практики'),
+    ]
+
+    work_program = models.ForeignKey('WorkProgram', related_name='expertise_with_rpd', on_delete=models.CASCADE, blank=True, null=True)
+    gia = models.ForeignKey('gia_practice_app.GIA', related_name='expertise_with_gia', on_delete=models.CASCADE, blank=True, null=True)
+    practice = models.ForeignKey('gia_practice_app.Practice', related_name='expertise_with_practice', on_delete=models.CASCADE,
+                                 blank=True, null=True)
+
+    expertise_type = models.CharField(choices=TYPE_CHOICES, max_length=1024, verbose_name="Тип экспертизы", blank=True,
+                                      null=True)
     expertise_status = models.CharField(choices=STATUS_CHOICES, max_length=1024, verbose_name="Статус экспертизы",
                                         default='EX')
     experts = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Эксперты', through=UserExpertise,
                                      related_name='experts_in_expertise')
     approval_date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
     date_of_last_change = models.DateTimeField(editable=True, auto_now=True, blank=True, null=True)
-    expertise_counter=models.IntegerField(blank=True, null=True, verbose_name="Счетчик отправки на экспертизу", default=0)
+    expertise_counter = models.IntegerField(blank=True, null=True, verbose_name="Счетчик отправки на экспертизу",
+                                            default=0)
 
     #
     #
@@ -68,7 +80,7 @@ class ExpertiseComments(models.Model):
         ('SE', 'Разделы'),
         ('TH', 'Темы'),
         ('SO', 'Источники'),
-        ('EV', 'Оценчные средства'),
+        ('EV', 'Оценочные средства'),
         ('RE', 'Результаты обучения'),
         ('CO', 'Контрольные средства'),
     ]
@@ -77,3 +89,9 @@ class ExpertiseComments(models.Model):
     user_expertise = models.ForeignKey('UserExpertise', on_delete=models.CASCADE, related_name="user_expertise_comment")
     comment_text = models.CharField(max_length=50000, verbose_name="Комментарий")
     comment_date = models.DateTimeField(auto_now_add=True, blank=True, verbose_name='Дата комментария')
+
+
+class ExpertsOnStructuralUnit(models.Model):
+    expert = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='experts_with_units', on_delete=models.CASCADE)
+    structural_units = models.ManyToManyField('StructuralUnit', verbose_name='Эксперты',
+                                              related_name='structural_units_with_experts')

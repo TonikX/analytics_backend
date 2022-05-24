@@ -1,4 +1,4 @@
-import React from "react";
+ import React from "react";
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 
 import AuthRoute from './hoc/AuthRoute'
@@ -47,6 +47,7 @@ import IndividualTrajectories from './containers/IndividualTrajectories';
 import IndividualEducationalPlans from './containers/IndividualEducationalPlans';
 
 import ProfessionalStandards from './containers/ProfessionalStandards';
+import ProfessionalStandard from "./containers/ProfessionalStandards/ProfessionalStandard";
 import StructuralUnits from './containers/StructuralUnits';
 import StructuralUnit from './containers/StructuralUnits/StructuralUnit';
 
@@ -56,6 +57,11 @@ import RouterService from './service/router-service';
 import Notifications from "./containers/Profile/Notifications";
 import Overview from "./containers/Overview";
 import Landing from "./containers/Landing";
+import UserProfile from "./containers/UserProfile";
+import DodProfile from "./containers/DodProfile";
+
+import EducationalStandards from "./containers/EducationalStandards";
+import EducationalStandard from "./containers/EducationalStandards/EducationalStandard";
 
 const routerService = RouterService.factory();
 
@@ -92,8 +98,17 @@ export default () => (
             <AuthRoute path={routerService.getSelectDisciplineRoute()}>
                 <SelectDiscipline />
             </AuthRoute>
+            <AuthRoute path={routerService.getProfessionalStandardRoute(':id')}>
+                <ProfessionalStandard />
+            </AuthRoute>
             <AuthRoute path={routerService.getProfessionalStandardsRoute()}>
                 <ProfessionalStandards />
+            </AuthRoute>
+            <AuthRoute path={routerService.getEducationalStandardRoute(':id')}>
+                <EducationalStandard />
+            </AuthRoute>
+            <AuthRoute path={routerService.getEducationalStandardsRoute()}>
+                <EducationalStandards />
             </AuthRoute>
             <AuthRoute path={routerService.getStructuralUnitRoute()}>
                 <StructuralUnit />
@@ -109,6 +124,9 @@ export default () => (
             </AuthRoute>
             <AuthRoute path={routerService.getNotificationsRoute()}>
                 <Notifications />
+            </AuthRoute>
+            <AuthRoute path={routerService.getUserProfile()}>
+                <UserProfile />
             </AuthRoute>
             <AuthRoute path={routerService.getSelectEducationalProgramRoute()}>
                 <SelectEducationalProgram />
@@ -215,6 +233,10 @@ export default () => (
             <AuthRoute path={routerService.getTrainingModulesRoute()}>
                 <TrainingModules />
             </AuthRoute>
+                <AuthRoute path={routerService.getDodProfileRoute()}>
+                    <DodProfile />
+                </AuthRoute>
+
             <Route path={routerService.getForbiddenPage()}>
                 <ForbiddenPage />
             </Route>

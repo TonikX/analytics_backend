@@ -38,7 +38,7 @@ const Selector = ({classes, label, value, onChange, noMargin, wrapClass, metaLis
                 }
             >
                 {metaList.map(item =>
-                    <MenuItem value={item.value} key={`group-${item.value}`}>
+                    <MenuItem value={item.value} key={item.value}>
                         {item.label}
                     </MenuItem>
                 )}

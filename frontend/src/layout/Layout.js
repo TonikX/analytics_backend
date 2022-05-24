@@ -86,6 +86,8 @@ class Layout extends React.Component {
         const isWorkProgramPage = this.isWorkProgramPage();
         const isLandingPage = this.isLandingPage();
 
+        const isDodProfile = userGroups.includes('experts')
+
         if (isLandingPage) return this.props.children
 
         return (
@@ -100,6 +102,7 @@ class Layout extends React.Component {
                                 isAuth={isAuth}
                                 logout={this.logout}
                                 notificationsCount={notificationsCount}
+                                isDodProfile={isDodProfile}
                         />
                         <div className={classes.root}>
                             {isAuth && <Menu isOpen={openMenu} userGroups={userGroups} mockMenu={mockMenu}/>}

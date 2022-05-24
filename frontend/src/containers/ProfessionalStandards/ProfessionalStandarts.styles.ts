@@ -33,12 +33,22 @@ export default (theme: Theme) => createStyles({
         minHeight: '50px'
     },
     titleCell: {
+        width: '20%',
+    },
+    profCell: {
         minWidth: 200,
-        width: '70%',
+        width: '25%',
+    },
+    pointerCell: {
+        cursor: 'pointer',
+        color: '#1d51a3'
     },
     numberCell: {
         width: 115,
         flex: 'none'
+    },
+    codeCell: {
+        width: '20%',
     },
     actions: {
         display: 'flex',

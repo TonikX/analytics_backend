@@ -29,12 +29,15 @@ import SearchSelector from "../../../components/SearchSelector";
 import {FirstStepProps} from './types';
 import {WorkProgramGeneralFields} from "../enum";
 import {FULL_DATE_FORMAT, getUserFullName} from "../../../common/utils";
-import {languageObject, specializationObject, languageArray} from "../constants";
+import {languageObject, specializationObject, languageArray, implementationFormats} from "../constants";
 import {UserFields} from "../../../layout/enum";
 
 import connect from './FirstStep.connect';
 import styles from './FirstStep.styles';
 import FormLabel from "@material-ui/core/FormLabel";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 class FirstStep extends React.Component<FirstStepProps> {
   state = {
@@ -49,6 +52,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     [WorkProgramGeneralFields.LANGUAGE]: '',
     [WorkProgramGeneralFields.BARS]: false,
     [WorkProgramGeneralFields.SEMESTER_COUNT]: 1,
+    [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: undefined,
     addEditorsMode: false
   };
 
@@ -66,6 +70,7 @@ class FirstStep extends React.Component<FirstStepProps> {
       [WorkProgramGeneralFields.LANGUAGE]: this.props.language,
       [WorkProgramGeneralFields.SEMESTER_COUNT]: this.props.semesterCount,
       [WorkProgramGeneralFields.BARS]: this.props.bars,
+      [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: this.props.implementationFormat,
     })
   }
 
@@ -83,6 +88,7 @@ class FirstStep extends React.Component<FirstStepProps> {
         [WorkProgramGeneralFields.LANGUAGE]: this.props.language,
         [WorkProgramGeneralFields.SEMESTER_COUNT]: this.props.semesterCount,
         [WorkProgramGeneralFields.BARS]: this.props.bars,
+        [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: this.props.implementationFormat,
       })
     }
   }
@@ -143,6 +149,17 @@ class FirstStep extends React.Component<FirstStepProps> {
     this.props.actions.saveWorkProgram({
       destination: WorkProgramGeneralFields.LANGUAGE,
       value: language
+    });
+  }
+
+  changeImplementationFormat = (implementationFormat: string) => {
+    this.setState({
+      [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: implementationFormat
+    });
+
+    this.props.actions.saveWorkProgram({
+      destination: WorkProgramGeneralFields.IMPLEMENTATION_FORMAT,
+      value: implementationFormat
     });
   }
 
@@ -212,7 +229,7 @@ class FirstStep extends React.Component<FirstStepProps> {
   render() {
     const {
       classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription,
-      isCanEdit, editors, structuralUnit, structuralUnitsList
+      isCanEdit, editors, structuralUnit, structuralUnitsList, canAddEditors
     } = this.props;
     const {state} = this;
     const {addEditorsMode} = state;
@@ -396,7 +413,7 @@ class FirstStep extends React.Component<FirstStepProps> {
               />
             </Dialog>
             :
-            isCanEdit
+            canAddEditors
               ?
               <Button onClick={() => this.setState({addEditorsMode: true})}
                       variant="text"
@@ -436,6 +453,18 @@ class FirstStep extends React.Component<FirstStepProps> {
                           wrapClass={classes.selectorWrap}
                           onChange={this.changeLanguage}
           />
+
+          {(state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] || state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] === null) && (
+            <SimpleSelector
+              label="Формат реализации"
+              metaList={implementationFormats}
+              value={state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]}
+              wrapClass={classes.selectorWrap}
+              onChange={this.changeImplementationFormat}
+              noMargin
+            />
+          )}
+          <Typography className={classes.marginBottom20}>Обратите внимание, при выборе онлайн формата все ваши введенные часы будут обнулены</Typography>
 
           <InputsLoader loading={fetchingDate}>
             <DatePicker

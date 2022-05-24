@@ -20,9 +20,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import UserService from "../../service/user-service";
-
-import styles from './Header.styles';
 import {appRouter} from "../../service/router-service";
+import styles from './Header.styles';
 
 const userService = UserService.factory();
 
@@ -33,6 +32,7 @@ interface HeaderProps extends WithStyles<typeof styles> {
     handleOpenMenu: Function;
     logout: Function;
     notificationsCount: number;
+    isDodProfile: boolean;
 }
 
 class Header extends React.PureComponent<HeaderProps>{
@@ -70,7 +70,7 @@ class Header extends React.PureComponent<HeaderProps>{
     };
 
     render() {
-        const {classes, openGeneralMenu, isAuth, notificationsCount} = this.props;
+        const {classes, openGeneralMenu, isAuth, notificationsCount, isDodProfile} = this.props;
         const {anchorEl} = this.state;
         const isOpenAvatarMenu = Boolean(anchorEl);
 
@@ -122,6 +122,7 @@ class Header extends React.PureComponent<HeaderProps>{
                                 </Link>
                             </Tooltip>
 
+
                             <div className={classes.avatar}>
                                 <IconButton
                                     aria-haspopup="true"
@@ -148,15 +149,23 @@ class Header extends React.PureComponent<HeaderProps>{
                                         root: classes.popper
                                     }}
                                 >
+                                    <MenuItem onClick={this.handleClose}>
+                                        <Link to={isDodProfile ? appRouter.getDodProfileRoute() : appRouter.getUserProfile()}
+                                              className={classes.link}
+                                        >
+                                            Личный кабинет
+                                        </Link>
+                                    </MenuItem>
                                     <MenuItem onClick={this.handleLogout}>
                                         <Link to={appRouter.getSignInRoute()}
                                               className={classes.link}
                                         >
-                                          Выйти
+                                            Выйти
                                         </Link>
                                     </MenuItem>
                                 </Menu>
                             </div>
+
 
                             <Tooltip title="Телеграм">
                                 <a href="https://t.me/op_itmo_ru"

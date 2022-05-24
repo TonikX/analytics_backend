@@ -1,12 +1,15 @@
 import json
 import os
 import re
+from collections import OrderedDict
+
 import pandas
 import requests as rq
 from html import unescape
+from django.db import transaction
 from django.shortcuts import get_object_or_404
-from collections import OrderedDict
-from django.http import HttpResponse
+from django_filters.rest_framework import DjangoFilterBackend
+from django_super_deduper.merge import MergedModelInstance
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework import status
@@ -14,20 +17,19 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django_filters.rest_framework import DjangoFilterBackend
 
 from dataprocessing.models import Items
 from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
-    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy, Certification
-from .models import FieldOfStudy, СertificationEvaluationTool
+    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
+from .models import FieldOfStudy, WorkProgramSource, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
-from .models import WorkProgramSource
-# Права доступа
-from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor
 from .notifications.models import UserNotification
+# Права доступа
+from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, \
+    IsOwnerOrDodWorkerOrReadOnly
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, \
@@ -36,18 +38,21 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
-    DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer
-from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, WorkProgramInFieldOfStudySerializerForCb, WorkProgramInFieldOfStudyForCompeteceListSerializer
-from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer,  ZunForManyCreateSerializer, \
+    DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer, \
+    WorkProgramArchiveUpdateSerializer
+from .serializers import SourceSerializer, \
+    WorkProgramSourceUpdateSerializer, \
+    PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
+    IndicatorListSerializer
+from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, WorkProgramInFieldOfStudySerializerForCb, \
+    WorkProgramInFieldOfStudyForCompeteceListSerializer
+from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
+    ZunForManyCreateSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
-from .serializers import SourceSerializer, WorkProgramSourceUpdateSerializer
-from .serializers import PrerequisitesOfWorkProgramCreateSerializer, \
-    EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, IndicatorListSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
-from .serializers import WorkProgramSerializer
+from .serializers import WorkProgramSerializer, WorkProgramEditorsUpdateSerializer
 from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
-from django_filters.rest_framework import DjangoFilterBackend
 
 """"Удалены старые views с использованием джанго рендеринга"""
 """Блок реализации API"""
@@ -74,7 +79,7 @@ class WorkProgramsListApi(generics.ListAPIView):
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile', 'qualification',
                         'prerequisites', 'outcomes', 'structural_unit__title',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__title',
-                        'editors__last_name', 'editors__first_name'
+                        'editors__last_name', 'editors__first_name', 'work_status'
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -91,6 +96,9 @@ class WorkProgramsListApi(generics.ListAPIView):
     def get_queryset(self):
         if self.request.GET.get('filter') == 'my':
             queryset = WorkProgram.objects.filter(editors=self.request.user)
+        elif self.request.GET.get('filter') == 'iamexpert':
+            queryset = WorkProgram.objects.filter(expertise_with_rpd__expertse_users_in_rpd__expert = self.request.user,
+                                                  expertise_with_rpd__expertse_users_in_rpd__stuff_status = 'EX')
         else:
             queryset = WorkProgram.objects.filter()
         return queryset
@@ -322,7 +330,7 @@ class OutcomesOfWorkProgramDestroyView(generics.DestroyAPIView):
 
             return self.destroy(request, *args, **kwargs)
         except:
-            return Response(status=400)
+            return self.destroy(request, *args, **kwargs)
 
 
 class OutcomesOfWorkProgramUpdateView(generics.UpdateAPIView):
@@ -482,10 +490,54 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        print(serializer.data['id'])
+        #print(request.data['id'])
+        try:
+            if request.data['implementation_format']=='online':
+                DisciplineSection.objects.filter(work_program = serializer.data['id'])
+                for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
+                    section.consultations = section.lecture_classes + section.laboratory + \
+                                            section.practical_lessons
+                    #section.contact_work = 0
+                    section.lecture_classes = 0
+                    section.laboratory = 0
+                    section.practical_lessons = 0
+                    #section.SRO = 0
+                    section.save()
+            elif request.data['implementation_format']=='mixed' or request.data['implementation_format']=='offline':
+                DisciplineSection.objects.filter(work_program = serializer.data['id'])
+                for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
+                    #section.contact_work = (section.consultations/21*11)
+                    section.lecture_classes = (section.consultations/3)
+                    section.laboratory = (section.consultations/3)
+                    section.practical_lessons = (section.consultations/3)
+                    #section.SRO = (section.consultations/8*2)
+                    section.consultations = 0
+                    section.save()
+        except:
+            pass
         response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id = serializer.data['id']))
         return Response(response_serializer.data)
 
+
+class WorkProgramEditorsUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramEditorsUpdateSerializer
+    permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
+
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(WorkProgramSerializer(instance).data)
 
 
 class WorkProgramDetailsView(generics.RetrieveAPIView):
@@ -505,8 +557,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 {"expertise_status": Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status})
             newdata.update(
                 {"use_chat_with_id_expertise": Expertise.objects.get(work_program__id=self.kwargs['pk']).pk})
-            if Expertise.objects.get(
-                    work_program__id=self.kwargs['pk']).expertise_status == "WK" and (WorkProgram.objects.get(
+            if (Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK" or
+                Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "RE") and (WorkProgram.objects.get(
                 pk=self.kwargs['pk']).owner == request.user or WorkProgram.objects.filter(pk=self.kwargs['pk'],
                                                                                           editors__in=[request.user])):
                 newdata.update({"can_edit": True})
@@ -520,9 +572,20 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 newdata.update({"can_edit": False, "expertise_status": False})
             newdata.update({"use_chat_with_id_expertise": None})
         try:
-            ue = UserExpertise.objects.get(expert=request.user, expertise__work_program=self.kwargs['pk'])
-            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "EX" or \
-                    Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK":
+
+            ue = UserExpertise.objects.filter(expert=request.user, expertise__work_program=self.kwargs['pk'])
+            ue_save_obj = None
+            for user_exp_object in ue:
+                ue_save_obj = user_exp_object
+                if user_exp_object.stuff_status == "EX":
+                    ue_save_obj = user_exp_object
+                    break
+            if ue_save_obj:
+                ue = ue_save_obj
+            else:
+                raise ValueError
+
+            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status in ["EX", "WK", "RE"]:
                 newdata.update({"can_comment": True})
                 newdata.update({"user_expertise_id": ue.id})
             else:
@@ -912,6 +975,171 @@ def NewRealtionsForWorkProgramsInFieldOfStudyAPI(request):
         return Response(status=400)
 
 
+# def merge(queryset):
+#     main = queryset[0]
+#     tail = queryset[1:]
+#
+#     related = main._meta.get_fields()
+#
+#     valnames = dict()
+#     for r in related:
+#         valnames.setdefault(r.model, []).append(r.field.name)
+#
+#     for place in tail:
+#         for model, field_names in valnames.iteritems():
+#             for field_name in field_names:
+#                 print(**{field_name: place})
+#                 print(**{field_name: main})
+#                 print()
+#                 model.objects.filter(**{field_name: place}).update(**{field_name: main})
+#
+#         place.delete()
+
+    #self.message_user(request, "%s is merged with other places, now you can give it a canonical name." % main)
+
+
+#class MyMergedModelInstance(MergedModelInstance):
+    # """
+    #     Custom way to handle Issue #11: Ignore models with managed = False
+    #     Also, ignore auditlog models.
+    # """
+    # def _handle_o2m_related_field(self, related_field: Field, alias_object: Model):
+    #     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
+    #         return super()._handle_o2m_related_field(related_field, alias_object)
+    #
+    # def _handle_m2m_related_field(self, related_field: Field, alias_object: Model):
+    #     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
+    #         return super()._handle_m2m_related_field(related_field, alias_object)
+    #
+    # def _handle_o2o_related_field(self, related_field: Field, alias_object: Model):
+    #     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
+    #         return super()._handle_o2o_related_field(related_field, alias_object)
+
+@transaction.atomic()
+def merge(primary_object, alias_objects):
+    # if not isinstance(alias_objects, list):
+    #     alias_objects = [alias_objects]
+    MergedModelInstance.create(primary_object, alias_objects, keep_old=False)
+    return primary_object
+
+from django.apps import apps
+from django.contrib.contenttypes.fields import GenericForeignKey
+
+
+def get_generic_fields():
+    """Return a list of all GenericForeignKeys in all models."""
+    generic_fields = []
+    for model in apps.get_models():
+        for field_name, field in model.__dict__.items():
+            if isinstance(field, GenericForeignKey):
+                generic_fields.append(field)
+    return generic_fields
+
+
+@transaction.atomic()
+def merge_model_instances(primary_object, alias_objects):
+    """
+    Merge several model instances into one, the `primary_object`.
+    Use this function to merge model objects and migrate all of the related
+    fields from the alias objects the primary object.
+    """
+    generic_fields = get_generic_fields()
+
+    # get related fields
+    related_fields = list(filter(
+        lambda x: x.is_relation is True,
+        primary_object._meta.get_fields()))
+
+    many_to_many_fields = list(filter(
+        lambda x: x.many_to_many is True, related_fields))
+
+    related_fields = list(filter(
+        lambda x: x.many_to_many is False, related_fields))
+
+    # Loop through all alias objects and migrate their references to the
+    # primary object
+    deleted_objects = []
+    deleted_objects_count = 0
+    for alias_object in alias_objects:
+        # Migrate all foreign key references from alias object to primary
+        # object.
+        for many_to_many_field in many_to_many_fields:
+            alias_varname = many_to_many_field.name
+            related_objects = getattr(alias_object, alias_varname)
+            for obj in related_objects.all():
+                try:
+                    # Handle regular M2M relationships.
+                    getattr(alias_object, alias_varname).remove(obj)
+                    getattr(primary_object, alias_varname).add(obj)
+                except AttributeError:
+                    # Handle M2M relationships with a 'through' model.
+                    # This does not delete the 'through model.
+                    # TODO: Allow the user to delete a duplicate 'through' model.
+                    through_model = getattr(alias_object, alias_varname).through
+                    kwargs = {
+                        many_to_many_field.m2m_reverse_field_name(): obj,
+                        many_to_many_field.m2m_field_name(): alias_object,
+                    }
+                    through_model_instances = through_model.objects.filter(**kwargs)
+                    for instance in through_model_instances:
+                        # Re-attach the through model to the primary_object
+                        setattr(
+                            instance,
+                            many_to_many_field.m2m_field_name(),
+                            primary_object)
+                        instance.save()
+                        # TODO: Here, try to delete duplicate instances that are
+                        # disallowed by a unique_together constraint
+
+        for related_field in related_fields:
+            if related_field.one_to_many:
+                alias_varname = related_field.get_accessor_name()
+                related_objects = getattr(alias_object, alias_varname)
+                for obj in related_objects.all():
+                    field_name = related_field.field.name
+                    setattr(obj, field_name, primary_object)
+                    obj.save()
+            elif related_field.one_to_one or related_field.many_to_one:
+                alias_varname = related_field.name
+                related_object = getattr(alias_object, alias_varname)
+                primary_related_object = getattr(primary_object, alias_varname)
+                if primary_related_object is None:
+                    setattr(primary_object, alias_varname, related_object)
+                    primary_object.save()
+                elif related_field.one_to_one:
+                    # self.stdout.write("Deleted {} with id {}\n".format(
+                    #     related_object, related_object.id))
+                    related_object.delete()
+
+        for field in generic_fields:
+            filter_kwargs = {}
+            filter_kwargs[field.fk_field] = alias_object._get_pk_val()
+            filter_kwargs[field.ct_field] = field.get_content_type(alias_object)
+            related_objects = field.model.objects.filter(**filter_kwargs)
+            for generic_related_object in related_objects:
+                setattr(generic_related_object, field.name, primary_object)
+                generic_related_object.save()
+
+        if alias_object.id:
+            print('!!')
+            deleted_objects += [alias_object]
+            # self.stdout.write("Deleted {} with id {}\n".format(
+            #     alias_object, alias_object.id))
+            alias_object.delete()
+            deleted_objects_count += 1
+
+@api_view(['GET', 'POST'])
+def ChangeItemsView(request):
+    try:
+        item = Items.objects.filter(id = request.data.get('old_item_id'))[0]
+        other_item = Items.objects.filter(name = item.name).exclude(id = item.id)
+        merge(item, other_item)
+    except:
+        return Response(status=400)
+    return Response(status=200)
+
+
+
 class FileUploadWorkProgramOutcomesAPIView(APIView):
     """
     API эндпоинт для добавления данных о РПД из csv-файла, спарсенного с online.edu.ru
@@ -1277,6 +1505,7 @@ def SearchInEBSCO(request):
 class EvaluationToolInWorkProgramList(generics.ListAPIView):
     serializer_class = EvaluationToolForWorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    queryset = EvaluationTool
 
     def list(self, request, **kwargs):
         """
@@ -1289,6 +1518,8 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
             return Response(serializer.data)
         except:
             return Response(status=400)
+
+
 
 
 class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
@@ -2179,7 +2410,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
 
 
 @api_view(['POST'])
-@permission_classes((IsAuthenticated, ))
+@permission_classes((IsAdminUser, ))
 def CloneWorkProgramm(request):
     """
     Апи для клонирования рабочей программы
@@ -2238,3 +2469,37 @@ def DisciplinesByNumber(request):
 
     except:
         return Response(status=400)
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def TimeoutTest(request):
+    import time
+    timer = 0
+    while True:
+        print("It took {} sec".format(timer))
+        time.sleep(30)
+        if timer < 7200:
+            timer +=30
+        else:
+            break
+    return Response(status=200)
+
+
+class WorkProgramArchiveUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramArchiveUpdateSerializer
+    permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        try:
+            exp = Expertise.objects.get(work_program=instance)
+            exp.expertise_status="AR"
+            exp.save()
+        except Expertise.DoesNotExist:
+            pass
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(WorkProgramSerializer(instance).data)

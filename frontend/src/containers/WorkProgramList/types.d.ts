@@ -3,6 +3,7 @@ import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {WorkProgramActions, WorkProgramGeneralType} from '../WorkProgram/types';
 import {SortingType} from "../../components/SortingButton/types";
+import {getShowArchive} from "./getters";
 
 export interface WorkProgramListActions {
     pageDown: any;
@@ -53,5 +54,6 @@ export interface WorkProgramListProps extends WithStyles<typeof styles> {
     allCount: number;
     sortingField: string;
     showOnlyMy: boolean;
+    showArchive: boolean;
     sortingMode: SortingType;
 }

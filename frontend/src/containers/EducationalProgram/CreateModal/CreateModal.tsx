@@ -110,9 +110,10 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {isOpen, classes} = this.props;
         const {educationalProgram} = this.state;
 
-        const disableButton = get(educationalProgram, [EducationProgramFields.YEAR, 'length']) === 0
-            || !Boolean(get(educationalProgram, [EducationProgramFields.ACADEMIC_PLAN_FOR_EP, EducationProgramFields.ID]))
-            || get(educationalProgram, [EducationProgramFields.QUALIFICATION, 'length']) === 0
+        const disableButton =
+            // get(educationalProgram, [EducationProgramFields.YEAR, 'length']) === 0
+            !Boolean(get(educationalProgram, [EducationProgramFields.ACADEMIC_PLAN_FOR_EP, EducationProgramFields.ID]))
+            // || get(educationalProgram, [EducationProgramFields.QUALIFICATION, 'length']) === 0
         ;
 
         const isEditMode = Boolean(educationalProgram[EducationProgramFields.ID]);
@@ -124,22 +125,22 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 classes={{
                     paper: classes.dialog
                 }}
-                maxWidth="sm"
+                maxWidth="md"
                 fullWidth
             >
-                <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} образовательную программу</DialogTitle>
+                <DialogTitle> {isEditMode ? 'Редактирование' : 'Создание'} общей характеристики образовательной программы</DialogTitle>
                 <DialogContent>
                     <EducationPlanInDirectionSelector handleChange={this.handleChangePlan} />
                     <UserSelector handleChange={this.handleChangeUser} selectorLabel="Руководитель *" />
-                    <DatePickerComponent label="Год *"
-                                         views={["year"]}
-                                         value={educationalProgram[EducationProgramFields.YEAR]}
-                                         onChange={this.handleChangeYear}
-                                         format={YEAR_DATE_FORMAT}
-                    />
-                    <QualificationSelector onChange={this.changeQualification}
-                                           value={educationalProgram[EducationProgramFields.QUALIFICATION]}
-                    />
+                    {/*<DatePickerComponent label="Год *"*/}
+                    {/*                     views={["year"]}*/}
+                    {/*                     value={educationalProgram[EducationProgramFields.YEAR]}*/}
+                    {/*                     onChange={this.handleChangeYear}*/}
+                    {/*                     format={YEAR_DATE_FORMAT}*/}
+                    {/*/>*/}
+                    {/*<QualificationSelector onChange={this.changeQualification}*/}
+                    {/*                       value={educationalProgram[EducationProgramFields.QUALIFICATION]}*/}
+                    {/*/>*/}
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={this.handleClose}

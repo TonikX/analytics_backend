@@ -19,7 +19,11 @@ export default (theme: Theme) => createStyles({
     },
     title: {
         fontSize: '24px',
-        marginRight: '20px'
+        marginRight: '20px',
+        '& a': {
+            textDecoration: 'none',
+            color: theme.palette.primary.main
+        }
     },
     addIcon: {
         marginLeft: 'auto',

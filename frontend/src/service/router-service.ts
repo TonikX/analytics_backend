@@ -27,6 +27,8 @@ const SELECT_EDUCATIONAL_PROGRAM = 'select-educational-program';
 const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
 const INDIVIDUAL_EDUCATIONAL_PLANS = 'individual-educational-plans';
 const PROFESSIONAL_STANDARDS = 'professional-standards';
+const EDUCATIONAL_STANDARDS = 'educational-standards';
+const DODPROFILE = 'dod-profile'
 
 const RECORDS = 'records';
 
@@ -59,6 +61,18 @@ export default class RouterService {
 
     getProfessionalStandardsRoute = () => {
         return SEPARATOR + PROFESSIONAL_STANDARDS;
+    };
+
+    getEducationalStandardsRoute = () => {
+        return SEPARATOR + EDUCATIONAL_STANDARDS;
+    };
+
+    getEducationalStandardRoute = (id: number | string) => {
+        return SEPARATOR + EDUCATIONAL_STANDARDS + SEPARATOR + id;
+    };
+
+    getProfessionalStandardRoute = (id: number | string) => {
+        return SEPARATOR + PROFESSIONAL_STANDARDS + SEPARATOR + id;
     };
 
     getStructuralUnitsRoute = () => {
@@ -163,6 +177,10 @@ export default class RouterService {
 
     getNotificationsRoute = () => {
         return SEPARATOR + NOTIFICATIONS;
+    };
+
+    getUserProfile = () => {
+      return SEPARATOR + 'user-profile';
     };
 
     getSkillsRolesRoute = () => {
@@ -286,6 +304,10 @@ export default class RouterService {
 
     getTrajectoryPlanDetailLink = (id: ReactText) => {
         return SEPARATOR + INDIVIDUAL_TRAJECTORIES + SEPARATOR + EDUCATIONAL_PLAN + SEPARATOR + id;
+    };
+
+    getDodProfileRoute = () => {
+        return SEPARATOR + DODPROFILE;
     };
 }
 

@@ -11,26 +11,26 @@ const service = new Service();
 
 const userService = new UserService();
 
-// const getUserData = createLogic({
-//     type: C.GET_USER_DATA,
-//     latest: true,
-//     process({getState, action}, dispatch, done) {
-//         dispatch(actions.fetchingTrue({destination: Enum.USER_DATA_FETCHING}));
-//
-//         service.getUserData()
-//             .then((res) => {
-//                 dispatch(actions.setUserData(res.data));
-//                 dispatch(actions.fetchingSuccess());
-//             })
-//             .catch((err) => {
-//                 dispatch(actions.fetchingFailed(err));
-//             })
-//             .then(() => {
-//                 dispatch(actions.fetchingFalse({destination: Enum.USER_DATA_FETCHING}));
-//                 return done();
-//             });
-//     }
-// });
+const getUserData = createLogic({
+    type: actions.getUserData.type,
+    latest: true,
+    process({getState, action}, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: 'USER_DATA_FETCHING'}));
+
+        service.getUserData()
+            .then((res) => {
+                dispatch(actions.setUserData(res.data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: 'USER_DATA_FETCHING'}));
+                return done();
+            });
+    }
+});
 
 const getAllUsers = createLogic({
     type: actions.getAllUsers.type,
@@ -85,6 +85,7 @@ const refreshToken = createLogic({
 
                 userService.setToken(token);
                 dispatch(actions.getUserGroups());
+                dispatch(actions.getUserData());
                 dispatch(profileActions.getFolders());
                 dispatch(actions.fetchingSuccess());
 
@@ -105,4 +106,5 @@ export default [
     getAllUsers,
     getUserGroups,
     refreshToken,
+    getUserData,
 ];

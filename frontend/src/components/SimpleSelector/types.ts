@@ -3,7 +3,7 @@ import styles from "./SimpleSelector.styles";
 import {ReactText} from "react";
 
 export interface QualificationSelectorProps extends WithStyles<typeof styles> {
-    value: ReactText;
+    value?: ReactText;
     label: string;
     onChange: Function;
     noMargin?: boolean;

@@ -11,12 +11,12 @@ services:
             - POSTGRES_DB=analytics_db
         volumes:
             - ./dbs/postgres-data:/var/lib/postgresql
+#        networks:
+#            - djangonetwork
     web:
         container_name: analytics_web
         build: ./application
-        command: bash -c "pip install django_extensions && pip install html2text &&
-
-            python manage.py runserver --insecure 0.0.0.0:8000";
+        command: bash -c "pip install deepdiff && pip install html2text && pip install django-super-deduper && python manage.py runserver --insecure 0.0.0.0:8000";
 #            python manage.py makemigrations --noinput  && python manage.py makemigrations dataprocessing && python manage.py makemigrations workprogramsapp &&
 #            python manage.py migrate dataprocessing && python manage.py migrate workprogramsapp &
             # "python manage.py makemigrations --merge --noinput" --fake-initial; -
@@ -30,6 +30,8 @@ services:
         restart: always
         depends_on:
             - db
+#        networks:
+#            - djangonetwork
     frontend:
         stdin_open: true
         tty: true
@@ -41,12 +43,14 @@ services:
             - ./frontend:/app
             - node-modules:/app/node_modules
         ports:
-            - "3002:3000"
+            - "3003:3000"
         environment:
             - REACT_APP_API_HOST=${BACKEND_URL_FOR_REACT}
             - REACT_APP_API_SCHEMA=http
             - REACT_APP_API_PORT=8003
             - PORT=3000
+#        networks:
+#            - djangonetwork
 
 volumes:
     node-modules:

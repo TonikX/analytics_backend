@@ -6,7 +6,7 @@ import {
     EvaluationToolFields,
     IntermediateCertificationFields,
     PrerequisiteFields,
-    ResultsFields,
+    ResultsFields, WorkProgramGeneralFields,
     workProgramTopicFields
 } from "./enum";
 import {CourseFields} from "../Courses/enum";
@@ -40,6 +40,12 @@ class WorkProgramService extends AnalyticsService{
         });
     }
 
+    sendToArchive(id: string){
+        return this.patch(`/api/workprogram/update/${id}`, {
+            'work_status': 'a'
+        });
+    }
+
     returnWorkProgramToWork(expertiseId: number){
         return this.patch(`/api/expertise/user/update/${expertiseId}`, {
             user_expertise_status: UserExpertResultEnum.REWORK,
@@ -53,17 +59,11 @@ class WorkProgramService extends AnalyticsService{
     }
 
     saveWorkProgram(destination: string, value: string|Array<number>, id: string){
-        // const formData = new FormData();
-        //
-        // if (typeof value === 'string'){
-        //     formData.append(destination, value);
-        // }
-        //
-        // if (Array.isArray(value)){
-        //     value.forEach((value, index) => {
-        //         formData.append(`${destination}[${index}]`, value.toString());
-        //     });
-        // }
+        if (destination === WorkProgramGeneralFields.EDITORS) {
+            return this.patch(`/api/workprogram/update_editors/${id}`, {
+                [WorkProgramGeneralFields.EDITORS]: value,
+            });
+        }
 
         return this.patch(`/api/workprogram/update/${id}`, {
             [destination]: value
@@ -293,6 +293,13 @@ class WorkProgramService extends AnalyticsService{
 
     getComments(expertiseId: number, step: string){
         return this.get(`/api/expertise/comments/${expertiseId}?block=${step}`);
+    }
+
+    updateUnreadCommentStatus(wp: number, block: string){
+        return this.post(`/api/experise/comment/statusupdate`, {
+            block,
+            wp
+        });
     }
 
     createComment(expertiseId: number, step: string, comment: string){

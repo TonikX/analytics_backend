@@ -13,7 +13,7 @@ import SuccessIcon from '@material-ui/icons/CheckOutlined';
 
 import {EditedRowProps, EditedRowState} from './types';
 
-import {workProgramSectionFields} from '../../enum';
+import {ImplementationFormatsEnum, workProgramSectionFields} from '../../enum';
 
 import connect from './EditedRow.connect';
 import styles from './EditedRow.styles';
@@ -25,21 +25,22 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
 
         this.state = {
             isEditMode: !props.section.id,
-            section: props.section
+            section: props.section,
         };
     }
 
     componentDidUpdate(prevProps: Readonly<EditedRowProps>, prevState: Readonly<EditedRowState>, snapshot?: any) {
+        const { section } = this.props
+
         if (!shallowEqual(prevProps.section, this.props.section)){
             this.setState({
-                section: this.props.section
+                section: section,
             })
         }
     }
 
     calculateTotalHours = () => {
         const {section} = this.state;
-
         const contactWork = this.calculateContactWork();
         const spo = parseFloat(section[workProgramSectionFields.SPO]);
 
@@ -94,17 +95,25 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
 
     calculateContactWork = () => {
         const {section} = this.state;
+        const canEditConsultation = this.props.implementationFormat === ImplementationFormatsEnum.ONLINE
 
-        return ((
-            (parseFloat(section[workProgramSectionFields.LECTURE_CLASSES]) || 0) +
-            (parseFloat(section[workProgramSectionFields.PRACTICAL_LESSONS]) || 0) +
-            (parseFloat(section[workProgramSectionFields.LABORATORY]) || 0)
-        ) * 1.1).toFixed(2);
+        if (canEditConsultation) {
+            return ((
+              (parseFloat(section[workProgramSectionFields.CONSULTATIONS]) || 0)
+            ) * 1.1).toFixed(2);
+        } else {
+            return ((
+              (parseFloat(section[workProgramSectionFields.LECTURE_CLASSES]) || 0) +
+              (parseFloat(section[workProgramSectionFields.PRACTICAL_LESSONS]) || 0) +
+              (parseFloat(section[workProgramSectionFields.LABORATORY]) || 0)
+            ) * 1.1).toFixed(2);
+        }
     }
 
     render() {
-        const {classes, isCanEdit} = this.props;
+        const {classes, isCanEdit, implementationFormat} = this.props;
         const {isEditMode, section} = this.state;
+        const canEditConsultation = implementationFormat === ImplementationFormatsEnum.ONLINE
 
         const contactWork = this.calculateContactWork();
 
@@ -136,6 +145,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                                    className={classes.smallInput}
                                    type="number"
                                    onChange={this.handleChangeField(workProgramSectionFields.LECTURE_CLASSES)}
+                                   disabled={canEditConsultation}
                         />
                         :
                         <>{section.lecture_classes}</>
@@ -149,6 +159,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                                    className={classes.smallInput}
                                    type="number"
                                    onChange={this.handleChangeField(workProgramSectionFields.LABORATORY)}
+                                   disabled={canEditConsultation}
                         />
                         :
                         <>{section.laboratory}</>
@@ -162,6 +173,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                                    className={classes.smallInput}
                                    type="number"
                                    onChange={this.handleChangeField(workProgramSectionFields.PRACTICAL_LESSONS)}
+                                   disabled={canEditConsultation}
                         />
                         :
                         <>{section.practical_lessons}</>
@@ -178,6 +190,20 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                         />
                         :
                         <>{section.SRO}</>
+                    }
+                </TableCell>
+                <TableCell className={classes.centerCell}>
+                    {isEditMode ?
+                        <TextField variant="outlined"
+                                   size="small"
+                                   defaultValue={section[workProgramSectionFields.CONSULTATIONS]}
+                                   className={classes.smallInput}
+                                   type="number"
+                                   onChange={this.handleChangeField(workProgramSectionFields.CONSULTATIONS)}
+                                   disabled={!canEditConsultation}
+                        />
+                        :
+                        <>{section.consultations}</>
                     }
                 </TableCell>
                 <TableCell className={classes.centerCell}>

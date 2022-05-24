@@ -11,21 +11,17 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {DatePicker} from "@material-ui/pickers";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-import IconButton from "@material-ui/core/IconButton";
-import DateIcon from "@material-ui/icons/DateRange";
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {DownloadFileModalFields} from '../../enum';
 import {DirectionFields} from "../../../Direction/enum";
 
 import Service from '../../service';
-import {YEAR_DATE_FORMAT} from "../../../../common/utils";
 
 import connect from './DownloadFileModal.connect';
 import styles from './DownloadFileModal.styles';
@@ -168,24 +164,6 @@ class DownloadFileModal extends React.PureComponent<DownloadFileModalProps> {
                             )}
                         </Select>
                     </FormControl>
-
-                    <DatePicker
-                        value={dialogData[DownloadFileModalFields.YEAR]}
-                        onChange={(date: any) => this.saveYear(date)}
-                        InputProps={{
-                            endAdornment: (
-                                <IconButton>
-                                    <DateIcon />
-                                </IconButton>
-                            ),
-                        }}
-                        inputVariant="outlined"
-                        format={YEAR_DATE_FORMAT}
-                        label={'Год'}
-                        views={["year"]}
-                        className={classes.datePicker}
-                    />
-
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={this.handleClose}

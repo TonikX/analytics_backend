@@ -2,6 +2,10 @@ from rest_framework import serializers
 from rest_framework.fields import BooleanField
 
 from dataprocessing.serializers import ItemSerializer, userProfileSerializer
+from gia_practice_app.GIA.models import GIA
+from gia_practice_app.Practice.models import Practice
+#from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
+#from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
 from .expertise.common_serializers import ShortExpertiseSerializer
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, FieldOfStudy, \
@@ -115,7 +119,7 @@ class EvaluationToolForOutcomsSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
     class Meta:
         model = EvaluationTool
-        fields = ['id', 'type', 'name', 'max', 'min', 'deadline', 'check_point', 'description']
+        fields = ['id', 'type', 'name', 'max', 'min', 'deadline', 'check_point', 'description', 'evaluation_criteria']
 
 
 class СertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
@@ -123,7 +127,7 @@ class СertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSeri
 
     class Meta:
         model = СertificationEvaluationTool
-        fields = ['id', 'type', 'name', 'description', 'deadline', 'min', 'max', 'semester']
+        fields = ['id', 'type', 'name', 'description', 'deadline', 'min', 'max', 'semester', 'evaluation_criteria']
 
 
 class СertificationEvaluationToolCreateSerializer(serializers.ModelSerializer):
@@ -131,7 +135,7 @@ class СertificationEvaluationToolCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = СertificationEvaluationTool
-        fields = ['type', 'name', 'description', 'deadline', 'semester', 'min', 'max', 'work_program']
+        fields = ['type', 'name', 'description', 'deadline', 'semester', 'min', 'max', 'work_program', 'evaluation_criteria']
 
 
 class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
@@ -226,7 +230,7 @@ class DisciplineSectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineSection
-        fields = ['id', 'ordinal_number', 'name', 'topics', 'evaluation_tools', 'contact_work', 'lecture_classes', 'laboratory', 'practical_lessons', 'SRO', 'total_hours']
+        fields = ['id', 'ordinal_number', 'name', 'topics', 'evaluation_tools', 'contact_work', 'lecture_classes', 'laboratory', 'practical_lessons', 'SRO', 'total_hours', 'consultations']
 
 
 class CertificationSerializer(serializers.ModelSerializer):
@@ -253,9 +257,9 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkProgram
         fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester',
-                  'hoursSecondSemester', 'source', 'description', 'video',
-                  'owner', 'editors', 'hours', 'extra_points', 'language', 'structural_unit', 'bars',
-                  'number_of_semesters']
+                  'hoursSecondSemester', 'source', 'description', 'video','owner','editors', 'hours',
+                  'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format',
+                  'work_status']
         extra_kwargs = {
             'source': {'required': False}
         }
@@ -267,6 +271,22 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = WorkProgramSource
 #         fields = ['id']
+
+
+class WorkProgramArchiveUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для отправки РПД в архив"""
+
+    class Meta:
+        model = WorkProgram
+        fields = ['work_status']
+
+
+class WorkProgramEditorsUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания рабочих программ"""
+
+    class Meta:
+        model = WorkProgram
+        fields = ['editors']
 
 
 class Geeks(object):
@@ -338,7 +358,7 @@ class EvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EvaluationTool
-        fields = ['id', 'type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections', 'semester']
+        fields = ['id', 'type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections', 'semester', 'evaluation_criteria']
 
 
 class EvaluationToolCreateSerializer(serializers.ModelSerializer):
@@ -348,7 +368,7 @@ class EvaluationToolCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EvaluationTool
-        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'semester', 'min', 'max', 'descipline_sections']
+        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'semester', 'min', 'max', 'descipline_sections', 'evaluation_criteria']
 
 
 class ZunSerializer(serializers.ModelSerializer):
@@ -492,9 +512,18 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
     #work_program = serializers.SerializerMethodField('get_id_of_wpcb')
     work_program = serializers.SerializerMethodField('get_id_of_wpcb')
 
+    def to_representation(self, value):
+        self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
+        self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
+        # self.fields['gia'] = GIASerializer(required=False, many=True)
+        # self.fields['practice'] = PracticeSerializer(required=False, many=True)
+        return super().to_representation(value)
+
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module', #'gia',
+                  #'practice'
+                  ]
 
 
     def get_id_of_wpcb(self, obj):
@@ -593,13 +622,30 @@ class WorkProgramChangeInDisciplineBlockModuleSerializerDetail(serializers.Model
         model = WorkProgramChangeInDisciplineBlockModule
         fields = "__all__"
 
+class PracticePrimitiveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Practice
+        fields = "__all__"
+
+class GIAPrimitiveSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = GIA
+        fields = "__all__"
+
 
 class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.ModelSerializer):
     work_program = serializers.PrimaryKeyRelatedField(many=True, queryset=WorkProgram.objects.all())
 
+    def to_representation(self, value):
+        # self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
+        # self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
+        return super().to_representation(value)
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', #'gia',
+                  #'practice'
+                  ]
         extra_kwargs = {
             'work_program': {'required': False}
         }
@@ -729,11 +775,12 @@ class WorkProgramSerializer(serializers.ModelSerializer):
         model = WorkProgram
         fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes',
                   'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification',
-                  'source', 'description', 'video', 'work_program_in_change_block',
-                  'expertise_with_rpd', 'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors',
-                  'language', 'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
-                  'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2', 'practice_hours_v2',
-                  'lab_hours_v2', 'srs_hours_v2', 'number_of_semesters']
+                  'source', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd',
+                  'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors', 'language',
+                  'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
+                  'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
+                  'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'number_of_semesters', 'read_notifications',
+                  'implementation_format']
 
     def create(self, validated_data):
         """
@@ -810,3 +857,13 @@ class WorkProgramInFieldOfStudyForCompeteceListSerializer(serializers.ModelSeria
     class Meta:
         model = WorkProgramInFieldOfStudy
         fields = ['id', 'work_program_change_in_discipline_block_module', 'zun_in_wp']
+
+
+class WorkProgramInFieldOfStudyShortSerializer(serializers.ModelSerializer):
+
+    """Сериализатор рабочих программ"""
+    work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title', 'approval_date', 'authors', 'discipline_code', 'work_program_in_change_block']

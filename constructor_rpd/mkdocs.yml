@@ -1,0 +1,15 @@
+site_name: Документация к сервису "Конструктор РПД"
+nav:
+  - Авторизация и данные для обращения к API:
+      - Общий формат API: auth/api_data.md
+      - Авторизация (Получение токена): auth/token.md
+  - Работа с внешними сервисами:
+      - Работа с БАРС 1.0: external_services/bars.md
+  - Серсвисы для работы с учебными сущностями:
+      - Сервис для объединения учебных сущностей: item_services/item.md
+  - Практики и ГИА:
+      - ГИА: gia_and_practice/gia.md
+      - Практики: gia_and_practice/practice.md
+
+theme:
+  name: material

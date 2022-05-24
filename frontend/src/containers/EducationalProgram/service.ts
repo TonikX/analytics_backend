@@ -16,7 +16,7 @@ class Service extends AnalyticsService{
     getEducationalProgramList(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
-        return this.get(`/api/EducationalProgram?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+        return this.get(`/api/general_characteristic?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
     deleteEducationProgram(id: number){
@@ -28,24 +28,24 @@ class Service extends AnalyticsService{
     }
 
     getEducationalProgramCharacteristic(id: number){
-        return this.get(`/api/GeneralCharacteristics/detail_with_educational_program/${id}`);
+        return this.get(`/api/general_characteristic/detail/${id}`);
     }
 
     createEducationProgram(program: any){
-        return this.post(`/api/EducationalProgram/create`, {
-            "academic_plan_for_ep": program[EducationProgramFields.ACADEMIC_PLAN_FOR_EP][EducationProgramFields.ID],
-            "qualification": program[EducationProgramFields.QUALIFICATION],
+        return this.post(`/api/general_characteristic/create`, {
+            "educational_program": [program[EducationProgramFields.ACADEMIC_PLAN_FOR_EP][EducationProgramFields.ID]],
+            // "qualification": program[EducationProgramFields.QUALIFICATION],
             "manager": program[EducationProgramFields.MANAGER],
-            "year_of_recruitment": program[EducationProgramFields.YEAR],
+            // "year_of_recruitment": program[EducationProgramFields.YEAR],
         });
     }
 
     updateEducationProgram(id: any, payload: any){
-        return this.patch(`/api/EducationalProgram/update/${id}`, payload);
+        return this.patch(`/api/general_characteristic/update/${id}`, payload);
     }
 
     updateEducationProgramCharacteristic(id: any, payload: any){
-        return this.patch(`/api/GeneralCharacteristics/update/${id}`, payload);
+        return this.patch(`/api/general_characteristic/update/${id}`, payload);
     }
 
     getCompetenceTableUrl(type: CompetenceTableType){
@@ -61,10 +61,11 @@ class Service extends AnalyticsService{
         }
     }
 
-    characteristicCreateGroup({name, type}: CharacteristicCreateGroupActionType, characteristicId: number){
+    characteristicCreateGroup({name, type, subType}: CharacteristicCreateGroupActionType, characteristicId: number ){
         return this.post(`/api/general_ch/${this.getCompetenceTableUrl(type)}/`, {
             name,
-            general_characteristic: characteristicId
+            general_characteristic: characteristicId,
+            type_of_pk_competence: subType,
         });
     }
 
@@ -91,6 +92,11 @@ class Service extends AnalyticsService{
             labor_functions: laborFunction
         });
     }
+    characteristicSaveCompetenceKindOfActivity({competenceId, type, kindOfActivity}: any){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            kinds_of_activity_for_miner: kindOfActivity
+        });
+    }
 
     characteristicSaveProfessionalStandard({competenceId, type, professionalStandardId}: CharacteristicAddProfessionalStandardActionType){
         return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
@@ -98,9 +104,33 @@ class Service extends AnalyticsService{
         });
     }
 
+    characteristicSaveProfessionalStandardLaborFunction({competenceId, type, laborFunction}: any){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            generalized_labor_functions: laborFunction
+        });
+    }
+
+    characteristicDeleteProfessionalStandardLaborFunction({competenceId, type, laborFunction}: any){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            generalized_labor_functions: null
+        });
+    }
+
+    characteristicSaveKindOfActivity({competenceId, type, kindOfActivity}: any){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            kinds_of_activity: kindOfActivity
+        });
+    }
+
     characteristicDeleteProfessionalStandard({competenceId, type}: CharacteristicDeleteProfessionalStandardActionType){
         return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
             professional_standard: null
+        });
+    }
+
+    characteristicDeleteKindOfActivity({competenceId, type}: CharacteristicDeleteProfessionalStandardActionType){
+        return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
+            kinds_of_activity: null
         });
     }
 
@@ -115,6 +145,50 @@ class Service extends AnalyticsService{
         return this.post(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/indicator/`, {
             "competence_in_group_of_pk": competenceId,
             "indicator": indicatorId
+        });
+    }
+
+    getKindsOfActivity(name: string){
+        return this.get(`/api/generalcharacteristic/kindsofactivity?search=${name}`);
+    }
+
+    getObjectsOfActivity(name: string){
+        return this.get(`/api/generalcharacteristic/objectsofactivity?search=${name}`);
+    }
+
+    getTaskTypes(name: string){
+        return this.get(`/api/generalcharacteristic/tasktypes?search=${name}`);
+    }
+
+    createKindOfActivity(name: string){
+        return this.post(`/api/generalcharacteristic/kindsofactivity/`, {
+            name,
+        });
+    }
+
+    createObjectOfActivity(name: string){
+        return this.post(`/api/generalcharacteristic/objectsofactivity/`, {
+            name,
+        });
+    }
+
+    createTaskType(name: string){
+        return this.post(`/api/generalcharacteristic/tasktypes/`, {
+            name,
+        });
+    }
+
+    getCompetenceMatrix(id: number) {
+        return this.get(`/api/general_characteristic/competence_matrix/${id}`);
+    }
+
+    saveZUN({indicator, plans, results}: any){
+        return this.post(`/api/zun/many_create/`,{
+            wpa_in_fss: plans,
+            zun: {
+                indicator_in_zun: indicator,
+                items: results
+            }
         });
     }
 }

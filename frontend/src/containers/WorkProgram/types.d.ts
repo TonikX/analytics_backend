@@ -4,7 +4,8 @@ import {
     EvaluationToolFields,
     ResultsFields,
     WorkProgramGeneralFields,
-    WorkProgramStatusEnum, CommentFields
+    WorkProgramStatusEnum, CommentFields,
+    ImplementationFormatsEnum
 } from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
@@ -14,6 +15,7 @@ import {IndicatorsFields} from "../Indicators/enum";
 import {CompetenceFields} from "../Competences/enum";
 import {UserType} from "../../layout/types";
 import {FolderActions, FolderType} from "../Profile/Folders/types";
+
 
 export interface WorkProgramActions {
     pageDown: any;
@@ -75,6 +77,7 @@ export interface WorkProgramActions {
     getComments: any;
     setComments: any;
     createComment: any;
+    updateUnreadCommentStatus: any;
 
     addTopicMaterial: any;
     updateTopicMaterial: any;
@@ -103,6 +106,7 @@ export type WorkProgramGeneralType = {
     [WorkProgramGeneralFields.RATING]: boolean;
     [WorkProgramGeneralFields.ZUN]: Array<ZunType>;
     [WorkProgramGeneralFields.BARS]: boolean;
+    [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: ImplementationFormatsEnum;
 };
 
 export type ZunType = {
@@ -137,6 +141,7 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     validateErrors: Array<string>;
     fetchingBars: boolean;
     location: any;
+    notificationsRead: Array<boolean>
 }
 
 
@@ -148,6 +153,7 @@ export type SectionType = {
     contact_work: number;
     lecture_classes: number;
     practical_lessons: number;
+    consultations: number;
     total_hours: number;
     laboratory: number;
     topics: Array<TopicType>;

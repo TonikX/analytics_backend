@@ -29,7 +29,7 @@ from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAP
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, \
     AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, DisciplineBlockModuleShortListView, \
     DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailListForUserView, DisciplineBlockModuleDetailView, \
-    DisciplinesByNumber, InsertModule
+    DisciplinesByNumber, InsertModule, WorkProgramArchiveUpdateView
 from .views import EvaluationToolInWorkProgramList, \
     FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, \
     FileUploadWorkProgramOutcomesAPIView
@@ -80,10 +80,10 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkPr
 from .files_export.views import DocxFileExportView, SyllabusExportView
 from .views import CloneWorkProgramm
 
-from .views import WorkProgramsListApi, UserGroups
+from .views import WorkProgramsListApi, UserGroups, TimeoutTest, WorkProgramEditorsUpdateView
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
 
-from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet, WorkProgramInFieldOfStudyForWorkProgramList
+from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet, WorkProgramInFieldOfStudyForWorkProgramList, ChangeItemsView
 
 # DocxFileExportOldView
 from .workprogram_additions.views import CopyContentOfWorkProgram
@@ -135,11 +135,14 @@ urlpatterns = [
     path('api/workprogram/detail/<int:pk>', WorkProgramDetailsView.as_view()),
     path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
+    path('api/workprogram/update_editors/<int:pk>', WorkProgramEditorsUpdateView.as_view()),
+    path('api/workprogram/update_status/<int:pk>', WorkProgramArchiveUpdateView.as_view()),
     path('api/workprogram/br/update/<int:pk>', WorkProgramWorkProgramSourceUpdateView.as_view()),
     path('api/workprogram/clone', CloneWorkProgramm),
     path('api/workprogram/merge_content', CopyContentOfWorkProgram),
     path('api/workprogramsinfieldofstudy', WorkProgramInFieldOfStudyListView.as_view()),
     path('api/workprogram/change_relations', NewRealtionsForWorkProgramsInFieldOfStudyAPI),
+    path('api/workprogram/change_items', ChangeItemsView),
     # path('api/workprogram/itemrelations/<char:discipline_code>', WorkProgramDetailsWithDisciplineCodeView.as_view()),
     url(r'^api/workprogram/itemrelations/(?P<discipline_code>[0-9.]+)/$',
         WorkProgramDetailsWithDisciplineCodeView.as_view()),
@@ -350,9 +353,15 @@ urlpatterns = [
 
     url(r'^', include('workprogramsapp.individualization.urls')),
     url(r'^', include('workprogramsapp.isu_merge.urls')),
-    url(r'^', include('workprogramsapp.statistic.urls')),
     url(r'^', include('workprogramsapp.notifications.urls')),
-
+    url(r'^', include('workprogramsapp.feedback.urls')),
+    path('api/nginx_timeout_test/', TimeoutTest),
     url(r'^', include(router.urls)),
+
+    path('api/nginx_timeout_test/', TimeoutTest),
+    url(r'^', include('workprogramsapp.expertise.urls')),
+    url(r'^', include('workprogramsapp.educational_program.educational_standart.urls')),
+    url(r'^', include('gia_practice_app.GIA.urls')),
+    url(r'^', include('gia_practice_app.Practice.urls')),
 
 ]

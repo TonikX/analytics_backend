@@ -35,7 +35,7 @@ class ExpertisesService extends AnalyticsService{
 
     sendForRework(expertiseId: number){
         return this.patch(`/api/expertise/update/${expertiseId}`, {
-            expertise_status: 'WK',
+            expertise_status: 'RE',
         });
     }
 }

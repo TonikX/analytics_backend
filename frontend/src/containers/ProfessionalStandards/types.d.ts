@@ -5,6 +5,8 @@ import {ProfessionalStandardFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
 
 export interface ProfessionalStandardsActions {
+    setLaborFunctions: any;
+    getLaborFunctions: any;
     changeSearchQuery: any;
     getProfessionalStandards: any;
     setProfessionalStandards: any;
@@ -16,6 +18,11 @@ export interface ProfessionalStandardsActions {
     changeCurrentPage: any;
     changeAllCount: any;
     changeSorting: any;
+    getProfessionalStandard: any;
+    setProfessionalStandard: any;
+    createProfessionalStandardAdditionalFields: any;
+    updateProfessionalStandardAdditionalFields: any;
+    deleteProfessionalStandardAdditionalFields: any;
 }
 
 export interface professionalStandardsState {
@@ -31,12 +38,17 @@ export interface professionalStandardsState {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: ProfessionalStandardsType|{};
     };
+    [fields.PROFESSIONAL_STANDARD]: any;
+    [fields.LABOR_FUNCTIONS]: Array<any>;
+
 }
 
 export type ProfessionalStandardsType = {
     [ProfessionalStandardFields.ID]: number,
     [ProfessionalStandardFields.TITLE]: string,
     [ProfessionalStandardFields.NUMBER]: string,
+    [ProfessionalStandardFields.CODE]: string,
+    [ProfessionalStandardFields.NAME]: string,
 };
 
 export interface ProfessionalStandardsProps extends WithStyles<typeof styles> {
@@ -47,4 +59,5 @@ export interface ProfessionalStandardsProps extends WithStyles<typeof styles> {
     allCount: number;
     sortingField: string;
     sortingMode: SortingType;
+    professionalStandard: any;
 }

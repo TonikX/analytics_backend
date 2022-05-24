@@ -35,6 +35,7 @@ export enum WorkProgramGeneralFields {
     TITLE = 'title',
     CODE = 'discipline_code',
     QUALIFICATION = 'qualification',
+    IMPLEMENTATION_FORMAT = 'implementation_format',
     LANGUAGE = 'language',
     STRUCTURAL_UNIT = 'structural_unit',
     APPROVAL_DATE = 'approval_date',
@@ -64,6 +65,7 @@ export enum workProgramSectionFields {
     ORDINAL_NUMBER = 'ordinal_number',
     NAME = 'name',
     SPO = 'SRO',
+    CONSULTATIONS = 'consultations',
     CONTACT_WORK = 'contact_work',
     LECTURE_CLASSES = 'lecture_classes',
     PRACTICAL_LESSONS = 'practical_lessons',
@@ -85,6 +87,7 @@ export enum workProgramTopicFields {
 
 export enum fetchingTypes {
     GET_RESULTS = 'GET_RESULTS',
+    UPDATE_UNREAD_COMMENT_STATUS = 'UPDATE_UNREAD_COMMENT_STATUS',
     CLONE_WORK_PROGRAM = 'CLONE_WORK_PROGRAM',
 
     SEND_TO_EXPERTISE = 'SEND_TO_EXPERTISE',
@@ -178,6 +181,7 @@ export enum WorkProgramStatusEnum {
     EXPERTISE = 'EX',
     APPROVE = 'AC',
     ARCHIVE = 'AR',
+    REWORK = 'RE',
 }
 
 export enum IntermediateCertificationEnum {
@@ -185,6 +189,7 @@ export enum IntermediateCertificationEnum {
     DIF_CREDIT = '2',
     CREDIT = '3',
     COURSE_WORK = '4',
+    COURSE_PROJECT = '5',
 }
 
 export enum StepsEnum {
@@ -206,4 +211,10 @@ export enum CommentFields {
     ID = 'id',
     USER_EXPERTISE = 'user_expertise',
     EXPERT = 'expert',
+}
+
+export enum ImplementationFormatsEnum {
+    ONLINE = 'online',
+    MIXED = 'mixed',
+    OFFLINE = 'offline',
 }

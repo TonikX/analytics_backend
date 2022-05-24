@@ -1,6 +1,7 @@
 import datetime
 from pprint import pprint
 
+from django.db import transaction
 from django.db.models import Count
 # Сериализаторы
 from django_filters.rest_framework import DjangoFilterBackend
@@ -13,22 +14,36 @@ from rest_framework.response import Response
 # Сериализаторы
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
     EducationalProgramSerializer, \
-    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer
+    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
+    GeneralLaborFunctionsSerializer, KindsOfActivitySerializer, EmployerSerializer, \
+    WorkProgramCompetenceIndicatorSerializer, ObjectsOfActivitySerializer
 from .competence_handler import competence_dict_generator
 from .general_prof_competencies.models import IndicatorInGeneralProfCompetenceInGeneralCharacteristic, \
-    GeneralProfCompetencesInGroupOfGeneralCharacteristic, GroupOfGeneralProfCompetencesInGeneralCharacteristic
+    GeneralProfCompetencesInGroupOfGeneralCharacteristic, GroupOfGeneralProfCompetencesInEducationalStandard
+from .general_prof_competencies.serializers import GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer, \
+    GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer
 from .key_competences.models import IndicatorInKeyCompetenceInGeneralCharacteristic, \
-    KeyCompetencesInGroupOfGeneralCharacteristic, GroupOfKeyCompetencesInGeneralCharacteristic
-from .over_professional_competencies.models import GroupOfOverProfCompetencesInGeneralCharacteristic, \
+    KeyCompetencesInGroupOfGeneralCharacteristic, GroupOfKeyCompetencesInEducationalStandard
+from .key_competences.serializers import GroupOfKeyCompetencesInGeneralCharacteristicSerializer, \
+    KeyCompetencesInGroupOfGeneralCharacteristicSerializer
+from .over_professional_competencies.models import GroupOfOverProfCompetencesInEducationalStandard, \
     OverProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInOverProfCompetenceInGeneralCharacteristic
+from .over_professional_competencies.serializers import GroupOfOverProfCompetencesInGeneralCharacteristicSerializer, \
+    OverProfCompetencesInGroupOfGeneralCharacteristicSerializer
 from .pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
     PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
+from .pk_comptencies.serializers import GroupOfPkCompetencesInGeneralCharacteristicSerializer, \
+    PkCompetencesInGroupOfGeneralCharacteristicSerializer
 
 from .serializers import ProfessionalStandardSerializer
 
+from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
+
 # --Работа с образовательной программой
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
-    ImplementationAcademicPlan, Competence, Indicator
+    ImplementationAcademicPlan, Competence, Indicator, WorkProgramInFieldOfStudy, Zun, GeneralizedLaborFunctions, \
+    KindsOfActivity, EmployerRepresentative, DisciplineBlockModule, DisciplineBlock, \
+    WorkProgramChangeInDisciplineBlockModule, ObjectsOfActivity
 from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
@@ -165,26 +180,64 @@ class ProfessionalStandardSet(viewsets.ModelViewSet):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+class GeneralizedLaborFunctionsSet(viewsets.ModelViewSet):
+    """
+    CRUD для обобщенных трудовых сущностей
+    """
+    queryset = GeneralizedLaborFunctions.objects.all()
+    serializer_class = GeneralLaborFunctionsSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class KindsOfActivitySet(viewsets.ModelViewSet):
+    """
+    CRUD для сфер деятельности
+    """
+    queryset = KindsOfActivity.objects.all()
+    serializer_class = KindsOfActivitySerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class ObjectsOfActivitySet(viewsets.ModelViewSet):
+    """
+    CRUD для сфер деятельности
+    """
+    queryset = ObjectsOfActivity.objects.all()
+    serializer_class = ObjectsOfActivitySerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class EmployerSet(viewsets.ModelViewSet):
+    """
+    CRUD представителей работодателей
+    """
+    queryset = EmployerRepresentative.objects.all()
+    serializer_class = EmployerSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
 @api_view(['POST'])
 @permission_classes((IsAdminUser,))
+@transaction.atomic
 def UploadCompetences(request):
-    csv_path = "workprogramsapp/educational_program/competence.csv"
+    csv_path = "workprogramsapp/educational_program/competences.csv"
     # Генерируем словарь компетенций из CSV
     dict_of_competences = competence_dict_generator(csv_path)
-
+    # pprint(dict_of_competences)
     for op in dict_of_competences:
         # Существует ли генеральная характеристика и таблица EducationalProgram или же ее надо создавать для УП
+        # op_real_object = ImplementationAcademicPlan.objects.get(year=int(op_year), title=op_name)
+        # print(op["id_op"])
         print(op["id_op"])
         try:
-            educational_program = EducationalProgram.objects.get(academic_plan_for_ep__academic_plan__pk=op["id_op"])
-            general_characteristic = GeneralCharacteristics.objects.get(educational_program=educational_program)
-        except EducationalProgram.DoesNotExist:
-            academic_plan_for_ep = ImplementationAcademicPlan.objects.get(pk=op["id_op"])
-            educational_program = EducationalProgram.objects.create(academic_plan_for_ep=academic_plan_for_ep)
-            general_characteristic = GeneralCharacteristics.objects.create(educational_program=educational_program)
+            general_characteristic = GeneralCharacteristics.objects.get(educational_program__in=op["id_op"])
         except GeneralCharacteristics.DoesNotExist:
-            general_characteristic = GeneralCharacteristics.objects.create(educational_program=educational_program)
-
+            general_characteristic = GeneralCharacteristics.objects.create()
+            general_characteristic.educational_program.add(*op["id_op"])
         # Объект характеристики есть, идем по списку компетенций
         for competence in op["competence_list"]:
             competence_to_add = None
@@ -204,31 +257,89 @@ def UploadCompetences(request):
                 competence_to_add = Competence.objects.create(number=competence["id_competence"],
                                                               name=competence["competence_name"])
                 for indicator in competence["indicators_list"]:
-                    indicator_from_db.append(
-                        Indicator.objects.create(number=indicator["id_indicator"], name=indicator["indicator_name"],
-                                                 competence=competence_to_add))
+                    created_indicator = Indicator.objects.create(number=indicator["id_indicator"],
+                                                                 name=indicator["indicator_name"],
+                                                                 competence=competence_to_add)
+                    # Будем ли мы привязывать индикаторы к РПД теперь?
+                    """for wp in indicator["wp_list"]:
+                        wp_in_fos = WorkProgramInFieldOfStudy.objects.filter(work_program_id=wp,
+                                                                             work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=op_real_object).distinct()
+                        for fs in wp_in_fos:
+                            Zun.objects.create(wp_in_fs=fs, indicator_in_zun=created_indicator)"""
+                    indicator_from_db.append(created_indicator)
 
-            if competence["competence_type"] == "Профессиональные компетенции":
-                CompGroupModel = GroupOfPkCompetencesInGeneralCharacteristic
-                CompGeneralModel = PkCompetencesInGroupOfGeneralCharacteristic
-                CompIndicatorModel = IndicatorInPkCompetenceInGeneralCharacteristic
-            elif competence["competence_type"] == "Надпрофессиональные компетенции":
-                CompGroupModel = GroupOfOverProfCompetencesInGeneralCharacteristic
-                CompGeneralModel = OverProfCompetencesInGroupOfGeneralCharacteristic
-                CompIndicatorModel = IndicatorInOverProfCompetenceInGeneralCharacteristic
-            elif competence["competence_type"] == "Ключевые компетенции":
-                CompGroupModel = GroupOfKeyCompetencesInGeneralCharacteristic
-                CompGeneralModel = KeyCompetencesInGroupOfGeneralCharacteristic
-                CompIndicatorModel = IndicatorInKeyCompetenceInGeneralCharacteristic
-            elif competence["competence_type"] == "Общепрофессиональные компетенции":
-                CompGroupModel = GroupOfGeneralProfCompetencesInGeneralCharacteristic
-                CompGeneralModel = GeneralProfCompetencesInGroupOfGeneralCharacteristic
-                CompIndicatorModel = IndicatorInGeneralProfCompetenceInGeneralCharacteristic
-            pprint(competence_to_add)
-            pprint(indicator_from_db)
+            # Элемент старого кода
+            CompGroupModel = GroupOfPkCompetencesInGeneralCharacteristic
+            CompGeneralModel = PkCompetencesInGroupOfGeneralCharacteristic
+            CompIndicatorModel = IndicatorInPkCompetenceInGeneralCharacteristic
+
+            # pprint(competence_to_add)
+            # pprint(indicator_from_db)
             comp_group, created = CompGroupModel.objects.get_or_create(name=competence["competence_group"],
                                                                        general_characteristic=general_characteristic)
             comp_general = CompGeneralModel.objects.create(group_of_pk=comp_group, competence=competence_to_add)
             for indicator in indicator_from_db:
                 CompIndicatorModel.objects.create(competence_in_group_of_pk=comp_general, indicator=indicator)
     return Response("γοητεία")
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def GetCompetenceMatrix(request, gen_pk):
+    unique_wp = []  # Уникальные РПД в нескольких УП
+    gen_characteristic = GeneralCharacteristics.objects.get(pk=gen_pk)
+    academic_plans = gen_characteristic.educational_program.all()
+    pk_competences = PkCompetencesInGroupOfGeneralCharacteristicSerializer(
+        instance=PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+            group_of_pk__general_characteristic_id=gen_pk).distinct(),
+        many=True).data
+    general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(
+        instance=GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+            group_of_pk__educational_standard=gen_characteristic.educational_standard).distinct(), many=True).data
+    key_competences = KeyCompetencesInGroupOfGeneralCharacteristicSerializer(
+        instance=KeyCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+            group_of_pk__educational_standard=gen_characteristic.educational_standard).distinct(), many=True).data
+    over_prof_competences = OverProfCompetencesInGroupOfGeneralCharacteristicSerializer(
+        instance=OverProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+            group_of_pk__educational_standard=gen_characteristic.educational_standard).distinct(), many=True).data
+    competence_matrix = {"pk_competences": pk_competences, "general_prof_competences": general_prof_competences,
+                         "key_competences": key_competences, "over_prof_competences": over_prof_competences, }
+    matrix_list = []
+    for ap in academic_plans:
+        academic_plan = ap.academic_plan
+        academic_plan_matrix_dict = {"academic_plan": ap.title, "discipline_blocks_in_academic_plan": []}
+        matrix_list.append(academic_plan_matrix_dict)
+        for block in DisciplineBlock.objects.filter(academic_plan=academic_plan):
+            block_dict = {"name": block.name, "modules_in_discipline_block": []}
+            # academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
+            for block_module in DisciplineBlockModule.objects.filter(descipline_block=block):
+                block_module_dict = {"name": block_module.name, "type": block_module.type,
+                                     "change_blocks_of_work_programs_in_modules": []}
+                # block_dict["modules_in_discipline_block"].append(block_module_dict)
+                for change_block in WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                        discipline_block_module=block_module):
+                    change_block_dict = {"change_type": change_block.change_type,
+                                         "credit_units": change_block.credit_units, "work_program": []}
+                    # block_module_dict["change_blocks_of_work_programs_in_modules"].append(change_block_dict)
+                    for work_program in WorkProgram.objects.filter(work_program_in_change_block=change_block):
+                        if work_program.id not in unique_wp:
+
+                            serializer = WorkProgramCompetenceIndicatorSerializer(work_program)
+                            change_block_dict["work_program"].append(serializer.data)
+                            unique_wp.append(work_program.id)
+                        else:
+                            pass
+                            # print(work_program)
+                    if change_block_dict["work_program"]:
+                        block_module_dict["change_blocks_of_work_programs_in_modules"].append(change_block_dict)
+                if block_module_dict["change_blocks_of_work_programs_in_modules"]:
+                    block_dict["modules_in_discipline_block"].append(block_module_dict)
+            if block_dict["modules_in_discipline_block"]:
+                academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
+        list_to_sort = academic_plan_matrix_dict["discipline_blocks_in_academic_plan"]
+        newlist = sorted(list_to_sort, key=lambda d: d['name'])
+        academic_plan_matrix_dict["discipline_blocks_in_academic_plan"] = newlist
+    competence_matrix["wp_matrix"] = matrix_list
+    competence_matrix["educational_program"] = ImplementationAcademicPlanSerializer(gen_characteristic.educational_program.all(), many = True).data
+    # print(matrix_list)
+    return Response(competence_matrix)

@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
 
-
 class User(AbstractUser):
     '''
     Модель для пользователей
@@ -16,6 +15,8 @@ class User(AbstractUser):
     is_rpd_developer = models.BooleanField(default = False)
     is_expertise_master = models.BooleanField(default = False)
 
+    expertise_status_notification = models.BooleanField(default=False)
+    expertise_comments_notification = models.BooleanField(default=False)
     # def __str__(self):
     #     return self.first_name + ' ' + self.last_name
 
@@ -42,7 +43,7 @@ class Items(models.Model):
     '''
  
     name = models.CharField(max_length=900, blank=True, verbose_name='Название')
-    domain = models.ForeignKey(Domain, null = True, blank = True, help_text='Укажите область', verbose_name='Область знаний',on_delete=models.CASCADE,)
+    domain = models.ForeignKey(Domain, null = True, blank = True, help_text='Укажите область', verbose_name='Область знаний',on_delete=models.CASCADE, related_name="items_in_domain")
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name = 'Автор', verbose_name='Пользователи', null=True)
     value = models.IntegerField(blank=True, null = True, default = 0, verbose_name='Значение')
     source = models.CharField(max_length=200, blank=True, verbose_name='Источник')

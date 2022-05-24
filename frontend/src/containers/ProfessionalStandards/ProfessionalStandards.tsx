@@ -18,6 +18,7 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import EyeIcon from '@material-ui/icons/VisibilityOutlined';
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -31,6 +32,9 @@ import {ProfessionalStandardsProps} from "./types";
 import connect from './ProfessionalStandards.connect';
 import styles from './ProfessionalStandarts.styles';
 import Pagination from "@material-ui/lab/Pagination";
+import {Link} from "react-router-dom";
+import {appRouter} from "../../service/router-service";
+import {withRouter} from "react-router-dom";
 
 class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> {
     state = {
@@ -83,9 +87,14 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
         this.props.actions.getProfessionalStandards();
     }
 
-    changeSorting = (field: string) => (mode: SortingType)=> {
+    changeSorting = (field: string) => (mode: SortingType) => {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
         this.props.actions.getProfessionalStandards();
+    }
+
+    changeRoute = (id: any) => () => {
+        //@ts-ignore
+        this.props.history.push(appRouter.getProfessionalStandardRoute(id))
     }
 
     render() {
@@ -103,7 +112,7 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
                                    classes: {
                                        root: classes.searchInput
                                    },
-                                   startAdornment: <SearchOutlined />,
+                                   startAdornment: <SearchOutlined/>,
                                }}
                                onChange={this.handleChangeSearchQuery}
                     />
@@ -123,20 +132,55 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
                                            mode={sortingField === ProfessionalStandardFields.TITLE ? sortingMode : ''}
                             />
                         </Typography>
+
+
+                        <Typography className={classNames(classes.marginRight, classes.codeCell)}>
+                            Код ПС
+                            <SortingButton changeMode={this.changeSorting(ProfessionalStandardFields.CODE)}
+                                           mode={sortingField === ProfessionalStandardFields.CODE ? sortingMode : ''}
+                            />
+                        </Typography>
+                        <Typography className={classes.profCell}>
+                            Наименование области проф. деятельности
+                            <SortingButton changeMode={this.changeSorting(ProfessionalStandardFields.NAME)}
+                                           mode={sortingField === ProfessionalStandardFields.NAME ? sortingMode : ''}
+                            />
+                        </Typography>
                     </div>
 
                     <div className={classes.list}>
                         <Scrollbars>
                             {professionalStandards.map(professionalStandard =>
                                 <div className={classes.row} key={professionalStandard[ProfessionalStandardFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.numberCell)}> {professionalStandard[ProfessionalStandardFields.NUMBER]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}> {professionalStandard[ProfessionalStandardFields.TITLE]} </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.numberCell)} >
+                                        {professionalStandard[ProfessionalStandardFields.NUMBER]}
+                                    </Typography>
+                                    <Typography
+                                        className={classNames(classes.marginRight, classes.titleCell, classes.pointerCell)}
+                                        onClick={this.changeRoute(professionalStandard[ProfessionalStandardFields.ID])}
+                                    >
+                                        {professionalStandard[ProfessionalStandardFields.TITLE]}
+                                    </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.codeCell)}>
+                                        {professionalStandard[ProfessionalStandardFields.CODE]}
+                                    </Typography>
+                                    <Typography className={classes.profCell}>
+                                        {professionalStandard[ProfessionalStandardFields.NAME]}
+                                    </Typography>
                                     <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(professionalStandard[ProfessionalStandardFields.ID])}>
+                                        <IconButton>
+                                            <Link style={{textDecoration: 'none', height: '23px', color: 'rgba(0, 0, 0, 0.54)'}}
+                                                  to={appRouter.getProfessionalStandardRoute(professionalStandard[ProfessionalStandardFields.ID])}
+                                            >
+                                                <EyeIcon />
+                                            </Link>
+                                        </IconButton>
+                                        <IconButton
+                                            onClick={this.handleClickDelete(professionalStandard[ProfessionalStandardFields.ID])}>
                                             <DeleteIcon />
                                         </IconButton>
                                         <IconButton onClick={this.handleClickEdit(professionalStandard)}>
-                                            <EditIcon />
+                                            <EditIcon/>
                                         </IconButton>
                                     </div>
                                 </div>
@@ -162,7 +206,7 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
                     </Fab>
                 </div>
 
-                <ProfessionalStandardCreateModal />
+                <ProfessionalStandardCreateModal/>
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}
@@ -177,4 +221,4 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
 }
 
 // @ts-ignore
-export default connect(withStyles(styles)(ProfessionalStandards));
+export default connect(withStyles(styles)(withRouter(ProfessionalStandards)));

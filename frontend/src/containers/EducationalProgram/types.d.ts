@@ -16,6 +16,14 @@ import {characterisicStyles} from './Сharacteristic/Сharacteristic.styles';
 import styles from "./WorkProgram.styles";
 
 export interface EducationalProgramActions {
+    createTaskType: any,
+    getTasksTypes: any,
+    setTasksTypes: any,
+    createObjectOfActivity: any,
+    getObjectsOfActivity: any,
+    setObjectsOfActivity: any,
+    characteristicSaveProfessionalStandardLaborFunction: any;
+    characteristicDeleteProfessionalStandardLaborFunction: any;
     changeSearchQuery: any;
     getEducationalProgramCharacteristic: any;
     setEducationalProgramCharacteristic: any;
@@ -30,6 +38,18 @@ export interface EducationalProgramActions {
     deleteEducationalProgram: any;
     changeEducationalProgram: any;
     setEducationalProgramList: any;
+    createKindOfActivity: any;
+    getKindsOfActivity: any;
+    setKindsOfActivity: any;
+    characteristicSaveKindOfActivity: any;
+    characteristicDeleteKindOfActivity: any;
+
+    characteristicSaveCompetenceKindsOfActivity: any;
+
+    getCompetenceMatrix: any;
+    setCompetenceMatrix: any;
+
+    saveZun: any;
 
     characteristicCreateGroup: ActionCreatorWithPayload<CharacteristicCreateGroupActionType>;
     characteristicSaveGroupTitle: ActionCreatorWithPayload<CharacteristicSaveGroupTitleActionType>;
@@ -51,12 +71,16 @@ export interface educationalProgramState {
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
+    [fields.KINDS_OF_ACTIVITIES]: Array<{ id: number; name: string; }>;
+    [fields.OBJECTS_OF_ACTIVITIES]: Array<{ id: number; name: string; }>;
+    [fields.TASKS_TYPES]: Array<{ id: number; name: string; }>;
     [fields.EDUCATION_PROGRAM_LIST]: Array<EducationalProgramType>;
     [fields.EDUCATION_PROGRAM_CHARACTERISTIC]: EducationalProgramCharacteristicType|{};
     [fields.EDUCATION_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: EducationalProgramType|{};
     };
+    [fields.COMPETENCE_MATRIX]: any;
 }
 
 export type EducationalProgramCharacteristicType = {
@@ -94,6 +118,7 @@ export interface CharacteristicProps extends WithStyles<typeof characterisicStyl
 export type CharacteristicCreateGroupActionType = {
     name: string;
     type: CompetenceTableType;
+    subType: 'prof' | 'fore' | 'min';
 }
 
 export type CharacteristicSaveGroupTitleActionType = {

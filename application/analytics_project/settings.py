@@ -57,7 +57,10 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'onlinecourse',
     'records',
-    'django_extensions',
+    'gia_practice_app',
+    #'django_extensions',
+    # 'ckeditor',
+    # 'ckeditor_uploader',
     #'oauth2_provider',
     #'social_django',
     #'rest_framework_social_oauth2',
@@ -159,6 +162,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'dataprocessing.User'
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -284,3 +288,12 @@ BARS = {
     "BARS_PASSWORD": env('BARS_PASSWORD'),
     "BARS_URL":env('BARS_URL'),
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

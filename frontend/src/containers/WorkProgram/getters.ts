@@ -23,6 +23,9 @@ export const getWorkProgramExpertiseStatus = (state: rootState) => get(getWorkPr
 export const getWorkProgramExpertiseId = (state: rootState) => get(getWorkProgram(state), 'expertise_with_rpd.0.id', null) || get(getWorkProgram(state), WorkProgramGeneralFields.EXPERTISE_ID_2);
 export const getWorkProgramUserExpertiseId = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.USER_EXPERTISE_ID) || get(getWorkProgram(state), WorkProgramGeneralFields.EXPERTISE_ID_2);
 export const getWorkProgramField = (state: rootState, field: string) => get(getWorkProgram(state), field, '');
+export const getWorkProgramNotificationsUnread = (state: rootState) => (
+  (getWorkProgramField(state, 'read_notifications')?.split(', ') || []).map((item: 'False'|'True') => item === 'True')
+);
 
 export const isCanEdit = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_EDIT);
 export const isCanApprove = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_APPROVE);
@@ -69,3 +72,12 @@ export const getEvaluationToolsForSelect = (state: rootState) => {
         value: evaluationTool[EvaluationToolFields.ID],
     }))
 };
+
+export const getPlanQualifications = (state: rootState) => {
+    const plans = getWorkProgramField(state, 'work_program_in_change_block');
+    const path = 'discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.field_of_study.0.qualification';
+    if (plans) {
+        return plans.map((p: any) => get(p, path, ''));
+    }
+    return [];
+}
