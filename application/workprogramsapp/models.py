@@ -85,7 +85,6 @@ class WorkProgram(CloneMixin, models.Model):
     #field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram,
     #                                          verbose_name="Предметная область",
     #                                          related_name='workprograms_in_fieldofstudy')
-    # source = models.ManyToManyField('WorkProgramSource', blank=True, null=True, verbose_name='Источник РПД', related_name='source')
     source = models.ManyToManyField('WorkProgramSource', blank=True, null=True, verbose_name='Источник РПД',
                                                      related_name='bibrefs')
     # evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
@@ -923,6 +922,7 @@ class WorkProgramSource(models.Model):
         (SCIENTIFIC, 'Научные издания')
     ]
     publication_type = models.CharField(max_length=1024,
+        verbose_name="Вид издания",
         choices=PUBLICATION_TYPE_CHOICES,
         blank=False,
         default=EDUCATIONAL
@@ -935,6 +935,7 @@ class WorkProgramSource(models.Model):
         (ELECTRONIC, 'Электронные ресурсы')
     ]
     format = models.CharField(max_length=1024,
+        verbose_name="Формат",
         choices=FORMAT_CHOICES,
         blank=False,
         default=PRINTED
@@ -952,6 +953,12 @@ class WorkProgramSource(models.Model):
     # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
     def save(self, *args, **kwargs):
+        """
+        Переопределение метода save для автоматической генерации библиографической ссылки на источник РПД
+        :param args:
+        :param kwargs:
+        :return:
+        """
         if self.format == "Электронные ресурсы":
             text = "электронный"
         else:
@@ -960,7 +967,7 @@ class WorkProgramSource(models.Model):
         if self.number_of_edition is None:
             edition = ""
         else:
-            edition = self.number_of_edition
+            edition = self.number_of_edition + " изд."
 
         if self.year is None:
             year = ""
@@ -974,14 +981,13 @@ class WorkProgramSource(models.Model):
 
         if not self.main_author:
             try:
-                self.main_author = self.authors[:self.index(",")]
-            except Exception:
+                self.main_author = self.authors[:self.authors.index(",")]
+            except ValueError:
                 self.main_author = self.authors
         if self.bib_reference == "":
-            self.bib_reference = f"{self.main_author}, {self.title} / {self.authors}. — {edition} " \
-                   f" : {self.publishing_company}{year}.{pages} — Текст : {text}"
+            self.bib_reference = f"{self.main_author}, {self.title} / {self.authors} — {edition} " \
+                   f"{self.city_of_publishing} : {self.publishing_company}{year}.{pages} — Текст : {text}"
         super(WorkProgramSource, self).save(*args, **kwargs)
-
 
     def __str__(self):
         return self.bib_reference

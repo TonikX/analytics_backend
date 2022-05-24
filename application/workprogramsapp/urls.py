@@ -30,10 +30,6 @@ from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicP
     AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, DisciplineBlockModuleShortListView, \
     DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailListForUserView, DisciplineBlockModuleDetailView, \
     DisciplinesByNumber, InsertModule
-# from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
-#     BibliographicReferenceDestroyView, \
-#     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
-#     BibliographicReferenceInWorkProgramList
 from .views import EvaluationToolInWorkProgramList, \
     FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, \
     FileUploadWorkProgramOutcomesAPIView
@@ -61,20 +57,18 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, \
     AcademicPlanListShortAPIView, \
     NewRealtionsForWorkProgramsInFieldOfStudyAPI, WorkProgramsWithOutcomesToPrerequisitesForThisWPView, \
     WorkProgramsWithPrerequisitesToOutocomesForThisWPView, WorkProgramsWithOutocomesForThisWPView
-from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView
+from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView, \
+    WorkProgramSourceInWorkProgramList
 
 from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, TopicsListAPI, TopicDetailAPI, NewOrdinalNumbersForDesciplineSectionAPI
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
 from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateView
 from .views import NewOrdinalNumbersForTopicAPI, TopicCreateAPI
-# from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
-#     BibliographicReferenceUpdateView
-# from .views import WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList
 from .views import\
     FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, FileUploadWorkProgramOutcomesAPIView, SearchInEBSCO
 from .views import WorkProgramSourceListCreateAPIView, WorkProgramSourceDetailsView, WorkProgramSourceDestroyView, \
-    WorkProgramSourceUpdateView, WorkProgramWorkProgramSourceUpdateView, WorkProgramSourceInWorkProgramList
+    WorkProgramSourceUpdateView, WorkProgramWorkProgramSourceUpdateView
 from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, IndicatorUpdateView
 from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlanDetailsView, ImplementationAcademicPlanDestroyView, ImplementationAcademicPlanUpdateView, ImplementationAcademicPlanListAPIView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
@@ -141,7 +135,7 @@ urlpatterns = [
     path('api/workprogram/detail/<int:pk>', WorkProgramDetailsView.as_view()),
     path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
-    # path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
+    path('api/workprogram/br/update/<int:pk>', WorkProgramWorkProgramSourceUpdateView.as_view()),
     path('api/workprogram/clone', CloneWorkProgramm),
     path('api/workprogram/merge_content', CopyContentOfWorkProgram),
     path('api/workprogramsinfieldofstudy', WorkProgramInFieldOfStudyListView.as_view()),
@@ -195,14 +189,14 @@ urlpatterns = [
     path('api/fieldofstudy/', FieldOfStudyListCreateView.as_view()),
     path('api/fieldofstudy/<int:pk>', FieldOfStudyDetailUpdateDeleteView.as_view()),
 
-    # Источники
-    path('api/WorkProgramSources', WorkProgramSourceListCreateAPIView.as_view()),
-    path('api/WorkProgramSources/create', WorkProgramSourceListCreateAPIView.as_view()),
-    path('api/WorkProgramSources/detail/<int:pk>', WorkProgramSourceDetailsView.as_view()),
-    path('api/WorkProgramSources/delete/<int:pk>', WorkProgramSourceDestroyView.as_view()),
-    path('api/WorkProgramSources/update/<int:pk>', WorkProgramSourceUpdateView.as_view()),
-    path('api/WorkProgramSources/SearchInEbsco', SearchInEBSCO),
-    path('api/SourceInWorkprogram/<int:workprogram_id>',
+    # Источники РПД
+    path('api/workprogram_sources', WorkProgramSourceListCreateAPIView.as_view()),
+    path('api/workprogram_sources/create', WorkProgramSourceListCreateAPIView.as_view()),
+    path('api/workprogram_sources/detail/<int:pk>', WorkProgramSourceDetailsView.as_view()),
+    path('api/workprogram_sources/delete/<int:pk>', WorkProgramSourceDestroyView.as_view()),
+    path('api/workprogram_sources/update/<int:pk>', WorkProgramSourceUpdateView.as_view()),
+    path('api/workprogram_sources/search_in_ebsco', SearchInEBSCO),
+    path('api/source_in_workprogram/<int:workprogram_id>',
          WorkProgramSourceInWorkProgramList.as_view()),
 
     # Библиографическая ссылка

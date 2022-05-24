@@ -253,28 +253,19 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkProgram
         fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester',
-                  'hoursSecondSemester', 'work_program_source', 'description', 'video',
+                  'hoursSecondSemester', 'source', 'description', 'video',
                   'owner', 'editors', 'hours', 'extra_points', 'language', 'structural_unit', 'bars',
                   'number_of_semesters']
         extra_kwargs = {
-            'work_program_source': {'required': False},
-            # 'bibliographic_reference': {'required': False}
+            'source': {'required': False}
         }
 
 
-class SourceForWorkProgramSerializer(serializers.ModelSerializer):
-    """Сериализатор """
-
-    class Meta:
-        model = WorkProgramSource
-        fields = ['id']
-
-
-# class BibliographicReferenceForWorkProgramSerializer(serializers.ModelSerializer):
+# class SourceForWorkProgramSerializer(serializers.ModelSerializer):
 #     """Сериализатор """
 #
 #     class Meta:
-#         model = BibliographicReference
+#         model = WorkProgramSource
 #         fields = ['id']
 
 
