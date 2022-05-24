@@ -3,6 +3,8 @@ from rest_framework import serializers
 from dataprocessing.models import User
 from dataprocessing.serializers import userProfileSerializer
 # from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
+from gia_practice_app.GIA.models import GIA
+from gia_practice_app.Practice.models import Practice
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
 from workprogramsapp.models import WorkProgram
 from workprogramsapp.workprogram_additions.serializers import ShortStructuralUnitSerializer
@@ -49,6 +51,14 @@ class ExpertiseSerializer(serializers.ModelSerializer):
                     pk=instance.id,
                     work_program__structural_unit__user_in_structural_unit__user=request.user,
                     work_program__structural_unit__user_in_structural_unit__status__in=["leader", "deputy"]).distinct())
+                    or bool(Expertise.objects.filter(
+                    pk=instance.id,
+                    gia__structural_unit__user_in_structural_unit__user=request.user,
+                    gia__structural_unit__user_in_structural_unit__status__in=["leader", "deputy"]).distinct())
+                    or bool(Expertise.objects.filter(
+                    pk=instance.id,
+                    practice__structural_unit__user_in_structural_unit__user=request.user,
+                    practice__structural_unit__user_in_structural_unit__status__in=["leader", "deputy"]).distinct())
             }
         for group in request.user.groups.all():
             if group.name == "expertise_master":
@@ -57,12 +67,24 @@ class ExpertiseSerializer(serializers.ModelSerializer):
         return user_statuses
 
     def create(self, validated_data):
-        is_exp_exist = Expertise.objects.filter(work_program=validated_data['work_program'])
+        try:
+            exp_type = validated_data['expertise_type']
+        except KeyError:
+            exp_type=None
+        if not exp_type or exp_type == "WP":
+            is_exp_exist = Expertise.objects.filter(work_program=validated_data['work_program'])
+        elif exp_type == "GIA":
+            is_exp_exist = Expertise.objects.filter(gia=validated_data['gia'])
+        elif exp_type == "PRAC":
+            is_exp_exist = Expertise.objects.filter(practice=validated_data['practice'])
+
         request = self.context.get('request')
         if is_exp_exist:
             is_exp_exist[0].expertise_status = "EX"
             is_exp_exist[0].save()
             counter = is_exp_exist[0].expertise_counter
+            if not counter:
+                counter=0
             is_exp_exist.update(expertise_counter=counter + 1)
             all_user_expertise = UserExpertise.objects.filter(expertise=is_exp_exist[0])
             all_user_expertise.update(user_expertise_status=None)
@@ -70,13 +92,23 @@ class ExpertiseSerializer(serializers.ModelSerializer):
             return is_exp_exist[0]
         exp = Expertise.objects.create(**validated_data)
         UserExpertise.objects.create(expertise=exp, expert=request.user, stuff_status="SE")  # ???
-        try:
-            expert = User.objects.get(
-                experts_with_units__structural_units__workprogram_in_structural_unit=validated_data['work_program'])
-            UserExpertise.objects.create(expertise=exp, expert=expert, stuff_status="EX")
-        except User.DoesNotExist:
-            pass
-        editors = WorkProgram.objects.get(pk=validated_data['work_program'].pk).editors.all()
+
+        # Автодобавление экспертов
+        if not exp_type or exp_type == "WP":
+            try:
+                expert = User.objects.get(
+                    experts_with_units__structural_units__workprogram_in_structural_unit=validated_data['work_program'])
+                UserExpertise.objects.create(expertise=exp, expert=expert, stuff_status="EX")
+            except User.DoesNotExist:
+                pass
+
+        if not exp_type or exp_type == "WP":
+            editors = WorkProgram.objects.get(pk=validated_data['work_program'].pk).editors.all()
+        elif exp_type == "GIA":
+            editors = GIA.objects.get(pk=validated_data['gia'].pk).editors.all()
+        elif exp_type == "PRAC":
+            editors = Practice.objects.get(pk=validated_data['practice'].pk).editors.all()
+
         for editor in editors:
             if editor.pk != request.user.pk:
                 UserExpertise.objects.create(expertise=exp, expert=editor, stuff_status="ED")
@@ -85,6 +117,10 @@ class ExpertiseSerializer(serializers.ModelSerializer):
     def to_representation(self, value):
         self.fields['work_program'] = WorkProgramShortForExperiseSerializerWithStructUnitWithEditors(many=False,
                                                                                                      read_only=True)
+        self.fields['practice'] = PracticeShortForExpertiseSerializerWithStructUnitWithEditors(many=False,
+                                                                                               read_only=True)
+        self.fields['GIA'] = GIAShortForExpertiseSerializerWithStructUnitWithEditors(many=False,
+                                                                                     read_only=True)
         self.fields['experts'] = serializers.SerializerMethodField()
         self.fields['expertse_users_in_rpd'] = UserExpertiseForExpertiseSerializer(many=True, read_only=True)
         return super().to_representation(value)
@@ -147,6 +183,26 @@ class WorkProgramShortForExperiseSerializerWithStructUnitWithEditors(serializers
         model = WorkProgram
         fields = ['id', 'title', 'discipline_code', 'qualification', 'prerequisites', 'outcomes', 'structural_unit',
                   'editors']
+
+
+class PracticeShortForExpertiseSerializerWithStructUnitWithEditors(serializers.ModelSerializer):
+    """Сериализатор практик"""
+    structural_unit = ShortStructuralUnitSerializer(many=False)
+    editors = userProfileSerializer(many=True)
+
+    class Meta:
+        model = Practice
+        fields = ['id', 'title', 'discipline_code', 'structural_unit', 'editors']
+
+
+class GIAShortForExpertiseSerializerWithStructUnitWithEditors(serializers.ModelSerializer):
+    """Сериализатор практик"""
+    structural_unit = ShortStructuralUnitSerializer(many=False)
+    editors = userProfileSerializer(many=True)
+
+    class Meta:
+        model = GIA
+        fields = ['id', 'title', 'discipline_code', 'structural_unit', 'editors']
 
 
 class ShortExpertiseSerializer(serializers.ModelSerializer):

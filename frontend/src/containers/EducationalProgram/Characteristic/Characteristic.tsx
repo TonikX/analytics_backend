@@ -102,6 +102,15 @@ class Characteristic extends React.Component<CharacteristicProps> {
         })
     }
 
+    handleChangeDean = (value: string) => {
+        this.props.actions.changeEducationalProgram({
+            id: this.getEducationalProgramId(),
+            payload: {
+                [EducationProgramFields.DEAN]: value
+            }
+        })
+    }
+
     handleChangeSKEEditorField = (field: string) => (event: any) => {
         const data: string = event.editor.getData()
         this.props.actions.changeEducationalProgramCharacteristic({
@@ -267,9 +276,14 @@ class Characteristic extends React.Component<CharacteristicProps> {
                     }
                     <br /><br /><br />
                     <UserSelector selectorLabel="Руководитель"
-                                  value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.MANAGER, 'id'], '').toString()}
+                                  value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.EP_SUPERVISOR, 'id'], '').toString()}
                                   label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.EP_SUPERVISOR], ''))}
                                   handleChange={this.handleChangeHead}
+                    />
+                    <UserSelector selectorLabel="Декан"
+                                  value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.DEAN, 'id'], '').toString()}
+                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.DEAN], ''))}
+                                  handleChange={this.handleChangeDean}
                     />
                     {/*<DatePickerComponent label="Год *"*/}
                     {/*                     views={["year"]}*/}
@@ -324,29 +338,6 @@ class Characteristic extends React.Component<CharacteristicProps> {
                         />
                 </div>
             case 12:
-                return <>
-                    <UserSelector selectorLabel='Разработчики'
-                                  value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEVELOPERS, 0, UserFields.ID], '')}
-                                  handleChange={()=>{}}
-                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEVELOPERS, 0, UserFields.ID], ''))}
-                    />
-                    <UserSelector selectorLabel="Представители работодателей"
-                                  value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EMPLOYERS, 0, UserFields.ID], '')}
-                                  handleChange={()=>{}}
-                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EMPLOYERS, 0, UserFields.ID], ''))}
-                    />
-                    <UserSelector selectorLabel="Директор мегафакультета"
-                                  handleChange={()=>{}}
-                                  value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DIRECTOR_MEGAFALCULTY, UserFields.ID], '')}
-                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DIRECTOR_MEGAFALCULTY, UserFields.ID], ''))}
-                    />
-                    <UserSelector selectorLabel="Декан факультета"
-                                  value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEAN, UserFields.ID], '')}
-                                  label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.DEAN, UserFields.ID], ''))}
-                                  handleChange={()=>{}}
-                    />
-                </>
-            case 13:
                 return <CompetenceMatrix/>
         }
     }

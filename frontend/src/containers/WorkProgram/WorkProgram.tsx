@@ -48,6 +48,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         activeStep: 0,
         isOpenComments: false,
         openConfirmDuplicateWPModal: false,
+        openConfirmArchiveWPModal: false,
     };
 
     componentDidMount() {
@@ -94,9 +95,21 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         })
     }
 
+    openConfirmArchiveWPModal = () => {
+        this.setState({
+            openConfirmArchiveWPModal: true
+        })
+    }
+
     closeConfirmDuplicateWPModal = () => {
         this.setState({
             openConfirmDuplicateWPModal: false
+        })
+    }
+
+    closeArchiveWPModal = () => {
+        this.setState({
+            openConfirmArchiveWPModal: false
         })
     }
 
@@ -217,6 +230,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
     }
 
     handleSendToArchive = () => {
+        this.closeArchiveWPModal();
         this.props.actions.sendWorkProgramToArchive();
     }
 
@@ -274,7 +288,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                     <WorkProgramStatus status={workProgramStatus} />
 
                     <div className={classes.headerButtons}>
-                        {canSendToArchive && <Button onClick={this.handleSendToArchive}>Отправить в архив</Button>}
+                        {canSendToArchive && <Button onClick={this.openConfirmArchiveWPModal}>Отправить в архив</Button>}
 
                         {canSendToExpertise &&
                             (validateErrors.length ?
@@ -366,6 +380,13 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                                isOpen={this.state.openConfirmDuplicateWPModal}
                                dialogTitle={'Клонировать учебную программу'}
                                confirmButtonText={'Клонировать'}
+                />
+                <ConfirmDialog onConfirm={this.handleSendToArchive}
+                               onDismiss={this.closeArchiveWPModal}
+                               confirmText={'Вы уверены, что хотите отправить рабочую программу в архив?'}
+                               isOpen={this.state.openConfirmArchiveWPModal}
+                               dialogTitle={'Отправить учебную программу в архив'}
+                               confirmButtonText={'Отправить в архив'}
                 />
             </div>
         );

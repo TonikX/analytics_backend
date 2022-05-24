@@ -121,6 +121,16 @@ class IsMemberOfExpertise(permissions.BasePermission):
                         expertise__work_program__structural_unit__user_in_structural_unit__user=request.user,
                         expertise__work_program__structural_unit__user_in_structural_unit__status__in=["leader",
                                                                                                        "deputy"],
+                        expertise=view.kwargs['pk']) or
+                    UserExpertise.objects.filter(
+                        expertise__practice__structural_unit__user_in_structural_unit__user=request.user,
+                        expertise__practice__structural_unit__user_in_structural_unit__status__in=["leader",
+                                                                                                       "deputy"],
+                        expertise=view.kwargs['pk']) or
+                    UserExpertise.objects.filter(
+                        expertise__gia__structural_unit__user_in_structural_unit__user=request.user,
+                        expertise__gia__structural_unit__user_in_structural_unit__status__in=["leader",
+                                                                                                   "deputy"],
                         expertise=view.kwargs['pk']))
         else:
             return (UserExpertise.objects.filter(expert=request.user) or
@@ -147,7 +157,17 @@ class IsMemberOfUserExpertise(permissions.BasePermission):
                         expertise__work_program__structural_unit__user_in_structural_unit__user=request.user,
                         expertise__work_program__structural_unit__user_in_structural_unit__status__in=["leader",
                                                                                                        "deputy"],
-                        pk=view.kwargs['pk']))
+                        pk=view.kwargs['pk'])or
+                    UserExpertise.objects.filter(
+                        expertise__practice__structural_unit__user_in_structural_unit__user=request.user,
+                        expertise__practice__structural_unit__user_in_structural_unit__status__in=["leader",
+                                                                                                       "deputy"],
+                        expertise=view.kwargs['pk']) or
+                    UserExpertise.objects.filter(
+                        expertise__gia__structural_unit__user_in_structural_unit__user=request.user,
+                        expertise__gia__structural_unit__user_in_structural_unit__status__in=["leader",
+                                                                                                   "deputy"],
+                        expertise=view.kwargs['pk']))
         else:
             return (UserExpertise.objects.filter(expert=request.user) or
                     UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"]))
@@ -204,3 +224,5 @@ class IsDisciplineBlockModuleEditor(permissions.BasePermission):
     @staticmethod
     def check_access(module_id: int, user: User) -> bool:
         return DisciplineBlockModule.objects.filter(pk=module_id, editors=user).exists()
+
+

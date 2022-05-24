@@ -264,6 +264,13 @@ class WorkProgramEditorsUpdateSerializer(serializers.ModelSerializer):
         model = WorkProgram
         fields = ['editors']
 
+class WorkProgramArchiveUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для отправки РПД в архив"""
+
+    class Meta:
+        model = WorkProgram
+        fields = ['work_status']
+
 
 class BibliographicReferenceForWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор Разделов"""
