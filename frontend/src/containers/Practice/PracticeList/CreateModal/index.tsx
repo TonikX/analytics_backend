@@ -34,7 +34,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     handleSave = () => {
         const {minimalPracticeState} = this.state;
-        minimalPracticeState[PracticeFields.FORM_OF_CERTIFICATION_TOOLS] = 'exam';
+        minimalPracticeState[PracticeFields.FORM_OF_CERTIFICATION_TOOLS] = 'Защита отчёта';
         const history = this.props.history;
         const callback = (id: number) => {
             history.push(appRouter.getPracticeLink(id));
