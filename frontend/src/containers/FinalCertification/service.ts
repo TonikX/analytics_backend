@@ -30,6 +30,10 @@ class CertificationService extends AnalyticsService {
     createCertification(state: CertificationState) {
         return this.post(`/api/gia/`, state);
     }
+
+    createExpertise(giaId: number) {
+        return this.post(`/api/expertise/create`, {gia: giaId, ['expertise_type']: 'GIA'})
+    }
 }
 
 export default CertificationService;

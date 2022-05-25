@@ -56,5 +56,8 @@ export default () => createStyles({
     },
     datesReadOnlyValue: {
         width: '30%',
+    },
+    structuralUnit: {
+        marginTop: '37px',
     }
 });

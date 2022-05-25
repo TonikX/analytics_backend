@@ -64,7 +64,7 @@ export enum StructuralUnitFields {
     ISU_ID = "isu_id",
 }
 
-export enum CertificationStepsRussian {
+export enum CertificationSteps {
     MAIN = 'Главное',
     GENERAL_PROVISIONS = 'Общие положения',
     DATES = 'Основные этапы и сроки подготовки ВКР',
@@ -85,6 +85,7 @@ export enum fetchingTypes {
     GET_TEMPLATE_TEXT = 'GET_TEMPLATE_TEXT',
     CREATE_CERTIFICATION = 'CREATE_CERTIFICATION',
     GET_CERTIFICATION_LIST = 'GET_CERTIFICATION_LIST',
+    CREATE_EXPERTISE = 'CREATE_EXPERTISE',
 }
 
 export const OptionalRequirementsRussian = new Map(Object.entries({
@@ -94,4 +95,4 @@ export const OptionalRequirementsRussian = new Map(Object.entries({
     [OptionalRequirements.APPENDIX]: 'Приложения',
 }))
 
-export const CertificationStepsRussianList = Object.entries(CertificationStepsRussian).map(([, value]) => value);
+export const CertificationStepsRussianList = Object.entries(CertificationSteps).map(([, value]) => value);

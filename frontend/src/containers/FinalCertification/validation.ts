@@ -33,7 +33,19 @@ const validationRules = {
     [CertificationFields.DISCIPLINE_CODE]: {
         presence,
         number,
-    }
+    },
+    [CertificationFields.ANTI_PLAGIARISM_ANALYSIS_TIME]: {
+        presence,
+    },
+    [CertificationFields.PRE_DEFENCE_TIME]: {
+        presence,
+    },
+    [CertificationFields.FILLING_AND_APPROVAL_TIME]: {
+        presence,
+    },
+    [CertificationFields.WORK_ON_VKR_CONTENT_TIME]: {
+        presence,
+    },
 } as any;
 
 const validateNumber = (value: string) => {
@@ -42,12 +54,19 @@ const validateNumber = (value: string) => {
     }
 }
 
-export const validate = (field: CertificationFields, value: string): Error => {
+export const validate = (field: CertificationFields, value: any): Error => {
     const rules = validationRules[field];
     if (!rules) return null;
 
     if (rules.presence) {
-        if (/^\s*$/.test(value)) {
+        if (typeof value === "string") {
+            if (/^\s*$/.test(value)) {
+                return {
+                    message: presence.message,
+                };
+            }
+        }
+        if (!value) {
             return {
                 message: presence.message,
             };
@@ -80,4 +99,20 @@ export const validate = (field: CertificationFields, value: string): Error => {
     }
 
     return null;
+}
+
+export const getErroredFields = (state: any) => {
+    const erroredFields = [];
+    for (const [,field] of Object.entries(CertificationFields)) {
+        const value = state[field];
+        const error = validate(field, value);
+        if (field === CertificationFields.DISCIPLINE_CODE) {
+            console.log(value);
+            console.log(validate(field, value));
+        }
+        if (error) {
+            erroredFields.push(field);
+        }
+    }
+    return erroredFields;
 }

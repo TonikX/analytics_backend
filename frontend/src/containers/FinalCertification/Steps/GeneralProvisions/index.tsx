@@ -1,5 +1,5 @@
 import React from "react";
-import {CertificationFields, CertificationStepsRussian, TemplateTextCertificationFields} from "../../enum";
+import {CertificationFields, CertificationSteps, TemplateTextCertificationFields} from "../../enum";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "../styles";
@@ -20,7 +20,7 @@ class GeneralProvisions extends React.Component<GeneralProvisionsProps> {
         return (
             <div className={classes.content}>
                 <Typography variant='h5'>
-                    {CertificationStepsRussian.GENERAL_PROVISIONS}
+                    {CertificationSteps.GENERAL_PROVISIONS}
                 </Typography>
                 <div className={classes.singleColumn}>
                     <Typography className={classes.generalProvisionsText}>

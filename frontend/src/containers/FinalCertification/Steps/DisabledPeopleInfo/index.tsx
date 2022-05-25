@@ -1,5 +1,5 @@
 import React from "react";
-import {CertificationStepsRussian, TemplateTextCertificationFields} from "../../enum";
+import {CertificationSteps, TemplateTextCertificationFields} from "../../enum";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "../styles";
@@ -19,7 +19,7 @@ class DisabledPeopleInfo extends React.Component<DisabledPeopleInfoProps> {
         return (
             <div className={classes.content}>
                 <Typography variant='h5'>
-                    {CertificationStepsRussian.DISABLED_PEOPLE}
+                    {CertificationSteps.DISABLED_PEOPLE}
                 </Typography>
                 <div className={classes.singleColumn}>
                     <Typography className={classes.generalProvisionsText}>

@@ -107,5 +107,11 @@ export default (theme: Theme) => createStyles({
     },
     resetButton: {
         marginTop: '20px',
-    }
+    },
+    sendToExpertise: {
+        marginTop: '10px'
+    },
+    rightButtons: {
+        margin: '50px 0 0 30px',
+    },
 });

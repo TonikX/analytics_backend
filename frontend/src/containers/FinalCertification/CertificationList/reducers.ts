@@ -1,7 +1,6 @@
 import {certificationListState} from "./types";
 import createReducer from "../../../store/createReducer";
 import actions from "./actions";
-import {practiceListState} from "../../Practice/PracticeList/types";
 
 export const GENERAL_PATH = 'certificationList';
 
@@ -47,7 +46,7 @@ const setCertificationCount = (state: certificationListState, {payload}: any): c
     certificationCount: payload,
 });
 
-const openModal = (state: practiceListState): practiceListState => ({
+const openModal = (state: certificationListState): certificationListState => ({
     ...state,
     modal: {
         ...state.modal,
@@ -55,7 +54,7 @@ const openModal = (state: practiceListState): practiceListState => ({
     }
 });
 
-const closeModal = (state: practiceListState): practiceListState => ({
+const closeModal = (state: certificationListState): certificationListState => ({
     ...state,
     modal: {
         ...state.modal,

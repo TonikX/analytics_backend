@@ -1,7 +1,7 @@
 import React from "react";
 import {WithStyles} from "@material-ui/core";
 import styles from "./styles";
-import {PracticeActions, PracticeState, Validation} from "../../types";
+import {CertificationActions, CertificationState, Validation} from "../../types";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Button from "@material-ui/core/Button";
@@ -10,11 +10,11 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 
 interface SendToExpertiseProps extends WithStyles<typeof styles> {
-    actions: PracticeActions;
-    fields: PracticeState;
+    actions: CertificationActions;
+    fields: CertificationState;
     openStep: (index: number) => void;
     validation: Validation;
-    practiceId: number;
+    certificationId: number;
 }
 
 class SendToExpertise extends React.Component<SendToExpertiseProps> {
@@ -36,7 +36,7 @@ class SendToExpertise extends React.Component<SendToExpertiseProps> {
     }
 
     handleSend = () => {
-        this.props.actions.createExpertise({id: this.props.practiceId});
+        this.props.actions.createExpertise({id: this.props.certificationId});
     }
 
     render() {

@@ -1,5 +1,5 @@
 import React from "react";
-import {CertificationFields, CertificationStepsRussian, TemplateTextCertificationFields} from "../../enum";
+import {CertificationFields, CertificationSteps, TemplateTextCertificationFields} from "../../enum";
 import get from "lodash/get";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -31,7 +31,7 @@ class Dates extends React.Component<DatesProps> {
             <div className={classes.content}>
                 <Scrollbars>
                     <Typography variant='h5'>
-                        {CertificationStepsRussian.DATES}
+                        {CertificationSteps.DATES}
                     </Typography>
 
                     <div className={classes.singleColumn}>

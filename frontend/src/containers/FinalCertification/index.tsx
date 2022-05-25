@@ -9,15 +9,11 @@ import get from "lodash/get";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepButton from "@material-ui/core/StepButton";
-import {CertificationFields, CertificationStepsRussianList} from "./enum";
-import MainInfo from "./Steps/MainInfo";
-import Features from "./Steps/Features";
-import Assessment from "./Steps/Assessment";
-import Dates from "./Steps/Dates";
-import GeneralProvisions from "./Steps/GeneralProvisions";
-import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
+import {CertificationFields} from "./enum";
 import ErrorPage from "../../components/ErrorPage";
 import Download from "./components/Download";
+import SendToExpertise from "./components/SendToExpertise";
+import {STEPS} from "./constants";
 
 export interface FinalCertificationProps extends WithStyles<typeof styles>, RouteComponentProps {
     actions: CertificationActions,
@@ -31,9 +27,8 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
         activeStep: 0,
     };
 
-    stepNameList = CertificationStepsRussianList;
-
-    stepList = [<MainInfo/>, <GeneralProvisions/>, <Dates/>, <Features/>, <Assessment/>, <DisabledPeopleInfo/>]
+    stepList = STEPS.map(step => step.component);
+    stepNameList = STEPS.map(step => step.name);
 
     getCertificationId = () => get(this, 'props.match.params.id');
 
@@ -51,7 +46,14 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
         this.props.actions.getCertification(this.getCertificationId());
     }
 
-    openStep = (index: number) => () => {
+    handleOpenStep = (index: number) => () => {
+        this.setState({
+            ...this.state,
+            activeStep: index,
+        })
+    }
+
+    openStep = (index: number) => {
         this.setState({
             ...this.state,
             activeStep: index,
@@ -75,7 +77,7 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
                 >
                     {Object.values(this.stepNameList).map((label, index) => {
                         return (
-                            <Step key={index} onClick={this.openStep(index)}>
+                            <Step key={index} onClick={this.handleOpenStep(index)}>
                                 <StepButton completed={false}
                                             style={{textAlign: 'left',}}
                                 >
@@ -90,8 +92,11 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
                         this.stepList[activeStep]
                     }
                 </div>
-                <div>
+                <div className={classes.rightButtons}>
                     <Download/>
+                    <div className={classes.sendToExpertise}>
+                        <SendToExpertise openStep={this.openStep} certificationId={this.getCertificationId()}/>
+                    </div>
                 </div>
             </Paper>
         )

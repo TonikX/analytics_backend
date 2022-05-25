@@ -78,7 +78,6 @@ class Download extends React.Component<DownloadProps> {
             a.href = data;
             a.download = fileName;
             document.body.appendChild(a);
-            // a.style = 'display: none';
             a.click();
             a.remove();
         };

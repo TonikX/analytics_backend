@@ -240,6 +240,8 @@ export const fieldToStep = new Map(Object.entries({
     [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: PracticeSteps.REFERENCES,
 }));
 
+
+
 export const STEPS = [
     {
         name: PracticeSteps.GENERAL,

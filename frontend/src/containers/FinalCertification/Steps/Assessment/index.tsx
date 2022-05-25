@@ -2,7 +2,7 @@ import React from "react";
 import {
     CertificationFields,
     CertificationMarkFields,
-    CertificationStepsRussian,
+    CertificationSteps,
     TemplateTextCertificationFields
 } from "../../enum";
 import connect from "./connect";
@@ -64,7 +64,7 @@ class Assessment extends React.Component<AssessmentProps> {
             <div className={classes.content}>
                 <Scrollbars>
                     <Typography variant='h5'>
-                        {CertificationStepsRussian.ASSESSMENT}
+                        {CertificationSteps.ASSESSMENT}
                     </Typography>
                     <FormControl fullWidth className={classes.markTypeSelect}>
                         <TextField

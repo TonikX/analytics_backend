@@ -1,5 +1,5 @@
 import React from "react";
-import {CertificationFields, CertificationStepsRussian} from "../../enum";
+import {CertificationFields, CertificationSteps} from "../../enum";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "../styles";
@@ -40,7 +40,7 @@ class MainInfo extends React.Component<MainInfoProps> {
         return (
             <div className={classes.content}>
                 <Typography variant='h5'>
-                    {CertificationStepsRussian.MAIN}
+                    {CertificationSteps.MAIN}
                 </Typography>
                 <div className={classes.columns}>
                     <div className={classes.leftColumn}>
@@ -54,7 +54,7 @@ class MainInfo extends React.Component<MainInfoProps> {
                         <SearchSelector label={RussianCertificationFields[CertificationFields.STRUCTURAL_UNIT]}
                                         changeSearchText={this.handleChangeStructuralUnitSearchText}
                                         list={structuralUnitsList}
-                                        className={classes.input}
+                                        className={classes.structuralUnit}
                                         changeItem={this.changeStructuralUnit}
                                         value={String(fields[CertificationFields.STRUCTURAL_UNIT]?.id)}
                                         valueLabel={fields[CertificationFields.STRUCTURAL_UNIT]?.title ?? ''}

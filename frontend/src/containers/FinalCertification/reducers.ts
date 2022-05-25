@@ -6,6 +6,10 @@ import actions from "./actions";
 export const GENERAL_PATH = 'certification';
 
 export const initialState: certificationPageState = {
+    validation: {
+        shownErroredFields: [],
+        erroredFields: [],
+    },
     isError: false,
     certification: {
         [CertificationFields.ID]: 1,
@@ -119,10 +123,81 @@ const setError = (state: certificationPageState, {payload}: any): certificationP
     isError: payload,
 });
 
+const setErroredFields = (state: certificationPageState, {payload}: any): certificationPageState => ({
+    ...state,
+    validation: {
+        ...state.validation,
+        erroredFields: payload,
+    },
+});
+
+const addToErroredFields = (state: certificationPageState, {payload}: any): certificationPageState => {
+    let erroredFields = state.validation.erroredFields;
+    if (!erroredFields.includes(payload)) {
+        erroredFields = erroredFields.concat([payload]);
+    }
+    return {
+        ...state,
+        validation: {
+            ...state.validation,
+            erroredFields,
+        },
+    }
+};
+
+const removeFromErroredFields = (state: certificationPageState, {payload}: any): certificationPageState => {
+    return {
+        ...state,
+        validation: {
+            ...state.validation,
+            erroredFields: state.validation.erroredFields.filter(field => field !== payload),
+            shownErroredFields: state.validation.shownErroredFields.filter(field => field !== payload),
+        },
+    }
+};
+
+const showErrors = (state: certificationPageState): certificationPageState => {
+    return {
+        ...state,
+        validation: {
+            ...state.validation,
+            shownErroredFields: [...state.validation.erroredFields],
+        },
+    }
+};
+
+const showErroredField = (state: certificationPageState, {payload}: any): certificationPageState => {
+    if (!state.validation.erroredFields.includes(payload)) throw new Error('trying to show a correct field as errored')
+    if (state.validation.shownErroredFields.includes(payload)) return state; // already shown
+    return {
+        ...state,
+        validation: {
+            ...state.validation,
+            shownErroredFields: [...state.validation.shownErroredFields, payload],
+        },
+    }
+};
+
+const hideErroredField = (state: certificationPageState, {payload}: any): certificationPageState => {
+    return {
+        ...state,
+        validation: {
+            ...state.validation,
+            shownErroredFields: state.validation.shownErroredFields.filter(field => field !== payload),
+        },
+    }
+};
+
 export const reducer = createReducer(initialState, {
     [actions.setCertification.type]: setCertification,
     [actions.setField.type]: setField,
     [actions.setMarkCriteria.type]: setMarkCriteria,
     [actions.setTemplateText.type]: setTemplateText,
     [actions.setError.type]: setError,
+    [actions.setErroredFields.type]: setErroredFields,
+    [actions.addToErroredFields.type]: addToErroredFields,
+    [actions.removeFromErroredFields.type]: removeFromErroredFields,
+    [actions.showErrors.type]: showErrors,
+    [actions.showErroredField.type]: showErroredField,
+    [actions.hideErroredField.type]: hideErroredField,
 });

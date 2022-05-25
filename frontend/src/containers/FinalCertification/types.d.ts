@@ -95,8 +95,14 @@ export type CertificationState = MainInfoState
     [CertificationFields.EDITORS]: any,
 }
 
+export type Validation = {
+    erroredFields: CertificationFields[];
+    shownErroredFields: CertificationFields[];
+}
+
 export interface certificationPageState {
     isError: boolean,
+    validation: Validation;
     certification: CertificationState,
     templateText: TemplateTextState,
 }
@@ -111,4 +117,11 @@ export interface CertificationActions {
     getTemplateText: any;
     setTemplateText: any,
     setError: any;
+    setErroredFields: any;
+    addToErroredFields: any;
+    removeFromErroredFields: any;
+    showErrors: any;
+    showErroredField: any;
+    hideErroredField: any;
+    createExpertise: any;
 }

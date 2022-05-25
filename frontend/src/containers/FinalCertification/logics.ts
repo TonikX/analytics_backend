@@ -4,6 +4,7 @@ import CertificationActions from "./actions";
 import CertificationService from "./service";
 import actions from "../../layout/actions";
 import {fetchingTypes} from "./enum";
+import {getErroredFields} from "./validation";
 
 const service = new CertificationService();
 
@@ -17,7 +18,10 @@ const getCertification = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_CERTIFICATION}));
         service.getCertification(id)
             .then((res) => {
+                const erroredFields = getErroredFields(res.data);
+                console.log(erroredFields);
                 dispatch(CertificationActions.setCertification(res.data));
+                dispatch(CertificationActions.setErroredFields(erroredFields));
             })
             .catch(() => {
                 dispatch(CertificationActions.setError(true));
@@ -40,7 +44,7 @@ const saveField = createLogic({
         dispatch(actions.fetchingComponentTrue({destination: field}));
         service.patchCertification({[field]: value}, id)
             .then((res: any) => {
-                dispatch(CertificationActions.setCertification(res.data));
+                dispatch(CertificationActions.setField({field, value: res.data[field]}));
             })
             .catch(() => {
                 dispatch(actions.fetchingFailed([`Поле ${field} не удалось сохранить. Пожалуйста, перезагрузите страницу или попробуйте позже.`]));
@@ -96,5 +100,28 @@ const getTemplateText = createLogic({
     }
 });
 
+const createExpertise = createLogic({
+    type: CertificationActions.createExpertise.type,
+    latest: true,
 
-export default [getCertification, saveField, saveMarkCriteria, getTemplateText];
+    process({getState, action}: any, dispatch, done) {
+        const {id} = action.payload;
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_EXPERTISE}));
+
+        service.createExpertise(id)
+            .then(() => {
+                // dispatch(actions.fetchingFailed([`"Экспертиза создана"`]));
+                // todo update status and other stuff
+            })
+            .catch(() => {
+                dispatch(actions.fetchingFailed([`Не удалось отправить на экспертизу`]));
+            })
+            .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_EXPERTISE}));
+                return done();
+            })
+    }
+});
+
+
+export default [getCertification, saveField, saveMarkCriteria, getTemplateText, createExpertise];

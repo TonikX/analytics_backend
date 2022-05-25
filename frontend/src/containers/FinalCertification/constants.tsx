@@ -1,4 +1,11 @@
-import {CertificationFields} from "./enum";
+import React from "react";
+import {CertificationFields, CertificationSteps} from "./enum";
+import MainInfo from "./Steps/MainInfo";
+import GeneralProvisions from "./Steps/GeneralProvisions";
+import Dates from "./Steps/Dates";
+import Features from "./Steps/Features";
+import Assessment from "./Steps/Assessment";
+import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
 
 export const markTypesRussian = [
     {
@@ -81,3 +88,64 @@ export const RussianCertificationFields = {
     [CertificationFields.GIA_BASE]: 'текст шаблона',
     [CertificationFields.EDITORS]: 'Редакторы',
 }
+export const fieldToStep = new Map(Object.entries({
+    [CertificationFields.ID]: CertificationSteps.MAIN,
+    [CertificationFields.DISCIPLINE_CODE]: CertificationSteps.MAIN,
+    [CertificationFields.TITLE]: CertificationSteps.MAIN,
+    [CertificationFields.YEAR]: CertificationSteps.MAIN,
+    [CertificationFields.AUTHORS]: CertificationSteps.MAIN,
+    [CertificationFields.OP_LEADER]: CertificationSteps.MAIN,
+    [CertificationFields.STRUCTURAL_UNIT]: CertificationSteps.MAIN,
+    [CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS]: CertificationSteps.GENERAL_PROVISIONS,
+    [CertificationFields.FILLING_AND_APPROVAL_TIME]: CertificationSteps.DATES,
+    [CertificationFields.WORK_ON_VKR_CONTENT_TIME]: CertificationSteps.DATES,
+    [CertificationFields.PRE_DEFENCE_TIME]: CertificationSteps.DATES,
+    [CertificationFields.ANTI_PLAGIARISM_ANALYSIS_TIME]: CertificationSteps.DATES,
+    [CertificationFields.PRELIMINARY_DEFENSE]: CertificationSteps.FEATURES,
+    [CertificationFields.ANTI_PLAGIARISM]: CertificationSteps.FEATURES,
+    [CertificationFields.STRUCTURE_ELEMENTS_OPTIONAL]: CertificationSteps.FEATURES,
+    [CertificationFields.OPTIONAL_DESIGN_REQUIREMENTS]: CertificationSteps.FEATURES,
+    [CertificationFields.CONTENT_REQUIREMENTS]: CertificationSteps.FEATURES,
+    [CertificationFields.DEFENCE_PRESENTATION_REQUIREMENTS]: CertificationSteps.FEATURES,
+    [CertificationFields.CONTENT_CORRESPONDENCE_MARKS]: CertificationSteps.ASSESSMENT,
+    [CertificationFields.RELEVANCE_MARKS]: CertificationSteps.ASSESSMENT,
+    [CertificationFields.SPECIALIZATION_CORRESPONDENCE_MARKS]: CertificationSteps.ASSESSMENT,
+    [CertificationFields.CORRECTNESS_OF_METHODS_MARKS]: CertificationSteps.ASSESSMENT,
+    [CertificationFields.QUALITY_AND_LOGIC_MARKS]: CertificationSteps.ASSESSMENT,
+    [CertificationFields.VALIDITY_MARKS]: CertificationSteps.ASSESSMENT,
+    [CertificationFields.SIGNIFICANCE_MARKS]: CertificationSteps.ASSESSMENT,
+    [CertificationFields.SIGNIFICANCE_MARKS]: CertificationSteps.ASSESSMENT,
+    [CertificationFields.IMPLEMENTATION_MARKS]: CertificationSteps.ASSESSMENT,
+    [CertificationFields.REPORT_QUALITY_MARKS]: CertificationSteps.ASSESSMENT,
+    [CertificationFields.PRESENTATION_QUALITY_MARKS]: CertificationSteps.ASSESSMENT,
+    [CertificationFields.ANSWERS_QUALITY_MARKS]: CertificationSteps.ASSESSMENT,
+    [CertificationFields.GIA_BASE]: CertificationSteps.MAIN,
+}))
+
+export const STEPS = [
+    {
+        name: CertificationSteps.MAIN,
+        component: <MainInfo/>,
+    },
+    {
+        name: CertificationSteps.GENERAL_PROVISIONS,
+        component: <GeneralProvisions/>,
+    },
+    {
+        name: CertificationSteps.DATES,
+        component: <Dates/>,
+    },
+    {
+        name: CertificationSteps.FEATURES,
+        component: <Features/>,
+    },
+    {
+        name: CertificationSteps.ASSESSMENT,
+        component: <Assessment/>,
+    },
+    {
+        name: CertificationSteps.DISABLED_PEOPLE,
+        component: <DisabledPeopleInfo/>,
+    },
+];
+

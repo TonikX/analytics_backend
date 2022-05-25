@@ -1,6 +1,6 @@
 import {WithStyles} from "@material-ui/core";
 import styles from "./styles";
-import {CertificationActions, CertificationState} from "../../types";
+import {CertificationActions, CertificationState, Validation} from "../../types";
 import {CertificationFields} from "../../enum";
 import React from "react";
 import connect from "./connect";
@@ -10,6 +10,7 @@ import get from "lodash/get";
 import {validate} from "../../validation";
 import InputsLoader from "../../../../components/InputsLoader";
 import {RussianCertificationFields} from "../../constants";
+import InputLabel from "@material-ui/core/InputLabel";
 
 interface InputProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
@@ -18,12 +19,48 @@ interface InputProps extends WithStyles<typeof styles> {
     multiline?: boolean;
     rows?: number;
     getLoading: (fieldName: string) => boolean,
+    validation: Validation,
+    label?: React.ReactNode;
 }
 
 class Input extends React.Component<InputProps> {
 
     state = {
+        value: '',
         errorMessage: '',
+    }
+
+    componentDidUpdate(prevProps: Readonly<InputProps>, prevState: Readonly<{}>, snapshot?: any) {
+        const field = this.props.fieldName;
+        const newValue = this.props.fields[field];
+        if (prevProps.fields[field] !== newValue || this.props.validation !== prevProps.validation) {
+            let errorMessage = '';
+            if (this.props.validation.shownErroredFields.includes(field)) {
+                const error = validate(field, newValue);
+                errorMessage = error?.message ?? '';
+            }
+            this.setState({
+                ...this.state,
+                value: newValue,
+                errorMessage,
+            })
+        }
+    }
+
+    componentDidMount() {
+        const field = this.props.fieldName;
+        const newValue = this.props.fields[field]
+        let errorMessage = '';
+        if (this.props.validation.shownErroredFields.includes(field)) {
+            const value = this.props.fields[field];
+            const error = validate(field, value);
+            errorMessage = error?.message ?? '';
+        }
+        this.setState({
+            ...this.state,
+            value: newValue,
+            errorMessage,
+        });
     }
 
     setErrorMessage = (errorMessage: string) => {
@@ -33,48 +70,58 @@ class Input extends React.Component<InputProps> {
         });
     }
 
-    setInput = (field: string) => (e: React.ChangeEvent) => {
-        this.setErrorMessage('');
-
+    setInput = (e: React.ChangeEvent) => {
         const value = get(e, 'target.value')
 
-        this.props.actions.setField({field, value});
+        this.setState({
+            ...this.state,
+            value,
+            errorMessage: '',
+        })
     }
 
     saveInput = (field: CertificationFields) => (e: React.ChangeEvent) => {
         const value = get(e, 'target.value')
 
         const error = validate(field, value);
+        this.props.actions.setField({field, value});
 
         if (error) {
-            this.setErrorMessage(error.message);
+            this.setErrorMessage(error.message ?? '');
+            this.props.actions.addToErroredFields(field);
+            this.props.actions.showErroredField(field);
             return;
         }
 
+        this.props.actions.removeFromErroredFields(field);
         this.props.actions.saveField({field, value});
     }
 
 
     render() {
-        const {fields, fieldName, classes, multiline, rows, getLoading} = this.props as any;
+        const {fieldName, classes, multiline, rows, getLoading, label} = this.props;
         const {errorMessage} = this.state;
 
         return (
             <div className={classes.input}>
+                <InputLabel error={!!errorMessage} shrink>
+                    {label ?? RussianCertificationFields[fieldName]}
+                </InputLabel>
                 <InputsLoader loading={getLoading(fieldName)}>
-                    <TextField label={(RussianCertificationFields as any)[fieldName]}
-                               onBlur={this.saveInput(fieldName)}
-                               onChange={this.setInput(fieldName)}
-                               variant="outlined"
-                               fullWidth
-                               multiline={multiline}
-                               rows={rows ? rows : 1}
-                               value={fields[fieldName]}
-                               error={Boolean(errorMessage)}
-                               helperText={errorMessage}
-                               InputLabelProps={{
-                                   shrink: true,
-                               }}
+                    <TextField
+                        onBlur={this.saveInput(fieldName)}
+                        onChange={this.setInput}
+                        variant="outlined"
+                        fullWidth
+                        multiline={multiline}
+                        rows={rows ? rows : 1}
+                        value={this.state.value}
+                        error={Boolean(errorMessage)}
+                        helperText={errorMessage}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        style={{marginTop: '3px'}} // margin between label and the field itself
                     />
                 </InputsLoader>
             </div>

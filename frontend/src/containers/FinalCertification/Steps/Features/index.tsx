@@ -1,7 +1,7 @@
 import React from "react";
 import {
     CertificationFields,
-    CertificationStepsRussian,
+    CertificationSteps,
     OptionalRequirements,
     OptionalRequirementsRussian, TemplateTextCertificationFields
 } from "../../enum";
@@ -106,7 +106,7 @@ class Features extends React.Component<FeaturesProps> {
             <div className={classes.content}>
                 <Scrollbars>
                     <Typography variant='h5'>
-                        {CertificationStepsRussian.FEATURES}
+                        {CertificationSteps.FEATURES}
                     </Typography>
 
                     <div className={classes.columns}>
