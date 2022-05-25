@@ -104,7 +104,7 @@ class Input extends React.Component<InputProps> {
 
         return (
             <div className={classes.input}>
-                <InputLabel shrink>
+                <InputLabel error={!!errorMessage} shrink>
                     {label ?? RussianPracticeFields[fieldName]}
                 </InputLabel>
                 <InputsLoader loading={getLoading(fieldName)}>
@@ -121,7 +121,7 @@ class Input extends React.Component<InputProps> {
                                InputLabelProps={{
                                    shrink: true,
                                }}
-                               style={{marginTop: '3px'}}
+                               style={{marginTop: '3px'}} // margin between label and the field itself
                     />
                 </InputsLoader>
             </div>

@@ -97,7 +97,7 @@ class Select extends React.Component<SelectProps> {
 
         return (
             <div style={{marginTop: '20px'}}>
-                <InputLabel shrink>
+                <InputLabel error={!!errorMessage} shrink>
                     {label}
                 </InputLabel>
                 <InputsLoader loading={getLoading(fieldName)}>
@@ -115,17 +115,9 @@ class Select extends React.Component<SelectProps> {
                             )}
                         </MuiSelect>
                         {
-                            errorMessage && <FormHelperText>{errorMessage}</FormHelperText>
+                            errorMessage && <FormHelperText style={{margin: '0 14px'}}>{errorMessage}</FormHelperText>
                         }
                     </FormControl>
-                    {/*<SimpleSelector label={RussianPracticeFields[fieldName]}*/}
-                    {/*                metaList={metaList}*/}
-                    {/*                value={fields[fieldName]}*/}
-                    {/*                wrapClass={classes.selectorWrap}*/}
-                    {/*                noMargin*/}
-                    {/*                onChange={this.saveSelect(fieldName)}*/}
-                    {/*                errorMessage={errorMessage}*/}
-                    {/*/>*/}
                 </InputsLoader>
             </div>
         );
