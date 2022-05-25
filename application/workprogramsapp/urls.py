@@ -29,7 +29,7 @@ from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAP
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, \
     AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, DisciplineBlockModuleShortListView, \
     DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailListForUserView, DisciplineBlockModuleDetailView, \
-    DisciplinesByNumber, InsertModule
+    DisciplinesByNumber, InsertModule, WorkProgramArchiveUpdateView
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
@@ -137,6 +137,7 @@ urlpatterns = [
     path('api/workprogram/delete/<int:pk>', WorkProgramDestroyView.as_view()),
     path('api/workprogram/update/<int:pk>', WorkProgramUpdateView.as_view()),
     path('api/workprogram/update_editors/<int:pk>', WorkProgramEditorsUpdateView.as_view()),
+    path('api/workprogram/update_status/<int:pk>', WorkProgramArchiveUpdateView.as_view()),
     path('api/workprogram/br/update/<int:pk>', WorkProgramBibliographicReferenceUpdateView.as_view()),
     path('api/workprogram/clone', CloneWorkProgramm),
     path('api/workprogram/merge_content', CopyContentOfWorkProgram),

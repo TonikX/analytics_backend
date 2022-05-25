@@ -494,7 +494,7 @@ class   FileUploadOldVersionAPIView(APIView):
                     ze = ze
                     sem = 0
                     all_ze_indexes_in_rpd = 0
-                    lecture_hours_v2 = [0, 0, 0, 0]
+                    lecture_hours_v2 = [0, 0, 0, 0, 0, 0, 0, 0]
                     for i in hours:
                         #print('ze', ze)
                         if ze[all_ze_indexes_in_rpd]>=1.0:
@@ -527,10 +527,12 @@ class   FileUploadOldVersionAPIView(APIView):
                 if StructuralUnit.objects.filter(title=str(data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip())):
                     st_unit = StructuralUnit.objects.filter(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip())[0]
                     st_unit.isu_id = int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i])
+                    print('Структурное подразделение записалось')
                     st_unit.save()
                 else:
                     StructuralUnit.objects.create(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip(), isu_id=int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i]))
                     st_unit = StructuralUnit.objects.get(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip(), isu_id=int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i]))
+                    print('Структурное подразделение выбралось')
                 wp_obj.structural_unit = st_unit
                 wp_obj.save()
                 print('-- Работа с образовательной программой')
@@ -623,17 +625,20 @@ class   FileUploadOldVersionAPIView(APIView):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
                                                                                        change_type=option, subject_code = data['НОМЕР'][i]
                                                                                        )
+                    print('111')
                     if WorkProgramInFieldOfStudy.objects.filter(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
                         #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                         wpinfs.save()
+                        print('111')
                     else:
                         wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
                                                            work_program=wp_obj)
                         #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                         wpinfs.save()
+                        print('111')
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=mdb,
                                                                              change_type=option,
                                                                              work_program=wp_obj
@@ -667,12 +672,16 @@ class   FileUploadOldVersionAPIView(APIView):
                         wpinfs.save()
                         print("Сохранили рпд в направлении", wpinfs)
                 try:
+                    print('ddd')
                     WorkProgramIdStrUpForIsu.objects.get(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs)
                     print('ddddddddddddddddd', WorkProgramIdStrUpForIsu.objects.get(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs))
                 except WorkProgramIdStrUpForIsu.DoesNotExist:
+                    print('ddddddd')
                     wpinfs_id_str_up = WorkProgramIdStrUpForIsu(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs)
                     wpinfs_id_str_up.number = data['НОМЕР'][i]
-                    wpinfs_id_str_up.dis_id = data['ДИС_ИД'][i]
+                    print('ddd')
+                    wpinfs_id_str_up.dis_id = int(data['ДИС_ИД'][i])
+                    print('ddd')
                     wpinfs_id_str_up.ze_v_sem = data['ЗЕ_В_СЕМЕСТРАХ'][i].strip("()")
                     wpinfs_id_str_up.lec_v_sem = data['ЛЕК_В_СЕМЕСТРАХ'][i].strip("()")
                     wpinfs_id_str_up.prak_v_sem = data['ПРАК_В_СЕМЕСТРАХ'][i].strip("()")
@@ -682,6 +691,7 @@ class   FileUploadOldVersionAPIView(APIView):
                     wpinfs_id_str_up.dif_zach_v_sem = data['ДИФ_ЗАЧЕТ_ПО_СЕМЕСТРАМ'][i].strip("()")
                     wpinfs_id_str_up.kp_v_sem = data['КП_ПО_СЕМЕСТРАМ'][i].strip("()")
                     wpinfs_id_str_up.save()
+                    print('dddddddddd')
                 except:
                     print('---- Ошибка с количеством WorkProgramIdStrUpForIsu.id_str_up')
                 for zun in Zun.objects.filter(wp_in_fs_saved_fk_id_str_up = int(data['ИД_СТР_УП'][i])):

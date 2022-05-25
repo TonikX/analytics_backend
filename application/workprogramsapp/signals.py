@@ -2,6 +2,7 @@ from django.contrib.auth.models import Group
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
+from dataprocessing.itmo_backends import isu_client_credentials_request
 from dataprocessing.models import User
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
