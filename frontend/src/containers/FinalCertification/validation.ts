@@ -26,8 +26,8 @@ const validationRules = {
         presence,
         year: {
             min: 1990,
-            max: 2030,
-            message: 'Введите год между 1990 и 2030',
+            max: (new Date()).getFullYear(),
+            message: `Введите год между 1990 и ${(new Date()).getFullYear()}`,
         }
     },
     [CertificationFields.DISCIPLINE_CODE]: {

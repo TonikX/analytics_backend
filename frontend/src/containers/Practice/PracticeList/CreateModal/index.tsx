@@ -22,7 +22,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
         minimalPracticeState: {
             [PracticeFields.TITLE]: '',
-            [PracticeFields.YEAR]: 2022, // todo current year using moment
+            [PracticeFields.YEAR]: (new Date()).getFullYear(),
             [PracticeFields.OP_LEADER]: '',
             [PracticeFields.AUTHORS]: '',
         } as MinimalPracticeState,

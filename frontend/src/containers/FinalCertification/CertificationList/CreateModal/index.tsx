@@ -21,7 +21,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
         state: {
             [CertificationFields.TITLE]: '',
-            [CertificationFields.YEAR]: 2022, // todo current year using moment
+            [CertificationFields.YEAR]: (new Date()).getFullYear(),
             [CertificationFields.OP_LEADER]: '',
             [CertificationFields.AUTHORS]: '',
         } as any,
