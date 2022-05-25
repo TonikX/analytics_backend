@@ -1969,6 +1969,7 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
                      'field_of_study__qualification',
                      'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
                      'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                     'academic_plan__year',
                      ]
     filterset_fields = ['title',
                         'field_of_study__title',
@@ -1979,6 +1980,7 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__id',
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__id',
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__structural_unit__title',
+                        'academic_plan__year',
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
