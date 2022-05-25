@@ -37,7 +37,7 @@ class AcademicPlanUpdateAspect:
 
             validated_field = ['title']
             for attr, value in updated_field_of_study.__dict__.items():
-                if old_field_of_study_object in None or old_field_of_study_object.__dict__[attr] != value \
+                if old_field_of_study_object is None or old_field_of_study_object.__dict__[attr] != value \
                         and validated_field.__contains__(attr):
                     print(attr, value)
 
@@ -108,6 +108,7 @@ class AcademicPlanUpdateAspect:
     def discipline_block_module_changes_aspect(func):
         def wrapper(*args, **kwargs):
             isu_academic_plan_block_module_json, discipline_block_object = args
+            print(discipline_block_object)
 
             if DisciplineBlockModule.objects.filter(
                     name=isu_academic_plan_block_module_json['module_name'],
@@ -142,9 +143,9 @@ class AcademicPlanUpdateAspect:
             if WorkProgram.objects.filter(
                     discipline_code=int(isu_academic_plan_discipline_json['disc_id'])
             ).exists():
-                old_work_program_object = WorkProgram.objects.get(
+                old_work_program_object = WorkProgram.objects.filter(
                     discipline_code=int(isu_academic_plan_discipline_json['disc_id'])
-                )
+                )[0]
             else:
                 old_work_program_object = None
 
@@ -152,11 +153,75 @@ class AcademicPlanUpdateAspect:
                 copy.deepcopy(old_work_program_object), *args, **kwargs
             )
 
+            # todo similar discipline_codes identified as different ?
+            print("-----")
+            print(old_work_program_object.discipline_code)
+            print(updated_work_program_object.discipline_code)
+            print(old_work_program_object.discipline_code != updated_work_program_object.discipline_code)
+            print("-----")
+
             for attr, value in updated_work_program_object.__dict__.items():
                 if old_work_program_object is None \
                         or old_work_program_object.__dict__[attr] != value:
                     print(attr, value)
 
             return updated_work_program_object
+
+        return wrapper
+
+    @staticmethod
+    def linked_data_changes_aspect(func):
+        def wrapper(*args, **kwargs):
+            old_work_program_change_in_discipline_block_module_object, \
+            old_work_program_in_field_of_study_object, \
+            updated_work_program_change_in_discipline_block_module_object, \
+            updated_work_program_in_field_of_study_object = func(
+                *args, **kwargs
+            )
+
+            for attr, value in updated_work_program_change_in_discipline_block_module_object.__dict__.items():
+                if old_work_program_change_in_discipline_block_module_object is None \
+                        or old_work_program_change_in_discipline_block_module_object.__dict__[attr] != value:
+                    print(attr, value)
+
+            for attr, value in updated_work_program_in_field_of_study_object.__dict__.items():
+                if old_work_program_in_field_of_study_object is None \
+                        or old_work_program_in_field_of_study_object.__dict__[attr] != value:
+                    print(attr, value)
+
+            return updated_work_program_in_field_of_study_object
+
+        return wrapper
+
+    @staticmethod
+    def work_program_id_str_up_for_isu_changes_aspect(func):
+        def wrapper(*args, **kwargs):
+            work_program_in_field_of_study_object, \
+            isu_academic_plan_json, \
+            isu_academic_plan_discipline_json = args
+
+            if WorkProgramIdStrUpForIsu.objects.filter(
+                    id_str_up=int(isu_academic_plan_discipline_json['str_up_id']),
+                    ns_id=int(isu_academic_plan_json['ns_id']),
+                    work_program_in_field_of_study=work_program_in_field_of_study_object
+            ).exists():
+                old_work_program_id_str_up_for_isu_object = WorkProgramIdStrUpForIsu.objects.get(
+                    id_str_up=int(isu_academic_plan_discipline_json['str_up_id']),
+                    ns_id=int(isu_academic_plan_json['ns_id']),
+                    work_program_in_field_of_study=work_program_in_field_of_study_object
+                )
+            else:
+                old_work_program_id_str_up_for_isu_object = None
+
+            updated_work_program_id_str_up_for_isu_object = func(
+                copy.deepcopy(old_work_program_id_str_up_for_isu_object), *args, **kwargs
+            )
+
+            for attr, value in updated_work_program_id_str_up_for_isu_object.__dict__.items():
+                if old_work_program_id_str_up_for_isu_object is None \
+                        or old_work_program_id_str_up_for_isu_object.__dict__[attr] != value:
+                    print(attr, value)
+
+            return updated_work_program_id_str_up_for_isu_object
 
         return wrapper

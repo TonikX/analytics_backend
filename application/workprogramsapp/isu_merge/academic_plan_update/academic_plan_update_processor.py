@@ -1,3 +1,4 @@
+import copy
 import json
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
@@ -17,8 +18,6 @@ class AcademicPlanUpdateProcessor:
                 'oVrLzGwN8giUEPpBDs82c8OLuzgx2b9L'
             )
         )
-        with open('workprogramsapp/modules-order.json', 'r', encoding='utf-8') as fh:
-            self.order = json.load(fh)
 
     @staticmethod
     def __get_old_academic_plan_by_id__(plan_id):
@@ -197,15 +196,19 @@ class AcademicPlanUpdateProcessor:
             discipline_block_object.save()
         return discipline_block_object
 
+    @staticmethod
     @AcademicPlanUpdateAspect.discipline_block_module_changes_aspect
-    def __process_block_module__(self, discipline_block_module_object, isu_academic_plan_block_module_json,
+    def __process_block_module__(discipline_block_module_object,
+                                 isu_academic_plan_block_module_json,
                                  discipline_block_object):
         if discipline_block_module_object is not None:
+            print('exists')
             return discipline_block_module_object
         else:
+            print('created')
             discipline_block_module_object = DisciplineBlockModule(
                 name=isu_academic_plan_block_module_json['module_name'],
-                order=AcademicPlanUpdateUtils.get_module_order(self.order, isu_academic_plan_block_module_json)
+                order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )
             discipline_block_module_object.save()
             discipline_block_module_object.descipline_block.add(discipline_block_object)
@@ -213,139 +216,173 @@ class AcademicPlanUpdateProcessor:
         return discipline_block_module_object
 
     @staticmethod
-    def __process_linked_data__(mdb, wp_obj, isu_academic_plan_json, isu_academic_plan_discipline_json):
+    @AcademicPlanUpdateAspect.linked_data_changes_aspect
+    def __process_linked_data__(discipline_block_module_object, work_program_object, isu_academic_plan_discipline_json):
         if isu_academic_plan_discipline_json['is_optional']:
             option = 'Optionally'
         else:
             option = 'Required'
 
-        if (option == 'Optionally'
-                and WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                    discipline_block_module=mdb,
-                    change_type=option,
-                    subject_code=AcademicPlanUpdateUtils.num_to_int(
-                        isu_academic_plan_discipline_json['plan_order'],
-                        isu_academic_plan_discipline_json['discipline_name']
-                    )
-                ).exists()):
-            wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(
-                discipline_block_module=mdb,
+        old_work_program_change_in_discipline_block_module = None
+        old_work_program_in_field_of_study = None
+
+        if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                discipline_block_module=discipline_block_module_object,
+                change_type=option,
+                subject_code=AcademicPlanUpdateUtils.num_to_int(
+                    isu_academic_plan_discipline_json['plan_order'],
+                    isu_academic_plan_discipline_json['discipline_name']
+                )
+        ).exists()):
+            old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.get(
+                discipline_block_module=discipline_block_module_object,
                 change_type=option,
                 subject_code=AcademicPlanUpdateUtils.num_to_int(
                     isu_academic_plan_discipline_json['plan_order'],
                     isu_academic_plan_discipline_json['discipline_name']
                 )
             )
+            work_program_change_in_discipline_block_module = copy.deepcopy(
+                old_work_program_change_in_discipline_block_module)
+            work_program_change_in_discipline_block_module.save()
+
             if WorkProgramInFieldOfStudy.objects.filter(
-                    work_program_change_in_discipline_block_module=wpchangemdb,
-                    work_program=wp_obj
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    work_program=work_program_object
             ).exists():
-                wpinfs = WorkProgramInFieldOfStudy.objects.get(
-                    work_program_change_in_discipline_block_module=wpchangemdb,
-                    work_program=wp_obj
+                old_work_program_in_field_of_study = WorkProgramInFieldOfStudy.objects.get(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    work_program=work_program_object
                 )
-                wpinfs.save()
+                work_program_in_field_of_study = copy.deepcopy(old_work_program_in_field_of_study)
+                work_program_in_field_of_study.save()
             else:
-                wpinfs = WorkProgramInFieldOfStudy(
-                    work_program_change_in_discipline_block_module=wpchangemdb,
-                    work_program=wp_obj
+                work_program_in_field_of_study = WorkProgramInFieldOfStudy(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    work_program=work_program_object
                 )
-                wpinfs.save()
+                work_program_in_field_of_study.save()
         elif WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                discipline_block_module=mdb,
+                discipline_block_module=discipline_block_module_object,
                 change_type=option,
-                work_program=wp_obj
+                work_program=work_program_object
         ).exists():
-            wpinfs = WorkProgramInFieldOfStudy.objects.get(
-                work_program_change_in_discipline_block_module=WorkProgramChangeInDisciplineBlockModule.objects.get(
-                    discipline_block_module=mdb,
-                    change_type=option,
-                    work_program=wp_obj
-                ),
-                work_program=wp_obj
+            old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.get(
+                discipline_block_module=discipline_block_module_object,
+                change_type=option,
+                work_program=work_program_object
             )
-            wpinfs.save()
-        else:
-            wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
-            wpchangemdb.credit_units = AcademicPlanUpdateUtils.get_ze(isu_academic_plan_discipline_json)
-            wpchangemdb.change_type = option
-            wpchangemdb.discipline_block_module = mdb
-            wpchangemdb.subject_code = AcademicPlanUpdateUtils.num_to_int(
-                isu_academic_plan_discipline_json['plan_order'],
-                isu_academic_plan_discipline_json['discipline_name']
-            )
-            wpchangemdb.save()
+            work_program_change_in_discipline_block_module = copy \
+                .deepcopy(old_work_program_change_in_discipline_block_module)
             if WorkProgramInFieldOfStudy.objects.filter(
-                    work_program_change_in_discipline_block_module=wpchangemdb,
-                    work_program=wp_obj
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    work_program=work_program_object
             ).exists():
-                wpinfs = WorkProgramInFieldOfStudy.objects.get(
-                    work_program_change_in_discipline_block_module=wpchangemdb,
-                    work_program=wp_obj
+                old_work_program_in_field_of_study = WorkProgramInFieldOfStudy.objects.get(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    work_program=work_program_object
                 )
-                wpinfs.save()
+                work_program_in_field_of_study = copy.deepcopy(old_work_program_in_field_of_study)
+                work_program_in_field_of_study.save()
             else:
-                wpinfs = WorkProgramInFieldOfStudy(
-                    work_program_change_in_discipline_block_module=wpchangemdb,
-                    work_program=wp_obj
+                work_program_in_field_of_study = WorkProgramInFieldOfStudy(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    work_program=work_program_object
                 )
-                wpinfs.save()
-        try:
-            WorkProgramIdStrUpForIsu.objects.get(
-                id_str_up=int(isu_academic_plan_discipline_json['str_up_id']),
-                ns_id=int(isu_academic_plan_json['ns_id']),
-                work_program_in_field_of_study=wpinfs
-            )
-        except WorkProgramIdStrUpForIsu.DoesNotExist:
-            wpinfs_id_str_up = WorkProgramIdStrUpForIsu(
-                id_str_up=int(isu_academic_plan_discipline_json['str_up_id']),
-                ns_id=int(isu_academic_plan_json['ns_id']),
-                work_program_in_field_of_study=wpinfs
-            )
-            wpinfs_id_str_up.number = AcademicPlanUpdateUtils.num_to_int(
+                work_program_in_field_of_study.save()
+        else:
+            work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule()
+            work_program_change_in_discipline_block_module.credit_units = AcademicPlanUpdateUtils.get_ze(
+                isu_academic_plan_discipline_json)
+            work_program_change_in_discipline_block_module.change_type = option
+            work_program_change_in_discipline_block_module.discipline_block_module = discipline_block_module_object
+            work_program_change_in_discipline_block_module.subject_code = AcademicPlanUpdateUtils.num_to_int(
                 isu_academic_plan_discipline_json['plan_order'],
                 isu_academic_plan_discipline_json['discipline_name']
             )
-            wpinfs_id_str_up.dis_id = isu_academic_plan_discipline_json['dis_id']
-            wpinfs_id_str_up.ze_v_sem = AcademicPlanUpdateUtils.get_ze(isu_academic_plan_discipline_json)
-            wpinfs_id_str_up.lec_v_sem = AcademicPlanUpdateUtils.get_lec(isu_academic_plan_discipline_json)
-            wpinfs_id_str_up.prak_v_sem = AcademicPlanUpdateUtils.get_prac(isu_academic_plan_discipline_json)
-            wpinfs_id_str_up.lab_v_sem = AcademicPlanUpdateUtils.get_lab(isu_academic_plan_discipline_json)
-            wpinfs_id_str_up.ekz_v_sem = AcademicPlanUpdateUtils.set_control(
+            work_program_change_in_discipline_block_module.save()
+            if WorkProgramInFieldOfStudy.objects.filter(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    work_program=work_program_object
+            ).exists():
+                old_work_program_in_field_of_study = WorkProgramInFieldOfStudy.objects.get(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    work_program=work_program_object
+                )
+                work_program_in_field_of_study = copy.deepcopy(old_work_program_in_field_of_study)
+                work_program_in_field_of_study.save()
+            else:
+                work_program_in_field_of_study = WorkProgramInFieldOfStudy(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    work_program=work_program_object
+                )
+                work_program_in_field_of_study.save()
+        return old_work_program_change_in_discipline_block_module, \
+               old_work_program_in_field_of_study, \
+               work_program_change_in_discipline_block_module, \
+               work_program_in_field_of_study
+
+    @staticmethod
+    @AcademicPlanUpdateAspect.work_program_id_str_up_for_isu_changes_aspect
+    def __process_work_program_id_str_up_for_isu__(work_program_id_str_up_for_isu_object,
+                                                   work_program_in_field_of_study_object,
+                                                   isu_academic_plan_json,
+                                                   isu_academic_plan_discipline_json):
+        if work_program_id_str_up_for_isu_object is None:
+            work_program_id_str_up_for_isu_object = WorkProgramIdStrUpForIsu(
+                id_str_up=int(isu_academic_plan_discipline_json['str_up_id']),
+                ns_id=int(isu_academic_plan_json['ns_id']),
+                work_program_in_field_of_study=work_program_in_field_of_study_object
+            )
+            work_program_id_str_up_for_isu_object.number = AcademicPlanUpdateUtils.num_to_int(
+                isu_academic_plan_discipline_json['plan_order'],
+                isu_academic_plan_discipline_json['discipline_name']
+            )
+            work_program_id_str_up_for_isu_object.dis_id = isu_academic_plan_discipline_json['dis_id']
+            work_program_id_str_up_for_isu_object.ze_v_sem = AcademicPlanUpdateUtils.get_ze(
+                isu_academic_plan_discipline_json)
+            work_program_id_str_up_for_isu_object.lec_v_sem = AcademicPlanUpdateUtils.get_lec(
+                isu_academic_plan_discipline_json)
+            work_program_id_str_up_for_isu_object.prak_v_sem = AcademicPlanUpdateUtils.get_prac(
+                isu_academic_plan_discipline_json)
+            work_program_id_str_up_for_isu_object.lab_v_sem = AcademicPlanUpdateUtils.get_lab(
+                isu_academic_plan_discipline_json)
+            work_program_id_str_up_for_isu_object.ekz_v_sem = AcademicPlanUpdateUtils.set_control(
                 isu_academic_plan_discipline_json['exam'],
                 int(float(isu_academic_plan_json['training_period']))
             )
-            wpinfs_id_str_up.zach_v_sem = AcademicPlanUpdateUtils.set_control(
+            work_program_id_str_up_for_isu_object.zach_v_sem = AcademicPlanUpdateUtils.set_control(
                 isu_academic_plan_discipline_json['credit'],
                 int(float(isu_academic_plan_json['training_period']))
             )
-            wpinfs_id_str_up.dif_zach_v_sem = AcademicPlanUpdateUtils.set_control(
+            work_program_id_str_up_for_isu_object.dif_zach_v_sem = AcademicPlanUpdateUtils.set_control(
                 isu_academic_plan_discipline_json['diff_credit'],
                 int(float(isu_academic_plan_json['training_period']))
             )
-            wpinfs_id_str_up.kp_v_sem = AcademicPlanUpdateUtils.set_control(
+            work_program_id_str_up_for_isu_object.kp_v_sem = AcademicPlanUpdateUtils.set_control(
                 isu_academic_plan_discipline_json['course_project'],
                 int(float(isu_academic_plan_json['training_period']))
             )
-            wpinfs_id_str_up.save()
+            work_program_id_str_up_for_isu_object.save()
 
             for zun in Zun.objects.filter(
                     wp_in_fs_saved_fk_id_str_up=int(isu_academic_plan_discipline_json['str_up_id'])
             ):
-                zun.wp_in_fs = wpinfs
+                zun.wp_in_fs = work_program_in_field_of_study_object
                 zun.save()
+        return work_program_id_str_up_for_isu_object
 
     def update_academic_plans(self):
         # todo make executable
-        academic_plans_ids = AcademicPlanUpdateConfiguration.objects.get().values_list('academic_plan_ids', flat=True)
-        #cademic_plans_ids = [10572]
+        # academic_plans_ids = AcademicPlanUpdateConfiguration.objects.get().values_list('academic_plan_ids', flat=True)
+        academic_plans_ids = [10572]
 
         for plan_id in academic_plans_ids:
             plan_id = str(plan_id)
 
             old_academic_plan = self.__get_old_academic_plan_by_id__(plan_id)
-            isu_academic_plan_json = self.isu_service.get_academic_plan(plan_id)
-            #isu_academic_plan_json = json.loads(json.dumps(test_plan['result']))
+            # isu_academic_plan_json = self.isu_service.get_academic_plan(plan_id)
+            isu_academic_plan_json = json.loads(json.dumps(test_plan['result']))
 
             if isu_academic_plan_json is not None:
                 self.__update_disciplines__(old_academic_plan, isu_academic_plan_json)
@@ -357,13 +394,19 @@ class AcademicPlanUpdateProcessor:
                 for block in isu_academic_plan_json['disciplines_blocks']:
                     discipline_block_object = self.__process_discipline_block__(block, academic_plan)
                     for module in block['discipline_modules']:
-                        module_object = self.__process_block_module__(module, discipline_block_object)
-                        for disc in module['disciplines']:
+                        discipline_block_module_object = self.__process_block_module__(module, discipline_block_object)
+                        for isu_academic_plan_discipline_json in module['disciplines']:
                             work_program_object = self \
-                                .__process_discipline__(isu_academic_plan_json, disc, module_object)
-                            self.__process_linked_data__(
-                                module_object,
-                                work_program_object,
+                                .__process_discipline__(
                                 isu_academic_plan_json,
-                                disc
+                                isu_academic_plan_discipline_json,
+                                discipline_block_module_object
+                            )
+                            work_program_in_field_of_study_object = self.__process_linked_data__(
+                                discipline_block_module_object, work_program_object, isu_academic_plan_discipline_json
+                            )
+                            self.__process_work_program_id_str_up_for_isu__(
+                                work_program_in_field_of_study_object,
+                                isu_academic_plan_json,
+                                isu_academic_plan_discipline_json
                             )

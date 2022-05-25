@@ -1,7 +1,20 @@
 import re
 
+import json
+
+
+class ModuleOrderProvider:
+    def __init__(self):
+        with open('workprogramsapp/modules-order.json', 'r', encoding='utf-8') as fh:
+            self.order = json.load(fh)
+
+    def get_module_order(self):
+        return self.order
+
 
 class AcademicPlanUpdateUtils:
+    def __init__(self):
+        self.module_order_provide = ModuleOrderProvider()
 
     @staticmethod
     def clean_text(text):
@@ -172,8 +185,8 @@ class AcademicPlanUpdateUtils:
                 terms[int(term) - 1] = 1
         return tuple(terms)
 
-    @staticmethod
-    def get_module_order(order, isu_academic_plan_block_module_json):
+    def get_module_order(self, isu_academic_plan_block_module_json):
+        order = self.module_order_provide.get_module_order()
         try:
             module_order = order[isu_academic_plan_block_module_json['module_name']]
         except:
