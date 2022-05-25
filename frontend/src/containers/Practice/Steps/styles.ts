@@ -35,5 +35,8 @@ export default () => createStyles({
     },
     singleColumn: {
         width: '70%',
+    },
+    structuralUnit: {
+        marginTop: '37px',
     }
 });

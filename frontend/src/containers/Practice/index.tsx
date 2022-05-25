@@ -88,7 +88,7 @@ class Practice extends React.Component<PracticeProps> {
                         this.stepList[activeStep]
                     }
                 </div>
-                <div>
+                <div className={classes.rightButtons}>
                     <Download/>
                     <div className={classes.sendToExpertise}>
                         <SendToExpertise openStep={this.openStep} practiceId={this.getPracticeId()}/>

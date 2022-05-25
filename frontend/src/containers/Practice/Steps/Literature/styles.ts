@@ -1,6 +1,6 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {createStyles} from "@material-ui/core";
 
-export default (theme: Theme) => createStyles({
+export default () => createStyles({
     root: {
         height: 'inherit',
     },
@@ -31,4 +31,12 @@ export default (theme: Theme) => createStyles({
         display: "flex",
         alignItems: 'center'
     },
+    header: {
+        display: 'flex',
+        justifyContent: 'start',
+        alignItems: 'center',
+    },
+    helpIcon: {
+        marginLeft: '5px',
+    }
 });

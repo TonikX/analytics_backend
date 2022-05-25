@@ -73,7 +73,7 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                         <SearchSelector label="Структурное подразделение"
                                         changeSearchText={this.handleChangeStructuralUnitSearchText}
                                         list={structuralUnitsList}
-                                        className={classes.input}
+                                        className={classes.structuralUnit}
                                         changeItem={this.changeStructuralUnit}
                                         value={String(fields[PracticeFields.STRUCTURAL_UNIT]?.id)}
                                         valueLabel={fields[PracticeFields.STRUCTURAL_UNIT]?.title ?? ''}

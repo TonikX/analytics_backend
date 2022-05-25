@@ -1,6 +1,6 @@
 import React from "react";
 import {WithStyles} from "@material-ui/core";
-import styles from "../Input/styles";
+import styles from "./styles";
 import {PracticeActions, PracticeState, Validation} from "../../types";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -41,7 +41,7 @@ class SendToExpertise extends React.Component<SendToExpertiseProps> {
 
     render() {
 
-        const {validation} = this.props;
+        const {validation, classes} = this.props;
 
         if (validation.erroredFields.length === 0) {
             return (
@@ -56,7 +56,7 @@ class SendToExpertise extends React.Component<SendToExpertiseProps> {
                     Для отправления на экспертизу нужно исправить ошибки. Нажмите, чтобы к ним перейти
                 </Typography>
             }>
-                <Button variant='outlined' onClick={this.handleClick}>
+                <Button className={classes.button} variant='outlined' onClick={this.handleClick}>
                     Перейти к ошибкам
                 </Button>
             </Tooltip>

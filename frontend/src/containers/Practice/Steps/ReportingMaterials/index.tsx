@@ -6,6 +6,9 @@ import styles from "../styles";
 import {Typography, WithStyles} from "@material-ui/core";
 import {PracticeActions, PracticeState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import Tooltip from "@material-ui/core/Tooltip";
+import {RussianPracticeFields} from "../../constants";
 
 interface ReportingMaterialsProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -30,6 +33,20 @@ class Structure extends React.Component<ReportingMaterialsProps> {
                     </Typography>
                     <Input fieldName={PracticeFields.ADDITIONAL_REPORTING_MATERIALS}
                            multiline
+                           label={
+                               <div style={{display: "flex", justifyContent: 'start', alignItems: 'center'}}>
+                                   {RussianPracticeFields[PracticeFields.ADDITIONAL_REPORTING_MATERIALS]}
+                                   <Tooltip title={
+                                       <Typography>
+                                           По решению руководителей практики возможны требования к дополнительным отчетным материалам. Укажите, какие документы и требования к ним предъявляются (дневник практики, отзыв руководителя практики, презентация и др.).
+                                           Пример: презентация, отчет на 20 страниц.
+                                       </Typography>
+                                   }>
+                                       <HelpOutlineIcon fontSize='small' style={{marginLeft: '5px'}}/>
+                                   </Tooltip>
+                               </div>
+
+                           }
                            rows={2}/>
                 </div>
             </div>

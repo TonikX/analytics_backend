@@ -10,6 +10,7 @@ import get from "lodash/get";
 import {validate} from "../../validation";
 import InputsLoader from "../../../../components/InputsLoader";
 import {RussianPracticeFields} from "../../constants";
+import InputLabel from "@material-ui/core/InputLabel";
 
 interface InputProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -19,6 +20,7 @@ interface InputProps extends WithStyles<typeof styles> {
     rows?: number;
     getLoading: (fieldName: string) => boolean,
     validation: Validation;
+    label?: React.ReactNode;
 }
 
 class Input extends React.Component<InputProps> {
@@ -97,13 +99,16 @@ class Input extends React.Component<InputProps> {
 
 
     render() {
-        const {fieldName, classes, multiline, rows, getLoading} = this.props;
+        const {fieldName, classes, multiline, rows, getLoading, label} = this.props;
         const {errorMessage} = this.state;
 
         return (
             <div className={classes.input}>
+                <InputLabel shrink>
+                    {label ?? RussianPracticeFields[fieldName]}
+                </InputLabel>
                 <InputsLoader loading={getLoading(fieldName)}>
-                    <TextField label={RussianPracticeFields[fieldName]}
+                    <TextField
                                onBlur={this.saveInput(fieldName)}
                                onChange={this.setInput}
                                variant="outlined"
@@ -116,6 +121,7 @@ class Input extends React.Component<InputProps> {
                                InputLabelProps={{
                                    shrink: true,
                                }}
+                               style={{marginTop: '3px'}}
                     />
                 </InputsLoader>
             </div>

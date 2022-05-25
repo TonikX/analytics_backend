@@ -1,14 +1,17 @@
-import {WithStyles} from "@material-ui/core";
+import {FormHelperText, Select as MuiSelect, WithStyles} from "@material-ui/core";
 import styles from "./styles";
 import {PracticeActions, Validation} from "../../types";
 import {PracticeFields} from "../../enum";
 import React, {ReactText} from "react";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
-import SimpleSelector from "../../../../components/SimpleSelector";
 import InputsLoader from "../../../../components/InputsLoader";
 import {RussianPracticeFields} from "../../constants";
 import {validate} from "../../validation";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import get from "lodash/get";
 
 type SelectOption = {
     label: string;
@@ -68,7 +71,9 @@ class Select extends React.Component<SelectProps> {
         });
     }
 
-    saveSelect = (field: PracticeFields) => (value: string) => {
+    saveSelect = (e: React.ChangeEvent<any>) => {
+        const field = this.props.fieldName;
+        const value = get(e, 'target.value')
         const error = validate(field, value);
         this.props.actions.setField({field, value});
 
@@ -80,24 +85,47 @@ class Select extends React.Component<SelectProps> {
         }
 
         this.props.actions.removeFromErroredFields(field);
-        this.props.actions.saveField({field, value})
+        this.props.actions.saveField({field, value});
     }
 
     render() {
         const {fields, classes, metaList, fieldName, getLoading} = this.props;
         const {errorMessage} = this.state;
 
+        const label = RussianPracticeFields[fieldName];
+        const value = fields[fieldName];
+
         return (
-            <div style={{marginTop: '30px'}}>
+            <div style={{marginTop: '20px'}}>
+                <InputLabel shrink>
+                    {label}
+                </InputLabel>
                 <InputsLoader loading={getLoading(fieldName)}>
-                    <SimpleSelector label={RussianPracticeFields[fieldName]}
-                                    metaList={metaList}
-                                    value={fields[fieldName]}
-                                    wrapClass={classes.selectorWrap}
-                                    noMargin
-                                    onChange={this.saveSelect(fieldName)}
-                                    errorMessage={errorMessage}
-                    />
+                    <FormControl error={!!errorMessage} className={classes.selectorWrap} fullWidth style={{marginTop: '3px'}}>
+                        <MuiSelect
+                            value={value}
+                            onChange={this.saveSelect}
+                            fullWidth
+                            variant='outlined'
+                        >
+                            {metaList.map(item =>
+                                <MenuItem value={item.value} key={item.value}>
+                                    {item.label}
+                                </MenuItem>
+                            )}
+                        </MuiSelect>
+                        {
+                            errorMessage && <FormHelperText>{errorMessage}</FormHelperText>
+                        }
+                    </FormControl>
+                    {/*<SimpleSelector label={RussianPracticeFields[fieldName]}*/}
+                    {/*                metaList={metaList}*/}
+                    {/*                value={fields[fieldName]}*/}
+                    {/*                wrapClass={classes.selectorWrap}*/}
+                    {/*                noMargin*/}
+                    {/*                onChange={this.saveSelect(fieldName)}*/}
+                    {/*                errorMessage={errorMessage}*/}
+                    {/*/>*/}
                 </InputsLoader>
             </div>
         );

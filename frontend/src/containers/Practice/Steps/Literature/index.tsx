@@ -17,6 +17,8 @@ import AddLiteratureModal from "../../../../components/AddLiteratureModal";
 import {literatureFields} from "../../../Literature/enum";
 import {LiteratureType} from "../../../Literature/types";
 import {PracticeFields, PracticeSteps} from "../../enum";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class Literature extends React.PureComponent<LiteratureProps> {
 
@@ -54,9 +56,18 @@ class Literature extends React.PureComponent<LiteratureProps> {
 
         return (
             <div className={classes.root}>
-                <Typography variant='h5'>
-                    {PracticeSteps.REFERENCES}
-                </Typography>
+                <div className={classes.header}>
+                    <Typography variant='h5'>
+                        {PracticeSteps.REFERENCES}
+                    </Typography>
+                    <Tooltip arrow title={
+                        <Typography variant='body1'>
+                            Указать разработанные на Вашем факультете методические рекомендации или общие источники. Если есть.
+                        </Typography>
+                    }>
+                        <HelpOutlineIcon fontSize='small' className={classes.helpIcon}/>
+                    </Tooltip>
+                </div>
                 <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
                     <div className={classes.list}>
                         {literatureList.map((literature) => (
