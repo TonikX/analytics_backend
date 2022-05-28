@@ -161,6 +161,18 @@ export enum EvaluationToolFields {
     CHECK_POINT = 'check_point',
     SECTIONS = 'descipline_sections',
     SEMESTER = 'semester',
+    PROBLEM_TOPIC = 'problem_topic',
+    FIELDS_HINTS = 'fields_hints',
+    CRITERIA = 'criteria',
+}
+
+export enum EvaluationCriteiaFields {
+    ID = 'id',
+    EVALUATION_CRITERIA = 'evaluation_criteria',
+    MIN = 'min',
+    MAX = 'max',
+    EVALUATIONTOOL_ID = 'evaluationtool_id',
+    CERTIFICATIONEVALUATIONTOOL_TYPE_ID = 'certificationevaluationtool_type_id',
 }
 
 export enum IntermediateCertificationFields {

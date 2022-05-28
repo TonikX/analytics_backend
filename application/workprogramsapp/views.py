@@ -20,6 +20,8 @@ from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
     DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy, Certification
+from .models import EvaluationCriteria
+from .models import EvaluationToolType
 from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
@@ -35,6 +37,7 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
     DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer
+from .serializers import EvaluationToolCreateWCriteriaSerializer
 from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, WorkProgramInFieldOfStudySerializerForCb, WorkProgramInFieldOfStudyForCompeteceListSerializer
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer,  ZunForManyCreateSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
@@ -751,8 +754,31 @@ class EvaluationToolListAPI(generics.ListCreateAPIView):
     API endpoint that represents a list of Evaluation Tools.
     """
     queryset = EvaluationTool.objects.all()
-    serializer_class = EvaluationToolCreateSerializer
+    serializer_class = EvaluationToolCreateWCriteriaSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def create(self, request, *args, **kwargs):
+        try:
+            type_name = request.data['evaluationTool']['type']
+        except KeyError:
+            return Response({'error': 'Invalid request format'}, status=400)
+
+        type_ = EvaluationToolType.objects.filter(type_name=type_name)
+        if len(type_) != 1:
+            return Response({'error': 'Ambiguous type name provided'}, status=400)
+
+        try:
+            type_id = type_[0].id
+        except AttributeError:
+            return Response({'error': 'Index error'}, status=400)
+
+        request.data['evaluationTool']['evaluationtool_type_id'] = type_id
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -762,6 +788,13 @@ class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = EvaluationTool.objects.all()
     serializer_class = EvaluationToolCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def delete(self, request, *args, **kwargs):
+        evaluation_tool_instance = self.get_object()
+        related_eval_criteria = EvaluationCriteria.objects.filter(
+            evaluationtool_id=evaluation_tool_instance.id)
+        related_eval_criteria.delete()
+        return super().delete(request, *args, **kwargs)
 
 
 class СertificationEvaluationToolListAPI(generics.ListCreateAPIView):

@@ -19,4 +19,10 @@ export default (theme: Theme) => createStyles({
     marginBottom30: {
         marginBottom: '30px'
     },
+    marginTop30: {
+        padding: 30
+    },
+    width100: {
+        width: '100%'
+    }
 });

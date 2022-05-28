@@ -7,6 +7,7 @@ from gia_practice_app.Practice.models import Practice
 #from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
 #from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
 from .expertise.common_serializers import ShortExpertiseSerializer
+from .models import EvaluationCriteria
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
@@ -116,17 +117,18 @@ class EvaluationToolSerializer(serializers.ModelSerializer):
 
 class EvaluationToolForOutcomsSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
+    type = serializers.CharField(source='evaluationtool_type.type_name', read_only=True)
     class Meta:
         model = EvaluationTool
-        fields = ['id', 'type', 'name', 'max', 'min', 'deadline', 'check_point', 'description', 'evaluation_criteria']
+        fields = ['id', 'type', 'name', 'max', 'min', 'deadline', 'check_point', 'description']
 
 
 class СertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
-
+    type = serializers.CharField(source='сertificationevaluationtool_type.type_name', read_only=True)
     class Meta:
         model = СertificationEvaluationTool
-        fields = ['id', 'type', 'name', 'description', 'deadline', 'min', 'max', 'semester', 'evaluation_criteria']
+        fields = ['id', 'type', 'name', 'description', 'deadline', 'min', 'max', 'semester']
 
 
 class СertificationEvaluationToolCreateSerializer(serializers.ModelSerializer):
@@ -332,20 +334,73 @@ class EvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
     #descipline_sections = serializers.StringRelatedField(many=True, source='evaluation_tools')
     descipline_sections = DisciplineSectionForEvaluationToolsSerializer(many=True, source='evaluation_tools')
+    type = serializers.CharField(source='evaluationtool_type.type_name', read_only=True)
 
     class Meta:
         model = EvaluationTool
-        fields = ['id', 'type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections', 'semester', 'evaluation_criteria']
+        fields = ['id', 'type', 'name', 'description', 'check_point', 'deadline', 'min', 'max', 'descipline_sections', 'semester']
 
 
 class EvaluationToolCreateSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
     descipline_sections = serializers.PrimaryKeyRelatedField(many=True, source='evaluation_tools', queryset=DisciplineSection.objects.all())
     #descipline_sections = DisciplineSectionForEvaluationToolsSerializer(many=True, source='evaluation_tools')
+    type = serializers.CharField(source='evaluationtool_type.type_name', read_only=True)
+    evaluationtool_type_id = serializers.IntegerField(write_only=True)
+    min = serializers.CharField(allow_blank=True)
+    max = serializers.CharField(allow_blank=True)
 
     class Meta:
         model = EvaluationTool
-        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'semester', 'min', 'max', 'descipline_sections', 'evaluation_criteria']
+        fields = ['type', 'name', 'description', 'check_point', 'deadline', 'semester', 'min', 'max', 'descipline_sections', 'evaluationtool_type_id']
+
+
+class EvalutationCriteriaSerializer(serializers.ModelSerializer):
+    """Сериализатор критерия оценки."""
+    class Meta:
+        model = EvaluationCriteria
+        fields = ['evaluation_criteria', 'min', 'max']
+
+
+class EvaluationToolCreateWCriteriaSerializer(serializers.Serializer):
+    """Сериализатор ФОСов, который умеет принимать и ФОС и критерии."""
+    evalCriteria = EvalutationCriteriaSerializer(many=True)
+    evaluationTool = EvaluationToolCreateSerializer()
+
+    def validate(self, attrs):
+        criteria = attrs['evalCriteria']
+        evaluation_tool = attrs['evaluationTool']
+
+        sum_min = sum((cr['min'] for cr in criteria))
+        sum_max = sum((cr['max'] for cr in criteria))
+
+        evaluation_tool['min'] = sum_min
+        evaluation_tool['max'] = sum_max
+
+        return attrs
+
+    def create(self, validated_data):
+        raw_tool = validated_data['evaluationTool']
+        sections = raw_tool['evaluation_tools']
+        raw_tool_2 = dict(raw_tool)
+        del raw_tool_2['evaluation_tools']
+        tool_instance = EvaluationTool(
+            **raw_tool_2
+        )
+        tool_instance.save()
+        for section in sections:
+            section.evaluation_tools.add(tool_instance)
+            section.save()
+
+        for cr in validated_data['evalCriteria']:
+            EvaluationCriteria.objects.create(
+                evaluation_criteria=cr['evaluation_criteria'],
+                max=cr['max'],
+                min=cr['min'],
+                evaluationtool_id=tool_instance.id
+            )
+
+        return tool_instance
 
 
 class ZunSerializer(serializers.ModelSerializer):

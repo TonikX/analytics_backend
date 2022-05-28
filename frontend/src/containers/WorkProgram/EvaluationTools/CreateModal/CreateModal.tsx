@@ -5,6 +5,8 @@ import classNames from 'classnames';
 
 import {CreateModalProps} from './types';
 
+import Box from '@material-ui/core/Box';
+import Table from '@material-ui/core/Table';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
@@ -30,16 +32,43 @@ import Radio from "@material-ui/core/Radio";
 import QuestionIcon from "@material-ui/icons/HelpOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import CKEditor from '../../../../components/CKEditor'
-import { types } from '../constants'
+import {types} from '../constants'
 
-import {
-    EvaluationToolFields,
-    fields,
-    workProgramSectionFields,
-} from '../../enum';
+import {EvaluationCriteiaFields, EvaluationToolFields, fields, workProgramSectionFields,} from '../../enum';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import Paper from "@material-ui/core/Paper";
+import TableBody from "@material-ui/core/TableBody";
+import {Input} from "@material-ui/core";
+import CreateIcon from "@material-ui/icons/NoteAddOutlined";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import EditIcon from "@material-ui/icons/EditOutlined";
+import CheckIcon from "@material-ui/icons/CheckOutlined";
+import {v4 as uuidv4} from 'uuid';
+
+
+const EditableTableCell = ({ row, name, onChange }: {row: any, name: any, onChange: any}) => {
+    const { isEditMode } = row;
+    return (
+        <TableCell>
+            {isEditMode? (
+                <Input
+                    value={row[name]}
+                    name={name}
+                    onChange={e => onChange(e, row)}
+                />
+            ): (
+                row[name]
+            )}
+        </TableCell>
+    );
+};
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     editor = null;
@@ -58,11 +87,56 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [EvaluationToolFields.DEADLINE]: 1,
             [EvaluationToolFields.CHECK_POINT]: false,
             [EvaluationToolFields.SEMESTER]: '1',
-        }
+            [EvaluationToolFields.PROBLEM_TOPIC]: '',
+            [EvaluationToolFields.FIELDS_HINTS]: '',
+            [EvaluationToolFields.CRITERIA]: [] as any[],
+        },
+        evalCriteria: [
+            {
+                internalId: uuidv4(),
+                [EvaluationCriteiaFields.ID]: 1,
+                [EvaluationCriteiaFields.EVALUATION_CRITERIA]: 'asd',
+                [EvaluationCriteiaFields.MIN]: 10,
+                [EvaluationCriteiaFields.MAX]: 100,
+                [EvaluationCriteiaFields.EVALUATIONTOOL_ID]: null,
+                [EvaluationCriteiaFields.CERTIFICATIONEVALUATIONTOOL_TYPE_ID]: null,
+            },
+            {
+                internalId: uuidv4(),
+                [EvaluationCriteiaFields.ID]: 2,
+                [EvaluationCriteiaFields.EVALUATION_CRITERIA]: 'asdsa',
+                [EvaluationCriteiaFields.MIN]: 10,
+                [EvaluationCriteiaFields.MAX]: 100,
+                [EvaluationCriteiaFields.EVALUATIONTOOL_ID]: null,
+                [EvaluationCriteiaFields.CERTIFICATIONEVALUATIONTOOL_TYPE_ID]: null,
+            },
+            {
+                internalId: uuidv4(),
+                [EvaluationCriteiaFields.ID]: 3,
+                [EvaluationCriteiaFields.EVALUATION_CRITERIA]: '2df4',
+                [EvaluationCriteiaFields.MIN]: 10,
+                [EvaluationCriteiaFields.MAX]: 100,
+                [EvaluationCriteiaFields.EVALUATIONTOOL_ID]: null,
+                [EvaluationCriteiaFields.CERTIFICATIONEVALUATIONTOOL_TYPE_ID]: null,
+            },
+        ] as any[],
+        evaluationCriteria: {
+            [EvaluationCriteiaFields.ID]: null,
+            [EvaluationCriteiaFields.EVALUATION_CRITERIA]: '',
+            [EvaluationCriteiaFields.MIN]: null,
+            [EvaluationCriteiaFields.MAX]: null,
+            [EvaluationCriteiaFields.EVALUATIONTOOL_ID]: null,
+            [EvaluationCriteiaFields.CERTIFICATIONEVALUATIONTOOL_TYPE_ID]: null,
+        },
+        sumMin: 0,
+        sumMax: 0
     };
+
+
 
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {evaluationTool} = this.props;
+        // const {evaluationCriteria} = this.props;
 
         if (!shallowEqual(this.props, prevProps)){
             this.setState({
@@ -79,9 +153,15 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     [EvaluationToolFields.TYPE]: get(evaluationTool, EvaluationToolFields.TYPE, ''),
                     [EvaluationToolFields.CHECK_POINT]: get(evaluationTool, EvaluationToolFields.CHECK_POINT, false),
                     [EvaluationToolFields.SEMESTER]: get(evaluationTool, EvaluationToolFields.SEMESTER, '1'),
+                    [EvaluationToolFields.PROBLEM_TOPIC]: get(evaluationTool, EvaluationToolFields.PROBLEM_TOPIC, ''),
+                    [EvaluationToolFields.FIELDS_HINTS]: get(evaluationTool, EvaluationToolFields.FIELDS_HINTS, ''),
                 }
             });
         }
+    }
+
+    componentDidMount() {
+        this.recalcTableSums();
     }
 
     handleClose = () => {
@@ -90,19 +170,23 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     handleSave = () => {
-        const {evaluationTool} = this.state;
+        let { evaluationTool, evalCriteria } = this.state;
 
         const disableSave = get(evaluationTool, [EvaluationToolFields.NAME, 'length'], 0) === 0
                             || get(evaluationTool, [EvaluationToolFields.DESCRIPTION, 'length'], 0) === 0
-                            || get(evaluationTool, [EvaluationToolFields.SECTIONS, 'length'], 0) === 0
+                            // || get(evaluationTool, [EvaluationToolFields.SECTIONS, 'length'], 0) === 0
                             || get(evaluationTool, [EvaluationToolFields.TYPE, 'length'], 0) === 0
         ;
         if (evaluationTool[EvaluationToolFields.ID]){
             this.setState({ showErrors: false });
+            // evaluationTool[EvaluationToolFields.CRITERIA] = evalCriteria;
             this.props.actions.changeEvaluationTool(evaluationTool);
         } else if (!disableSave){
             this.setState({ showErrors: false });
-            this.props.actions.addEvaluationTool(evaluationTool);
+            this.props.actions.addEvaluationTool({
+                evaluationTool,
+                evalCriteria
+            });
         } else if (disableSave) {
             this.setState({ showErrors: true })
         }
@@ -110,12 +194,17 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
         const {evaluationTool} = this.state;
+        // const {evaluationCriteia} = this.state;
 
         this.setState({
             evaluationTool: {
                 ...evaluationTool,
                 [field]: get(e, 'target.value')
             }
+            // evaluationCriteria: {
+            //     ...evaluationCriteia,
+            //     [field]: get(e, 'target.value')
+            // }
         })
     }
 
@@ -141,6 +230,87 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
+    recalcTableSums = () => {
+        const { evalCriteria } = this.state;
+
+        let newSumMin = evalCriteria
+            .filter(row => typeof row[EvaluationCriteiaFields.MIN] === 'number')
+            .map(row => row[EvaluationCriteiaFields.MIN]);
+        newSumMin = newSumMin.length !== 0 ? newSumMin.reduce((a, b) => a + b) : 0;
+        let newSumMax = evalCriteria
+            .filter(row => typeof row[EvaluationCriteiaFields.MAX] === 'number')
+            .map(row => row[EvaluationCriteiaFields.MAX]);
+        newSumMax = newSumMax.length !== 0 ? newSumMax.reduce((a, b) => a + b) : 0;
+
+        this.setState({
+            sumMin: newSumMin,
+            sumMax: newSumMax,
+        });
+    }
+    onTableRowToggleEdit = (id: any) => {
+        const {evalCriteria} = this.state;
+
+        this.setState({
+            evalCriteria: evalCriteria.map(row => {
+                if (row.internalId === id) {
+                    const { isEditMode } = row;
+
+                    return {...row, isEditMode: !isEditMode}
+                }
+                return row;
+            }),
+        }, () => {
+            this.recalcTableSums();
+        });
+    };
+    onTableRowDelete = (id: any) => {
+        const { evalCriteria } = this.state;
+        const newEvalCriteria = evalCriteria.filter(row => row.internalId !== id);
+        this.setState({
+            evalCriteria: newEvalCriteria
+        }, () => {
+            this.recalcTableSums();
+        });
+    };
+    onTableRowChange = (e: any, row: any) => {
+        const { evalCriteria } = this.state;
+        let value = e.target.value;
+        const name = e.target.name;
+        const { internalId } = row;
+
+        const newEvalCriteria = evalCriteria.map(row => {
+            if (row.internalId === internalId) {
+                if (
+                    (name === EvaluationCriteiaFields.MAX || name === EvaluationCriteiaFields.MIN)
+                    && !isNaN(Number(value))
+                ){
+                    value = Number(value);
+                }
+                return { ...row, [name]: value }
+            }
+            return row;
+        });
+        this.setState({
+            evalCriteria: newEvalCriteria
+        });
+    }
+    onTableRowCreate = () => {
+        const { evalCriteria } = this.state;
+        const newEvalCritera = evalCriteria.concat([{
+            internalId: uuidv4(),
+            [EvaluationCriteiaFields.ID]: null,
+            [EvaluationCriteiaFields.EVALUATION_CRITERIA]: '',
+            [EvaluationCriteiaFields.MIN]: 0,
+            [EvaluationCriteiaFields.MAX]: 0,
+            [EvaluationCriteiaFields.EVALUATIONTOOL_ID]: null,
+            [EvaluationCriteiaFields.CERTIFICATIONEVALUATIONTOOL_TYPE_ID]: null,
+            isEditMode: true,
+        }]);
+        this.setState({
+            evalCriteria: newEvalCritera
+        });
+    }
+
     changeDescription = (event: any) => {
         const {evaluationTool} = this.state;
         const data = event.editor.getData();
@@ -158,7 +328,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
     render() {
         const {classes, sections, semesterCount} = this.props;
-        const {evaluationTool, isOpen} = this.state;
+        const {evaluationTool, isOpen, evalCriteria} = this.state;
 
         const isEditMode = Boolean(evaluationTool[EvaluationToolFields.ID]);
         if (!isOpen) return <></>
@@ -273,26 +443,16 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                 </Select>
                                             </FormControl>
                                             <div className={classNames(classes.row, classes.marginBottom30)}>
-                                                <TextField label="Минимальное значение"
-                                                           onChange={this.saveField(EvaluationToolFields.MIN)}
-                                                           variant="outlined"
-                                                           className={classes.numberInput}
-                                                           fullWidth
-                                                           InputLabelProps={{
-                                                               shrink: true,
-                                                           }}
-                                                           type="number"
-                                                           value={evaluationTool[EvaluationToolFields.MIN]}
-                                                />
-                                                <TextField label="Максимальное значение"
-                                                           onChange={this.saveField(EvaluationToolFields.MAX)}
-                                                           variant="outlined"
-                                                           fullWidth
-                                                           InputLabelProps={{
-                                                               shrink: true,
-                                                           }}
-                                                           type="number"
-                                                           value={evaluationTool[EvaluationToolFields.MAX]}
+                                                <TextField
+                                                    label="Тема (проблема)"
+                                                    onChange={this.saveField(EvaluationToolFields.PROBLEM_TOPIC)}
+                                                    variant="outlined"
+                                                    className={classNames(classes.input, classes.nameInput)}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    error={this.hasError(EvaluationToolFields.PROBLEM_TOPIC)}
+                                                    value={evaluationTool[EvaluationToolFields.PROBLEM_TOPIC]}
                                                 />
                                             </div>
 
@@ -356,16 +516,97 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             </div>
 
                             <div className={classes.rightSide}>
-                                <InputLabel className={classes.label}> Описание * </InputLabel>
-                                <CKEditor
-                                    value={evaluationTool[EvaluationToolFields.DESCRIPTION]
-                                            ? evaluationTool[EvaluationToolFields.DESCRIPTION] : ''}
-                                    onChange={this.changeDescription}
-                                    useFormulas
-                                    height="calc(100vh - 280px)"
-                                    style={this.hasError(EvaluationToolFields.DESCRIPTION)? {border: '1px solid #d00000'} : {border: '1px solid #d1d1d1'}}
-                                />
+                                <Box component="div" display="block">
+                                    <>
+                                        <InputLabel className={classes.label}> Описание * </InputLabel>
+                                        <CKEditor
+                                            value={evaluationTool[EvaluationToolFields.DESCRIPTION]
+                                                    ? evaluationTool[EvaluationToolFields.DESCRIPTION] : ''}
+                                            onChange={this.changeDescription}
+                                            useFormulas
+                                            height="calc(50vh - 280px)"
+                                            style={this.hasError(EvaluationToolFields.DESCRIPTION)? {border: '1px solid #d00000'} : {border: '1px solid #d1d1d1'}}
+                                        />
+                                    </>
+                                    <Box
+
+                                    >
+                                        <Box
+                                            display='flex'
+                                            justifyContent='space-between'
+                                            alignItems='baseline'
+                                            paddingBottom='10px'
+                                        >
+                                            <InputLabel className={classes.label}>Критерии оценивания *</InputLabel>
+                                            <Button
+                                                variant="contained"
+                                                startIcon={<CreateIcon />}
+                                                onClick={() => {this.onTableRowCreate()}}
+                                            >
+                                                Добавить
+                                            </Button>
+                                        </Box>
+                                        <TableContainer component={Paper}>
+                                            <Table>
+                                                <TableHead>
+                                                    <TableRow key='table-header'>
+                                                        <TableCell>№</TableCell>
+                                                        <TableCell>Критерий оценивания</TableCell>
+                                                        <TableCell>Мин. кол-во баллов</TableCell>
+                                                        <TableCell>Макс. кол-во баллов</TableCell>
+                                                        <TableCell></TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {evalCriteria.map((row, idx) => (
+                                                        <TableRow key={row.internalId}>
+                                                            <TableCell>{idx + 1}</TableCell>
+                                                            <EditableTableCell row={row} name={EvaluationCriteiaFields.EVALUATION_CRITERIA} onChange={this.onTableRowChange} />
+                                                            <EditableTableCell row={row} name={EvaluationCriteiaFields.MIN} onChange={this.onTableRowChange} />
+                                                            <EditableTableCell row={row} name={EvaluationCriteiaFields.MAX} onChange={this.onTableRowChange} />
+                                                            <TableCell>
+                                                                {row.isEditMode? (
+                                                                    <ButtonGroup>
+                                                                        <IconButton
+                                                                            size='small'
+                                                                            onClick={() => this.onTableRowToggleEdit(row.internalId)}
+                                                                        >
+                                                                            <CheckIcon />
+                                                                        </IconButton>
+                                                                    </ButtonGroup>
+                                                                ): (
+                                                                    <ButtonGroup>
+                                                                        <IconButton
+                                                                            size='small'
+                                                                            onClick={() => this.onTableRowToggleEdit(row.internalId)}
+                                                                        >
+                                                                            <EditIcon />
+                                                                        </IconButton>
+                                                                        <IconButton
+                                                                            size='small'
+                                                                            onClick={() => this.onTableRowDelete(row.internalId)}
+                                                                        >
+                                                                            <DeleteIcon />
+                                                                        </IconButton>
+                                                                    </ButtonGroup>
+                                                                )}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                    <TableRow key='table_footer'>
+                                                        <TableCell colSpan={2}>Всего</TableCell>
+                                                        <TableCell>{this.state.sumMin}</TableCell>
+                                                        <TableCell>{this.state.sumMax}</TableCell>
+                                                        <TableCell></TableCell>
+                                                    </TableRow>
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </Box>
+                                </Box>
                             </div>
+
+
                         </>
                     }
                 </DialogContent>

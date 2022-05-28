@@ -903,11 +903,58 @@ class Indicator(models.Model):
         return self.name
 
 
+class EvaluationToolType(CloneMixin, models.Model):
+    '''
+    Модель для типов оценочых средств промежуточной аттестации
+    '''
+    id = models.IntegerField(verbose_name='id', primary_key=True)
+    type_name = models.CharField(verbose_name='Название типа оценочного средства', max_length=255)
+
+    class Meta:
+        db_table = 'workprogramsapp_evaluationtool_type'
+
+    def __str__(self):
+        return self.type_name
+
+
+class CertificationEvaluationToolType(CloneMixin, models.Model):
+    '''
+    Модель для типов оценочых средств промежуточной аттестации
+    '''
+    id = models.IntegerField(verbose_name='id', primary_key=True)
+    certification_type_name = models.CharField(verbose_name='Название типа оценочного средства промежуточной аттестации', max_length=255)
+
+    class Meta:
+        db_table = 'workprogramsapp_certificationevaluationtool_type'
+
+    def __str__(self):
+        return self.certification_type_name
+
+
+class EvaluationCriteria(CloneMixin, models.Model):
+    '''
+    Модель для критериев оценивания
+    '''
+    evaluation_criteria = models.CharField(verbose_name='Критерии оценивания', max_length=2048)
+    min = models.IntegerField(verbose_name="Максимальное значение", blank=True, null=True)
+    max = models.IntegerField(verbose_name="Минимальное значение", blank=True, null=True)
+
+    evaluationtool = models.ForeignKey('EvaluationTool', on_delete=models.DO_NOTHING)
+    certificationevaluationtool_type = models.ForeignKey('СertificationEvaluationTool', on_delete=models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'workprogramsapp_evaluation_criteria'
+
+        # TODO: add evaluationtool_id_certificationevaluationtool_type_check_only_one_set constraint
+
+    def __str__(self):
+        return self.evaluation_criteria
+
+
 class EvaluationTool(CloneMixin,models.Model):
     '''
     Модель для оценочных средств
     '''
-    type = models.CharField(max_length=1024, verbose_name="Тип оценочного средства")
     name = models.CharField(max_length=1024, verbose_name="Наименование оценочного средства")
     description = models.CharField(max_length=5000000, verbose_name="Описание", blank=True, null=True)
     check_point = models.BooleanField(verbose_name="Контрольная точка", blank=True, null=True)
@@ -915,7 +962,11 @@ class EvaluationTool(CloneMixin,models.Model):
     semester = models.IntegerField(verbose_name="Семестр в котором сдается оценочное средство", blank=True, null=True)
     min = models.IntegerField(verbose_name="Максимальное значение", blank=True, null=True)
     max = models.IntegerField(verbose_name="Минимальное значение", blank=True, null=True)
-    evaluation_criteria = models.CharField(max_length=2048, verbose_name="Критерии оценивания", blank=True, null=True)
+    fields_hints = models.CharField(max_length=1024, verbose_name="Поля-подсказки",blank=True, null=True)
+    problem_topic = models.CharField(max_length=1024, verbose_name="Тема (проблема)",blank=True, null=True)
+
+    evaluationtool_type = models.ForeignKey(EvaluationToolType, on_delete=models.DO_NOTHING)
+
     def __str__(self):
         return self.name
 
@@ -931,16 +982,26 @@ class СertificationEvaluationTool(CloneMixin, models.Model):
         ('4', 'Coursework'),
         ('5', 'course_project')
     ]
-    type = models.CharField(choices=types, default='1',max_length=1024, verbose_name="Тип оценочного средства")
-    name = models.CharField(blank=True, null=True, max_length=1024, verbose_name="Наименование оценочного средства", default="No name")
+    name = models.CharField(
+        blank=True,
+        null=True,
+        max_length=1024,
+        verbose_name="Наименование оценочного средства промежуточной аттестации",
+        default="No name")
     description = models.CharField(max_length=500000, verbose_name="Описание", blank=True, null=True)
-    #check_point = models.BooleanField(verbose_name="Контрольная точка", blank=True, null=True)
     deadline = models.IntegerField(verbose_name="Срок сдачи в неделях", blank=True, null=True)
     semester = models.IntegerField(verbose_name="Семестр в котором сдается оценочное средство", blank=True, null=True)
     min = models.IntegerField(verbose_name="Максимальное значение", blank=True, null=True)
     max = models.IntegerField(verbose_name="Минимальное значение", blank=True, null=True)
-    work_program = models.ForeignKey("WorkProgram", verbose_name='Аттестационное оценочное средство', related_name = "certification_evaluation_tools", on_delete=models.CASCADE)
-    evaluation_criteria = models.CharField(max_length=2048, verbose_name="Критерии оценивания", blank=True, null=True)
+
+    work_program = models.ForeignKey(
+        "WorkProgram",
+        verbose_name='Аттестационное оценочное средство',
+        related_name="certification_evaluation_tools",
+        on_delete=models.CASCADE)
+
+    сertificationevaluationtool_type = models.ForeignKey(CertificationEvaluationToolType, on_delete=models.DO_NOTHING)
+
     def __str__(self):
         return self.name
 

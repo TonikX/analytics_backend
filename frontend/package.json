@@ -50,7 +50,8 @@
     "redux": "^4.0.5",
     "redux-immutable-state-invariant": "^2.1.0",
     "redux-logic": "^3.0.0",
-    "typescript": "3.7.5"
+    "typescript": "3.7.5",
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -72,5 +73,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.4"
   }
 }
