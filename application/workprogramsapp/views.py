@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework import status
+from rest_framework import serializers
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -775,7 +776,10 @@ class EvaluationToolListAPI(generics.ListCreateAPIView):
         request.data['evaluationTool']['evaluationtool_type_id'] = type_id
 
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except serializers.ValidationError as e:
+            return Response({'error': e.args[0]['non_field_errors'][0]}, status=400)
         self.perform_create(serializer)
 
         return Response(status=status.HTTP_201_CREATED)

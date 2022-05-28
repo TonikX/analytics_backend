@@ -442,7 +442,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                     )}
                                                 </Select>
                                             </FormControl>
-                                            <div className={classNames(classes.row, classes.marginBottom30)}>
+                                            <div
+                                                className={classNames(classes.row, classes.marginBottom30)}
+                                            >
                                                 <TextField
                                                     label="Тема (проблема)"
                                                     onChange={this.saveField(EvaluationToolFields.PROBLEM_TOPIC)}
@@ -454,6 +456,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                     error={this.hasError(EvaluationToolFields.PROBLEM_TOPIC)}
                                                     value={evaluationTool[EvaluationToolFields.PROBLEM_TOPIC]}
                                                 />
+                                                <Tooltip title="Здесь Вы можете написать тему или проблему Вашего оценочного средства, если она есть.">
+                                                    <QuestionIcon color="primary" className={classes.tooltipIcon} />
+                                                </Tooltip>
                                             </div>
 
                                             <FormControl component="fieldset">
@@ -524,7 +529,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                     ? evaluationTool[EvaluationToolFields.DESCRIPTION] : ''}
                                             onChange={this.changeDescription}
                                             useFormulas
-                                            height="calc(50vh - 280px)"
+                                            height="calc(70vh - 280px)"
                                             style={this.hasError(EvaluationToolFields.DESCRIPTION)? {border: '1px solid #d00000'} : {border: '1px solid #d1d1d1'}}
                                         />
                                     </>
@@ -548,6 +553,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                         </Box>
                                         <TableContainer component={Paper}>
                                             <Table>
+                                                <colgroup>
+                                                    <col style={{width: '5%'}}/>
+                                                    <col style={{width: '70%'}}/>
+                                                    <col style={{width: '7%'}}/>
+                                                    <col style={{width: '7%'}}/>
+                                                    <col style={{width: '10%'}}/>
+                                                </colgroup>
                                                 <TableHead>
                                                     <TableRow key='table-header'>
                                                         <TableCell>№</TableCell>

@@ -367,9 +367,31 @@ class EvaluationToolCreateWCriteriaSerializer(serializers.Serializer):
     evalCriteria = EvalutationCriteriaSerializer(many=True)
     evaluationTool = EvaluationToolCreateSerializer()
 
+    def _validate_evaluation_criteria(self, value):
+        for criteria in value:
+            try:
+                c_min, c_max = int(criteria.get('min')), int(criteria.get('max'))
+            except ValueError:
+                raise serializers.ValidationError(
+                    f'Неправильно заполнены поля мин/макс в критерии "{criteria["evaluation_criteria"]}"')
+
+            if c_min < 0 or c_max < 0:
+                raise serializers.ValidationError(
+                    f'Поля мин/макс не могут быть меньше 0 (критерий "{criteria["evaluation_criteria"]}")'
+                )
+
+            if c_min > c_max:
+                raise serializers.ValidationError(
+                    f'Поле мин. должно быть меньше либо равно макс.  (критерий "{criteria["evaluation_criteria"]}")'
+                )
+
+        return value
+
     def validate(self, attrs):
         criteria = attrs['evalCriteria']
         evaluation_tool = attrs['evaluationTool']
+
+        criteria = self._validate_evaluation_criteria(criteria)
 
         sum_min = sum((cr['min'] for cr in criteria))
         sum_max = sum((cr['max'] for cr in criteria))
