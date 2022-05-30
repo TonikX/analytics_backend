@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, ReactElement} from 'react';
 import {Link} from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import {appRouter} from "../../service/router-service";
@@ -27,11 +27,12 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import SearchSelector from "../../components/SearchSelector";
-
+import QuantityReportCharts from './RecordsChart/QuantityReport/RecordsChart'
+import QualityReportChart from './RecordsChart/QualityReport/QualityReportChart'
 
 class Records extends Component<RecordsProops> {
     state = {
-        value: 1,
+        value: 2,
         isVisible: false,
         page: 0,
         rowsPerPage: 10,
@@ -146,6 +147,44 @@ class Records extends Component<RecordsProops> {
         this.props.actions.ChangeSU(value);
     }
 
+    renderQualityReportChartFirst = (SIMPLE_STATE: any): ReactElement | undefined => {
+        if(Number(SIMPLE_STATE['rpd_with_editors'])) {
+            return <QualityReportChart 
+                    labels={['РПД, имеющие редакторов','РПД на экспертизе', 'Одобренные РПД', 'РПД в работе']}
+                    data={[
+                        Number(SIMPLE_STATE['rpd_with_editors']),
+                        Number( SIMPLE_STATE['rpd_on_expertise']),
+                        Number( SIMPLE_STATE['rpd_approved']),
+                        Number( SIMPLE_STATE['rpd_in_work'])
+                    ]}
+                    colors={[
+                        'rgba(255, 156, 86, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)'
+                    ]}
+                />
+        }
+             
+    }
+
+    renderQualityReportChartSecond = (SIMPLE_STATE: any): ReactElement | undefined => {
+        if(Number(SIMPLE_STATE['registered_users'])) {
+            return (
+                <QualityReportChart 
+                    labels={['Зарегестрированных пользователей','Пользователей РПД']}
+                    data={[
+                        Number(SIMPLE_STATE['registered_users']),
+                        Number( SIMPLE_STATE['users_in_rpd'])
+                    ]}
+                    colors={[
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ]}
+                />
+            )
+        }
+    }
     render() {
         const {
             classes,
@@ -210,22 +249,34 @@ class Records extends Component<RecordsProops> {
                     Получить отчёт
                 </Button>
                 }
-                {this.state.isVisible && this.state.value == 1 &&
-                <Typography>
-                    <p>Зарегестрированных пользователей: {SIMPLE_STATE['registered_users']}</p>
-                    <p>Пользователей РПД: {SIMPLE_STATE['users_in_rpd']}</p>
-                    <p>РПД, имеющие редакторов: {SIMPLE_STATE['rpd_with_editors']}</p>
-                    <p>РПД на экспертизе: {SIMPLE_STATE['rpd_on_expertise']}</p>
-                    <p>Одобренные РПД: {SIMPLE_STATE['rpd_approved']}</p>
-                    <p>РПД в работе: {SIMPLE_STATE['rpd_in_work']}</p>
-                </Typography>
+                <div style={{display: 'flex'}}>
+                    {this.state.isVisible
+                        && this.state.value == 1
+                            && this.renderQualityReportChartFirst(SIMPLE_STATE)}
+                                        
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {(this.state.isVisible
+                        && this.state.value == 1
+                            && this.renderQualityReportChartSecond(SIMPLE_STATE))}
+                </div>
+                
+                        
 
-                }
+                {/* // <Typography>
+                //     <p>Зарегестрированных пользователей: {SIMPLE_STATE['registered_users']}</p>
+                //     <p>Пользователей РПД: {SIMPLE_STATE['users_in_rpd']}</p>
+                //     <p>РПД, имеющие редакторов: {SIMPLE_STATE['rpd_with_editors']}</p>
+                //     <p>РПД на экспертизе: {SIMPLE_STATE['rpd_on_expertise']}</p>
+                //     <p>Одобренные РПД: {SIMPLE_STATE['rpd_approved']}</p>
+                //     <p>РПД в работе: {SIMPLE_STATE['rpd_in_work']}</p>
+                // </Typography> */}
+
+            
                 {this.state.value == 2 &&
                 <>
                     <FormControl variant="outlined">
-                        <InputLabel>Выберите квалификацию</InputLabel>
-                        <Select className={classes.field}
+                        {/* <InputLabel>Выберите квалификацию</InputLabel> */}
+                        {/* <Select className={classes.field}
                                 label="Выберите квалификацию"
                                 value={QUALIFICATION}
                                 onChange={this.changeQual}
@@ -244,10 +295,12 @@ class Records extends Component<RecordsProops> {
                             <MenuItem value="bachelor">Бакалавриат</MenuItem>
                             <MenuItem value="master">Магистратура</MenuItem>
                             <MenuItem value="specialist">Специалитет</MenuItem>
-                        </Select>
+                        </Select> */}
+
+                        <QuantityReportCharts />
                     </FormControl>
-                    <Button onClick={this.getQuantityRPD} variant="contained" color="primary" disableElevation
-                            className={classes.Btn}>Получить отчёт</Button>
+                    {/* <Button onClick={this.getQuantityRPD} variant="contained" color="primary" disableElevation
+                            className={classes.Btn}>Получить отчёт</Button> */}
                 </>
                 }
                 {this.state.isVisible && this.state.value == 2 &&
