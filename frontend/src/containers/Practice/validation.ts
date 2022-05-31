@@ -67,6 +67,9 @@ const validationRules = {
     [PracticeFields.NOT_PASSED_MARK]: {
         presence,
     },
+    [PracticeFields.STRUCTURAL_UNIT]: {
+        presence,
+    }
 } as any;
 
 const validateNumber = (value: string) => {

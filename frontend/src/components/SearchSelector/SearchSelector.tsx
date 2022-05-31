@@ -93,7 +93,7 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
     }
 
     render(): any {
-        const {classes, label, list, value, disabled, className, popperPlacement} = this.props;
+        const {classes, label, list, value, disabled, className, popperPlacement, errorMessage} = this.props;
         const {anchorEl, searchText} = this.state;
         const open = Boolean(anchorEl);
 
@@ -111,6 +111,8 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
                                onBlur={this.closeMenu}
                                value={searchText}
                                disabled={disabled}
+                               error={Boolean(errorMessage)}
+                               helperText={errorMessage}
                     />
                     <AutoSizer style={{width: '100%'}}>
                         {({width}) => (

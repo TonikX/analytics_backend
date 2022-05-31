@@ -7,7 +7,6 @@ import {Typography, WithStyles} from "@material-ui/core";
 import {PracticeActions, PracticeState} from "../../types";
 import Input from "../../components/Input";
 import Select from "../../components/Select";
-import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 import {StructuralUnitsActions} from "../../../StructuralUnits/types";
 import {
@@ -18,6 +17,7 @@ import {
     PRACTICE_WAYS,
     QUALIFICATIONS
 } from "../../constants";
+import StructuralUnit from "../../components/StructuralUnit";
 
 interface GeneralInfoProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -70,14 +70,7 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                                 metaList={PRACTICE_WAYS}/>
                         <Select fieldName={PracticeFields.FORMAT_PRACTICE}
                                 metaList={PRACTICE_FORMATS}/>
-                        <SearchSelector label="Структурное подразделение"
-                                        changeSearchText={this.handleChangeStructuralUnitSearchText}
-                                        list={structuralUnitsList}
-                                        className={classes.structuralUnit}
-                                        changeItem={this.changeStructuralUnit}
-                                        value={String(fields[PracticeFields.STRUCTURAL_UNIT]?.id)}
-                                        valueLabel={fields[PracticeFields.STRUCTURAL_UNIT]?.title ?? ''}
-                        />
+                        <StructuralUnit/>
                     </div>
                 </div>
             </div>
