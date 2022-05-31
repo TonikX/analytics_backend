@@ -10,4 +10,5 @@ def get_permissions_gia_practice(instance, exp, user_exp, request):
     return_dict["can_approve"] = bool(
         user_exp.stuff_status == "EX" and exp.expertise_status == "EX") if user_exp else None
     return_dict["your_approve_status"] = user_exp.user_expertise_status if user_exp else None
+    return_dict["user_expertise_id"] = user_exp.id if user_exp else None
     return return_dict
