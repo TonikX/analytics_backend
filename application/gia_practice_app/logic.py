@@ -1,7 +1,7 @@
 def get_permissions_gia_practice(instance, exp, user_exp, request):
     return_dict = {}
     return_dict["can_edit"] = bool(
-        request.user in instance.editors.all() and exp.expertise_status == "WK") if exp else bool(
+        request.user in instance.editors.all() and exp.expertise_status in ["WK", "RE"]) if exp else bool(
         request.user in instance.editors.all())
     return_dict["expertise_status"] = exp.expertise_status if exp else None
     return_dict["use_chat_with_id_expertise"] = exp.id if exp else None
