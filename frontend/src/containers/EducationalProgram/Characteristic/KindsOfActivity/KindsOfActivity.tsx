@@ -21,6 +21,8 @@ import actions from '../../actions';
 import {EducationProgramCharacteristicFields} from "../../enum";
 
 import useStyles from './KindsOfActivity.styles'
+import Tooltip from "@material-ui/core/Tooltip";
+import QuestionIcon from "@material-ui/icons/HelpOutline";
 
 export default ({ characteristic }: any) => {
   const classes = useStyles()
@@ -63,7 +65,16 @@ export default ({ characteristic }: any) => {
 
   return (
     <>
-      <Typography className={classes.label}>Сферы профессиональной деятельности</Typography>
+      <Typography className={classes.label}>
+        Сферы профессиональной деятельности
+        <Tooltip title={(
+          <div style={{ fontSize: 14}}>
+            Необходимо указать не менее чем одну область и сферу профессиональной деятельности, в которых выпускники, освоившие программу бакалавриата, могут осуществлять профессиональную деятельность ( в соответствии с реестром областей и перечнем видов профессиональной деятельности Министерства труда и социальной защиты Российской Федерации https://profstandart.rosmintrud.ru/, приоритетами научно-технологического развития РФ и программой развития Университета ИТМО)
+          </div>
+        )}>
+          <QuestionIcon color="primary"/>
+        </Tooltip>
+      </Typography>
       <Table stickyHeader size='small'>
         <TableHead className={classes.header}>
           <TableRow>

@@ -237,6 +237,11 @@ class Characteristic extends React.Component<CharacteristicProps> {
     deleteEducationalProgram = (id: number) => () => {
         const { educationalProgramCharacteristic } = this.props
 
+        if (get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])) {
+            this.props.mainActions.fetchingFailed(['Нельзя удалить единственную ОП'])
+            return
+        }
+
         this.props.actions.changeEducationalProgram({
             id: this.getEducationalProgramId(),
             payload: {
