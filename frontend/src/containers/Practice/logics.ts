@@ -21,6 +21,8 @@ const getPractice = createLogic({
                 const erroredFields = getErroredFields(res.data);
                 dispatch(PracticeActions.setPractice(res.data));
                 dispatch(PracticeActions.setErroredFields(erroredFields));
+                const practiceBaseId = res.data[PracticeFields.PRACTICE_BASE] ?? 1;
+                dispatch(PracticeActions.getTemplateText(practiceBaseId));
             })
             .catch(() => {
                 dispatch(PracticeActions.setError(true));

@@ -29,14 +29,9 @@ class Practice extends React.Component<PracticeProps> {
 
     getPracticeId = () => get(this, 'props.match.params.id');
 
-    getTemplateText = () => {
-        const id = this.props.practice[PracticeFields.PRACTICE_BASE];
-        this.props.actions.getTemplateText(id);
-    }
 
     componentDidMount() {
         this.getPractice();
-        this.getTemplateText();
     }
 
     getPractice = () => {
