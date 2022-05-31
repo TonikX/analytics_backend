@@ -14,6 +14,7 @@ import {getDirectionsForSelector} from "../../Direction/getters";
 
 import {EducationalPlanActions} from "../../EducationalPlan/types";
 import educationalPlanActions from "../../EducationalPlan/actions";
+import educationPlanInDirectionActions from "../../EduationPlanInDirection/actions";
 
 const mapStateToProps = (state: rootState) => {
     return {
@@ -23,13 +24,15 @@ const mapStateToProps = (state: rootState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<EducationalProgramActions|DirectionActions|EducationalPlanActions>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
     // @ts-ignore
     actions: bindActionCreators(actions, dispatch),
     // @ts-ignore
     directionActions: bindActionCreators(directionsActions, dispatch),
     // @ts-ignore
     educationalPlanActions: bindActionCreators(educationalPlanActions, dispatch),
+    // @ts-ignore
+    educationPlanInDirectionActions: bindActionCreators(educationPlanInDirectionActions, dispatch),
 });
 
 // @ts-ignore

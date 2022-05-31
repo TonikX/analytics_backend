@@ -230,7 +230,10 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                     }
                 </div>
 
-                {canAddNew && <CourseCreateModal />}
+                {canAddNew &&
+                  //@ts-ignore
+                  <CourseCreateModal />
+                }
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
                                onDismiss={this.closeConfirmDeleteDialog}

@@ -43,7 +43,7 @@ class UserSelector extends React.PureComponent<UserSelectorType> {
     }
 
     render() {
-        const {optionsList, noMargin, classes, selectorLabel} = this.props;
+        const {optionsList, noMargin, classes, selectorLabel, disabled} = this.props;
         const {value, label} = this.state;
 
         return (
@@ -54,6 +54,7 @@ class UserSelector extends React.PureComponent<UserSelectorType> {
                             value={value}
                             valueLabel={label}
                             className={classNames({[classes.marginBottom30]: !noMargin})}
+                            disabled={disabled}
             />
         );
     }
