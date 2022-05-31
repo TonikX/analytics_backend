@@ -77,7 +77,8 @@ export type PermissionsInfoState = {
     [PermissionsInfoFields.USE_CHAT_WITH_ID_EXPERTISE]: number | null,
     [PermissionsInfoFields.CAN_COMMENT]: boolean | null,
     [PermissionsInfoFields.CAN_APPROVE]: boolean | null,
-    [PermissionsInfoFields.YOUR_APPROVE_STATUS]: any,
+    [PermissionsInfoFields.YOUR_APPROVE_STATUS]: ExpertiseStatus | null,
+    [PermissionsInfoFields.USER_EXPERTISE_ID]: number | null,
 }
 
 export type Validation = {
@@ -115,6 +116,8 @@ export interface PracticeActions {
     showErroredField: any;
     hideErroredField: any;
     createExpertise: any;
+    approvePractice: any;
+    sendPracticeToRework: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {

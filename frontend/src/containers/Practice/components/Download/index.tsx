@@ -102,12 +102,11 @@ class Download extends React.Component<DownloadProps> {
         const {classes, fields} = this.props;
 
         return (
-            <div className={classes.input}>
-                <Button variant='outlined'
-                        onClick={this.handleDownload(fields)}>
-                    Скачать рабочую программу
-                </Button>
-            </div>
+            <Button variant='outlined'
+                    className={classes.input}
+                    onClick={this.handleDownload(fields)}>
+                Скачать рабочую программу
+            </Button>
         );
     }
 }

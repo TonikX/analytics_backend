@@ -41,6 +41,7 @@ export enum PermissionsInfoFields {
     CAN_COMMENT = 'can_comment',
     CAN_APPROVE = 'can_approve',
     YOUR_APPROVE_STATUS = 'your_approve_status',
+    USER_EXPERTISE_ID = 'user_expertise_id',
 }
 
 export enum StructuralUnitFields {
@@ -132,4 +133,5 @@ export enum fetchingTypes {
     GET_PRACTICE_LIST = 'GET_PRACTICE_LIST',
     CREATE_PRACTICE = 'CREATE_PRACTICE',
     CREATE_EXPERTISE = 'CREATE_EXPERTISE',
+    CHANGE_EXPERTISE_STATE = 'CHANGE_EXPERTISE_STATE',
 }

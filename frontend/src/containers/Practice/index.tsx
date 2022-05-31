@@ -16,6 +16,7 @@ import Download from "./components/Download";
 import {STEPS} from "./constants";
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 import SendToExpertise from "./components/SendToExpertise";
+import Button from "@material-ui/core/Button";
 
 class Practice extends React.Component<PracticeProps> {
 
@@ -56,6 +57,14 @@ class Practice extends React.Component<PracticeProps> {
         })
     }
 
+    handleSendToRework = (userExpertiseId: number) => () => {
+        this.props.actions.sendPracticeToRework(userExpertiseId);
+    }
+
+    handleApprovePractice = (userExpertiseId: number) => () => {
+        this.props.actions.approvePractice(userExpertiseId);
+    }
+
 
     render() {
         const {classes, isError, permissionsInfo} = this.props;
@@ -63,9 +72,21 @@ class Practice extends React.Component<PracticeProps> {
 
         const workProgramStatus = permissionsInfo[PermissionsInfoFields.EXPERTISE_STATUS] ?? ExpertiseStatus.WORK;
 
-        const showSendToExpertise = permissionsInfo[PermissionsInfoFields.EXPERTISE_STATUS] === ExpertiseStatus.WORK
-            || permissionsInfo[PermissionsInfoFields.EXPERTISE_STATUS] === ExpertiseStatus.REWORK
-            || permissionsInfo[PermissionsInfoFields.EXPERTISE_STATUS] === null;
+        const expertiseStatus = permissionsInfo[PermissionsInfoFields.EXPERTISE_STATUS];
+
+        const userExpertiseStatus = permissionsInfo[PermissionsInfoFields.YOUR_APPROVE_STATUS];
+
+        const showSendToExpertise = expertiseStatus === ExpertiseStatus.WORK
+            || expertiseStatus === ExpertiseStatus.REWORK
+            || expertiseStatus === null;
+
+        const userExpertiseId =
+            this.props.practice[PracticeFields.PERMISSIONS_INFO][PermissionsInfoFields.USER_EXPERTISE_ID];
+
+        const showApproveAndRework = Boolean(permissionsInfo[PermissionsInfoFields.CAN_APPROVE])
+            && Boolean(userExpertiseId)
+            && expertiseStatus === ExpertiseStatus.EXPERTISE
+            && userExpertiseStatus === ExpertiseStatus.EXPERTISE;
 
         if (isError) {
             return <ErrorPage/>;
@@ -105,6 +126,23 @@ class Practice extends React.Component<PracticeProps> {
                             <div className={classes.rightButton}>
                                 <SendToExpertise openStep={this.openStep} practiceId={this.getPracticeId()}/>
                             </div>
+                        )
+                    }
+                    {
+                        (
+                            showApproveAndRework &&
+                            <>
+                                <Button variant="outlined"
+                                        className={classes.rightButton}
+                                        onClick={this.handleSendToRework(userExpertiseId!!)}>
+                                    Вернуть на доработку
+                                </Button>
+                                <Button variant="outlined"
+                                        className={classes.rightButton}
+                                        onClick={this.handleApprovePractice(userExpertiseId!!)}>
+                                    Одобрить рабочую программу
+                                </Button>
+                            </>
                         )
                     }
                 </div>

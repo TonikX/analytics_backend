@@ -43,6 +43,7 @@ export const initialState: practicePageState = {
             [PermissionsInfoFields.CAN_COMMENT]: null,
             [PermissionsInfoFields.CAN_APPROVE]: null,
             [PermissionsInfoFields.YOUR_APPROVE_STATUS]: null,
+            [PermissionsInfoFields.USER_EXPERTISE_ID]: null,
         }
     },
     templateText: {

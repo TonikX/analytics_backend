@@ -113,5 +113,54 @@ const createExpertise = createLogic({
     }
 });
 
+const approvePractice = createLogic({
+    type: PracticeActions.approvePractice.type,
+    latest: true,
 
-export default [getPractice, saveField, getTemplateText, createExpertise];
+    process({getState, action}: any, dispatch, done) {
+
+        const userExpertiseId = action.payload;
+        const state = getState();
+        const practiceId = getId(state);
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_EXPERTISE_STATE}));
+
+        service.approvePractice(userExpertiseId)
+            .then(() => {
+                dispatch(PracticeActions.getPractice(practiceId));
+            })
+            .catch(() => {
+                dispatch(actions.fetchingFailed([`Не удалось одобрить рабочую программу`]));
+            })
+            .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_EXPERTISE_STATE}));
+                return done();
+            })
+    }
+});
+
+const sendPracticeToRework = createLogic({
+    type: PracticeActions.sendPracticeToRework.type,
+    latest: true,
+
+    process({getState, action}: any, dispatch, done) {
+
+        const userExpertiseId = action.payload;
+        const state = getState();
+        const practiceId = getId(state);
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_EXPERTISE_STATE}));
+
+        service.sendPracticeToWork(userExpertiseId)
+            .then(() => {
+                dispatch(PracticeActions.getPractice(practiceId));
+            })
+            .catch(() => {
+                dispatch(actions.fetchingFailed([`Не удалось вернуть рабочую программу на доработку`]));
+            })
+            .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_EXPERTISE_STATE}));
+                return done();
+            })
+    }
+});
+
+export default [getPractice, saveField, getTemplateText, createExpertise, approvePractice, sendPracticeToRework];

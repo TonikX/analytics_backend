@@ -16,6 +16,8 @@ const showErrors = createAction('PRACTICE_SHOW_ERRORS');
 const showErroredField = createAction('PRACTICE_SHOW_ERRORED_FIELD');
 const hideErroredField = createAction('PRACTICE_HIDE_ERRORED_FIELD');
 const createExpertise = createAction('PRACTICE_CREATE_EXPERTISE');
+const approvePractice = createAction('APPROVE_PRACTICE');
+const sendPracticeToRework = createAction('SEND_PRACTICE_TO_REWORK');
 
 export const actions: PracticeActions = {
     getPractice,
@@ -32,6 +34,8 @@ export const actions: PracticeActions = {
     showErroredField,
     hideErroredField,
     createExpertise,
+    approvePractice,
+    sendPracticeToRework,
 }
 
 export default actions;

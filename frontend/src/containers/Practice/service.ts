@@ -1,5 +1,6 @@
 import AnalyticsService from "../../service/analytics-service";
 import {MinimalPracticeState, PracticeState} from "./types";
+import {UserExpertResultEnum} from "../Expertises/enum";
 
 class PracticeService extends AnalyticsService {
     getPracticeList(searchText: string, sortingField: string, currentPage: number) {
@@ -28,6 +29,18 @@ class PracticeService extends AnalyticsService {
 
     createExpertise(practiceId: number) {
         return this.post(`/api/expertise/create`, {practice: practiceId, ['expertise_type']: 'PRAC'})
+    }
+
+    sendPracticeToWork(userExpertiseId: number){
+        return this.patch(`/api/expertise/user/update/${userExpertiseId}`, {
+            user_expertise_status: UserExpertResultEnum.REWORK,
+        });
+    }
+
+    approvePractice(userExpertiseId: number){
+        return this.patch(`/api/expertise/user/update/${userExpertiseId}`, {
+            user_expertise_status: UserExpertResultEnum.APPROVED,
+        });
     }
 }
 
