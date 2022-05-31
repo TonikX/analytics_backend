@@ -46,6 +46,7 @@ import TasksTypes from "./TasksTypes";
 import CompetenceMatrix from "./CompetenceMatrix";
 import InputLabel from '@material-ui/core/InputLabel'
 import {getEducationalProgramFullNameForSelect} from "../../EduationPlanInDirection/getters";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class Characteristic extends React.Component<CharacteristicProps> {
     state = {
@@ -368,12 +369,19 @@ class Characteristic extends React.Component<CharacteristicProps> {
                 </Stepper>
                 <div className={classes.content}>
                     <Typography className={classes.title}>
-                        <div>
+                        <div style={{ display: 'flex', width: '100%' }}>
                             Характеристика образовательных программ {' '}
                             {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])
                               .map((item: any) => '"' + item.title + '"')
                               .join(', ')
                             }
+                            <Tooltip title={(
+                                <>
+                                    1. Ошибка в матрице компетенций: Компетенция не покрывается ни одной дисциплиной
+                                </>
+                            )}>
+                                <Button variant="contained" style={{marginLeft: 'auto'}} color="primary">Валидация</Button>
+                            </Tooltip>
                         </div>
                     </Typography>
 
