@@ -101,8 +101,7 @@ const createExpertise = createLogic({
 
         service.createExpertise(id)
             .then(() => {
-                // dispatch(actions.fetchingFailed([`"Экспертиза создана"`]));
-                // todo update status and other stuff
+                dispatch(PracticeActions.getPractice(id));
             })
             .catch(() => {
                 dispatch(actions.fetchingFailed([`Не удалось отправить на экспертизу`]));

@@ -212,6 +212,7 @@ export const RussianPracticeFields = {
     [PracticeFields.STRUCTURAL_UNIT]: 'Структурное подразделение',
     [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: 'Источники',
     [PracticeFields.EDITORS]: 'Редакторы',
+    [PracticeFields.PERMISSIONS_INFO]: 'Информация о правах',
 };
 
 export const fieldToStep = new Map(Object.entries({

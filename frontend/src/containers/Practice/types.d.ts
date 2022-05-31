@@ -1,4 +1,10 @@
-import {PracticeFields, StructuralUnitFields, TemplateTextPracticeFields} from "./enum";
+import {
+    ExpertiseStatus,
+    PermissionsInfoFields,
+    PracticeFields,
+    StructuralUnitFields,
+    TemplateTextPracticeFields
+} from "./enum";
 import {WithStyles} from "@material-ui/core";
 import styles from "./Practice.styles";
 import {RouteComponentProps} from "react-router-dom";
@@ -62,6 +68,16 @@ export type PracticeState = GeneralInfoState
     [PracticeFields.ID]: Id,
     [PracticeFields.PRACTICE_BASE]: Id,
     [PracticeFields.EDITORS]: any,
+    [PracticeFields.PERMISSIONS_INFO]: PermissionsInfoState,
+}
+
+export type PermissionsInfoState = {
+    [PermissionsInfoFields.CAN_EDIT]: boolean,
+    [PermissionsInfoFields.EXPERTISE_STATUS]: ExpertiseStatus | null,
+    [PermissionsInfoFields.USE_CHAT_WITH_ID_EXPERTISE]: number | null,
+    [PermissionsInfoFields.CAN_COMMENT]: boolean | null,
+    [PermissionsInfoFields.CAN_APPROVE]: boolean | null,
+    [PermissionsInfoFields.YOUR_APPROVE_STATUS]: any,
 }
 
 export type Validation = {
@@ -103,6 +119,7 @@ export interface PracticeActions {
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {
     actions: PracticeActions;
+    permissionsInfo: PermissionsInfoState;
     practice: PracticeState;
     isError: boolean;
 }

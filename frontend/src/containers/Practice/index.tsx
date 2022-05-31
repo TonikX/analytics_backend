@@ -7,14 +7,15 @@ import styles from "./Practice.styles";
 import connect from './Practice.connect';
 import {PracticeProps} from "./types";
 import get from "lodash/get";
-import {PracticeFields} from "./enum";
+import {ExpertiseStatus, PermissionsInfoFields, PracticeFields} from "./enum";
 import Step from "@material-ui/core/Step";
 import StepButton from "@material-ui/core/StepButton";
 import Stepper from "@material-ui/core/Stepper";
 import ErrorPage from "../../components/ErrorPage";
 import Download from "./components/Download";
-import SendToExpertise from "./components/SendToExpertise";
 import {STEPS} from "./constants";
+import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
+import SendToExpertise from "./components/SendToExpertise";
 
 class Practice extends React.Component<PracticeProps> {
 
@@ -57,8 +58,14 @@ class Practice extends React.Component<PracticeProps> {
 
 
     render() {
-        const {classes, isError} = this.props;
+        const {classes, isError, permissionsInfo} = this.props;
         const {activeStep} = this.state;
+
+        const workProgramStatus = permissionsInfo[PermissionsInfoFields.EXPERTISE_STATUS] ?? ExpertiseStatus.WORK;
+
+        const showSendToExpertise = permissionsInfo[PermissionsInfoFields.EXPERTISE_STATUS] === ExpertiseStatus.WORK
+            || permissionsInfo[PermissionsInfoFields.EXPERTISE_STATUS] === ExpertiseStatus.REWORK
+            || permissionsInfo[PermissionsInfoFields.EXPERTISE_STATUS] === null;
 
         if (isError) {
             return <ErrorPage/>;
@@ -89,10 +96,17 @@ class Practice extends React.Component<PracticeProps> {
                     }
                 </div>
                 <div className={classes.rightButtons}>
-                    <Download/>
-                    <div className={classes.sendToExpertise}>
-                        <SendToExpertise openStep={this.openStep} practiceId={this.getPracticeId()}/>
+                    <WorkProgramStatus status={workProgramStatus}/>
+                    <div className={classes.rightButton}>
+                        <Download/>
                     </div>
+                    {
+                        (showSendToExpertise &&
+                            <div className={classes.rightButton}>
+                                <SendToExpertise openStep={this.openStep} practiceId={this.getPracticeId()}/>
+                            </div>
+                        )
+                    }
                 </div>
             </Paper>
         )

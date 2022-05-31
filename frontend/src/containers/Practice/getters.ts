@@ -1,7 +1,7 @@
 import {rootState} from "../../store/reducers";
 import get from "lodash/get";
 import {GENERAL_PATH, initialState} from "./reducers";
-import {Id, practicePageState, PracticeState} from "./types";
+import {Id, PermissionsInfoState, practicePageState, PracticeState} from "./types";
 import {TemplateTextState} from "./types";
 
 const getStateData = (state: rootState): practicePageState => get(state, GENERAL_PATH);
@@ -18,3 +18,5 @@ export const getId = (state: rootState): Id => get(getStateData(state), 'practic
 
 export const getTemplateText = (state: rootState): TemplateTextState =>
     get(getStateData(state), 'templateText', initialState.templateText);
+
+export const getPermissionsInfo = (state: rootState): PermissionsInfoState => getPractice(state).permissions_info;

@@ -23,6 +23,24 @@ export enum PracticeFields {
     PRACTICE_BASE = 'practice_base',
     BIBLIOGRAPHIC_REFERENCE = "bibliographic_reference",
     EDITORS = 'editors',
+    PERMISSIONS_INFO = 'permissions_info',
+}
+
+export enum ExpertiseStatus {
+    WORK = 'WK',
+    EXPERTISE = 'EX',
+    APPROVE = 'AC',
+    ARCHIVE = 'AR',
+    REWORK = 'RE',
+}
+
+export enum PermissionsInfoFields {
+    CAN_EDIT = 'can_edit',
+    EXPERTISE_STATUS = 'expertise_status',
+    USE_CHAT_WITH_ID_EXPERTISE = 'use_chat_with_id_expertise',
+    CAN_COMMENT = 'can_comment',
+    CAN_APPROVE = 'can_approve',
+    YOUR_APPROVE_STATUS = 'your_approve_status',
 }
 
 export enum StructuralUnitFields {

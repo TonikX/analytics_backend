@@ -1,6 +1,6 @@
 import {practicePageState} from "./types";
 import createReducer from "../../store/createReducer";
-import {PracticeFields, TemplateTextPracticeFields} from "./enum";
+import {PermissionsInfoFields, PracticeFields, TemplateTextPracticeFields} from "./enum";
 import actions from "./actions";
 
 export const GENERAL_PATH = 'practice';
@@ -36,6 +36,14 @@ export const initialState: practicePageState = {
         [PracticeFields.STRUCTURAL_UNIT]: null,
         [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: [],
         [PracticeFields.EDITORS]: [],
+        [PracticeFields.PERMISSIONS_INFO]: {
+            [PermissionsInfoFields.CAN_EDIT]: false,
+            [PermissionsInfoFields.EXPERTISE_STATUS]: null,
+            [PermissionsInfoFields.USE_CHAT_WITH_ID_EXPERTISE]: null,
+            [PermissionsInfoFields.CAN_COMMENT]: null,
+            [PermissionsInfoFields.CAN_APPROVE]: null,
+            [PermissionsInfoFields.YOUR_APPROVE_STATUS]: null,
+        }
     },
     templateText: {
         [TemplateTextPracticeFields.ID]: 1,
