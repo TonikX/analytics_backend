@@ -9,8 +9,9 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 # Api-libs
 
 from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, \
-ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer, \
-RelationCreateSerializer, userProfileSerializer, ItemWithRelationForSearchDuplicatesSerializer
+    ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer, \
+    RelationCreateSerializer, userProfileSerializer, ItemWithRelationForSearchDuplicatesSerializer, \
+    DomainDetailSerializer
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -158,7 +159,7 @@ class DomainDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     API endpoint that represents a single Domain.
     """
     queryset = Domain.objects.all()
-    serializer_class = DomainSerializer
+    serializer_class = DomainDetailSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 

@@ -1,11 +1,13 @@
 import json
 import os
 import re
-from decimal import *
-import pandas
-from django.shortcuts import get_object_or_404
 from collections import OrderedDict
-from django.http import HttpResponse
+
+import pandas
+from django.db import transaction
+from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from django_super_deduper.merge import MergedModelInstance
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework import status
@@ -13,19 +15,19 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django_filters.rest_framework import DjangoFilterBackend
 
 from dataprocessing.models import Items
 from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
-    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy, Certification
+    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
 from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
-# Права доступа
-from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsExpertiseMaster, IsOwnerOrDodWorkerOrReadOnly
 from .notifications.models import UserNotification
+# Права доступа
+from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, \
+    IsOwnerOrDodWorkerOrReadOnly
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, \
@@ -34,23 +36,21 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
-    DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer
-from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, WorkProgramInFieldOfStudySerializerForCb, WorkProgramInFieldOfStudyForCompeteceListSerializer
-from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer,  ZunForManyCreateSerializer, \
-    WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
+    DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer, \
+    WorkProgramArchiveUpdateSerializer
 from .serializers import BibliographicReferenceSerializer, \
     WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
     IndicatorListSerializer
+from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, WorkProgramInFieldOfStudySerializerForCb, \
+    WorkProgramInFieldOfStudyForCompeteceListSerializer
+from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
+    ZunForManyCreateSerializer, \
+    WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer, WorkProgramEditorsUpdateSerializer
 from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
-from django_filters.rest_framework import DjangoFilterBackend
-from django.db import transaction
-from django.db.models import Model, Field
-from django_super_deduper.merge import MergedModelInstance
-
 
 """"Удалены старые views с использованием джанго рендеринга"""
 """Блок реализации API"""
@@ -603,7 +603,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         except:
             newdata.update({"can_comment": False})
             newdata.update({"can_approve": False})
-        if request.user.is_expertise_master == True:
+        if request.user.is_expertise_master == True or WorkProgram.objects.filter(pk=self.kwargs['pk'], editors__in=[request.user]):
             newdata.update({"can_archive": True})
         else:
             newdata.update({"can_archive": False})
@@ -1969,6 +1969,7 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
                      'field_of_study__qualification',
                      'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
                      'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                     'academic_plan__year',
                      ]
     filterset_fields = ['title',
                         'field_of_study__title',
@@ -1979,6 +1980,7 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__id',
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__id',
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__structural_unit__title',
+                        'academic_plan__year',
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -2227,3 +2229,23 @@ def TimeoutTest(request):
         else:
             break
     return Response(status=200)
+
+
+class WorkProgramArchiveUpdateView(generics.UpdateAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramArchiveUpdateSerializer
+    permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        try:
+            exp = Expertise.objects.get(work_program=instance)
+            exp.expertise_status="AR"
+            exp.save()
+        except Expertise.DoesNotExist:
+            pass
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(WorkProgramSerializer(instance).data)
