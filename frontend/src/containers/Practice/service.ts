@@ -42,6 +42,18 @@ class PracticeService extends AnalyticsService {
             user_expertise_status: UserExpertResultEnum.APPROVED,
         });
     }
+
+    getComments(expertiseId: number, step: string){
+        return this.get(`/api/expertise/comments/${expertiseId}?block=${step}`);
+    }
+
+    sendComment(userExpertiseId: number, step: string, comment: string){
+        return this.post(`/api/expertise/comments/create`, {
+            user_expertise: userExpertiseId,
+            comment_block: step,
+            comment_text: comment,
+        });
+    }
 }
 
 export default PracticeService;

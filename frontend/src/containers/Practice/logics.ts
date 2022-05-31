@@ -1,9 +1,9 @@
 import {createLogic} from "redux-logic";
 import PracticeActions from "./actions";
 import PracticeService from "./service";
-import {getId} from "./getters";
+import {getId, getPermissionsInfo} from "./getters";
 import actions from "../../layout/actions";
-import {fetchingTypes, PracticeFields} from "./enum";
+import {fetchingTypes, PermissionsInfoFields, PracticeFields} from "./enum";
 import {RussianPracticeFields} from "./constants";
 import {getErroredFields} from "./validation";
 
@@ -23,6 +23,9 @@ const getPractice = createLogic({
                 dispatch(PracticeActions.setErroredFields(erroredFields));
                 const practiceBaseId = res.data[PracticeFields.PRACTICE_BASE] ?? 1;
                 dispatch(PracticeActions.getTemplateText(practiceBaseId));
+                if (res.data[PracticeFields.PERMISSIONS_INFO][PermissionsInfoFields.USE_CHAT_WITH_ID_EXPERTISE]) {
+                    dispatch(PracticeActions.getComments());
+                }
             })
             .catch(() => {
                 dispatch(PracticeActions.setError(true));
@@ -165,4 +168,43 @@ const sendPracticeToRework = createLogic({
     }
 });
 
-export default [getPractice, saveField, getTemplateText, createExpertise, approvePractice, sendPracticeToRework];
+const getComments = createLogic({
+    type: PracticeActions.getComments.type,
+    latest: true,
+
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const expertiseId = getPermissionsInfo(state)[PermissionsInfoFields.USE_CHAT_WITH_ID_EXPERTISE];
+        if (!expertiseId) return;
+        service.getComments(expertiseId, 'MA')
+            .then((res) => {
+                dispatch(PracticeActions.setComments(res.data.results));
+            })
+            .catch(() => {
+            })
+            .finally(() => {
+                return done();
+            });
+    }
+});
+
+const sendComment = createLogic({
+    type: PracticeActions.sendComment.type,
+    latest: true,
+
+    process({getState, action}: any, dispatch, done) {
+        const {userExpertiseId, step, comment} = action.payload;
+        service.sendComment(userExpertiseId, step, comment)
+            .then(() => {
+                dispatch(PracticeActions.getComments());
+            })
+            .catch(() => {
+            })
+            .finally(() => {
+                return done();
+            });
+    }
+});
+
+
+export default [getPractice, saveField, getTemplateText, createExpertise, approvePractice, sendPracticeToRework, getComments, sendComment];

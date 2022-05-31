@@ -53,7 +53,8 @@ export const initialState: practicePageState = {
         [TemplateTextPracticeFields.REPORTING_MATERIALS]: '',
         [TemplateTextPracticeFields.OVZ]: '',
         [TemplateTextPracticeFields.EVALUATION_TOOLS_CURRENT_CONTROL]: '',
-    }
+    },
+    comments: [],
 }
 
 const setPractice = (state: practicePageState, {payload}: any): practicePageState => ({
@@ -150,6 +151,13 @@ const hideErroredField = (state: practicePageState, {payload}: any): practicePag
     }
 };
 
+const setComments = (state: practicePageState, {payload}: any): practicePageState => {
+    return {
+        ...state,
+        comments: [...payload],
+    }
+};
+
 export const reducer = createReducer(initialState, {
     [actions.setPractice.type]: setPractice,
     [actions.setField.type]: setField,
@@ -161,4 +169,5 @@ export const reducer = createReducer(initialState, {
     [actions.showErrors.type]: showErrors,
     [actions.showErroredField.type]: showErroredField,
     [actions.hideErroredField.type]: hideErroredField,
+    [actions.setComments.type]: setComments,
 });

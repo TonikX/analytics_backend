@@ -1,7 +1,7 @@
 import React from "react";
 import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 import styles from "./Practice.styles";
 import connect from './Practice.connect';
@@ -17,11 +17,14 @@ import {STEPS} from "./constants";
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 import SendToExpertise from "./components/SendToExpertise";
 import Button from "@material-ui/core/Button";
+import Comments from "../../components/Comments";
+import {appRouter} from "../../service/router-service";
 
 class Practice extends React.Component<PracticeProps> {
 
     state = {
         activeStep: 0,
+        isCommentsOpen: false,
     };
 
     stepList = STEPS.map(step => step.component);
@@ -60,6 +63,24 @@ class Practice extends React.Component<PracticeProps> {
         this.props.actions.approvePractice(userExpertiseId);
     }
 
+    handleCommentsClick = () => {
+        if (!this.state.isCommentsOpen) {
+            this.props.actions.getComments();
+        }
+        this.setState({
+            ...this.state,
+            isCommentsOpen: !this.state.isCommentsOpen,
+        })
+    }
+
+    handleSendComment = (comment: string) => {
+        this.props.actions.sendComment({
+            comment,
+            step: 'MA',
+            userExpertiseId: this.props.practice[PracticeFields.PERMISSIONS_INFO][PermissionsInfoFields.USER_EXPERTISE_ID],
+        })
+    }
+
 
     render() {
         const {classes, isError, permissionsInfo} = this.props;
@@ -82,6 +103,11 @@ class Practice extends React.Component<PracticeProps> {
             && Boolean(userExpertiseId)
             && expertiseStatus === ExpertiseStatus.EXPERTISE
             && userExpertiseStatus === ExpertiseStatus.EXPERTISE;
+
+        const showGoToExpertise = Boolean(permissionsInfo[PermissionsInfoFields.USE_CHAT_WITH_ID_EXPERTISE])
+            && (expertiseStatus === ExpertiseStatus.EXPERTISE || expertiseStatus === ExpertiseStatus.REWORK);
+
+        const comments = this.props.comments;
 
         if (isError) {
             return <ErrorPage/>;
@@ -109,6 +135,14 @@ class Practice extends React.Component<PracticeProps> {
                 <div className={classes.content}>
                     {
                         this.stepList[activeStep]
+                    }
+                    {
+                        (permissionsInfo[PermissionsInfoFields.CAN_COMMENT] &&
+                            <Comments isOpen={this.state.isCommentsOpen}
+                                      handleClick={this.handleCommentsClick}
+                                      comments={comments}
+                                      sendNewComment={this.handleSendComment}
+                            />)
                     }
                 </div>
                 <div className={classes.rightButtons}>
@@ -139,6 +173,18 @@ class Practice extends React.Component<PracticeProps> {
                                 </Button>
                             </>
                         )
+                    }
+                    {
+                        showGoToExpertise &&
+                        <Link
+                            to={appRouter.getExpertiseRouteLink(permissionsInfo[PermissionsInfoFields.USE_CHAT_WITH_ID_EXPERTISE]!!)}
+                            target="_blank"
+                            style={{textDecoration: 'none'}}>
+                            <Button variant="outlined"
+                                    className={classes.rightButton}>
+                                Перейти к экспертизе
+                            </Button>
+                        </Link>
                     }
                 </div>
             </Paper>

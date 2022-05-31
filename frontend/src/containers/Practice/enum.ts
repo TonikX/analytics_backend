@@ -50,6 +50,14 @@ export enum StructuralUnitFields {
     ISU_ID = "isu_id",
 }
 
+export enum CommentFields {
+    DATE = 'comment_date',
+    TEXT = 'comment_text',
+    ID = 'id',
+    USER_EXPERTISE = 'user_expertise',
+    EXPERT = 'expert',
+}
+
 export enum PracticeSteps {
     GENERAL = 'Главное',
     GENERAL_PROVISIONS = 'Общие положения',
@@ -134,4 +142,5 @@ export enum fetchingTypes {
     CREATE_PRACTICE = 'CREATE_PRACTICE',
     CREATE_EXPERTISE = 'CREATE_EXPERTISE',
     CHANGE_EXPERTISE_STATE = 'CHANGE_EXPERTISE_STATE',
+    GET_COMMENTS = 'GET_COMMENTS',
 }

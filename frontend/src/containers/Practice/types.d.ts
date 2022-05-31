@@ -1,4 +1,5 @@
 import {
+    CommentFields,
     ExpertiseStatus,
     PermissionsInfoFields,
     PracticeFields,
@@ -9,6 +10,7 @@ import {WithStyles} from "@material-ui/core";
 import styles from "./Practice.styles";
 import {RouteComponentProps} from "react-router-dom";
 import {LiteratureType} from "../Literature/types";
+import {UserType} from "../../layout/types";
 
 export type Id = number;
 
@@ -91,6 +93,7 @@ export interface practicePageState {
     validation: Validation;
     practice: PracticeState;
     templateText: TemplateTextState;
+    comments: Array<CommentType>;
 }
 
 export interface MinimalPracticeState {
@@ -99,6 +102,15 @@ export interface MinimalPracticeState {
     [PracticeFields.OP_LEADER]: string,
     [PracticeFields.AUTHORS]: string,
     [PracticeFields.FORM_OF_CERTIFICATION_TOOLS]: string,
+}
+
+export type CommentType = {
+    [CommentFields.DATE]: string;
+    [CommentFields.TEXT]: string;
+    [CommentFields.ID]: number;
+    [CommentFields.USER_EXPERTISE]: {
+        [CommentFields.EXPERT]: UserType
+    };
 }
 
 export interface PracticeActions {
@@ -118,6 +130,9 @@ export interface PracticeActions {
     createExpertise: any;
     approvePractice: any;
     sendPracticeToRework: any;
+    getComments: any;
+    setComments: any;
+    sendComment: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {
@@ -125,4 +140,5 @@ export interface PracticeProps extends WithStyles<typeof styles>, RouteComponent
     permissionsInfo: PermissionsInfoState;
     practice: PracticeState;
     isError: boolean;
+    comments: Array<CommentType>;
 }

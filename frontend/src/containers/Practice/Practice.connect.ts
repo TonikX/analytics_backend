@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {rootState} from "../../store/reducers";
-import {getIsError, getPermissionsInfo, getPractice} from './getters';
+import {getComments, getIsError, getPermissionsInfo, getPractice} from './getters';
 import {bindActionCreators} from "redux";
 import actions from "./actions";
 
@@ -9,6 +9,7 @@ const mapStateToProps = (state: rootState) => {
         permissionsInfo: getPermissionsInfo(state),
         practice: getPractice(state),
         isError: getIsError(state),
+        comments: getComments(state),
     }
 };
 

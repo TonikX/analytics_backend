@@ -20,3 +20,4 @@ export const getTemplateText = (state: rootState): TemplateTextState =>
     get(getStateData(state), 'templateText', initialState.templateText);
 
 export const getPermissionsInfo = (state: rootState): PermissionsInfoState => getPractice(state).permissions_info;
+export const getComments = (state: rootState) => get(getStateData(state), 'comments', initialState.comments);
