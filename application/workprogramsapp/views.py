@@ -4,8 +4,6 @@ import re
 from collections import OrderedDict
 
 import pandas
-import requests as rq
-from html import unescape
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -23,7 +21,7 @@ from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
     DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
-from .models import FieldOfStudy, WorkProgramSource, СertificationEvaluationTool
+from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
 from .notifications.models import UserNotification
@@ -40,8 +38,8 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
     DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer, \
     WorkProgramArchiveUpdateSerializer
-from .serializers import SourceSerializer, \
-    WorkProgramSourceUpdateSerializer, \
+from .serializers import BibliographicReferenceSerializer, \
+    WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
     IndicatorListSerializer
 from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, WorkProgramInFieldOfStudySerializerForCb, \
@@ -1200,306 +1198,52 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
 
 # Блок эндпоинтов рабочей программы
 
-# Эндпоинты источников РПД
 
-class WorkProgramSourceListCreateAPIView(generics.ListCreateAPIView):
-    """
-    Эндпоинт для работы с источниками РПД
-    GET ->  Получение списка всех источников в БД
-    POST -> Создание нового источника в БД
-    """
-    serializer_class = SourceSerializer
-    queryset = WorkProgramSource.objects.all()
+class BibliographicReferenceListCreateAPIView(generics.ListCreateAPIView):
+    serializer_class = BibliographicReferenceSerializer
+    queryset = BibliographicReference.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['bib_reference']
+    search_fields = ['description']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class WorkProgramSourceDestroyView(generics.DestroyAPIView):
-    """
-    Эндпоинт для удаления источника РПД
-    """
-    queryset = WorkProgramSource.objects.all()
-    serializer_class = SourceSerializer
+class BibliographicReferenceDestroyView(generics.DestroyAPIView):
+    queryset = BibliographicReference.objects.all()
+    serializer_class = BibliographicReferenceSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class WorkProgramSourceUpdateView(generics.UpdateAPIView):
-    """
-    Эндпоинт для обновления источника РПД
-    """
-    queryset = WorkProgramSource.objects.all()
-    serializer_class = SourceSerializer
+class BibliographicReferenceUpdateView(generics.UpdateAPIView):
+    queryset = BibliographicReference.objects.all()
+    serializer_class = BibliographicReferenceSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class WorkProgramSourceDetailsView(generics.RetrieveAPIView):
-    """
-    Эндпоинт для получения полей источника РПД
-    """
-    queryset = WorkProgramSource.objects.all()
-    serializer_class = SourceSerializer
+class BibliographicReferenceDetailsView(generics.RetrieveAPIView):
+    queryset = BibliographicReference.objects.all()
+    serializer_class = BibliographicReferenceSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class WorkProgramWorkProgramSourceUpdateView(generics.UpdateAPIView):
-    """
-    Эндпоинт для привязки источников к РПД
-    """
+class WorkProgramBibliographicReferenceUpdateView(generics.UpdateAPIView):
     queryset = WorkProgram.objects.all()
-    serializer_class = WorkProgramSourceUpdateSerializer
+    serializer_class = WorkProgramBibliographicReferenceUpdateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class WorkProgramSourceInWorkProgramList(generics.ListAPIView):
-    """
-    Эндпоинт для получения источников конкретной РПД
-    """
-    serializer_class = SourceSerializer
+class BibliographicReferenceInWorkProgramList(generics.ListAPIView):
+    serializer_class = BibliographicReferenceSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
-    queryset = WorkProgramSource.objects.all()
-
-    # def get_queryset(self, workprogram_id):
-    #     return WorkProgram.objects.get(id=workprogram_id).source.all()
 
     def list(self, request, **kwargs):
         """
-        Вывод всех источников для одной рабочей программы по id
+        Вывод всех результатов для одной рабочей программы по id
         """
         # Note the use of `get_queryset()` instead of `self.queryset`
         # queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
-        queryset = WorkProgram.objects.get(id=self.kwargs["workprogram_id"]).source.all()
-        serializer = SourceSerializer(queryset, many=True)
+        queryset = WorkProgram.objects.get(id=self.kwargs['workprogram_id']).bibliographic_reference.all()
+        serializer = BibliographicReferenceSerializer(queryset, many=True)
         return Response(serializer.data)
-
-
-# class BibliographicReferenceListCreateAPIView(generics.ListCreateAPIView):
-#     serializer_class = BibliographicReferenceSerializer
-#     queryset = BibliographicReference.objects.all()
-#     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-#     search_fields = ['description']
-#     permission_classes = [IsRpdDeveloperOrReadOnly]
-#
-#
-# class BibliographicReferenceDestroyView(generics.DestroyAPIView):
-#     queryset = BibliographicReference.objects.all()
-#     serializer_class = BibliographicReferenceSerializer
-#     permission_classes = [IsRpdDeveloperOrReadOnly]
-#
-#
-# class BibliographicReferenceUpdateView(generics.UpdateAPIView):
-#     queryset = BibliographicReference.objects.all()
-#     serializer_class = BibliographicReferenceSerializer
-#     permission_classes = [IsRpdDeveloperOrReadOnly]
-#
-#
-# class BibliographicReferenceDetailsView(generics.RetrieveAPIView):
-#     queryset = BibliographicReference.objects.all()
-#     serializer_class = BibliographicReferenceSerializer
-#     permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-# class WorkProgramBibliographicReferenceUpdateView(generics.UpdateAPIView):
-#     queryset = WorkProgram.objects.all()
-#     serializer_class = WorkProgramBibliographicReferenceUpdateSerializer
-#     permission_classes = [IsRpdDeveloperOrReadOnly]
-#
-#
-# class BibliographicReferenceInWorkProgramList(generics.ListAPIView):
-#     serializer_class = BibliographicReferenceSerializer
-#     permission_classes = [IsRpdDeveloperOrReadOnly]
-#
-#     def list(self, request, **kwargs):
-#         """
-#         Вывод всех результатов для одной рабочей программы по id
-#         """
-#         # Note the use of `get_queryset()` instead of `self.queryset`
-#         # queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
-#         queryset = WorkProgram.objects.get(id=self.kwargs['workprogram_id']).bibliographic_reference.all()
-#         serializer = BibliographicReferenceSerializer(queryset, many=True)
-#         return Response(serializer.data)
-
-
-# Поиск ресурса (книги, публикации) в электронно-библиотечной системе
-@api_view(['GET'])
-def SearchInEBSCO(request):
-    """
-    Эндпоинт для поиска источника в Электронно-Библиотечной Системе EBSCO
-
-    :param request:
-    :return: {sources: []}
-    """
-    # Получение токена аутентификации
-    def get_auth_token(user_id, password):
-        headers = {"Content-Type": "application/json", "Accept": "application/json"}
-        data = {"UserId": user_id, "Password": password, "interfaceid": "edsapi"}
-        url = f"https://eds-api.ebscohost.com/authservice/rest/uidauth"
-
-        request = rq.post(url, headers=headers, data=json.dumps(data))
-        return request.text
-
-    # Получение токена сессии
-    def get_session_token(profile_id, auth_token):
-        headers = {"Content-Type": "application/json", "Accept": "application/json",
-                   "x-authenticationToken": json.loads(auth_token)["AuthToken"]}
-        url = f"https://eds-api.ebscohost.com/edsapi/rest/createsession?profile={profile_id}"
-
-        request = rq.get(url, headers=headers)
-        return request.text
-
-    # Поиск ресурса по базе EBSCO
-    def search(term, auth_token, session_token):
-        headers = {"Content-Type": "application/json", "Accept": "application/json",
-                   "x-authenticationToken": json.loads(auth_token)["AuthToken"],
-                   "x-sessionToken": json.loads(session_token)["SessionToken"]}
-        url = f"https://eds-api.ebscohost.com/edsapi/rest/search?query={term}&view=detailed&highlight=n"
-
-        request = rq.get(url, headers=headers)
-        # print(request.text)
-        return request.text
-
-    # Обработка ЭБС Лань из Сводного Каталога ИТМО
-    def extract_ref_from_lan(record_data):
-        ab_list = []
-        for item in record_data["Items"]:
-            if item["Name"] == "Abstract":
-                ab_list.append(item["Data"])
-        for abstract in ab_list:
-            if "Библиографичекское описание:" in abstract:
-                # ref = abstract[29:]
-                return abstract
-
-    # Очистка библиографической ссылки от ненужных символов
-    def clean_text(bib_ref):
-        # clean_bib_ref = bib_ref
-        # elements_to_delete = []
-        # for elem in elements_to_delete:
-        #     clean_bib_ref = clean_bib_ref.replace(elem, "")
-        if bib_ref is not None:
-            bib_ref = delete_html(unescape(bib_ref))
-        return bib_ref
-
-    # Удаление тегов
-    def delete_html(text):
-        return re.sub(r'<.*?>', '', text)
-
-# Поиск автора
-    def search_author(record):
-        item_list = []
-        for item in record["Items"]:
-            if item["Label"] == "Authors":
-                item_list.append(item["Data"])
-
-        items = ", ".join(item_list)
-
-        # for item in item_list:
-        #     items += item
-        return items
-
-    def extract_main_author(authors):
-        # если запятая разделяет авторов, то взять первого автора
-        try:
-            return authors[:authors.index(',')]
-        except Exception:
-            return authors
-
-# Поиск названия
-    def search_title(record):
-        item_list = []
-        for item in record["Items"]:
-            if item["Label"] == "Title":
-                item_list.append(item["Data"])
-
-        items = ''
-
-        for item in item_list:
-            items += item
-        return items
-
-    # Поиск издательства
-    def search_publishing(record):
-        return ""
-
-    def search_city(record):
-        return ""
-
-    def search_number_of_edition(record):
-        return None
-
-    def search_year(record):
-        year = None
-        try:
-            year = record["RecordInfo"]["BibRecord"]["BibRelationships"]["IsPartOfRelationships"][0]["BibEntity"]["Dates"][0]["Y"]
-        except Exception as e:
-            return year
-        return year
-
-    def search_type_of_text(record):
-        for item in record["Items"]:
-            if item["Label"] == "Publication Type":
-                pub_type = item["Data"]
-                if "eBook" in pub_type:
-                    return "Электронные ресурсы"
-                return "Печатный экземпляр"
-
-    def make_object(record):
-        source = {
-            "authors": search_author(record),
-            "title": search_title(record),
-            "publishing_company": "",
-            "year": search_year(record),
-            "number_of_edition": None,
-            "pages": None,
-            "format": search_type_of_text(record),
-            "publication_type": "Учебные издания",
-        }
-
-        for key, val in source.items():
-            source[key] = clean_text(val)
-
-        source["main_author"] = extract_main_author(source["authors"])
-        source["bib_reference"] = make_bib_reference(source)
-
-        return source
-
-    def make_bib_reference(source):
-        if source['format'] == "Электронные ресурсы":
-            text_format = "электронный"
-        else:
-            text_format = "непосредственный"
-
-        if source["year"] is None:
-            year = ""
-        else:
-            year = f" : {source['year']}"
-
-
-        return f"{source['main_author']}, {source['title']} / {source['authors']}" \
-               f"{year}. — Текст : {text_format}."
-
-
-    query = request.query_params["query"]
-
-    userid = "|ocy(tb.e2k_c)~xf*pi"
-    pwd = "C4bfek8Mo7.BpPpGuO-M"
-    profile = "edsapi"
-
-    auth_token = get_auth_token(userid, pwd)
-
-    session_token = get_session_token(profile, auth_token)
-
-    s = json.loads(search(query, auth_token, session_token))
-
-    try:
-        records = s["SearchResult"]["Data"]["Records"]
-    except KeyError:
-        return Response({"sources": []})
-
-    sources = []
-
-    for record in records:
-        sources.append(make_object(record))
-    return Response({"sources": sources})
 
 
 class EvaluationToolInWorkProgramList(generics.ListAPIView):

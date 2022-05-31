@@ -8,12 +8,11 @@ from gia_practice_app.Practice.models import Practice
 #from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
 from .expertise.common_serializers import ShortExpertiseSerializer
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
-    PrerequisitesOfWorkProgram, Certification, OnlineCourse, FieldOfStudy, \
+    PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool
 from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer
 from onlinecourse.serializers import OnlineCourseSerializer
-from .models import WorkProgramSource
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
@@ -208,19 +207,12 @@ class SectionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class SourceSerializer(serializers.ModelSerializer):
-   """Сериализатор Источников РПД"""
+class BibliographicReferenceSerializer(serializers.ModelSerializer):
+    """Сериализатор Разделов"""
 
-   class Meta:
-       model = WorkProgramSource
-       fields = "__all__"
-
-# class BibliographicReferenceSerializer(serializers.ModelSerializer):
-#     """Сериализатор Разделов"""
-#
-#     class Meta:
-#         model = BibliographicReference
-#         fields = "__all__"
+    class Meta:
+        model = BibliographicReference
+        fields = "__all__"
 
 
 class DisciplineSectionSerializer(serializers.ModelSerializer):
@@ -257,28 +249,12 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkProgram
         fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester',
-                  'hoursSecondSemester', 'source', 'description', 'video','owner','editors', 'hours',
+                  'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours',
                   'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format',
                   'work_status']
         extra_kwargs = {
-            'source': {'required': False}
+            'bibliographic_reference': {'required': False}
         }
-
-
-# class SourceForWorkProgramSerializer(serializers.ModelSerializer):
-#     """Сериализатор """
-#
-#     class Meta:
-#         model = WorkProgramSource
-#         fields = ['id']
-
-
-class WorkProgramArchiveUpdateSerializer(serializers.ModelSerializer):
-    """Сериализатор для отправки РПД в архив"""
-
-    class Meta:
-        model = WorkProgram
-        fields = ['work_status']
 
 
 class WorkProgramEditorsUpdateSerializer(serializers.ModelSerializer):
@@ -288,31 +264,39 @@ class WorkProgramEditorsUpdateSerializer(serializers.ModelSerializer):
         model = WorkProgram
         fields = ['editors']
 
+class WorkProgramArchiveUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для отправки РПД в архив"""
+
+    class Meta:
+        model = WorkProgram
+        fields = ['work_status']
+
+
+class BibliographicReferenceForWorkProgramSerializer(serializers.ModelSerializer):
+    """Сериализатор Разделов"""
+
+    class Meta:
+        model = BibliographicReference
+        fields = ['id']
+
 
 class Geeks(object):
     def __init__(self, dictonary):
         self.dict = bibliographic_references
 
 
-class WorkProgramSourceUpdateSerializer(serializers.ModelSerializer):
+class WorkProgramBibliographicReferenceUpdateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания рабочих программ"""
+    #bibliographic_reference = BibliographicReferenceForWorkProgramSerializer(many=True, read_only=False)
+    #bibliographic_reference = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=BibliographicReference.objects.all())
+    # bibliographic_references = serializers.DictField(
+    #     child = serializers.CharField())
+    # , source='bibrefs_set'
+    #bibrefs = BibliographicReferenceForWorkProgramSerializer(many=True, read_only=True)
 
     class Meta:
         model = WorkProgram
-        fields = ['source']
-
-# class WorkProgramBibliographicReferenceUpdateSerializer(serializers.ModelSerializer):
-#     """Сериализатор для создания рабочих программ"""
-#     #bibliographic_reference = BibliographicReferenceForWorkProgramSerializer(many=True, read_only=False)
-#     #bibliographic_reference = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=BibliographicReference.objects.all())
-#     # bibliographic_references = serializers.DictField(
-#     #     child = serializers.CharField())
-#     # , source='bibrefs_set'
-#     #bibrefs = BibliographicReferenceForWorkProgramSerializer(many=True, read_only=True)
-#
-#     class Meta:
-#         model = WorkProgram
-#         fields = ['bibliographic_reference']
+        fields = ['bibliographic_reference']
     #
     # def update(self, instance, validated_data):
     #     tags_data = validated_data.pop('bibliographic_references')
@@ -763,8 +747,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     #discipline_sections = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
     discipline_sections = DisciplineSectionSerializer(many = True)
     discipline_certification = CertificationSerializer(many = True)
-    source = SourceSerializer(many=True, required=False)
-    # bibliographic_reference = BibliographicReferenceSerializer(many = True, required=False)
+    bibliographic_reference = BibliographicReferenceSerializer(many = True, required=False)
     work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many = True)
     expertise_with_rpd = ShortExpertiseSerializer(many = True, read_only=True)
     certification_evaluation_tools = СertificationEvaluationToolForWorkProgramSerializer(many = True)
@@ -775,7 +758,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
         model = WorkProgram
         fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes',
                   'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections','discipline_certification',
-                  'source', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd',
+                  'bibliographic_reference', 'description', 'video', 'work_program_in_change_block', 'expertise_with_rpd',
                   'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors', 'language',
                   'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
                   'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
