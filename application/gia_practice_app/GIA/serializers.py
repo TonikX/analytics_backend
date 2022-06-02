@@ -39,6 +39,15 @@ class GIASerializer(serializers.ModelSerializer):
     gia_in_change_block = SerializerMethodField()
     permissions_info = SerializerMethodField()
 
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        editors=validated_data.pop('editors', None)
+        gia=GIA.objects.create(**validated_data)
+        gia.editors.set(editors)
+        gia.editors.add(request.user)
+        return gia
+
     def get_permissions_info(self, instance):
         request = self.context.get("request")
         try:
