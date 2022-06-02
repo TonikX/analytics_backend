@@ -46,7 +46,7 @@ function QuantityReportCharts(props: IProps) {
       options: {
         plugins: {
           legend: {
-            display: false
+            display: typeChart === TypeChart.PIE
           },
           title: {
             display: true,
