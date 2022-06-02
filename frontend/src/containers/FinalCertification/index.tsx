@@ -14,6 +14,7 @@ import ErrorPage from "../../components/ErrorPage";
 import Download from "./components/Download";
 import SendToExpertise from "./components/SendToExpertise";
 import {STEPS} from "./constants";
+import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 
 export interface FinalCertificationProps extends WithStyles<typeof styles>, RouteComponentProps {
     actions: CertificationActions,
@@ -93,8 +94,13 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
                     }
                 </div>
                 <div className={classes.rightButtons}>
-                    <Download/>
-                    <div className={classes.sendToExpertise}>
+                    <div className={classes.rightButton}>
+                        <WorkProgramStatus status='WK'/>
+                    </div>
+                    <div className={classes.rightButton}>
+                        <Download/>
+                    </div>
+                    <div className={classes.rightButton}>
                         <SendToExpertise openStep={this.openStep} certificationId={this.getCertificationId()}/>
                     </div>
                 </div>

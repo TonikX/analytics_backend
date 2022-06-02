@@ -102,7 +102,7 @@ class Practice extends React.Component<PracticeProps> {
         const showApproveAndRework = Boolean(permissionsInfo[PermissionsInfoFields.CAN_APPROVE])
             && Boolean(userExpertiseId)
             && expertiseStatus === ExpertiseStatus.EXPERTISE
-            && userExpertiseStatus === ExpertiseStatus.EXPERTISE;
+            && userExpertiseStatus === null;
 
         const showGoToExpertise = Boolean(permissionsInfo[PermissionsInfoFields.USE_CHAT_WITH_ID_EXPERTISE])
             && (expertiseStatus === ExpertiseStatus.EXPERTISE || expertiseStatus === ExpertiseStatus.REWORK);

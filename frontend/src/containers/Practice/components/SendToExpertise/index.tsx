@@ -51,7 +51,7 @@ class SendToExpertise extends React.Component<SendToExpertiseProps> {
             )
         }
         return (
-            <Tooltip title={
+            <Tooltip arrow title={
                 <Typography variant='body1'>
                     Для отправления на экспертизу нужно исправить ошибки. Нажмите, чтобы к ним перейти
                 </Typography>

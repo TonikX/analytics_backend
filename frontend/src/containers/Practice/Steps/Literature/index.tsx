@@ -91,6 +91,7 @@ class Literature extends React.PureComponent<LiteratureProps> {
                 {
                     <div className={classes.iconWrapper}>
                         <Button color="secondary"
+                                variant="outlined"
                                 className={classes.addIcon}
                                 onClick={this.handleOpenModal}
                         >

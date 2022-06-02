@@ -49,7 +49,7 @@ class Download extends React.Component<DownloadProps> {
 
 
     multilineToList = (str: string) => {
-        if (str.length === 0) return [];
+        if (!str || str.length === 0) return [];
         return str.split(/\r?\n/g);
     }
 
