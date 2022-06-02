@@ -23,6 +23,7 @@ import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import QualificationSelector from "../../../components/QualificationSelector";
 import UserSelector from "../../Profile/UserSelector";
+import {filterFields} from "../../EduationPlanInDirection/enum";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -43,6 +44,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     componentDidMount() {
         this.props.directionActions.getDirections();
+
+        this.props.educationPlanInDirectionActions.changeFiltering({
+            [filterFields.YEAR]: 2020,
+        })
+
         this.props.educationalPlanActions.getEducationalPlans();
     }
 
@@ -85,6 +91,10 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     handleChangeYear = (value: Moment) => {
+        this.props.educationPlanInDirectionActions.changeFiltering({
+            [filterFields.YEAR]: value.format(YEAR_DATE_FORMAT),
+        })
+
         const {educationalProgram} = this.state;
 
         this.setState({
@@ -93,10 +103,15 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 [EducationProgramFields.YEAR]: value.format(YEAR_DATE_FORMAT)
             },
         })
+        this.props.educationPlanInDirectionActions.getEducationalPlansInDirection();
     }
 
     changeQualification = (value: string) => {
         const {educationalProgram} = this.state;
+
+        this.props.educationPlanInDirectionActions.changeFiltering({
+            [filterFields.QUALIFICATION]: value,
+        })
 
         this.setState({
             educationalProgram: {
@@ -104,6 +119,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 [EducationProgramFields.QUALIFICATION]: value
             },
         })
+        this.props.educationPlanInDirectionActions.getEducationalPlansInDirection();
     }
 
     render() {
@@ -116,6 +132,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             // || get(educationalProgram, [EducationProgramFields.QUALIFICATION, 'length']) === 0
         ;
 
+        const disableSelector = !get(educationalProgram, [EducationProgramFields.YEAR]) || get(educationalProgram, [EducationProgramFields.QUALIFICATION, 'length']) === 0
         const isEditMode = Boolean(educationalProgram[EducationProgramFields.ID]);
 
         return (
@@ -130,17 +147,17 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             >
                 <DialogTitle> {isEditMode ? 'Редактирование' : 'Создание'} общей характеристики образовательной программы</DialogTitle>
                 <DialogContent>
-                    <EducationPlanInDirectionSelector handleChange={this.handleChangePlan} />
-                    <UserSelector handleChange={this.handleChangeUser} selectorLabel="Руководитель *" />
-                    {/*<DatePickerComponent label="Год *"*/}
-                    {/*                     views={["year"]}*/}
-                    {/*                     value={educationalProgram[EducationProgramFields.YEAR]}*/}
-                    {/*                     onChange={this.handleChangeYear}*/}
-                    {/*                     format={YEAR_DATE_FORMAT}*/}
-                    {/*/>*/}
-                    {/*<QualificationSelector onChange={this.changeQualification}*/}
-                    {/*                       value={educationalProgram[EducationProgramFields.QUALIFICATION]}*/}
-                    {/*/>*/}
+                    <DatePickerComponent label="Год *"
+                                         views={["year"]}
+                                         value={educationalProgram[EducationProgramFields.YEAR]}
+                                         onChange={this.handleChangeYear}
+                                         format={YEAR_DATE_FORMAT}
+                    />
+                    <QualificationSelector onChange={this.changeQualification}
+                                           value={educationalProgram[EducationProgramFields.QUALIFICATION]}
+                    />
+                    <EducationPlanInDirectionSelector handleChange={this.handleChangePlan} disabled={disableSelector} />
+                    <UserSelector handleChange={this.handleChangeUser} selectorLabel="Руководитель *" disabled={disableSelector}/>
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={this.handleClose}

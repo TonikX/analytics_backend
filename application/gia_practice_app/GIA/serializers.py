@@ -2,6 +2,8 @@ from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
 from gia_practice_app.GIA.models import CriteriaVKR, GIABaseTemplate, GIA
+from gia_practice_app.logic import get_permissions_gia_practice
+from workprogramsapp.expertise.models import Expertise, UserExpertise
 from workprogramsapp.models import WorkProgramChangeInDisciplineBlockModule
 from workprogramsapp.serializers import WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
@@ -33,10 +35,22 @@ class GIABaseTemplateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
-
 class GIASerializer(serializers.ModelSerializer):
     gia_in_change_block = SerializerMethodField()
+    permissions_info = SerializerMethodField()
+
+    def get_permissions_info(self, instance):
+        request = self.context.get("request")
+        try:
+            exp = Expertise.objects.get(gia=instance)
+            user_exp = UserExpertise.objects.get(expert=request.user, expertise=exp)
+        except Expertise.DoesNotExist:
+            exp = None
+            user_exp = None
+        except UserExpertise.DoesNotExist:
+            user_exp = None
+
+        return get_permissions_gia_practice(instance,exp,user_exp,request)
 
     def get_gia_in_change_block(self, instance):
         return WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(
@@ -63,9 +77,6 @@ class GIASerializer(serializers.ModelSerializer):
 
 
 class GIAPrimitiveSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = GIA
         fields = "__all__"
-
-

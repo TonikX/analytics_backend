@@ -104,7 +104,7 @@ export default (theme: Theme) => createStyles({
         color: theme.palette.primary.main,
     },
     likeIcon: {
-        marginLeft: 'auto'
+        marginLeft: '20px'
     },
     trajectoryOwner: {
         marginBottom: '10px'

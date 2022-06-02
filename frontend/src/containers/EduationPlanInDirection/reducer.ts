@@ -19,6 +19,8 @@ export const initialState: educationalPlanInDirectionState = {
         [filterFields.STRUCTURAL_UNIT]: '',
         [filterFields.PREREQUISITE]: '',
         [filterFields.OUTCOMES]: '',
+        [filterFields.YEAR]: '',
+        [filterFields.QUALIFICATION]: '',
     },
     [fields.CURRENT_PAGE]: 1,
     [fields.ALL_COUNT]: 1,

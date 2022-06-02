@@ -243,6 +243,18 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                     {/*        <EditIcon className={classes.titleIcon} color="primary" onClick={this.handleChangePlan}/>*/}
                     {/*    </Tooltip>*/}
                     {/*}*/}
+                    <Tooltip title={(
+                        <>
+                            1. Пропущен обязательный блок <br/>
+                            2. Пропущен обязательный модуль в блоке <br/>
+                            3. Отсутствуют дисциплины в модуле <br/>
+                            4. Количество з.е. не достигает рекомендованного минимума <br/>
+                            5. Недостаточное количество дисциплин в модуле <br/>
+                            6. Недостаточное количество з. е. в модуле <br/>
+                        </>
+                    )}>
+                        <Button variant="contained" style={{marginLeft: 'auto'}} color="primary">Валидация</Button>
+                    </Tooltip>
                     <div className={classes.likeIcon}>
                         <LikeButton onClick={this.handleClickLike}
                                     isLiked={Boolean(detailPlan[EducationalPlanFields.ID_RATING])}
