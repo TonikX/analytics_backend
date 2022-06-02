@@ -14,9 +14,12 @@ enum TypeChart {
 }
 interface IProps {
   classes?: {[key: string]: string}
+  labels: string[],
+  title:string,
+  data:number[]
 }
 function TotalOPReport(props:IProps) {
-  const {classes} = props
+  const {classes, labels, title, data} = props
   const [btnText, setBtnText] = useState<TypeChart>(TypeChart.PIE)
   const [typeChart, setTypeChart] = useState<TypeChart>(TypeChart.BAR)
   const refChart = useRef<any>()
@@ -50,15 +53,15 @@ function TotalOPReport(props:IProps) {
           },
           title: {
             display: true,
-            text: 'РПД по квалификации'
+            text: title
           }
         }
       },
       data: {
-        labels: ['Бакалавриат', 'Магистратура', 'Специалитет'],
+        labels,
         datasets: [{
           label: 'Диаграмма',
-          data: [12, 19, 3],
+          data,
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',

@@ -64,6 +64,7 @@ export interface RecordsProops extends WithStyles<typeof styles>{
     QUALIFICATION: any;
     QUANTITY_RPD: any;
     YEAR: any;
+    YEARS_ALL: string[];
     QUANTITY_OP: any;
     QUANTITY_OP_ALL: any;
     RPD_WITHOUT_SU:any;

@@ -106,7 +106,6 @@ class Records extends Component<RecordsProops> {
     }
 
     getQuantityOPAll = () => {
-        console.log('this.props.actions', this.props.actions.GetQuantityOPAll());
         this.props.actions.GetQuantityOPAll();
         this.setState({isVisible: true});
     }
@@ -196,7 +195,9 @@ class Records extends Component<RecordsProops> {
             QUALIFICATION,
             QUANTITY_RPD,
             YEAR,
+            YEARS_ALL,
             QUANTITY_OP,
+            QUANTITY_OP_ALL,
             RPD_WITHOUT_SU,
             STATUS,
             RPD_IN_SU,
@@ -310,12 +311,16 @@ class Records extends Component<RecordsProops> {
                         disableElevation className={classes.Btn}>
                         Получить отчёт
                     </Button>
-                    <TotalOPReport />
+                    {QUANTITY_OP_ALL.length === 4 && <TotalOPReport
+                      labels={YEARS_ALL}
+                      title={`Образовательная программа бакалавриат`}
+                      data={QUANTITY_OP_ALL.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}
+                    />}
                 </>
                 }
                 {this.state.isVisible && this.state.value == 3 &&
                 <>
-                    <pre>{JSON.stringify(QUANTITY_OP)}</pre>
+                    <pre>{JSON.stringify(this.props.QUANTITY_OP_ALL, null, 3)}</pre>
                     <Typography>Количество ОП по заданной квалификации и году: {QUANTITY_OP['quantity']}</Typography>
                 </>
                 }

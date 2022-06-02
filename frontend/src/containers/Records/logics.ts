@@ -119,6 +119,7 @@ const getQuantityOPAll = createLogic({
 
         if(Array.isArray(state.records.YEARS_ALL) && state.records.YEARS_ALL.length) {
             dispatch(actions.fetchingTrue({destination: "GET_STATISTICS"}));
+            dispatch(statisticsActions.SetQuantityOPAll([]));
 
             state.records.YEARS_ALL.forEach((year: string, idx: number) => {
                 service.getStatisticsOP(qualification, year)

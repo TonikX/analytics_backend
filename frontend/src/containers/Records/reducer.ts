@@ -84,7 +84,6 @@ const SetQuantityOP = (state: SimpleStatState, {payload}: any): SimpleStatState=
     [fields.QUANTITY_OP]: payload,
 });
 const SetQuantityOPAll = (state: SimpleStatState, {payload}: any): SimpleStatState => {
-    console.log('payload', payload);
     return {
         ...state,
         [fields.QUANTITY_OP_ALL]: payload,

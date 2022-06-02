@@ -12,6 +12,7 @@ export const getCurrentCH = (state:rootState) => get(getStateData(state), fields
 export const getQualification = (state: rootState) => get(getStateData(state), fields.QUALIFICATION, "bachelor");
 export const getQuantityRPD = (state: rootState) => get(getStateData(state), fields.QUANTITY_RPD, []);
 export const getYear =(state: rootState) => get(getStateData(state), fields.YEAR, "2021");
+export const getYears =(state: rootState) => get(getStateData(state), fields.YEARS_ALL, []);
 export const getQuantityOP = (state: rootState) => get(getStateData(state), fields.QUANTITY_OP, []);
 export const getQuantityOPAll = (state: rootState) => get(getStateData(state), fields.QUANTITY_OP_ALL, []);
 export const getRPDwithoutSU = (state: rootState) => get(getStateData(state), fields.RPD_WITHOUT_SU, []);
