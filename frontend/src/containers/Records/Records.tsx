@@ -29,10 +29,11 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import SearchSelector from "../../components/SearchSelector";
 import QuantityReportCharts from './RecordsChart/QuantityReport/RecordsChart'
 import QualityReportChart from './RecordsChart/QualityReport/QualityReportChart'
+import TotalOPReport from './RecordsChart/TotalOPReport/TotalOPReport';
 
 class Records extends Component<RecordsProops> {
     state = {
-        value: 2,
+        value: 3,
         isVisible: false,
         page: 0,
         rowsPerPage: 10,
@@ -104,8 +105,9 @@ class Records extends Component<RecordsProops> {
         this.setState({isVisible: true});
     }
 
-    getQuantityOP = () => {
-        this.props.actions.GetQuantityOP();
+    getQuantityOPAll = () => {
+        console.log('this.props.actions', this.props.actions.GetQuantityOPAll());
+        this.props.actions.GetQuantityOPAll();
         this.setState({isVisible: true});
     }
 
@@ -168,7 +170,6 @@ class Records extends Component<RecordsProops> {
         }
              
     }
-
     renderQualityReportChartSecond = (SIMPLE_STATE: any): ReactElement | undefined => {
         if(Number(SIMPLE_STATE['registered_users'])) {
             return (
@@ -187,6 +188,7 @@ class Records extends Component<RecordsProops> {
             )
         }
     }
+
     render() {
         const {
             classes,
@@ -261,48 +263,12 @@ class Records extends Component<RecordsProops> {
                         && this.state.value == 1
                             && this.renderQualityReportChartSecond(SIMPLE_STATE))}
                 </div>
-                
-                        
 
-                {/* // <Typography>
-                //     <p>Зарегестрированных пользователей: {SIMPLE_STATE['registered_users']}</p>
-                //     <p>Пользователей РПД: {SIMPLE_STATE['users_in_rpd']}</p>
-                //     <p>РПД, имеющие редакторов: {SIMPLE_STATE['rpd_with_editors']}</p>
-                //     <p>РПД на экспертизе: {SIMPLE_STATE['rpd_on_expertise']}</p>
-                //     <p>Одобренные РПД: {SIMPLE_STATE['rpd_approved']}</p>
-                //     <p>РПД в работе: {SIMPLE_STATE['rpd_in_work']}</p>
-                // </Typography> */}
-
-            
                 {this.state.value == 2 &&
                 <>
                     <FormControl variant="outlined">
-                        {/* <InputLabel>Выберите квалификацию</InputLabel> */}
-                        {/* <Select className={classes.field}
-                                label="Выберите квалификацию"
-                                value={QUALIFICATION}
-                                onChange={this.changeQual}
-                                MenuProps={{
-                                    anchorOrigin: {
-                                        vertical: "bottom",
-                                        horizontal: "left"
-                                    },
-                                    transformOrigin: {
-                                        vertical: "top",
-                                        horizontal: "left"
-                                    },
-                                    getContentAnchorEl: null
-                                }}
-                        >
-                            <MenuItem value="bachelor">Бакалавриат</MenuItem>
-                            <MenuItem value="master">Магистратура</MenuItem>
-                            <MenuItem value="specialist">Специалитет</MenuItem>
-                        </Select> */}
-
                         <QuantityReportCharts />
                     </FormControl>
-                    {/* <Button onClick={this.getQuantityRPD} variant="contained" color="primary" disableElevation
-                            className={classes.Btn}>Получить отчёт</Button> */}
                 </>
                 }
                 {this.state.isVisible && this.state.value == 2 &&
@@ -337,41 +303,19 @@ class Records extends Component<RecordsProops> {
                             <MenuItem value="specialist">Специалитет</MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControl variant="outlined">
-                        <InputLabel>Выберите год</InputLabel>
-                        <Select
-                            label="Выберите год"
-                            value={YEAR}
-                            onChange={this.changeYear}
-                            className={classes.field}
-                            MenuProps={{
-                                anchorOrigin: {
-                                    vertical: "bottom",
-                                    horizontal: "left"
-                                },
-                                transformOrigin: {
-                                    vertical: "top",
-                                    horizontal: "left"
-                                },
-                                getContentAnchorEl: null
-                            }}
-                        >
-                            <MenuItem value="2021">2021</MenuItem>
-                            <MenuItem value="2020">2020</MenuItem>
-                            <MenuItem value="2019">2019</MenuItem>
-                        </Select>
-                    </FormControl>
                     <Button
-                        onClick={this.getQuantityOP}
+                        onClick={this.getQuantityOPAll}
                         variant="contained"
                         color="primary"
                         disableElevation className={classes.Btn}>
                         Получить отчёт
                     </Button>
+                    <TotalOPReport />
                 </>
                 }
                 {this.state.isVisible && this.state.value == 3 &&
                 <>
+                    <pre>{JSON.stringify(QUANTITY_OP)}</pre>
                     <Typography>Количество ОП по заданной квалификации и году: {QUANTITY_OP['quantity']}</Typography>
                 </>
                 }

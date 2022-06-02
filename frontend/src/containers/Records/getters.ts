@@ -4,7 +4,6 @@ import {rootState} from '../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 import {fields} from './enum';
-import {SelectorListType} from "../../components/SearchSelector/types";
 import {SimpleStatState} from './types';
 
 const getStateData = (state: rootState): SimpleStatState => get(state, GENERAL_PATH);
@@ -14,6 +13,7 @@ export const getQualification = (state: rootState) => get(getStateData(state), f
 export const getQuantityRPD = (state: rootState) => get(getStateData(state), fields.QUANTITY_RPD, []);
 export const getYear =(state: rootState) => get(getStateData(state), fields.YEAR, "2021");
 export const getQuantityOP = (state: rootState) => get(getStateData(state), fields.QUANTITY_OP, []);
+export const getQuantityOPAll = (state: rootState) => get(getStateData(state), fields.QUANTITY_OP_ALL, []);
 export const getRPDwithoutSU = (state: rootState) => get(getStateData(state), fields.RPD_WITHOUT_SU, []);
 export const getRPDinSU = (state: rootState) => get(getStateData(state), fields.RPD_IN_SU, []);
 export const getRPDinAP = (state: rootState) => get(getStateData(state), fields.RPD_IN_AP, []);

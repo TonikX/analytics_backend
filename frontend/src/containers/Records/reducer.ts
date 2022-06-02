@@ -15,7 +15,9 @@ export const initialSimpleStatState: SimpleStatState = {
     [fields.QUALIFICATION]: "bachelor",
     [fields.QUANTITY_RPD]: [],
     [fields.YEAR]: "2021",
+    [fields.YEARS_ALL]: ["2022", "2021", "2020", "2019"],
     [fields.QUANTITY_OP]: [],
+    [fields.QUANTITY_OP_ALL]: [],
     [fields.RPD_WITHOUT_SU]: [],
     [fields.RPD_IN_SU]: [],
     [fields.STATUS]: "all",
@@ -81,6 +83,13 @@ const SetQuantityOP = (state: SimpleStatState, {payload}: any): SimpleStatState=
     ...state,
     [fields.QUANTITY_OP]: payload,
 });
+const SetQuantityOPAll = (state: SimpleStatState, {payload}: any): SimpleStatState => {
+    console.log('payload', payload);
+    return {
+        ...state,
+        [fields.QUANTITY_OP_ALL]: payload,
+    }
+};
 
 const SetRPDwithoutSU = (state: SimpleStatState, {payload}: any): SimpleStatState=>({
     ...state,
@@ -119,6 +128,7 @@ export const reducer = createReducer(initialSimpleStatState,{
     [actions.SetQuantityRPD.type]: SetQuantityRPD,
     [actions.changeYear.type]: ChangeYear,
     [actions.SetQuantityOP.type] :SetQuantityOP,
+    [actions.SetQuantityOPAll.type] :SetQuantityOPAll,
     [actions.SetRPDwithoutSU.type]: SetRPDwithoutSU,
     [actions.SetRPDinSU.type]: SetRPDinSU,
     [actions.ChangeStatus.type]: ChangeStatus,

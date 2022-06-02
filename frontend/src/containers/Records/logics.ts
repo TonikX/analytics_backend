@@ -92,6 +92,7 @@ const getQuantityOP = createLogic({
     process({getState, action}: any, dispatch, done){
         const state = getState();
         const qualification = getQualification(state);
+        console.log('state', state);
         const year = getYear(state);
 
         dispatch(actions.fetchingTrue({destination: "GET_STATISTICS"}));
@@ -106,6 +107,32 @@ const getQuantityOP = createLogic({
                 dispatch(actions.fetchingFalse({destination: "GET_STATISTICS"}));
                 return done();
             });
+
+    }
+});
+const getQuantityOPAll = createLogic({
+    type: statisticsActions.GetQuantityOPAll.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done){
+        const state = getState();
+        const qualification = getQualification(state);
+
+        if(Array.isArray(state.records.YEARS_ALL) && state.records.YEARS_ALL.length) {
+            dispatch(actions.fetchingTrue({destination: "GET_STATISTICS"}));
+
+            state.records.YEARS_ALL.forEach((year: string, idx: number) => {
+                service.getStatisticsOP(qualification, year)
+                  .then((res)=>{
+                      const actualState = getState();
+                      dispatch(statisticsActions.SetQuantityOPAll([...actualState.records.QUANTITY_OP_ALL, res.data]));
+                  })
+                  .catch((err) => {
+                      dispatch(actions.fetchingFailed(err));
+                  })
+            })
+            dispatch(actions.fetchingFalse({destination: "GET_STATISTICS"}));
+            // return done();
+        }
     }
 });
 
@@ -227,5 +254,6 @@ export default [
     getSU,
     getAP,
     getRPDinAP,
-    getRPDinSEMESTER
+    getRPDinSEMESTER,
+    getQuantityOPAll
 ];

@@ -1,4 +1,4 @@
-import {SimpleStatFields, fields} from './enum'
+import { fields} from './enum'
 import {WithStyles} from "@material-ui/core";
 import styles from "./Records.styles";
 export interface StatisticsActions {
@@ -11,6 +11,8 @@ export interface StatisticsActions {
     changeYear: any;
     GetQuantityOP: any;
     SetQuantityOP: any;
+    GetQuantityOPAll: any;
+    SetQuantityOPAll: any;
     GetRPDwithoutSU: any;
     SetRPDwithoutSU: any;
     GetRPDinSU: any;
@@ -35,7 +37,9 @@ export interface SimpleStatState {
     [fields.QUALIFICATION]: any;
     [fields.QUANTITY_RPD]: any;
     [fields.YEAR]: any;
+    [fields.YEARS_ALL]: string[];
     [fields.QUANTITY_OP]: any;
+    [fields.QUANTITY_OP_ALL]: [{quantity: number}] | [];
     [fields.RPD_WITHOUT_SU]: any;
     [fields.RPD_IN_SU]: any;
     [fields.STATUS]: any;
@@ -61,6 +65,7 @@ export interface RecordsProops extends WithStyles<typeof styles>{
     QUANTITY_RPD: any;
     YEAR: any;
     QUANTITY_OP: any;
+    QUANTITY_OP_ALL: any;
     RPD_WITHOUT_SU:any;
     RPD_IN_SU: any;
     STATUS: any;

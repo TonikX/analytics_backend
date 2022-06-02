@@ -10,6 +10,8 @@ const GetQuantityRPD = createAction('GET_QUANTITY_RPD');
 const SetQuantityRPD = createAction('SET_QUANTITY_RPD');
 const changeYear = createAction('CHANGE_YEAR');
 const GetQuantityOP = createAction('GET_QUANTITY_OP');
+const GetQuantityOPAll = createAction('GET_QUANTITY_OP_ALL');
+const SetQuantityOPAll = createAction('SET_QUANTITY_OP_ALL');
 const SetQuantityOP = createAction('SET_QUANTITY_OP');
 const ChangeCH = createAction("CHANGE_CH");
 const GetRPDwithoutSU = createAction('GET_RPD_WITHOUT_SU');
@@ -38,6 +40,8 @@ const actions: StatisticsActions = {
    changeYear,
    GetQuantityOP,
    SetQuantityOP,
+   GetQuantityOPAll,
+   SetQuantityOPAll,
    GetRPDwithoutSU,
    SetRPDwithoutSU,
    GetRPDinSU,
