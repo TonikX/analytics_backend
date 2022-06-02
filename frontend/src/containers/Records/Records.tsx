@@ -149,7 +149,8 @@ class Records extends Component<RecordsProops> {
 
     renderQualityReportChartFirst = (SIMPLE_STATE: any): ReactElement | undefined => {
         if(Number(SIMPLE_STATE['rpd_with_editors'])) {
-            return <QualityReportChart 
+            return <QualityReportChart
+                    title={'Статус РПД'}
                     labels={['РПД, имеющие редакторов','РПД на экспертизе', 'Одобренные РПД', 'РПД в работе']}
                     data={[
                         Number(SIMPLE_STATE['rpd_with_editors']),
@@ -171,7 +172,8 @@ class Records extends Component<RecordsProops> {
     renderQualityReportChartSecond = (SIMPLE_STATE: any): ReactElement | undefined => {
         if(Number(SIMPLE_STATE['registered_users'])) {
             return (
-                <QualityReportChart 
+                <QualityReportChart
+                    title={'Статус пользователя'}
                     labels={['Зарегестрированных пользователей','Пользователей РПД']}
                     data={[
                         Number(SIMPLE_STATE['registered_users']),

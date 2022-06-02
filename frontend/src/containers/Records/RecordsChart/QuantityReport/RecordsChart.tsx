@@ -43,6 +43,17 @@ function QuantityReportCharts(props: IProps) {
     //@ts-ignore
     const chartLocal = new Chart(refChart.current.getContext('2d'), {
       type: typeChart,
+      options: {
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: 'РПД по квалификации'
+          }
+        }
+      },
       data: {
         labels: ['Бакалавриат', 'Магистратура', 'Специалитет'],
         datasets: [{

@@ -16,10 +16,11 @@ interface IProps {
   data: number[],
   colors: string[]
   classes: {[key: string]: string}
+  title: string
 }
 
 function QualityReportChart(props: IProps) {
-  const {labels, data, colors, classes} = props
+  const {labels, data, colors, classes, title} = props
   const [btnText, setBtnText] = useState<TypeChart>(TypeChart.PIE)
   const [typeChart, setTypeChart] = useState<TypeChart>(TypeChart.BAR)
   const [chart, setChart] = useState()
@@ -44,20 +45,29 @@ function QualityReportChart(props: IProps) {
       //@ts-ignore
       chart?.destroy()
     }
-    console.log('data', data)
     //@ts-ignore
     const chartLocal = new Chart(refChart.current.getContext('2d'), {
       type: typeChart,
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: title
+          },
+          legend: {
+            display: typeChart === TypeChart.PIE
+          }
+        }
+      },
       data: {
         labels,
         datasets: [{
-            label: 'Диаграмма',
-            data,
-            backgroundColor: colors,
-            borderColor: colors,
-            borderWidth: 1
+          data,
+          backgroundColor: colors,
+          borderColor: colors,
+          borderWidth: 1
         }]
-      },
+      }
     })
     //@ts-ignore
     setChart(chartLocal)
