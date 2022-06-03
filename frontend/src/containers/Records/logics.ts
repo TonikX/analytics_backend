@@ -92,7 +92,6 @@ const getQuantityOP = createLogic({
     process({getState, action}: any, dispatch, done){
         const state = getState();
         const qualification = getQualification(state);
-        console.log('state', state);
         const year = getYear(state);
 
         dispatch(actions.fetchingTrue({destination: "GET_STATISTICS"}));

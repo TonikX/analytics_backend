@@ -48,6 +48,8 @@ class Records extends Component<RecordsProops> {
         this.state.AP = this.props.AP
         this.props.actions.GetSU();
         this.state.SU = this.props.SU;
+        this.props.actions.GetQuantityOPAll();
+        this.setState({isVisible: true});
     }
 
     handleChange = (event: any): void => {
@@ -102,11 +104,6 @@ class Records extends Component<RecordsProops> {
 
     getQuantityRPD = () => {
         this.props.actions.GetQuantityRPD();
-        this.setState({isVisible: true});
-    }
-
-    getQuantityOPAll = () => {
-        this.props.actions.GetQuantityOPAll();
         this.setState({isVisible: true});
     }
 
@@ -280,48 +277,23 @@ class Records extends Component<RecordsProops> {
                 }
                 {this.state.value == 3 &&
                 <>
-                    <FormControl variant="outlined">
-                        <InputLabel>Выберите квалификацию</InputLabel>
-                        <Select
-                            label="Выберите квалификацию"
-                            value={QUALIFICATION}
-                            onChange={this.changeQual}
-                            className={classes.field}
-                            MenuProps={{
-                                anchorOrigin: {
-                                    vertical: "bottom",
-                                    horizontal: "left"
-                                },
-                                transformOrigin: {
-                                    vertical: "top",
-                                    horizontal: "left"
-                                },
-                                getContentAnchorEl: null
-                            }}
-                        >
-                            <MenuItem value="bachelor">Бакалавриат</MenuItem>
-                            <MenuItem value="master">Магистратура</MenuItem>
-                            <MenuItem value="specialist">Специалитет</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Button
-                        onClick={this.getQuantityOPAll}
-                        variant="contained"
-                        color="primary"
-                        disableElevation className={classes.Btn}>
-                        Получить отчёт
-                    </Button>
-                    {QUANTITY_OP_ALL.length === 4 && <TotalOPReport
-                      labels={YEARS_ALL}
-                      title={`Образовательная программа бакалавриат`}
-                      data={QUANTITY_OP_ALL.qualification.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}
-                    />}
-                </>
-                }
-                {this.state.isVisible && this.state.value == 3 &&
-                <>
-                    <pre>{JSON.stringify(this.props.QUANTITY_OP_ALL.qualification, null, 3)}</pre>
-                    <Typography>Количество ОП по заданной квалификации и году: {QUANTITY_OP['quantity']}</Typography>
+                    <div style={{display: 'flex'}}>
+                        {QUANTITY_OP_ALL['bachelor']?.length === 4 && <TotalOPReport
+                          labels={YEARS_ALL}
+                          title={`Образовательная программа бакалавриат`}
+                          data={QUANTITY_OP_ALL['bachelor']?.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}
+                        />}
+                        {QUANTITY_OP_ALL['master']?.length === 4 && <TotalOPReport
+                          labels={YEARS_ALL}
+                          title={`Образовательная программа магистратура`}
+                          data={QUANTITY_OP_ALL['master']?.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}
+                        />}
+                        {QUANTITY_OP_ALL['specialist']?.length === 4 && <TotalOPReport
+                          labels={YEARS_ALL}
+                          title={`Образовательная программа магистратура`}
+                          data={QUANTITY_OP_ALL['specialist']?.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}
+                        />}
+                    </div>
                 </>
                 }
                 {this.state.value == 4 &&

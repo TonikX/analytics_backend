@@ -92,8 +92,8 @@ interface IPayload {
 }
 /**
  * {QUANTITY_OP_ALL: {
- *       bachelor: [{quantity: 1}],
- *       master: [{quantity: 1}]
+ *     bachelor: [{quantity: 1}],
+ *     master: [{quantity: 1}]
  *   }
  * }
  * */
