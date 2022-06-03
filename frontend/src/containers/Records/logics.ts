@@ -1,7 +1,7 @@
 import {createLogic} from "redux-logic";
 import actions from '../../layout/actions';
 import statisticsActions from './actions';
-import {getQualification, getStatus, getYear, getAPuse,getSUuse, getSemester} from "./getters"
+import { getQualification, getStatus, getYear, getAPuse, getSUuse, getSemester, getQualificationAll } from "./getters"
 import Service from './service';
 
 const service = new Service();
@@ -115,24 +115,26 @@ const getQuantityOPAll = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done){
         const state = getState();
-        const qualification = getQualification(state);
+        const qualificationAll = getQualificationAll(state);
 
         if(Array.isArray(state.records.YEARS_ALL) && state.records.YEARS_ALL.length) {
             dispatch(actions.fetchingTrue({destination: "GET_STATISTICS"}));
-            dispatch(statisticsActions.SetQuantityOPAll([]));
+            dispatch(statisticsActions.SetQuantityOPAll(null));
 
             state.records.YEARS_ALL.forEach((year: string, idx: number) => {
-                service.getStatisticsOP(qualification, year)
-                  .then((res)=>{
-                      const actualState = getState();
-                      dispatch(statisticsActions.SetQuantityOPAll([...actualState.records.QUANTITY_OP_ALL, res.data]));
-                  })
-                  .catch((err) => {
-                      dispatch(actions.fetchingFailed(err));
-                  })
+                qualificationAll.forEach((qualification) => {
+                    service.getStatisticsOP(qualification, year)
+                      .then((res)=>{
+                          const actualState = getState();
+
+                          dispatch(statisticsActions.SetQuantityOPAll({ qualification, data: res.data }))
+                      })
+                      .catch((err) => {
+                          dispatch(actions.fetchingFailed(err));
+                      })
+                })
             })
             dispatch(actions.fetchingFalse({destination: "GET_STATISTICS"}));
-            // return done();
         }
     }
 });

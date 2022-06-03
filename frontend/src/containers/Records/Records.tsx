@@ -314,13 +314,13 @@ class Records extends Component<RecordsProops> {
                     {QUANTITY_OP_ALL.length === 4 && <TotalOPReport
                       labels={YEARS_ALL}
                       title={`Образовательная программа бакалавриат`}
-                      data={QUANTITY_OP_ALL.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}
+                      data={QUANTITY_OP_ALL.qualification.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}
                     />}
                 </>
                 }
                 {this.state.isVisible && this.state.value == 3 &&
                 <>
-                    <pre>{JSON.stringify(this.props.QUANTITY_OP_ALL, null, 3)}</pre>
+                    <pre>{JSON.stringify(this.props.QUANTITY_OP_ALL.qualification, null, 3)}</pre>
                     <Typography>Количество ОП по заданной квалификации и году: {QUANTITY_OP['quantity']}</Typography>
                 </>
                 }

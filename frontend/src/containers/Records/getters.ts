@@ -10,6 +10,7 @@ const getStateData = (state: rootState): SimpleStatState => get(state, GENERAL_P
 export const getSimpleStat = (state: rootState) => get(getStateData(state), fields.SIMPLE_STATE, []);
 export const getCurrentCH = (state:rootState) => get(getStateData(state), fields.CURRENT_CH, 1);
 export const getQualification = (state: rootState) => get(getStateData(state), fields.QUALIFICATION, "bachelor");
+export const getQualificationAll = (state: rootState) => get(getStateData(state), fields.QUALIFICATIONS_ALL, []);
 export const getQuantityRPD = (state: rootState) => get(getStateData(state), fields.QUANTITY_RPD, []);
 export const getYear =(state: rootState) => get(getStateData(state), fields.YEAR, "2021");
 export const getYears =(state: rootState) => get(getStateData(state), fields.YEARS_ALL, []);

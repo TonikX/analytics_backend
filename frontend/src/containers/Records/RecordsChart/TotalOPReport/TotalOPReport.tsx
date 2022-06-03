@@ -65,12 +65,15 @@ function TotalOPReport(props:IProps) {
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)'
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(129,20,203, 0.2)'
+
           ],
           borderColor: [
             'rgba(255, 99, 132, 1)',
             'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)'
+            'rgba(255, 206, 86, 1)',
+            'rgba(129,20,203,1 )',
           ],
           borderWidth: 1
         }]
