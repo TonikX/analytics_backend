@@ -30,6 +30,16 @@ class PracticeSerializer(serializers.ModelSerializer):
     practice_in_change_block = SerializerMethodField()
     permissions_info = SerializerMethodField()
 
+    def create(self, validated_data):
+        request = self.context.get('request')
+        editors = validated_data.pop('editors', None)
+        bibliographic_reference = validated_data.pop('bibliographic_reference', None)
+        practice = Practice.objects.create(**validated_data)
+        practice.bibliographic_reference.set(bibliographic_reference)
+        practice.editors.set(editors)
+        practice.editors.add(request.user)
+        return practice
+
     def get_permissions_info(self, instance):
         request = self.context.get("request")
         try:
