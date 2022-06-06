@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/MenuOutlined';
 import CloseIcon from '@material-ui/icons/CloseOutlined';
 import BookmarksIcon from '@material-ui/icons/BookmarksOutlined';
+import ChatIcon from '@material-ui/icons/Chat';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
 import NotificationsIcon from '@material-ui/icons/NotificationsNone';
@@ -32,6 +33,7 @@ interface HeaderProps extends WithStyles<typeof styles> {
     handleOpenMenu: Function;
     logout: Function;
     notificationsCount: number;
+    unreadChatsCount: number;
     isDodProfile: boolean;
 }
 
@@ -70,7 +72,7 @@ class Header extends React.PureComponent<HeaderProps>{
     };
 
     render() {
-        const {classes, openGeneralMenu, isAuth, notificationsCount, isDodProfile} = this.props;
+        const {classes, openGeneralMenu, isAuth, notificationsCount, isDodProfile, unreadChatsCount} = this.props;
         const {anchorEl} = this.state;
         const isOpenAvatarMenu = Boolean(anchorEl);
 
@@ -118,6 +120,17 @@ class Header extends React.PureComponent<HeaderProps>{
                                 >
                                     <IconButton aria-haspopup="true">
                                         <BookmarksIcon className={classes.bookmarkIcon} />
+                                    </IconButton>
+                                </Link>
+                            </Tooltip>
+
+                            <Tooltip title="Чаты">
+                                <Link to={appRouter.getChatsRoute()}
+                                      className={classes.link}
+                                >
+                                    <IconButton aria-haspopup="true">
+                                        <ChatIcon className={classes.bookmarkIcon} />
+                                        {unreadChatsCount ? <div className={classes.count}>{unreadChatsCount}</div> : <></>}
                                     </IconButton>
                                 </Link>
                             </Tooltip>

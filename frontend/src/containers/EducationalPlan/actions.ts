@@ -60,6 +60,8 @@ const planTrajectorySelectOptionalWp = createAction('EDUCATIONAL_PLAN_TRAJECTORY
 const planTrajectorySelectElectives = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SELECT_ELECTIVES');
 const planTrajectorySelectSpecialization = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SPECIALIZATION');
 
+const validateAcademicPlan = createAction('VALIDATE_ACADEMIC_PLAN');
+
 const actions: EducationalPlanActions = {
     planTrajectorySelectSpecialization,
     planTrajectorySelectOptionalWp,
@@ -102,6 +104,7 @@ const actions: EducationalPlanActions = {
     changeSorting,
     planTrajectorySetUserData,
     planTrajectorySetDirection,
+    validateAcademicPlan,
 }
 
 export default actions;

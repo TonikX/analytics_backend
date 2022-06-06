@@ -17,6 +17,18 @@ class MainService extends AnalyticsService{
             refresh: userService.getRefreshToken()
         });
     }
+
+    validateAcademicPlans() {
+        return this.get(`/api/validation/isu`);
+    }
+
+    getValidationResults() {
+        return this.get(`/api/validation/report`);
+    }
+
+    getValidationRunResults(runId: number) {
+        return this.get(`/api/validation/run/${runId}`);
+    }
 }
 
 export default MainService;

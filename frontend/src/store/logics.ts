@@ -34,6 +34,7 @@ import GeneralLogic from '../layout/logics';
 import DodProfile from  '../containers/DodProfile/logics';
 import UserProfile from  '../containers/UserProfile/logics';
 import MergeWorkProgramsLogic from  '../containers/MergeWorkPrograms/logics';
+import ChatLogic from  '../containers/Chats/logics';
 
 export default [
     ...EducationalStandardsLogic,
@@ -72,4 +73,5 @@ export default [
     ...DodProfile,
     ...UserProfile,
     ...MergeWorkProgramsLogic,
+    ...ChatLogic,
 ];

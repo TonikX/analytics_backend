@@ -81,7 +81,7 @@ class Layout extends React.Component {
 
     render() {
         const {openMenu} = this.state;
-        const {classes, fetching, errors, successMessages, auth, userGroups, isFetchingRefreshToken, mockMenu, notificationsCount} = this.props;
+        const {classes, fetching, errors, successMessages, auth, userGroups, isFetchingRefreshToken, mockMenu, notificationsCount, unreadChatsCount} = this.props;
         const isAuth = userService.isAuth() && auth;
         const isWorkProgramPage = this.isWorkProgramPage();
         const isLandingPage = this.isLandingPage();
@@ -102,6 +102,7 @@ class Layout extends React.Component {
                                 isAuth={isAuth}
                                 logout={this.logout}
                                 notificationsCount={notificationsCount}
+                                unreadChatsCount={unreadChatsCount}
                                 isDodProfile={isDodProfile}
                         />
                         <div className={classes.root}>

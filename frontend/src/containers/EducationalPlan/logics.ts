@@ -609,6 +609,27 @@ const transformDetailPlanData = createLogic({
     }
 });
 
+const validateAcademicPlan = createLogic({
+    type: planActions.validateAcademicPlan.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_SPECIALIZATION}));
+
+        service.validateAcademicPlan(action.payload)
+            .then((res) => {
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.PLAN_TRAJECTORY_SELECT_SPECIALIZATION}));
+                return done();
+            });
+    }
+});
+
 export default [
     deleteModule,
     changeModule,
@@ -631,4 +652,5 @@ export default [
     planTrajectorySelectOptionalWp,
     planTrajectorySelectElectives,
     planTrajectorySelectSpecialization,
+    validateAcademicPlan,
 ];

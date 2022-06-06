@@ -59,6 +59,7 @@ import Overview from "./containers/Overview";
 import Landing from "./containers/Landing";
 import UserProfile from "./containers/UserProfile";
 import DodProfile from "./containers/DodProfile";
+import Chats from "./containers/Chats";
 
 import EducationalStandards from "./containers/EducationalStandards";
 import EducationalStandard from "./containers/EducationalStandards/EducationalStandard";
@@ -133,6 +134,9 @@ export default () => (
             </AuthRoute>
             <AuthRoute path={routerService.getFoldersRoute()}>
                 <Folders />
+            </AuthRoute>
+            <AuthRoute path={routerService.getChatsRoute()}>
+                <Chats />
             </AuthRoute>
             <AuthRoute path={routerService.getCoursesRoute()}>
                 <Courses />

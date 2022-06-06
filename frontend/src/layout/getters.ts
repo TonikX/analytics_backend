@@ -20,6 +20,9 @@ export const getMockMenu = (state: rootState): layoutState[fields.MOCK_MENU] => 
 export const getUserGroups = (state: rootState): layoutState[fields.USER_GROUPS] => get(getStateData(state), fields.USER_GROUPS, []);
 export const getUserData = (state: rootState): layoutState[fields.USER_DATA] => get(getStateData(state), fields.USER_DATA, []);
 export const getNotificationCount = (state: rootState): layoutState[fields.NOTIFICATIONS_COUNT] => get(getStateData(state), fields.NOTIFICATIONS_COUNT, 0);
+export const getUnreadChatsCount = (state: rootState): layoutState[fields.UNREAD_CHATS_COUNT] => get(getStateData(state), fields.UNREAD_CHATS_COUNT, 0);
+export const getValidationResults = (state: rootState): layoutState[fields.VALIDATION_RESULTS] => get(getStateData(state), fields.VALIDATION_RESULTS, []);
+export const getValidationRunResults = (state: rootState): layoutState[fields.VALIDATION_RUN_RESULTS] => get(getStateData(state), fields.VALIDATION_RUN_RESULTS, []);
 export const getUsers = (state: rootState): layoutState[fields.USERS] => get(getStateData(state), fields.USERS, []);
 export const getUsersForSelector = (state: rootState): layoutState[fields.USERS] => getUsers(state).map((user: any): SelectorListType => ({
     //@ts-ignore

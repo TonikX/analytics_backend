@@ -9,7 +9,8 @@ import {
     getUserGroups,
     isFetchingByKey,
     getMockMenu,
-    getNotificationCount
+    getNotificationCount,
+    getUnreadChatsCount,
 } from './getters';
 const mapStateToProps = (state) => {
     return {
@@ -21,6 +22,7 @@ const mapStateToProps = (state) => {
         userGroups: getUserGroups(state),
         mockMenu: getMockMenu(state),
         notificationsCount: getNotificationCount(state),
+        unreadChatsCount: getUnreadChatsCount(state),
     };
 };
 
