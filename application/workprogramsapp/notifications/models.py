@@ -30,6 +30,12 @@ class ExpertiseNotification(UserNotification):
     expertise = models.ForeignKey(Expertise, on_delete=models.CASCADE, blank=True, null=True)
 
 
+class AcademicPlanUpdateNotification(UserNotification):
+    """
+    Нотификации об обновлениях в учебном плане
+    """
+    expertise = models.ForeignKey(Expertise, on_delete=models.CASCADE, blank=True, null=True)
+
 
 
 class NotificationComments(UserNotification):

@@ -1,5 +1,8 @@
 import copy
 import json
+import time
+
+from django.utils import timezone
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
     WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration
@@ -69,22 +72,27 @@ class AcademicPlanUpdateProcessor:
 
     @staticmethod
     @AcademicPlanUpdateAspect.discipline_changes_aspect
-    def __process_discipline__(work_program_object, isu_academic_plan_json, isu_academic_plan_discipline_json,
+    def __process_discipline__(work_program_object,
+                               isu_academic_plan_json,
+                               isu_academic_plan_discipline_json,
                                module_object):
         if work_program_object is None:
             work_program_object = WorkProgram(
                 title=isu_academic_plan_discipline_json['discipline_name'].strip(),
                 subject_code=isu_academic_plan_discipline_json['plan_order'],
                 qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json),
-                discipline_code=isu_academic_plan_discipline_json['disc_id']
+                discipline_code=str(isu_academic_plan_discipline_json['disc_id'])
             )
             work_program_object.save()
 
         def watchmaker(hours, ze):
+            print(hours)
+            print(ze)
             ze = ze
             sem = 0
             all_ze_indexes_in_rpd = 0
-            lecture_hours_v2 = [0, 0, 0, 0]
+            # todo was  lecture_hours_v2 = [0, 0, 0, 0], with 10752 index out of range
+            lecture_hours_v2 = [0, 0, 0, 0, 0, 0, 0, 0]
             for i in hours:
                 if ze[all_ze_indexes_in_rpd] >= 1.0:
                     lecture_hours_v2[sem] = i
@@ -144,7 +152,7 @@ class AcademicPlanUpdateProcessor:
             [float(x) for x in ze]
         )
 
-        work_program_object.discipline_code = isu_academic_plan_discipline_json['disc_id']
+        work_program_object.discipline_code = str(isu_academic_plan_discipline_json['disc_id'])
         work_program_object.save()
         return work_program_object
 
@@ -185,7 +193,8 @@ class AcademicPlanUpdateProcessor:
 
     @staticmethod
     @AcademicPlanUpdateAspect.discipline_block_changes_aspect
-    def __process_discipline_block__(discipline_block_object, isu_academic_plan_block_json, academic_plan_object):
+    def __process_discipline_block__(discipline_block_object, isu_academic_plan_block_json, academic_plan_object,
+                                     isu_academic_plan_json):
         if discipline_block_object is not None:
             return discipline_block_object
         else:
@@ -200,12 +209,11 @@ class AcademicPlanUpdateProcessor:
     @AcademicPlanUpdateAspect.discipline_block_module_changes_aspect
     def __process_block_module__(discipline_block_module_object,
                                  isu_academic_plan_block_module_json,
-                                 discipline_block_object):
+                                 discipline_block_object,
+                                 isu_academic_plan_json):
         if discipline_block_module_object is not None:
-            print('exists')
             return discipline_block_module_object
         else:
-            print('created')
             discipline_block_module_object = DisciplineBlockModule(
                 name=isu_academic_plan_block_module_json['module_name'],
                 order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
@@ -217,7 +225,10 @@ class AcademicPlanUpdateProcessor:
 
     @staticmethod
     @AcademicPlanUpdateAspect.linked_data_changes_aspect
-    def __process_linked_data__(discipline_block_module_object, work_program_object, isu_academic_plan_discipline_json):
+    def __process_linked_data__(discipline_block_module_object,
+                                work_program_object,
+                                isu_academic_plan_discipline_json,
+                                isu_academic_plan_json):
         if isu_academic_plan_discipline_json['is_optional']:
             option = 'Optionally'
         else:
@@ -373,16 +384,15 @@ class AcademicPlanUpdateProcessor:
         return work_program_id_str_up_for_isu_object
 
     def update_academic_plans(self):
-        # todo make executable
-        # academic_plans_ids = AcademicPlanUpdateConfiguration.objects.get().values_list('academic_plan_ids', flat=True)
-        academic_plans_ids = [10572]
+        academic_plans_ids = AcademicPlanUpdateConfiguration.objects.filter(updates_enabled=True).values_list(
+            'academic_plan_id', flat=True)
 
         for plan_id in academic_plans_ids:
             plan_id = str(plan_id)
 
             old_academic_plan = self.__get_old_academic_plan_by_id__(plan_id)
-            # isu_academic_plan_json = self.isu_service.get_academic_plan(plan_id)
-            isu_academic_plan_json = json.loads(json.dumps(test_plan['result']))
+            isu_academic_plan_json = self.isu_service.get_academic_plan(plan_id)
+            # isu_academic_plan_json = json.loads(json.dumps(test_plan['result']))
 
             if isu_academic_plan_json is not None:
                 self.__update_disciplines__(old_academic_plan, isu_academic_plan_json)
@@ -392,21 +402,37 @@ class AcademicPlanUpdateProcessor:
                 academic_plan = self.__process_academic_plan__(isu_academic_plan_json, field_of_study)
 
                 for block in isu_academic_plan_json['disciplines_blocks']:
-                    discipline_block_object = self.__process_discipline_block__(block, academic_plan)
+                    discipline_block_object = self.__process_discipline_block__(
+                        block,
+                        academic_plan,
+                        isu_academic_plan_json
+                    )
                     for module in block['discipline_modules']:
-                        discipline_block_module_object = self.__process_block_module__(module, discipline_block_object)
+                        discipline_block_module_object = self \
+                            .__process_block_module__(
+                            module,
+                            discipline_block_object,
+                            isu_academic_plan_json
+                        )
                         for isu_academic_plan_discipline_json in module['disciplines']:
-                            work_program_object = self \
-                                .__process_discipline__(
+                            work_program_object = self.__process_discipline__(
                                 isu_academic_plan_json,
                                 isu_academic_plan_discipline_json,
                                 discipline_block_module_object
                             )
                             work_program_in_field_of_study_object = self.__process_linked_data__(
-                                discipline_block_module_object, work_program_object, isu_academic_plan_discipline_json
+                                discipline_block_module_object,
+                                work_program_object,
+                                isu_academic_plan_discipline_json,
+                                isu_academic_plan_json
                             )
                             self.__process_work_program_id_str_up_for_isu__(
                                 work_program_in_field_of_study_object,
                                 isu_academic_plan_json,
                                 isu_academic_plan_discipline_json
                             )
+
+                academic_plan_update_configuration = AcademicPlanUpdateConfiguration.objects \
+                    .get(academic_plan_id=plan_id)
+                academic_plan_update_configuration.updated_date_time = timezone.now()
+                academic_plan_update_configuration.save()

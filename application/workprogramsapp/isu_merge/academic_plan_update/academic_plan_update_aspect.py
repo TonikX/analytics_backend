@@ -2,6 +2,7 @@ from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, Dis
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
     WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_utils import AcademicPlanUpdateUtils
+from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_logger import AcademicPlanUpdateLogger
 import copy
 
 
@@ -10,7 +11,6 @@ class AcademicPlanUpdateAspect:
     @staticmethod
     def discipline_difference_aspect(func):
         def wrapper(*args, **kwargs):
-            # print("Something is happening before the function is called.")
             result = func(*args, **kwargs)
             # todo log deleted ids
             return result
@@ -33,15 +33,16 @@ class AcademicPlanUpdateAspect:
             else:
                 old_field_of_study_object = None
 
-            updated_field_of_study = func(copy.deepcopy(old_field_of_study_object), *args, **kwargs)
+            updated_field_of_study_object = func(copy.deepcopy(old_field_of_study_object), *args, **kwargs)
 
-            validated_field = ['title']
-            for attr, value in updated_field_of_study.__dict__.items():
-                if old_field_of_study_object is None or old_field_of_study_object.__dict__[attr] != value \
-                        and validated_field.__contains__(attr):
-                    print(attr, value)
+            AcademicPlanUpdateLogger.log_changes(
+                isu_academic_plan_json['id'],
+                AcademicPlanUpdateLogger.LoggedObjectType.FIELD_OF_STUDY,
+                old_field_of_study_object,
+                updated_field_of_study_object
+            )
 
-            return updated_field_of_study
+            return updated_field_of_study_object
 
         return wrapper
 
@@ -70,9 +71,12 @@ class AcademicPlanUpdateAspect:
                 copy.deepcopy(old_implementation_academic_plan_object), *args, **kwargs
             )
 
-            for attr, value in old_implementation_academic_plan_object.__dict__.items():
-                if updated_implementation_academic_plan_object.__dict__[attr] != value:
-                    print(attr, value)
+            AcademicPlanUpdateLogger.log_changes(
+                isu_academic_plan_json['id'],
+                AcademicPlanUpdateLogger.LoggedObjectType.IMPLEMENTATION_ACADEMIC_PLAN,
+                old_implementation_academic_plan_object,
+                updated_implementation_academic_plan_object
+            )
 
             return updated_academic_plan_object
 
@@ -81,7 +85,7 @@ class AcademicPlanUpdateAspect:
     @staticmethod
     def discipline_block_changes_aspect(func):
         def wrapper(*args, **kwargs):
-            isu_academic_plan_block_json, academic_plan_object = args
+            isu_academic_plan_block_json, academic_plan_object, isu_academic_plan_json = args
 
             if DisciplineBlock.objects.filter(
                     name=isu_academic_plan_block_json['block_name'],
@@ -96,9 +100,12 @@ class AcademicPlanUpdateAspect:
 
             updated_discipline_block_object = func(copy.deepcopy(old_discipline_block_object), *args, **kwargs)
 
-            for attr, value in updated_discipline_block_object.__dict__.items():
-                if old_discipline_block_object is None or old_discipline_block_object.__dict__[attr] != value:
-                    print(attr, value)
+            AcademicPlanUpdateLogger.log_changes(
+                isu_academic_plan_json["id"],
+                AcademicPlanUpdateLogger.LoggedObjectType.DISCIPLINE_BLOCK,
+                old_discipline_block_object,
+                updated_discipline_block_object
+            )
 
             return updated_discipline_block_object
 
@@ -107,8 +114,7 @@ class AcademicPlanUpdateAspect:
     @staticmethod
     def discipline_block_module_changes_aspect(func):
         def wrapper(*args, **kwargs):
-            isu_academic_plan_block_module_json, discipline_block_object = args
-            print(discipline_block_object)
+            isu_academic_plan_block_module_json, discipline_block_object, isu_academic_plan_json = args
 
             if DisciplineBlockModule.objects.filter(
                     name=isu_academic_plan_block_module_json['module_name'],
@@ -125,10 +131,12 @@ class AcademicPlanUpdateAspect:
                 copy.deepcopy(old_discipline_block_module_object), *args, **kwargs
             )
 
-            for attr, value in updated_discipline_block_module_object.__dict__.items():
-                if old_discipline_block_module_object is None \
-                        or old_discipline_block_module_object.__dict__[attr] != value:
-                    print(attr, value)
+            AcademicPlanUpdateLogger.log_changes(
+                isu_academic_plan_json["id"],
+                AcademicPlanUpdateLogger.LoggedObjectType.DISCIPLINE_BLOCK_MODULE,
+                old_discipline_block_module_object,
+                updated_discipline_block_module_object
+            )
 
             return updated_discipline_block_module_object
 
@@ -138,13 +146,14 @@ class AcademicPlanUpdateAspect:
     def discipline_changes_aspect(func):
         def wrapper(*args, **kwargs):
             isu_academic_plan_discipline_json = args[1]
+            isu_academic_plan_json = args[0]
 
             # todo get() returned more than one WorkProgram -- it returned 11!
             if WorkProgram.objects.filter(
-                    discipline_code=int(isu_academic_plan_discipline_json['disc_id'])
+                    discipline_code=str(isu_academic_plan_discipline_json['disc_id'])
             ).exists():
                 old_work_program_object = WorkProgram.objects.filter(
-                    discipline_code=int(isu_academic_plan_discipline_json['disc_id'])
+                    discipline_code=str(isu_academic_plan_discipline_json['disc_id'])
                 )[0]
             else:
                 old_work_program_object = None
@@ -153,17 +162,12 @@ class AcademicPlanUpdateAspect:
                 copy.deepcopy(old_work_program_object), *args, **kwargs
             )
 
-            # todo similar discipline_codes identified as different ?
-            print("-----")
-            print(old_work_program_object.discipline_code)
-            print(updated_work_program_object.discipline_code)
-            print(old_work_program_object.discipline_code != updated_work_program_object.discipline_code)
-            print("-----")
-
-            for attr, value in updated_work_program_object.__dict__.items():
-                if old_work_program_object is None \
-                        or old_work_program_object.__dict__[attr] != value:
-                    print(attr, value)
+            AcademicPlanUpdateLogger.log_changes(
+                isu_academic_plan_json["id"],
+                AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM,
+                old_work_program_object,
+                updated_work_program_object
+            )
 
             return updated_work_program_object
 
@@ -172,6 +176,7 @@ class AcademicPlanUpdateAspect:
     @staticmethod
     def linked_data_changes_aspect(func):
         def wrapper(*args, **kwargs):
+            isu_academic_plan_json = args[3]
             old_work_program_change_in_discipline_block_module_object, \
             old_work_program_in_field_of_study_object, \
             updated_work_program_change_in_discipline_block_module_object, \
@@ -179,15 +184,19 @@ class AcademicPlanUpdateAspect:
                 *args, **kwargs
             )
 
-            for attr, value in updated_work_program_change_in_discipline_block_module_object.__dict__.items():
-                if old_work_program_change_in_discipline_block_module_object is None \
-                        or old_work_program_change_in_discipline_block_module_object.__dict__[attr] != value:
-                    print(attr, value)
+            AcademicPlanUpdateLogger.log_changes(
+                isu_academic_plan_json["id"],
+                AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM_CHANGE_IN_DISCIPLINE_BLOCK_MODULE,
+                old_work_program_change_in_discipline_block_module_object,
+                updated_work_program_change_in_discipline_block_module_object
+            )
 
-            for attr, value in updated_work_program_in_field_of_study_object.__dict__.items():
-                if old_work_program_in_field_of_study_object is None \
-                        or old_work_program_in_field_of_study_object.__dict__[attr] != value:
-                    print(attr, value)
+            AcademicPlanUpdateLogger.log_changes(
+                isu_academic_plan_json["id"],
+                AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM_IN_FIELD_OF_STUDY,
+                old_work_program_in_field_of_study_object,
+                updated_work_program_in_field_of_study_object
+            )
 
             return updated_work_program_in_field_of_study_object
 
@@ -217,10 +226,12 @@ class AcademicPlanUpdateAspect:
                 copy.deepcopy(old_work_program_id_str_up_for_isu_object), *args, **kwargs
             )
 
-            for attr, value in updated_work_program_id_str_up_for_isu_object.__dict__.items():
-                if old_work_program_id_str_up_for_isu_object is None \
-                        or old_work_program_id_str_up_for_isu_object.__dict__[attr] != value:
-                    print(attr, value)
+            AcademicPlanUpdateLogger.log_changes(
+                isu_academic_plan_json["id"],
+                AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM_ID_STR_UP_FOR_ISU,
+                old_work_program_id_str_up_for_isu_object,
+                updated_work_program_id_str_up_for_isu_object
+            )
 
             return updated_work_program_id_str_up_for_isu_object
 

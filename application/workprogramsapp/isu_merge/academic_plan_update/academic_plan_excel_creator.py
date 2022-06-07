@@ -3,17 +3,24 @@ import mimetypes
 import pandas as pd
 import time
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_utils import AcademicPlanUpdateUtils
-from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService
+from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
 from workprogramsapp.models import AcademicPlanUpdateConfiguration
 
 
 class AcademicPlanExcelCreator:
     def __init__(self):
-        self.excel_file_path = 'upload/isu_merge/input_add'
+        self.isu_service = IsuService(
+                    IsuUser(
+                        'rpd-constructor',
+                        'oVrLzGwN8giUEPpBDs82c8OLuzgx2b9L'
+                    )
+                )
+        self.excel_file_path = '../application/upload/isu_merge/input_add'
 
     def create_excel_file(self):
 
-        ids = AcademicPlanUpdateConfiguration.objects.get().values_list('academic_plan_ids', flat=True)
+        ids = [10572]
+        # AcademicPlanUpdateConfiguration.objects.get().values_list('academic_plan_ids', flat=True)
 
         academic_plan_df = pd.DataFrame(
             columns=['ИД_УП', 'НС_ИД', 'ШИФР_НАПРАВЛЕНИЯ', 'НАПРАВЛЕНИЕ_ПОДГОТОВКИ', 'ОП_ИД',
@@ -26,7 +33,8 @@ class AcademicPlanExcelCreator:
                      'ЗЕ_В_СЕМЕСТРАХ', 'ЛЕК_В_СЕМЕСТРАХ', 'ПРАК_В_СЕМЕСТРАХ', 'ЛАБ_В_СЕМЕСТРАХ'])
 
         for academic_plan_id in ids:
-            academic_plan_json = IsuService.get_academic_plan(academic_plan_id)
+            academic_plan_id = str(academic_plan_id)
+            academic_plan_json =  self.isu_service.get_academic_plan(academic_plan_id)
 
             line = [
                 academic_plan_json['id'],
@@ -119,7 +127,7 @@ class AcademicPlanExcelCreator:
 
         academic_plan_df["ДИСЦИПЛИНА"] = academic_plan_df["ДИСЦИПЛИНА"].apply(AcademicPlanUpdateUtils.clean_text)
 
-        academic_plan_df["МОДУЛЬ"] = academic_plan_df.apply(lambda row: AcademicPlanUpdateUtils.set_module(
+        academic_plan_df["МОДУЛЬ"] = academic_plan_df.apply(lambda row: AcademicPlanUpdateUtils().set_module(
             row["НАИМЕНОВАНИЕ_МОДУЛЯ"],
             row["НАИМЕНОВАНИЕ_БЛОКА"],
             row["НОМЕР_ПО_ПЛАНУ"]
@@ -180,4 +188,4 @@ class AcademicPlanExcelCreator:
 
         mime_type, _ = mimetypes.guess_type(self.excel_file_path)
 
-        return self.excel_file_path, mime_type
+        return self.excel_file_path + date_time + '.xlsx', mime_type

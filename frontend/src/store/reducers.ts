@@ -98,6 +98,9 @@ import {notificationsState} from "../containers/Profile/Notifications/types"
 import {GENERAL_PATH as dodProfilePath, reducer as dodProfileReducer} from "../containers/DodProfile/reducer"
 import {dodProfileState} from "../containers/DodProfile/types"
 
+import {GENERAL_PATH as academicPlanUpdatePath, reducer as academicPlanUpdateReducer} from "../containers/AcademicPlanUpdate/reducer"
+import {academicPlanUpdateState} from "../containers/AcademicPlanUpdate/types"
+
 import {GENERAL_PATH as educationalStandardPath, reducer as educationalStandardReducer} from "../containers/EducationalStandards/reducer"
 import {educationalStandardsState} from "../containers/EducationalStandards/types"
 
@@ -137,6 +140,7 @@ export interface rootState {
     [selectEducationalProgramPath]: selectEducationalProgramState,
     [coursePath]: CourseState,
     [dodProfilePath] : dodProfileState,
+    [academicPlanUpdatePath]: academicPlanUpdateState
 }
 
 export default combineReducers({
@@ -174,4 +178,5 @@ export default combineReducers({
     [selectEducationalProgramPath]: selectEducationalProgramReducer,
     [coursePath]: CourseReducer,
     [dodProfilePath]: dodProfileReducer,
+    [academicPlanUpdatePath]: academicPlanUpdateReducer
 });

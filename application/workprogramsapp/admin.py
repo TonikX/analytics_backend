@@ -11,7 +11,9 @@ from .models import (
     RouteComposition, Route, Certification, BibliographicReference, AcademicPlan,
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,
     СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
-    OnlineCourse, WorkProgramIdStrUpForIsu, GeneralizedLaborFunctions
+    OnlineCourse, WorkProgramIdStrUpForIsu, GeneralizedLaborFunctions,
+    AcademicPlanUpdateConfiguration,
+    AcademicPlanUpdateLog
 )
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, \
@@ -105,6 +107,8 @@ admin.site.register(CourseCredit)
 admin.site.register(CourseFieldOfStudy)
 admin.site.register(ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule)
 admin.site.register(WorkProgramIdStrUpForIsu)
+admin.site.register(AcademicPlanUpdateLog)
+admin.site.register(AcademicPlanUpdateConfiguration)
 admin.site.register(NotificationComments)
 admin.site.register(FeedbackRecord)
 admin.site.register(AcceptedBarsInWp)

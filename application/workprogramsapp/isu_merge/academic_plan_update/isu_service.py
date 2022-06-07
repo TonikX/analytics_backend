@@ -27,12 +27,12 @@ class IsuService:
         self.expires_in = json.loads(response)["expires_in"]
         self.requested_in = time.time()
 
-    def check_token(self):
+    def __check_token__(self):
         if self.token is None or time.time() >= self.requested_in + self.expires_in:
             self.get_access_token()
 
     def get_academic_plan(self, academic_plan_id):
-        self.check_token()
+        self.__check_token__()
         headers = {'Content-Type': "application/json", 'Authorization': "Token " + self.token}
         url = self.academic_plan_url + "/" + academic_plan_id
         response = requests.get(url, headers=headers)

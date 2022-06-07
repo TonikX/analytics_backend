@@ -54,247 +54,249 @@ import {isUserCanSeeProfessions, isUserInExpertiseGroup, isUserRpdDev} from "../
 
 export const getMockMenu = (menuArr: Array<number>): Array<any> => {
     const selectedMenus = []
-    for (let i = 0; i<menuArr.length; i++) {
+    for (let i = 0; i < menuArr.length; i++) {
 
 
-    switch (menuArr[i]){
-        case 1:
-            selectedMenus.push(...[
-                {
-                    title: 'Учебные планы',
-                    link: appRouter.getEducationPlanRoute(),
-                    icon: EducationPlanIcon,
-                    selectedIcon: EducationPlanSelectedIcon,
-                },
-                {
-                    title: 'Образовательные программы',
-                    link: appRouter.getEducationPlanInDirectionRoute(),
-                    icon: WorkProgramInDirectionIcon,
-                    selectedIcon: WorkProgramInDirectionSelectedIcon,
-                },
-                {
-                    title: 'Роли',
-                    link: appRouter.getRolesRoute(),
-                    icon: RolesIcon,
-                    selectedIcon: RolesSelectedIcon,
-                },
-                {
-                    title: 'Навыки ролей',
-                    link: appRouter.getSkillsRolesRoute(),
-                    icon: RolesSkillsIcon,
-                    selectedIcon: RolesSkillsSelectedIcon,
-                },
-                {
-                    title: 'Профессии',
-                    link: appRouter.getProfessionsRoute(),
-                    icon: ProfessionsIcon,
-                    selectedIcon: ProfessionsSelectedIcon,
-                },
-                {
-                    title: 'Навыки профессий',
-                    link: appRouter.getSkillsProfessionsRoute(),
-                    icon: ProfessionsSkillsIcon,
-                    selectedIcon: ProfessionsSkillsSelectedIcon,
-                },
-                {
-                    title: 'Подбор дисциплин',
-                    link: appRouter.getSelectDisciplineRoute(),
-                    icon: ProfessionsSkillsIcon,
-                    selectedIcon: ProfessionsSkillsSelectedIcon,
-                },
-                {
-                    title: 'Подбор ОП по профессиям',
-                    link: appRouter.getSelectEducationalProgramRoute(),
-                    icon: WorkProgramInDirectionIcon,
-                    selectedIcon: WorkProgramInDirectionSelectedIcon,
-                },
-                {
-                    title: 'Индивидуальные траектории',
-                    link: appRouter.getIndividualTrajectoriesRoute(),
-                    icon: WorkProgramInDirectionIcon,
-                    selectedIcon: WorkProgramInDirectionSelectedIcon,
-                }
-            ])
-            break
-        case 2:
-            selectedMenus.push(...[
-                {
-                    title: 'Предметные области',
-                    link: appRouter.getSubjectAreaRoute(),
-                    icon: SubjectAreaIcon,
-                    selectedIcon: SubjectAreaSelectedIcon,
-                },
-                {
-                    title: 'Учебные сущности',
-                    link: appRouter.getTrainingEntitiesRoute(),
-                    icon: TrainingEntitiesIcon,
-                    selectedIcon: TrainingEntitiesSelectedIcon,
-                },
-                {
-                    title: 'Связи',
-                    link: appRouter.getEntityToEntityRoute(),
-                    icon: EntityToEntityIcon,
-                    selectedIcon: EntityToEntitySelectedIcon,
-                },
-                {
-                    title: 'Рабочие программы',
-                    link: appRouter.getWorkProgramListRoute(),
-                    icon: WorkProgramIcon,
-                    selectedIcon: WorkProgramSelectedIcon,
-                },
-                {
-                    title: 'Источники',
-                    link: appRouter.getLiteratureRoute(),
-                    icon: LiteratureIcon,
-                    selectedIcon: LiteratureSelectedIcon,
-                },
-                {
-                    title: 'Структурные подразделения',
-                    link: appRouter.getStructuralUnitsRoute(),
-                    icon: IndicatorsIcon,
-                    selectedIcon: IndicatorsSelectedIcon,
-                },
-                {
-                    title: 'Экспертизы',
-                    link: appRouter.getExpertisesRoute(),
-                    icon: WorkProgramIcon,
-                    selectedIcon: WorkProgramSelectedIcon,
-                },
-            ])
-            break
-        case 3:
-            selectedMenus.push(...[
-                {
-                    title: 'Рабочие программы',
-                    link: appRouter.getWorkProgramListRoute(),
-                    icon: WorkProgramIcon,
-                    selectedIcon: WorkProgramSelectedIcon,
-                },
-                {
-                    title: 'Учебные планы',
-                    link: appRouter.getEducationPlanRoute(),
-                    icon: EducationPlanIcon,
-                    selectedIcon: EducationPlanSelectedIcon,
-                },
-                {
-                    title: 'Образовательные модули',
-                    link: appRouter.getTrainingModulesRoute(),
-                    icon: EducationPlanIcon,
-                    selectedIcon: EducationPlanSelectedIcon,
-                },
-            ])
-            break
-        case 4:
-            selectedMenus.push(...[
-                {
-                    title: 'Рабочие программы',
-                    link: appRouter.getWorkProgramListRoute(),
-                    icon: WorkProgramIcon,
-                    selectedIcon: WorkProgramSelectedIcon,
-                },
-                {
-                    title: 'Направления',
-                    link: appRouter.getDirectionRoute(),
-                    icon: DirectionsIcon,
-                    selectedIcon: DirectionsSelectedIcon,
-                },
-                {
-                    title: 'Учебные планы',
-                    link: appRouter.getEducationPlanRoute(),
-                    icon: EducationPlanIcon,
-                    selectedIcon: EducationPlanSelectedIcon,
-                },
-                {
-                    title: 'Образовательные модули',
-                    link: appRouter.getTrainingModulesRoute(),
-                    icon: EducationPlanIcon,
-                    selectedIcon: EducationPlanSelectedIcon,
-                },
-                {
-                    title: 'Образовательные программы',
-                    link: appRouter.getEducationPlanInDirectionRoute(),
-                    icon: WorkProgramInDirectionIcon,
-                    selectedIcon: WorkProgramInDirectionSelectedIcon,
-                },
-            ])
-            break
-        case 5:
-            selectedMenus.push(...[
-                {
-                    title: 'Направления',
-                    link: appRouter.getDirectionRoute(),
-                    icon: DirectionsIcon,
-                    selectedIcon: DirectionsSelectedIcon,
-                },
-                {
-                    title: 'Учебные планы',
-                    link: appRouter.getEducationPlanRoute(),
-                    icon: EducationPlanIcon,
-                    selectedIcon: EducationPlanSelectedIcon,
-                },
-                {
-                    title: 'Образовательные модули',
-                    link: appRouter.getTrainingModulesRoute(),
-                    icon: EducationPlanIcon,
-                    selectedIcon: EducationPlanSelectedIcon,
-                },
-                {
-                    title: 'Образовательные программы',
-                    link: appRouter.getEducationPlanInDirectionRoute(),
-                    icon: WorkProgramInDirectionIcon,
-                    selectedIcon: WorkProgramInDirectionSelectedIcon,
-                },
-                {
-                    title: 'Общие характеристики',
-                    link: appRouter.getEducationalProgram(),
-                    icon: WorkProgramInDirectionIcon,
-                    selectedIcon: WorkProgramInDirectionSelectedIcon,
-                },
-                {
-                    title: 'Роли',
-                    link: appRouter.getRolesRoute(),
-                    icon: RolesIcon,
-                    selectedIcon: RolesSelectedIcon,
-                },
-                {
-                    title: 'Навыки ролей',
-                    link: appRouter.getSkillsRolesRoute(),
-                    icon: RolesSkillsIcon,
-                    selectedIcon: RolesSkillsSelectedIcon,
-                },
-                {
-                    title: 'Профессии',
-                    link: appRouter.getProfessionsRoute(),
-                    icon: ProfessionsIcon,
-                    selectedIcon: ProfessionsSelectedIcon,
-                },
-                {
-                    title: 'Навыки профессий',
-                    link: appRouter.getSkillsProfessionsRoute(),
-                    icon: ProfessionsSkillsIcon,
-                    selectedIcon: ProfessionsSkillsSelectedIcon,
-                },
-                {
-                    title: 'Индивидуальные траектории',
-                    link: appRouter.getIndividualTrajectoriesRoute(),
-                    icon: WorkProgramInDirectionIcon,
-                    selectedIcon: WorkProgramInDirectionSelectedIcon,
-                }
-            ])
-            break
-        case 6:
-            selectedMenus.push(...[
-                {
-                    title: 'Онлайн курсы',
-                    link: appRouter.getCoursesRoute(),
-                    icon: CoursesIcon,
-                    selectedIcon: CoursesSelectedIcon,
-                },
-            ])
-            break
-        case 7: break
-        case 8: break
-    }
+        switch (menuArr[i]) {
+            case 1:
+                selectedMenus.push(...[
+                    {
+                        title: 'Учебные планы',
+                        link: appRouter.getEducationPlanRoute(),
+                        icon: EducationPlanIcon,
+                        selectedIcon: EducationPlanSelectedIcon,
+                    },
+                    {
+                        title: 'Образовательные программы',
+                        link: appRouter.getEducationPlanInDirectionRoute(),
+                        icon: WorkProgramInDirectionIcon,
+                        selectedIcon: WorkProgramInDirectionSelectedIcon,
+                    },
+                    {
+                        title: 'Роли',
+                        link: appRouter.getRolesRoute(),
+                        icon: RolesIcon,
+                        selectedIcon: RolesSelectedIcon,
+                    },
+                    {
+                        title: 'Навыки ролей',
+                        link: appRouter.getSkillsRolesRoute(),
+                        icon: RolesSkillsIcon,
+                        selectedIcon: RolesSkillsSelectedIcon,
+                    },
+                    {
+                        title: 'Профессии',
+                        link: appRouter.getProfessionsRoute(),
+                        icon: ProfessionsIcon,
+                        selectedIcon: ProfessionsSelectedIcon,
+                    },
+                    {
+                        title: 'Навыки профессий',
+                        link: appRouter.getSkillsProfessionsRoute(),
+                        icon: ProfessionsSkillsIcon,
+                        selectedIcon: ProfessionsSkillsSelectedIcon,
+                    },
+                    {
+                        title: 'Подбор дисциплин',
+                        link: appRouter.getSelectDisciplineRoute(),
+                        icon: ProfessionsSkillsIcon,
+                        selectedIcon: ProfessionsSkillsSelectedIcon,
+                    },
+                    {
+                        title: 'Подбор ОП по профессиям',
+                        link: appRouter.getSelectEducationalProgramRoute(),
+                        icon: WorkProgramInDirectionIcon,
+                        selectedIcon: WorkProgramInDirectionSelectedIcon,
+                    },
+                    {
+                        title: 'Индивидуальные траектории',
+                        link: appRouter.getIndividualTrajectoriesRoute(),
+                        icon: WorkProgramInDirectionIcon,
+                        selectedIcon: WorkProgramInDirectionSelectedIcon,
+                    }
+                ])
+                break
+            case 2:
+                selectedMenus.push(...[
+                    {
+                        title: 'Предметные области',
+                        link: appRouter.getSubjectAreaRoute(),
+                        icon: SubjectAreaIcon,
+                        selectedIcon: SubjectAreaSelectedIcon,
+                    },
+                    {
+                        title: 'Учебные сущности',
+                        link: appRouter.getTrainingEntitiesRoute(),
+                        icon: TrainingEntitiesIcon,
+                        selectedIcon: TrainingEntitiesSelectedIcon,
+                    },
+                    {
+                        title: 'Связи',
+                        link: appRouter.getEntityToEntityRoute(),
+                        icon: EntityToEntityIcon,
+                        selectedIcon: EntityToEntitySelectedIcon,
+                    },
+                    {
+                        title: 'Рабочие программы',
+                        link: appRouter.getWorkProgramListRoute(),
+                        icon: WorkProgramIcon,
+                        selectedIcon: WorkProgramSelectedIcon,
+                    },
+                    {
+                        title: 'Источники',
+                        link: appRouter.getLiteratureRoute(),
+                        icon: LiteratureIcon,
+                        selectedIcon: LiteratureSelectedIcon,
+                    },
+                    {
+                        title: 'Структурные подразделения',
+                        link: appRouter.getStructuralUnitsRoute(),
+                        icon: IndicatorsIcon,
+                        selectedIcon: IndicatorsSelectedIcon,
+                    },
+                    {
+                        title: 'Экспертизы',
+                        link: appRouter.getExpertisesRoute(),
+                        icon: WorkProgramIcon,
+                        selectedIcon: WorkProgramSelectedIcon,
+                    },
+                ])
+                break
+            case 3:
+                selectedMenus.push(...[
+                    {
+                        title: 'Рабочие программы',
+                        link: appRouter.getWorkProgramListRoute(),
+                        icon: WorkProgramIcon,
+                        selectedIcon: WorkProgramSelectedIcon,
+                    },
+                    {
+                        title: 'Учебные планы',
+                        link: appRouter.getEducationPlanRoute(),
+                        icon: EducationPlanIcon,
+                        selectedIcon: EducationPlanSelectedIcon,
+                    },
+                    {
+                        title: 'Образовательные модули',
+                        link: appRouter.getTrainingModulesRoute(),
+                        icon: EducationPlanIcon,
+                        selectedIcon: EducationPlanSelectedIcon,
+                    },
+                ])
+                break
+            case 4:
+                selectedMenus.push(...[
+                    {
+                        title: 'Рабочие программы',
+                        link: appRouter.getWorkProgramListRoute(),
+                        icon: WorkProgramIcon,
+                        selectedIcon: WorkProgramSelectedIcon,
+                    },
+                    {
+                        title: 'Направления',
+                        link: appRouter.getDirectionRoute(),
+                        icon: DirectionsIcon,
+                        selectedIcon: DirectionsSelectedIcon,
+                    },
+                    {
+                        title: 'Учебные планы',
+                        link: appRouter.getEducationPlanRoute(),
+                        icon: EducationPlanIcon,
+                        selectedIcon: EducationPlanSelectedIcon,
+                    },
+                    {
+                        title: 'Образовательные модули',
+                        link: appRouter.getTrainingModulesRoute(),
+                        icon: EducationPlanIcon,
+                        selectedIcon: EducationPlanSelectedIcon,
+                    },
+                    {
+                        title: 'Образовательные программы',
+                        link: appRouter.getEducationPlanInDirectionRoute(),
+                        icon: WorkProgramInDirectionIcon,
+                        selectedIcon: WorkProgramInDirectionSelectedIcon,
+                    },
+                ])
+                break
+            case 5:
+                selectedMenus.push(...[
+                    {
+                        title: 'Направления',
+                        link: appRouter.getDirectionRoute(),
+                        icon: DirectionsIcon,
+                        selectedIcon: DirectionsSelectedIcon,
+                    },
+                    {
+                        title: 'Учебные планы',
+                        link: appRouter.getEducationPlanRoute(),
+                        icon: EducationPlanIcon,
+                        selectedIcon: EducationPlanSelectedIcon,
+                    },
+                    {
+                        title: 'Образовательные модули',
+                        link: appRouter.getTrainingModulesRoute(),
+                        icon: EducationPlanIcon,
+                        selectedIcon: EducationPlanSelectedIcon,
+                    },
+                    {
+                        title: 'Образовательные программы',
+                        link: appRouter.getEducationPlanInDirectionRoute(),
+                        icon: WorkProgramInDirectionIcon,
+                        selectedIcon: WorkProgramInDirectionSelectedIcon,
+                    },
+                    {
+                        title: 'Общие характеристики',
+                        link: appRouter.getEducationalProgram(),
+                        icon: WorkProgramInDirectionIcon,
+                        selectedIcon: WorkProgramInDirectionSelectedIcon,
+                    },
+                    {
+                        title: 'Роли',
+                        link: appRouter.getRolesRoute(),
+                        icon: RolesIcon,
+                        selectedIcon: RolesSelectedIcon,
+                    },
+                    {
+                        title: 'Навыки ролей',
+                        link: appRouter.getSkillsRolesRoute(),
+                        icon: RolesSkillsIcon,
+                        selectedIcon: RolesSkillsSelectedIcon,
+                    },
+                    {
+                        title: 'Профессии',
+                        link: appRouter.getProfessionsRoute(),
+                        icon: ProfessionsIcon,
+                        selectedIcon: ProfessionsSelectedIcon,
+                    },
+                    {
+                        title: 'Навыки профессий',
+                        link: appRouter.getSkillsProfessionsRoute(),
+                        icon: ProfessionsSkillsIcon,
+                        selectedIcon: ProfessionsSkillsSelectedIcon,
+                    },
+                    {
+                        title: 'Индивидуальные траектории',
+                        link: appRouter.getIndividualTrajectoriesRoute(),
+                        icon: WorkProgramInDirectionIcon,
+                        selectedIcon: WorkProgramInDirectionSelectedIcon,
+                    }
+                ])
+                break
+            case 6:
+                selectedMenus.push(...[
+                    {
+                        title: 'Онлайн курсы',
+                        link: appRouter.getCoursesRoute(),
+                        icon: CoursesIcon,
+                        selectedIcon: CoursesSelectedIcon,
+                    },
+                ])
+                break
+            case 7:
+                break
+            case 8:
+                break
+        }
     }
 
     selectedMenus.push([
@@ -379,7 +381,7 @@ export default (groups: Array<string>) => {
         },
     ];
 
-    if (isUserInExpertiseGroup(groups)){
+    if (isUserInExpertiseGroup(groups)) {
         secondMenu.push(
             {
                 title: 'Экспертизы',
@@ -471,26 +473,31 @@ export default (groups: Array<string>) => {
         }
     ];
 
-    const sixthMenu =  [{
-      title: 'Отчеты',
-      link: appRouter.getRecordsRoute(),
-      icon: ReportsIcon,
-      selectedIcon: ReportsSelectedIcon,
-   }]
+    const sixthMenu = [{
+        title: 'Отчеты',
+        link: appRouter.getRecordsRoute(),
+        icon: ReportsIcon,
+        selectedIcon: ReportsSelectedIcon,
+    }, {
+        title: 'Обновления учебных планов',
+        link: appRouter.getAcademicPlanUpdateRoute(),
+        icon: WorkProgramInDirectionIcon,
+        selectedIcon: WorkProgramInDirectionSelectedIcon,
+    }]
 
     const menu = [];
 
-    if (firstMenu.length){
+    if (firstMenu.length) {
         menu.push(firstMenu);
     }
 
     menu.push(secondMenu);
 
-    if (thirdMenu.length){
+    if (thirdMenu.length) {
         menu.push(thirdMenu);
     }
 
-    if (fourthMenu.length){
+    if (fourthMenu.length) {
         menu.push(fourthMenu);
     }
 

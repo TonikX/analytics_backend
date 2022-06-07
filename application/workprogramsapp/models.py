@@ -1,4 +1,5 @@
 import datetime
+from enum import Enum
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -855,17 +856,90 @@ class Zun(models.Model):
 
 
 class AcademicPlanUpdateConfiguration(models.Model):
-    academic_plan_ids = models.CharField(
+    academic_plan_id = models.CharField(
         max_length=1024,
-        verbose_name="Множество учебных планов для обновления",
+        verbose_name="Id учебного плана для обновления",
         blank=True,
         null=False
     )
-    update_interval = models.IntegerField(
-        verbose_name="Количество дней между обновлениями учебных планов",
+    academic_plan_title = models.CharField(
+        max_length=1024,
+        verbose_name="Название учебного плана для обновления",
+        blank=True,
+        null=False
+    )
+    updated_date_time = models.DateTimeField(
+        editable=True,
+        blank=False,
+        null=True,
+        verbose_name='Дата обновления'
+    )
+    updates_enabled = models.BooleanField(verbose_name="Обновления включены", blank=False, null=False)
+
+    class Meta:
+        ordering = ['id']
+
+class AcademicPlanUpdateSchedulerConfiguration(models.Model):
+    days_interval = models.PositiveIntegerField(
+        verbose_name="Интервал обновления в днях",
+        blank=True,
+        null=True
+    )
+    execution_hours = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        verbose_name='Время запуска обновления'
+    )
+    updated_timestamp = models.BigIntegerField(
+        blank=True,
+        null=True,
+        verbose_name='Дата последнего обновления'
+    )
+
+
+
+class AcademicPlanUpdateLog(models.Model):
+    academic_plan_id = models.PositiveIntegerField(
+        verbose_name="ID учебного плана в ИСУ",
         blank=False,
         null=False
     )
+    object_type = models.PositiveIntegerField(
+        verbose_name="Измененный объект",
+        blank=False,
+        null=False
+    )
+    field_name = models.CharField(
+        max_length=1024,
+        verbose_name="Измененное поле",
+        blank=False,
+        null=False
+    )
+    old_value = models.CharField(
+        max_length=1024,
+        verbose_name="Старое значение",
+        blank=True,
+        null=True
+    )
+    new_value = models.CharField(
+        max_length=1024,
+        verbose_name="Новое значение",
+        blank=True,
+        null=True
+    )
+    updated_date_time = models.DateTimeField(
+        editable=True,
+        blank=False,
+        null=False,
+        verbose_name='Дата обновления'
+    )
+
+    class Meta:
+            ordering = ['id']
+
+    def __str__(self):
+        return str(self.object_type) + " " + str(self.field_name) + " " + str(self.old_value) + " " + str(
+            self.new_value) + " " + str(self.updated_date_time)
 
 
 class Competence(models.Model):

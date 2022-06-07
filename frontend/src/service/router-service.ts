@@ -32,6 +32,8 @@ const DODPROFILE = 'dod-profile'
 
 const RECORDS = 'records';
 
+const ACADEMIC_PLAN_UPDATE = 'academic-plan-update';
+
 const STRUCTURAL_UNITS = 'structural-units';
 const NOTIFICATIONS = 'notifications';
 
@@ -39,7 +41,7 @@ const SEPARATOR = '/';
 
 export default class RouterService {
 
-    static routerService : RouterService | null = null;
+    static routerService: RouterService | null = null;
 
     static factory(): RouterService {
         let routerServiceInstance = this.routerService;
@@ -63,11 +65,15 @@ export default class RouterService {
         return SEPARATOR + PROFESSIONAL_STANDARDS;
     };
 
+    getAcademicPlanUpdateRoute = () => {
+        return SEPARATOR + ACADEMIC_PLAN_UPDATE;
+    }
+
     getEducationalStandardsRoute = () => {
         return SEPARATOR + EDUCATIONAL_STANDARDS;
     };
 
-    getProfessionalStandardIDRoute = (id: number| string) => {
+    getProfessionalStandardIDRoute = (id: number | string) => {
         return SEPARATOR + PROFESSIONAL_STANDARDS + SEPARATOR + id;
     };
 
@@ -176,7 +182,7 @@ export default class RouterService {
     };
 
     getUserProfile = () => {
-      return SEPARATOR + 'user-profile';
+        return SEPARATOR + 'user-profile';
     };
 
     getSkillsRolesRoute = () => {

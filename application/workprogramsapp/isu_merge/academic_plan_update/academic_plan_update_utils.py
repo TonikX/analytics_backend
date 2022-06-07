@@ -5,7 +5,7 @@ import json
 
 class ModuleOrderProvider:
     def __init__(self):
-        with open('workprogramsapp/modules-order.json', 'r', encoding='utf-8') as fh:
+        with open('../application/workprogramsapp/modules-order.json', 'r', encoding='utf-8') as fh:
             self.order = json.load(fh)
 
     def get_module_order(self):
@@ -20,6 +20,30 @@ class AcademicPlanUpdateUtils:
     def clean_text(text):
         cleaned = re.sub('\s+', ' ', text)
         return cleaned.strip()
+
+    @staticmethod
+    def hours_status(creds, lec, prac, lab):
+        status = ["0" for _ in range(12)]
+        if any(creds):
+            if any(lec) or any(prac) or any(lab):
+                for i in range(len(creds)):
+                    if creds[i] != 0:
+                        if creds[i] * 36 == lec[i] + prac[i] + lab[i]:
+                            status[i] = "ЗЕ равно сумме часов без СРС"
+                        elif creds[i] * 36 < lec[i] + prac[i] + lab[i]:
+                            status[i] = "ЗЕ меньше, чем часов"
+                        else:
+                            status[i] = "ОК"
+            else:
+                return "ЗЕ есть, часов нет"
+        else:
+            if any(lec) or any(prac) or any(lab):
+                return "Нет ЗЕ, но есть часы"
+            else:
+                return "Нет ничего"
+        status = set(status)
+        status.remove("0")
+        return "".join(sorted(status, reverse=True))
 
     def set_module(self, module, block, number):
         block = self.clean_text(block)

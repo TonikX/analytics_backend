@@ -32,6 +32,7 @@ import IndividualEducationalPlansLogic from '../containers/IndividualEducational
 import ProfileNotificationsLogic from '../containers/Profile/Notifications/logics';
 import GeneralLogic from '../layout/logics';
 import DodProfile from  '../containers/DodProfile/logics';
+import AcademicPlanUpdate from '../containers/AcademicPlanUpdate/logics';
 
 export default [
     ...EducationalStandardsLogic,
@@ -68,4 +69,5 @@ export default [
     ...SelectEducationalProgramLogic,
     ...CourseLogic,
     ...DodProfile,
+    ...AcademicPlanUpdate
 ];
