@@ -24,6 +24,7 @@ import styles from './CreateModal.styles';
 import QualificationSelector from "../../../components/QualificationSelector";
 import UserSelector from "../../Profile/UserSelector";
 import {filterFields} from "../../EduationPlanInDirection/enum";
+import Chip from "@material-ui/core/Chip";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -32,9 +33,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [EducationProgramFields.YEAR]: '2020',
             [EducationProgramFields.MANAGER]: {},
             [EducationProgramFields.QUALIFICATION]: '',
-            [EducationProgramFields.ACADEMIC_PLAN_FOR_EP]: {
-                [EducationProgramFields.ID]: null,
-            },
+            [EducationProgramFields.ACADEMIC_PLAN_FOR_EP]: []
         },
     };
 
@@ -60,21 +59,44 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {educationalProgram} = this.state;
 
         if (educationalProgram[EducationProgramCharacteristicFields.ID]){
-            this.props.actions.changeEducationalProgram(educationalProgram);
+            const data = {
+                ...educationalProgram,
+                [EducationProgramFields.ACADEMIC_PLAN_FOR_EP]: educationalProgram[EducationProgramFields.ACADEMIC_PLAN_FOR_EP].map((item: any) => item.value)
+            }
+            this.props.actions.changeEducationalProgram(data);
         } else {
-            this.props.actions.createEducationalProgram(educationalProgram);
+            const data = {
+                ...educationalProgram,
+                [EducationProgramFields.ACADEMIC_PLAN_FOR_EP]: educationalProgram[EducationProgramFields.ACADEMIC_PLAN_FOR_EP].map((item: any) => item.value)
+            }
+            this.props.actions.createEducationalProgram(data);
         }
     }
 
-    handleChangePlan = (value: ReactText) => {
+    deleteItem = (value: ReactText) => {
         const {educationalProgram} = this.state;
 
         this.setState({
             educationalProgram: {
                 ...educationalProgram,
-                [EducationProgramFields.ACADEMIC_PLAN_FOR_EP]: {
-                    [EducationProgramFields.ID]: value,
-                },
+                [EducationProgramFields.ACADEMIC_PLAN_FOR_EP]: educationalProgram[EducationProgramFields.ACADEMIC_PLAN_FOR_EP].filter((item: any) => item.value !== value)
+            },
+        })
+    }
+
+    handleChangePlan = (value: ReactText, label: string) => {
+        const {educationalProgram} = this.state;
+
+        this.setState({
+            educationalProgram: {
+                ...educationalProgram,
+                [EducationProgramFields.ACADEMIC_PLAN_FOR_EP]: [
+                    ...educationalProgram[EducationProgramFields.ACADEMIC_PLAN_FOR_EP] ?? [],
+                    {
+                        value,
+                        label,
+                    }
+                ]
             },
         })
     }
@@ -128,7 +150,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const disableButton =
             // get(educationalProgram, [EducationProgramFields.YEAR, 'length']) === 0
-            !Boolean(get(educationalProgram, [EducationProgramFields.ACADEMIC_PLAN_FOR_EP, EducationProgramFields.ID]))
+            !(get(educationalProgram, [EducationProgramFields.ACADEMIC_PLAN_FOR_EP, 'length'], 0))
             // || get(educationalProgram, [EducationProgramFields.QUALIFICATION, 'length']) === 0
         ;
 
@@ -156,7 +178,17 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     <QualificationSelector onChange={this.changeQualification}
                                            value={educationalProgram[EducationProgramFields.QUALIFICATION]}
                     />
-                    <EducationPlanInDirectionSelector handleChange={this.handleChangePlan} disabled={disableSelector} />
+                    <EducationPlanInDirectionSelector handleChange={this.handleChangePlan} disabled={disableSelector} value={undefined} />
+
+                    {Boolean(educationalProgram[EducationProgramFields.ACADEMIC_PLAN_FOR_EP]?.length) &&
+                      <div style={{marginBottom: 10, marginTop: '-20px'}}>
+                          {educationalProgram[EducationProgramFields.ACADEMIC_PLAN_FOR_EP].map(({label, value}) =>
+                            <Chip label={label} onDelete={() => this.deleteItem(value)}
+                                  style={{marginRight: 10, marginBottom: 10}}/>
+                          )}
+                      </div>
+                    }
+
                     <UserSelector handleChange={this.handleChangeUser} selectorLabel="Руководитель *" disabled={disableSelector}/>
                 </DialogContent>
                 <DialogActions className={classes.actions}>

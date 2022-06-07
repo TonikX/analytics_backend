@@ -33,7 +33,7 @@ class Service extends AnalyticsService{
 
     createEducationProgram(program: any){
         return this.post(`/api/general_characteristic/create`, {
-            "educational_program": [program[EducationProgramFields.ACADEMIC_PLAN_FOR_EP][EducationProgramFields.ID]],
+            "educational_program": program[EducationProgramFields.ACADEMIC_PLAN_FOR_EP],
             // "qualification": program[EducationProgramFields.QUALIFICATION],
             "manager": program[EducationProgramFields.MANAGER],
             // "year_of_recruitment": program[EducationProgramFields.YEAR],

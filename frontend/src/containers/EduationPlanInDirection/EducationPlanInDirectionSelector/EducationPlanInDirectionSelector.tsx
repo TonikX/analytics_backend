@@ -36,12 +36,12 @@ class EducationPlanInDirectionSelectorByName extends React.PureComponent<Educati
         this.props.actions.setEducationalPlansInDirection([]);
     }
 
-    saveEducationalPlanField = (value: ReactText) => {
+    saveEducationalPlanField = (value: ReactText, label: string) => {
         this.setState({
             value: value
         })
 
-        this.props.handleChange(value);
+        this.props.handleChange(value, label);
     }
 
     render() {
