@@ -4,7 +4,6 @@ import {appRouter} from "../../service/router-service";
 import get from "lodash/get";
 import {WorkProgramGeneralFields} from "../WorkProgram/enum";
 import {PracticeFields} from "../Practice/enum";
-import {CertificationFields} from "../FinalCertification/enum";
 
 export const getLink = (expertise: ExpertiseType) => {
     if (isWorkProgram(expertise)) {
@@ -12,7 +11,7 @@ export const getLink = (expertise: ExpertiseType) => {
     } else if (isPractice(expertise)) {
         return appRouter.getPracticeLink(get(expertise, [ExpertisesFields.PRACTICE, PracticeFields.ID]));
     } else {
-        return appRouter.getFinalCertificationLink(get(expertise, [ExpertisesFields.GIA, CertificationFields.ID]));
+        return appRouter.getFinalCertificationLink(get(expertise, [ExpertisesFields.GIA]));
     }
 }
 
@@ -22,7 +21,7 @@ export const getLinkLabel = (expertise: ExpertiseType) => {
     } else if (isPractice(expertise)) {
         return get(expertise, [ExpertisesFields.PRACTICE, PracticeFields.TITLE]);
     } else {
-        return get(expertise, [ExpertisesFields.GIA, CertificationFields.TITLE]);
+        return 'ГИА';
     }
 }
 

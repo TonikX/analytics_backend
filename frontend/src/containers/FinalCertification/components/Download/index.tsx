@@ -58,7 +58,6 @@ class Download extends React.Component<DownloadProps> {
         const arrayBuffer = await fetch(rawFile).then(r => r.arrayBuffer())
         const template = new Buffer(arrayBuffer);
         const preparedFields = this.getPreparedFields(fields);
-        console.log(preparedFields);
         const report = await createReport({
             template,
             data: preparedFields,

@@ -70,7 +70,6 @@ class InputList extends React.Component<InputListProps> {
 
     saveField = (textList: Array<string>) => {
         const value = textList.join(DELIMITER);
-        console.log('saving value: ' + value);
         this.props.actions.saveField({field: this.props.fieldName, value});
     }
 

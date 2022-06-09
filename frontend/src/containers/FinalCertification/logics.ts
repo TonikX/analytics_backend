@@ -21,7 +21,6 @@ const getCertification = createLogic({
         service.getCertification(id)
             .then((res) => {
                 const erroredFields = getErroredFields(res.data);
-                console.log(erroredFields);
                 dispatch(CertificationActions.setCertification(res.data));
                 dispatch(CertificationActions.setErroredFields(erroredFields));
             })

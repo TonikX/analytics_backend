@@ -6,10 +6,9 @@ import styles from "../styles";
 import {Typography, WithStyles} from "@material-ui/core";
 import {CertificationActions, CertificationState} from "../../types";
 import Input from "../../components/Input";
-import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 import {StructuralUnitsActions} from "../../../StructuralUnits/types";
-import {RussianCertificationFields} from "../../constants";
+import StructuralUnit from "../../components/StructuralUnit";
 
 interface MainInfoProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
@@ -35,7 +34,7 @@ class MainInfo extends React.Component<MainInfoProps> {
 
     render() {
 
-        const {classes, structuralUnitsList, fields} = this.props;
+        const {classes} = this.props;
 
         return (
             <div className={classes.content}>
@@ -51,14 +50,7 @@ class MainInfo extends React.Component<MainInfoProps> {
                     <div className={classes.rightColumn}>
                         <Input fieldName={CertificationFields.OP_LEADER}/>
                         <Input fieldName={CertificationFields.AUTHORS}/>
-                        <SearchSelector label={RussianCertificationFields[CertificationFields.STRUCTURAL_UNIT]}
-                                        changeSearchText={this.handleChangeStructuralUnitSearchText}
-                                        list={structuralUnitsList}
-                                        className={classes.structuralUnit}
-                                        changeItem={this.changeStructuralUnit}
-                                        value={String(fields[CertificationFields.STRUCTURAL_UNIT]?.id)}
-                                        valueLabel={fields[CertificationFields.STRUCTURAL_UNIT]?.title ?? ''}
-                        />
+                        <StructuralUnit/>
                     </div>
                 </div>
             </div>

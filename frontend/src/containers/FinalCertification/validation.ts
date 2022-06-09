@@ -1,4 +1,5 @@
 import {CertificationFields} from "./enum";
+import {PracticeFields} from "../Practice/enum";
 
 export type Error = {
     message: string;
@@ -46,6 +47,9 @@ const validationRules = {
     [CertificationFields.WORK_ON_VKR_CONTENT_TIME]: {
         presence,
     },
+    [PracticeFields.STRUCTURAL_UNIT]: {
+        presence,
+    }
 } as any;
 
 const validateNumber = (value: string) => {
@@ -106,10 +110,6 @@ export const getErroredFields = (state: any) => {
     for (const [,field] of Object.entries(CertificationFields)) {
         const value = state[field];
         const error = validate(field, value);
-        if (field === CertificationFields.DISCIPLINE_CODE) {
-            console.log(value);
-            console.log(validate(field, value));
-        }
         if (error) {
             erroredFields.push(field);
         }
