@@ -30,6 +30,7 @@ export enum CertificationFields {
     ANSWERS_QUALITY_MARKS = "answers_quality_marks",
     GIA_BASE = "gia_base",
     EDITORS = 'editors',
+    PERMISSIONS_INFO = 'permissions_info',
 }
 
 export enum TemplateTextCertificationFields {
@@ -86,6 +87,33 @@ export enum fetchingTypes {
     CREATE_CERTIFICATION = 'CREATE_CERTIFICATION',
     GET_CERTIFICATION_LIST = 'GET_CERTIFICATION_LIST',
     CREATE_EXPERTISE = 'CREATE_EXPERTISE',
+    CHANGE_EXPERTISE_STATE = 'CHANGE_EXPERTISE_STATE',
+}
+
+export enum PermissionsInfoFields {
+    CAN_EDIT = 'can_edit',
+    EXPERTISE_STATUS = 'expertise_status',
+    USE_CHAT_WITH_ID_EXPERTISE = 'use_chat_with_id_expertise',
+    CAN_COMMENT = 'can_comment',
+    CAN_APPROVE = 'can_approve',
+    YOUR_APPROVE_STATUS = 'your_approve_status',
+    USER_EXPERTISE_ID = 'user_expertise_id',
+}
+
+export enum ExpertiseStatus {
+    WORK = 'WK',
+    EXPERTISE = 'EX',
+    APPROVE = 'AC',
+    ARCHIVE = 'AR',
+    REWORK = 'RE',
+}
+
+export enum CommentFields {
+    DATE = 'comment_date',
+    TEXT = 'comment_text',
+    ID = 'id',
+    USER_EXPERTISE = 'user_expertise',
+    EXPERT = 'expert',
 }
 
 export const OptionalRequirementsRussian = new Map(Object.entries({

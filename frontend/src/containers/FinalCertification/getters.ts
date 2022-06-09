@@ -4,6 +4,7 @@ import {GENERAL_PATH} from "./reducers";
 import {certificationPageState, CertificationState, Id, TemplateTextState} from "./types";
 import {initialState} from "./reducers";
 import {CertificationFields} from "./enum";
+import {PermissionsInfoState} from "./types";
 
 const getStateData = (state: rootState): certificationPageState => get(state, GENERAL_PATH);
 
@@ -20,6 +21,9 @@ export const getId = (state: rootState): Id => getCertification(state).id;
 
 export const getMarkCriteriaId = (fieldName: CertificationFields) => (state: rootState): Id =>
     (getCertification(state) as any)[fieldName].id;
+
+export const getPermissionsInfo = (state: rootState): PermissionsInfoState => getCertification(state).permissions_info;
+export const getComments = (state: rootState) => get(getStateData(state), 'comments', initialState.comments);
 
 export const getTemplateText = (state: rootState): TemplateTextState =>
     get(getStateData(state), 'templateText', initialState.templateText);

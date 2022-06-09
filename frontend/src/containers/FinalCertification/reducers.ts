@@ -2,6 +2,7 @@ import {certificationPageState} from "./types";
 import {CertificationFields, CertificationMarkFields, TemplateTextCertificationFields} from "./enum";
 import createReducer from "../../store/createReducer";
 import actions from "./actions";
+import {PermissionsInfoFields} from "./enum";
 
 export const GENERAL_PATH = 'certification';
 
@@ -44,6 +45,15 @@ export const initialState: certificationPageState = {
         [CertificationFields.ANSWERS_QUALITY_MARKS]: null,
         [CertificationFields.GIA_BASE]: 1,
         [CertificationFields.EDITORS]: [],
+        [CertificationFields.PERMISSIONS_INFO]: {
+            [PermissionsInfoFields.CAN_EDIT]: false,
+            [PermissionsInfoFields.EXPERTISE_STATUS]: null,
+            [PermissionsInfoFields.USE_CHAT_WITH_ID_EXPERTISE]: null,
+            [PermissionsInfoFields.CAN_COMMENT]: null,
+            [PermissionsInfoFields.CAN_APPROVE]: null,
+            [PermissionsInfoFields.YOUR_APPROVE_STATUS]: null,
+            [PermissionsInfoFields.USER_EXPERTISE_ID]: null,
+        }
     },
     templateText: {
         [TemplateTextCertificationFields.ID]: 1,
@@ -67,7 +77,8 @@ export const initialState: certificationPageState = {
             [CertificationMarkFields.SATISFACTORILY]: '',
             [CertificationMarkFields.UNSATISFACTORY]: '',
         },
-    }
+    },
+    comments: [],
 }
 
 const setCertification = (state: certificationPageState, {payload}: any): certificationPageState => ({
@@ -188,6 +199,13 @@ const hideErroredField = (state: certificationPageState, {payload}: any): certif
     }
 };
 
+const setComments = (state: certificationPageState, {payload}: any): certificationPageState => {
+    return {
+        ...state,
+        comments: [...payload],
+    }
+};
+
 export const reducer = createReducer(initialState, {
     [actions.setCertification.type]: setCertification,
     [actions.setField.type]: setField,
@@ -200,4 +218,5 @@ export const reducer = createReducer(initialState, {
     [actions.showErrors.type]: showErrors,
     [actions.showErroredField.type]: showErroredField,
     [actions.hideErroredField.type]: hideErroredField,
+    [actions.setComments.type]: setComments,
 });

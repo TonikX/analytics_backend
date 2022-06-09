@@ -17,6 +17,11 @@ const showErrors = createAction('CERTIFICATION_SHOW_ERRORS');
 const showErroredField = createAction('CERTIFICATION_SHOW_ERRORED_FIELD');
 const hideErroredField = createAction('CERTIFICATION_HIDE_ERRORED_FIELD');
 const createExpertise = createAction('CERTIFICATION_CREATE_EXPERTISE');
+const approveCertification = createAction('APPROVE_CERTIFICATION');
+const sendCertificationToRework = createAction('SEND_CERTIFICATION_TO_REWORK');
+const getComments = createAction('GET_COMMENTS_CERTIFICATION');
+const setComments = createAction('SET_COMMENTS_CERTIFICATION');
+const sendComment = createAction('SEND_COMMENT_CERTIFICATION');
 
 export const actions: CertificationActions = {
     getCertification,
@@ -35,6 +40,11 @@ export const actions: CertificationActions = {
     showErroredField,
     hideErroredField,
     createExpertise,
+    approveCertification,
+    sendCertificationToRework,
+    getComments,
+    setComments,
+    sendComment,
 }
 
 export default actions;

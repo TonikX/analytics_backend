@@ -4,6 +4,9 @@ import {
     StructuralUnitFields,
     TemplateTextCertificationFields
 } from "./enum";
+import {ExpertiseStatus, PermissionsInfoFields} from "./enum";
+import {CommentFields} from "./enum";
+import {UserType} from "../../layout/types";
 
 export type Id = number;
 
@@ -20,7 +23,6 @@ export type MainInfoState = {
     [CertificationFields.AUTHORS]: string;
     [CertificationFields.OP_LEADER]: string,
     [CertificationFields.STRUCTURAL_UNIT]: StructuralUnitType | null,
-    [CertificationFields.DISCIPLINE_CODE]: string,
 }
 
 export type GeneralProvisionsState = {
@@ -93,6 +95,16 @@ export type CertificationState = MainInfoState
     [CertificationFields.ID]: Id,
     [CertificationFields.GIA_BASE]: Id,
     [CertificationFields.EDITORS]: any,
+    [CertificationFields.PERMISSIONS_INFO]: PermissionsInfoState,
+}
+
+export type CommentType = {
+    [CommentFields.DATE]: string;
+    [CommentFields.TEXT]: string;
+    [CommentFields.ID]: number;
+    [CommentFields.USER_EXPERTISE]: {
+        [CommentFields.EXPERT]: UserType
+    };
 }
 
 export type Validation = {
@@ -101,10 +113,21 @@ export type Validation = {
 }
 
 export interface certificationPageState {
-    isError: boolean,
+    isError: boolean;
     validation: Validation;
-    certification: CertificationState,
-    templateText: TemplateTextState,
+    certification: CertificationState;
+    templateText: TemplateTextState;
+    comments: Array<CommentType>;
+}
+
+export type PermissionsInfoState = {
+    [PermissionsInfoFields.CAN_EDIT]: boolean,
+    [PermissionsInfoFields.EXPERTISE_STATUS]: ExpertiseStatus | null,
+    [PermissionsInfoFields.USE_CHAT_WITH_ID_EXPERTISE]: number | null,
+    [PermissionsInfoFields.CAN_COMMENT]: boolean | null,
+    [PermissionsInfoFields.CAN_APPROVE]: boolean | null,
+    [PermissionsInfoFields.YOUR_APPROVE_STATUS]: ExpertiseStatus | null,
+    [PermissionsInfoFields.USER_EXPERTISE_ID]: number | null,
 }
 
 export interface CertificationActions {
@@ -124,4 +147,9 @@ export interface CertificationActions {
     showErroredField: any;
     hideErroredField: any;
     createExpertise: any;
+    approveCertification: any;
+    sendCertificationToRework: any;
+    getComments: any;
+    setComments: any;
+    sendComment: any;
 }

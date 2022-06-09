@@ -87,6 +87,7 @@ export const RussianCertificationFields = {
     [CertificationFields.ANSWERS_QUALITY_MARKS]: '',
     [CertificationFields.GIA_BASE]: 'текст шаблона',
     [CertificationFields.EDITORS]: 'Редакторы',
+    [CertificationFields.PERMISSIONS_INFO]: 'Информация о правах',
 }
 export const fieldToStep = new Map(Object.entries({
     [CertificationFields.ID]: CertificationSteps.MAIN,

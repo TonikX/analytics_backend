@@ -5,6 +5,8 @@ import CertificationService from "./service";
 import actions from "../../layout/actions";
 import {fetchingTypes} from "./enum";
 import {getErroredFields} from "./validation";
+import {getPermissionsInfo} from "./getters";
+import {PermissionsInfoFields} from "./enum";
 
 const service = new CertificationService();
 
@@ -110,8 +112,7 @@ const createExpertise = createLogic({
 
         service.createExpertise(id)
             .then(() => {
-                // dispatch(actions.fetchingFailed([`"Экспертиза создана"`]));
-                // todo update status and other stuff
+                dispatch(CertificationActions.getCertification(id));
             })
             .catch(() => {
                 dispatch(actions.fetchingFailed([`Не удалось отправить на экспертизу`]));
@@ -123,5 +124,93 @@ const createExpertise = createLogic({
     }
 });
 
+const approveCertification = createLogic({
+    type: CertificationActions.approveCertification.type,
+    latest: true,
 
-export default [getCertification, saveField, saveMarkCriteria, getTemplateText, createExpertise];
+    process({getState, action}: any, dispatch, done) {
+
+        const userExpertiseId = action.payload;
+        const state = getState();
+        const certificationId = getId(state);
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_EXPERTISE_STATE}));
+
+        service.approveCertification(userExpertiseId)
+            .then(() => {
+                dispatch(CertificationActions.getCertification(certificationId));
+            })
+            .catch(() => {
+                dispatch(actions.fetchingFailed([`Не удалось одобрить рабочую программу`]));
+            })
+            .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_EXPERTISE_STATE}));
+                return done();
+            })
+    }
+});
+
+const sendCertificationToRework = createLogic({
+    type: CertificationActions.sendCertificationToRework.type,
+    latest: true,
+
+    process({getState, action}: any, dispatch, done) {
+
+        const userExpertiseId = action.payload;
+        const state = getState();
+        const certificationId = getId(state);
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_EXPERTISE_STATE}));
+
+        service.sendCertificationToWork(userExpertiseId)
+            .then(() => {
+                dispatch(CertificationActions.getCertification(certificationId));
+            })
+            .catch(() => {
+                dispatch(actions.fetchingFailed([`Не удалось вернуть рабочую программу на доработку`]));
+            })
+            .finally(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_EXPERTISE_STATE}));
+                return done();
+            })
+    }
+});
+
+const getComments = createLogic({
+    type: CertificationActions.getComments.type,
+    latest: true,
+
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const expertiseId = getPermissionsInfo(state)[PermissionsInfoFields.USE_CHAT_WITH_ID_EXPERTISE];
+        if (!expertiseId) return;
+        service.getComments(expertiseId, 'MA')
+            .then((res) => {
+                dispatch(CertificationActions.setComments(res.data.results));
+            })
+            .catch(() => {
+            })
+            .finally(() => {
+                return done();
+            });
+    }
+});
+
+const sendComment = createLogic({
+    type: CertificationActions.sendComment.type,
+    latest: true,
+
+    process({getState, action}: any, dispatch, done) {
+        const {userExpertiseId, step, comment} = action.payload;
+        service.sendComment(userExpertiseId, step, comment)
+            .then(() => {
+                dispatch(CertificationActions.getComments());
+            })
+            .catch(() => {
+            })
+            .finally(() => {
+                return done();
+            });
+    }
+});
+
+
+export default [getCertification, saveField, saveMarkCriteria, getTemplateText, createExpertise, approveCertification, sendCertificationToRework, getComments, sendComment];
