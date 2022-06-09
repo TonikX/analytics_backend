@@ -47,10 +47,11 @@ export default () => createStyles({
     comments: {
         position: "fixed",
         right: '80px',
-        bottom: '100px',
+        bottom: '110px',
         width: '350px',
         height: '500px',
-        boxShadow: '0px 0px 36px 1px rgb(143 143 143 / 30%)'
+        boxShadow: '0px 0px 36px 1px rgb(143 143 143 / 30%)',
+        zIndex: 1,
     },
     rotateIcon: {
         transform: 'rotate(360deg)',
