@@ -25,7 +25,7 @@ class GeneralProvisions extends React.Component<GeneralProvisionsProps> {
                     {PracticeSteps.GENERAL_PROVISIONS}
                 </Typography>
                 <div className={classes.singleColumn}>
-                    <Typography className={classes.generalProvisionsText}>
+                    <Typography className={classes.generalProvisionsText} align="justify">
                         {templateText[TemplateTextPracticeFields.GENERAL_PROVISIONS]}
                     </Typography>
                     <Input fieldName={PracticeFields.FEATURES_CONTENT_AND_INTERNSHIP}

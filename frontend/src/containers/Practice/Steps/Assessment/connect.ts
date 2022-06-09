@@ -1,14 +1,13 @@
 import {connect} from 'react-redux';
 
 import {rootState} from "../../../../store/reducers";
-import {getPractice, getTemplateText} from "../../getters";
+import {getPractice} from "../../getters";
 import {bindActionCreators} from "redux";
 import actions from "../../actions";
 
 const mapStateToProps = (state: rootState) => {
     return {
         fields: getPractice(state),
-        templateText: getTemplateText(state),
     }
 };
 

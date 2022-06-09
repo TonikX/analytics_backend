@@ -25,7 +25,7 @@ class Structure extends React.Component<StructureProps> {
                     {PracticeSteps.STRUCTURE}
                 </Typography>
                 <div className={classes.singleColumn}>
-                    <Typography className={classes.generalProvisionsText}>
+                    <Typography className={classes.generalProvisionsText} align="justify">
                         {templateText[TemplateTextPracticeFields.STRUCTURE_AND_CONTENT]}
                     </Typography>
                     <Input fieldName={PracticeFields.FEATURES_INTERNSHIP}

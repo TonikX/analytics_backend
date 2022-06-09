@@ -24,7 +24,7 @@ class GeneralProvisions extends React.Component<GeneralProvisionsProps> {
                     {PracticeSteps.OVZ}
                 </Typography>
                 <div className={classes.singleColumn}>
-                    <Typography className={classes.generalProvisionsText}>
+                    <Typography className={classes.generalProvisionsText} align="justify">
                         {templateText[TemplateTextPracticeFields.OVZ]}
                     </Typography>
                 </div>
