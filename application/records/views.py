@@ -1,22 +1,23 @@
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework import generics
-from django.shortcuts import get_object_or_404
 from django.db.models.aggregates import Count
+from django.shortcuts import get_object_or_404
+from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from dataprocessing.models import User
 from workprogramsapp.expertise.models import Expertise
 from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, DisciplineBlock, \
     DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, ImplementationAcademicPlan, FieldOfStudy, \
     СertificationEvaluationTool
+from workprogramsapp.workprogram_additions.models import StructuralUnit
 from .serializers import WorkProgramInFieldOfStudySerializerForStatistic, \
     WorkProgramSerializerForStatistic, SuperShortWorkProgramSerializer, WorkProgramSerializerForStatisticExtended, \
     AcademicPlansDescriptionWpSerializer, WorkProgramPrerequisitesAndOutcomesSerializer, \
     WorkProgramDescriptionOnlySerializer, \
     ImplementationAcademicPlanWpStatisticSerializer
-from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
 @api_view(['GET'])
@@ -160,12 +161,13 @@ def SimpleStatistic(request):
     '+'
     """
     registered_users = User.objects.count()
-    rpd_users = User.objects.filter(editors__isnull=False).distinct().count()
+    rpd_users = User.objects.filter(editors__isnull=False, editors__work_status="w").distinct().count()
     on_expertise = Expertise.objects.filter(expertise_status="EX").count()
     approved = Expertise.objects.filter(expertise_status="AC").count()
-    in_work = Expertise.objects.filter(expertise_status="WK").count()
-    editors_rpd = WorkProgram.objects.filter(editors__isnull=False).distinct().count()
-    total_rpd=WorkProgram.objects.all().count()
+    in_work = Expertise.objects.filter(expertise_status="RE").count()
+    archived_rpd = WorkProgram.objects.filter(work_status="a").count()
+    editors_rpd = WorkProgram.objects.filter(editors__isnull=False, work_status="w").distinct().count()
+    total_rpd = WorkProgram.objects.all().count()
     return Response(
         {
             "total_rpd":total_rpd,
@@ -174,6 +176,7 @@ def SimpleStatistic(request):
             "rpd_with_editors": editors_rpd,
             "rpd_on_expertise": on_expertise,
             "rpd_approved": approved,
+            "archived_rpd":archived_rpd,
             "rpd_in_work": in_work
         }
     )

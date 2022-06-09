@@ -381,6 +381,8 @@ class FirstStep extends React.Component<FirstStepProps> {
               checked={state[WorkProgramGeneralFields.BARS]}
               onChange={this.handleBars}
               disabled={!isCanEdit}
+              color="secondary"
+              className={classes.bars}
             />
           </div>
 
