@@ -10,5 +10,8 @@ export default (theme: Theme) => createStyles({
   },
   btnChart: {
     marginTop: 20 + 'px'
+  },
+  recordChart: {
+    marginBottom: 64 + 'px'
   }
 });

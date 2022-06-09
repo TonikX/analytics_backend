@@ -207,10 +207,10 @@ class Records extends Component<RecordsProops> {
             RPD_IN_SEMESTER
         } = this.props;
 
-        const style = {height: this.state.height};
+        // const style = {height: this.state.height};
 
         return (
-            <Paper className={classes.root} style={style}>
+            <Paper className={classes.root}>
                 <Typography className={classes.title}>
                     Отчёты
                 </Typography>
@@ -277,18 +277,21 @@ class Records extends Component<RecordsProops> {
                 }
                 {this.state.value == 3 &&
                 <>
-                    <div style={{display: 'flex'}}>
+                    <div style={{display: 'flex', flexWrap: 'wrap'}}>
                         {QUANTITY_OP_ALL['bachelor']?.length === 4 && <TotalOPReport
+                          classes={{recordChart: 'recordChart'}}
                           labels={YEARS_ALL}
                           title={`Образовательная программа бакалавриат`}
                           data={QUANTITY_OP_ALL['bachelor']?.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}
                         />}
                         {QUANTITY_OP_ALL['master']?.length === 4 && <TotalOPReport
+                          classes={{recordChart: 'recordChart'}}
                           labels={YEARS_ALL}
                           title={`Образовательная программа магистратура`}
                           data={QUANTITY_OP_ALL['master']?.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}
                         />}
                         {QUANTITY_OP_ALL['specialist']?.length === 4 && <TotalOPReport
+                          classes={{recordChart: 'recordChart'}}
                           labels={YEARS_ALL}
                           title={`Образовательная программа магистратура`}
                           data={QUANTITY_OP_ALL['specialist']?.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}

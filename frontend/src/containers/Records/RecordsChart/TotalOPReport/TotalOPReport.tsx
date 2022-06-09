@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
 import withStyles from '@material-ui/core/styles/withStyles';
-import styles from '../QuantityReport/RecordsChart.styles';
+import styles from '../TotalOPReport/TotalOPReport.styles';
 
 
 Chart.register(...registerables)
@@ -94,7 +94,7 @@ function TotalOPReport(props:IProps) {
     })
   }
   return (
-    <div className={classNames(classes?.wrapperChart)}>
+    <div className={classNames(classes?.wrapperChart, classes?.recordChart)}>
       <canvas ref={refChart} height={250} />
       <Button
         onClick={onClickHandler}
