@@ -22,7 +22,7 @@ class DisabledPeopleInfo extends React.Component<DisabledPeopleInfoProps> {
                     {CertificationSteps.DISABLED_PEOPLE}
                 </Typography>
                 <div className={classes.singleColumn}>
-                    <Typography className={classes.generalProvisionsText}>
+                    <Typography className={classes.generalProvisionsText} align="justify">
                         {templateText[TemplateTextCertificationFields.GIA_OVZ]}
                     </Typography>
                 </div>

@@ -100,20 +100,6 @@ class InputList extends React.Component<InputListProps> {
 
         return (
             <div className={classes.root}>
-                {
-                    textList.map((text, index) => (
-                        <div className={classes.item}>
-                            <Typography className={classes.title}>
-                                {text}
-                            </Typography>
-                            <div className={classes.actions}>
-                                <IconButton onClick={this.handleDelete(index)}>
-                                    <DeleteIcon/>
-                                </IconButton>
-                            </div>
-                        </div>
-                    ))
-                }
                 <div className={classes.input}>
                     <TextField label={(RussianCertificationFields as any)[fieldName]}
                                onBlur={this.addToList}
@@ -128,6 +114,20 @@ class InputList extends React.Component<InputListProps> {
                                style={{width: '100%'}}
                     />
                 </div>
+                {
+                    textList.map((text, index) => (
+                        <div className={classes.item}>
+                            <Typography className={classes.title}>
+                                {text}
+                            </Typography>
+                            <div className={classes.actions}>
+                                <IconButton onClick={this.handleDelete(index)}>
+                                    <DeleteIcon/>
+                                </IconButton>
+                            </div>
+                        </div>
+                    ))
+                }
             </div>
         );
     }

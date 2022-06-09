@@ -113,7 +113,7 @@ class Features extends React.Component<FeaturesProps> {
                         <div className={classes.singleColumn}>
                             <Input fieldName={CertificationFields.PRELIMINARY_DEFENSE}/>
                             <Input fieldName={CertificationFields.ANTI_PLAGIARISM}/>
-                            <Typography style={{marginTop: '30px'}}>
+                            <Typography style={{marginTop: '30px'}} align="justify">
                                 {templateText[TemplateTextCertificationFields.STRUCTURE_ELEMENTS]}
                             </Typography>
                             <FormGroup className={classes.optionalRequirements}>

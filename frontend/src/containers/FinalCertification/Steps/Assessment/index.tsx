@@ -142,7 +142,7 @@ class Assessment extends React.Component<AssessmentProps> {
                             - {professionalProblems ? professionalProblems[CertificationMarkFields.UNSATISFACTORY] : ''}
                         </Typography>
                     </div>
-                    <Typography style={{marginTop: '30px'}}>
+                    <Typography style={{marginTop: '30px'}} align="justify">
                         {templateText[TemplateTextCertificationFields.VKR_MARK]}
                     </Typography>
                 </Scrollbars>

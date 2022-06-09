@@ -23,7 +23,7 @@ class GeneralProvisions extends React.Component<GeneralProvisionsProps> {
                     {CertificationSteps.GENERAL_PROVISIONS}
                 </Typography>
                 <div className={classes.singleColumn}>
-                    <Typography className={classes.generalProvisionsText}>
+                    <Typography className={classes.generalProvisionsText} align="justify">
                         {templateText[TemplateTextCertificationFields.GENERAL_PROVISIONS]}
                     </Typography>
                     <InputList fieldName={CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS}/>
