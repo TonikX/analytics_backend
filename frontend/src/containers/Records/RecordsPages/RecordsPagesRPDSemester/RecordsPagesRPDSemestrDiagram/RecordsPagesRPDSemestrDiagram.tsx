@@ -10,15 +10,14 @@ Chart.register(...registerables)
 interface IProps {
   classes?: {[key: string]: string}
   labels: string[],
-  title:string,
-  data:number[]
+  data: Map<number, number>
 }
 enum TypeChart {
   PIE = 'pie',
   BAR = 'bar'
 }
 const RecordsPagesRPDSemestrDiagram = (props:IProps) => {
-  const {classes, labels, title, data} = props
+  const {classes, labels, data} = props
   const [btnText, setBtnText] = useState<TypeChart>(TypeChart.BAR)
   const [typeChart, setTypeChart] = useState<TypeChart>(TypeChart.PIE)
   const refChart = useRef<any>()
@@ -35,10 +34,11 @@ const RecordsPagesRPDSemestrDiagram = (props:IProps) => {
 
   function rerenderChart() {
     if(refChart.current && !firstRender) {
+      setFirstRender(false)
       renderChart()
     }
   }
-  useEffect(rerenderChart, [data])
+  useEffect(rerenderChart, [data.size])
 
 
   function changeTypeChart(): void {
@@ -60,10 +60,6 @@ const RecordsPagesRPDSemestrDiagram = (props:IProps) => {
         plugins: {
           legend: {
             display: typeChart === TypeChart.PIE
-          },
-          title: {
-            display: true,
-            text: title
           }
         }
       },
@@ -71,7 +67,7 @@ const RecordsPagesRPDSemestrDiagram = (props:IProps) => {
         labels,
         datasets: [{
           label: 'Диаграмма',
-          data,
+          data: Array.from(data.values()),
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',

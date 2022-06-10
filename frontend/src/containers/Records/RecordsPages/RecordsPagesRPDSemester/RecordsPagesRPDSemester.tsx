@@ -54,6 +54,8 @@ interface IProps {
   getRPDinSEMESTER:(value: any) => void
   changeSU:(value: string|number) => void
 }
+const mapData = new Map()
+const mapTitles = new Map()
 
 const RecordsPagesRPDSemester = (props:IProps) => {
   const dispatch = useDispatch();
@@ -101,23 +103,25 @@ const RecordsPagesRPDSemester = (props:IProps) => {
     dispatch(actions.changeYear(value))
   }
 
-  const mapData = new Map()
-  const mapTitles = new Map()
+
   if(Array.isArray(RPD_IN_SEMESTER) && RPD_IN_SEMESTER.length > 0) {
-    interface ITitles {
-      id: string
-      title: string
-    }
+      mapData.clear()
+      mapTitles.clear()
 
-    const prepareArrayId: Array<number> = RPD_IN_SEMESTER.map((s) => s.id)
-    const prepareArrayTitle: Array<ITitles> = RPD_IN_SEMESTER.map((s) => {
-      return {
-        id: s.id,
-        title: s.title
+      interface ITitles {
+        id: string
+        title: string
       }
-    })
 
-    prepareArrayId.forEach((id) => {
+      const prepareArrayId: Array<number> = RPD_IN_SEMESTER.map((s) => s.id)
+      const prepareArrayTitle: Array<ITitles> = RPD_IN_SEMESTER.map((s) => {
+        return {
+          id: s.id,
+          title: s.title
+        }
+      })
+
+      prepareArrayId.forEach((id) => {
         const currentIteration = prepareArrayId.reduce((acc, cur) => {
           if(id === cur) {
             return acc + 1
@@ -125,17 +129,17 @@ const RecordsPagesRPDSemester = (props:IProps) => {
             return acc
           }
         }, 0)
-      mapData.set(id, currentIteration)
-    })
+        mapData.set(id, currentIteration)
+      })
 
-    prepareArrayTitle.forEach((obj: ITitles, idx) => {
-      if(!mapTitles.has(obj.id)) {
-        mapTitles.set(obj.id, obj.title)
-      } else {
-        return
-      }
-    })
-  }
+      prepareArrayTitle.forEach((obj: ITitles, idx) => {
+        if(!mapTitles.has(obj.id)) {
+          mapTitles.set(obj.id, obj.title)
+        } else {
+          return
+        }
+      })
+    }
 
   return (
       <>
@@ -238,8 +242,7 @@ const RecordsPagesRPDSemester = (props:IProps) => {
         </Button>
         {mapData.size > 0 && <RecordsPagesRPDSemestrDiagram
           labels={Array.from(mapTitles.values())}
-          title={'title'}
-          data={Array.from(mapData.values())}
+          data={mapData}
         />}
         {/*{value == 6 && isVisible &&*/}
         {/*  <>*/}
