@@ -23,6 +23,9 @@ const RecordsPagesList = (props: IProps) => {
     setList(() => {
       return list.filter((el) => el.value !== id)
     })
+    if(list.length === 0) {
+      console.log('reset')
+    }
   }
 
   return (

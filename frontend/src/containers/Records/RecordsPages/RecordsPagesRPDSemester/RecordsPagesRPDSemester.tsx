@@ -96,7 +96,6 @@ const RecordsPagesRPDSemester = (props:IProps) => {
           list={list}
           changeItem={(value: string) => {
             changeSU(value)
-
             const findStructural = list.find((l: IStructural) => l.value === value)
             setStructuralList((prev) => {
               if(Array.isArray(prev)) {
@@ -152,35 +151,6 @@ const RecordsPagesRPDSemester = (props:IProps) => {
         </FormControl>
         <RecordsPagesList list={yearsList} setList={setYearsList}/>
 
-        <FormControl variant="outlined">
-          <InputLabel>Выберите семестр</InputLabel>
-          <Select
-            label="Выберите семестр"
-            value={SEMESTER}
-            onChange={changeSemester}
-            className={classNamesSelectSemester}
-            MenuProps={{
-              anchorOrigin: {
-                vertical: "bottom",
-                horizontal: "left"
-              },
-              transformOrigin: {
-                vertical: "top",
-                horizontal: "left"
-              },
-              getContentAnchorEl: null
-            }}>
-            <MenuItem value="all">Все</MenuItem>
-            <MenuItem value="1">Первый семестр</MenuItem>
-            <MenuItem value="2">Второй семестр</MenuItem>
-            <MenuItem value="3">Третий семестр</MenuItem>
-            <MenuItem value="4">Четвёртый семестр</MenuItem>
-            <MenuItem value="5">Пятый семестр</MenuItem>
-            <MenuItem value="6">Шестой семестр</MenuItem>
-            <MenuItem value="7">Седьмой семестр</MenuItem>
-            <MenuItem value="8">Восьмой семестр</MenuItem>
-          </Select>
-        </FormControl>
         <FormControl component="fieldset">
           <FormLabel component="legend">Выберите статус РПД</FormLabel>
           <RadioGroup
