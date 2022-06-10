@@ -14,7 +14,7 @@ export const initialSimpleStatState: SimpleStatState = {
     [fields.QUALIFICATION]: "bachelor",
     [fields.QUALIFICATIONS_ALL]: ["bachelor", "master", "specialist"],
     [fields.QUANTITY_RPD]: [],
-    [fields.YEAR]: "2021",
+    [fields.YEAR]: [],
     [fields.YEARS_ALL]: ["2022", "2021", "2020", "2019"],
     [fields.QUANTITY_OP]: [],
     [fields.QUANTITY_OP_ALL]: {},

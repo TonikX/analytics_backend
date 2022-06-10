@@ -27,8 +27,8 @@ const RecordsPagesList = (props: IProps) => {
     const filteredList = list.filter((el) => el.value !== id)
     setList(() => filteredList)
     removeItemInRedux(filteredList.map((el) => el.value))
-    if(filteredList.length === 0) {
-      resetValueControl()
+    if(filteredList?.length === 0) {
+      resetValueControl && resetValueControl()
     }
   }
 

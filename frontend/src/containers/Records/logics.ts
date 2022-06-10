@@ -211,6 +211,7 @@ const getRPDinSEMESTER = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done){
         const state = getState();
+
         let su = ''
         let reduxSu: Array<number> = getSUuse(state)
         if(Array.isArray(reduxSu)) {
@@ -222,29 +223,26 @@ const getRPDinSEMESTER = createLogic({
                 }
             })
         }
+
         let status = getStatus(state);
         if (status == 'all'){
             status = '';
         } else {
-            status = "&status=" + status;
+            status = "status=" + status;
         }
-        let year = getYear(state);
-        if (year == 'all'){
-            year = '';
-        } else {
-            year = "&year=" + year;
-        }
-        let semester = getSemester(state);
-        if (semester == 'all'){
-            semester = '';
-        } else {
-            semester = "&semester=" + semester;
+
+        let year = ''
+        let reduxYear: Array<string> = getYear(state)
+        if(Array.isArray(reduxYear)) {
+            reduxYear.forEach((year, idx) => {
+                su += `year=${year}&`
+            })
         }
 
         dispatch(actions.fetchingTrue({destination: "GET_STATISTICS"}));
         service.getStructuralUnitWPFilter(su, year, status)
             .then((res)=>{
-                dispatch(statisticsActions.SetRPDinSEMESTER(res.data));
+                dispatch(statisticsActions.SetRPDinSEMESTER(res.data.results));
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));

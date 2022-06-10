@@ -18,7 +18,7 @@ import TableBody from '@material-ui/core/TableBody';
 import { Link } from 'react-router-dom';
 import { appRouter } from '../../../../service/router-service';
 import TablePagination from '@material-ui/core/TablePagination';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SelectorItemType } from '../../../../components/SearchSelector/types';
 import RecordsPagesList from '../RecordsPagesList/RecordsPagesList';
 import { useDispatch } from 'react-redux';
@@ -96,6 +96,9 @@ const RecordsPagesRPDSemester = (props:IProps) => {
   function removeSUInRedux(value: Array<number>) {
     dispatch(actions.ChangeSU(value))
   }
+  function removeYearInRedux(value: Array<string>) {
+    dispatch(actions.changeYear(value))
+  }
 
   return (
       <>
@@ -172,7 +175,7 @@ const RecordsPagesRPDSemester = (props:IProps) => {
         <RecordsPagesList
           list={yearsList}
           setList={setYearsList}
-          resetValueControl={() => changeYear({target: {value: ''}})}
+          removeItemInRedux={removeYearInRedux}
         />
 
         <FormControl component="fieldset">

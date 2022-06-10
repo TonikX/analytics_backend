@@ -78,7 +78,9 @@ class Records extends Component<RecordsProops> {
     }
 
     changeYear = (event: any): void => {
-        this.props.actions.changeYear(event.target.value);
+        if(Array.isArray(this.props.YEAR)) {
+            this.props.actions.changeYear([...this.props.YEAR, event.target.value]);
+        }
     }
 
     changeYearForAP = (event: any): void => {
@@ -376,7 +378,7 @@ class Records extends Component<RecordsProops> {
                       classNamesHeader={classes.header}
                       classNamesLink={classes.link}
                       classNamesFooter={classes.footer}
-                      YEAR={YEAR}
+                      YEAR={YEAR[YEAR.length-1] || ''}
                       SEMESTER={SEMESTER}
                       STATUS={STATUS}
                       RPD_IN_SEMESTER={RPD_IN_SEMESTER}
@@ -398,25 +400,22 @@ class Records extends Component<RecordsProops> {
                 }
                 {this.state.value == 7 &&
                     <>
-                <SearchSelector
-                    label='Выберите учебный план'
-                    changeSearchText={this.handleChangeSearchQuery}
-                    list={this.state.AP}
-                    changeItem={(value: string) => this.сhangeAP(value)}
-                    value={APuse}
-                    valueLabel={''}
-                    className={classes.field}
-
-
-
-                />
-                    <Button
-                    onClick={this.getRPDinAP}
-                    variant="contained"
-                    color="primary"
-                    disableElevation className={classes.Btn}>
-                    Получить отчёт
-                    </Button>
+                        <SearchSelector
+                            label='Выберите учебный план'
+                            changeSearchText={this.handleChangeSearchQuery}
+                            list={this.state.AP}
+                            changeItem={(value: string) => this.сhangeAP(value)}
+                            value={APuse}
+                            valueLabel={''}
+                            className={classes.field}
+                        />
+                        <Button
+                        onClick={this.getRPDinAP}
+                        variant="contained"
+                        color="primary"
+                        disableElevation className={classes.Btn}>
+                        Получить отчёт
+                        </Button>
                     </>
                 }
                 {this.state.value == 7 && this.state.isVisible && RPD_IN_AP.length > 0 &&
