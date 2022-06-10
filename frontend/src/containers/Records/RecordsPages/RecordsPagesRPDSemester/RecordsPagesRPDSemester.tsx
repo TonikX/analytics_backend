@@ -23,6 +23,7 @@ import { SelectorItemType } from '../../../../components/SearchSelector/types';
 import RecordsPagesList from '../RecordsPagesList/RecordsPagesList';
 import { useDispatch } from 'react-redux';
 import actions from '../../actions';
+import RecordsPagesRPDSemestrDiagram from './RecordsPagesRPDSemestrDiagram/RecordsPagesRPDSemestrDiagram';
 
 interface IProps {
   handleChangeSearchQuerySU: (query: string) => void
@@ -100,6 +101,25 @@ const RecordsPagesRPDSemester = (props:IProps) => {
     dispatch(actions.changeYear(value))
   }
 
+
+  console.log('RPD_IN_SEMESTER', RPD_IN_SEMESTER);
+
+  const exampleArr = [1, 2, 2, 1, 1, 3]
+  const map = new Map()
+
+  exampleArr.forEach((el) => {
+    const currentIteration = exampleArr.reduce((acc, cur) => {
+      if(el === cur) {
+        return acc + 1
+      } else  {
+        return acc
+      }
+    }, 0)
+
+    map.set(el, currentIteration)
+  })
+
+  console.log('map', map.values());
   return (
       <>
         <SearchSelector
@@ -199,62 +219,68 @@ const RecordsPagesRPDSemester = (props:IProps) => {
           disableElevation className={classNamesButton}>
           Получить отчёт
         </Button>
-        {value == 6 && isVisible &&
-        <>
-          <div className={classNamesTableWrap}>
-            <Table stickyHeader size='small'>
-              <TableHead className={classNamesHeader}>
-                <TableRow>
-                  <TableCell style={{width: "25%"}}>
-                    Код
-                  </TableCell>
-                  <TableCell style={{width: "50%"}}>
-                    Название
-                  </TableCell>
-                  <TableCell style={{width: "25%"}}>
-                    Авторский состав
-                  </TableCell>
-                  <TableCell/>
-                </TableRow>
-              </TableHead>
+        <RecordsPagesRPDSemestrDiagram
+          labels={['labels1', 'labels2', 'labels3']}
+          title={'title'}
+          data={Array.from(map.values())}
+        />
+        {/*{value == 6 && isVisible &&*/}
+        {/*  <>*/}
+        {/*  <div className={classNamesTableWrap}>*/}
+        {/*    <Table stickyHeader size='small'>*/}
+        {/*      <TableHead className={classNamesHeader}>*/}
+        {/*        <TableRow>*/}
+        {/*          <TableCell style={{width: "25%"}}>*/}
+        {/*            Код*/}
+        {/*          </TableCell>*/}
+        {/*          <TableCell style={{width: "50%"}}>*/}
+        {/*            Название*/}
+        {/*          </TableCell>*/}
+        {/*          <TableCell style={{width: "25%"}}>*/}
+        {/*            Авторский состав*/}
+        {/*          </TableCell>*/}
+        {/*          <TableCell/>*/}
+        {/*        </TableRow>*/}
+        {/*      </TableHead>*/}
 
-              <TableBody>
-                {RPD_IN_SEMESTER.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((workProgram: any) =>
-                  <TableRow key={workProgram.id}>
-                    <TableCell>
-                      {workProgram.discipline_code}
-                    </TableCell>
-                    <TableCell className={classNamesLink}>
-                      <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>
-                        {workProgram.title}
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      {workProgram.editors.map((editors: any) =>
-                        <>{editors.first_name} {editors.last_name}; </>
-                      )}
-                    </TableCell>
+        {/*      <TableBody>*/}
+        {/*        {RPD_IN_SEMESTER.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((workProgram: any) =>*/}
+        {/*          <TableRow key={workProgram.id}>*/}
+        {/*            <TableCell>*/}
+        {/*              {workProgram.discipline_code}*/}
+        {/*            </TableCell>*/}
+        {/*            <TableCell className={classNamesLink}>*/}
+        {/*              <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>*/}
+        {/*                {workProgram.title}*/}
+        {/*              </Link>*/}
+        {/*            </TableCell>*/}
+        {/*            <TableCell>*/}
+        {/*              {workProgram.editors.map((editors: any) =>*/}
+        {/*                <>{editors.first_name} {editors.last_name}; </>*/}
+        {/*              )}*/}
+        {/*            </TableCell>*/}
 
-                  </TableRow>
-                )}
-              </TableBody>
+        {/*          </TableRow>*/}
+        {/*        )}*/}
+        {/*      </TableBody>*/}
 
-            </Table>
-          </div>
+        {/*    </Table>*/}
+        {/*  </div>*/}
 
-          <div className={classNamesFooter}>
-            <TablePagination
-              count={RPD_IN_SEMESTER.length}
-               component="div"
-               page={page}
-               rowsPerPageOptions={[]}
-               onChangePage={handleChangePage}
-               rowsPerPage={rowsPerPage}
-               onChangeRowsPerPage={() => {}}
-            />
+        {/*  <div className={classNamesFooter}>*/}
+        {/*    <TablePagination*/}
+        {/*      count={RPD_IN_SEMESTER.length}*/}
+        {/*       component="div"*/}
+        {/*       page={page}*/}
+        {/*       rowsPerPageOptions={[]}*/}
+        {/*       onChangePage={handleChangePage}*/}
+        {/*       rowsPerPage={rowsPerPage}*/}
+        {/*       onChangeRowsPerPage={() => {}}*/}
+        {/*    />*/}
 
-          </div>
-        </>}
+        {/*  </div>*/}
+        {/*</>*/}
+        {/*}*/}
       </>
   )
 }
