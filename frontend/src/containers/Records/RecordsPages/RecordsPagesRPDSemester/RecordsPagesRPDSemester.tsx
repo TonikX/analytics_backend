@@ -244,63 +244,63 @@ const RecordsPagesRPDSemester = (props:IProps) => {
           labels={Array.from(mapTitles.values())}
           data={mapData}
         />}
-        {/*{value == 6 && isVisible &&*/}
-        {/*  <>*/}
-        {/*  <div className={classNamesTableWrap}>*/}
-        {/*    <Table stickyHeader size='small'>*/}
-        {/*      <TableHead className={classNamesHeader}>*/}
-        {/*        <TableRow>*/}
-        {/*          <TableCell style={{width: "25%"}}>*/}
-        {/*            Код*/}
-        {/*          </TableCell>*/}
-        {/*          <TableCell style={{width: "50%"}}>*/}
-        {/*            Название*/}
-        {/*          </TableCell>*/}
-        {/*          <TableCell style={{width: "25%"}}>*/}
-        {/*            Авторский состав*/}
-        {/*          </TableCell>*/}
-        {/*          <TableCell/>*/}
-        {/*        </TableRow>*/}
-        {/*      </TableHead>*/}
+        {value == 6 && isVisible &&
+          <>
+          <div className={classNamesTableWrap}>
+            <Table stickyHeader size='small'>
+              <TableHead className={classNamesHeader}>
+                <TableRow>
+                  <TableCell style={{width: "25%"}}>
+                    Код
+                  </TableCell>
+                  <TableCell style={{width: "50%"}}>
+                    Название
+                  </TableCell>
+                  <TableCell style={{width: "25%"}}>
+                    Авторский состав
+                  </TableCell>
+                  <TableCell/>
+                </TableRow>
+              </TableHead>
 
-        {/*      <TableBody>*/}
-        {/*        {RPD_IN_SEMESTER.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((workProgram: any) =>*/}
-        {/*          <TableRow key={workProgram.id}>*/}
-        {/*            <TableCell>*/}
-        {/*              {workProgram.discipline_code}*/}
-        {/*            </TableCell>*/}
-        {/*            <TableCell className={classNamesLink}>*/}
-        {/*              <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>*/}
-        {/*                {workProgram.title}*/}
-        {/*              </Link>*/}
-        {/*            </TableCell>*/}
-        {/*            <TableCell>*/}
-        {/*              {workProgram.editors.map((editors: any) =>*/}
-        {/*                <>{editors.first_name} {editors.last_name}; </>*/}
-        {/*              )}*/}
-        {/*            </TableCell>*/}
+              <TableBody>
+                {RPD_IN_SEMESTER.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((workProgram: any) =>
+                  <TableRow key={workProgram.id}>
+                    <TableCell>
+                      {workProgram.discipline_code}
+                    </TableCell>
+                    <TableCell className={classNamesLink}>
+                      <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>
+                        {workProgram.title}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      {workProgram.editors.map((editors: any) =>
+                        <>{editors.first_name} {editors.last_name}; </>
+                      )}
+                    </TableCell>
 
-        {/*          </TableRow>*/}
-        {/*        )}*/}
-        {/*      </TableBody>*/}
+                  </TableRow>
+                )}
+              </TableBody>
 
-        {/*    </Table>*/}
-        {/*  </div>*/}
+            </Table>
+          </div>
 
-        {/*  <div className={classNamesFooter}>*/}
-        {/*    <TablePagination*/}
-        {/*      count={RPD_IN_SEMESTER.length}*/}
-        {/*       component="div"*/}
-        {/*       page={page}*/}
-        {/*       rowsPerPageOptions={[]}*/}
-        {/*       onChangePage={handleChangePage}*/}
-        {/*       rowsPerPage={rowsPerPage}*/}
-        {/*       onChangeRowsPerPage={() => {}}*/}
-        {/*    />*/}
+          <div className={classNamesFooter}>
+            <TablePagination
+              count={RPD_IN_SEMESTER.length}
+               component="div"
+               page={page}
+               rowsPerPageOptions={[]}
+               onChangePage={handleChangePage}
+               rowsPerPage={rowsPerPage}
+               onChangeRowsPerPage={() => {}}
+            />
 
-        {/*  </div>*/}
-        {/*</>*/}
-        {/*}*/}
+          </div>
+        </>
+        }
       </>
   )
 }
