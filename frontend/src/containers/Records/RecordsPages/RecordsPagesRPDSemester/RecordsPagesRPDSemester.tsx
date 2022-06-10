@@ -18,8 +18,9 @@ import TableBody from '@material-ui/core/TableBody';
 import { Link } from 'react-router-dom';
 import { appRouter } from '../../../../service/router-service';
 import TablePagination from '@material-ui/core/TablePagination';
-import React from 'react';
+import React, { useState } from 'react';
 import { SelectorItemType } from '../../../../components/SearchSelector/types';
+import RecordsPagesList from '../RecordsPagesList/RecordsPagesList';
 
 interface IProps {
   handleChangeSearchQuerySU: (query: string) => void
@@ -82,6 +83,8 @@ const RecordsPagesRPDSemester = (props:IProps) => {
     SUuse
   } = props
 
+  interface IStructural {value: string, label: string}
+  const [structuralList, setStructuralList] = useState<Array<IStructural>>([])
 
   return (
       <>
@@ -89,11 +92,25 @@ const RecordsPagesRPDSemester = (props:IProps) => {
           label='Выберите структурное подразделение'
           changeSearchText={handleChangeSearchQuerySU}
           list={list}
-          changeItem={(value: string) => changeSU(value)}
+          changeItem={(value: string) => {
+            changeSU(value)
+
+            const findStructural = list.find((l: IStructural) => l.value === value)
+            setStructuralList((prev) => {
+              if(Array.isArray(prev)) {
+                return [
+                  ...prev, findStructural
+                ]
+              } else  {
+                return []
+              }
+            })
+          }}
           value={SUuse}
           valueLabel={''}
           className={classNamesSearchSelector}
         />
+        <RecordsPagesList structuralList={structuralList} setStructuralList={setStructuralList}/>
         <FormControl variant="outlined">
           <InputLabel>Выберите год учебного плана</InputLabel>
           <Select
