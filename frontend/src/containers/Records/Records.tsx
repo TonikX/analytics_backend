@@ -207,8 +207,6 @@ class Records extends Component<RecordsProops> {
             RPD_IN_SEMESTER
         } = this.props;
 
-        // const style = {height: this.state.height};
-
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
@@ -235,7 +233,6 @@ class Records extends Component<RecordsProops> {
                         <MenuItem value="2">Отчёт о количестве РПД (по квалификации)</MenuItem>
                         <MenuItem value="3">Отчёт о количестве ОП (по квалификации и годам)</MenuItem>
                         <MenuItem value="4">Отчёт о РПД без структурного подразделения</MenuItem>
-                        <MenuItem value="5">Отчёт о РПД в структурных подразделениях</MenuItem>
                         <MenuItem value="6">Отчёт о РПД на семестр</MenuItem>
                         <MenuItem value="7">Отчёт о РПД и по учебному плану</MenuItem>
                     </Select>
@@ -365,98 +362,6 @@ class Records extends Component<RecordsProops> {
 
                     </div>
                 </>}
-                {this.state.value == 5 &&
-                <>
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Выберите статус РПД</FormLabel>
-                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.сhangeStatus}
-                                    className={classes.field}>
-                            <FormControlLabel value="all" control={<Radio color="primary"/>} label="Все"/>
-                            <FormControlLabel value="EX" control={<Radio color="primary"/>} label="На экспертизе"/>
-                            <FormControlLabel value="AC" control={<Radio color="primary"/>} label="Одобрены"/>
-                            <FormControlLabel value="WK" control={<Radio color="primary"/>} label="В работе"/>
-                        </RadioGroup>
-                    </FormControl>
-                    <Button
-                        onClick={this.getRPDinSU}
-                        variant="contained"
-                        color="primary"
-                        disableElevation className={classes.Btn}>
-                        Получить отчёт
-                    </Button>
-                </>
-                }
-                {this.state.isVisible && this.state.value == 5 &&
-                <div>
-                    {RPD_IN_SU.filter((SU: any) => SU.work_programs.length > 0).map((SU: any) =>
-                        <ExpansionPanel expanded={this.state.expandend === SU.id}
-                                        onChange={this.handleChangePanel(SU.id)} style={{width: "100%"}}>
-                            <ExpansionPanelSummary
-                                className={classes.accordionSummary}
-                                expandIcon={<ExpandMoreIcon/>}
-                            >
-                                <Typography>{SU.title} </Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <>
-                                    <div className={classes.tableWrap} style={{width: "100%"}}>
-                                        <Table>
-                                            <TableHead className={classes.header}>
-                                                <TableRow>
-                                                    <TableCell style={{width: "25%"}}>
-                                                        Код
-                                                    </TableCell>
-                                                    <TableCell style={{width: "50%"}}>
-                                                        Название
-                                                    </TableCell>
-                                                    <TableCell style={{width: "25%"}}>
-                                                        Авторский состав
-                                                    </TableCell>
-                                                    <TableCell/>
-                                                </TableRow>
-                                            </TableHead>
-
-                                            <TableBody>
-                                                {SU.work_programs.slice(this.state.page * this.state.rowsPerPage,
-                                                    this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((workProgram: any) =>
-                                                    <TableRow key={workProgram.id}>
-                                                        <TableCell>
-                                                            {workProgram.discipline_code}
-                                                        </TableCell>
-                                                        <TableCell className={classes.link}>
-                                                            <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>
-                                                                {workProgram.title}
-                                                            </Link>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {workProgram.editors.map((editors: any) =>
-                                                                <>{editors.first_name} {editors.last_name}; </>
-                                                            )}
-                                                        </TableCell>
-
-                                                    </TableRow>
-                                                )}
-                                            </TableBody>
-
-                                        </Table>
-                                        <div className={classes.footer}>
-                                            <TablePagination count={SU.work_programs.length}
-                                                             component="div"
-                                                             page={this.state.page}
-                                                             rowsPerPageOptions={[]}
-                                                             onChangePage={this.handleChangePage}
-                                                             rowsPerPage={this.state.rowsPerPage}
-                                                             onChangeRowsPerPage={() => {
-                                                             }}
-                                            />
-                                        </div>
-                                    </div>
-                                </>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                    )}
-                </div>
-                }
                 {this.state.value == 6 &&
                 <>
                     <SearchSelector
