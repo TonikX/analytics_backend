@@ -23,13 +23,24 @@ const RecordsPagesRPDSemestrDiagram = (props:IProps) => {
   const [typeChart, setTypeChart] = useState<TypeChart>(TypeChart.PIE)
   const refChart = useRef<any>()
   const [chart, setChart] = useState()
+  const [firstRender, setFirstRender] = useState(true)
 
   function firstRanderChart(): void {
     if(refChart.current) {
+      setFirstRender(false)
       renderChart()
     }
   }
   useEffect(firstRanderChart, [refChart.current])
+
+  function rerenderChart() {
+    if(refChart.current && !firstRender) {
+      renderChart()
+    }
+  }
+  useEffect(rerenderChart, [data])
+
+
   function changeTypeChart(): void {
     if(refChart.current && chart) {
       renderChart()

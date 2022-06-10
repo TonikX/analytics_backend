@@ -101,25 +101,42 @@ const RecordsPagesRPDSemester = (props:IProps) => {
     dispatch(actions.changeYear(value))
   }
 
+  const mapData = new Map()
+  const mapTitles = new Map()
+  if(Array.isArray(RPD_IN_SEMESTER) && RPD_IN_SEMESTER.length > 0) {
+    interface ITitles {
+      id: string
+      title: string
+    }
 
-  console.log('RPD_IN_SEMESTER', RPD_IN_SEMESTER);
-
-  const exampleArr = [1, 2, 2, 1, 1, 3]
-  const map = new Map()
-
-  exampleArr.forEach((el) => {
-    const currentIteration = exampleArr.reduce((acc, cur) => {
-      if(el === cur) {
-        return acc + 1
-      } else  {
-        return acc
+    const prepareArrayId: Array<number> = RPD_IN_SEMESTER.map((s) => s.id)
+    const prepareArrayTitle: Array<ITitles> = RPD_IN_SEMESTER.map((s) => {
+      return {
+        id: s.id,
+        title: s.title
       }
-    }, 0)
+    })
 
-    map.set(el, currentIteration)
-  })
+    prepareArrayId.forEach((id) => {
+        const currentIteration = prepareArrayId.reduce((acc, cur) => {
+          if(id === cur) {
+            return acc + 1
+          } else  {
+            return acc
+          }
+        }, 0)
+      mapData.set(id, currentIteration)
+    })
 
-  console.log('map', map.values());
+    prepareArrayTitle.forEach((obj: ITitles, idx) => {
+      if(!mapTitles.has(obj.id)) {
+        mapTitles.set(obj.id, obj.title)
+      } else {
+        return
+      }
+    })
+  }
+
   return (
       <>
         <SearchSelector
@@ -219,11 +236,11 @@ const RecordsPagesRPDSemester = (props:IProps) => {
           disableElevation className={classNamesButton}>
           Получить отчёт
         </Button>
-        <RecordsPagesRPDSemestrDiagram
-          labels={['labels1', 'labels2', 'labels3']}
+        {mapData.size > 0 && <RecordsPagesRPDSemestrDiagram
+          labels={Array.from(mapTitles.values())}
           title={'title'}
-          data={Array.from(map.values())}
-        />
+          data={Array.from(mapData.values())}
+        />}
         {/*{value == 6 && isVisible &&*/}
         {/*  <>*/}
         {/*  <div className={classNamesTableWrap}>*/}
