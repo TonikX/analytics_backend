@@ -26,7 +26,7 @@ export const initialSimpleStatState: SimpleStatState = {
     [fields.AP]: [],
     [fields.APuse]: -1,
     [fields.RPD_IN_AP]: [],
-    [fields.SUuse]: -1,
+    [fields.SUuse]: [],
     [fields.RPD_IN_SEMESTER]: [],
 
 };

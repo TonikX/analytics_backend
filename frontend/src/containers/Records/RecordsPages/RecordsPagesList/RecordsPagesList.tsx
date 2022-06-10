@@ -11,6 +11,7 @@ interface IProps extends WithStyles<typeof styles>{
   list: Array<IStructural>
   setList: (value: ICallback) => void
   resetValueControl?: any
+  removeItemInRedux?: any
 }
 
 const RecordsPagesList = (props: IProps) => {
@@ -18,12 +19,14 @@ const RecordsPagesList = (props: IProps) => {
     list,
     classes,
     setList,
-    resetValueControl
+    resetValueControl,
+    removeItemInRedux
   } = props
 
   function removeStructuralItem(id: string) {
     const filteredList = list.filter((el) => el.value !== id)
     setList(() => filteredList)
+    removeItemInRedux(filteredList.map((el) => el.value))
     if(filteredList.length === 0) {
       resetValueControl()
     }

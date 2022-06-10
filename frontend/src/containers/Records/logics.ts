@@ -211,7 +211,17 @@ const getRPDinSEMESTER = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done){
         const state = getState();
-        let su = '?structural_unit_id=' + getSUuse(state);
+        let su = ''
+        let reduxSu: Array<number> = getSUuse(state)
+        if(Array.isArray(reduxSu)) {
+            reduxSu.forEach((el, idx) => {
+                if(idx === 0) {
+                    su += `?structural_unit_id=${el}&`
+                } else {
+                    su += `structural_unit_id=${el}&`
+                }
+            })
+        }
         let status = getStatus(state);
         if (status == 'all'){
             status = '';
@@ -232,7 +242,7 @@ const getRPDinSEMESTER = createLogic({
         }
 
         dispatch(actions.fetchingTrue({destination: "GET_STATISTICS"}));
-        service.getStructuralUnitWPFilter(su, year, semester, status)
+        service.getStructuralUnitWPFilter(su, year, status)
             .then((res)=>{
                 dispatch(statisticsActions.SetRPDinSEMESTER(res.data));
             })

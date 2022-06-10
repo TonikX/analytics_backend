@@ -21,6 +21,8 @@ import TablePagination from '@material-ui/core/TablePagination';
 import React, { useState } from 'react';
 import { SelectorItemType } from '../../../../components/SearchSelector/types';
 import RecordsPagesList from '../RecordsPagesList/RecordsPagesList';
+import { useDispatch } from 'react-redux';
+import actions from '../../actions';
 
 interface IProps {
   handleChangeSearchQuerySU: (query: string) => void
@@ -53,6 +55,8 @@ interface IProps {
 }
 
 const RecordsPagesRPDSemester = (props:IProps) => {
+  const dispatch = useDispatch();
+
   const {
     handleChangeSearchQuerySU,
     handleChangePage,
@@ -89,7 +93,10 @@ const RecordsPagesRPDSemester = (props:IProps) => {
 
   const [yearsList, setYearsList] = useState<Array<IStructural>>([])
 
-  console.log('SUuse', SUuse);
+  function removeSUInRedux(value: Array<number>) {
+    dispatch(actions.ChangeSU(value))
+  }
+
   return (
       <>
         <SearchSelector
@@ -118,9 +125,11 @@ const RecordsPagesRPDSemester = (props:IProps) => {
         <RecordsPagesList
           list={structuralList}
           setList={setStructuralList}
+          removeItemInRedux={removeSUInRedux}
           resetValueControl={() => {
             changeSU(-1)
             setIsResetSearchSelector(true)
+            dispatch(actions.ChangeSU([]))
           }}
         />
         <FormControl variant="outlined">

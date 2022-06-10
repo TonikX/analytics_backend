@@ -143,7 +143,9 @@ class Records extends Component<RecordsProops> {
     }
 
     сhangeSU = (value: string|number): void => {
-        this.props.actions.ChangeSU(value);
+        if(Array.isArray(this.props.SUuse)) {
+            this.props.actions.ChangeSU([...this.props.SUuse, value]);
+        }
     }
 
     renderQualityReportChartFirst = (SIMPLE_STATE: any): ReactElement | undefined => {
