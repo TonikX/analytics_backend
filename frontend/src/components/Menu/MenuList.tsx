@@ -458,12 +458,20 @@ export default (groups: Array<string>) => {
         }
     ];
 
-    const sixthMenu =  [{
-      title: 'Отчеты',
-      link: appRouter.getRecordsRoute(),
-      icon: ReportsIcon,
-      selectedIcon: ReportsSelectedIcon,
-   }]
+    const sixthMenu =  []
+
+    if (!isUserInExpertiseGroup(groups)){
+        sixthMenu.push(
+          {
+              title: 'Отчеты',
+              link: appRouter.getRecordsRoute(),
+              icon: ReportsIcon,
+              selectedIcon: ReportsSelectedIcon,
+          },
+        )
+    }
+
+
 
     const characteristicMenu = isUserCanSeeCharacteristic(groups) ? [
         {
