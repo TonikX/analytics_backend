@@ -86,6 +86,8 @@ const RecordsPagesRPDSemester = (props:IProps) => {
   interface IStructural {value: string, label: string}
   const [structuralList, setStructuralList] = useState<Array<IStructural>>([])
 
+  const [yearsList, setYearsList] = useState<Array<IStructural>>([])
+
   return (
       <>
         <SearchSelector
@@ -110,13 +112,28 @@ const RecordsPagesRPDSemester = (props:IProps) => {
           valueLabel={''}
           className={classNamesSearchSelector}
         />
-        <RecordsPagesList structuralList={structuralList} setStructuralList={setStructuralList}/>
+        <RecordsPagesList list={structuralList} setList={setStructuralList}/>
         <FormControl variant="outlined">
           <InputLabel>Выберите год учебного плана</InputLabel>
           <Select
             label="Выберите год учебного плана"
             value={YEAR}
-            onChange={changeYear}
+            onChange={(e) => {
+              changeYear(e)
+              setYearsList((prev) => {
+                  if(Array.isArray(prev) && typeof e.target.value === 'string') {
+                    return [
+                      ...prev,
+                      {
+                        value: e.target.value,
+                        label: e.target.value
+                      }
+                    ]
+                  } else  {
+                    return []
+                  }
+          })
+            }}
             className={classNamesSelectYear}
             MenuProps={{
               anchorOrigin: {
@@ -129,12 +146,12 @@ const RecordsPagesRPDSemester = (props:IProps) => {
               },
               getContentAnchorEl: null
             }}>
-            <MenuItem value="all">Все</MenuItem>
-            <MenuItem value="2021">2021</MenuItem>
-            <MenuItem value="2020">2020</MenuItem>
-            <MenuItem value="2019">2019</MenuItem>
+            <MenuItem value="2020-2021">2020-2021</MenuItem>
+            <MenuItem value="2019-2020">2019-2020</MenuItem>
           </Select>
         </FormControl>
+        <RecordsPagesList list={yearsList} setList={setYearsList}/>
+
         <FormControl variant="outlined">
           <InputLabel>Выберите семестр</InputLabel>
           <Select
