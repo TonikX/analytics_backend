@@ -30,10 +30,11 @@ import SearchSelector from "../../components/SearchSelector";
 import QuantityReportCharts from './RecordsChart/QuantityReport/RecordsChart'
 import QualityReportChart from './RecordsChart/QualityReport/QualityReportChart'
 import TotalOPReport from './RecordsChart/TotalOPReport/TotalOPReport';
+import RecordsPagesRPDSemester from './RecordsPages/RecordsPagesRPDSemester/RecordsPagesRPDSemester';
 
 class Records extends Component<RecordsProops> {
     state = {
-        value: 3,
+        value: 6,
         isVisible: false,
         page: 0,
         rowsPerPage: 10,
@@ -362,150 +363,37 @@ class Records extends Component<RecordsProops> {
 
                     </div>
                 </>}
-                {this.state.value == 6 &&
-                <>
-                    <SearchSelector
-                        label='Выберите структурное подразделение'
-                        changeSearchText={this.handleChangeSearchQuerySU}
-                        list={this.state.SU}
-                        changeItem={(value: string) => this.сhangeSU(value)}
-                        value={SUuse}
-                        valueLabel={''}
-                        className={classes.field}
 
+                <RecordsPagesRPDSemester
+                  classNamesSearchSelector={classes.field}
+                  classNamesSelectYear={classes.field}
+                  classNamesSelectSemester={classes.field}
+                  classNamesRadioGroup={classes.field}
+                  classNamesButton={classes.Btn}
+                  classNamesTableWrap={classes.tableWrap}
+                  classNamesHeader={classes.header}
+                  classNamesLink={classes.link}
+                  classNamesFooter={classes.footer}
+                  YEAR={YEAR}
+                  SEMESTER={SEMESTER}
+                  STATUS={STATUS}
+                  RPD_IN_SEMESTER={RPD_IN_SEMESTER}
+                  changeYear={this.changeYear}
+                  changeSU={this.сhangeSU}
+                  changeSemester={this.сhangeSemester}
+                  changeStatus={this.сhangeStatus}
+                  getRPDinSEMESTER={this.getRPDinSEMESTER}
+                  handleChangePage={this.handleChangePage}
+                  handleChangeSearchQuerySU={this.handleChangeSearchQuerySU}
+                  list={this.state.SU}
+                  value={this.state.value}
+                  isVisible={this.state.isVisible}
+                  SU={this.state.SU}
+                  page={this.state.page}
+                  rowsPerPage={this.state.rowsPerPage}
+                  SUuse={SUuse}
 
-
-                    />
-                    <FormControl variant="outlined">
-                        <InputLabel>Выберите год учебного плана</InputLabel>
-                        <Select
-                            label="Выберите год учебного плана"
-                            value={YEAR}
-                            onChange={this.changeYear}
-                            className={classes.field}
-                            MenuProps={{
-                                anchorOrigin: {
-                                    vertical: "bottom",
-                                    horizontal: "left"
-                                },
-                                transformOrigin: {
-                                    vertical: "top",
-                                    horizontal: "left"
-                                },
-                                getContentAnchorEl: null
-                            }}>
-                            <MenuItem value="all">Все</MenuItem>
-                            <MenuItem value="2021">2021</MenuItem>
-                            <MenuItem value="2020">2020</MenuItem>
-                            <MenuItem value="2019">2019</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl variant="outlined">
-                        <InputLabel>Выберите семестр</InputLabel>
-                        <Select
-                            label="Выберите семестр"
-                            value={SEMESTER}
-                            onChange={this.сhangeSemester}
-                            className={classes.field}
-                            MenuProps={{
-                                anchorOrigin: {
-                                    vertical: "bottom",
-                                    horizontal: "left"
-                                },
-                                transformOrigin: {
-                                    vertical: "top",
-                                    horizontal: "left"
-                                },
-                                getContentAnchorEl: null
-                            }}>
-                            <MenuItem value="all">Все</MenuItem>
-                            <MenuItem value="1">Первый семестр</MenuItem>
-                            <MenuItem value="2">Второй семестр</MenuItem>
-                            <MenuItem value="3">Третий семестр</MenuItem>
-                            <MenuItem value="4">Четвёртый семестр</MenuItem>
-                            <MenuItem value="5">Пятый семестр</MenuItem>
-                            <MenuItem value="6">Шестой семестр</MenuItem>
-                            <MenuItem value="7">Седьмой семестр</MenuItem>
-                            <MenuItem value="8">Восьмой семестр</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Выберите статус РПД</FormLabel>
-                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.сhangeStatus}
-                                    className={classes.field}>
-                            <FormControlLabel value="all" control={<Radio color="primary"/>} label="Все"/>
-                            <FormControlLabel value="EX" control={<Radio color="primary"/>} label="На экспертизе"/>
-                            <FormControlLabel value="AC" control={<Radio color="primary"/>} label="Одобрены"/>
-                            <FormControlLabel value="WK" control={<Radio color="primary"/>} label="В работе"/>
-                        </RadioGroup>
-                    </FormControl>
-                    <Button
-                        onClick={this.getRPDinSEMESTER}
-                        variant="contained"
-                        color="primary"
-                        disableElevation className={classes.Btn}>
-                        Получить отчёт
-                    </Button>
-                </>
-                }
-                {this.state.value == 6 && this.state.isVisible &&
-                <>
-
-                <div className={classes.tableWrap}>
-                    <Table stickyHeader size='small'>
-                        <TableHead className={classes.header}>
-                            <TableRow>
-                                <TableCell style={{width: "25%"}}>
-                                    Код
-                                </TableCell>
-                                <TableCell style={{width: "50%"}}>
-                                    Название
-                                </TableCell>
-                                <TableCell style={{width: "25%"}}>
-                                    Авторский состав
-                                </TableCell>
-                                <TableCell/>
-                            </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                            {RPD_IN_SEMESTER.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((workProgram: any) =>
-                                <TableRow key={workProgram.id}>
-                                    <TableCell>
-                                        {workProgram.discipline_code}
-                                    </TableCell>
-                                    <TableCell className={classes.link}>
-                                        <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>
-                                            {workProgram.title}
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell>
-                                        {workProgram.editors.map((editors: any) =>
-                                            <>{editors.first_name} {editors.last_name}; </>
-                                        )}
-                                    </TableCell>
-
-                                </TableRow>
-                            )}
-                        </TableBody>
-
-                    </Table>
-                </div>
-
-                <div className={classes.footer}>
-                    <TablePagination count={RPD_IN_SEMESTER.length}
-                                     component="div"
-                                     page={this.state.page}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     rowsPerPage={this.state.rowsPerPage}
-                                     onChangeRowsPerPage={() => {
-                                     }}
-                    />
-
-                </div>
-                </>
-                }
+                />
                 {this.state.value == 7 &&
                     <>
                 <SearchSelector
