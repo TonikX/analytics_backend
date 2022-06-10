@@ -364,36 +364,36 @@ class Records extends Component<RecordsProops> {
                     </div>
                 </>}
 
-                <RecordsPagesRPDSemester
-                  classNamesSearchSelector={classes.field}
-                  classNamesSelectYear={classes.field}
-                  classNamesSelectSemester={classes.field}
-                  classNamesRadioGroup={classes.field}
-                  classNamesButton={classes.Btn}
-                  classNamesTableWrap={classes.tableWrap}
-                  classNamesHeader={classes.header}
-                  classNamesLink={classes.link}
-                  classNamesFooter={classes.footer}
-                  YEAR={YEAR}
-                  SEMESTER={SEMESTER}
-                  STATUS={STATUS}
-                  RPD_IN_SEMESTER={RPD_IN_SEMESTER}
-                  changeYear={this.changeYear}
-                  changeSU={this.сhangeSU}
-                  changeSemester={this.сhangeSemester}
-                  changeStatus={this.сhangeStatus}
-                  getRPDinSEMESTER={this.getRPDinSEMESTER}
-                  handleChangePage={this.handleChangePage}
-                  handleChangeSearchQuerySU={this.handleChangeSearchQuerySU}
-                  list={this.state.SU}
-                  value={this.state.value}
-                  isVisible={this.state.isVisible}
-                  SU={this.state.SU}
-                  page={this.state.page}
-                  rowsPerPage={this.state.rowsPerPage}
-                  SUuse={SUuse}
-
-                />
+                {this.state.value == 6 && <RecordsPagesRPDSemester
+                      classNamesSearchSelector={classes.field}
+                      classNamesSelectYear={classes.field}
+                      classNamesSelectSemester={classes.field}
+                      classNamesRadioGroup={classes.field}
+                      classNamesButton={classes.Btn}
+                      classNamesTableWrap={classes.tableWrap}
+                      classNamesHeader={classes.header}
+                      classNamesLink={classes.link}
+                      classNamesFooter={classes.footer}
+                      YEAR={YEAR}
+                      SEMESTER={SEMESTER}
+                      STATUS={STATUS}
+                      RPD_IN_SEMESTER={RPD_IN_SEMESTER}
+                      changeYear={this.changeYear}
+                      changeSU={this.сhangeSU}
+                      changeSemester={this.сhangeSemester}
+                      changeStatus={this.сhangeStatus}
+                      getRPDinSEMESTER={this.getRPDinSEMESTER}
+                      handleChangePage={this.handleChangePage}
+                      handleChangeSearchQuerySU={this.handleChangeSearchQuerySU}
+                      list={this.state.SU}
+                      value={this.state.value}
+                      isVisible={this.state.isVisible}
+                      SU={this.state.SU}
+                      page={this.state.page}
+                      rowsPerPage={this.state.rowsPerPage}
+                      SUuse={SUuse}
+                    />
+                }
                 {this.state.value == 7 &&
                     <>
                 <SearchSelector
