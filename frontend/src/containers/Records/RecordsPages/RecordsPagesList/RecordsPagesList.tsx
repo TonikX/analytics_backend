@@ -10,31 +10,32 @@ type ICallback = () => Array<IStructural>
 interface IProps extends WithStyles<typeof styles>{
   list: Array<IStructural>
   setList: (value: ICallback) => void
+  resetValueControl?: any
 }
 
 const RecordsPagesList = (props: IProps) => {
   const {
     list,
     classes,
-    setList
+    setList,
+    resetValueControl
   } = props
 
   function removeStructuralItem(id: string) {
-    setList(() => {
-      return list.filter((el) => el.value !== id)
-    })
-    if(list.length === 0) {
-      console.log('reset')
+    const filteredList = list.filter((el) => el.value !== id)
+    setList(() => filteredList)
+    if(filteredList.length === 0) {
+      resetValueControl()
     }
   }
 
   return (
     <ul className={classes.list}>
-      {list.map((listElement, idx) => {
+      {list.length > 0 && list.map((listElement, idx) => {
         return (
           <li
             className={classes.listItem}
-            key={listElement.value}>
+            key={idx}>
 
             <p className={classes.listItemText}>{listElement.label}</p>
 

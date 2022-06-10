@@ -49,7 +49,7 @@ interface IProps {
   changeSemester: (event: any) => void
   changeStatus: (event: any) => void
   getRPDinSEMESTER:(value: any) => void
-  changeSU:(value: string) => void
+  changeSU:(value: string|number) => void
 }
 
 const RecordsPagesRPDSemester = (props:IProps) => {
@@ -85,9 +85,11 @@ const RecordsPagesRPDSemester = (props:IProps) => {
 
   interface IStructural {value: string, label: string}
   const [structuralList, setStructuralList] = useState<Array<IStructural>>([])
+  const [isResetSearchSelector, setIsResetSearchSelector] = useState(false)
 
   const [yearsList, setYearsList] = useState<Array<IStructural>>([])
 
+  console.log('SUuse', SUuse);
   return (
       <>
         <SearchSelector
@@ -95,6 +97,7 @@ const RecordsPagesRPDSemester = (props:IProps) => {
           changeSearchText={handleChangeSearchQuerySU}
           list={list}
           changeItem={(value: string) => {
+            setIsResetSearchSelector(false)
             changeSU(value)
             const findStructural = list.find((l: IStructural) => l.value === value)
             setStructuralList((prev) => {
@@ -109,9 +112,17 @@ const RecordsPagesRPDSemester = (props:IProps) => {
           }}
           value={SUuse}
           valueLabel={''}
+          isReset={isResetSearchSelector}
           className={classNamesSearchSelector}
         />
-        <RecordsPagesList list={structuralList} setList={setStructuralList}/>
+        <RecordsPagesList
+          list={structuralList}
+          setList={setStructuralList}
+          resetValueControl={() => {
+            changeSU(-1)
+            setIsResetSearchSelector(true)
+          }}
+        />
         <FormControl variant="outlined">
           <InputLabel>Выберите год учебного плана</InputLabel>
           <Select
@@ -120,18 +131,18 @@ const RecordsPagesRPDSemester = (props:IProps) => {
             onChange={(e) => {
               changeYear(e)
               setYearsList((prev) => {
-                  if(Array.isArray(prev) && typeof e.target.value === 'string') {
-                    return [
-                      ...prev,
-                      {
-                        value: e.target.value,
-                        label: e.target.value
-                      }
-                    ]
-                  } else  {
-                    return []
-                  }
-          })
+                if(Array.isArray(prev) && typeof e.target.value === 'string') {
+                  return [
+                    ...prev,
+                    {
+                      value: e.target.value,
+                      label: e.target.value
+                    }
+                  ]
+                } else  {
+                  return []
+                }
+              })
             }}
             className={classNamesSelectYear}
             MenuProps={{
@@ -149,7 +160,11 @@ const RecordsPagesRPDSemester = (props:IProps) => {
             <MenuItem value="2019-2020">2019-2020</MenuItem>
           </Select>
         </FormControl>
-        <RecordsPagesList list={yearsList} setList={setYearsList}/>
+        <RecordsPagesList
+          list={yearsList}
+          setList={setYearsList}
+          resetValueControl={() => changeYear({target: {value: ''}})}
+        />
 
         <FormControl component="fieldset">
           <FormLabel component="legend">Выберите статус РПД</FormLabel>
