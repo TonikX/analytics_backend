@@ -20,12 +20,23 @@ const getUserGroups = createAction('GET_USER_GROUPS');
 const setUserGroups = createAction('SET_USER_GROUPS');
 const setUserNotificationsCount = createAction('SET_USER_NOTIFICATIONS_COUNT');
 
+const setUnreadChatsCount = createAction('SET_UNREAD_CHATS_COUNT');
+const decreaseUnreadChatsCount = createAction('DECREASE_UNREAD_CHATS_COUNT');
+
 const getUserData = createAction('GET_USER_DATA');
 const setUserData = createAction('SET_USER_DATA');
 
 const refreshToken = createAction('REFRESH_LOGIN');
 
 const setMockMenu = createAction('SET_MOCK_MENU');
+
+const validateAcademicPlans = createAction('VALIDATE_ACADEMIC_PLANS');
+
+const getValidationResults = createAction('GET_VALIDATION_RESULTS');
+const setValidationResults = createAction('SET_VALIDATION_RESULTS');
+
+const getValidationRunResults = createAction('GET_VALIDATION_RUN_RESULTS');
+const setValidationRunResults = createAction('SET_VALIDATION_RUN_RESULTS');
 
 const actions: GeneralActions = {
     setUserNotificationsCount,
@@ -45,6 +56,13 @@ const actions: GeneralActions = {
     setUserGroups,
     setUserData,
     getUserData,
+    setUnreadChatsCount,
+    decreaseUnreadChatsCount,
+    validateAcademicPlans,
+    getValidationResults,
+    setValidationResults,
+    getValidationRunResults,
+    setValidationRunResults,
 };
 
 export default actions;

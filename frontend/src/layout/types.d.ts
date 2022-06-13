@@ -18,6 +18,13 @@ export interface GeneralActions {
     setUserGroups: any;
     setMockMenu: any;
     setUserNotificationsCount: any;
+    setUnreadChatsCount;
+    decreaseUnreadChatsCount;
+    validateAcademicPlans;
+    getValidationResults;
+    setValidationResults;
+    getValidationRunResults;
+    setValidationRunResults;
 }
 
 export interface layoutState {
@@ -27,9 +34,12 @@ export interface layoutState {
     [fields.USER_GROUPS]: Array;
     [fields.IS_AUTH]: boolean;
     [fields.NOTIFICATIONS_COUNT]: number;
+    [fields.UNREAD_CHATS_COUNT]: number;
     [fields.MOCK_MENU]: Array<number>;
     [fields.USERS]: Array<any>; //todo: create user type
     [fields.USER_DATA]: any;
+    [fields.VALIDATION_RESULTS]: Array;
+    [fields.VALIDATION_RUN_RESULTS]: Array;
 }
 
 export type UserType = {

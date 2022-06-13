@@ -2,6 +2,7 @@ import {createLogic} from "redux-logic";
 
 import actions from './actions';
 import profileActions from '../containers/Profile/Folders/actions';
+import chatActions from '../containers/Chats/actions';
 
 import Service from './service';
 import get from "lodash/get";
@@ -20,6 +21,8 @@ const getUserData = createLogic({
         service.getUserData()
             .then((res) => {
                 dispatch(actions.setUserData(res.data));
+                dispatch(chatActions.getConversations(res.data.id));
+                dispatch(chatActions.getUnreadMessages(res.data.id));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -102,9 +105,68 @@ const refreshToken = createLogic({
     }
 });
 
+const getValidationResult = createLogic({
+    type: actions.getValidationResults.type,
+    latest: true,
+    process({getState, action}, dispatch, done) {
+        service.getValidationResults()
+            .then((res) => {
+                dispatch(actions.setValidationResults(res.data.results));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                return done();
+            });
+    }
+});
+
+const getValidationRunResults = createLogic({
+    type: actions.getValidationRunResults.type,
+    latest: true,
+    process({getState, action}, dispatch, done) {
+        //@ts-ignore
+        const runId = action.payload;
+
+        service.getValidationRunResults(runId)
+            .then((res) => {
+                dispatch(actions.setValidationRunResults(res.data.results));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                return done();
+            });
+    }
+});
+
+const validateAcademicPlans = createLogic({
+    type: actions.validateAcademicPlans.type,
+    latest: true,
+    process({getState, action}, dispatch, done) {
+        service.validateAcademicPlans()
+            .then((res) => {
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                return done();
+            });
+    }
+});
+
 export default [
     getAllUsers,
     getUserGroups,
     refreshToken,
     getUserData,
+    getValidationRunResults,
+    getValidationResult,
+    validateAcademicPlans,
 ];

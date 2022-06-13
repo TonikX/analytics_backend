@@ -58,4 +58,16 @@ export const useStyles = makeStyles(() => createStyles({
         alignItems: 'center',
         marginTop: '10px'
     },
+    wrapperChart: {
+        marginTop: '50px',
+        marginBottom: '50px',
+        display: 'flex',
+        flexDirection: 'column',
+        width: '500px',
+        height: '500px',
+        alignItems: 'center',
+    },
+    btnChart: {
+        marginTop: '20px'
+    }
 }));

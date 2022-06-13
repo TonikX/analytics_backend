@@ -1,6 +1,7 @@
 import {ReactText} from "react";
 import {subSections} from "../containers/WorkProgram/constants";
 
+const CHATS = 'chats';
 const FOLDERS = 'folders';
 const SIGN_IN = 'sign-in';
 const SIGN_UP = 'sign-up';
@@ -57,6 +58,10 @@ export default class RouterService {
 
     getFoldersRoute = () => {
         return SEPARATOR + FOLDERS;
+    };
+
+    getChatsRoute = () => {
+        return SEPARATOR + CHATS;
     };
 
     getProfessionalStandardsRoute = () => {

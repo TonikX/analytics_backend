@@ -16,7 +16,10 @@ export const initialState = {
     [fields.USER_GROUPS]: [],
     [fields.USER_DATA]: {},
     [fields.NOTIFICATIONS_COUNT]: 0,
+    [fields.UNREAD_CHATS_COUNT]: 0,
     [fields.MOCK_MENU]: [],
+    [fields.VALIDATION_RESULTS]: [],
+    [fields.VALIDATION_RUN_RESULTS]: [],
 };
 
 const fetchingTrue = (state, {payload}) => ({
@@ -86,6 +89,26 @@ const setUserNotificationsCount = (state, {payload}) => ({
     [fields.NOTIFICATIONS_COUNT]: payload,
 });
 
+const setUnreadChatsCount = (state, {payload}) => ({
+    ...state,
+    [fields.UNREAD_CHATS_COUNT]: payload,
+});
+
+const decreaseUnreadChatsCount = (state) => ({
+    ...state,
+    [fields.UNREAD_CHATS_COUNT]: Math.max(state[fields.UNREAD_CHATS_COUNT] - 1, 0),
+});
+
+const setValidationResults = (state, {payload}) => ({
+    ...state,
+    [fields.VALIDATION_RESULTS]: payload,
+});
+
+const setValidationRunResults = (state, {payload}) => ({
+    ...state,
+    [fields.VALIDATION_RUN_RESULTS]: payload,
+});
+
 const setAuthTrue = (state) => ({
     ...state,
     [fields.IS_AUTH]: true,
@@ -110,4 +133,8 @@ export const reducer = createReducer(initialState, {
     [actions.setUserData.type]: setUserData,
     [actions.setMockMenu.type]: setMockMenu,
     [actions.setUserNotificationsCount.type]: setUserNotificationsCount,
+    [actions.setUnreadChatsCount.type]: setUnreadChatsCount,
+    [actions.decreaseUnreadChatsCount.type]: decreaseUnreadChatsCount,
+    [actions.setValidationResults.type]: setValidationResults,
+    [actions.setValidationRunResults.type]: setValidationRunResults,
 });

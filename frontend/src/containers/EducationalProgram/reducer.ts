@@ -16,14 +16,10 @@ export const initialState: educationalProgramState = {
     [fields.ALL_COUNT]: 1,
     [fields.SEARCH_QUERY]: '',
     [fields.EDUCATION_PROGRAM_LIST]: [],
-    [fields.KINDS_OF_ACTIVITIES]: [],
-    [fields.OBJECTS_OF_ACTIVITIES]: [],
-    [fields.TASKS_TYPES]: [],
     [fields.EDUCATION_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
-    },
-    [fields.COMPETENCE_MATRIX]: {}
+    }
 };
 
 const setEducationalProgramList = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
@@ -35,12 +31,6 @@ const setEducationalProgramCharacteristic = (state: educationalProgramState, {pa
     ...state,
     [fields.EDUCATION_PROGRAM_CHARACTERISTIC]: payload,
 });
-
-const setCompetenceMatrix = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
-    ...state,
-    [fields.COMPETENCE_MATRIX]: payload,
-});
-
 
 const changeSearchQuery = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
     ...state,
@@ -81,32 +71,13 @@ const changeSorting = (state: educationalProgramState, {payload}: any): educatio
     }
 });
 
-const setKindsOfActivity = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
-    ...state,
-    [fields.KINDS_OF_ACTIVITIES]: payload
-});
-
-const setObjectsOfActivity = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
-    ...state,
-    [fields.OBJECTS_OF_ACTIVITIES]: payload
-});
-
-const setTasksTypes = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
-    ...state,
-    [fields.TASKS_TYPES]: payload
-});
-
 export const reducer = createReducer(initialState, {
     [actions.setEducationalProgramList.type]: setEducationalProgramList,
     [actions.setEducationalProgramCharacteristic.type]: setEducationalProgramCharacteristic,
-    [actions.setCompetenceMatrix.type]: setCompetenceMatrix,
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
     [actions.changeSearchQuery.type]: changeSearchQuery,
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,
-    [actions.setKindsOfActivity.type]: setKindsOfActivity,
-    [actions.setObjectsOfActivity.type]: setObjectsOfActivity,
-    [actions.setTasksTypes.type]: setTasksTypes,
 });

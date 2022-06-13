@@ -133,6 +133,10 @@ class EducationalPlanService extends AnalyticsService{
         return (`${appConfigService.getApiBasePath()}/api/export/docx/${dialogData[DownloadFileModalFields.ID]}/${dialogData[DownloadFileModalFields.DIRECTION_ID]}/${dialogData[DownloadFileModalFields.ACADEMIC_PLAN_ID]}/${dialogData[DownloadFileModalFields.YEAR]}`);
     }
 
+    validateAcademicPlan(id: number){
+        return this.get(`/api/validation/${id}`);
+    }
+
     updateEducationalPlan(competence: any){
         const formData = new FormData();
         const id = competence[EducationalPlanFields.ID];

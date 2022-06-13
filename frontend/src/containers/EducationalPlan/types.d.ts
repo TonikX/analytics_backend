@@ -53,6 +53,7 @@ export interface EducationalPlanActions {
     planTrajectorySetDirection: any;
     planTrajectorySelectOptionalWp: any;
     planTrajectorySelectElectives: any;
+    validateAcademicPlan: any;
     planTrajectorySelectSpecialization: any;
 }
 

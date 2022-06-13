@@ -223,6 +223,10 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         this.props.actions.planTrajectorySelectElectives({workPrograms, moduleId, planId: this.getPlanId()});
     }
 
+    validate = () => {
+        this.props.actions.validateAcademicPlan(this.getPlanId());
+    }
+
     render() {
         const {classes, blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
         const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
@@ -243,6 +247,10 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                     {/*        <EditIcon className={classes.titleIcon} color="primary" onClick={this.handleChangePlan}/>*/}
                     {/*    </Tooltip>*/}
                     {/*}*/}
+                    <Button variant="contained"
+                            color="primary" onClick={this.validate}>
+                        Отправить на валидацию
+                    </Button>
                     <Tooltip title={(
                         <>
                             1. Пропущен обязательный блок <br/>
