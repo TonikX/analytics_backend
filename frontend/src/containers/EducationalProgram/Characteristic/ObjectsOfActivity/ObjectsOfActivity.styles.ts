@@ -4,7 +4,16 @@ export default makeStyles((theme: Theme) => createStyles({
   label: {
     fontSize: '14px',
     marginBottom: '10px',
-    color: 'rgba(0, 0, 0, 0.54)'
+    color: 'rgba(0, 0, 0, 0.54)',
+    display: 'flex',
+    alignItems: 'center',
+    '& svg': {
+      marginLeft: '10px',
+    }
+  },
+  tooltip: {
+    fontSize: 14,
+    zIndex: 10
   },
   header: {
     background: theme.palette.primary.main,
