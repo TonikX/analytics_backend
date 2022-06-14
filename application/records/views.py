@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 
 from dataprocessing.models import User
@@ -17,7 +18,7 @@ from .serializers import WorkProgramInFieldOfStudySerializerForStatistic, \
     WorkProgramSerializerForStatistic, SuperShortWorkProgramSerializer, WorkProgramSerializerForStatisticExtended, \
     AcademicPlansDescriptionWpSerializer, WorkProgramPrerequisitesAndOutcomesSerializer, \
     WorkProgramDescriptionOnlySerializer, \
-    ImplementationAcademicPlanWpStatisticSerializer
+    ImplementationAcademicPlanWpStatisticSerializer, WorkProgramDuplicatesSerializer
 
 
 @api_view(['GET'])
@@ -109,7 +110,9 @@ def number_of_academplans_by_qualification_and_year(request, qualification, year
     Количество учебных планов по квалификации и году
     '+'
     """
-    return Response({"quantity": AcademicPlan.objects.filter(academic_plan_in_field_of_study__qualification=qualification, academic_plan_in_field_of_study__year=year).count()})
+    return Response({"quantity": AcademicPlan.objects.filter(
+        academic_plan_in_field_of_study__qualification=qualification,
+        academic_plan_in_field_of_study__year=year).count()})
 
 
 @api_view(['GET'])
@@ -170,13 +173,13 @@ def SimpleStatistic(request):
     total_rpd = WorkProgram.objects.all().count()
     return Response(
         {
-            "total_rpd":total_rpd,
+            "total_rpd": total_rpd,
             "registered_users": registered_users,
             "users_in_rpd": rpd_users,
             "rpd_with_editors": editors_rpd,
             "rpd_on_expertise": on_expertise,
             "rpd_approved": approved,
-            "archived_rpd":archived_rpd,
+            "archived_rpd": archived_rpd,
             "rpd_in_work": in_work
         }
     )
@@ -215,14 +218,15 @@ def StructuralUnitWp(request):
     for unit in units:
         if status_filter == "WK":
             needed_wp = (WorkProgram.objects.select_related('structural_unit').filter(expertise_with_rpd__isnull=True,
-                                                    structural_unit=unit) | WorkProgram.objects.filter(
+                                                                                      structural_unit=unit) | WorkProgram.objects.filter(
                 expertise_with_rpd__expertise_status__contains=status_filter,
                 structural_unit=unit)).distinct()
         elif status_filter == "":
             needed_wp = WorkProgram.objects.select_related('structural_unit').filter(structural_unit=unit).distinct()
         else:
-            needed_wp = WorkProgram.objects.select_related('structural_unit').filter(expertise_with_rpd__expertise_status__contains=status_filter,
-                                                   structural_unit=unit).distinct()
+            needed_wp = WorkProgram.objects.select_related('structural_unit').filter(
+                expertise_with_rpd__expertise_status__contains=status_filter,
+                structural_unit=unit).distinct()
         serializer = WorkProgramSerializerForStatistic(needed_wp, many=True)
         result.append({"id": unit.id,
                        "title": unit.title,
@@ -251,7 +255,7 @@ class WorkProgramDetailsWithApAndSemesters1(generics.ListAPIView):
 
 @api_view(['GET'])
 @permission_classes((AllowAny,))
-def WorkProgramDetailsWithApAndSemesters(request):
+def WorkProgramDetailsWithApAndSemesters_old(request):
     """
     Отчет о заполнении РПД по структурному подразделению, году, семестру
     #'+'
@@ -291,6 +295,74 @@ def WorkProgramDetailsWithApAndSemesters(request):
                                                zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
     serializer = WorkProgramSerializerForStatisticExtended(needed_wp, many=True)
     return Response(serializer.data)
+
+
+class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramSerializerForStatisticExtended
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        request = self.request
+        status_filter = request.query_params.get("status")
+        structural_units = request.query_params.getlist("structural_unit_id")
+        year = request.query_params.getlist("year")
+        editors = request.query_params.getlist("editor_id")
+        print(status_filter, structural_units, year, editors)
+
+        queryset = WorkProgram.objects.all()
+
+        filter_dict = {}
+        if status_filter:
+            if status_filter!="WK":
+                filter_dict["expertise_with_rpd__expertise_status__contains"] = status_filter
+        if structural_units:
+            structural_units = [int(unit) for unit in structural_units]
+            filter_dict["structural_unit__in"] = structural_units
+
+        if editors:
+            editors = [int(e) for e in editors]
+            filter_dict["editors__in"] = editors
+        queryset = queryset.filter(**filter_dict)
+        result = WorkProgram.objects.none()
+        if year:
+            year = [int(y.split("-")[0]) for y in year]
+            temp_year = year
+            for y in temp_year:
+                for i in range(1, 13, 2):
+                    print(i)
+                    cred_regex = r""
+                    for j in range(1, 13, 2):
+                        if j == i:
+                            cred_regex += "((([^0]\.[0-9])|([^0])),\s(([0-9]\.[0-9])|[0-9])|(([0-9]\.[0-9])|[0-9]),\s(([^0]\.[0-9])|([^0]))),\s"
+                        else:
+                            cred_regex += "(([0-9]\.[0-9])|[0-9]),\s(([0-9]\.[0-9])|[0-9]),\s"
+                    cred_regex = cred_regex[:-3]
+                    y -= 1
+                    result = result | queryset.filter(zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=cred_regex,
+                                                      zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year=y)
+        else:
+            result = queryset
+        return result
+
+
+@api_view(["GET"])
+@permission_classes((AllowAny,))
+def GetDuplicates(request):
+    duplicates = WorkProgram.objects.values('title').annotate(name_count=Count('title')).exclude(name_count=1)
+    duplicates_list = []
+
+    for wp in duplicates:
+        duplicates = WorkProgram.objects.filter(title=wp["title"])
+        serializer = WorkProgramSerializerForStatistic(duplicates, many=True)
+        duplicates_list.append({"name":wp["title"],"count":wp["name_count"], "work_programs":serializer.data})
+    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
+    paginator = pagination_class()
+    page = paginator.paginate_queryset(duplicates_list, request)
+
+    serializer = WorkProgramDuplicatesSerializer(page, many=True)
+    return paginator.get_paginated_response(serializer.data)
+    #return Response(duplicates_list)
 
 
 class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
