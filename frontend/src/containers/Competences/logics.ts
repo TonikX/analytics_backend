@@ -71,11 +71,11 @@ const createNewCompetence = createLogic({
     type: competencesActions.createNewCompetence.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const course = action.payload;
+        const data = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_COMPETENCE}));
 
-        service.createCompetence(course)
+        service.createCompetence(data)
             .then((res) => {
                 dispatch(competencesActions.getCompetences());
                 dispatch(actions.fetchingSuccess());

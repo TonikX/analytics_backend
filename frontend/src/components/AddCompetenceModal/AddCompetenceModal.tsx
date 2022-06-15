@@ -14,82 +14,157 @@ import SearchSelector from "../SearchSelector/SearchSelector";
 
 import connect from './AddCompetenceModal.connect';
 import styles from './AddCompetenceModal.styles';
+import AddIcon from "@material-ui/icons/Add";
+import TextField from "@material-ui/core/TextField";
+import {CompetenceFields} from "../../containers/Competences/enum";
+import CompetencesService from "../../containers/Competences/service";
+import classNames from "classnames";
+
+const Service = new CompetencesService()
 
 class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
-    state = {
-        competence: null
-    };
+  state = {
+    competence: null,
+    createCompetence: false,
+    newCompetence: {},
+  };
 
-    componentDidMount() {
-        this.props.competenceActions.getCompetences();
+  componentDidMount() {
+    this.props.competenceActions.getCompetences();
+  }
+
+  handleClose = () => {
+    this.props.closeDialog();
+  }
+
+  handleSave = async () => {
+    if (this.state.createCompetence) {
+      const { data }: any = await Service.createCompetence(this.state.newCompetence);
+      this.props.saveDialog({ value: data?.id})
+      this.props.closeDialog();
+      this.setState({competence: null, createCompetence: false, newCompetence: {}})
+    } else {
+      this.props.saveDialog(this.state.competence);
+      this.props.closeDialog();
+
+      this.setState({competence: null})
     }
+  }
 
-    handleClose = () => {
-        this.props.closeDialog();
-    }
+  save = (value: string) => {
+    const {competenceList} = this.props;
+    const competence = competenceList.find(el => el.value === value);
 
-    handleSave = () => {
-        this.props.saveDialog(this.state.competence);
-        this.props.closeDialog();
+    this.setState({competence: competence})
+  }
 
-        this.setState({competence: null})
-    }
+  handleChangeSearchText = (searchText: string) => {
+    this.props.competenceActions.changeSearchQuery(searchText);
+    this.props.competenceActions.getCompetences();
+  }
 
-    save = (value: string) => {
-        const {competenceList} = this.props;
-        const competence = competenceList.find(el => el.value === value);
+  changeNewCompetence = (field: string) => (e: any) => {
+    this.setState({
+      newCompetence: {
+        ...this.state.newCompetence,
+        [field]: e.target.value,
+      }
+    })
+  }
 
-        this.setState({competence: competence})
-    }
+  render() {
+    const {isOpen, classes, competenceList, } = this.props;
+    const { createCompetence, newCompetence } = this.state
 
-    handleChangeSearchText = (searchText: string) => {
-        this.props.competenceActions.changeSearchQuery(searchText);
-        this.props.competenceActions.getCompetences();
-    }
+    // @ts-ignore
+    const disableButton = createCompetence ? !(newCompetence[CompetenceFields.TITLE] && newCompetence[CompetenceFields.NUMBER])
+      : get(this, 'state.competence.value', null) === null;
 
-    render() {
-        const {isOpen, classes, competenceList} = this.props;
-
-        // @ts-ignore
-        const disableButton = get(this, 'state.competence.value', null) === null;
-
-        return (
-            <Dialog
-                open={isOpen}
-                onClose={this.handleClose}
-                classes={{
-                    paper: classes.dialog,
-                    root: classes.root,
-                }}
-                maxWidth="sm"
-                fullWidth
+    return (
+      <Dialog
+        open={isOpen}
+        onClose={this.handleClose}
+        classes={{
+          paper: classes.dialog,
+          root: classes.root,
+        }}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle style={{ display: 'flex', justifyContent: 'space-between' }}>
+          Добавить компетенцию
+          {createCompetence ? (
+            <Button color="primary"
+                    variant="text"
+                    size="small"
+                    className={classes.addSmallButton}
+                    onClick={() => this.setState({ createCompetence: false })}
             >
-                <DialogTitle>Добавить компетенцию</DialogTitle>
+              <AddIcon/> Добавить из существующих
+            </Button>
+          ) : (
+            <Button color="primary"
+            variant="text"
+            size="small"
+            className={classes.addSmallButton}
+            onClick={() => this.setState({ createCompetence: true })}
+            >
+              <AddIcon/> Создать компетенцию
+            </Button>
+          )}
+        </DialogTitle>
 
-                <DialogContent>
-                    <SearchSelector label="Компетенция * "
-                                    changeSearchText={this.handleChangeSearchText}
-                                    list={competenceList}
-                                    changeItem={this.save}
-                                    value={''}
-                                    valueLabel={''}
-                    />
-                </DialogContent>
-                <DialogActions className={classes.actions}>
-                    <Button onClick={this.handleClose}
-                            variant="text">
-                        Отмена
-                    </Button>
-                    <Button onClick={this.handleSave}
-                            variant="contained"
-                            disabled={disableButton}
-                            color="primary">
-                        Сохранить
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        );
-    }
+        <DialogContent>
+          {createCompetence ? (
+            <>
+              <TextField label="Название компетенции *"
+                         onChange={this.changeNewCompetence(CompetenceFields.TITLE)}
+                         variant="outlined"
+                         className={classNames(classes.input, classes.marginBottom30)}
+                         fullWidth
+                         // @ts-ignore
+                         value={newCompetence[CompetenceFields.TITLE]}
+                         InputLabelProps={{
+                           shrink: true,
+                         }}
+              />
+              <TextField label="Номер компетенции *"
+                         onChange={this.changeNewCompetence(CompetenceFields.NUMBER)}
+                         variant="outlined"
+                         className={classes.input}
+                         fullWidth
+                         // @ts-ignore
+                         value={newCompetence[CompetenceFields.NUMBER]}
+                         InputLabelProps={{
+                           shrink: true,
+                         }}
+              />
+            </>
+          ) : (
+            <SearchSelector label="Компетенция * "
+                            changeSearchText={this.handleChangeSearchText}
+                            list={competenceList}
+                            changeItem={this.save}
+                            value={''}
+                            valueLabel={''}
+            />
+          )}
+        </DialogContent>
+        <DialogActions className={classes.actions}>
+          <Button onClick={this.handleClose}
+                  variant="text">
+            Отмена
+          </Button>
+          <Button onClick={this.handleSave}
+                  variant="contained"
+                  disabled={disableButton}
+                  color="primary">
+            Сохранить
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
 }
 
 // @ts-ignore
