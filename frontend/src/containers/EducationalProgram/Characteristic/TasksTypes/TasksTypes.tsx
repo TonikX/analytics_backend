@@ -23,6 +23,8 @@ import actions from '../../actions';
 import {EducationProgramCharacteristicFields} from "../../enum";
 
 import useStyles from './TasksTypes.styles'
+import Tooltip from "@material-ui/core/Tooltip";
+import QuestionIcon from "@material-ui/icons/HelpOutline";
 
 export default ({ characteristic }: any) => {
   const classes = useStyles()
@@ -65,7 +67,19 @@ export default ({ characteristic }: any) => {
 
   return (
     <>
-      <Typography className={classes.label}>Типы профессиональных задач, к которым готовятся выпускники</Typography>
+      <Typography className={classes.label}>
+        Типы профессиональных задач, к которым готовятся выпускники
+        <Tooltip title={(
+          <div className={classes.tooltip}>
+            Использование в конструкторе ОП: В <a href="op.itmo.ru" target="_blank">op.itmo.ru</a> типы профессиональных задач, к которым готовятся выпускники хранятся в описании образовательных стандартов. Их описание доступно тут: <a href="https://op.itmo.ru/educational-standards" target="_blank"> op.itmo.ru/educational-standards </a>
+          </div>
+        )}
+          interactive
+          leaveDelay={1000}
+        >
+          <QuestionIcon color="primary"/>
+        </Tooltip>
+      </Typography>
       <Table stickyHeader size='small'>
         <TableHead className={classes.header}>
           <TableRow>

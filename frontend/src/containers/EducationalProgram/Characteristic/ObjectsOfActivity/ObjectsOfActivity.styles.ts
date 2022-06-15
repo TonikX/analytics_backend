@@ -7,6 +7,9 @@ export default makeStyles((theme: Theme) => createStyles({
     color: 'rgba(0, 0, 0, 0.54)',
     display: 'flex',
     alignItems: 'center',
+    '& a': {
+      color: '#fff !important',
+    },
     '& svg': {
       marginLeft: '10px',
     }

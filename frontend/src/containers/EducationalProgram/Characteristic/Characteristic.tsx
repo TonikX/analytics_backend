@@ -410,23 +410,28 @@ class Characteristic extends React.Component<CharacteristicProps> {
                   .join(', ')
                 }
               </div>
-              <Tooltip title="Данный вид компетенций подгружается из связного образовательного стандарта">
-                <Button variant="contained" style={{marginLeft: 'auto', marginRight: 10, height: '36px'}} color="primary">
-                  <Link
-                    style={{color: '#fff', textDecoration: 'none'}}
-                    to={appRouter.getEducationalStandardRoute(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATIONAL_STANDART, 'id'], ''))}
-                  >
-                    Образовательный стандарт
-                  </Link>
-                </Button>
-              </Tooltip>
-              <Tooltip title={(
-                <>
-                  1. Ошибка в матрице компетенций: Компетенция не покрывается ни одной дисциплиной
-                </>
-              )}>
-                <Button variant="contained" color="primary" style={{height: '36px'}}>Валидация</Button>
-              </Tooltip>
+              <div style={{ marginLeft: 'auto'}}>
+                {[8, 9, 10].includes(activeStep) &&
+                  <Tooltip title="Данный вид компетенций подгружается из связного образовательного стандарта">
+                    <Button variant="contained" style={{marginLeft: 'auto', marginRight: 10, height: '36px'}}
+                            color="primary">
+                      <Link
+                        style={{color: '#fff', textDecoration: 'none'}}
+                        to={appRouter.getEducationalStandardRoute(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATIONAL_STANDART, 'id'], ''))}
+                      >
+                        Образовательный стандарт
+                      </Link>
+                    </Button>
+                  </Tooltip>
+                }
+                <Tooltip title={(
+                  <>
+                    1. Ошибка в матрице компетенций: Компетенция не покрывается ни одной дисциплиной
+                  </>
+                )}>
+                  <Button variant="contained" color="primary" style={{height: '36px'}}>Валидация</Button>
+                </Tooltip>
+              </div>
             </div>
           </Typography>
 
