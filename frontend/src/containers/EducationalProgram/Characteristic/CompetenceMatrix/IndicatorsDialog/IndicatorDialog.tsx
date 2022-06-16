@@ -28,9 +28,10 @@ interface IndicatorsProps {
     }[];
     isEditMode?: boolean;
     handleClose: () => void;
+    onDeleteZun: (id: number) => void;
 }
 
-export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, workProgramId, addedIndicators}: IndicatorsProps) => {
+export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, workProgramId, addedIndicators, onDeleteZun}: IndicatorsProps) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [competence, setCompetence] = useState<{ value: number; label: string }>({value: 0, label: ''});
@@ -49,7 +50,8 @@ export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndi
     }, [plans]);
 
     const removeIndicator = (value: number) => {
-        // TODO: remove indicators
+        onDeleteZun(value);
+        dispatch(actions.deleteZun(value));
     };
 
     const addPlan = useCallback((value: number, label: string) => {

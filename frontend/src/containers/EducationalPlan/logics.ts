@@ -17,6 +17,7 @@ import {
     getSortingMode
 } from "./getters";
 import {getTrainingModuleId} from "./TrainingModules/getters";
+import {getEducationalProgramCharacteristicId} from "../EducationalProgram/getters";
 
 const service = new Service();
 
@@ -391,7 +392,9 @@ const getCompetenceDirectionsDependedOnWorkProgram = createLogic({
     process({getState, action}: any, dispatch, done) {
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM}));
 
-        service.getCompetenceDirectionsDependedOnWorkProgram(action.payload)
+        const competenceMatrixId = getEducationalProgramCharacteristicId(getState());
+
+        service.getCompetenceDirectionsDependedOnWorkProgram(action.payload, competenceMatrixId)
             .then((res) => {
                 dispatch(planActions.setDirectionsDependedOnWorkProgram(res.data));
                 dispatch(actions.fetchingSuccess());

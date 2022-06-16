@@ -44,6 +44,7 @@ export enum fetchingTypes {
     GET_OBJECTS_OF_ACTIVITY = 'GET_OBJECTS_OF_ACTIVITY',
     GET_TASKS_TYPES = 'GET_TASKS_TYPES',
     SAVE_ZUN = 'SAVE_ZUN',
+    DELETE_ZUN = 'DELETE_ZUN',
 }
 
 export enum EducationProgramCharacteristicFields {

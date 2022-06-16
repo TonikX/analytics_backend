@@ -191,6 +191,10 @@ class Service extends AnalyticsService{
             }
         });
     }
+
+    deleteZUN(compentenceId: number){
+        return this.delete(`/api/zun/many_create/${compentenceId}/`);
+    }
 }
 
 export default Service;

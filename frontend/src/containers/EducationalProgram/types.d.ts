@@ -50,6 +50,7 @@ export interface EducationalProgramActions {
     setCompetenceMatrix: any;
 
     saveZun: any;
+    deleteZun: any;
 
     characteristicCreateGroup: ActionCreatorWithPayload<CharacteristicCreateGroupActionType>;
     characteristicSaveGroupTitle: ActionCreatorWithPayload<CharacteristicSaveGroupTitleActionType>;
