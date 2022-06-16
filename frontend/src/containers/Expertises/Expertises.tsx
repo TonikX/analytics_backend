@@ -36,6 +36,8 @@ import connect from './Expertises.connect';
 import styles from './Expertises.styles';
 import Pagination from "@material-ui/lab/Pagination";
 import {UserType} from "../../layout/types";
+import {PracticeFields} from "../Practice/enum";
+import {CertificationFields} from "../FinalCertification/enum";
 
 class Expertises extends React.Component<ExpertisesProps> {
     state = {
@@ -51,7 +53,7 @@ class Expertises extends React.Component<ExpertisesProps> {
         this.props.actions.getExpertisesList();
     }
 
-    changeSorting = (field: string) => (mode: SortingType)=> {
+    changeSorting = (field: string) => (mode: SortingType) => {
         this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
         this.props.actions.getExpertisesList();
     }
@@ -76,7 +78,7 @@ class Expertises extends React.Component<ExpertisesProps> {
 
     handleSelectStatus = (status: WorkProgramStatusType) => {
         this.props.actions.changeCurrentPage(1);
-        if (this.props.selectedStatus === status){
+        if (this.props.selectedStatus === status) {
             this.props.actions.changeSelectedStatus('')
         } else {
             this.props.actions.changeSelectedStatus(status)
@@ -124,7 +126,8 @@ class Expertises extends React.Component<ExpertisesProps> {
                                     </TableCell>
                                     <TableCell className={classes.qualificationCell}>
                                         Уровень
-                                        <TableFilter items={specializationObject} handleSelect={this.handleSelectQualification} />
+                                        <TableFilter items={specializationObject}
+                                                     handleSelect={this.handleSelectQualification}/>
                                     </TableCell>
                                     <TableCell>
                                         Эксперты
@@ -134,42 +137,67 @@ class Expertises extends React.Component<ExpertisesProps> {
                                     </TableCell>
                                     <TableCell>
                                         Дата изменения
-                                        <SortingButton changeMode={this.changeSorting(ExpertisesFields.DATE_OF_LAST_CHANGE)}
-                                                       mode={sortingField === ExpertisesFields.DATE_OF_LAST_CHANGE ? sortingMode : ''}
+                                        <SortingButton
+                                            changeMode={this.changeSorting(ExpertisesFields.DATE_OF_LAST_CHANGE)}
+                                            mode={sortingField === ExpertisesFields.DATE_OF_LAST_CHANGE ? sortingMode : ''}
                                         />
                                     </TableCell>
 
-                                    <TableCell />
+                                    <TableCell/>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {expertisesList.map(expertise =>
-                                    <TableRow key={expertise[ExpertisesFields.ID]}>
-                                        <TableCell className={classes.cellStatus}
-                                                   style={{borderLeftColor: workProgramStatusesColors[expertise[ExpertisesFields.STATUS]]}}
-                                        >
-                                            <Link to={appRouter.getWorkProgramLink(expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.ID])}>
-                                                {expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.TITLE]}
-                                            </Link>
-                                        </TableCell>
-                                        <TableCell>{specializationObject[expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.QUALIFICATION]]}</TableCell>
-                                        <TableCell>
-                                            {expertise[ExpertisesFields.EXPERTS_USERS_IN_RPD]
-                                                .filter((item: any) => get(item, "stuff_status") === 'EX' || get(item, "stuff_status") === 'SE' || get(item, "stuff_status") === 'AU')
-                                                .map((item: ExpertUserInRPDType) => getUserFullName(item[ExpertisesFields.EXPERT])).join(', ')}
-                                        </TableCell>
-                                        <TableCell>
-                                            {expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.EDITORS].map((item: UserType) => getUserFullName(item)).join(', ')}
-                                        </TableCell>
-                                        <TableCell>
-                                            {moment(expertise[ExpertisesFields.DATE_OF_LAST_CHANGE]).format(FULL_DATE_FORMAT)}
-                                        </TableCell>
-                                        <TableCell className={classes.linkCell}>
-                                            <Link to={appRouter.getExpertiseRouteLink(expertise[ExpertisesFields.ID])}>
-                                                <EyeIcon />
-                                            </Link>
-                                        </TableCell>
-                                    </TableRow>
+                                {expertisesList.map(expertise => {
+                                        let link = '';
+                                        let title = '';
+                                        let editors = [];
+                                        if (expertise[ExpertisesFields.WORK_PROGRAM]) {
+                                            link = appRouter.getWorkProgramLink(expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.ID]);
+                                            title = expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.TITLE];
+                                            editors = expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.EDITORS];
+                                        } else if (expertise[ExpertisesFields.PRACTICE]) {
+                                            link = appRouter.getPracticeLink(expertise[ExpertisesFields.PRACTICE][PracticeFields.ID]);
+                                            title = expertise[ExpertisesFields.PRACTICE][PracticeFields.TITLE];
+                                            editors = expertise[ExpertisesFields.PRACTICE][PracticeFields.EDITORS];
+                                        } else if (expertise[ExpertisesFields.GIA]) {
+                                            link = appRouter.getFinalCertificationLink(expertise[ExpertisesFields.GIA][CertificationFields.ID]);
+                                            title = expertise[ExpertisesFields.GIA][CertificationFields.TITLE];
+                                            editors = expertise[ExpertisesFields.GIA][CertificationFields.EDITORS];
+                                        }
+
+                                        const qualification = expertise[ExpertisesFields.WORK_PROGRAM]
+                                            ? specializationObject[expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.QUALIFICATION]]
+                                            : '';
+                                        return (
+                                            <TableRow key={expertise[ExpertisesFields.ID]}>
+                                                <TableCell className={classes.cellStatus}
+                                                           style={{borderLeftColor: workProgramStatusesColors[expertise[ExpertisesFields.STATUS]]}}
+                                                >
+                                                    <Link to={link}>
+                                                        {title}
+                                                    </Link>
+                                                </TableCell>
+                                                <TableCell>{qualification}</TableCell>
+                                                <TableCell>
+                                                    {expertise[ExpertisesFields.EXPERTS_USERS_IN_RPD]
+                                                        .filter((item: any) => get(item, "stuff_status") === 'EX' || get(item, "stuff_status") === 'SE' || get(item, "stuff_status") === 'AU')
+                                                        .map((item: ExpertUserInRPDType) => getUserFullName(item[ExpertisesFields.EXPERT])).join(', ')}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {editors.map((item: UserType) => getUserFullName(item)).join(', ')}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {moment(expertise[ExpertisesFields.DATE_OF_LAST_CHANGE]).format(FULL_DATE_FORMAT)}
+                                                </TableCell>
+                                                <TableCell className={classes.linkCell}>
+                                                    <Link
+                                                        to={appRouter.getExpertiseRouteLink(expertise[ExpertisesFields.ID])}>
+                                                        <EyeIcon/>
+                                                    </Link>
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                    }
                                 )}
                             </TableBody>
                         </Table>

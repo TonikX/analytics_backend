@@ -25,6 +25,12 @@ class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'description']
 
 
+class WorkProgramDuplicatesSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=300)
+    count = serializers.IntegerField()
+    work_programs = serializers.ListField()
+
+
 class AcademicPlansDescriptionWpSerializer(serializers.ModelSerializer):
     wp_in_academic_plan = serializers.SerializerMethodField()
     academic_plan_in_field_of_study = ImplementationAcademicPlanForStatisticSerializer(many=True)

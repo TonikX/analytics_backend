@@ -14,6 +14,13 @@ export default makeStyles((theme: Theme) => createStyles({
       marginLeft: '10px',
     }
   },
+  link: {
+    color: '#fff'
+  },
+  tooltip: {
+    fontSize: 14,
+    zIndex: 10
+  },
   header: {
     background: theme.palette.primary.main,
     '& th': {

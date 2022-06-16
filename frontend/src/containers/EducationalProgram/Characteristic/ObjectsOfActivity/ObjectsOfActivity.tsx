@@ -21,6 +21,8 @@ import actions from '../../actions';
 import {EducationProgramCharacteristicFields} from "../../enum";
 
 import useStyles from './ObjectsOfActivity.styles'
+import QuestionIcon from "@material-ui/icons/HelpOutline";
+import Tooltip from "@material-ui/core/Tooltip";
 
 export default ({ characteristic }: any) => {
   const classes = useStyles()
@@ -63,7 +65,17 @@ export default ({ characteristic }: any) => {
 
   return (
     <>
-      <Typography className={classes.label}>Объекты профессиональной деятельности</Typography>
+      <Typography className={classes.label}>
+        Объекты профессиональной деятельности
+        <Tooltip title={(
+          <div className={classes.tooltip}>
+            В системе имеется общий словарь объектов профессиональной деятельности. Пользователь может выбрать из существующих или создать свой.
+          </div>
+        )}
+        >
+          <QuestionIcon color="primary"/>
+        </Tooltip>
+      </Typography>
       <Table stickyHeader size='small'>
         <TableHead className={classes.header}>
           <TableRow>

@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import number_of_academplans_by_qualification_and_year, RecordOfWorkProgramQuality, StructuralUnits, \
-    AcademicPlans, report_of_number_of_workprograms_by_qualification
+    AcademicPlans, report_of_number_of_workprograms_by_qualification, WorkProgramDetailsWithApAndSemesters, \
+    GetDuplicates
 from .views import SimpleStatistic, EmptyStringWp, WpWithoutAP, WpWithSimilarCode, \
     WpWithoutStructuralUnit, StructuralUnitWp, FieldOfStudyPlanToISU, AllWpShort, WorkProgramDetailsWithApAndSemesters, \
     OneAcademicPlanWithDescriptionWp, AllAcademicPlanWithDescriptionWp, GetPrerequisitesAndOutcomesOfWpByStrUP, \
@@ -18,7 +19,7 @@ urlpatterns = [
     path('api/record/structural/empty', WpWithoutStructuralUnit), #'+'
     path('api/record/structural_units', StructuralUnits),
     path('api/record/academic_plans', AcademicPlans),
-    path('api/record/structural/workprogram_extend', WorkProgramDetailsWithApAndSemesters),#'+'
+    path('api/record/structural/workprogram_extend', WorkProgramDetailsWithApAndSemesters.as_view()),#'+'
     path('api/record/academic_plan/academic_wp_description/<int:pk>', OneAcademicPlanWithDescriptionWp.as_view()),#'+'
 
     # нет фронта
@@ -31,5 +32,7 @@ urlpatterns = [
     path('api/record/workprogram/empty_field_wp', GetAllWPsWithEmptyField.as_view()),
     path('api/record/academic_plan/wp_statistic_for_academic_plan',
          AllAcademicPlansWpExpertiseStatisticView.as_view()),
+
+    path('api/record/workprogram/duplicates', GetDuplicates),
 
 ]

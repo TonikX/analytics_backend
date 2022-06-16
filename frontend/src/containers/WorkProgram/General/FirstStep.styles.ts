@@ -1,6 +1,11 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
+    bars: {
+        '& .Mui-checked': {
+            color: '#950020',
+        }
+    },
     container: {
         display: 'flex'
     },
