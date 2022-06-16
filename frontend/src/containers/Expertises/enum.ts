@@ -47,6 +47,8 @@ export enum ExpertisesFields {
     EXPERT = 'expert',
     EXPERTS_USERS_IN_RPD = 'expertse_users_in_rpd',
     WORK_PROGRAM = 'work_program',
+    PRACTICE = 'practice',
+    GIA = 'gia',
     EXPERT_RESULT = 'expert_result',
     USER_EXPERTISE_STATUS = 'user_expertise_status',
 }

@@ -19,15 +19,14 @@ import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
 
 import WorkProgramStatus from "../../../components/WorkProgramStatus/WorkProgramStatus";
-import {appRouter} from "../../../service/router-service";
 import AddExpertModal from './AddExpertModal';
 
 import {ExpertiseProps} from "./types";
 import {ExpertisesFields, UserExpertResult, fields, userStatusesInExFields} from "../enum";
-import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
 
 import connect from './Expertise.connect';
 import styles from './Expertise.styles';
+import {getLink, getLinkLabel} from "../utils";
 
 class Expertise extends React.Component<ExpertiseProps> {
     componentDidMount() {
@@ -78,12 +77,16 @@ class Expertise extends React.Component<ExpertiseProps> {
                 get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.EX_MASTER}`) ||
                 get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.STRUCTURAL_LEADER}`) 
             )
+
+        const link = getLink(expertise);
+        const linkLabel = getLinkLabel(expertise);
+
         return (
             <Paper className={classes.root}>
                 <div className={classes.titleWrap}>
                     <Typography className={classes.title}>
-                        <Link target="_blank" to={appRouter.getWorkProgramLink(get(expertise, [ExpertisesFields.WORK_PROGRAM, WorkProgramGeneralFields.ID]))}>
-                            <b>{get(expertise, [ExpertisesFields.WORK_PROGRAM, WorkProgramGeneralFields.TITLE])}</b>
+                        <Link target="_blank" to={link}>
+                            <b>{linkLabel}</b>
                         </Link>
                     </Typography>
                     <WorkProgramStatus status={get(expertise, ExpertisesFields.STATUS, '')} />

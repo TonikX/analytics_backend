@@ -62,6 +62,8 @@ export type ExpertiseType = {
     [ExpertisesFields.EXPERTS]: Array<any>;
     [ExpertisesFields.EXPERTS_USERS_IN_RPD]: Array<ExpertUserInRPD>;
     [ExpertisesFields.WORK_PROGRAM]: WorkProgramGeneralType;
+    [ExpertisesFields.PRACTICE]: any;
+    [ExpertisesFields.GIA]: any;
 }
 
 export type ExpertUserInRPDType = {
