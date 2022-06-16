@@ -107,6 +107,18 @@ import {mergeWorkProgramsState} from "../containers/MergeWorkPrograms/types"
 import {GENERAL_PATH as educationalStandardPath, reducer as educationalStandardReducer} from "../containers/EducationalStandards/reducer"
 import {educationalStandardsState} from "../containers/EducationalStandards/types"
 
+import {GENERAL_PATH as practiceListPath, reducer as practiceListReducer} from "../containers/Practice/PracticeList/reducers";
+import {practiceListState} from "../containers/Practice/PracticeList/types";
+
+import {GENERAL_PATH as practicePath, reducer as practiceReducer} from "../containers/Practice/reducers";
+import {practicePageState} from "../containers/Practice/types";
+
+import {GENERAL_PATH as finalCertificationPath, reducer as finalCertificationReducer} from "../containers/FinalCertification/reducers";
+import {certificationPageState as finalCertificationPageState} from "../containers/FinalCertification/types";
+
+import {GENERAL_PATH as finalCertificationListPath, reducer as finalCertificationListReducer} from "../containers/FinalCertification/CertificationList/reducers";
+import {certificationListState as finalCertificationListPageState} from "../containers/FinalCertification/CertificationList/types";
+
 export interface rootState {
     [educationalStandardPath]: educationalStandardsState,
     [profileNotificationsPath]: notificationsState,
@@ -145,6 +157,10 @@ export interface rootState {
     [dodProfilePath] : dodProfileState,
     [userProfilePath]: userProfileState,
     [mergeWorkProgramsPath]: mergeWorkProgramsState,
+    [practiceListPath]: practiceListState,
+    [practicePath]: practicePageState,
+    [finalCertificationPath]: finalCertificationPageState,
+    [finalCertificationListPath]: finalCertificationListPageState,
 }
 
 export default combineReducers({
@@ -184,4 +200,8 @@ export default combineReducers({
     [dodProfilePath]: dodProfileReducer,
     [userProfilePath]: userProfileReducer,
     [mergeWorkProgramsPath]: mergeWorkProgramsReducer,
+    [practiceListPath]: practiceListReducer,
+    [practicePath]: practiceReducer,
+    [finalCertificationPath]: finalCertificationReducer,
+    [finalCertificationListPath]: finalCertificationListReducer,
 });

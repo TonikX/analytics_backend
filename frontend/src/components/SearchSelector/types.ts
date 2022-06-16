@@ -14,6 +14,7 @@ export interface SearchSelectorProps extends WithStyles<typeof styles> {
     disabled?: boolean;
     isReset?: boolean;
     popperPlacement?: PopperPlacementType;
+    errorMessage?: string;
 }
 
 export type SelectorListType = Array<SelectorItemType>;

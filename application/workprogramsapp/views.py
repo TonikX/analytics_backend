@@ -603,10 +603,16 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         except:
             newdata.update({"can_comment": False})
             newdata.update({"can_approve": False})
-        if request.user.is_expertise_master == True or WorkProgram.objects.filter(pk=self.kwargs['pk'], editors__in=[request.user]):
+        if (request.user.is_expertise_master == True or WorkProgram.objects.filter(
+                    pk=self.kwargs['pk'], editors__in=[request.user])) and queryset[0].work_status == "w":
             newdata.update({"can_archive": True})
         else:
             newdata.update({"can_archive": False})
+        if request.user.is_expertise_master and queryset[0].work_status == "a":
+            newdata.update({"can_return_from_archive": True})
+        else:
+            newdata.update({"can_return_from_archive": False})
+
         if request.user.groups.filter(name="student"):
             newdata.update({"can_add_to_folder": True})
             newdata.update({"is_student": True})
@@ -1294,8 +1300,8 @@ class WorkProgramInFieldOfStudyForWorkProgramList(generics.ListAPIView):
         Вывод учебных планов для одной рабочей программы по id
         """
         queryset = WorkProgramInFieldOfStudy.objects.filter(
-            work_program__id
-            = self.kwargs['workprogram_id']).distinct()
+            work_program__id = self.kwargs['workprogram_id'],
+            work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program = self.kwargs['gh_id']).distinct()
         serializer = WorkProgramInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
         return Response(serializer.data)
         try:
