@@ -178,6 +178,8 @@ class ProfessionalStandardSet(viewsets.ModelViewSet):
     serializer_class = ProfessionalStandardSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    filterset_fields = ['title',
+                        ]
 
 
 class GeneralizedLaborFunctionsSet(viewsets.ModelViewSet):
@@ -343,3 +345,14 @@ def GetCompetenceMatrix(request, gen_pk):
     competence_matrix["educational_program"] = ImplementationAcademicPlanSerializer(gen_characteristic.educational_program.all(), many = True).data
     # print(matrix_list)
     return Response(competence_matrix)
+
+
+# @api_view(['POST'])
+# @permission_classes((IsAuthenticated,))
+# @transaction.atomic
+# def academ_plan_check(request):
+#
+#     if .objects.filter(user = request.user, read = False).count()>0:
+#         return Response({'message': 'you have new notifications', 'status': True}, status=200)
+#     else:
+#         return Response({'message': 'you have not new notifications', 'status': False}, status=400)

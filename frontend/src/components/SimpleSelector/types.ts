@@ -11,5 +11,6 @@ export interface QualificationSelectorProps extends WithStyles<typeof styles> {
     metaList: Array<{
         label: string;
         value: ReactText;
-    }>
+    }>;
+    errorMessage?: ReactText;
 }

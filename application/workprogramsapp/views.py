@@ -1300,8 +1300,8 @@ class WorkProgramInFieldOfStudyForWorkProgramList(generics.ListAPIView):
         Вывод учебных планов для одной рабочей программы по id
         """
         queryset = WorkProgramInFieldOfStudy.objects.filter(
-            work_program__id
-            = self.kwargs['workprogram_id']).distinct()
+            work_program__id = self.kwargs['workprogram_id'],
+            work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program = self.kwargs['gh_id']).distinct()
         serializer = WorkProgramInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
         return Response(serializer.data)
         try:
@@ -1975,6 +1975,7 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
                      'field_of_study__qualification',
                      'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
                      'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                     'year',
                      ]
     filterset_fields = ['title',
                         'field_of_study__title',
@@ -1985,6 +1986,7 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__id',
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__id',
                         'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__structural_unit__title',
+                        'year',
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 

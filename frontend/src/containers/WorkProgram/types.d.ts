@@ -1,20 +1,18 @@
 import {
-    fields,
-    PrerequisiteFields,
     EvaluationToolFields,
+    fields,
+    ImplementationFormatsEnum,
+    PrerequisiteFields,
     ResultsFields,
     WorkProgramGeneralFields,
-    WorkProgramStatusEnum, CommentFields,
-    ImplementationFormatsEnum
+    WorkProgramStatusEnum
 } from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {CourseType} from "../Courses/types";
 import {TrainingEntitityType} from "../TrainingEntities/types";
-import {IndicatorsFields} from "../Indicators/enum";
-import {CompetenceFields} from "../Competences/enum";
-import {UserType} from "../../layout/types";
 import {FolderActions, FolderType} from "../Profile/Folders/types";
+import {CommentType} from "../../components/Comments/types";
 
 
 export interface WorkProgramActions {
@@ -141,7 +139,8 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     validateErrors: Array<string>;
     fetchingBars: boolean;
     location: any;
-    notificationsRead: Array<boolean>
+    notificationsRead: Array<boolean>,
+    comments: Array<CommentType>,
 }
 
 
@@ -211,12 +210,3 @@ export type WorkProgramStatusType =
     WorkProgramStatusEnum.APPROVE |
     WorkProgramStatusEnum.ARCHIVE
 ;
-
-export type CommentType = {
-    [CommentFields.DATE]: string;
-    [CommentFields.TEXT]: string;
-    [CommentFields.ID]: number;
-    [CommentFields.USER_EXPERTISE]: {
-        [CommentFields.EXPERT]: UserType
-    };
-}

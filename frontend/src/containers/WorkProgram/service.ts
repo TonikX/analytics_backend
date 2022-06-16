@@ -41,7 +41,7 @@ class WorkProgramService extends AnalyticsService{
     }
 
     sendToArchive(id: string){
-        return this.patch(`/api/workprogram/update/${id}`, {
+        return this.patch(`/api/workprogram/update_status/${id}`, {
             'work_status': 'a'
         });
     }

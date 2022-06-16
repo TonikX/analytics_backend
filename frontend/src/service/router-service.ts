@@ -28,7 +28,11 @@ const INDIVIDUAL_TRAJECTORIES = 'individual-trajectories';
 const INDIVIDUAL_EDUCATIONAL_PLANS = 'individual-educational-plans';
 const PROFESSIONAL_STANDARDS = 'professional-standards';
 const EDUCATIONAL_STANDARDS = 'educational-standards';
-const DODPROFILE = 'dod-profile'
+const DODPROFILE = 'dod-profile';
+const PRACTICE_LIST = 'practice-list';
+const PRACTICE = 'practice';
+const FINAL_CERTIFICATION = 'gia';
+const FINAL_CERTIFICATION_LIST = 'gia-list';
 
 const RECORDS = 'records';
 
@@ -309,6 +313,30 @@ export default class RouterService {
     getDodProfileRoute = () => {
         return SEPARATOR + DODPROFILE;
     };
+
+    getPracticeListRoute = () => {
+        return SEPARATOR + PRACTICE_LIST;
+    }
+
+    getPracticeRoute = () => {
+        return SEPARATOR + PRACTICE + SEPARATOR + ':id';
+    }
+
+    getPracticeLink = (id: number) => {
+        return SEPARATOR + PRACTICE + SEPARATOR + id;
+    }
+
+    getFinalCertificationRoute = () => {
+        return SEPARATOR + FINAL_CERTIFICATION + SEPARATOR + ':id';
+    }
+
+    getFinalCertificationLink = (id: number) => {
+        return SEPARATOR + FINAL_CERTIFICATION + SEPARATOR + id;
+    }
+
+    getFinalCertificationListRoute = () => {
+        return SEPARATOR + FINAL_CERTIFICATION_LIST;
+    }
 }
 
 export const appRouter = RouterService.factory();

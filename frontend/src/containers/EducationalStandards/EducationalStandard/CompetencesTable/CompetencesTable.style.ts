@@ -40,7 +40,6 @@ export default makeStyles((theme: Theme) => createStyles({
         }
     },
     addSmallButton: {
-        marginTop: '10px',
         fontSize: '12px',
         padding: '0px 0px !important',
         '&:hover': {

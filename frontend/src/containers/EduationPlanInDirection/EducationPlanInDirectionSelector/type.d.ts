@@ -11,6 +11,7 @@ export interface EducationPlanInDirectionSelectorType extends WithStyles<typeof 
     className?: any;
     isReset?: boolean;
     label?: string;
+    disabled?: boolean;
 }
 
 export interface EducationPlanInDirectionSelectorType2 extends WithStyles<typeof styles>  {

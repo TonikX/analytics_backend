@@ -11,4 +11,5 @@ export interface UserSelectorType extends WithStyles<typeof styles> {
     selectorLabel: string;
     label: string;
     value: number;
+    disabled?: boolean;
 }

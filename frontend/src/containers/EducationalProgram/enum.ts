@@ -71,6 +71,7 @@ export enum EducationProgramCharacteristicFields {
     AREA_OF_ACTIVITY = 'area_of_activity',
     PPS = 'pps',
     ANNOTATION = 'annotation',
+    EDUCATIONAL_STANDART = 'educational_standard',
 }
 
 export enum EducationProgramFields {
@@ -85,6 +86,9 @@ export enum EducationProgramFields {
     DIRECTOR = 'directors_position',
     EP_SUPERVISOR = 'ep_supervisor',
     EDUCATIONAL_PROGRAM = 'educational_program',
+    DEAN = 'dean_of_the_faculty',
+    PROFESSIONAL_STANDARD = 'dean_of_the_faculty',
+    EDUCATIONAL_STANDARD = 'educational_standard',
 }
 
 export enum CompetenceTableType {

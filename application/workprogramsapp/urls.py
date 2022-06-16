@@ -154,7 +154,7 @@ urlpatterns = [
 
 
     path('api/workprogram/fieldofstudies/<int:workprogram_id>', FieldOfStudiesForWorkProgramList.as_view()),
-    path('api/workprogram/fieldofstudies_for_competences/<int:workprogram_id>', WorkProgramInFieldOfStudyForWorkProgramList.as_view()),
+    path('api/workprogram/fieldofstudies_for_competences/<int:workprogram_id>/<int:gh_id>', WorkProgramInFieldOfStudyForWorkProgramList.as_view()),
     path('api/workprograminfieldofstudy/', WorkProgramInFieldOfStudyListAPI.as_view()),
     path('api/workprograminfieldofstudy/<int:pk>', WorkProgramInFieldOfStudyDetailAPI.as_view()),
 
