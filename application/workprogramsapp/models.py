@@ -2,11 +2,9 @@ import datetime
 from enum import Enum
 
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from model_clone import CloneMixin
-from django.contrib.postgres.fields import ArrayField
 
 from dataprocessing.models import Items
 from onlinecourse.models import OnlineCourse, Institution
@@ -879,6 +877,7 @@ class AcademicPlanUpdateConfiguration(models.Model):
     class Meta:
         ordering = ['id']
 
+
 class AcademicPlanUpdateSchedulerConfiguration(models.Model):
     days_interval = models.PositiveIntegerField(
         verbose_name="Интервал обновления в днях",
@@ -896,6 +895,8 @@ class AcademicPlanUpdateSchedulerConfiguration(models.Model):
         verbose_name='Дата последнего обновления'
     )
 
+    def __str__(self):
+        return str(self.updated_timestamp) + " " + str(self.execution_hours) + " " + str(self.days_interval)
 
 
 class AcademicPlanUpdateLog(models.Model):
@@ -935,7 +936,7 @@ class AcademicPlanUpdateLog(models.Model):
     )
 
     class Meta:
-            ordering = ['id']
+        ordering = ['id']
 
     def __str__(self):
         return str(self.object_type) + " " + str(self.field_name) + " " + str(self.old_value) + " " + str(

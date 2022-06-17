@@ -22,13 +22,13 @@ import re
 from django.db import transaction
 
 
-
 class UpdateAcademicPlansView(APIView):
 
     def post(self, request):
         updater = AcademicPlanUpdateProcessor()
         updater.update_academic_plans()
         return Response(status=200)
+
 
 class AcademicPlanUpdateLogsView(ListAPIView):
     serializer_class = AcademicPlanUpdateLogSerializer
@@ -56,9 +56,9 @@ class AcademicPlanUpdateConfigurationView(ListAPIView):
     search_fields = ['academic_plan_id',
                      'academic_plan_title',
                      'updated_date_time']
-    ordering_fields =  ['academic_plan_id',
-                        'academic_plan_title',
-                          'updated_date_time']
+    ordering_fields = ['academic_plan_id',
+                       'academic_plan_title',
+                       'updated_date_time']
     permission_classes = [permissions.IsAuthenticated]
 
 
@@ -100,7 +100,6 @@ class AcademicPlanUpdateSchedulerConfigurationUpdateView(APIView):
             obj.execution_hours = request.data.get("execution_hours")
             obj.save()
             return Response(status=status.HTTP_200_OK)
-
 
         obj = queryset[0]
         obj.days_interval = request.data.get("days_interval")

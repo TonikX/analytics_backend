@@ -86,8 +86,6 @@ class AcademicPlanUpdateProcessor:
             work_program_object.save()
 
         def watchmaker(hours, ze):
-            print(hours)
-            print(ze)
             ze = ze
             sem = 0
             all_ze_indexes_in_rpd = 0
