@@ -39,6 +39,7 @@ class Expertise(models.Model):
         ('WP', 'Рабочая программа'),
         ('GIA', 'ГИА'),
         ('PRAC', 'Практики'),
+        ('OFERTA', 'Оферта'),
     ]
 
     work_program = models.ForeignKey('WorkProgram', related_name='expertise_with_rpd', on_delete=models.CASCADE, blank=True, null=True)
