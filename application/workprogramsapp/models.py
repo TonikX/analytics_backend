@@ -133,6 +133,7 @@ class WorkProgram(CloneMixin, models.Model):
     )
     implementation_format = models.CharField(choices=implementation_format_choise, max_length=15, verbose_name='формат реализации',
                                             blank=True, null=True)
+    is_oferta = models.BooleanField(blank=True, null=True, verbose_name="Оферта")
 
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
