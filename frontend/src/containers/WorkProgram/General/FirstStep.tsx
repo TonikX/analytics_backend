@@ -50,6 +50,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     [WorkProgramGeneralFields.QUALIFICATION]: '',
     [WorkProgramGeneralFields.EXTRA_POINTS]: '',
     [WorkProgramGeneralFields.LANGUAGE]: '',
+    [WorkProgramGeneralFields.OFFERTA]: false,
     [WorkProgramGeneralFields.BARS]: false,
     [WorkProgramGeneralFields.SEMESTER_COUNT]: 1,
     [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: undefined,
@@ -71,6 +72,7 @@ class FirstStep extends React.Component<FirstStepProps> {
       [WorkProgramGeneralFields.SEMESTER_COUNT]: this.props.semesterCount,
       [WorkProgramGeneralFields.BARS]: this.props.bars,
       [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: this.props.implementationFormat,
+      [WorkProgramGeneralFields.OFFERTA]: this.props.offerta,
     })
   }
 
@@ -88,6 +90,7 @@ class FirstStep extends React.Component<FirstStepProps> {
         [WorkProgramGeneralFields.LANGUAGE]: this.props.language,
         [WorkProgramGeneralFields.SEMESTER_COUNT]: this.props.semesterCount,
         [WorkProgramGeneralFields.BARS]: this.props.bars,
+        [WorkProgramGeneralFields.OFFERTA]: this.props.offerta,
         [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: this.props.implementationFormat,
       })
     }
@@ -223,6 +226,16 @@ class FirstStep extends React.Component<FirstStepProps> {
     })
     this.setState({
       [WorkProgramGeneralFields.BARS]: get(e, "target.checked", false)
+    });
+  }
+
+  handleOfferta = (e: React.ChangeEvent) => {
+    this.props.actions.saveWorkProgram({
+      destination: WorkProgramGeneralFields.OFFERTA,
+      value: get(e, "target.checked", false)
+    })
+    this.setState({
+      [WorkProgramGeneralFields.OFFERTA]: get(e, "target.checked", false)
     });
   }
 
@@ -380,6 +393,17 @@ class FirstStep extends React.Component<FirstStepProps> {
             <Switch
               checked={state[WorkProgramGeneralFields.BARS]}
               onChange={this.handleBars}
+              disabled={!isCanEdit}
+              color="secondary"
+              className={classes.bars}
+            />
+          </div>
+
+          <div style={{display: "flex", alignItems: "center"}}>
+            <Typography>Оферта</Typography>
+            <Switch
+              checked={state[WorkProgramGeneralFields.OFFERTA]}
+              onChange={this.handleOfferta}
               disabled={!isCanEdit}
               color="secondary"
               className={classes.bars}
