@@ -95,11 +95,11 @@ class ExpertiseListView(generics.ListAPIView):
     filterset_fields = ['date_of_last_change', 'expertise_status', 'work_program__title', 'work_program__qualification',
                         'work_program__discipline_code', 'work_program__editors__first_name',
                         'expertse_users_in_rpd__expert__first_name',
-                        'work_program__editors__last_name', 'expertse_users_in_rpd__expert__last_name']
+                        'work_program__editors__last_name', 'expertse_users_in_rpd__expert__last_name', 'expertise_type']
     search_fields = ['work_program__title', 'work_program__qualification',
                      'work_program__discipline_code', 'work_program__editors__first_name',
                      'expertse_users_in_rpd__expert__first_name',
-                     'work_program__editors__last_name', 'expertse_users_in_rpd__expert__last_name']
+                     'work_program__editors__last_name', 'expertse_users_in_rpd__expert__last_name', 'expertise_type']
 
     def get_queryset(self):
         # Note the use of `get_queryset()` instead of `self.queryset`

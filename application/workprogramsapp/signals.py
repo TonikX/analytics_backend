@@ -58,6 +58,10 @@ def expertise_notificator(sender, instance, created, **kwargs):
         struct_users = User.objects.filter(user_for_structural_unit__status__in=["leader", "deputy"],
                                            user_for_structural_unit__structural_unit__practice_in_structural_unit__expertise_with_practice=instance).distinct()
         users = User.objects.filter(expertse_in_rpd__expertise__practice=wp_exp).distinct()
+    else:
+        struct_users = []
+        name_of_object = "Оферты"
+        wp_exp = WorkProgram.objects.get(expertise_with_rpd=instance)
 
     if not struct_users:
         ExpertiseNotification.objects.create(expertise=instance, user=None,

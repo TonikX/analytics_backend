@@ -251,7 +251,7 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
         fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester',
                   'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours',
                   'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format',
-                  'work_status']
+                  'work_status', 'is_oferta']
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }
@@ -763,7 +763,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
                   'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
                   'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
                   'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'number_of_semesters', 'read_notifications',
-                  'implementation_format']
+                  'implementation_format', 'is_oferta']
 
     def create(self, validated_data):
         """
