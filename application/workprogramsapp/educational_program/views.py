@@ -293,17 +293,17 @@ def GetCompetenceMatrix(request, gen_pk):
     academic_plans = gen_characteristic.educational_program.all()
     pk_competences = PkCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__general_characteristic_id=gen_pk).distinct(),
+            group_of_pk__general_characteristic_id=gen_pk, competence__isnull=False).distinct(),
         many=True).data
     general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__educational_standard=gen_characteristic.educational_standard).distinct(), many=True).data
+            group_of_pk__educational_standard=gen_characteristic.educational_standard, competence__isnull=False).distinct(), many=True).data
     key_competences = KeyCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=KeyCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__educational_standard=gen_characteristic.educational_standard).distinct(), many=True).data
+            group_of_pk__educational_standard=gen_characteristic.educational_standard, competence__isnull=False).distinct(), many=True).data
     over_prof_competences = OverProfCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=OverProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__educational_standard=gen_characteristic.educational_standard).distinct(), many=True).data
+            group_of_pk__educational_standard=gen_characteristic.educational_standard, competence__isnull=False).distinct(), many=True).data
     competence_matrix = {"pk_competences": pk_competences, "general_prof_competences": general_prof_competences,
                          "key_competences": key_competences, "over_prof_competences": over_prof_competences, }
     matrix_list = []

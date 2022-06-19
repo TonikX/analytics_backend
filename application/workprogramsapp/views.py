@@ -603,10 +603,16 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         except:
             newdata.update({"can_comment": False})
             newdata.update({"can_approve": False})
-        if request.user.is_expertise_master == True or WorkProgram.objects.filter(pk=self.kwargs['pk'], editors__in=[request.user]):
+        if (request.user.is_expertise_master == True or WorkProgram.objects.filter(
+                    pk=self.kwargs['pk'], editors__in=[request.user])) and queryset[0].work_status == "w":
             newdata.update({"can_archive": True})
         else:
             newdata.update({"can_archive": False})
+        if request.user.is_expertise_master and queryset[0].work_status == "a":
+            newdata.update({"can_return_from_archive": True})
+        else:
+            newdata.update({"can_return_from_archive": False})
+
         if request.user.groups.filter(name="student"):
             newdata.update({"can_add_to_folder": True})
             newdata.update({"is_student": True})

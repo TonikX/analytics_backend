@@ -411,7 +411,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
                 }
               </div>
               <div style={{ marginLeft: 'auto'}}>
-                {[8, 9, 10].includes(activeStep) &&
+                {[6, 7, 8].includes(activeStep) &&
                   <Tooltip title="Данный вид компетенций подгружается из связного образовательного стандарта">
                     <Button variant="contained" style={{marginLeft: 'auto', marginRight: 10, height: '36px'}}
                             color="primary">
