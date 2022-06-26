@@ -10,9 +10,34 @@ from .expertise.common_serializers import ShortExpertiseSerializer
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
-    WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool
+    WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool, \
+    AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, AcademicPlanUpdateConfiguration
 from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer
 from onlinecourse.serializers import OnlineCourseSerializer
+
+
+class AcademicPlanUpdateLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcademicPlanUpdateLog
+        fields = ['id', 'object_type', 'field_name', 'old_value', 'new_value', 'updated_date_time', 'academic_plan_id']
+
+
+class AcademicPlanUpdateConfigurationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcademicPlanUpdateConfiguration
+        fields = ['id', 'academic_plan_id', 'academic_plan_title', 'updated_date_time', 'updates_enabled']
+
+
+class AcademicPlanUpdateConfigurationEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcademicPlanUpdateConfiguration
+        fields = ['updates_enabled']
+
+
+class AcademicPlanUpdateSchedulerConfigurationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcademicPlanUpdateSchedulerConfiguration
+        fields = ['days_interval', 'execution_hours']
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
@@ -250,8 +275,7 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
         model = WorkProgram
         fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester',
                   'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours',
-                  'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format',
-                  'work_status', 'is_oferta']
+                  'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format']
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }
@@ -505,9 +529,7 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module', #'gia',
-                  #'practice'
-                  ]
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module']
 
 
     def get_id_of_wpcb(self, obj):
@@ -627,9 +649,7 @@ class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.Model
         return super().to_representation(value)
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', #'gia',
-                  #'practice'
-                  ]
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program']
         extra_kwargs = {
             'work_program': {'required': False}
         }
@@ -763,7 +783,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
                   'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
                   'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
                   'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'number_of_semesters', 'read_notifications',
-                  'implementation_format', 'is_oferta']
+                  'implementation_format']
 
     def create(self, validated_data):
         """

@@ -36,6 +36,8 @@ const FINAL_CERTIFICATION_LIST = 'gia-list';
 
 const RECORDS = 'records';
 
+const ACADEMIC_PLAN_UPDATE = 'academic-plan-update';
+
 const STRUCTURAL_UNITS = 'structural-units';
 const NOTIFICATIONS = 'notifications';
 
@@ -67,15 +69,15 @@ export default class RouterService {
         return SEPARATOR + PROFESSIONAL_STANDARDS;
     };
 
+    getAcademicPlanUpdateRoute = () => {
+        return SEPARATOR + ACADEMIC_PLAN_UPDATE;
+    }
+
     getEducationalStandardsRoute = () => {
         return SEPARATOR + EDUCATIONAL_STANDARDS;
     };
 
-    getEducationalStandardRoute = (id: number | string) => {
-        return SEPARATOR + EDUCATIONAL_STANDARDS + SEPARATOR + id;
-    };
-
-    getProfessionalStandardRoute = (id: number | string) => {
+    getProfessionalStandardIDRoute = (id: number| string) => {
         return SEPARATOR + PROFESSIONAL_STANDARDS + SEPARATOR + id;
     };
 

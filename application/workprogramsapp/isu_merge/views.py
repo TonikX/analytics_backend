@@ -1,16 +1,129 @@
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.views import APIView
 import os
 import pandas
 from rest_framework.response import Response
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
 from rest_framework import permissions
+from rest_framework import status
 from typing import Dict
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan,\
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,\
     WorkProgramInFieldOfStudy, Zun
+from rest_framework import filters
+from rest_framework.decorators import api_view, permission_classes
+from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan, \
+    ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
+    WorkProgramInFieldOfStudy, Zun, AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, \
+    AcademicPlanUpdateConfiguration
+from workprogramsapp.serializers import AcademicPlanUpdateLogSerializer, AcademicPlanUpdateConfigurationSerializer, \
+    AcademicPlanUpdateSchedulerConfigurationSerializer, AcademicPlanUpdateConfigurationEditSerializer
+from workprogramsapp.isu_merge.academic_plan_update.academic_plan_excel_creator import AcademicPlanExcelCreator
+from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_processor import AcademicPlanUpdateProcessor
 import json
 import re
 from django.db import transaction
+
+
+class UpdateAcademicPlansView(APIView):
+
+    def post(self, request):
+        updater = AcademicPlanUpdateProcessor()
+        updater.update_academic_plans()
+        return Response(status=200)
+
+
+class AcademicPlanUpdateLogsView(ListAPIView):
+    serializer_class = AcademicPlanUpdateLogSerializer
+    queryset = AcademicPlanUpdateLog.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['new_value',
+                     'old_value',
+                     'object_type',
+                     'field_name',
+                     'academic_plan_id',
+                     'updated_date_time']
+    ordering_fields = ['new_value',
+                       'old_value',
+                       'object_type',
+                       'field_name',
+                       'academic_plan_id',
+                       'updated_date_time']
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class AcademicPlanUpdateConfigurationView(ListAPIView):
+    serializer_class = AcademicPlanUpdateConfigurationSerializer
+    queryset = AcademicPlanUpdateConfiguration.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['academic_plan_id',
+                     'academic_plan_title',
+                     'updated_date_time']
+    ordering_fields = ['academic_plan_id',
+                       'academic_plan_title',
+                       'updated_date_time']
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class AcademicPlanUpdateConfigurationCreateAPIView(CreateAPIView):
+    serializer_class = AcademicPlanUpdateConfigurationSerializer
+    queryset = AcademicPlanUpdateConfiguration.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class AcademicPlanUpdateConfigurationUpdateView(UpdateAPIView):
+    serializer_class = AcademicPlanUpdateConfigurationSerializer
+    queryset = AcademicPlanUpdateConfiguration.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class AcademicPlanUpdateSchedulerConfigurationView(RetrieveAPIView):
+    queryset = AcademicPlanUpdateSchedulerConfiguration.objects.all()
+    serializer_class = AcademicPlanUpdateSchedulerConfigurationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, **kwargs):
+        queryset = AcademicPlanUpdateSchedulerConfiguration.objects.all()
+        serializer = AcademicPlanUpdateSchedulerConfigurationSerializer(queryset, many=True,
+                                                                        context={'request': request})
+        if len(serializer.data) == 0:
+            return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
+        return Response(serializer.data[0], status=status.HTTP_200_OK)
+
+
+class AcademicPlanUpdateSchedulerConfigurationUpdateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request, **kwargs):
+        queryset = AcademicPlanUpdateSchedulerConfiguration.objects.all()
+
+        if len(queryset) == 0:
+            obj = AcademicPlanUpdateSchedulerConfiguration()
+            obj.days_interval = request.data.get("days_interval")
+            obj.execution_hours = request.data.get("execution_hours")
+            obj.save()
+            return Response(status=status.HTTP_200_OK)
+
+        obj = queryset[0]
+        obj.days_interval = request.data.get("days_interval")
+        obj.execution_hours = request.data.get("execution_hours")
+        obj.save()
+        return Response(status=status.HTTP_200_OK)
+
+
+class AcademicPlanUpdateExcelCreatorView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        creator = AcademicPlanExcelCreator()
+        filename, mime_type = creator.create_excel_file()
+
+        path = open(filename, 'r')
+        response = Response(path, content_type=mime_type)
+        response['Content-Disposition'] = "attachment; filename=%s" % filename
+
+        return response
 
 
 class FileUploadAPIView(APIView):
@@ -429,11 +542,12 @@ class FileUploadAPIView(APIView):
         return module_type
 
 
-class   FileUploadOldVersionAPIView(APIView):
+class FileUploadOldVersionAPIView(APIView):
     """
     API-endpoint для загрузки файла sub_2019_2020_new
     """
-    #@transaction.atomic
+
+    # @transaction.atomic
     def post(self, request):
         print('- Импортируем csv файл')
         if not os.path.exists('upload/'):
@@ -494,7 +608,7 @@ class   FileUploadOldVersionAPIView(APIView):
                     ze = ze
                     sem = 0
                     all_ze_indexes_in_rpd = 0
-                    lecture_hours_v2 = [0, 0, 0, 0, 0, 0, 0, 0]
+                    lecture_hours_v2 = [0, 0, 0, 0]
                     for i in hours:
                         #print('ze', ze)
                         if ze[all_ze_indexes_in_rpd]>=1.0:
