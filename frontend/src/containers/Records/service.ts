@@ -33,8 +33,11 @@ class RecordsService extends AnalyticsService{
         return this.get(`/api/record/structural/workprogram${status}`);
     }
 
-    getStructuralUnitWPFilter(structural_unit_id: string,year:string,semester:string,status:string){
-        return this.get(`/api/record/structural/workprogram_extend${structural_unit_id}${semester}${year}${status}`);
+    //http://127.0.0.1:8000
+    // /api/record/structural/
+    // workprogram_extend?editor_id=332&status=AC&structural_unit_id=2&structural_unit_id=9&year=2019-2020&year=2020-2021
+    getStructuralUnitWPFilter(structural_unit_id: string,year:string,status:string){
+        return this.get(`/api/record/structural/workprogram_extend${structural_unit_id}${year}${status}`);
     }
 }
 

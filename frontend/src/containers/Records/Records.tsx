@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, ReactElement} from 'react';
 import {Link} from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import {appRouter} from "../../service/router-service";
@@ -27,11 +27,14 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import SearchSelector from "../../components/SearchSelector";
-
+import QuantityReportCharts from './RecordsChart/QuantityReport/RecordsChart'
+import QualityReportChart from './RecordsChart/QualityReport/QualityReportChart'
+import TotalOPReport from './RecordsChart/TotalOPReport/TotalOPReport';
+import RecordsPagesRPDSemester from './RecordsPages/RecordsPagesRPDSemester/RecordsPagesRPDSemester';
 
 class Records extends Component<RecordsProops> {
     state = {
-        value: 1,
+        value: 6,
         isVisible: false,
         page: 0,
         rowsPerPage: 10,
@@ -46,6 +49,8 @@ class Records extends Component<RecordsProops> {
         this.state.AP = this.props.AP
         this.props.actions.GetSU();
         this.state.SU = this.props.SU;
+        this.props.actions.GetQuantityOPAll();
+        this.setState({isVisible: true});
     }
 
     handleChange = (event: any): void => {
@@ -73,7 +78,9 @@ class Records extends Component<RecordsProops> {
     }
 
     changeYear = (event: any): void => {
-        this.props.actions.changeYear(event.target.value);
+        if(Array.isArray(this.props.YEAR)) {
+            this.props.actions.changeYear([...this.props.YEAR, event.target.value]);
+        }
     }
 
     changeYearForAP = (event: any): void => {
@@ -100,11 +107,6 @@ class Records extends Component<RecordsProops> {
 
     getQuantityRPD = () => {
         this.props.actions.GetQuantityRPD();
-        this.setState({isVisible: true});
-    }
-
-    getQuantityOP = () => {
-        this.props.actions.GetQuantityOP();
         this.setState({isVisible: true});
     }
 
@@ -143,7 +145,49 @@ class Records extends Component<RecordsProops> {
     }
 
     сhangeSU = (value: string|number): void => {
-        this.props.actions.ChangeSU(value);
+        if(Array.isArray(this.props.SUuse)) {
+            this.props.actions.ChangeSU([...this.props.SUuse, value]);
+        }
+    }
+
+    renderQualityReportChartFirst = (SIMPLE_STATE: any): ReactElement | undefined => {
+        if(Number(SIMPLE_STATE['rpd_with_editors'])) {
+            return <QualityReportChart
+                    title={'Статус РПД'}
+                    labels={['РПД, имеющие редакторов','РПД на экспертизе', 'Одобренные РПД', 'РПД в работе']}
+                    data={[
+                        Number(SIMPLE_STATE['rpd_with_editors']),
+                        Number( SIMPLE_STATE['rpd_on_expertise']),
+                        Number( SIMPLE_STATE['rpd_approved']),
+                        Number( SIMPLE_STATE['rpd_in_work'])
+                    ]}
+                    colors={[
+                        'rgba(255, 156, 86, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)'
+                    ]}
+                />
+        }
+             
+    }
+    renderQualityReportChartSecond = (SIMPLE_STATE: any): ReactElement | undefined => {
+        if(Number(SIMPLE_STATE['registered_users'])) {
+            return (
+                <QualityReportChart
+                    title={'Статус пользователя'}
+                    labels={['Зарегестрированных пользователей','Пользователей РПД']}
+                    data={[
+                        Number(SIMPLE_STATE['registered_users']),
+                        Number( SIMPLE_STATE['users_in_rpd'])
+                    ]}
+                    colors={[
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ]}
+                />
+            )
+        }
     }
 
     render() {
@@ -153,7 +197,9 @@ class Records extends Component<RecordsProops> {
             QUALIFICATION,
             QUANTITY_RPD,
             YEAR,
+            YEARS_ALL,
             QUANTITY_OP,
+            QUANTITY_OP_ALL,
             RPD_WITHOUT_SU,
             STATUS,
             RPD_IN_SU,
@@ -166,10 +212,8 @@ class Records extends Component<RecordsProops> {
             RPD_IN_SEMESTER
         } = this.props;
 
-        const style = {height: this.state.height};
-
         return (
-            <Paper className={classes.root} style={style}>
+            <Paper className={classes.root}>
                 <Typography className={classes.title}>
                     Отчёты
                 </Typography>
@@ -194,7 +238,6 @@ class Records extends Component<RecordsProops> {
                         <MenuItem value="2">Отчёт о количестве РПД (по квалификации)</MenuItem>
                         <MenuItem value="3">Отчёт о количестве ОП (по квалификации и годам)</MenuItem>
                         <MenuItem value="4">Отчёт о РПД без структурного подразделения</MenuItem>
-                        <MenuItem value="5">Отчёт о РПД в структурных подразделениях</MenuItem>
                         <MenuItem value="6">Отчёт о РПД на семестр</MenuItem>
                         <MenuItem value="7">Отчёт о РПД и по учебному плану</MenuItem>
                     </Select>
@@ -210,44 +253,22 @@ class Records extends Component<RecordsProops> {
                     Получить отчёт
                 </Button>
                 }
-                {this.state.isVisible && this.state.value == 1 &&
-                <Typography>
-                    <p>Зарегестрированных пользователей: {SIMPLE_STATE['registered_users']}</p>
-                    <p>Пользователей РПД: {SIMPLE_STATE['users_in_rpd']}</p>
-                    <p>РПД, имеющие редакторов: {SIMPLE_STATE['rpd_with_editors']}</p>
-                    <p>РПД на экспертизе: {SIMPLE_STATE['rpd_on_expertise']}</p>
-                    <p>Одобренные РПД: {SIMPLE_STATE['rpd_approved']}</p>
-                    <p>РПД в работе: {SIMPLE_STATE['rpd_in_work']}</p>
-                </Typography>
+                <div style={{display: 'flex'}}>
+                    {this.state.isVisible
+                        && this.state.value == 1
+                            && this.renderQualityReportChartFirst(SIMPLE_STATE)}
+                                        
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {(this.state.isVisible
+                        && this.state.value == 1
+                            && this.renderQualityReportChartSecond(SIMPLE_STATE))}
+                </div>
 
-                }
                 {this.state.value == 2 &&
                 <>
                     <FormControl variant="outlined">
-                        <InputLabel>Выберите квалификацию</InputLabel>
-                        <Select className={classes.field}
-                                label="Выберите квалификацию"
-                                value={QUALIFICATION}
-                                onChange={this.changeQual}
-                                MenuProps={{
-                                    anchorOrigin: {
-                                        vertical: "bottom",
-                                        horizontal: "left"
-                                    },
-                                    transformOrigin: {
-                                        vertical: "top",
-                                        horizontal: "left"
-                                    },
-                                    getContentAnchorEl: null
-                                }}
-                        >
-                            <MenuItem value="bachelor">Бакалавриат</MenuItem>
-                            <MenuItem value="master">Магистратура</MenuItem>
-                            <MenuItem value="specialist">Специалитет</MenuItem>
-                        </Select>
+                        <QuantityReportCharts />
                     </FormControl>
-                    <Button onClick={this.getQuantityRPD} variant="contained" color="primary" disableElevation
-                            className={classes.Btn}>Получить отчёт</Button>
                 </>
                 }
                 {this.state.isVisible && this.state.value == 2 &&
@@ -258,66 +279,26 @@ class Records extends Component<RecordsProops> {
                 }
                 {this.state.value == 3 &&
                 <>
-                    <FormControl variant="outlined">
-                        <InputLabel>Выберите квалификацию</InputLabel>
-                        <Select
-                            label="Выберите квалификацию"
-                            value={QUALIFICATION}
-                            onChange={this.changeQual}
-                            className={classes.field}
-                            MenuProps={{
-                                anchorOrigin: {
-                                    vertical: "bottom",
-                                    horizontal: "left"
-                                },
-                                transformOrigin: {
-                                    vertical: "top",
-                                    horizontal: "left"
-                                },
-                                getContentAnchorEl: null
-                            }}
-                        >
-                            <MenuItem value="bachelor">Бакалавриат</MenuItem>
-                            <MenuItem value="master">Магистратура</MenuItem>
-                            <MenuItem value="specialist">Специалитет</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl variant="outlined">
-                        <InputLabel>Выберите год</InputLabel>
-                        <Select
-                            label="Выберите год"
-                            value={YEAR}
-                            onChange={this.changeYear}
-                            className={classes.field}
-                            MenuProps={{
-                                anchorOrigin: {
-                                    vertical: "bottom",
-                                    horizontal: "left"
-                                },
-                                transformOrigin: {
-                                    vertical: "top",
-                                    horizontal: "left"
-                                },
-                                getContentAnchorEl: null
-                            }}
-                        >
-                            <MenuItem value="2021">2021</MenuItem>
-                            <MenuItem value="2020">2020</MenuItem>
-                            <MenuItem value="2019">2019</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Button
-                        onClick={this.getQuantityOP}
-                        variant="contained"
-                        color="primary"
-                        disableElevation className={classes.Btn}>
-                        Получить отчёт
-                    </Button>
-                </>
-                }
-                {this.state.isVisible && this.state.value == 3 &&
-                <>
-                    <Typography>Количество ОП по заданной квалификации и году: {QUANTITY_OP['quantity']}</Typography>
+                    <div style={{display: 'flex', flexWrap: 'wrap'}}>
+                        {QUANTITY_OP_ALL['bachelor']?.length === 4 && <TotalOPReport
+                          classes={{recordChart: 'recordChart'}}
+                          labels={YEARS_ALL}
+                          title={`Образовательная программа бакалавриат`}
+                          data={QUANTITY_OP_ALL['bachelor']?.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}
+                        />}
+                        {QUANTITY_OP_ALL['master']?.length === 4 && <TotalOPReport
+                          classes={{recordChart: 'recordChart'}}
+                          labels={YEARS_ALL}
+                          title={`Образовательная программа магистратура`}
+                          data={QUANTITY_OP_ALL['master']?.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}
+                        />}
+                        {QUANTITY_OP_ALL['specialist']?.length === 4 && <TotalOPReport
+                          classes={{recordChart: 'recordChart'}}
+                          labels={YEARS_ALL}
+                          title={`Образовательная программа магистратура`}
+                          data={QUANTITY_OP_ALL['specialist']?.map((quantityItem: {quantity: number} ) => quantityItem.quantity)}
+                        />}
+                    </div>
                 </>
                 }
                 {this.state.value == 4 &&
@@ -386,263 +367,55 @@ class Records extends Component<RecordsProops> {
 
                     </div>
                 </>}
-                {this.state.value == 5 &&
-                <>
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Выберите статус РПД</FormLabel>
-                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.сhangeStatus}
-                                    className={classes.field}>
-                            <FormControlLabel value="all" control={<Radio color="primary"/>} label="Все"/>
-                            <FormControlLabel value="EX" control={<Radio color="primary"/>} label="На экспертизе"/>
-                            <FormControlLabel value="AC" control={<Radio color="primary"/>} label="Одобрены"/>
-                            <FormControlLabel value="WK" control={<Radio color="primary"/>} label="В работе"/>
-                        </RadioGroup>
-                    </FormControl>
-                    <Button
-                        onClick={this.getRPDinSU}
-                        variant="contained"
-                        color="primary"
-                        disableElevation className={classes.Btn}>
-                        Получить отчёт
-                    </Button>
-                </>
-                }
-                {this.state.isVisible && this.state.value == 5 &&
-                <div>
-                    {RPD_IN_SU.filter((SU: any) => SU.work_programs.length > 0).map((SU: any) =>
-                        <ExpansionPanel expanded={this.state.expandend === SU.id}
-                                        onChange={this.handleChangePanel(SU.id)} style={{width: "100%"}}>
-                            <ExpansionPanelSummary
-                                className={classes.accordionSummary}
-                                expandIcon={<ExpandMoreIcon/>}
-                            >
-                                <Typography>{SU.title} </Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <>
-                                    <div className={classes.tableWrap} style={{width: "100%"}}>
-                                        <Table>
-                                            <TableHead className={classes.header}>
-                                                <TableRow>
-                                                    <TableCell style={{width: "25%"}}>
-                                                        Код
-                                                    </TableCell>
-                                                    <TableCell style={{width: "50%"}}>
-                                                        Название
-                                                    </TableCell>
-                                                    <TableCell style={{width: "25%"}}>
-                                                        Авторский состав
-                                                    </TableCell>
-                                                    <TableCell/>
-                                                </TableRow>
-                                            </TableHead>
 
-                                            <TableBody>
-                                                {SU.work_programs.slice(this.state.page * this.state.rowsPerPage,
-                                                    this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((workProgram: any) =>
-                                                    <TableRow key={workProgram.id}>
-                                                        <TableCell>
-                                                            {workProgram.discipline_code}
-                                                        </TableCell>
-                                                        <TableCell className={classes.link}>
-                                                            <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>
-                                                                {workProgram.title}
-                                                            </Link>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {workProgram.editors.map((editors: any) =>
-                                                                <>{editors.first_name} {editors.last_name}; </>
-                                                            )}
-                                                        </TableCell>
-
-                                                    </TableRow>
-                                                )}
-                                            </TableBody>
-
-                                        </Table>
-                                        <div className={classes.footer}>
-                                            <TablePagination count={SU.work_programs.length}
-                                                             component="div"
-                                                             page={this.state.page}
-                                                             rowsPerPageOptions={[]}
-                                                             onChangePage={this.handleChangePage}
-                                                             rowsPerPage={this.state.rowsPerPage}
-                                                             onChangeRowsPerPage={() => {
-                                                             }}
-                                            />
-                                        </div>
-                                    </div>
-                                </>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                    )}
-                </div>
-                }
-                {this.state.value == 6 &&
-                <>
-                    <SearchSelector
-                        label='Выберите структурное подразделение'
-                        changeSearchText={this.handleChangeSearchQuerySU}
-                        list={this.state.SU}
-                        changeItem={(value: string) => this.сhangeSU(value)}
-                        value={SUuse}
-                        valueLabel={''}
-                        className={classes.field}
-
-
-
+                {this.state.value == 6 && <RecordsPagesRPDSemester
+                      classNamesSearchSelector={classes.field}
+                      classNamesSelectYear={classes.field}
+                      classNamesSelectSemester={classes.field}
+                      classNamesRadioGroup={classes.field}
+                      classNamesButton={classes.Btn}
+                      classNamesTableWrap={classes.tableWrap}
+                      classNamesHeader={classes.header}
+                      classNamesLink={classes.link}
+                      classNamesFooter={classes.footer}
+                      YEAR={YEAR[YEAR.length-1] || ''}
+                      SEMESTER={SEMESTER}
+                      STATUS={STATUS}
+                      RPD_IN_SEMESTER={RPD_IN_SEMESTER}
+                      changeYear={this.changeYear}
+                      changeSU={this.сhangeSU}
+                      changeSemester={this.сhangeSemester}
+                      changeStatus={this.сhangeStatus}
+                      getRPDinSEMESTER={this.getRPDinSEMESTER}
+                      handleChangePage={this.handleChangePage}
+                      handleChangeSearchQuerySU={this.handleChangeSearchQuerySU}
+                      list={this.state.SU}
+                      value={this.state.value}
+                      isVisible={this.state.isVisible}
+                      SU={this.state.SU}
+                      page={this.state.page}
+                      rowsPerPage={this.state.rowsPerPage}
+                      SUuse={SUuse}
                     />
-                    <FormControl variant="outlined">
-                        <InputLabel>Выберите год учебного плана</InputLabel>
-                        <Select
-                            label="Выберите год учебного плана"
-                            value={YEAR}
-                            onChange={this.changeYear}
-                            className={classes.field}
-                            MenuProps={{
-                                anchorOrigin: {
-                                    vertical: "bottom",
-                                    horizontal: "left"
-                                },
-                                transformOrigin: {
-                                    vertical: "top",
-                                    horizontal: "left"
-                                },
-                                getContentAnchorEl: null
-                            }}>
-                            <MenuItem value="all">Все</MenuItem>
-                            <MenuItem value="2021">2021</MenuItem>
-                            <MenuItem value="2020">2020</MenuItem>
-                            <MenuItem value="2019">2019</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl variant="outlined">
-                        <InputLabel>Выберите семестр</InputLabel>
-                        <Select
-                            label="Выберите семестр"
-                            value={SEMESTER}
-                            onChange={this.сhangeSemester}
-                            className={classes.field}
-                            MenuProps={{
-                                anchorOrigin: {
-                                    vertical: "bottom",
-                                    horizontal: "left"
-                                },
-                                transformOrigin: {
-                                    vertical: "top",
-                                    horizontal: "left"
-                                },
-                                getContentAnchorEl: null
-                            }}>
-                            <MenuItem value="all">Все</MenuItem>
-                            <MenuItem value="1">Первый семестр</MenuItem>
-                            <MenuItem value="2">Второй семестр</MenuItem>
-                            <MenuItem value="3">Третий семестр</MenuItem>
-                            <MenuItem value="4">Четвёртый семестр</MenuItem>
-                            <MenuItem value="5">Пятый семестр</MenuItem>
-                            <MenuItem value="6">Шестой семестр</MenuItem>
-                            <MenuItem value="7">Седьмой семестр</MenuItem>
-                            <MenuItem value="8">Восьмой семестр</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Выберите статус РПД</FormLabel>
-                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.сhangeStatus}
-                                    className={classes.field}>
-                            <FormControlLabel value="all" control={<Radio color="primary"/>} label="Все"/>
-                            <FormControlLabel value="EX" control={<Radio color="primary"/>} label="На экспертизе"/>
-                            <FormControlLabel value="AC" control={<Radio color="primary"/>} label="Одобрены"/>
-                            <FormControlLabel value="WK" control={<Radio color="primary"/>} label="В работе"/>
-                        </RadioGroup>
-                    </FormControl>
-                    <Button
-                        onClick={this.getRPDinSEMESTER}
-                        variant="contained"
-                        color="primary"
-                        disableElevation className={classes.Btn}>
-                        Получить отчёт
-                    </Button>
-                </>
-                }
-                {this.state.value == 6 && this.state.isVisible &&
-                <>
-
-                <div className={classes.tableWrap}>
-                    <Table stickyHeader size='small'>
-                        <TableHead className={classes.header}>
-                            <TableRow>
-                                <TableCell style={{width: "25%"}}>
-                                    Код
-                                </TableCell>
-                                <TableCell style={{width: "50%"}}>
-                                    Название
-                                </TableCell>
-                                <TableCell style={{width: "25%"}}>
-                                    Авторский состав
-                                </TableCell>
-                                <TableCell/>
-                            </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                            {RPD_IN_SEMESTER.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((workProgram: any) =>
-                                <TableRow key={workProgram.id}>
-                                    <TableCell>
-                                        {workProgram.discipline_code}
-                                    </TableCell>
-                                    <TableCell className={classes.link}>
-                                        <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>
-                                            {workProgram.title}
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell>
-                                        {workProgram.editors.map((editors: any) =>
-                                            <>{editors.first_name} {editors.last_name}; </>
-                                        )}
-                                    </TableCell>
-
-                                </TableRow>
-                            )}
-                        </TableBody>
-
-                    </Table>
-                </div>
-
-                <div className={classes.footer}>
-                    <TablePagination count={RPD_IN_SEMESTER.length}
-                                     component="div"
-                                     page={this.state.page}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     rowsPerPage={this.state.rowsPerPage}
-                                     onChangeRowsPerPage={() => {
-                                     }}
-                    />
-
-                </div>
-                </>
                 }
                 {this.state.value == 7 &&
                     <>
-                <SearchSelector
-                    label='Выберите учебный план'
-                    changeSearchText={this.handleChangeSearchQuery}
-                    list={this.state.AP}
-                    changeItem={(value: string) => this.сhangeAP(value)}
-                    value={APuse}
-                    valueLabel={''}
-                    className={classes.field}
-
-
-
-                />
-                    <Button
-                    onClick={this.getRPDinAP}
-                    variant="contained"
-                    color="primary"
-                    disableElevation className={classes.Btn}>
-                    Получить отчёт
-                    </Button>
+                        <SearchSelector
+                            label='Выберите учебный план'
+                            changeSearchText={this.handleChangeSearchQuery}
+                            list={this.state.AP}
+                            changeItem={(value: string) => this.сhangeAP(value)}
+                            value={APuse}
+                            valueLabel={''}
+                            className={classes.field}
+                        />
+                        <Button
+                        onClick={this.getRPDinAP}
+                        variant="contained"
+                        color="primary"
+                        disableElevation className={classes.Btn}>
+                        Получить отчёт
+                        </Button>
                     </>
                 }
                 {this.state.value == 7 && this.state.isVisible && RPD_IN_AP.length > 0 &&

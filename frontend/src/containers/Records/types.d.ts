@@ -1,4 +1,4 @@
-import {SimpleStatFields, fields} from './enum'
+import { fields} from './enum'
 import {WithStyles} from "@material-ui/core";
 import styles from "./Records.styles";
 export interface StatisticsActions {
@@ -11,6 +11,8 @@ export interface StatisticsActions {
     changeYear: any;
     GetQuantityOP: any;
     SetQuantityOP: any;
+    GetQuantityOPAll: any;
+    SetQuantityOPAll: any;
     GetRPDwithoutSU: any;
     SetRPDwithoutSU: any;
     GetRPDinSU: any;
@@ -28,14 +30,25 @@ export interface StatisticsActions {
     GetRPDinSEMESTER:any;
     SetRPDinSEMESTER:any;
 }
+
+export interface IQuantityOpItem {
+    quantity: number
+}
+export interface IQuantityOpAll {
+    [qualification: string]: [IQuantityOpItem] | null
+}
+
 export interface SimpleStatState {
     [fields.SIMPLE_STATE]: any;
     [fields.CURRENT_CH]: any;
     [fields.IS_VISIBLE]: any;
     [fields.QUALIFICATION]: any;
+    [fields.QUALIFICATIONS_ALL]: string[];
     [fields.QUANTITY_RPD]: any;
     [fields.YEAR]: any;
+    [fields.YEARS_ALL]: string[];
     [fields.QUANTITY_OP]: any;
+    [fields.QUANTITY_OP_ALL]: IQuantityOpAll
     [fields.RPD_WITHOUT_SU]: any;
     [fields.RPD_IN_SU]: any;
     [fields.STATUS]: any;
@@ -58,9 +71,12 @@ export interface RecordsProops extends WithStyles<typeof styles>{
     SIMPLE_STATE:any;
     IS_VISIBLE:any;
     QUALIFICATION: any;
+    QUALIFICATIONS_ALL: any;
     QUANTITY_RPD: any;
     YEAR: any;
+    YEARS_ALL: string[];
     QUANTITY_OP: any;
+    QUANTITY_OP_ALL: any;
     RPD_WITHOUT_SU:any;
     RPD_IN_SU: any;
     STATUS: any;

@@ -8,7 +8,9 @@ import {
     getQualification,
     getQuantityRPD,
     getYear,
+    getYears,
     getQuantityOP,
+    getQuantityOPAll,
     getRPDwithoutSU, getRPDinSU, getStatus, getSemester, getSU, getAP, getAPuse, getRPDinAP, getSUuse, getRPDinSEMESTER
 } from "./getters";
 import {StatisticsActions} from "./types"
@@ -21,7 +23,9 @@ const mapStateToProps = (state: rootState) => {
         QUALIFICATION : getQualification(state),
         QUANTITY_RPD: getQuantityRPD(state),
         YEAR: getYear(state),
+        YEARS_ALL: getYears(state),
         QUANTITY_OP: getQuantityOP(state),
+        QUANTITY_OP_ALL: getQuantityOPAll(state),
         RPD_WITHOUT_SU: getRPDwithoutSU(state),
         RPD_IN_SU: getRPDinSU(state),
         STATUS: getStatus(state),

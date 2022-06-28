@@ -1,9 +1,8 @@
 import createReducer from "../../store/createReducer";
 
 import actions from "./actions";
-import {fields} from './enum'
-import {SimpleStatState} from "./types";
-
+import { fields } from './enum'
+import { IQuantityOpAll, SimpleStatState } from "./types";
 
 
 export const GENERAL_PATH = 'records';
@@ -13,9 +12,12 @@ export const initialSimpleStatState: SimpleStatState = {
     [fields.CURRENT_CH]: 1,
     [fields.IS_VISIBLE]: false,
     [fields.QUALIFICATION]: "bachelor",
+    [fields.QUALIFICATIONS_ALL]: ["bachelor", "master", "specialist"],
     [fields.QUANTITY_RPD]: [],
-    [fields.YEAR]: "2021",
+    [fields.YEAR]: [],
+    [fields.YEARS_ALL]: ["2022", "2021", "2020", "2019"],
     [fields.QUANTITY_OP]: [],
+    [fields.QUANTITY_OP_ALL]: {},
     [fields.RPD_WITHOUT_SU]: [],
     [fields.RPD_IN_SU]: [],
     [fields.STATUS]: "all",
@@ -24,7 +26,7 @@ export const initialSimpleStatState: SimpleStatState = {
     [fields.AP]: [],
     [fields.APuse]: -1,
     [fields.RPD_IN_AP]: [],
-    [fields.SUuse]: -1,
+    [fields.SUuse]: [],
     [fields.RPD_IN_SEMESTER]: [],
 
 };
@@ -82,6 +84,48 @@ const SetQuantityOP = (state: SimpleStatState, {payload}: any): SimpleStatState=
     [fields.QUANTITY_OP]: payload,
 });
 
+interface IPayload {
+    qualification: 'bachelor' | 'master' | 'specialist',
+    data: {
+        quantity: number
+    }
+}
+/**
+ * {QUANTITY_OP_ALL: {
+ *     bachelor: [{quantity: 1}],
+ *     master: [{quantity: 1}]
+ *   }
+ * }
+ * */
+const SetQuantityOPAll = (state: SimpleStatState, { payload }: {payload: IPayload}): SimpleStatState => {
+    const cloneQuantityOpAll: IQuantityOpAll = {...state[fields.QUANTITY_OP_ALL]}
+    const cloneQuantity = cloneQuantityOpAll[payload.qualification]
+
+    if(cloneQuantity?.length) {
+        return {
+            ...state,
+            // @ts-ignore
+            [fields.QUANTITY_OP_ALL]: {
+                ...cloneQuantityOpAll,
+                [payload.qualification]: [
+                    ...cloneQuantity,
+                    {quantity: payload.data.quantity}
+                ]
+            },
+        }
+    } else {
+        return {
+            ...state,
+            [fields.QUANTITY_OP_ALL]: {
+                ...cloneQuantityOpAll,
+                [payload.qualification]: [
+                    {quantity: payload.data.quantity}
+                ]
+            },
+        }
+    }
+};
+
 const SetRPDwithoutSU = (state: SimpleStatState, {payload}: any): SimpleStatState=>({
     ...state,
     [fields.RPD_WITHOUT_SU]: payload,
@@ -119,6 +163,7 @@ export const reducer = createReducer(initialSimpleStatState,{
     [actions.SetQuantityRPD.type]: SetQuantityRPD,
     [actions.changeYear.type]: ChangeYear,
     [actions.SetQuantityOP.type] :SetQuantityOP,
+    [actions.SetQuantityOPAll.type] :SetQuantityOPAll,
     [actions.SetRPDwithoutSU.type]: SetRPDwithoutSU,
     [actions.SetRPDinSU.type]: SetRPDinSU,
     [actions.ChangeStatus.type]: ChangeStatus,

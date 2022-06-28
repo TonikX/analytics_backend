@@ -72,7 +72,8 @@ export default (theme: Theme) =>createStyles({
 
         boxSizing: 'border-box',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        minHeight: '100%'
     },
     title: {
         fontSize: '24px',
