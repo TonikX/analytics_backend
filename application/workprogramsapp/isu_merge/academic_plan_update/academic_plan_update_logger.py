@@ -17,6 +17,16 @@ class AcademicPlanUpdateLogger:
 
     @staticmethod
     def log_changes(academic_plan_id, object_type, old_object, updated_object):
+        if old_object is None:
+            updated_date_time = timezone.now()
+            log = AcademicPlanUpdateLog(
+                object_type=object_type.value,
+                academic_plan_id=academic_plan_id,
+                field_name=updated_object.__class__.__name__,
+                new_value=updated_object.id,
+                updated_date_time=updated_date_time
+            )
+            log.save()
         for attr, value in updated_object.__dict__.items():
             if attr != "_state" and (old_object is None or old_object.__dict__[attr] != value):
                 updated_date_time = timezone.now()

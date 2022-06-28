@@ -110,7 +110,7 @@ admin.site.register(CourseCredit)
 admin.site.register(CourseFieldOfStudy)
 admin.site.register(ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule)
 admin.site.register(WorkProgramIdStrUpForIsu)
-admin.site.register(AcademicPlanUpdateLog)
+
 admin.site.register(AcademicPlanUpdateConfiguration)
 admin.site.register(NotificationComments)
 admin.site.register(FeedbackRecord)
@@ -118,3 +118,9 @@ admin.site.register(AcceptedBarsInWp)
 admin.site.register(GeneralizedLaborFunctions)
 admin.site.register(EducationalStandard)
 admin.site.register(TasksForEducationalStandard)
+
+class LogAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "updated_date_time")
+    search_fields = ['object_type', 'old_value', 'new_value']
+
+admin.site.register(AcademicPlanUpdateLog, LogAdmin)

@@ -1,6 +1,5 @@
-import re
-
 import json
+import re
 
 
 class ModuleOrderProvider:
@@ -119,6 +118,10 @@ class AcademicPlanUpdateUtils:
         status = set(status)
         status.remove("0")
         return "".join(sorted(status, reverse=True))
+
+    @staticmethod
+    def ze_to_format(tuple_to_edit):
+        return str(tuple_to_edit).replace("(", "").replace(")", "")
 
     @staticmethod
     def set_srs(status, creds, lec, prac, lab, module):

@@ -1,15 +1,13 @@
 import copy
-import json
-import time
 
 from django.utils import timezone
+
+from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_aspect import AcademicPlanUpdateAspect
+from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_utils import AcademicPlanUpdateUtils
+from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
     WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration
-from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_utils import AcademicPlanUpdateUtils
-from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
-from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_aspect import AcademicPlanUpdateAspect
-from workprogramsapp.isu_merge.v_2.test_data import test_plan
 
 
 class AcademicPlanUpdateProcessor:
@@ -301,8 +299,8 @@ class AcademicPlanUpdateProcessor:
                 work_program_in_field_of_study.save()
         else:
             work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule()
-            work_program_change_in_discipline_block_module.credit_units = AcademicPlanUpdateUtils.get_ze(
-                isu_academic_plan_discipline_json)
+            work_program_change_in_discipline_block_module.credit_units = AcademicPlanUpdateUtils.ze_to_format(AcademicPlanUpdateUtils.get_ze(
+                isu_academic_plan_discipline_json))
             work_program_change_in_discipline_block_module.change_type = option
             work_program_change_in_discipline_block_module.discipline_block_module = discipline_block_module_object
             work_program_change_in_discipline_block_module.subject_code = AcademicPlanUpdateUtils.num_to_int(
@@ -348,30 +346,38 @@ class AcademicPlanUpdateProcessor:
                 isu_academic_plan_discipline_json['discipline_name']
             )
             work_program_id_str_up_for_isu_object.dis_id = isu_academic_plan_discipline_json['dis_id']
-            work_program_id_str_up_for_isu_object.ze_v_sem = AcademicPlanUpdateUtils.get_ze(
-                isu_academic_plan_discipline_json)
-            work_program_id_str_up_for_isu_object.lec_v_sem = AcademicPlanUpdateUtils.get_lec(
-                isu_academic_plan_discipline_json)
-            work_program_id_str_up_for_isu_object.prak_v_sem = AcademicPlanUpdateUtils.get_prac(
-                isu_academic_plan_discipline_json)
-            work_program_id_str_up_for_isu_object.lab_v_sem = AcademicPlanUpdateUtils.get_lab(
-                isu_academic_plan_discipline_json)
-            work_program_id_str_up_for_isu_object.ekz_v_sem = AcademicPlanUpdateUtils.set_control(
-                isu_academic_plan_discipline_json['exam'],
-                int(float(isu_academic_plan_json['training_period']))
-            )
-            work_program_id_str_up_for_isu_object.zach_v_sem = AcademicPlanUpdateUtils.set_control(
-                isu_academic_plan_discipline_json['credit'],
-                int(float(isu_academic_plan_json['training_period']))
-            )
-            work_program_id_str_up_for_isu_object.dif_zach_v_sem = AcademicPlanUpdateUtils.set_control(
-                isu_academic_plan_discipline_json['diff_credit'],
-                int(float(isu_academic_plan_json['training_period']))
-            )
-            work_program_id_str_up_for_isu_object.kp_v_sem = AcademicPlanUpdateUtils.set_control(
-                isu_academic_plan_discipline_json['course_project'],
-                int(float(isu_academic_plan_json['training_period']))
-            )
+            work_program_id_str_up_for_isu_object.ze_v_sem = AcademicPlanUpdateUtils.ze_to_format(
+                AcademicPlanUpdateUtils.get_ze(
+                    isu_academic_plan_discipline_json))
+            work_program_id_str_up_for_isu_object.lec_v_sem = AcademicPlanUpdateUtils.ze_to_format(
+                AcademicPlanUpdateUtils.get_lec(
+                    isu_academic_plan_discipline_json))
+            work_program_id_str_up_for_isu_object.prak_v_sem = AcademicPlanUpdateUtils.ze_to_format(
+                AcademicPlanUpdateUtils.get_prac(
+                    isu_academic_plan_discipline_json))
+            work_program_id_str_up_for_isu_object.lab_v_sem = AcademicPlanUpdateUtils.ze_to_format(
+                AcademicPlanUpdateUtils.get_lab(
+                    isu_academic_plan_discipline_json))
+            work_program_id_str_up_for_isu_object.ekz_v_sem = AcademicPlanUpdateUtils.ze_to_format(
+                AcademicPlanUpdateUtils.set_control(
+                    isu_academic_plan_discipline_json['exam'],
+                    int(float(isu_academic_plan_json['training_period']))
+                ))
+            work_program_id_str_up_for_isu_object.zach_v_sem = AcademicPlanUpdateUtils.ze_to_format(
+                AcademicPlanUpdateUtils.set_control(
+                    isu_academic_plan_discipline_json['credit'],
+                    int(float(isu_academic_plan_json['training_period']))
+                ))
+            work_program_id_str_up_for_isu_object.dif_zach_v_sem = AcademicPlanUpdateUtils.ze_to_format(
+                AcademicPlanUpdateUtils.set_control(
+                    isu_academic_plan_discipline_json['diff_credit'],
+                    int(float(isu_academic_plan_json['training_period']))
+                ))
+            work_program_id_str_up_for_isu_object.kp_v_sem = AcademicPlanUpdateUtils.ze_to_format(
+                AcademicPlanUpdateUtils.set_control(
+                    isu_academic_plan_discipline_json['course_project'],
+                    int(float(isu_academic_plan_json['training_period']))
+                ))
             work_program_id_str_up_for_isu_object.save()
 
             for zun in Zun.objects.filter(
