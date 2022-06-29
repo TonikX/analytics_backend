@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import {useDispatch, useSelector} from "react-redux";
@@ -23,6 +24,7 @@ import {
     TableContentProps, CompetencesHeaderProps,
     AttachIndicatorProps, CompetencesRowProps,
 } from "./types";
+import {appRouter} from '../../../../service/router-service';
 
 const EMPTY = '\u00A0';
 
@@ -123,7 +125,7 @@ const ContentByAcademicPlan = (
                 const indicators = ownCompetences.find(it => it.id === sourceCompetence.id)?.zuns.map(it => {
                     return {
                         label: `${it.indicator.number}`,
-                        value: it.indicator.id,
+                        value: it.id,
                     }
                 }) || [];
                 setIndicators(indicators);
@@ -181,7 +183,14 @@ const ContentByAcademicPlan = (
                         {moduleBlock.change_blocks_of_work_programs_in_modules.map((block: WorkProgramChangeInDisciplineBlockModule) =>
                             block.work_program.map((wp: ModuleWorkProgram, elIndex: number) =>
                                 <TableRow key={`wp-${elIndex}`}>
-                                    <TableCell className={classes.rowWithPadding}>{wp.title}</TableCell>
+                                    <TableCell className={classes.rowWithPadding}>
+                                        <Link
+                                            target="_blank"
+                                            to={appRouter.getWorkProgramLink(wp.id)}
+                                        >
+                                            {wp.title}
+                                        </Link>
+                                    </TableCell>
                                     <TableCell
                                         className={classes.noPaddingCells}>{getCompetencesContent(wp, 'key')}</TableCell>
                                     <TableCell
@@ -238,6 +247,10 @@ export default () => {
         setIsOpen(true);
     };
 
+    const deleteZun = (id: number) => {
+        setIndicators([...indicators.filter(it => it.value !== id)])
+    };
+
     const keyCompetences = transformCompetences(get(matrix, 'key_competences'));
     const profCompetences = transformCompetences(get(matrix, 'pk_competences'));
     const generalProfCompetences = transformCompetences(get(matrix, 'general_prof_competences'));
@@ -283,6 +296,7 @@ export default () => {
                 addedIndicators={indicators}
                 defaultCompetence={defaultCompetence}
                 workProgramId={workProgramId}
+                onDeleteZun={deleteZun}
             />
         </div>
     )

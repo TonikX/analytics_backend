@@ -28,8 +28,8 @@ class EducationalPlanService extends AnalyticsService{
         return this.get(`/api/workprogram/fieldofstudies/${workProgramId}`);
     }
 
-    getCompetenceDirectionsDependedOnWorkProgram(workProgramId: number){
-        return this.get(`/api/workprogram/fieldofstudies_for_competences/${workProgramId}`);
+    getCompetenceDirectionsDependedOnWorkProgram(workProgramId: number, characteristicId: number){
+        return this.get(`/api/workprogram/fieldofstudies_for_competences/${workProgramId}/${characteristicId}`);
     }
 
     deleteEducationalPlan(id: number){

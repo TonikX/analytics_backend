@@ -27,6 +27,7 @@ const getCompetenceMatrix = createAction('GET_COMPETENCE_MATRIX');
 const setCompetenceMatrix = createAction('SET_COMPETENCE_MATRIX');
 
 const saveZun = createAction('SAVE_ZUN');
+const deleteZun = createAction('DELETE_ZUN');
 
 const characteristicCreateGroup = createAction<CharacteristicCreateGroupActionType>('CHARACTERISTIC_COMPETENCIES_CREATE_GROUP');
 const characteristicSaveGroupTitle = createAction<CharacteristicSaveGroupTitleActionType>('CHARACTERISTIC_COMPETENCIES_SAVE_GROUP_TITLE');
@@ -110,6 +111,7 @@ const actions: EducationalProgramActions = {
     setCompetenceMatrix,
 
     saveZun,
+    deleteZun,
 
     getEducationalProgramList,
     setEducationalProgramList,
