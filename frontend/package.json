@@ -31,7 +31,7 @@
     "classnames": "^2.2.6",
     "copy-webpack-plugin": "^6.4.1",
     "docx-templates": "4.8.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "match-sorter": "2.3.0",
     "moment": "^2.26.0",
     "notistack": "^0.9.11",
