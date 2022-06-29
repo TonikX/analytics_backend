@@ -33,7 +33,7 @@
     "docx-templates": "4.8.2",
     "lodash": "^4.17.15",
     "match-sorter": "2.3.0",
-    "moment": "^2.26.0",
+    "moment": "^2.29.2",
     "notistack": "^0.9.11",
     "react": "^16.13.1",
     "react-anchor-link-smooth-scroll": "^1.0.12",
