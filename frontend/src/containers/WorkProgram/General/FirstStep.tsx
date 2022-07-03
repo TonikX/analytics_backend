@@ -362,26 +362,14 @@ class FirstStep extends React.Component<FirstStepProps> {
             <FormControl component="fieldset">
               <FormLabel component="legend">Кол-во семестров *</FormLabel>
               <RadioGroup className={classes.radioGroup} onChange={this.changeSemesterCount}>
-                <FormControlLabel
-                  value={1}
-                  control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === 1} />}
-                  label="1"
-                />
-                <FormControlLabel
-                  value={2}
-                  control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === 2} />}
-                  label="2"
-                />
-                <FormControlLabel
-                  value={3}
-                  control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === 3} />}
-                  label="3"
-                />
-                <FormControlLabel
-                  value={4}
-                  control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === 4} />}
-                  label="4"
-                />
+                {new Array(1,2,3,4,5,6,7,8).map((item) => (
+                  <FormControlLabel
+                    value={item}
+                    control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === item} />}
+                    label={item}
+                    key={item}
+                  />
+                ))}
               </RadioGroup>
             </FormControl>
               :
