@@ -104,6 +104,9 @@ import {userProfileState} from "../containers/UserProfile/types"
 import {GENERAL_PATH as mergeWorkProgramsPath, reducer as mergeWorkProgramsReducer} from "../containers/MergeWorkPrograms/reducer"
 import {mergeWorkProgramsState} from "../containers/MergeWorkPrograms/types"
 
+import {GENERAL_PATH as academicPlanUpdatePath, reducer as academicPlanUpdateReducer} from "../containers/AcademicPlanUpdate/reducer"
+import {academicPlanUpdateState} from "../containers/AcademicPlanUpdate/types"
+
 import {GENERAL_PATH as educationalStandardPath, reducer as educationalStandardReducer} from "../containers/EducationalStandards/reducer"
 import {educationalStandardsState} from "../containers/EducationalStandards/types"
 
@@ -161,6 +164,7 @@ export interface rootState {
     [practicePath]: practicePageState,
     [finalCertificationPath]: finalCertificationPageState,
     [finalCertificationListPath]: finalCertificationListPageState,
+    [academicPlanUpdatePath]: academicPlanUpdateState
 }
 
 export default combineReducers({
@@ -198,6 +202,7 @@ export default combineReducers({
     [selectEducationalProgramPath]: selectEducationalProgramReducer,
     [coursePath]: CourseReducer,
     [dodProfilePath]: dodProfileReducer,
+    [academicPlanUpdatePath]: academicPlanUpdateReducer,
     [userProfilePath]: userProfileReducer,
     [mergeWorkProgramsPath]: mergeWorkProgramsReducer,
     [practiceListPath]: practiceListReducer,

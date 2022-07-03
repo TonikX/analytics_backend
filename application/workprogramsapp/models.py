@@ -1,4 +1,5 @@
 import datetime
+from enum import Enum
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -6,9 +7,13 @@ from django.contrib.postgres.fields import JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from model_clone import CloneMixin
+from django.contrib.postgres.fields import ArrayField
 
 from dataprocessing.models import Items
 from onlinecourse.models import OnlineCourse, Institution
+from workprogramsapp.educational_program.educational_standart.models import EducationalStandard, \
+    TasksForEducationalStandard
+from django.contrib.postgres.fields import JSONField
 from workprogramsapp.educational_program.educational_standart.models import EducationalStandard, \
     TasksForEducationalStandard
 
@@ -25,6 +30,7 @@ class FieldOfStudyWorkProgram(models.Model):
     # class Meta:
     #     unique_together = ('work_program', 'field_of_study')
 '''
+
 
 def current_year():
     return datetime.date.today().year
@@ -87,10 +93,11 @@ class WorkProgram(CloneMixin, models.Model):
     hoursSecondSemester = models.IntegerField(blank=True, null=True, verbose_name="Количество часов в 2 семестре")
     # goals = models.CharField(max_length=1024, verbose_name = "Цели освоения" )
     # result_goals = models.CharField(max_length=1024, verbose_name = "Результаты освоения" )
-    #field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram,
+    # field_of_studies = models.ManyToManyField('FieldOfStudy', through=FieldOfStudyWorkProgram,
     #                                          verbose_name="Предметная область",
     #                                          related_name='workprograms_in_fieldofstudy')
-    bibliographic_reference = models.ManyToManyField('BibliographicReference', blank=True, null=True, verbose_name='Библиогравическая_ссылка',
+    bibliographic_reference = models.ManyToManyField('BibliographicReference', blank=True, null=True,
+                                                     verbose_name='Библиогравическая_ссылка',
                                                      related_name='bibrefs')
     # evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочное средство')
     description = models.CharField(max_length=5000, blank=True, null=True)
@@ -98,11 +105,12 @@ class WorkProgram(CloneMixin, models.Model):
     credit_units = models.CharField(max_length=1024, blank=True, null=True)
     semester_hour = models.CharField(max_length=1024, blank=True, null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
-    work_status = models.CharField(max_length=1, choices=status_choise, verbose_name='Архив', default = 'w')
+    work_status = models.CharField(max_length=1, choices=status_choise, verbose_name='Архив', default='w')
     hours = models.IntegerField(blank=True, null=True, verbose_name="Сумма часов по разделам")
     extra_points = models.CharField(choices=extra_points_choise, max_length=1, verbose_name='Квалификация',
-                                   blank=True, null=True)
-    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors", verbose_name="Редакторы РПД", blank=True, null=True)
+                                    blank=True, null=True)
+    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors", verbose_name="Редакторы РПД",
+                                     blank=True, null=True)
     language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
                                 blank=True, null=True)
     have_course_project = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД курсовой проект")
@@ -125,7 +133,9 @@ class WorkProgram(CloneMixin, models.Model):
     lab_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы лабораторных работ")
     srs_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы СРС")
     number_of_semesters = models.IntegerField(blank=True, null=True, verbose_name="Количество семестров в дисциплине")
-    read_notifications = models.CharField(max_length=256, default='False, False, False, False, False, False, False, False, False, False', verbose_name="Прочитанность уведомлений")
+    read_notifications = models.CharField(max_length=256,
+                                          default='False, False, False, False, False, False, False, False, False, False',
+                                          verbose_name="Прочитанность уведомлений")
     implementation_format_choise = (
         ('online', 'online'),
         ('mixed', 'mixed'),
@@ -134,7 +144,6 @@ class WorkProgram(CloneMixin, models.Model):
     implementation_format = models.CharField(choices=implementation_format_choise, max_length=15, verbose_name='формат реализации',
                                             blank=True, null=True)
     is_oferta = models.BooleanField(blank=True, null=True, verbose_name="Оферта")
-
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
@@ -151,11 +160,11 @@ class WorkProgram(CloneMixin, models.Model):
 
 
     def new_relations(old_descipline_code, new_descipline_code):
-        old_work_program = WorkProgram.objects.get(id = old_descipline_code)
-        print ('old', old_work_program, old_work_program.id)
-        new_work_program = WorkProgram.objects.get(id = new_descipline_code)
-        print ('new', new_work_program, new_work_program.id)
-        for wp_in_fs in WorkProgramInFieldOfStudy.objects.filter(work_program = old_work_program):
+        old_work_program = WorkProgram.objects.get(id=old_descipline_code)
+        print('old', old_work_program, old_work_program.id)
+        new_work_program = WorkProgram.objects.get(id=new_descipline_code)
+        print('new', new_work_program, new_work_program.id)
+        for wp_in_fs in WorkProgramInFieldOfStudy.objects.filter(work_program=old_work_program):
             wp_in_fs.work_program = new_work_program
             wp_in_fs.save()
             print ('замена прошла')
@@ -822,6 +831,7 @@ class WorkProgramInFieldOfStudy(CloneMixin,models.Model):
                                                                        on_delete=models.CASCADE, related_name="zuns_for_cb")
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
+
     # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
 
 
@@ -853,10 +863,98 @@ class Zun(models.Model):
     items = models.ManyToManyField('OutcomesOfWorkProgram', verbose_name = "Учебная сущность и уровень освоения", blank=True, null=True, related_name="item_in_wp")
     wp_in_fs_saved_fk_id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
 
-
     # def __str__(self):
     #     return (str(self.work_program_change_in_discipline_block_module) + str(self.work_program))
 
+
+class AcademicPlanUpdateConfiguration(models.Model):
+    academic_plan_id = models.CharField(
+        max_length=1024,
+        verbose_name="Id учебного плана для обновления",
+        blank=True,
+        null=False
+    )
+    academic_plan_title = models.CharField(
+        max_length=1024,
+        verbose_name="Название учебного плана для обновления",
+        blank=True,
+        null=False
+    )
+    updated_date_time = models.DateTimeField(
+        editable=True,
+        blank=False,
+        null=True,
+        verbose_name='Дата обновления'
+    )
+    updates_enabled = models.BooleanField(verbose_name="Обновления включены", blank=False, null=False)
+
+    class Meta:
+        ordering = ['id']
+
+
+class AcademicPlanUpdateSchedulerConfiguration(models.Model):
+    days_interval = models.PositiveIntegerField(
+        verbose_name="Интервал обновления в днях",
+        blank=True,
+        null=True
+    )
+    execution_hours = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        verbose_name='Время запуска обновления'
+    )
+    updated_timestamp = models.BigIntegerField(
+        blank=True,
+        null=True,
+        verbose_name='Дата последнего обновления'
+    )
+
+    def __str__(self):
+        return str(self.updated_timestamp) + " " + str(self.execution_hours) + " " + str(self.days_interval)
+
+
+class AcademicPlanUpdateLog(models.Model):
+    academic_plan_id = models.PositiveIntegerField(
+        verbose_name="ID учебного плана в ИСУ",
+        blank=False,
+        null=False
+    )
+    object_type = models.PositiveIntegerField(
+        verbose_name="Измененный объект",
+        blank=False,
+        null=False
+    )
+    field_name = models.CharField(
+        max_length=1024,
+        verbose_name="Измененное поле",
+        blank=False,
+        null=False
+    )
+    old_value = models.CharField(
+        max_length=1024,
+        verbose_name="Старое значение",
+        blank=True,
+        null=True
+    )
+    new_value = models.CharField(
+        max_length=1024,
+        verbose_name="Новое значение",
+        blank=True,
+        null=True
+    )
+    updated_date_time = models.DateTimeField(
+        editable=True,
+        blank=False,
+        null=False,
+        verbose_name='Дата обновления'
+    )
+
+    class Meta:
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.object_type) + " " + str(self.field_name) + " " + str(self.old_value) + " " + str(
+            self.new_value) + " " + str(self.updated_date_time)
 
 
 class Competence(models.Model):

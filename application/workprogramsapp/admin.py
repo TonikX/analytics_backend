@@ -11,7 +11,9 @@ from .models import (
     RouteComposition, Route, Certification, BibliographicReference, AcademicPlan,
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,
     СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
-    OnlineCourse, WorkProgramIdStrUpForIsu, GeneralizedLaborFunctions
+    OnlineCourse, WorkProgramIdStrUpForIsu, GeneralizedLaborFunctions,
+    AcademicPlanUpdateConfiguration,
+    AcademicPlanUpdateLog
 )
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, \
@@ -108,6 +110,8 @@ admin.site.register(CourseCredit)
 admin.site.register(CourseFieldOfStudy)
 admin.site.register(ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule)
 admin.site.register(WorkProgramIdStrUpForIsu)
+
+admin.site.register(AcademicPlanUpdateConfiguration)
 admin.site.register(NotificationComments)
 admin.site.register(FeedbackRecord)
 admin.site.register(AcceptedBarsInWp)
@@ -115,21 +119,8 @@ admin.site.register(GeneralizedLaborFunctions)
 admin.site.register(EducationalStandard)
 admin.site.register(TasksForEducationalStandard)
 
+class LogAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "updated_date_time")
+    search_fields = ['object_type', 'old_value', 'new_value']
 
-
-# class EvaluationToolInLine(admin.StackedInline):
-#     model = EvaluationTool
-#     extra = 1
-#
-#
-# @admin.register(DisciplineSection)
-# class DisciplineSectionAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'ordinal_number', 'work_program')
-#     list_filter = ('name', 'ordinal_number', 'work_program')
-#     inlines = [EvaluationToolInLine]
-#     save_on_top = True
-#     save_as = True
-
-admin.site.register(SentMail)
-admin.site.register(ExpertsOnStructuralUnit)
-
+admin.site.register(AcademicPlanUpdateLog, LogAdmin)

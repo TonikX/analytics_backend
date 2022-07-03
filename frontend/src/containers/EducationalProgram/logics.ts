@@ -168,6 +168,29 @@ const saveZun = createLogic({
     }
 });
 
+const deleteZun = createLogic({
+    type: educationalPlanActions.deleteZun.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_ZUN}));
+
+        const competenceMatrixId = getEducationalProgramCharacteristicId(getState());
+
+        service.deleteZUN(action.payload)
+            .then(() => {
+                dispatch(actions.fetchingSuccess(['Индикатор успешно удален']));
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_ZUN}));
+                dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
+                return done();
+            })
+    }
+});
+
 const getEducationalProgramCharacteristicLogic = createLogic({
     type: educationalPlanActions.getEducationalProgramCharacteristic.type,
     latest: true,
@@ -769,4 +792,5 @@ export default [
 
     getCompetenceMatrix,
     saveZun,
+    deleteZun,
 ];
