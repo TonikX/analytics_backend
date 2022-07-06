@@ -354,5 +354,6 @@ urlpatterns = [
     url(r'^', include('workprogramsapp.educational_program.educational_standart.urls')),
     url(r'^', include('gia_practice_app.GIA.urls')),
     url(r'^', include('gia_practice_app.Practice.urls')),
+    url(r'^', include('workprogramsapp.bibliographic_reference.urls')),
 
 ]
