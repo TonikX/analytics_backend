@@ -82,7 +82,9 @@ const addTotalHoursWithEvaluationCertificationHours = (state: rootState, errors:
 const addPlanError = (state: rootState, errors: string[]) => {
     const educationalPlans = getWorkProgramField(state, 'work_program_in_change_block')
 
-    if (educationalPlans.length === 0){
+    const isOffertaOn = getWorkProgramField(state, WorkProgramGeneralFields.OFFERTA);
+
+    if (educationalPlans.length === 0 && !isOffertaOn){
         errors.push('Дисциплина не включена ни в один учебный план');
     }
 }
@@ -128,8 +130,9 @@ const addEvaluationToolsErrors = (state: rootState, errors: string[]) => {
     const sections = getWorkProgramField(state, fields.WORK_PROGRAM_SECTIONS);
     const evaluationToolsList = getWorkProgramEvaluationToolsList(state);
     const isBarsOn = getWorkProgramField(state, WorkProgramGeneralFields.BARS);
+    const isOffertaOn = getWorkProgramField(state, WorkProgramGeneralFields.OFFERTA);
 
-    if (!evaluationToolsList.length){
+    if (!evaluationToolsList.length && !isOffertaOn){
         errors.push('В РПД отсутствуют оценочные средства');
     }
 

@@ -84,11 +84,14 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
 
     handleChangeField = (field: string) => (e: React.ChangeEvent) => {
         const {section} = this.state;
+        //@ts-ignore
+        const value = e?.target?.value
+        const isLecture = workProgramSectionFields.LECTURE_CLASSES === field
 
         this.setState({
             section: {
                 ...section,
-                [field]: get(e, 'target.value')
+                [field]: isLecture ? value.split('.')?.[0] : value
             }
         })
     }
@@ -141,7 +144,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                     {isEditMode ?
                         <TextField variant="outlined"
                                    size="small"
-                                   defaultValue={section[workProgramSectionFields.LECTURE_CLASSES]}
+                                   value={section[workProgramSectionFields.LECTURE_CLASSES]}
                                    className={classes.smallInput}
                                    type="number"
                                    onChange={this.handleChangeField(workProgramSectionFields.LECTURE_CLASSES)}

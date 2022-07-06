@@ -17,7 +17,6 @@ class LiteratureModal extends React.PureComponent<LiteratureModalProps> {
     render() {
         const {selectedItems, isOpen} = this.props;
 
-
         return (
             <AddLiteratureModal handleClose={this.handleClose}
                                 handleSave={this.handleSave}

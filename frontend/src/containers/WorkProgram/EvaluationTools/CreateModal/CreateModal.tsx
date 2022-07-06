@@ -34,7 +34,7 @@ import { types } from '../constants'
 
 import {
     EvaluationToolFields,
-    fields,
+    fields, IntermediateCertificationFields,
     workProgramSectionFields,
 } from '../../enum';
 
@@ -156,6 +156,18 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const { showErrors, evaluationTool } = this.state;
         return showErrors && get(evaluationTool, [field, 'length'], 0) === 0
     }
+
+    changeSemesterCount = (e: React.ChangeEvent<{}>, value: number | number[]) => {
+        const {evaluationTool} = this.state;
+
+        this.setState({
+            evaluationTool: {
+                ...evaluationTool,
+                [EvaluationToolFields.SEMESTER]: value
+            }
+        })
+    }
+
     render() {
         const {classes, sections, semesterCount} = this.props;
         const {evaluationTool, isOpen} = this.state;
@@ -296,37 +308,23 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                 />
                                             </div>
 
-                                            <FormControl component="fieldset">
-                                                <FormLabel component="legend">
-                                                    Длительность изучения *
+                                            <FormControl component="fieldset" style={{ width: '100%'}}>
+                                                <FormLabel component="legend" style={{ marginBottom: '50px' }}>
+                                                    Длительность изучения (в семестрах) *
                                                     <Tooltip title="Первый семестр - семестр с которого начинается дисциплина.">
-                                                        <QuestionIcon color="primary" className={classes.tooltipIcon} />
+                                                        <QuestionIcon color="primary" className={classes.tooltipIcon}/>
                                                     </Tooltip>
                                                 </FormLabel>
-                                                <RadioGroup className={classes.radioGroup}
-                                                            onChange={this.saveField(EvaluationToolFields.SEMESTER)}
-                                                            value={evaluationTool[EvaluationToolFields.SEMESTER]}
-                                                >
-                                                    <FormControlLabel value={'1'} control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 1} />} label="Первый" />
-                                                    <FormControlLabel
-                                                      disabled={semesterCount < 2}
-                                                      value={'2'}
-                                                      control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 2} />}
-                                                      label="Второй"
-                                                    />
-                                                    <FormControlLabel
-                                                      disabled={semesterCount < 3}
-                                                      value={'3'}
-                                                      control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 3} />}
-                                                      label="Третий"
-                                                    />
-                                                    <FormControlLabel
-                                                      disabled={semesterCount < 4}
-                                                      value={'4'}
-                                                      control={<Radio checked={parseInt(evaluationTool[EvaluationToolFields.SEMESTER]) === 4} />}
-                                                      label="Четвертый"
-                                                    />
-                                                </RadioGroup>
+                                                <Slider
+                                                  defaultValue={1}
+                                                  step={1}
+                                                  marks
+                                                  min={1}
+                                                  max={8}
+                                                  valueLabelDisplay="on"
+                                                  value={parseInt(evaluationTool[EvaluationToolFields.SEMESTER])}
+                                                  onChange={this.changeSemesterCount}
+                                                />
                                             </FormControl>
 
                                             <FormControlLabel

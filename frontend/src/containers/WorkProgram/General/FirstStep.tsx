@@ -50,6 +50,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     [WorkProgramGeneralFields.QUALIFICATION]: '',
     [WorkProgramGeneralFields.EXTRA_POINTS]: '',
     [WorkProgramGeneralFields.LANGUAGE]: '',
+    [WorkProgramGeneralFields.OFFERTA]: false,
     [WorkProgramGeneralFields.BARS]: false,
     [WorkProgramGeneralFields.SEMESTER_COUNT]: 1,
     [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: undefined,
@@ -71,6 +72,7 @@ class FirstStep extends React.Component<FirstStepProps> {
       [WorkProgramGeneralFields.SEMESTER_COUNT]: this.props.semesterCount,
       [WorkProgramGeneralFields.BARS]: this.props.bars,
       [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: this.props.implementationFormat,
+      [WorkProgramGeneralFields.OFFERTA]: this.props.offerta,
     })
   }
 
@@ -88,6 +90,7 @@ class FirstStep extends React.Component<FirstStepProps> {
         [WorkProgramGeneralFields.LANGUAGE]: this.props.language,
         [WorkProgramGeneralFields.SEMESTER_COUNT]: this.props.semesterCount,
         [WorkProgramGeneralFields.BARS]: this.props.bars,
+        [WorkProgramGeneralFields.OFFERTA]: this.props.offerta,
         [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: this.props.implementationFormat,
       })
     }
@@ -226,6 +229,16 @@ class FirstStep extends React.Component<FirstStepProps> {
     });
   }
 
+  handleOfferta = (e: React.ChangeEvent) => {
+    this.props.actions.saveWorkProgram({
+      destination: WorkProgramGeneralFields.OFFERTA,
+      value: get(e, "target.checked", false)
+    })
+    this.setState({
+      [WorkProgramGeneralFields.OFFERTA]: get(e, "target.checked", false)
+    });
+  }
+
   render() {
     const {
       classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription,
@@ -349,26 +362,14 @@ class FirstStep extends React.Component<FirstStepProps> {
             <FormControl component="fieldset">
               <FormLabel component="legend">Кол-во семестров *</FormLabel>
               <RadioGroup className={classes.radioGroup} onChange={this.changeSemesterCount}>
-                <FormControlLabel
-                  value={1}
-                  control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === 1} />}
-                  label="1"
-                />
-                <FormControlLabel
-                  value={2}
-                  control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === 2} />}
-                  label="2"
-                />
-                <FormControlLabel
-                  value={3}
-                  control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === 3} />}
-                  label="3"
-                />
-                <FormControlLabel
-                  value={4}
-                  control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === 4} />}
-                  label="4"
-                />
+                {new Array(1,2,3,4,5,6,7,8).map((item) => (
+                  <FormControlLabel
+                    value={item}
+                    control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === item} />}
+                    label={item}
+                    key={item}
+                  />
+                ))}
               </RadioGroup>
             </FormControl>
               :
@@ -380,6 +381,17 @@ class FirstStep extends React.Component<FirstStepProps> {
             <Switch
               checked={state[WorkProgramGeneralFields.BARS]}
               onChange={this.handleBars}
+              disabled={!isCanEdit}
+              color="secondary"
+              className={classes.bars}
+            />
+          </div>
+
+          <div style={{display: "flex", alignItems: "center"}}>
+            <Typography>Оферта</Typography>
+            <Switch
+              checked={state[WorkProgramGeneralFields.OFFERTA]}
+              onChange={this.handleOfferta}
               disabled={!isCanEdit}
               color="secondary"
               className={classes.bars}

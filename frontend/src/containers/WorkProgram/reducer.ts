@@ -20,7 +20,11 @@ export const initialState: workProgramState = {
         [fields.CREATE_NEW_TOPIC_DIALOG]: {
             [fields.IS_OPEN_DIALOG]: false,
             [fields.DIALOG_DATA]: {},
-        }
+        },
+        [fields.ADD_NEW_LITERATURE]: {
+            [fields.IS_OPEN_DIALOG]: false,
+            [fields.DIALOG_DATA]: [],
+        },
     },
 };
 

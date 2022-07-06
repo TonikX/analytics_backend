@@ -165,6 +165,10 @@ class Expertises extends React.Component<ExpertisesProps> {
                                             editors = expertise[ExpertisesFields.GIA][CertificationFields.EDITORS];
                                         }
 
+                                        if (expertise[ExpertisesFields.EXPERTISE_TYPE] === 'OFERTA') {
+                                            title = title + ' (оферта)'
+                                        }
+
                                         const qualification = expertise[ExpertisesFields.WORK_PROGRAM]
                                             ? specializationObject[expertise[ExpertisesFields.WORK_PROGRAM][WorkProgramGeneralFields.QUALIFICATION]]
                                             : '';
@@ -184,7 +188,7 @@ class Expertises extends React.Component<ExpertisesProps> {
                                                         .map((item: ExpertUserInRPDType) => getUserFullName(item[ExpertisesFields.EXPERT])).join(', ')}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {editors.map((item: UserType) => getUserFullName(item)).join(', ')}
+                                                    {editors?.map((item: UserType) => getUserFullName(item)).join(', ')}
                                                 </TableCell>
                                                 <TableCell>
                                                     {moment(expertise[ExpertisesFields.DATE_OF_LAST_CHANGE]).format(FULL_DATE_FORMAT)}

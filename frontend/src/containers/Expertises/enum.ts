@@ -51,4 +51,5 @@ export enum ExpertisesFields {
     GIA = 'gia',
     EXPERT_RESULT = 'expert_result',
     USER_EXPERTISE_STATUS = 'user_expertise_status',
+    EXPERTISE_TYPE = 'expertise_type',
 }

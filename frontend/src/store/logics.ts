@@ -38,6 +38,7 @@ import UserProfile from  '../containers/UserProfile/logics';
 import MergeWorkProgramsLogic from  '../containers/MergeWorkPrograms/logics';
 import FinalCertificationLogic from '../containers/FinalCertification/logics';
 import FinalCertificationListLogic from '../containers/FinalCertification/CertificationList/logics'
+import AcademicPlanUpdate from '../containers/AcademicPlanUpdate/logics';
 
 export default [
     ...EducationalStandardsLogic,
@@ -80,4 +81,5 @@ export default [
     ...PracticeLogic,
     ...FinalCertificationLogic,
     ...FinalCertificationListLogic,
+    ...AcademicPlanUpdate
 ];

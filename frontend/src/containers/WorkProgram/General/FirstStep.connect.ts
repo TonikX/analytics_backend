@@ -25,6 +25,7 @@ const mapStateToProps = (state:rootState) => {
         editors: getWorkProgramField(state, WorkProgramGeneralFields.EDITORS),
         structuralUnit: getWorkProgramField(state, WorkProgramGeneralFields.STRUCTURAL_UNIT),
         bars: getWorkProgramField(state, WorkProgramGeneralFields.BARS),
+        offerta: getWorkProgramField(state, WorkProgramGeneralFields.OFFERTA),
         semesterCount: getWorkProgramField(state, WorkProgramGeneralFields.SEMESTER_COUNT),
         implementationFormat: getWorkProgramField(state, WorkProgramGeneralFields.IMPLEMENTATION_FORMAT),
 

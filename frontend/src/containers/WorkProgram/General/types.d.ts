@@ -21,6 +21,7 @@ export interface FirstStepProps extends WithStyles<typeof styles> {
     structuralUnit: StructuralUnitType|null;
     editors: Array<UserType>;
     bars: boolean;
+    offerta: boolean;
     semesterCount: number;
 
     isCanEdit: boolean;
