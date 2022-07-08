@@ -71,7 +71,7 @@ def generate_single_checkpoint(work_program, absolute_semester, relative_semeste
     certificate = СertificationEvaluationTool.objects.filter(work_program=work_program_id, semester=relative_semester)
     for cerf in certificate:
         # Отдельно обрабатываем случай наличия курсовика
-        if int(cerf.type) == 4:
+        if int(cerf.type) == 4 or int(cerf.type) == 5:
             has_course_project = True
             course_project = generate_checkpoint(name=cerf.name, min=cerf.min, max=cerf.max, week=None, type_id=id,
                                                  key=False)
