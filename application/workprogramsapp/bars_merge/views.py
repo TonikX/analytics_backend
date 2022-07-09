@@ -250,9 +250,9 @@ def SendCheckpointsForAcceptedWP(request):
                         work_program_in_field_of_study__work_program=work_program,
                         work_program_in_field_of_study__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=imp))[
                         0]
+                isu_wp_id = isu_wp.dis_id
 
-            imp_list = list({v['id']: v for v in imp_list}.values())
-            print(imp_list)# Оставляем уникальные значения по айдишникам
+            imp_list = list({v['id']: v for v in imp_list}.values()) # Оставляем уникальные значения по айдишникам
             # Трагичные Факультативы и прочая гадость собирается в общий ком из УП и в отдельном блоке кода отправляется
             if work_program.id in wp_for_many_terms_list:
                 imp_list_for_many_term.extend(imp_list)
