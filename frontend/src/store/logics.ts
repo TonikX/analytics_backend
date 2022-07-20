@@ -36,6 +36,7 @@ import PracticeLogic from '../containers/Practice/logics';
 import PracticeListLogic from '../containers/Practice/PracticeList/logics'
 import UserProfile from  '../containers/UserProfile/logics';
 import MergeWorkProgramsLogic from  '../containers/MergeWorkPrograms/logics';
+import EmailWidgetLogic from  '../containers/EmailWidget/logics';
 import FinalCertificationLogic from '../containers/FinalCertification/logics';
 import FinalCertificationListLogic from '../containers/FinalCertification/CertificationList/logics'
 import AcademicPlanUpdate from '../containers/AcademicPlanUpdate/logics';
@@ -77,6 +78,7 @@ export default [
     ...DodProfile,
     ...UserProfile,
     ...MergeWorkProgramsLogic,
+    ...EmailWidgetLogic,
     ...PracticeListLogic,
     ...PracticeLogic,
     ...FinalCertificationLogic,
