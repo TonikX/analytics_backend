@@ -28,7 +28,7 @@ class AcademicPlanUpdateProcessor:
     def __get_disciplines_ids_by_academic_plan__(academic_plan_id):
         work_programs__ids = WorkProgramChangeInDisciplineBlockModule. \
             objects.filter(discipline_block_module__descipline_block__academic_plan__ap_isu_id=academic_plan_id) \
-            .values_list('work_program__discipline_code', flat=True)
+            .values_list('work_program__discipline_code')
         disciplines_ids = []
         # for work_program in work_programs:
         #     disciplines_ids.append(
@@ -42,7 +42,7 @@ class AcademicPlanUpdateProcessor:
         new_disciplines_ids = AcademicPlanUpdateUtils.get_disciplines_ids_from_academic_plan_json(
             isu_academic_plan_json)
 
-        to_del = set(map(int, [float(i) for i in old_disciplines_ids])) - set(map(int, new_disciplines_ids))
+        to_del = set(map(int, [float(i[0]) for i in old_disciplines_ids])) - set(map(int, new_disciplines_ids))
 
         # for wp in to_del:
         # todo get() returned more than one WorkProgram -- it returned 11!
