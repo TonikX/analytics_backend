@@ -235,7 +235,6 @@ def SendCheckpointsForAcceptedWP(request):
             implementation_of_academic_plan_all = ImplementationAcademicPlan.objects.filter(
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=work_program,
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
-
             # Список УП с учетом актуального семестра отправки в БАРС
             implementation_of_academic_plan = implementation_of_academic_plan_all.filter(
                 year=int(year_of_sending) - now_semester // 2)
@@ -253,7 +252,7 @@ def SendCheckpointsForAcceptedWP(request):
                         0]
                 isu_wp_id = isu_wp.dis_id
 
-            imp_list = list({v['id']: v for v in imp_list}.values())  # Оставляем уникальные значения по айдишникам
+            imp_list = list({v['id']: v for v in imp_list}.values()) # Оставляем уникальные значения по айдишникам
             # Трагичные Факультативы и прочая гадость собирается в общий ком из УП и в отдельном блоке кода отправляется
             if work_program.id in wp_for_many_terms_list:
                 imp_list_for_many_term.extend(imp_list)
@@ -302,7 +301,7 @@ def SendCheckpointsForAcceptedWP(request):
 
         # Выход из цикла по семестрам
         # Если РПД "особая" (реализуется в нескольких семестрах одновременно (как факультативы))
-        if work_program.id in wp_for_many_terms_list:
+        if work_program.id in wp_for_many_terms_list and minimal_sem_for_many_term!=0:
             if not relative_bool:
                 count_relative = send_semester + 1
                 absolute_semester = send_semester + 1
