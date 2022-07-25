@@ -34,6 +34,7 @@ class AcademicPlanUpdateProcessor:
         #     disciplines_ids.append(
         #         WorkProgram.objects.get(id=work_program[0]).discipline_code
         #     )
+        print(work_programs__ids)
         return work_programs__ids
 
     @AcademicPlanUpdateAspect.discipline_difference_aspect
