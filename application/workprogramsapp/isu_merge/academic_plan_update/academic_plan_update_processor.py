@@ -26,15 +26,15 @@ class AcademicPlanUpdateProcessor:
 
     @staticmethod
     def __get_disciplines_ids_by_academic_plan__(academic_plan_id):
-        work_programs = WorkProgramChangeInDisciplineBlockModule. \
+        work_programs__ids = WorkProgramChangeInDisciplineBlockModule. \
             objects.filter(discipline_block_module__descipline_block__academic_plan__ap_isu_id=academic_plan_id) \
-            .values_list('work_program')
+            .values_list('work_program__id')
         disciplines_ids = []
-        for work_program in work_programs:
-            disciplines_ids.append(
-                WorkProgram.objects.get(id=work_program[0]).discipline_code
-            )
-        return disciplines_ids
+        # for work_program in work_programs:
+        #     disciplines_ids.append(
+        #         WorkProgram.objects.get(id=work_program[0]).discipline_code
+        #     )
+        return work_programs__ids
 
     @AcademicPlanUpdateAspect.discipline_difference_aspect
     def __update_disciplines__(self, old_academic_plan, isu_academic_plan_json):
