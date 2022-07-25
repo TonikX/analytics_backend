@@ -42,7 +42,7 @@ class AcademicPlanUpdateProcessor:
         new_disciplines_ids = AcademicPlanUpdateUtils.get_disciplines_ids_from_academic_plan_json(
             isu_academic_plan_json)
 
-        to_del = set(map(int, old_disciplines_ids)) - set(map(int, new_disciplines_ids))
+        to_del = set(map(int, map(float, old_disciplines_ids))) - set(map(int, new_disciplines_ids))
 
         # for wp in to_del:
         # todo get() returned more than one WorkProgram -- it returned 11!
