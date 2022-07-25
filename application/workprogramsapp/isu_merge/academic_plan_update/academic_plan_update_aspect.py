@@ -159,7 +159,7 @@ class AcademicPlanUpdateAspect:
                 old_work_program_object = None
 
             updated_work_program_object = func(
-                copy.deepcopy(old_work_program_object), *args, **kwargs
+                old_work_program_object, *args, **kwargs
             )
 
             AcademicPlanUpdateLogger.log_changes(

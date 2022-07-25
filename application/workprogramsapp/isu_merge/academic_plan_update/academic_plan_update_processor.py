@@ -152,6 +152,7 @@ class AcademicPlanUpdateProcessor:
 
         work_program_object.discipline_code = str(isu_academic_plan_discipline_json['disc_id'])
         work_program_object.save()
+
         return work_program_object
 
     @staticmethod
