@@ -88,8 +88,10 @@ class AcademicPlanUpdateProcessor:
             sem = 0
             all_ze_indexes_in_rpd = 0
             # todo was  lecture_hours_v2 = [0, 0, 0, 0], with 10752 index out of range
-            lecture_hours_v2 = [0, 0, 0, 0, 0, 0, 0, 0]
+            lecture_hours_v2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            print(lecture_hours_v2)
             for i in hours:
+                print(hours)
                 if ze[all_ze_indexes_in_rpd] >= 1.0:
                     lecture_hours_v2[sem] = i
                     sem += 1
@@ -178,6 +180,7 @@ class AcademicPlanUpdateProcessor:
             implementation_academic_plan_object.save()
         if AcademicPlan.objects.filter(ap_isu_id=int(isu_academic_plan_json['id'])).exists():
             academic_plan_object = AcademicPlan.objects.get(ap_isu_id=int(isu_academic_plan_json['id']))
+            #ToDo: Тут сделать удалитель привязок
             implementation_academic_plan_object.academic_plan = academic_plan_object
             implementation_academic_plan_object.save()
         else:
