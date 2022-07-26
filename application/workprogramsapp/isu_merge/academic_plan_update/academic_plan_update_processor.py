@@ -26,16 +26,13 @@ class AcademicPlanUpdateProcessor:
 
     @staticmethod
     def __get_disciplines_ids_by_academic_plan__(academic_plan_id):
-        work_programs__ids = WorkProgramChangeInDisciplineBlockModule. \
-            objects.filter(discipline_block_module__descipline_block__academic_plan__ap_isu_id=academic_plan_id) \
-            .values_list('work_program__discipline_code')
-        disciplines_ids = []
-        # for work_program in work_programs:
-        #     disciplines_ids.append(
-        #         WorkProgram.objects.get(id=work_program[0]).discipline_code
-        #     )
-        print(work_programs__ids)
-        return work_programs__ids
+        wcbms = WorkProgramChangeInDisciplineBlockModule. \
+            objects.filter(discipline_block_module__descipline_block__academic_plan__ap_isu_id=academic_plan_id)
+        work_programs_ids = []
+        for wcbm in wcbms.all():
+            for work_program in wcbm.work_program.all():
+                work_programs_ids.append(work_program.discipline_code)
+        return work_programs_ids
 
     @AcademicPlanUpdateAspect.discipline_difference_aspect
     def __update_disciplines__(self, old_academic_plan, isu_academic_plan_json):
@@ -90,9 +87,9 @@ class AcademicPlanUpdateProcessor:
             all_ze_indexes_in_rpd = 0
             # todo was  lecture_hours_v2 = [0, 0, 0, 0], with 10752 index out of range
             lecture_hours_v2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            print(lecture_hours_v2)
+            #print(lecture_hours_v2)
             for i in hours:
-                print(hours)
+                #print(hours)
                 if ze[all_ze_indexes_in_rpd] >= 1.0:
                     lecture_hours_v2[sem] = i
                     sem += 1
