@@ -25,6 +25,12 @@ class AcademicPlanUpdateProcessor:
         return AcademicPlan.objects.get(ap_isu_id=plan_id)
 
     @staticmethod
+    def __del_disciplines_ids_by_academic_plan__(academic_plan_id, new_disciplines_ids):
+        wcbms = WorkProgramChangeInDisciplineBlockModule. \
+            objects.filter(discipline_block_module__descipline_block__academic_plan__ap_isu_id=academic_plan_id)\
+            .exclude(work_program__discipline_code__in = new_disciplines_ids).delete()
+
+    @staticmethod
     def __get_disciplines_ids_by_academic_plan__(academic_plan_id):
         wcbms = WorkProgramChangeInDisciplineBlockModule. \
             objects.filter(discipline_block_module__descipline_block__academic_plan__ap_isu_id=academic_plan_id)
@@ -42,6 +48,7 @@ class AcademicPlanUpdateProcessor:
 
         to_del = set(map(int, [float(i[0]) for i in old_disciplines_ids])) - set(map(int, new_disciplines_ids))
 
+        self.__del_disciplines_ids_by_academic_plan__(old_academic_plan.ap_isu_id, new_disciplines_ids)
         # for wp in to_del:
         # todo get() returned more than one WorkProgram -- it returned 11!
         # WorkProgramChangeInDisciplineBlockModule. \
