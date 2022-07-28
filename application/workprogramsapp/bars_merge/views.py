@@ -232,6 +232,8 @@ def SendCheckpointsForAcceptedWP(request):
                     cred_regex += "(([^0]\.[0-9])|([^0])),\s"
                 else:
                     cred_regex += "(([0-9]\.[0-9])|[0-9]),\s"
+            cred_regex = cred_regex[:-3]
+
 
             #######################################################
             # Если РПД является общеуниверситеским факультативом
@@ -269,9 +271,9 @@ def SendCheckpointsForAcceptedWP(request):
                     minimal_sem_for_many_term = now_semester + 1
                 if imp_list:
                     maximal_sem_for_many_term = now_semester + 1
-                ##############################
+                #######################################################
 
-            cred_regex = cred_regex[:-3]
+
             # Получаем все УП для данного семестра РПД (нужно для каунтера отнсительного семестра)
             implementation_of_academic_plan_all = ImplementationAcademicPlan.objects.filter(
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=work_program,

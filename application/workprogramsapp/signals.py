@@ -23,7 +23,7 @@ def populate_models(sender, **kwargs):
 def create_profile(sender, instance, created, **kwargs):
     """Create a matching profile whenever a user object is created."""
     if created:
-        expertise=Expertise.objects.get(expertse_users_in_rpd=instance)
+        expertise = Expertise.objects.get(expertse_users_in_rpd=instance)
         if expertise.expertise_type == "WP" or not expertise.expertise_type:
             name_of_object = "рабочей программы"
             wp_exp = WorkProgram.objects.get(expertise_with_rpd__expertse_users_in_rpd=instance)
@@ -70,12 +70,12 @@ def expertise_notificator(sender, instance, created, **kwargs):
         ExpertiseNotification.objects.create(expertise=instance, user=user,
                                              message=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}"')
 
-    if instance.expertise_status == 'WK':
+    if instance.expertise_status == 'RE' or instance.expertise_status == 'AC':
 
         user_to_send = users.filter(expertise_status_notification=True)
         user_email = [user.email for user in user_to_send]
         mail_sender(topic=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус.',
-                    text=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}")',
+                    text=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}"\n https://op.itmo.ru/work-program/{wp_exp.id}',
                     emails=user_email, users=user_to_send)
 
         for user in users:
@@ -84,7 +84,10 @@ def expertise_notificator(sender, instance, created, **kwargs):
 
     # isu_client_credentials_request('https://dev.disc.itmo.su/api/v1/disciplines/:disc_id?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(status=instance.expertise_status, wp_id=wp_exp.id))
 
-    isu_client_credentials_request('https://disc.itmo.su/api/v1/disciplines/{disc_id}?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(disc_id=wp_exp.discipline_code, status=instance.get_expertise_status_display(), wp_id=wp_exp.id))
+    isu_client_credentials_request(
+        'https://disc.itmo.su/api/v1/disciplines/{disc_id}?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(
+            disc_id=wp_exp.discipline_code, status=instance.get_expertise_status_display(), wp_id=wp_exp.id))
+
 
 @receiver(post_save, sender=ExpertiseComments)
 def comment_notificator(sender, instance, created, **kwargs):
