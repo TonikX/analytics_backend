@@ -1,11 +1,12 @@
 # Сериализаторы
 from django.http import Http404
-from rest_framework import filters
+from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, generics
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
 
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
@@ -13,12 +14,13 @@ from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 # Сериализаторы
 from .serializers import AdditionalMaterialSerializer, CreateAdditionalMaterialSerializer, \
     StructuralUnitSerializer, CreateStructuralUnitSerializer, \
-    CreateUserStructuralUnitSerializer, UserStructuralUnitSerializer, ShortStructuralUnitSerializer
+    CreateUserStructuralUnitSerializer, UserStructuralUnitSerializer, ShortStructuralUnitSerializer, \
+    WorkProgramItemsPrerequisitesSerializer
+from .serializers import CompetenceFullSerializer
 from ..expertise.models import Expertise
 from ..models import WorkProgram, DisciplineSection, PrerequisitesOfWorkProgram, OutcomesOfWorkProgram, \
-    WorkProgramInFieldOfStudy, СertificationEvaluationTool, EvaluationTool, Topic, Competence
-from ..serializers import WorkProgramSerializer, WorkProgramShortForExperiseSerializer, CompetenceSerializer
-from .serializers import CompetenceFullSerializer
+    СertificationEvaluationTool, EvaluationTool, Topic, Competence
+from ..serializers import WorkProgramSerializer, CompetenceSerializer
 
 
 class AdditionalMaterialSet(viewsets.ModelViewSet):
@@ -216,6 +218,7 @@ def ChangeSemesterInEvaluationsCorrect(request):
     serializer = WorkProgramSerializer(needed_wp, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def WorkProgramShortInfo(request, isu_id):
@@ -238,3 +241,13 @@ def WorkProgramShortInfo(request, isu_id):
     except WorkProgram.DoesNotExist:
         raise Http404
 
+
+class WorkProgramItemsPrerequisitesView(generics.RetrieveAPIView):
+    queryset = WorkProgram.objects.all()
+    serializer_class = WorkProgramItemsPrerequisitesSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset, discipline_code=str(self.request.resolver_match.kwargs['isu_id']))
+        return obj
