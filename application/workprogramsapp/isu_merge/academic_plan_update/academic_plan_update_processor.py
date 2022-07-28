@@ -211,6 +211,14 @@ class AcademicPlanUpdateProcessor:
         return discipline_block_object
 
     @staticmethod
+    def __del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json, discipline_block_object):
+
+        bm = DisciplineBlockModule.objects.filter(
+            descipline_block = discipline_block_object,\
+            descipline_block__academic_plan__ap_isu_id = isu_academic_plan_json['id'])\
+            .exclude(id__in = block_modules_to_del_ids).delete()
+
+    @staticmethod
     @AcademicPlanUpdateAspect.discipline_block_module_changes_aspect
     def __process_block_module__(discipline_block_module_object,
                                  isu_academic_plan_block_module_json,
@@ -396,6 +404,14 @@ class AcademicPlanUpdateProcessor:
                 zun.save()
         return work_program_id_str_up_for_isu_object
 
+
+    @staticmethod
+    def __del_work_program_in_field_of_study__(discipline_block_module, new_disciplines_ids):
+        wcbms = WorkProgramInFieldOfStudy. \
+            objects.filter(work_program_change_in_discipline_block_module__discipline_block_module=discipline_block_module)\
+            .exclude(work_program__id__in = new_disciplines_ids).delete()
+
+
     def update_academic_plans(self):
         academic_plans_ids = AcademicPlanUpdateConfiguration.objects.filter(updates_enabled=True).values_list(
             'academic_plan_id', flat=True)
@@ -420,6 +436,7 @@ class AcademicPlanUpdateProcessor:
                         academic_plan,
                         isu_academic_plan_json
                     )
+                    block_modules_to_del_ids = []
                     for module in block['discipline_modules']:
                         discipline_block_module_object = self \
                             .__process_block_module__(
@@ -427,6 +444,9 @@ class AcademicPlanUpdateProcessor:
                             discipline_block_object,
                             isu_academic_plan_json
                         )
+
+                        block_modules_to_del_ids.append(discipline_block_module_object.id)
+                        disciplines_for_del_in_module = []
                         for isu_academic_plan_discipline_json in module['disciplines']:
                             work_program_object = self.__process_discipline__(
                                 isu_academic_plan_json,
@@ -444,7 +464,11 @@ class AcademicPlanUpdateProcessor:
                                 isu_academic_plan_json,
                                 isu_academic_plan_discipline_json
                             )
-
+                            disciplines_for_del_in_module.append(work_program_object.id)
+                        self.__del_work_program_in_field_of_study__(discipline_block_module_object, disciplines_for_del_in_module)
+                    print(block_modules_to_del_ids)
+                    self.__del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json,
+                                               discipline_block_object)
                 academic_plan_update_configuration = AcademicPlanUpdateConfiguration.objects \
                     .get(academic_plan_id=plan_id)
                 academic_plan_update_configuration.updated_date_time = timezone.now()

@@ -688,7 +688,7 @@ class DisciplineBlock(CloneMixin,models.Model):
     # work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
 
     def __str__(self):
-        return (str(self.name) + str(self.academic_plan))
+        return ('Ид: ' + str(self.id) + str(self.name) + '/ Учебный план: ' + str(self.academic_plan))
 
     def clone_descipline_block_modules(id):
         DisciplineBlockModules = DisciplineBlockModule.objects.all()
@@ -762,7 +762,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         ordering = ['order']
 
     def __str__(self):
-        return (str(self.name) + str(self.descipline_block))
+        return ('ид: ' + str(self.id) + str(self.name) + '/ Блок:' + str(self.descipline_block))
 
     def clone_module(module_id):
         module = DisciplineBlockModule.objects.get(pk=module_id)
