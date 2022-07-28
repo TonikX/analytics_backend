@@ -72,7 +72,7 @@ def expertise_notificator(sender, instance, created, **kwargs):
 
     if instance.expertise_status == 'RE' or instance.expertise_status == 'AC':
 
-        user_to_send = users.filter(expertise_status_notification=True)
+        user_to_send = users.filter(expertise_status_notification=True, do_email_notifications=True)
         user_email = [user.email for user in user_to_send]
         mail_sender(topic=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус.',
                     text=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}"\n https://op.itmo.ru/work-program/{wp_exp.id}',
@@ -94,7 +94,8 @@ def comment_notificator(sender, instance, created, **kwargs):
     wp_exp = WorkProgram.objects.get(expertise_with_rpd__expertse_users_in_rpd__user_expertise_comment=instance)
     user_sender = User.objects.get(expertse_in_rpd__user_expertise_comment=instance)
 
-    user_to_send = User.objects.filter(editors=wp_exp, expertise_comments_notification=True)
+    user_to_send = User.objects.filter(editors=wp_exp, expertise_comments_notification=True,
+                                       do_email_notifications=True)
     user_to_send = user_to_send.exclude(id=user_sender.id)
     user_email = [user.email for user in user_to_send]
     mail_sender(topic=f'В экспертизе для рабочей программы "{wp_exp.title}" был оставлен новый комментарий',

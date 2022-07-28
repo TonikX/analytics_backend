@@ -15,6 +15,17 @@ class userProfileSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'isu_number')
 
 
+class UserBaseSerializer(serializers.ModelSerializer):
+    """Сериализатор для работы с акканутами"""
+
+    # user = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'do_email_notifications',
+                  'expertise_status_notification', 'expertise_comments_notification')
+
+
 class DomainDetailSerializer(serializers.ModelSerializer):
     """Сериализатор для предметной области"""
     user = serializers.PrimaryKeyRelatedField(required=False, many=True, queryset=User.objects.all())
