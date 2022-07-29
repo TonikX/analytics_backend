@@ -141,7 +141,7 @@ def CopyContentOfWorkProgram(request):
         new_wp.credit_units = old_wp.credit_units
         new_wp.semester_hour = old_wp.semester_hour
         new_wp.owner = old_wp.owner
-        new_wp.work_status = old_wp.work_status
+        #new_wp.work_status = old_wp.work_status
         new_wp.hours = old_wp.hours
         new_wp.extra_points = old_wp.extra_points
 

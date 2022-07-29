@@ -392,7 +392,7 @@ class AcademicPlan(models.Model):
     #TODO: Добавить год набора
 
     def __str__(self):
-        return str(self.ap_isu_id)
+        return str(self.id) + ' / '+ str(self.ap_isu_id)
 
 
     def clone_descipline_blocks(id, siap):

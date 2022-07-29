@@ -219,6 +219,13 @@ class AcademicPlanUpdateProcessor:
             .exclude(id__in = block_modules_to_del_ids).delete()
 
     @staticmethod
+    def __del_block__(block_to_del_ids, isu_academic_plan_json):
+
+        b = DisciplineBlock.objects.filter(
+            academic_plan__ap_isu_id = isu_academic_plan_json['id'])\
+            .exclude(id__in = block_to_del_ids).delete()
+
+    @staticmethod
     @AcademicPlanUpdateAspect.discipline_block_module_changes_aspect
     def __process_block_module__(discipline_block_module_object,
                                  isu_academic_plan_block_module_json,
@@ -429,13 +436,14 @@ class AcademicPlanUpdateProcessor:
                 field_of_study = self.__process_field_of_study__(isu_academic_plan_json)
 
                 academic_plan = self.__process_academic_plan__(isu_academic_plan_json, field_of_study)
-
+                block_to_del_ids = []
                 for block in isu_academic_plan_json['disciplines_blocks']:
                     discipline_block_object = self.__process_discipline_block__(
                         block,
                         academic_plan,
                         isu_academic_plan_json
                     )
+                    block_to_del_ids.append(discipline_block_object.id)
                     block_modules_to_del_ids = []
                     for module in block['discipline_modules']:
                         discipline_block_module_object = self \
@@ -469,6 +477,11 @@ class AcademicPlanUpdateProcessor:
                     print(block_modules_to_del_ids)
                     self.__del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json,
                                                discipline_block_object)
+
+                print(block_to_del_ids)
+                self.__del_block__(block_to_del_ids, isu_academic_plan_json,
+                                           )
+
                 academic_plan_update_configuration = AcademicPlanUpdateConfiguration.objects \
                     .get(academic_plan_id=plan_id)
                 academic_plan_update_configuration.updated_date_time = timezone.now()
