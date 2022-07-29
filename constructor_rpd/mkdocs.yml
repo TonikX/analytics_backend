@@ -10,6 +10,9 @@ nav:
   - Практики и ГИА:
       - ГИА: gia_and_practice/gia.md
       - Практики: gia_and_practice/practice.md
+  - Почта:
+      - Указание почтового ящика: email/email_reset.md
+      - Подтверждение почтового ящика: email/email_confirm.md
 
 theme:
   name: material
