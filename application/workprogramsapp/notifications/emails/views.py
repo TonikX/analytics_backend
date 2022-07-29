@@ -6,7 +6,7 @@ from datetime import timedelta
 from django.utils import timezone
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser, AllowAny
+from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from dataprocessing.models import User
@@ -49,7 +49,7 @@ class EmailSet(viewsets.ModelViewSet):
 
 
 @api_view(["POST"])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def email_reset_request(request):
     # checking username
     email = request.data.get("email")
@@ -72,11 +72,11 @@ def email_reset_request(request):
     recipient_list = [email]
     print(recipient_list)
     mail_sender(topic=subject, text=message, emails=recipient_list, users=[request.user])
-    return Response({"error": "success"}, status=status.HTTP_200_OK)
+    return Response({"message": "success"}, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def email_reset_confirm(request):
     # checking key
     queryset = EmailReset.objects.filter(key=request.data.get("key"))
@@ -91,7 +91,7 @@ def email_reset_confirm(request):
             user = email_reset.user
             user.email = queryset.first().email
             user.save()
-            return Response({"success": "email updated successfully."})
+            return Response({"message": "email updated successfully."})
 
     else:
         # invalid key
