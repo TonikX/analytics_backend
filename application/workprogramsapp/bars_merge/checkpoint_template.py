@@ -15,7 +15,7 @@ def generate_checkpoint_plan(regular_checkpoint: list, programs: list, disciplin
         "final_checkpoint": final_checkpoint,
         "course_project_checkpoint": course_project_checkpoint,
         "point_distribution": point_distribution,
-        "year": "2021/2022"
+        "year": "2022/2023"
     }
     return temp
 

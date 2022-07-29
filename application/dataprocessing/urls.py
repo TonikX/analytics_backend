@@ -33,4 +33,5 @@ urlpatterns = [
     path('login/', AuthenticateByCodeISU.as_view(), ),
     path('api/cas-redirect/', GetAuthenticationCodeISU.as_view(), ),
     path('api/item/search_duplicate/<int:pk>', views.ItemsDetailForDuplicateSearchAPIView.as_view(),),
+
 ]

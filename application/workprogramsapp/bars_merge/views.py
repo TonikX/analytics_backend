@@ -175,7 +175,8 @@ def SendCheckpointsForAcceptedWP(request):
     just_accepted_wp = []
     # Отсылаем ли мы одну дисципилну или же все с пометкой "отправить в барс"
     if not one_wp:
-        needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC',bars=True).distinct()
+        needed_wp = WorkProgram.objects.filter(expertise_with_rpd__expertise_status__contains='AC',
+                                               bars=True).distinct()
         just_accepted_wp = WorkProgram.objects.filter(accepted_wp_in_bars__year_of_study=setup_bars[0],
                                                       accepted_wp_in_bars__semester_of_sending=setup_bars[1]).distinct()
     else:
@@ -187,7 +188,7 @@ def SendCheckpointsForAcceptedWP(request):
             # Если РПД уже отправлена в этом учебном семестре, то игнорируем
             continue
         relative_bool = True  # Длится ли дисциплина дольше чем один семестр
-        count_relative = 1  # Счетчик относительных семестров
+        # count_relative = 1  # Счетчик относительных семестров
 
         # Проверка для булевой переменной, идет ли дисциплина в нескольких семестрах
         evaluation_tools = EvaluationTool.objects.filter(evaluation_tools__in=DisciplineSection.objects.filter(
@@ -225,36 +226,42 @@ def SendCheckpointsForAcceptedWP(request):
             imp_list = []  # Список всех учебных планов для этого семестра
             # Создание реуглярного выражения для того чтобы отфильтровать УП и инфу о РПД за этот семестр в цикле
             cred_regex = r""
+            end_term = now_semester + max_sem if now_semester + max_sem < 12 else 12
             for i in range(12):
-                if i == now_semester:
+                if now_semester <= i < end_term:
                     cred_regex += "(([^0]\.[0-9])|([^0])),\s"
                 else:
                     cred_regex += "(([0-9]\.[0-9])|[0-9]),\s"
             cred_regex = cred_regex[:-3]
-            # Получаем все УП для данного семестра РПД (нужно для каунтера отнсительного семестра)
-            implementation_of_academic_plan_all = ImplementationAcademicPlan.objects.filter(
-                academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=work_program,
-                academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
-            # Список УП с учетом актуального семестра отправки в БАРС
-            implementation_of_academic_plan = implementation_of_academic_plan_all.filter(
-                year=int(year_of_sending) - now_semester // 2)
 
-            isu_wp_id = None
-            for imp in implementation_of_academic_plan:
-                # создаем список направлений + уп с айдишниками ИСУ для БАРСа
-                field_of_studies = FieldOfStudy.objects.get(
-                    implementation_academic_plan_in_field_of_study=imp)
-                imp_list.append(generate_fos(imp.ns_id, field_of_studies.number, imp.title))
-                isu_wp = \
-                    list(WorkProgramIdStrUpForIsu.objects.filter(
-                        work_program_in_field_of_study__work_program=work_program,
-                        work_program_in_field_of_study__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=imp))[
-                        0]
-                isu_wp_id = isu_wp.dis_id
 
-            imp_list = list({v['id']: v for v in imp_list}.values()) # Оставляем уникальные значения по айдишникам
-            # Трагичные Факультативы и прочая гадость собирается в общий ком из УП и в отдельном блоке кода отправляется
+            #######################################################
+            # Если РПД является общеуниверситеским факультативом
             if work_program.id in wp_for_many_terms_list:
+                many_term_regex = r""
+                for i in range(12):
+                    if i == now_semester:
+                        many_term_regex += "(([^0]\.[0-9])|([^0])),\s"
+                    else:
+                        many_term_regex += "(([0-9]\.[0-9])|[0-9]),\s"
+                many_term_regex = many_term_regex[:-3]
+                implementation_of_academic_plan_all = ImplementationAcademicPlan.objects.filter(
+                    academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=work_program,
+                    academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zuns_for_wp__ze_v_sem__iregex=many_term_regex).distinct()
+                implementation_of_academic_plan = implementation_of_academic_plan_all.filter(
+                    year=int(year_of_sending) - now_semester // 2)
+                isu_wp_id = None
+                for imp in implementation_of_academic_plan:
+                    # создаем список направлений + уп с айдишниками ИСУ для БАРСа
+                    field_of_studies = FieldOfStudy.objects.get(
+                        implementation_academic_plan_in_field_of_study=imp)
+                    imp_list.append(generate_fos(imp.ns_id, field_of_studies.number, imp.title))
+                    isu_wp = \
+                        list(WorkProgramIdStrUpForIsu.objects.filter(
+                            work_program_in_field_of_study__work_program=work_program,
+                            work_program_in_field_of_study__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=imp))[
+                            0]
+                    isu_wp_id = isu_wp.dis_id
                 imp_list_for_many_term.extend(imp_list)
                 imp_list_for_many_term = list({v['id']: v for v in imp_list_for_many_term}.values())
                 # imp_list = list({v['id']: v for v in imp_list}.values())
@@ -264,44 +271,69 @@ def SendCheckpointsForAcceptedWP(request):
                     minimal_sem_for_many_term = now_semester + 1
                 if imp_list:
                     maximal_sem_for_many_term = now_semester + 1
+                #######################################################
 
-            # Если существует список УП, соответствует текущему семестру и не является специальной РПД
-            if imp_list and now_semester % 2 == send_semester and not (work_program.id in wp_for_many_terms_list):
-                # Генерируем чекпоинт со всеми УП, прямыми и относиетльным семестром
 
-                request_text = generate_single_checkpoint(absolute_semester=now_semester + 1,
-                                                          relative_semester=count_relative,
-                                                          programs=imp_list,
-                                                          work_program=work_program, setup=setup_bars,
-                                                          wp_isu_id=isu_wp_id, types_checkpoints=types_checkpoints)
-                isu_wp = None
+            # Получаем все УП для данного семестра РПД (нужно для каунтера отнсительного семестра)
+            implementation_of_academic_plan_all = ImplementationAcademicPlan.objects.filter(
+                academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=work_program,
+                academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zuns_for_wp__ze_v_sem__iregex=cred_regex).distinct()
+            # Список УП с учетом актуального семестра отправки в БАРС
+            for count_relative in range(0, max_sem):
+                if work_program.id in wp_for_many_terms_list:
+                    break
+                current_term = now_semester + count_relative
+                implementation_of_academic_plan = implementation_of_academic_plan_all.filter(
+                    year=int(year_of_sending) - current_term // 2)
                 isu_wp_id = None
-                # Получаем вернувшуюся информацию
-                # print(request_text)
-                request_response, request_status_code = post_checkpoint_plan(request_text, setup_bars)
-                if request_status_code != 200:
-                    #  если почему-то не отправилось продублируем респонс в терминал
-                    print(request_text, request_response)
-                else:
-                    # Если РПД отправилась со статусом 200, то записываем ее в отправленные
-                    AcceptedBarsInWp.objects.get_or_create(work_program=work_program,
-                                                           year_of_study=setup_bars[0]
-                                                           , semester_of_sending=setup_bars[1])
-                # Пишем логи
-                HistoryOfSendingToBars.objects.create(work_program=work_program, request_text=request_text,
-                                                      request_response=request_response,
-                                                      request_status=request_status_code)
+                for imp in implementation_of_academic_plan:
+                    # создаем список направлений + уп с айдишниками ИСУ для БАРСа
+                    field_of_studies = FieldOfStudy.objects.get(
+                        implementation_academic_plan_in_field_of_study=imp)
+                    imp_list.append(generate_fos(imp.ns_id, field_of_studies.number, imp.title))
+                    isu_wp = \
+                        list(WorkProgramIdStrUpForIsu.objects.filter(
+                            work_program_in_field_of_study__work_program=work_program,
+                            work_program_in_field_of_study__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=imp))[
+                            0]
+                    isu_wp_id = isu_wp.dis_id
 
-                all_sends.append(
-                    {"status": request_status_code, "request": request_text, "response": request_response})
+                imp_list = list({v['id']: v for v in imp_list}.values())  # Оставляем уникальные значения по айдишникам
+                # Трагичные Факультативы и прочая гадость собирается в общий ком из УП и в отдельном блоке кода отправляется
 
-            # Если дисциплина длинной несколько семестров, то добавляем плюсик к счетчику относительного семестра
-            if implementation_of_academic_plan_all and not relative_bool:
-                count_relative += 1
+                # Если существует список УП, соответствует текущему семестру и не является специальной РПД
+                if imp_list and current_term % 2 == send_semester and not (work_program.id in wp_for_many_terms_list):
+                    # Генерируем чекпоинт со всеми УП, прямыми и относиетльным семестром
+
+                    request_text = generate_single_checkpoint(absolute_semester=current_term + 1,
+                                                              relative_semester=count_relative + 1,
+                                                              programs=imp_list,
+                                                              work_program=work_program, setup=setup_bars,
+                                                              wp_isu_id=isu_wp_id, types_checkpoints=types_checkpoints)
+                    isu_wp = None
+                    isu_wp_id = None
+                    # Получаем вернувшуюся информацию
+                    # print(request_text)
+                    request_response, request_status_code = post_checkpoint_plan(request_text, setup_bars)
+                    if request_status_code != 200:
+                        #  если почему-то не отправилось продублируем респонс в терминал
+                        print(request_text, request_response)
+                    else:
+                        # Если РПД отправилась со статусом 200, то записываем ее в отправленные
+                        AcceptedBarsInWp.objects.get_or_create(work_program=work_program,
+                                                               year_of_study=setup_bars[0]
+                                                               , semester_of_sending=setup_bars[1])
+                    # Пишем логи
+                    HistoryOfSendingToBars.objects.create(work_program=work_program, request_text=request_text,
+                                                          request_response=request_response,
+                                                          request_status=request_status_code)
+
+                    all_sends.append(
+                        {"status": request_status_code, "request": request_text, "response": request_response})
 
         # Выход из цикла по семестрам
         # Если РПД "особая" (реализуется в нескольких семестрах одновременно (как факультативы))
-        if work_program.id in wp_for_many_terms_list and minimal_sem_for_many_term!=0:
+        if work_program.id in wp_for_many_terms_list and minimal_sem_for_many_term != 0:
             if not relative_bool:
                 count_relative = send_semester + 1
                 absolute_semester = send_semester + 1

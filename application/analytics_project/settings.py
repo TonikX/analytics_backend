@@ -258,8 +258,8 @@ DJOSER = {
     #'SERIALIZERS': {},
     'SET_USERNAME_RETYPE': True,
     'SERIALIZERS': {
-        #'user': 'dataprocessing.serializers.UserSerializer',
-        #'current_user': 'dataprocessing.serializers.UserSerializer',
+        'user': 'dataprocessing.serializers.UserBaseSerializer',
+        'current_user': 'dataprocessing.serializers.UserBaseSerializer',
         #'user_create': 'dataprocessing.serializers.UserSerializer',
     },
 }
