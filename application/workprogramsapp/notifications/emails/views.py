@@ -1,12 +1,13 @@
 import random
 from datetime import timedelta
 
-
 # from allauth.account.views import ConfirmEmailView
+from django.http.response import Http404
+from django.shortcuts import redirect
 from django.utils import timezone
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 from dataprocessing.models import User
@@ -54,25 +55,29 @@ def email_reset_request(request):
     # checking username
     email = request.data.get("email")
     user = request.user
-    email_reset = EmailReset(
-        user=user,
-        key="".join(
-            [random.choice("!@$_-qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890") for i in
-             range(99)]
-        ),
-        email=email
-    )
-    email_reset.save()
+    if email:
+        EmailReset.objects.filter(user=user).delete()
+        email_reset = EmailReset(
+            user=user,
+            key="".join(
+                [random.choice("!@$_-qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890") for i in
+                 range(99)]
+            ),
+            email=email
+        )
+        email_reset.save()
 
-    # send email here
-    subject = "op.itmo.ru: смена учетных данных"
-    message = """Ваш код для смены учетных данных: {}
-   С уважением,
-   команда Конструктора РПД""".format(email_reset.key)
-    recipient_list = [email]
-    print(recipient_list)
-    mail_sender(topic=subject, text=message, emails=recipient_list, users=[request.user])
-    return Response({"message": "success"}, status=status.HTTP_200_OK)
+        # send email here
+        subject = "op.itmo.ru: смена учетных данных"
+        message = """Ссылка для смены учетных данных: https://op.itmo.ru/api/email/confirm/{}
+       С уважением,
+       команда Конструктора РПД""".format(email_reset.key)
+        recipient_list = [email]
+        print(recipient_list)
+        mail_sender(topic=subject, text=message, emails=recipient_list, users=[request.user])
+        return Response({"message": "success"}, status=status.HTTP_200_OK)
+    else:
+        return Response({"error": "empty mail"}, 404)
 
 
 @api_view(["POST"])
@@ -91,6 +96,7 @@ def email_reset_confirm(request):
             user = email_reset.user
             user.email = queryset.first().email
             user.save()
+            email_reset.delete()
             return Response({"message": "email updated successfully."})
 
     else:
@@ -98,19 +104,21 @@ def email_reset_confirm(request):
         return Response({"error": "Invalid key"})
 
 
-"""class CustomConfirmEmailView(ConfirmEmailView):
-    def get(self, *args, **kwargs):
-        print('работает')
-        try:
-            self.object = self.get_object()
-        except Http404:
-            self.object = None
-        print('работает')
-        user = User.objects.get(email=self.object.email_address.email)
-        email = self.object.email_address
-        email.verified = True
-        email.save()
-        redirect_url = 'https://outlance.wtf/'
-        return redirect(redirect_url)
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def CustomConfirmEmailView(request, key):
+    try:
+        print(key)
+        email_reset = EmailReset.objects.get(key=key)
+        print(email_reset)
+    except EmailReset.DoesNotExist:
+        return redirect("https://op.itmo.ru/401")
 
-"""
+    if email_reset.timestamp < timezone.now() - timedelta(minutes=30):
+        return redirect("https://op.itmo.ru/402")
+    else:
+        user = email_reset.user
+        user.email = email_reset.email
+        user.save()
+        email_reset.delete()
+        return redirect("https://op.itmo.ru")
