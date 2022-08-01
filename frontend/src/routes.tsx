@@ -57,6 +57,7 @@ import RouterService from './service/router-service';
 import Notifications from "./containers/Profile/Notifications";
 import Overview from "./containers/Overview";
 import Landing from "./containers/Landing";
+ import UserSettings from "./containers/UserSettings";
 import UserProfile from "./containers/UserProfile";
 import DodProfile from "./containers/DodProfile";
 
@@ -277,6 +278,9 @@ export default () => (
                 </AuthRoute>
                 <AuthRoute path={routerService.getUserProfile()}>
                     <UserProfile/>
+                </AuthRoute>
+                <AuthRoute path={routerService.getUserSettings()}>
+                    <UserSettings/>
                 </AuthRoute>
                 <AuthRoute path={routerService.getSelectEducationalProgramRoute()}>
                     <SelectEducationalProgram/>

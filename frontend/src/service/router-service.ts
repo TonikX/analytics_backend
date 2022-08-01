@@ -33,6 +33,7 @@ const PRACTICE_LIST = 'practice-list';
 const PRACTICE = 'practice';
 const FINAL_CERTIFICATION = 'gia';
 const FINAL_CERTIFICATION_LIST = 'gia-list';
+const USER_SETTINGS = 'user-settings';
 
 const RECORDS = 'records';
 
@@ -73,7 +74,7 @@ export default class RouterService {
     getEducationalStandardRoute = (id: number | string) => {
         return SEPARATOR + EDUCATIONAL_STANDARDS + SEPARATOR + id;
     };
-	
+
 	getProfessionalStandardRoute = (id: number | string) => {
         return SEPARATOR + PROFESSIONAL_STANDARDS + SEPARATOR + id;
     };
@@ -323,6 +324,10 @@ export default class RouterService {
 
     getDodProfileRoute = () => {
         return SEPARATOR + DODPROFILE;
+    };
+
+    getUserSettings = () => {
+        return SEPARATOR + USER_SETTINGS;
     };
 
     getPracticeListRoute = () => {
