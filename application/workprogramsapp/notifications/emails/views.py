@@ -9,6 +9,7 @@ from rest_framework import viewsets, filters, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
+from django.conf import settings
 
 from dataprocessing.models import User
 from workprogramsapp.notifications.emails.models import SentMail
@@ -112,13 +113,13 @@ def CustomConfirmEmailView(request, key):
         email_reset = EmailReset.objects.get(key=key)
         print(email_reset)
     except EmailReset.DoesNotExist:
-        return redirect("https://op.itmo.ru/401")
+        return redirect("{}/401".format(settings.URL_FRONT))
 
     if email_reset.timestamp < timezone.now() - timedelta(minutes=30):
-        return redirect("https://op.itmo.ru/402")
+        return redirect("{}/402".format(settings.URL_FRONT))
     else:
         user = email_reset.user
         user.email = email_reset.email
         user.save()
         email_reset.delete()
-        return redirect("https://op.itmo.ru")
+        return redirect("{}".format(settings.URL_FRONT))

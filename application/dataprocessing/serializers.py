@@ -23,7 +23,7 @@ class UserBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'do_email_notifications',
-                  'expertise_status_notification', 'expertise_comments_notification')
+                  'expertise_status_notification', 'expertise_comments_notification', 'isu_number')
 
 
 class DomainDetailSerializer(serializers.ModelSerializer):
