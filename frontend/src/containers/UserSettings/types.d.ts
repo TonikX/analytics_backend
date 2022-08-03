@@ -1,10 +1,15 @@
 export interface userSettingsActions {
     updateUserEmail: any,
+    updateUserData: any,
 }
 
 export type UpdateEmailPayload = {
     email: string;
-    do_email_notifications: boolean;
-    expertise_comments_notification: boolean;
-    expertise_status_notification: boolean;
 };
+
+export type UpdateUserDataPayload = {
+    email: string;
+    do_email_notifications: notificationsAgree;
+    expertise_comments_notification: commentsAgree;
+    expertise_status_notification: statusAgree;
+}

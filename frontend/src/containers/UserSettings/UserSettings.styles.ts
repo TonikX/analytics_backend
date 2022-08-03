@@ -18,6 +18,16 @@ export const useStyles = makeStyles(() => createStyles({
         fontSize: '24px',
         textAlign: 'center',
     },
+    emailHolder: {
+        position: 'relative',
+    },
+    emailIcon: {
+        position: 'absolute',
+        right: '0',
+        top: '50%',
+        transform: 'translateY(-15px)',
+        zIndex: 1000,
+    },
     footer: {
         display: 'flex',
         alignItems: 'center',

@@ -1,6 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Box, Button, Typography, TextField} from "@material-ui/core";
+import VerifiedIcon from '@material-ui/icons/CheckCircle';
 import get from "lodash/get";
 import {getUserData} from "../../layout/getters";
 import {isValidEmail} from "../../common/utils";
@@ -8,6 +9,7 @@ import {useStyles} from "./UserSettings.styles";
 import actions from "./actions";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
+import Tooltip from "@material-ui/core/Tooltip/Tooltip";
 
 export default () => {
     const classes = useStyles();
@@ -23,6 +25,7 @@ export default () => {
         do_email_notifications = false,
         expertise_comments_notification = false,
         expertise_status_notification = false,
+        email_confirm_status: verified,
     } = userData;
 
     const [emailValue, setEmailValue] = useState(email);
@@ -31,11 +34,15 @@ export default () => {
     const [statusAgree, setStatusAgree] = useState(expertise_status_notification);
     const [isValid, setValid] = useState(true);
 
-    const disabled = (emailValue === email) && (do_email_notifications === notificationsAgree) && (
+    const emailChanged = emailValue !== email;
+    const disabled = !emailChanged && (do_email_notifications === notificationsAgree) && (
         expertise_status_notification === statusAgree) && expertise_comments_notification === commentsAgree;
 
     useEffect(() => {
         setEmailValue(email);
+        setNotificationsAgree(do_email_notifications);
+        setStatusAgree(expertise_status_notification);
+        setCommentsAgree(expertise_comments_notification);
     }, [email, do_email_notifications, expertise_comments_notification, expertise_status_notification]);
 
     const setEmail = (event: ChangeEvent) => {
@@ -46,7 +53,6 @@ export default () => {
 
     const toggleCheckbox = (event: React.ChangeEvent<HTMLInputElement>, key: string) => {
         const value = event.target.checked;
-        console.log(value, key);
         switch (key) {
             case 'agree': {
                 setNotificationsAgree(value);
@@ -72,16 +78,30 @@ export default () => {
     };
 
     const saveEmail = () => {
-        if (isValidEmail(emailValue)) {
-            dispatch(actions.updateUserEmail({
-                email: emailValue,
-                do_email_notifications: notificationsAgree,
-                expertise_comments_notification: commentsAgree,
-                expertise_status_notification: statusAgree
-            }));
-        } else {
-            setValid(false);
+        if (emailChanged) {
+            if (isValidEmail(emailValue)) {
+                dispatch(actions.updateUserEmail({
+                    email: emailValue,
+                }));
+            } else {
+                setValid(false);
+            }
         }
+
+        dispatch(actions.updateUserData({
+            email: emailValue,
+            do_email_notifications: notificationsAgree,
+            expertise_comments_notification: commentsAgree,
+            expertise_status_notification: statusAgree
+        }));
+    };
+
+    const VerificationSign = () => {
+        return (
+            <Tooltip title="Почта подтверждена">
+                <VerifiedIcon color="secondary" className={classes.emailIcon}/>
+            </Tooltip>
+        )
     };
 
     return (
@@ -91,16 +111,22 @@ export default () => {
             </Typography>
             <Box component="form" className={classes.form}>
                 <TextField label="Логин" value={username} className={classes.field} fullWidth disabled/>
-                <TextField label="Email" error={!isValid} value={emailValue} onChange={setEmail} className={classes.field} fullWidth/>
+                <Box className={classes.emailHolder}>
+                    {verified && <VerificationSign/>}
+                    <TextField label="Email" error={!isValid} value={emailValue} onChange={setEmail}
+                               className={classes.field} fullWidth/>
+                </Box>
                 <TextField label="Имя" value={first_name} className={classes.field} fullWidth disabled/>
                 <TextField label="Фамилия" value={last_name} className={classes.field} fullWidth disabled/>
                 <TextField label="Номер группы" value={isu_number} className={classes.field} fullWidth disabled/>
                 <FormControlLabel
-                    control={<Checkbox checked={notificationsAgree} onChange={(event) => toggleCheckbox(event, 'agree')}/>}
+                    control={<Checkbox checked={notificationsAgree}
+                                       onChange={(event) => toggleCheckbox(event, 'agree')}/>}
                     label="Подписаться на информационные email-уведомления"
                 />
                 <FormControlLabel
-                    control={<Checkbox checked={commentsAgree} onChange={(event) => toggleCheckbox(event, 'comments')}/>}
+                    control={<Checkbox checked={commentsAgree}
+                                       onChange={(event) => toggleCheckbox(event, 'comments')}/>}
                     label="Подписаться на комментарии к РПД"
                 />
                 <FormControlLabel

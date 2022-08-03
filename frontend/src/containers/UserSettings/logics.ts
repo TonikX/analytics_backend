@@ -14,13 +14,30 @@ const updateUserEmail = createLogic({
             .then(() => {
                 dispatch(actions.fetchingSuccess(['На указанный email отправлено письмо с подтверждением']));
             }).catch(() => {
-                dispatch(actions.fetchingSuccess(['Не удалось обновить email']));
+            dispatch(actions.fetchingSuccess(['Не удалось обновить email']));
+        }).finally(() => {
+            dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_EMAIL_SETTINGS}));
+            return done();
+        });
+    }
+});
+
+const updateUserData = createLogic({
+    type: userSettingsActions.updateUserData.type,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_DATA_SETTINGS}));
+
+        service.updateUserData(action.payload)
+            .then(() => {
+                dispatch(actions.getUserData());
             }).finally(() => {
-                dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_EMAIL_SETTINGS}));
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_DATA_SETTINGS}));
                 return done();
             });
     }
 });
+
 export default [
     updateUserEmail,
+    updateUserData,
 ];
