@@ -102,7 +102,6 @@ def email_reset_confirm(request):
             user = email_reset.user
             user.email = queryset.first().email
             user.save()
-            email_reset.delete()
             return Response({"message": "email updated successfully."})
 
     else:
