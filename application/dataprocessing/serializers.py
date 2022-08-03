@@ -29,7 +29,7 @@ class UserBaseSerializer(serializers.ModelSerializer):
 
     def is_named_bar(self, object):
         try:
-            EmailReset.objects.get(user=object)
+            EmailReset.objects.get(user=object, email=object.email)
             return True
         except:
             return False
