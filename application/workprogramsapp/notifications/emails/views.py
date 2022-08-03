@@ -68,6 +68,9 @@ def email_reset_request(request):
         )
         email_reset.save()
 
+        user.email = email
+        user.save()
+
         # send email here
         subject = "op.itmo.ru: смена учетных данных"
         message = """Ссылка для смены учетных данных: https://op.itmo.ru/api/email/confirm/{}
@@ -88,6 +91,8 @@ def email_reset_confirm(request):
     queryset = EmailReset.objects.filter(key=request.data.get("key"))
     if queryset.exists():
         email_reset = queryset.first()
+        email_reset.status = True
+        email_reset.save()
 
         if email_reset.timestamp < timezone.now() - timedelta(minutes=30):
             # expired
