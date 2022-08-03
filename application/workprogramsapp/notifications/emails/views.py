@@ -116,6 +116,8 @@ def CustomConfirmEmailView(request, key):
         print(key)
         email_reset = EmailReset.objects.get(key=key)
         print(email_reset)
+        email_reset.status = True
+        email_reset.save()
     except EmailReset.DoesNotExist:
         return redirect("{}/401".format(settings.URL_FRONT))
 
@@ -125,5 +127,5 @@ def CustomConfirmEmailView(request, key):
         user = email_reset.user
         user.email = email_reset.email
         user.save()
-        email_reset.delete()
+        #email_reset.delete()
         return redirect("{}".format(settings.URL_FRONT))
