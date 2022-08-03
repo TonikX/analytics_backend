@@ -4,8 +4,7 @@ import {makeStyles} from "@material-ui/core/styles";
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     wrap: {
         display: 'flex',
-        width: '100vw',
-        height: '100vh',
+        height: '100%',
         alignItems: 'center',
         justifyContent: 'center'
     },
