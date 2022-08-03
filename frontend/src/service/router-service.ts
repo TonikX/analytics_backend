@@ -34,6 +34,8 @@ const PRACTICE = 'practice';
 const FINAL_CERTIFICATION = 'gia';
 const FINAL_CERTIFICATION_LIST = 'gia-list';
 const USER_SETTINGS = 'user-settings';
+const EMAIL_CONFIRM_SUCCESS = 'email-confirm-success';
+const EMAIL_CONFIRM_FAIL = 'email-confirm-error';
 
 const RECORDS = 'records';
 
@@ -352,6 +354,14 @@ export default class RouterService {
 
     getFinalCertificationListRoute = () => {
         return SEPARATOR + FINAL_CERTIFICATION_LIST;
+    }
+
+    getEmailConfirmSuccess = () => {
+        return SEPARATOR + EMAIL_CONFIRM_SUCCESS;
+    }
+
+    getEmailConfirmFail = () => {
+        return SEPARATOR + EMAIL_CONFIRM_FAIL;
     }
 }
 

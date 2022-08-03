@@ -70,6 +70,9 @@ import FinalCertification from "./containers/FinalCertification";
 import FinalCertificationList from "./containers/FinalCertification/CertificationList";
 import AcademicPlanUpdate from "./containers/AcademicPlanUpdate";
 
+ import EmailSuccessPage from "./containers/EmailSuccessPage";
+ import EmailFailPage from "./containers/EmailFailPage";
+
 const routerService = RouterService.factory();
 
 export default () => (
@@ -406,6 +409,12 @@ export default () => (
                     <FinalCertificationList />
                 </AuthRoute>
 
+                <Route path={routerService.getEmailConfirmFail()}>
+                    <EmailFailPage/>
+                </Route>
+                <Route path={routerService.getEmailConfirmSuccess()}>
+                    <EmailSuccessPage/>
+                </Route>
                 <Route path={routerService.getForbiddenPage()}>
                     <ForbiddenPage/>
                 </Route>
