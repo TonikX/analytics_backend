@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 from django.utils import timezone
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from django.conf import settings
 
@@ -110,7 +110,7 @@ def email_reset_confirm(request):
 
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
+@permission_classes((AllowAny,))
 def CustomConfirmEmailView(request, key):
     try:
         print(key)
