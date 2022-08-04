@@ -2,6 +2,7 @@ import React, {ChangeEvent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Box, Button, Typography, TextField} from "@material-ui/core";
 import VerifiedIcon from '@material-ui/icons/CheckCircle';
+import NotVerifiedIcon from '@material-ui/icons/Close';
 import get from "lodash/get";
 import {getUserData} from "../../layout/getters";
 import {isValidEmail} from "../../common/utils";
@@ -97,9 +98,12 @@ export default () => {
     };
 
     const VerificationSign = () => {
+        const title = verified ? "Почта подтверждена" : "Почта не подтверждена";
         return (
-            <Tooltip title="Почта подтверждена">
-                <VerifiedIcon color="secondary" className={classes.emailIcon}/>
+            <Tooltip title={title}>
+                {
+                    verified ? <VerifiedIcon color="secondary" className={classes.emailIcon}/> : <NotVerifiedIcon color="secondary" className={classes.emailIcon}/>
+                }
             </Tooltip>
         )
     };
@@ -112,7 +116,7 @@ export default () => {
             <Box component="form" className={classes.form}>
                 <TextField label="Логин" value={username} className={classes.field} fullWidth disabled/>
                 <Box className={classes.emailHolder}>
-                    {verified && <VerificationSign/>}
+                    <VerificationSign/>
                     <TextField label="Email" error={!isValid} value={emailValue} onChange={setEmail}
                                className={classes.field} fullWidth/>
                 </Box>
