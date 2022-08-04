@@ -160,7 +160,7 @@ class Header extends React.PureComponent<HeaderProps>{
                                         <Link to={appRouter.getUserSettings()}
                                               className={classes.link}
                                         >
-                                            Настроки
+                                            Настройки
                                         </Link>
                                     </MenuItem>
                                     <MenuItem onClick={this.handleLogout}>
