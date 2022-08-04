@@ -1,4 +1,4 @@
-  version: '3.3'
+version: '3.3'
 
 services:
   db:
@@ -23,8 +23,8 @@ services:
 #      pip uninstall -y python3-openid &&
 #      pip uninstall -y social-auth-app-django &&
 #      pip install django-rest-framework-social-oauth2 &&
-      python manage.py makemigrations --noinput &&
-      python manage.py migrate --noinput &&
+#      python manage.py makemigrations --noinput &&
+#      python manage.py migrate --noinput &&
 #      python manage.py collectstatic --noinput &&
       gunicorn analytics_project.wsgi -b 0.0.0.0:8001 --workers 2 --timeout 7200";
     networks:
