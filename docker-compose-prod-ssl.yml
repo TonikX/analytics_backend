@@ -26,7 +26,7 @@ services:
 #      python manage.py makemigrations --noinput &&
 #      python manage.py migrate --noinput &&
 #      python manage.py collectstatic --noinput &&
-      gunicorn analytics_project.wsgi -b 0.0.0.0:8001 --workers 2 --timeout 7200";
+          gunicorn analytics_project.wsgi -b 0.0.0.0:8001 --workers 2 --timeout 7200";
     networks:
       nginx_net:
     volumes:
