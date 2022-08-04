@@ -156,6 +156,13 @@ class Header extends React.PureComponent<HeaderProps>{
                                             Личный кабинет
                                         </Link>
                                     </MenuItem>
+                                    <MenuItem onClick={this.handleClose}>
+                                        <Link to={appRouter.getUserSettings()}
+                                              className={classes.link}
+                                        >
+                                            Настроки
+                                        </Link>
+                                    </MenuItem>
                                     <MenuItem onClick={this.handleLogout}>
                                         <Link to={appRouter.getSignInRoute()}
                                               className={classes.link}
