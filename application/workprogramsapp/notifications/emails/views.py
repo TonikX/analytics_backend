@@ -1,15 +1,14 @@
 import random
 from datetime import timedelta
 
+from django.conf import settings
 # from allauth.account.views import ConfirmEmailView
-from django.http.response import Http404
 from django.shortcuts import redirect
 from django.utils import timezone
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
-from django.conf import settings
 
 from dataprocessing.models import User
 from workprogramsapp.notifications.emails.models import SentMail
@@ -28,14 +27,20 @@ def CreateMail(request):
     "groups": [str],
     "faculties": [int],
     "users": [int]
+    "send_to_all: bool"
     }
     """
     serializer = BaseEmailSerializer(data=request.data)
     if serializer.is_valid():
-        users_all = (User.objects.filter(groups__name__in=serializer.validated_data["groups"]) | User.objects.filter(
-            user_for_structural_unit__structural_unit__in=serializer.validated_data["faculties"]) | User.objects.filter(
-            id__in=serializer.validated_data["users"])).distinct()
-        users_all = users_all.objects.filter(do_email_notifications=True)
+        if serializer.validated_data["send_to_all"]:
+            users_all = User.objects.all()
+        else:
+            users_all = (
+                    User.objects.filter(groups__name__in=serializer.validated_data["groups"]) | User.objects.filter(
+                user_for_structural_unit__structural_unit__in=serializer.validated_data[
+                    "faculties"]) | User.objects.filter(
+                id__in=serializer.validated_data["users"])).distinct()
+        users_all = users_all.filter(do_email_notifications=True)
         emails = [user.email for user in users_all]
         mail = mail_sender(topic=serializer.validated_data["topic"], text=serializer.validated_data["text"],
                            emails=emails, users=users_all)

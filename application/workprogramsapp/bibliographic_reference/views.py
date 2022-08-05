@@ -39,7 +39,11 @@ def SearchInEBSCO(request):
         url = f"https://eds-api.ebscohost.com/edsapi/rest/search?query={term}&view=detailed&highlight=n"
 
         request = rq.get(url, headers=headers)
-        # print(request.text)
+
+        #print(request.text)
+        f = open("demofile2.txt", "w", encoding="utf-8")
+        f.write(request.text)
+        f.close()
         return request.text
 
     # Обработка ЭБС Лань из Сводного Каталога ИТМО
