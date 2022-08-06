@@ -12,6 +12,7 @@ class BaseEmailSerializer(serializers.Serializer):
     users = serializers.ListField(allow_empty=True, required=False, child=serializers.IntegerField(), default=[])
     topic = serializers.CharField()
     text = serializers.CharField()
+    send_to_all = serializers.BooleanField(required=False, default=False)
 
 
 class EmailSerializer(serializers.ModelSerializer):

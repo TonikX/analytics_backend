@@ -9,7 +9,8 @@ from workprogramsapp.notifications.emails.models import SentMail
 
 
 def mail_sender(topic: str, text: str, emails: list, users: QuerySet) -> Union[SentMail, None]:
-    if env('EMAIL_ENABLE'):
+    print(emails)
+    if env('EMAIL_ENABLE') == "True":
         send_mail(
             topic,
             text,
