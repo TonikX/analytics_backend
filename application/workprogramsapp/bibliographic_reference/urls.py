@@ -1,9 +1,15 @@
-from .views import SearchInEBSCO
 from django.conf.urls import url, include
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
+from .views import SearchInEBSCO, BibliographicReferenceViewSet
+
+router = DefaultRouter()
+router.register(r'api/workprogram_sources/bibliographic_reference', BibliographicReferenceViewSet,
+                basename='bibliographic_references')
 urlpatterns = [
     path('api/workprogram_sources/search_in_ebsco', SearchInEBSCO),
+    url(r'^', include(router.urls)),
     # path('api/source_in_workprogram/<int:workprogram_id>',
     #      WorkProgramSourceInWorkProgramList.as_view())
 
