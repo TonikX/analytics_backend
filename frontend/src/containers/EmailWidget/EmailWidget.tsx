@@ -1,7 +1,9 @@
 import * as React from "react";
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
 import {useDispatch} from "react-redux";
-import {Dialog, Button, Chip, DialogTitle, DialogContent, TextField, Box} from "@material-ui/core";
+import {
+    Dialog, Button, Chip, DialogTitle, DialogContent, TextField, Box, Checkbox, FormControlLabel
+} from "@material-ui/core";
 import actions from "./actions";
 import UserSelector from "./UserSelector";
 import {useStyles} from "./EmailWidget.styles";
@@ -18,12 +20,14 @@ export const EmailWidget = () => {
     const [isOpen, setOpen] = useState(false);
     const [topic, setTopic] = useState('');
     const [text, setText] = useState('');
+    const [sendToAll, setSendToAll] = useState(false);
     const [users, setUsers] = useState([] as SelectItem[]);
 
     const clearData = () => {
         setText('');
         setTopic('');
         setUsers([]);
+        setSendToAll(false);
     };
 
     const openDialog = () => {
@@ -36,19 +40,26 @@ export const EmailWidget = () => {
     };
 
     const sendEmails = () => {
-        dispatch(actions.sendEmail({topic, text, users: users.map(it => it.value)}));
+        dispatch(actions.sendEmail({send_to_all: sendToAll, topic, text, users: users.map(it => it.value)}));
         closeDialog();
     };
 
     const addRecipient = (item: {value: string, label: string}) => {
-        setUsers([...users, item]);
+        if (item.value && item.label) {
+            setUsers([...users, item]);
+        }
     };
 
     const removeRecipient = (item: {value: string, label: string}) => {
         setUsers(users.filter(it => it.value !== item.value));
     };
 
-    const someFieldsAreEmpty = !text.trim() || !topic.trim() || !users.length;
+    const checkCheckbox = (event: ChangeEvent<HTMLInputElement>) => {
+        const checked = event.target.checked;
+        setSendToAll(checked);
+    };
+
+    const someFieldsAreEmpty = !text.trim() || !topic.trim() || (!users.length && !sendToAll);
 
     return <Box>
         <Button variant="outlined" color="primary" onClick={openDialog}>Email-рассылка</Button>
@@ -69,6 +80,10 @@ export const EmailWidget = () => {
                         {users.map((item, index) => <Chip key={index} className={classes.chip} onDelete={() => removeRecipient(item)} label={item.label}/>)}
                     </div> : null
                 }
+                <FormControlLabel
+                    control={<Checkbox checked={sendToAll} onChange={checkCheckbox} />}
+                    label="Отправить всем"
+                />
                 <TextField
                     label="Тема сообщения"
                     variant="outlined"
