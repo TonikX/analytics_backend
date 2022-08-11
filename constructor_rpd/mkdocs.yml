@@ -13,6 +13,9 @@ nav:
   - Почта:
       - Указание почтового ящика: email/email_reset.md
       - Подтверждение почтового ящика: email/email_confirm.md
+  - Источники:
+      - Поиск источников в EBSCO: bibliographic_references/search.md
+      - СRUD для источников: bibliographic_references/crud_bib.md
 
 theme:
   name: material
