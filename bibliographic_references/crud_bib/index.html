@@ -13,7 +13,7 @@
     
     
       
-        <title>Работа с БАРС 1.0 - Документация к сервису "Конструктор РПД"</title>
+        <title>СRUD для источников - Документация к сервису "Конструктор РПД"</title>
       
     
     
@@ -60,7 +60,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#10" class="md-skip">
+        <a href="#_1" class="md-skip">
           Skip to content
         </a>
       
@@ -93,7 +93,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Работа с БАРС 1.0
+              СRUD для источников
             
           </span>
         </div>
@@ -239,14 +239,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
       
       
       
@@ -267,72 +265,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Работа с БАРС 1.0
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../external_services/bars/" class="md-nav__link">
         Работа с БАРС 1.0
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#request-format" class="md-nav__link">
-    Request format
-  </a>
-  
-    <nav class="md-nav" aria-label="Request format">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    Параметры:
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#success-responses" class="md-nav__link">
-    Success Responses
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -522,12 +459,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
       
       
       
@@ -550,7 +489,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../bibliographic_references/search/" class="md-nav__link">
+      <a href="../search/" class="md-nav__link">
         Поиск источников в EBSCO
       </a>
     </li>
@@ -562,11 +501,72 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../bibliographic_references/crud_bib/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          СRUD для источников
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         СRUD для источников
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#request-format" class="md-nav__link">
+    Request format
+  </a>
+  
+    <nav class="md-nav" aria-label="Request format">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-" class="md-nav__link">
+    GET-Параметры:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#success-responses" class="md-nav__link">
+    Success Responses
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -613,8 +613,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    Параметры:
+  <a href="#get-" class="md-nav__link">
+    GET-Параметры:
   </a>
   
 </li>
@@ -645,162 +645,119 @@
                 
 
 
-<h1 id="10">Список РПД прошедших экспертизу для БАРС 1.0</h1>
-<p><strong>URL</strong> : <code>api/bars_tools/academicntcheckpoints</code></p>
-<p><strong>Method</strong> : <code>POST</code></p>
+<h1 id="_1">Список источников в системе</h1>
+<p><strong>URL</strong> : <code>api/workprogram_sources/bibliographic_reference</code></p>
+<p><strong>Method</strong> : <code>GET</code></p>
 <p><strong>Auth required</strong> : Yes</p>
-<p><strong>Permissions required</strong> : IsAdminUser, IsExternalUser</p>
+<p><strong>Permissions required</strong> : IsAuthenticated</p>
 <h2 id="request-format">Request format</h2>
-<h3 id="_1">Параметры:<br /></h3>
-<p><strong>year </strong>: <code>Поле вида 'YYYY/YYYY', указывает учебный год в который реализована РПД</code><br />
-<strong>from_date</strong>: <code>поле вида "DD.MM.YYYY", обознает отсчет с даты принятия на экспертизу РПД</code><br /></p>
-<p><strong>Data constraints</strong> : <code>{}</code></p>
-<pre><code class="language-json">{
-   &quot;year&quot;:&quot;2021/2022&quot;,
-   &quot;from_date&quot;:&quot;01.09.2021&quot; 
-}
-</code></pre>
+<h3 id="get-">GET-Параметры:<br /></h3>
+<p><strong>author </strong>: <code>Автор источника</code><br />
+ <strong>title </strong>: <code>Наименование источника</code><br />
+ <strong>year </strong>: <code>Год издания</code><br /></p>
 <h2 id="success-responses">Success Responses</h2>
 <p><strong>Code</strong> : <code>200 OK</code></p>
-<p><strong>Content</strong> : <code>{[]}</code></p>
-<pre><code class="language-json">{
-    &quot;rpd&quot;: [ {
-            &quot;id&quot;: 3915,
-            &quot;dis_id&quot;: 25191,
-            &quot;bars2&quot;: &quot;Bars2&quot;,
-            &quot;date&quot;: &quot;14.09.2021&quot;,
-            &quot;apprenticeship&quot;: &quot;2021/2022&quot;,
-            &quot;programs&quot;: [
-                {
-                    &quot;id&quot;: 1981,
-                    &quot;code&quot;: &quot;38.03.05.&quot;,
-                    &quot;name&quot;: &quot;Бизнес-информатика&quot;
-                }
-            ],
-            &quot;term&quot;: 1,
-            &quot;checkpoints&quot;: [
-                {
-                    &quot;name&quot;: &quot;Реферат 1&quot;,
-                    &quot;min_grade&quot;: 12,
-                    &quot;max_grade&quot;: 18,
-                    &quot;week&quot;: 3,
-                    &quot;key&quot;: false,
-                    &quot;type_id&quot;: &quot;Реферат&quot;,
-                    &quot;term&quot;: 1,
-                    &quot;certification_type&quot;: &quot;regular&quot;
-                },
-                {
-                    &quot;name&quot;: &quot;Тест 1&quot;,
-                    &quot;min_grade&quot;: 13,
-                    &quot;max_grade&quot;: 24,
-                    &quot;week&quot;: 7,
-                    &quot;key&quot;: true,
-                    &quot;type_id&quot;: &quot;Тест&quot;,
-                    &quot;term&quot;: 1,
-                    &quot;certification_type&quot;: &quot;regular&quot;
-                },
-                {
-                    &quot;name&quot;: &quot;Тест 2&quot;,
-                    &quot;min_grade&quot;: 11,
-                    &quot;max_grade&quot;: 20,
-                    &quot;week&quot;: 11,
-                    &quot;key&quot;: false,
-                    &quot;type_id&quot;: &quot;Тест&quot;,
-                    &quot;term&quot;: 1,
-                    &quot;certification_type&quot;: &quot;regular&quot;
-                },
-                {
-                    &quot;name&quot;: &quot;Реферат 2&quot;,
-                    &quot;min_grade&quot;: 12,
-                    &quot;max_grade&quot;: 18,
-                    &quot;week&quot;: 14,
-                    &quot;key&quot;: false,
-                    &quot;type_id&quot;: &quot;Реферат&quot;,
-                    &quot;term&quot;: 1,
-                    &quot;certification_type&quot;: &quot;regular&quot;
-                },
-                {
-                    &quot;name&quot;: &quot;Устный экзамен&quot;,
-                    &quot;min_grade&quot;: 12,
-                    &quot;max_grade&quot;: 20,
-                    &quot;week&quot;: null,
-                    &quot;key&quot;: false,
-                    &quot;type_id&quot;: 25,
-                    &quot;term&quot;: 1,
-                    &quot;certification_type&quot;: &quot;final&quot;
-                }
-            ]
+<p><strong>Content</strong> : </p>
+<pre><code class="language-json">&quot;results&quot;: [
+        {
+            &quot;id&quot;: 25,
+            &quot;accession_number&quot;: null,
+            &quot;title&quot;: null,
+            &quot;authors&quot;: null,
+            &quot;bib_reference&quot;: null,
+            &quot;description&quot;: &quot;Прикладная математика для инженеров. Специальные курсы : [доп. МВ и ССО СССР в качестве учебного пособия для студентов высших технических учебных заведений] / А. Д. Мышкис .— Изд. 3-е, доп .— М. : ФИЗМАТЛИТ, 2007 .— 687, [1] с. : ил. — (Математика. Прикладная математика) .— Библиогр.: с. 672-677 .— ISBN 978-5-9221-0747-1.&quot;
         },
         {
-            &quot;id&quot;: 4164,
-            &quot;dis_id&quot;: 25201,
-            &quot;bars2&quot;: &quot;Bars2&quot;,
-            &quot;date&quot;: &quot;21.09.2021&quot;,
-            &quot;apprenticeship&quot;: &quot;2021/2022&quot;,
-            &quot;programs&quot;: [
-                {
-                    &quot;id&quot;: 4390,
-                    &quot;code&quot;: &quot;12.03.03.&quot;,
-                    &quot;name&quot;: &quot;Фотоника и оптоинформатика&quot;
-                }
-            ],
-            &quot;term&quot;: 1,
-            &quot;checkpoints&quot;: [
-                {
-                    &quot;name&quot;: &quot;Домашние задания&quot;,
-                    &quot;min_grade&quot;: 0,
-                    &quot;max_grade&quot;: 33,
-                    &quot;week&quot;: 7,
-                    &quot;key&quot;: true,
-                    &quot;type_id&quot;: &quot;Домашнее задание&quot;,
-                    &quot;term&quot;: 1,
-                    &quot;certification_type&quot;: &quot;regular&quot;
-                },
-                {
-                    &quot;name&quot;: &quot;Практическая задача&quot;,
-                    &quot;min_grade&quot;: 6,
-                    &quot;max_grade&quot;: 14,
-                    &quot;week&quot;: 17,
-                    &quot;key&quot;: true,
-                    &quot;type_id&quot;: &quot;Домашнее задание&quot;,
-                    &quot;term&quot;: 1,
-                    &quot;certification_type&quot;: &quot;regular&quot;
-                },
-                {
-                    &quot;name&quot;: &quot;Реферат&quot;,
-                    &quot;min_grade&quot;: 0,
-                    &quot;max_grade&quot;: 23,
-                    &quot;week&quot;: 14,
-                    &quot;key&quot;: true,
-                    &quot;type_id&quot;: &quot;Реферат&quot;,
-                    &quot;term&quot;: 1,
-                    &quot;certification_type&quot;: &quot;regular&quot;
-                },
-                {
-                    &quot;name&quot;: &quot;Тест&quot;,
-                    &quot;min_grade&quot;: 2,
-                    &quot;max_grade&quot;: 10,
-                    &quot;week&quot;: 12,
-                    &quot;key&quot;: true,
-                    &quot;type_id&quot;: &quot;Тест&quot;,
-                    &quot;term&quot;: 1,
-                    &quot;certification_type&quot;: &quot;regular&quot;
-                },
-                {
-                    &quot;name&quot;: &quot;Письменный зачет&quot;,
-                    &quot;min_grade&quot;: 0,
-                    &quot;max_grade&quot;: 20,
-                    &quot;week&quot;: null,
-                    &quot;key&quot;: false,
-                    &quot;type_id&quot;: 26,
-                    &quot;term&quot;: 1,
-                    &quot;certification_type&quot;: &quot;final&quot;
-                }
-            ]
+            &quot;id&quot;: 24,
+            &quot;accession_number&quot;: null,
+            &quot;title&quot;: null,
+            &quot;authors&quot;: null,
+            &quot;bib_reference&quot;: null,
+            &quot;description&quot;: &quot;Математические методы прогнозирования : рек. УМО по классич. унив. образованию в качестве учебного пособия для студентов высш. учеб. заведений (направл.) подготовки ВПО 010501 (010500.62) \&quot;Прикл. математика и информатика\&quot; / А. М. Шурыгин .— М. : Горячая линия - Телеком, 2009 .— 178, [2] с. : ил. — (Учебное пособие для высших учебных заведений) .— Имен. указ.: с. 175-176 .— Предм. указ.: с. 177-178 .— ISBN 978-5-9912-0062-2.&quot;
+        },
+        {
+            &quot;id&quot;: 27,
+            &quot;accession_number&quot;: null,
+            &quot;title&quot;: null,
+            &quot;authors&quot;: null,
+            &quot;bib_reference&quot;: null,
+            &quot;description&quot;: &quot;Решение задач вычислительной математики в пакетах Mathcad 12, MATLAB 7, Maple 9 / Е. Р. Алексеев, О. В. Чеснокова .— М. : НТ Пресс, 2006 .— 492 с. : ил .— (Самоучитель) .— Прил.: с. 425-484 .— Библиогр.: с.486-487 .— Предм. указ.: с. 488-492 .— ISBN 5-477-00208-5&quot;
         }
-    ]
+        ]
+</code></pre>
+<h1 id="_2">Конкретный источник</h1>
+<p><strong>URL</strong> : <code>api/workprogram_sources/bibliographic_reference/id</code></p>
+<p><strong>Method</strong> : <code>GET</code></p>
+<p><strong>Auth required</strong> : Yes</p>
+<p><strong>Permissions required</strong> : IsAuthenticated</p>
+<h2 id="request-format_1">Request format</h2>
+<h3 id="get-_1">GET-Параметры:<br /></h3>
+<p><strong>id </strong>: <code>id источника</code><br />
+ <strong>author </strong>: <code>Автор источника</code><br />
+ <strong>title </strong>: <code>Наименование источника</code><br />
+ <strong>year </strong>: <code>Год издания</code><br /></p>
+<h2 id="success-responses_1">Success Responses</h2>
+<p><strong>Code</strong> : <code>200 OK</code></p>
+<p><strong>Content</strong> : </p>
+<pre><code class="language-json">{
+    &quot;id&quot;: 12011,
+    &quot;accession_number&quot;: &quot;2458723&quot;,
+    &quot;authors&quot;: &quot;Mattan GriffelDaniel Guetta&quot;,
+    &quot;main_author&quot;: &quot;Mattan GriffelDaniel Guetta&quot;,
+    &quot;publication_type&quot;: &quot;Учебные издания&quot;,
+    &quot;title&quot;: &quot;Python for MBAs&quot;,
+    &quot;publishing_company&quot;: &quot;&quot;,
+    &quot;year&quot;: &quot;2022&quot;,
+    &quot;number_of_edition&quot;: null,
+    &quot;pages&quot;: null,
+    &quot;format&quot;: null,
+    &quot;publishing_type&quot;: null,
+    &quot;bib_reference&quot;: &quot;Mattan GriffelDaniel Guetta, Python for MBAs / Mattan GriffelDaniel Guetta : 2021. — Текст : непосредственный.&quot;,
+    &quot;description&quot;: null
 }
 </code></pre>
+<h1 id="_3">Создание источника</h1>
+<p><strong>URL</strong> : <code>api/workprogram_sources/bibliographic_reference</code></p>
+<p><strong>Method</strong> : <code>POST</code></p>
+<p><strong>Auth required</strong> : Yes</p>
+<p><strong>Permissions required</strong> : IsAuthenticated</p>
+<h2 id="request-format_2">Request format</h2>
+<h3 id="_4">Параметры:<br /></h3>
+<p>Де-факто все параметры (не считая description) копируют ответ от api/workprogram_sources/search_in_ebsco?query=data <br />
+Если при создании источника уже существует объект с таким accession_number, то запрос вернет существующий объект и не будет создавать новый <br /></p>
+<p><strong>accession_number </strong>: <code>id источника в EBSCO</code><br />
+ <strong>authors </strong>: <code>Авторы источника</code><br />
+ <strong>title </strong>: <code>Наименование источника</code><br />
+ <strong>publishing_company </strong>: <code>Ищдатель. Возвращает пустую строку</code><br />
+ <strong>year </strong>: <code>Год издания</code><br />
+ <strong>number_of_edition </strong>: <code>Номер издания, возвращает None</code><br />
+ <strong>pages </strong>: <code>Кол-во страниц, возвращает None</code><br />
+ <strong>format </strong>: <code>Формат</code><br />
+ <strong>publication_type </strong>: <code>Тип публикации</code><br />
+ <strong>main_author </strong>: <code>Главный автор</code><br />
+ <strong>bib_reference </strong>: <code>Сгенерированная библ. ссылка</code><br />
+ <strong>description </strong>: <code>Описание (используется в старых объектах)</code><br /></p>
+<h2 id="success-responses_2">Success Responses</h2>
+<p><strong>Code</strong> : <code>201 OK</code></p>
+<p><strong>Content</strong> : </p>
+<pre><code class="language-json">{
+    &quot;id&quot;: 12011,
+    &quot;accession_number&quot;: &quot;2458723&quot;,
+    &quot;authors&quot;: &quot;Mattan GriffelDaniel Guetta&quot;,
+    &quot;main_author&quot;: &quot;Mattan GriffelDaniel Guetta&quot;,
+    &quot;publication_type&quot;: &quot;Учебные издания&quot;,
+    &quot;title&quot;: &quot;Python for MBAs&quot;,
+    &quot;publishing_company&quot;: &quot;&quot;,
+    &quot;year&quot;: &quot;2022&quot;,
+    &quot;number_of_edition&quot;: null,
+    &quot;pages&quot;: null,
+    &quot;format&quot;: null,
+    &quot;publishing_type&quot;: null,
+    &quot;bib_reference&quot;: &quot;Mattan GriffelDaniel Guetta, Python for MBAs / Mattan GriffelDaniel Guetta : 2021. — Текст : непосредственный.&quot;,
+    &quot;description&quot;: null
+}
+</code></pre>
+<p>Изменение и удаление источника используют те же самые поля и URL и требуют указать соответсвующий метод при отправке запроса.</p>
 
               
             </article>
@@ -816,7 +773,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../../auth/token/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Авторизация (Получение токена)" rel="prev">
+        <a href="../search/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Поиск источников в EBSCO" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -825,26 +782,11 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Авторизация (Получение токена)
+              Поиск источников в EBSCO
             </div>
           </div>
         </a>
       
-      
-        
-        <a href="../../item_services/item/" class="md-footer__link md-footer__link--next" aria-label="Next: Сервис для объединения учебных сущностей" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Сервис для объединения учебных сущностей
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
       
     </nav>
   
