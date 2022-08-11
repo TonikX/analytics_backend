@@ -6,6 +6,7 @@ import requests as rq
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from workprogramsapp.bibliographic_reference.serializers import BibliographicReferenceDetailSerializer, \
@@ -204,7 +205,7 @@ class BibliographicReferenceViewSet(viewsets.ModelViewSet):
     serializer_class = BibliographicReferenceDetailSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
     filterset_fields = ["authors", "title", "year"]
-
+    permission_classes = [IsAuthenticated]
     def create(self, request, *args, **kwargs):
         try:
             reference = BibliographicReference.objects.get(accession_number=request.data["accession_number"])
