@@ -103,6 +103,9 @@
 
 ## Request format
 ### Параметры:<br />
+Де-факто все параметры (не считая description) копируют ответ от api/workprogram_sources/search_in_ebsco?query=data <br />
+Если при создании источника уже существует объект с таким accession_number, то запрос вернет существующий объект и не будет создавать новый <br />
+
 **accession_number **: `id источника в EBSCO`<br />
  **authors **: `Авторы источника`<br />
  **title **: `Наименование источника `<br />
