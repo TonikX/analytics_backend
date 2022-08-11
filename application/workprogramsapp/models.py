@@ -19,14 +19,11 @@ from workprogramsapp.educational_program.educational_standart.models import Educ
 
 '''
 class FieldOfStudyWorkProgram(models.Model):
-
     #Модель для связи направления и рабочей программы
-
     field_of_study = models.ForeignKey('FieldOfStudy', on_delete=models.CASCADE,
                                        verbose_name='Образовательная программа')
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа')
     # competence = models.ForeignKey('Competence',null=True,  on_delete=models.CASCADE, verbose_name = 'Компетенции')
-
     # class Meta:
     #     unique_together = ('work_program', 'field_of_study')
 '''
@@ -1115,9 +1112,22 @@ class BibliographicReference(models.Model):
     '''
     Модель описания онлайн курса
     '''
+    accession_number = models.CharField(max_length=512, verbose_name="An/Номер статьи из eds", blank=True, null=True)
+    authors = models.CharField(max_length=4096, verbose_name="Авторы", blank=True, null=True)
+    main_author = models.CharField(max_length=1024, verbose_name="Главный автор", blank=True, null=True)
+    publication_type = models.CharField(max_length=1024, verbose_name="Тип публикации", blank=True, null=True)
+    title = models.CharField(max_length=4096, verbose_name="Наименование", blank=True, null=True)
+    publishing_company = models.CharField(max_length=1024, verbose_name="Издатель", blank=True, null=True)
+    year = models.CharField(max_length=512, verbose_name="Год издания", blank=True, null=True)
+    number_of_edition = models.PositiveIntegerField( verbose_name="Номер издания", blank=True, null=True)
+    pages = models.PositiveIntegerField( verbose_name="Количество страниц", blank=True, null=True)
+    # Если получится понять что это, то возможно чузфилд
+    format = models.CharField(max_length=512, verbose_name="Формат", blank=True, null=True)
+    # Возможно тоже чузфилд, пока это захардкожено
+    publishing_type = models.CharField(max_length=1024, verbose_name="Тип публикации", blank=True, null=True)
+    bib_reference = models.CharField(max_length=4096, verbose_name="Библиогарфическая ссылка", blank=True, null=True)
     description = models.CharField(max_length=5000, verbose_name="Описание", blank=True, null=True)
     # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
-
 
 class Topic(CloneMixin, models.Model):
     '''
@@ -1279,4 +1289,3 @@ class SkillsOfRole(models.Model):
 
     def __str__(self):
         return (str(self.item) + ' / ' + str(self.role))
-

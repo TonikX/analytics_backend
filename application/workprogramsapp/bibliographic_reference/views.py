@@ -1,9 +1,16 @@
 import json
-from rest_framework.decorators import api_view, permission_classes
-import requests as rq
-from html import unescape
-from rest_framework.response import Response
 import re
+from html import unescape
+
+import requests as rq
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, filters, status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from workprogramsapp.bibliographic_reference.serializers import BibliographicReferenceDetailSerializer, \
+    BibliographicReferenceListSerializer
+from workprogramsapp.models import BibliographicReference
 
 
 @api_view(['GET'])
@@ -13,6 +20,7 @@ def SearchInEBSCO(request):
     :param request:
     :return: {sources: []}
     """
+
     # Получение токена аутентификации
     def get_auth_token(user_id, password):
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
@@ -67,7 +75,7 @@ def SearchInEBSCO(request):
     def delete_html(text):
         return re.sub(r'<.*?>', '', text)
 
-# Поиск автора
+    # Поиск автора
     def search_author(record):
         item_list = []
         for item in record["Items"]:
@@ -87,7 +95,7 @@ def SearchInEBSCO(request):
         except Exception:
             return authors
 
-# Поиск названия
+    # Поиск названия
     def search_title(record):
         item_list = []
         for item in record["Items"]:
@@ -113,7 +121,10 @@ def SearchInEBSCO(request):
     def search_year(record):
         year = None
         try:
-            year = record["RecordInfo"]["BibRecord"]["BibRelationships"]["IsPartOfRelationships"][0]["BibEntity"]["Dates"][0]["Y"]
+            year = \
+                record["RecordInfo"]["BibRecord"]["BibRelationships"]["IsPartOfRelationships"][0]["BibEntity"]["Dates"][
+                    0][
+                    "Y"]
         except Exception as e:
             return year
         return year
@@ -126,12 +137,16 @@ def SearchInEBSCO(request):
                     return "Электронные ресурсы"
                 return "Печатный экземпляр"
 
+    def search_an(record):
+        return record["Header"]["An"]
+
     def make_object(record):
         source = {
+            "accession_number": search_an(record),
             "authors": search_author(record),
             "title": search_title(record),
             "publishing_company": "",
-            "year": search_year(record),
+            "year": (search_year(record)),
             "number_of_edition": None,
             "pages": None,
             "format": search_type_of_text(record),
@@ -157,10 +172,8 @@ def SearchInEBSCO(request):
         else:
             year = f" : {source['year']}"
 
-
         return f"{source['main_author']}, {source['title']} / {source['authors']}" \
                f"{year}. — Текст : {text_format}."
-
 
     query = request.query_params["query"]
 
@@ -184,3 +197,32 @@ def SearchInEBSCO(request):
     for record in records:
         sources.append(make_object(record))
     return Response({"sources": sources})
+
+
+class BibliographicReferenceViewSet(viewsets.ModelViewSet):
+    queryset = BibliographicReference.objects.all()
+    serializer_class = BibliographicReferenceDetailSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+    filterset_fields = ["authors", "title", "year"]
+
+    def create(self, request, *args, **kwargs):
+        try:
+            reference = BibliographicReference.objects.get(accession_number=request.data["accession_number"])
+            serializer = self.get_serializer(reference, many=False)
+        except BibliographicReference.DoesNotExist:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return BibliographicReferenceListSerializer
+        if self.action == 'create':
+            return BibliographicReferenceDetailSerializer
+        if self.action == 'update':
+            return BibliographicReferenceDetailSerializer
+        if self.action == 'retrieve':
+            return BibliographicReferenceDetailSerializer
+        return BibliographicReferenceDetailSerializer
