@@ -569,6 +569,11 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             else:
                 newdata.update({"can_edit": False, "expertise_status": False})
             newdata.update({"use_chat_with_id_expertise": None})
+
+        if request.user.is_expertise_master:
+            newdata.update({"can_see_comments": True})
+        else:
+            newdata.update({"can_see_comments": False})
         try:
 
             ue = UserExpertise.objects.filter(expert=request.user, expertise__work_program=self.kwargs['pk'])
@@ -582,6 +587,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 ue = ue_save_obj
             else:
                 raise ValueError
+
+            newdata.update({"can_see_comments": True})
 
             if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status in ["EX", "WK", "RE"]:
                 newdata.update({"can_comment": True})
@@ -625,6 +632,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             newdata.update({"id_rating": WorkProgramInFolder.objects.get(work_program=self.kwargs['pk'],
                                                                          folder__owner=self.request.user).id})
         except:
+
             newdata.update({"rating": False})
         competences = Competence.objects.filter(indicator_in_competencse__zun__wp_in_fs__work_program__id = self.kwargs['pk']).distinct()
         competences_dict = []
