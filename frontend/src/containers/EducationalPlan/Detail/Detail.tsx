@@ -234,8 +234,11 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                     <Typography>
                         Учебный план: {get(detailPlan, 'academic_plan_in_field_of_study[0].title', '')}&nbsp;
                         {get(detailPlan, 'academic_plan_in_field_of_study[0].field_of_study', []).map((item: any) =>
-                            <>({specializationObject[get(item, 'qualification', '')]} / {get(item, 'title', '')} ({get(item, 'number', '')}))&nbsp;</>
+                            <>
+                                ({specializationObject[get(item, 'qualification', '')]} / {get(item, 'title', '')} ({get(item, 'number', '')}))&nbsp;
+                            </>
                         )}
+                        - {get(detailPlan, 'academic_plan_in_field_of_study[0].year', '')}
                     </Typography>
 
                     {/*{canEdit &&*/}
