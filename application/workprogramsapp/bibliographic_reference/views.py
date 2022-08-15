@@ -4,13 +4,13 @@ from html import unescape
 
 import requests as rq
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, filters, status
+from rest_framework import viewsets, filters, status, generics
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from workprogramsapp.bibliographic_reference.serializers import BibliographicReferenceDetailSerializer, \
-    BibliographicReferenceListSerializer
+    BibliographicReferenceListSerializer, BibliographicReferenceCreateWithWpSerializer
 from workprogramsapp.models import BibliographicReference
 
 
@@ -206,6 +206,7 @@ class BibliographicReferenceViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
     filterset_fields = ["authors", "title", "year"]
     permission_classes = [IsAuthenticated]
+
     def create(self, request, *args, **kwargs):
         try:
             reference = BibliographicReference.objects.get(accession_number=request.data["accession_number"])
@@ -227,3 +228,9 @@ class BibliographicReferenceViewSet(viewsets.ModelViewSet):
         if self.action == 'retrieve':
             return BibliographicReferenceDetailSerializer
         return BibliographicReferenceDetailSerializer
+
+
+class BibliographicReferenceCreateWithWpView(generics.CreateAPIView):
+    queryset = BibliographicReference.objects.all()
+    serializer_class = BibliographicReferenceCreateWithWpSerializer
+    permission_classes = [IsAuthenticated]

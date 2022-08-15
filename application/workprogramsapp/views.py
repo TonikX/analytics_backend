@@ -522,14 +522,18 @@ class WorkProgramEditorsUpdateView(generics.UpdateAPIView):
     serializer_class = WorkProgramEditorsUpdateSerializer
     permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
 
-
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-
+        try:
+            expertise = Expertise.objects.get(work_program=instance)
+            for editor in request.data["editors"]:
+                UserExpertise.objects.get_or_create(expertise=expertise, expert_id=editor, stuff_status="ED")
+        except Expertise.DoesNotExist:
+            pass
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
@@ -555,6 +559,12 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 {"expertise_status": Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status})
             newdata.update(
                 {"use_chat_with_id_expertise": Expertise.objects.get(work_program__id=self.kwargs['pk']).pk})
+
+            if request.user.is_expertise_master:
+                newdata.update({"can_see_comments": True})
+            else:
+                newdata.update({"can_see_comments": False})
+
             if (Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK" or
                 Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "RE") and (WorkProgram.objects.get(
                 pk=self.kwargs['pk']).owner == request.user or WorkProgram.objects.filter(pk=self.kwargs['pk'],
@@ -569,8 +579,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             else:
                 newdata.update({"can_edit": False, "expertise_status": False})
             newdata.update({"use_chat_with_id_expertise": None})
-        try:
 
+        try:
             ue = UserExpertise.objects.filter(expert=request.user, expertise__work_program=self.kwargs['pk'])
             ue_save_obj = None
             for user_exp_object in ue:
@@ -582,6 +592,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 ue = ue_save_obj
             else:
                 raise ValueError
+
+            newdata.update({"can_see_comments": True})
 
             if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status in ["EX", "WK", "RE"]:
                 newdata.update({"can_comment": True})
@@ -625,6 +637,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             newdata.update({"id_rating": WorkProgramInFolder.objects.get(work_program=self.kwargs['pk'],
                                                                          folder__owner=self.request.user).id})
         except:
+
             newdata.update({"rating": False})
         competences = Competence.objects.filter(indicator_in_competencse__zun__wp_in_fs__work_program__id = self.kwargs['pk']).distinct()
         competences_dict = []
