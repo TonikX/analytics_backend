@@ -125,10 +125,11 @@ def comment_notificator(sender, instance, created, **kwargs):
         read_notifications_array[4] = True
     elif instance.comment_block == 'EV':
         read_notifications_array[5] = True
+    elif instance.comment_block == 'CO':
+        read_notifications_array[6] = True
     elif instance.comment_block == 'RE':
         read_notifications_array[7] = True
-    elif instance.comment_blockk == 'CO':
-        read_notifications_array[8] = True
+
     wp_exp.read_notifications = str(read_notifications_array).replace('[', '').replace(']', '')
     wp_exp.save()
 
