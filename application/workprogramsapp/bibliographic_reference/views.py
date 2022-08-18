@@ -206,6 +206,7 @@ class BibliographicReferenceViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
     filterset_fields = ["authors", "title", "year"]
     permission_classes = [IsAuthenticated]
+
     def create(self, request, *args, **kwargs):
         try:
             reference = BibliographicReference.objects.get(accession_number=request.data["accession_number"])
