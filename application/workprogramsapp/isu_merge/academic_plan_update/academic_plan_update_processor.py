@@ -234,13 +234,16 @@ class AcademicPlanUpdateProcessor:
         if discipline_block_module_object is not None:
             return discipline_block_module_object
         else:
+            print('модуль', isu_academic_plan_block_module_json)
             discipline_block_module_object = DisciplineBlockModule(
                 name=isu_academic_plan_block_module_json['module_name'],
+                module_isu_id=isu_academic_plan_block_module_json['module_id '],
                 order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )
             discipline_block_module_object.save()
             discipline_block_module_object.descipline_block.add(discipline_block_object)
             discipline_block_module_object.save()
+        print(isu_academic_plan_block_module_json)
         return discipline_block_module_object
 
     @staticmethod
