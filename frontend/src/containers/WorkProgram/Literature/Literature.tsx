@@ -39,7 +39,7 @@ class Literature extends React.PureComponent<FourthStepProps> {
                         {literatureList.map((literature) => (
                             <div className={classes.item}>
                                 <Typography className={classes.title}>
-                                    {literature[literatureFields.DESCRIPTION]}
+                                    {literature[literatureFields.DESCRIPTION] || literature[literatureFields.DESCRIPTION_EBSCO]}
                                 </Typography>
 
                                 {isCanEdit &&
