@@ -231,6 +231,42 @@ class BibliographicReferenceViewSet(viewsets.ModelViewSet):
 
 
 class BibliographicReferenceCreateWithWpView(generics.CreateAPIView):
+    """Example:
+    [
+        {
+          "wp_id": 67,
+          "accession_number": "strinffffg",
+          "authors": "string",
+          "main_author": "string",
+          "publication_type": "string",
+          "title": "string",
+          "publishing_company": "string",
+          "year": "string",
+          "number_of_edition": 0,
+          "pages": 0,
+          "format": "string",
+          "publishing_type": "string",
+          "bib_reference": "string",
+          "description": "string"
+        },
+        {
+          "wp_id": 67,
+          "accession_number": "striffffffffng",
+          "authors": "string",
+          "main_author": "string",
+          "publication_type": "string",
+          "title": "string",
+          "publishing_company": "string",
+          "year": "string",
+          "number_of_edition": 0,
+          "pages": 0,
+          "format": "string",
+          "publishing_type": "string",
+          "bib_reference": "string",
+          "description": "string"
+        }
+    ]
+    """
     queryset = BibliographicReference.objects.all()
     serializer_class = BibliographicReferenceCreateWithWpSerializer
     permission_classes = [IsAuthenticated]
