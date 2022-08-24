@@ -58,12 +58,12 @@ class AcademicPlanUpdateAspect:
                     language=AcademicPlanUpdateUtils.get_op_language(isu_academic_plan_json),
                     qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json)
             ).exists():
-                old_implementation_academic_plan_object = ImplementationAcademicPlan.objects.get(
+                old_implementation_academic_plan_object = ImplementationAcademicPlan.objects.filter(
                     title=isu_academic_plan_json['edu_program_name'],
                     ap_isu_id=int(isu_academic_plan_json['id']),
                     year=isu_academic_plan_json['selection_year'],
                     qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json)
-                )
+                )[0]
             else:
                 old_implementation_academic_plan_object = None
 
@@ -115,18 +115,20 @@ class AcademicPlanUpdateAspect:
     def discipline_block_module_changes_aspect(func):
         def wrapper(*args, **kwargs):
             isu_academic_plan_block_module_json, discipline_block_object, isu_academic_plan_json = args
-
+            print(isu_academic_plan_block_module_json)
             if DisciplineBlockModule.objects.filter(
                     name=isu_academic_plan_block_module_json['module_name'],
+                    module_isu_id=isu_academic_plan_block_module_json['module_id '],
                     descipline_block=discipline_block_object
             ).exists():
                 old_discipline_block_module_object = DisciplineBlockModule.objects.get(
                     name=isu_academic_plan_block_module_json['module_name'],
+                    module_isu_id=isu_academic_plan_block_module_json['module_id '],
                     descipline_block=discipline_block_object
                 )
             else:
                 old_discipline_block_module_object = None
-
+            print('old_discipline_block_module_object',  old_discipline_block_module_object)
             updated_discipline_block_module_object = func(
                 copy.deepcopy(old_discipline_block_module_object), *args, **kwargs
             )

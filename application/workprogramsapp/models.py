@@ -754,6 +754,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     # work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='discipline_block_modules',
                                      verbose_name='Редакторы образовательных модулей', blank=True)
+    module_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID модуля в ИСУ")
 
     class Meta:
         ordering = ['order']
