@@ -1,8 +1,9 @@
 import {createAction} from "@reduxjs/toolkit";
 
 import {LiteratureActions} from './types';
+import {literatureSource} from "../WorkProgram/constants";
 
-const getLiterature = createAction('GET_LITERATURE');
+const getLiterature = createAction<{ source: literatureSource }>('GET_LITERATURE');
 const setLiterature = createAction('SET_LITERATURE');
 
 const createNewLiterature = createAction('CREATE_NEW_LITERATURE');

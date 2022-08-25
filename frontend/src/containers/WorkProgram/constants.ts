@@ -279,3 +279,8 @@ export const sectionsValue = {
     [subSections.PLANS]: 8,
     [subSections.COMPETENCES]: 9,
 }
+
+export enum literatureSource {
+    EBSCO = 'EBSCO',
+    ANALITYCS = 'ANALITYCS',
+}

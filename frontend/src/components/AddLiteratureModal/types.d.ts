@@ -1,8 +1,8 @@
 import {WithStyles} from "@material-ui/core";
-import {LiteratureActions} from '../types';
+import LiteratureActions from '../../containers/Literature/actions';
 
 import styles from "./styles";
-import {LiteratureType} from "../../containers/Literature/types";
+import {LiteratureEbscoType, LiteratureType} from "../../containers/Literature/types";
 
 export interface LiteratureCreateModalProps extends WithStyles<typeof styles> {
     actions: LiteratureActions;
@@ -11,6 +11,7 @@ export interface LiteratureCreateModalProps extends WithStyles<typeof styles> {
 }
 
 export interface AddLiteratureModalProps extends  WithStyles<typeof styles> {
+    searchQuery: string;
     isOpen: boolean;
     selectedItems: Array<string>;
     literatureList: Array<LiteratureType>;
@@ -18,5 +19,5 @@ export interface AddLiteratureModalProps extends  WithStyles<typeof styles> {
     allCount: number;
     literatureActions: LiteratureActions;
     handleClose: () => void;
-    handleSave: (ids: Array<LiteratureType>) => void;
+    handleSave: ({ selectedLiterature, selectedLiteratureEbsco }: { selectedLiterature: Array<LiteratureType>, selectedLiteratureEbsco: Array<LiteratureEbscoType>}) => void;
 }
