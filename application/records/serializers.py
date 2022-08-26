@@ -10,7 +10,7 @@ from workprogramsapp.workprogram_additions.models import StructuralUnit
 class ImplementationAcademicPlanForStatisticSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id',"ap_isu_id" ,'year']
+        fields = ['id',"ap_isu_id" ,'year' ,"title"]
 
 
 class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
