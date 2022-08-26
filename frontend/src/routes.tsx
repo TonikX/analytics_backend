@@ -57,6 +57,7 @@ import RouterService from './service/router-service';
 import Notifications from "./containers/Profile/Notifications";
 import Overview from "./containers/Overview";
 import Landing from "./containers/Landing";
+ import UserSettings from "./containers/UserSettings";
 import UserProfile from "./containers/UserProfile";
 import DodProfile from "./containers/DodProfile";
 
@@ -68,6 +69,9 @@ import Practice from "./containers/Practice";
 import FinalCertification from "./containers/FinalCertification";
 import FinalCertificationList from "./containers/FinalCertification/CertificationList";
 import AcademicPlanUpdate from "./containers/AcademicPlanUpdate";
+
+ import EmailSuccessPage from "./containers/EmailSuccessPage";
+ import EmailFailPage from "./containers/EmailFailPage";
 
 const routerService = RouterService.factory();
 
@@ -278,6 +282,9 @@ export default () => (
                 <AuthRoute path={routerService.getUserProfile()}>
                     <UserProfile/>
                 </AuthRoute>
+                <AuthRoute path={routerService.getUserSettings()}>
+                    <UserSettings/>
+                </AuthRoute>
                 <AuthRoute path={routerService.getSelectEducationalProgramRoute()}>
                     <SelectEducationalProgram/>
                 </AuthRoute>
@@ -402,6 +409,12 @@ export default () => (
                     <FinalCertificationList />
                 </AuthRoute>
 
+                <Route path={routerService.getEmailConfirmFail()}>
+                    <EmailFailPage/>
+                </Route>
+                <Route path={routerService.getEmailConfirmSuccess()}>
+                    <EmailSuccessPage/>
+                </Route>
                 <Route path={routerService.getForbiddenPage()}>
                     <ForbiddenPage/>
                 </Route>

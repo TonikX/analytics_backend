@@ -21,4 +21,9 @@ export enum fetchingTypes {
 export enum literatureFields {
     ID = 'id',
     DESCRIPTION = 'description',
+    DESCRIPTION_EBSCO = 'bib_reference',
+}
+export enum literatureEbscoFields {
+    ID = 'accession_number',
+    DESCRIPTION = 'bib_reference',
 }

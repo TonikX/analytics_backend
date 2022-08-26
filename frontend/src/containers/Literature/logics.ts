@@ -8,6 +8,9 @@ import Service from './service';
 
 import {fetchingTypes} from "./enum";
 import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode} from "./getters";
+import {literatureSource} from "../WorkProgram/constants";
+import {getWorkProgramField} from "../WorkProgram/getters";
+import {WorkProgramGeneralFields} from "../WorkProgram/enum";
 
 const service = new Service();
 
@@ -17,16 +20,21 @@ const getLiterature = createLogic({
     process({getState, action}: any, dispatch, done) {
         const state = getState();
 
+        const source = action?.payload?.source || literatureSource.EBSCO
+
         const currentPage = getCurrentPage(state);
         const searchQuery = getSearchQuery(state);
         const sortingField = getSortingField(state);
         const sortingMode = getSortingMode(state);
 
+        const finalSearchQuery = searchQuery.length ? searchQuery : getWorkProgramField(state, WorkProgramGeneralFields.TITLE)
+
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_LITERATURE}));
 
-        service.getLiterature(currentPage, searchQuery, sortingField, sortingMode)
-            .then((res) => {
-                const courses = get(res, 'data.results', []);
+        const request = source === literatureSource.EBSCO ? service.getEbscoLiterature(finalSearchQuery) : service.getLiterature(currentPage, searchQuery, sortingField, sortingMode)
+
+        request.then((res) => {
+                const courses = source === literatureSource.EBSCO ?  get(res, 'data.sources', []) : get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));
 
                 dispatch(literatureActions.setLiterature(courses));

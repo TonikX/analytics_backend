@@ -20,7 +20,7 @@ from .models import EducationalProgram, GeneralCharacteristics, Department, Prof
     SkillsOfRole, \
     Role, ProfessionalStandard, KindsOfActivity
 from .notifications.emails.models import SentMail
-from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments
+from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments, EmailReset
 
 
 from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
@@ -124,3 +124,4 @@ class LogAdmin(admin.ModelAdmin):
     search_fields = ['object_type', 'old_value', 'new_value']
 
 admin.site.register(AcademicPlanUpdateLog, LogAdmin)
+admin.site.register(EmailReset)

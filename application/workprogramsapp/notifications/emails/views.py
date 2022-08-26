@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 from django.utils import timezone
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from dataprocessing.models import User
@@ -73,6 +73,9 @@ def email_reset_request(request):
         )
         email_reset.save()
 
+        user.email = email
+        user.save()
+
         # send email here
         subject = "op.itmo.ru: смена учетных данных"
         message = """Ссылка для смены учетных данных: https://op.itmo.ru/api/email/confirm/{}
@@ -93,6 +96,8 @@ def email_reset_confirm(request):
     queryset = EmailReset.objects.filter(key=request.data.get("key"))
     if queryset.exists():
         email_reset = queryset.first()
+        email_reset.status = True
+        email_reset.save()
 
         if email_reset.timestamp < timezone.now() - timedelta(minutes=30):
             # expired
@@ -102,7 +107,6 @@ def email_reset_confirm(request):
             user = email_reset.user
             user.email = queryset.first().email
             user.save()
-            email_reset.delete()
             return Response({"message": "email updated successfully."})
 
     else:
@@ -111,20 +115,22 @@ def email_reset_confirm(request):
 
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
+@permission_classes((AllowAny,))
 def CustomConfirmEmailView(request, key):
     try:
         print(key)
         email_reset = EmailReset.objects.get(key=key)
         print(email_reset)
+        email_reset.status = True
+        email_reset.save()
     except EmailReset.DoesNotExist:
-        return redirect("{}/401".format(settings.URL_FRONT))
+        return redirect("{}email_confirm_success".format(settings.URL_FRONT))
 
     if email_reset.timestamp < timezone.now() - timedelta(minutes=30):
-        return redirect("{}/402".format(settings.URL_FRONT))
+        return redirect("{}email_confirm_error".format(settings.URL_FRONT))
     else:
         user = email_reset.user
         user.email = email_reset.email
         user.save()
-        email_reset.delete()
+        #email_reset.delete()
         return redirect("{}".format(settings.URL_FRONT))

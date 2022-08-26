@@ -129,6 +129,7 @@ class WorkProgram(CloneMixin, models.Model):
     practice_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы Практик")
     lab_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы лабораторных работ")
     srs_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы СРС")
+    contact_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы Контактной работы")
     number_of_semesters = models.IntegerField(blank=True, null=True, verbose_name="Количество семестров в дисциплине")
     read_notifications = models.CharField(max_length=256,
                                           default='False, False, False, False, False, False, False, False, False, False',
@@ -754,6 +755,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     # work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='discipline_block_modules',
                                      verbose_name='Редакторы образовательных модулей', blank=True)
+    module_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID модуля в ИСУ")
 
     class Meta:
         ordering = ['order']

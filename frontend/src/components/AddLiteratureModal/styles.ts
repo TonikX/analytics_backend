@@ -31,10 +31,10 @@ export default (theme: Theme) => createStyles({
         height: '100%',
         paddingRight: '20px'
     },
-    dialogSearch: {
+    header: {
         display: 'flex',
-        justifyContent: 'flex-end',
-        marginBottom: 40
+        marginBottom: 40,
+        justifyContent: 'space-between'
     },
     appBar: {
         position: 'relative',

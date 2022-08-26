@@ -231,6 +231,49 @@ class BibliographicReferenceViewSet(viewsets.ModelViewSet):
 
 
 class BibliographicReferenceCreateWithWpView(generics.CreateAPIView):
+    """Example:
+    [
+        {
+          "wp_id": 67,
+          "accession_number": "strinffffg",
+          "authors": "string",
+          "main_author": "string",
+          "publication_type": "string",
+          "title": "string",
+          "publishing_company": "string",
+          "year": "string",
+          "number_of_edition": 0,
+          "pages": 0,
+          "format": "string",
+          "publishing_type": "string",
+          "bib_reference": "string",
+          "description": "string"
+        },
+        {
+          "wp_id": 67,
+          "accession_number": "striffffffffng",
+          "authors": "string",
+          "main_author": "string",
+          "publication_type": "string",
+          "title": "string",
+          "publishing_company": "string",
+          "year": "string",
+          "number_of_edition": 0,
+          "pages": 0,
+          "format": "string",
+          "publishing_type": "string",
+          "bib_reference": "string",
+          "description": "string"
+        }
+    ]
+    """
     queryset = BibliographicReference.objects.all()
     serializer_class = BibliographicReferenceCreateWithWpSerializer
     permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

@@ -1,4 +1,4 @@
-import {fields} from './enum';
+import {fields, literatureEbscoFields} from './enum';
 import {WithStyles} from "@material-ui/core";
 import styles from "./WorkProgram.styles";
 import {literatureFields} from './enum';
@@ -36,6 +36,12 @@ export interface literatureState {
 export type LiteratureType = {
     [literatureFields.ID]: number,
     [literatureFields.DESCRIPTION]: string,
+    [literatureFields.DESCRIPTION_EBSCO]?: string,
+};
+
+export type LiteratureEbscoType = {
+    [literatureEbscoFields.ID]: number,
+    [literatureEbscoFields.DESCRIPTION]: string,
 };
 
 export interface LiteratureProps extends WithStyles<typeof styles> {

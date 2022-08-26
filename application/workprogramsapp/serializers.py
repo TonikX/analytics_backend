@@ -275,7 +275,9 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
         model = WorkProgram
         fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester',
                   'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours',
-                  'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format']
+                  'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format',
+                  'lecture_hours_v2', 'practice_hours_v2', 'practice_hours_v2', 'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2',
+                  'contact_hours_v2']
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }
@@ -782,7 +784,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
                   'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors', 'language',
                   'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
                   'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
-                  'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'number_of_semesters', 'read_notifications',
+                  'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'contact_hours_v2', 'number_of_semesters', 'read_notifications',
                   'implementation_format']
 
     def create(self, validated_data):
