@@ -1,5 +1,4 @@
 import datetime
-from rest_framework import generics, viewsets
 from docxtpl import DocxTemplate, RichText
 from django.http import HttpResponse
 from collections import OrderedDict
@@ -10,22 +9,6 @@ from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy,
 from ..serializers import WorkProgramSerializer
 from rest_framework import generics
 import re
-# from GrabzIt import GrabzItDOCXOptions
-# from GrabzIt import GrabzItClient
-# import pypandoc
-# import os
-# import pdfkit
-# import codecs
-# import os
-# from pdf2docx import parse
-# from pdf2docx import Converter
-# from docx import Document
-#
-# import PyPDF2
-# import os
-# import docx
-# import lxml.html
-# import lxml.html.clean
 from docx import Document
 """Скачивание рпд в формате docx/pdf"""
 
@@ -241,7 +224,6 @@ def render_context(context, **kwargs):
                 certification_evaluation_tools_semestr_1.append(item)
                 semester[0]['t'] = item['type']
             if item ['semester'] == 2:
-                print('maxxxxx', item['max'])
                 if item['max'] is not None:
                     items_max_semester_2.append(item['max'])
                 if item['min'] is not None:
@@ -249,7 +231,6 @@ def render_context(context, **kwargs):
                 certification_evaluation_tools_semestr_2.append(item)
                 semester[1]['t'] = item['type']
             if item ['semester'] == 3:
-                print('maxxxxx', item['max'])
                 if item['max'] is not None:
                     items_max_semester_3.append(item['max'])
                 if item['min'] is not None:
@@ -257,7 +238,6 @@ def render_context(context, **kwargs):
                 certification_evaluation_tools_semestr_3.append(item)
                 semester[2]['t'] = item['type']
             if item ['semester'] == 4:
-                print('maxxxxx', item['max'])
                 if item['max'] is not None:
                     items_max_semester_4.append(item['max'])
                 if item['min'] is not None:
@@ -268,9 +248,6 @@ def render_context(context, **kwargs):
                 pass
         except:
             continue
-
-    # print('certification_evaluation_tools_semestr_1', certification_evaluation_tools_semestr_1)
-    # print('certification_evaluation_tools_semestr_2', certification_evaluation_tools_semestr_2)
     template_context['certification_evaluation_tools_semestr_1'] = certification_evaluation_tools_semestr_1
     template_context['certification_evaluation_tools_semestr_2'] = certification_evaluation_tools_semestr_2
     template_context['certification_evaluation_tools_semestr_3'] = certification_evaluation_tools_semestr_3
@@ -287,11 +264,6 @@ def render_context(context, **kwargs):
     template_context['outcomes_min_all_semester_3'] = sum(items_min_semester_3)
     template_context['outcomes_min_all_semester_4'] = sum(items_min_semester_4)
     template_context['extra_points'] = context['extra_points']
-    #print('outcomes_evaluation_tool', template_context['outcomes_min_all_semester_2'])
-    #print(template_context['evaluation_tool_semester_2'])
-    # for item in context['discipline_sections']:
-    #     for i in item['evaluation_tools']:
-
     template_context['discipline_section'] = context['discipline_sections']
     print('bib', template_context['bibliographic_reference'])
     return template_context, filename
@@ -335,34 +307,14 @@ class DocxFileExportView(generics.ListAPIView):
         queryset = WorkProgram.objects.get(pk=kwargs['pk'])
         serializer = WorkProgramSerializer(queryset)
         data = dict(serializer.data)
-
-        # context, filename, evaluation_tools_pdf_docs = render_context(data, field_of_study_id=kwargs['fs_id'],
-        #                                    academic_plan_id=kwargs['ap_id'], year=kwargs['year'])
-
         context, filename = render_context(data, field_of_study_id=kwargs['fs_id'],
                                            academic_plan_id=kwargs['ap_id'], year=kwargs['year'])
-
         tpl.render(context)
         tpl.save('upload/'+str(filename)) #-- сохранение в папку локально (нужно указать актуальный путь!)
-        # target_document = Document('upload/'+str(filename))
-        #
-        # input = Document('upload/exp_v2_6.docx')
-        #
-        # paragraphs = []
-        # for para in input.paragraphs:
-        #     p = para.text
-        #     target_document.add_paragraph(p)
-        # target_document.save('upload/exp_v2_6.docx')
-
-        #i['description'] = paragraphs
-        #evaluation_tools_pdf_docs.append(filename)
-
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
         response['Content-Disposition'] = 'inline; filename="%s"' % filename
 
         tpl.save(response)
-        #filename = 'upload/' + filename
-        #self.combine_word_documents(filename, evaluation_tools_pdf_docs)
         return response
 
 
@@ -437,128 +389,3 @@ class SyllabusExportView(generics.ListAPIView):
         tpl.save(response)
 
         return response
-
-
-# for item in context['discipline_sections']:
-#     for i in item['evaluation_tools']:
-#         #print('ev tool', i)
-#         i['description'] = html2text.html2text(i['description'])
-#         if i not in current_evaluation_tool:
-#             current_evaluation_tool.append(i)
-#             #print(i['description'])
-#             k=k+1
-#             print('папка', k)
-#             #print(i['description'])
-#             options = {
-#                 #'quiet': ''
-#             }
-#             html_content = """
-# <!DOCTYPE html>
-# <html>
-# <head>
-# <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-# </head>
-# <body>
-# {body}
-# </body>
-# </html>
-# """.format(body =  i['description'].replace(' ', '&ensp;').replace('  ', '&ensp;').replace('&nbsp$', '&ensp;'))
-#             print('ворд!!!!!!!!!!!!!!!!!!', html_content)
-#html_content = str(html_content, "UTF-8")
-#i['description'] = html2text.html2text(i['description'])
-#i['description'] = pypandoc.convert_text(i['description'], format='html', to='docx', outputfile='/exp1.docx')
-#i['description'] = pypandoc.convert_text(i['description'].replace('<tbody>', '').replace('</tbody>', '').replace('<figure>', '').replace('</figure>', ''), format='html', to='docx', outputfile=('upload/exp{i}.docx'.format(i=k)))
-#i['description'] = pdfkit.from_string((i['description'].encode().decode('utf-8')), 'upload/exp{i}.pdf'.format(i=k))
-# i['description'] = pdfkit.from_string(html_content, 'upload/exp{i}.pdf'.format(i=k), options=options)
-#i['description'] = pdfkit.from_file('upload/new_11.html', 'upload/exp{i}.pdf'.format(i=k), options=options)
-
-# import sys
-# from PyQt4.QtCore import *
-# from PyQt4.QtGui import *
-# from PyQt4.QtWebKit import *
-#
-# app = QApplication(sys.argv)
-# w = QWebView()
-# w.load(html_content)
-# p = Qp()
-# p.setPageSize(Qp.A4)
-# p.setOutputFormat(Qp.PdfFormat)
-# p.setOutputFileName("sample.pdf")
-#
-# def convertIt():
-#     w.print_(p)
-#     QApplication.exit()
-#
-# QObject.connect(w, SIGNAL("loadFinished(bool)"), convertIt)
-# sys.exit(app.exec_())
-
-# print(i['description'])
-# word = win32com.client.Dispatch("Word.Application")
-# word.visible = 0
-# # GET FILE NAME AND NORMALIZED PATH
-# filename = 'upload/exp{i}.pdf'.format(i=k)
-# in_file = os.path.abspath('upload/exp{i}.pdf'.format(i=k))
-#
-# # CONVERT PDF TO DOCX AND SAVE IT ON THE OUTPUT PATH WITH THE SAME INPUT FILE NAME
-# wb = word.Documents.Open(in_file)
-# out_file = os.path.abspath('upload/exp_v2{i}.docx'.format(i=k))
-# wb.SaveAs2(out_file, FileFormat=16)
-# wb.Close()
-# # word.Quit()
-# parse('upload/exp{i}.pdf'.format(i=k), 'upload/exp_v2_{i}.docx'.format(i=k), start=0, end=None)
-# evaluation_tools_pdf_docs.append('upload/exp_v2_{i}.docx'.format(i=k))
-# input = Document('upload/exp_v2_{i}.docx'.format(i=k))
-#
-# paragraphs = []
-# for para in input.paragraphs:
-#     p = para.text
-#     paragraphs.append(p)
-#
-# i['description'] = paragraphs
-
-# output = Document()
-# for item in paragraphs:
-#     output.add_paragraph(item)
-# output.save('OutputDoc.docx')
-# cv = Converter('upload/exp{i}.pdf'.format(i=k))
-# cv.convert('upload/exp_v2_{i}.docx'.format(i=k), start=0, end=None)
-# cv.close()
-# mydoc = docx.Document() # document type
-# pdfFileObj = open('upload/exp{i}.pdf'.format(i=k), 'rb') # pdffile loction
-# pdfReader = PyPDF2.PdfFileReader(pdfFileObj) # define pdf reader object
-#
-#
-# # Loop through all the pages
-#
-# for pageNum in range(1, pdfReader.numPages):
-#     pageObj = pdfReader.getPage(pageNum)
-#     pdfContent = pageObj.extractText()  #extracts the content from the page.
-#     print ('pdfContent         ', pdfContent)
-#     print(pdfContent) # print statement to test output in the terminal. codeline optional.
-#     mydoc.add_paragraph(pdfContent) # this adds the content to the word document
-#
-# mydoc.save('upload/exp_v2{i}.docx'.format(i=k)) # Give a name to your output file.
-# import os
-# import subprocess
-# filename = 'upload/exp{i}.pdf'.format(i=k)
-# flipfilename = filename[::-1]
-# ext,trash = flipfilename.split('.',1)
-# if ext = 'pdf':
-#     abspath = os.path.join(path, filename)
-#     subprocess.call('lowriter --invisible --convert-to doc "{}"'
-#                     .format(abspath), shell=True)
-#print('evaluation_tools_pdf_docs', evaluation_tools_pdf_docs)
-# else:
-#     pass
-# template_context['discipline_section'] = context['discipline_sections']
-# for item in context['outcomes']:
-#     try:
-#         for i in item['evaluation_tool']:
-#             i['description'] = html2text.html2text(i['description'])
-#             #current_evaluation_tool.append(i)
-#             if i['check_point']:
-#                 #outcomes_evaluation_tool.append(i)
-#                 items_max.append(i['max'])
-#                 items_min.append(i['min'])
-#     except:
-#         continue
