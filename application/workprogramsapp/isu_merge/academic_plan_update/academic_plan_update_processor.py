@@ -173,10 +173,11 @@ class AcademicPlanUpdateProcessor:
         )
 
         work_program_object.discipline_code = str(isu_academic_plan_discipline_json['disc_id'])
-        print(isu_academic_plan_discipline_json)
-        work_program_object.structural_unit = structural_unit(isu_academic_plan_discipline_json)
+        try:
+            work_program_object.structural_unit = structural_unit(isu_academic_plan_discipline_json)
+        except:
+            pass
         work_program_object.save()
-        print('РПД обновилась')
         return work_program_object
 
     @staticmethod
