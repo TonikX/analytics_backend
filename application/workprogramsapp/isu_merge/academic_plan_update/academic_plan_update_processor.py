@@ -173,10 +173,8 @@ class AcademicPlanUpdateProcessor:
         )
 
         work_program_object.discipline_code = str(isu_academic_plan_discipline_json['disc_id'])
-        try:
+        if isu_academic_plan_discipline_json is not None:
             work_program_object.structural_unit = structural_unit(isu_academic_plan_discipline_json)
-        except:
-            pass
         work_program_object.save()
         return work_program_object
 
