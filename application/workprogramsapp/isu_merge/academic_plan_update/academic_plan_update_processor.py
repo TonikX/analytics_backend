@@ -114,6 +114,8 @@ class AcademicPlanUpdateProcessor:
                 print('Структурное подразделение записалось')
                 st_unit.save()
             else:
+                print(isu_academic_plan_discipline_json['discipline_doer'].strip())
+                print(isu_academic_plan_discipline_json['discipline_doer_id'])
                 StructuralUnit.objects.create(title=isu_academic_plan_discipline_json['discipline_doer'].strip(),
                                               isu_id=int(isu_academic_plan_discipline_json['discipline_doer_id']))
                 st_unit = StructuralUnit.objects.get(title=isu_academic_plan_discipline_json['discipline_doer'].strip(),
@@ -173,7 +175,8 @@ class AcademicPlanUpdateProcessor:
         )
 
         work_program_object.discipline_code = str(isu_academic_plan_discipline_json['disc_id'])
-        if isu_academic_plan_discipline_json is not None:
+        if isu_academic_plan_discipline_json['discipline_doer'] and \
+                isu_academic_plan_discipline_json['discipline_doer_id'] is not None:
             work_program_object.structural_unit = structural_unit(isu_academic_plan_discipline_json)
         work_program_object.save()
         return work_program_object
