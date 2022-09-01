@@ -8,6 +8,7 @@ from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuServic
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
     WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration
+from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
 class AcademicPlanUpdateProcessor:
@@ -86,6 +87,7 @@ class AcademicPlanUpdateProcessor:
                 qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json),
                 discipline_code=str(isu_academic_plan_discipline_json['disc_id'])
             )
+
             work_program_object.save()
 
         def watchmaker(hours, ze):
@@ -103,6 +105,23 @@ class AcademicPlanUpdateProcessor:
                 all_ze_indexes_in_rpd += 1
 
             return str(lecture_hours_v2).strip("[]")
+
+        def structural_unit(isu_academic_plan_discipline_json):
+            if StructuralUnit.objects.filter(title=str(isu_academic_plan_discipline_json['discipline_doer'].strip())):
+                st_unit = \
+                StructuralUnit.objects.filter(title=isu_academic_plan_discipline_json['discipline_doer'].strip())[0]
+                st_unit.isu_id = int(isu_academic_plan_discipline_json['discipline_doer_id'])
+                print('Структурное подразделение записалось')
+                st_unit.save()
+            else:
+                print(isu_academic_plan_discipline_json['discipline_doer'].strip())
+                print(isu_academic_plan_discipline_json['discipline_doer_id'])
+                StructuralUnit.objects.create(title=isu_academic_plan_discipline_json['discipline_doer'].strip(),
+                                              isu_id=int(isu_academic_plan_discipline_json['discipline_doer_id']))
+                st_unit = StructuralUnit.objects.get(title=isu_academic_plan_discipline_json['discipline_doer'].strip(),
+                                                     isu_id=int(isu_academic_plan_discipline_json['discipline_doer_id']))
+                print('Структурное подразделение выбралось')
+            return st_unit
 
         def semesters(ze):
             sem = 0
@@ -156,8 +175,10 @@ class AcademicPlanUpdateProcessor:
         )
 
         work_program_object.discipline_code = str(isu_academic_plan_discipline_json['disc_id'])
+        if isu_academic_plan_discipline_json['discipline_doer'] and \
+                isu_academic_plan_discipline_json['discipline_doer_id'] is not None:
+            work_program_object.structural_unit = structural_unit(isu_academic_plan_discipline_json)
         work_program_object.save()
-
         return work_program_object
 
     @staticmethod
