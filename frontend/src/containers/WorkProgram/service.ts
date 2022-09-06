@@ -13,6 +13,7 @@ import {CourseFields} from "../Courses/enum";
 import {TrainingEntitiesFields} from "../TrainingEntities/enum";
 import {UserExpertResultEnum} from "../Expertises/enum";
 import {LiteratureEbscoType} from "../Literature/types";
+import appConfigService from "../../config/app-config-service";
 
 class WorkProgramService extends AnalyticsService{
     getWorkProgram(id: string){
@@ -340,6 +341,10 @@ class WorkProgramService extends AnalyticsService{
                 items: results
             }
         });
+    }
+
+    getDownloadFileLink({ wpId, directionId, planId, year }: any) {
+        return `${appConfigService.getApiBasePath()}/api/export/docx/${wpId}/${directionId}/${planId}/${year}`
     }
 }
 

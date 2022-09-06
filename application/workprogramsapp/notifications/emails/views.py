@@ -78,9 +78,13 @@ def email_reset_request(request):
 
         # send email here
         subject = "op.itmo.ru: смена учетных данных"
-        message = """Ссылка для смены учетных данных: https://op.itmo.ru/api/email/confirm/{}
-       С уважением,
-       команда Конструктора РПД""".format(email_reset.key)
+        message = """
+Здравствуйте, уважаемый пользователь!
+Для подтверждения e-mail перейдите по ссылке: https://op.itmo.ru/api/email/confirm/{}
+        
+С уважением,
+команда Конструктора ОП
+        """.format(email_reset.key)
         recipient_list = [email]
         print(recipient_list)
         mail_sender(topic=subject, text=message, emails=recipient_list, users=[request.user])
@@ -124,10 +128,10 @@ def CustomConfirmEmailView(request, key):
         email_reset.status = True
         email_reset.save()
     except EmailReset.DoesNotExist:
-        return redirect("{}email_confirm_success".format(settings.URL_FRONT))
+        return redirect("{}email-confirm-success".format(settings.URL_FRONT))
 
     if email_reset.timestamp < timezone.now() - timedelta(minutes=30):
-        return redirect("{}email_confirm_error".format(settings.URL_FRONT))
+        return redirect("{}email-confirm-error".format(settings.URL_FRONT))
     else:
         user = email_reset.user
         user.email = email_reset.email
