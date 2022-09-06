@@ -10,16 +10,40 @@ import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-
 import TableBody from "@material-ui/core/TableBody";
+import DownloadIcon from "@material-ui/icons/CloudDownloadOutlined";
+
 import {PlansAndDirectionsProps} from './types';
 import {appRouter} from "../../../service/router-service";
+
+import Service from '../service'
 
 import connect from './PlansAndDirections.connect';
 import styles from './PlansAndDirections.styles';
 
+const service = new Service()
+
 class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
     scrollBar: any = null;
+
+    handleDownload = (item: any, planId: any) => {
+        const fileLink = service.getDownloadFileLink({
+            wpId: this.props.wpId,
+            directionId: item?.field_of_study?.[0]?.id,
+            planId: planId,
+            year: item?.year,
+        });
+
+        let tempLink = document.createElement('a');
+
+        tempLink.href = fileLink;
+
+        tempLink.setAttribute('target', '_blank');
+
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+    }
 
     render() {
         const {classes, plans} = this.props;
@@ -33,6 +57,7 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                                 <TableCell className={classes.header}>Образовательная программа</TableCell>
                                 <TableCell className={classes.header}>Направление</TableCell>
                                 <TableCell className={classes.header}>Год набора</TableCell>
+                                <TableCell className={classes.header} />
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -54,6 +79,9 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                                           </TableCell>
                                           <TableCell>
                                               {get(item, 'year', '')}
+                                          </TableCell>
+                                          <TableCell>
+                                              <DownloadIcon style={{ cursor: 'pointer' }} onClick={() => this.handleDownload(item, plan?.academic_plan?.id)} />
                                           </TableCell>
                                       </TableRow>
                                     ))

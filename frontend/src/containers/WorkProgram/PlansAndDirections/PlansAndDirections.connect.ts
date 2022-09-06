@@ -7,10 +7,12 @@ import {getWorkProgramField} from '../getters';
 import {WorkProgramActions} from "../types";
 
 import {rootState} from "../../../store/reducers";
+import {WorkProgramGeneralFields} from "../enum";
 
 const mapStateToProps = (state:rootState) => {
     return {
-        plans: getWorkProgramField(state, 'work_program_in_change_block') || []
+        plans: getWorkProgramField(state, 'work_program_in_change_block') || [],
+        wpId: getWorkProgramField(state, WorkProgramGeneralFields.ID)
     };
 };
 
