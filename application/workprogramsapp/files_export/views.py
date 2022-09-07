@@ -37,26 +37,27 @@ def render_context(context, **kwargs):
     semester = []
     for wpcb in context['work_program_in_change_block']:
         credit_units_list = []
-        if wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'] == ap_obj.id:
-            wpcb_pk = wpcb['id']
-            if wpcb['credit_units'] != None:
-                wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')
-                for cu in range (0, 16, 2):
-                    if list(wpcb['credit_units'][cu]) != 0:
-                        credit_units_list.append(wpcb['credit_units'][cu])
-                hours_getter = hours_v2_generator(context["lecture_hours_v2"], context["practice_hours_v2"],
-                                                  context["srs_hours_v2"], context["lab_hours_v2"])
-                for cu in credit_units_list:
-                    try:
-                        if int(float(cu)) != 0:
-                            hours_list=next(hours_getter)
-                            contact_hours=round((hours_list[0]+hours_list[1]+hours_list[3])*1.1,2)
-                            semester.append({'s': credit_units_list.index(cu) + 1, 'c': cu, 'h': int(cu) * 36,
-                                             "lc_h": hours_list[0], "pc_h": hours_list[1], "sr_h": hours_list[2],
-                                             "lb_h": hours_list[3], "cnt_h":contact_hours })
-                        credit_units_list[credit_units_list.index(cu)] = 0
-                    except:
-                        pass
+        if wpcb['discipline_block_module']['descipline_block'][0] is not None:
+            if wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'] == ap_obj.id:
+                wpcb_pk = wpcb['id']
+                if wpcb['credit_units'] != None:
+                    wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')
+                    for cu in range (0, 16, 2):
+                        if list(wpcb['credit_units'][cu]) != 0:
+                            credit_units_list.append(wpcb['credit_units'][cu])
+                    hours_getter = hours_v2_generator(context["lecture_hours_v2"], context["practice_hours_v2"],
+                                                      context["srs_hours_v2"], context["lab_hours_v2"])
+                    for cu in credit_units_list:
+                        try:
+                            if int(float(cu)) != 0:
+                                hours_list=next(hours_getter)
+                                contact_hours=round((hours_list[0]+hours_list[1]+hours_list[3])*1.1,2)
+                                semester.append({'s': credit_units_list.index(cu) + 1, 'c': cu, 'h': int(cu) * 36,
+                                                 "lc_h": hours_list[0], "pc_h": hours_list[1], "sr_h": hours_list[2],
+                                                 "lb_h": hours_list[3], "cnt_h":contact_hours })
+                            credit_units_list[credit_units_list.index(cu)] = 0
+                        except:
+                            pass
 
     try:
         semester = semester[:context["number_of_semesters"]]
