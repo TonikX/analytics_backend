@@ -37,7 +37,7 @@ def render_context(context, **kwargs):
     semester = []
     for wpcb in context['work_program_in_change_block']:
         credit_units_list = []
-        if wpcb['discipline_block_module']['descipline_block'][0] is not None:
+        if wpcb['discipline_block_module'] is not None:
             if wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'] == ap_obj.id:
                 wpcb_pk = wpcb['id']
                 if wpcb['credit_units'] != None:
