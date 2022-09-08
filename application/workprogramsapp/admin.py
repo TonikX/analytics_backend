@@ -125,3 +125,4 @@ class LogAdmin(admin.ModelAdmin):
 
 admin.site.register(AcademicPlanUpdateLog, LogAdmin)
 admin.site.register(EmailReset)
+admin.site.register(ExpertsOnStructuralUnit)
