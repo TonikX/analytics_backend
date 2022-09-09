@@ -173,6 +173,16 @@ class AcademicPlanUpdateUtils:
         return tuple(lab)
 
     @staticmethod
+    def get_consultation(isu_academic_plan_json):
+        consultation = []
+        for points in isu_academic_plan_json['class_points']:
+            if points['consultation'] is None:
+                consultation.append(0)
+            else:
+                consultation.append(points['consultation'])
+        return tuple(consultation)
+
+    @staticmethod
     def num_to_int(code, subj):
         if not code:
             if re.match('Подготовка к защите и защита ВКР', subj, flags=re.IGNORECASE):

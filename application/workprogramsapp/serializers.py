@@ -522,6 +522,7 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
     #work_program = serializers.SerializerMethodField('get_id_of_wpcb')
     work_program = serializers.SerializerMethodField('get_id_of_wpcb')
 
+
     def to_representation(self, value):
         self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
         self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
@@ -693,10 +694,24 @@ class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
         }
 
 
+class SubDisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerializer):
+    change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
+    descipline_block = DisciplineBlockDetailAcademicSerializer(many=True)
+    editors = userProfileSerializer(many=True)
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = "__all__"
+        extra_kwargs = {
+            'change_blocks_of_work_programs_in_modules': {'required': False}
+        }
+
+
 class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerializer):
     change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
     descipline_block = DisciplineBlockDetailAcademicSerializer(many=True)
     editors = userProfileSerializer(many=True)
+    father = SubDisciplineBlockModuleForModuleListDetailSerializer()
 
     class Meta:
         model = DisciplineBlockModule

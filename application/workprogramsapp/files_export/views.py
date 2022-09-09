@@ -1,4 +1,6 @@
 import datetime
+import os
+from rest_framework import generics, viewsets
 from docxtpl import DocxTemplate, RichText
 from django.http import HttpResponse
 from collections import OrderedDict
@@ -13,6 +15,21 @@ from docx import Document
 """Скачивание рпд в формате docx/pdf"""
 
 
+def get_hours(hour_str: str):
+    hours_list = hour_str.split(",")
+    return [round(float(el), 2) for el in hours_list ]
+
+
+def hours_v2_generator(lec_v2, prac_v2, sro_v2, lab_v2):
+    hours_lec_v2 = get_hours(lec_v2)
+    hours_prac_v2 = get_hours(prac_v2)
+    hours_sro_v2 = get_hours(sro_v2)
+    hours_lab_v2 = get_hours(lab_v2)
+
+    for i in range(0,12):
+        yield [hours_lec_v2[i], hours_prac_v2[i], hours_sro_v2[i], hours_lab_v2[i]]
+
+
 def render_context(context, **kwargs):
     """ Функция, которая возвращает context с параметрами для шаблона """
     fs_obj = FieldOfStudy.objects.get(pk=kwargs['field_of_study_id'])
@@ -20,20 +37,34 @@ def render_context(context, **kwargs):
     semester = []
     for wpcb in context['work_program_in_change_block']:
         credit_units_list = []
-        if wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'] == ap_obj.id:
-            wpcb_pk = wpcb['id']
-            if wpcb['credit_units'] != None:
-                wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')
-                for cu in range (0, 16, 2):
-                    if list(wpcb['credit_units'][cu]) != 0:
-                        credit_units_list.append(wpcb['credit_units'][cu])
-                for cu in credit_units_list:
-                    try:
-                        if int(float(cu)) != 0:
-                            semester.append({'s': credit_units_list.index(cu)+1, 'c': cu, 'h': int(cu) * 36})
-                        credit_units_list[credit_units_list.index(cu)] = 0
-                    except:
-                        pass
+        if wpcb['discipline_block_module']['descipline_block'] is not None:
+            if wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'] == ap_obj.id:
+                wpcb_pk = wpcb['id']
+                if wpcb['credit_units'] != None:
+                    wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')
+                    for cu in range (0, 16, 2):
+                        if list(wpcb['credit_units'][cu]) != 0:
+                            credit_units_list.append(wpcb['credit_units'][cu])
+                    hours_getter = hours_v2_generator(context["lecture_hours_v2"], context["practice_hours_v2"],
+                                                      context["srs_hours_v2"], context["lab_hours_v2"])
+                    for cu in credit_units_list:
+                        try:
+                            if int(float(cu)) != 0:
+                                hours_list=next(hours_getter)
+                                contact_hours=round((hours_list[0]+hours_list[1]+hours_list[3])*1.1,2)
+                                semester.append({'s': credit_units_list.index(cu) + 1, 'c': cu, 'h': int(cu) * 36,
+                                                 "lc_h": hours_list[0], "pc_h": hours_list[1], "sr_h": hours_list[2],
+                                                 "lb_h": hours_list[3], "cnt_h":contact_hours })
+                            credit_units_list[credit_units_list.index(cu)] = 0
+                        except:
+                            pass
+
+    try:
+        semester = semester[:context["number_of_semesters"]]
+    except KeyError:
+        # По идее надо что-то сделать с циклом по блокмодулям
+        # Но я не знаю какая логика задумывалась изначально в цикле выше с ними, поэтому будет так
+        pass
     wp_in_fs = WorkProgramInFieldOfStudy.objects.get(work_program_change_in_discipline_block_module__id=wpcb_pk,
                                                      work_program__id=context['id'])
     zun_obj = Zun.objects.filter(wp_in_fs=wp_in_fs)
@@ -119,7 +150,9 @@ def render_context(context, **kwargs):
     template_context['tbl_competence'] = tbl_competence
     template_context['total_hours'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours]
     print('ff',all_laboratory)
-    template_context['all_total_hours'] = [all_contact_work, all_lecture_classes, all_laboratory, all_practical_lessons, all_SRO, all_total_hours]
+    template_context['all_total_hours'] = [round(el, 2) for el in
+                                           [all_contact_work, all_lecture_classes, all_laboratory,
+                                            all_practical_lessons, all_SRO, all_total_hours]]
     template_context['is_no_online'] = True if online_sections == 0 else False
     template_context['is_online'] = True if online_sections else False
     template_context['X'] = 'X'
@@ -253,10 +286,10 @@ def render_context(context, **kwargs):
     template_context['certification_evaluation_tools_semestr_3'] = certification_evaluation_tools_semestr_3
     template_context['certification_evaluation_tools_semestr_4'] = certification_evaluation_tools_semestr_4
     try:
-        template_context['outcomes_max_all_semester_1'] = sum(items_max_semester_1) + int(context['extra_points'])
-        template_context['outcomes_max_all_semester_2'] = sum(items_max_semester_2) + int(context['extra_points'])
-        template_context['outcomes_max_all_semester_3'] = sum(items_max_semester_3) + int(context['extra_points'])
-        template_context['outcomes_max_all_semester_4'] = sum(items_max_semester_4) + int(context['extra_points'])
+        template_context['outcomes_max_all_semester_1'] = sum(items_max_semester_1) + int(context['extra_points'] or 0)
+        template_context['outcomes_max_all_semester_2'] = sum(items_max_semester_2) + int(context['extra_points'] or 0)
+        template_context['outcomes_max_all_semester_3'] = sum(items_max_semester_3) + int(context['extra_points'] or 0)
+        template_context['outcomes_max_all_semester_4'] = sum(items_max_semester_4) + int(context['extra_points'] or 0)
     except:
         pass
     template_context['outcomes_min_all_semester_1'] = sum(items_min_semester_1)
@@ -266,6 +299,7 @@ def render_context(context, **kwargs):
     template_context['extra_points'] = context['extra_points']
     template_context['discipline_section'] = context['discipline_sections']
     print('bib', template_context['bibliographic_reference'])
+    print(semester)
     return template_context, filename
         #, evaluation_tools_pdf_docs
 

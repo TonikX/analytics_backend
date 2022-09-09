@@ -134,6 +134,7 @@ class AcademicPlanUpdateProcessor:
         lec = AcademicPlanUpdateUtils.get_lec(isu_academic_plan_discipline_json)
         prac = AcademicPlanUpdateUtils.get_prac(isu_academic_plan_discipline_json)
         lab = AcademicPlanUpdateUtils.get_lab(isu_academic_plan_discipline_json)
+        consultation = AcademicPlanUpdateUtils.get_consultation(isu_academic_plan_discipline_json)
 
         work_program_object.number_of_semesters = int(
             semesters([float(x) for x in ze])
@@ -146,6 +147,11 @@ class AcademicPlanUpdateProcessor:
 
         work_program_object.practice_hours_v2 = watchmaker(
             [float(x) for x in prac],
+            [float(x) for x in ze]
+        )
+
+        work_program_object.consultation_v2 = watchmaker(
+            [float(x) for x in consultation],
             [float(x) for x in ze]
         )
 
