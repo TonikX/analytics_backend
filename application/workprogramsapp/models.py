@@ -778,9 +778,10 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='discipline_block_modules',
                                      verbose_name='Редакторы образовательных модулей', blank=True)
     module_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID модуля в ИСУ")
-    father = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
+    father = models.ForeignKey('self', on_delete=models.SET_NULL, related_name="inheritage_module",
+                               blank=True, null=True)
     educational_programs_to_access = models.ManyToManyField('ImplementationAcademicPlan',
-                                                            verbose_name='Учебный план_1',
+                                                            verbose_name='Разрешенные образовательные программы',
                                                             related_name="modules_to_access", blank=True)
 
     class Meta:
