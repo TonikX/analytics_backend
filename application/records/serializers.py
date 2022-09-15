@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
+from workprogramsapp.expertise.models import Expertise
 from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, ImplementationAcademicPlan
 from workprogramsapp.serializers import PrerequisitesOfWorkProgramInWorkProgramSerializer, \
     OutcomesOfWorkProgramInWorkProgramSerializer
@@ -14,9 +15,17 @@ class ImplementationAcademicPlanForStatisticSerializer(serializers.ModelSerializ
 
 
 class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
+
+    def get_status(self, instance):
+        try:
+            return Expertise.objects.get(work_program=instance).expertise_status
+        except Expertise.DoesNotExist:
+            return "WK"
+
     class Meta:
         model = WorkProgram
-        fields = ['id', 'discipline_code', 'title', 'description']
+        fields = ['id', 'discipline_code', 'title', 'description', 'status']
 
 
 class WorkProgramDuplicatesSerializer(serializers.Serializer):
