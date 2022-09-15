@@ -168,7 +168,7 @@ def SearchInEBSCO(request):
                   "url": "",
                   "pages": "",
                   "source": "",
-                  "access": "– Текст :непосредственный "}
+                  "access": "– Текст : непосредственный "}
         for item in items:
             if item["Label"] == "Authors":
                 source["authors"].append(item["Data"])
@@ -177,7 +177,9 @@ def SearchInEBSCO(request):
             if item["Label"] == "Publication Information":
                 source["pub_info"] = item["Data"] + " "
             if item["Label"] == "Availability":
-                source["url"] = "// [Электронный ресурс]. Режим доступа: " + item["Data"] + " "
+                source["url"] = "– URL:  " + item["Data"] + " "
+            if item["Label"] == "Online Access":
+                source["url"] = " – URL: " + item["Data"] + " "
             if item["Label"] == "Physical Description":
                 source["pages"] = " – " + item["Data"] + " "
             if item["Label"] == "Source":
@@ -193,10 +195,9 @@ def SearchInEBSCO(request):
 
         # Либо электронный ресурс либо издательство
         if source["pub_info"]:
-            source["url"] = ""
             source["authors"] += " "
-        elif source["url"]:
-            source["access"] = "– Текст :электронный "
+        if source["url"]:
+            source["access"] = "– Текст : электронный "
         bib_ref = f"{source['main_author']}{source['title']} / {source['authors']} {source['pub_info']}" \
                   f"{source['pages']}{source['access']}{source['source']}{source['url']}"
         return bib_ref, source
@@ -214,8 +215,16 @@ def SearchInEBSCO(request):
         response = []
         for item in s["Record"]["Items"]:
             data = {}
-            for key, val in item.items():
-                data[key] = clean_text(val)
+            if item["Label"] == "Online Access":
+                splited = item["Data"].split(";")
+                splited = [link for link in splited if "http" in link]
+
+                data["Label"] = "Online Access"
+                data["Data"] = splited[-1][:splited[-1].find("&quot")]
+
+            else:
+                for key, val in item.items():
+                    data[key] = clean_text(val)
             response.append(data)
         return generate_bib_ref(response)
 
