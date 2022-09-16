@@ -541,6 +541,27 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
         return serializers.data
 
 
+class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
+    #change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
+
+    # father = serializers.SerializerMethodField()
+
+    def to_representation(self, value):
+        self.fields['childs'] = serializers.SerializerMethodField()
+        return super().to_representation(value)
+
+    def get_childs(self, obj):
+        childs = DisciplineBlockModule.objects.filter(father=obj)
+        if childs:
+            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
+        else:
+            return None
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = ['id', 'name', 'type', 'selection_rule']
+
+
 class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
     change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
     #father = serializers.SerializerMethodField()
@@ -553,7 +574,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
     def get_childs(self, obj):
         childs = DisciplineBlockModule.objects.filter(father=obj)
         if childs:
-            return DisciplineBlockModuleSerializer(childs, many=True).data
+            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
         else:
             return None
 
@@ -709,7 +730,7 @@ class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
     def get_childs(self, obj):
         childs = DisciplineBlockModule.objects.filter(father=obj)
         if childs:
-            return DisciplineBlockModuleDetailSerializer(childs, many=True).data
+            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
         else:
             return None
 
@@ -752,7 +773,7 @@ class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerial
     def get_childs(self, obj):
         childs = DisciplineBlockModule.objects.filter(father=obj)
         if childs:
-            return DisciplineBlockModuleForModuleListDetailSerializer(childs, many=True).data
+            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
         else:
             return None
 
