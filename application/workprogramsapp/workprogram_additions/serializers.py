@@ -1,23 +1,22 @@
 # Библиотеки для сариализации
-from rest_framework import serializers, viewsets
-
-# Модели данных
-from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
-from workprogramsapp.models import Indicator, Competence
+from rest_framework import serializers
 
 # Другие сериализаторы
-from dataprocessing.serializers import userProfileSerializer
-from ..models import WorkProgramInFieldOfStudy, WorkProgram
+from dataprocessing.serializers import userProfileSerializer, ItemSerializer
+from workprogramsapp.models import Indicator, Competence, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram
+# Модели данных
+from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
+from ..models import WorkProgram
 
 """
 Материалы тем
 """
 
+
 class AdditionalMaterialSerializer(serializers.ModelSerializer):
     """
     Дополнительный материал в теме РПД
     """
-
 
     class Meta:
         model = AdditionalMaterial
@@ -50,7 +49,6 @@ class UserStructuralUnitSerializer(serializers.ModelSerializer):
     """
     user = userProfileSerializer()
 
-
     class Meta:
         model = UserStructuralUnit
         fields = "__all__"
@@ -67,11 +65,10 @@ class CreateUserStructuralUnitSerializer(serializers.ModelSerializer):
 
 
 class StructuralUnitSerializer(serializers.ModelSerializer):
-    user_in_structural_unit = UserStructuralUnitSerializer(many = True)
+    user_in_structural_unit = UserStructuralUnitSerializer(many=True)
     """
     Cериализатор подразделения разработчика РПД
     """
-
 
     class Meta:
         model = StructuralUnit
@@ -83,7 +80,6 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
     Cериализатор подразделения разработчика РПД
     """
 
-
     class Meta:
         model = StructuralUnit
         fields = "__all__"
@@ -91,25 +87,27 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
 
 class IndicatorSerializer(serializers.ModelSerializer):
     """Сериализатор Индикаторов"""
+
     class Meta:
         model = Indicator
-        fields = ['id','number', 'name', 'competence']
+        fields = ['id', 'number', 'name', 'competence']
 
 
 class CompetenceSerializer(serializers.ModelSerializer):
     """Сериализатор Компетенций"""
+
     class Meta:
         model = Competence
-        fields = ['id','number', 'name']
+        fields = ['id', 'number', 'name']
 
 
 class CompetenceFullSerializer(serializers.ModelSerializer):
     """Сериализатор Компетенций"""
-    indicator_in_competencse = IndicatorSerializer(many = True)
+    indicator_in_competencse = IndicatorSerializer(many=True)
 
     class Meta:
         model = Competence
-        fields = ['id','number', 'name', 'indicator_in_competencse']
+        fields = ['id', 'number', 'name', 'indicator_in_competencse']
 
 
 class IndicatorListSerializer(serializers.ModelSerializer):
@@ -117,5 +115,36 @@ class IndicatorListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Indicator
-        fields = ['id','number', 'name', 'competence']
+        fields = ['id', 'number', 'name', 'competence']
 
+
+class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
+    """Сериализатор вывода результата обучения для вывода результата в рабочей программе"""
+    # item_name  = serializers.ReadOnlyField(source='item.name')
+    # item_id  = serializers.ReadOnlyField(source='item.id')
+    item = ItemSerializer()
+
+    class Meta:
+        model = OutcomesOfWorkProgram
+        fields = ['item', 'masterylevel']
+        extra_kwargs = {
+            'evaluation_tool': {'required': False}
+        }
+
+
+class PrerequisitesOfWorkProgramSerializer(serializers.ModelSerializer):
+    """Сериализатор создания пререквизита обучения"""
+    item = ItemSerializer()
+    class Meta:
+        model = PrerequisitesOfWorkProgram
+        fields = ['item', 'masterylevel']
+
+
+class WorkProgramItemsPrerequisitesSerializer(serializers.ModelSerializer):
+    prerequisites = PrerequisitesOfWorkProgramSerializer(source='prerequisitesofworkprogram_set',
+                                                               many=True)
+    outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'title', 'discipline_code', 'prerequisites', 'outcomes']

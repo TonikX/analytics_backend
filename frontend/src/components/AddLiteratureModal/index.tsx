@@ -16,6 +16,8 @@ import Typography from "@material-ui/core/Typography";
 import TablePagination from "@material-ui/core/TablePagination";
 import Slide from '@material-ui/core/Slide';
 import TextField from "@material-ui/core/TextField";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -26,9 +28,10 @@ import AddIcon from "@material-ui/icons/Add";
 
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
-import {literatureFields} from "../../containers/Literature/enum";
-import {LiteratureType} from "../../containers/Literature/types";
+import {literatureFields, literatureEbscoFields} from "../../containers/Literature/enum";
+import {LiteratureType, LiteratureEbscoType} from "../../containers/Literature/types";
 import CreateLiteratureModal from '../../containers/Literature/LiteratureCreateModal';
+import {literatureSource} from "../../containers/WorkProgram/constants";
 
 import connect from './connect';
 import styles from './styles';
@@ -40,7 +43,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
     state = {
-        selectedLiterature: []
+        selectedLiterature: [],
+        selectedLiteratureEbsco: [],
+        source: literatureSource.EBSCO
     };
 
     componentDidMount() {
@@ -63,29 +68,43 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
 
     handleChangeLiteratureSearchText = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         this.props.literatureActions.changeSearchQuery(get(event, 'target.value', ''));
-        this.props.literatureActions.getLiterature();
+        this.props.literatureActions.getLiterature({ source: this.state.source });
     }
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
         this.props.literatureActions.changeCurrentPage(page + 1);
-        this.props.literatureActions.getLiterature();
+        this.props.literatureActions.getLiterature({ source: this.state.source });
     }
 
-    handleChangeSelect = (item: LiteratureType) => (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-        const {selectedLiterature} = this.state;
+    handleChangeSelect = (item: any) => (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+        const {selectedLiterature, source, selectedLiteratureEbsco} = this.state;
 
-        if (checked){
-            this.setState({selectedLiterature: [...selectedLiterature, item]});
+        if (source === literatureSource.EBSCO) {
+            if (checked){
+                this.setState({selectedLiteratureEbsco: [...selectedLiteratureEbsco, item]});
+            } else {
+                this.setState({selectedLiteratureEbsco: selectedLiteratureEbsco.filter(selectedItem =>
+                      selectedItem[literatureEbscoFields.ID] !== item[literatureEbscoFields.ID])});
+            }
         } else {
-            this.setState({selectedLiterature: selectedLiterature.filter(selectedItem =>
-                    selectedItem[literatureFields.ID] !== item[literatureFields.ID])});
+            if (checked){
+                this.setState({selectedLiterature: [...selectedLiterature, item]});
+            } else {
+                this.setState({selectedLiterature: selectedLiterature.filter(selectedItem =>
+                      selectedItem[literatureFields.ID] !== item[literatureFields.ID])});
+            }
         }
+    }
+
+    handleChangeSource = (e: any, value: literatureSource) => {
+        this.setState({ source: value })
+        this.props.literatureActions.changeCurrentPage(1);
+        this.props.literatureActions.getLiterature({ source: value });
     }
 
     render() {
         const {isOpen, classes, allCount, literatureList, currentPage, handleClose, handleSave} = this.props;
-        const {selectedLiterature} = this.state;
-
+        const {selectedLiterature, source, selectedLiteratureEbsco} = this.state;
         const disableButton = selectedLiterature.length === 0;
 
         return (
@@ -123,7 +142,12 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
                     </AppBar>
 
                     <DialogContent className={classes.dialogContent}>
-                        <div className={classes.dialogSearch}>
+                        <div className={classes.header}>
+                            <Tabs value={source} onChange={this.handleChangeSource}>
+                                <Tab value={literatureSource.EBSCO} label="Эбско" />
+                                <Tab value={literatureSource.ANALITYCS} label="Аналитика" />
+                            </Tabs>
+
                             <TextField placeholder="Поиск"
                                        variant="outlined"
                                        InputProps={{
@@ -135,25 +159,33 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
                                        onChange={this.handleChangeLiteratureSearchText}
                             />
                         </div>
-
                         <Scrollbars>
                             <div className={classes.list}>
-                                {selectedLiterature.map && selectedLiterature.map((item: LiteratureType) =>
+                                {source !== literatureSource.EBSCO && selectedLiterature.map && selectedLiterature.map((item: LiteratureType) =>
                                     <div className={classes.item}>
-                                        <Typography>{item[literatureFields.DESCRIPTION]}</Typography>
+                                        <Typography>{item[literatureFields.DESCRIPTION] || item[literatureFields.DESCRIPTION_EBSCO]}</Typography>
                                         <Checkbox checked={true}
                                                   onChange={this.handleChangeSelect(item)}/>
                                     </div>
                                 )}
-                                {literatureList.map((item: LiteratureType) => {
+                                {source === literatureSource.EBSCO && selectedLiteratureEbsco.map && selectedLiteratureEbsco.map((item: LiteratureEbscoType) =>
+                                    <div className={classes.item}>
+                                        <Typography>{item[literatureEbscoFields.DESCRIPTION]}</Typography>
+                                        <Checkbox checked={true}
+                                                  onChange={this.handleChangeSelect(item)}/>
+                                    </div>
+                                )}
+                                {literatureList.map((item: any) => {
                                     const findItem = selectedLiterature.find && selectedLiterature.find((selectedItem: LiteratureType) =>
                                         selectedItem[literatureFields.ID] === item[literatureFields.ID]);
+                                    const findItemEbsco = selectedLiteratureEbsco.find && selectedLiteratureEbsco.find((selectedItem: LiteratureEbscoType) =>
+                                        selectedItem[literatureEbscoFields.ID] === item[literatureEbscoFields.ID]);
 
-                                    if (findItem) return <></>;
+                                    if (findItem || findItemEbsco) return <></>;
 
                                     return (
                                         <div className={classes.item}>
-                                            <Typography>{item[literatureFields.DESCRIPTION]}</Typography>
+                                            <Typography>{item[literatureFields.DESCRIPTION] || item[literatureEbscoFields.DESCRIPTION]}</Typography>
                                             <Checkbox onChange={this.handleChangeSelect(item)}/>
                                         </div>
                                     );
@@ -176,7 +208,7 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
                                     variant="text">
                                 Отмена
                             </Button>
-                            <Button onClick={() => {handleSave(this.state.selectedLiterature)}}
+                            <Button onClick={() => {handleSave({ selectedLiterature, selectedLiteratureEbsco })}}
                                     variant="contained"
                                     disabled={disableButton}
                                     className={classes.saveButton}

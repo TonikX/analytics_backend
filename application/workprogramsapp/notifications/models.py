@@ -1,8 +1,7 @@
+from django.conf import settings
 from django.db import models
 
 from workprogramsapp.expertise.models import Expertise, ExpertiseComments
-from workprogramsapp.models import Topic, WorkProgram
-from django.conf import settings
 
 
 class UserNotification(models.Model):
@@ -40,3 +39,10 @@ class AcademicPlanUpdateNotification(UserNotification):
 class NotificationComments(UserNotification):
     comment_new = models.ForeignKey(ExpertiseComments, on_delete=models.CASCADE, blank=True, null=True)
 
+
+class EmailReset(models.Model):
+    user = models.ForeignKey('dataprocessing.User', on_delete=models.CASCADE, blank=True, null=True)
+    key = models.CharField(max_length=256, blank=True, null=True)
+    email = models.CharField(max_length=256, blank=True, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=False)

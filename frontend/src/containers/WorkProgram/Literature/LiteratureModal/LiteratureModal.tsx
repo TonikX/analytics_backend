@@ -4,14 +4,18 @@ import {LiteratureModalProps} from './types';
 import connect from './LiteratureModal.connect';
 import {fields} from '../../enum';
 import AddLiteratureModal from "../../../../components/AddLiteratureModal";
+import {LiteratureEbscoType, LiteratureType} from "../../../Literature/types";
 
 class LiteratureModal extends React.PureComponent<LiteratureModalProps> {
     handleClose = () => {
         this.props.actions.closeDialog(fields.ADD_NEW_LITERATURE);
     }
 
-    handleSave = (refs: Array<string>) => {
-        this.props.actions.addLiterature(refs);
+    handleSave = ({ selectedLiterature, selectedLiteratureEbsco }: { selectedLiterature: Array<LiteratureType>, selectedLiteratureEbsco: Array<LiteratureEbscoType> }) => {
+        this.props.actions.addLiterature({
+            selectedLiterature,
+            selectedLiteratureEbsco,
+        });
     }
 
     render() {

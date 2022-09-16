@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 
 import actions from "../actions";
 import {getWorkProgramField, isCanEdit} from '../getters';
-import {fields} from "../enum";
+import {fields, } from "../enum";
 import {WorkProgramActions} from "../types";
 
 import {rootState} from "../../../store/reducers";

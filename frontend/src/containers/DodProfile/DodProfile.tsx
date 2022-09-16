@@ -14,6 +14,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Notifications from "../Profile/Notifications/Notifications";
 import MergeWorkProgramsBlock from "../MergeWorkPrograms";
+import {EmailWidget} from "../EmailWidget";
 import {FULL_DATE_FORMAT} from "../../common/utils";
 import moment from "moment";
 import Chip from "@material-ui/core/Chip";
@@ -61,6 +62,7 @@ export default () => {
                     {userGroups.map((item: any, key: number) => <Chip key={key} label={item} className={classes.group} />)}
                 </div>
             </div>
+            <EmailWidget/>
             <MergeWorkProgramsBlock className={classes.copyRpdContainer}/>
             <div className={classes.mainContainer}>
                 <div className={classes.dodProfileContainer}>

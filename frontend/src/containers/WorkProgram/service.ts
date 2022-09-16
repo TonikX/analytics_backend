@@ -12,6 +12,8 @@ import {
 import {CourseFields} from "../Courses/enum";
 import {TrainingEntitiesFields} from "../TrainingEntities/enum";
 import {UserExpertResultEnum} from "../Expertises/enum";
+import {LiteratureEbscoType} from "../Literature/types";
+import appConfigService from "../../config/app-config-service";
 
 class WorkProgramService extends AnalyticsService{
     getWorkProgram(id: string){
@@ -291,6 +293,13 @@ class WorkProgramService extends AnalyticsService{
         });
     }
 
+    updateLiteratureEbsco(literature: Array<LiteratureEbscoType>, workProgramId: ReactText){
+        return this.post(`/api/workprogram_sources/bibliographic_reference/create_with_wp`, literature.map((literatureItem) => ({
+            ...literatureItem,
+            wp_id: workProgramId,
+        })));
+    }
+
     getComments(expertiseId: number, step: string){
         return this.get(`/api/expertise/comments/${expertiseId}?block=${step}`);
     }
@@ -332,6 +341,10 @@ class WorkProgramService extends AnalyticsService{
                 items: results
             }
         });
+    }
+
+    getDownloadFileLink({ wpId, directionId, planId, year }: any) {
+        return `${appConfigService.getApiBasePath()}/api/export/docx/${wpId}/${directionId}/${planId}/${year}`
     }
 }
 

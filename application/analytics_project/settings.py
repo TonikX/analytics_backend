@@ -154,9 +154,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+
 STATIC_URL = '/static-backend/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static-backend')
-
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -258,8 +258,8 @@ DJOSER = {
     #'SERIALIZERS': {},
     'SET_USERNAME_RETYPE': True,
     'SERIALIZERS': {
-        #'user': 'dataprocessing.serializers.UserSerializer',
-        #'current_user': 'dataprocessing.serializers.UserSerializer',
+        'user': 'dataprocessing.serializers.UserBaseSerializer',
+        'current_user': 'dataprocessing.serializers.UserBaseSerializer',
         #'user_create': 'dataprocessing.serializers.UserSerializer',
     },
 }
@@ -294,6 +294,9 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+#EMAIL_USE_SSL = env("EMAIL_USE_SSL")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+URL_FRONT = env("URL_FRONT")

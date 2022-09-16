@@ -275,7 +275,9 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
         model = WorkProgram
         fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester',
                   'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours',
-                  'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format']
+                  'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format',
+                  'lecture_hours_v2', 'practice_hours_v2', 'practice_hours_v2', 'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2',
+                  'contact_hours_v2']
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }
@@ -520,6 +522,7 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
     #work_program = serializers.SerializerMethodField('get_id_of_wpcb')
     work_program = serializers.SerializerMethodField('get_id_of_wpcb')
 
+
     def to_representation(self, value):
         self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
         self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
@@ -540,10 +543,23 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
 
 class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
     change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
+    #father = serializers.SerializerMethodField()
+
+    def to_representation(self, value):
+        self.fields['childs'] = serializers.SerializerMethodField()
+        return super().to_representation(value)
+
+
+    def get_childs(self, obj):
+        childs = DisciplineBlockModule.objects.filter(father=obj)
+        if childs:
+            return DisciplineBlockModuleSerializer(childs, many=True).data
+        else:
+            return None
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules']
+        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules', 'father', 'selection_rule']
         extra_kwargs = {
             'change_blocks_of_work_programs_in_modules': {'required': False}
         }
@@ -553,7 +569,8 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors']
+        fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors' , 'father', 'selection_rule',
+                  'educational_programs_to_access']
 
     def create(self, validated_data):
         editor = validated_data.pop('editor')
@@ -682,6 +699,34 @@ class DisciplineBlockDetailAcademicSerializer(serializers.ModelSerializer):
 
 
 class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
+    #father = serializers.SerializerMethodField()
+    educational_programs_to_access = ImplementationAcademicPlanCreateSerializer(many=False, required=False)
+
+    def to_representation(self, value):
+        self.fields['childs'] = serializers.SerializerMethodField()
+        return super().to_representation(value)
+
+    def get_childs(self, obj):
+        childs = DisciplineBlockModule.objects.filter(father=obj)
+        if childs:
+            return DisciplineBlockModuleDetailSerializer(childs, many=True).data
+        else:
+            return None
+
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = "__all__"
+        depth = 10
+        extra_kwargs = {
+            'change_blocks_of_work_programs_in_modules': {'required': False}
+        }
+
+
+class SubDisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerializer):
+    change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
+    descipline_block = DisciplineBlockDetailAcademicSerializer(many=True)
+    editors = userProfileSerializer(many=True)
 
     class Meta:
         model = DisciplineBlockModule
@@ -695,8 +740,24 @@ class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerial
     change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
     descipline_block = DisciplineBlockDetailAcademicSerializer(many=True)
     editors = userProfileSerializer(many=True)
+    #father = serializers.SerializerMethodField()
+    #educational_programs_to_access = ImplementationAcademicPlanCreateSerializer(many=False, required=False)
+
+    def to_representation(self, value):
+        self.fields['childs'] = serializers.SerializerMethodField()
+        return super().to_representation(value)
+
+
+
+    def get_childs(self, obj):
+        childs = DisciplineBlockModule.objects.filter(father=obj)
+        if childs:
+            return DisciplineBlockModuleForModuleListDetailSerializer(childs, many=True).data
+        else:
+            return None
 
     class Meta:
+        depth=10
         model = DisciplineBlockModule
         fields = "__all__"
         extra_kwargs = {
@@ -782,7 +843,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
                   'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors', 'language',
                   'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
                   'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
-                  'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'number_of_semesters', 'read_notifications',
+                  'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'contact_hours_v2', 'number_of_semesters', 'read_notifications',
                   'implementation_format']
 
     def create(self, validated_data):

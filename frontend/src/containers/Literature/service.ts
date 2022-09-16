@@ -9,6 +9,10 @@ class LiteratureServices extends AnalyticsService{
         return this.get(`/api/BibliographicReference?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
+    getEbscoLiterature(searchQuery: string){
+        return this.get(`/api/workprogram_sources/search_in_ebsco?query=${searchQuery.length ? searchQuery : 'А'}`);
+    }
+
     deleteLiterature(literatureId: number){
         return this.delete(`/api/BibliographicReference/delete/${literatureId}`);
     }

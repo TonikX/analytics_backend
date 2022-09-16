@@ -1,28 +1,31 @@
-from workprogramsapp.models import WorkProgram, EducationalProgram, AcademicPlan
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
-from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy
-from workprogramsapp.workprogram_additions.models import StructuralUnit
-from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan,ImplementationAcademicPlan
-from workprogramsapp.workprogram_additions.models import StructuralUnit
-from workprogramsapp.workprogram_additions.serializers import ShortStructuralUnitSerializer
+from workprogramsapp.expertise.models import Expertise
+from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, ImplementationAcademicPlan
 from workprogramsapp.serializers import PrerequisitesOfWorkProgramInWorkProgramSerializer, \
     OutcomesOfWorkProgramInWorkProgramSerializer
+from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
 class ImplementationAcademicPlanForStatisticSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id', 'year']
+        fields = ['id', 'ap_isu_id', 'year', 'title']
 
 
 class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
+
+    def get_status(self, instance):
+        try:
+            return Expertise.objects.get(work_program=instance).expertise_status
+        except Expertise.DoesNotExist:
+            return "WK"
+
     class Meta:
         model = WorkProgram
-        fields = ['id', 'title', 'description']
+        fields = ['id', 'discipline_code', 'title', 'description', 'status']
 
 
 class WorkProgramDuplicatesSerializer(serializers.Serializer):
@@ -31,19 +34,7 @@ class WorkProgramDuplicatesSerializer(serializers.Serializer):
     work_programs = serializers.ListField()
 
 
-class AcademicPlansDescriptionWpSerializer(serializers.ModelSerializer):
-    wp_in_academic_plan = serializers.SerializerMethodField()
-    academic_plan_in_field_of_study = ImplementationAcademicPlanForStatisticSerializer(many=True)
 
-    def get_wp_in_academic_plan(self, instance):
-        return WorkProgramSerializerForStatistic(
-            instance=WorkProgram.objects.filter(
-                zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan=instance).distinct(),
-            many=True).data
-
-    class Meta:
-        model = AcademicPlan
-        fields = ['id', 'academic_plan_in_field_of_study', 'wp_in_academic_plan', ]
 
 
 class ShortAcademicPlan(serializers.ModelSerializer):
@@ -139,16 +130,9 @@ class RecordAcademicPlanSerializer(serializers.ModelSerializer):
         model = AcademicPlan
         fields = ['number']
 
-class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WorkProgram
-        fields = ['id', 'title', 'description']
 
 
-class ImplementationAcademicPlanForStatisticSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ImplementationAcademicPlan
-        fields = ['id', 'year', 'title']
+
 
 
 class AcademicPlansDescriptionWpSerializer(serializers.ModelSerializer):

@@ -7,7 +7,7 @@ import Service from '../service';
 import {getWorkProgramField, getWorkProgramId} from '../getters';
 
 import {fetchingTypes, fields} from "../enum";
-import {LiteratureType} from "../../Literature/types";
+import {LiteratureEbscoType, LiteratureType} from "../../Literature/types";
 import {literatureFields} from "../../Literature/enum";
 
 const service = new Service();
@@ -47,24 +47,26 @@ const addLiterature = createLogic({
     process({getState, action}: any, dispatch, done) {
         const state = getState();
         const workProgramId = getWorkProgramId(state);
-        const selectedLiterature: Array<LiteratureType> = action.payload;
+        const { selectedLiterature, selectedLiteratureEbsco }: { selectedLiterature: Array<LiteratureType>, selectedLiteratureEbsco: Array<LiteratureEbscoType> } = action.payload
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_LITERATURE}));
 
-        service.updateLiterature(selectedLiterature.map(item => item[literatureFields.ID]), workProgramId)
-            .then((res) => {
-                dispatch(workProgramActions.getWorkProgram(workProgramId));
-                dispatch(workProgramActions.closeDialog(fields.ADD_NEW_LITERATURE));
-                // @ts-ignore
-                dispatch(actions.fetchingSuccess());
-            })
-            .catch((err) => {
-                dispatch(actions.fetchingFailed(err));
-            })
-            .then(() => {
-                dispatch(actions.fetchingFalse({destination: fetchingTypes.ADD_LITERATURE}));
-                return done();
-            });
+        Promise.all([
+          service.updateLiterature(selectedLiterature.map(item => item[literatureFields.ID]), workProgramId),
+          service.updateLiteratureEbsco(selectedLiteratureEbsco, workProgramId)
+        ]).then((res) => {
+            dispatch(workProgramActions.getWorkProgram(workProgramId));
+            dispatch(workProgramActions.closeDialog(fields.ADD_NEW_LITERATURE));
+            // @ts-ignore
+            dispatch(actions.fetchingSuccess());
+        })
+        .catch((err) => {
+            dispatch(actions.fetchingFailed(err));
+        })
+        .then(() => {
+            dispatch(actions.fetchingFalse({destination: fetchingTypes.ADD_LITERATURE}));
+            return done();
+        });
     }
 });
 

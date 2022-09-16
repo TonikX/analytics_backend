@@ -232,6 +232,8 @@ def SendCheckpointsForAcceptedWP(request):
                     cred_regex += "(([^0]\.[0-9])|([^0])),\s"
                 else:
                     cred_regex += "(([0-9]\.[0-9])|[0-9]),\s"
+            cred_regex = cred_regex[:-3]
+
 
             #######################################################
             # Если РПД является общеуниверситеским факультативом
@@ -269,9 +271,9 @@ def SendCheckpointsForAcceptedWP(request):
                     minimal_sem_for_many_term = now_semester + 1
                 if imp_list:
                     maximal_sem_for_many_term = now_semester + 1
-                ##############################
+                #######################################################
 
-            cred_regex = cred_regex[:-3]
+
             # Получаем все УП для данного семестра РПД (нужно для каунтера отнсительного семестра)
             implementation_of_academic_plan_all = ImplementationAcademicPlan.objects.filter(
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=work_program,
@@ -280,7 +282,11 @@ def SendCheckpointsForAcceptedWP(request):
             for count_relative in range(0, max_sem):
                 if work_program.id in wp_for_many_terms_list:
                     break
+
                 current_term = now_semester + count_relative
+                if current_term % 2 != send_semester:
+                    continue
+
                 implementation_of_academic_plan = implementation_of_academic_plan_all.filter(
                     year=int(year_of_sending) - current_term // 2)
                 isu_wp_id = None
@@ -288,6 +294,7 @@ def SendCheckpointsForAcceptedWP(request):
                     # создаем список направлений + уп с айдишниками ИСУ для БАРСа
                     field_of_studies = FieldOfStudy.objects.get(
                         implementation_academic_plan_in_field_of_study=imp)
+
                     imp_list.append(generate_fos(imp.ns_id, field_of_studies.number, imp.title))
                     isu_wp = \
                         list(WorkProgramIdStrUpForIsu.objects.filter(
@@ -297,10 +304,12 @@ def SendCheckpointsForAcceptedWP(request):
                     isu_wp_id = isu_wp.dis_id
 
                 imp_list = list({v['id']: v for v in imp_list}.values())  # Оставляем уникальные значения по айдишникам
+                print(current_term, imp_list)
                 # Трагичные Факультативы и прочая гадость собирается в общий ком из УП и в отдельном блоке кода отправляется
 
                 # Если существует список УП, соответствует текущему семестру и не является специальной РПД
-                if imp_list and current_term % 2 == send_semester and not (work_program.id in wp_for_many_terms_list):
+                if imp_list and isu_wp_id and current_term % 2 == send_semester \
+                        and not (work_program.id in wp_for_many_terms_list):
                     # Генерируем чекпоинт со всеми УП, прямыми и относиетльным семестром
 
                     request_text = generate_single_checkpoint(absolute_semester=current_term + 1,

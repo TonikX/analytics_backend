@@ -8,7 +8,12 @@ export const checkUrl = (url: string) => {
     const regexp =  /^(https?:\/\/)/;
 
     return regexp.test(url);
-}
+};
+
+export const isValidEmail = (email: string) => {
+    const REGEXP = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return REGEXP.test(email);
+};
 
 export const FULL_DATE_FORMAT = 'DD.MM.YYYY';
 export const FULL_DATE_FORMAT_WITH_TIME = 'DD.MM.YYYY HH:mm';

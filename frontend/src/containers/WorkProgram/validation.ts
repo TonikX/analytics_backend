@@ -195,17 +195,17 @@ const addQualificationErrors = (state: rootState, errors: string[]) => {
         }
     }
 
-    if (qualification !== ALL_LEVELS_QUALIFICATION) {
-        const planQualifications = getPlanQualifications(state).filter((p: string) => p !== ALL_LEVELS_QUALIFICATION);
-        for (const planQualification of planQualifications) {
-            if (planQualification === BACHELOR_QUALIFICATION && qualification === SPECIALIST_QUALIFICATION) continue;
-            if (planQualification === SPECIALIST_QUALIFICATION && qualification === BACHELOR_QUALIFICATION) continue;
+    // if (qualification !== ALL_LEVELS_QUALIFICATION) {
+    //     const planQualifications = getPlanQualifications(state).filter((p: string) => p !== ALL_LEVELS_QUALIFICATION);
+    //     for (const planQualification of planQualifications) {
+    //         if (planQualification === BACHELOR_QUALIFICATION && qualification === SPECIALIST_QUALIFICATION) continue;
+    //         if (planQualification === SPECIALIST_QUALIFICATION && qualification === BACHELOR_QUALIFICATION) continue;
             // bachelors and specialist accept each other
-            if (planQualification !== qualification) {
-                errors.push('Уровень образовательной программы должен соответствовать уровню каждого из учебных планов')
-            }
-        }
-    }
+            // if (planQualification !== qualification) {
+            //     errors.push('Уровень образовательной программы должен соответствовать уровню каждого из учебных планов')
+            // }
+        // }
+    // }
 }
 
 const addPrerequisitesErrors = (state: rootState, errors: string[]) => {

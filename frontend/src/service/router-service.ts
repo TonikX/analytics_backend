@@ -33,6 +33,9 @@ const PRACTICE_LIST = 'practice-list';
 const PRACTICE = 'practice';
 const FINAL_CERTIFICATION = 'gia';
 const FINAL_CERTIFICATION_LIST = 'gia-list';
+const USER_SETTINGS = 'user-settings';
+const EMAIL_CONFIRM_SUCCESS = 'email-confirm-success';
+const EMAIL_CONFIRM_FAIL = 'email-confirm-error';
 
 const RECORDS = 'records';
 
@@ -73,7 +76,7 @@ export default class RouterService {
     getEducationalStandardRoute = (id: number | string) => {
         return SEPARATOR + EDUCATIONAL_STANDARDS + SEPARATOR + id;
     };
-	
+
 	getProfessionalStandardRoute = (id: number | string) => {
         return SEPARATOR + PROFESSIONAL_STANDARDS + SEPARATOR + id;
     };
@@ -325,6 +328,10 @@ export default class RouterService {
         return SEPARATOR + DODPROFILE;
     };
 
+    getUserSettings = () => {
+        return SEPARATOR + USER_SETTINGS;
+    };
+
     getPracticeListRoute = () => {
         return SEPARATOR + PRACTICE_LIST;
     }
@@ -347,6 +354,14 @@ export default class RouterService {
 
     getFinalCertificationListRoute = () => {
         return SEPARATOR + FINAL_CERTIFICATION_LIST;
+    }
+
+    getEmailConfirmSuccess = () => {
+        return SEPARATOR + EMAIL_CONFIRM_SUCCESS;
+    }
+
+    getEmailConfirmFail = () => {
+        return SEPARATOR + EMAIL_CONFIRM_FAIL;
     }
 }
 

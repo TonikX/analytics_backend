@@ -661,6 +661,7 @@ class FileUploadOldVersionAPIView(APIView):
                     op_language = "kz"
                 elif data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip() == "Немецкий":
                     op_language = "de"
+                print('-- 11')
                 if ImplementationAcademicPlan.objects.filter(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i], ap_isu_id=int(data['ИД_УП'][i]),
                                                              year=data['ГОД_НАБОРА'][i], language = op_language, qualification=qualification).exists():
                     iap_obj=ImplementationAcademicPlan.objects.get(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i], ap_isu_id=int(data['ИД_УП'][i]),

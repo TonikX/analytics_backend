@@ -16,7 +16,7 @@ services:
     web:
         container_name: analytics_web
         build: ./application
-        command: bash -c "pip install deepdiff && pip install html2text && pip install django-super-deduper && python manage.py runserver 0.0.0.0:8000";
+        command: bash -c "pip install apscheduler && pip install deepdiff && pip install html2text && pip install django-super-deduper && python manage.py runserver 0.0.0.0:8000";
 #            python manage.py makemigrations --noinput  && python manage.py makemigrations dataprocessing && python manage.py makemigrations workprogramsapp &&
 #            python manage.py migrate dataprocessing && python manage.py migrate workprogramsapp &
             # "python manage.py makemigrations --merge --noinput" --fake-initial; -

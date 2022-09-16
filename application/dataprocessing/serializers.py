@@ -3,6 +3,12 @@ from rest_framework.fields import SerializerMethodField
 
 from workprogramsapp.models import WorkProgram
 from .models import User, Items, Domain, Relation
+from rest_framework.settings import api_settings
+import copy
+from rest_framework.settings import api_settings
+from rest_framework.utils import html, model_meta, representation
+from collections import OrderedDict, defaultdict
+from workprogramsapp.notifications.models import EmailReset
 
 
 class userProfileSerializer(serializers.ModelSerializer):
@@ -13,6 +19,25 @@ class userProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'isu_number')
+
+
+class UserBaseSerializer(serializers.ModelSerializer):
+    """Сериализатор для работы с акканутами"""
+
+    # user = serializers.StringRelatedField(read_only=True)
+    email_confirm_status = serializers.SerializerMethodField('is_named_bar')
+
+    def is_named_bar(self, object):
+        try:
+            EmailReset.objects.get(user=object, email=object.email, status=True)
+            return True
+        except:
+            return False
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'do_email_notifications',
+                  'expertise_status_notification', 'expertise_comments_notification', 'isu_number', 'email_confirm_status')
 
 
 class DomainDetailSerializer(serializers.ModelSerializer):
