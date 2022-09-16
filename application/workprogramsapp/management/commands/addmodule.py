@@ -12,7 +12,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         num = options['nums'][0]
         depth = options['nums'][1]
-        father = None
+        father_id = options['nums'][2]
+        father=DisciplineBlockModule.objects.get(id=father_id)
         for d in range(depth):
             random_objects = DisciplineBlockModule.objects.order_by('?')[0:num]
             new_modules = [DisciplineBlockModule.clone_module(module.id) for module in random_objects]
