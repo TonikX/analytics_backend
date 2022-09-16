@@ -542,7 +542,7 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
 
 
 class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
-    #change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
+    change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
 
     # father = serializers.SerializerMethodField()
 
@@ -559,7 +559,7 @@ class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'selection_rule']
+        fields = ['id', 'name', 'type', 'selection_rule', 'change_blocks_of_work_programs_in_modules']
 
 
 class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
