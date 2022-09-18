@@ -14,15 +14,17 @@ export default (theme: Theme) => createStyles({
     },
     root: {
         padding: '20px 50px 20px 50px',
-        boxShadow: '0px 0px 6px 1px rgba(194,194,194,0.3)',
-        height: '100%',
-        boxSizing: 'border-box',
+        boxShadow: 'none',
+        minHeight: 'calc(100vh - 200px)',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'row',
     },
     headerTextHoursCount: {
         border: 'none',
         textAlign: 'center'
+    },
+    textItem: {
+        marginBottom: '10px'
     },
     header: {
         background: theme.palette.primary.main,
@@ -43,9 +45,18 @@ export default (theme: Theme) => createStyles({
             fontSize: '24px',
         }
     },
+    content: {
+        width: '100%',
+        alignSelf: 'stretch',
+    },
     editors: {
         display: 'flex',
         flexWrap: 'wrap',
+    },
+    wrap: {
+        padding: '0px 30px 30px',
+        boxSizing: 'border-box',
+        marginTop: '30px',
     },
     editorsTitle: {
         fontSize: '14px',
@@ -68,6 +79,13 @@ export default (theme: Theme) => createStyles({
     displayFlex: {
         display: 'flex'
     },
+    subTitle: {
+        marginBottom: '10px',
+        fontSize: '20px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
     workProgramLink: {
         cursor: 'pointer'
     },
@@ -83,5 +101,12 @@ export default (theme: Theme) => createStyles({
     },
     dialog: {
         padding: '40px',
+    },
+    stepper: {
+        width: '250px',
+        height: 'fit-content',
+        padding: 0,
+        minWidth: '210px',
+        marginRight: '15px',
     },
 });

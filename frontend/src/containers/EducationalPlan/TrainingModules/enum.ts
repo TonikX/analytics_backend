@@ -34,3 +34,9 @@ export enum TrainingModuleFields {
     EDITORS = 'editors',
     CAN_EDIT = 'can_edit',
 }
+
+export enum StepsEnum {
+    GENERAL = 0,
+    MODULES = 1,
+    PLANS = 2,
+}
