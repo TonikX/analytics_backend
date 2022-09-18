@@ -48,7 +48,6 @@ def SearchInEBSCO(request):
         url = f"https://eds-api.ebscohost.com/edsapi/rest/search?query={term}&view=detailed&highlight=n"
 
         request = rq.get(url, headers=headers)
-        # print(request.text)
         return request.text
 
     # Обработка ЭБС Лань из Сводного Каталога ИТМО
@@ -82,7 +81,6 @@ def SearchInEBSCO(request):
         for item in record["Items"]:
             if item["Label"] == "Authors":
                 item_list.append(item["Data"])
-
         items = ", ".join(item_list)
 
         # for item in item_list:
@@ -141,7 +139,7 @@ def SearchInEBSCO(request):
     def search_an(record):
         return record["Header"]["An"]
 
-    def make_object(record):
+    def make_object(record, auth_token, session_token):
         source = {
             "accession_number": search_an(record),
             "authors": search_author(record),
@@ -156,11 +154,79 @@ def SearchInEBSCO(request):
 
         for key, val in source.items():
             source[key] = clean_text(val)
-
         source["main_author"] = extract_main_author(source["authors"])
-        source["bib_reference"] = make_bib_reference(source)
-
+        # source["bib_reference"] = make_bib_reference(source)
+        source["bib_reference"], extra_data = get_bib_reference(record, auth_token, session_token)
+        source["pages"]=extra_data["pages"]
+        source["publishing_company"]=extra_data["pub_info"]
         return source
+
+    def get_extra_data(items):
+        source = {"authors": [],
+                  "title": "",
+                  "pub_info": "",
+                  "url": "",
+                  "pages": "",
+                  "source": "",
+                  "access": "– Текст : непосредственный "}
+        for item in items:
+            if item["Label"] == "Authors":
+                source["authors"].append(item["Data"])
+            if item["Label"] == "Title":
+                source["title"] = item["Data"]
+            if item["Label"] == "Publication Information":
+                source["pub_info"] = item["Data"] + " "
+            if item["Label"] == "Availability":
+                source["url"] = "– URL:  " + item["Data"] + " "
+            if item["Label"] == "Online Access":
+                source["url"] = " – URL: " + item["Data"] + " "
+            if item["Label"] == "Physical Description":
+                source["pages"] = " – " + item["Data"] + " "
+            if item["Label"] == "Source":
+                source["source"] = "// " + item["Data"] + " "
+        return source
+
+    def generate_bib_ref(items):
+        source = get_extra_data(items)
+
+        # Приводим авторов в Порядок
+        source["authors"] = ", ".join(source["authors"])
+        source["main_author"] = extract_main_author(source["authors"]) + " "
+
+        # Либо электронный ресурс либо издательство
+        if source["pub_info"]:
+            source["authors"] += " "
+        if source["url"]:
+            source["access"] = "– Текст : электронный "
+        bib_ref = f"{source['main_author']}{source['title']} / {source['authors']} {source['pub_info']}" \
+                  f"{source['pages']}{source['access']}{source['source']}{source['url']}"
+        return bib_ref, source
+
+    def get_bib_reference(record, auth_token, session_token):
+        headers = {"Content-Type": "application/json", "Accept": "application/json",
+                   "x-authenticationToken": json.loads(auth_token)["AuthToken"],
+                   "x-sessionToken": json.loads(session_token)["SessionToken"]}
+
+        db_id = record["Header"]["DbId"]
+        an = record["Header"]["An"]
+        url2 = f"https://eds-api.ebscohost.com/edsapi/rest/retrieve?dbid={db_id}&an={an}"
+        request2 = rq.get(url2, headers=headers)
+        s = json.loads(request2.text)
+        response = []
+        for item in s["Record"]["Items"]:
+            data = {}
+            if item["Label"] == "Online Access":
+                splited = item["Data"].split(";")
+                splited = [link for link in splited if "http" in link]
+
+                data["Label"] = "Online Access"
+                data["Data"] = splited[-1][:splited[-1].find("&quot")]
+
+            else:
+                for key, val in item.items():
+                    data[key] = clean_text(val)
+            response.append(data)
+        return generate_bib_ref(response)
 
     def make_bib_reference(source):
         if source['format'] == "Электронные ресурсы":
@@ -196,7 +262,7 @@ def SearchInEBSCO(request):
     sources = []
 
     for record in records:
-        sources.append(make_object(record))
+        sources.append(make_object(record, auth_token, session_token))
     return Response({"sources": sources})
 
 
