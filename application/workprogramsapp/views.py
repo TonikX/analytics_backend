@@ -1314,7 +1314,8 @@ class WorkProgramInFieldOfStudyForWorkProgramList(generics.ListAPIView):
         """
         queryset = WorkProgramInFieldOfStudy.objects.filter(
             work_program__id = self.kwargs['workprogram_id'],
-            work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program = self.kwargs['gh_id']).distinct()
+            #work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study = self.kwargs['ap_id']
+            ).distinct()
         serializer = WorkProgramInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
         return Response(serializer.data)
         try:
