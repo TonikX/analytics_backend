@@ -26,5 +26,15 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     '& span': {
       whiteSpace: 'initial !important'
     }
+  },
+  info: {
+    marginTop: '10px',
+    cursor: 'pointer',
+    color: '#ec1946'
+  },
+  footer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   }
-}))
+}));

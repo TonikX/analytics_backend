@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Chip from '@material-ui/core/Chip'
+import InfoIcon from "@material-ui/icons/InfoOutlined";
 import CompetenceSelector from '../../../Competences/CompetenceSelector'
 import IndicatorSelector from '../../../Competences/Indicators/IndicatorSelector'
 import ResultsSelector from '../../Results/ResultsSeletor'
@@ -11,6 +12,7 @@ import PlanSelector from '../../../EducationalPlan/WorkProgramPlansSelector'
 import { useStyles } from './IndicatorDialog.styles'
 import actions from '../../actions'
 import {useDispatch} from 'react-redux'
+import Tooltip from "@material-ui/core/Tooltip/Tooltip";
 
 interface IndicatorsProps {
   workProgramId: number;
@@ -161,18 +163,23 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
           <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)} label={plan.label} />
         ))}
       </div>
-      <DialogActions className={classes.actions}>
-        <Button onClick={handleClose}
-                variant="text">
-          Отмена
-        </Button>
-        <Button onClick={saveZun}
-                variant="contained"
-                disabled={disableButton}
-                color="primary">
-          Сохранить
-        </Button>
-      </DialogActions>
+      <div className={classes.footer}>
+        <Tooltip title="При выборе результатов и учебного плана с ОП можно выбрать несколько объектов, выбирая их по очереди">
+          <InfoIcon className={classes.info}/>
+        </Tooltip>
+        <DialogActions className={classes.actions}>
+          <Button onClick={handleClose}
+                  variant="text">
+            Отмена
+          </Button>
+          <Button onClick={saveZun}
+                  variant="contained"
+                  disabled={disableButton}
+                  color="primary">
+            Сохранить
+          </Button>
+        </DialogActions>
+      </div>
     </Dialog>
   )
 }
