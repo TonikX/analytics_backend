@@ -3,6 +3,7 @@ import {fields} from './enum';
 import actions from "./actions";
 
 import {educationalProgramState} from "./types";
+import {educationalPlanState} from "../EducationalPlan/types";
 
 export const GENERAL_PATH = 'educationalProgram';
 
@@ -96,6 +97,12 @@ const setTasksTypes = (state: educationalProgramState, {payload}: any): educatio
     [fields.TASKS_TYPES]: payload
 });
 
+const setDirectionsDependedOnWorkProgram = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM]: payload,
+});
+
+
 export const reducer = createReducer(initialState, {
     [actions.setEducationalProgramList.type]: setEducationalProgramList,
     [actions.setEducationalProgramCharacteristic.type]: setEducationalProgramCharacteristic,
@@ -109,4 +116,5 @@ export const reducer = createReducer(initialState, {
     [actions.setKindsOfActivity.type]: setKindsOfActivity,
     [actions.setObjectsOfActivity.type]: setObjectsOfActivity,
     [actions.setTasksTypes.type]: setTasksTypes,
+    [actions.setDirectionsDependedOnWorkProgram.type]: setDirectionsDependedOnWorkProgram,
 });
