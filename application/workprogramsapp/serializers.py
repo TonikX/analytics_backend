@@ -7,6 +7,7 @@ from gia_practice_app.Practice.models import Practice
 #from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
 #from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
 from .expertise.common_serializers import ShortExpertiseSerializer
+from .expertise.models import Expertise
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
@@ -485,6 +486,18 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
     zuns_for_wp = serializers.SerializerMethodField('clarify_zuns_for_wp')
     #zuns_for_wp = RecursiveField(many=True)
     wp_in_fs_id = serializers.SerializerMethodField('wp_in_fs_id_get')
+
+    def to_representation(self, value):
+
+        self.fields['wp_status'] = serializers.SerializerMethodField()
+        return super().to_representation(value)
+
+    def get_wp_status(self, value):
+        try:
+            wp_status = Expertise.objects.get(work_program=value).expertise_status
+        except Expertise.DoesNotExist:
+            wp_status = "WK"
+        return wp_status
 
     class Meta:
         model = WorkProgram
