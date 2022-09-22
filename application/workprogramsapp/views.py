@@ -1328,6 +1328,29 @@ class WorkProgramInFieldOfStudyForWorkProgramList(generics.ListAPIView):
             return Response(status=400)
 
 
+class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
+    serializer_class = WorkProgramInFieldOfStudyForCompeteceListSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def list(self, request, **kwargs):
+        """
+        Вывод учебных планов для одной рабочей программы по id
+        """
+        queryset = WorkProgramInFieldOfStudy.objects.filter(
+            work_program__id = self.kwargs['workprogram_id'],
+            work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program = self.kwargs['gh_id']).distinct()            ).distinct()
+        serializer = WorkProgramInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
+        return Response(serializer.data)
+        try:
+            queryset = WorkProgramInFieldOfStudy.objects.filter(
+                work_program__id
+                = self.kwargs['workprogram_id']).distinct()
+            serializer = WorkProgramInFieldOfStudySerializer(queryset, many=True)
+            return Response(serializer.data)
+        except:
+            return Response(status=400)
+
+
 # Блок эндпоинтов для обрабоки файлов
 
 from dataprocessing.serializers import FileUploadSerializer

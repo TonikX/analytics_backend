@@ -77,7 +77,8 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkPr
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView,\
     FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
     ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView, AcademicPlanListShortAPIView, \
-    NewRealtionsForWorkProgramsInFieldOfStudyAPI, WorkProgramsWithOutcomesToPrerequisitesForThisWPView, WorkProgramsWithPrerequisitesToOutocomesForThisWPView, WorkProgramsWithOutocomesForThisWPView
+    NewRealtionsForWorkProgramsInFieldOfStudyAPI, WorkProgramsWithOutcomesToPrerequisitesForThisWPView,\
+    WorkProgramsWithPrerequisitesToOutocomesForThisWPView, WorkProgramsWithOutocomesForThisWPView, WorkProgramInFieldOfStudyForWorkProgramForGHList
 from .files_export.views import DocxFileExportView, SyllabusExportView
 from .views import CloneWorkProgramm
 
@@ -155,6 +156,8 @@ urlpatterns = [
 
     path('api/workprogram/fieldofstudies/<int:workprogram_id>', FieldOfStudiesForWorkProgramList.as_view()),
     path('api/workprogram/fieldofstudies_for_competences/<int:workprogram_id>', WorkProgramInFieldOfStudyForWorkProgramList.as_view()),
+    path('api/workprogram/fieldofstudies_for_competences_for_matrix/<int:workprogram_id>/<int:gh_id>',
+         WorkProgramInFieldOfStudyForWorkProgramForGHList.as_view()),
     path('api/workprograminfieldofstudy/', WorkProgramInFieldOfStudyListAPI.as_view()),
     path('api/workprograminfieldofstudy/<int:pk>', WorkProgramInFieldOfStudyDetailAPI.as_view()),
 
