@@ -28,8 +28,8 @@ import AddIcon from "@material-ui/icons/Add";
 
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
-import {literatureFields, literatureEbscoFields} from "../../containers/Literature/enum";
-import {LiteratureType, LiteratureEbscoType} from "../../containers/Literature/types";
+import {literatureEbscoFields, literatureFields} from "../../containers/Literature/enum";
+import {LiteratureEbscoType, LiteratureType} from "../../containers/Literature/types";
 import CreateLiteratureModal from '../../containers/Literature/LiteratureCreateModal';
 import {literatureSource} from "../../containers/WorkProgram/constants";
 
@@ -105,7 +105,7 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
     render() {
         const {isOpen, classes, allCount, literatureList, currentPage, handleClose, handleSave} = this.props;
         const {selectedLiterature, source, selectedLiteratureEbsco} = this.state;
-        const disableButton = selectedLiterature.length === 0;
+        const disableButton = source === literatureSource.EBSCO ? selectedLiteratureEbsco.length === 0 : selectedLiterature.length === 0;
 
         return (
             <>
