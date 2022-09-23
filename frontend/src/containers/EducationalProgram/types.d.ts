@@ -52,6 +52,10 @@ export interface EducationalProgramActions {
     saveZun: any;
     deleteZun: any;
 
+    getCompetenceDirectionsDependedOnWorkProgram: any;
+    getDirectionsDependedOnWorkProgram: any;
+    setDirectionsDependedOnWorkProgram: any;
+
     characteristicCreateGroup: ActionCreatorWithPayload<CharacteristicCreateGroupActionType>;
     characteristicSaveGroupTitle: ActionCreatorWithPayload<CharacteristicSaveGroupTitleActionType>;
     characteristicSaveCompetence: ActionCreatorWithPayload<CharacteristicAddCompetenceActionType>;

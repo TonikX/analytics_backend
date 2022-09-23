@@ -74,6 +74,10 @@ const setTasksTypes = createAction('SET_TASKS_TYPES');
 const characteristicSaveProfessionalStandardLaborFunction = createAction('CHARACTERISTIC_COMPETENCIES_SAVE_PROFESSIONAL_STANDARD_LABOR_FUNCTION');
 const characteristicDeleteProfessionalStandardLaborFunction = createAction('CHARACTERISTIC_COMPETENCIES_DELETE_PROFESSIONAL_STANDARD_LABOR_FUNCTION');
 
+const getCompetenceDirectionsDependedOnWorkProgram = createAction('GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM_WITH_GH');
+const getDirectionsDependedOnWorkProgram = createAction('GET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM_WITH_GH');
+const setDirectionsDependedOnWorkProgram = createAction('SET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM_WITH_GH');
+
 const actions: EducationalProgramActions = {
     createTaskType,
     getTasksTypes,
@@ -127,6 +131,10 @@ const actions: EducationalProgramActions = {
     changeCurrentPage,
     changeAllCount,
     changeSorting,
+
+    getCompetenceDirectionsDependedOnWorkProgram,
+    getDirectionsDependedOnWorkProgram,
+    setDirectionsDependedOnWorkProgram,
 }
 
 export default actions;

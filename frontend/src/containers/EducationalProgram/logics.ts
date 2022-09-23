@@ -750,6 +750,29 @@ const getTasksTypes = createLogic({
     }
 });
 
+const getCompetenceDirectionsDependedOnWorkProgram = createLogic({
+    type: educationalPlanActions.getCompetenceDirectionsDependedOnWorkProgram.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM}));
+
+        const competenceMatrixId = getEducationalProgramCharacteristicId(getState());
+
+        service.getCompetenceDirectionsDependedOnWorkProgram(action.payload, competenceMatrixId)
+            .then((res) => {
+                dispatch(educationalPlanActions.setDirectionsDependedOnWorkProgram(res.data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM}));
+                return done();
+            });
+    }
+});
+
 export default [
     getEducationalProgramList,
     deleteEducationalProgram,
@@ -793,4 +816,6 @@ export default [
     getCompetenceMatrix,
     saveZun,
     deleteZun,
+
+    getCompetenceDirectionsDependedOnWorkProgram,
 ];

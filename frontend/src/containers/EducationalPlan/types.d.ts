@@ -141,6 +141,7 @@ export type BlocksOfWorkProgramsType = {
 
 export interface WorkProgramBlockType extends WorkProgramGeneralType{
     wp_in_fs_id: number;
+    wp_status: string;
 }
 
 export interface EducationalPlanProps extends WithStyles<typeof styles> {
