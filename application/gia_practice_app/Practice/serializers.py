@@ -35,8 +35,10 @@ class PracticeSerializer(serializers.ModelSerializer):
         editors = validated_data.pop('editors', None)
         bibliographic_reference = validated_data.pop('bibliographic_reference', None)
         practice = Practice.objects.create(**validated_data)
-        practice.bibliographic_reference.set(bibliographic_reference)
-        practice.editors.set(editors)
+        if bibliographic_reference:
+            practice.bibliographic_reference.set(bibliographic_reference)
+        if editors:
+            practice.editors.set(editors)
         practice.editors.add(request.user)
         return practice
 
