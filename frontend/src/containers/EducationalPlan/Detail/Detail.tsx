@@ -223,6 +223,23 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         this.props.actions.planTrajectorySelectElectives({workPrograms, moduleId, planId: this.getPlanId()});
     }
 
+    getStatus = (statusCode: string) => {
+        switch (statusCode) {
+            case 'WK':
+                return 'В работе';
+            case 'EX':
+                return 'На экспертизе';
+            case 'AC':
+                return 'Одобрено';
+            case 'AR':
+                return 'Архив';
+            case 'RE':
+                return 'На доработке';
+            default:
+                return '';
+        }
+    };
+
     render() {
         const {classes, blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
         const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
@@ -410,6 +427,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                                                                             {workProgram[WorkProgramGeneralFields.TITLE]}
                                                                                         </Link>
                                                                                     </div>
+                                                                                    <div className={classes.wpStatus}>{this.getStatus(workProgram.wp_status)}</div>
                                                                                     <Tooltip
                                                                                         title={'Скачать рабочую программу'}>
                                                                                         <FileIcon
