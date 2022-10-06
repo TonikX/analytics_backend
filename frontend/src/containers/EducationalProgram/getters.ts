@@ -9,6 +9,8 @@ import {fields} from './enum';
 import {educationalProgramState, EducationalProgramCharacteristicType, EducationalProgramType} from './types';
 import {SelectorListType} from "../../components/SearchSelector/types";
 import {AcademicPlan, CompetenceMatrix} from './Characteristic/CompetenceMatrix/types';
+import {EducationalPlanListType} from "../EducationalPlan/types";
+import {EducationalPlanFields} from "../EducationalPlan/enum";
 
 const getStateData = (state: rootState): educationalProgramState => get(state, GENERAL_PATH);
 export const getEducationalProgramCharacteristic = (state: rootState): EducationalProgramCharacteristicType|{} => get(getStateData(state), fields.EDUCATION_PROGRAM_CHARACTERISTIC, {});
@@ -19,6 +21,19 @@ export const getSupraProfessionalCompetencies = (state: rootState): EducationalP
     get(getEducationalProgramCharacteristic(state), fields.EDUCATION_PROGRAM_CHARACTERISTIC, {})
 ;
 export const getEducationalProgramList = (state: rootState): Array<EducationalProgramType> => get(getStateData(state), fields.EDUCATION_PROGRAM_LIST, []);
+
+const titlePath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.title'
+const yearPath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.year'
+const titleDirectionPath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.field_of_study.0.title'
+const numberDirectionPath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.field_of_study.0.number'
+
+export const getDirectionsDependedOnWorkProgram = (state: rootState): Array<any> => get(getStateData(state), fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM, []);
+
+export const getDirectionsDependedOnWorkProgramForSelector = (state: rootState): SelectorListType =>
+    getDirectionsDependedOnWorkProgram(state).map((plan: EducationalPlanListType) => ({
+        value: plan[EducationalPlanFields.ID],
+        label: `${get(plan, titlePath, '')} ${get(plan, yearPath, '')}: ${get(plan, titleDirectionPath, '')} ${get(plan, numberDirectionPath, '')}`,
+    }));
 
 export const getKindsOfActivitiesForSelector = (state: rootState): SelectorListType =>
 // @ts-ignore

@@ -195,6 +195,10 @@ class Service extends AnalyticsService{
     deleteZUN(compentenceId: number){
         return this.delete(`/api/zun/many_create/${compentenceId}/`);
     }
+
+    getCompetenceDirectionsDependedOnWorkProgram(workProgramId: number, characteristicId: number){
+        return this.get(`/api/workprogram/fieldofstudies_for_competences_for_matrix/${workProgramId}/${characteristicId}`);
+    }
 }
 
 export default Service;

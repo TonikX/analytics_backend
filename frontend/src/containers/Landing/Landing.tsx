@@ -297,10 +297,10 @@ export default () => {
       </section>
       <div className={classes.footer}>
         <div className={classes.footerWrap}>
-          <Typography className={classes.footerText}>Разработка © 2021 Факультет ИКТ</Typography>
+          <Typography className={classes.footerText}>Разработка © 2022 Факультет ИКТ</Typography>
           <Typography className={classes.mailWrap}>
             <img src={mailImage} className={classes.mailIcon}/>
-            <a href='mailto:rpd@itmo.ru' className={classes.link}>rpd@itmo.ru</a>
+            <a href='mailto:osop@itmo.ru' className={classes.link}>osop@itmo.ru</a>
           </Typography>
         </div>
       </div>

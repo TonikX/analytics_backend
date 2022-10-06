@@ -108,5 +108,9 @@ export default (theme: Theme) => createStyles({
     },
     trajectoryOwner: {
         marginBottom: '10px'
+    },
+    wpStatus: {
+        margin: '0 6px',
+        whiteSpace: 'nowrap'
     }
 });
