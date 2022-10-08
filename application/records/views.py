@@ -577,3 +577,31 @@ class AllAcademicPlansWpExpertiseStatisticView(generics.ListAPIView):
     queryset = ImplementationAcademicPlan.objects.all()
     serializer_class = ImplementationAcademicPlanWpStatisticSerializer
     permission_classes = [AllowAny]
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def GetCoursesWithWP(request):
+    """
+    Редакторы с информацией о статусах их РПД (AC: принято, EX: на экспертизе:, WK: на доработке,
+    NO_EXP: не отправлялось на экспертизу)
+    """
+    editors_status_list = []
+    editors = User.objects.filter(editors__isnull=False).distinct()
+    for editor in editors:
+        expertise_of_editor = list(Expertise.objects.filter(work_program__editors=editor).distinct().values(
+            "expertise_status").annotate(total=Count("expertise_status")))
+
+        no_exp = {'expertise_status': 'NO_EXP', 'total': int(
+            WorkProgram.objects.filter(expertise_with_rpd__isnull=True, editors=editor).distinct().count())}
+        if no_exp['total'] == 0:
+            no_exp = []
+        expertise_of_editor.append(no_exp)
+
+        editors_status_list.append(
+            {
+                "editor": {"id": editor.id, "name": editor.first_name + " " + editor.last_name, },
+                "statuses_count": expertise_of_editor
+            }
+        )
+    return Response(editors_status_list)

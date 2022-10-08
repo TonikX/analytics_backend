@@ -157,8 +157,12 @@ def SearchInEBSCO(request):
         source["main_author"] = extract_main_author(source["authors"])
         # source["bib_reference"] = make_bib_reference(source)
         source["bib_reference"], extra_data = get_bib_reference(record, auth_token, session_token)
-        source["pages"]=extra_data["pages"]
-        source["publishing_company"]=extra_data["pub_info"]
+        s = [int(s) for s in re.findall(r'-?\d+\.?\d*', extra_data["pages"])]
+        try:
+            source["pages"] = s[0]
+        except IndexError:
+            source["pages"] = None
+        source["publishing_company"] = extra_data["pub_info"]
         return source
 
     def get_extra_data(items):
