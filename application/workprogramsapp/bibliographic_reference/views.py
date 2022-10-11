@@ -5,7 +5,7 @@ from html import unescape
 import requests as rq
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, status, generics
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -14,6 +14,7 @@ from workprogramsapp.bibliographic_reference.serializers import BibliographicRef
 from workprogramsapp.models import BibliographicReference
 
 
+@permission_classes([IsAuthenticated,])
 @api_view(['GET'])
 def SearchInEBSCO(request):
     """
