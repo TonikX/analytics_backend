@@ -472,7 +472,6 @@ class AcademicPlanUpdateProcessor:
             old_academic_plan = self.__get_old_academic_plan_by_id__(plan_id)
             isu_academic_plan_json = self.isu_service.get_academic_plan(plan_id)
             # isu_academic_plan_json = json.loads(json.dumps(test_plan['result']))
-
             if isu_academic_plan_json is not None:
                 self.__update_disciplines__(old_academic_plan, isu_academic_plan_json)
 
