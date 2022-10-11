@@ -14,8 +14,8 @@ from workprogramsapp.bibliographic_reference.serializers import BibliographicRef
 from workprogramsapp.models import BibliographicReference
 
 
-@permission_classes([IsAuthenticated,])
 @api_view(['GET'])
+@permission_classes([IsAuthenticated,])
 def SearchInEBSCO(request):
     """
     Эндпоинт для поиска источника в Электронно-Библиотечной Системе EBSCO
