@@ -36,6 +36,7 @@ const DEFAULT_WP_STATE = {
     [WorkProgramGeneralFields.TITLE_EN]: '',
     [WorkProgramGeneralFields.LANGUAGE]: '',
     [WorkProgramGeneralFields.QUALIFICATION]: '',
+    [WorkProgramGeneralFields.STRUCTURAL_UNIT]: '',
     [WorkProgramGeneralFields.SEMESTER_COUNT]: 1,
     [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: '',
     [WorkProgramGeneralFields.APPROVAL_DATE]: moment().format(),
@@ -44,7 +45,7 @@ const DEFAULT_WP_STATE = {
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
         workProgram: {
-            ...DEFAULT_WP_STATE
+            ...DEFAULT_WP_STATE,
             // lecture_hours_v2: '',
             // practice_hours_v2: '',
             // lab_hours_v2: '',
@@ -57,7 +58,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         this.props.actions.closeDialog();
         this.setState({
             workProgram: {
-                ...DEFAULT_WP_STATE
+                ...DEFAULT_WP_STATE,
             }
         });
     };
@@ -67,7 +68,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         this.props.actions.createNewWorkProgram(workProgram);
         this.setState({
             workProgram: {
-                ...DEFAULT_WP_STATE
+                ...DEFAULT_WP_STATE,
             }
         });
     };
@@ -102,7 +103,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {isOpen, structuralUnitsList, structuralUnit, classes} = this.props;
         const {workProgram} = this.state;
 
-        const disableButton = !Object.values(workProgram).every(Boolean);
+        const {title_en, ...rest} = workProgram;
+        const disableButton = !Object.values(rest).every(Boolean);
 
         return (
             <Dialog
