@@ -65,6 +65,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     handleSave = () => {
         const {workProgram} = this.state;
         this.props.actions.createNewWorkProgram(workProgram);
+        this.setState({
+            workProgram: {
+                ...DEFAULT_WP_STATE
+            }
+        });
     };
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
