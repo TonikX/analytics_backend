@@ -15,37 +15,57 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
-import {implementationFormats, specialization} from "../../WorkProgram/constants";
+import {implementationFormats, languageArray, specialization} from "../../WorkProgram/constants";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-import {DatePicker} from "@material-ui/pickers";
-import moment, {Moment} from "moment";
-import {IconButton} from "@material-ui/core";
-import DateIcon from "@material-ui/icons/DateRange";
-import {FULL_DATE_FORMAT} from "../../../common/utils";
+import moment from "moment";
+import FormLabel from "@material-ui/core/FormLabel";
+import RadioGroup from "@material-ui/core/RadioGroup/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
+import Radio from "@material-ui/core/Radio/Radio";
+import FormControl from "@material-ui/core/FormControl";
+import SearchSelector from "../../../components/SearchSelector/SearchSelector";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell/TableCell";
+import Table from "@material-ui/core/Table";
+
+const DEFAULT_WP_STATE = {
+    [WorkProgramGeneralFields.TITLE]: '',
+    [WorkProgramGeneralFields.TITLE_EN]: '',
+    [WorkProgramGeneralFields.LANGUAGE]: '',
+    [WorkProgramGeneralFields.QUALIFICATION]: '',
+    [WorkProgramGeneralFields.SEMESTER_COUNT]: 1,
+    [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: '',
+    [WorkProgramGeneralFields.APPROVAL_DATE]: moment().format(),
+};
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
         workProgram: {
-            [WorkProgramGeneralFields.TITLE]: '',
-            [WorkProgramGeneralFields.CODE]: '',
-            [WorkProgramGeneralFields.QUALIFICATION]: '',
-            [WorkProgramGeneralFields.AUTHORS]: '',
-            [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: undefined,
-            [WorkProgramGeneralFields.APPROVAL_DATE]: moment().format(),
+            ...DEFAULT_WP_STATE
+            // lecture_hours_v2: '',
+            // practice_hours_v2: '',
+            // lab_hours_v2: '',
+            // srs_hours_v2: '',
+            // contact_hours_v2: '',
         },
     };
 
     handleClose = () => {
         this.props.actions.closeDialog();
-    }
+        this.setState({
+            workProgram: {
+                ...DEFAULT_WP_STATE
+            }
+        });
+    };
 
     handleSave = () => {
         const {workProgram} = this.state;
-
         this.props.actions.createNewWorkProgram(workProgram);
-    }
+    };
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
         const {workProgram} = this.state;
@@ -55,28 +75,29 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 ...workProgram,
                 [field]: get(e, 'target.value')
             }
-        })
-    }
+        });
+    };
 
-    saveYear = (date: Moment) => {
+    handleChangeStructuralUnitSearchText = (searchText: string) => {
+        this.props.structuralUnitActions.changeSearchQuery(searchText);
+        this.props.structuralUnitActions.getStructuralUnits();
+    };
+
+    changeStructuralUnit = (value: string) => {
         const {workProgram} = this.state;
-
         this.setState({
             workProgram: {
                 ...workProgram,
-                [WorkProgramGeneralFields.APPROVAL_DATE]: date.format()
+                [WorkProgramGeneralFields.STRUCTURAL_UNIT]: value
             }
-        })
+        });
     }
 
     render() {
-        const {isOpen, classes} = this.props;
+        const {isOpen, structuralUnitsList, structuralUnit, classes} = this.props;
         const {workProgram} = this.state;
-        
-        const disableButton = workProgram[WorkProgramGeneralFields.TITLE].length === 0 
-            || workProgram[WorkProgramGeneralFields.QUALIFICATION].length === 0 
-            || workProgram[WorkProgramGeneralFields.CODE].length === 0
-        ;
+
+        const disableButton = !Object.values(workProgram).every(Boolean);
 
         return (
             <Dialog
@@ -88,53 +109,109 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             >
                 <DialogTitle> Создать рабочую программу </DialogTitle>
                 <DialogContent>
-                    <TextField label="Название *"
-                               onChange={this.saveField(WorkProgramGeneralFields.TITLE)}
-                               variant="outlined"
-                               className={classes.input}
-                               fullWidth
-                               value={workProgram[WorkProgramGeneralFields.TITLE]}
-                               InputLabelProps={{
-                                   shrink: true,
-                               }}
-                    />
-                    <TextField label="Идентификационный номер программы *"
-                               onChange={this.saveField(WorkProgramGeneralFields.CODE)}
-                               variant="outlined"
-                               className={classes.input}
-                               fullWidth
-                               value={workProgram[WorkProgramGeneralFields.CODE]}
-                               InputLabelProps={{
-                                   shrink: true,
-                               }}
-                    />
-                    <TextField label="Авторский состав"
-                               onChange={this.saveField(WorkProgramGeneralFields.AUTHORS)}
-                               variant="outlined"
-                               className={classes.input}
-                               fullWidth
-                               value={workProgram[WorkProgramGeneralFields.AUTHORS]}
-                               InputLabelProps={{
-                                   shrink: true,
-                               }}
-                    />
-                    <DatePicker
-                        value={moment(workProgram[WorkProgramGeneralFields.APPROVAL_DATE])}
-                        onChange={(date: any) => this.saveYear(date)}
-                        InputProps={{
-                            endAdornment: (
-                                <IconButton>
-                                    <DateIcon />
-                                </IconButton>
-                            ),
-                        }}
-                        inputVariant="outlined"
-                        className={classes.datePicker}
-                        format={FULL_DATE_FORMAT}
-                        label={'Дата создания *'}
-                    />
-                    <div className={classes.marginBottom20}>
-                        <InputLabel className={classes.label}> Уровень образовательной программы * </InputLabel>
+                    <div>
+                        <InputLabel className={classes.label}> Название * </InputLabel>
+                        <TextField
+                            onChange={this.saveField(WorkProgramGeneralFields.TITLE)}
+                            variant="outlined"
+                            className={classes.input}
+                            fullWidth
+                            value={workProgram[WorkProgramGeneralFields.TITLE]}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    </div>
+                    <div>
+                        <InputLabel className={classes.label}> Название (англ.)</InputLabel>
+                        <TextField
+                            onChange={this.saveField(WorkProgramGeneralFields.TITLE_EN)}
+                            variant="outlined"
+                            className={classes.input}
+                            fullWidth
+                            value={workProgram[WorkProgramGeneralFields.TITLE_EN]}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    </div>
+                    <div>
+                        <InputLabel className={classes.label}> Язык реализации * </InputLabel>
+                        <Select
+                            className={classes.languageSelector}
+                            value={workProgram[WorkProgramGeneralFields.LANGUAGE]}
+                            // @ts-ignore
+                            onChange={this.saveField(WorkProgramGeneralFields.LANGUAGE)}
+                            variant="outlined"
+                        >
+                            {languageArray.map(item =>
+                                <MenuItem value={item.value} key={`language-${item.value}`}>
+                                    {item.label}
+                                </MenuItem>
+                            )}
+                        </Select>
+                    </div>
+                    <FormControl component="fieldset">
+                        <FormLabel component="legend">Длительность семестров *</FormLabel>
+                        <RadioGroup className={classes.radioGroup}
+                                    onChange={this.saveField(WorkProgramGeneralFields.SEMESTER_COUNT)}>
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+                                <FormControlLabel
+                                    control={<Radio
+                                        value={item}
+                                        checked={workProgram[WorkProgramGeneralFields.SEMESTER_COUNT] == item}/>}
+                                    label={item}
+                                    key={item}
+                                />
+                            ))}
+                        </RadioGroup>
+                    </FormControl>
+                    <div>
+                        <InputLabel className={classes.label}> Формат реализации * </InputLabel>
+                        <Select
+                            className={classes.specializationSelector}
+                            value={workProgram[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]}
+                            // @ts-ignore
+                            onChange={this.saveField(WorkProgramGeneralFields.IMPLEMENTATION_FORMAT)}
+                            variant="outlined"
+                        >
+                            {implementationFormats.map(item =>
+                                <MenuItem value={item.value} key={`format-${item.value}`}>
+                                    {item.label}
+                                </MenuItem>
+                            )}
+                        </Select>
+                    </div>
+                    <div className={classes.marginTop20}>
+                        <InputLabel className={classes.label}> Реализатор дисциплины * </InputLabel>
+                        <SearchSelector
+                            label=""
+                            changeSearchText={this.handleChangeStructuralUnitSearchText}
+                            list={structuralUnitsList}
+                            changeItem={this.changeStructuralUnit}
+                            value={structuralUnit?.id}
+                            valueLabel={structuralUnit?.title}
+                        />
+                    </div>
+                    {false && (
+                        <Table className={classes.marginTop20}>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell className={classes.headerCell}>Занятия лекционного типа</TableCell>
+                                    <TableCell className={classes.headerCell}>Лабораторные занятия</TableCell>
+                                    <TableCell className={classes.headerCell}>Практические занятия</TableCell>
+                                    <TableCell className={classes.headerCell}>Консультации</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    {new Array(this.state.workProgram[WorkProgramGeneralFields.SEMESTER_COUNT]).map((item, index) =>
+                                        <TableCell key={index} className={classes.headerCell}>{index + 1}</TableCell>
+                                    )}
+                                </TableRow>
+                            </TableHead>
+                        </Table>
+                    )}
+                    <div className={classes.marginTop20}>
+                        <InputLabel className={classes.label}>Уровень образовательной программы * </InputLabel>
                         <Select
                             className={classes.specializationSelector}
                             value={workProgram[WorkProgramGeneralFields.QUALIFICATION]}
@@ -144,22 +221,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         >
                             {specialization.map(item =>
                                 <MenuItem value={item.value} key={`group-${item.value}`}>
-                                    {item.label}
-                                </MenuItem>
-                            )}
-                        </Select>
-                    </div>
-                    <div>
-                        <InputLabel className={classes.label}> Формат реализации * </InputLabel>
-                        <Select
-                            className={classes.specializationSelector}
-                            value={workProgram[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]}
-                          // @ts-ignore
-                            onChange={this.saveField(WorkProgramGeneralFields.IMPLEMENTATION_FORMAT)}
-                            variant="outlined"
-                        >
-                            {implementationFormats.map(item =>
-                                <MenuItem value={item.value} key={`format-${item.value}`}>
                                     {item.label}
                                 </MenuItem>
                             )}
