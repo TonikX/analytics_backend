@@ -45,7 +45,8 @@ class GIASerializer(serializers.ModelSerializer):
         editors=validated_data.pop('editors', None)
         gia=GIA.objects.create(**validated_data)
         gia.editors.set(editors)
-        gia.editors.add(request.user)
+        if editors:
+            gia.editors.add(request.user)
         return gia
 
     def get_permissions_info(self, instance):

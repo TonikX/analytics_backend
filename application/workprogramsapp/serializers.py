@@ -7,6 +7,7 @@ from gia_practice_app.Practice.models import Practice
 #from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
 #from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
 from .expertise.common_serializers import ShortExpertiseSerializer
+from .expertise.models import Expertise
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
@@ -486,6 +487,18 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
     #zuns_for_wp = RecursiveField(many=True)
     wp_in_fs_id = serializers.SerializerMethodField('wp_in_fs_id_get')
 
+    def to_representation(self, value):
+
+        self.fields['wp_status'] = serializers.SerializerMethodField()
+        return super().to_representation(value)
+
+    def get_wp_status(self, value):
+        try:
+            wp_status = Expertise.objects.get(work_program=value).expertise_status
+        except Expertise.DoesNotExist:
+            wp_status = "WK"
+        return wp_status
+
     class Meta:
         model = WorkProgram
         fields = ['id', 'wp_in_fs_id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp']
@@ -541,6 +554,27 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
         return serializers.data
 
 
+class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
+    change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
+
+    # father = serializers.SerializerMethodField()
+
+    def to_representation(self, value):
+        self.fields['childs'] = serializers.SerializerMethodField()
+        return super().to_representation(value)
+
+    def get_childs(self, obj):
+        childs = DisciplineBlockModule.objects.filter(father=obj)
+        if childs:
+            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
+        else:
+            return None
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = ['id', 'name', 'type', 'selection_rule', 'change_blocks_of_work_programs_in_modules']
+
+
 class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
     change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
     #father = serializers.SerializerMethodField()
@@ -553,7 +587,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
     def get_childs(self, obj):
         childs = DisciplineBlockModule.objects.filter(father=obj)
         if childs:
-            return DisciplineBlockModuleSerializer(childs, many=True).data
+            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
         else:
             return None
 
@@ -709,7 +743,7 @@ class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
     def get_childs(self, obj):
         childs = DisciplineBlockModule.objects.filter(father=obj)
         if childs:
-            return DisciplineBlockModuleDetailSerializer(childs, many=True).data
+            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
         else:
             return None
 
@@ -752,7 +786,7 @@ class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerial
     def get_childs(self, obj):
         childs = DisciplineBlockModule.objects.filter(father=obj)
         if childs:
-            return DisciplineBlockModuleForModuleListDetailSerializer(childs, many=True).data
+            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
         else:
             return None
 

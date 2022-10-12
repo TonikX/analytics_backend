@@ -1,3 +1,5 @@
+import { StepsEnum } from './enum'
+
 export const typesListArray = [
     {
         value: 'universal_module',
@@ -98,3 +100,9 @@ export const typesListObject = {
     practice: 'Практика',
     optional_disciplines: 'Факультативные дисциплины',
 };
+
+export const steps = {
+    [StepsEnum.GENERAL]: 'Главная',
+    [StepsEnum.MODULES]: 'Учебные модули',
+    [StepsEnum.PLANS]: 'Доступные учебные планы',
+}
