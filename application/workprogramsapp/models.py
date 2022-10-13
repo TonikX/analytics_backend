@@ -1071,7 +1071,12 @@ class СertificationEvaluationTool(CloneMixin, models.Model):
     min = models.IntegerField(verbose_name="Максимальное значение", blank=True, null=True)
     max = models.IntegerField(verbose_name="Минимальное значение", blank=True, null=True)
     work_program = models.ForeignKey("WorkProgram", verbose_name='Аттестационное оценочное средство',
-                                     related_name="certification_evaluation_tools", on_delete=models.CASCADE)
+                                     related_name="certification_evaluation_tools", on_delete=models.CASCADE,
+                                     blank=True, null=True)
+    discipline_block_module = models.ForeignKey("DisciplineBlockModule",
+                                                verbose_name='Аттестационное оценочное средство модуля',
+                                                related_name="certification_evaluation_tools_module",
+                                                on_delete=models.CASCADE, blank=True, null=True)
     evaluation_criteria = models.CharField(max_length=2048, verbose_name="Критерии оценивания", blank=True, null=True)
 
     def __str__(self):
