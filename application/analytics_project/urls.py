@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_swagger.views import get_swagger_view
 from django.conf.urls import url, include
-
+from .yasg import urlpatterns as doc_url
 
 
 
@@ -30,3 +30,4 @@ urlpatterns = [
     # url(r'^login/', include('rest_social_auth.urls_jwt')),
 ]
 
+urlpatterns+=doc_url

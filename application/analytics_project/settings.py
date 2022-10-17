@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'onlinecourse',
     'records',
     'gia_practice_app',
+    'drf_yasg2',
     #'django_extensions',
     # 'ckeditor',
     # 'ckeditor_uploader',

@@ -47,7 +47,7 @@ class ShortAcademicPlan(serializers.ModelSerializer):
         fields = ["id", "educational_profile"]
 
 
-class ShortStructuralUnitSerializer(serializers.ModelSerializer):
+class ShortStructuralUnitSerializerRecord(serializers.ModelSerializer):
     """
     Cериализатор подразделения разработчика РПД
     """
@@ -68,7 +68,7 @@ class WorkProgramSerializerForStatistic(serializers.ModelSerializer):
 class WorkProgramSerializerForStatisticExtended(serializers.ModelSerializer):
     editors = userProfileSerializer(many=True)
     academic_plans = serializers.SerializerMethodField()
-    structural_unit = ShortStructuralUnitSerializer(many=False)
+    structural_unit = ShortStructuralUnitSerializerRecord(many=False)
 
     def get_academic_plans(self, instance):
         return AcademicPlansStatisticSerializer(

@@ -2,6 +2,8 @@
 from collections import OrderedDict
 
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg2.utils import swagger_auto_schema
+
 from rest_framework import generics, filters, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -19,6 +21,10 @@ class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
     queryset = DisciplineBlockModule.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    @swagger_auto_schema(tags=['Discipline Blocks'])
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
     def perform_create(self, serializer):
         serializer.save(editor=self.request.user)
 
@@ -28,11 +34,19 @@ class DisciplineBlockModuleDestroyView(generics.DestroyAPIView):
     serializer_class = DisciplineBlockModuleSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    @swagger_auto_schema(tags=['Discipline Blocks'])
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
 
 class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    @swagger_auto_schema(tags=['Discipline Blocks'])
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
 
 class DisciplineBlockModuleShortListView(generics.ListAPIView):
@@ -47,12 +61,20 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
                         'descipline_block__academic_plan__academic_plan_in_field_of_study__qualification']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    @swagger_auto_schema(tags=['Discipline Blocks'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
 
 class DisciplineBlockModuleDetailListView(generics.ListAPIView):
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'descipline_block__name']
+
+    @swagger_auto_schema(tags=['Discipline Blocks'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
 class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
@@ -63,11 +85,16 @@ class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
     def get_queryset(self):
         return DisciplineBlockModule.objects.filter(editors=self.request.user)
 
+    @swagger_auto_schema(tags=['Discipline Blocks'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
 
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
 
+    @swagger_auto_schema(tags=['Discipline Blocks'])
     def get(self, request, **kwargs):
         queryset = DisciplineBlockModule.objects.filter(pk=self.kwargs['pk'])
         serializer = DisciplineBlockModuleForModuleListDetailSerializer(queryset, many=True)
@@ -90,6 +117,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
         return Response(newdata, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(tags=['Discipline Blocks'], method='post')
 @api_view(['POST'])
 def InsertModule(request):
     """
