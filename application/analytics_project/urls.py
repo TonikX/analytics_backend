@@ -21,7 +21,7 @@ urlpatterns = [
     #path('auth/social/itmo/', ItmoOAuth2),
     # path('djoser/auth/social/', include('djoser.social.urls')),
     # path("api/accounts/", include("accounts.urls")),
-    path(r'swagger-docs/', schema_view),
+    #path(r'swagger-docs/', schema_view),
     #url(r'^auth0/', include('rest_framework_social_oauth2.urls')),
     #url(r'^social-docs/', include('social_django.urls')),
     #path('hho/', include('oauth2_provider.urls')),
