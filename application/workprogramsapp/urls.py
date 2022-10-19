@@ -71,7 +71,6 @@ from .workprogram_additions.views import CopyContentOfWorkProgram
 
 router = DefaultRouter()
 
-
 router.register(r'api/zun/many_create',
                 ZunManyViewSet, basename='zun_many_create')
 
@@ -130,9 +129,9 @@ urlpatterns = [
 
     path('api/workprogram/getbynumbers', DisciplinesByNumber),
 
-
     path('api/workprogram/fieldofstudies/<int:workprogram_id>', FieldOfStudiesForWorkProgramList.as_view()),
-    path('api/workprogram/fieldofstudies_for_competences/<int:workprogram_id>', WorkProgramInFieldOfStudyForWorkProgramList.as_view()),
+    path('api/workprogram/fieldofstudies_for_competences/<int:workprogram_id>',
+         WorkProgramInFieldOfStudyForWorkProgramList.as_view()),
     path('api/workprogram/fieldofstudies_for_competences_for_matrix/<int:workprogram_id>/<int:gh_id>',
          WorkProgramInFieldOfStudyForWorkProgramForGHList.as_view()),
     path('api/workprograminfieldofstudy/', WorkProgramInFieldOfStudyListAPI.as_view()),
@@ -243,7 +242,6 @@ urlpatterns = [
     path('api/expertise/user/create', UserExpertiseCreateView.as_view()),
     path('api/expertise/user/delete/<int:pk>', DeleteUserExpertise.as_view()),
 
-
     path('api/expertise/comments/<int:pk>', ExpertiseCommentsView.as_view()),
     path('api/expertise/comments/create', ExpertiseCommentCreateView.as_view()),
     path('api/expertise/create', ExpertiseCreateView.as_view()),
@@ -311,12 +309,10 @@ urlpatterns = [
     path('api/workprogram/statistic/<int:pk>', WorkProgramStatistic),
     path('api/folders/real_remove/<int:pk>', DeleteFolderView.as_view()),
 
-
     # Аттестационные оценочные средства
     path('api/certification_tools/', СertificationEvaluationToolListAPI.as_view()),
     path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
     url(r'^', include('workprogramsapp.educational_program.urls')),
-
 
     url(r'^', include('workprogramsapp.educational_program.urls')),
     url(r'^', include('workprogramsapp.workprogram_additions.urls')),
