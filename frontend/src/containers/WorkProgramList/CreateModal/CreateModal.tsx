@@ -237,21 +237,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             )}
                         </Select>
                     </div>
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Длительность семестров *</FormLabel>
-                        <RadioGroup className={classes.radioGroup}
-                                    onChange={this.saveField(WorkProgramGeneralFields.SEMESTER_COUNT)}>
-                            {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-                                <FormControlLabel
-                                    control={<Radio
-                                        value={item}
-                                        checked={workProgram[WorkProgramGeneralFields.SEMESTER_COUNT] == item}/>}
-                                    label={item}
-                                    key={item}
-                                />
-                            ))}
-                        </RadioGroup>
-                    </FormControl>
                     <div>
                         <InputLabel className={classes.label}> Формат реализации * </InputLabel>
                         <Select
@@ -279,7 +264,22 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             valueLabel={structuralUnit?.title}
                         />
                     </div>
-                    <Table className={classes.marginTop20}>
+                    <FormControl className={classes.marginTop20} component="fieldset">
+                        <FormLabel component="legend">Длительность семестров *</FormLabel>
+                        <RadioGroup className={classes.radioGroup}
+                                    onChange={this.saveField(WorkProgramGeneralFields.SEMESTER_COUNT)}>
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+                                <FormControlLabel
+                                    control={<Radio
+                                        value={item}
+                                        checked={workProgram[WorkProgramGeneralFields.SEMESTER_COUNT] == item}/>}
+                                    label={item}
+                                    key={item}
+                                />
+                            ))}
+                        </RadioGroup>
+                    </FormControl>
+                    <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell className={classes.headerCell}>Занятия лекционного типа</TableCell>
