@@ -258,7 +258,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                          value={state[WorkProgramGeneralFields.CODE]}
                          onBlur={this.saveField(WorkProgramGeneralFields.CODE)}
                          onChange={this.changeCode}
-                         disabled={fetchingCode || !isCanEdit}
+                         disabled
                          InputLabelProps={{
                            shrink: true,
                          }}
