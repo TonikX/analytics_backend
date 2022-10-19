@@ -30,6 +30,7 @@ export interface TrainingModulesActions {
     changeFiltering: ActionCreatorWithPayload;
 
     showOnlyMy: ActionCreatorWithPayload<boolean>;
+    removeFatherFromModule: ActionCreatorWithPayload<number>;
 
     changeEditorList: ActionCreatorWithPayload;
 }
@@ -80,6 +81,7 @@ export type TrainingModuleType = {
     [TrainingModuleFields.NAME]: string;
     [TrainingModuleFields.DESCRIPTION]: string;
     [TrainingModuleFields.TYPE]: string;
+    [TrainingModuleFields.ISU_ID]: string;
     [TrainingModuleFields.DISCIPLINE]: {
         [TrainingModuleFields.ACADEMIC_PLAN]: {
             [TrainingModuleFields.EDUCATIONAL_PROFILE]: string;

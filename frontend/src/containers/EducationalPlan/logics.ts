@@ -225,7 +225,7 @@ const deleteBlockOfWorkPrograms = createLogic({
                 }
 
                 if (moduleId){
-                    dispatch(moduleActions.getTrainingModule({id: moduleId}));
+                    dispatch(moduleActions.getTrainingModule(moduleId));
                 }
 
                 dispatch(actions.fetchingSuccess());

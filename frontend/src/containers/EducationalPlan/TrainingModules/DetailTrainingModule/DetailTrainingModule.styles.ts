@@ -1,6 +1,25 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
+    textField: {
+        width: '100%',
+        marginBottom: '30px'
+    },
+    selectorWrap: {
+        width: '100%',
+        '& .MuiInputLabel-shrink': {
+            transform: 'translate(14px, -6.5px) scale(0.75) !important',
+        },
+        '& .MuiOutlinedInput-notchedOutline legend': {
+            width: '100px !important'
+        }
+    },
+    moduleName: {
+        color: theme.palette.primary.main,
+        fontWeight: 'bold',
+        display: 'flex',
+        alignItems: 'center',
+    },
     tableWrap: {
         height: 'calc(100% - 60px)',
         maxheight: 'calc(100% - 60px)',
@@ -52,6 +71,7 @@ export default (theme: Theme) => createStyles({
     editors: {
         display: 'flex',
         flexWrap: 'wrap',
+        marginBottom: '20px',
     },
     wrap: {
         padding: '0px 30px 30px',
@@ -70,8 +90,20 @@ export default (theme: Theme) => createStyles({
         marginBottom: '10px',
     },
     editorsAdd: {
-        marginLeft: '10px',
         height: '32px',
+        marginBottom: '20px',
+    },
+    moduleNameWrap: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    moduleButtons: {
+        display: 'flex',
+        justify: 'flex-end',
+        'button': {
+            padding: '5px 10px !important',
+            marginLeft: '5px',
+        }
     },
     hourCell: {
         width: '30px'
@@ -97,7 +129,8 @@ export default (theme: Theme) => createStyles({
         }
     },
     deleteIcon: {
-        marginRight: 5
+        marginRight: 5,
+        cursor: 'pointer'
     },
     dialog: {
         padding: '40px',

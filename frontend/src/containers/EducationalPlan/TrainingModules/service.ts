@@ -30,6 +30,12 @@ class TrainingModulesService extends AnalyticsService{
     changeTrainingModule(payload: ChangeTrainingModulePayload){
         return this.patch(`/api/disciplineblockmodule/update/${payload.data[TrainingModuleFields.ID]}`, payload.data);
     }
+
+    removeFatherFromModule(id: number){
+        return this.patch(`/api/disciplineblockmodule/update/${id}`, {
+            father: null
+        });
+    }
 }
 
 export default TrainingModulesService;
