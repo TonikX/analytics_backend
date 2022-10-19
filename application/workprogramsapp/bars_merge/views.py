@@ -315,7 +315,7 @@ def SendCheckpointsForAcceptedWP(request):
 
                 # Если существует список УП, соответствует текущему семестру и не является специальной РПД
                 if imp_list and isu_wp_id and current_term % 2 == send_semester \
-                        and not (work_program.id in wp_for_many_terms_list):
+                        and not (work_program.id in wp_for_many_terms_list or work_program.discipline_code in isu_bank_many_term):
                     # Генерируем чекпоинт со всеми УП, прямыми и относиетльным семестром
 
                     request_text = generate_single_checkpoint(absolute_semester=current_term + 1,
@@ -346,7 +346,7 @@ def SendCheckpointsForAcceptedWP(request):
 
         # Выход из цикла по семестрам
         # Если РПД "особая" (реализуется в нескольких семестрах одновременно (как факультативы))
-        if work_program.id in wp_for_many_terms_list and minimal_sem_for_many_term != 0:
+        if (work_program.id in wp_for_many_terms_list or work_program.discipline_code in isu_bank_many_term) and minimal_sem_for_many_term != 0:
             if not relative_bool:
                 count_relative = send_semester + 1
                 absolute_semester = send_semester + 1

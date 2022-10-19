@@ -17,39 +17,43 @@ from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBl
 
 
 class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
+    """
+    Api на создание Блокмоудлей
+    """
     serializer_class = DisciplineBlockModuleCreateSerializer
     queryset = DisciplineBlockModule.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
-    @swagger_auto_schema(tags=['Discipline Blocks'])
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+    my_tags = ["Discipline Blocks"]
 
     def perform_create(self, serializer):
         serializer.save(editor=self.request.user)
 
 
 class DisciplineBlockModuleDestroyView(generics.DestroyAPIView):
+    """
+        Api на удаление Блокмоудлей
+    """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
-    @swagger_auto_schema(tags=['Discipline Blocks'])
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+    my_tags = ["Discipline Blocks"]
 
 
 class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
+    """
+        Api на Изменение Блокмоудлей
+    """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
-    @swagger_auto_schema(tags=['Discipline Blocks'])
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+    my_tags = ["Discipline Blocks"]
 
 
 class DisciplineBlockModuleShortListView(generics.ListAPIView):
+    """
+        Получение списка модулей с краткой информацией
+        Можно осуществялть поиск по имени, имени блока, типу образования
+    """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleCreateSerializer
     search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
@@ -60,41 +64,42 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
                         'change_blocks_of_work_programs_in_modules__work_program__structural_unit__title',
                         'descipline_block__academic_plan__academic_plan_in_field_of_study__qualification']
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
-    @swagger_auto_schema(tags=['Discipline Blocks'])
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+    my_tags = ["Discipline Blocks"]
 
 
 class DisciplineBlockModuleDetailListView(generics.ListAPIView):
+    """
+     Получение списка модулей с полной информацией
+
+    """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'descipline_block__name']
-
-    @swagger_auto_schema(tags=['Discipline Blocks'])
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+    my_tags = ["Discipline Blocks"]
 
 
 class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
+    """
+         Получение списка модулей с полной информацией, где редактор запрашивающий пользователь
+    """
     serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+    my_tags = ["Discipline Blocks"]
 
     def get_queryset(self):
         return DisciplineBlockModule.objects.filter(editors=self.request.user)
 
-    @swagger_auto_schema(tags=['Discipline Blocks'])
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
 
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
+    """
+    Детальный просмотр одного модуля с полями can_edit и rating
+    """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
+    my_tags = ["Discipline Blocks"]
 
-    @swagger_auto_schema(tags=['Discipline Blocks'])
     def get(self, request, **kwargs):
         queryset = DisciplineBlockModule.objects.filter(pk=self.kwargs['pk'])
         serializer = DisciplineBlockModuleForModuleListDetailSerializer(queryset, many=True)
