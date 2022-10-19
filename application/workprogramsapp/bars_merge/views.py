@@ -217,6 +217,13 @@ def SendCheckpointsForAcceptedWP(request):
                                   15929, 15930, 15934, 15936, 15949, 15923, 15931, 15920, 15945, 15918, 15928, 15927,
                                   15946, 15942, 15676, 15704,
                                   15950, 15951, 15952, 15106]
+        isu_bank_many_term = ['21566', '21610', '14352', '21579', '21617', '21615', '21575', '14344', '21620', '21586',
+                              '21555', '21602', '21599', '21614', '21561', '21607', '21562', '21593', '21578', '21585',
+                              '21596', '21552', '21594', '21611', '21565', '21600', '21554', '21612', '21553', '21563',
+                              '21559', '14359', '21606', '14351', '14348', '21576', '21589', '21577', '21609', '21558',
+                              '21584', '21580', '21619', '14357', '21613', '21608', '21587', '21564', '21583', '21556',
+                              '21560', '21557', '21618', '21549', '14350', '21616']
+
         minimal_sem_for_many_term = 0
         maximal_sem_for_many_term = 0
         isu_wp_id_for_many_term = None
@@ -234,10 +241,10 @@ def SendCheckpointsForAcceptedWP(request):
                     cred_regex += "(([0-9]\.[0-9])|[0-9]),\s"
             cred_regex = cred_regex[:-3]
 
-
             #######################################################
+
             # Если РПД является общеуниверситеским факультативом
-            if work_program.id in wp_for_many_terms_list:
+            if work_program.id in wp_for_many_terms_list or work_program.discipline_code in isu_bank_many_term:
                 many_term_regex = r""
                 for i in range(12):
                     if i == now_semester:
@@ -272,7 +279,6 @@ def SendCheckpointsForAcceptedWP(request):
                 if imp_list:
                     maximal_sem_for_many_term = now_semester + 1
                 #######################################################
-
 
             # Получаем все УП для данного семестра РПД (нужно для каунтера отнсительного семестра)
             implementation_of_academic_plan_all = ImplementationAcademicPlan.objects.filter(
