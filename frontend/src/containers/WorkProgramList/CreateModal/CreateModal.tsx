@@ -1,7 +1,7 @@
 import React from 'react';
 import get from "lodash/get";
 
-import {CreateModalProps} from './types';
+import {CreateModalProps, HoursSection} from './types';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -29,7 +29,9 @@ import SearchSelector from "../../../components/SearchSelector/SearchSelector";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
-import Table from "@material-ui/core/Table";
+import EditedRow from "./EditableRow/EditableRow";
+import {Table} from "@material-ui/core";
+import {workProgramFields} from "../../SelectDiscipline/enum";
 
 const DEFAULT_WP_STATE = {
     [WorkProgramGeneralFields.TITLE]: '',
@@ -40,6 +42,10 @@ const DEFAULT_WP_STATE = {
     [WorkProgramGeneralFields.SEMESTER_COUNT]: 1,
     [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: '',
     [WorkProgramGeneralFields.APPROVAL_DATE]: moment().format(),
+    [WorkProgramGeneralFields.LAB_HOURS]: "0",
+    [WorkProgramGeneralFields.LECTURE_HOURS]: "0",
+    [WorkProgramGeneralFields.SRS_HOURS]: "0",
+    [WorkProgramGeneralFields.PRACTICE_HOURS]: "0",
 };
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
@@ -50,7 +56,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             // practice_hours_v2: '',
             // lab_hours_v2: '',
             // srs_hours_v2: '',
-            // contact_hours_v2: '',
         },
     };
 
@@ -59,6 +64,38 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         this.setState({
             workProgram: {
                 ...DEFAULT_WP_STATE,
+            }
+        });
+    };
+
+    getNewSection = (semesterNum: number) => {
+        const {workProgram} = this.state;
+        const {lecture_hours_v2, practice_hours_v2, srs_hours_v2, lab_hours_v2} = workProgram;
+
+        const lectureClasses = lecture_hours_v2.split(", ");
+        const practiceClasses = practice_hours_v2.split(", ");
+        const sroHours = srs_hours_v2.split(", ");
+        const laboratoryHours = lab_hours_v2.split(", ");
+
+        return ({
+            SRO: +sroHours[semesterNum - 1] || 0,
+            lecture_classes: +lectureClasses[semesterNum - 1] || 0,
+            practical_lessons: +practiceClasses[semesterNum - 1] || 0,
+            laboratory: +laboratoryHours[semesterNum - 1] || 0,
+        });
+    };
+
+    updateRow = (section: HoursSection, semesterNum: number) => {
+        const {workProgram} = this.state;
+        const {lecture_hours_v2, practice_hours_v2, srs_hours_v2, lab_hours_v2} = workProgram;
+
+        this.setState({
+            workProgram: {
+                ...workProgram,
+                lab_hours_v2: this.replaceValue(lab_hours_v2, section.laboratory, +semesterNum),
+                srs_hours_v2: this.replaceValue(srs_hours_v2, section.SRO, +semesterNum),
+                lecture_hours_v2: this.replaceValue(lecture_hours_v2, section.lecture_classes, +semesterNum),
+                practice_hours_v2: this.replaceValue(practice_hours_v2, section.practical_lessons, +semesterNum),
             }
         });
     };
@@ -73,8 +110,50 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         });
     };
 
+    replaceValue = (oldValue: string, newValue: number, semesterNumber: number) => {
+        const arr = oldValue.split(", ");
+        arr[semesterNumber - 1] = String(newValue);
+        return arr.join(", ");
+    };
+
+    fixZeros = (arr: string[], newLength: number) => {
+        if (newLength < arr.length) {
+            return arr.slice(0, newLength);
+        }
+
+        while (newLength > arr.length) {
+            arr.push("0")
+        }
+
+        return arr;
+    };
+
+    recalculateHours = (numOfSemesters: string) => {
+        const {workProgram} = this.state;
+        const {lecture_hours_v2, practice_hours_v2, srs_hours_v2, lab_hours_v2} = workProgram;
+
+        const lectureClasses = lecture_hours_v2.split(", ");
+        const practiceClasses = practice_hours_v2.split(", ");
+        const sroHours = srs_hours_v2.split(", ");
+        const laboratoryHours = lab_hours_v2.split(", ");
+
+        this.setState({
+            workProgram: {
+                ...workProgram,
+                lab_hours_v2: this.fixZeros(laboratoryHours, +numOfSemesters).join(", "),
+                srs_hours_v2: this.fixZeros(sroHours, +numOfSemesters).join(", "),
+                lecture_hours_v2: this.fixZeros(lectureClasses, +numOfSemesters).join(", "),
+                practice_hours_v2: this.fixZeros(practiceClasses, +numOfSemesters).join(", "),
+            }
+        });
+    };
+
     saveField = (field: string) => (e: React.ChangeEvent) => {
         const {workProgram} = this.state;
+
+        if (field === WorkProgramGeneralFields.SEMESTER_COUNT) {
+            this.recalculateHours(get(e, 'target.value'));
+        }
 
         this.setState({
             workProgram: {
@@ -97,7 +176,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 [WorkProgramGeneralFields.STRUCTURAL_UNIT]: value
             }
         });
-    }
+    };
 
     render() {
         const {isOpen, structuralUnitsList, structuralUnit, classes} = this.props;
@@ -200,23 +279,24 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             valueLabel={structuralUnit?.title}
                         />
                     </div>
-                    {false && (
-                        <Table className={classes.marginTop20}>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell className={classes.headerCell}>Занятия лекционного типа</TableCell>
-                                    <TableCell className={classes.headerCell}>Лабораторные занятия</TableCell>
-                                    <TableCell className={classes.headerCell}>Практические занятия</TableCell>
-                                    <TableCell className={classes.headerCell}>Консультации</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    {new Array(this.state.workProgram[WorkProgramGeneralFields.SEMESTER_COUNT]).map((item, index) =>
-                                        <TableCell key={index} className={classes.headerCell}>{index + 1}</TableCell>
-                                    )}
-                                </TableRow>
-                            </TableHead>
-                        </Table>
-                    )}
+                    <Table className={classes.marginTop20}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell className={classes.headerCell}>Занятия лекционного типа</TableCell>
+                                <TableCell className={classes.headerCell}>Лабораторные занятия</TableCell>
+                                <TableCell className={classes.headerCell}>Практические занятия</TableCell>
+                                <TableCell className={classes.headerCell}>Консультации</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        {new Array(+workProgram[WorkProgramGeneralFields.SEMESTER_COUNT]).fill('').map((_item, index) => {
+                            return <EditedRow
+                                semesterNum={index + 1}
+                                updateRow={this.updateRow}
+                                section={this.getNewSection(index + 1)}
+                            />
+                        })}
+
+                    </Table>
                     <div className={classes.marginTop20}>
                         <InputLabel className={classes.label}>Уровень образовательной программы * </InputLabel>
                         <Select
