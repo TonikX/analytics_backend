@@ -24,8 +24,7 @@ from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfes
 from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAPIView, SkillsOfRoleInRoleUpdateView, \
     SkillsOfRoleInRoleDestroyView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, \
-    AcademicPlanUpdateView, ImplementationAcademicPlanAPIView,  \
-    DisciplinesByNumber, WorkProgramArchiveUpdateView
+    AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
@@ -35,9 +34,7 @@ from .views import CloneWorkProgramm
 from .views import CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, \
     DeleteIndicatorFromCompetenceView, \
     AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
-from .views import DisciplineBlockModuleShortListView, \
-    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailListForUserView, DisciplineBlockModuleDetailView, \
-    DisciplinesByNumber, InsertModule, WorkProgramArchiveUpdateView
+from .views import DisciplinesByNumber, WorkProgramArchiveUpdateView
 from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, \
     TopicsListAPI, TopicDetailAPI, NewOrdinalNumbersForDesciplineSectionAPI
 from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateView
@@ -49,36 +46,9 @@ from .views import NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, \
     PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
-#
-from .views import CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, DeleteIndicatorFromCompetenceView, \
-    AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
-
-from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView
-
-from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, TopicsListAPI, TopicDetailAPI, NewOrdinalNumbersForDesciplineSectionAPI
-from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
-from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
-from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateView
-from .views import NewOrdinalNumbersForTopicAPI, TopicCreateAPI
-from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, BibliographicReferenceDestroyView, \
-    BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
-    FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, FileUploadWorkProgramOutcomesAPIView
-from .views import IndicatorCreateAPIView, IndicatorListAPIView, IndicatorDetailsView, IndicatorDestroyView, IndicatorUpdateView
-from .views import ImplementationAcademicPlanAPIView, ImplementationAcademicPlanDetailsView, ImplementationAcademicPlanDestroyView, ImplementationAcademicPlanUpdateView, ImplementationAcademicPlanListAPIView
-from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
-from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView,\
-    WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView,\
-    FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
-    ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView, AcademicPlanListShortAPIView, \
-    NewRealtionsForWorkProgramsInFieldOfStudyAPI, WorkProgramsWithOutcomesToPrerequisitesForThisWPView,\
-    WorkProgramsWithPrerequisitesToOutocomesForThisWPView, WorkProgramsWithOutocomesForThisWPView, WorkProgramInFieldOfStudyForWorkProgramForGHList
-from .files_export.views import DocxFileExportView, SyllabusExportView
-from .views import CloneWorkProgramm
-#
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, \
     WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView, \
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, \
-    DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView, \
     FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, \
     WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
     ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView, \
@@ -89,10 +59,8 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, \
 from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView
 from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet, \
     WorkProgramInFieldOfStudyForWorkProgramList, ChangeItemsView
-#
 from .views import WorkProgramsListApi, UserGroups, TimeoutTest, WorkProgramEditorsUpdateView
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
-# DocxFileExportOldView
 from .workprogram_additions.views import CopyContentOfWorkProgram
 
 # Контроллеры
