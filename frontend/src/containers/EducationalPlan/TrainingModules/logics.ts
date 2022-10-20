@@ -92,6 +92,7 @@ const changeTrainingModule = createLogic({
                 const moduleId = getTrainingModuleId(getState());
 
                 if (moduleId){
+                    //@ts-ignore
                     dispatch(moduleActions.getTrainingModule(moduleId));
                 } else {
                     dispatch(trainingModuleActions.getTrainingModulesList());
@@ -119,6 +120,7 @@ const removeFatherFromModule = createLogic({
         service.removeFatherFromModule(action.payload)
             .then((res) => {
                 const moduleId = getTrainingModuleId(getState());
+                //@ts-ignore
                 dispatch(moduleActions.getTrainingModule(moduleId));
                 dispatch(actions.fetchingSuccess());
             })
@@ -182,6 +184,7 @@ const changeEditorList = createLogic({
 
         service.changeTrainingModule(action.payload)
             .then(() => {
+                //@ts-ignore
                 dispatch(trainingModuleActions.getTrainingModule(action.payload.data[TrainingModuleFields.ID]));
                 dispatch(actions.fetchingSuccess());
             })
