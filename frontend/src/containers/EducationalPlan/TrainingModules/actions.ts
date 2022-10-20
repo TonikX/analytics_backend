@@ -17,7 +17,7 @@ const createTrainingModule = createAction<CreateTrainingModulePayload>('CREATE_T
 const changeTrainingModule = createAction<ChangeTrainingModulePayload>('CHANGE_TRAINING_MODULES');
 const deleteTrainingModule = createAction('DELETE_TRAINING_MODULES');
 
-const removeFatherFromModule = createAction('REMOVE_FATHER_FROM_MODULE');
+const removeFatherFromModule = createAction<any>('REMOVE_FATHER_FROM_MODULE');
 
 const openDialog = createAction<OpenDialogPayload>('OPEN_TRAINING_MODULE_DIALOG');
 const closeDialog = createAction('CLOSE_TRAINING_MODULE_DIALOG');
