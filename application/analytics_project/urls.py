@@ -1,10 +1,9 @@
+from django.conf.urls import url, include
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from rest_framework_swagger.views import get_swagger_view
 from django.conf.urls import url, include
 from .yasg import urlpatterns as doc_url
-
-
 
 schema_view = get_swagger_view(title='Analytica API')
 

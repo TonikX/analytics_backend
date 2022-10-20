@@ -7,7 +7,15 @@ import trainingModuleActions from './actions';
 import Service from './service';
 
 import {fetchingTypes, TrainingModuleFields} from "./enum";
-import {getCurrentPage, getSearchQuery, getSortingField, getSortingMode, getShowOnlyMy} from "./getters";
+import {
+    getCurrentPage,
+    getSearchQuery,
+    getSortingField,
+    getSortingMode,
+    getShowOnlyMy,
+    getTrainingModuleId
+} from "./getters";
+import moduleActions from "./actions";
 
 const service = new Service();
 
@@ -52,7 +60,14 @@ const createTrainingModule = createLogic({
 
         service.createTrainingModule(action.payload)
             .then((res) => {
-                dispatch(trainingModuleActions.getTrainingModulesList());
+                const moduleId = getTrainingModuleId(getState());
+
+                if (moduleId){
+                    //@ts-ignore
+                    dispatch(moduleActions.getTrainingModule(moduleId));
+                } else {
+                    dispatch(trainingModuleActions.getTrainingModulesList());
+                }
                 dispatch(trainingModuleActions.closeDialog());
                 dispatch(actions.fetchingSuccess());
             })
@@ -74,8 +89,37 @@ const changeTrainingModule = createLogic({
 
         service.changeTrainingModule(action.payload)
             .then((res) => {
-                dispatch(trainingModuleActions.getTrainingModulesList());
+                const moduleId = getTrainingModuleId(getState());
+
+                if (moduleId){
+                    dispatch(moduleActions.getTrainingModule(moduleId));
+                } else {
+                    dispatch(trainingModuleActions.getTrainingModulesList());
+                }
+
                 dispatch(trainingModuleActions.closeDialog());
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_TRAINING_MODULE}));
+                return done();
+            });
+    }
+});
+
+const removeFatherFromModule = createLogic({
+    type: trainingModuleActions.removeFatherFromModule.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_TRAINING_MODULE}));
+
+        service.removeFatherFromModule(action.payload)
+            .then((res) => {
+                const moduleId = getTrainingModuleId(getState());
+                dispatch(moduleActions.getTrainingModule(moduleId));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -158,4 +202,5 @@ export default [
     deleteTrainingModule,
     getTrainingModule,
     changeEditorList,
+    removeFatherFromModule,
 ];

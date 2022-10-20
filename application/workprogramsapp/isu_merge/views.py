@@ -1,29 +1,24 @@
-from rest_framework.generics import ListCreateAPIView
-from rest_framework.views import APIView
+import json
 import os
+from typing import Dict
+
 import pandas
-from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
+from rest_framework import filters
 from rest_framework import permissions
 from rest_framework import status
-from typing import Dict
-from workprogramsapp.workprogram_additions.models import StructuralUnit
-from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan,\
-    ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,\
-    WorkProgramInFieldOfStudy, Zun
-from rest_framework import filters
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from workprogramsapp.isu_merge.academic_plan_update.academic_plan_excel_creator import AcademicPlanExcelCreator
+from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_processor import AcademicPlanUpdateProcessor
 from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan, \
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
     WorkProgramInFieldOfStudy, Zun, AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, \
     AcademicPlanUpdateConfiguration
 from workprogramsapp.serializers import AcademicPlanUpdateLogSerializer, AcademicPlanUpdateConfigurationSerializer, \
-    AcademicPlanUpdateSchedulerConfigurationSerializer, AcademicPlanUpdateConfigurationEditSerializer
-from workprogramsapp.isu_merge.academic_plan_update.academic_plan_excel_creator import AcademicPlanExcelCreator
-from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_processor import AcademicPlanUpdateProcessor
-import json
-import re
-from django.db import transaction
+    AcademicPlanUpdateSchedulerConfigurationSerializer
+from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
 class UpdateAcademicPlansView(APIView):
@@ -691,24 +686,18 @@ class FileUploadOldVersionAPIView(APIView):
                     print('id учебного плана',ap_obj.ap_isu_id)
                 else:
                     ap_obj = AcademicPlan()
-                    #ap_obj.academic_plan_in_field_of_study.set(iap_obj)
-                    #iap_obj.academic_plan = ap_obj
-                    #ap_obj.typelearning = 'internal'
                     ap_obj.ap_isu_id=int(data['ИД_УП'][i])
                     ap_obj.save()
                     print('------')
                     iap_obj.academic_plan = ap_obj
                     iap_obj.save()
                     ap_count += 1
-                #print('Учебный план: ', ap_obj)
                 print('-- Работа с блоком')
                 if DisciplineBlock.objects.filter(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan=ap_obj).exists():
                     db = DisciplineBlock.objects.get(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan=ap_obj)
                 else:
                     db = DisciplineBlock(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan_id=ap_obj.id, )
                     db.save()
-                #print('Блок: ', db)
-                # Тут Денис Терещенко напишет обработчик модулей
                 print('-- Работа с модулями')
 
                 try:
@@ -718,47 +707,39 @@ class FileUploadOldVersionAPIView(APIView):
                     o = order[(data['МОДУЛЬ'][i].strip())]
                 if DisciplineBlockModule.objects.filter(name=(data['МОДУЛЬ'][i].strip()),
                                                         descipline_block=db).exists():
-                    print('1')
                     mdb = DisciplineBlockModule.objects.get(name=(data['МОДУЛЬ'][i].strip()), descipline_block=db)
 
                 else:
-                    print('2')
                     mdb = DisciplineBlockModule(name=(data['МОДУЛЬ'][i].strip()), order=o)
                     mdb.save()
                     mdb.descipline_block.add(db)
 
-                #print('Модуль в блоке: ', mdb)
                 print('-- Работа с блок-модулем')
                 if data['ВЫБОР'][i] == 0:
                     option = 'Required'
                 elif data['ВЫБОР'][i] == 1:
                     option = 'Optionally'
-                print("Выборность", option)
 
                 if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
                         discipline_block_module=mdb, change_type=option, subject_code = data['НОМЕР'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
                                                                                        change_type=option, subject_code = data['НОМЕР'][i]
                                                                                        )
-                    print('111')
                     if WorkProgramInFieldOfStudy.objects.filter(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
                         #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                         wpinfs.save()
-                        print('111')
                     else:
                         wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
                                                            work_program=wp_obj)
                         #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                         wpinfs.save()
-                        print('111')
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=mdb,
                                                                              change_type=option,
                                                                              work_program=wp_obj
                                                                              ).exists():
-                    print('exist', wp_obj)
                     wpinfs = WorkProgramInFieldOfStudy.objects.get(
                         work_program_change_in_discipline_block_module=WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
                                                                                                                             change_type=option,
@@ -789,14 +770,10 @@ class FileUploadOldVersionAPIView(APIView):
                 try:
                     print('ddd')
                     WorkProgramIdStrUpForIsu.objects.get(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs)
-                    print('ddddddddddddddddd', WorkProgramIdStrUpForIsu.objects.get(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs))
                 except WorkProgramIdStrUpForIsu.DoesNotExist:
-                    print('ddddddd')
                     wpinfs_id_str_up = WorkProgramIdStrUpForIsu(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs)
                     wpinfs_id_str_up.number = data['НОМЕР'][i]
-                    print('ddd')
                     wpinfs_id_str_up.dis_id = int(data['ДИС_ИД'][i])
-                    print('ddd')
                     wpinfs_id_str_up.ze_v_sem = data['ЗЕ_В_СЕМЕСТРАХ'][i].strip("()")
                     wpinfs_id_str_up.lec_v_sem = data['ЛЕК_В_СЕМЕСТРАХ'][i].strip("()")
                     wpinfs_id_str_up.prak_v_sem = data['ПРАК_В_СЕМЕСТРАХ'][i].strip("()")
@@ -806,7 +783,6 @@ class FileUploadOldVersionAPIView(APIView):
                     wpinfs_id_str_up.dif_zach_v_sem = data['ДИФ_ЗАЧЕТ_ПО_СЕМЕСТРАМ'][i].strip("()")
                     wpinfs_id_str_up.kp_v_sem = data['КП_ПО_СЕМЕСТРАМ'][i].strip("()")
                     wpinfs_id_str_up.save()
-                    print('dddddddddd')
                 except:
                     print('---- Ошибка с количеством WorkProgramIdStrUpForIsu.id_str_up')
                 for zun in Zun.objects.filter(wp_in_fs_saved_fk_id_str_up = int(data['ИД_СТР_УП'][i])):
@@ -814,7 +790,6 @@ class FileUploadOldVersionAPIView(APIView):
                     zun.save()
                 print('Рабочая программа дисциплины записана в модуль: done')
             except Exception as e:
-                print(e)
                 print('Строка ', i, 'не записалась, проверьте на опечатки или пустые значения')
                 continue
         print(f'Записано: Учебные планы:{ap_count}, РПД:{wp_count}, Направления:{fs_count}')

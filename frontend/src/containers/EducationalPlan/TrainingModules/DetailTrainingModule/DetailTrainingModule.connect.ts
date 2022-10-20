@@ -14,6 +14,7 @@ export const mapStateToProps = (state: rootState) => {
         module: getTrainingModule(state),
         moduleRating: getModuleRating(state),
         moduleRatingId: getModuleRatingId(state),
+        canEdit: true,
     };
 };
 

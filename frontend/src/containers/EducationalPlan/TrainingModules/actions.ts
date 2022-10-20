@@ -10,12 +10,14 @@ import {
 
 const getTrainingModulesList = createAction('GET_TRAINING_MODULES');
 const setTrainingModulesList = createAction('SET_TRAINING_MODULES');
-const getTrainingModule = createAction<GetTrainingModulePayload>('GET_TRAINING_MODULE');
+const getTrainingModule = createAction<any>('GET_TRAINING_MODULE');
 const setTrainingModule = createAction('SET_TRAINING_MODULE');
 
 const createTrainingModule = createAction<CreateTrainingModulePayload>('CREATE_TRAINING_MODULES');
 const changeTrainingModule = createAction<ChangeTrainingModulePayload>('CHANGE_TRAINING_MODULES');
 const deleteTrainingModule = createAction('DELETE_TRAINING_MODULES');
+
+const removeFatherFromModule = createAction<any>('REMOVE_FATHER_FROM_MODULE');
 
 const openDialog = createAction<OpenDialogPayload>('OPEN_TRAINING_MODULE_DIALOG');
 const closeDialog = createAction('CLOSE_TRAINING_MODULE_DIALOG');
@@ -36,6 +38,7 @@ const actions: TrainingModulesActions = {
     setTrainingModulesList,
     getTrainingModule,
     setTrainingModule,
+    removeFatherFromModule,
 
     changeSearchQuery,
     changeCurrentPage,
