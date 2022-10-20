@@ -10,7 +10,7 @@ import {
 
 const getTrainingModulesList = createAction('GET_TRAINING_MODULES');
 const setTrainingModulesList = createAction('SET_TRAINING_MODULES');
-const getTrainingModule = createAction<number>('GET_TRAINING_MODULE');
+const getTrainingModule = createAction<any>('GET_TRAINING_MODULE');
 const setTrainingModule = createAction('SET_TRAINING_MODULE');
 
 const createTrainingModule = createAction<CreateTrainingModulePayload>('CREATE_TRAINING_MODULES');
