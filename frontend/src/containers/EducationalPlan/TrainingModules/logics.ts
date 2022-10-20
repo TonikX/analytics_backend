@@ -63,6 +63,7 @@ const createTrainingModule = createLogic({
                 const moduleId = getTrainingModuleId(getState());
 
                 if (moduleId){
+                    //@ts-ignore
                     dispatch(moduleActions.getTrainingModule(moduleId));
                 } else {
                     dispatch(trainingModuleActions.getTrainingModulesList());
