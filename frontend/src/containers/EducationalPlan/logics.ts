@@ -225,6 +225,7 @@ const deleteBlockOfWorkPrograms = createLogic({
                 }
 
                 if (moduleId){
+                    //@ts-ignore
                     dispatch(moduleActions.getTrainingModule(moduleId));
                 }
 

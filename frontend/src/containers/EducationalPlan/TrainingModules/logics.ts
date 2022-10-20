@@ -60,7 +60,13 @@ const createTrainingModule = createLogic({
 
         service.createTrainingModule(action.payload)
             .then((res) => {
-                dispatch(trainingModuleActions.getTrainingModulesList());
+                const moduleId = getTrainingModuleId(getState());
+
+                if (moduleId){
+                    dispatch(moduleActions.getTrainingModule(moduleId));
+                } else {
+                    dispatch(trainingModuleActions.getTrainingModulesList());
+                }
                 dispatch(trainingModuleActions.closeDialog());
                 dispatch(actions.fetchingSuccess());
             })
