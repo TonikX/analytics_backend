@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'onlinecourse',
     'records',
     'gia_practice_app',
+    'drf_yasg2',
     #'django_extensions',
     # 'ckeditor',
     # 'ckeditor_uploader',
@@ -274,6 +275,7 @@ SWAGGER_SETTINGS = {
             'name': 'Authorization'
         }
     },
+    "DEFAULT_AUTO_SCHEMA_CLASS": "analytics_project.yasg_tag_class.CustomAutoSchema"
 }
 
 ISU = {
@@ -300,3 +302,4 @@ SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 URL_FRONT = env("URL_FRONT")
+

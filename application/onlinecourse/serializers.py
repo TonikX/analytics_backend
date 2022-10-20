@@ -4,7 +4,7 @@ from workprogramsapp.models import CourseCredit, CourseFieldOfStudy, FieldOfStud
 from dataprocessing.models import Items
 
 
-class FieldOfStudySerializer(serializers.ModelSerializer):
+class FieldOfStudySerializer2(serializers.ModelSerializer):
     """
         Сериализатор образовательных программ (направлений)
     """
@@ -31,7 +31,7 @@ class CourseCreditSerializer(serializers.ModelSerializer):
     """Сериализатор Перезачетов"""
     course = serializers.SlugRelatedField(slug_field="title", read_only=True)
     institution = InstitutionSerializer()
-    field_of_study = FieldOfStudySerializer(many=False)
+    field_of_study = FieldOfStudySerializer2(many=False)
 
     class Meta:
         model = CourseCredit
@@ -41,7 +41,7 @@ class CourseCreditSerializer(serializers.ModelSerializer):
 class CourseFieldOfStudySerializer(serializers.ModelSerializer):
     """Сериализатор Направлений и онлайн курсов"""
     course = serializers.SlugRelatedField(slug_field="title", read_only=True)
-    field_of_study = FieldOfStudySerializer(many=False)
+    field_of_study = FieldOfStudySerializer2(many=False)
 
     class Meta:
         model = CourseFieldOfStudy

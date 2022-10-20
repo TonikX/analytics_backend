@@ -85,7 +85,7 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class IndicatorSerializer(serializers.ModelSerializer):
+class IndicatorSerializerAdd(serializers.ModelSerializer):
     """Сериализатор Индикаторов"""
 
     class Meta:
@@ -103,7 +103,7 @@ class CompetenceSerializer(serializers.ModelSerializer):
 
 class CompetenceFullSerializer(serializers.ModelSerializer):
     """Сериализатор Компетенций"""
-    indicator_in_competencse = IndicatorSerializer(many=True)
+    indicator_in_competencse = IndicatorSerializerAdd(many=True)
 
     class Meta:
         model = Competence
@@ -118,7 +118,7 @@ class IndicatorListSerializer(serializers.ModelSerializer):
         fields = ['id', 'number', 'name', 'competence']
 
 
-class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
+class OutcomesOfWorkProgramInWorkProgramSerializerAdd(serializers.ModelSerializer):
     """Сериализатор вывода результата обучения для вывода результата в рабочей программе"""
     # item_name  = serializers.ReadOnlyField(source='item.name')
     # item_id  = serializers.ReadOnlyField(source='item.id')
@@ -132,7 +132,7 @@ class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
         }
 
 
-class PrerequisitesOfWorkProgramSerializer(serializers.ModelSerializer):
+class PrerequisitesOfWorkProgramSerializerAdd(serializers.ModelSerializer):
     """Сериализатор создания пререквизита обучения"""
     item = ItemSerializer()
     class Meta:
@@ -141,9 +141,9 @@ class PrerequisitesOfWorkProgramSerializer(serializers.ModelSerializer):
 
 
 class WorkProgramItemsPrerequisitesSerializer(serializers.ModelSerializer):
-    prerequisites = PrerequisitesOfWorkProgramSerializer(source='prerequisitesofworkprogram_set',
+    prerequisites = PrerequisitesOfWorkProgramSerializerAdd(source='prerequisitesofworkprogram_set',
                                                                many=True)
-    outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
+    outcomes = OutcomesOfWorkProgramInWorkProgramSerializerAdd(source='outcomesofworkprogram_set', many=True)
 
     class Meta:
         model = WorkProgram

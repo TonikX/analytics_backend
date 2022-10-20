@@ -69,7 +69,7 @@ class GeneralLaborFunctionsSerializer(serializers.ModelSerializer):
         fields = ['id', 'code', 'name', 'qualification_level', 'professional_standard']
 
 
-class KindsOfActivitySerializer(serializers.ModelSerializer):
+class KindsOfActivitySerializerForEd(serializers.ModelSerializer):
     """Сериализатор сфер проф. деятельности"""
 
     class Meta:

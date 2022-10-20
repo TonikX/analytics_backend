@@ -92,3 +92,4 @@ wdc==0.4.12
 xlrd==1.2.0
 deepdiff==5.7.0
 apscheduler==3.9.0
+drf-yasg2==18.5

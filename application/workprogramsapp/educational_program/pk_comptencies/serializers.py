@@ -20,7 +20,7 @@ from workprogramsapp.serializers import CompetenceSerializer, ImplementationAcad
 """
 
 
-class GeneralLaborFunctionsSerializer(serializers.ModelSerializer):
+class GeneralLaborFunctionsSerializerPk(serializers.ModelSerializer):
     """Сериализатор обобщенных трудовых функций"""
 
     class Meta:
@@ -92,7 +92,7 @@ class PkCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSer
         many=True)
     competence = CompetenceSerializer()
     professional_standard = ShortProfessionalStandardSerializer()
-    generalized_labor_functions = GeneralLaborFunctionsSerializer(many=True)
+    generalized_labor_functions = GeneralLaborFunctionsSerializerPk(many=True)
     kinds_of_activity = KindsOfActivitySerializer()
 
     class Meta:

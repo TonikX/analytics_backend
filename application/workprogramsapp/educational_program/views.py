@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
     EducationalProgramSerializer, \
     GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
-    GeneralLaborFunctionsSerializer, KindsOfActivitySerializer, EmployerSerializer, \
+    GeneralLaborFunctionsSerializer, KindsOfActivitySerializerForEd, EmployerSerializer, \
     WorkProgramCompetenceIndicatorSerializer, ObjectsOfActivitySerializer
 from .competence_handler import competence_dict_generator
 from .general_prof_competencies.models import IndicatorInGeneralProfCompetenceInGeneralCharacteristic, \
@@ -197,7 +197,7 @@ class KindsOfActivitySet(viewsets.ModelViewSet):
     CRUD для сфер деятельности
     """
     queryset = KindsOfActivity.objects.all()
-    serializer_class = KindsOfActivitySerializer
+    serializer_class = KindsOfActivitySerializerForEd
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
 

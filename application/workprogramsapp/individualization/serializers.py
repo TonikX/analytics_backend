@@ -16,7 +16,7 @@ from django.db import transaction
 from rest_framework.response import Response
 
 
-class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
+class ImplementationAcademicPlanSerializerIndividual(serializers.ModelSerializer):
     academic_plan = AcademicPlanSerializer()
     field_of_study = FieldOfStudyImplementationSerializer(many = True)
     #user = userProfileSerializer()
@@ -55,7 +55,7 @@ class CreateWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(seri
 class IndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     """Сериализатор вывода группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
 
-    implementation_of_academic_plan = ImplementationAcademicPlanSerializer()
+    implementation_of_academic_plan = ImplementationAcademicPlanSerializerIndividual()
     user = userProfileSerializer()
 
 
@@ -67,7 +67,7 @@ class IndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer
 class ShortIndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     """Сериализатор вывода группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
 
-    implementation_of_academic_plan = ImplementationAcademicPlanSerializer()
+    implementation_of_academic_plan = ImplementationAcademicPlanSerializerIndividual()
     user = userProfileSerializer()
 
     class Meta:
