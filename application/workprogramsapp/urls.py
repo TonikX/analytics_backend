@@ -35,9 +35,7 @@ from .views import CloneWorkProgramm
 from .views import CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, \
     DeleteIndicatorFromCompetenceView, \
     AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
-from .views import DisciplineBlockModuleShortListView, \
-    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailListForUserView, DisciplineBlockModuleDetailView, \
-    DisciplinesByNumber, InsertModule, WorkProgramArchiveUpdateView
+from .views import  DisciplinesByNumber,  WorkProgramArchiveUpdateView
 from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, \
     TopicsListAPI, TopicDetailAPI, NewOrdinalNumbersForDesciplineSectionAPI
 from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateView
@@ -78,7 +76,6 @@ from .views import CloneWorkProgramm
 from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, \
     WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView, \
     WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, \
-    DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView, \
     FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, \
     WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
     ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView, \
