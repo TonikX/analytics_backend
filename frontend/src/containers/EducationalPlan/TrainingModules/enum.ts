@@ -33,6 +33,8 @@ export enum TrainingModuleFields {
     TYPE = 'type',
     EDITORS = 'editors',
     CAN_EDIT = 'can_edit',
+    ISU_ID = 'module_isu_id',
+    SELECTION_RULE = 'selection_rule',
 }
 
 export enum StepsEnum {

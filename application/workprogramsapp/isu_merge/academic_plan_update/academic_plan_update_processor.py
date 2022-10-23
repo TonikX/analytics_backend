@@ -1,7 +1,7 @@
 import copy
 
+from django.conf import settings
 from django.utils import timezone
-
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_aspect import AcademicPlanUpdateAspect
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_utils import AcademicPlanUpdateUtils
 from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
@@ -16,8 +16,8 @@ class AcademicPlanUpdateProcessor:
     def __init__(self):
         self.isu_service = IsuService(
             IsuUser(
-                'rpd-constructor',
-                'oVrLzGwN8giUEPpBDs82c8OLuzgx2b9L'
+                settings.ISU["ISU_CLIENT_ID"],
+                settings.ISU["ISU_CLIENT_SECRET"]
             )
         )
 

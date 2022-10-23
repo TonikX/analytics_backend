@@ -106,3 +106,22 @@ export const steps = {
     [StepsEnum.MODULES]: 'Учебные модули',
     [StepsEnum.PLANS]: 'Доступные учебные планы',
 }
+
+export const selectRulesArray = [
+    {
+        value: 'choose_n_from_m',
+        label: 'Выбор в модуле по правилам'
+    },
+    {
+        value: 'all',
+        label: 'Необходимо выбрать всё в модуле'
+    },
+    {
+        value: 'any_quantity',
+        label: 'Выбрать в модуле любое колличество или 0'
+    },
+    {
+        value: 'by_credit_units',
+        label: 'Необходимое колличество ЗЕ'
+    },
+]

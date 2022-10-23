@@ -169,7 +169,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             this.props.actions.getEducationalDetail(planId);
         } else {
             //@ts-ignore
-            this.props.moduleActions.getTrainingModule({id: moduleId});
+            this.props.moduleActions.getTrainingModule(moduleId);
         }
     }
 

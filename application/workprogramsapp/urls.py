@@ -1,23 +1,20 @@
-from django.conf.urls import url
 from django.conf.urls import url, include
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
-from .bars_merge.views import FindSimilarEP, FindSimilarWP, CreateCheckPoint
 from .educational_program.views import DepartmentCreateAPIView, DepartmentListAPIView, DepartmentDetailsView, \
     DepartmentDestroyView, DepartmentUpdateView
-# Контроллеры
-
 from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView, UserExpertiseListView, \
     ExpertiseCommentsView, ChangeUserExpertiseView, \
     ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById, \
     DeleteUserExpertise
-from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, DeleteFolderView, \
-    CreateFolderView, EditFolderView, AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
+from .files_export.views import DocxFileExportView, SyllabusExportView
+from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, CreateFolderView, EditFolderView, \
+    AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
     AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, \
     ModuleInFolderView, AddToFolderModuleView, \
     RemoveFromFolderModuleView, IndividualImplementationAcademicPlanInFolderView, \
     AddToFolderndividualImplementationAcademicPlanView, RemoveFromFolderImplementationAcademicPlanView
-from .notifications.views import NotificationListView
 from .op_slection.views import CreateProfessionByKeywords
 from .profession.views import ProfessionsListApi, ProfessionCreateAPIView, ProfessionDetailsView, ProfessionDestroyView, \
     ProfessionUpdateView, ItemWithProfessions, ItemWithRoles, ProfessionsListWithoutPaginationApi
@@ -33,9 +30,14 @@ from .views import BibliographicReferenceListCreateAPIView, BibliographicReferen
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
     BibliographicReferenceInWorkProgramList, EvaluationToolInWorkProgramList, \
-    FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, \
-    FileUploadWorkProgramOutcomesAPIView
+    FileUploadWorkProgramAPIView, CompetenceCreateView, CompetencesListView, FileUploadWorkProgramOutcomesAPIView
 from .views import CloneWorkProgramm
+from .views import CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, \
+    DeleteIndicatorFromCompetenceView, \
+    AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
+from .views import DisciplineBlockModuleShortListView, \
+    DisciplineBlockModuleDetailListView, DisciplineBlockModuleDetailListForUserView, DisciplineBlockModuleDetailView, \
+    DisciplinesByNumber, InsertModule, WorkProgramArchiveUpdateView
 from .views import EvaluationToolListAPI, EvaluationToolDetailAPI, DisciplineSectionListAPI, DisciplineSectionDetailAPI, \
     TopicsListAPI, TopicDetailAPI, NewOrdinalNumbersForDesciplineSectionAPI
 from .views import FieldOfStudyDetailUpdateDeleteView, FieldOfStudyListCreateView
@@ -47,6 +49,7 @@ from .views import NewOrdinalNumbersForTopicAPI, TopicCreateAPI
 from .views import OutcomesOfWorkProgramDestroyView, OutcomesOfWorkProgramCreateAPIView, OutcomesOfWorkProgramUpdateView
 from .views import PrerequisitesOfWorkProgramDestroyView, PrerequisitesOfWorkProgramCreateAPIView, \
     PrerequisitesOfWorkProgramUpdateView, PrerequisitesOfWorkProgramList
+#
 from .views import CompetenceListView, CompetenceUpdateView, CompetenceIndicatorDetailView, DeleteIndicatorFromCompetenceView, \
     AddIndicatorToCompetenceView, OutcomesOfWorkProgramList
 
@@ -71,19 +74,30 @@ from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, WorkPr
     WorkProgramsWithPrerequisitesToOutocomesForThisWPView, WorkProgramsWithOutocomesForThisWPView, WorkProgramInFieldOfStudyForWorkProgramForGHList
 from .files_export.views import DocxFileExportView, SyllabusExportView
 from .views import CloneWorkProgramm
-
+#
+from .views import WorkProgramChangeInDisciplineBlockModuleCreateAPIView, \
+    WorkProgramChangeInDisciplineBlockModuleListAPIView, WorkProgramChangeInDisciplineBlockModuleDetailsView, \
+    WorkProgramChangeInDisciplineBlockModuleDestroyView, WorkProgramChangeInDisciplineBlockModuleUpdateView, \
+    DisciplineBlockModuleCreateAPIView, DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView, \
+    FileUploadAPIView, WorkProgramInFieldOfStudyListView, FieldOfStudiesForWorkProgramList, \
+    WorkProgramInFieldOfStudyListAPI, WorkProgramInFieldOfStudyDetailAPI, \
+    ZunListAPI, ZunDetailAPI, OutcomesForWorkProgramChangeBlock, WorkProgramDetailsWithDisciplineCodeView, \
+    AcademicPlanListShortAPIView, \
+    NewRealtionsForWorkProgramsInFieldOfStudyAPI, WorkProgramsWithOutcomesToPrerequisitesForThisWPView, \
+    WorkProgramsWithPrerequisitesToOutocomesForThisWPView, WorkProgramsWithOutocomesForThisWPView, \
+    WorkProgramInFieldOfStudyForWorkProgramForGHList
+from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgramDestroyView, WorkProgramUpdateView
+from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet, \
+    WorkProgramInFieldOfStudyForWorkProgramList, ChangeItemsView
+#
 from .views import WorkProgramsListApi, UserGroups, TimeoutTest, WorkProgramEditorsUpdateView
 from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
-
-from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet, WorkProgramInFieldOfStudyForWorkProgramList, ChangeItemsView
-
 # DocxFileExportOldView
 from .workprogram_additions.views import CopyContentOfWorkProgram
 
-from rest_framework.routers import DefaultRouter
+# Контроллеры
 
 router = DefaultRouter()
-
 
 router.register(r'api/zun/many_create',
                 ZunManyViewSet, basename='zun_many_create')
@@ -143,9 +157,9 @@ urlpatterns = [
 
     path('api/workprogram/getbynumbers', DisciplinesByNumber),
 
-
     path('api/workprogram/fieldofstudies/<int:workprogram_id>', FieldOfStudiesForWorkProgramList.as_view()),
-    path('api/workprogram/fieldofstudies_for_competences/<int:workprogram_id>', WorkProgramInFieldOfStudyForWorkProgramList.as_view()),
+    path('api/workprogram/fieldofstudies_for_competences/<int:workprogram_id>',
+         WorkProgramInFieldOfStudyForWorkProgramList.as_view()),
     path('api/workprogram/fieldofstudies_for_competences_for_matrix/<int:workprogram_id>/<int:gh_id>',
          WorkProgramInFieldOfStudyForWorkProgramForGHList.as_view()),
     path('api/workprograminfieldofstudy/', WorkProgramInFieldOfStudyListAPI.as_view()),
@@ -247,7 +261,6 @@ urlpatterns = [
     path('api/expertise/user/create', UserExpertiseCreateView.as_view()),
     path('api/expertise/user/delete/<int:pk>', DeleteUserExpertise.as_view()),
 
-
     path('api/expertise/comments/<int:pk>', ExpertiseCommentsView.as_view()),
     path('api/expertise/comments/create', ExpertiseCommentCreateView.as_view()),
     path('api/expertise/create', ExpertiseCreateView.as_view()),
@@ -315,12 +328,10 @@ urlpatterns = [
     path('api/workprogram/statistic/<int:pk>', WorkProgramStatistic),
     path('api/folders/real_remove/<int:pk>', DeleteFolderView.as_view()),
 
-
     # Аттестационные оценочные средства
     path('api/certification_tools/', СertificationEvaluationToolListAPI.as_view()),
     path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
     url(r'^', include('workprogramsapp.educational_program.urls')),
-
 
     url(r'^', include('workprogramsapp.educational_program.urls')),
     url(r'^', include('workprogramsapp.workprogram_additions.urls')),

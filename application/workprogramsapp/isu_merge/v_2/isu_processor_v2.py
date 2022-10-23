@@ -1,13 +1,23 @@
-import os
-import pandas as pd
 import json
-import re
 import os
+import re
+import time
+from django.conf import settings
+import pandas as pd
 import requests
+from requests import Response
+from workprogramsapp.models import ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
+    WorkProgram, FieldOfStudy, AcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramInFieldOfStudy, \
+    WorkProgramIdStrUpForIsu, Zun
+import json
+import os
+import re
 import time
 
+import pandas as pd
+import requests
+from django.conf import settings
 from requests import Response
-
 from workprogramsapp.models import ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
     WorkProgram, FieldOfStudy, AcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramInFieldOfStudy, \
     WorkProgramIdStrUpForIsu, Zun
@@ -16,7 +26,7 @@ from workprogramsapp.models import ImplementationAcademicPlan, WorkProgramChange
 def invoke():
     print('началось')
     url = "https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token"
-    auth_data = {"client_id": "rpd-constructor", "client_secret": "oVrLzGwN8giUEPpBDs82c8OLuzgx2b9L",
+    auth_data = {"client_id": settings.ISU["ISU_CLIENT_ID"], "client_secret": settings.ISU["ISU_CLIENT_SECRET"],
                  "grant_type": "client_credentials"}
     token_txt = requests.post(url, auth_data).text
     token = json.loads(token_txt)["access_token"]

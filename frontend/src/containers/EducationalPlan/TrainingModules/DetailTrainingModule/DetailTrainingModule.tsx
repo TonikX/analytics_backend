@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactText} from 'react';
 import get from 'lodash/get';
 import {withRouter} from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars";
@@ -10,6 +10,7 @@ import {DetailTrainingModuleProps} from './types';
 
 import connect from './DetailTrainingModule.connect';
 import WPBlockCreateModal from "../../Detail/WPBlockCreateModal";
+import TextField from "@material-ui/core/TextField";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -41,8 +42,10 @@ import {UserType} from "../../../../layout/types";
 import UserSelector from "../../../Profile/UserSelector/UserSelector";
 import Dialog from "@material-ui/core/Dialog";
 import {StepsEnum, TrainingModuleFields} from "../enum";
-import {steps} from "../constants";
+import {selectRulesArray, steps} from "../constants";
 import StepButton from "@material-ui/core/StepButton";
+import TrainingModuleCreateModal from "../TrainingModuleCreateModal/TrainingModuleCreateModal";
+import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -50,14 +53,35 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     deletedWorkProgramsLength: 0,
     addEditorsMode: false,
     activeStep: StepsEnum.GENERAL,
+    description: this.props.module[TrainingModuleFields.DESCRIPTION],
+    isuId: this.props.module[TrainingModuleFields.ISU_ID],
   }
 
   componentDidMount() {
     this.props.actions.getTrainingModule(this.getModuleId());
   }
 
-  handleCreateNewWPBlock = () => {
-    this.props.educationPlansActions.createBlockOfWorkPrograms(this.getModuleId());
+  componentDidUpdate(prevProps: DetailTrainingModuleProps, nextProps: any) {
+    if (prevProps.module !== this.props.module) {
+      this.setState({
+        description: this.props.module[TrainingModuleFields.DESCRIPTION],
+        isuId: this.props.module[TrainingModuleFields.ISU_ID],
+      })
+    }
+  }
+
+  handleCreateNewWPBlock = (moduleId: number) => () => {
+    this.props.educationPlansActions.createBlockOfWorkPrograms(moduleId);
+  }
+
+  handleCreateNewModule = (id: number) => () => {
+    this.props.actions.openDialog({data: {
+      father: id,
+    }});
+  }
+
+  removeFatherFromModule = (id: number) => () => {
+    this.props.actions.removeFatherFromModule(id)
   }
 
   getModuleId = () => get(this.props.match.params, 'id');
@@ -149,31 +173,58 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   renderModule = (item: any, level: number): any => {
     const {classes, canEdit} = this.props
     const blockOfWorkPrograms = item?.change_blocks_of_work_programs_in_modules
-    const child = item?.childs?.[0] ? this.renderModule(item?.childs?.[0], level + 1) : <></>
 
     return(
       <>
+        <TableRow>
+          <TableCell  style={{ height: '40px'}} rowSpan={2} colSpan={canEdit ? 3 : 2} className={classes.moduleNameWrap}>
+            <Typography className={classes.moduleName} style={{ paddingLeft: level * 5 }}>
+              {'*'.repeat(level)}
+              {item?.name}
+            </Typography>
+          </TableCell>
+          <TableCell />
+          {canEdit && (
+            <TableCell style={{ height: '40px'}}>
+              <div className={classes.moduleButtons}>
+                <Button size="small" onClick={this.handleCreateNewWPBlock(item.id)}>
+                  <AddIcon/> РПД
+                </Button>
+                <Button size="small" onClick={this.handleCreateNewModule(item.id)}>
+                  <AddIcon/> Модуль
+                </Button>
+                {level !== 0 && (
+                  <Tooltip
+                    title={`Открепить модуль`}>
+                    <DeleteIcon className={classes.deleteIcon}
+                                onClick={this.removeFatherFromModule(item.id)}
+                                style={{
+                                  marginRight: '28px',
+                                  marginTop: '5px',
+                                }}
+                    />
+                  </Tooltip>
+                )}
+              </div>
+            </TableCell>
+          )}
+        </TableRow>
         {blockOfWorkPrograms?.map((blockOfWorkProgram: any) => {
-          const semesterHours = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.SEMESTER_UNIT);
           const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
-
-          const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-          const semesterHour = mappedSemesterHours.slice(0, 10);
 
           return <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
             <TableCell>
-              {workPrograms.map((workProgram: any) =>
-                <div className={classes.displayFlex} style={{ paddingLeft: 10 + level * 5 }}>
-                  <Typography className={classes.workProgramLink}
-                              onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
-                    {workProgram[WorkProgramGeneralFields.TITLE]}
-                  </Typography>
-                </div>
-              )}
+              <div style={{ paddingLeft: 10 + level * 5 }}>
+                {workPrograms.map((workProgram: any) =>
+                  <div className={classes.displayFlex}>
+                    <Typography className={classes.workProgramLink}
+                                onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
+                      {workProgram[WorkProgramGeneralFields.TITLE]}
+                    </Typography>
+                  </div>
+                )}
+              </div>
             </TableCell>
-            {semesterHour.map((semesterHour: string) =>
-              <TableCell align="center" className={classes.hourCell}> {semesterHour} </TableCell>
-            )}
             <TableCell>
               {get(typeOfWorkProgramInPlan.find(item =>
                 item.value === blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
@@ -197,48 +248,45 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             }
           </TableRow>;
         })}
-        {child}
+        {item?.childs?.map((item: any) => (
+          this.renderModule(item, level + 1)
+        ))}
       </>
     )
+  }
+
+  updateTrainingModuleField = (field: string) => (e: React.ChangeEvent) => {
+    this.props.actions.changeTrainingModule({
+      data: {
+        [field]: get(e, 'target.value'),
+        id: this.props.module?.id
+      }
+    })
+  }
+
+  updateSelectRule = (value: ReactText) => {
+    this.props.actions.changeTrainingModule({
+      data: {
+        [TrainingModuleFields.SELECTION_RULE]: value,
+        id: this.props.module?.id
+      }
+    })
   }
 
   renderModules = () => {
     const {classes, module, canEdit} = this.props
     return (
       <>
-        <Typography className={classes.subTitle}>
-          {steps[StepsEnum.MODULES]}
-
-          <Button onClick={this.handleCreateNewWPBlock} color="secondary">
-            <AddIcon/> Создать блок рабочих программ
-          </Button>
-        </Typography>
         <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
           <div className={classes.tableWrap}>
             <Table stickyHeader size='small'>
               <TableHead className={classes.header}>
                 <TableRow>
-                  <TableCell rowSpan={2}>
-                    РПД
+                  <TableCell>
+                    Модуль/РПД
                   </TableCell>
-                  <TableCell colSpan={10} className={classes.headerTextHoursCount}>
-                    Количество зачетных единиц в семестрах
-                  </TableCell>
-                  <TableCell rowSpan={2}> Тип </TableCell>
-                  {canEdit && <TableCell rowSpan={2}/>}
-                </TableRow>
-
-                <TableRow>
-                  <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">1</TableCell>
-                  <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">2</TableCell>
-                  <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">3</TableCell>
-                  <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">4</TableCell>
-                  <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">5</TableCell>
-                  <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">6</TableCell>
-                  <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">7</TableCell>
-                  <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">8</TableCell>
-                  <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">9</TableCell>
-                  <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">10</TableCell>
+                  <TableCell> Тип </TableCell>
+                  {canEdit && <TableCell/>}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -256,9 +304,17 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
     return (
       <>
-        <Typography className={classes.subTitle}>
-          {steps[StepsEnum.GENERAL]}
-        </Typography>
+        {canEdit && (
+          <Button
+            onClick={() => this.setState({addEditorsMode: true})}
+            variant="outlined"
+            className={classes.editorsAdd}
+            size="small"
+          >
+            <AddIcon/> Добавить редактора
+          </Button>
+        )}
+
         {Boolean(module.editors && module.editors.length) ? (
           <div className={classes.editors}>
             <Typography className={classes.editorsTitle}>
@@ -276,27 +332,43 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           </div>
         ) : <></>}
 
-        {canEdit && (
-          <Button
-            onClick={() => this.setState({addEditorsMode: true})}
-            variant="text"
-            className={classes.editorsAdd}
-            size="small"
-          >
-            <AddIcon/> Добавить редактора
-          </Button>
-        )}
-
         <>
-          <Typography className={classes.textItem}>
-            <b>Описание:</b> {module.description}
-          </Typography>
-          <Typography className={classes.textItem}>
-            <b>ISU id:</b> {module.module_isu_id}
-          </Typography>
-          <Typography className={classes.textItem}>
-            <b>Правило выбора:</b> {module.selection_rule}
-          </Typography>
+          <TextField variant="outlined"
+                     label="Описание"
+                     value={this.state.description}
+                     onChange={(e) => this.setState({ description: e.target.value })}
+                     onBlur={this.updateTrainingModuleField(TrainingModuleFields.DESCRIPTION)}
+                     className={classes.textField}
+                     InputLabelProps={{
+                       shrink: true,
+                     }}
+          />
+          <TextField variant="outlined"
+                     label="ISU id"
+                     value={this.state.isuId}
+                     onChange={(e) => this.setState({ description: e.target.value })}
+                     onBlur={this.updateTrainingModuleField(TrainingModuleFields.ISU_ID)}
+                     className={classes.textField}
+                     InputLabelProps={{
+                       shrink: true,
+                     }}
+          />
+          <SimpleSelector label="Правило выбора"
+                          value={module?.[TrainingModuleFields.SELECTION_RULE]}
+                          onChange={this.updateSelectRule}
+                          metaList={selectRulesArray}
+                          wrapClass={classes.selectorWrap}
+          />
+
+          {/*<Typography className={classes.textItem}>*/}
+          {/*  <b>Описание:</b> {module.description}*/}
+          {/*</Typography>*/}
+          {/*<Typography className={classes.textItem}>*/}
+          {/*  <b>ISU id:</b> {module.module_isu_id}*/}
+          {/*</Typography>*/}
+          {/*<Typography className={classes.textItem}>*/}
+          {/*  <b>Правило выбора:</b> {module.selection_rule}*/}
+          {/*</Typography>*/}
         </>
       </>
     )
@@ -419,6 +491,8 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             </Dialog>
           )}
         </Paper>
+
+        <TrainingModuleCreateModal/>
       </div>
     );
   }
