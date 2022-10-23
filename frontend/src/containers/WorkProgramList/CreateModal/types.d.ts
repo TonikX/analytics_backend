@@ -12,3 +12,16 @@ export interface CreateModalProps extends WithStyles<typeof styles> {
     structuralUnitActions: StructuralUnitsActions;
     isOpen: boolean;
 }
+
+export type HoursSection = {
+    SRO: number,
+    lecture_classes: number,
+    practical_lessons: number,
+    laboratory: number,
+}
+
+export type EditableRowProps = {
+    section: HoursSection;
+    semesterNum: number,
+    updateRow: (section: HoursSection, semesterNum: number) => void;
+}
