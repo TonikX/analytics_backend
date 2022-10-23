@@ -1,8 +1,11 @@
+from collections import defaultdict
+
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.expertise.models import Expertise
-from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, ImplementationAcademicPlan
+from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, ImplementationAcademicPlan, \
+    EvaluationTool
 from workprogramsapp.serializers import PrerequisitesOfWorkProgramInWorkProgramSerializer, \
     OutcomesOfWorkProgramInWorkProgramSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
@@ -26,6 +29,20 @@ class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkProgram
         fields = ['id', 'discipline_code', 'title', 'description', 'status']
+
+
+class WorkProgramEvaluationToolsStatSerializer(serializers.ModelSerializer):
+    tools_counter = serializers.SerializerMethodField()
+
+    def get_tools_counter(self, instance):
+        types_dict = defaultdict(int)
+        for eva in EvaluationTool.objects.filter(evaluation_tools__work_program=instance):
+            types_dict[eva.type] += 1
+        return types_dict
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'discipline_code', 'title', 'tools_counter']
 
 
 class WorkProgramDuplicatesSerializer(serializers.Serializer):
