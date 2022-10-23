@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import number_of_academplans_by_qualification_and_year, RecordOfWorkProgramQuality, StructuralUnits, \
     AcademicPlans, report_of_number_of_workprograms_by_qualification, WorkProgramDetailsWithApAndSemesters, \
-    GetDuplicates
+    GetDuplicates, WorkProgramEvaluationToolsCounter
 from .views import SimpleStatistic, EmptyStringWp, WpWithoutAP, WpWithSimilarCode, \
     WpWithoutStructuralUnit, StructuralUnitWp, FieldOfStudyPlanToISU, AllWpShort, WorkProgramDetailsWithApAndSemesters, \
     OneAcademicPlanWithDescriptionWp, AllAcademicPlanWithDescriptionWp, GetPrerequisitesAndOutcomesOfWpByStrUP, \
@@ -32,7 +32,6 @@ urlpatterns = [
     path('api/record/workprogram/empty_field_wp', GetAllWPsWithEmptyField.as_view()),
     path('api/record/academic_plan/wp_statistic_for_academic_plan',
          AllAcademicPlansWpExpertiseStatisticView.as_view()),
-
     path('api/record/workprogram/duplicates', GetDuplicates),
-
+    path('api/record/tools/counter_type', WorkProgramEvaluationToolsCounter.as_view()),
 ]
