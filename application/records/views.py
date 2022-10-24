@@ -316,7 +316,7 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
 
         filter_dict = {}
         if status_filter:
-            if status_filter!="WK":
+            if status_filter != "WK":
                 filter_dict["expertise_with_rpd__expertise_status__contains"] = status_filter
         if structural_units:
             structural_units = [int(unit) for unit in structural_units]
@@ -357,14 +357,14 @@ def GetDuplicates(request):
     for wp in duplicates:
         duplicates = WorkProgram.objects.filter(title=wp["title"])
         serializer = WorkProgramSerializerForStatistic(duplicates, many=True)
-        duplicates_list.append({"name":wp["title"],"count":wp["name_count"], "work_programs":serializer.data})
+        duplicates_list.append({"name": wp["title"], "count": wp["name_count"], "work_programs": serializer.data})
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
     paginator = pagination_class()
     page = paginator.paginate_queryset(duplicates_list, request)
 
     serializer = WorkProgramDuplicatesSerializer(page, many=True)
     return paginator.get_paginated_response(serializer.data)
-    #return Response(duplicates_list)
+    # return Response(duplicates_list)
 
 
 class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
@@ -613,7 +613,41 @@ class WorkProgramEvaluationToolsCounter(generics.ListAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramEvaluationToolsStatSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['discipline_code', 'title' ]
-    filterset_fields = ['expertise_with_rpd__expertise_status' ]
+    search_fields = ['discipline_code', 'title']
+    filterset_fields = ['expertise_with_rpd__expertise_status']
     permission_classes = [IsAuthenticated]
 
+
+class WorkProgramRealisedInYear(generics.ListAPIView):
+    """
+    Получение всех РПД, реализующихся в опредленном учебном году
+    Для указания учебного года нужно передать get-параметр year вида "YYYY/YYYY"
+    """
+    queryset = WorkProgram.objects.all()
+    serializer_class = SuperShortWorkProgramSerializer
+    permission_classes = [AllowAny]
+    lookup_url_kwarg = "year"
+
+    def get_queryset(self):
+        year_of_sending = self.request.query_params.get(self.lookup_url_kwarg).split("/")[0]
+        object_list = None
+
+        for now_semester in range(12):
+
+            many_term_regex = r""
+            for i in range(12):
+                if i == now_semester:
+                    many_term_regex += "(([^0]\.[0-9])|([^0])),\s"
+                else:
+                    many_term_regex += "(([0-9]\.[0-9])|[0-9]),\s"
+            many_term_regex = many_term_regex[:-3]
+            wp_for_year = WorkProgram.objects.filter(
+                work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year=int(
+                    year_of_sending) - now_semester // 2,
+                zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=many_term_regex)
+            if object_list:
+                object_list = object_list | wp_for_year
+            else:
+                object_list = wp_for_year
+        object_list.distinct()
+        return object_list
