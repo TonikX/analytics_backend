@@ -60,6 +60,10 @@ export enum WorkProgramGeneralFields {
     EDITORS = 'editors',
     BARS = 'bars',
     OFFERTA = 'is_oferta',
+    LAB_HOURS = 'lab_hours_v2',
+    SRS_HOURS = 'srs_hours_v2',
+    PRACTICE_HOURS = 'practice_hours_v2',
+    LECTURE_HOURS = 'lecture_hours_v2',
 }
 
 export enum workProgramSectionFields {
