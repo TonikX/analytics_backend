@@ -8,6 +8,7 @@ from rest_framework import generics, filters, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from workprogramsapp.disciplineblockmodules.search_filters import DisciplineBlockModuleFilter
 from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockModuleCreateSerializer, \
     DisciplineBlockModuleSerializer, DisciplineBlockModuleForModuleListDetailSerializer, \
     DisciplineBlockModuleDetailSerializer
@@ -56,13 +57,10 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleCreateSerializer
-    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+    filterset_class=DisciplineBlockModuleFilter
+    search_fields = ['id', 'module_isu_id', 'name', 'descipline_block__name']
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
-    filterset_fields = ['change_blocks_of_work_programs_in_modules__work_program__prerequisites',
-                        'change_blocks_of_work_programs_in_modules__work_program__outcomes',
-                        'change_blocks_of_work_programs_in_modules__work_program__structural_unit__title',
-                        'descipline_block__academic_plan__academic_plan_in_field_of_study__qualification']
+   # filterset_fields = ['id', 'module_isu_id', 'name', 'descipline_block__name',]
     permission_classes = [IsRpdDeveloperOrReadOnly]
     my_tags = ["Discipline Blocks"]
 
@@ -74,8 +72,10 @@ class DisciplineBlockModuleDetailListView(generics.ListAPIView):
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filterset_class = DisciplineBlockModuleFilter
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['name', 'descipline_block__name']
+
     my_tags = ["Discipline Blocks"]
 
 
@@ -84,7 +84,8 @@ class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
          Получение списка модулей с полной информацией, где редактор запрашивающий пользователь
     """
     serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filterset_class = DisciplineBlockModuleFilter
     search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
     my_tags = ["Discipline Blocks"]
 

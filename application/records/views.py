@@ -20,7 +20,7 @@ from .serializers import WorkProgramInFieldOfStudySerializerForStatistic, \
     AcademicPlansDescriptionWpSerializer, WorkProgramPrerequisitesAndOutcomesSerializer, \
     WorkProgramDescriptionOnlySerializer, \
     ImplementationAcademicPlanWpStatisticSerializer, WorkProgramDuplicatesSerializer, \
-    WorkProgramEvaluationToolsStatSerializer
+    WorkProgramEvaluationToolsStatSerializer, AcademicPlanRealisedInYearSerializer
 
 
 @api_view(['GET'])
@@ -649,5 +649,12 @@ class WorkProgramRealisedInYear(generics.ListAPIView):
                 object_list = object_list | wp_for_year
             else:
                 object_list = wp_for_year
-        object_list.distinct()
+        object_list = object_list.distinct()
         return object_list
+
+
+class AcademicPlanRealisedInYear(generics.RetrieveAPIView):
+    queryset = AcademicPlan.objects.all()
+    serializer_class = AcademicPlanRealisedInYearSerializer
+    permission_classes = [AllowAny]
+    #lookup_url_kwarg = "year"
