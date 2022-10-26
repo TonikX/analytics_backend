@@ -112,7 +112,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     replaceValue = (oldValue: string, newValue: number, semesterNumber: number) => {
         const arr = oldValue.split(", ");
-        arr[semesterNumber - 1] = String(newValue);
+        // На случай, если кто-то решил стереть нули
+        arr[semesterNumber - 1] = String(newValue) ? String(newValue) : "0";
         return arr.join(", ");
     };
 
@@ -140,6 +141,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         this.setState({
             workProgram: {
                 ...workProgram,
+                [WorkProgramGeneralFields.SEMESTER_COUNT]: numOfSemesters,
                 lab_hours_v2: this.fixZeros(laboratoryHours, +numOfSemesters).join(", "),
                 srs_hours_v2: this.fixZeros(sroHours, +numOfSemesters).join(", "),
                 lecture_hours_v2: this.fixZeros(lectureClasses, +numOfSemesters).join(", "),
@@ -153,14 +155,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         if (field === WorkProgramGeneralFields.SEMESTER_COUNT) {
             this.recalculateHours(get(e, 'target.value'));
+        } else {
+            this.setState({
+                workProgram: {
+                    ...workProgram,
+                    [field]: get(e, 'target.value')
+                }
+            });
         }
-
-        this.setState({
-            workProgram: {
-                ...workProgram,
-                [field]: get(e, 'target.value')
-            }
-        });
     };
 
     handleChangeStructuralUnitSearchText = (searchText: string) => {
