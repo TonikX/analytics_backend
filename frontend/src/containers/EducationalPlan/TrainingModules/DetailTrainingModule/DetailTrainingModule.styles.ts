@@ -71,7 +71,7 @@ export default (theme: Theme) => createStyles({
     editors: {
         display: 'flex',
         flexWrap: 'wrap',
-        marginBottom: '20px',
+        marginBottom: '10px',
     },
     wrap: {
         padding: '0px 30px 30px',
@@ -92,6 +92,7 @@ export default (theme: Theme) => createStyles({
     editorsAdd: {
         height: '32px',
         marginBottom: '20px',
+        marginLeft: 'auto',
     },
     moduleNameWrap: {
         display: 'flex',

@@ -16,8 +16,16 @@ export const initialState: trainingModulesState = {
     [fields.SEARCH_QUERY]: "",
     [fields.TRAINING_MODULES_LIST]: [],
     [fields.TRAINING_MODULE_DIALOG]: {
-        [fields.IS_OPEN_TRAINING_MODULE_DIALOG]: false,
-        [fields.TRAINING_MODULE_DIALOG_DATA]: {}
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
+    },
+    [fields.EVALUATION_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
+    },
+    [fields.EVALUATION_DESCRIPTION_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: ''
     },
     [fields.DETAIL_TRAINING_MODULE]: {},
     [fields.SHOW_ONLY_MY]: false,
@@ -50,15 +58,17 @@ const changeAllCount = (state: trainingModulesState, {payload}: any): trainingMo
 
 const openDialog = (state: trainingModulesState, {payload}: {payload: OpenDialogPayload}): trainingModulesState => ({
     ...state,
-    [fields.TRAINING_MODULE_DIALOG]: {
-        [fields.IS_OPEN_TRAINING_MODULE_DIALOG]: true,
-        [fields.TRAINING_MODULE_DIALOG_DATA]: payload.data
+    [payload.dialog]: {
+        [fields.IS_OPEN_DIALOG]: true,
+        [fields.DIALOG_DATA]: payload.data
     },
 });
 
 const closeDialog = (state: trainingModulesState): trainingModulesState => ({
     ...state,
     [fields.TRAINING_MODULE_DIALOG]: initialState[fields.TRAINING_MODULE_DIALOG],
+    [fields.EVALUATION_MODULE_DIALOG]: initialState[fields.EVALUATION_MODULE_DIALOG],
+    [fields.EVALUATION_DESCRIPTION_MODULE_DIALOG]: initialState[fields.EVALUATION_DESCRIPTION_MODULE_DIALOG],
 });
 
 const changeSorting = (state: trainingModulesState, {payload}: any): trainingModulesState => ({

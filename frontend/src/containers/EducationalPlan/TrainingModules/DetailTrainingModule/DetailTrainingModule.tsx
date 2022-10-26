@@ -41,11 +41,12 @@ import AddIcon from "@material-ui/icons/Add";
 import {UserType} from "../../../../layout/types";
 import UserSelector from "../../../Profile/UserSelector/UserSelector";
 import Dialog from "@material-ui/core/Dialog";
-import {StepsEnum, TrainingModuleFields} from "../enum";
+import {fields, StepsEnum, TrainingModuleFields} from "../enum";
 import {selectRulesArray, steps} from "../constants";
 import StepButton from "@material-ui/core/StepButton";
 import TrainingModuleCreateModal from "../TrainingModuleCreateModal/TrainingModuleCreateModal";
 import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
+import EvaluationTools from '../EvaluationTools'
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -75,9 +76,12 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   handleCreateNewModule = (id: number) => () => {
-    this.props.actions.openDialog({data: {
-      father: id,
-    }});
+    this.props.actions.openDialog({
+      data: {
+        father: id,
+      },
+      dialog: fields.TRAINING_MODULE_DIALOG
+    });
   }
 
   removeFatherFromModule = (id: number) => () => {
@@ -304,35 +308,39 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
     return (
       <>
-        {canEdit && (
-          <Button
-            onClick={() => this.setState({addEditorsMode: true})}
-            variant="outlined"
-            className={classes.editorsAdd}
-            size="small"
-          >
-            <AddIcon/> Добавить редактора
-          </Button>
-        )}
+        <div className={classes.editors}>
+          <Typography className={classes.editorsTitle}>
+            Редакторы:
+          </Typography>
 
-        {Boolean(module.editors && module.editors.length) ? (
-          <div className={classes.editors}>
-            <Typography className={classes.editorsTitle}>
-              Редакторы:
-            </Typography>
+          {module?.editors?.map((editor: UserType) =>
+            <Chip
+              key={editor.id}
+              label={getUserFullName(editor)}
+              onDelete={canEdit ? this.handleDeletingEditor(editor.id) : undefined}
+              className={classes.editorsItem}
+            />
+          )}
 
-            {module.editors.map((editor: UserType) =>
-              <Chip
-                key={editor.id}
-                label={getUserFullName(editor)}
-                onDelete={canEdit ? this.handleDeletingEditor(editor.id) : undefined}
-                className={classes.editorsItem}
-              />
-            )}
-          </div>
-        ) : <></>}
+          {module?.editors?.length === 0 && <Typography>ни одного редактора не добавлено</Typography>}
+
+
+          {canEdit && (
+            <Button
+              onClick={() => this.setState({addEditorsMode: true})}
+              variant="outlined"
+              className={classes.editorsAdd}
+              size="small"
+            >
+              <AddIcon/> Добавить редактора
+            </Button>
+          )}
+        </div>
 
         <>
+          <Typography className={classes.textField}>
+            ID конструктора РПД: <b>{module?.[TrainingModuleFields.ID]}</b>
+          </Typography>
           <TextField variant="outlined"
                      label="Описание"
                      value={this.state.description}
@@ -422,6 +430,8 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         return this.renderModules()
       case StepsEnum.PLANS:
         return this.renderPlans()
+      case StepsEnum.EVALUATION_TOOLS:
+        return <EvaluationTools />
     }
   }
 

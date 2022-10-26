@@ -32,7 +32,16 @@ const showOnlyMy = createAction<boolean>('TRAINING_MODULES_SHOW_ONLY_MY');
 
 const changeEditorList = createAction('TRAINING_MODULES_CHANGE_EDITOR_LIST');
 
+const deleteIntermediateCertification = createAction('TRAINING_MODULES_DELETE_INTERMEDIATE_CERTIFICATION');
+const addIntermediateCertification = createAction('TRAINING_MODULES_ADD_INTERMEDIATE_CERTIFICATION');
+const changeIntermediateCertification = createAction('TRAINING_MODULES_CHANGE_INTERMEDIATE_CERTIFICATION');
+const getIntermediateCertification = createAction('TRAINING_MODULES_GET_INTERMEDIATE_CERTIFICATION');
+
 const actions: TrainingModulesActions = {
+    deleteIntermediateCertification,
+    addIntermediateCertification,
+    changeIntermediateCertification,
+    getIntermediateCertification,
     changeFiltering,
     getTrainingModulesList,
     setTrainingModulesList,
