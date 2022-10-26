@@ -35,7 +35,7 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
-    WorkProgramArchiveUpdateSerializer
+    WorkProgramArchiveUpdateSerializer, EvaluationToolListSerializer
 from .serializers import BibliographicReferenceSerializer, \
     WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
@@ -767,7 +767,7 @@ class EvaluationToolListAPI(generics.ListCreateAPIView):
     API endpoint that represents a list of Evaluation Tools.
     """
     queryset = EvaluationTool.objects.all()
-    serializer_class = EvaluationToolCreateSerializer
+    serializer_class = EvaluationToolListSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 

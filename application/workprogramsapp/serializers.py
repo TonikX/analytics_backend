@@ -382,6 +382,27 @@ class EvaluationToolCreateSerializer(serializers.ModelSerializer):
         fields = ['type', 'name', 'description', 'check_point', 'deadline', 'semester', 'min', 'max', 'descipline_sections', 'evaluation_criteria']
 
 
+class EvaluationToolListSerializer(serializers.ModelSerializer):
+    """Сериализатор ФОСов для ListView"""
+    descipline_sections = serializers.PrimaryKeyRelatedField(many=True, source='evaluation_tools',
+                                                             queryset=DisciplineSection.objects.all())
+    wp_id = serializers.SerializerMethodField()
+
+    def get_wp_id(self, instance):
+        try:
+            id_wp = WorkProgram.objects.filter(discipline_sections__evaluation_tools=instance)[0].id
+        except IndexError:
+            id_wp = None
+        return id_wp
+
+    # descipline_sections = DisciplineSectionForEvaluationToolsSerializer(many=True, source='evaluation_tools')
+
+    class Meta:
+        model = EvaluationTool
+        fields = ['id', 'type', 'name', 'description', 'check_point', 'deadline', 'semester', 'min', 'max',
+                  'descipline_sections', 'evaluation_criteria', 'wp_id']
+
+
 class ZunSerializer(serializers.ModelSerializer):
     """Сериализатор Зунов"""
     indicator_in_zun = IndicatorListSerializer()

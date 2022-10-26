@@ -1,8 +1,11 @@
+from collections import defaultdict
+
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.expertise.models import Expertise
-from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, ImplementationAcademicPlan
+from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, ImplementationAcademicPlan, \
+    EvaluationTool
 from workprogramsapp.serializers import PrerequisitesOfWorkProgramInWorkProgramSerializer, \
     OutcomesOfWorkProgramInWorkProgramSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
@@ -28,13 +31,24 @@ class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
         fields = ['id', 'discipline_code', 'title', 'description', 'status']
 
 
+class WorkProgramEvaluationToolsStatSerializer(serializers.ModelSerializer):
+    tools_counter = serializers.SerializerMethodField()
+
+    def get_tools_counter(self, instance):
+        types_dict = defaultdict(int)
+        for eva in EvaluationTool.objects.filter(evaluation_tools__work_program=instance):
+            types_dict[eva.type] += 1
+        return types_dict
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'discipline_code', 'title', 'tools_counter']
+
+
 class WorkProgramDuplicatesSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=300)
     count = serializers.IntegerField()
     work_programs = serializers.ListField()
-
-
-
 
 
 class ShortAcademicPlan(serializers.ModelSerializer):
@@ -131,10 +145,6 @@ class RecordAcademicPlanSerializer(serializers.ModelSerializer):
         fields = ['number']
 
 
-
-
-
-
 class AcademicPlansDescriptionWpSerializer(serializers.ModelSerializer):
     wp_in_academic_plan = serializers.SerializerMethodField()
     academic_plan_in_field_of_study = ImplementationAcademicPlanForStatisticSerializer(many=True)
@@ -189,3 +199,41 @@ class ImplementationAcademicPlanWpStatisticSerializer(serializers.ModelSerialize
         model = ImplementationAcademicPlan
         fields = ['academic_plan', 'title', 'year', 'total_count_of_wp', 'wp_with_editors', 'accepted_wp',
                   'wp_on_expertise']
+
+
+class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
+    work_programs = serializers.SerializerMethodField()
+    title = serializers.SerializerMethodField()
+
+    def get_title(self, instance):
+        return ImplementationAcademicPlan.objects.get(academic_plan=instance).title
+
+    def get_work_programs(self, instance):
+        request = self.context['request']
+        year_of_sending = request.query_params.get("year").split("/")[0]
+        object_list = None
+        wps_list = WorkProgram.objects.filter(
+            work_program_in_change_block__discipline_block_module__descipline_block__academic_plan=instance)
+
+        for now_semester in range(12):
+            many_term_regex = r""
+            for i in range(12):
+                if i == now_semester:
+                    many_term_regex += "(([^0]\.[0-9])|([^0])),\s"
+                else:
+                    many_term_regex += "(([0-9]\.[0-9])|[0-9]),\s"
+            many_term_regex = many_term_regex[:-3]
+            wp_for_year = wps_list.filter(
+                work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year=int(
+                    year_of_sending) - now_semester // 2,
+                zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=many_term_regex)
+            if object_list:
+                object_list = object_list | wp_for_year
+            else:
+                object_list = wp_for_year
+        object_list=object_list.distinct()
+        return SuperShortWorkProgramSerializer(instance=object_list, many=True).data
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id', 'ap_isu_id', 'title', 'work_programs', ]
