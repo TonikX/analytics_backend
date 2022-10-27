@@ -215,7 +215,7 @@ const addIntermediateCertification = createLogic({
             //@ts-ignore
             dispatch(trainingModuleActions.getTrainingModule(moduleId));
             dispatch(actions.fetchingSuccess());
-            dispatch(trainingModuleActions.closeDialog(fields.CREATE_NEW_INTERMEDIATE_CERTIFICATION));
+            dispatch(trainingModuleActions.closeDialog());
           })
           .catch((err) => {
               dispatch(actions.fetchingFailed(err));
@@ -241,7 +241,7 @@ const changeIntermediateCertification = createLogic({
             //@ts-ignore
             dispatch(trainingModuleActions.getTrainingModule(moduleId));
             dispatch(actions.fetchingSuccess());
-            dispatch(trainingModuleActions.closeDialog(fields.CREATE_NEW_INTERMEDIATE_CERTIFICATION));
+            dispatch(trainingModuleActions.closeDialog());
           })
           .catch((err) => {
               dispatch(actions.fetchingFailed(err));
