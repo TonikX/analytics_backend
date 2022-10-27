@@ -81,7 +81,6 @@ export default (theme: Theme) => createStyles({
     },
     editorsTitle: {
         fontSize: '14px',
-        fontWeight: 'bold',
         lineHeight: '32px',
         marginRight: '10px',
     },
