@@ -212,6 +212,7 @@ const addIntermediateCertification = createLogic({
 
         service.addIntermediateCertification(evaluationTool, moduleId)
           .then((res) => {
+            //@ts-ignore
             dispatch(trainingModuleActions.getTrainingModule(moduleId));
             dispatch(actions.fetchingSuccess());
             dispatch(trainingModuleActions.closeDialog(fields.CREATE_NEW_INTERMEDIATE_CERTIFICATION));
@@ -237,6 +238,7 @@ const changeIntermediateCertification = createLogic({
 
         service.changeIntermediateCertification(evaluationTool)
           .then((res) => {
+            //@ts-ignore
             dispatch(trainingModuleActions.getTrainingModule(moduleId));
             dispatch(actions.fetchingSuccess());
             dispatch(trainingModuleActions.closeDialog(fields.CREATE_NEW_INTERMEDIATE_CERTIFICATION));
@@ -264,6 +266,7 @@ const deleteIntermediateCertification = createLogic({
 
         service.deleteIntermediateCertification(id)
           .then((res) => {
+            //@ts-ignore
             dispatch(trainingModuleActions.getTrainingModule(moduleId));
             dispatch(actions.fetchingSuccess());
           })
