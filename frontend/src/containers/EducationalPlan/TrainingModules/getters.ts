@@ -31,9 +31,9 @@ export const getSorting = (state: rootState) => get(getStateData(state), fields.
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
 export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
 
-export const getDialogData = (state: rootState, dialog) =>
+export const getDialogData = (state: rootState, dialog: string) =>
   get(getStateData(state), [dialog, fields.DIALOG_DATA], {});
-export const isOpenDialog = (state: rootState, dialog) =>
+export const isOpenDialog = (state: rootState, dialog: string) =>
   get(getStateData(state), [dialog, fields.IS_OPEN_DIALOG], false);
 
 export const getShowOnlyMy = (state: rootState) => get(getStateData(state), fields.SHOW_ONLY_MY, false);
