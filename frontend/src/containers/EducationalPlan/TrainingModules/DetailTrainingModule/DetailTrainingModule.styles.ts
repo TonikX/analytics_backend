@@ -71,6 +71,7 @@ export default (theme: Theme) => createStyles({
     editors: {
         display: 'flex',
         flexWrap: 'wrap',
+        alignItems: 'center',
         marginBottom: '10px',
     },
     wrap: {
@@ -83,15 +84,12 @@ export default (theme: Theme) => createStyles({
         fontWeight: 'bold',
         lineHeight: '32px',
         marginRight: '10px',
-        marginBottom: '10px',
     },
     editorsItem: {
         marginLeft: '5px',
-        marginBottom: '10px',
     },
     editorsAdd: {
         height: '32px',
-        marginBottom: '20px',
         marginLeft: 'auto',
     },
     moduleNameWrap: {

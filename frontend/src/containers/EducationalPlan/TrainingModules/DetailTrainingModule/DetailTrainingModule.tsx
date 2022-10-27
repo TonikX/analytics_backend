@@ -324,7 +324,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
           {module?.editors?.length === 0 && <Typography>ни одного редактора не добавлено</Typography>}
 
-
           {canEdit && (
             <Button
               onClick={() => this.setState({addEditorsMode: true})}
