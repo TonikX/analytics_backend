@@ -166,7 +166,7 @@ class EvaluationTools extends React.PureComponent<Props> {
                                     </div>
                                     :
                                     <div className={classes.eyeIcon}
-                                         onClick={this.handleClickShowDescription(intermediateCertificationTool[IntermediateCertificationFields.ID])}
+                                         onClick={this.handleClickShowDescription(intermediateCertificationTool)}
                                     >
                                         <EyeIcon className={classes.menuIcon} />
                                     </div>
