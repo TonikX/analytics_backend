@@ -80,7 +80,6 @@ export default (theme: Theme) => createStyles({
         marginTop: '30px',
     },
     editorsTitle: {
-        fontSize: '14px',
         lineHeight: '32px',
         marginRight: '10px',
     },
