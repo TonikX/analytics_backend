@@ -34,7 +34,7 @@ import {appRouter} from "../../../service/router-service";
 import UserService from "../../../service/user-service";
 
 import {TrainingModulesProps, TrainingModuleType} from './types';
-import {TrainingModuleFields} from "./enum";
+import {fields, TrainingModuleFields} from "./enum";
 import {typesListObject} from './constants';
 
 import connect from './TrainingModules.connect';
@@ -102,12 +102,18 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
     }
 
     handleClickEdit = (trainingModule: TrainingModuleType) => () => {
-        this.props.actions.openDialog({data: trainingModule});
+        this.props.actions.openDialog({
+            data: trainingModule,
+            dialog: fields.TRAINING_MODULE_DIALOG,
+        });
         this.handleCloseMenu()
     }
 
     handleClickCreate = () => {
-        this.props.actions.openDialog({data: {}});
+        this.props.actions.openDialog({
+            data: {},
+            dialog: fields.TRAINING_MODULE_DIALOG
+        });
     }
 
     handleOpenMenu = (id: number) => (event: SyntheticEvent): void => {
@@ -272,14 +278,14 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
 
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
-                    />
+                    {/*<TablePagination count={allCount}*/}
+                    {/*                 component="div"*/}
+                    {/*                 page={currentPage - 1}*/}
+                    {/*                 rowsPerPageOptions={[]}*/}
+                    {/*                 onChangePage={this.handleChangePage}*/}
+                    {/*                 rowsPerPage={10}*/}
+                    {/*                 onChangeRowsPerPage={()=>{}}*/}
+                    {/*/>*/}
                     {canEdit &&
                         <Fab color="secondary"
                              classes={{

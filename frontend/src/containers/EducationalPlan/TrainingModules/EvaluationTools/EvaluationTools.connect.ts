@@ -3,14 +3,13 @@ import {bindActionCreators} from "redux";
 
 import actions from "../actions";
 
-import {isOpenDialog, getDialogData} from '../getters';
 import {rootState} from "../../../../store/reducers";
-import {fields} from "../enum";
+import {getEvaluationListModule} from "../getters";
 
 const mapStateToProps = (state: rootState) => {
     return {
-        isOpen: isOpenDialog(state, fields.TRAINING_MODULE_DIALOG),
-        trainingModule: getDialogData(state, fields.TRAINING_MODULE_DIALOG),
+        evaluationToolsList: getEvaluationListModule(state) || [],
+        isCanEdit: true,
     };
 };
 

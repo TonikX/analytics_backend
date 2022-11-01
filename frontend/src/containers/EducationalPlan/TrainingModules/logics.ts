@@ -16,6 +16,9 @@ import {
     getTrainingModuleId
 } from "./getters";
 import moduleActions from "./actions";
+import workProgramActions from "../../WorkProgram/actions";
+import {getWorkProgramId} from "../../WorkProgram/getters";
+import {fields} from "../../WorkProgram/enum";
 
 const service = new Service();
 
@@ -198,6 +201,106 @@ const changeEditorList = createLogic({
     }
 });
 
+const addIntermediateCertification = createLogic({
+    type: trainingModuleActions.addIntermediateCertification.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const evaluationTool = action.payload;
+        const moduleId = getTrainingModuleId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_INTERMEDIATE_CERTIFICATION}));
+
+        service.addIntermediateCertification(evaluationTool, moduleId)
+          .then((res) => {
+            //@ts-ignore
+            dispatch(trainingModuleActions.getTrainingModule(moduleId));
+            dispatch(actions.fetchingSuccess());
+            dispatch(trainingModuleActions.closeDialog());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.ADD_INTERMEDIATE_CERTIFICATION}));
+              return done();
+          });
+    }
+});
+
+const changeIntermediateCertification = createLogic({
+    type: trainingModuleActions.changeIntermediateCertification.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const evaluationTool = action.payload;
+        const moduleId = getTrainingModuleId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_INTERMEDIATE_CERTIFICATION}));
+
+        service.changeIntermediateCertification(evaluationTool)
+          .then((res) => {
+            //@ts-ignore
+            dispatch(trainingModuleActions.getTrainingModule(moduleId));
+            dispatch(actions.fetchingSuccess());
+            dispatch(trainingModuleActions.closeDialog());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_INTERMEDIATE_CERTIFICATION}));
+              return done();
+          });
+    }
+});
+
+
+const deleteIntermediateCertification = createLogic({
+    type: trainingModuleActions.deleteIntermediateCertification.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const id = action.payload;
+        const moduleId = getTrainingModuleId(getState());
+
+
+      dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_INTERMEDIATE_CERTIFICATION}));
+
+        service.deleteIntermediateCertification(id)
+          .then((res) => {
+            //@ts-ignore
+            dispatch(trainingModuleActions.getTrainingModule(moduleId));
+            dispatch(actions.fetchingSuccess());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_INTERMEDIATE_CERTIFICATION}));
+              return done();
+          });
+    }
+});
+
+const getIntermediateCertification = createLogic({
+    type: trainingModuleActions.getIntermediateCertification.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_INTERMEDIATE_CERTIFICATION}));
+
+        service.getIntermediateCertification(action.payload)
+          .then((res) => {
+              dispatch(workProgramActions.setIntermediateCertification(res.data));
+              dispatch(actions.fetchingSuccess());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_INTERMEDIATE_CERTIFICATION}));
+              return done();
+          });
+    }
+});
+
 export default [
     getTrainingModulesList,
     createTrainingModule,
@@ -206,4 +309,8 @@ export default [
     getTrainingModule,
     changeEditorList,
     removeFatherFromModule,
+    changeIntermediateCertification,
+    addIntermediateCertification,
+    deleteIntermediateCertification,
+    getIntermediateCertification,
 ];
