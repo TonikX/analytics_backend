@@ -38,7 +38,7 @@ export interface TrainingModulesActions {
 
     showOnlyMy: ActionCreatorWithPayload<boolean>;
     removeFatherFromModule: ActionCreatorWithPayload<number>;
-    addFatherToModules: ActionCreatorWithPayload;
+    updateChildModules: ActionCreatorWithPayload;
 
     changeEditorList: ActionCreatorWithPayload;
 }

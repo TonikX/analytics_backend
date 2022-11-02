@@ -89,8 +89,12 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     });
   }
 
-  removeFatherFromModule = (id: number) => () => {
-    this.props.actions.removeFatherFromModule(id)
+  removeFatherFromModule = (removedId: number, allChild: any, fatherId: number) => () => {
+    this.props.actions.updateChildModules({
+      //@ts-ignore
+      trainingModules: allChild.map((item) => item.id).filter(item => item !== id),
+      moduleId: fatherId,
+    })
   }
 
   getModuleId = () => get(this.props.match.params, 'id');
@@ -179,7 +183,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     });
   }
 
-  renderModule = (item: any, level: number): any => {
+  renderModule = (item: any, level: number, allChild: any, fatherId: number): any => {
     const {classes, canEdit} = this.props
     const blockOfWorkPrograms = item?.change_blocks_of_work_programs_in_modules
 
@@ -206,7 +210,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   <Tooltip
                     title={`Открепить модуль`}>
                     <DeleteIcon className={classes.deleteIcon}
-                                onClick={this.removeFatherFromModule(item.id)}
+                                onClick={this.removeFatherFromModule(item.id, allChild, fatherId)}
                                 style={{
                                   marginRight: '28px',
                                   marginTop: '5px',
@@ -258,7 +262,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           </TableRow>;
         })}
         {item?.childs?.map((item: any) => (
-          this.renderModule(item, level + 1)
+          this.renderModule(item, level + 1, item?.childs, item.id)
         ))}
       </>
     )
@@ -299,7 +303,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {module?.childs?.map((item: any) => this.renderModule(item, 0))}
+                {module?.childs?.map((item: any) => this.renderModule(item, 0, module?.childs, module?.id))}
               </TableBody>
             </Table>
           </div>

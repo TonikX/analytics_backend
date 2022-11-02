@@ -40,9 +40,9 @@ class TrainingModulesService extends AnalyticsService{
         });
     }
 
-    addFatherToModule(id: number, father: number){
-        return this.patch(`/api/disciplineblockmodule/update/${id}`, {
-            father: father
+    addFatherToModule(modules: number[], moduleId: number){
+        return this.patch(`/api/disciplineblockmodule/update/${moduleId}`, {
+            childs: modules
         });
     }
 

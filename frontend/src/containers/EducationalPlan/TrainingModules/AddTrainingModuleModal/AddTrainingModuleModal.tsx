@@ -35,9 +35,9 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
     }
 
     handleSave = () => {
-        this.props.actions.addFatherToModules({
+        this.props.actions.updateChildModules({
             trainingModules: this.state.selectedTrainingModules.map((trainingModule) => trainingModule.id),
-            fatherId: this.props.fatherId
+            moduleId: this.props.fatherId
         });
         this.setState({
             selectedTrainingModules: [],

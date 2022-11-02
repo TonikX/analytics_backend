@@ -144,15 +144,15 @@ const removeFatherFromModule = createLogic({
     }
 });
 
-const addFatherToModules = createLogic({
-    type: trainingModuleActions.addFatherToModules.type,
+const updateChildModules = createLogic({
+    type: trainingModuleActions.updateChildModules.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_TRAINING_MODULE}));
 
-        const {fatherId, trainingModules} = action.payload
+        const {moduleId, trainingModules} = action.payload
 
-        Promise.all(trainingModules.map((id: number) => service.addFatherToModule(id, fatherId)))
+        service.addFatherToModule(trainingModules, moduleId)
             .then((res) => {
                     const moduleId = getTrainingModuleId(getState());
                     //@ts-ignore
@@ -342,7 +342,7 @@ export default [
     getTrainingModule,
     changeEditorList,
     removeFatherFromModule,
-    addFatherToModules,
+    updateChildModules,
     changeIntermediateCertification,
     addIntermediateCertification,
     deleteIntermediateCertification,
