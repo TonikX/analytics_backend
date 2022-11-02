@@ -15,13 +15,13 @@ export default (theme: Theme) => createStyles({
     },
     filtersLine: {
         display: 'flex',
-        gap: 20,
     },
     searchButton: {
         marginLeft: 'auto',
     },
     input: {
         width: '100%',
+        marginRight: 20,
     },
     actions: {
         padding: '15px 24px 20px'
