@@ -1,11 +1,12 @@
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.models import DisciplineBlockModule, СertificationEvaluationTool
+from workprogramsapp.models import DisciplineBlockModule, СertificationEvaluationTool, ImplementationAcademicPlan
 from workprogramsapp.serializers import \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockDetailAcademicSerializer, \
     ImplementationAcademicPlanCreateSerializer, DisciplineBlockForWPinFSSerializer, \
-    СertificationEvaluationToolCreateSerializer
+    СertificationEvaluationToolCreateSerializer, AcademicPlanInImplementationSerializer, \
+    FieldOfStudyImplementationSerializer
 
 
 class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
@@ -14,6 +15,21 @@ class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'name', 'descipline_block']
+
+
+class ImplementationAcademicPlanSerializerForBlockModule(serializers.ModelSerializer):
+    academic_plan = AcademicPlanInImplementationSerializer()
+    field_of_study = FieldOfStudyImplementationSerializer(many=True)
+    is_included = serializers.SerializerMethodField()
+
+    def get_is_included(self, instance):
+        block_module = self._context
+        return ImplementationAcademicPlan.objects.filter(id=instance.id,
+                                                         academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block=block_module).exists()
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = ['id', 'academic_plan', 'field_of_study', 'year', 'is_included']
 
 
 class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerializer):
@@ -25,16 +41,12 @@ class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerial
     # educational_programs_to_access = ImplementationAcademicPlanCreateSerializer(many=False, required=False)
 
     def to_representation(self, value):
-        self.fields['childs'] = serializers.SerializerMethodField()
+        self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
         self.fields['certification_evaluation_tools'] = serializers.SerializerMethodField()
+        self.fields['educational_programs_to_access'] = ImplementationAcademicPlanSerializerForBlockModule(many=True,
+                                                                                                           required=False,
+                                                                                                           context=value)
         return super().to_representation(value)
-
-    def get_childs(self, obj):
-        childs = DisciplineBlockModule.objects.filter(father=obj)
-        if childs:
-            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
-        else:
-            return None
 
     def get_certification_evaluation_tools(self, obj):
         tools = СertificationEvaluationTool.objects.filter(discipline_block_module=obj)
@@ -44,7 +56,7 @@ class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerial
             return None
 
     class Meta:
-        depth = 10
+        depth = 2
         model = DisciplineBlockModule
         fields = "__all__"
         extra_kwargs = {
@@ -67,18 +79,16 @@ class SubDisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSer
 
 class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
     # father = serializers.SerializerMethodField()
-    educational_programs_to_access = ImplementationAcademicPlanCreateSerializer(many=False, required=False)
+    educational_programs_to_access = ImplementationAcademicPlanSerializerForBlockModule(many=True,
+                                                                                        required=False)  # = serializers.SerializerMethodField()
+
+    """def get_educational_programs_to_access(self, instance):
+        imps=ImplementationAcademicPlan.objects.filter(modules_to_access=instance)
+        for im"""
 
     def to_representation(self, value):
-        self.fields['childs'] = serializers.SerializerMethodField()
+        self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
         return super().to_representation(value)
-
-    def get_childs(self, obj):
-        childs = DisciplineBlockModule.objects.filter(father=obj)
-        if childs:
-            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
-        else:
-            return None
 
     class Meta:
         model = DisciplineBlockModule
@@ -95,19 +105,12 @@ class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
     # father = serializers.SerializerMethodField()
 
     def to_representation(self, value):
-        self.fields['childs'] = serializers.SerializerMethodField()
+        self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
         return super().to_representation(value)
-
-    def get_childs(self, obj):
-        childs = DisciplineBlockModule.objects.filter(father=obj)
-        if childs:
-            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
-        else:
-            return None
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'selection_rule', 'change_blocks_of_work_programs_in_modules']
+        fields = ['id', 'name', 'type', 'selection_rule', 'change_blocks_of_work_programs_in_modules', 'childs']
 
 
 class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
@@ -116,19 +119,12 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
     # father = serializers.SerializerMethodField()
 
     def to_representation(self, value):
-        self.fields['childs'] = serializers.SerializerMethodField()
+        self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
         return super().to_representation(value)
-
-    def get_childs(self, obj):
-        childs = DisciplineBlockModule.objects.filter(father=obj)
-        if childs:
-            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
-        else:
-            return None
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules', 'father', 'selection_rule']
+        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules', 'selection_rule', 'childs']
         extra_kwargs = {
             'change_blocks_of_work_programs_in_modules': {'required': False}
         }
@@ -137,8 +133,8 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors', 'father', 'selection_rule',
-                  'educational_programs_to_access']
+        fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors', 'selection_rule',
+                  'educational_programs_to_access', 'childs']
 
     def create(self, validated_data):
         editor = validated_data.pop('editor')
