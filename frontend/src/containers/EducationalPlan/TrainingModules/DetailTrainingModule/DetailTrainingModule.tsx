@@ -305,9 +305,17 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           </div>
         </Scrollbars>
         <div className={classes.createModuleButtonWrap}>
-          <Button onClick={this.handleCreateNewModule} variant="outlined" className={classes.createModuleButton}>
+          <Button onClick={this.handleCreateNewModule} variant="outlined">
             <AddIcon/>
             Создать модуль
+          </Button>
+          <Button onClick={this.handleAddNewModule(module.id)} variant="outlined">
+            <AddIcon/>
+            Добавить модуль
+          </Button>
+          <Button onClick={this.handleCreateNewWPBlock(module.id)} variant="outlined">
+            <AddIcon/>
+            Добавить блок РПД
           </Button>
         </div>
       </>

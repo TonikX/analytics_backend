@@ -97,9 +97,8 @@ export default (theme: Theme) => createStyles({
     createModuleButtonWrap: {
         display: 'flex',
         marginTop: 20,
-    },
-    createModuleButton: {
-        marginLeft: 'auto',
+        gap: 20,
+        justifyContent: 'flex-end'
     },
     moduleButtons: {
         display: 'flex',
