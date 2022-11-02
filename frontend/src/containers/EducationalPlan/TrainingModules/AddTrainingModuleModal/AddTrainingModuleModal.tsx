@@ -1,6 +1,4 @@
-import React, {ReactText} from 'react';
-import {getDisplayName, shallowEqual} from "recompose";
-import get from "lodash/get";
+import React from 'react';
 import Scrollbars from "react-custom-scrollbars";
 
 import Dialog from '@material-ui/core/Dialog';
@@ -12,7 +10,7 @@ import TextField from "@material-ui/core/TextField";
 import withStyles from '@material-ui/core/styles/withStyles';
 import TablePagination from '@material-ui/core/TablePagination';
 
-import {fields, TrainingModuleFields} from '../enum';
+import {fields} from '../enum';
 
 import {TrainingModuleCreateModalProps} from './types';
 
@@ -21,6 +19,7 @@ import styles from './AddTrainingModuleModal.styles';
 import Checkbox from "@material-ui/core/Checkbox";
 import Typography from "@material-ui/core/Typography";
 import {TrainingModuleType} from "../types";
+import {getUserFullName} from "../../../../common/utils";
 
 class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateModalProps, { selectedTrainingModules: TrainingModuleType[]}> {
     state = {
@@ -145,7 +144,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                                 {selectedTrainingModules.map((trainingModule: TrainingModuleType) => (
                                   <div key={trainingModule.id} className={classes.selectedItem}>
                                       <Checkbox checked={true} onChange={this.handleUnselect(trainingModule.id)}/>
-                                      <Typography>{trainingModule.name} / {trainingModule.id} (КОП) / {trainingModule.module_isu_id} (ИСУ) / {trainingModule.editors?.map((editor) => getDisplayName(editor)).join(',')} </Typography>
+                                      <Typography>{trainingModule.name} / {trainingModule.id} (КОП) / {trainingModule.module_isu_id} (ИСУ) / {trainingModule.editors?.map((editor) => getUserFullName(editor)).join(',')} </Typography>
                                   </div>
                                 ))}
                                 {trainingModules.map((trainingModule: TrainingModuleType) => {
@@ -153,7 +152,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                                     return (
                                       <div key={trainingModule.id} className={classes.selectedItem}>
                                           <Checkbox checked={false} onChange={this.handleSelect(trainingModule)}/>
-                                          <Typography>{trainingModule.name} / {trainingModule.id} (КОП) / {trainingModule.module_isu_id} (ИСУ) / {trainingModule.editors?.map((editor) => getDisplayName(editor)).join(',')} </Typography>
+                                          <Typography>{trainingModule.name} / {trainingModule.id} (КОП) / {trainingModule.module_isu_id} (ИСУ) / {trainingModule.editors?.map((editor) => getUserFullName(editor)).join(',')} </Typography>
                                       </div>
                                     )
                                 })}
