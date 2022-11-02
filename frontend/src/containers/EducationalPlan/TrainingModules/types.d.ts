@@ -16,6 +16,7 @@ export interface TrainingModulesActions {
     setTrainingModulesList: ActionCreatorWithPayload;
     getTrainingModule: ActionCreatorWithPayload<GetTrainingModulePayload>;
     setTrainingModule: ActionCreatorWithPayload;
+    updateTrainingModuleFilters: ActionCreatorWithPayload;
 
     changeSearchQuery: ActionCreatorWithPayload;
     changeCurrentPage: ActionCreatorWithPayload;
@@ -37,13 +38,14 @@ export interface TrainingModulesActions {
 
     showOnlyMy: ActionCreatorWithPayload<boolean>;
     removeFatherFromModule: ActionCreatorWithPayload<number>;
+    addFatherToModules: ActionCreatorWithPayload;
 
     changeEditorList: ActionCreatorWithPayload;
 }
 
 export type OpenDialogPayload = {
     data: TrainingModuleType|{};
-    dialog: fields.TRAINING_MODULE_DIALOG | fields.EVALUATION_MODULE_DIALOG
+    dialog: fields.CREATE_TRAINING_MODULE_DIALOG | fields.EVALUATION_MODULE_DIALOG
 }
 
 export type CreateTrainingModulePayload = {
@@ -68,10 +70,16 @@ export interface trainingModulesState {
         [fields.SORTING_FIELD]: string,
         [fields.SORTING_MODE]: SortingType;
     };
+    [fields.FILTERS]: {
+        [fields.FILTER_ID]: string,
+        [fields.FILTER_MODULE_ISU_ID]: string,
+        [fields.FILTER_MODULE_DISCIPLINE_NAME]: string,
+        [fields.FILTER_MODULE_NAME]: string,
+    },
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
-    [fields.TRAINING_MODULE_DIALOG]: {
+    [fields.CREATE_TRAINING_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;
         [fields.DIALOG_DATA]: TrainingModuleType|{};
     };
@@ -80,6 +88,10 @@ export interface trainingModulesState {
         [fields.DIALOG_DATA]: IntermediateCertificationType|{};
     },
     [fields.EVALUATION_DESCRIPTION_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: boolean,
+        [fields.DIALOG_DATA]: string
+    },
+    [fields.ADD_TRAINING_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean,
         [fields.DIALOG_DATA]: string
     },

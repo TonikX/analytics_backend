@@ -9,8 +9,8 @@ import {fields} from "../enum";
 
 const mapStateToProps = (state: rootState) => {
     return {
-        isOpen: isOpenDialog(state, fields.TRAINING_MODULE_DIALOG),
-        trainingModule: getDialogData(state, fields.TRAINING_MODULE_DIALOG),
+        isOpen: isOpenDialog(state, fields.CREATE_TRAINING_MODULE_DIALOG),
+        trainingModule: getDialogData(state, fields.CREATE_TRAINING_MODULE_DIALOG),
     };
 };
 

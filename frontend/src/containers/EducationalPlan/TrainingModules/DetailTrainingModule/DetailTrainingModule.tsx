@@ -47,6 +47,7 @@ import StepButton from "@material-ui/core/StepButton";
 import TrainingModuleCreateModal from "../TrainingModuleCreateModal/TrainingModuleCreateModal";
 import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
 import EvaluationTools from '../EvaluationTools'
+import AddTrainingModuleModal from "../AddTrainingModuleModal/AddTrainingModuleModal";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -75,12 +76,16 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     this.props.educationPlansActions.createBlockOfWorkPrograms(moduleId);
   }
 
-  handleCreateNewModule = (id: number) => () => {
+  handleCreateNewModule = () => {
     this.props.actions.openDialog({
-      data: {
-        father: id,
-      },
-      dialog: fields.TRAINING_MODULE_DIALOG
+      dialog: fields.CREATE_TRAINING_MODULE_DIALOG
+    });
+  }
+
+  handleAddNewModule = (id: number) => () => {
+    this.props.actions.openDialog({
+      data: id,
+      dialog: fields.ADD_TRAINING_MODULE_DIALOG
     });
   }
 
@@ -194,7 +199,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                 <Button size="small" onClick={this.handleCreateNewWPBlock(item.id)}>
                   <AddIcon/> РПД
                 </Button>
-                <Button size="small" onClick={this.handleCreateNewModule(item.id)}>
+                <Button size="small" onClick={this.handleAddNewModule(item.id)}>
                   <AddIcon/> Модуль
                 </Button>
                 {level !== 0 && (
@@ -299,6 +304,12 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             </Table>
           </div>
         </Scrollbars>
+        <div className={classes.createModuleButtonWrap}>
+          <Button onClick={this.handleCreateNewModule} variant="outlined" className={classes.createModuleButton}>
+            <AddIcon/>
+            Создать модуль
+          </Button>
+        </div>
       </>
     )
   }
@@ -502,6 +513,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         </Paper>
 
         <TrainingModuleCreateModal/>
+        <AddTrainingModuleModal />
       </div>
     );
   }

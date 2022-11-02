@@ -104,7 +104,7 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
     handleClickEdit = (trainingModule: TrainingModuleType) => () => {
         this.props.actions.openDialog({
             data: trainingModule,
-            dialog: fields.TRAINING_MODULE_DIALOG,
+            dialog: fields.CREATE_TRAINING_MODULE_DIALOG,
         });
         this.handleCloseMenu()
     }
@@ -112,7 +112,7 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
     handleClickCreate = () => {
         this.props.actions.openDialog({
             data: {},
-            dialog: fields.TRAINING_MODULE_DIALOG
+            dialog: fields.CREATE_TRAINING_MODULE_DIALOG
         });
     }
 

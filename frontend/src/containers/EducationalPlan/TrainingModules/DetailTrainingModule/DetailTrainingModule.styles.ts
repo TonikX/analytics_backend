@@ -94,6 +94,13 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         justifyContent: 'space-between',
     },
+    createModuleButtonWrap: {
+        display: 'flex',
+        marginTop: 20,
+    },
+    createModuleButton: {
+        marginLeft: 'auto',
+    },
     moduleButtons: {
         display: 'flex',
         justify: 'flex-end',
