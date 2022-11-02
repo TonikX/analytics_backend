@@ -13,8 +13,15 @@ export default (theme: Theme) => createStyles({
     dialogContent: {
         height: '450px'
     },
+    filtersLine: {
+        display: 'flex',
+        gap: 20,
+    },
+    searchButton: {
+        marginLeft: 'auto',
+    },
     input: {
-        width: '23%',
+        width: '100%',
     },
     actions: {
         padding: '15px 24px 20px'

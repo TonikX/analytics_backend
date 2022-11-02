@@ -9,17 +9,17 @@ import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";
 import withStyles from '@material-ui/core/styles/withStyles';
 import TablePagination from '@material-ui/core/TablePagination';
+import Checkbox from "@material-ui/core/Checkbox";
+import Typography from "@material-ui/core/Typography";
 
+import {getUserFullName} from "../../../../common/utils";
+
+import {TrainingModuleType} from "../types";
 import {fields} from '../enum';
-
 import {TrainingModuleCreateModalProps} from './types';
 
 import connect from './AddTrainingModuleModal.connect';
 import styles from './AddTrainingModuleModal.styles';
-import Checkbox from "@material-ui/core/Checkbox";
-import Typography from "@material-ui/core/Typography";
-import {TrainingModuleType} from "../types";
-import {getUserFullName} from "../../../../common/utils";
 
 class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateModalProps, { selectedTrainingModules: TrainingModuleType[]}> {
     state = {
@@ -92,8 +92,8 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
             >
                 <DialogTitle> Добавить учебный модуль </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <TextField label="Id *"
+                    <div className={classes.filtersLine}>
+                        <TextField label="КОП ИД *"
                                    onChange={this.updateFilters(fields.FILTER_ID)}
                                    variant="outlined"
                                    className={classes.input}
@@ -103,7 +103,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                                        shrink: true,
                                    }}
                         />
-                        <TextField label="Id ISU модуля *"
+                        <TextField label="ИСУ ИД *"
                                    onChange={this.updateFilters(fields.FILTER_MODULE_ISU_ID)}
                                    variant="outlined"
                                    className={classes.input}
@@ -133,7 +133,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                                        shrink: true,
                                    }}
                         />
-                        <Button variant="contained" color="primary" onClick={this.searchModules}>
+                        <Button variant="contained" color="primary" onClick={this.searchModules} className={classes.searchButton}>
                             Найти
                         </Button>
                     </div>

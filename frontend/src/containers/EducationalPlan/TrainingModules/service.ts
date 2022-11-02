@@ -9,7 +9,7 @@ import {IntermediateCertificationFields} from "../../WorkProgram/enum";
 class TrainingModulesService extends AnalyticsService{
     getTrainingModules(currentPage: number, search: string, sortingField: string, sortingMode: SortingType, showOnlyMy: boolean, filters: any){
         const sortingSymbol = getSortingSymbol(sortingMode);
-        const filtersString = `id=${filters.id}&module_isu_id__icontains=${filters.isuId}&name__icontains=${filters.isuId}&descipline_block__name__icontains=${filters.disciplineName}`
+        const filtersString = `id=${filters.id}&module_isu_id__icontains=${filters.isuId}&name__icontains=${filters.name}&descipline_block__name__icontains=${filters.disciplineName}`
 
         if (showOnlyMy) {
             return this.get(`/api/disciplineblockmodule/detail/list/for_this_user?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}&${filtersString}`);
