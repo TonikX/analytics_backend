@@ -305,11 +305,11 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           </div>
         </Scrollbars>
         <div className={classes.createModuleButtonWrap}>
-          <Button onClick={this.handleCreateNewModule} variant="outlined">
-            <AddIcon/>
-            Создать модуль
-          </Button>
-          <Button onClick={this.handleAddNewModule(module.id)} variant="outlined">
+          {/*<Button onClick={this.handleCreateNewModule} variant="outlined">*/}
+          {/*  <AddIcon/>*/}
+          {/*  Создать модуль*/}
+          {/*</Button>*/}
+          <Button onClick={this.handleAddNewModule(module.id)} variant="outlined" style={{marginRight: 10}}>
             <AddIcon/>
             Добавить модуль
           </Button>
