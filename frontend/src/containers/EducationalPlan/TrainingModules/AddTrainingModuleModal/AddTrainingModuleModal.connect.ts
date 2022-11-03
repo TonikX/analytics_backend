@@ -16,7 +16,8 @@ import {fields} from "../enum";
 const mapStateToProps = (state: rootState) => {
     return {
         isOpen: isOpenDialog(state, fields.ADD_TRAINING_MODULE_DIALOG),
-        fatherId: getDialogData(state, fields.ADD_TRAINING_MODULE_DIALOG),
+        fatherId: getDialogData(state, fields.ADD_TRAINING_MODULE_DIALOG)?.moduleId,
+        connectedModules: getDialogData(state, fields.ADD_TRAINING_MODULE_DIALOG)?.trainingModules,
         filterId: getFilterField(state, fields.FILTER_ID),
         filterModuleIsuId: getFilterField(state, fields.FILTER_MODULE_ISU_ID),
         filterModuleName: getFilterField(state, fields.FILTER_MODULE_NAME),

@@ -93,7 +93,10 @@ export interface trainingModulesState {
     },
     [fields.ADD_TRAINING_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean,
-        [fields.DIALOG_DATA]: string
+        [fields.DIALOG_DATA]: {
+            trainingModules: Array<number>,
+            moduleId: number
+        }
     },
     [fields.SHOW_ONLY_MY]: boolean;
 }
