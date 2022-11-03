@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from workprogramsapp.disciplineblockmodules.search_filters import DisciplineBlockModuleFilter
 from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockModuleCreateSerializer, \
     DisciplineBlockModuleSerializer, DisciplineBlockModuleForModuleListDetailSerializer, \
-    DisciplineBlockModuleDetailSerializer
+    DisciplineBlockModuleDetailSerializer, ShortDisciplineBlockModuleForModuleListSerializer
 from workprogramsapp.folders_ans_statistic.models import DisciplineBlockModuleInFolder
 from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor
@@ -71,7 +71,7 @@ class DisciplineBlockModuleDetailListView(generics.ListAPIView):
 
     """
     queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
+    serializer_class = ShortDisciplineBlockModuleForModuleListSerializer
     filterset_class = DisciplineBlockModuleFilter
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['name', 'descipline_block__name']
@@ -83,7 +83,7 @@ class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
     """
          Получение списка модулей с полной информацией, где редактор запрашивающий пользователь
     """
-    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
+    serializer_class = ShortDisciplineBlockModuleForModuleListSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     filterset_class = DisciplineBlockModuleFilter
     search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']

@@ -41,7 +41,7 @@ class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerial
     # educational_programs_to_access = ImplementationAcademicPlanCreateSerializer(many=False, required=False)
 
     def to_representation(self, value):
-        # self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
+        self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
         self.fields['certification_evaluation_tools'] = serializers.SerializerMethodField()
         self.fields['educational_programs_to_access'] = ImplementationAcademicPlanSerializerForBlockModule(many=True,
                                                                                                            required=False,
@@ -142,3 +142,16 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
         instance.editors.add(editor)
 
         return instance
+
+
+class ShortDisciplineBlockModuleForModuleListSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для вывода списка Модулей
+    """
+    descipline_block = DisciplineBlockDetailAcademicSerializer(many=True)
+    editors = userProfileSerializer(many=True)
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = ['id', 'module_isu_id', 'name', 'type', 'editors']
+
