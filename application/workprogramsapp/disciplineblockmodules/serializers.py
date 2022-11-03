@@ -148,7 +148,6 @@ class ShortDisciplineBlockModuleForModuleListSerializer(serializers.ModelSeriali
     """
     Сериализатор для вывода списка Модулей
     """
-    descipline_block = DisciplineBlockDetailAcademicSerializer(many=True)
     editors = userProfileSerializer(many=True)
 
     class Meta:
