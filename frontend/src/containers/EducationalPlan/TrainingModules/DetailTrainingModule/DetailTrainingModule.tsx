@@ -48,6 +48,7 @@ import TrainingModuleCreateModal from "../TrainingModuleCreateModal/TrainingModu
 import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
 import EvaluationTools from '../EvaluationTools'
 import AddTrainingModuleModal from "../AddTrainingModuleModal/AddTrainingModuleModal";
+import {TrainingModuleType} from "../types";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -82,17 +83,21 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     });
   }
 
-  handleAddNewModule = (id: number) => () => {
+  handleAddNewModule = (id: number, modules: Array<TrainingModuleType>) => () => {
     this.props.actions.openDialog({
-      data: id,
+      data: {
+        moduleId: id,
+        trainingModules: modules?.map((module) => module.id)
+      },
       dialog: fields.ADD_TRAINING_MODULE_DIALOG
     });
   }
 
   removeFatherFromModule = (removedId: number, allChild: any, fatherId: number) => () => {
+    debugger
     this.props.actions.updateChildModules({
       //@ts-ignore
-      trainingModules: allChild.map((item) => item.id).filter(item => item !== id),
+      trainingModules: allChild.map((item) => item.id).filter(item => item !== removedId),
       moduleId: fatherId,
     })
   }
@@ -203,7 +208,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                 <Button size="small" onClick={this.handleCreateNewWPBlock(item.id)}>
                   <AddIcon/> РПД
                 </Button>
-                <Button size="small" onClick={this.handleAddNewModule(item.id)}>
+                <Button size="small" onClick={this.handleAddNewModule(item.id, allChild)}>
                   <AddIcon/> Модуль
                 </Button>
                 {level !== 0 && (
@@ -262,7 +267,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           </TableRow>;
         })}
         {item?.childs?.map((child: any) => (
-          this.renderModule(child, level + 1, child?.childs, item.id)
+          this.renderModule(child, level + 1, item?.childs, item.id)
         ))}
       </>
     )
@@ -313,7 +318,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           {/*  <AddIcon/>*/}
           {/*  Создать модуль*/}
           {/*</Button>*/}
-          <Button onClick={this.handleAddNewModule(module.id)} variant="outlined" style={{marginRight: 10}}>
+          <Button onClick={this.handleAddNewModule(module.id, module?.childs)} variant="outlined" style={{marginRight: 10}}>
             <AddIcon/>
             Добавить модуль
           </Button>

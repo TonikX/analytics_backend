@@ -8,7 +8,7 @@ export const GENERAL_PATH = 'trainingModule';
 
 export const initialState: trainingModulesState = {
     [fields.SORTING]: {
-        [fields.SORTING_FIELD]: '',
+        [fields.SORTING_FIELD]: '-id',
         [fields.SORTING_MODE]: ''
     },
     [fields.FILTERS]: {
@@ -27,7 +27,10 @@ export const initialState: trainingModulesState = {
     },
     [fields.ADD_TRAINING_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
-        [fields.DIALOG_DATA]: ''
+        [fields.DIALOG_DATA]: {
+            moduleId: 0,
+            trainingModules: []
+        }
     },
     [fields.EVALUATION_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,

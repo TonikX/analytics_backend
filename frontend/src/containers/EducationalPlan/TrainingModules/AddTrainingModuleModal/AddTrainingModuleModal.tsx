@@ -35,8 +35,12 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
     }
 
     handleSave = () => {
+        const {connectedModules} = this.props
         this.props.actions.updateChildModules({
-            trainingModules: this.state.selectedTrainingModules.map((trainingModule) => trainingModule.id),
+            trainingModules: [
+               ...this.state.selectedTrainingModules.map((trainingModule) => trainingModule.id),
+               ...connectedModules,
+            ],
             moduleId: this.props.fatherId
         });
         this.setState({
@@ -144,7 +148,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                                 {selectedTrainingModules.map((trainingModule: TrainingModuleType) => (
                                   <div key={trainingModule.id} className={classes.selectedItem}>
                                       <Checkbox checked={true} onChange={this.handleUnselect(trainingModule.id)}/>
-                                      <Typography>{trainingModule.name} / {trainingModule.id} (КОП) / {trainingModule.module_isu_id} (ИСУ) / {trainingModule.editors?.map((editor) => getUserFullName(editor)).join(',')} </Typography>
+                                      <Typography>{trainingModule.name} / {trainingModule.id} (КОП) / {trainingModule.module_isu_id} (ИСУ) / {trainingModule.editors?.map((editor) => getUserFullName(editor)).join(', ')} </Typography>
                                   </div>
                                 ))}
                                 {trainingModules.map((trainingModule: TrainingModuleType) => {
@@ -152,7 +156,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                                     return (
                                       <div key={trainingModule.id} className={classes.selectedItem}>
                                           <Checkbox checked={false} onChange={this.handleSelect(trainingModule)}/>
-                                          <Typography>{trainingModule.name} / {trainingModule.id} (КОП) / {trainingModule.module_isu_id} (ИСУ) / {trainingModule.editors?.map((editor) => getUserFullName(editor)).join(',')} </Typography>
+                                          <Typography>{trainingModule.name} / {trainingModule.id} (КОП) / {trainingModule.module_isu_id} (ИСУ) / {trainingModule.editors?.map((editor) => getUserFullName(editor)).join(', ')} </Typography>
                                       </div>
                                     )
                                 })}
