@@ -58,7 +58,7 @@ export const RussianCertificationFields = {
     [CertificationFields.ID]: 'ID',
     [CertificationFields.DISCIPLINE_CODE]: 'Код дисциплины',
     [CertificationFields.TITLE]: 'Название',
-    [CertificationFields.YEAR]: 'Год проведения',
+    [CertificationFields.YEAR]: 'Год заполнения программы',
     [CertificationFields.AUTHORS]: 'Авторский состав',
     [CertificationFields.OP_LEADER]: 'Руководитель образовательной программы',
     [CertificationFields.STRUCTURAL_UNIT]: 'Структурное подразделение',

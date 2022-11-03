@@ -261,8 +261,8 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             }
           </TableRow>;
         })}
-        {item?.childs?.map((item: any) => (
-          this.renderModule(item, level + 1, item?.childs, item.id)
+        {item?.childs?.map((child: any) => (
+          this.renderModule(child, level + 1, child?.childs, item.id)
         ))}
       </>
     )
