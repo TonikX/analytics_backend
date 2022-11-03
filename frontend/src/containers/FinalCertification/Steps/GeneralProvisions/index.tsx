@@ -1,4 +1,5 @@
 import React from "react";
+import cn from "classnames";
 import {CertificationFields, CertificationSteps, TemplateTextCertificationFields} from "../../enum";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -28,10 +29,10 @@ class GeneralProvisions extends React.Component<GeneralProvisionsProps> {
                     <Typography className={classes.generalProvisionsText} align="justify">
                         {templateText[TemplateTextCertificationFields.GENERAL_PROVISIONS]}
                     </Typography>
-                    <div className={classes.inputWrapper}>
+                    <div className={classes.inputWrapperRelative}>
                         <InputList fieldName={CertificationFields.GENERAL_PROVISIONS_OTHER_DOCUMENTS}/>
                         <Tooltip title="По желанию можно указать другие документы, которые использовались при написании рабочей программы">
-                            <QuestionIcon color="secondary" className={classes.tooltipIcon}/>
+                            <QuestionIcon color="secondary" className={cn(classes.tooltipIconAbsolute, classes.tooltipTop)}/>
                         </Tooltip>
                     </div>
                 </div>

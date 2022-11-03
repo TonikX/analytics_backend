@@ -80,5 +80,8 @@ export default () => createStyles({
         transform: 'translate(50%, -4px)',
         left: '100%',
         cursor: 'pointer'
+    },
+    tooltipTop: {
+        top: '20px',
     }
 });
