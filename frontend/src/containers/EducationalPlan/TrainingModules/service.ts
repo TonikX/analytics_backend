@@ -19,7 +19,7 @@ class TrainingModulesService extends AnalyticsService{
     }
 
     getTrainingModule(id: number){
-        return this.get(`/api/disciplineblockmodule/${id}`);
+        return this.get(`/api/disciplineblockmodule/detail/${id}`);
     }
 
     deleteTrainingModule(id: number){
