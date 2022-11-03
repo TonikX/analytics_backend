@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.models import DisciplineBlockModule, СertificationEvaluationTool, ImplementationAcademicPlan
@@ -130,7 +131,16 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
         }
 
 
+def validate_keys(self, value):
+    print(self.id)
+    print(value)
+    if self.id in value:
+        raise ValidationError('%s is not an even number' % value)
+
+
 class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
+
+
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors', 'selection_rule',
@@ -142,6 +152,13 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
         instance.editors.add(editor)
 
         return instance
+
+
+    def validate_childs(self, childs):
+        if self.instance.id in self.initial_data['childs']:
+            raise ValidationError('Модуль %s не может сослаться сам на себя' % self.instance.id)
+        else:
+            return childs
 
 
 class ShortDisciplineBlockModuleForModuleListSerializer(serializers.ModelSerializer):

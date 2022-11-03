@@ -5,6 +5,7 @@ from django.contrib.postgres.fields import JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from model_clone import CloneMixin
+from rest_framework.exceptions import ValidationError
 
 from dataprocessing.models import Items
 from onlinecourse.models import OnlineCourse, Institution
@@ -647,18 +648,6 @@ class DisciplineBlock(CloneMixin, models.Model):
             db.name = block
             db.descipline_block_id = id
             db.save()
-
-
-# class DisciplineBlockModule(models.Model):
-#     '''
-#     Модель блока дисциплин
-#     '''
-#     name = models.CharField(max_length=1024)
-#     descipline_block = models.ForeignKey('DisciplineBlock', on_delete=models.CASCADE, verbose_name = 'Модуль в блоке', related_name="modules_in_discipline_block", blank=True, null=True)
-#     work_program = models.ManyToManyField('WorkProgram', verbose_name = "Рабочая программа", blank=True, null=True)
-#
-#     def __str__(self):
-#         return (str(self.name) + str(self.descipline_block))
 
 
 class DisciplineBlockModule(CloneMixin, models.Model):
