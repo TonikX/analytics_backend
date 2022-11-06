@@ -188,6 +188,53 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     });
   }
 
+  renderBlockOfWP = (blockOfWorkPrograms: any, level: number) => {
+    const {classes, canEdit} = this.props
+      return (
+        <>
+          {blockOfWorkPrograms?.map((blockOfWorkProgram: any) => {
+            const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
+
+            return <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
+              <TableCell>
+                <div style={{ paddingLeft: level * 5 }}>
+                  {workPrograms.map((workProgram: any) =>
+                    <div className={classes.displayFlex}>
+                      <Typography className={classes.workProgramLink}
+                                  onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
+                        {workProgram[WorkProgramGeneralFields.TITLE]}
+                      </Typography>
+                    </div>
+                  )}
+                </div>
+              </TableCell>
+              <TableCell>
+                {get(typeOfWorkProgramInPlan.find(item =>
+                  item.value === blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
+                ), 'label', '')}
+              </TableCell>
+
+              {canEdit &&
+                <TableCell className={classes.actions}>
+                  <Tooltip
+                    title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                    <DeleteIcon className={classes.deleteIcon}
+                                onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                    <EditIcon
+                      onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>
+                  </Tooltip>
+                </TableCell>
+              }
+            </TableRow>;
+          })}
+        </>
+      )
+  }
+
   renderModule = (item: any, level: number, allChild: any, fatherId: number): any => {
     const {classes, canEdit} = this.props
     const blockOfWorkPrograms = item?.change_blocks_of_work_programs_in_modules
@@ -227,45 +274,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             </TableCell>
           )}
         </TableRow>
-        {blockOfWorkPrograms?.map((blockOfWorkProgram: any) => {
-          const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
-
-          return <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
-            <TableCell>
-              <div style={{ paddingLeft: 10 + level * 5 }}>
-                {workPrograms.map((workProgram: any) =>
-                  <div className={classes.displayFlex}>
-                    <Typography className={classes.workProgramLink}
-                                onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
-                      {workProgram[WorkProgramGeneralFields.TITLE]}
-                    </Typography>
-                  </div>
-                )}
-              </div>
-            </TableCell>
-            <TableCell>
-              {get(typeOfWorkProgramInPlan.find(item =>
-                item.value === blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
-              ), 'label', '')}
-            </TableCell>
-
-            {canEdit &&
-              <TableCell className={classes.actions}>
-                <Tooltip
-                  title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                  <DeleteIcon className={classes.deleteIcon}
-                              onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
-                  />
-                </Tooltip>
-                <Tooltip
-                  title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                  <EditIcon
-                    onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>
-                </Tooltip>
-              </TableCell>
-            }
-          </TableRow>;
-        })}
+        {this.renderBlockOfWP(blockOfWorkPrograms, level)}
         {item?.childs?.map((child: any) => (
           this.renderModule(child, level + 1, item?.childs, item.id)
         ))}
@@ -309,6 +318,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               </TableHead>
               <TableBody>
                 {module?.childs?.map((item: any) => this.renderModule(item, 0, module?.childs, module?.id))}
+                {this.renderBlockOfWP(module?.change_blocks_of_work_programs_in_modules, 0)}
               </TableBody>
             </Table>
           </div>
