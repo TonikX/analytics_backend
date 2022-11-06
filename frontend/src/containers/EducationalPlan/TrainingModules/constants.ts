@@ -105,6 +105,7 @@ export const steps = {
     [StepsEnum.GENERAL]: 'Главная',
     [StepsEnum.MODULES]: 'Учебные модули',
     [StepsEnum.PLANS]: 'Доступные учебные планы',
+    [StepsEnum.EVALUATION_TOOLS]: 'Оценочные средства',
 }
 
 export const selectRulesArray = [

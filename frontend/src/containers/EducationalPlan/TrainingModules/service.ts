@@ -3,16 +3,19 @@ import AnalyticsService from "../../../service/analytics-service";
 import {SortingType} from "../../../components/SortingButton/types";
 import {ChangeTrainingModulePayload, CreateTrainingModulePayload} from "./types";
 import {TrainingModuleFields} from "./enum";
+import {ReactText} from "react";
+import {IntermediateCertificationFields} from "../../WorkProgram/enum";
 
 class TrainingModulesService extends AnalyticsService{
-    getTrainingModules(currentPage: number, search: string, sortingField: string, sortingMode: SortingType, showOnlyMy: boolean){
+    getTrainingModules(currentPage: number, search: string, sortingField: string, sortingMode: SortingType, showOnlyMy: boolean, filters: any){
         const sortingSymbol = getSortingSymbol(sortingMode);
+        const filtersString = `id=${filters.id}&module_isu_id__icontains=${filters.isuId}&name__icontains=${filters.name}&descipline_block__name__icontains=${filters.disciplineName}`
 
         if (showOnlyMy) {
-            return this.get(`/api/disciplineblockmodule/detail/list/for_this_user?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}`);
+            return this.get(`/api/disciplineblockmodule/list/for_this_user?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}&${filtersString}`);
         }
 
-        return this.get(`/api/disciplineblockmodule/detail/list?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}`);
+        return this.get(`/api/disciplineblockmodule/list?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}&${filtersString}`);
     }
 
     getTrainingModule(id: number){
@@ -36,6 +39,34 @@ class TrainingModulesService extends AnalyticsService{
             father: null
         });
     }
+
+    addFatherToModule(modules: number[], moduleId: number){
+        return this.patch(`/api/disciplineblockmodule/update/${moduleId}`, {
+            childs: modules
+        });
+    }
+
+    deleteIntermediateCertification(id: ReactText){
+        return this.delete(`/api/certification_tools/${id}`);
+    }
+
+    getIntermediateCertification(id: ReactText){
+        return this.get(`/api/certification_tools/${id}`);
+    }
+
+    changeIntermediateCertification(evaluationTool: any){
+        const id = evaluationTool[IntermediateCertificationFields.ID];
+
+        return this.patch(`/api/certification_tools/${id}`, evaluationTool);
+    }
+
+    addIntermediateCertification(evaluationTool: any, moduleId: ReactText){
+        return this.post(`/api/certification_tools/`, {
+            ...evaluationTool,
+            discipline_block_module: moduleId
+        });
+    }
+
 }
 
 export default TrainingModulesService;

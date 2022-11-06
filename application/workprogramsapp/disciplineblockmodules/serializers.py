@@ -1,10 +1,11 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.models import DisciplineBlockModule, СertificationEvaluationTool, ImplementationAcademicPlan
 from workprogramsapp.serializers import \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockDetailAcademicSerializer, \
-    ImplementationAcademicPlanCreateSerializer, DisciplineBlockForWPinFSSerializer, \
+    DisciplineBlockForWPinFSSerializer, \
     СertificationEvaluationToolCreateSerializer, AcademicPlanInImplementationSerializer, \
     FieldOfStudyImplementationSerializer
 
@@ -142,3 +143,20 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
         instance.editors.add(editor)
 
         return instance
+
+    def validate_childs(self, childs):
+        if self.instance.id in self.initial_data['childs']:
+            raise ValidationError('Модуль %s не может сослаться сам на себя' % self.instance.id)
+        else:
+            return childs
+
+
+class ShortDisciplineBlockModuleForModuleListSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для вывода списка Модулей
+    """
+    editors = userProfileSerializer(many=True)
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = ['id', 'module_isu_id', 'name', 'type', 'editors']

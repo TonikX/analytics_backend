@@ -17,6 +17,8 @@ export const getTrainingModulesListForSelector = (state: rootState): SelectorLis
 }));
 
 export const getTrainingModule = (state: rootState): TrainingModuleType|{} => get(getStateData(state), fields.DETAIL_TRAINING_MODULE, {});
+export const getEvaluationListModule = (state: rootState): TrainingModuleType|{} =>
+  get(getTrainingModule(state), TrainingModuleFields.CERTIFICATION_EVALUATION_LIST, []);
 export const getTrainingModuleId = (state: rootState): number => get(getTrainingModule(state), TrainingModuleFields.ID, 0);
 export const getModuleRating = (state: rootState): boolean => get(getTrainingModule(state), 'rating', false);
 export const getModuleRatingId = (state: rootState): number => get(getTrainingModule(state), 'id_rating', 0);
@@ -29,7 +31,12 @@ export const getSorting = (state: rootState) => get(getStateData(state), fields.
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
 export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
 
-export const getDialogData = (state: rootState) => get(getStateData(state), [fields.TRAINING_MODULE_DIALOG, fields.TRAINING_MODULE_DIALOG_DATA], {});
-export const isOpenDialog = (state: rootState) => get(getStateData(state), [fields.TRAINING_MODULE_DIALOG, fields.IS_OPEN_TRAINING_MODULE_DIALOG], false);
+export const getFilterField = (state: rootState, field: string) =>
+  get(getStateData(state), [fields.FILTERS, field], '');
+
+export const getDialogData = (state: rootState, dialog: string) =>
+  get(getStateData(state), [dialog, fields.DIALOG_DATA], {});
+export const isOpenDialog = (state: rootState, dialog: string) =>
+  get(getStateData(state), [dialog, fields.IS_OPEN_DIALOG], false);
 
 export const getShowOnlyMy = (state: rootState) => get(getStateData(state), fields.SHOW_ONLY_MY, false);

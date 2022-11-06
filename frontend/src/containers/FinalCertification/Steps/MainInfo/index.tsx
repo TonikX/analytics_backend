@@ -9,6 +9,9 @@ import Input from "../../components/Input";
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 import {StructuralUnitsActions} from "../../../StructuralUnits/types";
 import StructuralUnit from "../../components/StructuralUnit";
+import {PracticeFields, PracticeKinds} from "../../../Practice/enum";
+import {PRACTICE_KINDS} from "../../../Practice/constants";
+import Select from "../../../Practice/components/Select";
 
 interface MainInfoProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
@@ -16,6 +19,17 @@ interface MainInfoProps extends WithStyles<typeof styles> {
     structuralUnitsList: SelectorListType;
     structuralUnitActions: StructuralUnitsActions;
 }
+
+const TITLES = [
+    {
+        value: 'preparation',
+        label: 'Подготовка к защите и защита ВКР',
+    },
+    {
+        value: 'preparation-en',
+        label: 'Подготовка к защите и защита ВКР / Master Thesis Research and Defense',
+    }
+];
 
 class MainInfo extends React.Component<MainInfoProps> {
 
@@ -44,7 +58,8 @@ class MainInfo extends React.Component<MainInfoProps> {
                 <div className={classes.columns}>
                     <div className={classes.leftColumn}>
                         <Input fieldName={CertificationFields.DISCIPLINE_CODE}/>
-                        <Input fieldName={CertificationFields.TITLE}/>
+                        <Select fieldName={PracticeFields.TITLE}
+                                metaList={TITLES}/>
                         <Input fieldName={CertificationFields.YEAR}/>
                     </div>
                     <div className={classes.rightColumn}>

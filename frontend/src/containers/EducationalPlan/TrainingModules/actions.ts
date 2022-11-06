@@ -12,12 +12,14 @@ const getTrainingModulesList = createAction('GET_TRAINING_MODULES');
 const setTrainingModulesList = createAction('SET_TRAINING_MODULES');
 const getTrainingModule = createAction<any>('GET_TRAINING_MODULE');
 const setTrainingModule = createAction('SET_TRAINING_MODULE');
+const updateTrainingModuleFilters = createAction('UPDATE_TRAINING_MODULE_FILTERS');
 
 const createTrainingModule = createAction<CreateTrainingModulePayload>('CREATE_TRAINING_MODULES');
 const changeTrainingModule = createAction<ChangeTrainingModulePayload>('CHANGE_TRAINING_MODULES');
 const deleteTrainingModule = createAction('DELETE_TRAINING_MODULES');
 
 const removeFatherFromModule = createAction<any>('REMOVE_FATHER_FROM_MODULE');
+const updateChildModules = createAction<any>('ADD_FATHER_TO_MODULES');
 
 const openDialog = createAction<OpenDialogPayload>('OPEN_TRAINING_MODULE_DIALOG');
 const closeDialog = createAction('CLOSE_TRAINING_MODULE_DIALOG');
@@ -32,13 +34,24 @@ const showOnlyMy = createAction<boolean>('TRAINING_MODULES_SHOW_ONLY_MY');
 
 const changeEditorList = createAction('TRAINING_MODULES_CHANGE_EDITOR_LIST');
 
+const deleteIntermediateCertification = createAction('TRAINING_MODULES_DELETE_INTERMEDIATE_CERTIFICATION');
+const addIntermediateCertification = createAction('TRAINING_MODULES_ADD_INTERMEDIATE_CERTIFICATION');
+const changeIntermediateCertification = createAction('TRAINING_MODULES_CHANGE_INTERMEDIATE_CERTIFICATION');
+const getIntermediateCertification = createAction('TRAINING_MODULES_GET_INTERMEDIATE_CERTIFICATION');
+
 const actions: TrainingModulesActions = {
+    updateTrainingModuleFilters,
+    deleteIntermediateCertification,
+    addIntermediateCertification,
+    changeIntermediateCertification,
+    getIntermediateCertification,
     changeFiltering,
     getTrainingModulesList,
     setTrainingModulesList,
     getTrainingModule,
     setTrainingModule,
     removeFatherFromModule,
+    updateChildModules,
 
     changeSearchQuery,
     changeCurrentPage,

@@ -71,7 +71,8 @@ export default (theme: Theme) => createStyles({
     editors: {
         display: 'flex',
         flexWrap: 'wrap',
-        marginBottom: '20px',
+        alignItems: 'center',
+        marginBottom: '10px',
     },
     wrap: {
         padding: '0px 30px 30px',
@@ -79,23 +80,25 @@ export default (theme: Theme) => createStyles({
         marginTop: '30px',
     },
     editorsTitle: {
-        fontSize: '14px',
-        fontWeight: 'bold',
         lineHeight: '32px',
         marginRight: '10px',
-        marginBottom: '10px',
     },
     editorsItem: {
         marginLeft: '5px',
-        marginBottom: '10px',
     },
     editorsAdd: {
         height: '32px',
-        marginBottom: '20px',
+        marginLeft: 'auto',
     },
     moduleNameWrap: {
         display: 'flex',
         justifyContent: 'space-between',
+    },
+    createModuleButtonWrap: {
+        display: 'flex',
+        marginTop: 20,
+        gap: 20,
+        justifyContent: 'flex-end'
     },
     moduleButtons: {
         display: 'flex',

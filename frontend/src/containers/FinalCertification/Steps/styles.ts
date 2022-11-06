@@ -59,5 +59,26 @@ export default () => createStyles({
     },
     structuralUnit: {
         marginTop: '37px',
+    },
+    inputWrapper: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px'
+    },
+    inputWrapperRelative: {
+        position: 'relative',
+    },
+    tooltipIcon: {
+        position: 'relative',
+        top: '5px',
+        left: '5px',
+        cursor: 'pointer'
+    },
+    tooltipIconAbsolute: {
+        top: '50%',
+        position: 'absolute',
+        transform: 'translate(50%, -4px)',
+        left: '100%',
+        cursor: 'pointer'
     }
 });
