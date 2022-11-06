@@ -581,15 +581,10 @@ class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
     # father = serializers.SerializerMethodField()
 
     def to_representation(self, value):
-        self.fields['childs'] = serializers.SerializerMethodField()
+        self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
         return super().to_representation(value)
 
-    def get_childs(self, obj):
-        childs = DisciplineBlockModule.objects.filter(father=obj)
-        if childs:
-            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
-        else:
-            return None
+
 
     class Meta:
         model = DisciplineBlockModule
@@ -601,19 +596,12 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
     # father = serializers.SerializerMethodField()
 
     def to_representation(self, value):
-        self.fields['childs'] = serializers.SerializerMethodField()
+        self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
         return super().to_representation(value)
-
-    def get_childs(self, obj):
-        childs = DisciplineBlockModule.objects.filter(father=obj)
-        if childs:
-            return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
-        else:
-            return None
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules', 'father', 'selection_rule']
+        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules', 'selection_rule']
         extra_kwargs = {
             'change_blocks_of_work_programs_in_modules': {'required': False}
         }
