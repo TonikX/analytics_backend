@@ -14,7 +14,7 @@ from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockMo
     DisciplineBlockModuleDetailSerializer, ShortDisciplineBlockModuleForModuleListSerializer
 from workprogramsapp.folders_ans_statistic.models import DisciplineBlockModuleInFolder
 from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsBlockModuleEditor
 
 
 class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
@@ -23,7 +23,7 @@ class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
     """
     serializer_class = DisciplineBlockModuleCreateSerializer
     queryset = DisciplineBlockModule.objects.all()
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsBlockModuleEditor]
     my_tags = ["Discipline Blocks"]
 
     def perform_create(self, serializer):
@@ -36,7 +36,7 @@ class DisciplineBlockModuleDestroyView(generics.DestroyAPIView):
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsBlockModuleEditor]
     my_tags = ["Discipline Blocks"]
 
 
@@ -46,7 +46,7 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleCreateSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsBlockModuleEditor]
     my_tags = ["Discipline Blocks"]
 
 
@@ -57,11 +57,11 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleCreateSerializer
-    filterset_class=DisciplineBlockModuleFilter
+    filterset_class = DisciplineBlockModuleFilter
     search_fields = ['id', 'module_isu_id', 'name', 'descipline_block__name']
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-   # filterset_fields = ['id', 'module_isu_id', 'name', 'descipline_block__name',]
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    # filterset_fields = ['id', 'module_isu_id', 'name', 'descipline_block__name',]
+    permission_classes = [IsBlockModuleEditor]
     my_tags = ["Discipline Blocks"]
 
 
@@ -75,7 +75,7 @@ class DisciplineBlockModuleDetailListView(generics.ListAPIView):
     filterset_class = DisciplineBlockModuleFilter
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['name', 'descipline_block__name']
-
+    permission_classes = [IsBlockModuleEditor]
     my_tags = ["Discipline Blocks"]
 
 
@@ -87,6 +87,7 @@ class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     filterset_class = DisciplineBlockModuleFilter
     search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
+    permission_classes = [IsBlockModuleEditor]
     my_tags = ["Discipline Blocks"]
 
     def get_queryset(self):
@@ -100,6 +101,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
     my_tags = ["Discipline Blocks"]
+    permission_classes = [IsBlockModuleEditor]
 
     def get(self, request, **kwargs):
         queryset = DisciplineBlockModule.objects.filter(pk=self.kwargs['pk'])

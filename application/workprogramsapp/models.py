@@ -704,7 +704,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     #father = models.ForeignKey('self', on_delete=models.SET_NULL, related_name="inheritage_module",blank=True, null=True)
     educational_programs_to_access = models.ManyToManyField('ImplementationAcademicPlan',
                                                             verbose_name='Разрешенные образовательные программы',
-                                                            related_name="modules_to_access", blank=True)
+                                                            related_name="modules_to_access", blank=True, null=True)
 
     class Meta:
         ordering = ['order']
