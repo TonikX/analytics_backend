@@ -605,7 +605,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
         return super().to_representation(value)
 
     def get_childs(self, obj):
-        childs = DisciplineBlockModule.objects.filter(father=obj)
+        childs = DisciplineBlockModule.objects.filter(father_module=obj)
         if childs:
             return DisciplineBlockModuleWithoutFatherSerializer(childs, many=True).data
         else:
