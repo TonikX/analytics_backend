@@ -16,6 +16,7 @@ from workprogramsapp.educational_program.educational_standart.models import Educ
 from django.contrib.postgres.fields import JSONField
 from workprogramsapp.educational_program.educational_standart.models import EducationalStandard, \
     TasksForEducationalStandard
+from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 '''
 class FieldOfStudyWorkProgram(models.Model):
@@ -784,6 +785,9 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     educational_programs_to_access = models.ManyToManyField('ImplementationAcademicPlan',
                                                             verbose_name='Разрешенные образовательные программы',
                                                             related_name="modules_to_access", blank=True, null=True)
+    only_for_struct_units = models.BooleanField(verbose_name="Доавбление только для тех же структрных подарзеделений",
+                                                blank=True, null=True)
+
 
     class Meta:
         ordering = ['order']
@@ -802,6 +806,28 @@ class DisciplineBlockModule(CloneMixin, models.Model):
                 clone_wp_in_fos = wp.make_clone(attrs={'work_program_change_in_discipline_block_module': clone_change})
         return clone_module
 
+    def is_included_in_plan(self):
+        instance = self
+        if instance.descipline_block.all().exists():
+            return True
+        fathers = DisciplineBlockModule.objects.filter(childs=instance)
+        for father in fathers:
+            if father.descipline_block.all().exists():
+                return True
+        for father in fathers:
+            father_3rds = DisciplineBlockModule.objects.filter(childs=father)
+            for f3 in father_3rds:
+                if f3.descipline_block.all().exists():
+                    return True
+        return False
+
+    def get_structural_units(self) -> set:
+        set_of_unit_id = set()
+        for editor in self.editors.all():
+            for unit in StructuralUnit.objects.filter(user_in_structural_unit__user=editor):
+                set_of_unit_id.add(unit.id)
+        print(set_of_unit_id)
+        return set_of_unit_id
 
 class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
     '''

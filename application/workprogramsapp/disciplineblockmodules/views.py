@@ -7,13 +7,14 @@ from drf_yasg2.utils import swagger_auto_schema
 from rest_framework import generics, filters, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from workprogramsapp.disciplineblockmodules.search_filters import DisciplineBlockModuleFilter
 from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockModuleCreateSerializer, \
     DisciplineBlockModuleSerializer, DisciplineBlockModuleForModuleListDetailSerializer, \
     DisciplineBlockModuleDetailSerializer
 from workprogramsapp.folders_ans_statistic.models import DisciplineBlockModuleInFolder
-from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock
+from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock, ImplementationAcademicPlan
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsBlockModuleEditor
 
 
@@ -48,6 +49,45 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
     serializer_class = DisciplineBlockModuleCreateSerializer
     permission_classes = [IsBlockModuleEditor]
     my_tags = ["Discipline Blocks"]
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        data = request.data
+        blocks = data.get("descipline_block")
+        if blocks:
+            blocks_current = [block.id for block in instance.descipline_block.all()]
+            for block in blocks:
+                if not (block in blocks_current):
+                    imp = ImplementationAcademicPlan.objects.get(
+                        academic_plan__discipline_blocks_in_academic_plan__id=block)
+                    if not (imp.id in [accept_imp.id for accept_imp in instance.educational_programs_to_access.all()]):
+                        return Response(data={"error": "Данный учебный план не разрешен для добавления"},
+                                        status=HTTP_400_BAD_REQUEST)
+        childs = data.get("childs")
+        if childs:
+            childs_current = [child.id for child in instance.childs.all()]
+            if instance.only_for_struct_units:
+                instance_structural_set = instance.get_structural_units()
+            for child in childs:
+                if not (child in childs_current):
+                    if not instance.is_included_in_plan():
+                        return Response(
+                            data={"error": "Данный модуль/его родители не включен(-ы) ни в один учебный план"},
+                            status=HTTP_400_BAD_REQUEST)
+
+                    if instance.only_for_struct_units:
+                        new_child_struct = DisciplineBlockModule.objects.get(id=child).get_structural_units()
+                        if not new_child_struct:
+                            return Response(
+                                data={"error": "Данный модуль не входит в разрешенные структурные подразделения"},
+                                status=HTTP_400_BAD_REQUEST)
+                        for new_child in new_child_struct:
+                            if not (new_child in instance_structural_set):
+                                return Response(
+                                    data={"error": "Данный модуль не входит в разрешенные структурные подразделения"},
+                                    status=HTTP_400_BAD_REQUEST)
+
+        return self.partial_update(request, *args, **kwargs)
 
 
 class DisciplineBlockModuleShortListView(generics.ListAPIView):
