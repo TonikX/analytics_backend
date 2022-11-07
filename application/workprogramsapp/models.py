@@ -826,7 +826,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         for editor in self.editors.all():
             for unit in StructuralUnit.objects.filter(user_in_structural_unit__user=editor):
                 set_of_unit_id.add(unit.id)
-        print(set_of_unit_id)
+
         return set_of_unit_id
 
 class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):

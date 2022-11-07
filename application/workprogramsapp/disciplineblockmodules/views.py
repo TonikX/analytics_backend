@@ -93,7 +93,11 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
 class DisciplineBlockModuleShortListView(generics.ListAPIView):
     """
         Получение списка модулей с краткой информацией
-        Можно осуществялть поиск по имени, имени блока, типу образования
+        Можно осуществлять поиск по имени, имени блока, типу образования
+
+        Если нужно найти подходящие модули для добавление в другой модуль
+        необходимо указывать в GET-параметр id_module_for_filter айди исходного
+        модуля.
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleCreateSerializer
@@ -103,6 +107,21 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
     # filterset_fields = ['id', 'module_isu_id', 'name', 'descipline_block__name',]
     permission_classes = [IsBlockModuleEditor]
     my_tags = ["Discipline Blocks"]
+
+    def get_queryset(self):
+        id_module_for_filter = self.request.GET.get('id_module_for_filter')
+        if id_module_for_filter:
+            module_for_filter = DisciplineBlockModule.objects.get(id=id_module_for_filter)
+            if module_for_filter.only_for_struct_units:
+                set_of_units = module_for_filter.get_structural_units()
+                queryset = DisciplineBlockModule.objects.filter(
+                    editors__user_for_structural_unit__structural_unit__id__in=set_of_units).exclude(
+                    id=module_for_filter.id).exclude()
+                return queryset
+            else:
+                return DisciplineBlockModule.objects.all()
+        else:
+            return DisciplineBlockModule.objects.all()
 
 
 class DisciplineBlockModuleDetailListView(generics.ListAPIView):
