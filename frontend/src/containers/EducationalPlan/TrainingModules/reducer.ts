@@ -8,16 +8,37 @@ export const GENERAL_PATH = 'trainingModule';
 
 export const initialState: trainingModulesState = {
     [fields.SORTING]: {
-        [fields.SORTING_FIELD]: '',
+        [fields.SORTING_FIELD]: '-id',
         [fields.SORTING_MODE]: ''
+    },
+    [fields.FILTERS]: {
+        [fields.FILTER_ID]: '',
+        [fields.FILTER_MODULE_ISU_ID]: '',
+        [fields.FILTER_MODULE_NAME]: '',
+        [fields.FILTER_MODULE_DISCIPLINE_NAME]: '',
     },
     [fields.CURRENT_PAGE]: 1,
     [fields.ALL_COUNT]: 1,
     [fields.SEARCH_QUERY]: "",
     [fields.TRAINING_MODULES_LIST]: [],
-    [fields.TRAINING_MODULE_DIALOG]: {
-        [fields.IS_OPEN_TRAINING_MODULE_DIALOG]: false,
-        [fields.TRAINING_MODULE_DIALOG_DATA]: {}
+    [fields.CREATE_TRAINING_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
+    },
+    [fields.ADD_TRAINING_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {
+            moduleId: 0,
+            trainingModules: []
+        }
+    },
+    [fields.EVALUATION_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: {}
+    },
+    [fields.EVALUATION_DESCRIPTION_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
+        [fields.DIALOG_DATA]: ''
     },
     [fields.DETAIL_TRAINING_MODULE]: {},
     [fields.SHOW_ONLY_MY]: false,
@@ -50,15 +71,18 @@ const changeAllCount = (state: trainingModulesState, {payload}: any): trainingMo
 
 const openDialog = (state: trainingModulesState, {payload}: {payload: OpenDialogPayload}): trainingModulesState => ({
     ...state,
-    [fields.TRAINING_MODULE_DIALOG]: {
-        [fields.IS_OPEN_TRAINING_MODULE_DIALOG]: true,
-        [fields.TRAINING_MODULE_DIALOG_DATA]: payload.data
+    [payload.dialog]: {
+        [fields.IS_OPEN_DIALOG]: true,
+        [fields.DIALOG_DATA]: payload.data
     },
 });
 
 const closeDialog = (state: trainingModulesState): trainingModulesState => ({
     ...state,
-    [fields.TRAINING_MODULE_DIALOG]: initialState[fields.TRAINING_MODULE_DIALOG],
+    [fields.CREATE_TRAINING_MODULE_DIALOG]: initialState[fields.CREATE_TRAINING_MODULE_DIALOG],
+    [fields.EVALUATION_MODULE_DIALOG]: initialState[fields.EVALUATION_MODULE_DIALOG],
+    [fields.EVALUATION_DESCRIPTION_MODULE_DIALOG]: initialState[fields.EVALUATION_DESCRIPTION_MODULE_DIALOG],
+    [fields.ADD_TRAINING_MODULE_DIALOG]: initialState[fields.ADD_TRAINING_MODULE_DIALOG],
 });
 
 const changeSorting = (state: trainingModulesState, {payload}: any): trainingModulesState => ({
@@ -66,6 +90,14 @@ const changeSorting = (state: trainingModulesState, {payload}: any): trainingMod
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: payload.field,
         [fields.SORTING_MODE]: payload.mode
+    }
+});
+
+const updateTrainingModuleFilters = (state: trainingModulesState, {payload}: any): trainingModulesState => ({
+    ...state,
+    [fields.FILTERS]: {
+        ...state[fields.FILTERS],
+        [payload.field]: payload.value,
     }
 });
 
@@ -84,4 +116,5 @@ export const reducer = createReducer(initialState, {
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
     [actions.showOnlyMy.type]: showOnlyMy,
+    [actions.updateTrainingModuleFilters.type]: updateTrainingModuleFilters,
 });
