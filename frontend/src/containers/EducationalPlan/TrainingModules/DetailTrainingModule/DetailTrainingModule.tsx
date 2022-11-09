@@ -386,7 +386,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
         <>
           <Typography className={classes.textField}>
-            ID конструктора РПД: <b>{module?.[TrainingModuleFields.ID]}</b>
+            ID конструктора КОП: <b>{module?.[TrainingModuleFields.ID]}</b>
           </Typography>
           <TextField variant="outlined"
                      label="Описание"
