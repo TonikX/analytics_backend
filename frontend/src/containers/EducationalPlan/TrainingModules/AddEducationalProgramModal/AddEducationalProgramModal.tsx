@@ -101,9 +101,11 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
                           changeItem={(value: string) => this.handleFilter(filterFields.SPECIALIZATION, value)}
                           value={filters[filterFields.SPECIALIZATION]}
                           valueLabel={''}
+                          className={classes.select}
                         />
                         <StructuralUnitsSelector value={filters[filterFields.STRUCTURAL_UNIT]}
                                                  onChange={(value: number) => {this.handleFilter(filterFields.STRUCTURAL_UNIT, value)}}
+                                                 className={classes.select}
                         />
                         <TextField label='Номер направления подготовки'
                                    onChange={(e: any) => this.handleFilter(filterFields.NUMBER_DP, e.target.value)}
@@ -112,6 +114,7 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
                                    InputLabelProps={{
                                        shrink: true,
                                    }}
+                                   className={classes.select}
                         />
                         <TextField label='Название направления подготовки'
                                    onChange={(e: any) => this.handleFilter(filterFields.NAME_DP, e.target.value)}
@@ -120,6 +123,7 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
                                    InputLabelProps={{
                                        shrink: true,
                                    }}
+                                   className={classes.select}
                         />
                         <Button variant="contained" color="primary" onClick={this.searchModules} className={classes.searchButton}>
                             Найти

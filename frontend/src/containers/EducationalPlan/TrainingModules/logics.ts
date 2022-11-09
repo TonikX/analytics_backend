@@ -152,6 +152,8 @@ const updateChildModules = createLogic({
 
         const {moduleId, trainingModules} = action.payload
 
+        dispatch(actions.fetchingFailed([]));
+
         service.addFatherToModule(trainingModules, moduleId)
             .then((res) => {
                     const moduleId = getTrainingModuleId(getState());
@@ -161,7 +163,7 @@ const updateChildModules = createLogic({
                     dispatch(actions.fetchingSuccess());
                 })
                 .catch((err) => {
-                    dispatch(actions.fetchingFailed(err));
+                    dispatch(actions.fetchingFailed(err?.childs?.[0] ?? err?.[0]));
                 })
                 .then(() => {
                     dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_TRAINING_MODULE}));

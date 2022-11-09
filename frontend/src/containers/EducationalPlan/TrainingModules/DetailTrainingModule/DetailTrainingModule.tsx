@@ -205,7 +205,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
             return <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
               <TableCell>
-                <div style={{ paddingLeft: level * 5 }}>
+                <div style={{ paddingLeft: (level + 1) * 5 }}>
                   {workPrograms.map((workProgram: any) =>
                     <div className={classes.displayFlex}>
                       <Typography className={classes.workProgramLink}
