@@ -22,6 +22,7 @@ const mapStateToProps = (state: rootState) => {
         filterModuleIsuId: getFilterField(state, fields.FILTER_MODULE_ISU_ID),
         filterModuleName: getFilterField(state, fields.FILTER_MODULE_NAME),
         filterModuleDisciplineName: getFilterField(state, fields.FILTER_MODULE_DISCIPLINE_NAME),
+        filterModuleAvailableForAll: getFilterField(state, fields.FILTER_MODULE_AVAILABLE_FOR_ALL),
         trainingModules: getTrainingModulesList(state),
         currentPage: getCurrentPage(state),
         allCount: getAllCount(state),

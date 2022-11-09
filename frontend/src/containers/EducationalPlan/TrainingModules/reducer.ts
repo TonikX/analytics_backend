@@ -16,6 +16,7 @@ export const initialState: trainingModulesState = {
         [fields.FILTER_MODULE_ISU_ID]: '',
         [fields.FILTER_MODULE_NAME]: '',
         [fields.FILTER_MODULE_DISCIPLINE_NAME]: '',
+        [fields.FILTER_MODULE_AVAILABLE_FOR_ALL]: true,
     },
     [fields.CURRENT_PAGE]: 1,
     [fields.ALL_COUNT]: 1,

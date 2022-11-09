@@ -76,6 +76,7 @@ export interface trainingModulesState {
         [fields.FILTER_MODULE_ISU_ID]: string,
         [fields.FILTER_MODULE_DISCIPLINE_NAME]: string,
         [fields.FILTER_MODULE_NAME]: string,
+        [fields.FILTER_MODULE_AVAILABLE_FOR_ALL]: boolean,
     },
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;

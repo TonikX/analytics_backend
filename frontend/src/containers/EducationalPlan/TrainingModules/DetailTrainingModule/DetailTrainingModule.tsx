@@ -50,6 +50,8 @@ import EvaluationTools from '../EvaluationTools'
 import AddEducationalProgramModal from "../AddEducationalProgramModal/AddEducationalProgramModal";
 import AddTrainingModuleModal from "../AddTrainingModuleModal/AddTrainingModuleModal";
 import {TrainingModuleType} from "../types";
+import {QUALIFICATIONS} from "../../../Practice/constants";
+import {specializationObject} from "../../../WorkProgram/constants";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -326,7 +328,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               </TableHead>
               <TableBody>
                 {module?.childs?.map((item: any) => this.renderModule(item, 0, module?.childs, module?.id))}
-                {this.renderBlockOfWP(module?.change_blocks_of_work_programs_in_modules, 0)}
+                {this.renderBlockOfWP(module?.change_blocks_of_work_programs_in_modules, -1)}
               </TableBody>
             </Table>
           </div>
@@ -443,16 +445,14 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           <Typography className={classes.subTitle}>
             {steps[StepsEnum.PLANS]}
           </Typography>
-          <Button onClick={this.openAddEducationalProgramModal}>
-            Добавить образовательную программу
-          </Button>
         </div>
         <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
           <Table stickyHeader>
             <TableHead style={{height: 45}}>
               <TableRow>
-                <TableCell className={classes.header}>Образовательная программа</TableCell>
                 <TableCell className={classes.header}>Направление</TableCell>
+                <TableCell className={classes.header}>Номер</TableCell>
+                <TableCell className={classes.header}>Уровень</TableCell>
                 <TableCell className={classes.header}>Год набора</TableCell>
                 <TableCell />
               </TableRow>
@@ -461,10 +461,13 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               {module?.educational_programs_to_access?.map((plan: any) => (
                 <TableRow>
                   <TableCell>
-                    {get(plan, 'title')}
+                    {get(plan, 'field_of_study.0.title')}
                   </TableCell>
                   <TableCell>
-                    {get(plan, 'field_of_study.0.title')}
+                    {get(plan, 'field_of_study.0.number')}
+                  </TableCell>
+                  <TableCell>
+                    {specializationObject[get(plan, 'field_of_study.0.qualification', '')]}
                   </TableCell>
                   <TableCell>
                     {get(plan, 'year')}
@@ -482,6 +485,11 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             </TableBody>
           </Table>
         </Scrollbars>
+        <div className={classes.addEducationalProgramButtonWrap}>
+          <Button onClick={this.openAddEducationalProgramModal} variant="outlined">
+            Добавить образовательную программу
+          </Button>
+        </div>
       </>
     )
   }
@@ -569,7 +577,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         </Paper>
 
         <TrainingModuleCreateModal/>
-        <AddTrainingModuleModal />
+        {module?.id && <AddTrainingModuleModal />}
         <AddEducationalProgramModal />
       </div>
     );

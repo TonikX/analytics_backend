@@ -20,6 +20,7 @@ import {TrainingModuleCreateModalProps} from './types';
 
 import connect from './AddTrainingModuleModal.connect';
 import styles from './AddTrainingModuleModal.styles';
+import Switch from "@material-ui/core/Switch";
 
 class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateModalProps, { selectedTrainingModules: TrainingModuleType[]}> {
     state = {
@@ -56,6 +57,15 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
         })
     }
 
+    updateAvailableForAllModulesFilter = () => {
+        this.props.actions.updateTrainingModuleFilters({
+            field: fields.FILTER_MODULE_AVAILABLE_FOR_ALL,
+            //@ts-ignore
+            value: !this.props.filterModuleAvailableForAll,
+        })
+        this.props.actions.getTrainingModulesList()
+    }
+
     searchModules = () => {
         this.props.actions.getTrainingModulesList()
     }
@@ -81,7 +91,8 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
     }
 
     render() {
-        const {isOpen, classes, filterId, filterModuleIsuId, filterModuleName, filterModuleDisciplineName, trainingModules, allCount, currentPage} = this.props;
+        const {isOpen, classes, filterId, filterModuleIsuId, filterModuleName, filterModuleDisciplineName,
+            trainingModules, allCount, currentPage, filterModuleAvailableForAll} = this.props;
         const {selectedTrainingModules} = this.state;
 
         return (
@@ -94,7 +105,18 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                 fullWidth
                 maxWidth="xl"
             >
-                <DialogTitle> Добавить учебный модуль </DialogTitle>
+                <DialogTitle>
+                    <div className={classes.dialogTitle}>
+                        Добавить учебный модуль
+                        <Typography>
+                            <Switch checked={filterModuleAvailableForAll}
+                                    onChange={this.updateAvailableForAllModulesFilter}
+                                    color="primary"
+                            />
+                            Показать общедоступные модули
+                        </Typography>
+                    </div>
+                </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
                     <div className={classes.filtersLine}>
                         <TextField label="КОП ИД *"

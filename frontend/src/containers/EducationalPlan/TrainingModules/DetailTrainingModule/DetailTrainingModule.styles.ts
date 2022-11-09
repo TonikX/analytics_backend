@@ -148,5 +148,9 @@ export default (theme: Theme) => createStyles({
     plansTitle: {
         display: 'flex',
         justifyContent: 'space-between'
+    },
+    addEducationalProgramButtonWrap: {
+        display: 'flex',
+        justifyContent: 'flex-end'
     }
 });
