@@ -126,7 +126,7 @@ class WorkProgram(CloneMixin, models.Model):
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
     def __str__(self):
-        return (self.title) + (self.structural_unit)
+        return (self.title)
 
     def new_relations(old_descipline_code, new_descipline_code):
         old_work_program = WorkProgram.objects.get(id=old_descipline_code)
@@ -708,7 +708,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
                                                             related_name="modules_to_access", blank=True, null=True)
 
     only_for_struct_units = models.BooleanField(verbose_name="Доавбление только для тех же структрных подарзеделений",
-                                                blank=True, null=True)
+                                                blank=True, null=True, default=False)
 
     class Meta:
         ordering = ['order']
