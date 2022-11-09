@@ -46,6 +46,12 @@ class TrainingModulesService extends AnalyticsService{
         });
     }
 
+    addFatherToModule(modules: number[], moduleId: number){
+        return this.patch(`/api/disciplineblockmodule/update/${moduleId}`, {
+            childs: modules
+        });
+    }
+
     deleteIntermediateCertification(id: ReactText){
         return this.delete(`/api/certification_tools/${id}`);
     }
