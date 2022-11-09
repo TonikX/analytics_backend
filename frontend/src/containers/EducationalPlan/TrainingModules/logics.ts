@@ -170,6 +170,33 @@ const updateChildModules = createLogic({
     }
 });
 
+const changeTrainingModuleEducationalPrograms = createLogic({
+    type: trainingModuleActions.changeTrainingModuleEducationalPrograms.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const moduleId = getTrainingModuleId(getState());
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_TRAINING_MODULE}));
+
+        const {educationalPrograms} = action.payload
+
+        service.changeTrainingModuleEducationalPrograms(educationalPrograms, moduleId)
+            .then((res) => {
+                    const moduleId = getTrainingModuleId(getState());
+                    //@ts-ignore
+                    dispatch(moduleActions.getTrainingModule(moduleId));
+                    dispatch(moduleActions.closeDialog());
+                    dispatch(actions.fetchingSuccess());
+                })
+                .catch((err) => {
+                    dispatch(actions.fetchingFailed(err));
+                })
+                .then(() => {
+                    dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_TRAINING_MODULE}));
+                    return done();
+                });
+    }
+});
+
 const deleteTrainingModule = createLogic({
     type: trainingModuleActions.deleteTrainingModule.type,
     latest: true,
@@ -347,4 +374,5 @@ export default [
     addIntermediateCertification,
     deleteIntermediateCertification,
     getIntermediateCertification,
+    changeTrainingModuleEducationalPrograms,
 ];

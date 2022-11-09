@@ -145,4 +145,8 @@ export default (theme: Theme) => createStyles({
         minWidth: '210px',
         marginRight: '15px',
     },
+    plansTitle: {
+        display: 'flex',
+        justifyContent: 'space-between'
+    }
 });
