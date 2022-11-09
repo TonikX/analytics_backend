@@ -47,6 +47,7 @@ import StepButton from "@material-ui/core/StepButton";
 import TrainingModuleCreateModal from "../TrainingModuleCreateModal/TrainingModuleCreateModal";
 import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
 import EvaluationTools from '../EvaluationTools'
+import AddEducationalProgramModal from "../AddEducationalProgramModal/AddEducationalProgramModal";
 import AddTrainingModuleModal from "../AddTrainingModuleModal/AddTrainingModuleModal";
 import {TrainingModuleType} from "../types";
 
@@ -83,6 +84,13 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     });
   }
 
+
+  openAddEducationalProgramModal = () => {
+    this.props.actions.openDialog({
+      dialog: fields.ADD_EDUCATIONAL_PROGRAM_DIALOG
+    });
+  }
+
   handleAddNewModule = (id: number, modules: Array<TrainingModuleType>) => () => {
     this.props.actions.openDialog({
       data: {
@@ -94,7 +102,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   removeFatherFromModule = (removedId: number, allChild: any, fatherId: number) => () => {
-    debugger
     this.props.actions.updateChildModules({
       //@ts-ignore
       trainingModules: allChild.map((item) => item.id).filter(item => item !== removedId),
@@ -138,6 +145,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
       moduleId: this.getModuleId()
     });
   }
+
   handleClickLike = () => {
     const {moduleRating, moduleRatingId} = this.props;
     const moduleId = this.getModuleId();
@@ -197,7 +205,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
             return <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
               <TableCell>
-                <div style={{ paddingLeft: level * 5 }}>
+                <div style={{ paddingLeft: (level + 1) * 5 }}>
                   {workPrograms.map((workProgram: any) =>
                     <div className={classes.displayFlex}>
                       <Typography className={classes.workProgramLink}
@@ -419,14 +427,26 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     )
   }
 
+  handleDeleteEducationalProgram = (id: number) => () => {
+    const {module} = this.props
+    this.props.actions.changeTrainingModuleEducationalPrograms({
+      educationalPrograms: module?.educational_programs_to_access?.map((item: any) => item.id).filter((item: any) => item !== id)
+    });
+  }
+
   renderPlans = () => {
     const {classes, module} = this.props
 
     return (
       <>
-        <Typography className={classes.subTitle}>
-          {steps[StepsEnum.PLANS]}
-        </Typography>
+        <div className={classes.plansTitle}>
+          <Typography className={classes.subTitle}>
+            {steps[StepsEnum.PLANS]}
+          </Typography>
+          <Button onClick={this.openAddEducationalProgramModal}>
+            Добавить образовательную программу
+          </Button>
+        </div>
         <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
           <Table stickyHeader>
             <TableHead style={{height: 45}}>
@@ -434,6 +454,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                 <TableCell className={classes.header}>Образовательная программа</TableCell>
                 <TableCell className={classes.header}>Направление</TableCell>
                 <TableCell className={classes.header}>Год набора</TableCell>
+                <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -447,6 +468,14 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   </TableCell>
                   <TableCell>
                     {get(plan, 'year')}
+                  </TableCell>
+                  <TableCell>
+                    <Tooltip
+                      title={'Удалить образовательную программу'}>
+                      <DeleteIcon className={classes.deleteIcon}
+                                  onClick={this.handleDeleteEducationalProgram(plan.id)}
+                      />
+                    </Tooltip>
                   </TableCell>
                 </TableRow>
               ))}
@@ -511,7 +540,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                          onDismiss={this.closeConfirmDeleteDialog}
                          confirmText={`Вы точно уверены, что хотите ${deletedWorkProgramsLength > 1 ? 'комлект рабочих программ' : 'рабочую программу'}?`}
                          isOpen={Boolean(deleteBlockConfirmId)}
-                         dialogTitle={`Удалить ${deletedWorkProgramsLength > 1 ? 'комлект рабочих программ' : 'рабочую программу'}`}
+                         dialogTitle={`Удалить ${deletedWorkProgramsLength > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}
                          confirmButtonText={'Удалить'}
           />
 
@@ -541,6 +570,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
         <TrainingModuleCreateModal/>
         <AddTrainingModuleModal />
+        <AddEducationalProgramModal />
       </div>
     );
   }

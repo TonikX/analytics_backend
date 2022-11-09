@@ -152,7 +152,36 @@ const updateChildModules = createLogic({
 
         const {moduleId, trainingModules} = action.payload
 
+        dispatch(actions.fetchingFailed([]));
+
         service.addFatherToModule(trainingModules, moduleId)
+            .then((res) => {
+                    const moduleId = getTrainingModuleId(getState());
+                    //@ts-ignore
+                    dispatch(moduleActions.getTrainingModule(moduleId));
+                    dispatch(moduleActions.closeDialog());
+                    dispatch(actions.fetchingSuccess());
+                })
+                .catch((err) => {
+                    dispatch(actions.fetchingFailed(err?.childs?.[0] ?? err?.[0]));
+                })
+                .then(() => {
+                    dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_TRAINING_MODULE}));
+                    return done();
+                });
+    }
+});
+
+const changeTrainingModuleEducationalPrograms = createLogic({
+    type: trainingModuleActions.changeTrainingModuleEducationalPrograms.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const moduleId = getTrainingModuleId(getState());
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_TRAINING_MODULE}));
+
+        const {educationalPrograms} = action.payload
+
+        service.changeTrainingModuleEducationalPrograms(educationalPrograms, moduleId)
             .then((res) => {
                     const moduleId = getTrainingModuleId(getState());
                     //@ts-ignore
@@ -347,4 +376,5 @@ export default [
     addIntermediateCertification,
     deleteIntermediateCertification,
     getIntermediateCertification,
+    changeTrainingModuleEducationalPrograms,
 ];
