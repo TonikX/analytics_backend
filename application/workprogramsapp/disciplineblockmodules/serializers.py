@@ -135,7 +135,7 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors', 'selection_rule',
-                  'educational_programs_to_access', 'childs']
+                  'educational_programs_to_access', 'childs', 'only_for_struct_units']
 
     def create(self, validated_data):
         editor = validated_data.pop('editor')
