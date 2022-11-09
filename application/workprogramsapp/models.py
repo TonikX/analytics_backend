@@ -125,7 +125,7 @@ class WorkProgram(CloneMixin, models.Model):
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
     def __str__(self):
-        return (self.title) + (self.structural_unit)
+        return (self.title)
 
     def new_relations(old_descipline_code, new_descipline_code):
         old_work_program = WorkProgram.objects.get(id=old_descipline_code)
