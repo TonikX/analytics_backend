@@ -49,6 +49,7 @@ export enum TrainingModuleFields {
     CAN_EDIT = 'can_edit',
     ISU_ID = 'module_isu_id',
     SELECTION_RULE = 'selection_rule',
+    SELECTION_PARAMETER = 'selection_parameter',
     CERTIFICATION_EVALUATION_LIST = 'certification_evaluation_tools',
 }
 

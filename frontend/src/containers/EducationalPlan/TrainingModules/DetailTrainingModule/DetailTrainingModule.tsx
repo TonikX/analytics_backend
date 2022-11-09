@@ -61,6 +61,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     activeStep: StepsEnum.GENERAL,
     description: this.props.module[TrainingModuleFields.DESCRIPTION],
     isuId: this.props.module[TrainingModuleFields.ISU_ID],
+    selectionParameter: this.props.module[TrainingModuleFields.SELECTION_PARAMETER],
   }
 
   componentDidMount() {
@@ -72,6 +73,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
       this.setState({
         description: this.props.module[TrainingModuleFields.DESCRIPTION],
         isuId: this.props.module[TrainingModuleFields.ISU_ID],
+        selectionParameter: this.props.module[TrainingModuleFields.SELECTION_PARAMETER],
       })
     }
   }
@@ -415,6 +417,17 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                           wrapClass={classes.selectorWrap}
           />
 
+          <TextField variant="outlined"
+                     label="Параметр выбора"
+                     value={this.state.selectionParameter}
+                     onChange={(e) => this.setState({ selectionParameter: e.target.value })}
+                     onBlur={this.updateTrainingModuleField(TrainingModuleFields.SELECTION_PARAMETER)}
+                     className={classes.textField}
+                     InputLabelProps={{
+                       shrink: true,
+                     }}
+                     type="number"
+          />
           {/*<Typography className={classes.textItem}>*/}
           {/*  <b>Описание:</b> {module.description}*/}
           {/*</Typography>*/}
