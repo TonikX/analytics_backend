@@ -1,6 +1,6 @@
   
 from django.db import models
-from workprogramsapp.models import Topic, WorkProgram
+#from workprogramsapp.models import Topic, WorkProgram
 from django.conf import settings
 
 

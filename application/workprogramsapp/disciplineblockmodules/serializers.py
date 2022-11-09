@@ -5,7 +5,7 @@ from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.models import DisciplineBlockModule, СertificationEvaluationTool, ImplementationAcademicPlan
 from workprogramsapp.serializers import \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockDetailAcademicSerializer, \
-    ImplementationAcademicPlanCreateSerializer, DisciplineBlockForWPinFSSerializer, \
+    DisciplineBlockForWPinFSSerializer, \
     СertificationEvaluationToolCreateSerializer, AcademicPlanInImplementationSerializer, \
     FieldOfStudyImplementationSerializer
 
@@ -131,20 +131,11 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
         }
 
 
-def validate_keys(self, value):
-    print(self.id)
-    print(value)
-    if self.id in value:
-        raise ValidationError('%s is not an even number' % value)
-
-
 class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
-
-
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors', 'selection_rule',
-                  'educational_programs_to_access', 'childs']
+                  'educational_programs_to_access', 'childs', 'only_for_struct_units']
 
     def create(self, validated_data):
         editor = validated_data.pop('editor')
@@ -152,7 +143,6 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
         instance.editors.add(editor)
 
         return instance
-
 
     def validate_childs(self, childs):
         if self.instance.id in self.initial_data['childs']:
@@ -170,4 +160,3 @@ class ShortDisciplineBlockModuleForModuleListSerializer(serializers.ModelSeriali
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'module_isu_id', 'name', 'type', 'editors']
-
