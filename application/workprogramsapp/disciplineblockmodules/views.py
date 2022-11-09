@@ -1,7 +1,9 @@
 # РПД
 from collections import OrderedDict
 
+from django.db.models import Q, QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg2 import openapi
 from drf_yasg2.utils import swagger_auto_schema
 
 from rest_framework import generics, filters, status
@@ -94,63 +96,63 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
     """
         Получение списка модулей с краткой информацией
         Можно осуществлять поиск по имени, имени блока, типу образования
-
-        Если нужно найти подходящие модули для добавление в другой модуль
-        необходимо указывать в GET-параметр id_module_for_filter айди исходного
-        модуля.
     """
     queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleCreateSerializer
+    serializer_class = ShortDisciplineBlockModuleForModuleListSerializer
     filterset_class = DisciplineBlockModuleFilter
     search_fields = ['id', 'module_isu_id', 'name', 'descipline_block__name']
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     # filterset_fields = ['id', 'module_isu_id', 'name', 'descipline_block__name',]
     permission_classes = [IsBlockModuleEditor]
     my_tags = ["Discipline Blocks"]
+    id_module_for_filter_struct = openapi.Parameter('id_module_for_filter_struct', openapi.IN_QUERY,
+                                                    description="Находит модули с подходящим структурными "
+                                                                "подразделениями переданного id модуля",
+                                                    type=openapi.TYPE_INTEGER)
+    filter_non_struct = openapi.Parameter('filter_non_struct', openapi.IN_QUERY,
+                                          description="Если true, то Находит модули, которые разрешено добавлять любым "
+                                                      "подразделениям (если применять вместе с "
+                                                      "id_module_for_filter_struct, результаты запросов объединятся)",
+                                          type=openapi.TYPE_BOOLEAN)
+    for_user = openapi.Parameter('for_user', openapi.IN_QUERY,
+                                 description="Если true находит все модули, принадлежащие запрашивающему юзеру",
+                                 type=openapi.TYPE_BOOLEAN)
 
-    def get_queryset(self):
-        id_module_for_filter = self.request.GET.get('id_module_for_filter')
-        if id_module_for_filter:
-            module_for_filter = DisciplineBlockModule.objects.get(id=id_module_for_filter)
-            if module_for_filter.only_for_struct_units:
-                set_of_units = module_for_filter.get_structural_units()
-                queryset = DisciplineBlockModule.objects.filter(
-                    editors__user_for_structural_unit__structural_unit__id__in=set_of_units).exclude(
-                    id=module_for_filter.id).exclude()
-                return queryset
-            else:
-                return DisciplineBlockModule.objects.all()
-        else:
-            return DisciplineBlockModule.objects.all()
+    @swagger_auto_schema(manual_parameters=[id_module_for_filter_struct, filter_non_struct, for_user])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
 
-class DisciplineBlockModuleDetailListView(generics.ListAPIView):
-    """
-     Получение списка модулей с полной информацией
+        id_module_for_filter_struct = self.request.GET.get('id_module_for_filter_struct')
+        filter_non_struct = self.request.GET.get('filter_non_struct')
+        user_filtering = self.request.GET.get('for_user')
 
-    """
-    queryset = DisciplineBlockModule.objects.all()
-    serializer_class = ShortDisciplineBlockModuleForModuleListSerializer
-    filterset_class = DisciplineBlockModuleFilter
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['name', 'descipline_block__name']
-    permission_classes = [IsBlockModuleEditor]
-    my_tags = ["Discipline Blocks"]
+        filter_struct = DisciplineBlockModule.objects.none()
+        if id_module_for_filter_struct:
+            module_for_filter = DisciplineBlockModule.objects.get(id=id_module_for_filter_struct)
+            set_of_units = module_for_filter.get_structural_units()
+            filter_struct = queryset.filter(
+                editors__user_for_structural_unit__structural_unit__id__in=set_of_units,
+                only_for_struct_units=True).exclude(
+                id=module_for_filter.id)
 
+        if filter_non_struct == "true":
+            queryset = queryset.filter(only_for_struct_units=False) | filter_struct
+        elif id_module_for_filter_struct:
+            queryset = filter_struct
 
-class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
-    """
-         Получение списка модулей с полной информацией, где редактор запрашивающий пользователь
-    """
-    serializer_class = ShortDisciplineBlockModuleForModuleListSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    filterset_class = DisciplineBlockModuleFilter
-    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
-    permission_classes = [IsBlockModuleEditor]
-    my_tags = ["Discipline Blocks"]
+        if user_filtering == "true":
+            queryset = queryset.filter(editors=self.request.user)
 
-    def get_queryset(self):
-        return DisciplineBlockModule.objects.filter(editors=self.request.user)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):

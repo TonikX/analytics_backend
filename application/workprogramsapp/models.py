@@ -708,7 +708,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
                                                             related_name="modules_to_access", blank=True, null=True)
 
     only_for_struct_units = models.BooleanField(verbose_name="Доавбление только для тех же структрных подарзеделений",
-                                                blank=True, null=True)
+                                                blank=True, null=True, default=False)
 
     class Meta:
         ordering = ['order']
