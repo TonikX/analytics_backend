@@ -119,7 +119,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
                     <div className={classes.filtersLine}>
-                        <TextField label="КОП ИД *"
+                        <TextField label="КОП ИД"
                                    onChange={this.updateFilters(fields.FILTER_ID)}
                                    variant="outlined"
                                    className={classes.input}
@@ -129,7 +129,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                                        shrink: true,
                                    }}
                         />
-                        <TextField label="ИСУ ИД *"
+                        <TextField label="ИСУ ИД"
                                    onChange={this.updateFilters(fields.FILTER_MODULE_ISU_ID)}
                                    variant="outlined"
                                    className={classes.input}
@@ -139,7 +139,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                                        shrink: true,
                                    }}
                         />
-                        <TextField label="Название модуля *"
+                        <TextField label="Название модуля"
                                    onChange={this.updateFilters(fields.FILTER_MODULE_NAME)}
                                    variant="outlined"
                                    className={classes.input}
@@ -149,7 +149,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                                        shrink: true,
                                    }}
                         />
-                        <TextField label="Название блока *"
+                        <TextField label="Название блока"
                                    onChange={this.updateFilters(fields.FILTER_MODULE_DISCIPLINE_NAME)}
                                    variant="outlined"
                                    className={classes.input}
