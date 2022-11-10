@@ -726,6 +726,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
             for wp in wp_in_fos:
                 clone_wp_in_fos = wp.make_clone(attrs={'work_program_change_in_discipline_block_module': clone_change})
         return clone_module
+
     def is_included_in_plan(self):
         instance = self
         if instance.descipline_block.all().exists():

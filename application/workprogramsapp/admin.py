@@ -72,7 +72,12 @@ admin.site.register(RouteComposition)
 admin.site.register(Route)
 admin.site.register(Certification)
 admin.site.register(BibliographicReference)
-admin.site.register(AcademicPlan)
+
+# class AcademicPlanAdminHandler(admin.ModelAdmin):
+#     list_display = ("__str__", 'id', 'ap_isu_id', 'year')
+#     search_fields = ['id', 'ap_isu_id', 'year']
+# admin.site.register(AcademicPlan, AcademicPlanAdminHandler)
+
 admin.site.register(DisciplineBlock)
 admin.site.register(ImplementationAcademicPlan)
 admin.site.register(DisciplineBlockModule)
@@ -126,3 +131,18 @@ class LogAdmin(admin.ModelAdmin):
 admin.site.register(AcademicPlanUpdateLog, LogAdmin)
 admin.site.register(EmailReset)
 admin.site.register(ExpertsOnStructuralUnit)
+
+
+class ImplementationAcademicPlanInLine(admin.StackedInline):
+    model = ImplementationAcademicPlan
+    extra = 1
+
+
+@admin.register(AcademicPlan)
+class AcademicPlanAdmin(admin.ModelAdmin):
+    list_display = ("__str__", 'id', 'ap_isu_id', 'year')
+    search_fields = ['id', 'ap_isu_id', 'year']
+    inlines = [ImplementationAcademicPlanInLine]
+    save_on_top = True
+    save_as = True
+
