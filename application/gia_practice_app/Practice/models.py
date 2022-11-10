@@ -1,10 +1,9 @@
+import datetime
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from analytics_project import settings
-
-import datetime
-
 from .consts_for_models import *
 
 
@@ -90,12 +89,13 @@ class Practice(models.Model):
     discipline_code = models.IntegerField(max_length=1024, blank=True, null=True)
     title = models.CharField(max_length=1024, verbose_name="Наименование", blank=True, null=True)
 
-    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors_practice", verbose_name="Редакторы РПД",
+    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors_practice",
+                                     verbose_name="Редакторы РПД",
                                      blank=True, null=True)
 
     practice_base = models.ForeignKey('PracticeTemplate', on_delete=models.SET_NULL,
-                                 verbose_name='Базовый шаблон Практики',
-                                 related_name='practice_heir', blank=True, null=True)
+                                      verbose_name='Базовый шаблон Практики',
+                                      related_name='practice_heir', blank=True, null=True)
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year], blank=True, null=True)
     authors = models.CharField(max_length=1024, verbose_name="Авторский состав")
@@ -141,3 +141,4 @@ class Practice(models.Model):
     bibliographic_reference = models.ManyToManyField('workprogramsapp.BibliographicReference', blank=True, null=True,
                                                      verbose_name='Рекомендуемые источники',
                                                      related_name='practise_refs')
+    prac_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID практики в ИСУ")

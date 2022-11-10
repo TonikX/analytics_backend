@@ -707,7 +707,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
                                                             verbose_name='Разрешенные образовательные программы',
                                                             related_name="modules_to_access", blank=True, null=True)
 
-    only_for_struct_units = models.BooleanField(verbose_name="Доавбление только для тех же структрных подарзеделений",
+    only_for_struct_units = models.BooleanField(verbose_name="Доавбление только для тех же структрных подразеделений",
                                                 blank=True, null=True, default=False)
 
     class Meta:
