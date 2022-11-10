@@ -17,7 +17,6 @@ import {
 } from "./getters";
 import moduleActions from "./actions";
 import workProgramActions from "../../WorkProgram/actions";
-import {getWorkProgramId} from "../../WorkProgram/getters";
 import {fields} from "../TrainingModules/enum";
 
 const service = new Service();
@@ -33,12 +32,15 @@ const getTrainingModulesList = createLogic({
         const sortingField = getSortingField(state);
         const sortingMode = getSortingMode(state);
         const showOnlyMy = getShowOnlyMy(state);
+        const moduleId = getTrainingModuleId(getState());
 
         const filters = {
           id: getFilterField(state, fields.FILTER_ID),
           name: getFilterField(state, fields.FILTER_MODULE_NAME),
           isuId: getFilterField(state, fields.FILTER_MODULE_ISU_ID),
           disciplineName: getFilterField(state, fields.FILTER_MODULE_DISCIPLINE_NAME),
+          availableForAll: getFilterField(state, fields.FILTER_MODULE_AVAILABLE_FOR_ALL),
+          moduleId: moduleId ? moduleId : undefined,
         }
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_TRAINING_MODULES}));

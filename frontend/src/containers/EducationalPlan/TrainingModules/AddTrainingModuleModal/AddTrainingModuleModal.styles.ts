@@ -29,4 +29,8 @@ export default (theme: Theme) => createStyles({
     dialog: {
         padding: 20,
     },
+    dialogTitle: {
+        display: 'flex',
+        justifyContent: 'space-between'
+    },
 });

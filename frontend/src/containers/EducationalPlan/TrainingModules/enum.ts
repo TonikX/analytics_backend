@@ -20,6 +20,7 @@ export enum fields {
     FILTER_MODULE_ISU_ID = 'FILTER_MODULE_ISU_ID',
     FILTER_MODULE_NAME = 'FILTER_MODULE_NAME',
     FILTER_MODULE_DISCIPLINE_NAME = 'FILTER_MODULE_DISCIPLINE_NAME',
+    FILTER_MODULE_AVAILABLE_FOR_ALL = 'FILTER_MODULE_AVAILABLE_FOR_ALL',
 }
 
 export enum fetchingTypes {
@@ -48,6 +49,7 @@ export enum TrainingModuleFields {
     CAN_EDIT = 'can_edit',
     ISU_ID = 'module_isu_id',
     SELECTION_RULE = 'selection_rule',
+    SELECTION_PARAMETER = 'selection_parameter',
     CERTIFICATION_EVALUATION_LIST = 'certification_evaluation_tools',
 }
 
