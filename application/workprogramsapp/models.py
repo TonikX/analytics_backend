@@ -788,10 +788,13 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
     work_program = models.ManyToManyField('WorkProgram', verbose_name="Рабочая программа",
                                           through='WorkProgramInFieldOfStudy',
                                           related_name="work_program_in_change_block")
-    gia = models.ManyToManyField('gia_practice_app.GIA', verbose_name="Гиа",
-                                 related_name="gia_in_change_block", blank=True, null=True)
-    practice = models.ManyToManyField('gia_practice_app.Practice', verbose_name="Практики",
-                                      related_name="practice_in_change_block", blank=True, null=True)
+    # gia = models.ManyToManyField('gia_practice_app.GIA', verbose_name="Гиа",
+    #                              related_name="gia_in_change_block",
+    #                              through='GiaInFieldOfStudy', blank=True, null=True)
+    # practice = models.ManyToManyField('gia_practice_app.Practice', verbose_name="Практики",
+    #                                   related_name="practice_in_change_block",
+    #                                   through='PracticeInFieldOfStudy',
+    #                                   blank=True, null=True)
     subject_code = models.CharField(max_length=1024, verbose_name="Срок сдачи в неделях", blank=True, null=True)
 
     # zuns = models.ManyToManyField('Zun', verbose_name = "Зуны", through='WorkProgramInFieldOfStudy', related_name="zuns_in_changeblock")
@@ -807,7 +810,21 @@ class WorkProgramInFieldOfStudy(CloneMixin, models.Model):
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
 
-    # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
+
+class GiaInFieldOfStudy(CloneMixin, models.Model):
+    work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
+                                                                       on_delete=models.CASCADE,
+                                                                       related_name="zuns_for_cb_for_gia")
+    gia = models.ForeignKey('gia_practice_app.GIA', on_delete=models.CASCADE, related_name="zuns_for_gia")
+    id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
+
+
+class PracticeInFieldOfStudy(CloneMixin, models.Model):
+    work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
+                                                                       on_delete=models.CASCADE,
+                                                                       related_name="zuns_for_cb_for_practice")
+    practice = models.ForeignKey('gia_practice_app.Practice', on_delete=models.CASCADE, related_name="zuns_for_practice")
+    id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
 
 
 class WorkProgramIdStrUpForIsu(CloneMixin, models.Model):

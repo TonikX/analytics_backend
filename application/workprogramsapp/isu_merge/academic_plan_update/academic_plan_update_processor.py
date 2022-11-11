@@ -46,8 +46,9 @@ class AcademicPlanUpdateProcessor:
         old_disciplines_ids = self.__get_disciplines_ids_by_academic_plan__(old_academic_plan.ap_isu_id)
         new_disciplines_ids = AcademicPlanUpdateUtils.get_disciplines_ids_from_academic_plan_json(
             isu_academic_plan_json)
+        print(old_disciplines_ids)
 
-        to_del = set(map(int, [float(i[0]) for i in old_disciplines_ids])) - set(map(int, new_disciplines_ids))
+        to_del = set(map(int, [float(i[0]) for i in [i for i in old_disciplines_ids if i != '']])) - set(map(int, new_disciplines_ids))
 
         self.__del_disciplines_ids_by_academic_plan__(old_academic_plan.ap_isu_id, new_disciplines_ids)
         # for wp in to_del:
