@@ -1,7 +1,7 @@
 import datetime
 
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import JSONField, ArrayField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from model_clone import CloneMixin
@@ -779,6 +779,16 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
     code = models.CharField(max_length=1024, blank=True, null=True)
     credit_units = models.CharField(max_length=1024, blank=True, null=True)
     semester_hour = models.CharField(max_length=1024, blank=True, null=True)
+
+    semester_start = ArrayField(
+        ArrayField(
+            models.IntegerField(blank=True),
+        ),
+        verbose_name="В каком семестре начинается (массив)",
+        default=[]
+    )
+    semester_duration = models.IntegerField(verbose_name="Сколько семестров длится", blank=True, null=True)
+
     change_type = models.CharField(choices=CHANGE_CHOICES, max_length=1024, verbose_name='Форма обучения', blank=True,
                                    null=True)
     discipline_block_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE,
