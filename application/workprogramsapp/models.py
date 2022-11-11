@@ -788,13 +788,13 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
     work_program = models.ManyToManyField('WorkProgram', verbose_name="Рабочая программа",
                                           through='WorkProgramInFieldOfStudy',
                                           related_name="work_program_in_change_block")
-    # gia = models.ManyToManyField('gia_practice_app.GIA', verbose_name="Гиа",
-    #                              related_name="gia_in_change_block",
-    #                              through='GiaInFieldOfStudy', blank=True, null=True)
-    # practice = models.ManyToManyField('gia_practice_app.Practice', verbose_name="Практики",
-    #                                   related_name="practice_in_change_block",
-    #                                   through='PracticeInFieldOfStudy',
-    #                                   blank=True, null=True)
+    gia = models.ManyToManyField('gia_practice_app.GIA', verbose_name="Гиа",
+                                 related_name="gia_in_change_block",
+                                 through='GiaInFieldOfStudy', blank=True, null=True)
+    practice = models.ManyToManyField('gia_practice_app.Practice', verbose_name="Практики",
+                                      related_name="practice_in_change_block",
+                                      through='PracticeInFieldOfStudy',
+                                      blank=True, null=True)
     subject_code = models.CharField(max_length=1024, verbose_name="Срок сдачи в неделях", blank=True, null=True)
 
     # zuns = models.ManyToManyField('Zun', verbose_name = "Зуны", through='WorkProgramInFieldOfStudy', related_name="zuns_in_changeblock")
