@@ -490,7 +490,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             startSemester.filter(startItem => item === startItem) :
             [...startSemester, item]
 
-        console.log('block id', blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID])
         this.props.actions.changeBlockOfWorkPrograms({
             [BlocksOfWorkProgramsFields.SEMESTER_START]: newStartSemester,
             [BlocksOfWorkProgramsFields.ID]: blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID],
@@ -505,8 +504,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     changeDuration = (e: any) => {
+        const { blockOfWorkPrograms } = this.state
+
         this.props.actions.changeBlockOfWorkPrograms({
             [BlocksOfWorkProgramsFields.SEMESTER_DURATION]: e.target.value,
+            [BlocksOfWorkProgramsFields.ID]: blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID],
         });
     }
 
