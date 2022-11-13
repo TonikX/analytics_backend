@@ -83,6 +83,8 @@ export enum BlocksOfWorkProgramsFields {
     SEMESTER_UNIT = 'credit_units',
     TYPE = 'change_type',
     CHANGED = 'changed',
+    SEMESTER_DURATION = 'semester_durations',
+    SEMESTER_START = 'semester_start',
 }
 
 export enum DownloadFileModalFields {

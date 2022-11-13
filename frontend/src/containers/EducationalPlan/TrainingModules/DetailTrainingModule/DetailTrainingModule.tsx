@@ -209,6 +209,8 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
             const gia = blockOfWorkProgram?.gia || [];
             const practice = blockOfWorkProgram?.practice || [];
+            const duration = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_DURATION];
+            const semesterStart = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START]?.join(', ');
 
             return <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
               <TableCell>
@@ -230,7 +232,10 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                 {practice?.map((item: any) => item?.title).join(', ')}
               </TableCell>
               <TableCell>
-                Длительность
+                {duration}
+              </TableCell>
+              <TableCell>
+                {semesterStart}
               </TableCell>
               <TableCell>
                 {get(typeOfWorkProgramInPlan.find(item =>
@@ -342,6 +347,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   <TableCell> ГИА </TableCell>
                   <TableCell> Практика </TableCell>
                   <TableCell> Длительность </TableCell>
+                  <TableCell> Семестр начала </TableCell>
                   <TableCell> Тип </TableCell>
                   {canEdit && <TableCell/>}
                 </TableRow>

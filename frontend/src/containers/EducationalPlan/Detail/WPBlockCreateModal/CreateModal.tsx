@@ -52,6 +52,7 @@ import AddResultsModal from "./AddResultsModal";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
+import {amber} from "@material-ui/core/colors";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -67,7 +68,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [BlocksOfWorkProgramsFields.ID]: null,
             [BlocksOfWorkProgramsFields.TYPE]: '',
             [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: [],
-            [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [BlocksOfWorkProgramsFields.SEMESTER_START]: [],
+            [BlocksOfWorkProgramsFields.SEMESTER_DURATION]: '',
         },
         showWorkProgramSelector: false,
         showAddWorkProgramButton: true,
@@ -87,7 +89,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         if (!shallowEqual(blockOfWorkPrograms, prevProps.blockOfWorkPrograms)){
             const workProgram = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.WORK_PROGRAMS) || [];
-            const semesterHours = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.SEMESTER_UNIT);
 
             const mappedWorkProgram = workProgram.map((program: WorkProgramGeneralType) => {
                 const date = moment(program[WorkProgramGeneralFields.APPROVAL_DATE]).isValid() ?
@@ -105,13 +106,12 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 };
             });
 
-            const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
             this.setState({
                 blockOfWorkPrograms: {
                     [BlocksOfWorkProgramsFields.ID]: get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.ID),
                     [BlocksOfWorkProgramsFields.TYPE]: get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.TYPE, ''),
-                    [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: mappedSemesterHours,
+                    [BlocksOfWorkProgramsFields.SEMESTER_START]: get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.SEMESTER_START, ''),
+                    [BlocksOfWorkProgramsFields.SEMESTER_DURATION]: get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.SEMESTER_DURATION, ''),
                     [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: mappedWorkProgram,
                 },
                 module: {
@@ -465,25 +465,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         this.props.actions.deleteWorkProgramFromZun(id);
     }
 
-    handleChangeHours = (index: number) => (e: React.ChangeEvent) => {
-        const {blockOfWorkPrograms} = this.state;
-        const hours = blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_UNIT];
-
-        hours[index] = get(e, 'target.value', 0);
-
-        this.props.actions.changeBlockOfWorkPrograms({
-            [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: hours.toString(),
-            [BlocksOfWorkProgramsFields.ID]: blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID],
-        });
-
-        this.setState({
-            blockOfWorkPrograms: {
-                ...blockOfWorkPrograms,
-                [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: hours
-            }
-        });
-    }
-
     handleChangeExpandedWorkProgram = (wpId: number) => () => {
         const {expandedWorkProgram} = this.state;
 
@@ -502,6 +483,45 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
+    changeSelectedStartSemester = (item: number) => () => {
+        const { blockOfWorkPrograms } = this.state
+        const startSemester: Array<number> = blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_START]
+        const newStartSemester = startSemester.includes(item) ?
+            startSemester.filter(startItem => item === startItem) :
+            [...startSemester, item]
+
+        this.props.actions.changeBlockOfWorkPrograms({
+            [BlocksOfWorkProgramsFields.SEMESTER_START]: newStartSemester,
+            [BlocksOfWorkProgramsFields.ID]: blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID],
+        });
+
+        this.setState({
+            blockOfWorkPrograms: {
+                ...blockOfWorkPrograms,
+                [BlocksOfWorkProgramsFields.SEMESTER_START]: newStartSemester,
+            }
+        })
+    }
+
+    changeDuration = (e: any) => {
+        const { blockOfWorkPrograms } = this.state
+
+        this.props.actions.changeBlockOfWorkPrograms({
+            [BlocksOfWorkProgramsFields.SEMESTER_DURATION]: e.target.value,
+        });
+    }
+
+    changeStateDuration = (e: any) => {
+        const { blockOfWorkPrograms } = this.state
+
+        this.setState({
+            blockOfWorkPrograms: {
+                ...blockOfWorkPrograms,
+                [BlocksOfWorkProgramsFields.SEMESTER_DURATION]: e.target.value,
+            }
+        })
+    }
+
     render() {
         const {isOpen, classes, disableZUN} = this.props;
         const {blockOfWorkPrograms, showAddWorkProgramButton, isAddWorkProgramModalOpen,
@@ -510,6 +530,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const canAddMoreWorkProgram = get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0) === 0 ||
             blockOfWorkPrograms[BlocksOfWorkProgramsFields.TYPE] === optionalTypeOfWorkProgram;
+        const startSemester: Array<number> = this.state.blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_START]
 
         const isEditMode = Boolean(blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID]);
 
@@ -572,18 +593,30 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 </Select>
                             </FormControl>
 
+                            <TextField label="Длительность изучения *"
+                                       onBlur={this.changeDuration}
+                                       onChange={this.changeStateDuration}
+                                       variant="outlined"
+                                       className={classes.input}
+                                       fullWidth
+                                       value={blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_DURATION]}
+                                       InputLabelProps={{
+                                           shrink: true,
+                                       }}
+                                       type="number"
+                            />
+
                             <div className={classes.semesterBlock}>
-                                <Typography className={classes.label}> Количество зачетных единиц в семестрах </Typography>
+                                <Typography className={classes.label}> Выберите семеcтры, в которых может начаться дисциплина </Typography>
                                 <div className={classes.semesterList}>
-                                    {blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_UNIT].map((item, index) =>
-                                        <TextField className={classes.semesterField}
-                                                   label={`${index + 1} семестр`}
-                                                   variant='outlined'
-                                                   defaultValue={item}
-                                                   onBlur={this.handleChangeHours(index)}
-                                                   type="number"
-                                                   key={'semester' + index}
-                                        />
+                                    {Array(8).fill(0).map((item, index) =>
+                                        <Button
+                                            key={'start-semester' + index}
+                                            variant={startSemester.includes(index + 1) ? 'contained' : "outlined"}
+                                            onClick={this.changeSelectedStartSemester(index + 1)}
+                                        >
+                                            {index + 1}
+                                        </Button>
                                     )}
                                 </div>
                             </div>
