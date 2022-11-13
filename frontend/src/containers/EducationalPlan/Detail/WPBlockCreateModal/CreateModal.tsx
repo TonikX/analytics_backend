@@ -593,7 +593,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 </Select>
                             </FormControl>
 
-                            <TextField label="Длительность изучения *"
+                            <TextField label="Длительность изучения"
                                        onBlur={this.changeDuration}
                                        onChange={this.changeStateDuration}
                                        variant="outlined"
