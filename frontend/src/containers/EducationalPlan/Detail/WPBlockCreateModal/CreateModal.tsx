@@ -597,7 +597,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                        onBlur={this.changeDuration}
                                        onChange={this.changeStateDuration}
                                        variant="outlined"
-                                       className={classes.input}
+                                       className={classes.smallInput}
                                        fullWidth
                                        value={blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_DURATION]}
                                        InputLabelProps={{

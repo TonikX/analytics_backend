@@ -93,7 +93,7 @@ export default (theme: Theme) => createStyles({
         //@ts-ignore
         zIndex: '10001 !important'
     },
-    input: {
+    smallInput: {
         width: '290px'
     },
     actions: {
