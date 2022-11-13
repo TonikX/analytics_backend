@@ -212,53 +212,60 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             const duration = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_DURATION];
             const semesterStart = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START]?.join(', ');
 
-            return <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
-              <TableCell>
-                <div style={{ paddingLeft: (level + 1) * 5 }}>
-                  {workPrograms.map((workProgram: any) =>
-                    <div className={classes.displayFlex}>
-                      <Typography className={classes.workProgramLink}
-                                  onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
-                        {workProgram[WorkProgramGeneralFields.TITLE]}
-                      </Typography>
-                    </div>
-                  )}
-                </div>
-              </TableCell>
-              <TableCell>
-                {gia?.map((item: any) => item?.title).join(', ')}
-              </TableCell>
-              <TableCell>
-                {practice?.map((item: any) => item?.title).join(', ')}
-              </TableCell>
-              <TableCell>
-                {duration}
-              </TableCell>
-              <TableCell>
-                {semesterStart}
-              </TableCell>
-              <TableCell>
-                {get(typeOfWorkProgramInPlan.find(item =>
-                  item.value === blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
-                ), 'label', '')}
-              </TableCell>
-
-              {canEdit &&
-                <TableCell className={classes.actions}>
-                  <Tooltip
-                    title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                    <DeleteIcon className={classes.deleteIcon}
-                                onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                    <EditIcon
-                      onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>
-                  </Tooltip>
+            const renderRow = (title: any) => (
+              <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
+                <TableCell>
+                  <div style={{ paddingLeft: (level + 1) * 5 }}>
+                    {title}
+                  </div>
                 </TableCell>
-              }
-            </TableRow>;
+                <TableCell>
+                  {duration}
+                </TableCell>
+                <TableCell>
+                  {semesterStart}
+                </TableCell>
+                <TableCell>
+                  {get(typeOfWorkProgramInPlan.find(item =>
+                      item.value === blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
+                  ), 'label', '')}
+                </TableCell>
+                {canEdit &&
+                  <TableCell className={classes.actions}>
+                    <Tooltip
+                        title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                      <DeleteIcon className={classes.deleteIcon}
+                                  onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
+                      />
+                    </Tooltip>
+                    <Tooltip
+                        title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                      <EditIcon
+                          onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>
+                    </Tooltip>
+                  </TableCell>
+                }
+                </TableRow>
+              )
+
+            return (
+              <>
+                {renderRow(workPrograms.map((workProgram: any) =>
+                      <div className={classes.displayFlex}>
+                        <Typography className={classes.workProgramLink}
+                                    onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
+                          {workProgram[WorkProgramGeneralFields.TITLE]}
+                        </Typography>
+                      </div>
+                ))}
+                {Boolean(gia?.length) && renderRow(<>
+                  {gia?.map((item: any) => item?.title).join(', ')} (ГИА)
+                </>)}
+                {Boolean(practice?.length) && renderRow(<>
+                  {practice?.map((item: any) => item?.title).join(', ')} (практика)
+                </>)}
+              </>
+            )
           })}
         </>
       )
@@ -277,7 +284,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               {item?.name}
             </Typography>
           </TableCell>
-          <TableCell />
           <TableCell />
           <TableCell />
           <TableCell />
@@ -344,8 +350,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   <TableCell>
                     Модуль/РПД
                   </TableCell>
-                  <TableCell> ГИА </TableCell>
-                  <TableCell> Практика </TableCell>
                   <TableCell> Длительность </TableCell>
                   <TableCell> Семестр начала </TableCell>
                   <TableCell> Тип </TableCell>
