@@ -202,10 +202,13 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
   renderBlockOfWP = (blockOfWorkPrograms: any, level: number) => {
     const {classes, canEdit} = this.props
+
       return (
         <>
           {blockOfWorkPrograms?.map((blockOfWorkProgram: any) => {
             const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
+            const gia = blockOfWorkProgram?.gia || [];
+            const practice = blockOfWorkProgram?.practice || [];
 
             return <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
               <TableCell>
@@ -219,6 +222,15 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                     </div>
                   )}
                 </div>
+              </TableCell>
+              <TableCell>
+                {gia?.map((item: any) => item?.title).join(', ')}
+              </TableCell>
+              <TableCell>
+                {practice?.map((item: any) => item?.title).join(', ')}
+              </TableCell>
+              <TableCell>
+                Длительность
               </TableCell>
               <TableCell>
                 {get(typeOfWorkProgramInPlan.find(item =>
@@ -260,6 +272,9 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               {item?.name}
             </Typography>
           </TableCell>
+          <TableCell />
+          <TableCell />
+          <TableCell />
           <TableCell />
           {canEdit && (
             <TableCell style={{ height: '40px'}}>
@@ -324,6 +339,9 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   <TableCell>
                     Модуль/РПД
                   </TableCell>
+                  <TableCell> ГИА </TableCell>
+                  <TableCell> Практика </TableCell>
+                  <TableCell> Длительность </TableCell>
                   <TableCell> Тип </TableCell>
                   {canEdit && <TableCell/>}
                 </TableRow>
