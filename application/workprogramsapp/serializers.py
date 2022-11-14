@@ -566,7 +566,7 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module', 'practice', 'gia']
 
 
     def get_id_of_wpcb(self, obj):

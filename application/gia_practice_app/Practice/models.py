@@ -90,12 +90,13 @@ class Practice(models.Model):
     discipline_code = models.IntegerField(max_length=1024, blank=True, null=True)
     title = models.CharField(max_length=1024, verbose_name="Наименование", blank=True, null=True)
 
-    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors_practice", verbose_name="Редакторы РПД",
+    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors_practice",
+                                     verbose_name="Редакторы РПД",
                                      blank=True, null=True)
 
     practice_base = models.ForeignKey('PracticeTemplate', on_delete=models.SET_NULL,
-                                 verbose_name='Базовый шаблон Практики',
-                                 related_name='practice_heir', blank=True, null=True)
+                                      verbose_name='Базовый шаблон Практики',
+                                      related_name='practice_heir', blank=True, null=True)
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year], blank=True, null=True)
     authors = models.CharField(max_length=1024, verbose_name="Авторский состав")
@@ -141,3 +142,72 @@ class Practice(models.Model):
     bibliographic_reference = models.ManyToManyField('workprogramsapp.BibliographicReference', blank=True, null=True,
                                                      verbose_name='Рекомендуемые источники',
                                                      related_name='practise_refs')
+    prerequisites = models.ManyToManyField("dataprocessing.Items", related_name='practice_prerequisites',
+                                           through='PrerequisitesOfPractice', blank=True, null=True,
+                                           verbose_name="Пререквизиты")
+    outcomes = models.ManyToManyField("dataprocessing.Items", related_name='practice',
+                                      through='OutcomesOfPractice',
+                                      verbose_name="Постреквизиты")
+
+
+class PrerequisitesOfPractice(models.Model):
+    '''
+    Модель для пререквизитов практик
+    '''
+
+    item = models.ForeignKey("dataprocessing.Items", on_delete=models.CASCADE, verbose_name="Пререквизит")
+    practice = models.ForeignKey(Practice, on_delete=models.CASCADE, verbose_name="Рабочая программа")
+    MasterylevelChoices = [
+        ('1', 'low'),
+        ('2', 'average'),
+        ('3', 'high'),
+    ]
+    masterylevel = models.CharField(
+        max_length=1,
+        choices=MasterylevelChoices,
+        default=1, verbose_name="Уровень"
+    )
+
+
+class OutcomesOfPractice(models.Model):
+    '''
+    Модель для результатов практик
+    '''
+
+    item = models.ForeignKey("dataprocessing.Items", on_delete=models.CASCADE, verbose_name="Пререквизит",
+                             related_name="practice_item_in_outcomes")
+    practice = models.ForeignKey(Practice, on_delete=models.CASCADE, verbose_name="Рабочая программа")
+    MasterylevelChoices = [
+        ('1', 'low'),
+        ('2', 'average'),
+        ('3', 'high'),
+    ]
+    masterylevel = models.CharField(
+        max_length=1,
+        choices=MasterylevelChoices,
+        default=1, verbose_name="Уровень"
+    )
+
+
+class PracticeInFieldOfStudy(models.Model):
+    work_program_change_in_discipline_block_module = models.ForeignKey(
+        "workprogramsapp.WorkProgramChangeInDisciplineBlockModule",
+        on_delete=models.CASCADE, related_name="practice_zun"
+        )
+    practice = models.ForeignKey(Practice, on_delete=models.CASCADE, related_name="zuns_for_pr")
+
+
+class ZunPractice(models.Model):
+    '''
+    Модель для зунов
+    '''
+    practice_in_fs = models.ForeignKey('PracticeInFieldOfStudy', on_delete=models.SET_NULL, blank=True, null=True,
+                                       related_name="zun_in_practice")
+    indicator_in_zun = models.ForeignKey('workprogramsapp.Indicator', on_delete=models.CASCADE, blank=True, null=True,
+                                         related_name="zun_practice")
+    knowledge = models.CharField(max_length=1024, blank=True, null=True)
+    skills = models.CharField(max_length=1024, blank=True, null=True)
+    attainments = models.CharField(max_length=1024, blank=True, null=True)
+    items = models.ManyToManyField('OutcomesOfPractice', verbose_name="Учебная сущность и уровень освоения",
+                                   blank=True, null=True, related_name="item_in_practice")
+    wp_in_fs_saved_fk_id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)

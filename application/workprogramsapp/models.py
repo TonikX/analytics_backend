@@ -126,7 +126,7 @@ class WorkProgram(CloneMixin, models.Model):
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
     def __str__(self):
-        return (self.title) + (self.structural_unit)
+        return (self.title) + (self.structural_unit.title)
 
     def new_relations(old_descipline_code, new_descipline_code):
         old_work_program = WorkProgram.objects.get(id=old_descipline_code)
@@ -789,7 +789,8 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
                                           related_name="work_program_in_change_block")
     gia = models.ManyToManyField('gia_practice_app.GIA', verbose_name="Гиа",
                                  related_name="gia_in_change_block", blank=True, null=True)
-    practice = models.ManyToManyField('gia_practice_app.Practice', verbose_name="Практики",
+    practice = models.ManyToManyField('gia_practice_app.Practice', through="gia_practice_app.PracticeInFieldOfStudy",
+                                      verbose_name="Практики",
                                       related_name="practice_in_change_block", blank=True, null=True)
     subject_code = models.CharField(max_length=1024, verbose_name="Срок сдачи в неделях", blank=True, null=True)
 

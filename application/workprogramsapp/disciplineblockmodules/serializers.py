@@ -160,3 +160,4 @@ class ShortDisciplineBlockModuleForModuleListSerializer(serializers.ModelSeriali
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'module_isu_id', 'name', 'type', 'editors']
+
