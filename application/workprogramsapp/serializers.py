@@ -700,9 +700,10 @@ class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.Model
         # self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
         # self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
         return super().to_representation(value)
+
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'semester_start', 'semester_duration']
         extra_kwargs = {
             'work_program': {'required': False}
         }
