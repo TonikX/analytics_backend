@@ -271,14 +271,14 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
 
 
                 <div className={classes.footer}>
-                    {/*<TablePagination count={allCount}*/}
-                    {/*                 component="div"*/}
-                    {/*                 page={currentPage - 1}*/}
-                    {/*                 rowsPerPageOptions={[]}*/}
-                    {/*                 onChangePage={this.handleChangePage}*/}
-                    {/*                 rowsPerPage={10}*/}
-                    {/*                 onChangeRowsPerPage={()=>{}}*/}
-                    {/*/>*/}
+                    <TablePagination count={allCount}
+                                     component="div"
+                                     page={currentPage - 1}
+                                     rowsPerPageOptions={[]}
+                                     onChangePage={this.handleChangePage}
+                                     rowsPerPage={10}
+                                     onChangeRowsPerPage={()=>{}}
+                    />
                     {canEdit &&
                         <Fab color="secondary"
                              classes={{

@@ -14,20 +14,20 @@ export const typeOfWorkProgramInPlan = [
         value: REQUIRED,
         label: 'Обязательная',
     },
-    {
-        value: SET_SPECIALIZATION,
-        label: 'Часть специализации',
-    },
-    {
-        value: FACULTATIV,
-        label: 'Факультативная',
-    },
-    {
-        value: OGNP_SET,
-        label: 'ОГНП',
-    },
-    {
-        value: OPT,
-        label: 'Выбор в специализации',
-    }
+    // {
+    //     value: SET_SPECIALIZATION,
+    //     label: 'Часть специализации',
+    // },
+    // {
+    //     value: FACULTATIV,
+    //     label: 'Факультативная',
+    // },
+    // {
+    //     value: OGNP_SET,
+    //     label: 'ОГНП',
+    // },
+    // {
+    //     value: OPT,
+    //     label: 'Выбор в специализации',
+    // }
 ];

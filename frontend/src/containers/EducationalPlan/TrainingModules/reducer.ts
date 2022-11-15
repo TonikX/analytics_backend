@@ -16,6 +16,7 @@ export const initialState: trainingModulesState = {
         [fields.FILTER_MODULE_ISU_ID]: '',
         [fields.FILTER_MODULE_NAME]: '',
         [fields.FILTER_MODULE_DISCIPLINE_NAME]: '',
+        [fields.FILTER_MODULE_AVAILABLE_FOR_ALL]: true,
     },
     [fields.CURRENT_PAGE]: 1,
     [fields.ALL_COUNT]: 1,
@@ -35,6 +36,9 @@ export const initialState: trainingModulesState = {
     [fields.EVALUATION_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
+    },
+    [fields.ADD_EDUCATIONAL_PROGRAM_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: false,
     },
     [fields.EVALUATION_DESCRIPTION_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
@@ -83,6 +87,7 @@ const closeDialog = (state: trainingModulesState): trainingModulesState => ({
     [fields.EVALUATION_MODULE_DIALOG]: initialState[fields.EVALUATION_MODULE_DIALOG],
     [fields.EVALUATION_DESCRIPTION_MODULE_DIALOG]: initialState[fields.EVALUATION_DESCRIPTION_MODULE_DIALOG],
     [fields.ADD_TRAINING_MODULE_DIALOG]: initialState[fields.ADD_TRAINING_MODULE_DIALOG],
+    [fields.ADD_EDUCATIONAL_PROGRAM_DIALOG]: initialState[fields.ADD_EDUCATIONAL_PROGRAM_DIALOG],
 });
 
 const changeSorting = (state: trainingModulesState, {payload}: any): trainingModulesState => ({
