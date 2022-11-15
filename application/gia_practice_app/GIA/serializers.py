@@ -39,14 +39,17 @@ class GIASerializer(serializers.ModelSerializer):
     gia_in_change_block = SerializerMethodField()
     permissions_info = SerializerMethodField()
 
-
     def create(self, validated_data):
         request = self.context.get('request')
-        editors=validated_data.pop('editors', None)
-        gia=GIA.objects.create(**validated_data)
+        editors = validated_data.pop('editors', None)
+        gia = GIA.objects.create(**validated_data)
         gia.editors.set(editors)
         if editors:
             gia.editors.add(request.user)
+
+        if not gia.gia_base:
+            gia.gia_base.practice_base = GIABaseTemplate.objects.create()
+            gia.save()
         return gia
 
     def get_permissions_info(self, instance):
@@ -60,7 +63,7 @@ class GIASerializer(serializers.ModelSerializer):
         except UserExpertise.DoesNotExist:
             user_exp = None
 
-        return get_permissions_gia_practice(instance,exp,user_exp,request)
+        return get_permissions_gia_practice(instance, exp, user_exp, request)
 
     def get_gia_in_change_block(self, instance):
         return WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(
