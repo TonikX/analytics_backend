@@ -1,11 +1,13 @@
+
 from django.contrib.postgres.forms import JSONField
+
+import datetime
+
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from analytics_project import settings
-
-import datetime
-
 from .consts_for_models import *
 
 
@@ -147,13 +149,12 @@ class Practice(models.Model):
     outcomes = models.ManyToManyField("dataprocessing.Items", related_name='practice',
                                       through='OutcomesOfPractice',
                                       verbose_name="Постреквизиты")
+
     evaluation_tools_current_control = models.TextField(max_length=8192, default=EVALUATION,
                                                         verbose_name="ОЦЕНОЧНЫЕ СРЕДСТВА ДЛЯ ПРОВЕДЕНИЯ ТЕКУЩЕГО КОНТРОЛЯ И  ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ ПО ПРАКТИКЕ.Текущий контроль")
     term_hours_info_table = JSONField()
+    prac_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID практики в ИСУ")
 
-
-[{'ze': 1, 'hours': 36, 'term': 3, 'control_form': 'Дифференцированный зачет', 'contact_work_hour': 1},
- {'ze': 1, 'hours': 18, 'term': 4, 'control_form': 'Дифференцированный зачет', 'contact_work_hour': 2}]
 
 
 class PrerequisitesOfPractice(models.Model):
@@ -217,3 +218,4 @@ class ZunPractice(models.Model):
     items = models.ManyToManyField('OutcomesOfPractice', verbose_name="Учебная сущность и уровень освоения",
                                    blank=True, null=True, related_name="item_in_practice")
     wp_in_fs_saved_fk_id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
+    prac_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID практики в ИСУ")

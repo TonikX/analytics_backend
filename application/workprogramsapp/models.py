@@ -1,7 +1,7 @@
 import datetime
 
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import JSONField, ArrayField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from model_clone import CloneMixin
@@ -126,7 +126,7 @@ class WorkProgram(CloneMixin, models.Model):
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
     def __str__(self):
-        return (self.title) + (self.structural_unit.title)
+        return (self.title)
 
     def new_relations(old_descipline_code, new_descipline_code):
         old_work_program = WorkProgram.objects.get(id=old_descipline_code)
@@ -707,7 +707,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
                                                             verbose_name='Разрешенные образовательные программы',
                                                             related_name="modules_to_access", blank=True, null=True)
 
-    only_for_struct_units = models.BooleanField(verbose_name="Доавбление только для тех же структрных подарзеделений",
+    only_for_struct_units = models.BooleanField(verbose_name="Доавбление только для тех же структрных подразеделений",
                                                 blank=True, null=True, default=False)
 
     class Meta:
@@ -726,6 +726,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
             for wp in wp_in_fos:
                 clone_wp_in_fos = wp.make_clone(attrs={'work_program_change_in_discipline_block_module': clone_change})
         return clone_module
+
     def is_included_in_plan(self):
         instance = self
         if instance.descipline_block.all().exists():
@@ -778,6 +779,14 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
     code = models.CharField(max_length=1024, blank=True, null=True)
     credit_units = models.CharField(max_length=1024, blank=True, null=True)
     semester_hour = models.CharField(max_length=1024, blank=True, null=True)
+
+    semester_start = ArrayField(
+        models.IntegerField(blank=True),
+        verbose_name="В каком семестре начинается (массив)",
+        default=[]
+    )
+    semester_duration = models.IntegerField(verbose_name="Сколько семестров длится", blank=True, null=True)
+
     change_type = models.CharField(choices=CHANGE_CHOICES, max_length=1024, verbose_name='Форма обучения', blank=True,
                                    null=True)
     discipline_block_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE,
@@ -788,10 +797,12 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
                                           through='WorkProgramInFieldOfStudy',
                                           related_name="work_program_in_change_block")
     gia = models.ManyToManyField('gia_practice_app.GIA', verbose_name="Гиа",
-                                 related_name="gia_in_change_block", blank=True, null=True)
-    practice = models.ManyToManyField('gia_practice_app.Practice', through="gia_practice_app.PracticeInFieldOfStudy",
-                                      verbose_name="Практики",
-                                      related_name="practice_in_change_block", blank=True, null=True)
+                                 related_name="gia_in_change_block",
+                                 through='GiaInFieldOfStudy', blank=True, null=True)
+    practice = models.ManyToManyField('gia_practice_app.Practice', verbose_name="Практики",
+                                      related_name="practice_in_change_block",
+                                      through='PracticeInFieldOfStudy',
+                                      blank=True, null=True)
     subject_code = models.CharField(max_length=1024, verbose_name="Срок сдачи в неделях", blank=True, null=True)
 
     # zuns = models.ManyToManyField('Zun', verbose_name = "Зуны", through='WorkProgramInFieldOfStudy', related_name="zuns_in_changeblock")
@@ -807,7 +818,21 @@ class WorkProgramInFieldOfStudy(CloneMixin, models.Model):
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
 
-    # indicators = models.ManyToManyField('Indicator', through=CompetenceIndicator)
+
+class GiaInFieldOfStudy(models.Model):
+    work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
+                                                                       on_delete=models.CASCADE,
+                                                                       related_name="zuns_for_cb_for_gia")
+    gia = models.ForeignKey('gia_practice_app.GIA', on_delete=models.CASCADE, related_name="zuns_for_gia")
+    id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
+
+
+class PracticeInFieldOfStudy(models.Model):
+    work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
+                                                                       on_delete=models.CASCADE,
+                                                                       related_name="zuns_for_cb_for_practice")
+    practice = models.ForeignKey('gia_practice_app.Practice', on_delete=models.CASCADE, related_name="zuns_for_practice")
+    id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
 
 
 class WorkProgramIdStrUpForIsu(CloneMixin, models.Model):

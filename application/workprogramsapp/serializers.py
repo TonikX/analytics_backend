@@ -542,7 +542,8 @@ class WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(serializ
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'semester_start',
+                  'semester_duration']
 
 
     def get_id_of_wpcb(self, obj):
@@ -566,8 +567,8 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module', 'practice', 'gia']
-
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'discipline_block_module', 'practice', 'gia',
+                  'semester_start', 'semester_duration']
 
     def get_id_of_wpcb(self, obj):
         work_program = WorkProgram.objects.filter(work_program_in_change_block = obj.id)
@@ -698,9 +699,10 @@ class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.Model
         # self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
         # self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
         return super().to_representation(value)
+
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'semester_start', 'semester_duration']
         extra_kwargs = {
             'work_program': {'required': False}
         }
@@ -758,7 +760,8 @@ class WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(serializers.Mo
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'discipline_block_module', 'zuns_for_wp']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'discipline_block_module', 'zuns_for_wp',
+                  'semester_start', 'semester_duration']
 
 
 class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
@@ -881,7 +884,8 @@ class WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer(serialize
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'discipline_block_module']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'discipline_block_module',
+                  'semester_start', 'semester_duration']
 
 
 class WorkProgramInFieldOfStudyForCompeteceListSerializer(serializers.ModelSerializer):

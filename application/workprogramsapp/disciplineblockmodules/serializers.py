@@ -135,7 +135,7 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors', 'selection_rule',
-                  'educational_programs_to_access', 'childs', 'only_for_struct_units']
+                  'educational_programs_to_access', 'childs', 'only_for_struct_units', ]
 
     def create(self, validated_data):
         editor = validated_data.pop('editor')
@@ -145,7 +145,9 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
         return instance
 
     def validate_childs(self, childs):
-        if self.instance.id in self.initial_data['childs']:
+        print('dd')
+        print(self.instance.childs.all())
+        if self.instance.id in self.initial_data['childs'] and self.instance.id not in self.instance.childs.all():
             raise ValidationError('Модуль %s не может сослаться сам на себя' % self.instance.id)
         else:
             return childs
