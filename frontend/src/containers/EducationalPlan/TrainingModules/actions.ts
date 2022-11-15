@@ -16,6 +16,7 @@ const updateTrainingModuleFilters = createAction('UPDATE_TRAINING_MODULE_FILTERS
 
 const createTrainingModule = createAction<CreateTrainingModulePayload>('CREATE_TRAINING_MODULES');
 const changeTrainingModule = createAction<ChangeTrainingModulePayload>('CHANGE_TRAINING_MODULES');
+const changeTrainingModuleEducationalPrograms = createAction('CHANGE_TRAINING_MODULES_EDUCATIONAL_PROGRAM');
 const deleteTrainingModule = createAction('DELETE_TRAINING_MODULES');
 
 const removeFatherFromModule = createAction<any>('REMOVE_FATHER_FROM_MODULE');
@@ -45,6 +46,7 @@ const actions: TrainingModulesActions = {
     addIntermediateCertification,
     changeIntermediateCertification,
     getIntermediateCertification,
+    changeTrainingModuleEducationalPrograms,
     changeFiltering,
     getTrainingModulesList,
     setTrainingModulesList,

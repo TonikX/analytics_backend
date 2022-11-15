@@ -13,7 +13,7 @@ from .models import (
     СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
     OnlineCourse, WorkProgramIdStrUpForIsu, GeneralizedLaborFunctions,
     AcademicPlanUpdateConfiguration,
-    AcademicPlanUpdateLog
+    AcademicPlanUpdateLog, GiaInFieldOfStudy, PracticeInFieldOfStudy
 )
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, \
@@ -72,11 +72,16 @@ admin.site.register(RouteComposition)
 admin.site.register(Route)
 admin.site.register(Certification)
 admin.site.register(BibliographicReference)
-admin.site.register(AcademicPlan)
+
+# class AcademicPlanAdminHandler(admin.ModelAdmin):
+#     list_display = ("__str__", 'id', 'ap_isu_id', 'year')
+#     search_fields = ['id', 'ap_isu_id', 'year']
+# admin.site.register(AcademicPlan, AcademicPlanAdminHandler)
+
 admin.site.register(DisciplineBlock)
 admin.site.register(ImplementationAcademicPlan)
 admin.site.register(DisciplineBlockModule)
-admin.site.register(WorkProgramChangeInDisciplineBlockModule)
+#admin.site.register(WorkProgramChangeInDisciplineBlockModule)
 
 admin.site.register(EducationalProgram)
 admin.site.register(GeneralCharacteristics)
@@ -97,7 +102,7 @@ admin.site.register(BarsWorkProgramsAssociate)
 admin.site.register(HistoryOfSendingToBars)
 admin.site.register(BarsEPAssociate)
 admin.site.register(IndividualImplementationAcademicPlan)
-admin.site.register(WorkProgramInWorkProgramChangeInDisciplineBlockModule)
+
 admin.site.register(DisciplineBlockModuleInDisciplineBlock)
 
 admin.site.register(StructuralUnit)
@@ -126,3 +131,40 @@ class LogAdmin(admin.ModelAdmin):
 admin.site.register(AcademicPlanUpdateLog, LogAdmin)
 admin.site.register(EmailReset)
 admin.site.register(ExpertsOnStructuralUnit)
+
+
+class ImplementationAcademicPlanInLine(admin.StackedInline):
+    model = ImplementationAcademicPlan
+    extra = 1
+
+
+@admin.register(AcademicPlan)
+class AcademicPlanAdmin(admin.ModelAdmin):
+    list_display = ("__str__", 'id', 'ap_isu_id', 'year')
+    search_fields = ['id', 'ap_isu_id', 'year']
+    inlines = [ImplementationAcademicPlanInLine]
+    save_on_top = True
+    save_as = True
+
+admin.site.register(WorkProgramInWorkProgramChangeInDisciplineBlockModule)
+
+class WorkProgramInFieldOfStudyInLine(admin.StackedInline):
+    model = WorkProgramInFieldOfStudy
+    extra = 1
+
+class GiaInFieldOfStudyInLine(admin.StackedInline):
+    model = GiaInFieldOfStudy
+    extra = 1
+
+class PracticeInFieldOfStudyInLine(admin.StackedInline):
+    model = PracticeInFieldOfStudy
+    extra = 1
+
+
+@admin.register(WorkProgramChangeInDisciplineBlockModule)
+class AcademicPlanAdmin(admin.ModelAdmin):
+    #list_display = ("__str__", 'id', 'ap_isu_id', 'year')
+    #search_fields = ['id', 'ap_isu_id', 'year']
+    inlines = [WorkProgramInFieldOfStudyInLine, GiaInFieldOfStudyInLine, PracticeInFieldOfStudyInLine]
+    save_on_top = True
+    save_as = True

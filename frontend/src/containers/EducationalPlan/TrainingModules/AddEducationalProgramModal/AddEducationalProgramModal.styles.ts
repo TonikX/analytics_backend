@@ -15,6 +15,7 @@ export default (theme: Theme) => createStyles({
     },
     filtersLine: {
         display: 'flex',
+        justifyContent: 'space-between',
     },
     searchButton: {
         marginLeft: 'auto',
@@ -29,8 +30,8 @@ export default (theme: Theme) => createStyles({
     dialog: {
         padding: 20,
     },
-    dialogTitle: {
-        display: 'flex',
-        justifyContent: 'space-between'
-    },
+    select: {
+        width: '20%',
+        marginLeft: 20,
+    }
 });

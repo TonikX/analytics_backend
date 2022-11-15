@@ -72,10 +72,10 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
                 instance_structural_set = instance.get_structural_units()
             for child in childs:
                 if not (child in childs_current):
-                    if not instance.is_included_in_plan():
-                        return Response(
-                            data={"error": "Данный модуль/его родители не включен(-ы) ни в один учебный план"},
-                            status=HTTP_400_BAD_REQUEST)
+                    # if not instance.is_included_in_plan():
+                    #     return Response(
+                    #         data={"error": "Данный модуль/его родители не включен(-ы) ни в один учебный план"},
+                    #         status=HTTP_400_BAD_REQUEST)
 
                     if instance.only_for_struct_units:
                         new_child_struct = DisciplineBlockModule.objects.get(id=child).get_structural_units()

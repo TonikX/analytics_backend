@@ -47,8 +47,11 @@ import StepButton from "@material-ui/core/StepButton";
 import TrainingModuleCreateModal from "../TrainingModuleCreateModal/TrainingModuleCreateModal";
 import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
 import EvaluationTools from '../EvaluationTools'
+import AddEducationalProgramModal from "../AddEducationalProgramModal/AddEducationalProgramModal";
 import AddTrainingModuleModal from "../AddTrainingModuleModal/AddTrainingModuleModal";
 import {TrainingModuleType} from "../types";
+import {QUALIFICATIONS} from "../../../Practice/constants";
+import {specializationObject} from "../../../WorkProgram/constants";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -58,6 +61,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     activeStep: StepsEnum.GENERAL,
     description: this.props.module[TrainingModuleFields.DESCRIPTION],
     isuId: this.props.module[TrainingModuleFields.ISU_ID],
+    selectionParameter: this.props.module[TrainingModuleFields.SELECTION_PARAMETER],
   }
 
   componentDidMount() {
@@ -69,6 +73,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
       this.setState({
         description: this.props.module[TrainingModuleFields.DESCRIPTION],
         isuId: this.props.module[TrainingModuleFields.ISU_ID],
+        selectionParameter: this.props.module[TrainingModuleFields.SELECTION_PARAMETER],
       })
     }
   }
@@ -83,6 +88,13 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     });
   }
 
+
+  openAddEducationalProgramModal = () => {
+    this.props.actions.openDialog({
+      dialog: fields.ADD_EDUCATIONAL_PROGRAM_DIALOG
+    });
+  }
+
   handleAddNewModule = (id: number, modules: Array<TrainingModuleType>) => () => {
     this.props.actions.openDialog({
       data: {
@@ -94,7 +106,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   removeFatherFromModule = (removedId: number, allChild: any, fatherId: number) => () => {
-    debugger
     this.props.actions.updateChildModules({
       //@ts-ignore
       trainingModules: allChild.map((item) => item.id).filter(item => item !== removedId),
@@ -138,6 +149,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
       moduleId: this.getModuleId()
     });
   }
+
   handleClickLike = () => {
     const {moduleRating, moduleRatingId} = this.props;
     const moduleId = this.getModuleId();
@@ -190,46 +202,70 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
   renderBlockOfWP = (blockOfWorkPrograms: any, level: number) => {
     const {classes, canEdit} = this.props
+
       return (
         <>
           {blockOfWorkPrograms?.map((blockOfWorkProgram: any) => {
             const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
+            const gia = blockOfWorkProgram?.gia || [];
+            const practice = blockOfWorkProgram?.practice || [];
+            const duration = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_DURATION];
+            const semesterStart = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START]?.join(', ');
 
-            return <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
-              <TableCell>
-                <div style={{ paddingLeft: level * 5 }}>
-                  {workPrograms.map((workProgram: any) =>
-                    <div className={classes.displayFlex}>
-                      <Typography className={classes.workProgramLink}
-                                  onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
-                        {workProgram[WorkProgramGeneralFields.TITLE]}
-                      </Typography>
-                    </div>
-                  )}
-                </div>
-              </TableCell>
-              <TableCell>
-                {get(typeOfWorkProgramInPlan.find(item =>
-                  item.value === blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
-                ), 'label', '')}
-              </TableCell>
-
-              {canEdit &&
-                <TableCell className={classes.actions}>
-                  <Tooltip
-                    title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                    <DeleteIcon className={classes.deleteIcon}
-                                onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                    <EditIcon
-                      onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>
-                  </Tooltip>
+            const renderRow = (title: any) => (
+              <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
+                <TableCell>
+                  <div style={{ paddingLeft: (level + 1) * 5 }}>
+                    {title}
+                  </div>
                 </TableCell>
-              }
-            </TableRow>;
+                <TableCell>
+                  {duration}
+                </TableCell>
+                <TableCell>
+                  {semesterStart}
+                </TableCell>
+                <TableCell>
+                  {get(typeOfWorkProgramInPlan.find(item =>
+                      item.value === blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
+                  ), 'label', '')}
+                </TableCell>
+                {canEdit &&
+                  <TableCell className={classes.actions}>
+                    <Tooltip
+                        title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                      <DeleteIcon className={classes.deleteIcon}
+                                  onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
+                      />
+                    </Tooltip>
+                    <Tooltip
+                        title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                      <EditIcon
+                          onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>
+                    </Tooltip>
+                  </TableCell>
+                }
+                </TableRow>
+              )
+
+            return (
+              <>
+                {renderRow(workPrograms.map((workProgram: any) =>
+                      <div className={classes.displayFlex}>
+                        <Typography className={classes.workProgramLink}
+                                    onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
+                          {workProgram[WorkProgramGeneralFields.TITLE]}
+                        </Typography>
+                      </div>
+                ))}
+                {Boolean(gia?.length) && renderRow(<>
+                  {gia?.map((item: any) => item?.title).join(', ')} (ГИА)
+                </>)}
+                {Boolean(practice?.length) && renderRow(<>
+                  {practice?.map((item: any) => item?.title).join(', ')} (практика)
+                </>)}
+              </>
+            )
           })}
         </>
       )
@@ -248,6 +284,8 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               {item?.name}
             </Typography>
           </TableCell>
+          <TableCell />
+          <TableCell />
           <TableCell />
           {canEdit && (
             <TableCell style={{ height: '40px'}}>
@@ -312,13 +350,15 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   <TableCell>
                     Модуль/РПД
                   </TableCell>
+                  <TableCell> Длительность </TableCell>
+                  <TableCell> Семестр начала </TableCell>
                   <TableCell> Тип </TableCell>
                   {canEdit && <TableCell/>}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {module?.childs?.map((item: any) => this.renderModule(item, 0, module?.childs, module?.id))}
-                {this.renderBlockOfWP(module?.change_blocks_of_work_programs_in_modules, 0)}
+                {this.renderBlockOfWP(module?.change_blocks_of_work_programs_in_modules, -1)}
               </TableBody>
             </Table>
           </div>
@@ -376,7 +416,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
         <>
           <Typography className={classes.textField}>
-            ID конструктора РПД: <b>{module?.[TrainingModuleFields.ID]}</b>
+            ID конструктора КОП: <b>{module?.[TrainingModuleFields.ID]}</b>
           </Typography>
           <TextField variant="outlined"
                      label="Описание"
@@ -405,6 +445,17 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                           wrapClass={classes.selectorWrap}
           />
 
+          <TextField variant="outlined"
+                     label="Параметр выбора"
+                     value={this.state.selectionParameter}
+                     onChange={(e) => this.setState({ selectionParameter: e.target.value })}
+                     onBlur={this.updateTrainingModuleField(TrainingModuleFields.SELECTION_PARAMETER)}
+                     className={classes.textField}
+                     InputLabelProps={{
+                       shrink: true,
+                     }}
+                     type="number"
+          />
           {/*<Typography className={classes.textItem}>*/}
           {/*  <b>Описание:</b> {module.description}*/}
           {/*</Typography>*/}
@@ -419,40 +470,67 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     )
   }
 
+  handleDeleteEducationalProgram = (id: number) => () => {
+    const {module} = this.props
+    this.props.actions.changeTrainingModuleEducationalPrograms({
+      educationalPrograms: module?.educational_programs_to_access?.map((item: any) => item.id).filter((item: any) => item !== id)
+    });
+  }
+
   renderPlans = () => {
     const {classes, module} = this.props
 
     return (
       <>
-        <Typography className={classes.subTitle}>
-          {steps[StepsEnum.PLANS]}
-        </Typography>
+        <div className={classes.plansTitle}>
+          <Typography className={classes.subTitle}>
+            {steps[StepsEnum.PLANS]}
+          </Typography>
+        </div>
         <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
           <Table stickyHeader>
             <TableHead style={{height: 45}}>
               <TableRow>
-                <TableCell className={classes.header}>Образовательная программа</TableCell>
                 <TableCell className={classes.header}>Направление</TableCell>
+                <TableCell className={classes.header}>Номер</TableCell>
+                <TableCell className={classes.header}>Уровень</TableCell>
                 <TableCell className={classes.header}>Год набора</TableCell>
+                <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
               {module?.educational_programs_to_access?.map((plan: any) => (
                 <TableRow>
                   <TableCell>
-                    {get(plan, 'title')}
-                  </TableCell>
-                  <TableCell>
                     {get(plan, 'field_of_study.0.title')}
                   </TableCell>
                   <TableCell>
+                    {get(plan, 'field_of_study.0.number')}
+                  </TableCell>
+                  <TableCell>
+                    {specializationObject[get(plan, 'field_of_study.0.qualification', '')]}
+                  </TableCell>
+                  <TableCell>
                     {get(plan, 'year')}
+                  </TableCell>
+                  <TableCell>
+                    <Tooltip
+                      title={'Удалить образовательную программу'}>
+                      <DeleteIcon className={classes.deleteIcon}
+                                  onClick={this.handleDeleteEducationalProgram(plan.id)}
+                      />
+                    </Tooltip>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </Scrollbars>
+        <div className={classes.addEducationalProgramButtonWrap}>
+          <Button onClick={this.openAddEducationalProgramModal} variant="outlined">
+            Добавить образовательную программу
+          </Button>
+        </div>
       </>
     )
   }
@@ -511,7 +589,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                          onDismiss={this.closeConfirmDeleteDialog}
                          confirmText={`Вы точно уверены, что хотите ${deletedWorkProgramsLength > 1 ? 'комлект рабочих программ' : 'рабочую программу'}?`}
                          isOpen={Boolean(deleteBlockConfirmId)}
-                         dialogTitle={`Удалить ${deletedWorkProgramsLength > 1 ? 'комлект рабочих программ' : 'рабочую программу'}`}
+                         dialogTitle={`Удалить ${deletedWorkProgramsLength > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}
                          confirmButtonText={'Удалить'}
           />
 
@@ -540,7 +618,8 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         </Paper>
 
         <TrainingModuleCreateModal/>
-        <AddTrainingModuleModal />
+        {module?.id && <AddTrainingModuleModal />}
+        <AddEducationalProgramModal />
       </div>
     );
   }

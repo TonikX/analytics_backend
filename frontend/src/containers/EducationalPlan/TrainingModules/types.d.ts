@@ -22,6 +22,7 @@ export interface TrainingModulesActions {
     changeCurrentPage: ActionCreatorWithPayload;
     changeAllCount: ActionCreatorWithPayload;
     changeSorting: ActionCreatorWithPayload;
+    changeTrainingModuleEducationalPrograms: ActionCreatorWithPayload;
 
     deleteIntermediateCertification: ActionCreatorWithPayload;
     addIntermediateCertification: ActionCreatorWithPayload;
@@ -75,6 +76,7 @@ export interface trainingModulesState {
         [fields.FILTER_MODULE_ISU_ID]: string,
         [fields.FILTER_MODULE_DISCIPLINE_NAME]: string,
         [fields.FILTER_MODULE_NAME]: string,
+        [fields.FILTER_MODULE_AVAILABLE_FOR_ALL]: boolean,
     },
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
@@ -90,6 +92,9 @@ export interface trainingModulesState {
     [fields.EVALUATION_DESCRIPTION_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean,
         [fields.DIALOG_DATA]: string
+    },
+    [fields.ADD_EDUCATIONAL_PROGRAM_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: boolean,
     },
     [fields.ADD_TRAINING_MODULE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean,

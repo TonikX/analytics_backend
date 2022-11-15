@@ -17,7 +17,6 @@ import {
 } from "./getters";
 import moduleActions from "./actions";
 import workProgramActions from "../../WorkProgram/actions";
-import {getWorkProgramId} from "../../WorkProgram/getters";
 import {fields} from "../TrainingModules/enum";
 
 const service = new Service();
@@ -33,12 +32,15 @@ const getTrainingModulesList = createLogic({
         const sortingField = getSortingField(state);
         const sortingMode = getSortingMode(state);
         const showOnlyMy = getShowOnlyMy(state);
+        const moduleId = getTrainingModuleId(getState());
 
         const filters = {
           id: getFilterField(state, fields.FILTER_ID),
           name: getFilterField(state, fields.FILTER_MODULE_NAME),
           isuId: getFilterField(state, fields.FILTER_MODULE_ISU_ID),
           disciplineName: getFilterField(state, fields.FILTER_MODULE_DISCIPLINE_NAME),
+          availableForAll: getFilterField(state, fields.FILTER_MODULE_AVAILABLE_FOR_ALL),
+          moduleId: moduleId ? moduleId : undefined,
         }
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_TRAINING_MODULES}));
@@ -152,7 +154,36 @@ const updateChildModules = createLogic({
 
         const {moduleId, trainingModules} = action.payload
 
+        dispatch(actions.fetchingFailed([]));
+
         service.addFatherToModule(trainingModules, moduleId)
+            .then((res) => {
+                    const moduleId = getTrainingModuleId(getState());
+                    //@ts-ignore
+                    dispatch(moduleActions.getTrainingModule(moduleId));
+                    dispatch(moduleActions.closeDialog());
+                    dispatch(actions.fetchingSuccess());
+                })
+                .catch((err) => {
+                    dispatch(actions.fetchingFailed(err?.childs?.[0] ?? err?.[0]));
+                })
+                .then(() => {
+                    dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_TRAINING_MODULE}));
+                    return done();
+                });
+    }
+});
+
+const changeTrainingModuleEducationalPrograms = createLogic({
+    type: trainingModuleActions.changeTrainingModuleEducationalPrograms.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const moduleId = getTrainingModuleId(getState());
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_TRAINING_MODULE}));
+
+        const {educationalPrograms} = action.payload
+
+        service.changeTrainingModuleEducationalPrograms(educationalPrograms, moduleId)
             .then((res) => {
                     const moduleId = getTrainingModuleId(getState());
                     //@ts-ignore
@@ -347,4 +378,5 @@ export default [
     addIntermediateCertification,
     deleteIntermediateCertification,
     getIntermediateCertification,
+    changeTrainingModuleEducationalPrograms,
 ];

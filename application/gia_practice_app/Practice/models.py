@@ -1,10 +1,9 @@
+import datetime
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from analytics_project import settings
-
-import datetime
-
 from .consts_for_models import *
 
 
@@ -148,6 +147,7 @@ class Practice(models.Model):
     outcomes = models.ManyToManyField("dataprocessing.Items", related_name='practice',
                                       through='OutcomesOfPractice',
                                       verbose_name="Постреквизиты")
+    prac_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID практики в ИСУ")
 
 
 class PrerequisitesOfPractice(models.Model):
@@ -211,3 +211,4 @@ class ZunPractice(models.Model):
     items = models.ManyToManyField('OutcomesOfPractice', verbose_name="Учебная сущность и уровень освоения",
                                    blank=True, null=True, related_name="item_in_practice")
     wp_in_fs_saved_fk_id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
+    prac_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID практики в ИСУ")

@@ -97,7 +97,6 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
             <Button color="primary"
                     variant="text"
                     size="small"
-                    className={classes.addSmallButton}
                     onClick={() => this.setState({ createCompetence: false })}
             >
               <AddIcon/> Добавить из существующих
@@ -106,7 +105,6 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
             <Button color="primary"
             variant="text"
             size="small"
-            className={classes.addSmallButton}
             onClick={() => this.setState({ createCompetence: true })}
             >
               <AddIcon/> Создать компетенцию
@@ -120,7 +118,7 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
               <TextField label="Название компетенции *"
                          onChange={this.changeNewCompetence(CompetenceFields.TITLE)}
                          variant="outlined"
-                         className={classNames(classes.input, classes.marginBottom30)}
+                         className={classNames(classes.marginBottom30)}
                          fullWidth
                          // @ts-ignore
                          value={newCompetence[CompetenceFields.TITLE]}
@@ -131,7 +129,6 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
               <TextField label="Номер компетенции *"
                          onChange={this.changeNewCompetence(CompetenceFields.NUMBER)}
                          variant="outlined"
-                         className={classes.input}
                          fullWidth
                          // @ts-ignore
                          value={newCompetence[CompetenceFields.NUMBER]}

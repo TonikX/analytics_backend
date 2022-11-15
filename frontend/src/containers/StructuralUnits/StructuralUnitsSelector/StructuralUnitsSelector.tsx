@@ -7,7 +7,7 @@ import actions from '../actions';
 import {getStructuralUnitsForSelector} from '../getters';
 import {StructuralUnitsSelectorProps} from './types'
 
-export default ({onChange, value, isReset}: StructuralUnitsSelectorProps) => {
+export default ({onChange, value, isReset, className}: StructuralUnitsSelectorProps) => {
     const dispatch = useDispatch()
     const structuralUnits = useSelector((state: rootState) => getStructuralUnitsForSelector(state))
     useEffect(() => {
@@ -29,6 +29,7 @@ export default ({onChange, value, isReset}: StructuralUnitsSelectorProps) => {
                         value={value}
                         valueLabel=''
                         isReset={isReset}
+                        className={className}
         />
     )
 }
