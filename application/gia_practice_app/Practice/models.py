@@ -1,3 +1,4 @@
+from django.contrib.postgres.forms import JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -24,8 +25,6 @@ class PracticeTemplate(models.Model):
     reporting_materials = models.TextField(max_length=16384, default=REPORTS,
                                            verbose_name="ОТЧЕТНЫЕ МАТЕРИАЛЫ ПО ПРАКТИКЕ")
     ovz = models.TextField(max_length=8192, default=OVZ, verbose_name="Проведение ГИА для лиц с ОВЗ")
-    evaluation_tools_current_control = models.TextField(max_length=8192, default=EVALUATION,
-                                                        verbose_name="ОЦЕНОЧНЫЕ СРЕДСТВА ДЛЯ ПРОВЕДЕНИЯ ТЕКУЩЕГО КОНТРОЛЯ И  ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ ПО ПРАКТИКЕ.Текущий контроль")
 
 
 class Practice(models.Model):
@@ -148,6 +147,13 @@ class Practice(models.Model):
     outcomes = models.ManyToManyField("dataprocessing.Items", related_name='practice',
                                       through='OutcomesOfPractice',
                                       verbose_name="Постреквизиты")
+    evaluation_tools_current_control = models.TextField(max_length=8192, default=EVALUATION,
+                                                        verbose_name="ОЦЕНОЧНЫЕ СРЕДСТВА ДЛЯ ПРОВЕДЕНИЯ ТЕКУЩЕГО КОНТРОЛЯ И  ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ ПО ПРАКТИКЕ.Текущий контроль")
+    term_hours_info_table = JSONField()
+
+
+[{'ze': 1, 'hours': 36, 'term': 3, 'control_form': 'Дифференцированный зачет', 'contact_work_hour': 1},
+ {'ze': 1, 'hours': 18, 'term': 4, 'control_form': 'Дифференцированный зачет', 'contact_work_hour': 2}]
 
 
 class PrerequisitesOfPractice(models.Model):
@@ -193,7 +199,7 @@ class PracticeInFieldOfStudy(models.Model):
     work_program_change_in_discipline_block_module = models.ForeignKey(
         "workprogramsapp.WorkProgramChangeInDisciplineBlockModule",
         on_delete=models.CASCADE, related_name="practice_zun"
-        )
+    )
     practice = models.ForeignKey(Practice, on_delete=models.CASCADE, related_name="zuns_for_pr")
 
 
