@@ -125,7 +125,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules', 'selection_rule', 'childs']
+        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules', 'selection_rule', 'childs', 'module_isu_id']
         extra_kwargs = {
             'change_blocks_of_work_programs_in_modules': {'required': False}
         }
@@ -135,7 +135,7 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors', 'selection_rule',
-                  'educational_programs_to_access', 'childs', 'only_for_struct_units', ]
+                  'educational_programs_to_access', 'childs', 'only_for_struct_units', 'module_isu_id' ]
 
     def create(self, validated_data):
         editor = validated_data.pop('editor')
