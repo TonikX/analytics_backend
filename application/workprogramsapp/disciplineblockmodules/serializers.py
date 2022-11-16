@@ -1,8 +1,10 @@
+from django.db import transaction
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.models import DisciplineBlockModule, СertificationEvaluationTool, ImplementationAcademicPlan
+from workprogramsapp.models import DisciplineBlockModule, СertificationEvaluationTool, ImplementationAcademicPlan, \
+    DisciplineBlock
 from workprogramsapp.serializers import \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockDetailAcademicSerializer, \
     DisciplineBlockForWPinFSSerializer, \
@@ -162,4 +164,21 @@ class ShortDisciplineBlockModuleForModuleListSerializer(serializers.ModelSeriali
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'module_isu_id', 'name', 'type', 'editors']
+
+
+class DisciplineBlockModuleUpdateForBlockRelationSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для обновления связей с блоками
+    """
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = ['descipline_block']
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        if 'descipline_block' in validated_data:
+            descipline_block_ids = validated_data.pop('descipline_block')
+            instance.descipline_block.add(descipline_block_ids[0])
+        return super().update(instance, validated_data)
 
