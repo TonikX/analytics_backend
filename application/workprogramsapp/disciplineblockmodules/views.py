@@ -8,13 +8,16 @@ from drf_yasg2.utils import swagger_auto_schema
 
 from rest_framework import generics, filters, status
 from rest_framework.decorators import api_view
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework.views import APIView
 
 from workprogramsapp.disciplineblockmodules.search_filters import DisciplineBlockModuleFilter
 from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockModuleCreateSerializer, \
     DisciplineBlockModuleSerializer, DisciplineBlockModuleForModuleListDetailSerializer, \
-    DisciplineBlockModuleDetailSerializer, ShortDisciplineBlockModuleForModuleListSerializer
+    DisciplineBlockModuleDetailSerializer, ShortDisciplineBlockModuleForModuleListSerializer, \
+    DisciplineBlockModuleUpdateForBlockRelationSerializer
 from workprogramsapp.folders_ans_statistic.models import DisciplineBlockModuleInFolder
 from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock, ImplementationAcademicPlan
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsBlockModuleEditor
@@ -201,3 +204,38 @@ def InsertModule(request):
     cloned_module.save()
     serializer = DisciplineBlockModuleDetailSerializer(cloned_module)
     return Response(status=200, data=serializer.data)
+
+
+class WorkWithBlocksApiView(APIView):
+    my_tags = ["Discipline Blocks"]
+    parser_classes = [MultiPartParser]
+
+    descipline_block = openapi.Parameter('descipline_block', openapi.IN_FORM,
+                                         description="Если true находит все модули, принадлежащие запрашивающему юзеру",
+                                         type=openapi.TYPE_INTEGER)
+    module_id = openapi.Parameter('module_id', openapi.IN_FORM,
+                                  description="Если true находит все модули, принадлежащие запрашивающему юзеру",
+                                  type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(manual_parameters=[descipline_block, module_id])
+    def post(self, request, format=None):
+        """
+        Метод для обновления связей с блоками
+        """
+        queryset = DisciplineBlockModule.objects.get(id=request.data.get('module_id'))
+        serializer = DisciplineBlockModuleUpdateForBlockRelationSerializer(queryset, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(manual_parameters=[descipline_block, module_id])
+    def delete(self, request):
+        """
+        Метод для удаления связи блока и модуля
+        """
+        object = DisciplineBlockModule.objects.get(id=request.data.get('module_id'))
+        object.descipline_block.remove(DisciplineBlock.objects.get(id = request.data.get('descipline_block')))
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+

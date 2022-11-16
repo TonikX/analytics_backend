@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 from workprogramsapp.disciplineblockmodules.views import DisciplineBlockModuleCreateAPIView, \
     DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView, DisciplineBlockModuleShortListView, \
-    DisciplineBlockModuleDetailView,  InsertModule
+    DisciplineBlockModuleDetailView, InsertModule, WorkWithBlocksApiView
 
 urlpatterns = [
     path('api/disciplineblockmodule/create', DisciplineBlockModuleCreateAPIView.as_view()),
@@ -13,5 +13,6 @@ urlpatterns = [
     path('api/disciplineblockmodule/list', DisciplineBlockModuleShortListView.as_view()),
     path('api/disciplineblockmodule/detail/<int:pk>', DisciplineBlockModuleDetailView.as_view()),
     path('api/disciplineblockmodule/insert', InsertModule),
+    path('api/disciplineblockmodule/insert_to_block', WorkWithBlocksApiView.as_view()),
 
 ]

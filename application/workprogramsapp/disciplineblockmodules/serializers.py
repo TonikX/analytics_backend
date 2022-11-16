@@ -1,8 +1,10 @@
+from django.db import transaction
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.models import DisciplineBlockModule, СertificationEvaluationTool, ImplementationAcademicPlan
+from workprogramsapp.models import DisciplineBlockModule, СertificationEvaluationTool, ImplementationAcademicPlan, \
+    DisciplineBlock
 from workprogramsapp.serializers import \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockDetailAcademicSerializer, \
     DisciplineBlockForWPinFSSerializer, \
@@ -125,7 +127,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules', 'selection_rule', 'childs']
+        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules', 'selection_rule', 'childs', 'module_isu_id']
         extra_kwargs = {
             'change_blocks_of_work_programs_in_modules': {'required': False}
         }
@@ -135,7 +137,7 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'name', 'type', 'description', 'descipline_block', 'editors', 'selection_rule',
-                  'educational_programs_to_access', 'childs', 'only_for_struct_units', ]
+                  'educational_programs_to_access', 'childs', 'only_for_struct_units', 'module_isu_id' ]
 
     def create(self, validated_data):
         editor = validated_data.pop('editor')
@@ -162,4 +164,21 @@ class ShortDisciplineBlockModuleForModuleListSerializer(serializers.ModelSeriali
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'module_isu_id', 'name', 'type', 'editors']
+
+
+class DisciplineBlockModuleUpdateForBlockRelationSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для обновления связей с блоками
+    """
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = ['descipline_block']
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        if 'descipline_block' in validated_data:
+            descipline_block_ids = validated_data.pop('descipline_block')
+            instance.descipline_block.add(descipline_block_ids[0])
+        return super().update(instance, validated_data)
 
