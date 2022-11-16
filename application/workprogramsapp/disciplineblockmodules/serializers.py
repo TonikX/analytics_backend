@@ -178,7 +178,22 @@ class DisciplineBlockModuleUpdateForBlockRelationSerializer(serializers.ModelSer
     @transaction.atomic
     def update(self, instance, validated_data):
         if 'descipline_block' in validated_data:
-            descipline_block_ids = validated_data.pop('descipline_block')
-            instance.descipline_block.add(descipline_block_ids[0])
+            descipline_blocks = validated_data.pop('descipline_block')
+            for block in descipline_blocks:
+                instance.descipline_block.add(block)
         return super().update(instance, validated_data)
+
+
+class BodyParamsForDisciplineBlockModuleUpdateForBlockRelationSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для вывода списка Модулей
+    """
+    module = serializers.PrimaryKeyRelatedField(source='modules_in_discipline_block', many=True, queryset=DisciplineBlockModule.objects.all()
+                                                )
+    descipline_block = serializers.IntegerField(source='id')
+
+
+    class Meta:
+        model = DisciplineBlock
+        fields = ['module', 'descipline_block']
 
