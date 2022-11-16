@@ -60,7 +60,12 @@ const planTrajectorySelectOptionalWp = createAction('EDUCATIONAL_PLAN_TRAJECTORY
 const planTrajectorySelectElectives = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SELECT_ELECTIVES');
 const planTrajectorySelectSpecialization = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SPECIALIZATION');
 
+const educationalPlanConnectModules = createAction('EDUCATIONAL_PLAN_CONNECT_MODULES');
+const educationalPlanDisconnectModule = createAction('EDUCATIONAL_PLAN_DISCONNECT_MODULE');
+
 const actions: EducationalPlanActions = {
+    educationalPlanConnectModules,
+    educationalPlanDisconnectModule,
     planTrajectorySelectSpecialization,
     planTrajectorySelectOptionalWp,
     planTrajectorySelectElectives,

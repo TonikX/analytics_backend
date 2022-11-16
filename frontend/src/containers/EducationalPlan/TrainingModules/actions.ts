@@ -22,7 +22,7 @@ const deleteTrainingModule = createAction('DELETE_TRAINING_MODULES');
 const removeFatherFromModule = createAction<any>('REMOVE_FATHER_FROM_MODULE');
 const updateChildModules = createAction<any>('ADD_FATHER_TO_MODULES');
 
-const openDialog = createAction<OpenDialogPayload>('OPEN_TRAINING_MODULE_DIALOG');
+const openDialog = createAction<any>('OPEN_TRAINING_MODULE_DIALOG');
 const closeDialog = createAction('CLOSE_TRAINING_MODULE_DIALOG');
 
 const changeSearchQuery = createAction('TRAINING_MODULES_CHANGE_SEARCH_QUERY');

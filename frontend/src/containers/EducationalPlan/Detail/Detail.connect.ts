@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "../actions";
+import trainingModulesActions from "../TrainingModules/actions";
 import {
     getEducationalPlanDetail,
     getEducationalPlanDetailBlocks,
@@ -29,6 +30,8 @@ const mapDispatchToProps = (dispatch: Dispatch<EducationalPlanActions>) => ({
     actions: bindActionCreators(actions, dispatch),
     // @ts-ignore
     foldersActions: bindActionCreators(folderActions, dispatch),
+    // @ts-ignore
+    trainingModulesActions: bindActionCreators(trainingModulesActions, dispatch),
 });
 
 // @ts-ignore
