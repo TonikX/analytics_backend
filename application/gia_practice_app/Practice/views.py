@@ -60,7 +60,12 @@ class OutcomesPracticeSet(mixins.CreateModelMixin,
     permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
 
 
-class PracticeInFieldOfStudySet(viewsets.ModelViewSet):
+class PracticeInFieldOfStudySet(#mixins.CreateModelMixin,
+                   #mixins.RetrieveModelMixin,
+                   #mixins.UpdateModelMixin,
+                   #mixins.DestroyModelMixin,
+                   mixins.ListModelMixin,
+                   GenericViewSet):
     my_tags = ["Gia and Practice"]
     queryset = PracticeInFieldOfStudy.objects.all()
     serializer_class = PracticeInFieldOfStudyCreateSerializer
@@ -68,7 +73,12 @@ class PracticeInFieldOfStudySet(viewsets.ModelViewSet):
     permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
 
 
-class ZunPracticeManyViewSet(viewsets.ModelViewSet):
+class ZunPracticeManyViewSet(mixins.CreateModelMixin,
+                   #mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin,
+                   mixins.DestroyModelMixin,
+                   #mixins.ListModelMixin,
+                   GenericViewSet):
     my_tags = ["Gia and Practice"]
     model = ZunPractice
     queryset = ZunPractice.objects.all()
