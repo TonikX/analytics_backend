@@ -196,19 +196,19 @@ class OutcomesOfPractice(models.Model):
     )
 
 
-class PracticeInFieldOfStudy(models.Model):
-    work_program_change_in_discipline_block_module = models.ForeignKey(
-        "workprogramsapp.WorkProgramChangeInDisciplineBlockModule",
-        on_delete=models.CASCADE, related_name="practice_zun"
-    )
-    practice = models.ForeignKey(Practice, on_delete=models.CASCADE, related_name="zuns_for_pr")
+# class PracticeInFieldOfStudy(models.Model):
+#     work_program_change_in_discipline_block_module = models.ForeignKey(
+#         "workprogramsapp.WorkProgramChangeInDisciplineBlockModule",
+#         on_delete=models.CASCADE, related_name="practice_zun"
+#         )
+#     practice = models.ForeignKey(Practice, on_delete=models.CASCADE, related_name="zuns_for_pr")
 
 
 class ZunPractice(models.Model):
     '''
     Модель для зунов
     '''
-    practice_in_fs = models.ForeignKey('PracticeInFieldOfStudy', on_delete=models.SET_NULL, blank=True, null=True,
+    practice_in_fs = models.ForeignKey('workprogramsapp.PracticeInFieldOfStudy', on_delete=models.SET_NULL, blank=True, null=True,
                                        related_name="zun_in_practice")
     indicator_in_zun = models.ForeignKey('workprogramsapp.Indicator', on_delete=models.CASCADE, blank=True, null=True,
                                          related_name="zun_practice")

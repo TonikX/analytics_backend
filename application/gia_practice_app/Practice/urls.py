@@ -11,7 +11,7 @@ router.register(r'api/practice/practice_template', PracticeTemplateSet, basename
 router.register(r'api/practice-prerequisites', PrerequisitesPracticeSet, basename='prerequisites-practice')
 router.register(r'api/practice-outcomes', OutcomesPracticeSet, basename='prerequisites-practice')
 router.register(r'api/practice-in-field-of-study', PracticeInFieldOfStudySet, basename='fos-practice')
-router.register(r'api/zun/practice-many',ZunPracticeManyViewSet, basename='zun_many_create')
+router.register(r'api/zun/practice-many', ZunPracticeManyViewSet, basename='zun_many_create')
 urlpatterns = [
 
     url(r'^', include(router.urls)),

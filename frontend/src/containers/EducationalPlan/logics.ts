@@ -18,6 +18,7 @@ import {
 } from "./getters";
 import {getTrainingModuleId} from "./TrainingModules/getters";
 import {getEducationalProgramCharacteristicId} from "../EducationalProgram/getters";
+import trainingModuleActions from "./TrainingModules/actions";
 
 const service = new Service();
 
@@ -364,6 +365,54 @@ const deleteModule = createLogic({
     }
 });
 
+const educationalPlanConnectModules = createLogic({
+    type: planActions.educationalPlanConnectModules.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {modules, blockId} = action.payload;
+        const planId = getEducationalPlanDetailId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CONNECT_MODULES}));
+
+        service.educationalPlanConnectModules(modules[0], blockId)
+            .then((res) => {
+                dispatch(trainingModuleActions.closeDialog());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CONNECT_MODULES}));
+                return done();
+            });
+    }
+});
+
+const educationalPlanDisconnectModule = createLogic({
+    type: planActions.educationalPlanDisconnectModule.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {module, blockId} = action.payload;
+        const planId = getEducationalPlanDetailId(getState());
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CONNECT_MODULES}));
+
+        service.educationalPlanDisconnectModule(module, blockId)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CONNECT_MODULES}));
+                return done();
+            });
+    }
+});
+
 const getDirectionsDependedOnWorkProgram = createLogic({
     type: planActions.getDirectionsDependedOnWorkProgram.type,
     latest: true,
@@ -635,4 +684,6 @@ export default [
     planTrajectorySelectOptionalWp,
     planTrajectorySelectElectives,
     planTrajectorySelectSpecialization,
+    educationalPlanConnectModules,
+    educationalPlanDisconnectModule,
 ];
