@@ -1,4 +1,8 @@
+
+from django.contrib.postgres.forms import JSONField
+
 import datetime
+
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -23,8 +27,6 @@ class PracticeTemplate(models.Model):
     reporting_materials = models.TextField(max_length=16384, default=REPORTS,
                                            verbose_name="ОТЧЕТНЫЕ МАТЕРИАЛЫ ПО ПРАКТИКЕ")
     ovz = models.TextField(max_length=8192, default=OVZ, verbose_name="Проведение ГИА для лиц с ОВЗ")
-    evaluation_tools_current_control = models.TextField(max_length=8192, default=EVALUATION,
-                                                        verbose_name="ОЦЕНОЧНЫЕ СРЕДСТВА ДЛЯ ПРОВЕДЕНИЯ ТЕКУЩЕГО КОНТРОЛЯ И  ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ ПО ПРАКТИКЕ.Текущий контроль")
 
 
 class Practice(models.Model):
@@ -147,7 +149,12 @@ class Practice(models.Model):
     outcomes = models.ManyToManyField("dataprocessing.Items", related_name='practice',
                                       through='OutcomesOfPractice',
                                       verbose_name="Постреквизиты")
+
+    evaluation_tools_current_control = models.TextField(max_length=8192, default=EVALUATION,
+                                                        verbose_name="ОЦЕНОЧНЫЕ СРЕДСТВА ДЛЯ ПРОВЕДЕНИЯ ТЕКУЩЕГО КОНТРОЛЯ И  ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ ПО ПРАКТИКЕ.Текущий контроль")
+    term_hours_info_table = JSONField()
     prac_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID практики в ИСУ")
+
 
 
 class PrerequisitesOfPractice(models.Model):

@@ -138,9 +138,9 @@ def academicNTCheckpointGenerator(work_program: WorkProgram, send_semester: int,
         cred_regex = r""
         for i in range(12):
             if i == now_semester:
-                cred_regex += "[^0]\.[0-9],\s"
+                cred_regex += "(([^0]\.[0-9])|([^0])),\s"
             else:
-                cred_regex += "(([0-9]\.[0-9])|[0]),\s"
+                cred_regex += "(([0-9]\.[0-9])|[0-9]),\s"
         cred_regex = cred_regex[:-3]
 
         # Получаем все УП для данного семестра РПД (нужно для каунтера отнсительного семестра)
