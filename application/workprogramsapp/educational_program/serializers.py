@@ -162,7 +162,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         self.fields['tasks_for_prof_standards'] = TasksForEducationalStandardSerializer(many=True, required=False)
         self.fields['structural_unit_implementer'] = ShortStructuralUnitSerializer(many=False, required=False)
         self.fields['area_of_activity'] = ProfessionalStandardSerializer(many=True)
-        self.fields['kinds_of_activity'] = KindsOfActivitySerializer(many=True)
+        self.fields['kinds_of_activity'] = KindsOfActivitySerializerForEd(many=True)
         self.fields['objects_of_activity'] = ObjectsOfActivitySerializer(many=True)
         self.fields['educational_program'] = ImplementationAcademicPlanSerializer(many=True)
         self.fields['educational_standard'] = EducationalStandardSingleObjectSerializer()
