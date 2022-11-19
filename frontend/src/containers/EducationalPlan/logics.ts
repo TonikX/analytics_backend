@@ -374,7 +374,7 @@ const educationalPlanConnectModules = createLogic({
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CONNECT_MODULES}));
 
-        service.educationalPlanConnectModules(modules[0], blockId)
+        service.educationalPlanConnectModules(modules, blockId)
             .then((res) => {
                 dispatch(trainingModuleActions.closeDialog());
                 dispatch(planActions.getEducationalDetail(planId));

@@ -129,19 +129,15 @@ class EducationalPlanService extends AnalyticsService{
         return this.delete(`/api/disciplineblockmodule/delete/${id}`);
     }
 
-    educationalPlanConnectModules(module: any, blockId: any){
-        const formData = new FormData();
-        formData.append('descipline_block', blockId)
-        formData.append('module_id', module)
-
-        return this.post(`/api/disciplineblockmodule/insert_to_block`, formData);
+    educationalPlanConnectModules(modules: any, blockId: any){
+        return this.post(`/api/disciplineblockmodule/insert_to_block`, {
+            descipline_block: blockId,
+            module: modules,
+        });
     }
 
     educationalPlanDisconnectModule(module: any, blockId: any){
-        return this.delete(`/api/disciplineblockmodule/insert_to_block`, {
-            descipline_block: blockId,
-            module_id: module,
-        });
+        return this.delete(`/api/disciplineblockmodule/insert_to_block?module=${module}&descipline_block=${blockId}`);
     }
 
     getDownloadFileLink(dialogData: any){
