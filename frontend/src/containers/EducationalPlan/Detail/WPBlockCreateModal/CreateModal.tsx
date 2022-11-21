@@ -40,7 +40,7 @@ import SaveIcon from "@material-ui/icons/SaveOutlined";
 import Tooltip from "@material-ui/core/Tooltip";
 
 import AddWorkProgramModal from "./AddWorkProgramModal";
-import {typeOfWorkProgramInPlan, OPTIONALLY as optionalTypeOfWorkProgram} from '../../data';
+import {OPTIONALLY as optionalTypeOfWorkProgram, typeOfWorkProgramInPlan} from '../../data';
 
 import {BlocksOfWorkProgramsFields, ModuleFields} from '../../enum';
 import {WorkProgramGeneralType} from "../../../WorkProgram/types";
@@ -52,7 +52,6 @@ import AddResultsModal from "./AddResultsModal";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-import {amber} from "@material-ui/core/colors";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -161,7 +160,11 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     handleClose = () => {
-        const {planId, moduleId} = this.props;
+        const {planId, moduleId, blockOfWorkPrograms} = this.props;
+
+        if (get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0) === 0) {
+            this.props.actions.deleteBlockOfWorkPrograms(blockOfWorkPrograms?.[BlocksOfWorkProgramsFields.ID])
+        }
 
         this.props.actions.closeDetailDialog();
         
