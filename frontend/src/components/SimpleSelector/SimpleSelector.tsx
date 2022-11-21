@@ -14,7 +14,7 @@ import {QualificationSelectorProps} from './types';
 import styles from './SimpleSelector.styles';
 import {FormHelperText} from "@material-ui/core";
 
-const Selector = ({classes, label, value, onChange, noMargin, wrapClass, metaList, errorMessage}: QualificationSelectorProps) => {
+const Selector = ({classes, label, value, onChange, noMargin, wrapClass, metaList, errorMessage, disabled}: QualificationSelectorProps) => {
     const handleChange = (e: React.ChangeEvent<any>) => {
         onChange(get(e, 'target.value'))
     }
@@ -38,6 +38,7 @@ const Selector = ({classes, label, value, onChange, noMargin, wrapClass, metaLis
                         id="section-label"
                     />
                 }
+                disabled={disabled}
             >
                 {metaList.map(item =>
                     <MenuItem value={item.value} key={item.value}>

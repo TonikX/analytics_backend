@@ -7,6 +7,7 @@ export interface QualificationSelectorProps extends WithStyles<typeof styles> {
     label: string;
     onChange: Function;
     noMargin?: boolean;
+    disabled?: boolean;
     wrapClass: string;
     metaList: Array<{
         label: string;

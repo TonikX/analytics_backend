@@ -287,12 +287,18 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           {canEdit && (
             <TableCell style={{ height: '40px'}}>
               <div className={classes.moduleButtons}>
-                <Button size="small" onClick={this.handleCreateNewWPBlock(item.id)}>
-                  <AddIcon/> РПД
-                </Button>
-                <Button size="small" onClick={this.handleAddNewModule(item.id, allChild)}>
-                  <AddIcon/> Модуль
-                </Button>
+                {item?.childs?.length === 0 ? (
+                    <Button size="small" onClick={this.handleCreateNewWPBlock(item.id)}>
+                      <AddIcon/> РПД
+                    </Button>
+                  ) : <></>
+                }
+                {blockOfWorkPrograms?.length === 0 ? (
+                    <Button size="small" onClick={this.handleAddNewModule(item.id, allChild)}>
+                      <AddIcon/> Модуль
+                    </Button>
+                  ) : <></>
+                }
                 {level !== 0 && (
                   <Tooltip
                     title={`Открепить модуль`}>
@@ -396,7 +402,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               className={classes.editorsItem}
             />
           )}
-
           {module?.editors?.length === 0 && <Typography>ни одного редактора не добавлено</Typography>}
 
           {canEdit && (

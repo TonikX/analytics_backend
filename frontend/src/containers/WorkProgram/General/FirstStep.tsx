@@ -277,7 +277,8 @@ class FirstStep extends React.Component<FirstStepProps> {
                          className={classes.input}
                          onBlur={this.saveField(WorkProgramGeneralFields.TITLE)}
                          onChange={this.changeTitle}
-                         disabled={fetchingTitle || !isCanEdit}
+                         // disabled={fetchingTitle || !isCanEdit}
+                         disabled
               />
               :
               <Typography className={classes.textItem}> <b>Название
@@ -311,6 +312,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                             value={structuralUnit?.id}
                             valueLabel={structuralUnit?.title}
                             className={classes.marginBottom20}
+                            disabled
             />
             :
             <Typography className={classes.textItem}>
@@ -368,6 +370,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                     control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === item} />}
                     label={item}
                     key={item}
+                    disabled
                   />
                 ))}
               </RadioGroup>
@@ -459,13 +462,14 @@ class FirstStep extends React.Component<FirstStepProps> {
             />
           </InputsLoader>
 
-          <SpecializationSelector/>
+          <SpecializationSelector disabled />
 
           <SimpleSelector label="Язык реализации"
                           metaList={languageArray}
                           value={state[WorkProgramGeneralFields.LANGUAGE]}
                           wrapClass={classes.selectorWrap}
                           onChange={this.changeLanguage}
+                          disabled
           />
 
           {(state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] || state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] === null) && (

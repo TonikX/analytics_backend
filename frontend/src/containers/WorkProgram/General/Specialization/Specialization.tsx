@@ -27,7 +27,7 @@ class Specialization extends React.PureComponent<SpecializationProps> {
     };
 
     render() {
-        const {classes, isFetching, value, isCanEdit} = this.props;
+        const {classes, isFetching, value, isCanEdit, disabled} = this.props;
 
         if (!value) return <></>;
 
@@ -41,7 +41,7 @@ class Specialization extends React.PureComponent<SpecializationProps> {
                                 style={{width: width}}>
                                 <Select
                                     className={classes.specializationSelector}
-                                    disabled={isFetching || !isCanEdit}
+                                    disabled={isFetching || !isCanEdit || disabled}
                                     value={value}
                                     // @ts-ignore
                                     onChange={this.saveField}
