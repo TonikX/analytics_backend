@@ -4,6 +4,7 @@ import styles from "./WorkProgram.styles";
 import {WorkProgramActions, WorkProgramGeneralType} from '../WorkProgram/types';
 import {SortingType} from "../../components/SortingButton/types";
 import {getShowArchive} from "./getters";
+import {WorkProgramStatusEnum} from "../WorkProgram/enum";
 
 export interface WorkProgramListActions {
     pageDown: any;
@@ -56,4 +57,5 @@ export interface WorkProgramListProps extends WithStyles<typeof styles> {
     showOnlyMy: boolean;
     showArchive: boolean;
     sortingMode: SortingType;
+    status: WorkProgramStatusEnum|null;
 }

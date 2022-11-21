@@ -42,14 +42,13 @@ import {FULL_DATE_FORMAT} from "../../common/utils";
 import {appRouter} from "../../service/router-service";
 
 import {specialization, workProgramStatusesColors, workProgramStatusesRussian} from "../WorkProgram/constants";
-import {WorkProgramGeneralFields} from '../WorkProgram/enum';
+import {WorkProgramGeneralFields, WorkProgramStatusEnum} from '../WorkProgram/enum';
 import {filterFields} from "./enum";
 import {WorkProgramListProps} from './types';
 
 import connect from './WorkProgramList.connect';
 import styles from './WorkProgramList.styles';
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
-import {ExpertisesFields} from "../Expertises/enum";
 
 class WorkProgramList extends React.Component<WorkProgramListProps> {
     state = {
@@ -152,8 +151,15 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         this.props.actions.getWorkProgramList();
     }
 
+    changeStatusFiltering = (newStatus: WorkProgramStatusEnum) => () => {
+        const {status} = this.props;
+        this.props.actions.changeCurrentPage(1);
+        this.props.actions.changeFiltering({[filterFields.STATUS]: status === newStatus ? null : newStatus});
+        this.props.actions.getWorkProgramList();
+    }
+
     render() {
-        const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode, showOnlyMy, showArchive} = this.props;
+        const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode, showOnlyMy, showArchive, status} = this.props;
         const {deleteConfirmId, duplicateConfirmId, anchorsEl} = this.state;
 
         return (
@@ -191,10 +197,12 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
                 </Typography>
 
                 <div className={classes.statuses}>
-                    {Object.keys(workProgramStatusesRussian).map(status =>
+                    {Object.keys(workProgramStatusesRussian).map((enumStatus: any) =>
                       <WorkProgramStatus
-                        status={status}
-                        key={status}
+                        status={enumStatus}
+                        key={enumStatus}
+                        onClick={this.changeStatusFiltering(enumStatus)}
+                        disabledStyle={Boolean(status !== enumStatus && status)}
                       />
                     )}
                 </div>

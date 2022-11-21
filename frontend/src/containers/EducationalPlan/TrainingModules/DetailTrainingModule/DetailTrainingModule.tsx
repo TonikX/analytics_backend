@@ -402,7 +402,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               className={classes.editorsItem}
             />
           )}
-
           {module?.editors?.length === 0 && <Typography>ни одного редактора не добавлено</Typography>}
 
           {canEdit && (
