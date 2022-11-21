@@ -420,7 +420,7 @@ class ZunForManyCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Zun
-        fields = ['id', 'indicator_in_zun', 'items', 'wp_in_fs']
+        fields = ['id', 'indicator_in_zun', 'items', 'wp_in_fs', 'knowledge', 'skills', 'attainments']
 
 
 class ZunForDetailAcademicPlanSerializer(serializers.ModelSerializer):

@@ -74,7 +74,7 @@ urlpatterns = [
 
     # Старые урлы приложения удалены
     # Блок реализации API
-    path('api/workprograms/', WorkProgramsListApi.as_view()),
+
 
     # Компетенции индикаторы
     # path('api/indicator/', IndicatorListView.as_view(), name='indicator'),
@@ -99,6 +99,7 @@ urlpatterns = [
     path('api/outcomesofworkprogram/<int:workprogram_id>', OutcomesOfWorkProgramList.as_view()),
 
     # Рабочая программа
+    path('api/workprograms/', WorkProgramsListApi.as_view()),
     path('api/workprogram/create', WorkProgramCreateAPIView.as_view()),
     url(r'^api/workprogram/outcomes/prerequisites/relations/(?P<discipline_code>[0-9.]+)/$',
         WorkProgramsWithOutcomesToPrerequisitesForThisWPView.as_view()),
