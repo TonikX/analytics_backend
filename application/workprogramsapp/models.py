@@ -831,7 +831,7 @@ class PracticeInFieldOfStudy(models.Model):
     work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
                                                                        on_delete=models.CASCADE,
                                                                        related_name="zuns_for_cb_for_practice")
-    practice = models.ForeignKey('gia_practice_app.Practice', on_delete=models.CASCADE, related_name="zuns_for_practice")
+    practice = models.ForeignKey('gia_practice_app.Practice', on_delete=models.CASCADE, related_name="zuns_for_pr")
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
 
 

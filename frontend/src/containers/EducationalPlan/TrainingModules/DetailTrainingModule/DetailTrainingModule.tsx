@@ -60,7 +60,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     addEditorsMode: false,
     activeStep: StepsEnum.GENERAL,
     description: this.props.module[TrainingModuleFields.DESCRIPTION],
-    isuId: this.props.module[TrainingModuleFields.ISU_ID],
     selectionParameter: this.props.module[TrainingModuleFields.SELECTION_PARAMETER],
   }
 
@@ -72,7 +71,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     if (prevProps.module !== this.props.module) {
       this.setState({
         description: this.props.module[TrainingModuleFields.DESCRIPTION],
-        isuId: this.props.module[TrainingModuleFields.ISU_ID],
         selectionParameter: this.props.module[TrainingModuleFields.SELECTION_PARAMETER],
       })
     }
@@ -87,7 +85,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
       dialog: fields.CREATE_TRAINING_MODULE_DIALOG
     });
   }
-
 
   openAddEducationalProgramModal = () => {
     this.props.actions.openDialog({
@@ -417,22 +414,13 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         <>
           <Typography className={classes.textField}>
             ID конструктора КОП: <b>{module?.[TrainingModuleFields.ID]}</b>
+            {module?.[TrainingModuleFields.ISU_ID] && <><br/> ISU id: <b>{module?.[TrainingModuleFields.ISU_ID]}</b></>}
           </Typography>
           <TextField variant="outlined"
                      label="Описание"
                      value={this.state.description}
                      onChange={(e) => this.setState({ description: e.target.value })}
                      onBlur={this.updateTrainingModuleField(TrainingModuleFields.DESCRIPTION)}
-                     className={classes.textField}
-                     InputLabelProps={{
-                       shrink: true,
-                     }}
-          />
-          <TextField variant="outlined"
-                     label="ISU id"
-                     value={this.state.isuId}
-                     onChange={(e) => this.setState({ description: e.target.value })}
-                     onBlur={this.updateTrainingModuleField(TrainingModuleFields.ISU_ID)}
                      className={classes.textField}
                      InputLabelProps={{
                        shrink: true,

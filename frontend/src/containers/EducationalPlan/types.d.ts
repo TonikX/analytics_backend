@@ -9,6 +9,8 @@ import {UserType} from "../../layout/types";
 
 export interface EducationalPlanActions {
     pageDown: any;
+    educationalPlanConnectModules: any;
+    educationalPlanDisconnectModule: any;
     deleteCompetenceBlock: any;
     deleteWorkProgramFromZun: any;
     saveCompetenceBlock: any;

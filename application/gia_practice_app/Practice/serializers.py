@@ -4,11 +4,11 @@ from rest_framework.fields import SerializerMethodField
 from dataprocessing.models import Items
 from dataprocessing.serializers import ItemSerializer
 from gia_practice_app.Practice.models import PracticeTemplate, Practice, PrerequisitesOfPractice, OutcomesOfPractice, \
-    PracticeInFieldOfStudy, ZunPractice
+    ZunPractice
 from gia_practice_app.logic import get_permissions_gia_practice
 from workprogramsapp.expertise.models import Expertise, UserExpertise
 from workprogramsapp.models import WorkProgramChangeInDisciplineBlockModule, Competence, Zun, Indicator, \
-    ImplementationAcademicPlan
+    ImplementationAcademicPlan, PracticeInFieldOfStudy
 from workprogramsapp.serializers import WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer, \
     BibliographicReferenceSerializer, IndicatorSerializer, ImplementationAcademicPlanSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit

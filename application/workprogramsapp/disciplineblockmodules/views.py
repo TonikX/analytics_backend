@@ -8,13 +8,17 @@ from drf_yasg2.utils import swagger_auto_schema
 
 from rest_framework import generics, filters, status
 from rest_framework.decorators import api_view
+from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework.views import APIView
 
 from workprogramsapp.disciplineblockmodules.search_filters import DisciplineBlockModuleFilter
 from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockModuleCreateSerializer, \
     DisciplineBlockModuleSerializer, DisciplineBlockModuleForModuleListDetailSerializer, \
-    DisciplineBlockModuleDetailSerializer, ShortDisciplineBlockModuleForModuleListSerializer
+    DisciplineBlockModuleDetailSerializer, ShortDisciplineBlockModuleForModuleListSerializer, \
+    DisciplineBlockModuleUpdateForBlockRelationSerializer, \
+    BodyParamsForDisciplineBlockModuleUpdateForBlockRelationSerializer
 from workprogramsapp.folders_ans_statistic.models import DisciplineBlockModuleInFolder
 from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock, ImplementationAcademicPlan
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsBlockModuleEditor
@@ -201,3 +205,51 @@ def InsertModule(request):
     cloned_module.save()
     serializer = DisciplineBlockModuleDetailSerializer(cloned_module)
     return Response(status=200, data=serializer.data)
+
+
+class WorkWithBlocksApiView(APIView):
+    my_tags = ["Discipline Blocks"]
+
+    descipline_block = openapi.Parameter('descipline_block', openapi.IN_FORM,
+                                         description="id блока",
+                                         type=openapi.TYPE_INTEGER)
+    module = openapi.Parameter('module', openapi.IN_FORM,
+                               description="массив id модулей",
+                               items=openapi.Items(type=openapi.TYPE_INTEGER),
+                               type=openapi.TYPE_ARRAY)
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+                             type=openapi.TYPE_OBJECT,
+                             required=['version'],
+                             properties={
+                                 'modules': openapi.Schema(type=openapi.TYPE_ARRAY,
+                                                           items=openapi.Items(type=openapi.TYPE_INTEGER)),
+                                 'descipline_block': openapi.Schema(type=openapi.TYPE_INTEGER)
+                             },
+                         ),
+                         operation_description='Метод для обновления связей с блоками')
+    def post(self, request):
+        """
+        Метод для обновления связей с блоками
+        """
+        request_data = BodyParamsForDisciplineBlockModuleUpdateForBlockRelationSerializer(data=request.data)
+        if request_data.is_valid():
+            for module in request_data.validated_data['modules_in_discipline_block']:
+                module.descipline_block.add(request_data.validated_data['id'])
+                module.save()
+            print(DisciplineBlock.objects.filter(id = request_data.validated_data['id']).values_list('modules_in_discipline_block'))
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(request_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('module', openapi.IN_QUERY, type='integer'),
+        openapi.Parameter('descipline_block', openapi.IN_QUERY, type='integer')
+    ])
+    def delete(self, request):
+        """
+        Метод для удаления связи блока и модуля
+        """
+        print(request.query_params.get('module'))
+        object = DisciplineBlockModule.objects.get(id=request.query_params.get('module'))
+        object.descipline_block.remove(DisciplineBlock.objects.get(id=request.query_params.get('descipline_block')))
+        return Response(status=status.HTTP_204_NO_CONTENT)

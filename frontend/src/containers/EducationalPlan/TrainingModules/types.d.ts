@@ -46,7 +46,7 @@ export interface TrainingModulesActions {
 
 export type OpenDialogPayload = {
     data: TrainingModuleType|{};
-    dialog: fields.CREATE_TRAINING_MODULE_DIALOG | fields.EVALUATION_MODULE_DIALOG
+    dialog: fields.CREATE_TRAINING_MODULE_DIALOG | fields.EVALUATION_MODULE_DIALOG | fields.ADD_TRAINING_MODULE_DIALOG | fields.ADD_EDUCATIONAL_PROGRAM_DIALOG
 }
 
 export type CreateTrainingModulePayload = {

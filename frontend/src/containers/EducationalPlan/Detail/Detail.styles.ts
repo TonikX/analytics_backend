@@ -112,5 +112,15 @@ export default (theme: Theme) => createStyles({
     wpStatus: {
         margin: '0 6px',
         whiteSpace: 'nowrap'
-    }
+    },
+    moduleNameWrap: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    moduleName: {
+        color: theme.palette.primary.main,
+        fontWeight: 'bold',
+        display: 'flex',
+        alignItems: 'center',
+    },
 });
