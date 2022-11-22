@@ -1966,7 +1966,12 @@ class AcademicPlanCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+
+        academic_plan = serializer.save(author=self.request.user)
+        DisciplineBlock.objects.create(name="Блок 1. Модули (дисциплины)", academic_plan=academic_plan)
+        DisciplineBlock.objects.create(name="Блок 2. Практика", academic_plan=academic_plan)
+        DisciplineBlock.objects.create(name="Блок 3. ГИА", academic_plan=academic_plan)
+        DisciplineBlock.objects.create(name="Блок 4. Факультативные модули (дисциплины)", academic_plan=academic_plan)
         AcademicPlan.clone_descipline_blocks(self, serializer)
 
 
