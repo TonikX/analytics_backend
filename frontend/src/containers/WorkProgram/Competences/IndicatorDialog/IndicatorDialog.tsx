@@ -14,8 +14,6 @@ import { useStyles } from './IndicatorDialog.styles'
 import actions from '../../actions'
 import {useDispatch} from 'react-redux'
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
-import {Simulate} from "react-dom/test-utils";
-import change = Simulate.change;
 
 interface IndicatorsProps {
   workProgramId: number;
