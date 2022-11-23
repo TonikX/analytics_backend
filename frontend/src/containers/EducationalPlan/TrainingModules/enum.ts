@@ -51,6 +51,7 @@ export enum TrainingModuleFields {
     SELECTION_RULE = 'selection_rule',
     SELECTION_PARAMETER = 'selection_parameter',
     CERTIFICATION_EVALUATION_LIST = 'certification_evaluation_tools',
+    ONLY_FOR_STRUCT_UNITS = 'only_for_struct_units',
 }
 
 export enum StepsEnum {

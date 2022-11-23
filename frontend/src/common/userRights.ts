@@ -9,6 +9,7 @@ export const OP_DEVELOPER = "op_developer";
 export const RPD_DEVELOPER = "rpd_developer";
 export const ACADEMIC_PLAN_DEVELOPER = "academic_plan_developer";
 export const EDUCATION_PLAN_DEVELOPER = "education_plan_developer";
+export const BLOCK_MODULE_EDITOR = "blockmodule_editor";
 
 export const EXPERTISE_GROUP = [EXPERTISE_MASTER, EXPERTISE_MEMBER, EXPERT];
 
@@ -36,4 +37,8 @@ export const isUserCanSeeProfessions = (groups: Array<string>) => {
 
 export const isUserCanSeeCharacteristic = (groups: Array<string>) => {
     return groups.some(group => CHARACTERISTIC_GROUP.indexOf(group) !== -1);
+}
+
+export const isUserCanSeeEducationalModules = (groups: Array<string>) => {
+    return groups.some(group => group === BLOCK_MODULE_EDITOR);
 }

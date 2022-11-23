@@ -17,7 +17,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   chipsList: {
     display: 'flex',
     marginTop: '10px',
-    marginBottom: '20px',
+    marginBottom: '30px',
     flexWrap: 'wrap'
   },
   chip: {
@@ -35,6 +35,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   footer: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 20,
   }
 }));

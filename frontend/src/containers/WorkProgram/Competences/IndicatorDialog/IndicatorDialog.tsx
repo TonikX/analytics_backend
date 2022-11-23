@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Chip from '@material-ui/core/Chip'
+import TextField from '@material-ui/core/TextField'
 import InfoIcon from "@material-ui/icons/InfoOutlined";
 import CompetenceSelector from '../../../Competences/CompetenceSelector'
 import IndicatorSelector from '../../../Competences/Indicators/IndicatorSelector'
@@ -13,6 +14,8 @@ import { useStyles } from './IndicatorDialog.styles'
 import actions from '../../actions'
 import {useDispatch} from 'react-redux'
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
+import {Simulate} from "react-dom/test-utils";
+import change = Simulate.change;
 
 interface IndicatorsProps {
   workProgramId: number;
@@ -36,6 +39,9 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
   const [indicator, setIndicator] = useState<{value: number; label: string}>({value: 0, label: ''})
   const [results, setResults] = useState<Array<{value: number; label: string}>>([])
   const [plans, setPlans] = useState<Array<{value: number; label: string}>>([])
+  const [knowledge, changeKnowledge] = useState('')
+  const [skills, changeSkills] = useState('')
+  const [attainments, changeAttainments] = useState('')
 
   const addIndicator = (value: number, label: string) => {
     setIndicator({
@@ -90,9 +96,12 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
       indicator: indicator.value,
       results: results.map(item => item.value),
       plans: plans.map(item => item.value),
+      knowledge,
+      skills,
+      attainments,
     }))
     handleClose()
-  }, [indicator, competence, results, plans])
+  }, [indicator, competence, results, plans, knowledge, skills, attainments])
 
   const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0 || results.length === 0 || plans.length === 0),
     [indicator, competence, results, plans]
@@ -163,6 +172,23 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
           <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)} label={plan.label} />
         ))}
       </div>
+      <TextField
+        label="Знания"
+        onChange={(e) => changeKnowledge(e.currentTarget.value)}
+        variant="outlined"
+        className={classes.marginBottom30}
+      />
+      <TextField
+        label="Умения"
+        onChange={(e) => changeSkills(e.currentTarget.value)}
+        variant="outlined"
+        className={classes.marginBottom30}
+      />
+      <TextField
+        label="Навыки"
+        onChange={(e) => changeAttainments(e.currentTarget.value)}
+        variant="outlined"
+      />
       <div className={classes.footer}>
         <Tooltip title="При выборе результатов и учебного плана с ОП можно выбрать несколько объектов, выбирая их по очереди">
           <InfoIcon className={classes.info}/>

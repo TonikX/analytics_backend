@@ -52,6 +52,7 @@ import AddTrainingModuleModal from "../AddTrainingModuleModal/AddTrainingModuleM
 import {TrainingModuleType} from "../types";
 import {QUALIFICATIONS} from "../../../Practice/constants";
 import {specializationObject} from "../../../WorkProgram/constants";
+import {Checkbox, FormControlLabel} from "@material-ui/core";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -332,6 +333,15 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     })
   }
 
+  updateOnlyForStructUnitsField = (e: React.ChangeEvent) => {
+    this.props.actions.changeTrainingModule({
+      data: {
+        [TrainingModuleFields.ONLY_FOR_STRUCT_UNITS]: get(e, 'target.checked'),
+        id: this.props.module?.id
+      }
+    })
+  }
+
   updateSelectRule = (value: ReactText) => {
     this.props.actions.changeTrainingModule({
       data: {
@@ -386,7 +396,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
   renderGeneral = () => {
     const {module, classes, canEdit} = this.props
-
     return (
       <>
         <div className={classes.editors}>
@@ -417,10 +426,17 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         </div>
 
         <>
-          <Typography className={classes.textField}>
+          <Typography>
             ID конструктора КОП: <b>{module?.[TrainingModuleFields.ID]}</b>
             {module?.[TrainingModuleFields.ISU_ID] && <><br/> ISU id: <b>{module?.[TrainingModuleFields.ISU_ID]}</b></>}
           </Typography>
+          {module?.[TrainingModuleFields.ONLY_FOR_STRUCT_UNITS] !== undefined && (
+            <FormControlLabel
+              control={<Checkbox checked={module?.[TrainingModuleFields.ONLY_FOR_STRUCT_UNITS]} onChange={this.updateOnlyForStructUnitsField} />}
+              label="Общедоступный модуль"
+              className={classes.checkbox}
+            />
+          )}
           <TextField variant="outlined"
                      label="Описание"
                      value={this.state.description}

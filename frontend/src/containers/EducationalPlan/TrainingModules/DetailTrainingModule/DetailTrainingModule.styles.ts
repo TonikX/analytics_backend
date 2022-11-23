@@ -5,6 +5,9 @@ export default (theme: Theme) => createStyles({
         width: '100%',
         marginBottom: '30px'
     },
+    checkbox: {
+        margin: '10px 0px 10px -12px'
+    },
     selectorWrap: {
         width: '100%',
         '& .MuiInputLabel-shrink': {

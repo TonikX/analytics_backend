@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import actions from "./actions";
-import {getEducationalPlan, getCurrentPage, getSearchQuery, getAllCount, getSortingMode, getSortingField} from './getters';
+import {getEducationalPlan, getCurrentPage, getSearchQuery, getAllCount, getSortingMode, getSortingField, getNewPlanIdForRedirect} from './getters';
 import {EducationalPlanActions} from "./types";
 
 import {rootState} from "../../store/reducers";
@@ -18,6 +18,7 @@ const mapStateToProps = (state: rootState) => {
         allCount: getAllCount(state),
         sortingField: getSortingField(state),
         sortingMode: getSortingMode(state),
+        newPlanIdForRedirect: getNewPlanIdForRedirect(state),
         canAddNewPlan: isUserInOpGroup(getUserGroups(state))
     };
 };
