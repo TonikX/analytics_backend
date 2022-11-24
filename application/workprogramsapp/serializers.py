@@ -890,7 +890,7 @@ class WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer(serialize
 
 class WorkProgramInFieldOfStudyForCompeteceListSerializer(serializers.ModelSerializer):
     """Сериализатор Зунов"""
-    work_program_change_in_discipline_block_module =  WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer()
+    work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer()
 
     class Meta:
         model = WorkProgramInFieldOfStudy
