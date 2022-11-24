@@ -168,3 +168,5 @@ class AcademicPlanAdmin(admin.ModelAdmin):
     inlines = [WorkProgramInFieldOfStudyInLine, GiaInFieldOfStudyInLine, PracticeInFieldOfStudyInLine]
     save_on_top = True
     save_as = True
+
+admin.site.register(PracticeInFieldOfStudy)
