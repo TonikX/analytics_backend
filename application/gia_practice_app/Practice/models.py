@@ -1,8 +1,6 @@
-
 from django.contrib.postgres.forms import JSONField
 
 import datetime
-
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -156,7 +154,6 @@ class Practice(models.Model):
     prac_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID практики в ИСУ")
 
 
-
 class PrerequisitesOfPractice(models.Model):
     '''
     Модель для пререквизитов практик
@@ -208,7 +205,8 @@ class ZunPractice(models.Model):
     '''
     Модель для зунов
     '''
-    practice_in_fs = models.ForeignKey('workprogramsapp.PracticeInFieldOfStudy', on_delete=models.SET_NULL, blank=True, null=True,
+    practice_in_fs = models.ForeignKey('workprogramsapp.PracticeInFieldOfStudy', on_delete=models.SET_NULL, blank=True,
+                                       null=True,
                                        related_name="zun_in_practice")
     indicator_in_zun = models.ForeignKey('workprogramsapp.Indicator', on_delete=models.CASCADE, blank=True, null=True,
                                          related_name="zun_practice")
