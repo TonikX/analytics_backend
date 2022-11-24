@@ -396,6 +396,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
   renderGeneral = () => {
     const {module, classes, canEdit} = this.props
+    if (!module?.id) return <></>
     return (
       <>
         <div className={classes.editors}>

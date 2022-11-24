@@ -160,7 +160,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     handleClose = () => {
-        const {planId, moduleId, blockOfWorkPrograms} = this.props;
+        const {planId, moduleId} = this.props;
+        const {blockOfWorkPrograms} = this.state
 
         if (get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0) === 0) {
             this.props.actions.deleteBlockOfWorkPrograms(blockOfWorkPrograms?.[BlocksOfWorkProgramsFields.ID])

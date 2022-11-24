@@ -21,6 +21,7 @@ export enum fields {
     FILTER_MODULE_NAME = 'FILTER_MODULE_NAME',
     FILTER_MODULE_DISCIPLINE_NAME = 'FILTER_MODULE_DISCIPLINE_NAME',
     FILTER_MODULE_AVAILABLE_FOR_ALL = 'FILTER_MODULE_AVAILABLE_FOR_ALL',
+    TRAINIG_MODULE_ID_FOR_REDIRECT = 'TRAINIG_MODULE_ID_FOR_REDIRECT',
 }
 
 export enum fetchingTypes {
@@ -49,7 +50,7 @@ export enum TrainingModuleFields {
     CAN_EDIT = 'can_edit',
     ISU_ID = 'module_isu_id',
     SELECTION_RULE = 'selection_rule',
-    SELECTION_PARAMETER = 'selection_parameter',
+    SELECTION_PARAMETER = 'selection_parametr',
     CERTIFICATION_EVALUATION_LIST = 'certification_evaluation_tools',
     ONLY_FOR_STRUCT_UNITS = 'only_for_struct_units',
 }

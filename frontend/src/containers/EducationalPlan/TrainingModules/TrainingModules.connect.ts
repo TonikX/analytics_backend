@@ -9,7 +9,7 @@ import {
     getAllCount,
     getSortingMode,
     getSortingField,
-    getShowOnlyMy,
+    getShowOnlyMy, getTrainingModuleIdForRedirect,
 } from './getters';
 
 import {rootState} from "../../../store/reducers";
@@ -26,6 +26,7 @@ export const mapStateToProps = (state: rootState) => {
         sortingMode: getSortingMode(state),
         canEdit: isUserInOpGroup(getUserGroups(state)),
         showOnlyMy: getShowOnlyMy(state),
+        trainingModuleIdForRedirect: getTrainingModuleIdForRedirect(state),
     };
 };
 

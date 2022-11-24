@@ -42,6 +42,7 @@ import styles from './TrainingModules.styles';
 
 import Filters from "./Filters";
 import Switch from "@material-ui/core/Switch";
+import {withRouter} from "react-router-dom";
 
 const userService = UserService.factory();
 
@@ -53,6 +54,20 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
 
     componentDidMount() {
         this.props.actions.getTrainingModulesList();
+    }
+
+    componentDidUpdate(prevProps: TrainingModulesProps) {
+        if (prevProps.trainingModuleIdForRedirect !== this.props.trainingModuleIdForRedirect && this.props.trainingModuleIdForRedirect) {
+            this.goToTrainingModule()
+        }
+    }
+
+    goToTrainingModule = () => {
+        // @ts-ignore
+        const {history, trainingModuleIdForRedirect} = this.props;
+
+        this.props.actions.setTrainingModuleIdForRedirect(null)
+        history.push(appRouter.getTrainingModuleDetailLink(trainingModuleIdForRedirect));
     }
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
@@ -309,4 +324,4 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
     }
 }
 
-export default connect(withStyles(styles)(TrainingModules));
+export default connect(withStyles(styles)(withRouter(TrainingModules)));
