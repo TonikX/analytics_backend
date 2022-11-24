@@ -44,6 +44,7 @@ export const initialState: educationalPlanState = {
     [fields.IS_TRAJECTORY_ROUTE]: false,
     [fields.TRAJECTORY_USER_DATA]: {},
     [fields.TRAJECTORY_DIRECTION]: {},
+    [fields.NEW_PLAN_ID_FOR_REDIRECT]: null,
 };
 
 const setIsTrajectoryRoute = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
@@ -59,6 +60,11 @@ const planTrajectorySetUserData = (state: educationalPlanState, {payload}: any):
 const planTrajectorySetDirection = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
     ...state,
     [fields.TRAJECTORY_DIRECTION]: payload,
+});
+
+const setNewPlanIdForRedirect = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
+    ...state,
+    [fields.NEW_PLAN_ID_FOR_REDIRECT]: payload,
 });
 
 const setEducationalPlans = (state: educationalPlanState, {payload}: any): educationalPlanState => ({
@@ -208,6 +214,7 @@ export const reducer = createReducer(initialState, {
     [actions.setIsTrajectoryRoute.type]: setIsTrajectoryRoute,
     [actions.planTrajectorySetUserData.type]: planTrajectorySetUserData,
     [actions.planTrajectorySetDirection.type]: planTrajectorySetDirection,
+    [actions.setNewPlanIdForRedirect.type]: setNewPlanIdForRedirect,
 
     [actions.pageDown.type]: pageDown,
 });

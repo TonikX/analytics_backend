@@ -122,7 +122,8 @@ const createNewEducationalPlan = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_EDUCATIONAL_PLAN}));
 
         service.createEducationalPlan(educationalPlan)
-            .then((res) => {
+            .then((res: any) => {
+                dispatch(planActions.setNewPlanIdForRedirect(res.data?.id));
                 dispatch(planActions.getEducationalPlans());
                 dispatch(actions.fetchingSuccess());
                 dispatch(planActions.closeDialog());

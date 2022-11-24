@@ -8,6 +8,7 @@ import {DirectionType} from "../Direction/types";
 import {UserType} from "../../layout/types";
 
 export interface EducationalPlanActions {
+    setNewPlanIdForRedirect: any;
     pageDown: any;
     educationalPlanConnectModules: any;
     educationalPlanDisconnectModule: any;
@@ -92,6 +93,7 @@ export interface educationalPlanState {
     [fields.IS_TRAJECTORY_ROUTE]: boolean,
     [fields.TRAJECTORY_USER_DATA]: {} | UserType,
     [fields.TRAJECTORY_DIRECTION]: {} | DirectionType,
+    [fields.NEW_PLAN_ID_FOR_REDIRECT]: number|null,
 }
 
 export type EducationalPlanType = {
@@ -155,4 +157,5 @@ export interface EducationalPlanProps extends WithStyles<typeof styles> {
     sortingField: string;
     sortingMode: SortingType;
     canAddNewPlan: boolean;
+    newPlanIdForRedirect: number|null;
 }

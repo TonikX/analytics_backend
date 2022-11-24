@@ -17,6 +17,7 @@ export const getEducationalPlanDetail = (state: rootState): EducationalPlanType|
 export const getIsTrajectoryRoute = (state: rootState): boolean => get(getStateData(state), fields.IS_TRAJECTORY_ROUTE, false);
 export const getTrajectoryUserData = (state: rootState): UserType|{} => get(getStateData(state), fields.TRAJECTORY_USER_DATA, {});
 export const getTrajectoryDirection = (state: rootState): DirectionType|{} => get(getStateData(state), fields.TRAJECTORY_DIRECTION, {});
+export const getNewPlanIdForRedirect = (state: rootState): null|number => get(getStateData(state), fields.NEW_PLAN_ID_FOR_REDIRECT, null);
 
 export const getEducationalPlanDetailBlocks = (state: rootState): Array<EducationalPlanType> =>
     get(getEducationalPlanDetail(state), EducationalPlanFields.DISCIPLINE_BLOCKS, []);

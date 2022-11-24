@@ -319,13 +319,16 @@ class WorkProgramService extends AnalyticsService{
         });
     }
 
-    saveZUN({indicator, plans, results}: any){
+    saveZUN({indicator, plans, results, knowledge, skills, attainments}: any){
         return this.post(`/api/zun/many_create/`,{
             wpa_in_fss: plans,
             zun: {
                 indicator_in_zun: indicator,
-                items: results
-            }
+                items: results,
+                knowledge,
+                skills,
+                attainments,
+            },
         });
     }
 

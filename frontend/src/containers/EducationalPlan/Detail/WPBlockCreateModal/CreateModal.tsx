@@ -597,18 +597,18 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 </Select>
                             </FormControl>
 
-                            <TextField label="Длительность изучения"
-                                       onBlur={this.changeDuration}
-                                       onChange={this.changeStateDuration}
-                                       variant="outlined"
-                                       className={classes.smallInput}
-                                       fullWidth
-                                       value={blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_DURATION]}
-                                       InputLabelProps={{
-                                           shrink: true,
-                                       }}
-                                       type="number"
-                            />
+                            {/*<TextField label="Длительность изучения"*/}
+                            {/*           onBlur={this.changeDuration}*/}
+                            {/*           onChange={this.changeStateDuration}*/}
+                            {/*           variant="outlined"*/}
+                            {/*           className={classes.smallInput}*/}
+                            {/*           fullWidth*/}
+                            {/*           value={blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_DURATION]}*/}
+                            {/*           InputLabelProps={{*/}
+                            {/*               shrink: true,*/}
+                            {/*           }}*/}
+                            {/*           type="number"*/}
+                            {/*/>*/}
 
                             <div className={classes.semesterBlock}>
                                 <Typography className={classes.label}> Выберите семеcтры, в которых может начаться дисциплина </Typography>
