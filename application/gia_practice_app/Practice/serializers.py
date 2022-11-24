@@ -10,7 +10,8 @@ from workprogramsapp.expertise.models import Expertise, UserExpertise
 from workprogramsapp.models import WorkProgramChangeInDisciplineBlockModule, Competence, Zun, Indicator, \
     ImplementationAcademicPlan, PracticeInFieldOfStudy
 from workprogramsapp.serializers import WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer, \
-    BibliographicReferenceSerializer, IndicatorSerializer, ImplementationAcademicPlanSerializer
+    BibliographicReferenceSerializer, IndicatorSerializer, ImplementationAcademicPlanSerializer, \
+    WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
@@ -158,3 +159,12 @@ class ZunPracticeForManyCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ZunPractice
         fields = ['id', 'indicator_in_zun', 'items', 'practice_in_fs']
+
+
+class PracticeInFieldOfStudyForCompeteceListSerializer(serializers.ModelSerializer):
+    """Сериализатор Зунов"""
+    work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer()
+
+    class Meta:
+        model = PracticeInFieldOfStudy
+        fields = ['id', 'work_program_change_in_discipline_block_module', 'zun_in_practice']

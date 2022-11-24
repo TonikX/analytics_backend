@@ -62,8 +62,10 @@ const planTrajectorySelectSpecialization = createAction('EDUCATIONAL_PLAN_TRAJEC
 
 const educationalPlanConnectModules = createAction('EDUCATIONAL_PLAN_CONNECT_MODULES');
 const educationalPlanDisconnectModule = createAction('EDUCATIONAL_PLAN_DISCONNECT_MODULE');
+const setNewPlanIdForRedirect = createAction('SET_NEW_PLAN_ID_FOR_REDIRECT');
 
 const actions: EducationalPlanActions = {
+    setNewPlanIdForRedirect,
     educationalPlanConnectModules,
     educationalPlanDisconnectModule,
     planTrajectorySelectSpecialization,

@@ -1,4 +1,6 @@
-from rest_framework import viewsets, filters, status, mixins
+from drf_yasg2 import openapi
+from drf_yasg2.utils import swagger_auto_schema
+from rest_framework import viewsets, filters, status, mixins, generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -7,7 +9,8 @@ from gia_practice_app.Practice.models import Practice, PracticeTemplate, Prerequ
     ZunPractice
 from gia_practice_app.Practice.serializers import PracticeSerializer, PracticeTemplateSerializer, \
     PracticePrimitiveSerializer, ItemInPracticeCreateSerializer, OutcomesInPracticeCreateSerializer, \
-    PracticeInFieldOfStudyCreateSerializer, ZunPracticeForManyCreateSerializer
+    PracticeInFieldOfStudyCreateSerializer, ZunPracticeForManyCreateSerializer, \
+    PracticeInFieldOfStudyForCompeteceListSerializer
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsOwnerOrDodWorkerOrReadOnly
 from workprogramsapp.models import PracticeInFieldOfStudy
 
@@ -73,9 +76,10 @@ class PracticeInFieldOfStudySet(#mixins.CreateModelMixin,
     permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
 
 
+
 class ZunPracticeManyViewSet(mixins.CreateModelMixin,
                    #mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
+                   #mixins.UpdateModelMixin,
                    mixins.DestroyModelMixin,
                    #mixins.ListModelMixin,
                    GenericViewSet):
@@ -85,17 +89,22 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
     serializer_class = ZunPracticeForManyCreateSerializer
     http_method_names = ['post', 'delete', 'patch']
 
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=['version'],
+        properties={
+            'pra_in_fss': openapi.Schema(type=openapi.TYPE_ARRAY,
+                                         description='id объектов класса PracticeInFieldOfStudy (api/practice/fieldofstudies_for_competences/<int:practice_id>)',
+                                         items=openapi.Items(type=openapi.TYPE_INTEGER)),
+            'zun': openapi.Schema(type=openapi.TYPE_OBJECT, properties={
+                'indicator_in_zun': openapi.Schema(type=openapi.TYPE_INTEGER, description='id интикатора'),
+                'items': openapi.Schema(type=openapi.TYPE_ARRAY, description='id объектов OutcomesOfPractice (доступны в ендпоинте практики)',
+                                             items=openapi.Items(type=openapi.TYPE_INTEGER)),
+                }, )
+            },
+        ),
+        operation_description='Метод для добавления компетенций в практики')
     def create(self, request, *args, **kwargs):
-        """
-        Example:
-            {"pra_in_fss": [74089, 74090, 74091],
-            "zun": {
-              "indicator_in_zun": 16,
-              "items": []
-                }
-            }
-        """
-
         for pr_in_fs in request.data['pra_in_fss']:
             serializer = self.get_serializer(data=request.data['zun'])
             serializer.is_valid(raise_exception=True)
@@ -109,3 +118,19 @@ class ZunPracticeViewSet(viewsets.ModelViewSet):
     serializer_class = ZunPracticeForManyCreateSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
+
+
+class PracticeInFieldOfStudyForWorkProgramList(generics.ListAPIView):
+    my_tags = ["Gia and Practice"]
+    serializer_class = PracticeInFieldOfStudyForCompeteceListSerializer
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def list(self, request, **kwargs):
+        """
+        Вывод учебных планов для одной рабочей программы по id
+        """
+        queryset = PracticeInFieldOfStudy.objects.filter(
+            practice__id=self.kwargs['practice_id'],
+        ).distinct()
+        serializer = PracticeInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
+        return Response(serializer.data)
