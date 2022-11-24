@@ -324,4 +324,5 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(withRouter(TrainingModules)));
