@@ -4,8 +4,15 @@ from rest_framework import generics, viewsets
 from docxtpl import DocxTemplate, RichText
 from django.http import HttpResponse
 from collections import OrderedDict
-from rest_framework.permissions import IsAuthenticated, AllowAny
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 import html2text
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from dataprocessing.serializers import FileUploadSerializer
+from .plan_logic import plans_processor
 from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy, WorkProgram, \
     ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule
 from ..serializers import WorkProgramSerializer
@@ -423,3 +430,16 @@ class SyllabusExportView(generics.ListAPIView):
         tpl.save(response)
 
         return response
+
+
+@api_view(['POST'])
+@permission_classes((IsAdminUser,))
+def UploadPlans(request):
+    """
+    Метод принимает xlsx-файл с планами 2023 года
+    """
+    file = request.FILES["plans"]
+    print(file)
+    return Response(plans_processor(file))
+
+
