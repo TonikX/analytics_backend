@@ -23,6 +23,7 @@ def handle_uploaded_file_v2(file, filename):
 def plans_processor(file):
     path = handle_uploaded_file_v2(file, str(file))
     plans = pd.read_excel(path)
+    i=0
     for i in range(len(plans)):
         qualification = plans["Квалификация"][i]
         year = plans["Год приема"][i]
@@ -34,7 +35,7 @@ def plans_processor(file):
             break
         create_plans_in_row(qualification, year, plan_ids, direction_codes, directions_names, op_name)
 
-    return len(plans)
+    return i
 
 
 def create_plans_in_row(qualification: int, year: int, plan_ids: list, direction_codes: list, directions_names: list,

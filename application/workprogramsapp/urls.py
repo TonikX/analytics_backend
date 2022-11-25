@@ -8,7 +8,7 @@ from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView
     ExpertiseCommentsView, ChangeUserExpertiseView, \
     ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById, \
     DeleteUserExpertise
-from .files_export.views import DocxFileExportView, SyllabusExportView, UploadPlans
+from .files_export.views import DocxFileExportView, SyllabusExportView, UploadPlans, UploadPlansAPIView
 from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, CreateFolderView, EditFolderView, \
     AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
     AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, \
@@ -183,7 +183,7 @@ urlpatterns = [
     path('api/upload/wpwithoutcomes', FileUploadWorkProgramOutcomesAPIView.as_view()),
     path('api/upload/csv', FileUploadAPIView.as_view()),
     path('api/export/docx', DocxFileExportView.as_view()),
-    path('api/upload/plans', UploadPlans),
+    path('api/upload/plans', UploadPlansAPIView.as_view()),
     # path('api/export/docx2', DocxFileExportOldView.as_view()),
     path('api/export/docx/<int:pk>/<int:fs_id>/<int:ap_id>/<int:year>', DocxFileExportView.as_view()),
     path('api/export/syllabus/<int:pk>/<int:fs_id>/<int:ap_id>/<int:year>', SyllabusExportView.as_view()),
