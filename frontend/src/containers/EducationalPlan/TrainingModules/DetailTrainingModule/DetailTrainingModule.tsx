@@ -300,18 +300,16 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                     </Button>
                   ) : <></>
                 }
-                {level !== 0 && (
-                  <Tooltip
-                    title={`Открепить модуль`}>
-                    <DeleteIcon className={classes.deleteIcon}
-                                onClick={this.removeFatherFromModule(item.id, allChild, fatherId)}
-                                style={{
-                                  marginRight: '28px',
-                                  marginTop: '5px',
-                                }}
-                    />
-                  </Tooltip>
-                )}
+                <Tooltip
+                  title={`Открепить модуль`}>
+                  <DeleteIcon className={classes.deleteIcon}
+                              onClick={this.removeFatherFromModule(item.id, allChild, fatherId)}
+                              style={{
+                                marginRight: '28px',
+                                marginTop: '5px',
+                              }}
+                  />
+                </Tooltip>
               </div>
             </TableCell>
           )}
@@ -381,14 +379,14 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           {/*  <AddIcon/>*/}
           {/*  Создать модуль*/}
           {/*</Button>*/}
-          <Button onClick={this.handleAddNewModule(module.id, module?.childs)} variant="outlined" style={{marginRight: 10}}>
+          {Boolean(!module?.change_blocks_of_work_programs_in_modules?.length) && <Button onClick={this.handleAddNewModule(module.id, module?.childs)} variant="outlined" style={{marginRight: 10}}>
             <AddIcon/>
             Добавить модуль
-          </Button>
-          <Button onClick={this.handleCreateNewWPBlock(module.id)} variant="outlined">
+          </Button>}
+          {Boolean(!module?.childs?.length) && <Button onClick={this.handleCreateNewWPBlock(module.id)} variant="outlined">
             <AddIcon/>
             Добавить блок РПД
-          </Button>
+          </Button>}
         </div>
       </>
     )
