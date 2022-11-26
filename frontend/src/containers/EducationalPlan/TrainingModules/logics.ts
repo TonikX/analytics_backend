@@ -73,7 +73,8 @@ const createTrainingModule = createLogic({
         service.createTrainingModule(action.payload)
             .then((res) => {
                 const moduleId = getTrainingModuleId(getState());
-
+                // @ts-ignore
+                dispatch(trainingModuleActions.setTrainingModuleIdForRedirect(res?.data?.id));
                 if (moduleId){
                     //@ts-ignore
                     dispatch(moduleActions.getTrainingModule(moduleId));

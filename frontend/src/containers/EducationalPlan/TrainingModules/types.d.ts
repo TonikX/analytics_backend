@@ -42,6 +42,7 @@ export interface TrainingModulesActions {
     updateChildModules: ActionCreatorWithPayload;
 
     changeEditorList: ActionCreatorWithPayload;
+    setTrainingModuleIdForRedirect: ActionCreatorWithPayload;
 }
 
 export type OpenDialogPayload = {
@@ -104,6 +105,7 @@ export interface trainingModulesState {
         }
     },
     [fields.SHOW_ONLY_MY]: boolean;
+    [fields.TRAINIG_MODULE_ID_FOR_REDIRECT]: number|null;
 }
 
 export interface TrainingModulesProps extends WithStyles<typeof styles>, PropsFromRedux, ActionsFromRedux{}

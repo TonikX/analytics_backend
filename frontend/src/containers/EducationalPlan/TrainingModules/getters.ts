@@ -40,3 +40,4 @@ export const isOpenDialog = (state: rootState, dialog: string) =>
   get(getStateData(state), [dialog, fields.IS_OPEN_DIALOG], false);
 
 export const getShowOnlyMy = (state: rootState) => get(getStateData(state), fields.SHOW_ONLY_MY, false);
+export const getTrainingModuleIdForRedirect = (state: rootState) => get(getStateData(state), fields.TRAINIG_MODULE_ID_FOR_REDIRECT, false);

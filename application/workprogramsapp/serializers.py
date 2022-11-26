@@ -420,7 +420,7 @@ class ZunForManyCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Zun
-        fields = ['id', 'indicator_in_zun', 'items', 'wp_in_fs']
+        fields = ['id', 'indicator_in_zun', 'items', 'wp_in_fs', 'knowledge', 'skills', 'attainments']
 
 
 class ZunForDetailAcademicPlanSerializer(serializers.ModelSerializer):
@@ -890,7 +890,7 @@ class WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer(serialize
 
 class WorkProgramInFieldOfStudyForCompeteceListSerializer(serializers.ModelSerializer):
     """Сериализатор Зунов"""
-    work_program_change_in_discipline_block_module =  WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer()
+    work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer()
 
     class Meta:
         model = WorkProgramInFieldOfStudy

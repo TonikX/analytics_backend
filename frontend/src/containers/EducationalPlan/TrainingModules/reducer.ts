@@ -46,6 +46,7 @@ export const initialState: trainingModulesState = {
     },
     [fields.DETAIL_TRAINING_MODULE]: {},
     [fields.SHOW_ONLY_MY]: false,
+    [fields.TRAINIG_MODULE_ID_FOR_REDIRECT]: null,
 };
 
 const setData = (state: trainingModulesState, {payload}: any): trainingModulesState => ({
@@ -111,6 +112,11 @@ const showOnlyMy = (state: trainingModulesState, {payload}: {payload: boolean}):
     [fields.SHOW_ONLY_MY]: payload
 });
 
+const setTrainingModuleIdForRedirect = (state: trainingModulesState, {payload}: {payload: number|null}): trainingModulesState => ({
+    ...state,
+    [fields.TRAINIG_MODULE_ID_FOR_REDIRECT]: payload
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setTrainingModulesList.type]: setData,
     [actions.setTrainingModule.type]: setTrainingModule,
@@ -122,4 +128,5 @@ export const reducer = createReducer(initialState, {
     [actions.closeDialog.type]: closeDialog,
     [actions.showOnlyMy.type]: showOnlyMy,
     [actions.updateTrainingModuleFilters.type]: updateTrainingModuleFilters,
+    [actions.setTrainingModuleIdForRedirect.type]: setTrainingModuleIdForRedirect,
 });

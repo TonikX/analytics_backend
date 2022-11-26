@@ -1,4 +1,5 @@
 import { StepsEnum } from './enum'
+import React from 'react';
 
 export const typesListArray = [
     {
@@ -105,7 +106,7 @@ export const steps = {
     [StepsEnum.GENERAL]: 'Главная',
     [StepsEnum.MODULES]: 'Учебные модули',
     [StepsEnum.PLANS]: 'Доступные учебные планы',
-    [StepsEnum.EVALUATION_TOOLS]: 'Оценочные средства',
+    [StepsEnum.EVALUATION_TOOLS]: <>Оценочные средства <br /> (не обязательны)</>,
 }
 
 export const selectRulesArray = [

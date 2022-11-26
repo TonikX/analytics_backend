@@ -8,7 +8,7 @@ from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView
     ExpertiseCommentsView, ChangeUserExpertiseView, \
     ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById, \
     DeleteUserExpertise
-from .files_export.views import DocxFileExportView, SyllabusExportView
+from .files_export.views import DocxFileExportView, SyllabusExportView, UploadPlans, UploadPlansAPIView
 from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, CreateFolderView, EditFolderView, \
     AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
     AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, \
@@ -74,7 +74,7 @@ urlpatterns = [
 
     # Старые урлы приложения удалены
     # Блок реализации API
-    path('api/workprograms/', WorkProgramsListApi.as_view()),
+
 
     # Компетенции индикаторы
     # path('api/indicator/', IndicatorListView.as_view(), name='indicator'),
@@ -99,6 +99,7 @@ urlpatterns = [
     path('api/outcomesofworkprogram/<int:workprogram_id>', OutcomesOfWorkProgramList.as_view()),
 
     # Рабочая программа
+    path('api/workprograms/', WorkProgramsListApi.as_view()),
     path('api/workprogram/create', WorkProgramCreateAPIView.as_view()),
     url(r'^api/workprogram/outcomes/prerequisites/relations/(?P<discipline_code>[0-9.]+)/$',
         WorkProgramsWithOutcomesToPrerequisitesForThisWPView.as_view()),
@@ -182,6 +183,7 @@ urlpatterns = [
     path('api/upload/wpwithoutcomes', FileUploadWorkProgramOutcomesAPIView.as_view()),
     path('api/upload/csv', FileUploadAPIView.as_view()),
     path('api/export/docx', DocxFileExportView.as_view()),
+    path('api/upload/plans', UploadPlansAPIView.as_view()),
     # path('api/export/docx2', DocxFileExportOldView.as_view()),
     path('api/export/docx/<int:pk>/<int:fs_id>/<int:ap_id>/<int:year>', DocxFileExportView.as_view()),
     path('api/export/syllabus/<int:pk>/<int:fs_id>/<int:ap_id>/<int:year>', SyllabusExportView.as_view()),
@@ -296,6 +298,7 @@ urlpatterns = [
     path('api/workprogram/statistic/<int:pk>', WorkProgramStatistic),
     path('api/folders/real_remove/<int:pk>', DeleteFolderView.as_view()),
 
+
     # Аттестационные оценочные средства
     path('api/certification_tools/', СertificationEvaluationToolListAPI.as_view()),
     path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
@@ -319,5 +322,6 @@ urlpatterns = [
     url(r'^', include('gia_practice_app.Practice.urls')),
     url(r'^', include('workprogramsapp.bibliographic_reference.urls')),
     url(r'^', include('workprogramsapp.disciplineblockmodules.urls')),
+
 
 ]

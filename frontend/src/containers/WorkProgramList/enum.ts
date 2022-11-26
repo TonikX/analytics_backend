@@ -28,5 +28,6 @@ export enum filterFields{
     ARCHIVE = 'ARCHIVE',
     PREREQUISITE = 'PREREQUISITE',
     OUTCOMES = 'OUTCOMES',
-    EDU_PROGRAM = 'EDU_PROGRAM'
+    EDU_PROGRAM = 'EDU_PROGRAM',
+    STATUS = 'STATUS'
 }

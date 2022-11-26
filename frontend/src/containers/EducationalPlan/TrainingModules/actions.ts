@@ -40,7 +40,10 @@ const addIntermediateCertification = createAction('TRAINING_MODULES_ADD_INTERMED
 const changeIntermediateCertification = createAction('TRAINING_MODULES_CHANGE_INTERMEDIATE_CERTIFICATION');
 const getIntermediateCertification = createAction('TRAINING_MODULES_GET_INTERMEDIATE_CERTIFICATION');
 
+const setTrainingModuleIdForRedirect = createAction('SET_TRAINING_MODULE_ID_FOR_REDIRECT');
+
 const actions: TrainingModulesActions = {
+    setTrainingModuleIdForRedirect,
     updateTrainingModuleFilters,
     deleteIntermediateCertification,
     addIntermediateCertification,

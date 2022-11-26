@@ -1,23 +1,36 @@
 import datetime
 import os
+
+from drf_yasg2 import openapi
+from drf_yasg2.utils import swagger_auto_schema
 from rest_framework import generics, viewsets
 from docxtpl import DocxTemplate, RichText
 from django.http import HttpResponse
 from collections import OrderedDict
-from rest_framework.permissions import IsAuthenticated, AllowAny
+
+from rest_framework.decorators import api_view, permission_classes, action
+from rest_framework.generics import CreateAPIView
+from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 import html2text
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from dataprocessing.serializers import FileUploadSerializer
+from .plan_logic import plans_processor
 from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy, WorkProgram, \
     ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule
 from ..serializers import WorkProgramSerializer
 from rest_framework import generics
 import re
 from docx import Document
+
 """Скачивание рпд в формате docx/pdf"""
 
 
 def get_hours(hour_str: str):
     hours_list = hour_str.split(",")
-    return [round(float(el), 2) for el in hours_list ]
+    return [round(float(el), 2) for el in hours_list]
 
 
 def hours_v2_generator(lec_v2, prac_v2, sro_v2, lab_v2):
@@ -26,7 +39,7 @@ def hours_v2_generator(lec_v2, prac_v2, sro_v2, lab_v2):
     hours_sro_v2 = get_hours(sro_v2)
     hours_lab_v2 = get_hours(lab_v2)
 
-    for i in range(0,12):
+    for i in range(0, 12):
         yield [hours_lec_v2[i], hours_prac_v2[i], hours_sro_v2[i], hours_lab_v2[i]]
 
 
@@ -42,7 +55,7 @@ def render_context(context, **kwargs):
                 wpcb_pk = wpcb['id']
                 if wpcb['credit_units'] != None:
                     wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')
-                    for cu in range (0, 16, 2):
+                    for cu in range(0, 16, 2):
                         if list(wpcb['credit_units'][cu]) != 0:
                             credit_units_list.append(wpcb['credit_units'][cu])
                     hours_getter = hours_v2_generator(context["lecture_hours_v2"], context["practice_hours_v2"],
@@ -50,11 +63,11 @@ def render_context(context, **kwargs):
                     for cu in credit_units_list:
                         try:
                             if int(float(cu)) != 0:
-                                hours_list=next(hours_getter)
-                                contact_hours=round((hours_list[0]+hours_list[1]+hours_list[3])*1.1,2)
+                                hours_list = next(hours_getter)
+                                contact_hours = round((hours_list[0] + hours_list[1] + hours_list[3]) * 1.1, 2)
                                 semester.append({'s': credit_units_list.index(cu) + 1, 'c': cu, 'h': int(cu) * 36,
                                                  "lc_h": hours_list[0], "pc_h": hours_list[1], "sr_h": hours_list[2],
-                                                 "lb_h": hours_list[3], "cnt_h":contact_hours })
+                                                 "lb_h": hours_list[3], "cnt_h": contact_hours})
                             credit_units_list[credit_units_list.index(cu)] = 0
                         except:
                             pass
@@ -86,29 +99,29 @@ def render_context(context, **kwargs):
         if i['contact_work'] is None:
             i['contact_work'] = ''
         else:
-            contact_work += float(i['contact_work'])/context['number_of_semesters']
+            contact_work += float(i['contact_work']) / context['number_of_semesters']
             all_contact_work += float(i['contact_work'])
         if i['lecture_classes'] is None:
             i['lecture_classes'] = ''
         else:
-            lecture_classes += float(i['lecture_classes'])/context['number_of_semesters']
+            lecture_classes += float(i['lecture_classes']) / context['number_of_semesters']
             all_lecture_classes += float(i['lecture_classes'])
         if i['laboratory'] is None:
             i['laboratory'] = ''
         else:
-            laboratory += float(i['laboratory'])/context['number_of_semesters']
+            laboratory += float(i['laboratory']) / context['number_of_semesters']
             all_laboratory += float(i['laboratory'])
         if i['practical_lessons'] is None:
             i['practical_lessons'] = ''
         else:
-            practical_lessons += float(i['practical_lessons'])/context['number_of_semesters']
+            practical_lessons += float(i['practical_lessons']) / context['number_of_semesters']
             all_practical_lessons += float(i['practical_lessons'])
         if i['SRO'] is None:
             i['SRO'] = ''
         else:
-            SRO += float(i['SRO'])/context['number_of_semesters']
-            all_SRO += float(i['SRO'])/context['number_of_semesters']
-        total_hours += 0.0 if i['total_hours'] is None else float(i['total_hours'])/context['number_of_semesters']
+            SRO += float(i['SRO']) / context['number_of_semesters']
+            all_SRO += float(i['SRO']) / context['number_of_semesters']
+        total_hours += 0.0 if i['total_hours'] is None else float(i['total_hours']) / context['number_of_semesters']
         all_total_hours += 0.0 if i['total_hours'] is None else float(i['total_hours'])
         for ev_tool in i['evaluation_tools']:
             if ev_tool not in evaluation_tools:
@@ -120,8 +133,9 @@ def render_context(context, **kwargs):
             else:
                 online_sections.append(i['ordinal_number'])
                 print('online_sections', online_sections)
-                online_list_number +=1
-                online_names.append('{} (url: {})'.format(j['url_online_course']['title'], j['url_online_course']['external_url']))
+                online_list_number += 1
+                online_names.append(
+                    '{} (url: {})'.format(j['url_online_course']['title'], j['url_online_course']['external_url']))
                 if j['url_online_course'] not in url_online_course:
                     url_online_course.append(j['url_online_course'])
         i['online_list'] = ', '.join(map(str, set(online_names)))
@@ -136,10 +150,13 @@ def render_context(context, **kwargs):
         template_context['QUALIFICATION'] = 'МАГИСТР'
     else:
         template_context['QUALIFICATION'] = 'ИНЖЕНЕР'
-    template_context['academic_plan'] = str(ImplementationAcademicPlan.objects.get(academic_plan__id = ap_obj.id).title) + ' (' + \
-                                        str(FieldOfStudy.objects.get(implementation_academic_plan_in_field_of_study__academic_plan__id = ap_obj.id).number) + ')'
+    template_context['academic_plan'] = str(
+        ImplementationAcademicPlan.objects.get(academic_plan__id=ap_obj.id).title) + ' (' + \
+                                        str(FieldOfStudy.objects.get(
+                                            implementation_academic_plan_in_field_of_study__academic_plan__id=ap_obj.id).number) + ')'
     template_context['semester'] = semester
-    template_context['total_hours_1'] = [round(contact_work, 2), round(lecture_classes, 2), round(laboratory, 2), round(practical_lessons, 2), round(SRO, 2)]
+    template_context['total_hours_1'] = [round(contact_work, 2), round(lecture_classes, 2), round(laboratory, 2),
+                                         round(practical_lessons, 2), round(SRO, 2)]
     template_context['year'] = kwargs['year']
     if context['authors'] is None:
         template_context['author'] = ''
@@ -149,7 +166,7 @@ def render_context(context, **kwargs):
         template_context['authors'] = context['authors'].split(', ')
     template_context['tbl_competence'] = tbl_competence
     template_context['total_hours'] = [contact_work, lecture_classes, laboratory, practical_lessons, SRO, total_hours]
-    print('ff',all_laboratory)
+    print('ff', all_laboratory)
     template_context['all_total_hours'] = [round(el, 2) for el in
                                            [all_contact_work, all_lecture_classes, all_laboratory,
                                             all_practical_lessons, all_SRO, all_total_hours]]
@@ -159,14 +176,14 @@ def render_context(context, **kwargs):
     template_context['sections_online'] = ', '.join(map(str, set(online_sections)))
     template_context['sections_replaced_onl'] = ''
     online_list_number_list = ''
-    for i in range(1, online_list_number+1):
+    for i in range(1, online_list_number + 1):
         online_list_number_list = online_list_number_list + '{}'.format(str(i))
         if int(i) != int(online_list_number):
             online_list_number_list = online_list_number_list + ', '
     template_context['online_list_number_list'] = online_list_number_list
     template_context['bibliographic_reference'] = context['bibliographic_reference']
     for bib in template_context['bibliographic_reference']:
-        bib['description'] =  re.sub('<[^>]*>', '', str(bib['description']))
+        bib['description'] = re.sub('<[^>]*>', '', str(bib['description']))
     template_context['online_course'] = url_online_course
     template_context['evaluation_tools'] = evaluation_tools
     filename = str(fs_obj.number) + '_' + str(context['discipline_code']) + '_' + str(
@@ -187,13 +204,14 @@ def render_context(context, **kwargs):
     items_min_semester_3 = []
     items_max_semester_4 = []
     items_min_semester_4 = []
-    k=0
+    k = 0
     for i in template_context['evaluation_tools']:
         i['description'] = ''
-        i['url']= 'https://op.itmo.ru/work-program/{}/evaluation-tools/{}'.format(context['id'], i['id'])
+        i['url'] = 'https://op.itmo.ru/work-program/{}/evaluation-tools/{}'.format(context['id'], i['id'])
         tpl
         rt = RichText()
-        rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id('https://op.itmo.ru/work-program/{}/evaluation-tools/{}'.format(context['id'], i['id'])))
+        rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id(
+            'https://op.itmo.ru/work-program/{}/evaluation-tools/{}'.format(context['id'], i['id'])))
         i['url'] = rt
         if i['semester'] == 1:
             evaluation_tool_semester_1.append(i)
@@ -234,10 +252,12 @@ def render_context(context, **kwargs):
     template_context['control_types_in_semester'] = ['', '', '', '']
     for item in context['certification_evaluation_tools']:
         try:
-            item['url']= 'https://op.itmo.ru/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])
+            item['url'] = 'https://op.itmo.ru/work-program/{}/intermediate-certification/{}'.format(context['id'],
+                                                                                                    item['id'])
             tpl
             rt = RichText()
-            rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id('https://op.itmo.ru/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])))
+            rt.add('Ссылка на описание оценочного средства', url_id=tpl.build_url_id(
+                'https://op.itmo.ru/work-program/{}/intermediate-certification/{}'.format(context['id'], item['id'])))
             item['url'] = rt
             item['description'] = html2text.html2text(item['description'])
             if item['type'] == '1':
@@ -248,29 +268,29 @@ def render_context(context, **kwargs):
                 item['type'] = 'Зачет'
             elif item['type'] == '4':
                 item['type'] = 'Курсовая работа'
-            item ['description'] = ''
-            if item ['semester'] == 1:
+            item['description'] = ''
+            if item['semester'] == 1:
                 if item['max'] is not None:
                     items_max_semester_1.append(item['max'])
                 if item['min'] is not None:
                     items_min_semester_1.append(item['min'])
                 certification_evaluation_tools_semestr_1.append(item)
                 semester[0]['t'] = item['type']
-            if item ['semester'] == 2:
+            if item['semester'] == 2:
                 if item['max'] is not None:
                     items_max_semester_2.append(item['max'])
                 if item['min'] is not None:
                     items_min_semester_2.append(item['min'])
                 certification_evaluation_tools_semestr_2.append(item)
                 semester[1]['t'] = item['type']
-            if item ['semester'] == 3:
+            if item['semester'] == 3:
                 if item['max'] is not None:
                     items_max_semester_3.append(item['max'])
                 if item['min'] is not None:
                     items_min_semester_3.append(item['min'])
                 certification_evaluation_tools_semestr_3.append(item)
                 semester[2]['t'] = item['type']
-            if item ['semester'] == 4:
+            if item['semester'] == 4:
                 if item['max'] is not None:
                     items_max_semester_4.append(item['max'])
                 if item['min'] is not None:
@@ -301,7 +321,7 @@ def render_context(context, **kwargs):
     print('bib', template_context['bibliographic_reference'])
     print(semester)
     return template_context, filename
-        #, evaluation_tools_pdf_docs
+    # , evaluation_tools_pdf_docs
 
 
 """Контроллер для выгрузки docx-файла РПД"""
@@ -327,7 +347,7 @@ class DocxFileExportView(generics.ListAPIView):
             sub_doc = Document(file)
 
             # Don't add a page break if you've reached the last file.
-            if index < len(files)-1:
+            if index < len(files) - 1:
                 sub_doc.add_page_break()
 
             for element in sub_doc.element.body:
@@ -344,7 +364,7 @@ class DocxFileExportView(generics.ListAPIView):
         context, filename = render_context(data, field_of_study_id=kwargs['fs_id'],
                                            academic_plan_id=kwargs['ap_id'], year=kwargs['year'])
         tpl.render(context)
-        tpl.save('upload/'+str(filename)) #-- сохранение в папку локально (нужно указать актуальный путь!)
+        tpl.save('upload/' + str(filename))  # -- сохранение в папку локально (нужно указать актуальный путь!)
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
         response['Content-Disposition'] = 'inline; filename="%s"' % filename
 
@@ -423,3 +443,27 @@ class SyllabusExportView(generics.ListAPIView):
         tpl.save(response)
 
         return response
+
+
+@api_view(['POST'])
+@permission_classes((IsAdminUser,))
+def UploadPlans(request):
+    """
+    Метод принимает xlsx-файл с планами 2023 года
+    """
+    file = request.FILES["plans"]
+    print(file)
+    return Response(plans_processor(file))
+
+
+class UploadPlansAPIView(CreateAPIView):
+    parser_classes = (MultiPartParser,)
+
+    @swagger_auto_schema(operation_description='Создание ОП по xlsx-файлу  c ОП 2023 года',
+                         manual_parameters=[openapi.Parameter('plans', openapi.IN_FORM, type=openapi.TYPE_FILE,
+                                                              description='xlsx-файл')])
+    @action(detail=False, methods=['post'])
+    def post(self, request, **kwargs):
+        file = request.FILES["plans"]
+        print(file)
+        return Response(status=201, data={"rows_passed": plans_processor(file)})

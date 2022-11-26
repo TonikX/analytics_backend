@@ -76,7 +76,8 @@ class WorkProgramsListApi(generics.ListAPIView):
                         'qualification',
                         'prerequisites', 'outcomes', 'structural_unit__title',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__title',
-                        'editors__last_name', 'editors__first_name', 'work_status'
+                        'editors__last_name', 'editors__first_name', 'work_status',
+                        'expertise_with_rpd__expertise_status'
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -146,7 +147,10 @@ class ZunManyViewSet(viewsets.ModelViewSet):
             "zun": {
               "indicator_in_zun": 16,
               "items": []
-                }
+                },
+              "knowledge",
+              "skills",
+              "attainments"
             }
         """
 
@@ -1962,7 +1966,12 @@ class AcademicPlanCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+
+        academic_plan = serializer.save(author=self.request.user)
+        DisciplineBlock.objects.create(name="Блок 1. Модули (дисциплины)", academic_plan=academic_plan)
+        DisciplineBlock.objects.create(name="Блок 2. Практика", academic_plan=academic_plan)
+        DisciplineBlock.objects.create(name="Блок 3. ГИА", academic_plan=academic_plan)
+        DisciplineBlock.objects.create(name="Блок 4. Факультативные модули (дисциплины)", academic_plan=academic_plan)
         AcademicPlan.clone_descipline_blocks(self, serializer)
 
 
