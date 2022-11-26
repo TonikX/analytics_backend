@@ -71,6 +71,10 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         this.props.actions.getEducationalDetail(planId);
     }
 
+    componentWillUnmount() {
+        this.props.actions.pageDown();
+    }
+
     getPlanId = () => get(this, 'props.match.params.id');
 
     handleClickBlockDelete = (id: number, length: number) => () => {

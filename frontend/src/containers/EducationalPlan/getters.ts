@@ -23,6 +23,8 @@ export const getEducationalPlanDetailBlocks = (state: rootState): Array<Educatio
     get(getEducationalPlanDetail(state), EducationalPlanFields.DISCIPLINE_BLOCKS, []);
 export const getEducationalPlanDetailId = (state: rootState): Array<EducationalPlanType> =>
     get(getEducationalPlanDetail(state), EducationalPlanFields.ID, '');
+export const getEducationalPlanOpId = (state: rootState): Array<EducationalPlanType> =>
+    get(getEducationalPlanDetail(state), 'academic_plan_in_field_of_study.0.id', '');
 
 export const getEducationalPlanForSelector = (state: rootState): SelectorListType =>
     getEducationalPlan(state).map((plan: EducationalPlanListType) => ({
