@@ -148,10 +148,12 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
             set_of_units = module_for_filter.get_structural_units()
             queryset = queryset.filter(
                 editors__user_for_structural_unit__structural_unit__id__in=set_of_units,
-                only_for_struct_units=True).exclude(
+                #only_for_struct_units=True).exclude(
                 id=module_for_filter.id)
 
         if filter_non_struct == "true":
+            queryset = queryset | DisciplineBlockModule.objects.filter(only_for_struct_units=False)
+        else:
             queryset = queryset | DisciplineBlockModule.objects.filter(only_for_struct_units=False)
 
         if allowed_id:
@@ -163,7 +165,7 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
         if without_me:
             queryset = queryset.exclude(id=without_me)
 
-        queryset=queryset.filter().distinct()
+        queryset = queryset.filter().distinct()
 
         page = self.paginate_queryset(queryset)
         if page is not None:
