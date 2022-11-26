@@ -110,6 +110,7 @@ class WorkProgram(CloneMixin, models.Model):
     contact_hours_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Часы Контактной работы")
     consultation_v2 = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Консультации")
     number_of_semesters = models.IntegerField(blank=True, null=True, verbose_name="Количество семестров в дисциплине")
+    ze_v_sem = models.CharField(max_length=1024, blank=True, null=True, verbose_name="Количество зачетных единиц у РПД")
     read_notifications = models.CharField(max_length=256,
                                           default='False, False, False, False, False, False, False, False, False, False',
                                           verbose_name="Прочитанность уведомлений")
