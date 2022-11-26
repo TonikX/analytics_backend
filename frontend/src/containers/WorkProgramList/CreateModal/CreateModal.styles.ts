@@ -2,20 +2,17 @@ import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
     input: {
-        width: '550px',
+        width: '100%',
         marginBottom: '30px',
     },
     specializationSelector: {
-        width: '550px',
-    },
-    lastInput: {
-        width: '550px',
+        width: '100%',
     },
     selector: {
-        width: '550px'
+        width: '100%'
     },
     languageSelector: {
-        width: '550px',
+        width: '100%',
         marginBottom: 30,
     },
     radioGroup: {

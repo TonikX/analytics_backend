@@ -18,6 +18,8 @@ export type HoursSection = {
     lecture_classes: number,
     practical_lessons: number,
     laboratory: number,
+    ze_v_sem: number,
+    evaluation_tools: number[],
 }
 
 export type EditableRowProps = {
