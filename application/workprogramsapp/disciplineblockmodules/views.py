@@ -149,7 +149,8 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
             queryset = queryset.filter(
                 editors__user_for_structural_unit__structural_unit__id__in=set_of_units,
                 #only_for_struct_units=True).exclude(
-                id=module_for_filter.id)
+                #id=module_for_filter.id
+            )
 
         if filter_non_struct == "true":
             queryset = queryset | DisciplineBlockModule.objects.filter(only_for_struct_units=False)
