@@ -143,19 +143,19 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
         without_me = self.request.GET.get('without_me')
         allowed_id = self.request.GET.get("allowed_to_add_ap_id")
 
-        filter_struct = DisciplineBlockModule.objects.none()
         if id_module_for_filter_struct:
             module_for_filter = DisciplineBlockModule.objects.get(id=id_module_for_filter_struct)
             set_of_units = module_for_filter.get_structural_units()
-            filter_struct = queryset.filter(
+            queryset = queryset.filter(
                 editors__user_for_structural_unit__structural_unit__id__in=set_of_units,
                 only_for_struct_units=True).exclude(
                 id=module_for_filter.id)
 
         if filter_non_struct == "true":
-            queryset = queryset.filter(only_for_struct_units=False) | filter_struct
-        elif id_module_for_filter_struct:
-            queryset = filter_struct
+            queryset = queryset | DisciplineBlockModule.objects.filter(only_for_struct_units=False)
+
+        if allowed_id:
+            queryset = queryset.filter(educational_programs_to_access__id=allowed_id)
 
         if user_filtering == "true":
             queryset = queryset.filter(editors=self.request.user)
@@ -163,8 +163,7 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
         if without_me:
             queryset = queryset.exclude(id=without_me)
 
-        if allowed_id:
-            queryset = queryset.filter(educational_programs_to_access__id=allowed_id)
+        queryset=queryset.filter().distinct()
 
         page = self.paginate_queryset(queryset)
         if page is not None:
