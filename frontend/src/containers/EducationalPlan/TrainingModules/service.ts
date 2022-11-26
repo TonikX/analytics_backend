@@ -14,6 +14,9 @@ class TrainingModulesService extends AnalyticsService{
         if (filters.moduleId) {
             filtersString += `&id_module_for_filter_struct=${filters.moduleId}`
         }
+        if (filters.planId) {
+            filtersString += `&allowed_to_add_ap_id=${filters.planId}`
+        }
         if (showOnlyMy) {
             filtersString += `&for_user=true`
         }

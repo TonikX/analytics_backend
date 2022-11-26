@@ -27,8 +27,10 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
         selectedTrainingModules: [] as TrainingModuleType[]
     };
 
-    componentDidMount() {
-        this.searchModules()
+    componentDidUpdate(prevProps: Readonly<TrainingModuleCreateModalProps>, prevState: Readonly<{ selectedTrainingModules: TrainingModuleType[] }>, snapshot?: any) {
+        if (!prevProps.isOpen && this.props.isOpen) {
+            this.searchModules()
+        }
     }
 
     handleClose = () => {
