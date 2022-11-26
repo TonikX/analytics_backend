@@ -465,6 +465,14 @@ class PrerequisitesOfWorkProgramUpdateView(generics.UpdateAPIView):
 # Блок эндпоинтов рабочей программы
 
 class WorkProgramCreateAPIView(generics.CreateAPIView):
+    """
+    API для создание рабочей програмы
+    Поле evaluation_tools принимает двумерный массив с id-типами оценочных средств. Индекс каждого подмасива - номер
+    семестра
+
+    Пример:
+    "evaluation_tools": [[1,4],[1]]
+    """
     serializer_class = WorkProgramCreateSerializer
     queryset = WorkProgram.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]

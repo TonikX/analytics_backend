@@ -272,13 +272,26 @@ class WorkProgramForIndividualRoutesSerializer(serializers.ModelSerializer):
 class WorkProgramCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания рабочих программ"""
 
+    evaluation_tools = serializers.ListField(write_only=True, required=False,
+                                             child=serializers.ListField(write_only=True, required=False,
+                                                                         child=serializers.IntegerField()))
+
+    def create(self, validated_data):
+
+        evaluation_tools = validated_data.pop("evaluation_tools", None)
+        wp = super(WorkProgramCreateSerializer, self).create(validated_data)
+        for i in range(len(evaluation_tools)):
+            for tool in evaluation_tools[i]:
+                СertificationEvaluationTool.objects.create(type=tool, work_program=wp, semester=i + 1)
+        return wp
+
     class Meta:
         model = WorkProgram
         fields = ['id', 'discipline_code', 'authors', 'qualification', 'title', 'hoursFirstSemester',
-                  'hoursSecondSemester', 'bibliographic_reference', 'description', 'video','owner','editors', 'hours',
+                  'hoursSecondSemester', 'bibliographic_reference', 'description', 'video', 'owner', 'editors', 'hours',
                   'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format',
-                  'lecture_hours_v2', 'practice_hours_v2', 'practice_hours_v2', 'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2',
-                  'contact_hours_v2']
+                  'lecture_hours_v2', 'practice_hours_v2', 'practice_hours_v2', 'practice_hours_v2', 'lab_hours_v2',
+                  'srs_hours_v2', 'contact_hours_v2', "ze_v_sem", "evaluation_tools"]
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }
@@ -817,7 +830,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
                   'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
                   'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
                   'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'contact_hours_v2', 'number_of_semesters', 'read_notifications',
-                  'implementation_format']
+                  'implementation_format', "ze_v_sem"]
 
     def create(self, validated_data):
         """
