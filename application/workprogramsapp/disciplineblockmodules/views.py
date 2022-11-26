@@ -164,8 +164,7 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
             queryset = queryset.exclude(id=without_me)
 
         if allowed_id:
-            queryset = (queryset.filter(only_for_struct_units=False) | queryset.filter(
-                educational_programs_to_access__id=allowed_id)).distinct()
+            queryset = queryset.filter(educational_programs_to_access__id=allowed_id)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
