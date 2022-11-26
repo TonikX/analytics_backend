@@ -153,8 +153,8 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
 
         if filter_non_struct == "true":
             queryset = queryset | DisciplineBlockModule.objects.filter(only_for_struct_units=False)
-        else:
-            queryset = queryset | DisciplineBlockModule.objects.filter(only_for_struct_units=False)
+        # else:
+        #     queryset = queryset | DisciplineBlockModule.objects.filter(only_for_struct_units=False)
 
         if allowed_id:
             queryset = queryset.filter(educational_programs_to_access__id=allowed_id)
