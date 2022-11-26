@@ -12,7 +12,7 @@ class TrainingModulesService extends AnalyticsService{
         let filtersString = `id=${filters.id}&module_isu_id__icontains=${filters.isuId}&name__icontains=${filters.name}&descipline_block__name__icontains=${filters.disciplineName}&filter_non_struct=${filters.availableForAll}`
 
         if (filters.moduleId) {
-            filtersString += `&id_module_for_filter_struct=${filters.moduleId}`
+            filtersString += `&allowed_to_add_ap_id=${filters.moduleId}`
         }
         if (showOnlyMy) {
             filtersString += `&for_user=true`
