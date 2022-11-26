@@ -121,8 +121,16 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
     for_user = openapi.Parameter('for_user', openapi.IN_QUERY,
                                  description="Если true находит все модули, принадлежащие запрашивающему юзеру",
                                  type=openapi.TYPE_BOOLEAN)
+    without_me = openapi.Parameter('without_me', openapi.IN_QUERY,
+                                   description="исключить модуль из вывода в списке по id",
+                                   type=openapi.TYPE_INTEGER)
+    allowed_to_add_ap_id = openapi.Parameter('allowed_to_add_ap_id', openapi.IN_QUERY,
+                                             description="id ImplementationAcademicPlan для поиска всех доступных "
+                                                         "для него модулей",
+                                             type=openapi.TYPE_INTEGER)
 
-    @swagger_auto_schema(manual_parameters=[id_module_for_filter_struct, filter_non_struct, for_user])
+    @swagger_auto_schema(
+        manual_parameters=[id_module_for_filter_struct, filter_non_struct, for_user, without_me, allowed_to_add_ap_id])
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
@@ -132,6 +140,8 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
         id_module_for_filter_struct = self.request.GET.get('id_module_for_filter_struct')
         filter_non_struct = self.request.GET.get('filter_non_struct')
         user_filtering = self.request.GET.get('for_user')
+        without_me = self.request.GET.get('without_me')
+        allowed_id = self.request.GET.get("allowed_to_add_ap_id")
 
         filter_struct = DisciplineBlockModule.objects.none()
         if id_module_for_filter_struct:
@@ -149,6 +159,13 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
 
         if user_filtering == "true":
             queryset = queryset.filter(editors=self.request.user)
+
+        if without_me:
+            queryset = queryset.exclude(id=without_me)
+
+        if allowed_id:
+            queryset = (queryset.filter(only_for_struct_units=False) | queryset.filter(
+                educational_programs_to_access__id=allowed_id)).distinct()
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -219,15 +236,15 @@ class WorkWithBlocksApiView(APIView):
                                type=openapi.TYPE_ARRAY)
 
     @swagger_auto_schema(request_body=openapi.Schema(
-                             type=openapi.TYPE_OBJECT,
-                             required=['version'],
-                             properties={
-                                 'modules': openapi.Schema(type=openapi.TYPE_ARRAY,
-                                                           items=openapi.Items(type=openapi.TYPE_INTEGER)),
-                                 'descipline_block': openapi.Schema(type=openapi.TYPE_INTEGER)
-                             },
-                         ),
-                         operation_description='Метод для обновления связей с блоками')
+        type=openapi.TYPE_OBJECT,
+        required=['version'],
+        properties={
+            'modules': openapi.Schema(type=openapi.TYPE_ARRAY,
+                                      items=openapi.Items(type=openapi.TYPE_INTEGER)),
+            'descipline_block': openapi.Schema(type=openapi.TYPE_INTEGER)
+        },
+    ),
+        operation_description='Метод для обновления связей с блоками')
     def post(self, request):
         """
         Метод для обновления связей с блоками
@@ -237,7 +254,8 @@ class WorkWithBlocksApiView(APIView):
             for module in request_data.validated_data['modules_in_discipline_block']:
                 module.descipline_block.add(request_data.validated_data['id'])
                 module.save()
-            print(DisciplineBlock.objects.filter(id = request_data.validated_data['id']).values_list('modules_in_discipline_block'))
+            print(DisciplineBlock.objects.filter(id=request_data.validated_data['id']).values_list(
+                'modules_in_discipline_block'))
             return Response(status=status.HTTP_201_CREATED)
         return Response(request_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
