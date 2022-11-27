@@ -117,7 +117,7 @@ class CreateModal extends React.PureComponent<EducationalStandardCreateModalProp
                       onChange={this.changeYear}
                       format={YEAR_DATE_FORMAT}
                       minDate={'1984'}
-                      maxDate={currentDate.getFullYear().toString()}
+                      maxDate={'2026'}
                     />
                 </DialogContent>
                 <DialogActions>
