@@ -84,22 +84,22 @@ class CreateModal extends React.PureComponent<CourseCreateModalProps> {
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} компетенцию</DialogTitle>
                 <DialogContent>
-                    <TextField label="Название компетенции *"
-                               onChange={this.saveField(CompetenceFields.TITLE)}
+                    <TextField label="Номер компетенции *"
+                               onChange={this.saveField(CompetenceFields.NUMBER)}
                                variant="outlined"
                                className={classNames(classes.input, classes.marginBottom30)}
                                fullWidth
-                               value={competence[CompetenceFields.TITLE]}
+                               value={competence[CompetenceFields.NUMBER]}
                                InputLabelProps={{
                                    shrink: true,
                                }}
                     />
-                    <TextField label="Номер компетенции *"
-                               onChange={this.saveField(CompetenceFields.NUMBER)}
+                    <TextField label="Название компетенции *"
+                               onChange={this.saveField(CompetenceFields.TITLE)}
                                variant="outlined"
                                className={classes.input}
                                fullWidth
-                               value={competence[CompetenceFields.NUMBER]}
+                               value={competence[CompetenceFields.TITLE]}
                                InputLabelProps={{
                                    shrink: true,
                                }}

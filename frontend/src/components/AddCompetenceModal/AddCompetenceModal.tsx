@@ -115,6 +115,16 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
         <DialogContent>
           {createCompetence ? (
             <>
+              <TextField label="Номер компетенции *"
+                         onChange={this.changeNewCompetence(CompetenceFields.NUMBER)}
+                         variant="outlined"
+                         fullWidth
+                // @ts-ignore
+                         value={newCompetence[CompetenceFields.NUMBER]}
+                         InputLabelProps={{
+                           shrink: true,
+                         }}
+              />
               <TextField label="Название компетенции *"
                          onChange={this.changeNewCompetence(CompetenceFields.TITLE)}
                          variant="outlined"
@@ -122,16 +132,6 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
                          fullWidth
                          // @ts-ignore
                          value={newCompetence[CompetenceFields.TITLE]}
-                         InputLabelProps={{
-                           shrink: true,
-                         }}
-              />
-              <TextField label="Номер компетенции *"
-                         onChange={this.changeNewCompetence(CompetenceFields.NUMBER)}
-                         variant="outlined"
-                         fullWidth
-                         // @ts-ignore
-                         value={newCompetence[CompetenceFields.NUMBER]}
                          InputLabelProps={{
                            shrink: true,
                          }}
