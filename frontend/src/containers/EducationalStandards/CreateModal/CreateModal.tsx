@@ -111,7 +111,7 @@ class CreateModal extends React.PureComponent<EducationalStandardCreateModalProp
                     <DatePickerComponent
                       label="Год *"
                       views={["year"]}
-                      value={educationalStandard[EducationalStandardFields.YEAR]}
+                      value={educationalStandard[EducationalStandardFields.YEAR].toString()}
                       onChange={this.changeYear}
                       format={YEAR_DATE_FORMAT}
                     />
