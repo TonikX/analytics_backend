@@ -88,6 +88,8 @@ class CreateModal extends React.PureComponent<EducationalStandardCreateModalProp
 
         const isEditMode = Boolean(educationalStandard[EducationalStandardFields.ID]);
 
+        const currentDate = new Date();
+
         return (
             <Dialog
                 open={isOpen}
@@ -114,6 +116,8 @@ class CreateModal extends React.PureComponent<EducationalStandardCreateModalProp
                       value={educationalStandard[EducationalStandardFields.YEAR].toString()}
                       onChange={this.changeYear}
                       format={YEAR_DATE_FORMAT}
+                      minDate={'1984'}
+                      maxDate={currentDate.getFullYear().toString()}
                     />
                 </DialogContent>
                 <DialogActions>

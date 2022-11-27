@@ -9,4 +9,6 @@ export interface DatePickerProps extends WithStyles<typeof styles> {
     format?: string;
     views?: Array<DatePickerView>;
     value: string;
+    minDate?: string;
+    maxDate?: string;
 }
