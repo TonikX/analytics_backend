@@ -290,7 +290,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         />
                     </div>
                     <FormControl className={classes.marginTop20} component="fieldset">
-                        <FormLabel component="legend">Длительность семестров *</FormLabel>
+                        <FormLabel component="legend">Длительность в семестрах *</FormLabel>
                         <RadioGroup className={classes.radioGroup}
                                     onChange={this.saveField(WorkProgramGeneralFields.SEMESTER_COUNT)}>
                             {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (

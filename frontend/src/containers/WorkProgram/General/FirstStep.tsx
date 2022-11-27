@@ -480,6 +480,7 @@ class FirstStep extends React.Component<FirstStepProps> {
               wrapClass={classes.selectorWrap}
               onChange={this.changeImplementationFormat}
               noMargin
+              disabled
             />
           )}
           <Typography className={classes.marginBottom20}>Обратите внимание, при выборе онлайн формата все ваши введенные часы будут обнулены</Typography>
