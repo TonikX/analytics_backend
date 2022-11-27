@@ -134,7 +134,11 @@ class Competences extends React.Component<CompetenceProps> {
                             {competences.map(competence =>
                                 <div className={classes.row} key={competence[CompetenceFields.ID]}>
                                     <Typography className={classNames(classes.marginRight, classes.numberCell)}> {competence[CompetenceFields.NUMBER]} </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}> {competence[CompetenceFields.TITLE]} </Typography>
+                                    <Typography className={classNames(classes.marginRight, classes.titleCell, classes.link)}>
+                                        <Link to={appRouter.getCompetenceIndicatorsRouteLink(competence[CompetenceFields.ID])}>
+                                            {competence[CompetenceFields.TITLE]}
+                                        </Link>
+                                    </Typography>
                                     <div className={classes.actions}>
                                         <IconButton>
                                             <Link style={{textDecoration: 'none', height: '23px', color: 'rgba(0, 0, 0, 0.54)'}}
