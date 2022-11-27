@@ -4,7 +4,7 @@ import get from 'lodash/get';
 import moment from 'moment';
 import Scrollbars from "react-custom-scrollbars";
 
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
@@ -61,8 +61,21 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
         this.props.actions.getWorkProgramList();
     }
 
+    componentDidUpdate(prevProps: WorkProgramListProps) {
+        if (prevProps.workProgramIdForRedirect !== this.props.workProgramIdForRedirect && this.props.workProgramIdForRedirect){
+            this.navigateToWorkProgram();
+        }
+    }
+
     componentWillUnmount() {
         this.props.actions.pageDown();
+    }
+
+    navigateToWorkProgram = () => {
+        // @ts-ignore
+        const {history, workProgramIdForRedirect} = this.props;
+        this.props.actions.setWorkProgramIdForRedirect(null);
+        history.push(appRouter.getWorkProgramLink(workProgramIdForRedirect!));
     }
 
     handleClickDelete = (id: number) => () => {
@@ -369,4 +382,4 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
 }
 
 // @ts-ignore
-export default connect(withStyles(styles)(WorkProgramList));
+export default connect(withStyles(styles)(withRouter(WorkProgramList)));

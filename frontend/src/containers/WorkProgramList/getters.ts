@@ -14,6 +14,8 @@ import {WorkProgramGeneralFields} from "../WorkProgram/enum";
 
 const getStateData = (state: rootState): workProgramListState => get(state, GENERAL_PATH);
 export const getWorkProgramList = (state: rootState): Array<WorkProgramGeneralType> => get(getStateData(state), fields.WORK_PROGRAM_LIST, []);
+export const getWorkProgramIdForRedirect = (state: rootState): number|null =>
+    get(getStateData(state), fields.WORK_PROGRAM_ID_FOR_REDIRECT, null);
 
 export const getWorkProgramsListForSelector = (state: rootState): SelectorListType =>
     getWorkProgramList(state).map((workProgram: WorkProgramGeneralType) => ({

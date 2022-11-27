@@ -31,7 +31,8 @@ export const initialState: workProgramListState = {
     [fields.WORK_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
-    }
+    },
+    [fields.WORK_PROGRAM_ID_FOR_REDIRECT]: null,
 };
 
 const setWorkProgramList = (state: workProgramListState, {payload}: any): workProgramListState => ({
@@ -52,6 +53,11 @@ const changeCurrentPage = (state: workProgramListState, {payload}: any): workPro
 const changeAllCount = (state: workProgramListState, {payload}: any): workProgramListState => ({
     ...state,
     [fields.ALL_COUNT]: payload,
+});
+
+const setWorkProgramIdForRedirect = (state: workProgramListState, {payload}: any): workProgramListState => ({
+    ...state,
+    [fields.WORK_PROGRAM_ID_FOR_REDIRECT]: payload,
 });
 
 const changeFiltering = (state: workProgramListState, {payload}: any): workProgramListState => ({
@@ -98,4 +104,5 @@ export const reducer = createReducer(initialState, {
     [actions.changeSorting.type]: changeSorting,
     [actions.pageDown.type]: pageDown,
     [actions.changeFiltering.type]: changeFiltering,
+    [actions.setWorkProgramIdForRedirect.type]: setWorkProgramIdForRedirect,
 });

@@ -11,7 +11,7 @@ import {
     getSortingMode,
     getSortingField,
     getShowOnlyMy,
-    getShowArchive, getStatus
+    getShowArchive, getStatus, getWorkProgramIdForRedirect
 } from './getters';
 
 import {rootState} from "../../store/reducers";
@@ -27,6 +27,7 @@ const mapStateToProps = (state: rootState) => {
         showOnlyMy: getShowOnlyMy(state),
         showArchive: getShowArchive(state),
         status: getStatus(state),
+        workProgramIdForRedirect: getWorkProgramIdForRedirect(state),
     };
 };
 
