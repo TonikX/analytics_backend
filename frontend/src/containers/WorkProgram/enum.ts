@@ -64,6 +64,8 @@ export enum WorkProgramGeneralFields {
     SRS_HOURS = 'srs_hours_v2',
     PRACTICE_HOURS = 'practice_hours_v2',
     LECTURE_HOURS = 'lecture_hours_v2',
+    ZE_V_SEM = 'ze_v_sem',
+    EVALUATION_TOOLS = 'evaluation_tools',
 }
 
 export enum workProgramSectionFields {

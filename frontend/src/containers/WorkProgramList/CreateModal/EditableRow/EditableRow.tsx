@@ -1,11 +1,13 @@
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import TextField from "@material-ui/core/TextField/TextField";
-import {workProgramSectionFields} from "./enum";
+import {EVALUATION_TOOLS, workProgramSectionFields} from "./enum";
 import React from "react";
 
 import {useStyles} from './EditableRow.styles';
 import {EditableRowProps} from "../types";
+import {Select} from "@material-ui/core";
+import MenuItem from "@material-ui/core/MenuItem";
 
 function EditableRow(props: EditableRowProps) {
     const classes = useStyles();
@@ -17,8 +19,27 @@ function EditableRow(props: EditableRowProps) {
             [field]: e?.target?.value,
         }, semesterNum);
     };
+
+    const handleEvaluationToolsChange = (e: React.ChangeEvent<any>) => {
+        updateRow({
+            ...section,
+            //@ts-ignore
+            [workProgramSectionFields.EVALUATION_TOOLS]: e?.target?.value,
+        }, semesterNum);
+    };
+
     return (
         <TableRow>
+            <TableCell className={classes.centerCell}>
+                <TextField
+                    variant="outlined"
+                    size="small"
+                    defaultValue={section[workProgramSectionFields.ZE_V_SEM]}
+                    className={classes.smallInput}
+                    type="number"
+                    onChange={handleChangeField(workProgramSectionFields.ZE_V_SEM)}
+                />
+            </TableCell>
             <TableCell className={classes.centerCell}>
                 <TextField
                     variant="outlined"
@@ -58,6 +79,15 @@ function EditableRow(props: EditableRowProps) {
                     type="number"
                     onChange={handleChangeField(workProgramSectionFields.SPO)}
                 />
+            </TableCell>
+            <TableCell className={classes.centerCell}>
+                <Select value={section[workProgramSectionFields.EVALUATION_TOOLS]} placeholder="Оценочное средство" onChange={handleEvaluationToolsChange} fullWidth multiple>
+                    {EVALUATION_TOOLS.map(item =>
+                        <MenuItem value={item.value} key={`group-${item.value}`}>
+                            {item.label}
+                        </MenuItem>
+                    )}
+                </Select>
             </TableCell>
         </TableRow>
     );
