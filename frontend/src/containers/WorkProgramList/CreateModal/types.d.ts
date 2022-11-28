@@ -14,7 +14,6 @@ export interface CreateModalProps extends WithStyles<typeof styles> {
 }
 
 export type HoursSection = {
-    SRO: number,
     lecture_classes: number,
     practical_lessons: number,
     laboratory: number,

@@ -67,16 +67,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     getNewSection = (semesterNum: number) => {
         const {workProgram} = this.state;
-        const {lecture_hours_v2, practice_hours_v2, srs_hours_v2, lab_hours_v2, ze_v_sem, evaluation_tools} = workProgram;
+        const {lecture_hours_v2, practice_hours_v2, lab_hours_v2, ze_v_sem, evaluation_tools} = workProgram;
 
         const lectureClasses = lecture_hours_v2.split(", ");
         const practiceClasses = practice_hours_v2.split(", ");
-        const sroHours = srs_hours_v2.split(", ");
         const laboratoryHours = lab_hours_v2.split(", ");
         const zeSem = ze_v_sem.split(", ");
 
         return ({
-            SRO: +sroHours[semesterNum - 1] || 0,
             lecture_classes: +lectureClasses[semesterNum - 1] || 0,
             practical_lessons: +practiceClasses[semesterNum - 1] || 0,
             laboratory: +laboratoryHours[semesterNum - 1] || 0,
@@ -87,23 +85,26 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     updateRow = (section: HoursSection, semesterNum: number) => {
         const {workProgram} = this.state;
-        const {lecture_hours_v2, practice_hours_v2, srs_hours_v2, lab_hours_v2, ze_v_sem, evaluation_tools} = workProgram;
+        const {lecture_hours_v2, practice_hours_v2, lab_hours_v2, ze_v_sem, evaluation_tools} = workProgram;
         this.setState({
             workProgram: {
                 ...workProgram,
                 lab_hours_v2: this.replaceValue(lab_hours_v2, section.laboratory, +semesterNum),
-                srs_hours_v2: this.replaceValue(srs_hours_v2, section.SRO, +semesterNum),
                 lecture_hours_v2: this.replaceValue(lecture_hours_v2, section.lecture_classes, +semesterNum),
                 practice_hours_v2: this.replaceValue(practice_hours_v2, section.practical_lessons, +semesterNum),
                 ze_v_sem: this.replaceValue(ze_v_sem, section.ze_v_sem, +semesterNum),
-                evaluation_tools: this.insertIntoArray(evaluation_tools, section.evaluation_tools, +semesterNum)
+                evaluation_tools: this.insertIntoArray(evaluation_tools, section.evaluation_tools, +semesterNum),
             }
         });
     };
 
     handleSave = () => {
         const {workProgram} = this.state;
-        this.props.actions.createNewWorkProgram(workProgram);
+        this.props.actions.createNewWorkProgram({
+            ...workProgram,
+            hours: this.calculateTotal(workProgram.ze_v_sem) * 36,
+            srs_hours_v2: this.calculateSrc()
+        });
         this.setState({
             workProgram: {
                 ...DEFAULT_WP_STATE,
@@ -122,6 +123,29 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const arr = [...oldArray];
         arr[semesterNumber - 1] = newValue;
         return arr;
+    };
+
+    calculateTotal = (zeValues: string) => {
+        return zeValues.split(", ").reduce((total, item) => {
+            total += Number(item);
+            return total;
+        }, 0);
+    };
+
+    calculateSrc = () => {
+        const {workProgram} = this.state;
+        const {lecture_hours_v2, practice_hours_v2, lab_hours_v2} = workProgram;
+        const lecturesArray = lecture_hours_v2.split(", ").map(Number);
+        const practiceArray = practice_hours_v2.split(", ").map(Number);
+        const labArray = lab_hours_v2.split(", ").map(Number);
+
+        const result = [];
+        for (let i = 0; i < lecturesArray.length; i++) {
+            const sum = lecturesArray[i] + practiceArray[i] + labArray[i];
+            result.push(sum * 1.1)
+        }
+
+        return result.join(", ");
     };
 
     fixArray = (arr: number[][], newLength: number) => {
@@ -150,11 +174,10 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     recalculateHours = (numOfSemesters: string) => {
         const {workProgram} = this.state;
-        const {lecture_hours_v2, practice_hours_v2, srs_hours_v2, lab_hours_v2, ze_v_sem, evaluation_tools} = workProgram;
+        const {lecture_hours_v2, practice_hours_v2, lab_hours_v2, ze_v_sem, evaluation_tools} = workProgram;
 
         const lectureClasses = lecture_hours_v2.split(", ");
         const practiceClasses = practice_hours_v2.split(", ");
-        const sroHours = srs_hours_v2.split(", ");
         const laboratoryHours = lab_hours_v2.split(", ");
         const zeSem = ze_v_sem.split(", ");
 
@@ -163,7 +186,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 ...workProgram,
                 [WorkProgramGeneralFields.SEMESTER_COUNT]: numOfSemesters,
                 lab_hours_v2: this.fixZeros(laboratoryHours, +numOfSemesters).join(", "),
-                srs_hours_v2: this.fixZeros(sroHours, +numOfSemesters).join(", "),
                 lecture_hours_v2: this.fixZeros(lectureClasses, +numOfSemesters).join(", "),
                 practice_hours_v2: this.fixZeros(practiceClasses, +numOfSemesters).join(", "),
                 ze_v_sem: this.fixZeros(zeSem, +numOfSemesters).join(", "),
@@ -311,7 +333,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 <TableCell className={classes.headerCell}>Занятия лекционного типа</TableCell>
                                 <TableCell className={classes.headerCell}>Лабораторные занятия</TableCell>
                                 <TableCell className={classes.headerCell}>Практические занятия</TableCell>
-                                <TableCell className={classes.headerCell}>Консультации</TableCell>
                                 <TableCell className={classes.headerCell}>Аттестационное оценочное средство</TableCell>
                             </TableRow>
                         </TableHead>
