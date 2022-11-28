@@ -1,5 +1,6 @@
 import datetime
 import os
+from pathlib import Path
 
 from drf_yasg2 import openapi
 from drf_yasg2.utils import swagger_auto_schema
@@ -183,7 +184,7 @@ def render_context(context, **kwargs):
     template_context['online_list_number_list'] = online_list_number_list
     template_context['bibliographic_reference'] = context['bibliographic_reference']
     for bib in template_context['bibliographic_reference']:
-        bib['description'] = re.sub('<[^>]*>', '', str(bib['description']))
+        bib['description'] = re.sub('<[^>]*>', '', str(bib['description']).replace("<", ""))
     template_context['online_course'] = url_online_course
     template_context['evaluation_tools'] = evaluation_tools
     filename = str(fs_obj.number) + '_' + str(context['discipline_code']) + '_' + str(
@@ -413,7 +414,9 @@ def render_context_syllabus(context, **kwargs):
         i['topics_list'] = '. '.join(map(str, set([j['description'] for j in i['topics']])))
 
     template_context['evaluation_tools'] = evaluation_tools
-    template_context['bibliographic_reference'] = re.sub('<[^>]*>', '', str(context['bibliographic_reference']))
+
+    template_context['bibliographic_reference'] = re.sub('<[^>]*>', '',
+                                                         str(context['bibliographic_reference']))
     filename = 'Syllabus_' + str(context['title']) + str(kwargs['year']) + '.docx'
     print('bib', template_context['bibliographic_reference'])
 
@@ -435,6 +438,7 @@ class SyllabusExportView(generics.ListAPIView):
         context, filename = render_context_syllabus(data, field_of_study_id=kwargs['fs_id'],
                                                     academic_plan_id=kwargs['ap_id'], year=kwargs['year'])
         tpl.render(context)
+        print(context["bibliographic_reference"])
         # tpl.save('/application/upload/'+filename) #-- сохранение в папку локально (нужно указать актуальный путь!)
 
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
