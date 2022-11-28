@@ -68,6 +68,10 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     this.props.actions.getTrainingModule(this.getModuleId());
   }
 
+  componentWillUnmount() {
+    this.props.actions.trainingModulesPageDown();
+  }
+
   componentDidUpdate(prevProps: DetailTrainingModuleProps, nextProps: any) {
     if (prevProps.module !== this.props.module) {
       this.setState({
@@ -503,6 +507,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                 <TableCell className={classes.header}>Номер</TableCell>
                 <TableCell className={classes.header}>Уровень</TableCell>
                 <TableCell className={classes.header}>Год набора</TableCell>
+                <TableCell className={classes.header}>Включен в эту ОП</TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
@@ -520,6 +525,9 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   </TableCell>
                   <TableCell>
                     {get(plan, 'year')}
+                  </TableCell>
+                  <TableCell>
+                    {get(plan, 'is_included') ? 'Включен' : 'Не включен'}
                   </TableCell>
                   <TableCell>
                     <Tooltip
