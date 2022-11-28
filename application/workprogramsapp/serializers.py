@@ -535,7 +535,8 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'wp_in_fs_id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp']
+        fields = ['id', 'wp_in_fs_id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification',
+                  'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp', "ze_v_sem"]
 
 
     def clarify_zuns_for_wp(self, obj, *args, **kwargs):
