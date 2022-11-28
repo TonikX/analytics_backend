@@ -50,6 +50,8 @@ import {typeOfWorkProgramInPlan} from "../data";
 import connect from './Detail.connect';
 import styles from './Detail.styles';
 import {fields} from "../TrainingModules/enum";
+import FileIcon from '@material-ui/icons/DescriptionOutlined';
+import classNames from "classnames";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -285,6 +287,14 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                           onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
                                   {workProgram[WorkProgramGeneralFields.TITLE]}
                               </Typography>
+                              <div className={classes.wpStatus}>{this.getStatus(workProgram.wp_status)}</div>
+                              <Tooltip
+                                title={'Скачать рабочую программу'}>
+                                  <FileIcon
+                                    className={classNames(classes.marginRight10, classes.button)}
+                                    onClick={this.handleDownloadFile(workProgram[WorkProgramGeneralFields.ID])}
+                                  />
+                              </Tooltip>
                           </div>
                         ))}
                         {Boolean(gia?.length) && renderRow(<>
