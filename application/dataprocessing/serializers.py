@@ -26,7 +26,14 @@ class UserBaseSerializer(serializers.ModelSerializer):
 
     # user = serializers.StringRelatedField(read_only=True)
     email_confirm_status = serializers.SerializerMethodField('is_named_bar')
-
+    def update(self, instance, validated_data):
+        user=super(UserBaseSerializer, self).update(instance, validated_data)
+        units = self._kwargs["context"]["request"].data.get('structural_unit')
+        if units:
+            user.structural_unit.clear()
+            user.structural_unit.add(*units)
+            user.save()
+        return user
     def is_named_bar(self, object):
         try:
             EmailReset.objects.get(user=object, email=object.email, status=True)
@@ -37,7 +44,8 @@ class UserBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'do_email_notifications',
-                  'expertise_status_notification', 'expertise_comments_notification', 'isu_number', 'email_confirm_status')
+                  'expertise_status_notification', 'expertise_comments_notification', 'isu_number',
+                  'email_confirm_status', 'structural_unit')
 
 
 class DomainDetailSerializer(serializers.ModelSerializer):
@@ -50,20 +58,20 @@ class DomainDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Domain
-        fields = ('id', 'name','items', 'user')
+        fields = ('id', 'name', 'items', 'user')
         extra_kwargs = {
             'user': {'required': False}
         }
         # read_only_fields = ('user',)
 
 
-
 class DomainSerializer(serializers.ModelSerializer):
     """Сериализатор для предметной области"""
     user = serializers.PrimaryKeyRelatedField(required=False, many=True, queryset=User.objects.all())
+
     class Meta:
         model = Domain
-        fields = ('id', 'name','user')
+        fields = ('id', 'name', 'user')
         extra_kwargs = {
             'user': {'required': False}
         }
