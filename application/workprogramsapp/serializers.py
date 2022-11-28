@@ -291,7 +291,7 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
                   'hoursSecondSemester', 'bibliographic_reference', 'description', 'video', 'owner', 'editors', 'hours',
                   'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format',
                   'lecture_hours_v2', 'practice_hours_v2', 'practice_hours_v2', 'practice_hours_v2', 'lab_hours_v2',
-                  'srs_hours_v2', 'contact_hours_v2', "ze_v_sem", "evaluation_tools"]
+                  'srs_hours_v2', 'contact_hours_v2', "ze_v_sem", "evaluation_tools", 'consultation_v2']
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }
@@ -535,7 +535,8 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'wp_in_fs_id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification', 'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp']
+        fields = ['id', 'wp_in_fs_id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification',
+                  'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp', "ze_v_sem"]
 
 
     def clarify_zuns_for_wp(self, obj, *args, **kwargs):
@@ -622,7 +623,8 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules', 'selection_rule']
+        fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules', 'selection_rule',
+                  'selection_parametr']
         extra_kwargs = {
             'change_blocks_of_work_programs_in_modules': {'required': False}
         }
@@ -830,7 +832,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
                   'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
                   'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
                   'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'contact_hours_v2', 'number_of_semesters', 'read_notifications',
-                  'implementation_format', "ze_v_sem"]
+                  'implementation_format', "ze_v_sem", 'consultation_v2']
 
     def create(self, validated_data):
         """

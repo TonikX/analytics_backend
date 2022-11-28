@@ -23,7 +23,8 @@ class EducationalStandardListSerializer(serializers.ModelSerializer):
         fields = ['id','name', 'standard_date']
 
 
-class EducationalStandardSingleObjectSerializer(serializers.ModelSerializer):
+class \
+        EducationalStandardSingleObjectSerializer(serializers.ModelSerializer):
     def to_representation(self, value):
         self.fields['tasks_prof_standard'] = \
             TasksForEducationalStandardSerializer(many=True, required=False)
