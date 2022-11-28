@@ -256,6 +256,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                   const practice = blockOfWorkProgram?.practice || [];
                   const duration = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_DURATION];
                   const semesterStart = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START]?.join(', ');
+                  const creditUnits = blockOfWorkProgram?.credit_units
 
                   const renderRow = (title: any) => (
                     <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
@@ -264,8 +265,8 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                 {title}
                             </div>
                         </TableCell>
-                        <TableCell>
-                            {duration}
+                        <TableCell style={{width: '190px'}}>
+                            {creditUnits}
                         </TableCell>
                         <TableCell>
                             {semesterStart}
@@ -415,9 +416,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                             <TableHead className={classes.header}>
                                 <TableRow>
                                     <TableCell> Название </TableCell>
-                                    <TableCell> Тип </TableCell>
-                                    <TableCell> Длительность </TableCell>
+                                    <TableCell> Зачетные единицы </TableCell>
                                     <TableCell> Семестр начала </TableCell>
+                                    <TableCell> Тип </TableCell>
                                     <TableCell />
                                 </TableRow>
                             </TableHead>
