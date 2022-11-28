@@ -832,7 +832,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
                   'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
                   'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
                   'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'contact_hours_v2', 'number_of_semesters', 'read_notifications',
-                  'implementation_format', "ze_v_sem"]
+                  'implementation_format', "ze_v_sem", 'consultation_v2']
 
     def create(self, validated_data):
         """
