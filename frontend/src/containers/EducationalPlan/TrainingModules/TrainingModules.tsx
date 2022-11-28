@@ -56,6 +56,10 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
         this.props.actions.getTrainingModulesList();
     }
 
+    componentWillUnmount() {
+        this.props.actions.trainingModulesPageDown();
+    }
+
     componentDidUpdate(prevProps: TrainingModulesProps) {
         if (prevProps.trainingModuleIdForRedirect !== this.props.trainingModuleIdForRedirect && this.props.trainingModuleIdForRedirect) {
             this.goToTrainingModule()

@@ -96,6 +96,10 @@ const resetFilters = (state: trainingModulesState): trainingModulesState => ({
     [fields.FILTERS]: initialState[fields.FILTERS],
 });
 
+const trainingModulesPageDown = (state: trainingModulesState): trainingModulesState => ({
+    ...initialState,
+});
+
 const changeSorting = (state: trainingModulesState, {payload}: any): trainingModulesState => ({
     ...state,
     [fields.SORTING]: {
@@ -134,5 +138,6 @@ export const reducer = createReducer(initialState, {
     [actions.showOnlyMy.type]: showOnlyMy,
     [actions.updateTrainingModuleFilters.type]: updateTrainingModuleFilters,
     [actions.resetFilters.type]: resetFilters,
+    [actions.trainingModulesPageDown.type]: trainingModulesPageDown,
     [actions.setTrainingModuleIdForRedirect.type]: setTrainingModuleIdForRedirect,
 });

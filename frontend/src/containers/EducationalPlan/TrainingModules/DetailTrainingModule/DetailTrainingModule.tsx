@@ -68,6 +68,10 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     this.props.actions.getTrainingModule(this.getModuleId());
   }
 
+  componentWillUnmount() {
+    this.props.actions.trainingModulesPageDown();
+  }
+
   componentDidUpdate(prevProps: DetailTrainingModuleProps, nextProps: any) {
     if (prevProps.module !== this.props.module) {
       this.setState({
