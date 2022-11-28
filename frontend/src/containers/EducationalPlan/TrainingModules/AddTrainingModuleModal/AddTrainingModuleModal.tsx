@@ -34,6 +34,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
     }
 
     handleClose = () => {
+        this.props.actions.resetFilters();
         this.props.actions.closeDialog();
     }
 

@@ -30,6 +30,7 @@ const changeCurrentPage = createAction('TRAINING_MODULES_CHANGE_CURRENT_PAGE');
 const changeAllCount = createAction('TRAINING_MODULES_CHANGE_ALL_COUNT');
 const changeSorting = createAction('TRAINING_MODULES_CHANGE_SORTING');
 const changeFiltering = createAction('TRAINING_MODULES_CHANGE_FILTERING');
+const resetFilters = createAction('TRAINING_MODULES_RESET_FILTERS');
 
 const showOnlyMy = createAction<boolean>('TRAINING_MODULES_SHOW_ONLY_MY');
 
@@ -43,6 +44,7 @@ const getIntermediateCertification = createAction('TRAINING_MODULES_GET_INTERMED
 const setTrainingModuleIdForRedirect = createAction('SET_TRAINING_MODULE_ID_FOR_REDIRECT');
 
 const actions: TrainingModulesActions = {
+    resetFilters,
     setTrainingModuleIdForRedirect,
     updateTrainingModuleFilters,
     deleteIntermediateCertification,

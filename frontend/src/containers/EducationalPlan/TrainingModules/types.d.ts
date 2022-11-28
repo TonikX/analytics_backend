@@ -31,6 +31,7 @@ export interface TrainingModulesActions {
 
     openDialog: ActionCreatorWithPayload<OpenDialogPayload>;
     closeDialog: ActionCreatorWithoutPayload;
+    resetFilters: ActionCreatorWithoutPayload;
 
     createTrainingModule: ActionCreatorWithPayload<CreateTrainingModulePayload>;
     changeTrainingModule: ActionCreatorWithPayload<ChangeTrainingModulePayload>;

@@ -91,6 +91,11 @@ const closeDialog = (state: trainingModulesState): trainingModulesState => ({
     [fields.ADD_EDUCATIONAL_PROGRAM_DIALOG]: initialState[fields.ADD_EDUCATIONAL_PROGRAM_DIALOG],
 });
 
+const resetFilters = (state: trainingModulesState): trainingModulesState => ({
+    ...state,
+    [fields.FILTERS]: initialState[fields.FILTERS],
+});
+
 const changeSorting = (state: trainingModulesState, {payload}: any): trainingModulesState => ({
     ...state,
     [fields.SORTING]: {
@@ -128,5 +133,6 @@ export const reducer = createReducer(initialState, {
     [actions.closeDialog.type]: closeDialog,
     [actions.showOnlyMy.type]: showOnlyMy,
     [actions.updateTrainingModuleFilters.type]: updateTrainingModuleFilters,
+    [actions.resetFilters.type]: resetFilters,
     [actions.setTrainingModuleIdForRedirect.type]: setTrainingModuleIdForRedirect,
 });
