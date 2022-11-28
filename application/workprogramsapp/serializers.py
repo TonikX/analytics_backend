@@ -291,7 +291,7 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
                   'hoursSecondSemester', 'bibliographic_reference', 'description', 'video', 'owner', 'editors', 'hours',
                   'extra_points', 'language', 'structural_unit', 'bars', 'number_of_semesters', 'implementation_format',
                   'lecture_hours_v2', 'practice_hours_v2', 'practice_hours_v2', 'practice_hours_v2', 'lab_hours_v2',
-                  'srs_hours_v2', 'contact_hours_v2', "ze_v_sem", "evaluation_tools"]
+                  'srs_hours_v2', 'contact_hours_v2', "ze_v_sem", "evaluation_tools", 'consultation_v2']
         extra_kwargs = {
             'bibliographic_reference': {'required': False}
         }
