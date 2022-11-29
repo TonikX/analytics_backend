@@ -611,7 +611,13 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
     def to_representation(self, value):
         self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
+        self.fields["laboriousness"] = serializers.SerializerMethodField()
         return super().to_representation(value)
+    def get_laboriousness(self, obj):
+        unit_final_sum = 0
+        for changeblock in WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=obj):
+            unit_final_sum += sum([int(unit) for unit in changeblock.credit_units.split(", ")])
+        return unit_final_sum
 
     def get_childs(self, obj):
         childs = DisciplineBlockModule.objects.filter(father_module=obj)
