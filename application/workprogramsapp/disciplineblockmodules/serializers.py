@@ -1,7 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-
+from django.contrib.auth.models import Group
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.models import DisciplineBlockModule, СertificationEvaluationTool, ImplementationAcademicPlan, \
     DisciplineBlock
@@ -145,6 +145,15 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
         instance.editors.add(editor)
 
         return instance
+
+    def update(self, instance, validated_data):
+        updated_module = super(DisciplineBlockModuleCreateSerializer, self).update(instance, validated_data)
+        module_group = Group.objects.get(name='blockmodule_editor')
+        for user in updated_module.editors.all():
+            if module_group not in user.groups.all():
+                user.groups.add(module_group)
+                user.save()
+        return updated_module
 
     def validate_childs(self, childs):
         print('dd')
