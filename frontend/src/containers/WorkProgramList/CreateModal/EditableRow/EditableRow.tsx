@@ -71,16 +71,6 @@ function EditableRow(props: EditableRowProps) {
                 />
             </TableCell>
             <TableCell className={classes.centerCell}>
-                <TextField
-                    variant="outlined"
-                    size="small"
-                    defaultValue={section[workProgramSectionFields.SPO]}
-                    className={classes.smallInput}
-                    type="number"
-                    onChange={handleChangeField(workProgramSectionFields.SPO)}
-                />
-            </TableCell>
-            <TableCell className={classes.centerCell}>
                 <Select value={section[workProgramSectionFields.EVALUATION_TOOLS]} placeholder="Оценочное средство" onChange={handleEvaluationToolsChange} fullWidth multiple>
                     {EVALUATION_TOOLS.map(item =>
                         <MenuItem value={item.value} key={`group-${item.value}`}>

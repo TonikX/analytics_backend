@@ -62,6 +62,7 @@ export enum WorkProgramGeneralFields {
     OFFERTA = 'is_oferta',
     LAB_HOURS = 'lab_hours_v2',
     SRS_HOURS = 'srs_hours_v2',
+    HOURS = 'hours',
     PRACTICE_HOURS = 'practice_hours_v2',
     LECTURE_HOURS = 'lecture_hours_v2',
     ZE_V_SEM = 'ze_v_sem',

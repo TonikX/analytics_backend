@@ -139,7 +139,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     render() {
-        const {classes, semesterCount} = this.props;
+        const {classes} = this.props;
         const {evaluationTool, isOpen} = this.state;
 
         const isEditMode = Boolean(evaluationTool[IntermediateCertificationFields.ID]);
@@ -196,6 +196,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                 onChange={this.saveField(IntermediateCertificationFields.TYPE)}
                                                 value={evaluationTool[IntermediateCertificationFields.TYPE]}
                                                 fullWidth
+                                                disabled
                                                 displayEmpty
                                                 input={
                                                     <OutlinedInput
@@ -254,6 +255,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                               valueLabelDisplay="on"
                                               value={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER])}
                                               onChange={this.changeSemesterCount}
+                                              disabled
                                             />
                                         </FormControl>
                                     </>
