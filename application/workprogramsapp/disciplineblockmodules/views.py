@@ -135,7 +135,7 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.get_queryset()
 
         id_module_for_filter_struct = self.request.GET.get('id_module_for_filter_struct')
         filter_non_struct = self.request.GET.get('filter_non_struct')
@@ -153,7 +153,7 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
             )
 
         if filter_non_struct == "true":
-            queryset = queryset.union(DisciplineBlockModule.objects.filter(only_for_struct_units=False))
+            queryset = queryset | DisciplineBlockModule.objects.filter(only_for_struct_units=False)
         # else:
         #     queryset = queryset | DisciplineBlockModule.objects.filter(only_for_struct_units=False)
 
@@ -167,8 +167,10 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
             queryset = queryset.exclude(id=without_me)
 
         queryset = queryset.filter().distinct()
+        queryset = self.filter_queryset(queryset.all())
 
         page = self.paginate_queryset(queryset)
+
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
