@@ -694,7 +694,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     descipline_block = models.ManyToManyField('DisciplineBlock', verbose_name='Модуль в блоке',
                                               related_name='modules_in_discipline_block', blank=True)
     order = models.IntegerField(blank=True, null=True, verbose_name="Порядок модулей")
-    selection_rule = models.CharField(choices=CHANGE_TYPES, max_length=100, default='faculty_module',
+    selection_rule = models.CharField(choices=CHANGE_TYPES, max_length=100, blank=True, null=True,
                                       verbose_name='Правило выбора модуля')
     selection_parametr = models.CharField(max_length=100, verbose_name='Параметр выбора модуля', blank=True, null=True)
     description = models.CharField(max_length=10240, verbose_name="Описания блока модуля дисциплин", blank=True,
