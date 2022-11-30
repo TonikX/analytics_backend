@@ -120,10 +120,10 @@ export const selectRulesArray = [
     },
     {
         value: 'any_quantity',
-        label: 'Выбрать в модуле любое колличество или 0'
+        label: 'Выбрать в модуле любое количество или 0'
     },
     {
         value: 'by_credit_units',
-        label: 'Необходимое колличество ЗЕ'
+        label: 'Необходимое количество ЗЕ'
     },
 ]

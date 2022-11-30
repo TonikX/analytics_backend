@@ -98,7 +98,7 @@ export default (theme: Theme) => createStyles({
     marginRight10: {
         marginRight: 10
     },
-    workProgramLink: {
+    link: {
         cursor: 'pointer',
         textDecoration: 'none',
         color: theme.palette.primary.main,
@@ -115,7 +115,7 @@ export default (theme: Theme) => createStyles({
     },
     moduleNameWrap: {
         display: 'flex',
-        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     moduleName: {
         color: theme.palette.primary.main,

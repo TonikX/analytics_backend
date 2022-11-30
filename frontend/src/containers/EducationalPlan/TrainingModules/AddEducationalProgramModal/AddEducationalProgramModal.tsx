@@ -137,7 +137,7 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
                                   <div key={educationalPlan.id} className={classes.selectedItem}>
                                       <Checkbox checked={true} onChange={this.handleUnselect(educationalPlan.id)} />
                                       <Typography>
-                                          {educationalPlan?.field_of_study?.[0]?.title} &nbsp;
+                                          {educationalPlan?.title} &nbsp;
                                           {educationalPlan?.field_of_study?.[0]?.number} &nbsp;
                                           {educationalPlan?.year}
                                       </Typography>
@@ -149,7 +149,7 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
                                       <div key={educationalPlan.id} className={classes.selectedItem}>
                                           <Checkbox checked={false} onChange={this.handleSelect(educationalPlan)}/>
                                           <Typography>
-                                              {educationalPlan?.field_of_study?.[0]?.title} &nbsp;
+                                              {educationalPlan?.title} &nbsp;
                                               {educationalPlan?.field_of_study?.[0]?.number} &nbsp;
                                               {educationalPlan?.year}
                                           </Typography>

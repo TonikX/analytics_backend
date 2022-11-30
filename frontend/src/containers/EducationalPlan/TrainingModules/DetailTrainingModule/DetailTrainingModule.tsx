@@ -28,7 +28,7 @@ import Step from '@material-ui/core/Step';
 import ConfirmDialog from "../../../../components/ConfirmDialog/ConfirmDialog";
 
 import {WorkProgramGeneralFields} from "../../../WorkProgram/enum";
-import {typeOfWorkProgramInPlan} from "../../data";
+import {OPTIONALLY, typeOfWorkProgramInPlan} from "../../data";
 import {appRouter} from "../../../../service/router-service";
 import {BlocksOfWorkProgramsType} from "../../types";
 
@@ -211,8 +211,10 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
             const gia = blockOfWorkProgram?.gia || [];
             const practice = blockOfWorkProgram?.practice || [];
-            const duration = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_DURATION];
+            const duration = workPrograms?.[0]?.number_of_semesters;
+            const creditUnits = blockOfWorkProgram?.credit_units?.replaceAll(', ', '')?.replace(/0*$/,"")?.replace(/^0+/, '')?.split("")?.join(" ")
             const semesterStart = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START]?.join(', ');
+            const type = blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
 
             const renderRow = (title: any) => (
               <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
@@ -225,12 +227,13 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   {duration}
                 </TableCell>
                 <TableCell>
+                  {creditUnits}
+                </TableCell>
+                <TableCell>
                   {semesterStart}
                 </TableCell>
                 <TableCell>
-                  {get(typeOfWorkProgramInPlan.find(item =>
-                      item.value === blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
-                  ), 'label', '')}
+                  {type === OPTIONALLY ? '-' : '+'}
                 </TableCell>
                 {canEdit &&
                   <TableCell className={classes.actions}>
@@ -289,6 +292,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           <TableCell />
           <TableCell />
           <TableCell />
+          <TableCell />
           {canEdit && (
             <TableCell style={{ height: '40px'}}>
               <div className={classes.moduleButtons}>
@@ -311,6 +315,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                               style={{
                                 marginRight: '28px',
                                 marginTop: '5px',
+                                marginLeft: 'auto',
                               }}
                   />
                 </Tooltip>
@@ -366,8 +371,9 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                     Модуль/РПД
                   </TableCell>
                   <TableCell> Длительность </TableCell>
+                  <TableCell> Зачетные единицы </TableCell>
                   <TableCell> Семестр начала </TableCell>
-                  <TableCell> Тип </TableCell>
+                  <TableCell> Обязательность </TableCell>
                   {canEdit && <TableCell/>}
                 </TableRow>
               </TableHead>
@@ -436,7 +442,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           {module?.[TrainingModuleFields.ONLY_FOR_STRUCT_UNITS] !== undefined && (
             <FormControlLabel
               control={<Checkbox checked={module?.[TrainingModuleFields.ONLY_FOR_STRUCT_UNITS]} onChange={this.updateOnlyForStructUnitsField} />}
-              label="Общедоступный модуль"
+              label="Использовать только сотрудниками подразделений, в которых работают редакторы данного модуля."
               className={classes.checkbox}
             />
           )}
@@ -503,7 +509,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           <Table stickyHeader>
             <TableHead style={{height: 45}}>
               <TableRow>
-                <TableCell className={classes.header}>Направление</TableCell>
+                <TableCell className={classes.header}>Образовательная программа</TableCell>
                 <TableCell className={classes.header}>Номер</TableCell>
                 <TableCell className={classes.header}>Уровень</TableCell>
                 <TableCell className={classes.header}>Год набора</TableCell>

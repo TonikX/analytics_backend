@@ -2,6 +2,7 @@ import React from 'react';
 import get from 'lodash/get';
 import {appRouter} from "../../../service/router-service";
 import {withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 // @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
@@ -45,13 +46,14 @@ import {DirectionFields} from "../../Direction/enum";
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
 import {specializationObject} from "../../WorkProgram/constants";
 
-import {typeOfWorkProgramInPlan} from "../data";
+import {OPTIONALLY} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
 import {fields} from "../TrainingModules/enum";
 import FileIcon from '@material-ui/icons/DescriptionOutlined';
 import classNames from "classnames";
+import {selectRulesArray, typesListArray} from "../TrainingModules/constants";
 
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     state = {
@@ -254,9 +256,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                   const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
                   const gia = blockOfWorkProgram?.gia || [];
                   const practice = blockOfWorkProgram?.practice || [];
-                  const duration = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_DURATION];
                   const semesterStart = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START]?.join(', ');
-                  const creditUnits = blockOfWorkProgram?.credit_units
+                  const creditUnits = blockOfWorkProgram?.credit_units?.replaceAll(', ', '')?.replace(/0*$/,"")?.replace(/^0+/, '')?.split("")?.join(" ")
+                  const type = blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
 
                   const renderRow = (title: any) => (
                     <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
@@ -272,9 +274,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                             {semesterStart}
                         </TableCell>
                         <TableCell>
-                            {get(typeOfWorkProgramInPlan.find(item =>
-                              item.value === blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
-                            ), 'label', '')}
+                            {type === OPTIONALLY ? '-' : '+'}
                         </TableCell>
                         <TableCell />
                     </TableRow>
@@ -284,7 +284,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                     <>
                         {renderRow(workPrograms.map((workProgram: any) =>
                           <div className={classes.displayFlex}>
-                              <Typography className={classes.workProgramLink}
+                              <Typography className={classes.link}
                                           onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
                                   {workProgram[WorkProgramGeneralFields.TITLE]}
                               </Typography>
@@ -314,6 +314,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     renderModule = (item: any, level: number, blockId?: any): any => {
         const {classes} = this.props
         const blockOfWorkPrograms = item?.change_blocks_of_work_programs_in_modules
+        const selectionRule = selectRulesArray.find(type => type.value === item?.selection_rule)?.label
+        const selectionParameter = item?.selection_parametr
+        const laboriousness = item?.laboriousness
 
         return(
           <>
@@ -321,7 +324,14 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                   <TableCell style={{ height: '40px'}} className={classes.moduleNameWrap}>
                       <Typography className={classes.moduleName} style={{ paddingLeft: level * 5 }}>
                           {'*'.repeat(level)}
-                          {item?.name}
+                          <Link to={appRouter.getTrainingModuleDetailLink(item.id)} target="_blank" className={classes.link}>
+                              {item?.name}
+                          </Link>:
+                      </Typography>
+                      <Typography>
+                          {laboriousness ? <>&nbsp;<b>Трудоемкость:</b> {laboriousness}</> : ''}
+                          {selectionRule ? <>&nbsp;<b>Правило выбора:</b> {selectionRule}</> : ''}
+                          {selectionParameter ? <>&nbsp;<b>Параметр выбора:</b> {selectionParameter}</> : ''}
                       </Typography>
                   </TableCell>
                   <TableCell />
@@ -418,7 +428,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                     <TableCell> Название </TableCell>
                                     <TableCell> Зачетные единицы </TableCell>
                                     <TableCell> Семестр начала </TableCell>
-                                    <TableCell> Тип </TableCell>
+                                    <TableCell> Обязательность </TableCell>
                                     <TableCell />
                                 </TableRow>
                             </TableHead>
