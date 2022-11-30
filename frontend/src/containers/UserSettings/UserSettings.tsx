@@ -183,7 +183,7 @@ export default () => {
                     }}
                     onClose={() => setOpenAddStructuralUnitModal(false)}
                   >
-                      <StructuralUnitsSelector onChange={addStructuralUnit} />
+                      <StructuralUnitsSelector onChange={addStructuralUnit} value={-1} />
                   </Dialog>
                 )}
                 <FormControlLabel
