@@ -616,16 +616,28 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
         self.fields["laboriousness"] = serializers.SerializerMethodField()
         return super().to_representation(value)
 
-    def get_laboriousness(self, obj):
+    def recursion_module(self, obj):
+        childs = obj.childs.all()
         unit_final_sum = 0
-        work_programs = WorkProgram.objects.filter(work_program_in_change_block__discipline_block_module=obj)
+
         try:
             if obj.selection_rule == "choose_n_from_m":
-                for i in range(int(obj.selection_parametr)):
-                    unit_final_sum += sum([int(unit) for unit in work_programs[i].ze_v_sem.split(", ")])
+                if childs.exists():
+                    for i in range(int(obj.selection_parametr)):
+                        unit_final_sum += self.recursion_module(childs[i])
+                else:
+                    work_programs = WorkProgram.objects.filter(work_program_in_change_block__discipline_block_module=obj)
+                    for i in range(int(obj.selection_parametr)):
+                        unit_final_sum += sum([int(unit) for unit in work_programs[i].ze_v_sem.split(", ")])
             elif obj.selection_rule == "all" or obj.selection_rule == "any_quantity":
-                for wp in work_programs:
-                    unit_final_sum += sum([int(unit) for unit in wp.ze_v_sem.split(", ")])
+                if childs.exists():
+                    for child in childs:
+                        unit_final_sum += self.recursion_module(child)
+                else:
+                    work_programs = WorkProgram.objects.filter(
+                        work_program_in_change_block__discipline_block_module=obj)
+                    for wp in work_programs:
+                        unit_final_sum += sum([int(unit) for unit in wp.ze_v_sem.split(", ")])
             elif obj.selection_rule == "by_credit_units":
                 unit_final_sum = int(obj.selection_parametr)
 
@@ -634,6 +646,14 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
                     unit_final_sum += sum([int(unit) for unit in changeblock.credit_units.split(", ")])
         except AttributeError:
             pass
+        except IndexError:
+            pass
+
+        return unit_final_sum
+
+    def get_laboriousness(self, obj):
+        unit_final_sum = self.recursion_module(obj)
+
         return unit_final_sum
 
     def get_childs(self, obj):
