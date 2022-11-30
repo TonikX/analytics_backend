@@ -167,7 +167,7 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
             queryset = queryset.exclude(id=without_me)
 
         queryset = queryset.filter().distinct()
-        queryset = self.filter_queryset(queryset)
+        queryset = self.filter_queryset(queryset.all())
 
         page = self.paginate_queryset(queryset)
 
