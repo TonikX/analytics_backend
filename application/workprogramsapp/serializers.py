@@ -536,7 +536,7 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkProgram
         fields = ['id', 'wp_in_fs_id', 'approval_date', 'authors', 'discipline_code', 'title', 'qualification',
-                  'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp', "ze_v_sem"]
+                  'hoursFirstSemester', 'hoursSecondSemester', 'zuns_for_wp', "ze_v_sem", 'number_of_semesters']
 
 
     def clarify_zuns_for_wp(self, obj, *args, **kwargs):
@@ -605,6 +605,7 @@ class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
         model = DisciplineBlockModule
         fields = ['id', 'name', 'type', 'selection_rule', 'change_blocks_of_work_programs_in_modules']
 
+
 class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
     change_blocks_of_work_programs_in_modules = WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
 
@@ -614,10 +615,25 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
         self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
         self.fields["laboriousness"] = serializers.SerializerMethodField()
         return super().to_representation(value)
+
     def get_laboriousness(self, obj):
         unit_final_sum = 0
-        for changeblock in WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=obj):
-            unit_final_sum += sum([int(unit) for unit in changeblock.credit_units.split(", ")])
+        work_programs = WorkProgram.objects.filter(work_program_in_change_block__discipline_block_module=obj)
+        try:
+            if obj.selection_rule == "choose_n_from_m":
+                for i in range(int(obj.selection_parametr)):
+                    unit_final_sum += sum([int(unit) for unit in work_programs[i].ze_v_sem.split(", ")])
+            elif obj.selection_rule == "all" or obj.selection_rule == "any_quantity":
+                for wp in work_programs:
+                    unit_final_sum += sum([int(unit) for unit in wp.ze_v_sem.split(", ")])
+            elif obj.selection_rule == "by_credit_units":
+                unit_final_sum = int(obj.selection_parametr)
+
+            if unit_final_sum == 0:
+                for changeblock in WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=obj):
+                    unit_final_sum += sum([int(unit) for unit in changeblock.credit_units.split(", ")])
+        except AttributeError:
+            pass
         return unit_final_sum
 
     def get_childs(self, obj):
