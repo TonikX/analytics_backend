@@ -34,7 +34,7 @@ const Filters: React.FC = () => {
     setIsReset(true)
     dispatch(actions.changeFiltering({
       [filterFields.NUMBER_DP]: '',
-      [filterFields.NAME_DP]: '',
+      [filterFields.TITLE]: '',
       [filterFields.SPECIALIZATION]: '',
       [filterFields.STRUCTURAL_UNIT]: '',
       [filterFields.PREREQUISITE]: '',
@@ -80,9 +80,9 @@ const Filters: React.FC = () => {
                    }}
         />
         <TextField label='Название направления подготовки'
-                   onChange={(e: any) => handleFilter(filterFields.NAME_DP, e.target.value)}
+                   onChange={(e: any) => handleFilter(filterFields.TITLE, e.target.value)}
                    variant="outlined"
-                   value={filters[filterFields.NAME_DP]}
+                   value={filters[filterFields.TITLE]}
                    InputLabelProps={{
                      shrink: true,
                    }}

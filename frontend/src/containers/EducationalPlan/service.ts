@@ -9,6 +9,7 @@ import {
 import {SortingType, Types} from "../../components/SortingButton/types";
 
 import appConfigService from '../../config/app-config-service';
+import {REQUIRED} from "./data";
 
 class EducationalPlanService extends AnalyticsService{
     getEducationalPlan(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
@@ -93,6 +94,8 @@ class EducationalPlanService extends AnalyticsService{
         return this.post(`/api/workprogramchangeindisciplineblockmodule/create`, {
             //@ts-ignore
             'discipline_block_module': parseInt(moduleId),
+            change_type: REQUIRED,
+            semester_start: [1]
         });
     }
 

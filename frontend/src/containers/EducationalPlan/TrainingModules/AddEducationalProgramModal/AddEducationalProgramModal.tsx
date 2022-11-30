@@ -94,19 +94,19 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
                 <DialogTitle> Добавить образовательную программу </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
                     <div className={classes.filtersLine}>
-                        <SearchSelector
-                          label='Уровень образовательной программы'
-                          changeSearchText={() => {}}
-                          list={specialization}
-                          changeItem={(value: string) => this.handleFilter(filterFields.SPECIALIZATION, value)}
-                          value={filters[filterFields.SPECIALIZATION]}
-                          valueLabel={''}
-                          className={classes.select}
-                        />
-                        <StructuralUnitsSelector value={filters[filterFields.STRUCTURAL_UNIT]}
-                                                 onChange={(value: number) => {this.handleFilter(filterFields.STRUCTURAL_UNIT, value)}}
-                                                 className={classes.select}
-                        />
+                        {/*<SearchSelector*/}
+                        {/*  label='Уровень образовательной программы'*/}
+                        {/*  changeSearchText={() => {}}*/}
+                        {/*  list={specialization}*/}
+                        {/*  changeItem={(value: string) => this.handleFilter(filterFields.SPECIALIZATION, value)}*/}
+                        {/*  value={filters[filterFields.SPECIALIZATION]}*/}
+                        {/*  valueLabel={''}*/}
+                        {/*  className={classes.select}*/}
+                        {/*/>*/}
+                        {/*<StructuralUnitsSelector value={filters[filterFields.STRUCTURAL_UNIT]}*/}
+                        {/*                         onChange={(value: number) => {this.handleFilter(filterFields.STRUCTURAL_UNIT, value)}}*/}
+                        {/*                         className={classes.select}*/}
+                        {/*/>*/}
                         <TextField label='Номер направления подготовки'
                                    onChange={(e: any) => this.handleFilter(filterFields.NUMBER_DP, e.target.value)}
                                    variant="outlined"
@@ -116,10 +116,10 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
                                    }}
                                    className={classes.select}
                         />
-                        <TextField label='Название направления подготовки'
-                                   onChange={(e: any) => this.handleFilter(filterFields.NAME_DP, e.target.value)}
+                        <TextField label='Образовательная программа'
+                                   onChange={(e: any) => this.handleFilter(filterFields.TITLE, e.target.value)}
                                    variant="outlined"
-                                   value={filters[filterFields.NAME_DP]}
+                                   value={filters[filterFields.TITLE]}
                                    InputLabelProps={{
                                        shrink: true,
                                    }}
@@ -137,7 +137,7 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
                                   <div key={educationalPlan.id} className={classes.selectedItem}>
                                       <Checkbox checked={true} onChange={this.handleUnselect(educationalPlan.id)} />
                                       <Typography>
-                                          {educationalPlan?.field_of_study?.[0]?.title} &nbsp;
+                                          {educationalPlan?.title} &nbsp;
                                           {educationalPlan?.field_of_study?.[0]?.number} &nbsp;
                                           {educationalPlan?.year}
                                       </Typography>
@@ -149,7 +149,7 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
                                       <div key={educationalPlan.id} className={classes.selectedItem}>
                                           <Checkbox checked={false} onChange={this.handleSelect(educationalPlan)}/>
                                           <Typography>
-                                              {educationalPlan?.field_of_study?.[0]?.title} &nbsp;
+                                              {educationalPlan?.title} &nbsp;
                                               {educationalPlan?.field_of_study?.[0]?.number} &nbsp;
                                               {educationalPlan?.year}
                                           </Typography>

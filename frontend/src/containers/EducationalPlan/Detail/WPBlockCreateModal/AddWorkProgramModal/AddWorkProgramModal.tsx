@@ -54,6 +54,8 @@ class AddWorkProgramModal extends React.PureComponent<AddWorkProgramModalProps> 
                     paper: classes.dialog,
                     root: classes.root,
                 }}
+                fullWidth
+                maxWidth="sm"
             >
                 <DialogTitle>Добавить рабочую программу</DialogTitle>
 

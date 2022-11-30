@@ -20,7 +20,7 @@ export const getWorkProgramIdForRedirect = (state: rootState): number|null =>
 export const getWorkProgramsListForSelector = (state: rootState): SelectorListType =>
     getWorkProgramList(state).map((workProgram: WorkProgramGeneralType) => ({
         value: workProgram[WorkProgramGeneralFields.ID],
-        label: `${workProgram[WorkProgramGeneralFields.TITLE]} (${workProgram[WorkProgramGeneralFields.ID]})`,
+        label: `${workProgram[WorkProgramGeneralFields.TITLE]} (КОП ИД: ${workProgram[WorkProgramGeneralFields.ID]}, ИСУ ИД: ${workProgram[WorkProgramGeneralFields.DISCIPLINE_CODE]})`,
     }))
 
 export const getWorkProgramDialog = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_DIALOG, {});
