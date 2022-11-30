@@ -303,7 +303,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   ) : <></>
                 }
                 {blockOfWorkPrograms?.length === 0 ? (
-                    <Button size="small" onClick={this.handleAddNewModule(item.id, allChild)}>
+                    <Button size="small" onClick={this.handleAddNewModule(item.id, item?.childs)}>
                       <AddIcon/> Модуль
                     </Button>
                   ) : <></>

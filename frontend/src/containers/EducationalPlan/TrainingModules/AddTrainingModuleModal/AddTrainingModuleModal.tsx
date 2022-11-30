@@ -102,7 +102,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
 
     render() {
         const {isOpen, classes, filterId, filterModuleIsuId, filterModuleName, filterModuleDisciplineName,
-            trainingModules, allCount, currentPage, filterModuleAvailableForAll} = this.props;
+            trainingModules, allCount, currentPage, filterModuleAvailableForAll, onSave} = this.props;
         const {selectedTrainingModules} = this.state;
 
         return (
@@ -118,13 +118,15 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                 <DialogTitle>
                     <div className={classes.dialogTitle}>
                         Добавить учебный модуль
-                        {/*<Typography>*/}
-                        {/*    <Switch checked={filterModuleAvailableForAll}*/}
-                        {/*            onChange={this.updateAvailableForAllModulesFilter}*/}
-                        {/*            color="primary"*/}
-                        {/*    />*/}
-                        {/*    Показать общедоступные модули*/}
-                        {/*</Typography>*/}
+                        {!onSave && ( // onSave передается в учебных планах, там не нужно показывать эту галку
+                            <Typography>
+                                <Switch checked={filterModuleAvailableForAll}
+                                        onChange={this.updateAvailableForAllModulesFilter}
+                                        color="primary"
+                                />
+                                Показать общедоступные модули
+                            </Typography>
+                      )}
                     </div>
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>

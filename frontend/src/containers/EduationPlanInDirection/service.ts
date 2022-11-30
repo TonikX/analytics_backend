@@ -13,7 +13,7 @@ class Service extends AnalyticsService{
         const prerequisite = `academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__id=${filters[filterFields.PREREQUISITE]}`
         const structuralUnit = `academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__structural_unit__title=${filters[filterFields.STRUCTURAL_UNIT]}`
         const numberDp = `field_of_study__number=${filters[filterFields.NUMBER_DP]}`
-        const nameDp  =`field_of_study__title=${filters[filterFields.NAME_DP]}`
+        const nameDp  =`title=${filters[filterFields.TITLE]}`
         const yearOp  =`year=${filters[filterFields.YEAR]}`
         const qualificationOp  =`field_of_study__qualification=${filters[filterFields.QUALIFICATION]}`
 

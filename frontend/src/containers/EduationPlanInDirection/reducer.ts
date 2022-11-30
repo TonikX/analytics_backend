@@ -14,7 +14,7 @@ export const initialState: educationalPlanInDirectionState = {
     },
     [fields.FILTERING]: {
         [filterFields.NUMBER_DP]: '',
-        [filterFields.NAME_DP]: '',
+        [filterFields.TITLE]: '',
         [filterFields.SPECIALIZATION]: '',
         [filterFields.STRUCTURAL_UNIT]: '',
         [filterFields.PREREQUISITE]: '',
