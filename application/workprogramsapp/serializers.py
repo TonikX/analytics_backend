@@ -588,9 +588,11 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
                 ze_list = obj.credit_units.split(",")
                 for i, el in enumerate(ze_list):
                     if int(el) != 0:
-                        return i + 1
+                        return [i + 1]
             except IndexError:
-                return ""
+                return []
+            except AttributeError:
+                return []
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
