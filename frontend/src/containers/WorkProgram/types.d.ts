@@ -95,6 +95,7 @@ export interface workProgramState {
 
 export type WorkProgramGeneralType = {
     [WorkProgramGeneralFields.ID]: number;
+    [WorkProgramGeneralFields.DISCIPLINE_CODE]: number;
     [WorkProgramGeneralFields.TITLE]: string;
     [WorkProgramGeneralFields.DESCRIPTION]: string;
     [WorkProgramGeneralFields.CODE]: string;
