@@ -118,13 +118,13 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                 <DialogTitle>
                     <div className={classes.dialogTitle}>
                         Добавить учебный модуль
-                        <Typography>
-                            <Switch checked={filterModuleAvailableForAll}
-                                    onChange={this.updateAvailableForAllModulesFilter}
-                                    color="primary"
-                            />
-                            Показать общедоступные модули
-                        </Typography>
+                        {/*<Typography>*/}
+                        {/*    <Switch checked={filterModuleAvailableForAll}*/}
+                        {/*            onChange={this.updateAvailableForAllModulesFilter}*/}
+                        {/*            color="primary"*/}
+                        {/*    />*/}
+                        {/*    Показать общедоступные модули*/}
+                        {/*</Typography>*/}
                     </div>
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>

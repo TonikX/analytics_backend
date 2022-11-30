@@ -11,11 +11,17 @@ import actions from "./actions";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
+import Chip from "@material-ui/core/Chip";
+import StructuralUnitsSelector from "../StructuralUnits/StructuralUnitsSelector";
+import structuralUnitActions from "../StructuralUnits/actions";
+import AddIcon from "@material-ui/icons/Add";
+import Dialog from "@material-ui/core/Dialog";
 
 export default () => {
     const classes = useStyles();
     const userData = useSelector(getUserData);
     const dispatch = useDispatch();
+    const [openAddStructuralUnitModal, setOpenAddStructuralUnitModal] = useState(false)
 
     const {
         username = '',
@@ -23,6 +29,7 @@ export default () => {
         last_name = '',
         first_name = '',
         isu_number = '',
+        structural_unit = [],
         do_email_notifications = false,
         expertise_comments_notification = false,
         expertise_status_notification = false,
@@ -45,6 +52,16 @@ export default () => {
         setStatusAgree(expertise_status_notification);
         setCommentsAgree(expertise_comments_notification);
     }, [email, do_email_notifications, expertise_comments_notification, expertise_status_notification]);
+
+    useEffect(() => {
+        dispatch(structuralUnitActions.getStructuralUnits())
+    }, [])
+
+    useEffect(() => {
+        if (openAddStructuralUnitModal) {
+            dispatch(structuralUnitActions.getStructuralUnits())
+        }
+    }, [openAddStructuralUnitModal])
 
     const setEmail = (event: ChangeEvent) => {
         const value = get(event, 'target.value', '').trim();
@@ -108,6 +125,19 @@ export default () => {
         )
     };
 
+    const addStructuralUnit = (value: number) => {
+        setOpenAddStructuralUnitModal(false);
+        dispatch(actions.updateUserData({
+            structural_unit: [...structural_unit.map((item: any) => item.id), value],
+        }));
+    }
+
+    const removeStructuralUnit = (value: number) => {
+        dispatch(actions.updateUserData({
+            structural_unit: structural_unit.filter((item: any) => item.id !== value).map((item: any) => item.id),
+        }));
+    }
+
     return (
         <Box className={classes.root}>
             <Typography className={classes.title}>
@@ -123,6 +153,39 @@ export default () => {
                 <TextField label="Имя" value={first_name} className={classes.field} fullWidth disabled/>
                 <TextField label="Фамилия" value={last_name} className={classes.field} fullWidth disabled/>
                 <TextField label="Номер группы" value={isu_number} className={classes.field} fullWidth disabled/>
+                <Typography>
+                    Структурные подразделения:
+                </Typography>
+                <div>
+                    {structural_unit.map((item: any) =>
+                        <Chip
+                            className={classes.structuralUnitItem}
+                            onDelete={() => removeStructuralUnit(item.id)}
+                            label={item.title}
+                        />
+                    )}
+                </div>
+                <Button
+                  onClick={() => setOpenAddStructuralUnitModal(true)}
+                  variant="outlined"
+                  className={classes.structuralUnitsAddButton}
+                  size="small"
+                >
+                    <AddIcon/> Добавить структурное подразделение
+                </Button>
+                {openAddStructuralUnitModal && (
+                  <Dialog
+                    open
+                    fullWidth
+                    maxWidth="sm"
+                    classes={{
+                        paper: classes.dialog,
+                    }}
+                    onClose={() => setOpenAddStructuralUnitModal(false)}
+                  >
+                      <StructuralUnitsSelector onChange={addStructuralUnit} />
+                  </Dialog>
+                )}
                 <FormControlLabel
                     control={<Checkbox checked={notificationsAgree}
                                        onChange={(event) => toggleCheckbox(event, 'agree')}/>}

@@ -14,6 +14,16 @@ export const useStyles = makeStyles(() => createStyles({
     field: {
         marginBottom: '20px'
     },
+    structuralUnitItem: {
+        marginTop: '5px',
+        marginRight: '5px',
+    },
+    structuralUnitsAddButton: {
+        marginTop: '10px',
+    },
+    dialog: {
+        padding: '40px',
+    },
     title: {
         fontSize: '24px',
         textAlign: 'center',
