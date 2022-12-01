@@ -159,7 +159,7 @@ class Sections extends React.PureComponent<SectionsProps> {
   }
 
   render() {
-    const {classes, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours, semesterCount, implementationFormat} = this.props;
+    const {classes, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours, semesterCount, implementationFormat, contactHours} = this.props;
     const {createNewSectionMode} = this.state;
 
     const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
@@ -370,6 +370,14 @@ class Sections extends React.PureComponent<SectionsProps> {
                     </TableCell>
                     {semesterColumns.map((item: any, index: number) =>
                       <TableCell className={classes.cell}>{srsHours[index]}</TableCell>
+                    )}
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className={classes.headerCell}>
+                      Контактная работа
+                    </TableCell>
+                    {semesterColumns.map((item: any, index: number) =>
+                        <TableCell className={classes.cell}>{contactHours[index]}</TableCell>
                     )}
                   </TableRow>
                 </TableBody>
