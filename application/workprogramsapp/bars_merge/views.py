@@ -264,12 +264,12 @@ def SendCheckpointsForAcceptedWP(request):
                         implementation_academic_plan_in_field_of_study=imp)
                     for fos in field_of_studies:
                         imp_list.append(generate_fos(imp.ns_id, fos.number, imp.title))
-                        isu_wp = \
-                            list(WorkProgramIdStrUpForIsu.objects.filter(
-                                work_program_in_field_of_study__work_program=work_program,
-                                work_program_in_field_of_study__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=imp))[
-                                0]
-                        isu_wp_id = isu_wp.dis_id
+                    isu_wp = \
+                        list(WorkProgramIdStrUpForIsu.objects.filter(
+                            work_program_in_field_of_study__work_program=work_program,
+                            work_program_in_field_of_study__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=imp))[
+                            0]
+                    isu_wp_id = isu_wp.dis_id
                 imp_list_for_many_term.extend(imp_list)
                 imp_list_for_many_term = list({v['id']: v for v in imp_list_for_many_term}.values())
                 # imp_list = list({v['id']: v for v in imp_list}.values())
@@ -304,12 +304,12 @@ def SendCheckpointsForAcceptedWP(request):
                             implementation_academic_plan_in_field_of_study=imp)
                         for fos in field_of_studies:
                             imp_list.append(generate_fos(imp.ns_id, fos.number, imp.title))
-                            isu_wp = \
-                                list(WorkProgramIdStrUpForIsu.objects.filter(
-                                    work_program_in_field_of_study__work_program=work_program,
-                                    work_program_in_field_of_study__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=imp))[
-                                    0]
-                            isu_wp_id = isu_wp.dis_id
+                        isu_wp = \
+                            list(WorkProgramIdStrUpForIsu.objects.filter(
+                                work_program_in_field_of_study__work_program=work_program,
+                                work_program_in_field_of_study__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=imp))[
+                                0]
+                        isu_wp_id = isu_wp.dis_id
                     except FieldOfStudy.DoesNotExist:
                         pass
 
