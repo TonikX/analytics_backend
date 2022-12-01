@@ -28,7 +28,6 @@ import {fields, ImplementationFormatsEnum, workProgramSectionFields} from "../en
 
 import connect from './Sections.connect';
 import styles from './Sections.styles';
-import {SectionType} from "../types";
 
 class Sections extends React.PureComponent<SectionsProps> {
   scrollBar: any = null;
