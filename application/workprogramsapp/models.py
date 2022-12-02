@@ -598,6 +598,11 @@ class ImplementationAcademicPlan(models.Model):
         ('ru/en', 'ru/en'),
     )
 
+    types_of_plan = (
+        ('base', 'Базовый'),
+        ('individual', 'Индивидуальный'),
+    )
+
     academic_plan = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, verbose_name='Учебный план',
                                       related_name="academic_plan_in_field_of_study", blank=True, null=True)
     field_of_study = models.ManyToManyField('FieldOfStudy', verbose_name='Направление подготовки',
@@ -617,6 +622,19 @@ class ImplementationAcademicPlan(models.Model):
     title = models.CharField(max_length=1024, verbose_name='Название', blank=True, null=True)
     old_json = JSONField(blank=True, null=True)
     new_json = JSONField(blank=True, null=True)
+
+    # Новые поля из ИСУ (по логике могут конфликтовать с нашей базой)
+    plan_type = models.CharField(max_length=1024, choices=types_of_plan, verbose_name='Тип плана', default="base")
+    training_period = models.IntegerField(default=0, verbose_name="Срок обучения в годах")
+    structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL,
+                                        verbose_name='Структурное подразделение',
+                                        related_name='educational_program_in_structural_unit', blank=True, null=True)
+    total_intensity = models.IntegerField(default=0, verbose_name="Количество зачетных единиц")
+    military_department = models.BooleanField(verbose_name="Наличие военной кафедры", default=False)
+    university_partner = models.ManyToManyField('UniversityPartner',
+                                                verbose_name='ВУЗ партнер',
+                                                related_name='educational_program_in_university_partner', blank=True)
+
 
     def __str__(self):
         return 'НАШ ОП ид: ' + str(self.id) + ' / ' + 'ОП ИСУ ИД: ' + str(self.op_isu_id)

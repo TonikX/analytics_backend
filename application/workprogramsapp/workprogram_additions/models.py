@@ -35,3 +35,12 @@ class UserStructuralUnit(models.Model):
                              related_name='user_for_structural_unit')
     status = models.CharField(max_length=30, choices=status_choise, verbose_name='Тип пользователя', default='employee',
                               blank=True, null=True, )
+
+
+class UniversityPartner(models.Model):
+    title = models.CharField(max_length=300, verbose_name="Наименование ВУЗа")
+    isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID вуза в ИСУ (при иналичии)")
+    country = models.CharField(blank=True, null=True, max_length=300, verbose_name="Страна")
+
+    def __str__(self):
+        return self.title
