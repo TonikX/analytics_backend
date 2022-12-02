@@ -3,6 +3,7 @@ import os
 from typing import Dict
 
 import pandas
+from django.conf import settings
 from rest_framework import filters
 from rest_framework import permissions
 from rest_framework import status
@@ -12,6 +13,7 @@ from rest_framework.views import APIView
 
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_excel_creator import AcademicPlanExcelCreator
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_processor import AcademicPlanUpdateProcessor
+from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
 from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan, \
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
     WorkProgramInFieldOfStudy, Zun, AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, \
@@ -793,4 +795,20 @@ class FileUploadOldVersionAPIView(APIView):
                 print('Строка ', i, 'не записалась, проверьте на опечатки или пустые значения')
                 continue
         print(f'Записано: Учебные планы:{ap_count}, РПД:{wp_count}, Направления:{fs_count}')
+        return Response(status=200)
+
+
+class UpdateAcademicPlansHeadersView(APIView):
+
+
+
+    def post(self, request):
+        isu_service = IsuService(
+            IsuUser(
+                settings.ISU["ISU_CLIENT_ID"],
+                settings.ISU["ISU_CLIENT_SECRET"]
+            )
+        )
+        headers = isu_service.get_academic_plan_headers()
+
         return Response(status=200)
