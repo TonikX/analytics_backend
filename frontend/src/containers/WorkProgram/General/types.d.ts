@@ -34,4 +34,5 @@ export interface FirstStepProps extends WithStyles<typeof styles> {
     fetchingDescription: boolean;
     fetchingVideoLink: boolean;
     canAddEditors: boolean;
+    inChangeBlock: Array[];
 }

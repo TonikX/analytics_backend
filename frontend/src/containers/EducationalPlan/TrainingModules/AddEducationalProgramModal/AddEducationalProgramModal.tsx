@@ -28,6 +28,7 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
     };
 
     componentDidMount() {
+        this.props.educationalProgramActions.changeFiltering({[filterFields.YEAR]: 2023})
         this.searchModules()
     }
 
@@ -73,6 +74,7 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
     }
 
     handleFilter = (field: string, value: string | number): void => {
+        this.props.educationalProgramActions.changeCurrentPage(1);
         this.props.educationalProgramActions.changeFiltering({[field]: value})
         this.props.educationalProgramActions.getEducationalPlansInDirection()
     }

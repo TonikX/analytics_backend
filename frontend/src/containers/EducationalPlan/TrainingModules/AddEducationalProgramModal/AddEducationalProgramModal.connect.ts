@@ -4,12 +4,11 @@ import actions from "../actions";
 import educationalProgramActions from "../../../EduationPlanInDirection/actions";
 import {
     isOpenDialog,
-    getAllCount,
     getTrainingModule
 } from '../getters';
 import {rootState} from "../../../../store/reducers";
 import {fields} from "../enum";
-import {getFilters, getCurrentPage, getEducationalPlanInDirection} from "../../../EduationPlanInDirection/getters";
+import {getFilters, getCurrentPage, getEducationalPlanInDirection, getAllCount} from "../../../EduationPlanInDirection/getters";
 
 const mapStateToProps = (state: rootState) => {
     return {
