@@ -23,7 +23,7 @@ from .notifications.emails.models import SentMail
 from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments, EmailReset
 
 
-from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
+from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit, UniversityPartner
 
 from .educational_program.pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
     PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
@@ -170,3 +170,4 @@ class AcademicPlanAdmin(admin.ModelAdmin):
     save_as = True
 
 admin.site.register(PracticeInFieldOfStudy)
+admin.site.register(UniversityPartner)

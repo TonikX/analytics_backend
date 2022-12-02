@@ -5,7 +5,7 @@ from rest_framework import serializers
 from dataprocessing.serializers import userProfileSerializer, ItemSerializer
 from workprogramsapp.models import Indicator, Competence, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram
 # Модели данных
-from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
+from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit, UniversityPartner
 from ..models import WorkProgram
 
 """
@@ -82,6 +82,16 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StructuralUnit
+        fields = "__all__"
+
+
+class ShortUniversityPartnerSerializer(serializers.ModelSerializer):
+    """
+    Cериализатор университета партена
+    """
+
+    class Meta:
+        model = UniversityPartner
         fields = "__all__"
 
 

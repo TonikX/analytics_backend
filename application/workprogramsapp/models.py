@@ -622,18 +622,20 @@ class ImplementationAcademicPlan(models.Model):
     title = models.CharField(max_length=1024, verbose_name='Название', blank=True, null=True)
     old_json = JSONField(blank=True, null=True)
     new_json = JSONField(blank=True, null=True)
+    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='implementation_academic_plan_block_modules',
+                                     verbose_name='Редакторы образовательной программы', blank=True)
 
     # Новые поля из ИСУ (по логике могут конфликтовать с нашей базой)
     plan_type = models.CharField(max_length=1024, choices=types_of_plan, verbose_name='Тип плана', default="base")
     training_period = models.IntegerField(default=0, verbose_name="Срок обучения в годах")
     structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL,
                                         verbose_name='Структурное подразделение',
-                                        related_name='educational_program_in_structural_unit', blank=True, null=True)
+                                        related_name='implementation_academic_plan_in_structural_unit', blank=True, null=True)
     total_intensity = models.IntegerField(default=0, verbose_name="Количество зачетных единиц")
     military_department = models.BooleanField(verbose_name="Наличие военной кафедры", default=False)
     university_partner = models.ManyToManyField('UniversityPartner',
                                                 verbose_name='ВУЗ партнер',
-                                                related_name='educational_program_in_university_partner', blank=True)
+                                                related_name='implementation_academic_plan_in_university_partner', blank=True)
 
 
     def __str__(self):

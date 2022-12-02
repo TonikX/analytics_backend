@@ -13,7 +13,8 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool, \
     AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, AcademicPlanUpdateConfiguration
-from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer
+from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer, \
+    ShortUniversityPartnerSerializer
 from onlinecourse.serializers import OnlineCourseSerializer
 
 
@@ -918,10 +919,15 @@ class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     academic_plan = AcademicPlanInImplementationSerializer()
     field_of_study = FieldOfStudyImplementationSerializer(many = True)
     #academic_plan = AcademicPlanSerializer()
+    structural_unit = ShortStructuralUnitSerializer()
+    university_partner = ShortUniversityPartnerSerializer(many = True)
+    editors = userProfileSerializer(many=True)
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id','academic_plan', 'year', 'qualification', 'title', 'field_of_study', 'year']
+        fields = ['id','academic_plan', 'year', 'qualification', 'title', 'field_of_study', 'year',
+                  'plan_type', 'training_period', 'structural_unit', 'total_intensity', 'military_department',
+                  'university_partner', 'editors']
 
 
 class FieldOfStudyListSerializer(serializers.ModelSerializer):
