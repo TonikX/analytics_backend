@@ -69,7 +69,7 @@ PyMuPDF==1.18.16
 PyMySQL==0.9.3
 pypandoc==1.6.3
 pyparsing==2.4.7
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 python-dateutil==2.8.1
 python-docx==0.8.10
 python-openid==2.2.5
