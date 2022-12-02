@@ -153,9 +153,10 @@ def academicNTCheckpointGenerator(work_program: WorkProgram, send_semester: int,
         isu_wp_id = None
         for imp in implementation_of_academic_plan:
             # создаем список направлений + уп с айдишниками ИСУ для БАРСа
-            field_of_studies = FieldOfStudy.objects.get(
+            field_of_studies = FieldOfStudy.objects.filter(
                 implementation_academic_plan_in_field_of_study=imp)
-            imp_list.append(generate_fos(imp.ns_id, field_of_studies.number, imp.title))
+            for fos in field_of_studies:
+                imp_list.append(generate_fos(imp.ns_id, fos.number, imp.title))
             isu_wp = \
                 list(WorkProgramIdStrUpForIsu.objects.filter(
                     work_program_in_field_of_study__work_program=work_program,

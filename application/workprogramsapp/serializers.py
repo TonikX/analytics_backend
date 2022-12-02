@@ -575,9 +575,24 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
     def to_representation(self, value):
         self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
         self.fields['practice'] = PracticePrimitiveSerializer(required=False, many=True)
+        self.fields['semester_start'] = serializers.SerializerMethodField()
         # self.fields['gia'] = GIASerializer(required=False, many=True)
         # self.fields['practice'] = PracticeSerializer(required=False, many=True)
         return super().to_representation(value)
+
+    def get_semester_start(self, obj):
+        if obj.semester_start:
+            return obj.semester_start
+        else:
+            try:
+                ze_list = obj.credit_units.split(",")
+                for i, el in enumerate(ze_list):
+                    if int(el) != 0:
+                        return [i + 1]
+            except IndexError:
+                return []
+            except AttributeError:
+                return []
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
