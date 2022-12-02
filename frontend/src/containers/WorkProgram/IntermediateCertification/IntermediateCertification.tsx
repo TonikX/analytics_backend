@@ -96,7 +96,8 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
     render() {
         const {classes, intermediateCertificationList, isCanEdit} = this.props;
         const {anchorsEl} = this.state;
-        
+        const disabled = this.props.inChangeBlock.length > 0;
+
         return (
             <div className={classes.root}>
 
@@ -214,7 +215,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                 {/*    Экзамен: <b> {hasExam === null ? 'Нет информации' : hasExam ? 'да' : 'нет'}</b> <br/>*/}
                 {/*</Typography>*/}
 
-                {isCanEdit &&
+                {isCanEdit && !disabled  &&
                     <Button color="secondary"
                          className={classes.addIcon}
                          onClick={this.handleCreateNew}

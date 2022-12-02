@@ -35,9 +35,6 @@ import {UserFields} from "../../../layout/enum";
 import connect from './FirstStep.connect';
 import styles from './FirstStep.styles';
 import FormLabel from "@material-ui/core/FormLabel";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 
 class FirstStep extends React.Component<FirstStepProps> {
   state = {
@@ -246,6 +243,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     } = this.props;
     const {state} = this;
     const {addEditorsMode} = state;
+    const disabled = this.props.inChangeBlock.length > 0;
 
     return (
       <div className={classes.container}>
@@ -258,7 +256,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                          value={state[WorkProgramGeneralFields.CODE]}
                          onBlur={this.saveField(WorkProgramGeneralFields.CODE)}
                          onChange={this.changeCode}
-                         disabled
+                         disabled={disabled}
                          InputLabelProps={{
                            shrink: true,
                          }}
@@ -278,7 +276,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                          onBlur={this.saveField(WorkProgramGeneralFields.TITLE)}
                          onChange={this.changeTitle}
                          // disabled={fetchingTitle || !isCanEdit}
-                         disabled
+                         disabled={disabled}
               />
               :
               <Typography className={classes.textItem}> <b>Название
@@ -312,7 +310,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                             value={structuralUnit?.id}
                             valueLabel={structuralUnit?.title}
                             className={classes.marginBottom20}
-                            disabled
+                            disabled={disabled}
             />
             :
             <Typography className={classes.textItem}>
@@ -370,7 +368,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                     control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === item} />}
                     label={item}
                     key={item}
-                    disabled
+                    disabled={disabled}
                   />
                 ))}
               </RadioGroup>

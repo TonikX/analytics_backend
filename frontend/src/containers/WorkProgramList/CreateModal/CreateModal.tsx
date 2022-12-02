@@ -103,6 +103,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         this.props.actions.createNewWorkProgram({
             ...workProgram,
             hours: this.calculateTotal(workProgram.ze_v_sem) * 36,
+            contact_hours_v2: this.calculateContactWork(),
             srs_hours_v2: this.calculateSrc()
         });
         this.setState({
@@ -133,6 +134,23 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     };
 
     calculateSrc = () => {
+        const {workProgram} = this.state;
+        const {lecture_hours_v2, practice_hours_v2, lab_hours_v2, ze_v_sem} = workProgram;
+        const lecturesArray = lecture_hours_v2.split(", ").map(Number);
+        const practiceArray = practice_hours_v2.split(", ").map(Number);
+        const labArray = lab_hours_v2.split(", ").map(Number);
+        const zeSem = ze_v_sem.split(", ").map(Number);
+
+        const result = [];
+        for (let i = 0; i < lecturesArray.length; i++) {
+            const sum = lecturesArray[i] + practiceArray[i] + labArray[i];
+            result.push(36 * zeSem[i] - sum * 1.1)
+        }
+
+        return result.join(", ");
+    };
+
+    calculateContactWork = () => {
         const {workProgram} = this.state;
         const {lecture_hours_v2, practice_hours_v2, lab_hours_v2} = workProgram;
         const lecturesArray = lecture_hours_v2.split(", ").map(Number);

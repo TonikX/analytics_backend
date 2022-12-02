@@ -13,6 +13,7 @@ export interface SectionsProps extends WithStyles<typeof styles> {
     practiceHours: Array<string>;
     labHours: Array<string>;
     srsHours: Array<string>;
+    contactHours: Array<string>;
     semesterCount: number;
     implementationFormat: ImplementationFormatsEnum;
 }
