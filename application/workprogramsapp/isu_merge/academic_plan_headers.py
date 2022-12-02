@@ -68,12 +68,12 @@ def process_headers(headers: list):
                                                                        country=ap_header["up_country"])
             if partner not in imp.university_partner.all():
                 imp.university_partner.add(partner)
-            print("PARTNER----------->", partner, created)
+            #print("PARTNER----------->", partner, created)
         if ap_header["faculty_id"]:
             unit, created = StructuralUnit.objects.get_or_create(isu_id=ap_header["faculty_id"],
                                                                  title=ap_header["faculty_name"])
             imp.structural_unit = unit
-            print("UNIT---------->", unit, created)
+            #print("UNIT---------->", unit, created)
 
         imp.save()
         counter_plans += 1
