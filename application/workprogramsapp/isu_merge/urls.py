@@ -5,7 +5,7 @@ from rest_framework.routers import DefaultRouter
 from .views import FileUploadAPIView, FileUploadOldVersionAPIView, AcademicPlanUpdateExcelCreatorView, \
     AcademicPlanUpdateLogsView, AcademicPlanUpdateSchedulerConfigurationView, AcademicPlanUpdateConfigurationView, \
     AcademicPlanUpdateConfigurationUpdateView, AcademicPlanUpdateConfigurationCreateAPIView, \
-    AcademicPlanUpdateSchedulerConfigurationUpdateView, UpdateAcademicPlansView
+    AcademicPlanUpdateSchedulerConfigurationUpdateView, UpdateAcademicPlansView, UpdateAcademicPlansHeadersView
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_scheduler import AcademicPlanUpdateScheduler
 from .v_2.isu_change_parser import ChangeParser
 
@@ -21,7 +21,8 @@ urlpatterns = [
     path('api/isu_v2/scheduler/configuration/update', AcademicPlanUpdateSchedulerConfigurationUpdateView.as_view()),
     path('api/isu_v2/academic-plans/configuration', AcademicPlanUpdateConfigurationView.as_view()),
     path('api/isu_v2/academic-plans/configuration/create', AcademicPlanUpdateConfigurationCreateAPIView.as_view()),
-    path('api/isu_v2/academic-plans/configuration/update/<int:pk>', AcademicPlanUpdateConfigurationUpdateView.as_view())
+    path('api/isu_v2/academic-plans/configuration/update/<int:pk>', AcademicPlanUpdateConfigurationUpdateView.as_view()),
+    path('api/isu_v2/academic-plans/headers/update', UpdateAcademicPlansHeadersView.as_view()),
 ]
 
 sd = AcademicPlanUpdateScheduler()
