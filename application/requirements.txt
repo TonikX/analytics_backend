@@ -64,7 +64,7 @@ pdfkit==0.6.1
 Pillow==7.0.0
 psycopg2==2.8.4
 pycparser==2.20
-PyJWT==1.7.1
+PyJWT==2.4.0
 PyMuPDF==1.18.16
 PyMySQL==0.9.3
 pypandoc==1.6.3
