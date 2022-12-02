@@ -11,6 +11,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView,
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from workprogramsapp.isu_merge.academic_plan_headers import process_headers
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_excel_creator import AcademicPlanExcelCreator
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_processor import AcademicPlanUpdateProcessor
 from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
@@ -800,8 +801,6 @@ class FileUploadOldVersionAPIView(APIView):
 
 class UpdateAcademicPlansHeadersView(APIView):
 
-
-
     def post(self, request):
         isu_service = IsuService(
             IsuUser(
@@ -810,5 +809,6 @@ class UpdateAcademicPlansHeadersView(APIView):
             )
         )
         headers = isu_service.get_academic_plan_headers()
+        plans_created = process_headers(headers)
 
-        return Response(status=200)
+        return Response(data={"plans_created": plans_created}, status=200)
