@@ -698,6 +698,8 @@ class DisciplineBlockSerializer(serializers.ModelSerializer):
 
 class ImplementationAcademicPlanShortForAPSerializer(serializers.ModelSerializer):
     field_of_study = FieldOfStudyImplementationSerializer(many=True)
+    university_partner = ShortUniversityPartnerSerializer(many=True)
+    editors = userProfileSerializer(many=True)
 
     class Meta:
         model = ImplementationAcademicPlan
