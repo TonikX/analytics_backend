@@ -698,10 +698,15 @@ class DisciplineBlockSerializer(serializers.ModelSerializer):
 
 class ImplementationAcademicPlanShortForAPSerializer(serializers.ModelSerializer):
     field_of_study = FieldOfStudyImplementationSerializer(many=True)
+    university_partner = ShortUniversityPartnerSerializer(many=True)
+    editors = userProfileSerializer(many=True)
+    structural_unit = ShortStructuralUnitSerializer()
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id', 'year', 'qualification', 'title', 'field_of_study']
+        fields = ['id', 'year', 'qualification', 'title', 'field_of_study', 'plan_type', 'training_period',
+                  'structural_unit', 'total_intensity', 'military_department',
+                  'university_partner', 'editors']
 
 
 class AcademicPlanSerializer(serializers.ModelSerializer):
