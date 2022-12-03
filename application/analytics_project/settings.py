@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'records',
     'gia_practice_app',
     'drf_yasg2',
+    'model_clone',
     #'django_extensions',
     # 'ckeditor',
     # 'ckeditor_uploader',
