@@ -701,7 +701,9 @@ class ImplementationAcademicPlanShortForAPSerializer(serializers.ModelSerializer
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id', 'year', 'qualification', 'title', 'field_of_study']
+        fields = ['id', 'year', 'qualification', 'title', 'field_of_study', 'plan_type', 'training_period',
+                  'structural_unit', 'total_intensity', 'military_department',
+                  'university_partner', 'editors']
 
 
 class AcademicPlanSerializer(serializers.ModelSerializer):
