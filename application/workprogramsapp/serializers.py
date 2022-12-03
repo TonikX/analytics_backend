@@ -700,6 +700,7 @@ class ImplementationAcademicPlanShortForAPSerializer(serializers.ModelSerializer
     field_of_study = FieldOfStudyImplementationSerializer(many=True)
     university_partner = ShortUniversityPartnerSerializer(many=True)
     editors = userProfileSerializer(many=True)
+    structural_unit = ShortStructuralUnitSerializer()
 
     class Meta:
         model = ImplementationAcademicPlan
