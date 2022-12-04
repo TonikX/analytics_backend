@@ -7,7 +7,7 @@ import moduleActions from './TrainingModules/actions';
 
 import Service from './service';
 
-import {BlocksOfWorkProgramsFields, fetchingTypes} from "./enum";
+import {BlocksOfWorkProgramsFields, EducationalPlanFields, fetchingTypes} from "./enum";
 import {
     getCurrentPage,
     getEducationalPlanDetailId,
@@ -149,6 +149,31 @@ const changeEducationalPlan = createLogic({
         service.updateEducationalPlan(educationalPlan)
             .then((res) => {
                 dispatch(planActions.getEducationalPlans());
+                dispatch(actions.fetchingSuccess());
+                dispatch(planActions.closeDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_EDUCATIONAL_PLAN}));
+                return done();
+            });
+    }
+});
+
+const changeEditorsEducationalPlan = createLogic({
+    type: planActions.changeEditorsEducationalPlan.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalPlan = action.payload;
+        const id = getEducationalPlanDetailId(getState())
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_EDUCATIONAL_PLAN}));
+
+        service.updatePatchEducationalPlan(educationalPlan)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(id));
                 dispatch(actions.fetchingSuccess());
                 dispatch(planActions.closeDialog());
             })
@@ -671,6 +696,7 @@ export default [
     getEducationalPlans,
     deleteEducationalPlan,
     createNewEducationalPlan,
+    changeEditorsEducationalPlan,
     changeEducationalPlan,
     getEducationalPlanDetail,
     createBlockOfWorkPrograms,

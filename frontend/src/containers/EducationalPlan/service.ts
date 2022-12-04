@@ -160,6 +160,12 @@ class EducationalPlanService extends AnalyticsService{
 
         return this.put(`/api/academicplan/update/${id}`, formData);
     }
+
+    updatePatchEducationalPlan(plan: any){
+        const id = plan[EducationalPlanFields.ID];
+
+        return this.patch(`/api/implementationacademicplan/update/${id}`, plan);
+    }
 }
 
 export default EducationalPlanService;

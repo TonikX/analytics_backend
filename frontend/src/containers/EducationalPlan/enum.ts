@@ -48,6 +48,13 @@ export enum fetchingTypes {
 
 export enum EducationalPlanFields {
     ID = 'id',
+    EDITORS = 'editors',
+    TRAINING_PERIOD = 'training_period',
+    UNIVERSITY_PARTNER = 'university_partner',
+    PLAN_TYPE = 'plan_type',
+    STRUCTURAL_UNIT = 'structural_unit',
+    TOTAL_INTENSITY = 'total_intensity',
+    MILITARY_DEPARTMENT = 'military_department',
     PROFILE = 'educational_profile',
     APPROVAL_DATE = 'approval_date',
     NUMBER = 'number',

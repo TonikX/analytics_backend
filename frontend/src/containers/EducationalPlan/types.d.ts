@@ -15,6 +15,7 @@ export interface EducationalPlanActions {
     deleteCompetenceBlock: any;
     deleteWorkProgramFromZun: any;
     saveCompetenceBlock: any;
+    changeEditorsEducationalPlan: any;
 
     closeCreateModuleDialog: any;
     openCreateModuleDialog: any;
@@ -100,6 +101,7 @@ export type EducationalPlanType = {
     [EducationalPlanFields.ID]: number;
     [EducationalPlanFields.PROFILE]: string;
     [EducationalPlanFields.NUMBER]: string;
+    [EducationalPlanFields.EDITORS]: UserType[];
     [EducationalPlanFields.APPROVAL_DATE]: string;
     [EducationalPlanFields.YEAR]: string;
     [EducationalPlanFields.QUALIFICATION]: string;
