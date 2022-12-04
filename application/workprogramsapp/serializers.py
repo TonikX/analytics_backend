@@ -6,6 +6,7 @@ from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
 #from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
 #from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
+from .disciplineblockmodules.ze_module_logic import recursion_module
 from .expertise.common_serializers import ShortExpertiseSerializer
 from .expertise.models import Expertise
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
@@ -629,47 +630,17 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
     def to_representation(self, value):
         self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
         self.fields["laboriousness"] = serializers.SerializerMethodField()
+        self.fields["ze_by_sem"] = serializers.SerializerMethodField()
         return super().to_representation(value)
 
-    def recursion_module(self, obj):
-        childs = obj.childs.all()
-        unit_final_sum = 0
-
-        try:
-            if obj.selection_rule == "choose_n_from_m":
-                if childs.exists():
-                    for i in range(int(obj.selection_parametr)):
-                        unit_final_sum += self.recursion_module(childs[i])
-                else:
-                    work_programs = WorkProgram.objects.filter(work_program_in_change_block__discipline_block_module=obj)
-                    for i in range(int(obj.selection_parametr)):
-                        unit_final_sum += sum([int(unit) for unit in work_programs[i].ze_v_sem.split(", ")])
-            elif obj.selection_rule == "all" or obj.selection_rule == "any_quantity":
-                if childs.exists():
-                    for child in childs:
-                        unit_final_sum += self.recursion_module(child)
-                else:
-                    work_programs = WorkProgram.objects.filter(
-                        work_program_in_change_block__discipline_block_module=obj)
-                    for wp in work_programs:
-                        unit_final_sum += sum([int(unit) for unit in wp.ze_v_sem.split(", ")])
-            elif obj.selection_rule == "by_credit_units":
-                unit_final_sum = int(obj.selection_parametr)
-
-            if unit_final_sum == 0:
-                for changeblock in WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=obj):
-                    unit_final_sum += sum([int(unit) for unit in changeblock.credit_units.split(", ")])
-        except AttributeError:
-            pass
-        except IndexError:
-            pass
-
-        return unit_final_sum
-
     def get_laboriousness(self, obj):
-        unit_final_sum = self.recursion_module(obj)
+        unit_final_sum = recursion_module(obj)
 
         return unit_final_sum
+
+    def get_ze_by_sem(self, obj):
+        min_ze, max_ze = recursion_module(obj, ze_or_ze_sem=False)
+        return {"min_ze": min_ze, "max_ze": max_ze}
 
     def get_childs(self, obj):
         childs = DisciplineBlockModule.objects.filter(father_module=obj)
