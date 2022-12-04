@@ -11,7 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #path('hho/', include('oauth2_provider.urls')),
     url(r'^', include('dataprocessing.urls')),
-    url(r'^', include('workprogramsapp.urls')),
+    path('', include('workprogramsapp.urls')),
     url(r'^', include('onlinecourse.urls')),
     url(r'^', include('records.urls')),
     path('auth/', include('djoser.urls')),

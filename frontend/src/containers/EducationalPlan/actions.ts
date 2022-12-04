@@ -12,6 +12,7 @@ const setIsTrajectoryRoute = createAction('SET_EDUCATIONAL_PLAN_IS_TRAJECTORY_RO
 
 const createNewEducationalPlan = createAction('CREATE_NEW_EDUCATIONAL_PLAN');
 const changeEducationalPlan = createAction('CHANGE_EDUCATIONAL_PLAN');
+const changeEditorsEducationalPlan = createAction('CHANGE_PATCH_EDUCATIONAL_PLAN');
 const deleteEducationalPlan = createAction('DELETE_EDUCATIONAL_PLAN');
 
 const openDialog = createAction('OPEN_EDUCATIONAL_PLAN_DIALOG');
@@ -65,6 +66,7 @@ const educationalPlanDisconnectModule = createAction('EDUCATIONAL_PLAN_DISCONNEC
 const setNewPlanIdForRedirect = createAction('SET_NEW_PLAN_ID_FOR_REDIRECT');
 
 const actions: EducationalPlanActions = {
+    changeEditorsEducationalPlan,
     setNewPlanIdForRedirect,
     educationalPlanConnectModules,
     educationalPlanDisconnectModule,

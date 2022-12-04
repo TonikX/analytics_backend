@@ -31,7 +31,7 @@ DEBUG = env('DEBUG')
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
 
 #ALLOWED_HOSTS = ['94.250.249.177', '94.250.249.177:8000', 'localhost', '127.0.0.1']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '62.109.28.95', 'op.itmo.ru']
 
 # Application definition
 
@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'records',
     'gia_practice_app',
     'drf_yasg2',
+    'model_clone',
     #'django_extensions',
     # 'ckeditor',
     # 'ckeditor_uploader',

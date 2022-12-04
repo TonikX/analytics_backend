@@ -2,6 +2,7 @@ import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
     tableWrap: {
+        marginTop: '20px',
         height: 'calc(100% - 60px)',
         maxheight: 'calc(100% - 60px)',
         '& td': {
@@ -112,6 +113,26 @@ export default (theme: Theme) => createStyles({
     wpStatus: {
         margin: '0 6px',
         whiteSpace: 'nowrap'
+    },
+    editors: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        margin: '20px 0px 10px',
+    },
+    editorsTitle: {
+        lineHeight: '32px',
+        marginRight: '10px',
+    },
+    editorsItem: {
+        marginLeft: '5px',
+    },
+    editorsAdd: {
+        height: '32px',
+        marginLeft: 'auto',
+    },
+    dialog: {
+        padding: '40px',
     },
     moduleNameWrap: {
         display: 'flex',
