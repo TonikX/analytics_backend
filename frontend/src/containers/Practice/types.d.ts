@@ -69,8 +69,11 @@ export type PracticeState = GeneralInfoState
     & {
     [PracticeFields.ID]: Id,
     [PracticeFields.PRACTICE_BASE]: Id,
+    [PracticeFields.SEMESTER_COUNT]: number,
     [PracticeFields.EDITORS]: any,
     [PracticeFields.PERMISSIONS_INFO]: PermissionsInfoState,
+    [PracticeFields.ZE_V_SEM]: string,
+    [PracticeFields.EVALUATION_TOOLS]: number[][]
 }
 
 export type PermissionsInfoState = {
@@ -99,9 +102,12 @@ export interface practicePageState {
 export interface MinimalPracticeState {
     [PracticeFields.TITLE]: string,
     [PracticeFields.YEAR]: number,
-    [PracticeFields.OP_LEADER]: string,
-    [PracticeFields.AUTHORS]: string,
+    [PracticeFields.SEMESTER_COUNT]: number,
     [PracticeFields.FORM_OF_CERTIFICATION_TOOLS]: string,
+    [PracticeFields.QUALIFICATION]: string,
+    [PracticeFields.ZE_V_SEM]: string;
+    [PracticeFields.STRUCTURAL_UNIT]: string;
+    [PracticeFields.EVALUATION_TOOLS]: number[][];
 }
 
 export type CommentType = {
