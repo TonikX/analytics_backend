@@ -87,6 +87,8 @@ export enum ModuleFields {
 export enum BlocksOfWorkProgramsFields {
     ID = 'id',
     WORK_PROGRAMS = 'work_program',
+    GIA = 'gia',
+    PRACTICE = 'practice',
     COMPETENCES = 'competences',
     INDICATORS = 'indicators',
     RESULTS = 'results',

@@ -256,7 +256,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
             return (
               <>
-                {renderRow(workPrograms.map((workProgram: any) =>
+                {Boolean(workPrograms?.length) && renderRow(workPrograms.map((workProgram: any) =>
                       <div className={classes.displayFlex}>
                         <Typography className={classes.workProgramLink}
                                     onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
