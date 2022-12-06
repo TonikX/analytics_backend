@@ -196,7 +196,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                 onChange={this.saveField(IntermediateCertificationFields.TYPE)}
                                                 value={evaluationTool[IntermediateCertificationFields.TYPE]}
                                                 fullWidth
-                                                disabled
                                                 displayEmpty
                                                 input={
                                                     <OutlinedInput
@@ -255,7 +254,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                               valueLabelDisplay="on"
                                               value={parseInt(evaluationTool[IntermediateCertificationFields.SEMESTER])}
                                               onChange={this.changeSemesterCount}
-                                              disabled
                                             />
                                         </FormControl>
                                     </>
