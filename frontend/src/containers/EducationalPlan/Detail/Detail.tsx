@@ -508,6 +508,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   renderMain = () => {
     const {classes, detailPlan} = this.props;
 
+    //@ts-ignore
     const isuId = detailPlan?.ap_isu_id
 
     const plan = get(detailPlan, 'academic_plan_in_field_of_study[0]', {})
