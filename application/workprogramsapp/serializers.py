@@ -1,21 +1,22 @@
+from django.contrib.auth.models import Group
 from rest_framework import serializers
 from rest_framework.fields import BooleanField
 
 from dataprocessing.serializers import ItemSerializer, userProfileSerializer
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
-#from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
-#from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
+from onlinecourse.serializers import OnlineCourseSerializer
+# from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
+# from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
 from .expertise.common_serializers import ShortExpertiseSerializer
 from .expertise.models import Expertise
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
-    PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
+    PrerequisitesOfWorkProgram, Certification, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool, \
     AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, AcademicPlanUpdateConfiguration
 from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer, \
     ShortUniversityPartnerSerializer
-from onlinecourse.serializers import OnlineCourseSerializer
 
 
 class AcademicPlanUpdateLogSerializer(serializers.ModelSerializer):
@@ -109,6 +110,15 @@ class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
 
 
 class ImplementationAcademicPlanCreateSerializer(serializers.ModelSerializer):
+
+    def update(self, instance, validated_data):
+        updated_module = super(ImplementationAcademicPlanCreateSerializer, self).update(instance, validated_data)
+        module_group = Group.objects.get(name='blockmodule_editor')
+        for user in updated_module.editors.all():
+            if module_group not in user.groups.all():
+                user.groups.add(module_group)
+                user.save()
+        return updated_module
 
     class Meta:
         model = ImplementationAcademicPlan
