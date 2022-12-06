@@ -19,6 +19,7 @@ from .workprogram_additions.serializers import AdditionalMaterialSerializer, Sho
     ShortUniversityPartnerSerializer
 
 
+
 class AcademicPlanUpdateLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlanUpdateLog
@@ -782,6 +783,8 @@ class GIAPrimitiveSerializer(serializers.ModelSerializer):
 
 class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.ModelSerializer):
     work_program = serializers.PrimaryKeyRelatedField(many=True, queryset=WorkProgram.objects.all())
+    gia = serializers.PrimaryKeyRelatedField(many=True, queryset=GIA.objects.all())
+    practice = serializers.PrimaryKeyRelatedField(many=True, queryset=Practice.objects.all())
 
     def to_representation(self, value):
         # self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
@@ -790,7 +793,8 @@ class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.Model
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'semester_start', 'semester_duration']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'semester_start', 'semester_duration',
+                  'gia', 'practice']
         extra_kwargs = {
             'work_program': {'required': False}
         }
