@@ -113,7 +113,7 @@ class ImplementationAcademicPlanCreateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         updated_module = super(ImplementationAcademicPlanCreateSerializer, self).update(instance, validated_data)
-        module_group = Group.objects.get(name='blockmodule_editor')
+        module_group = Group.objects.get(name='academic_plan_developer')
         for user in updated_module.editors.all():
             if module_group not in user.groups.all():
                 user.groups.add(module_group)
