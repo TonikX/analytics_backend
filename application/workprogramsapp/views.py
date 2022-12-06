@@ -1992,7 +1992,7 @@ class AcademicPlanDestroyView(generics.DestroyAPIView):
 class AcademicPlanUpdateView(generics.UpdateAPIView):
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlanSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsRpdDeveloperOrReadOnly, IsAcademicPlanDeveloper]
 
 
 class AcademicPlanDetailsView(generics.RetrieveAPIView):
@@ -2068,7 +2068,7 @@ class ImplementationAcademicPlanUpdateView(generics.UpdateAPIView):
 class ImplementationAcademicPlanDetailsView(generics.RetrieveAPIView):
     queryset = ImplementationAcademicPlan.objects.all()
     serializer_class = ImplementationAcademicPlanSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsRpdDeveloperOrReadOnly, IsAcademicPlanDeveloper]
 
 
 class WorkProgramChangeInDisciplineBlockModuleListAPIView(generics.ListAPIView):
