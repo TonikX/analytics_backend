@@ -27,7 +27,7 @@ from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgr
 from .notifications.models import UserNotification
 # Права доступа
 from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, \
-    IsOwnerOrDodWorkerOrReadOnly
+    IsOwnerOrDodWorkerOrReadOnly, IsAcademicPlanDeveloper
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, \
