@@ -180,7 +180,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         </Select>
                     </div>
                     <div className={classes.marginTop20}>
-                        <InputLabel className={classes.label}> Реализатор дисциплины</InputLabel>
+                        <InputLabel className={classes.label}> Реализатор</InputLabel>
                         <SearchSelector
                             label=""
                             changeSearchText={this.handleChangeStructuralUnitSearchText}
