@@ -396,7 +396,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           </Button>}
           {Boolean(!module?.childs?.length) && <Button onClick={this.handleCreateNewWPBlock(module.id)} variant="outlined">
             <AddIcon/>
-            Добавить блок РПД
+            Добавить рабочую программу
           </Button>}
         </div>
       </>

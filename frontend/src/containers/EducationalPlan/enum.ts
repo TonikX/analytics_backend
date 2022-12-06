@@ -55,6 +55,7 @@ export enum EducationalPlanFields {
     STRUCTURAL_UNIT = 'structural_unit',
     TOTAL_INTENSITY = 'total_intensity',
     MILITARY_DEPARTMENT = 'military_department',
+    ISU_ID = 'ap_isu_id',
     PROFILE = 'educational_profile',
     APPROVAL_DATE = 'approval_date',
     NUMBER = 'number',
