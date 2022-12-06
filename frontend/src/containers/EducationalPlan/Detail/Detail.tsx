@@ -508,6 +508,8 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   renderMain = () => {
     const {classes, detailPlan} = this.props;
 
+    const isuId = detailPlan?.ap_isu_id
+
     const plan = get(detailPlan, 'academic_plan_in_field_of_study[0]', {})
     const editors = plan?.[EducationalPlanFields.EDITORS]
 
@@ -609,9 +611,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
           </Typography>
         ) : null }
 
-        {plan?.[EducationalPlanFields.ISU_ID] ? (
+        {isuId ? (
           <Typography className={classes.trajectoryOwner}>
-            <b>ИСУ ИД:</b> {plan?.[EducationalPlanFields.ISU_ID]}
+            <b>ИСУ ИД:</b> {isuId}
           </Typography>
         ) : null }
 
