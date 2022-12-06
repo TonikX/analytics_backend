@@ -68,7 +68,7 @@ class WorkProgramsListApi(generics.ListAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['discipline_code', 'title', 'editors__last_name', 'editors__first_name']
+    search_fields = ['discipline_code', 'title', 'editors__last_name', 'editors__first_name', 'id']
     filterset_fields = ['language',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__title',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__number',
