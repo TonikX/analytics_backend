@@ -85,7 +85,7 @@ class GIA(models.Model):
                                      blank=True, null=True)
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year], blank=True, null=True)
-    authors = models.CharField(max_length=1024, verbose_name="Авторский состав")
+    authors = models.CharField(max_length=1024, verbose_name="Авторский состав", blank=True, null=True)
     # Это поле пока оставляем текстовым, когда станет понятно что ОХ, сделаем подтягиеваемым программно (или нет?)
     op_leader = models.CharField(max_length=1024, verbose_name="Руководитель образовательной программы", blank=True,
                                  null=True)
