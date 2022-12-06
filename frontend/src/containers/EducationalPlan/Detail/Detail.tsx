@@ -294,7 +294,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
           return (
             <>
-              {renderRow(workPrograms.map((workProgram: any) =>
+              {Boolean(workPrograms?.length) && renderRow(workPrograms.map((workProgram: any) =>
                 <div className={classes.displayFlex}>
                   <Typography className={classes.link}
                               onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
@@ -606,6 +606,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         {plan?.[EducationalPlanFields.MILITARY_DEPARTMENT] ? (
           <Typography className={classes.trajectoryOwner}>
             <b>Военная кафедра:</b> {plan?.[EducationalPlanFields.MILITARY_DEPARTMENT] ? 'есть' : 'нету'}
+          </Typography>
+        ) : null }
+
+        {plan?.[EducationalPlanFields.ISU_ID] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>ИСУ ИД:</b> {plan?.[EducationalPlanFields.ISU_ID]}
           </Typography>
         ) : null }
 

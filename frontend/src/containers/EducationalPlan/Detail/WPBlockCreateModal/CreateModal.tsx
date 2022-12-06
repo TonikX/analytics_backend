@@ -656,15 +656,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     render() {
-        const {isOpen, classes, disableZUN} = this.props;
+        const {isOpen, classes, disableZUN, canAddGia, canAddPractice, canAddWp} = this.props;
         const {blockOfWorkPrograms, showAddWorkProgramButton, isAddWorkProgramModalOpen,
             isAddCompetenceModalOpen, isAddIndicatorsModalOpen, expandedWorkProgram, isAddResultsModalOpen,
           isAddGiaModalOpen, isAddPracticeModalOpen, gia, practice,
         } = this.state;
-
         const wpLength = get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0)
 
-        const canAddMore = wpLength === 0 && practice.length === 0 && gia.length === 0
         const startSemester: Array<number> = this.state.blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_START]
 
         const isEditMode = Boolean(blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID]);
@@ -758,21 +756,21 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
 
                             {/*<div className={classes.addWorkProgramButtonWrap}>*/}
-                                {showAddWorkProgramButton && canAddMore &&
+                                {showAddWorkProgramButton && canAddWp && wpLength === 0 && gia.length === 0 && practice.length === 0 &&
                                 <Button size="small"
                                         onClick={this.handleOpenAddWorkProgramModal}
                                         className={classes.addWorkProgramButton}
                                         variant="text"
-                                ><AddIcon/> Добавить рабочую программу</Button>
+                                ><AddIcon/> Добавить дисциплину</Button>
                                 } <br/>
-                                {showAddWorkProgramButton && canAddMore &&
+                                {showAddWorkProgramButton && canAddGia && gia.length === 0 && !wpLength && practice.length === 0 &&
                                 <Button size="small"
                                         onClick={this.handleOpenAddGiaModal}
                                         className={classes.addWorkProgramButton}
                                         variant="text"
                                 ><AddIcon/> Добавить ГИА</Button>
                                 } <br/>
-                                {showAddWorkProgramButton && canAddMore &&
+                                {showAddWorkProgramButton && canAddPractice && practice.length === 0 && gia.length === 0 && !wpLength &&
                                 <Button size="small"
                                         onClick={this.handleOpenAddPracticeModal}
                                         className={classes.addWorkProgramButton}
