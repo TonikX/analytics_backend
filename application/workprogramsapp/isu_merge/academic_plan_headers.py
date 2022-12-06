@@ -41,7 +41,7 @@ def process_headers(headers: list):
                                                                      number=ap_header["direction_code"])
         #print("FOS----------->", field_of_study, created)
         academic_plan, created = AcademicPlan.objects.get_or_create(ap_isu_id=ap_header["id"])
-        #print("AP----------->", academic_plan, created)
+        print("AP----------->", academic_plan, created)
         if created:
             DisciplineBlock.objects.create(name="Блок 1. Модули (дисциплины)", academic_plan=academic_plan)
             DisciplineBlock.objects.create(name="Блок 2. Практика", academic_plan=academic_plan)
