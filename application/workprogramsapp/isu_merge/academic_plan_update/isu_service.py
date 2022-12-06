@@ -54,4 +54,6 @@ class IsuService:
             print("Error: academic plan fetch failed: ", response.status_code)
             return
 
+        print(response.json()['result'])
+
         return response.json()['result']

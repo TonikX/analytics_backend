@@ -1,7 +1,6 @@
-from django.contrib.postgres.forms import JSONField
-
 import datetime
 
+from django.contrib.postgres.forms import JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -98,9 +97,10 @@ class Practice(models.Model):
                                       related_name='practice_heir', blank=True, null=True)
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year], blank=True, null=True)
-    authors = models.CharField(max_length=1024, verbose_name="Авторский состав")
+    authors = models.CharField(max_length=1024, verbose_name="Авторский состав", blank=True, null=True)
     # Это поле пока оставляем текстовым, когда станет понятно что ОХ, сделаем подтягиеваемым программно (или нет?)
-    op_leader = models.CharField(max_length=1024, verbose_name="Руководитель образовательной программы")
+    op_leader = models.CharField(max_length=1024, verbose_name="Руководитель образовательной программы",
+                                 blank=True, null=True)
     structural_unit = models.ForeignKey('workprogramsapp.StructuralUnit', on_delete=models.SET_NULL,
                                         verbose_name='Структурное подразделени',
                                         related_name='practice_in_structural_unit', blank=True, null=True)
@@ -152,6 +152,10 @@ class Practice(models.Model):
                                                         verbose_name="ОЦЕНОЧНЫЕ СРЕДСТВА ДЛЯ ПРОВЕДЕНИЯ ТЕКУЩЕГО КОНТРОЛЯ И  ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ ПО ПРАКТИКЕ.Текущий контроль")
     term_hours_info_table = JSONField()
     prac_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID практики в ИСУ")
+    ze_v_sem = models.CharField(max_length=1024, blank=True, null=True,
+                                verbose_name="Количество зачетных единиц по семестрам в Практике")
+    evaluation_tools_v_sem = models.CharField(max_length=1024, blank=True, null=True,
+                                              verbose_name="Оценочные средства по семестрам в Практике")
 
 
 class PrerequisitesOfPractice(models.Model):

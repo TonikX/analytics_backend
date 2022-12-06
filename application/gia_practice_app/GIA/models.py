@@ -66,6 +66,15 @@ class GIABaseTemplate(models.Model):
 
 
 class GIA(models.Model):
+    types = [
+        ('1', 'Exam'),
+        ('2', 'Differentiated credit'),
+        ('3', 'Offset'),
+        ('4', 'Coursework'),
+        ('5', 'course_project')
+    ]
+
+
     discipline_code = models.IntegerField(max_length=1024, blank=True, null=True)
     title = models.CharField(max_length=1024, verbose_name="Наименование", blank=True, null=True)
     gia_base = models.ForeignKey('GIABaseTemplate', on_delete=models.SET_NULL,
@@ -149,6 +158,11 @@ class GIA(models.Model):
     answers_quality_marks = models.ForeignKey('CriteriaVKR', on_delete=models.SET_NULL,
                                               verbose_name='Качество и уровень ответов на вопросы',
                                               related_name='vkr_answers', blank=True, null=True)
+    ze_v_sem = models.CharField(max_length=1024, blank=True, null=True,
+                                verbose_name="Количество зачетных единиц в Практике")
+    type = models.CharField(choices=types, default='1', max_length=1024,
+                            verbose_name="Тип аттестационного оценочного средства")
+
 
     def save(self, *args, **kwargs):
         self.content_correspondence_marks = CriteriaVKR.objects.create(great=CONTENT_GREAT,
