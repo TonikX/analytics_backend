@@ -1960,7 +1960,8 @@ class AcademicPlanListShortAPIView(generics.ListAPIView):
     search_fields = ['academic_plan_in_field_of_study__qualification',
                      'academic_plan_in_field_of_study__title',
                      'academic_plan_in_field_of_study__year',
-                     'academic_plan_in_field_of_study__field_of_study__title']
+                     'academic_plan_in_field_of_study__field_of_study__title',
+                     'academic_plan_in_field_of_study__field_of_study__number']
     ordering_fields = ['academic_plan_in_field_of_study__qualification',
                        'academic_plan_in_field_of_study__title',
                        'academic_plan_in_field_of_study__year',

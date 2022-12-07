@@ -727,13 +727,15 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data["can_edit"] = self.context['request'].user == instance.author or bool(self.context['request'].user.groups.filter(name="academic_plan_developer"))
+        data["discipline_blocks_in_academic_plan"] = sorted(data["discipline_blocks_in_academic_plan"], key=lambda x: x["name"])
+        data["can_edit"] = self.context['request'].user == instance.author or bool(self.context['request'].
+                                                                                   user.groups.filter(name="academic_plan_developer"))
         return data
 
     class Meta:
         model = AcademicPlan
         fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year',
-                  'education_form', 'qualification','author', 'can_edit', 'academic_plan_in_field_of_study', 'ap_isu_id']
+                  'education_form', 'qualification', 'author', 'can_edit', 'academic_plan_in_field_of_study', 'ap_isu_id']
         extra_kwargs = {
             'discipline_blocks_in_academic_plan': {'required': False},
             'academic_plan_in_field_of_study': {'required': False}
