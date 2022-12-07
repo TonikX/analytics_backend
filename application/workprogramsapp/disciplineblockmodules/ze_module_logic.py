@@ -25,16 +25,13 @@ def find_min_max_ze_by_term(lower_module, selection_parameter=0):
     total_min_ze_by_term = [0 for _ in range(10)]
     total_max_ze_by_term = [0 for _ in range(10)]
 
-    count_for_parameter += 1
-
     for changeblock in changeblocks:
-
+        count_for_parameter += 1
         min_ze_by_term = [10 for _ in range(10)]
         max_ze_by_term = [0 for _ in range(10)]
         if changeblock.credit_units:
             array_ze = np.array([[int(unit) for unit in changeblock.credit_units.split(", ")]])
         else:
-
             work_program = changeblock.work_program.all()[0]
             semesters = changeblock.semester_start
             ze_wp = [int(unit) for unit in work_program.ze_v_sem.split(", ")]
@@ -123,6 +120,8 @@ def recursion_module(obj, ze_or_ze_sem=True):
         print("a")
     except IndexError:
         print("i")
+    except ValueError:
+        print("v")
     if ze_or_ze_sem:
         return unit_final_sum
     else:
