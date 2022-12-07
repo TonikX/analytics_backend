@@ -43,13 +43,14 @@ class GIASerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         editors = validated_data.pop('editors', None)
         gia = GIA.objects.create(**validated_data)
+        print(gia)
 
         if editors:
             gia.editors.set(editors)
             gia.editors.add(request.user)
 
         if not gia.gia_base:
-            gia.gia_base.practice_base = GIABaseTemplate.objects.create()
+            gia.gia_base = GIABaseTemplate.objects.create()
             gia.save()
         return gia
 
