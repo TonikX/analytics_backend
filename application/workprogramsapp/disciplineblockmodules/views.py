@@ -21,7 +21,8 @@ from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockMo
     BodyParamsForDisciplineBlockModuleUpdateForBlockRelationSerializer
 from workprogramsapp.folders_ans_statistic.models import DisciplineBlockModuleInFolder
 from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock, ImplementationAcademicPlan
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsBlockModuleEditor
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsBlockModuleEditor, \
+    IsAcademicPlanDeveloper
 
 
 class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
@@ -229,6 +230,7 @@ def InsertModule(request):
 
 
 class WorkWithBlocksApiView(APIView):
+    permission_classes = [IsAcademicPlanDeveloper]
     my_tags = ["Discipline Blocks"]
 
     descipline_block = openapi.Parameter('descipline_block', openapi.IN_FORM,
