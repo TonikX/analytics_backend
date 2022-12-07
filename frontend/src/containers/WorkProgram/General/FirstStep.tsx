@@ -256,7 +256,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                          value={state[WorkProgramGeneralFields.CODE]}
                          onBlur={this.saveField(WorkProgramGeneralFields.CODE)}
                          onChange={this.changeCode}
-                         disabled={disabled}
+                         disabled
                          InputLabelProps={{
                            shrink: true,
                          }}
@@ -460,14 +460,13 @@ class FirstStep extends React.Component<FirstStepProps> {
             />
           </InputsLoader>
 
-          <SpecializationSelector disabled />
+          <SpecializationSelector />
 
           <SimpleSelector label="Язык реализации"
                           metaList={languageArray}
                           value={state[WorkProgramGeneralFields.LANGUAGE]}
                           wrapClass={classes.selectorWrap}
                           onChange={this.changeLanguage}
-                          disabled
           />
 
           {(state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] || state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] === null) && (
@@ -478,7 +477,6 @@ class FirstStep extends React.Component<FirstStepProps> {
               wrapClass={classes.selectorWrap}
               onChange={this.changeImplementationFormat}
               noMargin
-              disabled
             />
           )}
           <Typography className={classes.marginBottom20}>Обратите внимание, при выборе онлайн формата все ваши введенные часы будут обнулены</Typography>
