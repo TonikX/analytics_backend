@@ -18,6 +18,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataprocessing.serializers import FileUploadSerializer
+from .academic_plan_export import process_excel
 from .plan_logic import plans_processor
 from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy, WorkProgram, \
     ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule
@@ -446,6 +447,21 @@ class SyllabusExportView(generics.ListAPIView):
 
         tpl.save(response)
 
+        return response
+
+# http://127.0.0.1:8000/api/export/academic_plan/7767
+class AcademicPlanGenerateXlsx(generics.ListAPIView):
+    """Возвращает РПД в формате docx в браузере"""
+    queryset = WorkProgram.objects.all()
+    serializer = WorkProgramSerializer
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request, *args, **kwargs):
+        academic_plan = AcademicPlan.objects.get(pk=kwargs['pk'])
+        wb_obj = process_excel(academic_plan)
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = 'inline; filename="%s"' % str("filename.xlsx")
+        wb_obj.save(response)
         return response
 
 

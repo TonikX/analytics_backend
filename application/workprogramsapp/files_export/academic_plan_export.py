@@ -3,7 +3,7 @@ from openpyxl.styles import Alignment, PatternFill, Side, Border, Font
 
 from workprogramsapp.disciplineblockmodules.ze_module_logic import recursion_module, generate_full_ze_list
 from workprogramsapp.models import DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
-    СertificationEvaluationTool
+    СertificationEvaluationTool, ImplementationAcademicPlan
 from workprogramsapp.serializers import AcademicPlanSerializer
 
 color_list = ["8EA9DB", "B4C6E7", "D9E1F2", "E2E9EA"]
@@ -212,7 +212,7 @@ def process_excel(academic_plan):
 
         start_list = module_inside_recursion(DisciplineBlockModule.objects.filter(descipline_block=block), start_list,
                                              ws)
+    imp=ImplementationAcademicPlan.objects.get(academic_plan=academic_plan)
 
-    wb_obj.save("123.xlsx")
-    wb_obj.close()
-    print("done")
+    return wb_obj
+
