@@ -1,22 +1,27 @@
+from django.contrib.auth.models import Group
 from rest_framework import serializers
 from rest_framework.fields import BooleanField
 
 from dataprocessing.serializers import ItemSerializer, userProfileSerializer
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
-#from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
-#from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
+
 from .disciplineblockmodules.ze_module_logic import recursion_module
+
+from onlinecourse.serializers import OnlineCourseSerializer
+# from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
+# from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
+
 from .expertise.common_serializers import ShortExpertiseSerializer
 from .expertise.models import Expertise
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
-    PrerequisitesOfWorkProgram, Certification, OnlineCourse, BibliographicReference, FieldOfStudy, \
+    PrerequisitesOfWorkProgram, Certification, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool, \
     AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, AcademicPlanUpdateConfiguration
 from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer, \
     ShortUniversityPartnerSerializer
-from onlinecourse.serializers import OnlineCourseSerializer
+
 
 
 class AcademicPlanUpdateLogSerializer(serializers.ModelSerializer):
@@ -110,6 +115,15 @@ class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
 
 
 class ImplementationAcademicPlanCreateSerializer(serializers.ModelSerializer):
+
+    def update(self, instance, validated_data):
+        updated_module = super(ImplementationAcademicPlanCreateSerializer, self).update(instance, validated_data)
+        module_group = Group.objects.get(name='academic_plan_developer')
+        for user in updated_module.editors.all():
+            if module_group not in user.groups.all():
+                user.groups.add(module_group)
+                user.save()
+        return updated_module
 
     class Meta:
         model = ImplementationAcademicPlan
@@ -691,11 +705,15 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
             data["can_edit"] = self.context['request'].user == instance.author or bool(self.context['request'].user.groups.filter(name="academic_plan_developer"))
         except KeyError:
             data["can_edit"] = False
+        data["discipline_blocks_in_academic_plan"] = sorted(data["discipline_blocks_in_academic_plan"], key=lambda x: x["name"])
+        data["can_edit"] = self.context['request'].user == instance.author or bool(self.context['request'].
+                                                                                   user.groups.filter(name="academic_plan_developer"))
         return data
 
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year', 'education_form', 'qualification','author', 'can_edit', 'academic_plan_in_field_of_study']
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year',
+                  'education_form', 'qualification', 'author', 'can_edit', 'academic_plan_in_field_of_study', 'ap_isu_id']
         extra_kwargs = {
             'discipline_blocks_in_academic_plan': {'required': False},
             'academic_plan_in_field_of_study': {'required': False}
@@ -746,6 +764,8 @@ class GIAPrimitiveSerializer(serializers.ModelSerializer):
 
 class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.ModelSerializer):
     work_program = serializers.PrimaryKeyRelatedField(many=True, queryset=WorkProgram.objects.all())
+    gia = serializers.PrimaryKeyRelatedField(many=True, queryset=GIA.objects.all())
+    practice = serializers.PrimaryKeyRelatedField(many=True, queryset=Practice.objects.all())
 
     def to_representation(self, value):
         # self.fields['gia'] = GIAPrimitiveSerializer(required=False, many=True)
@@ -754,7 +774,8 @@ class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(serializers.Model
 
     class Meta:
         model = WorkProgramChangeInDisciplineBlockModule
-        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'semester_start', 'semester_duration']
+        fields = ['id', 'code', 'credit_units', 'change_type', 'work_program', 'semester_start', 'semester_duration',
+                  'gia', 'practice']
         extra_kwargs = {
             'work_program': {'required': False}
         }

@@ -23,6 +23,10 @@ export type MainInfoState = {
     [CertificationFields.AUTHORS]: string;
     [CertificationFields.OP_LEADER]: string,
     [CertificationFields.STRUCTURAL_UNIT]: StructuralUnitType | null,
+    [CertificationFields.SEMESTER_COUNT]: number,
+    [CertificationFields.QUALIFICATION]: string,
+    [CertificationFields.ZE_V_SEM]: string,
+    [CertificationFields.EVALUATION_TOOLS]: number[][],
 }
 
 export type GeneralProvisionsState = {

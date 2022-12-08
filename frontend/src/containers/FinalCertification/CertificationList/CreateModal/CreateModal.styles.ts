@@ -30,5 +30,17 @@ export default () => createStyles({
     },
     marginBottom20: {
         marginBottom: '20px',
-    }
+    },
+    marginTop20: {
+        marginTop: '20px'
+    },
+    radioGroup: {
+        flexDirection: 'row',
+        marginBottom: 20,
+    },
+    headerCell: {
+        border: '1px solid rgba(224, 224, 224, 1)',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
 });

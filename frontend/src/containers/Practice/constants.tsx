@@ -213,6 +213,9 @@ export const RussianPracticeFields = {
     [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: 'Источники',
     [PracticeFields.EDITORS]: 'Редакторы',
     [PracticeFields.PERMISSIONS_INFO]: 'Информация о правах',
+    [PracticeFields.SEMESTER_COUNT]: 'Длительность в семестрах',
+    [PracticeFields.ZE_V_SEM]: 'Зачетные единицы',
+    [PracticeFields.EVALUATION_TOOLS]: 'Аттестационное оценочное средство',
 };
 
 export const fieldToStep = new Map(Object.entries({

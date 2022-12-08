@@ -10,6 +10,7 @@ import {EducationalPlanListType, educationalPlanState, EducationalPlanType} from
 import {SelectorListType} from "../../components/SearchSelector/types";
 import {UserType} from "../../layout/types";
 import {DirectionType} from "../Direction/types";
+import {getTrainingModule} from "./TrainingModules/getters";
 
 const getStateData = (state: rootState): educationalPlanState => get(state, GENERAL_PATH);
 export const getEducationalPlan = (state: rootState): Array<EducationalPlanListType> => get(getStateData(state), fields.EDUCATIONAL_PLAN_LIST, []);
@@ -71,3 +72,30 @@ export const getSearchQuery = (state: rootState) => get(getStateData(state), fie
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
 export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+
+export const getAvailableButtons = (state: rootState) => {
+  const module = getTrainingModule(state)
+  const find = (item: any) => {
+    const workPrograms = item?.work_program;
+    const gia = item?.gia || [];
+    const practice = item?.practice || [];
+
+    if (workPrograms.length || gia.length || practice.length) return true
+    if (item.child) return item.child.find((childItem: any) => find(childItem))
+  }
+
+  //@ts-ignore
+  const moduleFind = module?.change_blocks_of_work_programs_in_modules?.find((item) => find(item))
+
+  const giaLength = moduleFind?.gia?.length || 0
+  const practiceLength = moduleFind?.practice?.length || 0
+  const wpLength = moduleFind?.work_program?.length || 0
+
+  const none = giaLength === 0 && practiceLength === 0 && wpLength === 0
+
+  return {
+    gia: giaLength > 0 || none,
+    practice: moduleFind?.practice?.length > 0 || none,
+    wp: moduleFind?.work_program.length > 0 || none,
+  }
+}
