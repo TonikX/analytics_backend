@@ -8,7 +8,8 @@ from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView
     ExpertiseCommentsView, ChangeUserExpertiseView, \
     ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById, \
     DeleteUserExpertise
-from .files_export.views import DocxFileExportView, SyllabusExportView, UploadPlans, UploadPlansAPIView
+from .files_export.views import DocxFileExportView, SyllabusExportView, UploadPlans, UploadPlansAPIView, \
+    AcademicPlanGenerateXlsx
 from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, CreateFolderView, EditFolderView, \
     AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
     AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, \
@@ -187,6 +188,7 @@ urlpatterns = [
     # path('api/export/docx2', DocxFileExportOldView.as_view()),
     path('api/export/docx/<int:pk>/<int:fs_id>/<int:ap_id>/<int:year>', DocxFileExportView.as_view()),
     path('api/export/syllabus/<int:pk>/<int:fs_id>/<int:ap_id>/<int:year>', SyllabusExportView.as_view()),
+    path('api/export/academic_plan/<int:pk>', AcademicPlanGenerateXlsx.as_view()),
 
     # Учебный планы
     path('api/academicplan', AcademicPlanListAPIView.as_view()),

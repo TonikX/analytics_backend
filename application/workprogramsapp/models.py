@@ -774,6 +774,9 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         return set_of_unit_id
 
 
+
+
+
 class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
     '''
     Модель хранения блоков выбора в модуле

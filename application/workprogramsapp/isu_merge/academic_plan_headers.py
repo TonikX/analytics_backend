@@ -39,21 +39,17 @@ def process_headers(headers: list):
         field_of_study, created = FieldOfStudy.objects.get_or_create(qualification=qualification_name,
                                                                      title=ap_header["direction_name"],
                                                                      number=ap_header["direction_code"])
-        #print("FOS----------->", field_of_study, created)
+        # print("FOS----------->", field_of_study, created)
         academic_plan, created = AcademicPlan.objects.get_or_create(ap_isu_id=ap_header["id"])
-        print("AP----------->", academic_plan, created)
+        # print("AP----------->", academic_plan, created)
         if created:
             DisciplineBlock.objects.create(name="Блок 1. Модули (дисциплины)", academic_plan=academic_plan)
             DisciplineBlock.objects.create(name="Блок 2. Практика", academic_plan=academic_plan)
             DisciplineBlock.objects.create(name="Блок 3. ГИА", academic_plan=academic_plan)
             DisciplineBlock.objects.create(name="Блок 4. Факультативные модули (дисциплины)",
                                            academic_plan=academic_plan)
-        imp, created = ImplementationAcademicPlan.objects.get_or_create(academic_plan=academic_plan,
-                                                                        year=2023,
-                                                                        qualification=qualification_name,
-                                                                        ap_isu_id=ap_header["id"],
-                                                                        title=ap_header["edu_program_name"])
-        #print("IMP----------->", imp, created)
+        imp, created = ImplementationAcademicPlan.objects.get_or_create(ap_isu_id=ap_header["id"])
+        # print("IMP----------->", imp, created)
         if created:
             imp.field_of_study.add(field_of_study)
         ImplementationAcademicPlan.objects.filter(id=imp.id).update(plan_type=ap_header["plan_type"],
@@ -62,18 +58,24 @@ def process_headers(headers: list):
                                                                     training_period=ap_header["training_period"],
                                                                     language=language,
                                                                     military_department=bool(ap_header),
-                                                                    total_intensity=total_intensity)
+                                                                    total_intensity=total_intensity,
+                                                                    title=ap_header["edu_program_name"],
+                                                                    academic_plan=academic_plan,
+                                                                    year=2023,
+                                                                    qualification=qualification_name
+                                                                    )
+        print(created)
         if ap_header["university_partner"]:
             partner, created = UniversityPartner.objects.get_or_create(title=ap_header["university_partner"],
                                                                        country=ap_header["up_country"])
             if partner not in imp.university_partner.all():
                 imp.university_partner.add(partner)
-            #print("PARTNER----------->", partner, created)
+            # print("PARTNER----------->", partner, created)
         if ap_header["faculty_id"]:
             unit, created = StructuralUnit.objects.get_or_create(isu_id=ap_header["faculty_id"],
                                                                  title=ap_header["faculty_name"])
             imp.structural_unit = unit
-            #print("UNIT---------->", unit, created)
+            # print("UNIT---------->", unit, created)
 
         imp.save()
         counter_plans += 1
