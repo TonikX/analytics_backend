@@ -467,66 +467,70 @@ class AcademicPlanUpdateProcessor:
         academic_plans_ids = AcademicPlanUpdateConfiguration.objects.filter(updates_enabled=True).values_list(
             'academic_plan_id', flat=True)
 
-        for plan_id in academic_plans_ids:
-            plan_id = str(plan_id)
+        try:
+            for plan_id in academic_plans_ids:
+                plan_id = str(plan_id)
 
-            old_academic_plan = self.__get_old_academic_plan_by_id__(plan_id)
-            isu_academic_plan_json = self.isu_service.get_academic_plan(plan_id)
-            # isu_academic_plan_json = json.loads(json.dumps(test_plan['result']))
-            if isu_academic_plan_json is not None:
-                self.__update_disciplines__(old_academic_plan, isu_academic_plan_json)
+                old_academic_plan = self.__get_old_academic_plan_by_id__(plan_id)
+                isu_academic_plan_json = self.isu_service.get_academic_plan(plan_id)
+                # isu_academic_plan_json = json.loads(json.dumps(test_plan['result']))
+                if isu_academic_plan_json is not None:
+                    self.__update_disciplines__(old_academic_plan, isu_academic_plan_json)
 
-                field_of_study = self.__process_field_of_study__(isu_academic_plan_json)
+                    field_of_study = self.__process_field_of_study__(isu_academic_plan_json)
 
-                academic_plan = self.__process_academic_plan__(isu_academic_plan_json, field_of_study)
-                block_to_del_ids = []
-                for block in isu_academic_plan_json['disciplines_blocks']:
-                    discipline_block_object = self.__process_discipline_block__(
-                        block,
-                        academic_plan,
-                        isu_academic_plan_json
-                    )
-                    block_to_del_ids.append(discipline_block_object.id)
-                    block_modules_to_del_ids = []
-                    for module in block['discipline_modules']:
-                        discipline_block_module_object = self \
-                            .__process_block_module__(
-                            module,
-                            discipline_block_object,
+                    academic_plan = self.__process_academic_plan__(isu_academic_plan_json, field_of_study)
+                    block_to_del_ids = []
+                    for block in isu_academic_plan_json['disciplines_blocks']:
+                        discipline_block_object = self.__process_discipline_block__(
+                            block,
+                            academic_plan,
                             isu_academic_plan_json
                         )
-
-                        block_modules_to_del_ids.append(discipline_block_module_object.id)
-                        disciplines_for_del_in_module = []
-                        for isu_academic_plan_discipline_json in module['disciplines']:
-                            work_program_object = self.__process_discipline__(
-                                isu_academic_plan_json,
-                                isu_academic_plan_discipline_json,
-                                discipline_block_module_object
-                            )
-                            work_program_in_field_of_study_object = self.__process_linked_data__(
-                                discipline_block_module_object,
-                                work_program_object,
-                                isu_academic_plan_discipline_json,
+                        block_to_del_ids.append(discipline_block_object.id)
+                        block_modules_to_del_ids = []
+                        for module in block['discipline_modules']:
+                            discipline_block_module_object = self \
+                                .__process_block_module__(
+                                module,
+                                discipline_block_object,
                                 isu_academic_plan_json
                             )
-                            self.__process_work_program_id_str_up_for_isu__(
-                                work_program_in_field_of_study_object,
-                                isu_academic_plan_json,
-                                isu_academic_plan_discipline_json
-                            )
-                            disciplines_for_del_in_module.append(work_program_object.id)
-                        self.__del_work_program_in_field_of_study__(discipline_block_module_object, disciplines_for_del_in_module)
-                        self.__del_old_wpcbms_by_module__(discipline_block_module_object)
-                    print(block_modules_to_del_ids)
-                    self.__del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json,
-                                               discipline_block_object)
 
-                print(block_to_del_ids)
-                self.__del_block__(block_to_del_ids, isu_academic_plan_json,
-                                           )
+                            block_modules_to_del_ids.append(discipline_block_module_object.id)
+                            disciplines_for_del_in_module = []
+                            for isu_academic_plan_discipline_json in module['disciplines']:
+                                work_program_object = self.__process_discipline__(
+                                    isu_academic_plan_json,
+                                    isu_academic_plan_discipline_json,
+                                    discipline_block_module_object
+                                )
+                                work_program_in_field_of_study_object = self.__process_linked_data__(
+                                    discipline_block_module_object,
+                                    work_program_object,
+                                    isu_academic_plan_discipline_json,
+                                    isu_academic_plan_json
+                                )
+                                self.__process_work_program_id_str_up_for_isu__(
+                                    work_program_in_field_of_study_object,
+                                    isu_academic_plan_json,
+                                    isu_academic_plan_discipline_json
+                                )
+                                disciplines_for_del_in_module.append(work_program_object.id)
+                            self.__del_work_program_in_field_of_study__(discipline_block_module_object, disciplines_for_del_in_module)
+                            self.__del_old_wpcbms_by_module__(discipline_block_module_object)
+                        print(block_modules_to_del_ids)
+                        self.__del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json,
+                                                   discipline_block_object)
 
-                academic_plan_update_configuration = AcademicPlanUpdateConfiguration.objects \
-                    .get(academic_plan_id=plan_id)
-                academic_plan_update_configuration.updated_date_time = timezone.now()
-                academic_plan_update_configuration.save()
+                    print(block_to_del_ids)
+                    self.__del_block__(block_to_del_ids, isu_academic_plan_json,
+                                               )
+
+                    academic_plan_update_configuration = AcademicPlanUpdateConfiguration.objects \
+                        .get(academic_plan_id=plan_id)
+                    academic_plan_update_configuration.updated_date_time = timezone.now()
+                    academic_plan_update_configuration.save()
+        except:
+            pass
+
