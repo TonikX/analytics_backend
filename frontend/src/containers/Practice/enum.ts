@@ -24,6 +24,9 @@ export enum PracticeFields {
     BIBLIOGRAPHIC_REFERENCE = "bibliographic_reference",
     EDITORS = 'editors',
     PERMISSIONS_INFO = 'permissions_info',
+    SEMESTER_COUNT = 'number_of_semesters',
+    ZE_V_SEM = 'ze_v_sem',
+    EVALUATION_TOOLS = 'evaluation_tools_v_sem'
 }
 
 export enum ExpertiseStatus {

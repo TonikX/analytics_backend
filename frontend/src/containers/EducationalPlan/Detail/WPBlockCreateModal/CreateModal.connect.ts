@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 import workProgramActions from "../../../WorkProgramList/actions";
 
 import actions from "../../actions";
-import {isOpenDetailDialog, getDetailDialogData, getEducationalPlanDetailId} from '../../getters';
+import {isOpenDetailDialog, getDetailDialogData, getEducationalPlanDetailId, getAvailableButtons} from '../../getters';
 
 import {rootState} from "../../../../store/reducers";
 import {getWorkProgramsListForSelector} from "../../../WorkProgramList/getters";
@@ -12,11 +12,15 @@ import {getWorkProgramsListForSelector} from "../../../WorkProgramList/getters";
 import moduleActions from '../../TrainingModules/actions';
 
 const mapStateToProps = (state: rootState) => {
+    const {gia, practice, wp} = getAvailableButtons(state)
     return {
         isOpen: isOpenDetailDialog(state),
         blockOfWorkPrograms: getDetailDialogData(state),
         workProgramList: getWorkProgramsListForSelector(state),
-        planId: getEducationalPlanDetailId(state)
+        planId: getEducationalPlanDetailId(state),
+        canAddGia: gia,
+        canAddPractice: practice,
+        canAddWp: wp,
     };
 };
 

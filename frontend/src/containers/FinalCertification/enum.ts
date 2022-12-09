@@ -31,6 +31,10 @@ export enum CertificationFields {
     GIA_BASE = "gia_base",
     EDITORS = 'editors',
     PERMISSIONS_INFO = 'permissions_info',
+    SEMESTER_COUNT = 'semester_count',
+    QUALIFICATION = 'qualification',
+    ZE_V_SEM = 'ze_v_sem',
+    EVALUATION_TOOLS = 'evaluation_tools_v_sem'
 }
 
 export enum TemplateTextCertificationFields {

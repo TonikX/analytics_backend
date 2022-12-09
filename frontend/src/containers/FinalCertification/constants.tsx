@@ -88,6 +88,10 @@ export const RussianCertificationFields = {
     [CertificationFields.GIA_BASE]: 'текст шаблона',
     [CertificationFields.EDITORS]: 'Редакторы',
     [CertificationFields.PERMISSIONS_INFO]: 'Информация о правах',
+    [CertificationFields.SEMESTER_COUNT]: 'Длительность в семестрах',
+    [CertificationFields.QUALIFICATION]: 'Уровень образовательной программы',
+    [CertificationFields.ZE_V_SEM]: 'Зачетные единицы',
+    [CertificationFields.EVALUATION_TOOLS]: 'Аттестационное оценочное средство',
 }
 export const fieldToStep = new Map(Object.entries({
     [CertificationFields.ID]: CertificationSteps.MAIN,

@@ -7,7 +7,7 @@ from drf_yasg2 import openapi
 from drf_yasg2.utils import swagger_auto_schema
 
 from rest_framework import generics, filters, status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
@@ -21,7 +21,8 @@ from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockMo
     BodyParamsForDisciplineBlockModuleUpdateForBlockRelationSerializer
 from workprogramsapp.folders_ans_statistic.models import DisciplineBlockModuleInFolder
 from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock, ImplementationAcademicPlan
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsBlockModuleEditor
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsBlockModuleEditor, \
+    IsAcademicPlanDeveloper
 
 
 class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
@@ -212,6 +213,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
 
 @swagger_auto_schema(tags=['Discipline Blocks'], method='post')
 @api_view(['POST'])
+@permission_classes((IsBlockModuleEditor))
 def InsertModule(request):
     """
     Апи для вставки модуля в другой блок
@@ -228,6 +230,7 @@ def InsertModule(request):
 
 
 class WorkWithBlocksApiView(APIView):
+    permission_classes = [IsAcademicPlanDeveloper]
     my_tags = ["Discipline Blocks"]
 
     descipline_block = openapi.Parameter('descipline_block', openapi.IN_FORM,

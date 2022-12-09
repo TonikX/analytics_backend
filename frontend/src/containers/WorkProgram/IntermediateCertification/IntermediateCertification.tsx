@@ -215,7 +215,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                 {/*    Экзамен: <b> {hasExam === null ? 'Нет информации' : hasExam ? 'да' : 'нет'}</b> <br/>*/}
                 {/*</Typography>*/}
 
-                {isCanEdit && !disabled  &&
+                {isCanEdit  &&
                     <Button color="secondary"
                          className={classes.addIcon}
                          onClick={this.handleCreateNew}
