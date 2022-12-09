@@ -1,3 +1,5 @@
+from gia_practice_app.GIA.models import GIA
+from gia_practice_app.Practice.models import Practice
 from workprogramsapp.models import WorkProgram, WorkProgramChangeInDisciplineBlockModule
 import numpy as np
 
@@ -32,9 +34,14 @@ def find_min_max_ze_by_term(lower_module, selection_parameter=0):
         if changeblock.credit_units:
             array_ze = np.array([[int(unit) for unit in changeblock.credit_units.split(", ")]])
         else:
-            work_program = changeblock.work_program.all()[0]
+            objs = changeblock.work_program.all()
+            if not objs.exists():
+                objs = changeblock.practice.all()
+            if not objs.exists():
+                objs = changeblock.gia.all()
+            obj = objs[0]
             semesters = changeblock.semester_start
-            ze_wp = [int(unit) for unit in work_program.ze_v_sem.split(", ")]
+            ze_wp = [int(unit) for unit in obj.ze_v_sem.split(", ")]
             possible_terms_ze = generate_full_ze_list(ze_wp, semesters)
             array_ze = np.array(possible_terms_ze)
         for i in range(10):
@@ -63,12 +70,25 @@ def recursion_module(obj):
             if childs.exists():
                 for i in range(int(obj.selection_parametr)):
                     unit_final_sum += recursion_module(childs[i])
-
             else:
                 work_programs = WorkProgram.objects.filter(
                     work_program_in_change_block__discipline_block_module=obj)
-                for i in range(int(obj.selection_parametr)):
-                    unit_final_sum += sum([int(unit) for unit in work_programs[i].ze_v_sem.split(", ")])
+                if work_programs.exists():
+                    for i in range(int(obj.selection_parametr)):
+                        unit_final_sum += sum([int(unit) for unit in work_programs[i].ze_v_sem.split(", ")])
+
+                gias = GIA.objects.filter(gia_in_change_block__discipline_block_module=obj)
+                if gias.exists():
+                    for i in range(int(obj.selection_parametr)):
+                        unit_final_sum += sum([int(unit) for unit in gias[i].ze_v_sem.split(", ")])
+
+                practices = Practice.objects.filter(practice_in_change_block__discipline_block_module=obj)
+                if practices.exists():
+                    for i in range(int(obj.selection_parametr)):
+                        unit_final_sum += sum([int(unit) for unit in practices[i].ze_v_sem.split(", ")])
+
+
+
         elif obj.selection_rule == "all" or obj.selection_rule == "any_quantity":
             if childs.exists():
                 for child in childs:
@@ -78,6 +98,17 @@ def recursion_module(obj):
                     work_program_in_change_block__discipline_block_module=obj)
                 for wp in work_programs:
                     unit_final_sum += sum([int(unit) for unit in wp.ze_v_sem.split(", ")])
+
+                gias = GIA.objects.filter(gia_in_change_block__discipline_block_module=obj)
+                if gias.exists():
+                    for gia in gias:
+                        unit_final_sum += sum([int(unit) for unit in gia.ze_v_sem.split(", ")])
+
+                practices = Practice.objects.filter(practice_in_change_block__discipline_block_module=obj)
+                if practices.exists():
+                    for practice in practices:
+                        unit_final_sum += sum([int(unit) for unit in practice.ze_v_sem.split(", ")])
+
         elif obj.selection_rule == "by_credit_units":
             unit_final_sum = int(obj.selection_parametr)
 
@@ -88,19 +119,25 @@ def recursion_module(obj):
     except AttributeError:
         print("a")
     except IndexError:
-        print("i")
+        print("a")
     except ValueError:
         print("v")
     return unit_final_sum
 
 
-def calculate_wp_term(module, select_param=0):
+def calculate_wp_term(module, select_param=0, type_control="wp"):
     matrix = []
     change_blocks = WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=module)
     for change_block in change_blocks:
-        work_program = change_block.work_program.all()[0]
+
+        objs = change_block.work_program.all()
+        if not objs.exists():
+            objs = change_block.practice.all()
+        if not objs.exists():
+            objs = change_block.gia.all()
+        obj = objs[0]
         semesters = change_block.semester_start
-        ze_wp = [int(unit) for unit in work_program.ze_v_sem.split(", ")]
+        ze_wp = [int(unit) for unit in obj.ze_v_sem.split(", ")]
         matrix.extend(generate_full_ze_list(ze_wp, semesters))
     return calculate_ze_term(matrix, select_param)
 
@@ -147,10 +184,7 @@ def recursion_module_per_ze(obj):
             _, max_res = find_min_max_ze_by_term(obj)
             max_ze_total = sum_lists(max_ze_total, max_res)
 
-    except AttributeError:
-        print("a")
-    except IndexError:
-        print("i")
+
     except ValueError:
         print("v")
     return max_ze_total
