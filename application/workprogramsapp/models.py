@@ -123,6 +123,7 @@ class WorkProgram(CloneMixin, models.Model):
                                              verbose_name='формат реализации',
                                              blank=True, null=True)
     is_oferta = models.BooleanField(blank=True, null=True, verbose_name="Оферта")
+    moodle_link = models.URLField(max_length=1024, null=True, blank=True, verbose_name="Ссылка на мудл")
 
     _clone_many_to_many_fields = ['prerequisites', 'field_of_studies', 'bibliographic_reference', 'editors']
 
@@ -706,7 +707,8 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         ('choose_n_from_m', 'choose_n_from_m'),
         ('all', 'all'),
         ('any_quantity', 'any_quantity'),
-        ('by_credit_units', 'by_credit_units')
+        ('by_credit_units', 'by_credit_units'),
+        ('no_more_than_n_credits', 'no_more_than_n_credits'),
     ]
 
     type = models.CharField(choices=TYPES, max_length=100, default='faculty_module', verbose_name='Тип модуля')
