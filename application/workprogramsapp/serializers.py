@@ -6,7 +6,9 @@ from dataprocessing.serializers import ItemSerializer, userProfileSerializer
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
 from onlinecourse.serializers import OnlineCourseSerializer
-from .disciplineblockmodules.ze_module_logic import recursion_module
+# from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
+# from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
+from .disciplineblockmodules.ze_module_logic import recursion_module, recursion_module_per_ze
 from .expertise.common_serializers import ShortExpertiseSerializer
 from .expertise.models import Expertise
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
@@ -115,7 +117,6 @@ class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
 
 
 class ImplementationAcademicPlanCreateSerializer(serializers.ModelSerializer):
-
     def update(self, instance, validated_data):
         updated_module = super(ImplementationAcademicPlanCreateSerializer, self).update(instance, validated_data)
         module_group = Group.objects.get(name='academic_plan_developer')
@@ -124,7 +125,6 @@ class ImplementationAcademicPlanCreateSerializer(serializers.ModelSerializer):
                 user.groups.add(module_group)
                 user.save()
         return updated_module
-
     class Meta:
         model = ImplementationAcademicPlan
         fields = "__all__"
@@ -669,8 +669,8 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
         return unit_final_sum
 
     def get_ze_by_sem(self, obj):
-        min_ze, max_ze = recursion_module(obj, ze_or_ze_sem=False)
-        return {"min_ze": min_ze, "max_ze": max_ze}
+        max_ze = recursion_module_per_ze(obj)
+        return {"max_ze": max_ze}
 
     def get_childs(self, obj):
         childs = DisciplineBlockModule.objects.filter(father_module=obj)
@@ -723,9 +723,6 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
             data["can_edit"] = False
         data["discipline_blocks_in_academic_plan"] = sorted(data["discipline_blocks_in_academic_plan"],
                                                             key=lambda x: x["name"])
-        data["can_edit"] = self.context['request'].user == instance.author or bool(self.context['request'].
-                                                                                   user.groups.filter(
-            name="academic_plan_developer"))
         return data
 
     class Meta:
