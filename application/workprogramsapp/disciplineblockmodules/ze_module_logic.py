@@ -184,7 +184,11 @@ def recursion_module_per_ze(obj):
             _, max_res = find_min_max_ze_by_term(obj)
             max_ze_total = sum_lists(max_ze_total, max_res)
 
-
+    except AttributeError:
+        print("a")
+    except IndexError:
+        print("a")
     except ValueError:
         print("v")
+
     return max_ze_total
