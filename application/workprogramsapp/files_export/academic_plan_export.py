@@ -1,7 +1,8 @@
 import openpyxl
 from openpyxl.styles import Alignment, PatternFill, Side, Border, Font
 
-from workprogramsapp.disciplineblockmodules.ze_module_logic import recursion_module, generate_full_ze_list
+from workprogramsapp.disciplineblockmodules.ze_module_logic import recursion_module, generate_full_ze_list, \
+    recursion_module_per_ze
 from workprogramsapp.models import DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
     СertificationEvaluationTool, ImplementationAcademicPlan
 from workprogramsapp.serializers import AcademicPlanSerializer
@@ -185,7 +186,7 @@ def module_inside_recursion(modules, level, ws, depth=0):
                          do_line_merge=False)
         insert_cell_data(ws=ws, level=level, column_name="hours_all", data=ze_module * 36,
                          do_line_merge=False)
-        min_ze, max_ze = recursion_module(module, ze_or_ze_sem=False)
+        max_ze = recursion_module_per_ze(module)
         insert_cell_data_range(ws, level, "ze_by_term", max_ze)
         # insert_cell_data_range(ws, level + 1, "ze_by_term", min_ze)
 

@@ -6,7 +6,7 @@ from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
 #from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
 #from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
-from .disciplineblockmodules.ze_module_logic import recursion_module
+from .disciplineblockmodules.ze_module_logic import recursion_module, recursion_module_per_ze
 from .expertise.common_serializers import ShortExpertiseSerializer
 from .expertise.models import Expertise
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
@@ -640,8 +640,8 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
         return unit_final_sum
 
     def get_ze_by_sem(self, obj):
-        min_ze, max_ze = recursion_module(obj, ze_or_ze_sem=False)
-        return {"min_ze": min_ze, "max_ze": max_ze}
+        max_ze = recursion_module_per_ze(obj)
+        return {"max_ze": max_ze}
 
     def get_childs(self, obj):
         childs = DisciplineBlockModule.objects.filter(father_module=obj)
