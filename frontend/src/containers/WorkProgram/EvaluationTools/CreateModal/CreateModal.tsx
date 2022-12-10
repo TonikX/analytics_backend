@@ -51,9 +51,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [EvaluationToolFields.ID]: null,
             [EvaluationToolFields.DESCRIPTION]: '',
             [EvaluationToolFields.SECTIONS]: [],
-            [EvaluationToolFields.MIN]: '',
+            [EvaluationToolFields.MIN]: undefined,
             [EvaluationToolFields.NAME]: '',
-            [EvaluationToolFields.MAX]: '',
+            [EvaluationToolFields.MAX]: undefined,
             [EvaluationToolFields.TYPE]: '',
             [EvaluationToolFields.DEADLINE]: 1,
             [EvaluationToolFields.CHECK_POINT]: false,
@@ -73,8 +73,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     [EvaluationToolFields.DESCRIPTION]: get(evaluationTool, EvaluationToolFields.DESCRIPTION, ''),
                     //@ts-ignore
                     [EvaluationToolFields.SECTIONS]: get(evaluationTool, EvaluationToolFields.SECTIONS, []).map(item => item[workProgramSectionFields.ID]),
-                    [EvaluationToolFields.MIN]: get(evaluationTool, EvaluationToolFields.MIN, ''),
-                    [EvaluationToolFields.MAX]: get(evaluationTool, EvaluationToolFields.MAX, ''),
+                    [EvaluationToolFields.MIN]: get(evaluationTool, EvaluationToolFields.MIN, undefined),
+                    [EvaluationToolFields.MAX]: get(evaluationTool, EvaluationToolFields.MAX, undefined),
                     [EvaluationToolFields.DEADLINE]: get(evaluationTool, EvaluationToolFields.DEADLINE, 1),
                     [EvaluationToolFields.TYPE]: get(evaluationTool, EvaluationToolFields.TYPE, ''),
                     [EvaluationToolFields.CHECK_POINT]: get(evaluationTool, EvaluationToolFields.CHECK_POINT, false),
@@ -115,6 +115,18 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             evaluationTool: {
                 ...evaluationTool,
                 [field]: get(e, 'target.value')
+            }
+        })
+    }
+
+    saveMinMaxField = (field: string) => (e: React.ChangeEvent) => {
+        const {evaluationTool} = this.state;
+        const value = get(e, 'target.value')
+
+        this.setState({
+            evaluationTool: {
+                ...evaluationTool,
+                [field]: value.length > 0 ? value : undefined
             }
         })
     }
@@ -286,7 +298,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             </FormControl>
                                             <div className={classNames(classes.row, classes.marginBottom30)}>
                                                 <TextField label="Минимальное значение"
-                                                           onChange={this.saveField(EvaluationToolFields.MIN)}
+                                                           onChange={this.saveMinMaxField(EvaluationToolFields.MIN)}
                                                            variant="outlined"
                                                            className={classes.numberInput}
                                                            fullWidth
@@ -297,7 +309,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                            value={evaluationTool[EvaluationToolFields.MIN]}
                                                 />
                                                 <TextField label="Максимальное значение"
-                                                           onChange={this.saveField(EvaluationToolFields.MAX)}
+                                                           onChange={this.saveMinMaxField(EvaluationToolFields.MAX)}
                                                            variant="outlined"
                                                            fullWidth
                                                            InputLabelProps={{
