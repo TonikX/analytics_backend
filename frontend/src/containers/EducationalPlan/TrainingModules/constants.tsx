@@ -112,7 +112,7 @@ export const steps = {
 export const selectRulesArray = [
     {
         value: 'choose_n_from_m',
-        label: 'Выбор в модуле по правилам'
+        label: 'Выбрать количество дисциплин/модулей'
     },
     {
         value: 'all',
