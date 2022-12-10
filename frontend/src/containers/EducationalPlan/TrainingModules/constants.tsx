@@ -124,6 +124,10 @@ export const selectRulesArray = [
     },
     {
         value: 'by_credit_units',
-        label: 'Необходимое количество ЗЕ'
+        label: 'Необходимое количество зачетных единиц'
+    },
+    {
+        value: 'no_more_than_n_credits',
+        label: 'Hе более N зачетных единиц'
     },
 ]
