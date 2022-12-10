@@ -268,29 +268,32 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
           const gia = blockOfWorkProgram?.gia || [];
           const practice = blockOfWorkProgram?.practice || [];
           const semesterStart = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START]?.join(', ');
-          const allCreditUnits = workPrograms?.[0]?.ze_v_sem;
-          const creditUnits = allCreditUnits?.replaceAll(', ', '')?.replace(/0*$/,"")?.replace(/^0+/, '')?.split("")?.join(" ")
           const type = blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
 
-          const renderRow = (title: any) => (
-            <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
-              <TableCell>
-                <div style={{ paddingLeft: (level + 1) * 5 }}>
-                  {title}
-                </div>
-              </TableCell>
-              <TableCell style={{width: '190px'}}>
-                {creditUnits}
-              </TableCell>
-              <TableCell>
-                {semesterStart}
-              </TableCell>
-              <TableCell>
-                {type === OPTIONALLY ? '-' : '+'}
-              </TableCell>
-              <TableCell />
-            </TableRow>
-          )
+          const renderRow = (title: any, itemsArray: Array<any>) => {
+            const allCreditUnits = itemsArray?.[0]?.ze_v_sem;
+            const creditUnits = allCreditUnits?.replaceAll(', ', '')?.replace(/0*$/,"")?.replace(/^0+/, '')?.split("")?.join(" ")
+
+            return (
+              <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
+                <TableCell>
+                  <div style={{ paddingLeft: (level + 1) * 5 }}>
+                    {title}
+                  </div>
+                </TableCell>
+                <TableCell style={{width: '190px'}}>
+                  {creditUnits}
+                </TableCell>
+                <TableCell>
+                  {semesterStart}
+                </TableCell>
+                <TableCell>
+                  {type === OPTIONALLY ? '-' : '+'}
+                </TableCell>
+                <TableCell />
+              </TableRow>
+            )
+          }
 
           return (
             <>
@@ -309,13 +312,13 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                     />
                   </Tooltip>
                 </div>
-              ))}
+              ), workPrograms)}
               {Boolean(gia?.length) && renderRow(<>
                 {gia?.map((item: any) => item?.title).join(', ')} (ГИА)
-              </>)}
+              </>, gia)}
               {Boolean(practice?.length) && renderRow(<>
                 {practice?.map((item: any) => item?.title).join(', ')} (практика)
-              </>)}
+              </>, practice)}
             </>
           )
         })}

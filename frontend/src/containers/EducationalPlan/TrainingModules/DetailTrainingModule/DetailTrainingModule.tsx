@@ -211,48 +211,51 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
             const gia = blockOfWorkProgram?.gia || [];
             const practice = blockOfWorkProgram?.practice || [];
-            const duration = workPrograms?.[0]?.number_of_semesters;
-            const allCreditUnits = workPrograms?.[0]?.ze_v_sem;
-            const creditUnits = allCreditUnits?.replaceAll(', ', '')?.replace(/0*$/,"")?.replace(/^0+/, '')?.split("")?.join(" ")
             const semesterStart = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START]?.join(', ');
             const type = blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
 
-            const renderRow = (title: any) => (
-              <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
-                <TableCell>
-                  <div style={{ paddingLeft: (level + 1) * 5 }}>
-                    {title}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  {duration}
-                </TableCell>
-                <TableCell>
-                  {creditUnits}
-                </TableCell>
-                <TableCell>
-                  {semesterStart}
-                </TableCell>
-                <TableCell>
-                  {type === OPTIONALLY ? '-' : '+'}
-                </TableCell>
-                {canEdit &&
-                  <TableCell className={classes.actions}>
-                    <Tooltip
-                        title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                      <DeleteIcon className={classes.deleteIcon}
-                                  onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
-                      />
-                    </Tooltip>
-                    <Tooltip
-                        title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                      <EditIcon
-                          onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>
-                    </Tooltip>
+            const renderRow = (title: any, itemsArray: Array<any>) => {
+              const duration = itemsArray?.[0]?.number_of_semesters;
+              const allCreditUnits = itemsArray?.[0]?.ze_v_sem;
+              const creditUnits = allCreditUnits?.replaceAll(', ', '')?.replace(/0*$/,"")?.replace(/^0+/, '')?.split("")?.join(" ")
+
+              return (
+                <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
+                  <TableCell>
+                    <div style={{ paddingLeft: (level + 1) * 5 }}>
+                      {title}
+                    </div>
                   </TableCell>
-                }
+                  <TableCell>
+                    {duration}
+                  </TableCell>
+                  <TableCell>
+                    {creditUnits}
+                  </TableCell>
+                  <TableCell>
+                    {semesterStart}
+                  </TableCell>
+                  <TableCell>
+                    {type === OPTIONALLY ? '-' : '+'}
+                  </TableCell>
+                  {canEdit &&
+                      <TableCell className={classes.actions}>
+                          <Tooltip
+                              title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                              <DeleteIcon className={classes.deleteIcon}
+                                          onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
+                              />
+                          </Tooltip>
+                          <Tooltip
+                              title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                              <EditIcon
+                                  onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>
+                          </Tooltip>
+                      </TableCell>
+                  }
                 </TableRow>
               )
+            }
 
             return (
               <>
@@ -263,13 +266,13 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                           {workProgram[WorkProgramGeneralFields.TITLE]}
                         </Typography>
                       </div>
-                ))}
+                ), workPrograms)}
                 {Boolean(gia?.length) && renderRow(<>
                   {gia?.map((item: any) => item?.title).join(', ')} (ГИА)
-                </>)}
+                </>, gia)}
                 {Boolean(practice?.length) && renderRow(<>
                   {practice?.map((item: any) => item?.title).join(', ')} (практика)
-                </>)}
+                </>, practice)}
               </>
             )
           })}
