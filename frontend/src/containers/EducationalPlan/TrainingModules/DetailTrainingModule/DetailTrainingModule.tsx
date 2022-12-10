@@ -477,16 +477,8 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                        shrink: true,
                      }}
                      type="number"
+                     disabled={['any_quantity', 'all'].includes(module?.[TrainingModuleFields.SELECTION_RULE])}
           />
-          {/*<Typography className={classes.textItem}>*/}
-          {/*  <b>Описание:</b> {module.description}*/}
-          {/*</Typography>*/}
-          {/*<Typography className={classes.textItem}>*/}
-          {/*  <b>ISU id:</b> {module.module_isu_id}*/}
-          {/*</Typography>*/}
-          {/*<Typography className={classes.textItem}>*/}
-          {/*  <b>Правило выбора:</b> {module.selection_rule}*/}
-          {/*</Typography>*/}
         </>
       </>
     )
