@@ -47,6 +47,7 @@ export enum WorkProgramGeneralFields {
     VIDEO_LINK = 'video',
     SEMESTER_COUNT = 'number_of_semesters',
     DESCRIPTION = 'description',
+    MOODLE_LINK = 'moodle_link',
     ZUN = 'zuns_for_wp',
     CAN_COMMENT = 'can_comment',
     CAN_ADD_TO_FOLDER = 'can_add_to_folder',

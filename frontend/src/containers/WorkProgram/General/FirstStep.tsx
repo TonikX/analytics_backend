@@ -44,6 +44,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     [WorkProgramGeneralFields.AUTHORS]: '',
     [WorkProgramGeneralFields.DESCRIPTION]: '',
     [WorkProgramGeneralFields.VIDEO_LINK]: '',
+    [WorkProgramGeneralFields.MOODLE_LINK]: '',
     [WorkProgramGeneralFields.QUALIFICATION]: '',
     [WorkProgramGeneralFields.EXTRA_POINTS]: '',
     [WorkProgramGeneralFields.LANGUAGE]: '',
@@ -64,6 +65,7 @@ class FirstStep extends React.Component<FirstStepProps> {
       [WorkProgramGeneralFields.AUTHORS]: this.props.authors,
       [WorkProgramGeneralFields.DESCRIPTION]: this.props.description,
       [WorkProgramGeneralFields.VIDEO_LINK]: this.props.video,
+      [WorkProgramGeneralFields.MOODLE_LINK]: this.props.moodleLink,
       [WorkProgramGeneralFields.QUALIFICATION]: this.props.qualification,
       [WorkProgramGeneralFields.LANGUAGE]: this.props.language,
       [WorkProgramGeneralFields.SEMESTER_COUNT]: this.props.semesterCount,
@@ -83,6 +85,7 @@ class FirstStep extends React.Component<FirstStepProps> {
         [WorkProgramGeneralFields.AUTHORS]: this.props.authors,
         [WorkProgramGeneralFields.DESCRIPTION]: this.props.description,
         [WorkProgramGeneralFields.VIDEO_LINK]: this.props.video,
+        [WorkProgramGeneralFields.MOODLE_LINK]: this.props.moodleLink,
         [WorkProgramGeneralFields.QUALIFICATION]: this.props.qualification,
         [WorkProgramGeneralFields.LANGUAGE]: this.props.language,
         [WorkProgramGeneralFields.SEMESTER_COUNT]: this.props.semesterCount,
@@ -121,6 +124,12 @@ class FirstStep extends React.Component<FirstStepProps> {
   changeVideo = (e: React.ChangeEvent) => {
     this.setState({
       [WorkProgramGeneralFields.VIDEO_LINK]: get(e, 'target.value')
+    });
+  }
+
+  changeMoodleLink = (e: React.ChangeEvent) => {
+    this.setState({
+      [WorkProgramGeneralFields.MOODLE_LINK]: get(e, 'target.value')
     });
   }
 
@@ -239,7 +248,7 @@ class FirstStep extends React.Component<FirstStepProps> {
   render() {
     const {
       classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription,
-      isCanEdit, editors, structuralUnit, structuralUnitsList, canAddEditors
+      fetchingMoodleLink, isCanEdit, editors, structuralUnit, structuralUnitsList, canAddEditors
     } = this.props;
     const {state} = this;
     const {addEditorsMode} = state;
@@ -332,8 +341,37 @@ class FirstStep extends React.Component<FirstStepProps> {
                          }}
               />
               :
-              <Typography className={classes.textItem}> <b>Видео: </b>< a
-                href={WorkProgramGeneralFields.VIDEO_LINK}> Видео </a></Typography>
+              <Typography className={classes.textItem}>
+                <b>Видео: </b>
+                {state[WorkProgramGeneralFields.VIDEO_LINK].length > 0 ?
+                  <a href={state[WorkProgramGeneralFields.VIDEO_LINK]}> Видео </a>
+                  : null
+                }
+              </Typography>
+            }
+          </InputsLoader>
+
+          <InputsLoader loading={fetchingMoodleLink}>
+            {isCanEdit ?
+              <TextField variant="outlined"
+                         label="Ссылка в Moodle"
+                         value={state[WorkProgramGeneralFields.MOODLE_LINK]}
+                         className={classes.input}
+                         onBlur={this.saveField(WorkProgramGeneralFields.MOODLE_LINK)}
+                         onChange={this.changeMoodleLink}
+                         disabled={fetchingMoodleLink || !isCanEdit}
+                         InputLabelProps={{
+                           shrink: true,
+                         }}
+              />
+              :
+              <Typography className={classes.textItem}>
+                <b>Ссылка в Moodle: </b>
+                {state[WorkProgramGeneralFields.MOODLE_LINK].length > 0 ?
+                  <a href={state[WorkProgramGeneralFields.MOODLE_LINK]}> Moodle </a>
+                  : null
+                }
+              </Typography>
             }
           </InputsLoader>
 

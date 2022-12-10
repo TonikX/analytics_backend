@@ -23,6 +23,7 @@ export interface FirstStepProps extends WithStyles<typeof styles> {
     bars: boolean;
     offerta: boolean;
     semesterCount: number;
+    moodleLink: string;
 
     isCanEdit: boolean;
     implementationFormat: ImplementationFormatsEnum | null;
@@ -33,6 +34,7 @@ export interface FirstStepProps extends WithStyles<typeof styles> {
     fetchingDate: boolean;
     fetchingDescription: boolean;
     fetchingVideoLink: boolean;
+    fetchingMoodleLink: boolean;
     canAddEditors: boolean;
     inChangeBlock: Array[];
 }
