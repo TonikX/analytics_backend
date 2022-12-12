@@ -120,7 +120,7 @@ def recursion_module(obj):
                     for practice in practices:
                         unit_final_sum += sum([int(unit) for unit in practice.ze_v_sem.split(", ")])
 
-        elif obj.selection_rule == "by_credit_units" or "no_more_than_n_credits":
+        elif obj.selection_rule in ["by_credit_units", "no_more_than_n_credits"]:
             unit_final_sum = int(obj.selection_parametr)
 
         if unit_final_sum == 0:
@@ -133,6 +133,8 @@ def recursion_module(obj):
         print("a")
     except ValueError:
         print("v")
+    except TypeError:
+        print("t")
     return unit_final_sum
 
 
@@ -168,7 +170,7 @@ def calculate_wp_term(module, select_param=0, type_control="wp"):
             cons_wp = [float(unit) for unit in obj.consultation_v2.split(", ")]
             matrix_cons.extend(generate_full_ze_list(cons_wp, semesters))
         except AttributeError:
-            print("a")
+            pass
 
     return calculate_ze_term(matrix, matrix_lab, matrix_lecture, matrix_practice, matrix_cons, select_param)
 
@@ -196,7 +198,7 @@ def calculate_ze_term(matrix, matrix_lab, matrix_lecture, matrix_practice, matri
                 max_practice_by_term[i] += matrix_practice[max_index, i]
                 max_cons_by_term[i] += matrix_cons[max_index, i]
             except IndexError:
-                print("i")
+                pass
 
             if param_counter == select_param:
                 break

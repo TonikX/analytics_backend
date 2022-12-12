@@ -670,7 +670,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
     def get_ze_by_sem(self, obj):
         max_ze, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = recursion_module_per_ze(obj)
-        print(obj.name, "-----", max_hours_lab)
+        #print(max_hours_lec)
         return {"max_ze": max_ze}
 
     def get_childs(self, obj):
