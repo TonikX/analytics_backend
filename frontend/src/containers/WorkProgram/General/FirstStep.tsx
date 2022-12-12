@@ -343,7 +343,7 @@ class FirstStep extends React.Component<FirstStepProps> {
               :
               <Typography className={classes.textItem}>
                 <b>Видео: </b>
-                {state[WorkProgramGeneralFields.VIDEO_LINK].length > 0 ?
+                {state[WorkProgramGeneralFields.VIDEO_LINK]?.length > 0 ?
                   <a href={state[WorkProgramGeneralFields.VIDEO_LINK]}> Видео </a>
                   : null
                 }
@@ -367,7 +367,7 @@ class FirstStep extends React.Component<FirstStepProps> {
               :
               <Typography className={classes.textItem}>
                 <b>Ссылка в Moodle: </b>
-                {state[WorkProgramGeneralFields.MOODLE_LINK].length > 0 ?
+                {state[WorkProgramGeneralFields.MOODLE_LINK]?.length > 0 ?
                   <a href={state[WorkProgramGeneralFields.MOODLE_LINK]}> Moodle </a>
                   : null
                 }
