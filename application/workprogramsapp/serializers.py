@@ -669,7 +669,8 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
         return unit_final_sum
 
     def get_ze_by_sem(self, obj):
-        max_ze = recursion_module_per_ze(obj)
+        max_ze, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = recursion_module_per_ze(obj)
+        print(obj.name, "-----", max_hours_lab)
         return {"max_ze": max_ze}
 
     def get_childs(self, obj):

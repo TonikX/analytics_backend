@@ -186,7 +186,7 @@ def module_inside_recursion(modules, level, ws, depth=0):
                          do_line_merge=False)
         insert_cell_data(ws=ws, level=level, column_name="hours_all", data=ze_module * 36,
                          do_line_merge=False)
-        max_ze = recursion_module_per_ze(module)
+        max_ze, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = recursion_module_per_ze(module)
         insert_cell_data_range(ws, level, "ze_by_term", max_ze)
         # insert_cell_data_range(ws, level + 1, "ze_by_term", min_ze)
 
