@@ -139,7 +139,7 @@ class PracticeSerializer(serializers.ModelSerializer):
                     items_array.append({"id": item.id, "name": item.name})
                 # serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
                 queryset = ImplementationAcademicPlan.objects.filter(
-                    academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__practice_zun__zun_in_practice__id=zun.id)
+                    academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb_for_practice__zun_in_practice__id=zun.id)
                 serializer = ImplementationAcademicPlanSerializer(queryset, many=True)
                 zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
                                    "attainments": zun.attainments, "indicator": indicator,
