@@ -368,6 +368,8 @@ def academ_plan_check(request, ap_id):
         mail_sender(topic=f'Учебный план с КОП ИД "{ap.id}" и ИСУ ИД "{ap.ap_isu_id}" готов к проверке',
                     text='Учебный план с КОП ИД "{ap.id}" и ИСУ ИД "{ap.ap_isu_id}" готов к проверке',
                     emails=['antongovorov@gmail.com'], users=[])
+        ap.on_check = "on_check"
+        ap.save()
         return Response({'message': 'email sent', 'status': True}, status=200)
     else:
         return Response({'message': 'academic plan was sent', 'status': False}, status=400)

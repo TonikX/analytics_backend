@@ -466,7 +466,7 @@ class AcademicPlanGenerateXlsx(generics.ListAPIView):
         fos = imp.field_of_study.all()[0]
         filename = f"{fos.number} {fos.title}.xlsx"
         wb_obj = process_excel(academic_plan)
-        response = HttpResponse(content=save_virtual_workbook(wb_obj),
+        response = HttpResponse(#content=save_virtual_workbook(wb_obj),
                                 content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
         response['Content-Disposition'] = 'inline; filename="%s"' % str(filename)
 
