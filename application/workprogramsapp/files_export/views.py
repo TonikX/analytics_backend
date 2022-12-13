@@ -458,7 +458,8 @@ class AcademicPlanGenerateXlsx(generics.ListAPIView):
     """Возвращает РПД в формате docx в браузере"""
     queryset = WorkProgram.objects.all()
     serializer = WorkProgramSerializer
-    permission_classes = [IsAuthenticated, ]
+    #permission_classes = [IsAuthenticated, ]
+    permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
         academic_plan = AcademicPlan.objects.get(pk=kwargs['pk'])
