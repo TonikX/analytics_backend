@@ -40,7 +40,6 @@ class ItemInPracticeCreateSerializer(serializers.ModelSerializer):
 
 
 class OutcomesInPracticeCreateSerializer(serializers.ModelSerializer):
-    item = ItemSerializer()
     """Сериализатор создания пререквизита обучения"""
 
     class Meta:
@@ -58,6 +57,7 @@ class PrerequisitesOfPracticeSerializer(serializers.ModelSerializer):
 
 
 class OutcomesOfPracticeSerializer(serializers.ModelSerializer):
+    item = ItemSerializer()
     """Сериализатор создания пререквизита обучения"""
 
     class Meta:
