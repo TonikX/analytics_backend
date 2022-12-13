@@ -64,6 +64,10 @@ import AddIcon from "@material-ui/icons/Add";
 import Dialog from "@material-ui/core/Dialog";
 import UserSelector from "../../Profile/UserSelector/UserSelector";
 
+import Service from '../service'
+
+const planService = new Service()
+
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   state = {
     deleteBlockConfirmId: null,
@@ -327,11 +331,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   renderModule = (item: any, level: number, blockId?: any): any => {
-    const {classes} = this.props
+    const {classes, detailPlan} = this.props
     const blockOfWorkPrograms = item?.change_blocks_of_work_programs_in_modules
     const selectionRule = selectRulesArray.find(type => type.value === item?.selection_rule)?.label
     const selectionParameter = item?.selection_parametr
     const laboriousness = item?.laboriousness
+    const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
 
     return(
       <>
@@ -353,7 +358,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
           <TableCell />
           <TableCell />
           <TableCell>
-            {level === 0 ? (
+            {level === 0 && canEdit ? (
               <Tooltip title="Удалить модуль">
                 <DeleteIcon className={classes.marginRight10}
                             color="primary"
@@ -508,8 +513,28 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     });
   }
 
+  sendToCheck = () => {
+    this.props.actions.sendPlanToCheck();
+  }
+
+  downloadPlan = async () => {
+    const planLink = await planService.getPlanDownloadLink(this.props.detailPlan.id);
+
+    let tempLink = document.createElement('a');
+
+    // @ts-ignore
+    tempLink.href = planLink;
+
+    tempLink.setAttribute('target', '_blank');
+
+    document.body.appendChild(tempLink);
+    tempLink.click();
+    document.body.removeChild(tempLink);
+
+  }
+
   renderMain = () => {
-    const {classes, detailPlan} = this.props;
+    const {classes, detailPlan, canSendToCheck} = this.props;
 
     //@ts-ignore
     const isuId = detailPlan?.ap_isu_id
@@ -644,7 +669,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   render() {
-    const {classes, blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
+    const {classes, blocks, detailPlan, trajectoryRoute, user, direction, canSendToCheck} = this.props;
     const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
     const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
 
@@ -670,10 +695,23 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
           </div>
         </div>
 
-        <Tabs value={tab} onChange={(e, value) => this.setState({tab: value})}>
-          <Tab value="1" label="Главная" />
-          <Tab value="2" label="Учебный план" />
-        </Tabs>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <Tabs value={tab} onChange={(e, value) => this.setState({tab: value})}>
+            <Tab value="1" label="Главная" />
+            <Tab value="2" label="Учебный план" />
+          </Tabs>
+
+          <div style={{display: 'flex'}}>
+            <Button onClick={this.downloadPlan}>
+              Скачать учебный план
+            </Button>
+            {canSendToCheck && canEdit && (
+              <Button onClick={this.sendToCheck}>
+                Отправить на проверку
+              </Button>
+            )}
+          </div>
+        </div>
 
         {tab === '1' ? this.renderMain() : this.renderEducationPlan()}
       </Paper>

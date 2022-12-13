@@ -628,6 +628,29 @@ const planTrajectorySelectSpecialization = createLogic({
     }
 });
 
+const sendPlanToCheck = createLogic({
+    type: planActions.sendPlanToCheck.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SEND_PLAN_TO_CHECK}));
+        const planId = getEducationalPlanDetailId(getState())
+
+        service.sendPlanToCheck(planId)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SEND_PLAN_TO_CHECK}));
+                return done();
+            });
+    }
+});
+
 const transformDetailPlanData = createLogic({
     type: planActions.openDetailDialog.type,
     latest: true,
@@ -713,4 +736,5 @@ export default [
     planTrajectorySelectSpecialization,
     educationalPlanConnectModules,
     educationalPlanDisconnectModule,
+    sendPlanToCheck,
 ];

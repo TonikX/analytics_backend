@@ -166,6 +166,14 @@ class EducationalPlanService extends AnalyticsService{
 
         return this.patch(`/api/implementationacademicplan/update/${id}`, plan);
     }
+
+    getPlanDownloadLink(planId: any){
+        return (`${appConfigService.getApiBasePath()}/api/export/academic_plan/${planId}`);
+    }
+
+    sendPlanToCheck(planId: any){
+        return this.post(`/api/academicplan_check/${planId}`, {});
+    }
 }
 
 export default EducationalPlanService;
