@@ -14,7 +14,7 @@ import ReportingMaterials from "./Steps/ReportingMaterials";
 import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
 import Assessment from "./Steps/Assessment";
 import Literature from "./Steps/Literature";
-// import Prerequisites from "./Steps/Prerequisites";
+import Prerequisites from "./Steps/Prerequisites";
 import React from "react";
 
 export const LANGUAGES = [
@@ -257,10 +257,10 @@ export const STEPS = [
         name: PracticeSteps.GENERAL_PROVISIONS,
         component: <GeneralProvisions/>,
     },
-    // {
-    //     name: PracticeSteps.PREREQUISITES,
-    //     component: <Prerequisites/>,
-    // },
+    {
+        name: PracticeSteps.PREREQUISITES,
+        component: <Prerequisites/>,
+    },
     {
         name: PracticeSteps.STRUCTURE,
         component: <Structure/>,
