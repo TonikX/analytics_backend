@@ -31,6 +31,38 @@ class PracticeTemplateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ItemInPracticeCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор создания пререквизита обучения"""
+
+    class Meta:
+        model = PrerequisitesOfPractice
+        fields = ['item', 'practice', 'masterylevel']
+
+
+class OutcomesInPracticeCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор создания пререквизита обучения"""
+
+    class Meta:
+        model = OutcomesOfPractice
+        fields = ['item', 'practice', 'masterylevel']
+
+
+class PrerequisitesOfPracticeSerializer(serializers.ModelSerializer):
+    """Сериализатор создания пререквизита обучения"""
+
+    class Meta:
+        model = PrerequisitesOfPractice
+        fields = ['id', 'item', 'masterylevel']
+
+
+class OutcomesOfPracticeSerializer(serializers.ModelSerializer):
+    """Сериализатор создания пререквизита обучения"""
+
+    class Meta:
+        model = OutcomesOfPractice
+        fields = ['id', 'item', 'masterylevel']
+
+
 class PracticeSerializer(serializers.ModelSerializer):
     practice_in_change_block = SerializerMethodField()
     permissions_info = SerializerMethodField()
@@ -72,8 +104,10 @@ class PracticeSerializer(serializers.ModelSerializer):
         self.fields['bibliographic_reference'] = BibliographicReferenceSerializer(required=False, many=True)
         self.fields['practice_base'] = PracticeTemplateSerializer(required=False)
         self.fields['structural_unit'] = ShortStructuralUnitSerializer(required=False)
-        self.fields['prerequisites'] = ItemSerializer(many=True, required=False)
-        self.fields['outcomes'] = ItemSerializer(many=True, required=False)
+        self.fields['prerequisites'] = PrerequisitesOfPracticeSerializer(source='prerequisitesofpractice_set',
+                                                                      many=True)
+        self.fields['outcomes'] = OutcomesOfPracticeSerializer(source='prerequisitesofpractice_set',
+                                                                      many=True)
         self.fields['competences'] = SerializerMethodField()
         return super().to_representation(value)
 
