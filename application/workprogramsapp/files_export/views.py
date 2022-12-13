@@ -153,7 +153,7 @@ def render_context(context, **kwargs):
     else:
         template_context['QUALIFICATION'] = 'ИНЖЕНЕР'
     template_context['academic_plan'] = str(
-        ImplementationAcademicPlan.objects.get(academic_plan__id=ap_obj.id).title) + ' (' + \
+        ImplementationAcademicPlan.objects.filter(academic_plan__id=ap_obj.id)[0].title) + ' (' + \
                                         str(FieldOfStudy.objects.get(
                                             implementation_academic_plan_in_field_of_study__academic_plan__id=ap_obj.id).number) + ')'
     template_context['semester'] = semester
