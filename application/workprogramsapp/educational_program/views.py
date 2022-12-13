@@ -43,7 +43,7 @@ from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
     ImplementationAcademicPlan, Competence, Indicator, WorkProgramInFieldOfStudy, Zun, GeneralizedLaborFunctions, \
     KindsOfActivity, EmployerRepresentative, DisciplineBlockModule, DisciplineBlock, \
-    WorkProgramChangeInDisciplineBlockModule, ObjectsOfActivity
+    WorkProgramChangeInDisciplineBlockModule, ObjectsOfActivity, AcademicPlan
 from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
@@ -51,6 +51,8 @@ from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 
 
 # Блок реализации АПИ для КПУД интерфейсов
+from ..notifications.emails.send_mail import mail_sender
+
 
 class EducationalProgramListAPIView(generics.ListAPIView):
     serializer_class = EducationalProgramSerializer
@@ -356,3 +358,16 @@ def GetCompetenceMatrix(request, gen_pk):
 #         return Response({'message': 'you have new notifications', 'status': True}, status=200)
 #     else:
 #         return Response({'message': 'you have not new notifications', 'status': False}, status=400)
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+@transaction.atomic
+def academ_plan_check(request, ap_id):
+    ap = AcademicPlan.objects.get(id=ap_id)
+    if ap is not None:
+        mail_sender(topic=f'Учебный план с КОП ИД "{ap.id}" и ИСУ ИД "{ap.ap_isu_id}" готов к проверке',
+                    text='Учебный план с КОП ИД "{ap.id}" и ИСУ ИД "{ap.ap_isu_id}" готов к проверке',
+                    emails=['antongovorov@gmail.com'], users=[])
+        return Response({'message': 'email sent', 'status': True}, status=200)
+    else:
+        return Response({'message': 'academic plan was sent', 'status': False}, status=400)

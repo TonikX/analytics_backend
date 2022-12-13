@@ -313,6 +313,12 @@ class AcademicPlan(models.Model):
         (EXTRAMURAL, 'Extramural'),
     )
 
+    check_status = (
+        ('in_work', 'in_work'),
+        ('on_check', 'on_check'),
+        ('verified', 'verified'),
+    )
+
     qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name='- Квалификация',
                                      blank=True, null=True)
     educational_profile = models.CharField(max_length=1024, verbose_name='- Профиль ОП', blank=True, null=True)
@@ -326,6 +332,7 @@ class AcademicPlan(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Автор учебного плана', on_delete=models.CASCADE,
                                related_name='academic_plan_author', blank=True, null=True)
     ap_isu_id = models.PositiveIntegerField(verbose_name="ID учебного плана в ИСУ", blank=True, null=True)
+    on_check = models.CharField(verbose_name="Статус проверки", choices=check_status, default="in_work")
 
     # TODO: Добавить год набора
 
