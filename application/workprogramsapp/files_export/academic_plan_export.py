@@ -2,7 +2,7 @@ import openpyxl
 from openpyxl.styles import Alignment, PatternFill, Side, Border, Font
 
 from workprogramsapp.disciplineblockmodules.ze_module_logic import recursion_module, generate_full_ze_list, \
-    recursion_module_per_ze
+    recursion_module_per_ze, sum_lists
 from workprogramsapp.models import DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
     СertificationEvaluationTool, ImplementationAcademicPlan
 from workprogramsapp.serializers import AcademicPlanSerializer
@@ -51,11 +51,10 @@ def fill_row(ws, level, color, bold=False):
         cell.font = font
 
 
-def insert_cell_data(ws, level, column_name, data, do_line_merge=False, style="thin"):
+def insert_cell_data(ws, level, column_name, data, do_line_merge=False, horizontal='center'):
     cell = ws.cell(row=level, column=columns_dict[column_name]["column"])
     cell.value = data
-    cell.alignment = Alignment(wrap_text=True, horizontal='center', vertical='center')
-
+    cell.alignment = Alignment(wrap_text=True, horizontal=horizontal, vertical='center')
     if do_line_merge:
         ws.merge_cells(start_row=level, start_column=columns_dict[column_name]["column"], end_row=level + 1,
                        end_column=columns_dict[column_name]["column"])
@@ -75,7 +74,7 @@ def process_evaluation_tools(ws, level, wp=None, module=None):
     if wp:
         tools = СertificationEvaluationTool.objects.filter(work_program=wp)
     elif module:
-        tools = СertificationEvaluationTool.objects.none()
+        tools = СertificationEvaluationTool.objects.filter(discipline_block_module=module)
     else:
         tools = СertificationEvaluationTool.objects.none()
     exam_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="1")]))
@@ -100,8 +99,49 @@ def process_hours_by_terms(ws, level, hours_list, offset=0):
             cell.alignment = Alignment(wrap_text=True, horizontal='center', vertical='center')
 
 
-def process_wp(changeblocks, level, ws):
+def process_gia(changeblock, level, ws):
+    for gia in changeblock.gia.all():
+        fill_row(ws, level, "FFFFFF")
+        insert_cell_data(ws=ws, level=level, column_name="wp_id", data=gia.discipline_code)
+        insert_cell_data(ws=ws, level=level, column_name="choosing_term",
+                         data=', '.join(map(str, changeblock.semester_start)))
+        insert_cell_data(ws=ws, level=level, column_name="name", data=gia.title, horizontal="left")
+
+        ze = [int(unit) for unit in gia.ze_v_sem.split(", ")]
+        sum_ze = sum(ze)
+        insert_cell_data(ws=ws, level=level, column_name="ze_all", data=sum_ze)
+        insert_cell_data(ws=ws, level=level, column_name="hours_all", data=sum_ze * 36)
+        wp_ze_by_term = generate_full_ze_list(ze, changeblock.semester_start)[0]
+        insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
+        level += 1
+        return level
+
+
+def process_practice(changeblock, level, ws):
+    for practice in changeblock.practice.all():
+        fill_row(ws, level, "FFFFFF")
+        insert_cell_data(ws=ws, level=level, column_name="wp_id", data=practice.discipline_code)
+        insert_cell_data(ws=ws, level=level, column_name="choosing_term",
+                         data=', '.join(map(str, changeblock.semester_start)))
+        insert_cell_data(ws=ws, level=level, column_name="name", data=practice.title, horizontal="left")
+
+        ze = [int(unit) for unit in practice.ze_v_sem.split(", ")]
+        sum_ze = sum(ze)
+        insert_cell_data(ws=ws, level=level, column_name="ze_all", data=sum_ze)
+        insert_cell_data(ws=ws, level=level, column_name="hours_all", data=sum_ze * 36)
+        wp_ze_by_term = generate_full_ze_list(ze, changeblock.semester_start)[0]
+        insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
+        level += 1
+        return level
+
+
+def process_changeblock(changeblocks, level, ws):
     for changeblock in changeblocks:
+        if changeblock.gia.all().exists():
+            level = process_gia(changeblock, level, ws)
+        if changeblock.practice.all().exists():
+            level = process_practice(changeblock, level, ws)
+
         for wp in changeblock.work_program.all():
             fill_row(ws, level, "FFFFFF")
 
@@ -119,7 +159,8 @@ def process_wp(changeblocks, level, ws):
             insert_cell_data(ws=ws, level=level, column_name="choosing_format", data=choosing_format)
             replaceable = "+" if changeblock.change_type == "Optionally" else "-"
             insert_cell_data(ws=ws, level=level, column_name="replaceable", data=replaceable)
-            insert_cell_data(ws=ws, level=level, column_name="name", data=wp.title)
+
+            insert_cell_data(ws=ws, level=level, column_name="name", data=wp.title, horizontal="left")
 
             ze = [int(unit) for unit in wp.ze_v_sem.split(", ")]
             sum_ze = sum(ze)
@@ -149,26 +190,46 @@ def process_wp(changeblocks, level, ws):
             insert_cell_data(ws=ws, level=level, column_name="consultations", data=0)
             insert_cell_data(ws=ws, level=level, column_name="srs", data=sum(sro_list))
 
-            process_hours_by_terms(ws, level, lecture_list, offset=0)
-            process_hours_by_terms(ws, level, lab_list, offset=1)
-            process_hours_by_terms(ws, level, practice_list, offset=2)
+            process_hours_by_terms(ws, level, generate_full_ze_list(lecture_list, changeblock.semester_start)[0],
+                                   offset=0)
+            process_hours_by_terms(ws, level, generate_full_ze_list(lab_list, changeblock.semester_start)[0], offset=1)
+            process_hours_by_terms(ws, level, generate_full_ze_list(practice_list, changeblock.semester_start)[0],
+                                   offset=2)
 
             insert_cell_data(ws=ws, level=level, column_name="realizer", data=wp.structural_unit.short_name)
             insert_cell_data(ws=ws, level=level, column_name="percent_seminary",
-                             data=round(float((seminary_hours) / (sum_ze * 36))*100, 2))
+                             data=round(float((seminary_hours) / (sum_ze * 36)) * 100, 2))
             insert_cell_data(ws=ws, level=level, column_name="realisation_language", data=wp.language.upper())
             level += 1
     return level
 
 
 def module_inside_recursion(modules, level, ws, depth=0):
+    sum_data = {
+        "level": level,
+        "ze": 0,
+        "ze_by_term": [0 for _ in range(10)],
+        "contact_work": 0,
+        "all_seminary": 0,
+        "lecture": 0,
+        "lab": 0,
+        "practice": 0,
+        "cons": 0,
+        "srs": 0,
+        "lecture_by_sem": [0 for _ in range(10)],
+        "lab_by_sem": [0 for _ in range(10)],
+        "practice_by_sem": [0 for _ in range(10)],
+        "cons_by_sem": [0 for _ in range(10)],
+    }
+
     for module in modules:
 
         fill_row(ws, level, color_list[depth])
-        insert_cell_data(ws=ws, level=level, column_name="name", data=module.name, do_line_merge=False)
+        insert_cell_data(ws=ws, level=level, column_name="name", data=module.name, do_line_merge=False,
+                         horizontal="left")
 
         if module.selection_rule == "choose_n_from_m":
-            choosing_rule = "n из m"
+            choosing_rule = "кол-во"
         elif module.selection_rule == "all":
             choosing_rule = "все"
         elif module.selection_rule == "any_quantity":
@@ -188,32 +249,62 @@ def module_inside_recursion(modules, level, ws, depth=0):
                          do_line_merge=False)
         max_ze, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = recursion_module_per_ze(module)
         insert_cell_data_range(ws, level, "ze_by_term", max_ze)
+
+        process_evaluation_tools(ws, level, module=module)
+
         # insert_cell_data_range(ws, level + 1, "ze_by_term", min_ze)
+        process_hours_by_terms(ws, level, max_hours_lec, offset=0)
+        process_hours_by_terms(ws, level, max_hours_lab, offset=1)
+        process_hours_by_terms(ws, level, max_hours_practice, offset=2)
 
         level += 1
         if module.childs.all().exists():
-            depth += 1
-            level = module_inside_recursion(module.childs.all(), level, ws, depth)
+            # depth += 1
+            level = module_inside_recursion(module.childs.all(), level, ws, depth + 1)
         else:
-            level = process_wp(WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=module),
-                               level, ws)
-
-    return level
+            level = process_changeblock(
+                WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=module),
+                level, ws)
+        if depth == 0:
+            sum_data["level"] = level
+            sum_data["ze"] += ze_module
+            sum_data["ze_by_term"] = sum_lists(sum_data["ze_by_term"], max_ze)
+            # sum_data["contact_work"] += ze_module
+            sum_data["lecture_by_sem"] = sum_lists(sum_data["lecture_by_sem"], max_hours_lec)
+            sum_data["lab_by_sem"] = sum_lists(sum_data["lab_by_sem"], max_hours_lab)
+            sum_data["practice_by_sem"] = sum_lists(sum_data["practice_by_sem"], max_hours_practice)
+            # sum_data["cons_by_sem"] = sum_lists(sum_data["cons_by_sem"], max_hours_cons)
+    if depth == 0:
+        return sum_data
+    else:
+        return level
 
 
 def process_excel(academic_plan):
-    wb_obj = openpyxl.load_workbook(
-        "C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\plan.xlsx")
+    # wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\plan.xlsx")
+    wb_obj = openpyxl.load_workbook('/application/static-backend/export_template/academic_plan_template_2023.xlsx')
     ws = wb_obj["УП"]
     start_list = 7
     for block in DisciplineBlock.objects.filter(academic_plan=academic_plan):
-        insert_cell_data(ws=ws, level=start_list, column_name="name", data=block.name)
+        insert_cell_data(ws=ws, level=start_list, column_name="name", data=block.name, horizontal="left")
         fill_row(ws, start_list, "5F84D4")
         start_list += 1
+        sum_data = module_inside_recursion(DisciplineBlockModule.objects.filter(descipline_block=block), start_list, ws)
+        start_list = sum_data["level"]
 
-        start_list = module_inside_recursion(DisciplineBlockModule.objects.filter(descipline_block=block), start_list,
-                                             ws)
-    imp=ImplementationAcademicPlan.objects.get(academic_plan=academic_plan)
+        fill_row(ws, start_list, "899499")
+        process_hours_by_terms(ws, start_list, sum_data["lecture_by_sem"], offset=0)
+        process_hours_by_terms(ws, start_list, sum_data["lab_by_sem"], offset=1)
+        process_hours_by_terms(ws, start_list, sum_data["practice_by_sem"], offset=2)
+        # process_hours_by_terms(ws, start_list, sum_data["cons_by_sem"], offset=3)
+
+        insert_cell_data(ws=ws, level=start_list, column_name="ze_all", data=sum_data["ze"],
+                         do_line_merge=False)
+        insert_cell_data(ws=ws, level=start_list, column_name="hours_all", data=sum_data["ze"] * 36,
+                         do_line_merge=False)
+        insert_cell_data_range(ws, start_list, "ze_by_term", sum_data["ze_by_term"])
+        start_list += 1
+
+    # imp = ImplementationAcademicPlan.objects.get(academic_plan=academic_plan)
 
     return wb_obj
-
