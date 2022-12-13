@@ -52,7 +52,7 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                 </Typography>
                 <div className={classes.columns}>
                     <div className={classes.leftColumn}>
-                        <Input fieldName={PracticeFields.DISCIPLINE_CODE}/>
+                        <Input fieldName={PracticeFields.PRAC_ISU_ID} disabled/>
                         <Input fieldName={PracticeFields.TITLE}/>
                         <Input fieldName={PracticeFields.YEAR}/>
                         <Input fieldName={PracticeFields.OP_LEADER}/>
