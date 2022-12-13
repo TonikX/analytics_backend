@@ -74,6 +74,7 @@ export type PracticeState = GeneralInfoState
     [PracticeFields.PERMISSIONS_INFO]: PermissionsInfoState,
     [PracticeFields.ZE_V_SEM]: string,
     [PracticeFields.EVALUATION_TOOLS]: number[][]
+    [PracticeFields.PRAC_ISU_ID]: number | null
 }
 
 export type PermissionsInfoState = {
@@ -97,6 +98,10 @@ export interface practicePageState {
     practice: PracticeState;
     templateText: TemplateTextState;
     comments: Array<CommentType>;
+    addPrerequisitesDialog: {
+        isOpen: boolean,
+        dialogData: any
+    }
 }
 
 export interface MinimalPracticeState {
@@ -139,6 +144,13 @@ export interface PracticeActions {
     getComments: any;
     setComments: any;
     sendComment: any;
+
+    openDialog: any;
+    closeDialog: any;
+
+    deletePrerequisite: any;
+    addPrerequisite: any;
+    changePrerequisite: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {

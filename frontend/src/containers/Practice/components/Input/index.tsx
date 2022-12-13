@@ -21,6 +21,7 @@ interface InputProps extends WithStyles<typeof styles> {
     getLoading: (fieldName: string) => boolean,
     validation: Validation;
     label?: React.ReactNode;
+    disabled?: boolean;
 }
 
 class Input extends React.Component<InputProps> {
@@ -99,7 +100,7 @@ class Input extends React.Component<InputProps> {
 
 
     render() {
-        const {fieldName, classes, multiline, rows, getLoading, label} = this.props;
+        const {fieldName, classes, multiline, rows, getLoading, label, disabled} = this.props;
         const {errorMessage} = this.state;
 
         return (
@@ -121,6 +122,7 @@ class Input extends React.Component<InputProps> {
                                InputLabelProps={{
                                    shrink: true,
                                }}
+                               disabled={disabled}
                                style={{marginTop: '3px'}} // margin between label and the field itself
                     />
                 </InputsLoader>

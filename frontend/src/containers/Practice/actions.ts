@@ -21,6 +21,11 @@ const sendPracticeToRework = createAction('SEND_PRACTICE_TO_REWORK');
 const getComments = createAction('GET_COMMENTS_PRACTICE');
 const setComments = createAction('SET_COMMENTS_PRACTICE');
 const sendComment = createAction('SEND_COMMENT_PRACTICE');
+const openDialog = createAction('OPEN_DIALOG');
+const closeDialog = createAction('CLOSE_DIALOG');
+const addPrerequisite = createAction('PRACTISE_ADD_PREREQUISITE');
+const changePrerequisite = createAction('PRACTISE_CHANGE_PREREQUISITE');
+const deletePrerequisite = createAction('PRACTISE_DELETE_PREREQUISITE');
 
 export const actions: PracticeActions = {
     getPractice,
@@ -42,6 +47,11 @@ export const actions: PracticeActions = {
     getComments,
     setComments,
     sendComment,
-}
+    openDialog,
+    closeDialog,
+    deletePrerequisite,
+    addPrerequisite,
+    changePrerequisite,
+};
 
 export default actions;

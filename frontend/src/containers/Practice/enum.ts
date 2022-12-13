@@ -26,7 +26,8 @@ export enum PracticeFields {
     PERMISSIONS_INFO = 'permissions_info',
     SEMESTER_COUNT = 'number_of_semesters',
     ZE_V_SEM = 'ze_v_sem',
-    EVALUATION_TOOLS = 'evaluation_tools_v_sem'
+    EVALUATION_TOOLS = 'evaluation_tools_v_sem',
+    PRAC_ISU_ID = 'prac_isu_id'
 }
 
 export enum ExpertiseStatus {
@@ -64,10 +65,13 @@ export enum CommentFields {
 export enum PracticeSteps {
     GENERAL = 'Главное',
     GENERAL_PROVISIONS = 'Общие положения',
+    PREREQUISITES = 'Пререквизиты',
     STRUCTURE = 'Содержание и структура практики',
     REPORTING_MATERIALS = 'Отчетные материалы',
     OVZ = 'Проведение РПП для лиц с ОВЗ',
     EVALUATION_METHODS = 'Оценочные средства',
+    RESULTS = 'Результаты',
+    ZUN = 'ЗУН',
     REFERENCES = 'Источники',
 }
 
@@ -146,4 +150,7 @@ export enum fetchingTypes {
     CREATE_EXPERTISE = 'CREATE_EXPERTISE',
     CHANGE_EXPERTISE_STATE = 'CHANGE_EXPERTISE_STATE',
     GET_COMMENTS = 'GET_COMMENTS',
+    CHANGE_PREREQUISITES = 'CHANGE_PREREQUISITES',
+    DELETE_PREREQUISITES = 'DELETE_PREREQUISITES',
+    ADD_PREREQUISITES = 'ADD_PREREQUISITES',
 }

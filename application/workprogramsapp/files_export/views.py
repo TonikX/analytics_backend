@@ -4,6 +4,7 @@ from pathlib import Path
 
 from drf_yasg2 import openapi
 from drf_yasg2.utils import swagger_auto_schema
+from openpyxl.writer.excel import save_virtual_workbook
 from rest_framework import generics, viewsets
 from docxtpl import DocxTemplate, RichText
 from django.http import HttpResponse
@@ -53,26 +54,29 @@ def render_context(context, **kwargs):
     for wpcb in context['work_program_in_change_block']:
         credit_units_list = []
         if wpcb['discipline_block_module']['descipline_block'] is not None:
-            if wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'] == ap_obj.id:
-                wpcb_pk = wpcb['id']
-                if wpcb['credit_units'] != None:
-                    wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')
-                    for cu in range(0, 16, 2):
-                        if list(wpcb['credit_units'][cu]) != 0:
-                            credit_units_list.append(wpcb['credit_units'][cu])
-                    hours_getter = hours_v2_generator(context["lecture_hours_v2"], context["practice_hours_v2"],
-                                                      context["srs_hours_v2"], context["lab_hours_v2"])
-                    for cu in credit_units_list:
-                        try:
-                            if int(float(cu)) != 0:
-                                hours_list = next(hours_getter)
-                                contact_hours = round((hours_list[0] + hours_list[1] + hours_list[3]) * 1.1, 2)
-                                semester.append({'s': credit_units_list.index(cu) + 1, 'c': cu, 'h': int(cu) * 36,
-                                                 "lc_h": hours_list[0], "pc_h": hours_list[1], "sr_h": hours_list[2],
-                                                 "lb_h": hours_list[3], "cnt_h": contact_hours})
-                            credit_units_list[credit_units_list.index(cu)] = 0
-                        except:
-                            pass
+            try:
+                if wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'] == ap_obj.id:
+                    wpcb_pk = wpcb['id']
+                    if wpcb['credit_units'] != None:
+                        wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')
+                        for cu in range(0, 16, 2):
+                            if list(wpcb['credit_units'][cu]) != 0:
+                                credit_units_list.append(wpcb['credit_units'][cu])
+                        hours_getter = hours_v2_generator(context["lecture_hours_v2"], context["practice_hours_v2"],
+                                                          context["srs_hours_v2"], context["lab_hours_v2"])
+                        for cu in credit_units_list:
+                            try:
+                                if int(float(cu)) != 0:
+                                    hours_list = next(hours_getter)
+                                    contact_hours = round((hours_list[0] + hours_list[1] + hours_list[3]) * 1.1, 2)
+                                    semester.append({'s': credit_units_list.index(cu) + 1, 'c': cu, 'h': int(cu) * 36,
+                                                     "lc_h": hours_list[0], "pc_h": hours_list[1], "sr_h": hours_list[2],
+                                                     "lb_h": hours_list[3], "cnt_h": contact_hours})
+                                credit_units_list[credit_units_list.index(cu)] = 0
+                            except:
+                                pass
+            except:
+                pass
 
     try:
         semester = semester[:context["number_of_semesters"]]
@@ -153,9 +157,9 @@ def render_context(context, **kwargs):
     else:
         template_context['QUALIFICATION'] = 'ИНЖЕНЕР'
     template_context['academic_plan'] = str(
-        ImplementationAcademicPlan.objects.get(academic_plan__id=ap_obj.id).title) + ' (' + \
-                                        str(FieldOfStudy.objects.get(
-                                            implementation_academic_plan_in_field_of_study__academic_plan__id=ap_obj.id).number) + ')'
+        ImplementationAcademicPlan.objects.filter(academic_plan__id=ap_obj.id)[0].title) + ' (' + \
+                                        str(FieldOfStudy.objects.filter(
+                                            implementation_academic_plan_in_field_of_study__academic_plan__id=ap_obj.id)[0].number) + ')'
     template_context['semester'] = semester
     template_context['total_hours_1'] = [round(contact_work, 2), round(lecture_classes, 2), round(laboratory, 2),
                                          round(practical_lessons, 2), round(SRO, 2)]
@@ -454,14 +458,20 @@ class AcademicPlanGenerateXlsx(generics.ListAPIView):
     """Возвращает РПД в формате docx в браузере"""
     queryset = WorkProgram.objects.all()
     serializer = WorkProgramSerializer
-    permission_classes = [IsAuthenticated, ]
+    #permission_classes = [IsAuthenticated, ]
+    permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
         academic_plan = AcademicPlan.objects.get(pk=kwargs['pk'])
+        imp = ImplementationAcademicPlan.objects.get(academic_plan=academic_plan)
+        fos = imp.field_of_study.all()[0]
+        filename = f"{fos.number} {fos.title}.xlsx"
         wb_obj = process_excel(academic_plan)
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-        response['Content-Disposition'] = 'inline; filename="%s"' % str("filename.xlsx")
-        wb_obj.save(response)
+        response = HttpResponse(content=save_virtual_workbook(wb_obj),
+                                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response['Content-Disposition'] = 'inline; filename="%s"' % str(filename)
+
+        # wb_obj.save(response)
         return response
 
 

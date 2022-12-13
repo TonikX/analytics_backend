@@ -2,6 +2,8 @@ import {practicePageState} from "./types";
 import createReducer from "../../store/createReducer";
 import {PermissionsInfoFields, PracticeFields, TemplateTextPracticeFields} from "./enum";
 import actions from "./actions";
+import {educationalProgramState} from "../EducationalProgram/types";
+import {fields} from "../EducationalProgram/enum";
 
 export const GENERAL_PATH = 'practice';
 
@@ -47,7 +49,8 @@ export const initialState: practicePageState = {
             [PermissionsInfoFields.CAN_APPROVE]: null,
             [PermissionsInfoFields.YOUR_APPROVE_STATUS]: null,
             [PermissionsInfoFields.USER_EXPERTISE_ID]: null,
-        }
+        },
+        [PracticeFields.PRAC_ISU_ID]: null,
     },
     templateText: {
         [TemplateTextPracticeFields.ID]: 1,
@@ -58,7 +61,27 @@ export const initialState: practicePageState = {
         [TemplateTextPracticeFields.EVALUATION_TOOLS_CURRENT_CONTROL]: '',
     },
     comments: [],
-}
+    addPrerequisitesDialog: {
+        isOpen: false,
+        dialogData: {}
+    }
+};
+
+const openDialog = (state: practicePageState, {payload}: any): practicePageState => ({
+    ...state,
+    addPrerequisitesDialog: {
+        isOpen: true,
+        dialogData: payload
+    }
+});
+
+const closeDialog =  (state: practicePageState, {payload}: any): practicePageState => ({
+    ...state,
+    addPrerequisitesDialog: {
+        ...state.addPrerequisitesDialog,
+        isOpen: false,
+    }
+});
 
 const setPractice = (state: practicePageState, {payload}: any): practicePageState => ({
     ...state,
@@ -173,4 +196,6 @@ export const reducer = createReducer(initialState, {
     [actions.showErroredField.type]: showErroredField,
     [actions.hideErroredField.type]: hideErroredField,
     [actions.setComments.type]: setComments,
+    [actions.openDialog.type]: openDialog,
+    [actions.closeDialog.type]: closeDialog,
 });

@@ -669,7 +669,8 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
         return unit_final_sum
 
     def get_ze_by_sem(self, obj):
-        max_ze = recursion_module_per_ze(obj)
+        max_ze, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = recursion_module_per_ze(obj)
+        #print(max_hours_lec)
         return {"max_ze": max_ze}
 
     def get_childs(self, obj):
@@ -721,6 +722,8 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
                 self.context['request'].user.groups.filter(name="academic_plan_developer"))
         except KeyError:
             data["can_edit"] = False
+        if instance.on_check == 'on_check':
+            data["can_edit"] = False
         data["discipline_blocks_in_academic_plan"] = sorted(data["discipline_blocks_in_academic_plan"],
                                                             key=lambda x: x["name"])
         return data
@@ -729,7 +732,7 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
         model = AcademicPlan
         fields = ['id', 'educational_profile', 'number', 'approval_date', 'discipline_blocks_in_academic_plan', 'year',
                   'education_form', 'qualification', 'author', 'can_edit', 'academic_plan_in_field_of_study',
-                  'ap_isu_id']
+                  'ap_isu_id', 'on_check']
         extra_kwargs = {
             'discipline_blocks_in_academic_plan': {'required': False},
             'academic_plan_in_field_of_study': {'required': False}

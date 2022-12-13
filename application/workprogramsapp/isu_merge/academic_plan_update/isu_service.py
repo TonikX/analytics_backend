@@ -39,8 +39,9 @@ class IsuService:
         response = requests.get(url, headers=headers)
 
         if response.status_code != 200:
-            print("Error: academic plan fetch failed: ", response.status_code, academic_plan_id)
-            return
+            # print("Error: academic plan fetch failed: ", response.status_code, academic_plan_id)
+            raise Exception("Error: academic plan fetch failed: id: {id}, responce_code: {code}" \
+                            .format(code=str(response.status_code), id=str(academic_plan_id)))
 
         return response.json()['result']
 
@@ -51,9 +52,9 @@ class IsuService:
         response = requests.get(url, headers=headers)
 
         if response.status_code != 200:
-            print("Error: academic plan fetch failed: ", response.status_code)
+            # print("Error: academic plan fetch failed: ", response.status_code)
             return
 
-        print(response.json()['result'])
+        # print(response.json()['result'])
 
         return response.json()['result']

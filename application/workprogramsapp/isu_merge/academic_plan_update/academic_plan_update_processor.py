@@ -46,7 +46,7 @@ class AcademicPlanUpdateProcessor:
         old_disciplines_ids = self.__get_disciplines_ids_by_academic_plan__(old_academic_plan.ap_isu_id)
         new_disciplines_ids = AcademicPlanUpdateUtils.get_disciplines_ids_from_academic_plan_json(
             isu_academic_plan_json)
-        print(old_disciplines_ids)
+        # print(old_disciplines_ids)
 
         to_del = set(map(int, [float(i[0]) for i in [i for i in old_disciplines_ids if i != '']])) - set(map(int, new_disciplines_ids))
 
@@ -97,9 +97,9 @@ class AcademicPlanUpdateProcessor:
             all_ze_indexes_in_rpd = 0
             # todo was  lecture_hours_v2 = [0, 0, 0, 0], with 10752 index out of range
             lecture_hours_v2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            #print(lecture_hours_v2)
+            ## print(lecture_hours_v2)
             for i in hours:
-                #print(hours)
+                ## print(hours)
                 if ze[all_ze_indexes_in_rpd] >= 1.0:
                     lecture_hours_v2[sem] = i
                     sem += 1
@@ -112,16 +112,16 @@ class AcademicPlanUpdateProcessor:
                 st_unit = \
                 StructuralUnit.objects.filter(title=isu_academic_plan_discipline_json['discipline_doer'].strip())[0]
                 st_unit.isu_id = int(isu_academic_plan_discipline_json['discipline_doer_id'])
-                print('Структурное подразделение записалось')
+                # print('Структурное подразделение записалось')
                 st_unit.save()
             else:
-                print(isu_academic_plan_discipline_json['discipline_doer'].strip())
-                print(isu_academic_plan_discipline_json['discipline_doer_id'])
+                # print(isu_academic_plan_discipline_json['discipline_doer'].strip())
+                # print(isu_academic_plan_discipline_json['discipline_doer_id'])
                 StructuralUnit.objects.create(title=isu_academic_plan_discipline_json['discipline_doer'].strip(),
                                               isu_id=int(isu_academic_plan_discipline_json['discipline_doer_id']))
                 st_unit = StructuralUnit.objects.get(title=isu_academic_plan_discipline_json['discipline_doer'].strip(),
                                                      isu_id=int(isu_academic_plan_discipline_json['discipline_doer_id']))
-                print('Структурное подразделение выбралось')
+                # print('Структурное подразделение выбралось')
             return st_unit
 
         def semesters(ze):
@@ -262,7 +262,7 @@ class AcademicPlanUpdateProcessor:
         if discipline_block_module_object is not None:
             return discipline_block_module_object
         else:
-            print('модуль', isu_academic_plan_block_module_json)
+            # print('модуль', isu_academic_plan_block_module_json)
             discipline_block_module_object = DisciplineBlockModule(
                 name=isu_academic_plan_block_module_json['module_name'],
                 module_isu_id=isu_academic_plan_block_module_json['module_id '],
@@ -271,7 +271,7 @@ class AcademicPlanUpdateProcessor:
             discipline_block_module_object.save()
             discipline_block_module_object.descipline_block.add(discipline_block_object)
             discipline_block_module_object.save()
-        print(isu_academic_plan_block_module_json)
+        # print(isu_academic_plan_block_module_json)
         return discipline_block_module_object
 
     @staticmethod
@@ -329,12 +329,12 @@ class AcademicPlanUpdateProcessor:
                 change_type=option,
                 work_program=work_program_object
         ).exists():
-            print(work_program_object)
-            print(WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                discipline_block_module=discipline_block_module_object,
-                change_type=option,
-                work_program=work_program_object
-            )[0])
+            # print(work_program_object)
+            # print(WorkProgramChangeInDisciplineBlockModule.objects.filter(
+            #     discipline_block_module=discipline_block_module_object,
+            #     change_type=option,
+            #     work_program=work_program_object
+            # )[0])
             old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
@@ -467,8 +467,9 @@ class AcademicPlanUpdateProcessor:
         academic_plans_ids = AcademicPlanUpdateConfiguration.objects.filter(updates_enabled=True).values_list(
             'academic_plan_id', flat=True)
 
-        try:
-            for plan_id in academic_plans_ids:
+
+        for plan_id in academic_plans_ids:
+            try:
                 plan_id = str(plan_id)
 
                 old_academic_plan = self.__get_old_academic_plan_by_id__(plan_id)
@@ -519,11 +520,11 @@ class AcademicPlanUpdateProcessor:
                                 disciplines_for_del_in_module.append(work_program_object.id)
                             self.__del_work_program_in_field_of_study__(discipline_block_module_object, disciplines_for_del_in_module)
                             self.__del_old_wpcbms_by_module__(discipline_block_module_object)
-                        print(block_modules_to_del_ids)
+                        # print(block_modules_to_del_ids)
                         self.__del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json,
                                                    discipline_block_object)
 
-                    print(block_to_del_ids)
+                    # print(block_to_del_ids)
                     self.__del_block__(block_to_del_ids, isu_academic_plan_json,
                                                )
 
@@ -531,6 +532,6 @@ class AcademicPlanUpdateProcessor:
                         .get(academic_plan_id=plan_id)
                     academic_plan_update_configuration.updated_date_time = timezone.now()
                     academic_plan_update_configuration.save()
-        except:
-            pass
+            except Exception as e:
+                print(e)
 

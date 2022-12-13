@@ -4,7 +4,8 @@ from rest_framework.routers import DefaultRouter
 
 from workprogramsapp.educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
     EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView, UploadCompetences, \
-    GeneralizedLaborFunctionsSet, KindsOfActivitySet, EmployerSet, GetCompetenceMatrix, ObjectsOfActivitySet
+    GeneralizedLaborFunctionsSet, KindsOfActivitySet, EmployerSet, GetCompetenceMatrix, ObjectsOfActivitySet, \
+    academ_plan_check
 from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, \
     GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
@@ -45,6 +46,8 @@ urlpatterns = [
 
     # --Матрица компетенций
     path('api/general_characteristic/competence_matrix/<int:gen_pk>', GetCompetenceMatrix),
+
+    path('api/academicplan_check/<int:ap_id>', academ_plan_check),
 
     url(r'^', include(router.urls)),
     url(r'^', include('workprogramsapp.educational_program.key_competences.urls')),

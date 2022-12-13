@@ -115,7 +115,7 @@ class AcademicPlanUpdateAspect:
     def discipline_block_module_changes_aspect(func):
         def wrapper(*args, **kwargs):
             isu_academic_plan_block_module_json, discipline_block_object, isu_academic_plan_json = args
-            print(isu_academic_plan_block_module_json)
+            # print(isu_academic_plan_block_module_json)
             if DisciplineBlockModule.objects.filter(
                     name=isu_academic_plan_block_module_json['module_name'],
                     module_isu_id=isu_academic_plan_block_module_json['module_id '],
@@ -128,7 +128,7 @@ class AcademicPlanUpdateAspect:
                 )
             else:
                 old_discipline_block_module_object = None
-            print('old_discipline_block_module_object',  old_discipline_block_module_object)
+            # print('old_discipline_block_module_object',  old_discipline_block_module_object)
             updated_discipline_block_module_object = func(
                 copy.deepcopy(old_discipline_block_module_object), *args, **kwargs
             )
