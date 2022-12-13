@@ -719,11 +719,11 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         try:
             data["can_edit"] = self.context['request'].user == instance.author or bool(
-                self.context['request'].user.groups.filter(name="academic_plan_developer")) or \
-                               bool(instance.on_check == 'on_check')
+                self.context['request'].user.groups.filter(name="academic_plan_developer"))
         except KeyError:
             data["can_edit"] = False
-        # data["can_edit"] = False
+        if instance.on_check == 'on_check':
+            data["can_edit"] = False
         data["discipline_blocks_in_academic_plan"] = sorted(data["discipline_blocks_in_academic_plan"],
                                                             key=lambda x: x["name"])
         return data
