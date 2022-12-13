@@ -19,7 +19,7 @@ def current_year():
 
 
 def max_value_current_year(value):
-    return MaxValueValidator(current_year())(value)
+    return MaxValueValidator(current_year()+2)(value)
 
 
 class WorkProgram(CloneMixin, models.Model):

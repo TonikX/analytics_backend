@@ -40,7 +40,8 @@ class IsuService:
 
         if response.status_code != 200:
             # print("Error: academic plan fetch failed: ", response.status_code, academic_plan_id)
-            return
+            raise Exception("Error: academic plan fetch failed: id: {id}, responce_code: {code}" \
+                            .format(code=str(response.status_code), id=str(academic_plan_id)))
 
         return response.json()['result']
 

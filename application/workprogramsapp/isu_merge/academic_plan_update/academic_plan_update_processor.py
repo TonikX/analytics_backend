@@ -532,8 +532,6 @@ class AcademicPlanUpdateProcessor:
                         .get(academic_plan_id=plan_id)
                     academic_plan_update_configuration.updated_date_time = timezone.now()
                     academic_plan_update_configuration.save()
-            except:
-                print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Mistake')
-                print(plan_id)
-                pass
+            except Exception as e:
+                print(e)
 
