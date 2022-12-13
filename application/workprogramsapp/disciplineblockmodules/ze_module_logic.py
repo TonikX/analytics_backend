@@ -31,7 +31,10 @@ def generate_full_ze_list(ze_wp, semesters):
                 list_of_ze[i] = ze_wp[terms_counter]
                 terms_counter += 1
         possible_terms.append(list_of_ze)
-    return possible_terms
+    if possible_terms:
+        return possible_terms
+    else:
+        return [[0 for _ in range(10)]]
 
 
 def find_min_max_ze_by_term(lower_module, selection_parameter=0):
