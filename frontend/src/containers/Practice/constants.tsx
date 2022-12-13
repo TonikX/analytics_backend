@@ -14,6 +14,7 @@ import ReportingMaterials from "./Steps/ReportingMaterials";
 import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
 import Assessment from "./Steps/Assessment";
 import Literature from "./Steps/Literature";
+// import Prerequisites from "./Steps/Prerequisites";
 import React from "react";
 
 export const LANGUAGES = [
@@ -69,7 +70,7 @@ export const QUALIFICATIONS = [
 export const PRACTICE_KINDS  = [
     {
         value: PracticeKinds.EDUCATIONAL,
-        label: 'Образовательная',
+        label: 'Учебная',
     },
     {
         value: PracticeKinds.PRODUCTION,
@@ -172,7 +173,7 @@ export const PRACTICE_WAYS = [
     },
     {
         value: PracticeWays.STATIONARY_EXTERNAL,
-        label: 'Стационарно/выездная'
+        label: 'Стационарная или выездная'
     },
 ]
 
@@ -216,6 +217,7 @@ export const RussianPracticeFields = {
     [PracticeFields.SEMESTER_COUNT]: 'Длительность в семестрах',
     [PracticeFields.ZE_V_SEM]: 'Зачетные единицы',
     [PracticeFields.EVALUATION_TOOLS]: 'Аттестационное оценочное средство',
+    [PracticeFields.PRAC_ISU_ID]: 'ID практики в ИСУ'
 };
 
 export const fieldToStep = new Map(Object.entries({
@@ -255,6 +257,10 @@ export const STEPS = [
         name: PracticeSteps.GENERAL_PROVISIONS,
         component: <GeneralProvisions/>,
     },
+    // {
+    //     name: PracticeSteps.PREREQUISITES,
+    //     component: <Prerequisites/>,
+    // },
     {
         name: PracticeSteps.STRUCTURE,
         component: <Structure/>,
