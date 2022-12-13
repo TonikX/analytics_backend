@@ -331,11 +331,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   renderModule = (item: any, level: number, blockId?: any): any => {
-    const {classes} = this.props
+    const {classes, detailPlan} = this.props
     const blockOfWorkPrograms = item?.change_blocks_of_work_programs_in_modules
     const selectionRule = selectRulesArray.find(type => type.value === item?.selection_rule)?.label
     const selectionParameter = item?.selection_parametr
     const laboriousness = item?.laboriousness
+    const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
 
     return(
       <>
@@ -357,7 +358,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
           <TableCell />
           <TableCell />
           <TableCell>
-            {level === 0 ? (
+            {level === 0 && canEdit ? (
               <Tooltip title="Удалить модуль">
                 <DeleteIcon className={classes.marginRight10}
                             color="primary"
