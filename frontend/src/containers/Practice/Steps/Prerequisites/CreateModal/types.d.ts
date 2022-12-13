@@ -1,13 +1,14 @@
 import {WithStyles} from "@material-ui/core";
-import {PrerequisiteType, WorkProgramActions} from '../../types';
+import {PrerequisiteType} from '../../types';
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 
 import styles from "./CreateModal.styles";
 import {TrainingEntitiesActions} from "../../../TrainingEntities/types";
 import {SubjectAreaActions} from "../../../SubjectArea/types";
+import {PracticeActions} from "../../../types";
 
 export interface CreateModalProps extends WithStyles<typeof styles> {
-    actions: WorkProgramActions;
+    actions: PracticeActions;
     trainingEntitiesActions: TrainingEntitiesActions;
     subjectAreaActions: SubjectAreaActions;
     isOpen: boolean;

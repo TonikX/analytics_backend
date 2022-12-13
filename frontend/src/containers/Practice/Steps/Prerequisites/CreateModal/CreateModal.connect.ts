@@ -11,8 +11,7 @@ import trainingEntitiesActions from "../../../../TrainingEntities/actions";
 import subjectAreaActions from "../../../../SubjectArea/actions";
 import actions from "../../../actions";
 import {SubjectAreaActions} from "../../../../SubjectArea/types";
-import {fields} from "../../../../WorkProgram/enum";
-import {isOpenedPrerequisitesDialog} from "../../../getters";
+import {isOpenedPrerequisitesDialog, getCurrentPrerequisite} from "../../../getters";
 
 const mapStateToProps = (state: rootState) => {
     return {
@@ -20,7 +19,7 @@ const mapStateToProps = (state: rootState) => {
         subjectArea: getSubjectAreaListForSelect(state),
         sections: getAllSectionsForSelect(state),
         isOpen: isOpenedPrerequisitesDialog(state),
-        prerequisite: getDialogData(state, fields.ADD_NEW_PREREQUISITES),
+        prerequisite: getCurrentPrerequisite(state),
     };
 };
 

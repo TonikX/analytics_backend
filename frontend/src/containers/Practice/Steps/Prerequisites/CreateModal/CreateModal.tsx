@@ -65,7 +65,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     handleClose = () => {
         this.props.actions.closeDialog();
-    }
+    };
 
     handleSave = () => {
         const {prerequisite} = this.state;

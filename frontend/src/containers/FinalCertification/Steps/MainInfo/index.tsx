@@ -9,9 +9,7 @@ import Input from "../../components/Input";
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 import {StructuralUnitsActions} from "../../../StructuralUnits/types";
 import StructuralUnit from "../../components/StructuralUnit";
-import {PracticeFields, PracticeKinds} from "../../../Practice/enum";
-import {PRACTICE_KINDS} from "../../../Practice/constants";
-import Select from "../../../Practice/components/Select";
+import Select from "../../../FinalCertification/components/Select";
 
 interface MainInfoProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
@@ -58,7 +56,7 @@ class MainInfo extends React.Component<MainInfoProps> {
                 <div className={classes.columns}>
                     <div className={classes.leftColumn}>
                         <Input fieldName={CertificationFields.DISCIPLINE_CODE}/>
-                        <Select fieldName={PracticeFields.TITLE}
+                        <Select fieldName={CertificationFields.TITLE}
                                 metaList={TITLES}/>
                         <Input fieldName={CertificationFields.YEAR}/>
                     </div>

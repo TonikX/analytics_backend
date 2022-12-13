@@ -16,6 +16,7 @@ import Assessment from "./Steps/Assessment";
 import Literature from "./Steps/Literature";
 import Prerequisites from "./Steps/Prerequisites";
 import React from "react";
+import Competences from "./Steps/Competences";
 
 export const LANGUAGES = [
     {
@@ -217,7 +218,10 @@ export const RussianPracticeFields = {
     [PracticeFields.SEMESTER_COUNT]: 'Длительность в семестрах',
     [PracticeFields.ZE_V_SEM]: 'Зачетные единицы',
     [PracticeFields.EVALUATION_TOOLS]: 'Аттестационное оценочное средство',
-    [PracticeFields.PRAC_ISU_ID]: 'ID практики в ИСУ'
+    [PracticeFields.PRAC_ISU_ID]: 'ID практики в ИСУ',
+    [PracticeFields.PREREQUISITES]: 'Пререквизиты',
+    [PracticeFields.COMPETENCES]: 'Компетенции',
+    [PracticeFields.OUTCOMES]: 'Результаты',
 };
 
 export const fieldToStep = new Map(Object.entries({
@@ -281,4 +285,8 @@ export const STEPS = [
         name: PracticeSteps.REFERENCES,
         component: <Literature/>,
     },
+    // {
+    //     name: PracticeSteps.COMPETENCES,
+    //     component: <Competences/>,
+    // },
 ];

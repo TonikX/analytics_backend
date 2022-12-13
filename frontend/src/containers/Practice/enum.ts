@@ -27,7 +27,10 @@ export enum PracticeFields {
     SEMESTER_COUNT = 'number_of_semesters',
     ZE_V_SEM = 'ze_v_sem',
     EVALUATION_TOOLS = 'evaluation_tools_v_sem',
-    PRAC_ISU_ID = 'prac_isu_id'
+    PRAC_ISU_ID = 'prac_isu_id',
+    PREREQUISITES = 'prerequisites',
+    COMPETENCES = 'competences',
+    OUTCOMES = 'outcomes',
 }
 
 export enum ExpertiseStatus {
@@ -71,8 +74,8 @@ export enum PracticeSteps {
     OVZ = 'Проведение РПП для лиц с ОВЗ',
     EVALUATION_METHODS = 'Оценочные средства',
     RESULTS = 'Результаты',
-    ZUN = 'ЗУН',
     REFERENCES = 'Источники',
+    COMPETENCES = 'Компетенции',
 }
 
 export const PracticeStepsRussianList = Object.entries(PracticeSteps).map(([, value]) => value);

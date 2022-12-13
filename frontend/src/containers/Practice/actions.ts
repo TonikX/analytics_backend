@@ -23,9 +23,12 @@ const setComments = createAction('SET_COMMENTS_PRACTICE');
 const sendComment = createAction('SEND_COMMENT_PRACTICE');
 const openDialog = createAction('OPEN_DIALOG');
 const closeDialog = createAction('CLOSE_DIALOG');
-const addPrerequisite = createAction('PRACTISE_ADD_PREREQUISITE');
-const changePrerequisite = createAction('PRACTISE_CHANGE_PREREQUISITE');
-const deletePrerequisite = createAction('PRACTISE_DELETE_PREREQUISITE');
+const addPrerequisite = createAction('PRACTICE_ADD_PREREQUISITE');
+const changePrerequisite = createAction('PRACTICE_CHANGE_PREREQUISITE');
+const deletePrerequisite = createAction('PRACTICE_DELETE_PREREQUISITE');
+const getResults = createAction('PRACTICE_GET_RESULTS');
+const deleteZUN = createAction('PRACTICE_DELETE_ZUN');
+const saveZUN = createAction('PRACTICE_SAVE_ZUN')
 
 export const actions: PracticeActions = {
     getPractice,
@@ -52,6 +55,9 @@ export const actions: PracticeActions = {
     deletePrerequisite,
     addPrerequisite,
     changePrerequisite,
+    getResults,
+    deleteZUN,
+    saveZUN,
 };
 
 export default actions;

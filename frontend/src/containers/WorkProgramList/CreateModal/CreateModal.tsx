@@ -14,7 +14,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 
-import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
+import {ImplementationFormatsEnum, WorkProgramGeneralFields} from "../../WorkProgram/enum";
 import {implementationFormats, languageArray, specialization} from "../../WorkProgram/constants";
 
 import connect from './CreateModal.connect';
@@ -47,6 +47,7 @@ const DEFAULT_WP_STATE = {
     [WorkProgramGeneralFields.PRACTICE_HOURS]: "0",
     [WorkProgramGeneralFields.ZE_V_SEM]: "0",
     [WorkProgramGeneralFields.EVALUATION_TOOLS]: [[1]],
+    [WorkProgramGeneralFields.CONSULTATIONS]: "0",
 };
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
@@ -67,16 +68,18 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     getNewSection = (semesterNum: number) => {
         const {workProgram} = this.state;
-        const {lecture_hours_v2, practice_hours_v2, lab_hours_v2, ze_v_sem, evaluation_tools} = workProgram;
+        const {lecture_hours_v2, practice_hours_v2, lab_hours_v2, ze_v_sem, evaluation_tools, consultation_v2} = workProgram;
 
         const lectureClasses = lecture_hours_v2.split(", ");
         const practiceClasses = practice_hours_v2.split(", ");
         const laboratoryHours = lab_hours_v2.split(", ");
         const zeSem = ze_v_sem.split(", ");
+        const consultationsHours = consultation_v2.split(", ");
 
         return ({
             lecture_classes: +lectureClasses[semesterNum - 1] || 0,
             practical_lessons: +practiceClasses[semesterNum - 1] || 0,
+            consultations: +consultationsHours[semesterNum - 1] || 0,
             laboratory: +laboratoryHours[semesterNum - 1] || 0,
             ze_v_sem: +zeSem[semesterNum - 1] || 0,
             evaluation_tools: evaluation_tools[semesterNum - 1] || [1]
@@ -85,13 +88,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     updateRow = (section: HoursSection, semesterNum: number) => {
         const {workProgram} = this.state;
-        const {lecture_hours_v2, practice_hours_v2, lab_hours_v2, ze_v_sem, evaluation_tools} = workProgram;
+        const {lecture_hours_v2, practice_hours_v2, lab_hours_v2, ze_v_sem, evaluation_tools, consultation_v2} = workProgram;
         this.setState({
             workProgram: {
                 ...workProgram,
                 lab_hours_v2: this.replaceValue(lab_hours_v2, section.laboratory, +semesterNum),
                 lecture_hours_v2: this.replaceValue(lecture_hours_v2, section.lecture_classes, +semesterNum),
                 practice_hours_v2: this.replaceValue(practice_hours_v2, section.practical_lessons, +semesterNum),
+                consultation_v2: this.replaceValue(consultation_v2, section.consultations, +semesterNum),
                 ze_v_sem: this.replaceValue(ze_v_sem, section.ze_v_sem, +semesterNum),
                 evaluation_tools: this.insertIntoArray(evaluation_tools, section.evaluation_tools, +semesterNum),
             }
@@ -104,7 +108,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             ...workProgram,
             hours: this.calculateTotal(workProgram.ze_v_sem) * 36,
             contact_hours_v2: this.calculateContactWork(),
-            srs_hours_v2: this.calculateSrc()
+            srs_hours_v2: this.calculateSrc(),
+            consultation_v2: workProgram[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] === ImplementationFormatsEnum.OFFLINE ?
+                null : workProgram[WorkProgramGeneralFields.CONSULTATIONS]
         });
         this.setState({
             workProgram: {
@@ -144,7 +150,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const result = [];
         for (let i = 0; i < lecturesArray.length; i++) {
             const sum = lecturesArray[i] + practiceArray[i] + labArray[i];
-            result.push(36 * zeSem[i] - sum * 1.1)
+            result.push((36 * zeSem[i] - sum * 1.1).toFixed(2))
         }
 
         return result.join(", ");
@@ -160,7 +166,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const result = [];
         for (let i = 0; i < lecturesArray.length; i++) {
             const sum = lecturesArray[i] + practiceArray[i] + labArray[i];
-            result.push(sum * 1.1)
+            result.push((sum * 1.1).toFixed(2))
         }
 
         return result.join(", ");
@@ -192,12 +198,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     recalculateHours = (numOfSemesters: string) => {
         const {workProgram} = this.state;
-        const {lecture_hours_v2, practice_hours_v2, lab_hours_v2, ze_v_sem, evaluation_tools} = workProgram;
+        const {lecture_hours_v2, practice_hours_v2, lab_hours_v2, ze_v_sem, evaluation_tools, consultation_v2} = workProgram;
 
         const lectureClasses = lecture_hours_v2.split(", ");
         const practiceClasses = practice_hours_v2.split(", ");
         const laboratoryHours = lab_hours_v2.split(", ");
         const zeSem = ze_v_sem.split(", ");
+        const consultationHours = consultation_v2.split(", ");
 
         this.setState({
             workProgram: {
@@ -206,6 +213,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 lab_hours_v2: this.fixZeros(laboratoryHours, +numOfSemesters).join(", "),
                 lecture_hours_v2: this.fixZeros(lectureClasses, +numOfSemesters).join(", "),
                 practice_hours_v2: this.fixZeros(practiceClasses, +numOfSemesters).join(", "),
+                consultation_v2: this.fixZeros(consultationHours, +numOfSemesters).join(", "),
                 ze_v_sem: this.fixZeros(zeSem, +numOfSemesters).join(", "),
                 evaluation_tools: this.fixArray(evaluation_tools, +numOfSemesters),
             }
@@ -351,6 +359,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 <TableCell className={classes.headerCell}>Занятия лекционного типа</TableCell>
                                 <TableCell className={classes.headerCell}>Лабораторные занятия</TableCell>
                                 <TableCell className={classes.headerCell}>Практические занятия</TableCell>
+                                <TableCell className={classes.headerCell}>Консультации</TableCell>
                                 <TableCell className={classes.headerCell}>Аттестационное оценочное средство</TableCell>
                             </TableRow>
                         </TableHead>

@@ -11,7 +11,7 @@ import Scrollbars from "react-custom-scrollbars";
 import {fields, PrerequisiteFields} from "../../../WorkProgram/enum";
 import {TrainingEntitiesFields} from "../../../TrainingEntities/enum";
 import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import Button from "@material-ui/core/Button";

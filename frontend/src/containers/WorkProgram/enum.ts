@@ -69,7 +69,8 @@ export enum WorkProgramGeneralFields {
     LECTURE_HOURS = 'lecture_hours_v2',
     ZE_V_SEM = 'ze_v_sem',
     EVALUATION_TOOLS = 'evaluation_tools',
-    WORK_PROGRAM_IN_CHANGE_BLOCK = 'work_program_in_change_block'
+    WORK_PROGRAM_IN_CHANGE_BLOCK = 'work_program_in_change_block',
+    CONSULTATIONS = 'consultation_v2',
 }
 
 export enum workProgramSectionFields {

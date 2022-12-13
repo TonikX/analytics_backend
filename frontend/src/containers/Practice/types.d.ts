@@ -11,6 +11,8 @@ import styles from "./Practice.styles";
 import {RouteComponentProps} from "react-router-dom";
 import {LiteratureType} from "../Literature/types";
 import {UserType} from "../../layout/types";
+import {Zun} from "../EducationalProgram/Characteristic/CompetenceMatrix/types";
+import {PrerequisiteType} from "../WorkProgram/types";
 
 export type Id = number;
 
@@ -75,6 +77,16 @@ export type PracticeState = GeneralInfoState
     [PracticeFields.ZE_V_SEM]: string,
     [PracticeFields.EVALUATION_TOOLS]: number[][]
     [PracticeFields.PRAC_ISU_ID]: number | null
+    [PracticeFields.PREREQUISITES]: PrerequisiteType[]
+    [PracticeFields.COMPETENCES]: Competence[];
+    [PracticeFields.OUTCOMES]: any[];
+}
+
+interface Competence {
+    id: number;
+    number: string;
+    name: string;
+    zuns: Zun[]
 }
 
 export type PermissionsInfoState = {
@@ -100,7 +112,7 @@ export interface practicePageState {
     comments: Array<CommentType>;
     addPrerequisitesDialog: {
         isOpen: boolean,
-        dialogData: any
+        dialogData: PrerequisiteType
     }
 }
 
@@ -151,6 +163,10 @@ export interface PracticeActions {
     deletePrerequisite: any;
     addPrerequisite: any;
     changePrerequisite: any;
+
+    getResults: any;
+    deleteZUN: any;
+    saveZUN: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {
