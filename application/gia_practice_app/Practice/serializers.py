@@ -108,7 +108,7 @@ class PracticeSerializer(serializers.ModelSerializer):
         self.fields['structural_unit'] = ShortStructuralUnitSerializer(required=False)
         self.fields['prerequisites'] = PrerequisitesOfPracticeSerializer(source='prerequisitesofpractice_set',
                                                                       many=True)
-        self.fields['outcomes'] = OutcomesOfPracticeSerializer(source='outcomesitesofpractice_set',
+        self.fields['outcomes'] = OutcomesOfPracticeSerializer(source='outcomesofpractice_set',
                                                                       many=True)
         self.fields['competences'] = SerializerMethodField()
         return super().to_representation(value)
