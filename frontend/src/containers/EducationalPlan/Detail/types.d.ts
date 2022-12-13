@@ -15,4 +15,5 @@ export interface EducationalPlanDetailProps extends WithStyles<typeof styles> {
     trajectoryRoute?: boolean;
     user: UserType;
     direction: DirectionType;
+    canSendToCheck: boolean;
 }

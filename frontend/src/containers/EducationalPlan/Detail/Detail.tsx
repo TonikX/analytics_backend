@@ -64,6 +64,10 @@ import AddIcon from "@material-ui/icons/Add";
 import Dialog from "@material-ui/core/Dialog";
 import UserSelector from "../../Profile/UserSelector/UserSelector";
 
+import Service from '../service'
+
+const planService = new Service()
+
 class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   state = {
     deleteBlockConfirmId: null,
@@ -508,8 +512,28 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     });
   }
 
+  sendToCheck = () => {
+    this.props.actions.sendPlanToCheck();
+  }
+
+  downloadPlan = async () => {
+    const planLink = await planService.getPlanDownloadLink(this.props.detailPlan.id);
+
+    let tempLink = document.createElement('a');
+
+    // @ts-ignore
+    tempLink.href = planLink;
+
+    tempLink.setAttribute('target', '_blank');
+
+    document.body.appendChild(tempLink);
+    tempLink.click();
+    document.body.removeChild(tempLink);
+
+  }
+
   renderMain = () => {
-    const {classes, detailPlan} = this.props;
+    const {classes, detailPlan, canSendToCheck} = this.props;
 
     //@ts-ignore
     const isuId = detailPlan?.ap_isu_id
@@ -644,7 +668,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   render() {
-    const {classes, blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
+    const {classes, blocks, detailPlan, trajectoryRoute, user, direction, canSendToCheck} = this.props;
     const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
     const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
 
@@ -670,10 +694,23 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
           </div>
         </div>
 
-        <Tabs value={tab} onChange={(e, value) => this.setState({tab: value})}>
-          <Tab value="1" label="Главная" />
-          <Tab value="2" label="Учебный план" />
-        </Tabs>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <Tabs value={tab} onChange={(e, value) => this.setState({tab: value})}>
+            <Tab value="1" label="Главная" />
+            <Tab value="2" label="Учебный план" />
+          </Tabs>
+
+          <div style={{display: 'flex'}}>
+            <Button onClick={this.downloadPlan}>
+              Скачать учебный план
+            </Button>
+            {canSendToCheck && canEdit && (
+              <Button onClick={this.sendToCheck}>
+                Отправить на проверку
+              </Button>
+            )}
+          </div>
+        </div>
 
         {tab === '1' ? this.renderMain() : this.renderEducationPlan()}
       </Paper>

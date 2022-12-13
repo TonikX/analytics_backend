@@ -8,6 +8,7 @@ import {DirectionType} from "../Direction/types";
 import {UserType} from "../../layout/types";
 
 export interface EducationalPlanActions {
+    sendPlanToCheck: any;
     setNewPlanIdForRedirect: any;
     pageDown: any;
     educationalPlanConnectModules: any;
@@ -98,6 +99,7 @@ export interface educationalPlanState {
 }
 
 export type EducationalPlanType = {
+    [EducationalPlanFields.ON_CHECK]: 'in_work'|'on_check'|'verified';
     [EducationalPlanFields.ID]: number;
     [EducationalPlanFields.PROFILE]: string;
     [EducationalPlanFields.NUMBER]: string;

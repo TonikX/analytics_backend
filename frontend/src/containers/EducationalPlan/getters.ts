@@ -15,6 +15,9 @@ import {getTrainingModule} from "./TrainingModules/getters";
 const getStateData = (state: rootState): educationalPlanState => get(state, GENERAL_PATH);
 export const getEducationalPlan = (state: rootState): Array<EducationalPlanListType> => get(getStateData(state), fields.EDUCATIONAL_PLAN_LIST, []);
 export const getEducationalPlanDetail = (state: rootState): EducationalPlanType|{} => get(getStateData(state), fields.DETAIL_PLAN, {});
+// @ts-ignore
+export const canSendToCheck = (state: rootState): EducationalPlanType|{} => getEducationalPlanDetail(state)?.[EducationalPlanFields.ON_CHECK] === 'in_work';
+
 export const getIsTrajectoryRoute = (state: rootState): boolean => get(getStateData(state), fields.IS_TRAJECTORY_ROUTE, false);
 export const getTrajectoryUserData = (state: rootState): UserType|{} => get(getStateData(state), fields.TRAJECTORY_USER_DATA, {});
 export const getTrajectoryDirection = (state: rootState): DirectionType|{} => get(getStateData(state), fields.TRAJECTORY_DIRECTION, {});

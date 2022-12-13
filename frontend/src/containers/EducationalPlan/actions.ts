@@ -65,7 +65,10 @@ const educationalPlanConnectModules = createAction('EDUCATIONAL_PLAN_CONNECT_MOD
 const educationalPlanDisconnectModule = createAction('EDUCATIONAL_PLAN_DISCONNECT_MODULE');
 const setNewPlanIdForRedirect = createAction('SET_NEW_PLAN_ID_FOR_REDIRECT');
 
+const sendPlanToCheck = createAction('SEND_PLAN_TO_CHECK');
+
 const actions: EducationalPlanActions = {
+    sendPlanToCheck,
     changeEditorsEducationalPlan,
     setNewPlanIdForRedirect,
     educationalPlanConnectModules,

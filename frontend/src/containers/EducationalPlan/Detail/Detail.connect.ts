@@ -5,6 +5,7 @@ import {bindActionCreators} from "redux";
 import actions from "../actions";
 import trainingModulesActions from "../TrainingModules/actions";
 import {
+    canSendToCheck,
     getEducationalPlanDetail,
     getEducationalPlanDetailBlocks,
     getTrajectoryDirection,
@@ -22,6 +23,7 @@ const mapStateToProps = (state: rootState) => {
         types: getEducationalPlanDetailBlocks(state),
         user: getTrajectoryUserData(state),
         direction: getTrajectoryDirection(state),
+        canSendToCheck: canSendToCheck(state)
     };
 };
 
