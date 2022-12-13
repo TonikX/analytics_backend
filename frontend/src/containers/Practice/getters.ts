@@ -15,6 +15,9 @@ export const getLiteratureList = (state: rootState): PracticeState =>
     get(getStateData(state), 'practice.bibliographic_reference', initialState.practice.bibliographic_reference);
 
 export const getId = (state: rootState): Id => get(getStateData(state), 'practice.id', initialState.practice.id);
+export const isOpenedPrerequisitesDialog = (state: rootState): Boolean => get(
+    getStateData(state), 'addPrerequisitesDialog.isOpen', initialState.addPrerequisitesDialog.isOpen
+);
 
 export const getTemplateText = (state: rootState): TemplateTextState =>
     get(getStateData(state), 'templateText', initialState.templateText);

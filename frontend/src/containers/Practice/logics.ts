@@ -6,6 +6,7 @@ import actions from "../../layout/actions";
 import {fetchingTypes, PermissionsInfoFields, PracticeFields} from "./enum";
 import {RussianPracticeFields} from "./constants";
 import {getErroredFields} from "./validation";
+import {fields} from "../WorkProgram/enum";
 
 const service = new PracticeService();
 
@@ -206,5 +207,87 @@ const sendComment = createLogic({
     }
 });
 
+const addPrerequisite = createLogic({
+    type: PracticeActions.addPrerequisite.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const practiceId = getId(state);
+        const prerequisite = action.payload;
 
-export default [getPractice, saveField, getTemplateText, createExpertise, approvePractice, sendPracticeToRework, getComments, sendComment];
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_PREREQUISITES}));
+
+        service.addPrerequisites(prerequisite, practiceId)
+            .then((res) => {
+                dispatch(PracticeActions.getPractice(practiceId));
+                // @ts-ignore
+                dispatch(actions.fetchingSuccess());
+                dispatch(PracticeActions.closeDialog(fields.ADD_NEW_PREREQUISITES));
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.ADD_PREREQUISITES}));
+                return done();
+            });
+    }
+});
+
+const changePrerequisite = createLogic({
+    type: PracticeActions.changePrerequisite.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const practiceId = getId(state);
+        const prerequisite = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_PREREQUISITES}));
+
+        service.changePrerequisites(prerequisite, practiceId)
+            .then((res) => {
+                dispatch(PracticeActions.getPractice(practiceId));
+                // @ts-ignore
+                dispatch(actions.fetchingSuccess());
+                dispatch(PracticeActions.closeDialog(fields.ADD_NEW_PREREQUISITES));
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_PREREQUISITES}));
+                return done();
+            });
+    }
+});
+
+
+const deletePrerequisite = createLogic({
+    type: PracticeActions.deletePrerequisite.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const practiceId = getId(state);
+        const id = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_PREREQUISITES}));
+
+        service.deletePrerequisite(id)
+            .then((res) => {
+                dispatch(PracticeActions.getPractice(practiceId));
+                // @ts-ignore
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_PREREQUISITES}));
+                return done();
+            });
+    }
+});
+
+
+
+export default [getPractice, saveField, getTemplateText, createExpertise, approvePractice, sendPracticeToRework, getComments, sendComment, addPrerequisite, changePrerequisite, deletePrerequisite];

@@ -11,15 +11,15 @@ import trainingEntitiesActions from "../../../../TrainingEntities/actions";
 import subjectAreaActions from "../../../../SubjectArea/actions";
 import actions from "../../../actions";
 import {SubjectAreaActions} from "../../../../SubjectArea/types";
-import {isOpenDialog} from "../../../../Roles/getters";
 import {fields} from "../../../../WorkProgram/enum";
+import {isOpenedPrerequisitesDialog} from "../../../getters";
 
 const mapStateToProps = (state: rootState) => {
     return {
         trainingEntities: getTrainingEntitiesForSelect(state),
         subjectArea: getSubjectAreaListForSelect(state),
         sections: getAllSectionsForSelect(state),
-        isOpen: isOpenDialog(state),
+        isOpen: isOpenedPrerequisitesDialog(state),
         prerequisite: getDialogData(state, fields.ADD_NEW_PREREQUISITES),
     };
 };

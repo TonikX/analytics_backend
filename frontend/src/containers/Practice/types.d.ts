@@ -98,6 +98,10 @@ export interface practicePageState {
     practice: PracticeState;
     templateText: TemplateTextState;
     comments: Array<CommentType>;
+    addPrerequisitesDialog: {
+        isOpen: boolean,
+        dialogData: any
+    }
 }
 
 export interface MinimalPracticeState {
@@ -143,7 +147,10 @@ export interface PracticeActions {
 
     openDialog: any;
     closeDialog: any;
+
     deletePrerequisite: any;
+    addPrerequisite: any;
+    changePrerequisite: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {
