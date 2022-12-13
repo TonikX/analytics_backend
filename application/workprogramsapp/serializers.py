@@ -723,6 +723,7 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
                                bool(instance.on_check == 'on_check')
         except KeyError:
             data["can_edit"] = False
+        data["can_edit"] = False
         data["discipline_blocks_in_academic_plan"] = sorted(data["discipline_blocks_in_academic_plan"],
                                                             key=lambda x: x["name"])
         return data
