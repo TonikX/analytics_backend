@@ -157,8 +157,8 @@ def render_context(context, **kwargs):
         template_context['QUALIFICATION'] = 'ИНЖЕНЕР'
     template_context['academic_plan'] = str(
         ImplementationAcademicPlan.objects.filter(academic_plan__id=ap_obj.id)[0].title) + ' (' + \
-                                        str(FieldOfStudy.objects.get(
-                                            implementation_academic_plan_in_field_of_study__academic_plan__id=ap_obj.id).number) + ')'
+                                        str(FieldOfStudy.objects.filter(
+                                            implementation_academic_plan_in_field_of_study__academic_plan__id=ap_obj.id)[0].number) + ')'
     template_context['semester'] = semester
     template_context['total_hours_1'] = [round(contact_work, 2), round(lecture_classes, 2), round(laboratory, 2),
                                          round(practical_lessons, 2), round(SRO, 2)]
