@@ -365,8 +365,8 @@ def GetCompetenceMatrix(request, gen_pk):
 def academ_plan_check(request, ap_id):
     ap = AcademicPlan.objects.get(id=ap_id)
     if ap is not None:
-        mail_sender(topic=f'Учебный план с КОП ИД "{ap.id}" и ИСУ ИД "{ap.ap_isu_id}" готов к проверке',
-                    text='Учебный план с КОП ИД "{ap.id}" и ИСУ ИД "{ap.ap_isu_id}" готов к проверке',
+        mail_sender(topic=f'Учебный план с КОП ИД {ap.id} и ИСУ ИД {ap.ap_isu_id} готов к проверке',
+                    text=f'Учебный план с КОП ИД {ap.id} и ИСУ ИД {ap.ap_isu_id} готов к проверке',
                     emails=['antongovorov@gmail.com'], users=[])
         ap.on_check = "on_check"
         ap.save()

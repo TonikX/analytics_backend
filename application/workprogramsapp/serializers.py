@@ -717,13 +717,19 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
+        data["can_validate"] = False
         try:
             data["can_edit"] = self.context['request'].user == instance.author or bool(
-                self.context['request'].user.groups.filter(name="academic_plan_developer"))
+                self.context['request'].user.groups.filter(name="academic_plan_developer"))\
+                               or bool(
+                self.context['request'].user.groups.filter(name="expertise_master"))
         except KeyError:
             data["can_edit"] = False
-        if instance.on_check == 'on_check':
+        if instance.on_check == 'on_check' and not bool(
+                self.context['request'].user.groups.filter(name="expertise_master")):
             data["can_edit"] = False
+        elif bool(self.context['request'].user.groups.filter(name="expertise_master")):
+            data["can_validate"] = True
         data["discipline_blocks_in_academic_plan"] = sorted(data["discipline_blocks_in_academic_plan"],
                                                             key=lambda x: x["name"])
         return data
