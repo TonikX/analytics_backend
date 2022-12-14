@@ -24,6 +24,7 @@ export type HoursSection = {
 
 export type EditableRowProps = {
     section: HoursSection;
+    implementationFormat: string;
     semesterNum: number,
     updateRow: (section: HoursSection, semesterNum: number) => void;
 }
