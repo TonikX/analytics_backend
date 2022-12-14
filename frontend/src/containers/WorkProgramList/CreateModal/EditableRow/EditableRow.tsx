@@ -64,6 +64,16 @@ function EditableRow(props: EditableRowProps) {
                 <TextField
                     variant="outlined"
                     size="small"
+                    defaultValue={section[workProgramSectionFields.CONSULTATIONS]}
+                    className={classes.smallInput}
+                    type="number"
+                    onChange={handleChangeField(workProgramSectionFields.CONSULTATIONS)}
+                />
+            </TableCell>
+            <TableCell className={classes.centerCell}>
+                <TextField
+                    variant="outlined"
+                    size="small"
                     defaultValue={0}
                     className={classes.smallInput}
                     type="number"

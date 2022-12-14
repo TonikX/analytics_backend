@@ -16,6 +16,7 @@ const mapStateToProps = (state:rootState) => {
     const labHours = getHoursArray(getWorkProgramField(state, 'lab_hours_v2'));
     const srsHours = getHoursArray(getWorkProgramField(state, 'srs_hours_v2'));
     const contactHours = getHoursArray(getWorkProgramField(state, 'contact_hours_v2'));
+    const consultationHours = getHoursArray(getWorkProgramField(state, 'consultation_v2'));
 
     return {
         sections: getWorkProgramField(state, fields.WORK_PROGRAM_SECTIONS),
@@ -26,6 +27,7 @@ const mapStateToProps = (state:rootState) => {
         labHours: labHours,
         srsHours: srsHours,
         contactHours: contactHours,
+        consultationHours: consultationHours,
         semesterCount: getWorkProgramField(state, WorkProgramGeneralFields.SEMESTER_COUNT) || 1,
         implementationFormat: getWorkProgramField(state, WorkProgramGeneralFields.IMPLEMENTATION_FORMAT),
     };

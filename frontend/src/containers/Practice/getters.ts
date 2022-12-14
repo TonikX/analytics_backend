@@ -1,8 +1,9 @@
 import {rootState} from "../../store/reducers";
 import get from "lodash/get";
 import {GENERAL_PATH, initialState} from "./reducers";
-import {Id, PermissionsInfoState, practicePageState, PracticeState} from "./types";
+import {Competence, Id, PermissionsInfoState, practicePageState, PracticeState} from "./types";
 import {TemplateTextState} from "./types";
+import {getWorkProgramResults} from "../WorkProgram/getters";
 
 const getStateData = (state: rootState): practicePageState => get(state, GENERAL_PATH);
 
@@ -18,6 +19,20 @@ export const getId = (state: rootState): Id => get(getStateData(state), 'practic
 export const isOpenedPrerequisitesDialog = (state: rootState): Boolean => get(
     getStateData(state), 'addPrerequisitesDialog.isOpen', initialState.addPrerequisitesDialog.isOpen
 );
+export const getCurrentPrerequisite = (state: rootState): Boolean => get(
+    getStateData(state), 'addPrerequisitesDialog.dialogData', initialState.addPrerequisitesDialog.dialogData
+);
+export const getCompetences = (state: rootState): Competence[] => get(getStateData(state), 'practice.competences', initialState.practice.competences);
+export const getResults = (state: rootState): Competence[] => get(getStateData(state), 'practice.outcomes', initialState.practice.outcomes);
+
+export const getResultsForSelect = (state: rootState) => {
+    const allResults = getResults(state);
+    //@ts-ignore
+    return allResults.map((result: any) => ({
+        value: get(result, 'id'),
+        label: get(result, 'item.name', ''),
+    }))
+};
 
 export const getTemplateText = (state: rootState): TemplateTextState =>
     get(getStateData(state), 'templateText', initialState.templateText);

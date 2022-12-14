@@ -19,6 +19,7 @@ export type HoursSection = {
     laboratory: number,
     ze_v_sem: number,
     evaluation_tools: number[],
+    consultations: number,
 }
 
 export type EditableRowProps = {

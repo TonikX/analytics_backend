@@ -96,5 +96,5 @@ export default (theme: Theme) => createStyles({
         position: 'absolute',
         top: '10px',
         left: '-25px',
-    }
+    },
 });

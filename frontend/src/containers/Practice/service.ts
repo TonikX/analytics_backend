@@ -59,7 +59,7 @@ class PracticeService extends AnalyticsService {
     }
 
     deletePrerequisite(id: ReactText){
-        return this.delete(`/api/practice-prerequisites/${id}`);
+        return this.delete(`/api/practice-prerequisites/${id}/`);
     }
 
     changePrerequisites(prerequisite: any, practiceId: ReactText){
@@ -67,19 +67,19 @@ class PracticeService extends AnalyticsService {
         const id = prerequisite[PrerequisiteFields.ID];
 
         // @ts-ignore
-        formData.append('practice', workProgramId);
+        formData.append('practice', practiceId);
 
         formData.append(PrerequisiteFields.MASTER_LEVEL, prerequisite[PrerequisiteFields.MASTER_LEVEL]);
         formData.append(PrerequisiteFields.ITEM, prerequisite[PrerequisiteFields.ITEM][TrainingEntitiesFields.ID]);
 
-        return this.patch(`/api/practice-prerequisites/${id}`, formData);
+        return this.patch(`/api/practice-prerequisites/${id}/`, formData);
     }
 
     addPrerequisites(prerequisite: any, practiceId: ReactText){
         const formData = new FormData();
 
         // @ts-ignore
-        formData.append('practice', workProgramId);
+        formData.append('practice', practiceId);
 
         formData.append(PrerequisiteFields.MASTER_LEVEL, prerequisite[PrerequisiteFields.MASTER_LEVEL]);
         formData.append(PrerequisiteFields.ITEM, prerequisite[PrerequisiteFields.ITEM][TrainingEntitiesFields.ID]);

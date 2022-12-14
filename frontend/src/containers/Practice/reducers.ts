@@ -2,8 +2,6 @@ import {practicePageState} from "./types";
 import createReducer from "../../store/createReducer";
 import {PermissionsInfoFields, PracticeFields, TemplateTextPracticeFields} from "./enum";
 import actions from "./actions";
-import {educationalProgramState} from "../EducationalProgram/types";
-import {fields} from "../EducationalProgram/enum";
 
 export const GENERAL_PATH = 'practice';
 
@@ -51,6 +49,9 @@ export const initialState: practicePageState = {
             [PermissionsInfoFields.USER_EXPERTISE_ID]: null,
         },
         [PracticeFields.PRAC_ISU_ID]: null,
+        [PracticeFields.PREREQUISITES]: [],
+        [PracticeFields.COMPETENCES]: [],
+        [PracticeFields.OUTCOMES]: [],
     },
     templateText: {
         [TemplateTextPracticeFields.ID]: 1,
@@ -63,6 +64,7 @@ export const initialState: practicePageState = {
     comments: [],
     addPrerequisitesDialog: {
         isOpen: false,
+        // @ts-ignore
         dialogData: {}
     }
 };
@@ -71,7 +73,7 @@ const openDialog = (state: practicePageState, {payload}: any): practicePageState
     ...state,
     addPrerequisitesDialog: {
         isOpen: true,
-        dialogData: payload
+        dialogData: payload.data
     }
 });
 
