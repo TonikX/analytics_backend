@@ -124,7 +124,7 @@ class PracticeSerializer(serializers.ModelSerializer):
             for zun in zuns:
                 try:
                     indicator = Indicator.objects.get(competence=competence.id,
-                                                      zun__id=zun.id)
+                                                      zun_practice__id=zun.id)
                     indicator = IndicatorSerializer(indicator).data
                 except:
                     indicator = None
