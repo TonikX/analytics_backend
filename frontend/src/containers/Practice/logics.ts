@@ -3,7 +3,7 @@ import PracticeActions from "./actions";
 import PracticeService from "./service";
 import {getId, getPermissionsInfo} from "./getters";
 import actions from "../../layout/actions";
-import {fetchingTypes, PermissionsInfoFields, PracticeFields} from "./enum";
+import {DialogType, fetchingTypes, PermissionsInfoFields, PracticeFields} from "./enum";
 import {RussianPracticeFields} from "./constants";
 import {getErroredFields} from "./validation";
 import {fields} from "../WorkProgram/enum";
@@ -288,6 +288,164 @@ const deletePrerequisite = createLogic({
     }
 });
 
+const addResult = createLogic({
+    type: PracticeActions.addResult.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const practiceId = getId(state);
+        const result = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_RESULT}));
+
+        service.addResult(result, practiceId)
+            .then(() => {
+                dispatch(PracticeActions.getPractice(practiceId));
+                // @ts-ignore
+                dispatch(actions.fetchingSuccess());
+                dispatch(PracticeActions.closeDialog({dialogType: DialogType.RESULTS}));
+            })
+            // @ts-ignore
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.ADD_RESULT}));
+                return done();
+            });
+    }
+});
+
+const changeResult = createLogic({
+    type: PracticeActions.changeResult.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const practiceId = getId(state);
+        const result = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_RESULT}));
+
+        service.changeResult(result)
+            .then(() => {
+                dispatch(PracticeActions.getPractice(practiceId));
+                // @ts-ignore
+                dispatch(actions.fetchingSuccess());
+                dispatch(PracticeActions.closeDialog({dialogType: DialogType.RESULTS}));
+            })
+            // @ts-ignore
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_RESULT}));
+                return done();
+            });
+    }
+});
 
 
-export default [getPractice, saveField, getTemplateText, createExpertise, approvePractice, sendPracticeToRework, getComments, sendComment, addPrerequisite, changePrerequisite, deletePrerequisite];
+const deleteResult = createLogic({
+    type: PracticeActions.deleteResult.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const practiceId = getId(state);
+        const id = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_RESULT}));
+
+        service.deleteResult(id)
+            .then(() => {
+                dispatch(PracticeActions.getPractice(practiceId));
+                // @ts-ignore
+                dispatch(actions.fetchingSuccess());
+            })
+            // @ts-ignore
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_RESULT}));
+                return done();
+            });
+    }
+});
+
+const getCompetenceDirectionsDependedOnPractice = createLogic({
+    type: PracticeActions.getCompetencesDependedOnPractice.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_PRACTICE}));
+
+        service.getCompetenceDirectionsDependedOnPractice(action.payload)
+            .then((res) => {
+                dispatch(PracticeActions.setCompetencesDependedOnPractice(res.data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_PRACTICE}));
+                return done();
+            });
+    }
+});
+
+const saveZUN = createLogic({
+    type: PracticeActions.saveZUN.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const practiceId = getId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
+
+        service.saveZUN(action.payload)
+            .then(() => {
+                dispatch(PracticeActions.getPractice(practiceId));
+                dispatch(actions.fetchingSuccess());
+            })
+            //@ts-ignore
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SAVE_ZUN}));
+                return done();
+            });
+    }
+});
+
+const deleteZUN = createLogic({
+    type: PracticeActions.deleteZUN.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const practiceId = getId(state);
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_ZUN}));
+
+        service.deleteZUN(action.payload)
+            .then(() => {
+                dispatch(PracticeActions.getPractice(practiceId));
+                dispatch(actions.fetchingSuccess());
+            })
+            //@ts-ignore
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_ZUN}));
+                return done();
+            });
+    }
+});
+
+
+export default [
+    getPractice, saveField, getTemplateText, createExpertise, approvePractice, sendPracticeToRework,
+    getComments, sendComment, addPrerequisite, changePrerequisite, deletePrerequisite,
+    addResult, deleteResult, changeResult, getCompetenceDirectionsDependedOnPractice,
+    deleteZUN, saveZUN
+];

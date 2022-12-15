@@ -1,6 +1,6 @@
 import {practicePageState} from "./types";
 import createReducer from "../../store/createReducer";
-import {PermissionsInfoFields, PracticeFields, TemplateTextPracticeFields} from "./enum";
+import {DialogType, PermissionsInfoFields, PracticeFields, TemplateTextPracticeFields} from "./enum";
 import actions from "./actions";
 
 export const GENERAL_PATH = 'practice';
@@ -62,28 +62,48 @@ export const initialState: practicePageState = {
         [TemplateTextPracticeFields.EVALUATION_TOOLS_CURRENT_CONTROL]: '',
     },
     comments: [],
-    addPrerequisitesDialog: {
-        isOpen: false,
-        // @ts-ignore
-        dialogData: {}
-    }
+    dialog: {
+        [DialogType.RESULTS]: {
+            isOpen: false,
+            //@ts-ignore
+            dialogData: {}
+        },
+        [DialogType.PREREQUISITES]: {
+            isOpen: false,
+            //@ts-ignore
+            dialogData: {}
+        }
+    },
+    dependentDirections: []
 };
 
 const openDialog = (state: practicePageState, {payload}: any): practicePageState => ({
     ...state,
-    addPrerequisitesDialog: {
-        isOpen: true,
-        dialogData: payload.data
+    dialog: {
+        ...state.dialog,
+        [payload.dialogType]: {
+            isOpen: true,
+            dialogData: payload.data,
+        }
     }
 });
 
 const closeDialog =  (state: practicePageState, {payload}: any): practicePageState => ({
     ...state,
-    addPrerequisitesDialog: {
-        ...state.addPrerequisitesDialog,
-        isOpen: false,
+    dialog: {
+        ...state.dialog,
+        [payload.dialogType]: {
+            isOpen: false,
+        }
     }
 });
+
+const setCompetencesDependedOnPractice = (state: practicePageState, {payload}: any) => {
+    return {
+        ...state,
+        dependentDirections: payload
+    }
+};
 
 const setPractice = (state: practicePageState, {payload}: any): practicePageState => ({
     ...state,
@@ -200,4 +220,5 @@ export const reducer = createReducer(initialState, {
     [actions.setComments.type]: setComments,
     [actions.openDialog.type]: openDialog,
     [actions.closeDialog.type]: closeDialog,
+    [actions.setCompetencesDependedOnPractice]: setCompetencesDependedOnPractice,
 });

@@ -28,7 +28,12 @@ const changePrerequisite = createAction('PRACTICE_CHANGE_PREREQUISITE');
 const deletePrerequisite = createAction('PRACTICE_DELETE_PREREQUISITE');
 const getResults = createAction('PRACTICE_GET_RESULTS');
 const deleteZUN = createAction('PRACTICE_DELETE_ZUN');
-const saveZUN = createAction('PRACTICE_SAVE_ZUN')
+const saveZUN = createAction('PRACTICE_SAVE_ZUN');
+const deleteResult = createAction('PRACTICE_DELETE_RESULT');
+const changeResult = createAction('PRACTICE_CHANGE_RESULT');
+const addResult = createAction('PRACTICE_ADD_RESULT');
+const getCompetencesDependedOnPractice = createAction('GET_COMPETENCES_DEPENDENT_ON_PRACTICE');
+const setCompetencesDependedOnPractice = createAction('SET_COMPETENCES_DEPENDENT_ON_PRACTICE');
 
 export const actions: PracticeActions = {
     getPractice,
@@ -58,6 +63,11 @@ export const actions: PracticeActions = {
     getResults,
     deleteZUN,
     saveZUN,
+    deleteResult,
+    changeResult,
+    addResult,
+    getCompetencesDependedOnPractice,
+    setCompetencesDependedOnPractice
 };
 
 export default actions;

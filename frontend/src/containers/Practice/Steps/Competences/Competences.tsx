@@ -24,11 +24,11 @@ export default React.memo(() => {
   const [dialogCompetence, setDialogCompetence] = useState<{value: number; label: string} | undefined>(undefined)
 
   const competences = useSelector((state: rootState) => getCompetences(state))
-  const workProgramId = useSelector((state: rootState) => getId(state))
+  const practiceId = useSelector((state: rootState) => getId(state));
   const classes = useStyles()
 
   const handleCloseDialog = () => {
-    setDialogCompetence(undefined)
+    setDialogCompetence(undefined);
     setIsOpenIndicatorDialog(false)
   }
 
@@ -36,15 +36,15 @@ export default React.memo(() => {
     setIsOpenIndicatorDialog(true)
   }
 
-  useEffect(() => {
-    if (workProgramId) {
-      dispatch(actions.getResults(workProgramId))
-    }
-  }, [workProgramId]);
+  // useEffect(() => {
+  //   if (workProgramId) {
+  //     dispatch(actions.getResults(workProgramId))
+  //   }
+  // }, [workProgramId]);
 
   const deleteCompetence = (competenceId: number) => {
     dispatch(actions.deleteZUN(competenceId))
-  }
+  };
 
   return (
     <>
@@ -78,11 +78,15 @@ export default React.memo(() => {
             <TableCell className={classes.header}>
               ЗУН
             </TableCell>
+            <TableCell className={classes.header}>
+              {' '}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {competences.map((competence: any) => {
-            const zuns = get(competence, 'zuns', [])
+            const zuns = get(competence, 'zuns', []);
+            console.log(zuns);
             const addIndicatorButton = (
               <div className={classes.smallButton}
                    onClick={() => {
@@ -96,19 +100,11 @@ export default React.memo(() => {
                 <AddIcon/> Добавить индикатор
               </div>
             )
-            const deleteCompetenceButton = (
-              <div className={classes.smallButton}
-                   onClick={() => deleteCompetence(competence.id)}
-              >
-                Удалить компетенцию
-              </div>
-            )
             if (zuns.length === 0){
               return (
                 <TableRow>
                   <TableCell className={classes.cell}>
                     {competence.number} {competence.name}
-                    {deleteCompetenceButton}
                   </TableCell>
                   <TableCell className={classes.cell}>
                     {addIndicatorButton}
@@ -123,7 +119,6 @@ export default React.memo(() => {
                   <TableCell rowSpan={zuns.length} className={classes.cell}>
                     {competence.number} {competence.name}
                     {addIndicatorButton}
-                    {deleteCompetenceButton}
                   </TableCell>
                   : <></>
                 }
@@ -149,6 +144,13 @@ export default React.memo(() => {
                 <TableCell className={classes.cell}>
                   {[get(zun, 'knowledge'), get(zun, 'skills'), get(zun, 'attainments')].filter(item => Boolean(item)).join(' / ')}
                 </TableCell>
+                <TableCell>
+                  <div className={classes.smallButton}
+                       onClick={() => deleteCompetence(zun.id)}
+                  >
+                    Удалить индикатор
+                  </div>
+                </TableCell>
               </TableRow>
             ))
           })}
@@ -159,7 +161,7 @@ export default React.memo(() => {
         isOpen={isOpenIndicatorDialog}
         handleClose={handleCloseDialog}
         defaultCompetence={dialogCompetence}
-        workProgramId={workProgramId}
+        practiceId={practiceId}
       />
     </>
   )
