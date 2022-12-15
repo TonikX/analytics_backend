@@ -5,6 +5,8 @@ from django.db import transaction
 from django.db.models import Count
 # Сериализаторы
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg2 import openapi
+from drf_yasg2.utils import swagger_auto_schema
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
@@ -359,12 +361,32 @@ def GetCompetenceMatrix(request, gen_pk):
 #     else:
 #         return Response({'message': 'you have not new notifications', 'status': False}, status=400)
 
+
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=None,
+        properties={
+            'new_status': openapi.Schema(type=openapi.TYPE_STRING,
+                                  description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
+    }
+    ),
+    operation_description='Метод для изменения статусов учебного плана')
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 @transaction.atomic
 def academ_plan_check(request, ap_id):
     ap = AcademicPlan.objects.get(id=ap_id)
     if ap is not None:
+        if ap.on_check == "on_check" and bool(request.user.groups.filter(name="expertise_master")):
+            if request.data['new_status'] == 'in_work':
+                ap.on_check = "in_work"
+                ap.save()
+            elif request.data['new_status'] == 'verified':
+                ap.on_check = "verified"
+                ap.save()
+            return Response({'message': 'status changed', 'status': True}, status=200)
         mail_sender(topic=f'Учебный план с КОП ИД {ap.id} и ИСУ ИД {ap.ap_isu_id} готов к проверке',
                     text=f'Учебный план с КОП ИД {ap.id} и ИСУ ИД {ap.ap_isu_id} готов к проверке',
                     emails=['antongovorov@gmail.com'], users=[])
