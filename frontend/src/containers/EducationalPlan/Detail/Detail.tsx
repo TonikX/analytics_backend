@@ -65,6 +65,8 @@ import Dialog from "@material-ui/core/Dialog";
 import UserSelector from "../../Profile/UserSelector/UserSelector";
 
 import Service from '../service'
+import WorkProgramStatus from "../../../components/WorkProgramStatus";
+import {StatusPoint} from "../../../components/StatusPoint";
 
 const planService = new Service()
 
@@ -514,7 +516,15 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   sendToCheck = () => {
-    this.props.actions.sendPlanToCheck();
+    this.props.actions.sendPlanToValidate();
+  }
+
+  approvePlan = () => {
+    this.props.actions.approvePlan();
+  }
+
+  sendToRework = () => {
+    this.props.actions.sendPlanToRework();
   }
 
   downloadPlan = async () => {
@@ -534,7 +544,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   renderMain = () => {
-    const {classes, detailPlan, canSendToCheck} = this.props;
+    const {classes, detailPlan, canSendToValidate} = this.props;
 
     //@ts-ignore
     const isuId = detailPlan?.ap_isu_id
@@ -669,7 +679,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   render() {
-    const {classes, blocks, detailPlan, trajectoryRoute, user, direction, canSendToCheck} = this.props;
+    const {classes, blocks, detailPlan, trajectoryRoute, user, direction, canSendToValidate, canValidate, statusInfo} = this.props;
     const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
     const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
 
@@ -677,6 +687,35 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
     return (
       <Paper className={classes.root}>
+        <div className={classes.headerWrap}>
+          <StatusPoint {...statusInfo} />
+          <div className={classes.headerButtons}>
+            <Button onClick={this.downloadPlan} className={classes.buttonH32}>
+              Скачать учебный план
+            </Button>
+            {canSendToValidate && canEdit && (
+              <Button onClick={this.sendToCheck} className={classes.buttonH32}>
+                Отправить на проверку
+              </Button>
+            )}
+            {canValidate && (
+              <>
+                <Button className={classes.buttonH32} onClick={this.sendToRework} variant="outlined" style={{marginRight: 10}}>
+                  Отправить на доработку
+                </Button>
+                <Button className={classes.buttonH32} onClick={this.approvePlan} variant="contained" color="primary">
+                  Принять
+                </Button>
+              </>
+            )}
+            <div className={classes.likeIcon}>
+              <LikeButton onClick={this.handleClickLike}
+                          isLiked={Boolean(detailPlan[EducationalPlanFields.ID_RATING])}
+              />
+            </div>
+          </div>
+        </div>
+
         <div className={classes.title}>
           <Typography>
             Учебный план: {get(detailPlan, 'academic_plan_in_field_of_study[0].title', '')}&nbsp;
@@ -687,31 +726,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
             )}
             - {get(detailPlan, 'academic_plan_in_field_of_study[0].year', '')}
           </Typography>
-
-          <div className={classes.likeIcon}>
-            <LikeButton onClick={this.handleClickLike}
-                        isLiked={Boolean(detailPlan[EducationalPlanFields.ID_RATING])}
-            />
-          </div>
         </div>
 
-        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <Tabs value={tab} onChange={(e, value) => this.setState({tab: value})}>
-            <Tab value="1" label="Главная" />
-            <Tab value="2" label="Учебный план" />
-          </Tabs>
-
-          <div style={{display: 'flex'}}>
-            <Button onClick={this.downloadPlan}>
-              Скачать учебный план
-            </Button>
-            {canSendToCheck && canEdit && (
-              <Button onClick={this.sendToCheck}>
-                Отправить на проверку
-              </Button>
-            )}
-          </div>
-        </div>
+        <Tabs value={tab} onChange={(e, value) => this.setState({tab: value})}>
+          <Tab value="1" label="Главная" />
+          <Tab value="2" label="Учебный план" />
+        </Tabs>
 
         {tab === '1' ? this.renderMain() : this.renderEducationPlan()}
       </Paper>

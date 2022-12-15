@@ -4,7 +4,7 @@ import {
     DownloadFileModalFields,
     EducationalPlanBlockFields,
     EducationalPlanFields,
-    ModuleFields
+    ModuleFields, PlanStatuses
 } from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
@@ -171,8 +171,20 @@ class EducationalPlanService extends AnalyticsService{
         return (`${appConfigService.getApiBasePath()}/api/export/academic_plan/${planId}`);
     }
 
-    sendPlanToCheck(planId: any){
+    sendPlanToValidate(planId: any){
         return this.post(`/api/academicplan_check/${planId}`, {});
+    }
+
+    sendPlanToRework(planId: any){
+        return this.post(`/api/academicplan_check/${planId}`, {
+            new_status: PlanStatuses.IN_WORK
+        });
+    }
+
+    approvePlan(planId: any){
+        return this.post(`/api/academicplan_check/${planId}`, {
+            new_status: PlanStatuses.APPROVED
+        });
     }
 }
 

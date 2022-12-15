@@ -4,7 +4,7 @@ import {rootState} from '../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 
-import {EducationalPlanFields, fields} from './enum';
+import {EducationalPlanFields, fields, PlanStatuses, PlanStatusesColors, PlanStatusesNames} from './enum';
 
 import {EducationalPlanListType, educationalPlanState, EducationalPlanType} from './types';
 import {SelectorListType} from "../../components/SearchSelector/types";
@@ -16,7 +16,19 @@ const getStateData = (state: rootState): educationalPlanState => get(state, GENE
 export const getEducationalPlan = (state: rootState): Array<EducationalPlanListType> => get(getStateData(state), fields.EDUCATIONAL_PLAN_LIST, []);
 export const getEducationalPlanDetail = (state: rootState): EducationalPlanType|{} => get(getStateData(state), fields.DETAIL_PLAN, {});
 // @ts-ignore
-export const canSendToCheck = (state: rootState): EducationalPlanType|{} => getEducationalPlanDetail(state)?.[EducationalPlanFields.ON_CHECK] === 'in_work';
+export const canSendToValidate = (state: rootState): EducationalPlanType|{} => getEducationalPlanDetail(state)?.[EducationalPlanFields.STATUS] === PlanStatuses.IN_WORK;
+// @ts-ignore
+export const canValidate = (state: rootState): EducationalPlanType|{} => getEducationalPlanDetail(state)?.[EducationalPlanFields.CAN_VALIDATE] && getEducationalPlanDetail(state)?.[EducationalPlanFields.STATUS] === PlanStatuses.ON_CHECK;
+export const getStatusInfo = (state: rootState) => {
+  // @ts-ignore
+  const status = getEducationalPlanDetail(state)?.[EducationalPlanFields.STATUS] as PlanStatuses
+
+  return {
+    status,
+    statusText: PlanStatusesNames[status],
+    backgroundColor: PlanStatusesColors[status]
+  }
+};
 
 export const getIsTrajectoryRoute = (state: rootState): boolean => get(getStateData(state), fields.IS_TRAJECTORY_ROUTE, false);
 export const getTrajectoryUserData = (state: rootState): UserType|{} => get(getStateData(state), fields.TRAJECTORY_USER_DATA, {});
@@ -24,17 +36,17 @@ export const getTrajectoryDirection = (state: rootState): DirectionType|{} => ge
 export const getNewPlanIdForRedirect = (state: rootState): null|number => get(getStateData(state), fields.NEW_PLAN_ID_FOR_REDIRECT, null);
 
 export const getEducationalPlanDetailBlocks = (state: rootState): Array<EducationalPlanType> =>
-    get(getEducationalPlanDetail(state), EducationalPlanFields.DISCIPLINE_BLOCKS, []);
+  get(getEducationalPlanDetail(state), EducationalPlanFields.DISCIPLINE_BLOCKS, []);
 export const getEducationalPlanDetailId = (state: rootState): Array<EducationalPlanType> =>
-    get(getEducationalPlanDetail(state), EducationalPlanFields.ID, '');
+  get(getEducationalPlanDetail(state), EducationalPlanFields.ID, '');
 export const getEducationalPlanOpId = (state: rootState): Array<EducationalPlanType> =>
-    get(getEducationalPlanDetail(state), 'academic_plan_in_field_of_study.0.id', '');
+  get(getEducationalPlanDetail(state), 'academic_plan_in_field_of_study.0.id', '');
 
 export const getEducationalPlanForSelector = (state: rootState): SelectorListType =>
-    getEducationalPlan(state).map((plan: EducationalPlanListType) => ({
-        value: plan[EducationalPlanFields.ID],
-        label: `${get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.NUMBER])} ${get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.TITLE])}`,
-    }))
+  getEducationalPlan(state).map((plan: EducationalPlanListType) => ({
+      value: plan[EducationalPlanFields.ID],
+      label: `${get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.NUMBER])} ${get(plan, [EducationalPlanFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY, 0, EducationalPlanFields.TITLE])}`,
+  }))
 
 export const getEducationalPlanDialog = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_PLAN_DIALOG, {});
 export const isOpenDialog = (state: rootState) => get(getEducationalPlanDialog(state), fields.IS_OPEN_DIALOG, false);
