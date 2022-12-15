@@ -365,6 +365,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         </TableHead>
                         {new Array(+workProgram[WorkProgramGeneralFields.SEMESTER_COUNT]).fill('').map((_item, index) => {
                             return <EditedRow
+                                implementationFormat={workProgram[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]}
                                 semesterNum={index + 1}
                                 updateRow={this.updateRow}
                                 section={this.getNewSection(index + 1)}

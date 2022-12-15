@@ -8,10 +8,11 @@ import {useStyles} from './EditableRow.styles';
 import {EditableRowProps} from "../types";
 import {Select} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
+import {ImplementationFormatsEnum} from "../../../WorkProgram/enum";
 
 function EditableRow(props: EditableRowProps) {
     const classes = useStyles();
-    const {section, updateRow, semesterNum} = props;
+    const {section, updateRow, semesterNum, implementationFormat} = props;
     const handleChangeField = (field: string) => (e: React.ChangeEvent) => {
         updateRow({
             ...section,
@@ -64,20 +65,21 @@ function EditableRow(props: EditableRowProps) {
                 <TextField
                     variant="outlined"
                     size="small"
-                    defaultValue={section[workProgramSectionFields.CONSULTATIONS]}
+                    defaultValue={0}
                     className={classes.smallInput}
                     type="number"
-                    onChange={handleChangeField(workProgramSectionFields.CONSULTATIONS)}
+                    onChange={handleChangeField(workProgramSectionFields.PRACTICAL_LESSONS)}
                 />
             </TableCell>
             <TableCell className={classes.centerCell}>
                 <TextField
                     variant="outlined"
                     size="small"
-                    defaultValue={0}
+                    defaultValue={section[workProgramSectionFields.CONSULTATIONS]}
                     className={classes.smallInput}
                     type="number"
-                    onChange={handleChangeField(workProgramSectionFields.PRACTICAL_LESSONS)}
+                    disabled={implementationFormat === ImplementationFormatsEnum.OFFLINE}
+                    onChange={handleChangeField(workProgramSectionFields.CONSULTATIONS)}
                 />
             </TableCell>
             <TableCell className={classes.centerCell}>
