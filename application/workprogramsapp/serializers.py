@@ -717,19 +717,28 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data["can_validate"] = False
-        try:
-            data["can_edit"] = self.context['request'].user == instance.author or bool(
-                self.context['request'].user.groups.filter(name="academic_plan_developer"))\
-                               or bool(
-                self.context['request'].user.groups.filter(name="expertise_master"))
-        except KeyError:
-            data["can_edit"] = False
+
+        # try:
+        #     data["can_edit"] = self.context['request'].user == instance.author or bool(
+        #         self.context['request'].user.groups.filter(name="academic_plan_developer"))\
+        #                        or bool(
+        #         self.context['request'].user.groups.filter(name="expertise_master"))
+        # except KeyError:
+        #     data["can_edit"] = False
+        # print(instance.academic_plan_in_field_of_study.filter()[0].editors)
         if instance.on_check == 'on_check' and not bool(
                 self.context['request'].user.groups.filter(name="expertise_master")):
             data["can_edit"] = False
-        elif bool(self.context['request'].user.groups.filter(name="expertise_master")):
+        elif self.context['request'].user in instance.academic_plan_in_field_of_study.filter()[0].editors.all():
+            data["can_edit"] = True
+        elif self.context['request'].user.is_staff:
+            data["can_edit"] = True
+        else:
+            data["can_edit"] = False
+        if instance.on_check == 'on_check' and bool(self.context['request'].user.groups.filter(name="expertise_master")):
             data["can_validate"] = True
+        else:
+            data["can_validate"] = False
         data["discipline_blocks_in_academic_plan"] = sorted(data["discipline_blocks_in_academic_plan"],
                                                             key=lambda x: x["name"])
         return data
