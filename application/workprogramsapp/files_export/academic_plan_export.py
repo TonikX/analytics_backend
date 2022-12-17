@@ -199,7 +199,8 @@ def process_changeblock(changeblocks, level, ws):
             insert_cell_data(ws=ws, level=level, column_name="realizer", data=wp.structural_unit.short_name)
             insert_cell_data(ws=ws, level=level, column_name="percent_seminary",
                              data=round(float((seminary_hours) / (sum_ze * 36)) * 100, 2))
-            insert_cell_data(ws=ws, level=level, column_name="realisation_language", data=wp.language.upper())
+            if wp.language:
+                insert_cell_data(ws=ws, level=level, column_name="realisation_language", data=wp.language.upper())
             level += 1
     return level
 
@@ -281,7 +282,7 @@ def module_inside_recursion(modules, level, ws, depth=0):
 
 
 def process_excel(academic_plan):
-    # wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\plan.xlsx")
+    #wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\plan.xlsx")
     wb_obj = openpyxl.load_workbook('/application/static-backend/export_template/academic_plan_template_2023.xlsx')
     ws = wb_obj["УП"]
     start_list = 7

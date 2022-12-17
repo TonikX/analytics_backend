@@ -459,7 +459,7 @@ class AcademicPlanGenerateXlsx(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         academic_plan = AcademicPlan.objects.get(pk=kwargs['pk'])
-        imp = ImplementationAcademicPlan.objects.get(academic_plan=academic_plan)
+        imp = ImplementationAcademicPlan.objects.filter(academic_plan=academic_plan).order_by("-id")[0]
         fos = imp.field_of_study.all()[0]
         filename = f"{fos.number} {fos.title}.xlsx"
         wb_obj = process_excel(academic_plan)
