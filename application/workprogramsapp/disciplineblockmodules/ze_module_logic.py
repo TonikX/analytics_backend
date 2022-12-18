@@ -153,27 +153,28 @@ def calculate_wp_term(module, select_param=0, type_control="wp"):
         objs = change_block.work_program.all()
         if not objs.exists():
             objs = change_block.practice.all()
+            type_control = "prac"
         if not objs.exists():
             objs = change_block.gia.all()
-        try:
-            obj = objs[0]
-            semesters = change_block.semester_start
+            type_control = "gia"
+        obj = objs[0]
+        semesters = change_block.semester_start
+        if obj.ze_v_sem:
             ze_wp = [int(unit) for unit in obj.ze_v_sem.split(", ")]
             matrix.extend(generate_full_ze_list(ze_wp, semesters))
-
-            lecture_wp = [float(unit) for unit in obj.lecture_hours_v2.split(", ")]
-            matrix_lecture.extend(generate_full_ze_list(lecture_wp, semesters))
-
-            lab_wp = [float(unit) for unit in obj.lab_hours_v2.split(", ")]
-            matrix_lab.extend(generate_full_ze_list(lab_wp, semesters))
-
-            practice_wp = [float(unit) for unit in obj.practice_hours_v2.split(", ")]
-            matrix_practice.extend(generate_full_ze_list(practice_wp, semesters))
-
-            cons_wp = [float(unit) for unit in obj.consultation_v2.split(", ")]
-            matrix_cons.extend(generate_full_ze_list(cons_wp, semesters))
-        except AttributeError:
-            pass
+        if type_control == "wp":
+            if obj.lecture_hours_v2:
+                lecture_wp = [float(unit) for unit in obj.lecture_hours_v2.split(", ")]
+                matrix_lecture.extend(generate_full_ze_list(lecture_wp, semesters))
+            if obj.lab_hours_v2:
+                lab_wp = [float(unit) for unit in obj.lab_hours_v2.split(", ")]
+                matrix_lab.extend(generate_full_ze_list(lab_wp, semesters))
+            if obj.practice_hours_v2:
+                practice_wp = [float(unit) for unit in obj.practice_hours_v2.split(", ")]
+                matrix_practice.extend(generate_full_ze_list(practice_wp, semesters))
+            if obj.consultation_v2:
+                cons_wp = [float(unit) for unit in obj.consultation_v2.split(", ")]
+                matrix_cons.extend(generate_full_ze_list(cons_wp, semesters))
 
     return calculate_ze_term(matrix, matrix_lab, matrix_lecture, matrix_practice, matrix_cons, select_param)
 
@@ -193,16 +194,19 @@ def calculate_ze_term(matrix, matrix_lab, matrix_lecture, matrix_practice, matri
         column = np.flip(np.argsort(matrix[:, i]))
         param_counter = 0
         for max_index in column:
-            try:
-                param_counter += 1
-                max_ze_by_term[i] += matrix[max_index, i]
-                max_lab_by_term[i] += matrix_lab[max_index, i]
-                max_lecture_by_term[i] += matrix_lecture[max_index, i]
-                max_practice_by_term[i] += matrix_practice[max_index, i]
-                max_cons_by_term[i] += matrix_cons[max_index, i]
-            except IndexError:
-                pass
 
+            param_counter += 1
+            if matrix.tolist():
+                max_ze_by_term[i] += matrix[max_index, i]
+            if matrix_lab.tolist():
+                max_lab_by_term[i] += matrix_lab[max_index, i]
+            if matrix_lecture.tolist():
+                max_lecture_by_term[i] += matrix_lecture[max_index, i]
+            if matrix_practice.tolist():
+                max_practice_by_term[i] += matrix_practice[max_index, i]
+            if matrix_cons.tolist():
+                #max_cons_by_term[i] += matrix_cons[max_index, i]
+                pass
             if param_counter == select_param:
                 break
     return max_ze_by_term, max_lab_by_term, max_lecture_by_term, max_practice_by_term, matrix_cons
@@ -263,7 +267,7 @@ def recursion_module_per_ze(obj):
                     max_hours_cons = sum_lists(max_hours_cons, max_cons)
             else:
                 selection_param = WorkProgram.objects.filter(
-                    zuns_for_wp__work_program_change_in_discipline_block_module=obj).count()
+                    work_program_in_change_block__discipline_block_module=obj).count()
                 max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = calculate_wp_term(obj, int(selection_param))
             for i in range(len(max_ze_total)):
                 if max_ze_total[i] > int(obj.selection_parametr):
@@ -277,8 +281,8 @@ def recursion_module_per_ze(obj):
     except AttributeError:
         print("a")
     except IndexError:
-        print("a")
+        print("i")
     except ValueError:
-        print("a")
+        print("v")
 
     return max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons
