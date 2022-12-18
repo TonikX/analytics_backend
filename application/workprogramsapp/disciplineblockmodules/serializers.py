@@ -32,7 +32,7 @@ class ImplementationAcademicPlanSerializerForBlockModule(serializers.ModelSerial
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id', 'academic_plan', 'field_of_study', 'year', 'is_included']
+        fields = ['id', 'academic_plan', 'field_of_study', 'year', 'is_included', 'title']
 
 
 class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerializer):
