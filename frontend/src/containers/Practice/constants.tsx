@@ -17,6 +17,7 @@ import Literature from "./Steps/Literature";
 import Prerequisites from "./Steps/Prerequisites";
 import React from "react";
 import Competences from "./Steps/Competences";
+import Results from "./Steps/Results";
 
 export const LANGUAGES = [
     {
@@ -282,11 +283,15 @@ export const STEPS = [
         component: <Assessment/>,
     },
     {
+        name: PracticeSteps.RESULTS,
+        component: <Results/>,
+    },
+    {
         name: PracticeSteps.REFERENCES,
         component: <Literature/>,
     },
-    // {
-    //     name: PracticeSteps.COMPETENCES,
-    //     component: <Competences/>,
-    // },
+    {
+        name: PracticeSteps.COMPETENCES,
+        component: <Competences/>,
+    },
 ];

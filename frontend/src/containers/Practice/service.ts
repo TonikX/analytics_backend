@@ -2,7 +2,8 @@ import AnalyticsService from "../../service/analytics-service";
 import {MinimalPracticeState, PracticeState} from "./types";
 import {UserExpertResultEnum} from "../Expertises/enum";
 import {ReactText} from "react";
-import {PrerequisiteFields} from "../WorkProgram/enum";
+import get from 'lodash/get';
+import {PrerequisiteFields, ResultsFields} from "../WorkProgram/enum";
 import {TrainingEntitiesFields} from "../TrainingEntities/enum";
 
 class PracticeService extends AnalyticsService {
@@ -85,6 +86,48 @@ class PracticeService extends AnalyticsService {
         formData.append(PrerequisiteFields.ITEM, prerequisite[PrerequisiteFields.ITEM][TrainingEntitiesFields.ID]);
 
         return this.post(`/api/practice-prerequisites/`, formData);
+    }
+
+    addResult(result: any, practiceId: ReactText){
+        return this.post(`/api/practice-outcomes/`, {
+            ...result,
+            practice: practiceId,
+            item: get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID])
+        });
+    }
+
+    deleteResult(id: ReactText){
+        return this.delete(`/api/practice-outcomes/${id}/`);
+    }
+
+    changeResult(result: any){
+        const id = result[ResultsFields.ID];
+
+        return this.patch(`/api/practice-outcomes/${id}/`, {
+            ...result,
+            item: get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID])
+        });
+    }
+
+    getCompetenceDirectionsDependedOnPractice(practiceId: number){
+        return this.get(`/api/practice/fieldofstudies_for_competences/${practiceId}`);
+    }
+
+    saveZUN({indicator, plans, results, knowledge, skills, attainments}: any){
+        return this.post(`/api/zun/practice-many/`,{
+            pra_in_fss: plans,
+            zun: {
+                indicator_in_zun: indicator,
+                items: results,
+                knowledge,
+                skills,
+                attainments,
+            },
+        });
+    }
+
+    deleteZUN(compentenceId: number){
+        return this.delete(`/api/zun/practice-many/${compentenceId}`);
     }
 }
 

@@ -3,7 +3,8 @@ import get from "lodash/get";
 import {GENERAL_PATH, initialState} from "./reducers";
 import {Competence, Id, PermissionsInfoState, practicePageState, PracticeState} from "./types";
 import {TemplateTextState} from "./types";
-import {getWorkProgramResults} from "../WorkProgram/getters";
+import {DialogType} from "./enum";
+import {ResultsType} from "../WorkProgram/types";
 
 const getStateData = (state: rootState): practicePageState => get(state, GENERAL_PATH);
 
@@ -16,14 +17,14 @@ export const getLiteratureList = (state: rootState): PracticeState =>
     get(getStateData(state), 'practice.bibliographic_reference', initialState.practice.bibliographic_reference);
 
 export const getId = (state: rootState): Id => get(getStateData(state), 'practice.id', initialState.practice.id);
-export const isOpenedPrerequisitesDialog = (state: rootState): Boolean => get(
-    getStateData(state), 'addPrerequisitesDialog.isOpen', initialState.addPrerequisitesDialog.isOpen
+export const isOpenedDialog = (state: rootState, dialogType: DialogType): Boolean => get(
+    getStateData(state), ['dialog', dialogType, 'isOpen'], initialState.dialog[dialogType].isOpen
 );
-export const getCurrentPrerequisite = (state: rootState): Boolean => get(
-    getStateData(state), 'addPrerequisitesDialog.dialogData', initialState.addPrerequisitesDialog.dialogData
+export const getCurrentData = (state: rootState, dialogType: DialogType) => get(
+    getStateData(state), ['dialog', dialogType, 'dialogData'], initialState.dialog[dialogType].dialogData
 );
 export const getCompetences = (state: rootState): Competence[] => get(getStateData(state), 'practice.competences', initialState.practice.competences);
-export const getResults = (state: rootState): Competence[] => get(getStateData(state), 'practice.outcomes', initialState.practice.outcomes);
+export const getResults = (state: rootState): ResultsType[] => get(getStateData(state), 'practice.outcomes', initialState.practice.outcomes);
 
 export const getResultsForSelect = (state: rootState) => {
     const allResults = getResults(state);
@@ -33,6 +34,16 @@ export const getResultsForSelect = (state: rootState) => {
         label: get(result, 'item.name', ''),
     }))
 };
+
+const titlePath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.title'
+const yearPath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.year'
+const titleDirectionPath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.field_of_study.0.title'
+const numberDirectionPath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.field_of_study.0.number'
+
+export const getDependentDirections = (state: rootState) => get(getStateData(state), 'dependentDirections', initialState.dependentDirections).map((result: any) => ({
+    value: get(result, 'id'),
+    label: `${get(result, titlePath, '')} ${get(result, yearPath, '')}: ${get(result, titleDirectionPath, '')} ${get(result, numberDirectionPath, '')}`,
+}));
 
 export const getTemplateText = (state: rootState): TemplateTextState =>
     get(getStateData(state), 'templateText', initialState.templateText);

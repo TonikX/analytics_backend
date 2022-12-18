@@ -1,5 +1,5 @@
 import {
-    CommentFields,
+    CommentFields, DialogType,
     ExpertiseStatus,
     PermissionsInfoFields,
     PracticeFields,
@@ -12,7 +12,8 @@ import {RouteComponentProps} from "react-router-dom";
 import {LiteratureType} from "../Literature/types";
 import {UserType} from "../../layout/types";
 import {Zun} from "../EducationalProgram/Characteristic/CompetenceMatrix/types";
-import {PrerequisiteType} from "../WorkProgram/types";
+import {PrerequisiteType, ResultsType} from "../WorkProgram/types";
+import {DirectionType} from "../Direction/types";
 
 export type Id = number;
 
@@ -79,7 +80,7 @@ export type PracticeState = GeneralInfoState
     [PracticeFields.PRAC_ISU_ID]: number | null
     [PracticeFields.PREREQUISITES]: PrerequisiteType[]
     [PracticeFields.COMPETENCES]: Competence[];
-    [PracticeFields.OUTCOMES]: any[];
+    [PracticeFields.OUTCOMES]: ResultsType[];
 }
 
 interface Competence {
@@ -110,10 +111,17 @@ export interface practicePageState {
     practice: PracticeState;
     templateText: TemplateTextState;
     comments: Array<CommentType>;
-    addPrerequisitesDialog: {
-        isOpen: boolean,
-        dialogData: PrerequisiteType
-    }
+    dialog: {
+        [DialogType.PREREQUISITES]: {
+            isOpen: boolean,
+            dialogData: PrerequisiteType
+        },
+        [DialogType.RESULTS]: {
+            isOpen: boolean,
+            dialogData: PrerequisiteType
+        }
+    };
+    dependentDirections: Array<DirectionType>
 }
 
 export interface MinimalPracticeState {
@@ -167,6 +175,13 @@ export interface PracticeActions {
     getResults: any;
     deleteZUN: any;
     saveZUN: any;
+
+    deleteResult: any;
+    changeResult: any;
+    addResult: any;
+
+    getCompetencesDependedOnPractice: any;
+    setCompetencesDependedOnPractice: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {
