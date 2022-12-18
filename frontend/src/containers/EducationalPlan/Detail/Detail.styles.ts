@@ -156,4 +156,13 @@ export default (theme: Theme) => createStyles({
     display: 'flex',
     alignItems: 'center',
   },
+  notifyBlock: {
+    border: '1px solid',
+    borderRadius: '4px',
+    borderColor: theme.palette.primary.main,
+    color: theme.palette.primary.main,
+    padding: '10px',
+    width: 'fit-content',
+    display: 'flex',
+  }
 });

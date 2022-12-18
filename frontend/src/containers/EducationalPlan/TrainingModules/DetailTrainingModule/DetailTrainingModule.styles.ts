@@ -125,6 +125,7 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between'
     },
     workProgramLink: {
+        color: theme.palette.primary.main,
         cursor: 'pointer'
     },
     actions: {

@@ -117,6 +117,20 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
   getModuleId = () => get(this.props.match.params, 'id');
 
+  goToPracticePage = (id: number) => () => {
+    // @ts-ignore
+    const {history} = this.props;
+
+    history.push(appRouter.getPracticeLink(id));
+  }
+
+  goToGiaPage = (id: number) => () => {
+    // @ts-ignore
+    const {history} = this.props;
+
+    history.push(appRouter.getFinalCertificationLink(id));
+  }
+
   goToWorkProgramPage = (id: number) => () => {
     // @ts-ignore
     const {history} = this.props;
@@ -260,19 +274,29 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             return (
               <>
                 {Boolean(workPrograms?.length) && renderRow(workPrograms.map((workProgram: any) =>
-                      <div className={classes.displayFlex}>
-                        <Typography className={classes.workProgramLink}
-                                    onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
-                          {workProgram[WorkProgramGeneralFields.TITLE]}
-                        </Typography>
-                      </div>
+                    <div className={classes.displayFlex}>
+                      <Typography className={classes.workProgramLink}
+                                  onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
+                        {workProgram[WorkProgramGeneralFields.TITLE]}
+                      </Typography>
+                    </div>
                 ), workPrograms)}
-                {Boolean(gia?.length) && renderRow(<>
-                  {gia?.map((item: any) => item?.title).join(', ')} (ГИА)
-                </>, gia)}
-                {Boolean(practice?.length) && renderRow(<>
-                  {practice?.map((item: any) => item?.title).join(', ')} (практика)
-                </>, practice)}
+                {Boolean(gia?.length) && renderRow(gia.map((gia: any) =>
+                  <div className={classes.displayFlex}>
+                    <Typography className={classes.workProgramLink}
+                                onClick={this.goToGiaPage(gia[WorkProgramGeneralFields.ID])}>
+                      {gia[WorkProgramGeneralFields.TITLE]}
+                    </Typography>
+                  </div>
+                ), gia)}
+                {Boolean(practice?.length) && renderRow(practice.map((practice: any) =>
+                  <div className={classes.displayFlex}>
+                    <Typography className={classes.workProgramLink}
+                                onClick={this.goToPracticePage(practice[WorkProgramGeneralFields.ID])}>
+                      {practice[WorkProgramGeneralFields.TITLE]}
+                    </Typography>
+                  </div>
+                ), practice)}
               </>
             )
           })}
@@ -517,7 +541,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               {module?.educational_programs_to_access?.map((plan: any) => (
                 <TableRow>
                   <TableCell>
-                    {get(plan, 'field_of_study.0.title')}
+                    {get(plan, 'title')}
                   </TableCell>
                   <TableCell>
                     {get(plan, 'field_of_study.0.number')}

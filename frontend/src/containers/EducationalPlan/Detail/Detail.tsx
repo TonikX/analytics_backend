@@ -21,6 +21,7 @@ import Tab from "@material-ui/core/Tab";
 
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import AttachIcon from '@material-ui/icons/AttachFileOutlined';
+import WarningIcon from '@material-ui/icons/WarningRounded';
 
 import LikeButton from "../../../components/LikeButton/LikeButton";
 import ConfirmDialog from "../../../components/ConfirmDialog";
@@ -200,6 +201,20 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     history.push(appRouter.getWorkProgramLink(id));
   }
 
+  goToPracticePage = (id: number) => () => {
+    // @ts-ignore
+    const {history} = this.props;
+
+    history.push(appRouter.getPracticeLink(id));
+  }
+
+  goToGiaPage = (id: number) => () => {
+    // @ts-ignore
+    const {history} = this.props;
+
+    history.push(appRouter.getFinalCertificationLink(id));
+  }
+
   handleChangePlan = () => {
     const {detailPlan} = this.props;
 
@@ -319,12 +334,22 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                   </Tooltip>
                 </div>
               ), workPrograms)}
-              {Boolean(gia?.length) && renderRow(<>
-                {gia?.map((item: any) => item?.title).join(', ')} (ГИА)
-              </>, gia)}
-              {Boolean(practice?.length) && renderRow(<>
-                {practice?.map((item: any) => item?.title).join(', ')} (практика)
-              </>, practice)}
+              {Boolean(gia?.length) && renderRow(gia.map((gia: any) =>
+                <div className={classes.displayFlex}>
+                  <Typography className={classes.link}
+                              onClick={this.goToGiaPage(gia[WorkProgramGeneralFields.ID])}>
+                    {gia[WorkProgramGeneralFields.TITLE]} (ГИА)
+                  </Typography>
+                </div>
+              ), gia)}
+              {Boolean(practice?.length) && renderRow(practice.map((practice: any) =>
+                <div className={classes.displayFlex}>
+                  <Typography className={classes.link}
+                              onClick={this.goToPracticePage(practice[WorkProgramGeneralFields.ID])}>
+                    {practice[WorkProgramGeneralFields.TITLE]} (практика)
+                  </Typography>
+                </div>
+              ), practice)}
             </>
           )
         })}
@@ -544,7 +569,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   renderMain = () => {
-    const {classes, detailPlan, canSendToValidate} = this.props;
+    const {classes, detailPlan, canValidate} = this.props;
 
     //@ts-ignore
     const isuId = detailPlan?.ap_isu_id
@@ -655,6 +680,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
             <b>ИСУ ИД:</b> {isuId}
           </Typography>
         ) : null }
+
+        {/*{!canEdit && !canValidate && (*/}
+          <Typography className={classes.notifyBlock}>
+            <WarningIcon style={{marginRight: 3}}/> Если Вам необходим доступ к редактированию учебного плана, обратитесь в офис сопровождения образовательных программ. (Osop@itmo.ru)
+          </Typography>
+        {/*)}*/}
 
         {addEditorsMode && (
           <Dialog
