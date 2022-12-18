@@ -681,11 +681,11 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
           </Typography>
         ) : null }
 
-        {/*{!canEdit && !canValidate && (*/}
+        {!canEdit && !canValidate && (
           <Typography className={classes.notifyBlock}>
             <WarningIcon style={{marginRight: 3}}/> Если Вам необходим доступ к редактированию учебного плана, обратитесь в офис сопровождения образовательных программ. (Osop@itmo.ru)
           </Typography>
-        {/*)}*/}
+        )}
 
         {addEditorsMode && (
           <Dialog
@@ -713,7 +713,8 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     const {classes, blocks, detailPlan, trajectoryRoute, user, direction, canSendToValidate, canValidate, statusInfo} = this.props;
     const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
     const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
-
+    // @ts-ignore
+    const canDownload = detailPlan[EducationalPlanFields.YEAR] >= 2023;
     const {tab} = this.state
 
     return (
@@ -721,9 +722,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
         <div className={classes.headerWrap}>
           <StatusPoint {...statusInfo} />
           <div className={classes.headerButtons}>
-            <Button onClick={this.downloadPlan} className={classes.buttonH32}>
+            {canDownload && <Button onClick={this.downloadPlan} className={classes.buttonH32}>
               Скачать учебный план
-            </Button>
+            </Button>}
             {canSendToValidate && canEdit && (
               <Button onClick={this.sendToCheck} className={classes.buttonH32}>
                 Отправить на проверку
