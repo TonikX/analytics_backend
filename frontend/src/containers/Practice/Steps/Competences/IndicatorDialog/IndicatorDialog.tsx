@@ -9,14 +9,14 @@ import InfoIcon from "@material-ui/icons/InfoOutlined";
 import CompetenceSelector from '../../../../Competences/CompetenceSelector'
 import IndicatorSelector from '../../../../Competences/Indicators/IndicatorSelector'
 import ResultsSelector from '../ResultsSeletor'
-import PlanSelector from '../../../../EducationalPlan/WorkProgramPlansSelector'
+import PlanSelector from '../PlansSelector'
 import { useStyles } from './IndicatorDialog.styles'
 import {useDispatch} from 'react-redux'
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
 import actions from "../../../actions";
 
 interface IndicatorsProps {
-  workProgramId: number;
+  practiceId: number;
   isOpen: boolean;
   defaultCompetence?: {
     value: number;
@@ -30,7 +30,7 @@ interface IndicatorsProps {
   handleClose: () => void;
 }
 
-export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, workProgramId }: IndicatorsProps) => {
+export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, practiceId }: IndicatorsProps) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [competence, setCompetence] = useState<{value: number; label: string}>({value: 0, label: ''})
@@ -103,7 +103,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
 
   const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0 || results.length === 0 || plans.length === 0),
     [indicator, competence, results, plans]
-  )
+  );
 
   useEffect(() => {
     setIndicator({value: 0, label: ''})
@@ -163,7 +163,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
         onChange={addPlan}
         valueLabel=""
         value={0}
-        workProgramId={workProgramId}
+        practiceId={practiceId}
       />
       <div className={classes.chipsList}>
         {plans.map(plan => (

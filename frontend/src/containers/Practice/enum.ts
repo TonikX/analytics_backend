@@ -33,6 +33,11 @@ export enum PracticeFields {
     OUTCOMES = 'outcomes',
 }
 
+export enum DialogType {
+    RESULTS = 'results',
+    PREREQUISITES = 'prerequisites',
+}
+
 export enum ExpertiseStatus {
     WORK = 'WK',
     EXPERTISE = 'EX',
@@ -156,4 +161,11 @@ export enum fetchingTypes {
     CHANGE_PREREQUISITES = 'CHANGE_PREREQUISITES',
     DELETE_PREREQUISITES = 'DELETE_PREREQUISITES',
     ADD_PREREQUISITES = 'ADD_PREREQUISITES',
+    DELETE_RESULT = 'DELETE_RESULT',
+    CHANGE_RESULT = 'CHANGE_RESULT',
+    ADD_RESULT = 'ADD_RESULT',
+    GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_PRACTICE = 'GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_PRACTICE',
+    UPDATE_ZUN = 'UPDATE_ZUN',
+    DELETE_ZUN = 'DELETE_ZUN',
+    SAVE_ZUN = 'SAVE_ZUN'
 }

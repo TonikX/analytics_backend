@@ -1,5 +1,5 @@
 import React from "react";
-import {PermissionsInfoFields, PracticeSteps} from "../../enum";
+import {DialogType, PermissionsInfoFields, PracticeSteps} from "../../enum";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "../styles";
@@ -8,7 +8,7 @@ import {PermissionsInfoState, PracticeActions, PracticeState} from "../../types"
 
 import classNames from "classnames";
 import Scrollbars from "react-custom-scrollbars";
-import {fields, PrerequisiteFields} from "../../../WorkProgram/enum";
+import {PrerequisiteFields} from "../../../WorkProgram/enum";
 import {TrainingEntitiesFields} from "../../../TrainingEntities/enum";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
@@ -28,7 +28,7 @@ interface PrerequisitesProps extends WithStyles<typeof styles> {
 class Prerequisites extends React.Component<PrerequisitesProps> {
 
     handleCreateNew = () => {
-        this.props.actions.openDialog({dialogType: fields.ADD_NEW_PREREQUISITES, data: {}});
+        this.props.actions.openDialog({dialogType: DialogType.PREREQUISITES, data: {}});
     };
 
     handleClickDelete = (id: number) => () => {
@@ -36,7 +36,7 @@ class Prerequisites extends React.Component<PrerequisitesProps> {
     };
 
     handleClickEdit = (prerequisite: PrerequisiteType) => () => {
-        this.props.actions.openDialog({dialogType: fields.ADD_NEW_PREREQUISITES, data: prerequisite});
+        this.props.actions.openDialog({dialogType: DialogType.PREREQUISITES, data: prerequisite});
     };
 
     render() {

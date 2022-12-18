@@ -18,88 +18,100 @@ import Tooltip from "@material-ui/core/Tooltip";
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import {Link} from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
+import {EvaluationToolFields, ResultsFields} from "../../../../WorkProgram/enum";
+import {TrainingEntitiesFields} from "../../../../TrainingEntities/enum";
 import {SubjectAreaFields} from "../../../../SubjectArea/enum";
 import SearchSelector from "../../../../../components/SearchSelector";
-import {PrerequisiteFields} from "../../../../WorkProgram/enum";
 import {appRouter} from "../../../../../service/router-service";
-import {TrainingEntitiesFields} from "../../../../TrainingEntities/enum";
 import {DialogType} from "../../../enum";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
-        prerequisite: {
-            [PrerequisiteFields.ID]: null,
-            [PrerequisiteFields.MASTER_LEVEL]: '1',
-            [PrerequisiteFields.ITEM]: {
+        result: {
+            [ResultsFields.ID]: null,
+            [ResultsFields.MASTER_LEVEL]: '1',
+            [ResultsFields.EVALUATION_TOOLS]: [],
+            [ResultsFields.ITEM]: {
                 [TrainingEntitiesFields.ID]: ''
             },
         }
     };
 
-    componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
-        const {prerequisite} = this.props;
+    componentDidMount() {
+        this.props.subjectAreaActions.getSubjectArea();
+    }
 
-        if (!shallowEqual(prerequisite, prevProps.prerequisite)){
-            const subjectAreaId = get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], null);
+    componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
+        const {result} = this.props;
+
+        if (!shallowEqual(result, prevProps.result)){
+            const subjectAreaId = get(result, [ResultsFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], null);
 
             this.props.trainingEntitiesActions.changeSubjectId(subjectAreaId);
             this.props.trainingEntitiesActions.getTrainingEntities();
 
             this.setState({
-                prerequisite: {
-                    [PrerequisiteFields.MASTER_LEVEL]: get(prerequisite, PrerequisiteFields.MASTER_LEVEL, ''),
-                    [PrerequisiteFields.ITEM]: get(prerequisite, PrerequisiteFields.ITEM, {}),
-                    [PrerequisiteFields.ID]: get(prerequisite, PrerequisiteFields.ID, null),
+                result: {
+                    [ResultsFields.MASTER_LEVEL]: get(result, ResultsFields.MASTER_LEVEL, '1'),
+                    [ResultsFields.ITEM]: get(result, ResultsFields.ITEM, {}),
+                    [ResultsFields.ID]: get(result, ResultsFields.ID, null),
+                    // @ts-ignore
+                    [ResultsFields.EVALUATION_TOOLS]: get(result, ResultsFields.EVALUATION_TOOLS, []).map(item => item[EvaluationToolFields.ID]),
                 }
             });
         }
     }
 
-    componentDidMount() {
-        this.props.trainingEntitiesActions.getTrainingEntities();
-    }
-
     handleClose = () => {
-        this.props.actions.closeDialog({dialogType: DialogType.PREREQUISITES});
+        this.props.actions.closeDialog({dialogType: DialogType.RESULTS});
     };
 
     handleSave = () => {
-        const {prerequisite} = this.state;
+        const {result} = this.state;
 
-        if (prerequisite[PrerequisiteFields.ID]){
-            this.props.actions.changePrerequisite(this.state.prerequisite);
+        if (result[ResultsFields.ID]){
+            this.props.actions.changeResult(this.state.result);
         } else {
-            this.props.actions.addPrerequisite(this.state.prerequisite);
+            this.props.actions.addResult(this.state.result);
         }
-        this.props.actions.closeDialog({dialogType: DialogType.PREREQUISITES});
-    }
+    };
 
     changeMasterLevelField = (e: React.ChangeEvent) => {
-        const {prerequisite} = this.state;
+        const {result} = this.state;
 
         this.setState({
-            prerequisite: {
-                ...prerequisite,
-                [PrerequisiteFields.MASTER_LEVEL]: get(e, 'target.value')
+            result: {
+                ...result,
+                [ResultsFields.MASTER_LEVEL]: get(e, 'target.value')
             }
         })
-    }
+    };
 
     saveTrainingEntityField = (value: ReactText) => {
-        const {prerequisite} = this.state;
+        const {result} = this.state;
 
         this.setState({
-            prerequisite: {
-                ...prerequisite,
-                [PrerequisiteFields.ITEM]: {
-                    ...prerequisite[PrerequisiteFields.ITEM],
+            result: {
+                ...result,
+                [ResultsFields.ITEM]: {
+                    ...result[ResultsFields.ITEM],
                     [TrainingEntitiesFields.ID]: value
                 }
+            }
+        })
+    };
+
+    changeEvaluationTools = (e: React.ChangeEvent) => {
+        const {result} = this.state;
+
+        this.setState({
+            result: {
+                ...result,
+                [ResultsFields.EVALUATION_TOOLS]: get(e, 'target.value')
             }
         })
     };
@@ -109,13 +121,18 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         this.props.trainingEntitiesActions.getTrainingEntities();
     };
 
+    handleChangeSubjectAreaSearch = (searchText: string) => {
+        this.props.subjectAreaActions.changeSearchQuery(searchText);
+        this.props.subjectAreaActions.getSubjectArea();
+    };
+
     render() {
         const {isOpen, classes, trainingEntities} = this.props;
-        const {prerequisite} = this.state;
+        const {result} = this.state;
 
-        const disableButton = get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.ID], '').length === 0;
+        const disableButton = get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID], '').length === 0;
 
-        const isEditMode = Boolean(get(prerequisite, PrerequisiteFields.ID));
+        const isEditMode = Boolean(get(result, ResultsFields.ID));
 
         return (
             <Dialog
@@ -127,15 +144,15 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             >
                 <DialogTitle>
                     <div className={classes.dialogTitle}>
-                        {isEditMode ? 'Редактировать' : 'Создать'} пререквизит
+                        {isEditMode ? 'Редактировать' : 'Создать'} результат
                         <Tooltip
                             title={
                                 <span style={{ fontSize: '13px' }}>
                                     Пререквезит - объект, отражающий конкретное знание из конкретной области
                                     (далее "учебная сущность"), которое должно быть у студента перед началом изучения курса.
                                     <br /><br />Для добавления необходимо выбрать предметную область и учебную сущность в ней.
-                                    <br /><br />Если необходимо создать новую учебную сущность, необходимо нажать кнопку "Создать учебную сущность"
-                                     и создать ее в соответствующем интерфейсе.
+                                    <br /><br />Если необходимо создать новую учебную сущность, необходимо нажать кнопку
+                                    "Создать учебную сущность" и создать ее в соответствующем интерфейсе.
                                 </span>
                             }
                         >
@@ -148,20 +165,21 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         <FormLabel component="legend">Уровень освоения *</FormLabel>
                         <RadioGroup className={classes.radioGroup}
                                     onChange={this.changeMasterLevelField}
-                                    value={prerequisite[PrerequisiteFields.ITEM]}
+                                    value={result[ResultsFields.ITEM]}
                         >
-                            <FormControlLabel value="1" control={<Radio checked={prerequisite[PrerequisiteFields.MASTER_LEVEL] === '1'} />} label="Начальный" />
-                            <FormControlLabel value="2" control={<Radio checked={prerequisite[PrerequisiteFields.MASTER_LEVEL] === '2'} />} label="Средний" />
-                            <FormControlLabel value="3" control={<Radio checked={prerequisite[PrerequisiteFields.MASTER_LEVEL] === '3'} />} label="Высокий" />
+                            <FormControlLabel value="1" control={<Radio checked={result[ResultsFields.MASTER_LEVEL] === '1'} />} label="Начальный" />
+                            <FormControlLabel value="2" control={<Radio checked={result[ResultsFields.MASTER_LEVEL] === '2'} />} label="Средний" />
+                            <FormControlLabel value="3" control={<Radio checked={result[ResultsFields.MASTER_LEVEL] === '3'} />} label="Высокий" />
                         </RadioGroup>
                     </FormControl>
 
-                    <SearchSelector label="Учебная сущность *"
-                                            changeSearchText={this.handleChangeTrainingEntitySearchText}
-                                            list={trainingEntities}
-                                            changeItem={this.saveTrainingEntityField}
-                                            value={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.ID], '')}
-                                            valueLabel={get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.TITLE], '')}
+                    <SearchSelector
+                        label="Учебная сущность *"
+                        changeSearchText={this.handleChangeTrainingEntitySearchText}
+                        list={trainingEntities}
+                        changeItem={this.saveTrainingEntityField}
+                        value={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID], '')}
+                        valueLabel={get(result, [ResultsFields.ITEM, TrainingEntitiesFields.TITLE], '')}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
@@ -173,7 +191,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             Создать учебную сущность
                         </Typography>
                     </Link>
-
                     <Button onClick={this.handleClose}
                             variant="text">
                         Отмена
