@@ -284,5 +284,7 @@ def recursion_module_per_ze(obj):
         print("i")
     except ValueError:
         print("v")
+    except TypeError:
+        print("t")
 
     return max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons
