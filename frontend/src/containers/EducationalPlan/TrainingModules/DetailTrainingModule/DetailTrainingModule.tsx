@@ -2,6 +2,7 @@ import React, {ReactText} from 'react';
 import get from 'lodash/get';
 import {withRouter} from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars";
+import {Link} from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
 
@@ -116,27 +117,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   getModuleId = () => get(this.props.match.params, 'id');
-
-  goToPracticePage = (id: number) => () => {
-    // @ts-ignore
-    const {history} = this.props;
-
-    history.push(appRouter.getPracticeLink(id));
-  }
-
-  goToGiaPage = (id: number) => () => {
-    // @ts-ignore
-    const {history} = this.props;
-
-    history.push(appRouter.getFinalCertificationLink(id));
-  }
-
-  goToWorkProgramPage = (id: number) => () => {
-    // @ts-ignore
-    const {history} = this.props;
-
-    history.push(appRouter.getWorkProgramLink(id));
-  }
 
   handleConfirmBlockDeleteDialog = () => {
     const {deleteBlockConfirmId} = this.state;
@@ -275,26 +255,32 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               <>
                 {Boolean(workPrograms?.length) && renderRow(workPrograms.map((workProgram: any) =>
                     <div className={classes.displayFlex}>
-                      <Typography className={classes.workProgramLink}
-                                  onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
+                      <Link className={classes.workProgramLink}
+                            to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.ID])}
+                            target="_blank"
+                      >
                         {workProgram[WorkProgramGeneralFields.TITLE]}
-                      </Typography>
+                      </Link>
                     </div>
                 ), workPrograms)}
                 {Boolean(gia?.length) && renderRow(gia.map((gia: any) =>
                   <div className={classes.displayFlex}>
-                    <Typography className={classes.workProgramLink}
-                                onClick={this.goToGiaPage(gia[WorkProgramGeneralFields.ID])}>
+                    <Link className={classes.workProgramLink}
+                          to={appRouter.getFinalCertificationLink(gia[WorkProgramGeneralFields.ID])}
+                          target="_blank"
+                    >
                       {gia[WorkProgramGeneralFields.TITLE]}
-                    </Typography>
+                    </Link>
                   </div>
                 ), gia)}
                 {Boolean(practice?.length) && renderRow(practice.map((practice: any) =>
                   <div className={classes.displayFlex}>
-                    <Typography className={classes.workProgramLink}
-                                onClick={this.goToPracticePage(practice[WorkProgramGeneralFields.ID])}>
+                    <Link className={classes.workProgramLink}
+                          to={appRouter.getPracticeLink(practice[WorkProgramGeneralFields.ID])}
+                          target="_blank"
+                    >
                       {practice[WorkProgramGeneralFields.TITLE]}
-                    </Typography>
+                    </Link>
                   </div>
                 ), practice)}
               </>

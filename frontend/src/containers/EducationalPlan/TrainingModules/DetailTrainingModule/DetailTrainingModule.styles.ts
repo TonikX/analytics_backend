@@ -126,7 +126,8 @@ export default (theme: Theme) => createStyles({
     },
     workProgramLink: {
         color: theme.palette.primary.main,
-        cursor: 'pointer'
+        cursor: 'pointer',
+        textDecoration: 'none',
     },
     actions: {
         textAlign: 'end',
