@@ -139,8 +139,8 @@ class Sections extends React.PureComponent<SectionsProps> {
     const totalContactWorkHours = ((
       (parseFloat(section[workProgramSectionFields.LECTURE_CLASSES]) || 0) +
       (parseFloat(section[workProgramSectionFields.PRACTICAL_LESSONS]) || 0) +
-      (parseFloat(section[workProgramSectionFields.LABORATORY]) || 0)
-      * 1.1).toFixed(2))
+      (parseFloat(section[workProgramSectionFields.LABORATORY]) || 0))
+      * 1.1).toFixed(2)
 
     const totalConsultationsWorkHours = ((parseFloat(section[workProgramSectionFields.CONSULTATIONS]) || 0) * 1.1).toFixed(2)
 
