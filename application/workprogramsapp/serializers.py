@@ -731,7 +731,8 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
             data["can_edit"] = False
         elif self.context['request'].user in instance.academic_plan_in_field_of_study.filter()[0].editors.all():
             data["can_edit"] = True
-        elif self.context['request'].user.is_staff:
+        elif self.context['request'].user.is_staff or bool(
+                self.context['request'].user.groups.filter(name="expertise_master")):
             data["can_edit"] = True
         else:
             data["can_edit"] = False
