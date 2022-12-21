@@ -205,7 +205,7 @@ def calculate_ze_term(matrix, matrix_lab, matrix_lecture, matrix_practice, matri
             if matrix_practice.tolist():
                 max_practice_by_term[i] += matrix_practice[max_index, i]
             if matrix_cons.tolist():
-                #max_cons_by_term[i] += matrix_cons[max_index, i]
+                # max_cons_by_term[i] += matrix_cons[max_index, i]
                 pass
             if param_counter == select_param:
                 break
@@ -240,9 +240,11 @@ def recursion_module_per_ze(obj):
                         matrix_cons, int(obj.selection_parametr))
 
             else:
-                max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = calculate_wp_term(obj, int(obj.selection_parametr))
+                max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = calculate_wp_term(obj,
+                                                                                                                   int(
+                                                                                                                       obj.selection_parametr))
 
-        elif obj.selection_rule == "all" or obj.selection_rule == "any_quantity" or obj.selection_rule == "by_credit_units":
+        elif obj.selection_rule == "all" or obj.selection_rule == "any_quantity":
             if childs.exists():
                 for child in childs:
                     max_term, max_lab, max_lec, max_prac, max_cons = recursion_module_per_ze(child)
@@ -254,9 +256,11 @@ def recursion_module_per_ze(obj):
             else:
                 selection_param = WorkProgram.objects.filter(
                     work_program_in_change_block__discipline_block_module=obj).count()
-                max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = calculate_wp_term(obj, int(selection_param))
-
-        elif obj.selection_rule in ["by_credit_units", "no_more_than_n_credits"]:
+                max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = calculate_wp_term(obj,
+                                                                                                                   int(
+                                                                                                                       selection_param))
+        elif obj.selection_rule == "by_credit_units" or obj.selection_rule == "any_quantity":
+            print("руддщ,")
             if childs.exists():
                 for child in childs:
                     max_term, max_lab, max_lec, max_prac, max_cons = recursion_module_per_ze(child)
@@ -268,11 +272,14 @@ def recursion_module_per_ze(obj):
             else:
                 selection_param = WorkProgram.objects.filter(
                     work_program_in_change_block__discipline_block_module=obj).count()
-                max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = calculate_wp_term(obj, int(selection_param))
+                max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = calculate_wp_term(obj,
+                                                                                                                   int(
+                                                                                                                       selection_param))
+                print(max_ze_total)
             for i in range(len(max_ze_total)):
                 if max_ze_total[i] > int(obj.selection_parametr):
                     max_ze_total[i] = int(obj.selection_parametr)
-        #print("name ", obj.name, " ----", max_ze_total)
+        # print("name ", obj.name, " ----", max_ze_total)
 
         if sum(max_ze_total) == 0:
             _, max_res = find_min_max_ze_by_term(obj)
