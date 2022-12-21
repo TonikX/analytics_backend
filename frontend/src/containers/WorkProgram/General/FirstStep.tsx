@@ -252,7 +252,10 @@ class FirstStep extends React.Component<FirstStepProps> {
     } = this.props;
     const {state} = this;
     const {addEditorsMode} = state;
-    const disabled = this.props.inChangeBlock.length > 0;
+    const changeBlock = this.props.changeBlock || [];
+    const disabled = changeBlock.some((item) => {
+      return item.discipline_block_module.descipline_block.length > 0
+    });
 
     return (
       <div className={classes.container}>
