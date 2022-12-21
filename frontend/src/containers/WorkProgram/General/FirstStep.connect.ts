@@ -32,7 +32,7 @@ const mapStateToProps = (state:rootState) => {
 
         isCanEdit: isCanEdit(state),
         structuralUnitsList: getStructuralUnitsForSelector(state),
-        inChangeBlock: getWorkProgramField(state, WorkProgramGeneralFields.WORK_PROGRAM_IN_CHANGE_BLOCK),
+        changeBlock: getWorkProgramField(state, WorkProgramGeneralFields.WORK_PROGRAM_IN_CHANGE_BLOCK),
 
         fetchingCode: isFetchingComponentByKey(state, WorkProgramGeneralFields.CODE),
         fetchingTitle: isFetchingComponentByKey(state, WorkProgramGeneralFields.TITLE),
