@@ -94,3 +94,4 @@ deepdiff==5.7.0
 apscheduler==3.9.0
 drf-yasg2==1.18.5
 packaging==21.3
+sentry-sdk==SENTRY_URL

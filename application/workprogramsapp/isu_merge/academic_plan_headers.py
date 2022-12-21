@@ -59,7 +59,7 @@ def process_headers(headers: list):
         imp.language = language
         imp.military_department = bool(ap_header)
         imp.title = ap_header["edu_program_name"]
-        imp.academic_plan = academic_plan
+        imp.total_intensity = total_intensity,
         imp.academic_plan = academic_plan
         imp.year = 2023
         imp.qualification = qualification_name
