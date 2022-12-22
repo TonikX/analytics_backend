@@ -65,9 +65,12 @@ def insert_cell_data_range(ws, level, column_name, data_list):
     for col in range(columns_dict[column_name]["column_start"],
                      columns_dict[column_name]["column_finish"] + 1):
         cell = ws.cell(row=level, column=col)
-        cell.value = data_list[i]
-        cell.alignment = Alignment(wrap_text=True, horizontal='center', vertical='center')
-        i += 1
+        try:
+            cell.value = data_list[i]
+            cell.alignment = Alignment(wrap_text=True, horizontal='center', vertical='center')
+            i += 1
+        except IndexError:
+            pass
 
 
 def process_evaluation_tools(ws, level, wp=None, module=None):
@@ -77,17 +80,20 @@ def process_evaluation_tools(ws, level, wp=None, module=None):
         tools = СertificationEvaluationTool.objects.filter(discipline_block_module=module)
     else:
         tools = СertificationEvaluationTool.objects.none()
-    exam_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="1")]))
-    diff_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="2")]))
-    credit_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="3")]))
-    course_work_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="4")]))
-    course_project_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="5")]))
+    try:
+        exam_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="1")]))
+        diff_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="2")]))
+        credit_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="3")]))
+        course_work_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="4")]))
+        course_project_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="5")]))
+        insert_cell_data(ws, level, "exam", exam_tools)
+        insert_cell_data(ws, level, "diff", diff_tools)
+        insert_cell_data(ws, level, "credit", credit_tools)
+        insert_cell_data(ws, level, "course_project", course_project_tools)
+        insert_cell_data(ws, level, "course_work", course_work_tools)
 
-    insert_cell_data(ws, level, "exam", exam_tools)
-    insert_cell_data(ws, level, "diff", diff_tools)
-    insert_cell_data(ws, level, "credit", credit_tools)
-    insert_cell_data(ws, level, "course_project", course_project_tools)
-    insert_cell_data(ws, level, "course_work", course_work_tools)
+    except Exception as e:
+        print(str(e))
 
 
 def process_hours_by_terms(ws, level, hours_list, offset=0):
@@ -103,16 +109,24 @@ def process_gia(changeblock, level, ws):
     for gia in changeblock.gia.all():
         fill_row(ws, level, "FFFFFF")
         insert_cell_data(ws=ws, level=level, column_name="wp_id", data=gia.discipline_code)
-        insert_cell_data(ws=ws, level=level, column_name="choosing_term",
-                         data=', '.join(map(str, changeblock.semester_start)))
+        try:
+            insert_cell_data(ws=ws, level=level, column_name="choosing_term",
+                             data=', '.join(map(str, changeblock.semester_start)))
+
+        except Exception as e:
+            print(str(e))
         insert_cell_data(ws=ws, level=level, column_name="name", data=gia.title, horizontal="left")
 
-        ze = [int(unit) for unit in gia.ze_v_sem.split(", ")]
-        sum_ze = sum(ze)
-        insert_cell_data(ws=ws, level=level, column_name="ze_all", data=sum_ze)
-        insert_cell_data(ws=ws, level=level, column_name="hours_all", data=sum_ze * 36)
-        wp_ze_by_term = generate_full_ze_list(ze, changeblock.semester_start)[0]
-        insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
+        try:
+            ze = [int(unit) for unit in gia.ze_v_sem.split(", ")]
+            sum_ze = sum(ze)
+            insert_cell_data(ws=ws, level=level, column_name="ze_all", data=sum_ze)
+            insert_cell_data(ws=ws, level=level, column_name="hours_all", data=sum_ze * 36)
+            wp_ze_by_term = generate_full_ze_list(ze, changeblock.semester_start)[0]
+            insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
+        except Exception as e:
+            print(str(e))
+
         level += 1
         return level
 
@@ -121,16 +135,24 @@ def process_practice(changeblock, level, ws):
     for practice in changeblock.practice.all():
         fill_row(ws, level, "FFFFFF")
         insert_cell_data(ws=ws, level=level, column_name="wp_id", data=practice.discipline_code)
-        insert_cell_data(ws=ws, level=level, column_name="choosing_term",
-                         data=', '.join(map(str, changeblock.semester_start)))
+        try:
+            insert_cell_data(ws=ws, level=level, column_name="choosing_term",
+                             data=', '.join(map(str, changeblock.semester_start)))
+
+        except Exception as e:
+            print(str(e))
         insert_cell_data(ws=ws, level=level, column_name="name", data=practice.title, horizontal="left")
 
-        ze = [int(unit) for unit in practice.ze_v_sem.split(", ")]
-        sum_ze = sum(ze)
-        insert_cell_data(ws=ws, level=level, column_name="ze_all", data=sum_ze)
-        insert_cell_data(ws=ws, level=level, column_name="hours_all", data=sum_ze * 36)
-        wp_ze_by_term = generate_full_ze_list(ze, changeblock.semester_start)[0]
-        insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
+        try:
+            ze = [int(unit) for unit in practice.ze_v_sem.split(", ")]
+            sum_ze = sum(ze)
+            insert_cell_data(ws=ws, level=level, column_name="ze_all", data=sum_ze)
+            insert_cell_data(ws=ws, level=level, column_name="hours_all", data=sum_ze * 36)
+            wp_ze_by_term = generate_full_ze_list(ze, changeblock.semester_start)[0]
+            insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
+        except Exception as e:
+            print(str(e))
+
         level += 1
         return level
 
@@ -161,44 +183,54 @@ def process_changeblock(changeblocks, level, ws):
             insert_cell_data(ws=ws, level=level, column_name="replaceable", data=replaceable)
 
             insert_cell_data(ws=ws, level=level, column_name="name", data=wp.title, horizontal="left")
+            try:
+                ze = [int(unit) for unit in wp.ze_v_sem.split(", ")]
+                sum_ze = sum(ze)
+                insert_cell_data(ws=ws, level=level, column_name="ze_all", data=sum_ze)
+                insert_cell_data(ws=ws, level=level, column_name="hours_all", data=sum_ze * 36)
 
-            ze = [int(unit) for unit in wp.ze_v_sem.split(", ")]
-            sum_ze = sum(ze)
-            insert_cell_data(ws=ws, level=level, column_name="ze_all", data=sum_ze)
-            insert_cell_data(ws=ws, level=level, column_name="hours_all", data=sum_ze * 36)
-
-            wp_ze_by_term = generate_full_ze_list(ze, changeblock.semester_start)[0]
-            insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
+                wp_ze_by_term = generate_full_ze_list(ze, changeblock.semester_start)[0]
+                insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
+            except Exception as e:
+                print(str(e))
             process_evaluation_tools(ws, level, wp)
 
-            extend_list = [0 for _ in range(10)]
-            lecture_list = [float(hour) for hour in wp.lecture_hours_v2.split(", ")]
-            practice_list = [float(hour) for hour in wp.practice_hours_v2.split(", ")]
-            sro_list = [float(hour) for hour in wp.srs_hours_v2.split(", ")]
-            lab_list = [float(hour) for hour in wp.lab_hours_v2.split(", ")]
-            # cons_list = [float(hour) for hour in wp.consultation_v2.split(", ")]
+            try:
+                extend_list = [0 for _ in range(10)]
+                lecture_list = [float(hour) for hour in wp.lecture_hours_v2.split(", ")]
+                practice_list = [float(hour) for hour in wp.practice_hours_v2.split(", ")]
+                sro_list = [float(hour) for hour in wp.srs_hours_v2.split(", ")]
+                lab_list = [float(hour) for hour in wp.lab_hours_v2.split(", ")]
+                # cons_list = [float(hour) for hour in wp.consultation_v2.split(", ")]
 
-            contact_hours = round((sum(lecture_list) + sum(practice_list) + sum(lab_list)) * 1.1, 2)
-            insert_cell_data(ws=ws, level=level, column_name="contact_work", data=contact_hours)
+                contact_hours = round((sum(lecture_list) + sum(practice_list) + sum(lab_list)) * 1.1, 2)
+                insert_cell_data(ws=ws, level=level, column_name="contact_work", data=contact_hours)
 
-            seminary_hours = sum(lecture_list) + + sum(practice_list) + sum(lab_list) + 0  # sum(cons_list)
-            insert_cell_data(ws=ws, level=level, column_name="seminary_sum", data=seminary_hours)
+                seminary_hours = sum(lecture_list) + + sum(practice_list) + sum(lab_list) + 0  # sum(cons_list)
+                insert_cell_data(ws=ws, level=level, column_name="seminary_sum", data=seminary_hours)
 
-            insert_cell_data(ws=ws, level=level, column_name="lecture", data=sum(lecture_list))
-            insert_cell_data(ws=ws, level=level, column_name="labs", data=sum(lab_list))
-            insert_cell_data(ws=ws, level=level, column_name="practice", data=sum(practice_list))
-            insert_cell_data(ws=ws, level=level, column_name="consultations", data=0)
-            insert_cell_data(ws=ws, level=level, column_name="srs", data=sum(sro_list))
+                insert_cell_data(ws=ws, level=level, column_name="lecture", data=sum(lecture_list))
+                insert_cell_data(ws=ws, level=level, column_name="labs", data=sum(lab_list))
+                insert_cell_data(ws=ws, level=level, column_name="practice", data=sum(practice_list))
+                insert_cell_data(ws=ws, level=level, column_name="consultations", data=0)
+                insert_cell_data(ws=ws, level=level, column_name="srs", data=sum(sro_list))
 
-            process_hours_by_terms(ws, level, generate_full_ze_list(lecture_list, changeblock.semester_start)[0],
-                                   offset=0)
-            process_hours_by_terms(ws, level, generate_full_ze_list(lab_list, changeblock.semester_start)[0], offset=1)
-            process_hours_by_terms(ws, level, generate_full_ze_list(practice_list, changeblock.semester_start)[0],
-                                   offset=2)
+                process_hours_by_terms(ws, level, generate_full_ze_list(lecture_list, changeblock.semester_start)[0],
+                                       offset=0)
+                process_hours_by_terms(ws, level, generate_full_ze_list(lab_list, changeblock.semester_start)[0], offset=1)
+                process_hours_by_terms(ws, level, generate_full_ze_list(practice_list, changeblock.semester_start)[0],
+                                       offset=2)
+            except Exception as e:
+                print(str(e))
 
             insert_cell_data(ws=ws, level=level, column_name="realizer", data=wp.structural_unit.short_name)
-            insert_cell_data(ws=ws, level=level, column_name="percent_seminary",
-                             data=round(float((seminary_hours) / (sum_ze * 36)) * 100, 2))
+
+            try:
+                insert_cell_data(ws=ws, level=level, column_name="percent_seminary",
+                                 data=round(float((seminary_hours) / (sum_ze * 36)) * 100, 2))
+            except Exception as e:
+                print(str(e))
+
             if wp.language:
                 insert_cell_data(ws=ws, level=level, column_name="realisation_language", data=wp.language.upper())
             level += 1
