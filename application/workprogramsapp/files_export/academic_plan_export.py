@@ -1,5 +1,6 @@
 import openpyxl
 from openpyxl.styles import Alignment, PatternFill, Side, Border, Font
+from sentry_sdk import capture_exception
 
 from workprogramsapp.disciplineblockmodules.ze_module_logic import recursion_module, generate_full_ze_list, \
     recursion_module_per_ze, sum_lists
@@ -93,7 +94,7 @@ def process_evaluation_tools(ws, level, wp=None, module=None):
         insert_cell_data(ws, level, "course_work", course_work_tools)
 
     except Exception as e:
-        print(str(e))
+        capture_exception(e)
 
 
 def process_hours_by_terms(ws, level, hours_list, offset=0):
@@ -114,7 +115,7 @@ def process_gia(changeblock, level, ws):
                              data=', '.join(map(str, changeblock.semester_start)))
 
         except Exception as e:
-            print(str(e))
+            capture_exception(e)
         insert_cell_data(ws=ws, level=level, column_name="name", data=gia.title, horizontal="left")
 
         try:
@@ -125,7 +126,7 @@ def process_gia(changeblock, level, ws):
             wp_ze_by_term = generate_full_ze_list(ze, changeblock.semester_start)[0]
             insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
         except Exception as e:
-            print(str(e))
+            capture_exception(e)
 
         level += 1
         return level
@@ -140,7 +141,7 @@ def process_practice(changeblock, level, ws):
                              data=', '.join(map(str, changeblock.semester_start)))
 
         except Exception as e:
-            print(str(e))
+            capture_exception(e)
         insert_cell_data(ws=ws, level=level, column_name="name", data=practice.title, horizontal="left")
 
         try:
@@ -151,7 +152,7 @@ def process_practice(changeblock, level, ws):
             wp_ze_by_term = generate_full_ze_list(ze, changeblock.semester_start)[0]
             insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
         except Exception as e:
-            print(str(e))
+            capture_exception(e)
 
         level += 1
         return level
@@ -192,7 +193,7 @@ def process_changeblock(changeblocks, level, ws):
                 wp_ze_by_term = generate_full_ze_list(ze, changeblock.semester_start)[0]
                 insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
             except Exception as e:
-                print(str(e))
+                capture_exception(e)
             process_evaluation_tools(ws, level, wp)
 
             try:
@@ -221,7 +222,7 @@ def process_changeblock(changeblocks, level, ws):
                 process_hours_by_terms(ws, level, generate_full_ze_list(practice_list, changeblock.semester_start)[0],
                                        offset=2)
             except Exception as e:
-                print(str(e))
+                capture_exception(e)
 
             insert_cell_data(ws=ws, level=level, column_name="realizer", data=wp.structural_unit.short_name)
 
@@ -229,7 +230,7 @@ def process_changeblock(changeblocks, level, ws):
                 insert_cell_data(ws=ws, level=level, column_name="percent_seminary",
                                  data=round(float((seminary_hours) / (sum_ze * 36)) * 100, 2))
             except Exception as e:
-                print(str(e))
+                capture_exception(e)
 
             if wp.language:
                 insert_cell_data(ws=ws, level=level, column_name="realisation_language", data=wp.language.upper())
