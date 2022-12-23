@@ -205,11 +205,13 @@ def calculate_ze_term(matrix, matrix_lab, matrix_lecture, matrix_practice, matri
             if matrix_practice.tolist():
                 max_practice_by_term[i] += matrix_practice[max_index, i]
             if matrix_cons.tolist():
-                # max_cons_by_term[i] += matrix_cons[max_index, i]
-                pass
+                try:
+                    max_cons_by_term[i] += matrix_cons[max_index, i]
+                except Exception as e:
+                    print(str(e))
             if param_counter == select_param:
                 break
-    return max_ze_by_term, max_lab_by_term, max_lecture_by_term, max_practice_by_term, matrix_cons
+    return max_ze_by_term, max_lab_by_term, max_lecture_by_term, max_practice_by_term, max_cons_by_term
 
 
 def recursion_module_per_ze(obj):
@@ -248,6 +250,8 @@ def recursion_module_per_ze(obj):
             if childs.exists():
                 for child in childs:
                     max_term, max_lab, max_lec, max_prac, max_cons = recursion_module_per_ze(child)
+                    if obj.name == "Универсальная (надпрофессиональная) подготовка":
+                        print(max_term)
                     max_ze_total = sum_lists(max_ze_total, max_term)
                     max_hours_lab = sum_lists(max_hours_lab, max_lab)
                     max_hours_lec = sum_lists(max_hours_lec, max_lec)
@@ -260,7 +264,6 @@ def recursion_module_per_ze(obj):
                                                                                                                    int(
                                                                                                                        selection_param))
         elif obj.selection_rule == "by_credit_units" or obj.selection_rule == "any_quantity":
-            print("руддщ,")
             if childs.exists():
                 for child in childs:
                     max_term, max_lab, max_lec, max_prac, max_cons = recursion_module_per_ze(child)
@@ -275,7 +278,6 @@ def recursion_module_per_ze(obj):
                 max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = calculate_wp_term(obj,
                                                                                                                    int(
                                                                                                                        selection_param))
-                print(max_ze_total)
             for i in range(len(max_ze_total)):
                 if max_ze_total[i] > int(obj.selection_parametr):
                     max_ze_total[i] = int(obj.selection_parametr)

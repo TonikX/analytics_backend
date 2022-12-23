@@ -4,7 +4,7 @@ from openpyxl.styles import Alignment, PatternFill, Side, Border, Font
 from workprogramsapp.disciplineblockmodules.ze_module_logic import recursion_module, generate_full_ze_list, \
     recursion_module_per_ze, sum_lists
 from workprogramsapp.models import DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
-    СertificationEvaluationTool, ImplementationAcademicPlan
+    СertificationEvaluationTool, ImplementationAcademicPlan, FieldOfStudy
 from workprogramsapp.serializers import AcademicPlanSerializer
 
 color_list = ["8EA9DB", "B4C6E7", "D9E1F2", "E2E9EA"]
@@ -73,7 +73,7 @@ def insert_cell_data_range(ws, level, column_name, data_list):
             pass
 
 
-def process_evaluation_tools(ws, level, wp=None, module=None):
+def process_evaluation_tools(ws, level, wp=None, module=None, start_sem=0):
     if wp:
         tools = СertificationEvaluationTool.objects.filter(work_program=wp)
     elif module:
@@ -81,11 +81,11 @@ def process_evaluation_tools(ws, level, wp=None, module=None):
     else:
         tools = СertificationEvaluationTool.objects.none()
     try:
-        exam_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="1")]))
-        diff_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="2")]))
-        credit_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="3")]))
-        course_work_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="4")]))
-        course_project_tools = ''.join(map(str, [tool.semester for tool in tools.filter(type="5")]))
+        exam_tools = ''.join(map(str, [tool.semester + start_sem for tool in tools.filter(type="1")]))
+        diff_tools = ''.join(map(str, [tool.semester + start_sem for tool in tools.filter(type="2")]))
+        credit_tools = ''.join(map(str, [tool.semester + start_sem for tool in tools.filter(type="3")]))
+        course_work_tools = ''.join(map(str, [tool.semester + start_sem for tool in tools.filter(type="4")]))
+        course_project_tools = ''.join(map(str, [tool.semester + start_sem for tool in tools.filter(type="5")]))
         insert_cell_data(ws, level, "exam", exam_tools)
         insert_cell_data(ws, level, "diff", diff_tools)
         insert_cell_data(ws, level, "credit", credit_tools)
@@ -93,7 +93,7 @@ def process_evaluation_tools(ws, level, wp=None, module=None):
         insert_cell_data(ws, level, "course_work", course_work_tools)
 
     except Exception as e:
-        print(str(e))
+        print("tools", str(e))
 
 
 def process_hours_by_terms(ws, level, hours_list, offset=0):
@@ -126,13 +126,20 @@ def process_gia(changeblock, level, ws):
             insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
         except Exception as e:
             print(str(e))
-
+        insert_cell_data(ws, level, "exam", changeblock.semester_start[0])
         level += 1
         return level
 
 
 def process_practice(changeblock, level, ws):
     for practice in changeblock.practice.all():
+        tool_types = {
+            1: '',
+            2: '',
+            3: '',
+            4: '',
+            5: ''
+        }
         fill_row(ws, level, "FFFFFF")
         insert_cell_data(ws=ws, level=level, column_name="wp_id", data=practice.discipline_code)
         try:
@@ -152,6 +159,16 @@ def process_practice(changeblock, level, ws):
             insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
         except Exception as e:
             print(str(e))
+        list_of_tools = eval(practice.evaluation_tools_v_sem)
+
+        for i, el in enumerate(list_of_tools):
+            for tool_type in el:
+                tool_types[tool_type] += str(i + changeblock.semester_start[0])
+        insert_cell_data(ws, level, "exam", tool_types[1])
+        insert_cell_data(ws, level, "diff", tool_types[2])
+        insert_cell_data(ws, level, "credit", tool_types[3])
+        insert_cell_data(ws, level, "course_project", tool_types[4])
+        insert_cell_data(ws, level, "course_work", tool_types[5])
 
         level += 1
         return level
@@ -193,7 +210,7 @@ def process_changeblock(changeblocks, level, ws):
                 insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
             except Exception as e:
                 print(str(e))
-            process_evaluation_tools(ws, level, wp)
+            process_evaluation_tools(ws, level, wp, None, changeblock.semester_start[0] - 1)
 
             try:
                 extend_list = [0 for _ in range(10)]
@@ -201,9 +218,15 @@ def process_changeblock(changeblocks, level, ws):
                 practice_list = [float(hour) for hour in wp.practice_hours_v2.split(", ")]
                 sro_list = [float(hour) for hour in wp.srs_hours_v2.split(", ")]
                 lab_list = [float(hour) for hour in wp.lab_hours_v2.split(", ")]
-                # cons_list = [float(hour) for hour in wp.consultation_v2.split(", ")]
+                try:
+                    cons_list = [float(hour) for hour in wp.consultation_v2.split(", ")]
+                    insert_cell_data(ws=ws, level=level, column_name="consultations", data=sum(cons_list))
+                except Exception as e:
+                    cons_list = [0]
+                    print("cons", str(e))
 
-                contact_hours = round((sum(lecture_list) + sum(practice_list) + sum(lab_list)) * 1.1, 2)
+                contact_hours = round((sum(lecture_list) + sum(practice_list) + sum(lab_list) + sum(cons_list)) * 1.1,
+                                      2)
                 insert_cell_data(ws=ws, level=level, column_name="contact_work", data=contact_hours)
 
                 seminary_hours = sum(lecture_list) + + sum(practice_list) + sum(lab_list) + 0  # sum(cons_list)
@@ -212,14 +235,16 @@ def process_changeblock(changeblocks, level, ws):
                 insert_cell_data(ws=ws, level=level, column_name="lecture", data=sum(lecture_list))
                 insert_cell_data(ws=ws, level=level, column_name="labs", data=sum(lab_list))
                 insert_cell_data(ws=ws, level=level, column_name="practice", data=sum(practice_list))
-                insert_cell_data(ws=ws, level=level, column_name="consultations", data=0)
                 insert_cell_data(ws=ws, level=level, column_name="srs", data=sum(sro_list))
 
                 process_hours_by_terms(ws, level, generate_full_ze_list(lecture_list, changeblock.semester_start)[0],
                                        offset=0)
-                process_hours_by_terms(ws, level, generate_full_ze_list(lab_list, changeblock.semester_start)[0], offset=1)
+                process_hours_by_terms(ws, level, generate_full_ze_list(lab_list, changeblock.semester_start)[0],
+                                       offset=1)
                 process_hours_by_terms(ws, level, generate_full_ze_list(practice_list, changeblock.semester_start)[0],
                                        offset=2)
+                process_hours_by_terms(ws, level, generate_full_ze_list(cons_list, changeblock.semester_start)[0],
+                                       offset=3)
             except Exception as e:
                 print(str(e))
 
@@ -315,9 +340,11 @@ def module_inside_recursion(modules, level, ws, depth=0):
 
 def process_excel(academic_plan):
     #wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\plan.xlsx")
-    wb_obj = openpyxl.load_workbook('/application/static-backend/export_template/academic_plan_template_2023.xlsx')
+    wb_obj = openpyxl.load_workbook('/application/static-backend/export_template/plan.xlsx')
     ws = wb_obj["УП"]
     start_list = 7
+    final_ze_by_term = [0 for _ in range(10)]
+    final_ze = 0
     for block in DisciplineBlock.objects.filter(academic_plan=academic_plan):
         insert_cell_data(ws=ws, level=start_list, column_name="name", data=block.name, horizontal="left")
         fill_row(ws, start_list, "5F84D4")
@@ -337,7 +364,42 @@ def process_excel(academic_plan):
                          do_line_merge=False)
         insert_cell_data_range(ws, start_list, "ze_by_term", sum_data["ze_by_term"])
         start_list += 1
+        if block.name != "Блок 4. Факультативные модули (дисциплины)":
+            final_ze += sum_data["ze"]
+            final_ze_by_term = sum_lists(final_ze_by_term, sum_data["ze_by_term"])
 
     # imp = ImplementationAcademicPlan.objects.get(academic_plan=academic_plan)
+    insert_cell_data(ws=ws, level=start_list, column_name="name", data="Объем ОП", horizontal="left")
+    fill_row(ws, start_list, "AB6E9D", bold=True)
+    insert_cell_data(ws=ws, level=start_list, column_name="ze_all", data=final_ze,
+                     do_line_merge=False)
+    insert_cell_data(ws=ws, level=start_list, column_name="hours_all", data=final_ze * 36,
+                     do_line_merge=False)
+    insert_cell_data_range(ws, start_list, "ze_by_term", final_ze_by_term)
+
+    ws = wb_obj["Титульный лист"]
+    imp = ImplementationAcademicPlan.objects.filter(academic_plan=academic_plan)[0]
+    fos = FieldOfStudy.objects.filter(implementation_academic_plan_in_field_of_study=imp)[0]
+    insert_cell_data(ws=ws, level=4, column_name="wp_id", data=f'Наименование образовательной программы "{imp.title}"',
+                     do_line_merge=False)
+    insert_cell_data(ws=ws, level=5, column_name="wp_id", data=f'Направление подготовки: {fos.number} {fos.title}',
+                     do_line_merge=False)
+    insert_cell_data(ws=ws, level=8, column_name="wp_id",
+                     data=f'Очная форма обучения, срок получения образования - {imp.training_period} года, '
+                          f'год начала подготовки -  {imp.year}',
+                     do_line_merge=False)
+    if imp.language == "ru":
+        language = "Русский"
+    elif imp.language == "en":
+        language = "Английский"
+    elif imp.language == "kz":
+        language = "Казахский"
+    elif imp.language == "de":
+        language = "Немецкий"
+    else:
+        language = "Русский/Английский"
+    insert_cell_data(ws=ws, level=10, column_name="wp_id",
+                     data=f'Язык реализации ОП: {language}',
+                     do_line_merge=False)
 
     return wb_obj
