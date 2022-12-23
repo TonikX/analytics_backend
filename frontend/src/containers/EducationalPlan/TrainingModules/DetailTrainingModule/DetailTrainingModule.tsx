@@ -234,17 +234,17 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   </TableCell>
                   {canEdit &&
                       <TableCell className={classes.actions}>
-                          <Tooltip
-                              title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                              <DeleteIcon className={classes.deleteIcon}
-                                          onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
-                              />
-                          </Tooltip>
-                          <Tooltip
-                              title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                              <EditIcon
-                                  onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>
-                          </Tooltip>
+                          {/*<Tooltip*/}
+                          {/*    title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>*/}
+                          {/*    <DeleteIcon className={classes.deleteIcon}*/}
+                          {/*                onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}*/}
+                          {/*    />*/}
+                          {/*</Tooltip>*/}
+                          {/*<Tooltip*/}
+                          {/*    title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>*/}
+                          {/*    <EditIcon*/}
+                          {/*        onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>*/}
+                          {/*</Tooltip>*/}
                       </TableCell>
                   }
                 </TableRow>
@@ -310,18 +310,18 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           {canEdit && (
             <TableCell style={{ height: '40px'}}>
               <div className={classes.moduleButtons}>
-                {item?.childs?.length === 0 ? (
-                    <Button size="small" onClick={this.handleCreateNewWPBlock(item.id)}>
-                      <AddIcon/> РПД
-                    </Button>
-                  ) : <></>
-                }
-                {blockOfWorkPrograms?.length === 0 ? (
-                    <Button size="small" onClick={this.handleAddNewModule(item.id, item?.childs)}>
-                      <AddIcon/> Модуль
-                    </Button>
-                  ) : <></>
-                }
+                {/*{item?.childs?.length === 0 ? (*/}
+                {/*    <Button size="small" onClick={this.handleCreateNewWPBlock(item.id)}>*/}
+                {/*      <AddIcon/> РПД*/}
+                {/*    </Button>*/}
+                {/*  ) : <></>*/}
+                {/*}*/}
+                {/*{blockOfWorkPrograms?.length === 0 ? (*/}
+                {/*    <Button size="small" onClick={this.handleAddNewModule(item.id, item?.childs)}>*/}
+                {/*      <AddIcon/> Модуль*/}
+                {/*    </Button>*/}
+                {/*  ) : <></>*/}
+                {/*}*/}
                 <Tooltip
                   title={`Открепить модуль`}>
                   <DeleteIcon className={classes.deleteIcon}
@@ -399,10 +399,10 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           </div>
         </Scrollbars>
         <div className={classes.createModuleButtonWrap}>
-          {/*<Button onClick={this.handleCreateNewModule} variant="outlined">*/}
-          {/*  <AddIcon/>*/}
-          {/*  Создать модуль*/}
-          {/*</Button>*/}
+          <Button onClick={this.handleCreateNewModule} variant="outlined">
+            <AddIcon/>
+            Создать модуль
+          </Button>
           {Boolean(!module?.change_blocks_of_work_programs_in_modules?.length) && <Button onClick={this.handleAddNewModule(module.id, module?.childs)} variant="outlined" style={{marginRight: 10}}>
             <AddIcon/>
             Добавить модуль
