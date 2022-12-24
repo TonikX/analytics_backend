@@ -36,5 +36,5 @@ export interface FirstStepProps extends WithStyles<typeof styles> {
     fetchingVideoLink: boolean;
     fetchingMoodleLink: boolean;
     canAddEditors: boolean;
-    inChangeBlock: Array[];
+    changeBlock: any[];
 }

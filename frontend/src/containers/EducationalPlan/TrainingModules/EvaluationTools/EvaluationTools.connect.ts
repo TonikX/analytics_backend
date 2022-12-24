@@ -4,12 +4,13 @@ import {bindActionCreators} from "redux";
 import actions from "../actions";
 
 import {rootState} from "../../../../store/reducers";
-import {getEvaluationListModule} from "../getters";
+import {getEvaluationListModule, getCanEdit} from "../getters";
 
 const mapStateToProps = (state: rootState) => {
     return {
         evaluationToolsList: getEvaluationListModule(state) || [],
-        isCanEdit: true,
+        isCanEdit: getCanEdit(state),
+
     };
 };
 

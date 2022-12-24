@@ -52,19 +52,21 @@ def process_headers(headers: list):
         # print("IMP----------->", imp, created)
         if created:
             imp.field_of_study.add(field_of_study)
-        ImplementationAcademicPlan.objects.filter(id=imp.id).update(plan_type=ap_header["plan_type"],
-                                                                    ns_id=ap_header["ns_id"],
-                                                                    op_isu_id=ap_header["edu_program_id"],
-                                                                    training_period=ap_header["training_period"],
-                                                                    language=language,
-                                                                    military_department=bool(ap_header),
-                                                                    total_intensity=total_intensity,
-                                                                    title=ap_header["edu_program_name"],
-                                                                    academic_plan=academic_plan,
-                                                                    year=2023,
-                                                                    qualification=qualification_name
-                                                                    )
-        print(created)
+        imp.plan_type = ap_header["plan_type"]
+        imp.ns_id = ap_header["ns_id"]
+        imp.op_isu_id = ap_header["edu_program_id"]
+        imp.training_period = ap_header["training_period"]
+        imp.language = language
+        imp.military_department = bool(ap_header)
+        imp.title = ap_header["edu_program_name"]
+        imp.total_intensity = total_intensity,
+        imp.academic_plan = academic_plan
+        imp.year = 2023
+        imp.qualification = qualification_name
+        imp.save()
+        print('!!', ImplementationAcademicPlan.objects.filter(id=imp.id))
+        print('!!!!!!', ap_header["edu_program_name"])
+        # print(created)
         if ap_header["university_partner"]:
             partner, created = UniversityPartner.objects.get_or_create(title=ap_header["university_partner"],
                                                                        country=ap_header["up_country"])
