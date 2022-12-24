@@ -129,6 +129,5 @@ export type TrainingModuleType = {
     };
     [TrainingModuleFields.EDITORS]: Array<UserType>;
     [TrainingModuleFields.CAN_EDIT]: boolean;
-    [TrainingModuleFields.CAN_EDIT]: boolean;
     [TrainingModuleFields.CERTIFICATION_EVALUATION_LIST]?: IntermediateCertificationType[];
 }

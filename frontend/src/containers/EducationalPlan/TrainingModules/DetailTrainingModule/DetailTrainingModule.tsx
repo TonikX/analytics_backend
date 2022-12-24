@@ -399,15 +399,15 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           </div>
         </Scrollbars>
         <div className={classes.createModuleButtonWrap}>
-          <Button onClick={this.handleCreateNewModule} variant="outlined">
+          {canEdit && <Button onClick={this.handleCreateNewModule} variant="outlined">
             <AddIcon/>
             Создать модуль
-          </Button>
-          {Boolean(!module?.change_blocks_of_work_programs_in_modules?.length) && <Button onClick={this.handleAddNewModule(module.id, module?.childs)} variant="outlined" style={{marginRight: 10}}>
+          </Button>}
+          {canEdit && Boolean(!module?.change_blocks_of_work_programs_in_modules?.length) && <Button onClick={this.handleAddNewModule(module.id, module?.childs)} variant="outlined" style={{marginRight: 10}}>
             <AddIcon/>
             Добавить модуль
           </Button>}
-          {Boolean(!module?.childs?.length) && <Button onClick={this.handleCreateNewWPBlock(module.id)} variant="outlined">
+          {canEdit && Boolean(!module?.childs?.length) && <Button onClick={this.handleCreateNewWPBlock(module.id)} variant="outlined">
             <AddIcon/>
             Добавить рабочую программу
           </Button>}
@@ -419,6 +419,9 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   renderGeneral = () => {
     const {module, classes, canEdit} = this.props
     if (!module?.id) return <></>
+
+    const onlyForStrucUnit = module?.[TrainingModuleFields.ONLY_FOR_STRUCT_UNITS]
+
     return (
       <>
         <div className={classes.editors}>
@@ -449,18 +452,27 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         </div>
 
         <>
-          <Typography>
+          <Typography className={classes.textInfo}>
             ID конструктора КОП: <b>{module?.[TrainingModuleFields.ID]}</b>
             {module?.[TrainingModuleFields.ISU_ID] && <><br/> ISU id: <b>{module?.[TrainingModuleFields.ISU_ID]}</b></>}
           </Typography>
-          {module?.[TrainingModuleFields.ONLY_FOR_STRUCT_UNITS] !== undefined && (
-            <FormControlLabel
-              control={<Checkbox checked={module?.[TrainingModuleFields.ONLY_FOR_STRUCT_UNITS]} onChange={this.updateOnlyForStructUnitsField} />}
-              label="Использовать только сотрудниками подразделений, в которых работают редакторы данного модуля."
-              className={classes.checkbox}
-            />
-          )}
-          <TextField variant="outlined"
+
+          {canEdit ? (
+            onlyForStrucUnit !== undefined ? (
+              <FormControlLabel
+                control={<Checkbox checked={onlyForStrucUnit} onChange={this.updateOnlyForStructUnitsField} />}
+                label="Использовать только сотрудниками подразделений, в которых работают редакторы данного модуля."
+                className={classes.checkbox}
+              />
+            ) : null)
+            : onlyForStrucUnit ? (
+              <Typography className={classes.textInfo}>
+                Использовать только сотрудниками подразделений, в которых работают редакторы данного модуля
+              </Typography>
+            ) : null
+          }
+
+          {canEdit ? <TextField variant="outlined"
                      label="Описание"
                      value={this.state.description}
                      onChange={(e) => this.setState({ description: e.target.value })}
@@ -469,15 +481,26 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                      InputLabelProps={{
                        shrink: true,
                      }}
-          />
-          <SimpleSelector label="Правило выбора"
-                          value={module?.[TrainingModuleFields.SELECTION_RULE]}
-                          onChange={this.updateSelectRule}
-                          metaList={selectRulesArray}
-                          wrapClass={classes.selectorWrap}
-          />
+                     disabled={!canEdit}
+          /> : (
+            <Typography className={classes.textInfo}>
+              <b>Описание:</b> {module?.[TrainingModuleFields.DESCRIPTION]}
+            </Typography>
+          )}
+          {canEdit ? (
+            <SimpleSelector label="Правило выбора"
+              value={module?.[TrainingModuleFields.SELECTION_RULE]}
+              onChange={this.updateSelectRule}
+              metaList={selectRulesArray}
+              wrapClass={classes.selectorWrap}
+            />
+          ) : (
+            <Typography className={classes.textInfo}>
+              <b>Правило выбора:</b> {selectRulesArray.find((item) => item.value === module?.[TrainingModuleFields.SELECTION_RULE])?.label}
+            </Typography>
+          )}
 
-          <TextField variant="outlined"
+          {canEdit ? <TextField variant="outlined"
                      label="Параметр выбора"
                      value={this.state.selectionParameter}
                      onChange={(e) => this.setState({ selectionParameter: e.target.value })}
@@ -487,8 +510,14 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                        shrink: true,
                      }}
                      type="number"
-                     disabled={['any_quantity', 'all'].includes(module?.[TrainingModuleFields.SELECTION_RULE])}
-          />
+                     disabled={!canEdit || ['any_quantity', 'all'].includes(module?.[TrainingModuleFields.SELECTION_RULE])}
+          /> : (
+            this.state.selectionParameter?.length ? (
+              <Typography>
+                <b>Параметр выбора:</b> {this.state.selectionParameter}
+              </Typography>
+            ) : null
+          )}
         </>
       </>
     )
@@ -502,7 +531,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   renderPlans = () => {
-    const {classes, module} = this.props
+    const {classes, module, canEdit} = this.props
 
     return (
       <>
@@ -542,23 +571,23 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                     {get(plan, 'is_included') ? 'Включен' : 'Не включен'}
                   </TableCell>
                   <TableCell>
-                    <Tooltip
+                    {canEdit && <Tooltip
                       title={'Удалить образовательную программу'}>
                       <DeleteIcon className={classes.deleteIcon}
                                   onClick={this.handleDeleteEducationalProgram(plan.id)}
                       />
-                    </Tooltip>
+                    </Tooltip>}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </Scrollbars>
-        <div className={classes.addEducationalProgramButtonWrap}>
+        {canEdit && <div className={classes.addEducationalProgramButtonWrap}>
           <Button onClick={this.openAddEducationalProgramModal} variant="outlined">
             Добавить образовательную программу
           </Button>
-        </div>
+        </div>}
       </>
     )
   }
