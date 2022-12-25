@@ -222,7 +222,7 @@ class IsOwnerOfFolderWithDisciplineBlockModule(permissions.BasePermission):
 class IsDisciplineBlockModuleEditor(permissions.BasePermission):
     @staticmethod
     def check_access(module_id: int, user: User) -> bool:
-        return DisciplineBlockModule.objects.filter(pk=module_id, editors=user).exists()
+        return DisciplineBlockModule.objects.filter(pk=module_id, editors=user).exists() or user.is_expertise_master
 
 
 class IsBlockModuleEditor(permissions.BasePermission):
