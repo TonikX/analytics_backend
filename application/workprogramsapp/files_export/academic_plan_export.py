@@ -340,7 +340,7 @@ def module_inside_recursion(modules, level, ws, depth=0):
 
 def process_excel(academic_plan):
     #wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\plan.xlsx")
-    wb_obj = openpyxl.load_workbook('/application/static-backend/export_template/plan.xlsx')
+    wb_obj = openpyxl.load_workbook('/application/static-backend/export_template/academic_plan_template_2023.xlsx')
     ws = wb_obj["УП"]
     start_list = 7
     final_ze_by_term = [0 for _ in range(10)]
