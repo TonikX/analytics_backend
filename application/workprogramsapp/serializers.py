@@ -729,7 +729,8 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
         if instance.on_check == 'on_check' and not bool(
                 self.context['request'].user.groups.filter(name="expertise_master")):
             data["can_edit"] = False
-        elif self.context['request'].user in instance.academic_plan_in_field_of_study.filter()[0].editors.all():
+        elif self.context['request'].user in instance.academic_plan_in_field_of_study.filter()[0].editors.all() and\
+                instance.on_check != 'verified':
             data["can_edit"] = True
         elif self.context['request'].user.is_staff or bool(
                 self.context['request'].user.groups.filter(name="expertise_master")):

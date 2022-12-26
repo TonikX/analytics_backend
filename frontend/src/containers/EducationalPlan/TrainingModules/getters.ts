@@ -17,6 +17,7 @@ export const getTrainingModulesListForSelector = (state: rootState): SelectorLis
 }));
 
 export const getTrainingModule = (state: rootState): TrainingModuleType|{} => get(getStateData(state), fields.DETAIL_TRAINING_MODULE, {});
+export const getCanEdit = (state: rootState): boolean => get(getTrainingModule(state), TrainingModuleFields.CAN_EDIT, false);
 export const getEvaluationListModule = (state: rootState): TrainingModuleType|{} =>
   get(getTrainingModule(state), TrainingModuleFields.CERTIFICATION_EVALUATION_LIST, []);
 export const getTrainingModuleId = (state: rootState): number => get(getTrainingModule(state), TrainingModuleFields.ID, 0);

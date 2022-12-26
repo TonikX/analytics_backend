@@ -194,31 +194,11 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     });
   }
 
-  goToWorkProgramPage = (id: number) => () => {
-    // @ts-ignore
-    const {history} = this.props;
-
-    history.push(appRouter.getWorkProgramLink(id));
-  }
-
   goToPracticePage = (id: number) => () => {
     // @ts-ignore
     const {history} = this.props;
 
     history.push(appRouter.getPracticeLink(id));
-  }
-
-  goToGiaPage = (id: number) => () => {
-    // @ts-ignore
-    const {history} = this.props;
-
-    history.push(appRouter.getFinalCertificationLink(id));
-  }
-
-  handleChangePlan = () => {
-    const {detailPlan} = this.props;
-
-    this.props.actions.openDialog(detailPlan);
   }
 
   handleDownloadFile = (workProgramId: number) => () => {
@@ -320,10 +300,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
             <>
               {Boolean(workPrograms?.length) && renderRow(workPrograms.map((workProgram: any) =>
                 <div className={classes.displayFlex}>
-                  <Typography className={classes.link}
-                              onClick={this.goToWorkProgramPage(workProgram[WorkProgramGeneralFields.ID])}>
+                  <Link className={classes.link}
+                        to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.ID])}
+                        target="_blank"
+                  >
                     {workProgram[WorkProgramGeneralFields.TITLE]}
-                  </Typography>
+                  </Link>
                   <div className={classes.wpStatus}>{this.getStatus(workProgram.wp_status)}</div>
                   <Tooltip
                     title={'Скачать рабочую программу'}>
@@ -336,18 +318,22 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
               ), workPrograms)}
               {Boolean(gia?.length) && renderRow(gia.map((gia: any) =>
                 <div className={classes.displayFlex}>
-                  <Typography className={classes.link}
-                              onClick={this.goToGiaPage(gia[WorkProgramGeneralFields.ID])}>
+                  <Link className={classes.link}
+                        to={appRouter.getFinalCertificationLink(gia[WorkProgramGeneralFields.ID])}
+                        target="_blank"
+                  >
                     {gia[WorkProgramGeneralFields.TITLE]} (ГИА)
-                  </Typography>
+                  </Link>
                 </div>
               ), gia)}
               {Boolean(practice?.length) && renderRow(practice.map((practice: any) =>
                 <div className={classes.displayFlex}>
-                  <Typography className={classes.link}
-                              onClick={this.goToPracticePage(practice[WorkProgramGeneralFields.ID])}>
+                  <Link className={classes.link}
+                        to={appRouter.getPracticeLink(practice[WorkProgramGeneralFields.ID])}
+                        target="_blank"
+                  >
                     {practice[WorkProgramGeneralFields.TITLE]} (практика)
-                  </Typography>
+                  </Link>
                 </div>
               ), practice)}
             </>
@@ -714,7 +700,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
     const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
     // @ts-ignore
-    const canDownload = detailPlan[EducationalPlanFields.YEAR] >= 2023;
+    const canDownload = get(detailPlan, 'academic_plan_in_field_of_study[0].year', 0) >= 2023;
     const {tab} = this.state
 
     return (

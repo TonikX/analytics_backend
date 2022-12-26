@@ -222,7 +222,7 @@ class IsOwnerOfFolderWithDisciplineBlockModule(permissions.BasePermission):
 class IsDisciplineBlockModuleEditor(permissions.BasePermission):
     @staticmethod
     def check_access(module_id: int, user: User) -> bool:
-        return DisciplineBlockModule.objects.filter(pk=module_id, editors=user).exists()
+        return DisciplineBlockModule.objects.filter(pk=module_id, editors=user).exists() or user.is_expertise_master
 
 
 class IsBlockModuleEditor(permissions.BasePermission):
@@ -230,7 +230,7 @@ class IsBlockModuleEditor(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user.is_superuser:
             return True
-        if request.method in ('GET', 'HEAD', 'OPTIONS', "POST") and request.user.groups.filter(
+        if request.method in ('GET', 'HEAD', 'OPTIONS', "POST", 'PATCH') and request.user.groups.filter(
                 name="blockmodule_editor"):
             return True
         return request.user in obj.editors.all()
