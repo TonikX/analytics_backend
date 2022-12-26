@@ -566,6 +566,10 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     const {addEditorsMode} = this.state;
     const canEdit = detailPlan?.[EducationalPlanFields.CAN_EDIT];
 
+    const newPlan = get(detailPlan, 'academic_plan_in_field_of_study[0].year', 0) >= 2023;
+    const type = newPlan ? plan?.[EducationalPlanFields.PLAN_TYPE] :
+      plan?.[EducationalPlanFields.PLAN_TYPE] === 'base' ? 'Базовый' : 'Индивидуальный'
+
     return (
       <>
         <div className={classes.editors}>
@@ -595,17 +599,13 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
           )}
         </div>
 
-        {plan?.[EducationalPlanFields.YEAR] ? (
-          <Typography className={classes.trajectoryOwner}>
-            <b>Направление:</b> {plan?.[EducationalPlanFields.FIELD_OF_STUDY]?.[0]?.title}
-          </Typography>
-        ) : null }
+        <Typography className={classes.trajectoryOwner}>
+          <b>Направление:</b> {plan?.[EducationalPlanFields.FIELD_OF_STUDY]?.[0]?.title}
+        </Typography>
 
-        {plan?.[EducationalPlanFields.YEAR] ? (
-          <Typography className={classes.trajectoryOwner}>
-            <b>ОП:</b> {plan?.[EducationalPlanFields.TITLE]}
-          </Typography>
-        ) : null }
+        <Typography className={classes.trajectoryOwner}>
+          <b>ОП:</b> {plan?.[EducationalPlanFields.TITLE]}
+        </Typography>
 
         {plan?.[EducationalPlanFields.NUMBER] ? (
           <Typography className={classes.trajectoryOwner}>
@@ -639,7 +639,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
         {plan?.[EducationalPlanFields.PLAN_TYPE] ? (
           <Typography className={classes.trajectoryOwner}>
-            <b>Тип плана:</b> {plan?.[EducationalPlanFields.PLAN_TYPE] === 'base' ? 'Базовый' : 'Индивидуальный'}
+            <b>Тип плана:</b> {type}
           </Typography>
         ) : null }
 
