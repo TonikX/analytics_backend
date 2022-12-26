@@ -314,18 +314,18 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           {canEdit && (
             <TableCell style={{ height: '40px'}}>
               <div className={classes.moduleButtons}>
-                {item?.childs?.length === 0 && level === 0 ? (
-                    <Button size="small" onClick={this.handleCreateNewWPBlock(item.id)}>
-                      <AddIcon/> РПД
-                    </Button>
-                  ) : <></>
-                }
-                {blockOfWorkPrograms?.length === 0 && level === 0 ? (
-                    <Button size="small" onClick={this.handleAddNewModule(item.id, item?.childs)}>
-                      <AddIcon/> Модуль
-                    </Button>
-                  ) : <></>
-                }
+                {/*{item?.childs?.length === 0 && level === 0 ? (*/}
+                {/*    <Button size="small" onClick={this.handleCreateNewWPBlock(item.id)}>*/}
+                {/*      <AddIcon/> РПД*/}
+                {/*    </Button>*/}
+                {/*  ) : <></>*/}
+                {/*}*/}
+                {/*{blockOfWorkPrograms?.length === 0 && level === 0 ? (*/}
+                {/*    <Button size="small" onClick={this.handleAddNewModule(item.id, item?.childs)}>*/}
+                {/*      <AddIcon/> Модуль*/}
+                {/*    </Button>*/}
+                {/*  ) : <></>*/}
+                {/*}*/}
                 {blockOfWorkPrograms?.length === 0 && level === 0 ? (
                   <Tooltip
                     title={`Открепить модуль`}>
