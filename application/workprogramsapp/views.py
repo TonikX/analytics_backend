@@ -2089,7 +2089,7 @@ class WorkProgramChangeInDisciplineBlockModuleCreateAPIView(generics.CreateAPIVi
 class WorkProgramChangeInDisciplineBlockModuleDestroyView(generics.DestroyAPIView):
     queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
     serializer_class = WorkProgramChangeInDisciplineBlockModuleSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsDisciplineBlockModuleEditor]
 
 
 class WorkProgramChangeInDisciplineBlockModuleDetailsView(generics.RetrieveAPIView):
@@ -2101,7 +2101,7 @@ class WorkProgramChangeInDisciplineBlockModuleDetailsView(generics.RetrieveAPIVi
 class WorkProgramChangeInDisciplineBlockModuleUpdateView(generics.UpdateAPIView):
     queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
     serializer_class = WorkProgramChangeInDisciplineBlockModuleUpdateSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsDisciplineBlockModuleEditor]
 
 
 class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
