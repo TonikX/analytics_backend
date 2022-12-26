@@ -232,20 +232,24 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   <TableCell>
                     {type === OPTIONALLY ? '-' : '+'}
                   </TableCell>
-                  {canEdit && level === -1 &&
-                      <TableCell className={classes.actions}>
+                  {canEdit &&
+                    <TableCell className={classes.actions}>
+                      {level === -1 &&
+                        <>
                           <Tooltip
-                              title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                              <DeleteIcon className={classes.deleteIcon}
-                                          onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
-                              />
+                            title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                            <DeleteIcon className={classes.deleteIcon}
+                                        onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
+                            />
                           </Tooltip>
                           <Tooltip
-                              title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                              <EditIcon
-                                  onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>
+                            title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                            <EditIcon
+                                onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>
                           </Tooltip>
-                      </TableCell>
+                        </>
+                      }
+                    </TableCell>
                   }
                 </TableRow>
               )
@@ -293,7 +297,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   renderModule = (item: any, level: number, allChild: any, fatherId: number): any => {
     const {classes, canEdit} = this.props
     const blockOfWorkPrograms = item?.change_blocks_of_work_programs_in_modules
-    console.log('level', level)
+
     return(
       <>
         <TableRow>
@@ -316,23 +320,25 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                     </Button>
                   ) : <></>
                 }
-                {blockOfWorkPrograms?.length === 0 && level === -1 ? (
+                {blockOfWorkPrograms?.length === 0 && level === 0 ? (
                     <Button size="small" onClick={this.handleAddNewModule(item.id, item?.childs)}>
                       <AddIcon/> Модуль
                     </Button>
                   ) : <></>
                 }
-                <Tooltip
-                  title={`Открепить модуль`}>
-                  <DeleteIcon className={classes.deleteIcon}
-                              onClick={this.removeFatherFromModule(item.id, allChild, fatherId)}
-                              style={{
-                                marginRight: '28px',
-                                marginTop: '5px',
-                                marginLeft: 'auto',
-                              }}
-                  />
-                </Tooltip>
+                {blockOfWorkPrograms?.length === 0 && level === 0 ? (
+                  <Tooltip
+                    title={`Открепить модуль`}>
+                    <DeleteIcon className={classes.deleteIcon}
+                                onClick={this.removeFatherFromModule(item.id, allChild, fatherId)}
+                                style={{
+                                  marginRight: '28px',
+                                  marginTop: '5px',
+                                  marginLeft: 'auto',
+                                }}
+                    />
+                  </Tooltip>
+                ) : <></>}
               </div>
             </TableCell>
           )}
