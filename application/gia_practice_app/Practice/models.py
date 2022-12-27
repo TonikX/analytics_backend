@@ -156,6 +156,7 @@ class Practice(models.Model):
                                 verbose_name="Количество зачетных единиц по семестрам в Практике")
     evaluation_tools_v_sem = models.CharField(max_length=1024, blank=True, null=True,
                                               verbose_name="Оценочные средства по семестрам в Практике")
+    number_of_semesters = models.IntegerField(blank=True, null=True, verbose_name="Количество семестров в практике")
 
 
 class PrerequisitesOfPractice(models.Model):

@@ -698,6 +698,17 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 class DisciplineBlockSerializer(serializers.ModelSerializer):
     modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
 
+    def to_representation(self, value):
+        self.fields["laboriousness"] = serializers.SerializerMethodField()
+        return super().to_representation(value)
+
+    def get_laboriousness(self, obj):
+        sum_ze = 0
+        for module in DisciplineBlockModule.objects.filter(descipline_block=obj):
+            sum_ze += recursion_module(module)
+
+        return sum_ze
+
     class Meta:
         model = DisciplineBlock
         fields = ['id', 'name', 'modules_in_discipline_block']
@@ -723,7 +734,6 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-
         # try:
         #     data["can_edit"] = self.context['request'].user == instance.author or bool(
         #         self.context['request'].user.groups.filter(name="academic_plan_developer"))\
@@ -732,6 +742,7 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
         # except KeyError:
         #     data["can_edit"] = False
         # print(instance.academic_plan_in_field_of_study.filter()[0].editors)
+        data["laboriousness"] = sum([block["laboriousness"]for block in data["discipline_blocks_in_academic_plan"]])
         if instance.on_check == 'on_check' and not bool(
                 self.context['request'].user.groups.filter(name="expertise_master")):
             data["can_edit"] = False
