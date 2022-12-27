@@ -233,19 +233,23 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                     {type === OPTIONALLY ? '-' : '+'}
                   </TableCell>
                   {canEdit &&
-                      <TableCell className={classes.actions}>
-                          {/*<Tooltip*/}
-                          {/*    title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>*/}
-                          {/*    <DeleteIcon className={classes.deleteIcon}*/}
-                          {/*                onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}*/}
-                          {/*    />*/}
-                          {/*</Tooltip>*/}
-                          {/*<Tooltip*/}
-                          {/*    title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>*/}
-                          {/*    <EditIcon*/}
-                          {/*        onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>*/}
-                          {/*</Tooltip>*/}
-                      </TableCell>
+                    <TableCell className={classes.actions}>
+                      {level === -1 &&
+                        <>
+                          <Tooltip
+                            title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                            <DeleteIcon className={classes.deleteIcon}
+                                        onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
+                            />
+                          </Tooltip>
+                          <Tooltip
+                            title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
+                            <EditIcon
+                                onClick={this.handleOpenDetailModal(blockOfWorkProgram)}/>
+                          </Tooltip>
+                        </>
+                      }
+                    </TableCell>
                   }
                 </TableRow>
               )
@@ -310,29 +314,31 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           {canEdit && (
             <TableCell style={{ height: '40px'}}>
               <div className={classes.moduleButtons}>
-                {/*{item?.childs?.length === 0 ? (*/}
+                {/*{item?.childs?.length === 0 && level === 0 ? (*/}
                 {/*    <Button size="small" onClick={this.handleCreateNewWPBlock(item.id)}>*/}
                 {/*      <AddIcon/> РПД*/}
                 {/*    </Button>*/}
                 {/*  ) : <></>*/}
                 {/*}*/}
-                {/*{blockOfWorkPrograms?.length === 0 ? (*/}
+                {/*{blockOfWorkPrograms?.length === 0 && level === 0 ? (*/}
                 {/*    <Button size="small" onClick={this.handleAddNewModule(item.id, item?.childs)}>*/}
                 {/*      <AddIcon/> Модуль*/}
                 {/*    </Button>*/}
                 {/*  ) : <></>*/}
                 {/*}*/}
-                <Tooltip
-                  title={`Открепить модуль`}>
-                  <DeleteIcon className={classes.deleteIcon}
-                              onClick={this.removeFatherFromModule(item.id, allChild, fatherId)}
-                              style={{
-                                marginRight: '28px',
-                                marginTop: '5px',
-                                marginLeft: 'auto',
-                              }}
-                  />
-                </Tooltip>
+                {blockOfWorkPrograms?.length === 0 && level === 0 ? (
+                  <Tooltip
+                    title={`Открепить модуль`}>
+                    <DeleteIcon className={classes.deleteIcon}
+                                onClick={this.removeFatherFromModule(item.id, allChild, fatherId)}
+                                style={{
+                                  marginRight: '28px',
+                                  marginTop: '5px',
+                                  marginLeft: 'auto',
+                                }}
+                    />
+                  </Tooltip>
+                ) : <></>}
               </div>
             </TableCell>
           )}
