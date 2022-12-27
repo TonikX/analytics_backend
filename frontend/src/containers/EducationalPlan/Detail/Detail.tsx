@@ -273,7 +273,17 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
           const renderRow = (title: any, itemsArray: Array<any>) => {
             const allCreditUnits = itemsArray?.[0]?.ze_v_sem;
-            const creditUnits = allCreditUnits?.replaceAll(', ', ' ')?.replace(/0*$/,"")?.replace(/^0+/, '')?.trim()
+            // const allCreditUnits = '0, 0, 1, 2, 3, 0, 2, 0, 0, 0';
+            const creditUnitsArray = allCreditUnits?.split(', ')
+            // @ts-ignore
+            const indexFirstNumber1 = creditUnitsArray?.findIndex((item: number) => +item !== 0)
+            const withoutZero1 = creditUnitsArray?.slice(indexFirstNumber1, creditUnitsArray.length)
+            const withoutZero1Reverse = withoutZero1?.reverse()
+            // @ts-ignore
+            const indexFirstNumber2 = withoutZero1Reverse?.findIndex((item: number) => +item !== 0)
+            const withoutZero2 = withoutZero1?.slice(indexFirstNumber2, withoutZero1.length)
+
+            const creditUnits = withoutZero2?.reverse()?.join(' ')
 
             return (
               <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
