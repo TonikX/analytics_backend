@@ -645,7 +645,13 @@ class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
 
     def to_representation(self, value):
         self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
+        self.fields['laboriousness'] = serializers.SerializerMethodField()
         return super().to_representation(value)
+
+    def get_laboriousness(self, obj):
+        unit_final_sum = recursion_module(obj)
+
+        return unit_final_sum
 
     class Meta:
         model = DisciplineBlockModule
@@ -660,7 +666,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
     def to_representation(self, value):
         self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
         self.fields["laboriousness"] = serializers.SerializerMethodField()
-        self.fields["ze_by_sem"] = serializers.SerializerMethodField()
+        #self.fields["ze_by_sem"] = serializers.SerializerMethodField()
         return super().to_representation(value)
 
     def get_laboriousness(self, obj):
@@ -668,10 +674,10 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
         return unit_final_sum
 
-    def get_ze_by_sem(self, obj):
+    """def get_ze_by_sem(self, obj):
         max_ze, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = recursion_module_per_ze(obj)
         #print(max_hours_lec)
-        return {"max_ze": max_ze}
+        return {"max_ze": max_ze}"""
 
     def get_childs(self, obj):
         childs = DisciplineBlockModule.objects.filter(father_module=obj)
