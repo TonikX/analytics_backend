@@ -160,5 +160,14 @@ export default (theme: Theme) => createStyles({
   addEducationalProgramButtonWrap: {
     display: 'flex',
     justifyContent: 'flex-end'
+  },
+  errorBlock: {
+    border: '1px solid',
+    borderRadius: '4px',
+    borderColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.main,
+    padding: '10px',
+    width: 'fit-content',
+    display: 'flex',
   }
 });

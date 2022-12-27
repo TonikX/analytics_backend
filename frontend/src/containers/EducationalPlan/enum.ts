@@ -57,6 +57,7 @@ export enum EducationalPlanFields {
   TRAINING_PERIOD = 'training_period',
   UNIVERSITY_PARTNER = 'university_partner',
   PLAN_TYPE = 'plan_type',
+  LABORIOUSNESS = 'laboriousness',
   STRUCTURAL_UNIT = 'structural_unit',
   TOTAL_INTENSITY = 'total_intensity',
   MILITARY_DEPARTMENT = 'military_department',
@@ -80,6 +81,7 @@ export enum EducationalPlanFields {
 export enum EducationalPlanBlockFields {
   ID = 'id',
   NAME = 'name',
+  LABORIOUSNESS = 'laboriousness',
   MODULES = 'modules_in_discipline_block',
 }
 

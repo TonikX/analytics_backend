@@ -273,7 +273,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
           const renderRow = (title: any, itemsArray: Array<any>) => {
             const allCreditUnits = itemsArray?.[0]?.ze_v_sem;
-            const creditUnits = allCreditUnits?.replaceAll(', ', '')?.replace(/0*$/,"")?.replace(/^0+/, '')?.split("")?.join(" ")
+            const creditUnits = allCreditUnits?.replaceAll(', ', ' ')?.replace(/0*$/,"")?.replace(/^0+/, '')?.trim()
 
             return (
               <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
@@ -447,6 +447,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                     />
                                 </Tooltip>
                             }
+                            <b>трудоемкость</b>&nbsp;{block[EducationalPlanBlockFields.LABORIOUSNESS]}
                           </div>
                         </TableCell>
                       </TableRow>
@@ -637,6 +638,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
           </Typography>
         ) : null }
 
+        {detailPlan?.[EducationalPlanFields.LABORIOUSNESS] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>Общая трудоемкость:</b> {detailPlan?.[EducationalPlanFields.LABORIOUSNESS]}
+          </Typography>
+        ) : null }
+
         {plan?.[EducationalPlanFields.PLAN_TYPE] ? (
           <Typography className={classes.trajectoryOwner}>
             <b>Тип плана:</b> {type}
@@ -702,6 +709,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     // @ts-ignore
     const canDownload = get(detailPlan, 'academic_plan_in_field_of_study[0].year', 0) >= 2023;
     const {tab} = this.state
+    const isValid = detailPlan?.[EducationalPlanFields.LABORIOUSNESS] === 240
 
     return (
       <Paper className={classes.root}>
@@ -712,9 +720,21 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
               Скачать учебный план
             </Button>}
             {canSendToValidate && canEdit && (
-              <Button onClick={this.sendToCheck} className={classes.buttonH32}>
-                Отправить на проверку
-              </Button>
+              isValid ?
+                <Button
+                  onClick={this.sendToCheck}
+                  className={classes.buttonH32}
+                >
+                  Отправить на проверку
+                </Button>
+              :
+                <Tooltip title="Общее число зачетных единиц не равно 240">
+                  <Button
+                    className={classes.buttonH32}
+                  >
+                    Отправить на проверку
+                  </Button>
+                </Tooltip>
             )}
             {canValidate && (
               <>

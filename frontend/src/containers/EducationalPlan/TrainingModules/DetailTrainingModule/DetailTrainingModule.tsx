@@ -211,7 +211,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             const renderRow = (title: any, itemsArray: Array<any>) => {
               const duration = itemsArray?.[0]?.number_of_semesters;
               const allCreditUnits = itemsArray?.[0]?.ze_v_sem;
-              const creditUnits = allCreditUnits?.replaceAll(', ', '')?.replace(/0*$/,"")?.replace(/^0+/, '')?.split("")?.join(" ")
+              const creditUnits = allCreditUnits?.replaceAll(', ', ' ')?.replace(/0*$/,"")?.replace(/^0+/, '')?.trim()
 
               return (
                 <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
@@ -507,16 +507,16 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           )}
 
           {canEdit ? <TextField variant="outlined"
-                     label="Параметр выбора"
-                     value={this.state.selectionParameter}
-                     onChange={(e) => this.setState({ selectionParameter: e.target.value })}
-                     onBlur={this.updateTrainingModuleField(TrainingModuleFields.SELECTION_PARAMETER)}
-                     className={classes.textField}
-                     InputLabelProps={{
-                       shrink: true,
-                     }}
-                     type="number"
-                     disabled={!canEdit || ['any_quantity', 'all'].includes(module?.[TrainingModuleFields.SELECTION_RULE])}
+                       label="Параметр выбора"
+                       value={this.state.selectionParameter}
+                       onChange={(e) => this.setState({ selectionParameter: e.target.value })}
+                       onBlur={this.updateTrainingModuleField(TrainingModuleFields.SELECTION_PARAMETER)}
+                       className={classes.textField}
+                       InputLabelProps={{
+                         shrink: true,
+                       }}
+                       type="number"
+                       disabled={!canEdit || 'choose_n_from_m' === module?.[TrainingModuleFields.SELECTION_RULE]}
           /> : (
             this.state.selectionParameter?.length ? (
               <Typography>
@@ -524,6 +524,12 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               </Typography>
             ) : null
           )}
+
+          {canEdit && this.state.selectionParameter?.length === 0 && !['any_quantity', 'all'].includes(module?.[TrainingModuleFields.SELECTION_RULE]) ? (
+            <Typography className={classes.errorBlock}>
+              Параметр выбора обязателен для заполнения
+            </Typography>
+          ) : null}
         </>
       </>
     )
