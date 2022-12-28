@@ -8,7 +8,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import connect from './CreateModal.connect';
@@ -33,6 +32,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import {HoursSection} from "./types";
 import EditedRow from "./EditableRow/EditableRow";
+import {PRACTICE_TITLES} from "../../constants";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -155,15 +155,19 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 <DialogContent>
                     <div>
                         <InputLabel className={classes.label}>Название</InputLabel>
-                        <TextField label=""
-                                   onChange={this.saveField(PracticeFields.TITLE)}
-                                   variant="outlined"
-                                   fullWidth
-                                   value={minimalPracticeState[PracticeFields.TITLE]}
-                                   InputLabelProps={{
-                                       shrink: true,
-                                   }}
-                        />
+                        <Select
+                            variant="outlined"
+                            fullWidth
+                            value={minimalPracticeState[PracticeFields.TITLE]}
+                            // @ts-ignore
+                            onChange={this.saveField(PracticeFields.TITLE)}
+                        >
+                            {PRACTICE_TITLES.map((item, index) =>
+                                <MenuItem value={item.value} key={`practice-title-${index}`}>
+                                    {item.label}
+                                </MenuItem>
+                            )}}
+                        </Select>
                     </div>
                     <div className={classes.marginTop20}>
                         <InputLabel className={classes.label}>Год</InputLabel>

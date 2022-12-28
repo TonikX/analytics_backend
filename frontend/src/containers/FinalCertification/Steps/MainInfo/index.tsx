@@ -18,14 +18,14 @@ interface MainInfoProps extends WithStyles<typeof styles> {
     structuralUnitActions: StructuralUnitsActions;
 }
 
-const TITLES = [
+export const GIA_TITLES = [
     {
         value: 'preparation',
         label: 'Подготовка к защите и защита ВКР',
     },
     {
         value: 'preparation-en',
-        label: 'Подготовка к защите и защита ВКР / Master Thesis Research and Defense',
+        label: 'Подготовка к защите и защита ВКР / Preparation for Thesis Defense and Thesis Defense',
     }
 ];
 
@@ -57,7 +57,7 @@ class MainInfo extends React.Component<MainInfoProps> {
                     <div className={classes.leftColumn}>
                         <Input fieldName={CertificationFields.DISCIPLINE_CODE}/>
                         <Select fieldName={CertificationFields.TITLE}
-                                metaList={TITLES}/>
+                                metaList={GIA_TITLES}/>
                         <Input fieldName={CertificationFields.YEAR}/>
                     </div>
                     <div className={classes.rightColumn}>
