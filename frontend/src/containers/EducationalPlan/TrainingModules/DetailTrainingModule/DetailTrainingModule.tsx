@@ -516,7 +516,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                          shrink: true,
                        }}
                        type="number"
-                       disabled={!canEdit || 'choose_n_from_m' === module?.[TrainingModuleFields.SELECTION_RULE]}
+                       disabled={!canEdit || ['any_quantity', 'all'].includes(module?.[TrainingModuleFields.SELECTION_RULE])}
           /> : (
             this.state.selectionParameter?.length ? (
               <Typography>
