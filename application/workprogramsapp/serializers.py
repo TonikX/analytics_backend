@@ -743,7 +743,9 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
         # except KeyError:
         #     data["can_edit"] = False
         # print(instance.academic_plan_in_field_of_study.filter()[0].editors)
-        data["laboriousness"] = sum([block["laboriousness"]for block in data["discipline_blocks_in_academic_plan"]])
+        data["laboriousness"] = sum(
+            [block["laboriousness"] if block["name"] != "Блок 4. Факультативные модули (дисциплины)" else 0 for block in
+             data["discipline_blocks_in_academic_plan"]])
         if instance.on_check == 'on_check' and not bool(
                 self.context['request'].user.groups.filter(name="expertise_master")):
             data["can_edit"] = False
