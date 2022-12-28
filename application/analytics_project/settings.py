@@ -29,11 +29,12 @@ environ.Env.read_env()  # reading .env file
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG') == 'TRUE'
+#DEBUG = env('DEBUG') == True
+DEBUG = True
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
 
-#ALLOWED_HOSTS = ['94.250.249.177', '94.250.249.177:8000', 'localhost', '127.0.0.1']
+# ALLOWED_HOSTS = ['94.250.249.177', '94.250.249.177:8000', 'localhost', '127.0.0.1']
 ALLOWED_HOSTS = ['localhost', '62.109.28.95', 'op.itmo.ru', "127.0.0.1"]
 
 # Application definition
@@ -63,12 +64,12 @@ INSTALLED_APPS = [
     'gia_practice_app',
     'drf_yasg2',
     'model_clone',
-    #'django_extensions',
+    # 'django_extensions',
     # 'ckeditor',
     # 'ckeditor_uploader',
-    #'oauth2_provider',
-    #'social_django',
-    #'rest_framework_social_oauth2',
+    # 'oauth2_provider',
+    # 'social_django',
+    # 'rest_framework_social_oauth2',
     # 'social_auth',
     # 'social_django',  # django social auth
     # 'rest_social_auth',  # this package
@@ -85,11 +86,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    #'social_django.middleware.SocialAuthExceptionMiddleware',
+    # 'social_django.middleware.SocialAuthExceptionMiddleware',
 
-    #'django.middleware.common.BrokenLinkEmailsMiddleware',
-    #'django.middleware.common.CommonMiddleware',
-    #'dataprocessing.CorsMiddleware',
+    # 'django.middleware.common.BrokenLinkEmailsMiddleware',
+    # 'django.middleware.common.CommonMiddleware',
+    # 'dataprocessing.CorsMiddleware',
 ]
 
 # MIDDLEWARE_CLASSES = [
@@ -109,8 +110,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                #'social_django.context_processors.backends',
-                #'social_django.context_processors.login_redirect',
+                # 'social_django.context_processors.backends',
+                # 'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -141,7 +142,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -155,7 +155,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -167,7 +166,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'dataprocessing.User'
-
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -209,7 +207,7 @@ SIMPLE_JWT = {
 }
 
 AUTHENTICATION_BACKENDS = [
-    #'social_core.backends.github.GithubOAuth2',
+    # 'social_core.backends.github.GithubOAuth2',
     'dataprocessing.social_auth_backend.FiwareAuth',
     'social_core.backends.facebook.FacebookOAuth2',
     'dataprocessing.itmo_backends.ItmoOAuth2',
@@ -238,11 +236,11 @@ AUTHENTICATION_BACKENDS = [
 # SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 
 AUTHENTICATION_BACKENDS = [
-        #'social_core.backends.github.GithubOAuth2',
-        # 'dataprocessing.social_auth_backend.FiwareAuth',
-        # 'social_core.backends.facebook.FacebookOAuth2',
-        # 'dataprocessing.itmo_backends.ItmoOAuth2',
-        'django.contrib.auth.backends.ModelBackend'
+    # 'social_core.backends.github.GithubOAuth2',
+    # 'dataprocessing.social_auth_backend.FiwareAuth',
+    # 'social_core.backends.facebook.FacebookOAuth2',
+    # 'dataprocessing.itmo_backends.ItmoOAuth2',
+    'django.contrib.auth.backends.ModelBackend'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -258,14 +256,14 @@ CORS_ORIGIN_ALLOW_ALL = True
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
-    #'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    #'SEND_ACTIVATION_EMAIL': True,
-    #'SERIALIZERS': {},
+    # 'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    # 'SEND_ACTIVATION_EMAIL': True,
+    # 'SERIALIZERS': {},
     'SET_USERNAME_RETYPE': True,
     'SERIALIZERS': {
         'user': 'dataprocessing.serializers.UserBaseSerializer',
         'current_user': 'dataprocessing.serializers.UserBaseSerializer',
-        #'user_create': 'dataprocessing.serializers.UserSerializer',
+        # 'user_create': 'dataprocessing.serializers.UserSerializer',
     },
 }
 
@@ -292,7 +290,7 @@ ISU = {
 BARS = {
     "BARS_LOGIN": env('BARS_LOGIN'),
     "BARS_PASSWORD": env('BARS_PASSWORD'),
-    "BARS_URL":env('BARS_URL'),
+    "BARS_URL": env('BARS_URL'),
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -300,7 +298,7 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = env("EMAIL_USE_TLS")
-#EMAIL_USE_SSL = env("EMAIL_USE_SSL")
+# EMAIL_USE_SSL = env("EMAIL_USE_SSL")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
@@ -322,4 +320,3 @@ sentry_sdk.init(
     # django.contrib.auth) you may enable sending PII data.
     send_default_pii=True
 )
-

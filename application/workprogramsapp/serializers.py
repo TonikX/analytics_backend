@@ -655,7 +655,8 @@ class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'type', 'selection_rule', 'change_blocks_of_work_programs_in_modules']
+        fields = ['id', 'name', 'type', 'selection_rule', 'change_blocks_of_work_programs_in_modules',
+                  'selection_parametr']
 
 
 class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
