@@ -273,7 +273,6 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
           const renderRow = (title: any, itemsArray: Array<any>) => {
             const allCreditUnits = itemsArray?.[0]?.ze_v_sem;
-            // const allCreditUnits = '0, 0, 1, 2, 3, 0, 2, 0, 0, 0';
             const creditUnitsArray = allCreditUnits?.split(', ')
             // @ts-ignore
             const indexFirstNumber1 = creditUnitsArray?.findIndex((item: number) => +item !== 0)

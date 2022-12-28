@@ -211,8 +211,16 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             const renderRow = (title: any, itemsArray: Array<any>) => {
               const duration = itemsArray?.[0]?.number_of_semesters;
               const allCreditUnits = itemsArray?.[0]?.ze_v_sem;
-              const creditUnits = allCreditUnits?.replaceAll(', ', ' ')?.replace(/0*$/,"")?.replace(/^0+/, '')?.trim()
+              const creditUnitsArray = allCreditUnits?.split(', ')
+              // @ts-ignore
+              const indexFirstNumber1 = creditUnitsArray?.findIndex((item: number) => +item !== 0)
+              const withoutZero1 = creditUnitsArray?.slice(indexFirstNumber1, creditUnitsArray.length)
+              const withoutZero1Reverse = withoutZero1?.reverse()
+              // @ts-ignore
+              const indexFirstNumber2 = withoutZero1Reverse?.findIndex((item: number) => +item !== 0)
+              const withoutZero2 = withoutZero1?.slice(indexFirstNumber2, withoutZero1.length)
 
+              const creditUnits = withoutZero2?.reverse()?.join(' ')
               return (
                 <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
                   <TableCell>
@@ -302,10 +310,16 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
       <>
         <TableRow>
           <TableCell  style={{ height: '40px'}} rowSpan={2} colSpan={canEdit ? 3 : 2} className={classes.moduleNameWrap}>
-            <Typography className={classes.moduleName} style={{ paddingLeft: level * 5 }}>
-              {'*'.repeat(level)}
-              {item?.name}
-            </Typography>
+            <Link className={classes.workProgramLink}
+                  to={appRouter.getTrainingModuleDetailLink(item?.[WorkProgramGeneralFields.ID])}
+                  target="_blank"
+            >
+              <Typography className={classes.moduleName} style={{ paddingLeft: level * 5 }}>
+                {'*'.repeat(level)}
+                {item?.name}
+              </Typography>
+            </Link>
+
           </TableCell>
           <TableCell />
           <TableCell />
@@ -326,7 +340,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                 {/*    </Button>*/}
                 {/*  ) : <></>*/}
                 {/*}*/}
-                {blockOfWorkPrograms?.length === 0 && level === 0 ? (
+                {level === 0 ? (
                   <Tooltip
                     title={`Открепить модуль`}>
                     <DeleteIcon className={classes.deleteIcon}
@@ -516,7 +530,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                          shrink: true,
                        }}
                        type="number"
-                       disabled={!canEdit || ['any_quantity', 'all'].includes(module?.[TrainingModuleFields.SELECTION_RULE])}
+                       disabled={['any_quantity', 'all'].includes(module?.[TrainingModuleFields.SELECTION_RULE])}
           /> : (
             this.state.selectionParameter?.length ? (
               <Typography>
