@@ -31,6 +31,7 @@ import EditedRow from "./EditableRow/EditableRow";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
+import {GIA_TITLES} from "../../Steps/MainInfo";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -152,15 +153,19 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 <DialogContent>
                     <div>
                         <InputLabel className={classes.label}>Название</InputLabel>
-                        <TextField label=""
-                                   onChange={this.saveField(CertificationFields.TITLE)}
-                                   variant="outlined"
-                                   fullWidth
-                                   value={state[CertificationFields.TITLE]}
-                                   InputLabelProps={{
-                                       shrink: true,
-                                   }}
-                        />
+                        <Select
+                            variant="outlined"
+                            fullWidth
+                            value={state[CertificationFields.TITLE]}
+                            // @ts-ignore
+                            onChange={this.saveField(CertificationFields.TITLE)}
+                        >
+                            {GIA_TITLES.map((item, index) =>
+                                <MenuItem value={item.value} key={`gia-title-${index}`}>
+                                    {item.label}
+                                </MenuItem>
+                            )}}
+                        </Select>
                     </div>
                     <div className={classes.marginTop20}>
                         <InputLabel className={classes.label}>Год</InputLabel>
