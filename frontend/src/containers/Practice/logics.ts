@@ -22,7 +22,7 @@ const getPractice = createLogic({
                 const erroredFields = getErroredFields(res.data);
                 dispatch(PracticeActions.setPractice(res.data));
                 dispatch(PracticeActions.setErroredFields(erroredFields));
-                const practiceBaseId = res.data[PracticeFields.PRACTICE_BASE] ?? 1;
+                const practiceBaseId = res.data[PracticeFields.PRACTICE_BASE].id ?? 1;
                 dispatch(PracticeActions.getTemplateText(practiceBaseId));
                 if (res.data[PracticeFields.PERMISSIONS_INFO][PermissionsInfoFields.USE_CHAT_WITH_ID_EXPERTISE]) {
                     dispatch(PracticeActions.getComments());

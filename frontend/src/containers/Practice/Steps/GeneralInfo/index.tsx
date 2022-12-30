@@ -13,11 +13,18 @@ import {
     LANGUAGES,
     PRACTICE_FORMATS,
     PRACTICE_KINDS,
+    PRACTICE_TITLES,
     PRACTICE_TYPES,
     PRACTICE_WAYS,
-    QUALIFICATIONS
+    QUALIFICATIONS,
 } from "../../constants";
 import StructuralUnit from "../../components/StructuralUnit";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell/TableCell";
+import TableBody from "@material-ui/core/TableBody";
+import TableContainer from "@material-ui/core/TableContainer";
 
 interface GeneralInfoProps extends WithStyles<typeof styles> {
     actions: PracticeActions;
@@ -43,17 +50,21 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
 
     render() {
 
-        const {classes, structuralUnitsList, fields} = this.props;
+        const {classes, fields} = this.props;
+        const semesterCount = fields[PracticeFields.SEMESTER_COUNT] || 0;
+        const semesterColumns = new Array(semesterCount).fill(0);
+        const ze = fields[PracticeFields.ZE_V_SEM] || "";
+        const zeColumns = ze.split(", ");
 
         return (
-            <div className={classes.content}>
+            <div className={classes.contentScroll}>
                 <Typography variant='h5'>
                     {PracticeSteps.GENERAL}
                 </Typography>
                 <div className={classes.columns}>
                     <div className={classes.leftColumn}>
                         <Input fieldName={PracticeFields.PRAC_ISU_ID} disabled/>
-                        <Input fieldName={PracticeFields.TITLE}/>
+                        <Select fieldName={PracticeFields.TITLE} metaList={PRACTICE_TITLES}/>
                         <Input fieldName={PracticeFields.YEAR}/>
                         <Input fieldName={PracticeFields.OP_LEADER}/>
                         <Select fieldName={PracticeFields.LANGUAGE} metaList={LANGUAGES}/>
@@ -73,6 +84,39 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                         <StructuralUnit/>
                     </div>
                 </div>
+                {
+                    semesterCount > 0 && (
+                        <TableContainer className={classes.table}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell rowSpan={2} className={classes.headerCell} colSpan={1}>
+                                            {' '}
+                                        </TableCell>
+                                        <TableCell className={classes.headerCell} colSpan={10}>
+                                            Семестр
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        {semesterColumns.map((item, index) =>
+                                            <TableCell className={classes.headerCell}>{index + 1}</TableCell>
+                                        )}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell className={classes.headerCell}>
+                                            Зачетные единицы
+                                        </TableCell>
+                                        {semesterColumns.map((item: any, index: number) =>
+                                            <TableCell className={classes.cell}>{zeColumns[index]}</TableCell>
+                                        )}
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    )
+                }
             </div>
         );
     }
