@@ -273,7 +273,16 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
           const renderRow = (title: any, itemsArray: Array<any>) => {
             const allCreditUnits = itemsArray?.[0]?.ze_v_sem;
-            const creditUnits = allCreditUnits?.replaceAll(', ', '')?.replace(/0*$/,"")?.replace(/^0+/, '')?.split("")?.join(" ")
+            const creditUnitsArray = allCreditUnits?.split(', ')
+            // @ts-ignore
+            const indexFirstNumber1 = creditUnitsArray?.findIndex((item: number) => +item !== 0)
+            const withoutZero1 = creditUnitsArray?.slice(indexFirstNumber1, creditUnitsArray.length)
+            const withoutZero1Reverse = withoutZero1?.reverse()
+            // @ts-ignore
+            const indexFirstNumber2 = withoutZero1Reverse?.findIndex((item: number) => +item !== 0)
+            const withoutZero2 = withoutZero1?.slice(indexFirstNumber2, withoutZero1.length)
+
+            const creditUnits = withoutZero2?.reverse()?.join(' ')
 
             return (
               <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
@@ -447,6 +456,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                                     />
                                 </Tooltip>
                             }
+                            <b>трудоемкость</b>&nbsp;{block[EducationalPlanBlockFields.LABORIOUSNESS]}
                           </div>
                         </TableCell>
                       </TableRow>
@@ -637,6 +647,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
           </Typography>
         ) : null }
 
+        {detailPlan?.[EducationalPlanFields.LABORIOUSNESS] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>Общая трудоемкость:</b> {detailPlan?.[EducationalPlanFields.LABORIOUSNESS]}
+          </Typography>
+        ) : null }
+
         {plan?.[EducationalPlanFields.PLAN_TYPE] ? (
           <Typography className={classes.trajectoryOwner}>
             <b>Тип плана:</b> {type}
@@ -702,6 +718,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     // @ts-ignore
     const canDownload = get(detailPlan, 'academic_plan_in_field_of_study[0].year', 0) >= 2023;
     const {tab} = this.state
+    const isValid = detailPlan?.[EducationalPlanFields.LABORIOUSNESS] === 240
 
     return (
       <Paper className={classes.root}>
@@ -712,9 +729,21 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
               Скачать учебный план
             </Button>}
             {canSendToValidate && canEdit && (
-              <Button onClick={this.sendToCheck} className={classes.buttonH32}>
-                Отправить на проверку
-              </Button>
+              isValid ?
+                <Button
+                  onClick={this.sendToCheck}
+                  className={classes.buttonH32}
+                >
+                  Отправить на проверку
+                </Button>
+              :
+                <Tooltip title="Общее число зачетных единиц не равно 240">
+                  <Button
+                    className={classes.buttonH32}
+                  >
+                    Отправить на проверку
+                  </Button>
+                </Tooltip>
             )}
             {canValidate && (
               <>

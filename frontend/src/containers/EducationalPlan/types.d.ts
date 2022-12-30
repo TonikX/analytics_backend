@@ -114,6 +114,7 @@ export type EducationalPlanType = {
   [EducationalPlanFields.CAN_EDIT]: boolean;
   [EducationalPlanFields.ID_RATING]: string;
   [EducationalPlanFields.RATING]: string;
+  [EducationalPlanFields.LABORIOUSNESS]: number;
   [EducationalPlanFields.DISCIPLINE_BLOCKS]: Array<DisciplineBlockType>;
 };
 
@@ -134,6 +135,7 @@ export type EducationalPlanListType = {
 export type DisciplineBlockType = {
   [EducationalPlanBlockFields.ID]: number;
   [EducationalPlanBlockFields.NAME]: string;
+  [EducationalPlanBlockFields.LABORIOUSNESS]: number;
   [EducationalPlanBlockFields.MODULES]: Array<ModuleType>;
 };
 

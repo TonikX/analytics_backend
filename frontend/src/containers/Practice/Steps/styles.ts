@@ -9,6 +9,10 @@ export default (theme: Theme) => createStyles({
     content: {
         height: '600px',
     },
+    contentScroll: {
+        maxHeight: '100%',
+        overflowY: 'auto',
+    },
     selectorWrap: {
         width: '100%',
         marginTop: '30px',
@@ -72,5 +76,25 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         padding: '10px',
         marginTop: '20px'
-    }
+    },
+    headerCell: {
+        border: '1px solid rgba(224, 224, 224, 1)',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+    cell: {
+        border: '1px solid rgba(224, 224, 224, 1)',
+        textAlign: 'center',
+    },
+    table: {
+        height: '100%',
+        overflow: 'hidden',
+        marginTop: '30px',
+        '& th': {
+            padding: '3px !important',
+        },
+        '& td': {
+            padding: '3px !important'
+        }
+    },
 });
