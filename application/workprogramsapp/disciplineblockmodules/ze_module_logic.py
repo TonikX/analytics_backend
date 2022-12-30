@@ -157,6 +157,8 @@ def calculate_wp_term(module, select_param=0, type_control="wp"):
         if not objs.exists():
             objs = change_block.gia.all()
             type_control = "gia"
+        if not objs.exists():
+            continue
         obj = objs[0]
         semesters = change_block.semester_start
         if obj.ze_v_sem:

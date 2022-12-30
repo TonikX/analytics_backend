@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete, pre_save
 from django.dispatch import receiver
 
 from dataprocessing.itmo_backends import isu_client_credentials_request
@@ -7,9 +7,11 @@ from dataprocessing.models import User
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
-from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Zun, WorkProgramIdStrUpForIsu
+from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Zun, WorkProgramIdStrUpForIsu, AcademicPlan, \
+    ImplementationAcademicPlan
 from workprogramsapp.notifications.emails.send_mail import mail_sender
-from workprogramsapp.notifications.models import ExpertiseNotification, NotificationComments
+from workprogramsapp.notifications.models import ExpertiseNotification, NotificationComments, \
+    AcademicPlanUpdateNotification
 
 
 def populate_models(sender, **kwargs):
@@ -143,3 +145,31 @@ def zun_saver(sender, instance, using, **kwargs):
                 print(wp_in_fs_id_str.id_str_up)
                 zun.wp_in_fs_saved_fk_id_str_up = wp_in_fs_id_str.id_str_up
                 zun.save()
+
+
+@receiver(pre_save, sender=AcademicPlan)
+def check_previous_mode(sender, instance, *args, **kwargs):
+    original_status = None
+    if instance.id:
+        original_status = AcademicPlan.objects.get(pk=instance.id).on_check
+
+    if instance.on_check != original_status and original_status in ["in_work", "on_check"]:
+        status = "instance.on_check"
+        if instance.on_check == "in_work":
+            status = "В работе"
+        elif instance.on_check == "on_check":
+            status = "На экспертизе"
+        elif instance.on_check == "verified":
+            status = "Одобрено"
+        imp = ImplementationAcademicPlan.objects.filter(academic_plan__id=instance.id)[0]
+        users = User.objects.filter(
+            implementation_academic_plan_block_modules__academic_plan__id=instance.id).distinct()
+        for user in users:
+            AcademicPlanUpdateNotification.objects.create(academic_plan=instance, user=user,
+                                                          message=f'Учебный план "{imp.title}" поменял свой статус на '
+                                                                  f'"{status}"')
+        user_to_send = users.filter(expertise_status_notification=True, do_email_notifications=True)
+        user_email = [user.email for user in user_to_send]
+        mail_sender(topic=f'Учебный план "{imp.title}" поменял свой статус.',
+                    text=f'Учебный план "{imp.title}" поменял свой статус на "{status}"\n https://op.itmo.ru/educational-plans/{instance.id}',
+                    emails=user_email, users=user_to_send)
