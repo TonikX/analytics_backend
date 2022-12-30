@@ -129,6 +129,7 @@ def process_gia(changeblock, level, ws):
             capture_exception(e)
             
         insert_cell_data(ws, level, "exam", changeblock.semester_start[0])
+        insert_cell_data(ws=ws, level=level, column_name="realizer", data=gia.structural_unit.short_name)
         level += 1
         return level
 
@@ -161,17 +162,21 @@ def process_practice(changeblock, level, ws):
             insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
         except Exception as e:
             capture_exception(e)
-            
-        list_of_tools = eval(practice.evaluation_tools_v_sem)
+        try:
+            list_of_tools = eval(practice.evaluation_tools_v_sem)
 
-        for i, el in enumerate(list_of_tools):
-            for tool_type in el:
-                tool_types[tool_type] += str(i + changeblock.semester_start[0])
-        insert_cell_data(ws, level, "exam", tool_types[1])
-        insert_cell_data(ws, level, "diff", tool_types[2])
-        insert_cell_data(ws, level, "credit", tool_types[3])
-        insert_cell_data(ws, level, "course_project", tool_types[4])
-        insert_cell_data(ws, level, "course_work", tool_types[5])
+            for i, el in enumerate(list_of_tools):
+                for tool_type in el:
+                    tool_types[tool_type] += str(i + changeblock.semester_start[0])
+            insert_cell_data(ws, level, "exam", tool_types[1])
+            insert_cell_data(ws, level, "diff", tool_types[2])
+            insert_cell_data(ws, level, "credit", tool_types[3])
+            insert_cell_data(ws, level, "course_project", tool_types[4])
+            insert_cell_data(ws, level, "course_work", tool_types[5])
+        except Exception as e:
+            capture_exception(e)
+
+        insert_cell_data(ws=ws, level=level, column_name="realizer", data=practice.structural_unit.short_name)
 
         level += 1
         return level
@@ -343,8 +348,8 @@ def module_inside_recursion(modules, level, ws, depth=0):
 
 
 def process_excel(academic_plan):
-    #wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\plan.xlsx")
-    wb_obj = openpyxl.load_workbook('/application/static-backend/export_template/academic_plan_template_2023.xlsx')
+    wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\plan.xlsx")
+    #wb_obj = openpyxl.load_workbook('/application/static-backend/export_template/academic_plan_template_2023.xlsx')
     ws = wb_obj["УП"]
     start_list = 7
     final_ze_by_term = [0 for _ in range(10)]

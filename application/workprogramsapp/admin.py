@@ -20,8 +20,8 @@ from .models import EducationalProgram, GeneralCharacteristics, Department, Prof
     SkillsOfRole, \
     Role, ProfessionalStandard, KindsOfActivity
 from .notifications.emails.models import SentMail
-from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments, EmailReset
-
+from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments, EmailReset, \
+    AcademicPlanUpdateNotification
 
 from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit, UniversityPartner
 
@@ -171,3 +171,4 @@ class AcademicPlanAdmin(admin.ModelAdmin):
 
 admin.site.register(PracticeInFieldOfStudy)
 admin.site.register(UniversityPartner)
+admin.site.register(AcademicPlanUpdateNotification)
