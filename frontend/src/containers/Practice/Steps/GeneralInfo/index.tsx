@@ -64,7 +64,9 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
                 <div className={classes.columns}>
                     <div className={classes.leftColumn}>
                         <Input fieldName={PracticeFields.PRAC_ISU_ID} disabled/>
-                        <Select fieldName={PracticeFields.TITLE} metaList={PRACTICE_TITLES}/>
+                        <Select fieldName={PracticeFields.TITLE} metaList={
+                            PRACTICE_TITLES.map((item) => ({value: item.label, label: item.label}))
+                        }/>
                         <Input fieldName={PracticeFields.YEAR}/>
                         <Input fieldName={PracticeFields.OP_LEADER}/>
                         <Select fieldName={PracticeFields.LANGUAGE} metaList={LANGUAGES}/>
