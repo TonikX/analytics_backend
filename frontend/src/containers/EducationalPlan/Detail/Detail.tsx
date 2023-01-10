@@ -48,7 +48,7 @@ import {getUserFullName} from "../../../common/utils";
 import {DirectionFields} from "../../Direction/enum";
 
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
-import {specializationObject} from "../../WorkProgram/constants";
+import {BACHELOR_QUALIFICATION, specializationObject} from "../../WorkProgram/constants";
 
 import {OPTIONALLY} from "../data";
 
@@ -718,7 +718,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     // @ts-ignore
     const canDownload = get(detailPlan, 'academic_plan_in_field_of_study[0].year', 0) >= 2023;
     const {tab} = this.state
-    const isValid = detailPlan?.[EducationalPlanFields.LABORIOUSNESS] === 240
+    const qualification = get(detailPlan, 'academic_plan_in_field_of_study[0].qualification', '')
+    const laboriousness = detailPlan?.[EducationalPlanFields.LABORIOUSNESS]
+    const isValid = qualification === BACHELOR_QUALIFICATION ? laboriousness === 240 : 120
 
     return (
       <Paper className={classes.root}>

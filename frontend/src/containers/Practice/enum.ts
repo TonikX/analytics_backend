@@ -126,6 +126,7 @@ export enum PracticeTypes {
     TEH_PROJ_TECH_INTET = 'teh-proj-tech-intet',
     TECH_PROJ_TECH = 'tech-proj-tech',
     SENIOR_INTER = 'senior-inter',
+    SENIOR_INTER_ENG = 'senior-inter-eng',
     EXPL = 'expl',
     INTER = 'inter',
 }
