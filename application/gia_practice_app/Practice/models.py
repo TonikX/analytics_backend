@@ -61,7 +61,7 @@ class Practice(models.Model):
     )
     formats = (
         ('dedicated', 'Выделенная '),
-        ('dispersed ', 'Рассредоточенная '),
+        ('dispersed', 'Рассредоточенная'),
     )
     types = (
         ('intro', 'ознакомительная'),
