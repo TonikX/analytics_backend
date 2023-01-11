@@ -2,6 +2,7 @@ import openpyxl
 from openpyxl.styles import Alignment, PatternFill, Side, Border, Font
 from sentry_sdk import capture_exception
 
+from analytics_project.settings import AP_FILE_ROUTE
 from workprogramsapp.disciplineblockmodules.ze_module_logic import recursion_module, generate_full_ze_list, \
     recursion_module_per_ze, sum_lists
 from workprogramsapp.models import DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
@@ -349,7 +350,7 @@ def module_inside_recursion(modules, level, ws, depth=0):
 
 def process_excel(academic_plan):
     #wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\plan.xlsx")
-    wb_obj = openpyxl.load_workbook('/application/static-backend/export_template/academic_plan_template_2023.xlsx')
+    wb_obj = openpyxl.load_workbook(AP_FILE_ROUTE)
     ws = wb_obj["УП"]
     start_list = 7
     final_ze_by_term = [0 for _ in range(10)]

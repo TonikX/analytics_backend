@@ -68,6 +68,10 @@ export const PRACTICE_TITLES = [
         label: 'Производственная, технологическая (проектно-технологическая) практика'
     },
     {
+        value: "sci-research-internship",
+        label: "Производственная, научно-исследовательская / Research Internship"
+    },
+    {
         value: "study-tech",
         label: 'Учебная, учебно-технологическая практика'
     },
