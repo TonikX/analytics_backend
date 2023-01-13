@@ -23,6 +23,7 @@ def ze_cutter(ze_wp):
 def generate_full_ze_list(ze_wp, semesters):
     possible_terms = []
     ze_wp = ze_cutter(ze_wp)
+
     for sem in semesters:
         list_of_ze = [0 for _ in range(10)]
         terms_counter = 0
@@ -31,6 +32,7 @@ def generate_full_ze_list(ze_wp, semesters):
                 list_of_ze[i] = ze_wp[terms_counter]
                 terms_counter += 1
         possible_terms.append(list_of_ze)
+
     if possible_terms:
         return possible_terms
     else:
