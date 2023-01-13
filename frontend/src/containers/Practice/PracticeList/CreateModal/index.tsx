@@ -163,7 +163,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             onChange={this.saveField(PracticeFields.TITLE)}
                         >
                             {PRACTICE_TITLES.map((item, index) =>
-                                <MenuItem value={item.value} key={`practice-title-${index}`}>
+                                <MenuItem value={item.label} key={`practice-title-${index}`}>
                                     {item.label}
                                 </MenuItem>
                             )}}
