@@ -239,7 +239,7 @@ def process_changeblock(changeblocks, level, ws):
                                       2)
                 insert_cell_data(ws=ws, level=level, column_name="contact_work", data=contact_hours)
 
-                seminary_hours = sum(lecture_list) + + sum(practice_list) + sum(lab_list) + 0  # sum(cons_list)
+                seminary_hours = sum(lecture_list) + + sum(practice_list) + sum(lab_list) + sum(cons_list)
                 insert_cell_data(ws=ws, level=level, column_name="seminary_sum", data=seminary_hours)
 
                 insert_cell_data(ws=ws, level=level, column_name="lecture", data=sum(lecture_list))
