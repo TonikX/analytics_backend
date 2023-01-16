@@ -9,7 +9,7 @@ from workprogramsapp.models import DisciplineBlock, DisciplineBlockModule, WorkP
     СertificationEvaluationTool, ImplementationAcademicPlan, FieldOfStudy
 from workprogramsapp.serializers import AcademicPlanSerializer
 
-color_list = ["8EA9DB", "B4C6E7", "D9E1F2", "E2E9EA"]
+color_list = ["8EA9DB", "B4C6E7", "D9E1F2",  "E2E9EA", "ECF0F8", "F2F2F2"]
 
 columns_dict = {
     "wp_id": {"column": 1},
