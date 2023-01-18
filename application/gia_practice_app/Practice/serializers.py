@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
 from dataprocessing.models import Items
-from dataprocessing.serializers import ItemSerializer
+from dataprocessing.serializers import ItemSerializer, userProfileSerializer
 from gia_practice_app.Practice.models import PracticeTemplate, Practice, PrerequisitesOfPractice, OutcomesOfPractice, \
     ZunPractice
 from gia_practice_app.logic import get_permissions_gia_practice

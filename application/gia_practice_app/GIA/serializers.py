@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
+from dataprocessing.serializers import userProfileSerializer
 from gia_practice_app.GIA.models import CriteriaVKR, GIABaseTemplate, GIA
 from gia_practice_app.logic import get_permissions_gia_practice
 from workprogramsapp.expertise.models import Expertise, UserExpertise
