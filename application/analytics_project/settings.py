@@ -304,7 +304,7 @@ SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 URL_FRONT = env("URL_FRONT")
-
+AP_FILE_ROUTE = env('AP_FILE_ROUTE')
 sentry_sdk.init(
     dsn=env("SENTRY_URL"),
     integrations=[

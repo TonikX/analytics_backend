@@ -359,6 +359,13 @@ class AcademicPlan(models.Model):
             print(db.id)
             DisciplineBlock.new_descipline_block_modules(db.id)
 
+    def get_all_changeblocks_from_ap(self):
+        changeblock_in_ap = WorkProgramChangeInDisciplineBlockModule.objects.none()
+        for block in DisciplineBlock.objects.filter(academic_plan__id=self.id):
+            for module in DisciplineBlockModule.objects.filter(descipline_block=block):
+                changeblock_in_ap = changeblock_in_ap | DisciplineBlockModule.get_all_changeblocks_from_module(module)
+        return changeblock_in_ap
+
 
 class EducationalProgram(models.Model):
     '''
@@ -782,7 +789,16 @@ class DisciplineBlockModule(CloneMixin, models.Model):
 
         return set_of_unit_id
 
-
+    @staticmethod
+    def get_all_changeblocks_from_module(module):
+        changeblocks_in_module = WorkProgramChangeInDisciplineBlockModule.objects.none()
+        if module.childs.exists():
+            for child in module.childs.all():
+                changeblocks_in_module = DisciplineBlockModule.get_all_changeblocks_from_module(child) | changeblocks_in_module
+        else:
+            return changeblocks_in_module | WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                discipline_block_module=module)
+        return changeblocks_in_module
 
 
 

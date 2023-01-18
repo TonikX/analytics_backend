@@ -4,7 +4,8 @@ from rest_framework import serializers
 from dataprocessing.models import User
 from workprogramsapp.expertise.common_serializers import ShortExpertiseSerializer
 from workprogramsapp.expertise.serializers import CommentSerializer, CommentSerializerFull
-from workprogramsapp.notifications.models import UserNotification, ExpertiseNotification, NotificationComments
+from workprogramsapp.notifications.models import UserNotification, ExpertiseNotification, NotificationComments, \
+    AcademicPlanUpdateNotification
 
 
 # Модели данных
@@ -13,6 +14,7 @@ from workprogramsapp.notifications.models import UserNotification, ExpertiseNoti
 
 class NotificationSerializer(serializers.ModelSerializer):
     expertise = serializers.SerializerMethodField()
+    academic_plan = serializers.SerializerMethodField()
     expertise_comment = serializers.SerializerMethodField()
     basic = serializers.SerializerMethodField()
 
@@ -32,13 +34,21 @@ class NotificationSerializer(serializers.ModelSerializer):
         except NotificationComments.DoesNotExist:
             return None
 
+    def get_academic_plan(self, instance):
+        try:
+            ap = AcademicPlanUpdateNotificationSerializer(
+                instance=AcademicPlanUpdateNotification.objects.get(usernotification_ptr_id=instance.id)).data
+            return ap
+        except AcademicPlanUpdateNotification.DoesNotExist:
+            return None
+
     def get_basic(self, instance):
         return NotificationCreateSerializer(
             instance=UserNotification.objects.get(id=instance.id)).data
 
     class Meta:
         model = UserNotification
-        fields = ["expertise_comment", "expertise", "basic"]
+        fields = ["expertise_comment", "expertise", "basic", "academic_plan"]
 
 
 class ExpertiseNotificationSerializer(serializers.ModelSerializer):
@@ -54,6 +64,12 @@ class ExpertiseCommentsNotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = NotificationComments
+        fields = "__all__"
+
+
+class AcademicPlanUpdateNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcademicPlanUpdateNotification
         fields = "__all__"
 
 

@@ -125,6 +125,7 @@ class ImplementationAcademicPlanCreateSerializer(serializers.ModelSerializer):
                 user.groups.add(module_group)
                 user.save()
         return updated_module
+
     class Meta:
         model = ImplementationAcademicPlan
         fields = "__all__"
@@ -667,7 +668,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
     def to_representation(self, value):
         self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
         self.fields["laboriousness"] = serializers.SerializerMethodField()
-        #self.fields["ze_by_sem"] = serializers.SerializerMethodField()
+        # self.fields["ze_by_sem"] = serializers.SerializerMethodField()
         return super().to_representation(value)
 
     def get_laboriousness(self, obj):
@@ -749,7 +750,7 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
         if instance.on_check == 'on_check' and not bool(
                 self.context['request'].user.groups.filter(name="expertise_master")):
             data["can_edit"] = False
-        elif self.context['request'].user in instance.academic_plan_in_field_of_study.filter()[0].editors.all() and\
+        elif self.context['request'].user in instance.academic_plan_in_field_of_study.filter()[0].editors.all() and \
                 instance.on_check != 'verified':
             data["can_edit"] = True
         elif self.context['request'].user.is_staff or bool(
@@ -757,7 +758,8 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
             data["can_edit"] = True
         else:
             data["can_edit"] = False
-        if instance.on_check == 'on_check' and bool(self.context['request'].user.groups.filter(name="expertise_master")):
+        if instance.on_check == 'on_check' and bool(
+                self.context['request'].user.groups.filter(name="expertise_master")):
             data["can_validate"] = True
         else:
             data["can_validate"] = False
@@ -940,6 +942,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     certification_evaluation_tools = СertificationEvaluationToolForWorkProgramSerializer(many=True)
     editors = userProfileSerializer(many=True)
     structural_unit = ShortStructuralUnitSerializer()
+    work_program_in_change_block_v2 = serializers.SerializerMethodField()
 
     class Meta:
         model = WorkProgram
@@ -953,13 +956,20 @@ class WorkProgramSerializer(serializers.ModelSerializer):
                   'practice_hours', 'lab_hours', 'srs_hours', 'bars', 'lecture_hours_v2',
                   'practice_hours_v2', 'lab_hours_v2', 'srs_hours_v2', 'contact_hours_v2', 'number_of_semesters',
                   'read_notifications',
-                  'implementation_format', "ze_v_sem", 'consultation_v2', 'moodle_link']
+                  'implementation_format', "ze_v_sem", 'consultation_v2', 'moodle_link',
+                  'work_program_in_change_block_v2']
 
     def create(self, validated_data):
         """
         Create and return a new `Snippet` instance, given the validated data.
         """
         return WorkProgram.objects.create(**validated_data)
+
+    def get_work_program_in_change_block_v2(self, instance):
+        serializers = DisciplineBlockModuleForWPinFSSerializer(DisciplineBlockModule.objects.filter
+                                                               (change_blocks_of_work_programs_in_modules__work_program=instance)
+                                                               , many=True)
+        return serializers.data
 
 
 class WorkProgramSerializerByName(serializers.ModelSerializer):

@@ -3,6 +3,7 @@ from collections import defaultdict
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
+from workprogramsapp.disciplineblockmodules.ze_module_logic import ze_cutter
 from workprogramsapp.expertise.models import Expertise
 from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, ImplementationAcademicPlan, \
     EvaluationTool
@@ -150,10 +151,11 @@ class AcademicPlansDescriptionWpSerializer(serializers.ModelSerializer):
     academic_plan_in_field_of_study = ImplementationAcademicPlanForStatisticSerializer(many=True)
 
     def get_wp_in_academic_plan(self, instance):
-        return WorkProgramDescriptionOnlySerializer(
-            instance=WorkProgram.objects.filter(
-                zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan=instance).distinct(),
-            many=True).data
+        wp_all = WorkProgram.objects.none()
+        for change in instance.get_all_changeblocks_from_ap():
+            wp_all = wp_all | change.work_program.all()
+        print(instance.id, len(wp_all))
+        return WorkProgramDescriptionOnlySerializer(instance=wp_all.distinct(), many=True).data
 
     class Meta:
         model = AcademicPlan
@@ -210,6 +212,37 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
 
     def get_work_programs(self, instance):
         request = self.context['request']
+        year_of_sending = int(request.query_params.get("year").split("/")[0])
+        plan_year = ImplementationAcademicPlan.objects.get(academic_plan=instance).year
+        wps = []
+        for changeblock in instance.get_all_changeblocks_from_ap():
+            semester_start = changeblock.semester_start
+            if not semester_start:
+                try:
+                    ze_list = changeblock.credit_units.split(",")
+                    for i, el in enumerate(ze_list):
+                        if int(el) != 0:
+                            semester_start = [i + 1]
+                except IndexError:
+                    semester_start = []
+                except AttributeError:
+                    semester_start = []
+            for wp in changeblock.work_program.all():
+                try:
+                    #print(wp.ze_v_sem, wp.title)
+                    ze_v_sem = [int(unit) for unit in wp.ze_v_sem.split(", ")]
+                    duration = len([el for el in ze_v_sem if el != 0])
+                except TypeError:
+                    continue
+                except AttributeError:
+                    continue
+                for sem in semester_start:
+                    if plan_year + sem // 2 <= year_of_sending <= plan_year + (sem + duration) // 2:
+                        wps.append(SuperShortWorkProgramSerializer(instance=wp, ).data)
+        return wps
+
+    """def get_work_programs(self, instance):
+        request = self.context['request']
         year_of_sending = request.query_params.get("year").split("/")[0]
         object_list = None
         wps_list = WorkProgram.objects.filter(
@@ -232,7 +265,7 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
             else:
                 object_list = wp_for_year
         object_list=object_list.distinct()
-        return SuperShortWorkProgramSerializer(instance=object_list, many=True).data
+        return SuperShortWorkProgramSerializer(instance=object_list, many=True).data"""
 
     class Meta:
         model = AcademicPlan
