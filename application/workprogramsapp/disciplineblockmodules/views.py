@@ -1,6 +1,7 @@
 # РПД
 from collections import OrderedDict
 
+from django.db import transaction
 from django.db.models import Q, QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg2 import openapi
@@ -9,6 +10,7 @@ from drf_yasg2.utils import swagger_auto_schema
 from rest_framework import generics, filters, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import MultiPartParser, JSONParser
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
@@ -20,7 +22,7 @@ from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockMo
     DisciplineBlockModuleUpdateForBlockRelationSerializer, \
     BodyParamsForDisciplineBlockModuleUpdateForBlockRelationSerializer
 from workprogramsapp.folders_ans_statistic.models import DisciplineBlockModuleInFolder
-from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock, ImplementationAcademicPlan
+from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock, ImplementationAcademicPlan, AcademicPlan
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsBlockModuleEditor, \
     IsAcademicPlanDeveloper
 
@@ -227,6 +229,54 @@ def InsertModule(request):
     cloned_module.save()
     serializer = DisciplineBlockModuleDetailSerializer(cloned_module)
     return Response(status=200, data=serializer.data)
+
+
+class InsertModuleInBlockAP(APIView):
+    permission_classes = [IsAdminUser]
+    my_tags = ["Discipline Blocks"]
+
+    discipline_block_name = openapi.Parameter('discipline_block_name', openapi.IN_FORM,
+                                              description="Имя блока",
+                                              type=openapi.TYPE_STRING)
+    modules = openapi.Parameter('modules', openapi.IN_FORM,
+                                description="массив id модулей",
+                                items=openapi.Items(type=openapi.TYPE_INTEGER),
+                                type=openapi.TYPE_ARRAY)
+    aps = openapi.Parameter('aps', openapi.IN_FORM,
+                            description="массив id планов",
+                            items=openapi.Items(type=openapi.TYPE_INTEGER),
+                            type=openapi.TYPE_ARRAY)
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=['version'],
+        properties={
+            'modules': openapi.Schema(type=openapi.TYPE_ARRAY,
+                                      items=openapi.Items(type=openapi.TYPE_INTEGER)),
+            'discipline_block_name': openapi.Schema(type=openapi.TYPE_STRING),
+            'aps': openapi.Schema(type=openapi.TYPE_ARRAY,
+                                  items=openapi.Items(type=openapi.TYPE_INTEGER)),
+        },
+    ),
+        responses={201: openapi.Response(description="count of created data", schema=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'count_of_added_modules': openapi.Schema(type=openapi.TYPE_INTEGER),
+
+            },
+        ))},
+        operation_description='Метод для добавления модуля во все указанные планы в определнный блок (по имени)')
+    @transaction.atomic
+    def post(self, request):
+        request_data = request.data
+        counter = 0
+        for ap in AcademicPlan.objects.filter(id__in=request_data["aps"]):
+            block = DisciplineBlock.objects.get(name=request_data["discipline_block_name"], academic_plan=ap.id)
+            for module_id in request_data['modules']:
+                DisciplineBlockModule.objects.get(id=module_id).descipline_block.add(block)
+                counter += 1
+
+        return Response(status=status.HTTP_201_CREATED, data={"count_of_added_modules": counter})
 
 
 class WorkWithBlocksApiView(APIView):
