@@ -84,6 +84,7 @@ class GIASerializer(serializers.ModelSerializer):
         self.fields['report_quality_marks'] = CriteriaVKRSerializer(required=False)
         self.fields['presentation_quality_marks'] = CriteriaVKRSerializer(required=False)
         self.fields['answers_quality_marks'] = CriteriaVKRSerializer(required=False)
+        self.fields['editors'] = userProfileSerializer(many=True)
         return super().to_representation(value)
 
     class Meta:

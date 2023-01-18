@@ -111,6 +111,7 @@ class PracticeSerializer(serializers.ModelSerializer):
         self.fields['outcomes'] = OutcomesOfPracticeSerializer(source='outcomesofpractice_set',
                                                                       many=True)
         self.fields['competences'] = SerializerMethodField()
+        self.fields['editors'] = userProfileSerializer(many=True)
         return super().to_representation(value)
 
     def get_competences(self, instance):
