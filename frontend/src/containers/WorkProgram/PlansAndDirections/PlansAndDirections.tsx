@@ -1,9 +1,5 @@
 import React from 'react';
-import get from 'lodash/get';
-
 import Scrollbars from "react-custom-scrollbars";
-
-import {Link} from "react-router-dom";
 
 import withStyles from '@material-ui/core/styles/withStyles';
 import Table from "@material-ui/core/Table";
@@ -14,8 +10,6 @@ import TableBody from "@material-ui/core/TableBody";
 import DownloadIcon from "@material-ui/icons/CloudDownloadOutlined";
 
 import {PlansAndDirectionsProps} from './types';
-import {appRouter} from "../../../service/router-service";
-
 import Service from '../service'
 
 import connect from './PlansAndDirections.connect';
@@ -24,12 +18,12 @@ import styles from './PlansAndDirections.styles';
 const service = new Service()
 
 class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
-  handleDownload = (item: any, planId: any) => {
+  handleDownload = ({opId, planId, year}: any) => {
     const fileLink = service.getDownloadFileLink({
       wpId: this.props.wpId,
-      directionId: item?.field_of_study?.[0]?.id,
+      directionId: opId,
       planId: planId,
-      year: item?.year,
+      year,
     });
 
     let tempLink = document.createElement('a');
@@ -57,6 +51,7 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                 <TableCell className={classes.header}>Образовательные программы</TableCell>
                 <TableCell className={classes.header}>Направления</TableCell>
                 <TableCell className={classes.header}>Год набора</TableCell>
+                <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -72,6 +67,7 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                       <TableCell >
                         {plan?.discipline_block_module?.id}
                       </TableCell>
+                      <TableCell />
                       <TableCell />
                       <TableCell />
                       <TableCell />
@@ -102,6 +98,18 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                         </TableCell>
                         <TableCell >
                           {opItem?.academic_plan?.academic_plan_in_field_of_study[0]?.year}
+                        </TableCell>
+                        <TableCell>
+                          <DownloadIcon
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => {
+                              this.handleDownload({
+                                year: opItem?.academic_plan?.academic_plan_in_field_of_study[0]?.year,
+                                opId: opItem?.academic_plan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.id,
+                                planId: opItem?.academic_plan?.id,
+                              })
+                            }}
+                          />
                         </TableCell>
                       </TableRow>
                     ))}
