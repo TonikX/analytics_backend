@@ -111,6 +111,10 @@ export const PRACTICE_TITLES = [
         value: "prod-proj",
         label: 'Производственная, проектная практика',
     },
+    {
+        value: "study-project-2",
+        label: 'Проектная работа',
+    },
 ];
 
 export const QUALIFICATIONS = [
