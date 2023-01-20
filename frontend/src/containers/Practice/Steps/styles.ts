@@ -97,4 +97,27 @@ export default (theme: Theme) => createStyles({
             padding: '3px !important'
         }
     },
+    editorsList: {
+        display: 'flex',
+        flexWrap: 'wrap'
+    },
+    editorItem: {
+        marginRight: '5px',
+        marginBottom: '10px'
+    },
+    editorTitle: {
+        fontSize: '14px',
+        fontWeight: 'bold',
+        marginBottom: 10
+    },
+    dialog: {
+        padding: 40,
+    },
+    addEditorButton: {
+        padding: '0px !important'
+    },
+
+    editorTitleRow: {
+        marginTop: '30px'
+    },
 });
