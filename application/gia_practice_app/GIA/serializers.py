@@ -86,6 +86,7 @@ class GIASerializer(serializers.ModelSerializer):
         self.fields['presentation_quality_marks'] = CriteriaVKRSerializer(required=False)
         self.fields['answers_quality_marks'] = CriteriaVKRSerializer(required=False)
         self.fields['editors'] = userProfileSerializer(many=True)
+        self.fields['gia_in_change_block'] = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True)
         return super().to_representation(value)
 
     class Meta:
