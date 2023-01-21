@@ -83,5 +83,28 @@ export default () => createStyles({
     },
     tooltipTop: {
         top: '20px',
-    }
+    },
+    editorsList: {
+        display: 'flex',
+        flexWrap: 'wrap'
+    },
+    editorItem: {
+        marginRight: '5px',
+        marginBottom: '10px'
+    },
+    editorTitle: {
+        fontSize: '14px',
+        fontWeight: 'bold',
+        marginBottom: 10
+    },
+    dialog: {
+        padding: 40,
+    },
+    addEditorButton: {
+        padding: '0px !important'
+    },
+
+    editorTitleRow: {
+        marginTop: '30px'
+    },
 });
