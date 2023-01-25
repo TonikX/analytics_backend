@@ -1,5 +1,6 @@
 import React from 'react';
 import Scrollbars from "react-custom-scrollbars";
+import {Link} from "react-router-dom";
 
 import withStyles from '@material-ui/core/styles/withStyles';
 import Table from "@material-ui/core/Table";
@@ -11,6 +12,7 @@ import DownloadIcon from "@material-ui/icons/CloudDownloadOutlined";
 
 import {PlansAndDirectionsProps} from './types';
 import Service from '../service'
+import {appRouter} from '../../../service/router-service';
 
 import connect from './PlansAndDirections.connect';
 import styles from './PlansAndDirections.styles';
@@ -61,10 +63,10 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                 if (opList.length === 0) {
                   return (
                     <TableRow>
-                      <TableCell >
+                      <TableCell>
                         {plan?.discipline_block_module?.name}
                       </TableCell>
-                      <TableCell >
+                      <TableCell>
                         {plan?.discipline_block_module?.id}
                       </TableCell>
                       <TableCell />
@@ -82,7 +84,13 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                         {index === 0 ?
                           <>
                             <TableCell rowSpan={opList.length}>
-                              {plan?.discipline_block_module?.name}
+                              <Link
+                                to={appRouter.getTrainingModuleDetailLink(plan?.discipline_block_module?.id)}
+                                target="_blank"
+                                className={classes.cellLink}
+                              >
+                                {plan?.discipline_block_module?.name}
+                              </Link>
                             </TableCell>
                             <TableCell rowSpan={opList.length}>
                               {plan?.discipline_block_module?.id}
@@ -91,7 +99,13 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                           : null
                         }
                         <TableCell>
-                          {opItem?.academic_plan?.academic_plan_in_field_of_study[0]?.title}
+                          <Link
+                            to={appRouter.getPlanDetailLink(opItem?.academic_plan?.id)}
+                            target="_blank"
+                            className={classes.cellLink}
+                          >
+                            {opItem?.academic_plan?.academic_plan_in_field_of_study[0]?.title}
+                          </Link>
                         </TableCell>
                         <TableCell>
                           {opItem?.academic_plan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}

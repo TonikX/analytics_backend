@@ -231,7 +231,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                     }}
                                                 >
                                                     <MenuItem className={classes.menuLinkItem}>
-                                                        <Link to={appRouter.getPlanDetailLink(plan[EducationalPlanFields.ID])}>
+                                                        <Link to={appRouter.getPlanDetailLink(plan[EducationalPlanFields.ID])} target="_blank">
                                                             <EyeIcon className={classes.menuIcon}/>
                                                             Смотреть детально
                                                         </Link>
