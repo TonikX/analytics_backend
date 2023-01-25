@@ -24,6 +24,9 @@ export default (theme: Theme) => createStyles({
             width: '100px !important'
         }
     },
+    root: {
+        height: '100%'
+    },
     columns: {
         display: "flex",
     },

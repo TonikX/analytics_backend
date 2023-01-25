@@ -15,6 +15,7 @@ import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
 import Assessment from "./Steps/Assessment";
 import Literature from "./Steps/Literature";
 import Prerequisites from "./Steps/Prerequisites";
+import PlansAndDirections from "./Steps/PlansAndDirections";
 import React from "react";
 import Competences from "./Steps/Competences";
 import Results from "./Steps/Results";
@@ -368,6 +369,10 @@ export const STEPS = [
     {
         name: PracticeSteps.REFERENCES,
         component: <Literature/>,
+    },
+    {
+        name: PracticeSteps.PLANS,
+        component: <PlansAndDirections/>,
     },
     {
         name: PracticeSteps.COMPETENCES,

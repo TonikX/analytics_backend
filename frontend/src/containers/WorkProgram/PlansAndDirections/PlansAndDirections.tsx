@@ -64,7 +64,13 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                   return (
                     <TableRow>
                       <TableCell>
-                        {plan?.discipline_block_module?.name}
+                        <Link
+                          to={appRouter.getTrainingModuleDetailLink(plan?.discipline_block_module?.id)}
+                          target="_blank"
+                          className={classes.cellLink}
+                        >
+                          {plan?.discipline_block_module?.name}
+                        </Link>
                       </TableCell>
                       <TableCell>
                         {plan?.discipline_block_module?.id}
