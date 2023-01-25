@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 from pathlib import Path
 
@@ -466,10 +467,11 @@ class AcademicPlanGenerateXlsx(generics.ListAPIView):
         imp = ImplementationAcademicPlan.objects.filter(academic_plan=academic_plan).order_by("-id")[0]
         fos = imp.field_of_study.all()[0]
         filename = f"{fos.number} {fos.title}.xlsx"
-        wb_obj = process_excel(academic_plan)
+        wb_obj, errors = process_excel(academic_plan)
         response = HttpResponse(content=save_virtual_workbook(wb_obj),
                                 content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
         response['Content-Disposition'] = 'inline; filename="%s"' % str(filename)
+        response['X-Extra-Info-JSON'] = json.dumps(errors, ensure_ascii=False)
 
         # wb_obj.save(response)
         return response

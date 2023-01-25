@@ -9,7 +9,7 @@ from workprogramsapp.models import DisciplineBlock, DisciplineBlockModule, WorkP
     СertificationEvaluationTool, ImplementationAcademicPlan, FieldOfStudy
 from workprogramsapp.serializers import AcademicPlanSerializer
 
-color_list = ["8EA9DB", "B4C6E7", "D9E1F2",  "E2E9EA", "ECF0F8", "F2F2F2"]
+color_list = ["8EA9DB", "B4C6E7", "D9E1F2", "E2E9EA", "ECF0F8", "F2F2F2"]
 
 columns_dict = {
     "wp_id": {"column": 1},
@@ -41,6 +41,7 @@ columns_dict = {
     "realisation_language": {"column": 64},
 
 }
+ERR_DICT = {"wp_err": []}
 
 
 def fill_row(ws, level, color, bold=False):
@@ -128,7 +129,7 @@ def process_gia(changeblock, level, ws):
             insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
         except Exception as e:
             capture_exception(e)
-            
+
         insert_cell_data(ws, level, "exam", changeblock.semester_start[0])
         insert_cell_data(ws=ws, level=level, column_name="realizer", data=gia.structural_unit.short_name)
         level += 1
@@ -217,10 +218,11 @@ def process_changeblock(changeblocks, level, ws):
 
                 wp_ze_by_term = generate_full_ze_list(ze, changeblock.semester_start)[0]
                 insert_cell_data_range(ws, level, "ze_by_term", wp_ze_by_term)
+            except AttributeError:
+                ERR_DICT["wp_err"].append(f"В РПД {wp.id} зачетные единицы указаны в некорректном формате")
             except Exception as e:
                 capture_exception(e)
             process_evaluation_tools(ws, level, wp, None, changeblock.semester_start[0] - 1)
-
 
             try:
                 extend_list = [0 for _ in range(10)]
@@ -233,7 +235,8 @@ def process_changeblock(changeblocks, level, ws):
                     insert_cell_data(ws=ws, level=level, column_name="consultations", data=sum(cons_list))
                 except Exception as e:
                     cons_list = [0]
-                    print("cons", str(e))
+                    ERR_DICT["wp_err"].append(f"В РПД {wp.id} часы консультаций отсутсвуют"
+                                              f" или указаны в неверном формате")
 
                 contact_hours = round((sum(lecture_list) + sum(practice_list) + sum(lab_list) + sum(cons_list)) * 1.1,
                                       2)
@@ -263,6 +266,9 @@ def process_changeblock(changeblocks, level, ws):
             try:
                 insert_cell_data(ws=ws, level=level, column_name="percent_seminary",
                                  data=round(float((seminary_hours) / (sum_ze * 36)) * 100, 2))
+            except ZeroDivisionError:
+                ERR_DICT["wp_err"].append(f"В РПД {wp.id} не удалось подсчитать сумму зачетных единиц. "
+                                          f"Проверьте, указаны ли они в рабочей программе корретно")
             except Exception as e:
                 capture_exception(e)
 
@@ -349,7 +355,8 @@ def module_inside_recursion(modules, level, ws, depth=0):
 
 
 def process_excel(academic_plan):
-    #wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\plan.xlsx")
+    ERR_DICT["wp_err"] = []
+    # wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\plan.xlsx")
     wb_obj = openpyxl.load_workbook(AP_FILE_ROUTE)
     ws = wb_obj["УП"]
     start_list = 7
@@ -412,4 +419,4 @@ def process_excel(academic_plan):
                      data=f'Язык реализации ОП: {language}',
                      do_line_merge=False)
 
-    return wb_obj
+    return wb_obj, ERR_DICT
