@@ -333,6 +333,7 @@ class AcademicPlan(models.Model):
                                related_name='academic_plan_author', blank=True, null=True)
     ap_isu_id = models.PositiveIntegerField(verbose_name="ID учебного плана в ИСУ", blank=True, null=True)
     on_check = models.CharField(max_length=1024, verbose_name="Статус проверки", choices=check_status, default="in_work")
+    excel_generation_errors = JSONField(blank=True, null=True, verbose_name="Список ошибок в УП")
 
     # TODO: Добавить год набора
 

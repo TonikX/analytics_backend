@@ -471,7 +471,9 @@ class AcademicPlanGenerateXlsx(generics.ListAPIView):
         response = HttpResponse(content=save_virtual_workbook(wb_obj),
                                 content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
         response['Content-Disposition'] = 'inline; filename="%s"' % str(filename)
-        response['X-Extra-Info-JSON'] = json.dumps(errors, ensure_ascii=False)
+        academic_plan.excel_generation_errors = errors
+        academic_plan.save()
+
 
         # wb_obj.save(response)
         return response
