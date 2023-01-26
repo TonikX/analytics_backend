@@ -303,6 +303,7 @@ export const RussianPracticeFields = {
     [PracticeFields.PREREQUISITES]: 'Пререквизиты',
     [PracticeFields.COMPETENCES]: 'Компетенции',
     [PracticeFields.OUTCOMES]: 'Результаты',
+    [PracticeFields.PLANS]: 'Учебные планы и направления',
 };
 
 export const fieldToStep = new Map(Object.entries({
