@@ -1,3 +1,5 @@
+from sentry_sdk import capture_exception
+
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
 from workprogramsapp.models import WorkProgram, WorkProgramChangeInDisciplineBlockModule
@@ -132,14 +134,19 @@ def recursion_module(obj):
             for changeblock in WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=obj):
                 unit_final_sum += sum([int(unit) for unit in changeblock.credit_units.split(", ")])
 
-    except AttributeError:
-        print("a")
-    except IndexError:
-        print("a")
-    except ValueError:
-        print("v")
-    except TypeError:
-        print("t")
+
+    except AttributeError as e:
+        print("a", e)
+        capture_exception(e)
+    except IndexError as e:
+        print("i", e)
+        capture_exception(e)
+    except ValueError as e:
+        print("v", e)
+        capture_exception(e)
+    except TypeError as e:
+        print("t", e)
+        capture_exception(e)
     return unit_final_sum
 
 
@@ -209,10 +216,11 @@ def calculate_ze_term(matrix, matrix_lab, matrix_lecture, matrix_practice, matri
             if matrix_practice.tolist():
                 max_practice_by_term[i] += matrix_practice[max_index, i]
             if matrix_cons.tolist():
+                # У нас в рпд есть строчки с пустыми консультациями, они вот так и обрабатываются
                 try:
                     max_cons_by_term[i] += matrix_cons[max_index, i]
                 except Exception as e:
-                    print(str(e))
+                    pass
             if param_counter == select_param:
                 break
     return max_ze_by_term, max_lab_by_term, max_lecture_by_term, max_practice_by_term, max_cons_by_term
@@ -291,13 +299,18 @@ def recursion_module_per_ze(obj):
             _, max_res = find_min_max_ze_by_term(obj)
             max_ze_total = sum_lists(max_ze_total, max_res)
 
-    except AttributeError:
-        print("a")
-    except IndexError:
-        print("i")
-    except ValueError:
-        print("v")
-    except TypeError:
-        print("t")
+
+    except AttributeError as e:
+        print("a", e)
+        capture_exception(e)
+    except IndexError as e:
+        print("i", e)
+        capture_exception(e)
+    except ValueError as e:
+        print("v", e)
+        capture_exception(e)
+    except TypeError as e:
+        print("t", e)
+        capture_exception(e)
 
     return max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons
