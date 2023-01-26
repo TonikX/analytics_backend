@@ -219,10 +219,11 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
             semester_start = changeblock.semester_start
             if not semester_start:
                 try:
-                    ze_list = changeblock.credit_units.split(",")
+                    ze_list = changeblock.credit_units.split(", ")
                     for i, el in enumerate(ze_list):
                         if int(el) != 0:
                             semester_start = [i + 1]
+                            break
                 except IndexError:
                     semester_start = []
                 except AttributeError:
@@ -237,7 +238,8 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
                 except AttributeError:
                     continue
                 for sem in semester_start:
-                    if plan_year + sem // 2 <= year_of_sending <= plan_year + (sem + duration) // 2:
+                    sem = sem-1
+                    if plan_year + sem // 2 <= year_of_sending <= plan_year + (sem + duration-1) // 2:
                         wps.append(SuperShortWorkProgramSerializer(instance=wp, ).data)
         return wps
 
