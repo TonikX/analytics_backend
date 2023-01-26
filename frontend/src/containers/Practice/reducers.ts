@@ -52,6 +52,7 @@ export const initialState: practicePageState = {
         [PracticeFields.PREREQUISITES]: [],
         [PracticeFields.COMPETENCES]: [],
         [PracticeFields.OUTCOMES]: [],
+        [PracticeFields.PLANS]: [],
     },
     templateText: {
         [TemplateTextPracticeFields.ID]: 1,
