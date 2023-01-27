@@ -20,9 +20,12 @@ class IsuService:
         self.academic_plan_headers_url = "https://disc.itmo.su/api/v1/academic_plans_heading"
         self.grant_type = "client_credentials"
 
-    def get_access_token(self):
+    def get_access_token(self, add_headers=None):
         auth_data = {"client_id": self.isu_user.client_id, "client_secret": self.isu_user.client_secret,
                      "grant_type": self.grant_type}
+        if add_headers:
+            for key, value in add_headers:
+                auth_data[key] = value
         response = requests.post(self.auth_url, auth_data).text
         self.token = json.loads(response)["access_token"]
         self.expires_in = json.loads(response)["expires_in"]

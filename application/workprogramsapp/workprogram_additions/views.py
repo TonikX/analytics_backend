@@ -138,7 +138,7 @@ def CopyContentOfWorkProgram(request):
 
         #new_wp.hoursFirstSemester = old_wp.hoursFirstSemester
         #new_wp.hoursSecondSemester = old_wp.hoursSecondSemester
-        #new_wp.description = old_wp.description
+        new_wp.description = old_wp.description
         new_wp.video = old_wp.video
         #new_wp.credit_units = old_wp.credit_units
         #new_wp.semester_hour = old_wp.semester_hour
