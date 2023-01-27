@@ -52,14 +52,15 @@ def process_headers(headers: list):
         # print("IMP----------->", imp, created)
         if created:
             imp.field_of_study.add(field_of_study)
+        print(ap_header)
         imp.plan_type = ap_header["plan_type"]
-        imp.ns_id = ap_header["ns_id"]
-        imp.op_isu_id = ap_header["edu_program_id"]
-        imp.training_period = ap_header["training_period"]
+        imp.ns_id = int(ap_header["ns_id"])
+        imp.op_isu_id = int(ap_header["edu_program_id"])
+        imp.training_period = int(ap_header["training_period"])
         imp.language = language
         imp.military_department = bool(ap_header)
         imp.title = ap_header["edu_program_name"]
-        imp.total_intensity = total_intensity,
+        imp.total_intensity = int(total_intensity)
         imp.academic_plan = academic_plan
         imp.year = 2023
         imp.qualification = qualification_name
