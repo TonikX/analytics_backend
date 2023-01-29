@@ -260,7 +260,10 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     }
   };
   renderBlockOfWP = (blockOfWorkPrograms: any, level: number) => {
-    const {classes} = this.props
+    const {classes, detailPlan} = this.props
+
+    const qualification = get(detailPlan, 'academic_plan_in_field_of_study[0].qualification', '');
+    const maxSem = qualification === BACHELOR_QUALIFICATION ? 8 : 4;
 
     return (
       <>
@@ -269,7 +272,12 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
           const gia = blockOfWorkProgram?.gia || [];
           const practice = blockOfWorkProgram?.practice || [];
           const semesterStart = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START]?.join(', ');
+          const semesterStartArray = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START];
           const type = blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
+          const duration = blockOfWorkProgram?.work_program?.[0]?.number_of_semesters;
+          const semError = semesterStartArray?.some((item: any) => {
+            return (duration + item) > (maxSem + 1)
+          })
 
           const renderRow = (title: any, itemsArray: Array<any>) => {
             const allCreditUnits = itemsArray?.[0]?.ze_v_sem;
@@ -294,8 +302,14 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                 <TableCell style={{width: '190px'}}>
                   {creditUnits}
                 </TableCell>
-                <TableCell>
-                  {semesterStart}
+                <TableCell className={semError ? classes.error : undefined}>
+                  {semError ? (
+                    <Tooltip title='Обучение по этой дисциплине выходит за рамки обучения специалиста'>
+                      <div style={{ width: '30px' }}>
+                        {semesterStart}
+                      </div>
+                    </Tooltip>
+                  ) : semesterStart}
                 </TableCell>
                 <TableCell>
                   {type === OPTIONALLY ? '-' : '+'}
@@ -711,6 +725,44 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     )
   }
 
+  checkSemestersDuration = () => {
+    const {detailPlan} = this.props;
+    const qualification = get(detailPlan, 'academic_plan_in_field_of_study[0].qualification', '');
+    const maxSem = qualification === BACHELOR_QUALIFICATION ? 8 : 4;
+
+    return detailPlan?.discipline_blocks_in_academic_plan?.some((item: any) => {
+      return item?.modules_in_discipline_block?.some((item: any) => {
+        return item?.change_blocks_of_work_programs_in_modules.some((item: any) => {
+          const semesterStart = item?.semester_start;
+          const duration = item?.work_program?.[0]?.number_of_semesters;
+          return semesterStart?.some((item: any) => {
+            return (duration + item) > (maxSem + 1)
+          })
+        })
+      })
+    })
+  }
+
+  getValidationErrors = () => {
+    const {detailPlan} = this.props;
+    //@ts-ignore
+    const qualification = detailPlan?.academic_plan_in_field_of_study?.[0]?.qualification
+    const laboriousness = detailPlan?.[EducationalPlanFields.LABORIOUSNESS]
+
+    const errors = []
+    const isValidSemesterDuration = this.checkSemestersDuration();
+    const isValidLaboriousness = qualification === BACHELOR_QUALIFICATION ? laboriousness === 240 : 12
+
+    if (!isValidLaboriousness) {
+      errors.push('Общее число зачетных единиц не равно 240')
+    }
+
+    if (isValidSemesterDuration) {
+      errors.push('Проверьте длительность дисциплины и сестры начала в модулях')
+    }
+
+    return errors;
+  }
   render() {
     const {classes, blocks, detailPlan, trajectoryRoute, user, direction, canSendToValidate, canValidate, statusInfo} = this.props;
     const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
@@ -718,9 +770,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     // @ts-ignore
     const canDownload = get(detailPlan, 'academic_plan_in_field_of_study[0].year', 0) >= 2023;
     const {tab} = this.state
-    const qualification = get(detailPlan, 'academic_plan_in_field_of_study[0].qualification', '')
-    const laboriousness = detailPlan?.[EducationalPlanFields.LABORIOUSNESS]
-    const isValid = qualification === BACHELOR_QUALIFICATION ? laboriousness === 240 : 120
+    const validationErrors = this.getValidationErrors()
 
     return (
       <Paper className={classes.root}>
@@ -731,7 +781,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
               Скачать учебный план
             </Button>}
             {canSendToValidate && canEdit && (
-              isValid ?
+              validationErrors.length === 0 ?
                 <Button
                   onClick={this.sendToCheck}
                   className={classes.buttonH32}
@@ -739,7 +789,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                   Отправить на проверку
                 </Button>
               :
-                <Tooltip title="Общее число зачетных единиц не равно 240">
+                <Tooltip title={validationErrors.map((item: any) => <>{item} <br/> </>)}>
                   <Button
                     className={classes.buttonH32}
                   >

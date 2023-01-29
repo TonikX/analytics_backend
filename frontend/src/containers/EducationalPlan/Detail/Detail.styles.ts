@@ -38,6 +38,9 @@ export default (theme: Theme) => createStyles({
     color: theme.palette.primary.main,
     fontWeight: 500
   },
+  error: {
+    color: theme.palette.secondary.main,
+  },
   rowBlock: {
     display: 'flex',
     alignItems: 'center',
