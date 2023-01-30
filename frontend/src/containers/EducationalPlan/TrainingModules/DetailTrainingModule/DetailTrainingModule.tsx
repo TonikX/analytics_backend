@@ -236,7 +236,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   </TableCell>
                   <TableCell>
                     {hasSemesterError ? (
-                      <Tooltip title="Превышена длительность">
+                      <Tooltip title="Обучение по этой дисциплине выходит за рамки обучения (длительность дисциплины больше допустимой в данном семестре)">
                         <span className={classes.semesterError}>{duration}</span>
                       </Tooltip>
                     ) : duration}
@@ -246,7 +246,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                   </TableCell>
                   <TableCell>
                     {hasSemesterError ? (
-                      <Tooltip title="Превышена длительность">
+                      <Tooltip title="Обучение по этой дисциплине выходит за рамки обучения (длительность дисциплины больше допустимой в данном семестре)">
                         <span className={classes.semesterError}>
                           {semesterStart}
                         </span>
