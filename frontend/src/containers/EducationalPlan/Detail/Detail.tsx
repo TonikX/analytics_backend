@@ -304,7 +304,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                 </TableCell>
                 <TableCell className={semError ? classes.error : undefined}>
                   {semError ? (
-                    <Tooltip title='Обучение по этой дисциплине выходит за рамки обучения специалиста'>
+                    <Tooltip title='Обучение по этой дисциплине выходит за рамки обучения (длительность дисциплины больше допустимой в данном семестре)'>
                       <div style={{ width: '30px' }}>
                         {semesterStart}
                       </div>
