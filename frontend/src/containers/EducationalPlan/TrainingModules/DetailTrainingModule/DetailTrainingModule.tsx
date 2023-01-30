@@ -51,8 +51,7 @@ import EvaluationTools from '../EvaluationTools'
 import AddEducationalProgramModal from "../AddEducationalProgramModal/AddEducationalProgramModal";
 import AddTrainingModuleModal from "../AddTrainingModuleModal/AddTrainingModuleModal";
 import {TrainingModuleType} from "../types";
-import {QUALIFICATIONS} from "../../../Practice/constants";
-import {specializationObject} from "../../../WorkProgram/constants";
+import {BACHELOR_QUALIFICATION, specializationObject} from "../../../WorkProgram/constants";
 import {Checkbox, FormControlLabel} from "@material-ui/core";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
@@ -207,9 +206,12 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             const practice = blockOfWorkProgram?.practice || [];
             const semesterStart = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START]?.join(', ');
             const type = blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
+            const semesterStartArr = blockOfWorkProgram?.semester_start
+            const qualification = blockOfWorkProgram?.work_program?.[0]?.qualification
 
             const renderRow = (title: any, itemsArray: Array<any>) => {
               const duration = itemsArray?.[0]?.number_of_semesters;
+
               const allCreditUnits = itemsArray?.[0]?.ze_v_sem;
               const creditUnitsArray = allCreditUnits?.split(', ')
               // @ts-ignore
@@ -221,6 +223,10 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               const withoutZero2 = withoutZero1?.slice(indexFirstNumber2, withoutZero1.length)
 
               const creditUnits = withoutZero2?.reverse()?.join(' ')
+
+              const semesterAvailableCount = qualification === BACHELOR_QUALIFICATION ? 9 : 5;
+              const hasSemesterError = semesterStartArr.some((item: any) => ((item + duration) > semesterAvailableCount));
+
               return (
                 <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
                   <TableCell>
@@ -229,13 +235,23 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                     </div>
                   </TableCell>
                   <TableCell>
-                    {duration}
+                    {hasSemesterError ? (
+                      <Tooltip title="Превышена длительность">
+                        <span className={classes.semesterError}>{duration}</span>
+                      </Tooltip>
+                    ) : duration}
                   </TableCell>
                   <TableCell>
                     {creditUnits}
                   </TableCell>
                   <TableCell>
-                    {semesterStart}
+                    {hasSemesterError ? (
+                      <Tooltip title="Превышена длительность">
+                        <span className={classes.semesterError}>
+                          {semesterStart}
+                        </span>
+                      </Tooltip>
+                    ) : semesterStart}
                   </TableCell>
                   <TableCell>
                     {type === OPTIONALLY ? '-' : '+'}
