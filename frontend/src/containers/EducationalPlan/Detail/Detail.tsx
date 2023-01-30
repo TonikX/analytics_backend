@@ -758,7 +758,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     }
 
     if (isValidSemesterDuration) {
-      errors.push('Проверьте длительность дисциплины и сестры начала в модулях')
+      errors.push('Проверьте длительность дисциплины и семестры начала в модулях')
     }
 
     return errors;
