@@ -827,6 +827,10 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
           </Typography>
         </div>
 
+        <Typography className={classes.noteText}>
+          Если Вы включили модуль, который использовался в учебных планах 2018-2022 года, в учебный план 2023 года набора, возможны коллизии в данных, т.к. если этот план обновится в одному году, он обновится и для планов других годов набора. <b>Рекомендуем делать разные модули для разных годов набора.</b>
+        </Typography>
+
         <Tabs value={tab} onChange={(e, value) => this.setState({tab: value})}>
           <Tab value="1" label="Главная" />
           <Tab value="2" label="Учебный план" />

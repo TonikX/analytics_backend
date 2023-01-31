@@ -80,10 +80,14 @@ export default (theme: Theme) => createStyles({
   title: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: '20px',
+    marginBottom: '10px',
     '& p': {
       fontSize: '24px',
     }
+  },
+  noteText: {
+    color: theme.palette.secondary.main,
+    marginBottom: '20px',
   },
   titleIcon: {
     marginLeft: '10px',
