@@ -24,7 +24,7 @@ class IsuService:
         auth_data = {"client_id": self.isu_user.client_id, "client_secret": self.isu_user.client_secret,
                      "grant_type": self.grant_type}
         if add_headers:
-            for key, value in add_headers:
+            for key, value in add_headers.items():
                 auth_data[key] = value
         response = requests.post(self.auth_url, auth_data).text
         self.token = json.loads(response)["access_token"]

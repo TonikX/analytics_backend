@@ -226,7 +226,7 @@ def process_changeblock(changeblocks, level, ws):
             try:
                 process_evaluation_tools(ws, level, wp, None, changeblock.semester_start[0] - 1)
             except IndexError as e:
-                print("what happened", e)
+                #print("what happened", e)
                 ERR_DICT["wp_err"].append(f'В РПД {wp.id} "{wp.title}" не указан семестр начала изучения дисциплины')
 
             try:

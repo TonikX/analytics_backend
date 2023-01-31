@@ -4,10 +4,12 @@ from typing import Dict
 
 import pandas
 from django.conf import settings
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -15,10 +17,12 @@ from workprogramsapp.isu_merge.academic_plan_headers import process_headers
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_excel_creator import AcademicPlanExcelCreator
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_processor import AcademicPlanUpdateProcessor
 from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
+from workprogramsapp.isu_merge.post_to_isu.ap_to_isu import ap_isu_generate_dict
+from workprogramsapp.isu_merge.serializers import IsuHistoryListViewSerializer
 from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan, \
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
     WorkProgramInFieldOfStudy, Zun, AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, \
-    AcademicPlanUpdateConfiguration
+    AcademicPlanUpdateConfiguration, IsuObjectsSendLogger
 from workprogramsapp.serializers import AcademicPlanUpdateLogSerializer, AcademicPlanUpdateConfigurationSerializer, \
     AcademicPlanUpdateSchedulerConfigurationSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
@@ -129,6 +133,7 @@ class FileUploadAPIView(APIView):
     """
     API-endpoint для загрузки файла sub_2019_2020_new
     """
+
     # @transaction.atomic
     def post(self, request):
         print('- Импортируем csv файл')
@@ -170,8 +175,10 @@ class FileUploadAPIView(APIView):
                 print('-- Уровень образования', qualification)
 
                 print('--- проверяем если ОП уже существует в БД')
-                if FieldOfStudy.objects.filter(number=data['ШИФР_НАПРАВЛЕНИЯ'][i], qualification=qualification).exists():
-                    fs_obj = FieldOfStudy.objects.get(number=data['ШИФР_НАПРАВЛЕНИЯ'][i], qualification=qualification) #todo добавить ОБЩАЯ_ТРУДОЕМКОСТЬ
+                if FieldOfStudy.objects.filter(number=data['ШИФР_НАПРАВЛЕНИЯ'][i],
+                                               qualification=qualification).exists():
+                    fs_obj = FieldOfStudy.objects.get(number=data['ШИФР_НАПРАВЛЕНИЯ'][i],
+                                                      qualification=qualification)  # todo добавить ОБЩАЯ_ТРУДОЕМКОСТЬ
                 else:
                     # Записываем в БД новую ОП
                     fs_obj = FieldOfStudy(number=data['ШИФР_НАПРАВЛЕНИЯ'][i],
@@ -190,7 +197,7 @@ class FileUploadAPIView(APIView):
                     wp_obj = WorkProgram(title=data['ДИСЦИПЛИНА'][i].strip(),
                                          subject_code=data['НОМЕР'][i],
                                          qualification=qualification,
-                                         #credit_units=",".join(map(str, data['ЗЕ_В_СЕМЕСТРАХ'][i]))
+                                         # credit_units=",".join(map(str, data['ЗЕ_В_СЕМЕСТРАХ'][i]))
                                          )
                     print("--- РПД создана")
                     wp_obj.save()
@@ -240,8 +247,6 @@ class FileUploadAPIView(APIView):
                 # wp_obj.lab_hours = str(lab_array)[1:-1].replace(" ", "")
                 # wp_obj.srs_hours = str(srs_array)[1:-1].replace(" ", "")
 
-
-
                 print('-- Работа с образовательной программой')
 
                 if data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find("Русский") != -1 and data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find(
@@ -256,11 +261,16 @@ class FileUploadAPIView(APIView):
                 elif data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip() == "Немецкий":
                     op_language = "de"
 
-                if ImplementationAcademicPlan.objects.filter(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i], ap_isu_id=int(data['ИД_УП'][i]),
-                                                             year=data['ГОД_НАБОРА'][i], language = op_language, qualification=qualification).exists():
-                    iap_obj = ImplementationAcademicPlan.objects.get(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i], ap_isu_id=int(data['ИД_УП'][i]),
-                                                                   year=data['ГОД_НАБОРА'][i], language = op_language, qualification=qualification)
-                    iap_obj.op_isu_id = int(data['ОП_ИД'][i]) #todo: вернуть нс-ид (+) + записать название ОП сюда "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА" + язык + вуз партнер
+                if ImplementationAcademicPlan.objects.filter(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
+                                                             ap_isu_id=int(data['ИД_УП'][i]),
+                                                             year=data['ГОД_НАБОРА'][i], language=op_language,
+                                                             qualification=qualification).exists():
+                    iap_obj = ImplementationAcademicPlan.objects.get(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
+                                                                     ap_isu_id=int(data['ИД_УП'][i]),
+                                                                     year=data['ГОД_НАБОРА'][i], language=op_language,
+                                                                     qualification=qualification)
+                    iap_obj.op_isu_id = int(data['ОП_ИД'][
+                                                i])  # todo: вернуть нс-ид (+) + записать название ОП сюда "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА" + язык + вуз партнер
                     iap_obj.ap_isu_id = int(data['ИД_УП'][i])
                     iap_obj.ns_id = int(data['НС_ИД'][i])
                     iap_obj.title = data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i]
@@ -268,7 +278,8 @@ class FileUploadAPIView(APIView):
                     iap_obj.save()
                 else:
                     iap_obj = ImplementationAcademicPlan(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
-                                                         year=data['ГОД_НАБОРА'][i], language=op_language, qualification=qualification)
+                                                         year=data['ГОД_НАБОРА'][i], language=op_language,
+                                                         qualification=qualification)
                     iap_obj.op_isu_id = int(data['ОП_ИД'][i])
                     iap_obj.ap_isu_id = int(data['ИД_УП'][i])
                     iap_obj.ns_id = int(data['НС_ИД'][i])
@@ -276,39 +287,40 @@ class FileUploadAPIView(APIView):
                     iap_obj.save()
                     iap_obj.field_of_study.add(fs_obj)
                     iap_obj.save()
-                #print('Связь учебного плана и направления: done')
+                # print('Связь учебного плана и направления: done')
 
                 print('-- Работа с учебным планом')
-                print('dsssss', AcademicPlan.objects.filter(ap_isu_id = int(data['ИД_УП'][i])))
+                print('dsssss', AcademicPlan.objects.filter(ap_isu_id=int(data['ИД_УП'][i])))
 
-                if AcademicPlan.objects.filter(ap_isu_id = int(data['ИД_УП'][i])).exists():
-                    ap_obj = AcademicPlan.objects.get(ap_isu_id = int(data['ИД_УП'][i]))
+                if AcademicPlan.objects.filter(ap_isu_id=int(data['ИД_УП'][i])).exists():
+                    ap_obj = AcademicPlan.objects.get(ap_isu_id=int(data['ИД_УП'][i]))
                     # ap_obj.ap_isu_id=int(data['ИД_УП'][i]) #todo: НЕ переносим в ImplementationAcademicPlan +
                     # ap_obj.save()
                     iap_obj.academic_plan = ap_obj
                     iap_obj.save()
-                    print('id учебного плана',ap_obj.ap_isu_id)
+                    print('id учебного плана', ap_obj.ap_isu_id)
                 else:
                     ap_obj = AcademicPlan()
-                    #ap_obj.academic_plan_in_field_of_study.set(iap_obj)
-                    #iap_obj.academic_plan = ap_obj
-                    #ap_obj.typelearning = 'internal'
-                    ap_obj.ap_isu_id=int(data['ИД_УП'][i])
+                    # ap_obj.academic_plan_in_field_of_study.set(iap_obj)
+                    # iap_obj.academic_plan = ap_obj
+                    # ap_obj.typelearning = 'internal'
+                    ap_obj.ap_isu_id = int(data['ИД_УП'][i])
                     ap_obj.save()
                     print('------')
                     iap_obj.academic_plan = ap_obj
                     iap_obj.save()
                     ap_count += 1
-                #print('Учебный план: ', ap_obj)
+                # print('Учебный план: ', ap_obj)
 
                 print('-- Работа с блоком')
-                if DisciplineBlock.objects.filter(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan=ap_obj).exists():
+                if DisciplineBlock.objects.filter(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(),
+                                                  academic_plan=ap_obj).exists():
                     db = DisciplineBlock.objects.get(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan=ap_obj)
                 else:
                     db = DisciplineBlock(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan_id=ap_obj.id, )
                     db.save()
 
-                #print('Блок: ', db)
+                # print('Блок: ', db)
                 print('-- Работа с модулями')
                 print('из данных', str(data['МОДУЛЬ'][i]))
 
@@ -316,7 +328,7 @@ class FileUploadAPIView(APIView):
                 mdb = DisciplineBlockModule.objects.get(pk=mdb_id)
                 mdb.descipline_block.add(db)
 
-                #print('Модуль в блоке: ', mdb)
+                # print('Модуль в блоке: ', mdb)
                 print('-- Работа с блок-модулем')
                 if data['ВЫБОР'][i] == 0:
                     option = 'Required'
@@ -325,20 +337,21 @@ class FileUploadAPIView(APIView):
                 print("Выборность", option)
 
                 if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                        discipline_block_module=mdb, change_type=option, subject_code = data['НОМЕР'][i]).exists()):
+                        discipline_block_module=mdb, change_type=option, subject_code=data['НОМЕР'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
-                                                                                       change_type=option, subject_code = data['НОМЕР'][i]
+                                                                                       change_type=option,
+                                                                                       subject_code=data['НОМЕР'][i]
                                                                                        )
                     if WorkProgramInFieldOfStudy.objects.filter(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
-                        #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
+                        # wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                         wpinfs.save()
                     else:
                         wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
                                                            work_program=wp_obj)
-                        #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
+                        # wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                         wpinfs.save()
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=mdb,
                                                                              change_type=option,
@@ -346,11 +359,12 @@ class FileUploadAPIView(APIView):
                                                                              ).exists():
                     print('exist', wp_obj)
                     wpinfs = WorkProgramInFieldOfStudy.objects.get(
-                        work_program_change_in_discipline_block_module=WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
-                                                                                                                            change_type=option,
-                                                                                                                            work_program=wp_obj
-                                                                                                                            ), work_program=wp_obj)
-                    #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
+                        work_program_change_in_discipline_block_module=WorkProgramChangeInDisciplineBlockModule.objects.get(
+                            discipline_block_module=mdb,
+                            change_type=option,
+                            work_program=wp_obj
+                        ), work_program=wp_obj)
+                    # wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                     wpinfs.save()
                 else:
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
@@ -364,7 +378,7 @@ class FileUploadAPIView(APIView):
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
-                        #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
+                        # wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                         wpinfs.save()
                         print("Нашли рпд в направлении", wpinfs)
                     else:
@@ -373,9 +387,13 @@ class FileUploadAPIView(APIView):
                         wpinfs.save()
                         print("Сохранили рпд в направлении", wpinfs)
                 try:
-                    WorkProgramIdStrUpForIsu.objects.get(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs)
+                    WorkProgramIdStrUpForIsu.objects.get(id_str_up=int(data['ИД_СТР_УП'][i]),
+                                                         ns_id=int(data['НС_ИД'][i]),
+                                                         work_program_in_field_of_study=wpinfs)
                 except WorkProgramIdStrUpForIsu.DoesNotExist:
-                    wpinfs_id_str_up = WorkProgramIdStrUpForIsu(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs)
+                    wpinfs_id_str_up = WorkProgramIdStrUpForIsu(id_str_up=int(data['ИД_СТР_УП'][i]),
+                                                                ns_id=int(data['НС_ИД'][i]),
+                                                                work_program_in_field_of_study=wpinfs)
                     wpinfs_id_str_up.number = data['НОМЕР'][i]
                     wpinfs_id_str_up.ze_v_sem = data['ЗЕ_В_СЕМЕСТРАХ'][i].strip("()")
                     wpinfs_id_str_up.lec_v_sem = data['ЛЕК_В_СЕМЕСТРАХ'][i].strip("()")
@@ -564,7 +582,7 @@ class FileUploadOldVersionAPIView(APIView):
         fs_count, wp_count, ap_count = 0, 0, 0
         for i in list(data.index.values):
             try:
-                #print('clone', clone)
+                # print('clone', clone)
                 print('-- Новая СТРОКА')
                 if data['УРОВЕНЬ_ОБРАЗОВАНИЯ'][i].strip() == 'Академический бакалавр':
                     qualification = 'bachelor'
@@ -574,27 +592,30 @@ class FileUploadOldVersionAPIView(APIView):
                     qualification = 'specialist'
                 print('-- Уровень образования', qualification)
                 print('--- проверяем если ОП уже существует в БД')
-                if FieldOfStudy.objects.filter(number=data['ШИФР_НАПРАВЛЕНИЯ'][i], qualification=qualification).exists():
-                    fs_obj = FieldOfStudy.objects.get(number=data['ШИФР_НАПРАВЛЕНИЯ'][i], qualification=qualification) #todo добавить ОБЩАЯ_ТРУДОЕМКОСТЬ
+                if FieldOfStudy.objects.filter(number=data['ШИФР_НАПРАВЛЕНИЯ'][i],
+                                               qualification=qualification).exists():
+                    fs_obj = FieldOfStudy.objects.get(number=data['ШИФР_НАПРАВЛЕНИЯ'][i],
+                                                      qualification=qualification)  # todo добавить ОБЩАЯ_ТРУДОЕМКОСТЬ
                 else:
                     # Записываем в БД новую ОП
-                    fs_obj = FieldOfStudy(number=data['ШИФР_НАПРАВЛЕНИЯ'][i], title=data['НАПРАВЛЕНИЕ_ПОДГОТОВКИ'][i].strip(),
+                    fs_obj = FieldOfStudy(number=data['ШИФР_НАПРАВЛЕНИЯ'][i],
+                                          title=data['НАПРАВЛЕНИЕ_ПОДГОТОВКИ'][i].strip(),
                                           qualification=qualification)
                     fs_obj.save()
                     fs_count += 1
                 try:
                     try:
-                        wp = WorkProgram.objects.get(id = int(data['ИД_НАШ'][i]))
+                        wp = WorkProgram.objects.get(id=int(data['ИД_НАШ'][i]))
                         wp_obj = wp
                     except:
-                        wp = WorkProgram.objects.get(discipline_code = int(data['DISC_DISC_ID'][i]))
+                        wp = WorkProgram.objects.get(discipline_code=int(data['DISC_DISC_ID'][i]))
                         wp_obj = wp
                     print('--- РПД найдена')
                 except:
                     print('--- РПД не найдена')
                     wp_obj = WorkProgram(title=data['ДИСЦИПЛИНА'][i].strip(),
                                          subject_code=data['НОМЕР'][i], qualification=qualification,
-                                         #credit_units=",".join(map(str, data['ЗЕ_В_СЕМЕСТРАХ'][i]))
+                                         # credit_units=",".join(map(str, data['ЗЕ_В_СЕМЕСТРАХ'][i]))
                                          )
                     print("--- РПД создана")
                     wp_obj.save()
@@ -608,14 +629,14 @@ class FileUploadOldVersionAPIView(APIView):
                     all_ze_indexes_in_rpd = 0
                     lecture_hours_v2 = [0, 0, 0, 0]
                     for i in hours:
-                        #print('ze', ze)
-                        if ze[all_ze_indexes_in_rpd]>=1.0:
+                        # print('ze', ze)
+                        if ze[all_ze_indexes_in_rpd] >= 1.0:
                             print('условие сработало')
                             lecture_hours_v2[sem] = i
-                            sem +=1
-                        all_ze_indexes_in_rpd +=1
+                            sem += 1
+                        all_ze_indexes_in_rpd += 1
 
-                    #print('lecture_hours_v2', lecture_hours_v2)
+                    # print('lecture_hours_v2', lecture_hours_v2)
                     return str(lecture_hours_v2).strip("[]")
 
                 def semesters(ze):
@@ -623,17 +644,25 @@ class FileUploadOldVersionAPIView(APIView):
                     sem = 0
                     for i in ze:
                         if i > 0:
-                            sem +=1
+                            sem += 1
                     return sem
 
-                wp_obj.number_of_semesters = int(semesters([float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")]))
-                wp_obj.lecture_hours_v2 = watchmaker([float(x) for x in (data['ЛЕК_В_СЕМЕСТРАХ'][i]).strip("()").split(",")], [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
+                wp_obj.number_of_semesters = int(
+                    semesters([float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")]))
+                wp_obj.lecture_hours_v2 = watchmaker(
+                    [float(x) for x in (data['ЛЕК_В_СЕМЕСТРАХ'][i]).strip("()").split(",")],
+                    [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
                 print('Записаны часы лекций:', wp_obj.lecture_hours_v2)
-                wp_obj.practice_hours_v2 = watchmaker([float(x) for x in (data['ПРАК_В_СЕМЕСТРАХ'][i]).strip("()").split(",")], [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
+                wp_obj.practice_hours_v2 = watchmaker(
+                    [float(x) for x in (data['ПРАК_В_СЕМЕСТРАХ'][i]).strip("()").split(",")],
+                    [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
                 print('Записаны часы практик:', wp_obj.practice_hours_v2)
-                wp_obj.lab_hours_v2 = watchmaker([float(x) for x in (data['ЛАБ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")], [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
+                wp_obj.lab_hours_v2 = watchmaker(
+                    [float(x) for x in (data['ЛАБ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")],
+                    [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
                 print('Записаны часы лаб:', wp_obj.lab_hours_v2)
-                wp_obj.srs_hours_v2 = watchmaker([float(x) for x in (data['СРС'][i]).strip("()").split(",")], [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
+                wp_obj.srs_hours_v2 = watchmaker([float(x) for x in (data['СРС'][i]).strip("()").split(",")],
+                                                 [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
                 print('Записаны часы срс:', wp_obj.srs_hours_v2)
                 wp_obj.discipline_code = data['DISC_DISC_ID'][i]
                 if StructuralUnit.objects.filter(title=str(data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip())):
@@ -642,8 +671,10 @@ class FileUploadOldVersionAPIView(APIView):
                     print('Структурное подразделение записалось')
                     st_unit.save()
                 else:
-                    StructuralUnit.objects.create(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip(), isu_id=int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i]))
-                    st_unit = StructuralUnit.objects.get(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip(), isu_id=int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i]))
+                    StructuralUnit.objects.create(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip(),
+                                                  isu_id=int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i]))
+                    st_unit = StructuralUnit.objects.get(title=data['ИСПОЛНИТЕЛЬ_ДИС'][i].strip(),
+                                                         isu_id=int(data['ИД_ИСПОЛНИТЕЛЯ_ДИС'][i]))
                     print('Структурное подразделение выбралось')
                 wp_obj.structural_unit = st_unit
                 wp_obj.save()
@@ -660,43 +691,50 @@ class FileUploadOldVersionAPIView(APIView):
                 elif data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip() == "Немецкий":
                     op_language = "de"
                 print('-- 11')
-                if ImplementationAcademicPlan.objects.filter(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i], ap_isu_id=int(data['ИД_УП'][i]),
-                                                             year=data['ГОД_НАБОРА'][i], language = op_language, qualification=qualification).exists():
-                    iap_obj=ImplementationAcademicPlan.objects.get(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i], ap_isu_id=int(data['ИД_УП'][i]),
-                                                                   year=data['ГОД_НАБОРА'][i], language = op_language, qualification=qualification)
-                    iap_obj.op_isu_id=int(data['ОП_ИД'][i]) #todo: вернуть нс-ид (+) + записать название ОП сюда "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА" + язык + вуз партнер
-                    iap_obj.ap_isu_id=int(data['ИД_УП'][i])
+                if ImplementationAcademicPlan.objects.filter(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
+                                                             ap_isu_id=int(data['ИД_УП'][i]),
+                                                             year=data['ГОД_НАБОРА'][i], language=op_language,
+                                                             qualification=qualification).exists():
+                    iap_obj = ImplementationAcademicPlan.objects.get(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
+                                                                     ap_isu_id=int(data['ИД_УП'][i]),
+                                                                     year=data['ГОД_НАБОРА'][i], language=op_language,
+                                                                     qualification=qualification)
+                    iap_obj.op_isu_id = int(data['ОП_ИД'][
+                                                i])  # todo: вернуть нс-ид (+) + записать название ОП сюда "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА" + язык + вуз партнер
+                    iap_obj.ap_isu_id = int(data['ИД_УП'][i])
                     iap_obj.ns_id = int(data['НС_ИД'][i])
                     iap_obj.title = data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i]
                     iap_obj.field_of_study.add(fs_obj)
                     iap_obj.save()
                 else:
                     iap_obj = ImplementationAcademicPlan(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
-                                                         year=data['ГОД_НАБОРА'][i], language = op_language, qualification=qualification)
-                    iap_obj.op_isu_id=int(data['ОП_ИД'][i])
-                    iap_obj.ap_isu_id=int(data['ИД_УП'][i])
+                                                         year=data['ГОД_НАБОРА'][i], language=op_language,
+                                                         qualification=qualification)
+                    iap_obj.op_isu_id = int(data['ОП_ИД'][i])
+                    iap_obj.ap_isu_id = int(data['ИД_УП'][i])
                     iap_obj.ns_id = int(data['НС_ИД'][i])
                     iap_obj.title = data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i]
                     iap_obj.save()
                     iap_obj.field_of_study.add(fs_obj)
                     iap_obj.save()
-                #print('Связь учебного плана и направления: done')
+                # print('Связь учебного плана и направления: done')
                 print('-- Работа с учебным планом')
-                if AcademicPlan.objects.filter(ap_isu_id = int(data['ИД_УП'][i])).exists():
-                    ap_obj = AcademicPlan.objects.get(ap_isu_id = int(data['ИД_УП'][i]))
+                if AcademicPlan.objects.filter(ap_isu_id=int(data['ИД_УП'][i])).exists():
+                    ap_obj = AcademicPlan.objects.get(ap_isu_id=int(data['ИД_УП'][i]))
                     iap_obj.academic_plan = ap_obj
                     iap_obj.save()
-                    print('id учебного плана',ap_obj.ap_isu_id)
+                    print('id учебного плана', ap_obj.ap_isu_id)
                 else:
                     ap_obj = AcademicPlan()
-                    ap_obj.ap_isu_id=int(data['ИД_УП'][i])
+                    ap_obj.ap_isu_id = int(data['ИД_УП'][i])
                     ap_obj.save()
                     print('------')
                     iap_obj.academic_plan = ap_obj
                     iap_obj.save()
                     ap_count += 1
                 print('-- Работа с блоком')
-                if DisciplineBlock.objects.filter(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan=ap_obj).exists():
+                if DisciplineBlock.objects.filter(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(),
+                                                  academic_plan=ap_obj).exists():
                     db = DisciplineBlock.objects.get(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan=ap_obj)
                 else:
                     db = DisciplineBlock(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan_id=ap_obj.id, )
@@ -724,31 +762,33 @@ class FileUploadOldVersionAPIView(APIView):
                     option = 'Optionally'
 
                 if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                        discipline_block_module=mdb, change_type=option, subject_code = data['НОМЕР'][i]).exists()):
+                        discipline_block_module=mdb, change_type=option, subject_code=data['НОМЕР'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
-                                                                                       change_type=option, subject_code = data['НОМЕР'][i]
+                                                                                       change_type=option,
+                                                                                       subject_code=data['НОМЕР'][i]
                                                                                        )
                     if WorkProgramInFieldOfStudy.objects.filter(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
-                        #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
+                        # wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                         wpinfs.save()
                     else:
                         wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
                                                            work_program=wp_obj)
-                        #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
+                        # wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                         wpinfs.save()
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=mdb,
                                                                              change_type=option,
                                                                              work_program=wp_obj
                                                                              ).exists():
                     wpinfs = WorkProgramInFieldOfStudy.objects.get(
-                        work_program_change_in_discipline_block_module=WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
-                                                                                                                            change_type=option,
-                                                                                                                            work_program=wp_obj
-                                                                                                                            ), work_program=wp_obj)
-                    #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
+                        work_program_change_in_discipline_block_module=WorkProgramChangeInDisciplineBlockModule.objects.get(
+                            discipline_block_module=mdb,
+                            change_type=option,
+                            work_program=wp_obj
+                        ), work_program=wp_obj)
+                    # wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                     wpinfs.save()
                 else:
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
@@ -762,7 +802,7 @@ class FileUploadOldVersionAPIView(APIView):
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
-                        #wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
+                        # wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                         wpinfs.save()
                         print("Нашли рпд в направлении", wpinfs)
                     else:
@@ -772,9 +812,13 @@ class FileUploadOldVersionAPIView(APIView):
                         print("Сохранили рпд в направлении", wpinfs)
                 try:
                     print('ddd')
-                    WorkProgramIdStrUpForIsu.objects.get(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs)
+                    WorkProgramIdStrUpForIsu.objects.get(id_str_up=int(data['ИД_СТР_УП'][i]),
+                                                         ns_id=int(data['НС_ИД'][i]),
+                                                         work_program_in_field_of_study=wpinfs)
                 except WorkProgramIdStrUpForIsu.DoesNotExist:
-                    wpinfs_id_str_up = WorkProgramIdStrUpForIsu(id_str_up = int(data['ИД_СТР_УП'][i]), ns_id = int(data['НС_ИД'][i]), work_program_in_field_of_study = wpinfs)
+                    wpinfs_id_str_up = WorkProgramIdStrUpForIsu(id_str_up=int(data['ИД_СТР_УП'][i]),
+                                                                ns_id=int(data['НС_ИД'][i]),
+                                                                work_program_in_field_of_study=wpinfs)
                     wpinfs_id_str_up.number = data['НОМЕР'][i]
                     wpinfs_id_str_up.dis_id = int(data['ДИС_ИД'][i])
                     wpinfs_id_str_up.ze_v_sem = data['ЗЕ_В_СЕМЕСТРАХ'][i].strip("()")
@@ -788,8 +832,8 @@ class FileUploadOldVersionAPIView(APIView):
                     wpinfs_id_str_up.save()
                 except:
                     print('---- Ошибка с количеством WorkProgramIdStrUpForIsu.id_str_up')
-                for zun in Zun.objects.filter(wp_in_fs_saved_fk_id_str_up = int(data['ИД_СТР_УП'][i])):
-                    zun.wp_in_fs =  wpinfs
+                for zun in Zun.objects.filter(wp_in_fs_saved_fk_id_str_up=int(data['ИД_СТР_УП'][i])):
+                    zun.wp_in_fs = wpinfs
                     zun.save()
                 print('Рабочая программа дисциплины записана в модуль: done')
             except Exception as e:
@@ -812,3 +856,28 @@ class UpdateAcademicPlansHeadersView(APIView):
         plans_created = process_headers(headers)
 
         return Response(data={"plans_created": plans_created}, status=200)
+
+
+class SendAcademicPlansLinesToIsu(APIView):
+    """
+        {
+        "ap_id": INT
+        }
+        """
+    permission_classes = [IsAdminUser]
+
+    def post(self, request):
+        request_data = request.data
+        ap = AcademicPlan.objects.get(id=request_data["ap_id"])
+        plans_created = ap_isu_generate_dict(ap)
+
+        return Response(data={"plans_created": plans_created}, status=200)
+
+
+class IsuHistoryListView(ListAPIView):
+    queryset = IsuObjectsSendLogger.objects.all()
+    serializer_class = IsuHistoryListViewSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filterset_fields = ["error_status",'date_of_sending', 'obj_id', "obj_type", "date_of_sending"]
+    search_fields = ["error_status", "obj_id", "obj_type", "date_of_sending"]
+    permission_classes = [IsAdminUser]

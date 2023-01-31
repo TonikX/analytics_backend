@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.postgres.fields import JSONField, ArrayField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils import timezone
 from model_clone import CloneMixin
 from rest_framework.exceptions import ValidationError
 
@@ -19,7 +20,7 @@ def current_year():
 
 
 def max_value_current_year(value):
-    return MaxValueValidator(current_year()+2)(value)
+    return MaxValueValidator(current_year() + 2)(value)
 
 
 class WorkProgram(CloneMixin, models.Model):
@@ -332,7 +333,8 @@ class AcademicPlan(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Автор учебного плана', on_delete=models.CASCADE,
                                related_name='academic_plan_author', blank=True, null=True)
     ap_isu_id = models.PositiveIntegerField(verbose_name="ID учебного плана в ИСУ", blank=True, null=True)
-    on_check = models.CharField(max_length=1024, verbose_name="Статус проверки", choices=check_status, default="in_work")
+    on_check = models.CharField(max_length=1024, verbose_name="Статус проверки", choices=check_status,
+                                default="in_work")
     excel_generation_errors = JSONField(blank=True, null=True, verbose_name="Список ошибок в УП")
 
     # TODO: Добавить год набора
@@ -638,7 +640,8 @@ class ImplementationAcademicPlan(models.Model):
     title = models.CharField(max_length=1024, verbose_name='Название', blank=True, null=True)
     old_json = JSONField(blank=True, null=True)
     new_json = JSONField(blank=True, null=True)
-    editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='implementation_academic_plan_block_modules',
+    editors = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                     related_name='implementation_academic_plan_block_modules',
                                      verbose_name='Редакторы образовательной программы', blank=True)
 
     # Новые поля из ИСУ (по логике могут конфликтовать с нашей базой)
@@ -646,13 +649,14 @@ class ImplementationAcademicPlan(models.Model):
     training_period = models.IntegerField(default=0, verbose_name="Срок обучения в годах")
     structural_unit = models.ForeignKey('StructuralUnit', on_delete=models.SET_NULL,
                                         verbose_name='Структурное подразделение',
-                                        related_name='implementation_academic_plan_in_structural_unit', blank=True, null=True)
+                                        related_name='implementation_academic_plan_in_structural_unit', blank=True,
+                                        null=True)
     total_intensity = models.IntegerField(default=0, verbose_name="Количество зачетных единиц")
     military_department = models.BooleanField(verbose_name="Наличие военной кафедры", default=False)
     university_partner = models.ManyToManyField('UniversityPartner',
                                                 verbose_name='ВУЗ партнер',
-                                                related_name='implementation_academic_plan_in_university_partner', blank=True)
-
+                                                related_name='implementation_academic_plan_in_university_partner',
+                                                blank=True)
 
     def __str__(self):
         return 'НАШ ОП ид: ' + str(self.id) + ' / ' + 'ОП ИСУ ИД: ' + str(self.op_isu_id)
@@ -740,15 +744,15 @@ class DisciplineBlockModule(CloneMixin, models.Model):
                                      verbose_name='Редакторы образовательных модулей', blank=True)
     module_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID модуля в ИСУ")
     childs = models.ManyToManyField('self', related_name="father_module", blank=True, symmetrical=False,
-                               null=True)
-    #father = models.ForeignKey('self', on_delete=models.SET_NULL, related_name="inheritage_module",blank=True, null=True)
+                                    null=True)
+    # father = models.ForeignKey('self', on_delete=models.SET_NULL, related_name="inheritage_module",blank=True, null=True)
     educational_programs_to_access = models.ManyToManyField('ImplementationAcademicPlan',
                                                             verbose_name='Разрешенные образовательные программы',
                                                             related_name="modules_to_access", blank=True, null=True)
 
     only_for_struct_units = models.BooleanField(verbose_name="Доавбление только для тех же структрных подразеделений",
                                                 blank=True, null=True, default=False)
-
+    isu_ids_by_fathers = JSONField(blank=True, null=True, verbose_name="id модуля в ису по отцам")
 
     class Meta:
         ordering = ['order']
@@ -795,12 +799,12 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         changeblocks_in_module = WorkProgramChangeInDisciplineBlockModule.objects.none()
         if module.childs.exists():
             for child in module.childs.all():
-                changeblocks_in_module = DisciplineBlockModule.get_all_changeblocks_from_module(child) | changeblocks_in_module
+                changeblocks_in_module = DisciplineBlockModule.get_all_changeblocks_from_module(
+                    child) | changeblocks_in_module
         else:
             return changeblocks_in_module | WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=module)
         return changeblocks_in_module
-
 
 
 class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
@@ -1358,3 +1362,30 @@ class SkillsOfRole(models.Model):
 
     def __str__(self):
         return (str(self.item) + ' / ' + str(self.role))
+
+
+class DisciplineBlockModuleInIsu(models.Model):
+    module = models.ForeignKey(DisciplineBlockModule, on_delete=models.CASCADE, related_name="isu_module")
+    isu_id = models.IntegerField(verbose_name="ИСУ ид модуля")
+    isu_father_id = models.IntegerField(verbose_name="ИСУ ид родителя", blank=True, null=True)
+    academic_plan = models.ForeignKey(AcademicPlan, on_delete=models.CASCADE, related_name="module_isu_in_plan")
+
+
+class IsuObjectsSendLogger(models.Model):
+    ObjTypeChoices = [
+        ('wp', 'Рабочая Программа'),
+        ('practice', 'Практика'),
+        ('gia', 'ГИА'),
+        ('module', 'Модуль'),
+        ('ap', 'Учебный план'),
+    ]
+    obj_type = models.CharField(
+        max_length=50,
+        choices=ObjTypeChoices,
+        default=1, verbose_name="Тип объекта"
+    )
+    obj_id = models.IntegerField(verbose_name="ИД объекта")
+    generated_json = JSONField(verbose_name="Сгенерированный JSON объекта")
+    error_status = models.IntegerField(verbose_name="номер ошибки")
+    returned_data = JSONField(verbose_name="Вернувшийся ответ")
+    date_of_sending = models.DateField(default=timezone.now)
