@@ -9,7 +9,7 @@ from workprogramsapp.models import DisciplineBlock, DisciplineBlockModule, WorkP
     СertificationEvaluationTool, ImplementationAcademicPlan, FieldOfStudy
 from workprogramsapp.serializers import AcademicPlanSerializer
 
-color_list = ["4c69a9", "5f84d4","6f90d8", "8fa8e0", "afc1e9", "cfdaf2", "dfe6f6", "eff2fa"]
+color_list = ["4c69a9", "5f84d4","6f90d8", "8fa8e0", "afc1e9", "cfdaf2", "dfe6f6", "eff2fa", "eff2fa", "eff2fa", "eff2fa"]
 
 columns_dict = {
     "wp_id": {"column": 1},
@@ -179,7 +179,8 @@ def process_practice(changeblock, level, ws):
             capture_exception(e)
 
         insert_cell_data(ws=ws, level=level, column_name="realizer", data=practice.structural_unit.short_name)
-
+        if practice.language:
+            insert_cell_data(ws=ws, level=level, column_name="realisation_language", data=practice.language.upper())
         level += 1
         return level
 
@@ -224,7 +225,8 @@ def process_changeblock(changeblocks, level, ws):
                 capture_exception(e)
             try:
                 process_evaluation_tools(ws, level, wp, None, changeblock.semester_start[0] - 1)
-            except IndexError:
+            except IndexError as e:
+                #print("what happened", e)
                 ERR_DICT["wp_err"].append(f'В РПД {wp.id} "{wp.title}" не указан семестр начала изучения дисциплины')
 
             try:
@@ -367,7 +369,7 @@ def process_excel(academic_plan):
     start_list = 7
     final_ze_by_term = [0 for _ in range(10)]
     final_ze = 0
-    for block in DisciplineBlock.objects.filter(academic_plan=academic_plan):
+    for block in DisciplineBlock.objects.filter(academic_plan=academic_plan).order_by("name"):
         insert_cell_data(ws=ws, level=start_list, column_name="name", data=block.name, horizontal="left")
         fill_row(ws, start_list, "394f7f")
         start_list += 1

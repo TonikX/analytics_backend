@@ -20,7 +20,7 @@ from .serializers import WorkProgramInFieldOfStudySerializerForStatistic, \
     AcademicPlansDescriptionWpSerializer, WorkProgramPrerequisitesAndOutcomesSerializer, \
     WorkProgramDescriptionOnlySerializer, \
     ImplementationAcademicPlanWpStatisticSerializer, WorkProgramDuplicatesSerializer, \
-    WorkProgramEvaluationToolsStatSerializer, AcademicPlanRealisedInYearSerializer
+    WorkProgramEvaluationToolsStatSerializer, AcademicPlanRealisedInYearSerializer, ModulesWithoutRulesSerializer
 
 
 @api_view(['GET'])
@@ -658,3 +658,13 @@ class AcademicPlanRealisedInYear(generics.RetrieveAPIView):
     serializer_class = AcademicPlanRealisedInYearSerializer
     permission_classes = [AllowAny]
     #lookup_url_kwarg = "year"
+
+
+class ModulesWithoutSelectionRules(generics.ListAPIView):
+    queryset = DisciplineBlockModule.objects.all()
+    serializer_class = ModulesWithoutRulesSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return DisciplineBlockModule.objects.filter(editors__isnull=False, selection_rule__isnull=True)
