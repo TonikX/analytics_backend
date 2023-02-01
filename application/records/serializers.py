@@ -6,7 +6,7 @@ from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.disciplineblockmodules.ze_module_logic import ze_cutter
 from workprogramsapp.expertise.models import Expertise
 from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, ImplementationAcademicPlan, \
-    EvaluationTool
+    EvaluationTool, DisciplineBlockModule
 from workprogramsapp.serializers import PrerequisitesOfWorkProgramInWorkProgramSerializer, \
     OutcomesOfWorkProgramInWorkProgramSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
@@ -272,3 +272,11 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlan
         fields = ['id', 'ap_isu_id', 'title', 'work_programs', ]
+
+
+class ModulesWithoutRulesSerializer(serializers.ModelSerializer):
+    #editors = userProfileSerializer(many=True)
+
+    class Meta:
+        model = DisciplineBlockModule
+        fields = ['id', 'name', 'editors']
