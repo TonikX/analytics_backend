@@ -247,7 +247,8 @@ class InsertModuleInBlockAP(APIView):
                             items=openapi.Items(type=openapi.TYPE_INTEGER),
                             type=openapi.TYPE_ARRAY)
 
-    @swagger_auto_schema(request_body=openapi.Schema(
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=['version'],
         properties={
@@ -256,6 +257,9 @@ class InsertModuleInBlockAP(APIView):
             'discipline_block_name': openapi.Schema(type=openapi.TYPE_STRING),
             'aps': openapi.Schema(type=openapi.TYPE_ARRAY,
                                   items=openapi.Items(type=openapi.TYPE_INTEGER)),
+            'year_for_all_ap': openapi.Parameter('year_for_all_ap', openapi.IN_QUERY,
+                              description="year_for_all_ap",
+                              type=openapi.TYPE_INTEGER)
         },
     ),
         responses={201: openapi.Response(description="count of created data", schema=openapi.Schema(
@@ -270,7 +274,12 @@ class InsertModuleInBlockAP(APIView):
     def post(self, request):
         request_data = request.data
         counter = 0
-        for ap in AcademicPlan.objects.filter(id__in=request_data["aps"]):
+        if request_data['year_for_all_ap']:
+            ap_ids = AcademicPlan.objects.filter(academic_plan_in_field_of_study__year=request_data['year_for_all_ap'])\
+                .values_list('id', flat=True).distinct()
+        else:
+            ap_ids = request_data["aps"]
+        for ap in AcademicPlan.objects.filter(id__in=ap_ids):
             block = DisciplineBlock.objects.get(name=request_data["discipline_block_name"], academic_plan=ap.id)
             for module_id in request_data['modules']:
                 DisciplineBlockModule.objects.get(id=module_id).descipline_block.add(block)
@@ -327,3 +336,35 @@ class WorkWithBlocksApiView(APIView):
         object = DisciplineBlockModule.objects.get(id=request.query_params.get('module'))
         object.descipline_block.remove(DisciplineBlock.objects.get(id=request.query_params.get('descipline_block')))
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CopyModulesToAnotherAPView(APIView):
+    permission_classes = [IsAdminUser]
+    my_tags = ["Discipline Blocks"]
+
+    ap_from = openapi.Parameter('ap_from', openapi.IN_FORM,
+                                description="id УП из которого копировать",
+                                type=openapi.TYPE_INTEGER)
+    ap_to = openapi.Parameter('ap_to', openapi.IN_FORM,
+                              description="id УП куда копировать",
+                              type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=['version'],
+        properties={
+
+            'ap_from': openapi.Schema(type=openapi.TYPE_INTEGER),
+            'ap_to':openapi.Schema(type=openapi.TYPE_INTEGER),
+        },
+    ),
+        responses={201: openapi.Response(description="created info",)})
+    @transaction.atomic
+    def post(self, request):
+        request_data = request.data
+        counter = 0
+        for block_to in DisciplineBlock.objects.filter(academic_plan__id=request_data["ap_to"]):
+            modules_from = DisciplineBlockModule.objects.filter(descipline_block__name=block_to.name, descipline_block__academic_plan=request_data["ap_from"])
+            [module.descipline_block.add(block_to) for module in modules_from]
+
+        return Response(status=status.HTTP_201_CREATED,)

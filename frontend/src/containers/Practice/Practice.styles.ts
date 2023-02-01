@@ -22,7 +22,6 @@ export default (theme: Theme) => createStyles({
         padding: '20px 50px 20px 50px',
         boxShadow: 'none',
         minHeight: 'calc(100vh - 200px)',
-        height: '100%',
         display: 'flex',
         flexDirection: 'row',
     },

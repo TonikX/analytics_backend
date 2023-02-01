@@ -15,6 +15,7 @@ import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
 import Assessment from "./Steps/Assessment";
 import Literature from "./Steps/Literature";
 import Prerequisites from "./Steps/Prerequisites";
+import PlansAndDirections from "./Steps/PlansAndDirections";
 import React from "react";
 import Competences from "./Steps/Competences";
 import Results from "./Steps/Results";
@@ -54,6 +55,14 @@ export const PRACTICE_TITLES = [
     {
         value: "sci-research",
         label: 'Производственная, научно-исследовательская практика'
+    },
+    {
+        value: "prod",
+        label: 'Производственная практика'
+    },
+    {
+        value: "org-admin",
+        label: "Производственная, организационно-управленческая практика"
     },
     {
         value: "tech",
@@ -110,6 +119,10 @@ export const PRACTICE_TITLES = [
     {
         value: "prod-proj",
         label: 'Производственная, проектная практика',
+    },
+    {
+        value: "study-project-2",
+        label: 'Проектная работа',
     },
 ];
 
@@ -298,6 +311,7 @@ export const RussianPracticeFields = {
     [PracticeFields.PREREQUISITES]: 'Пререквизиты',
     [PracticeFields.COMPETENCES]: 'Компетенции',
     [PracticeFields.OUTCOMES]: 'Результаты',
+    [PracticeFields.PLANS]: 'Учебные планы и направления',
 };
 
 export const fieldToStep = new Map(Object.entries({
@@ -364,6 +378,10 @@ export const STEPS = [
     {
         name: PracticeSteps.REFERENCES,
         component: <Literature/>,
+    },
+    {
+        name: PracticeSteps.PLANS,
+        component: <PlansAndDirections/>,
     },
     {
         name: PracticeSteps.COMPETENCES,

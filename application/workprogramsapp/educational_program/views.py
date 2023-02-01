@@ -395,3 +395,24 @@ def academ_plan_check(request, ap_id):
         return Response({'message': 'email sent', 'status': True}, status=200)
     else:
         return Response({'message': 'academic plan was sent', 'status': False}, status=400)
+
+
+# @api_view(['POST'])
+# @permission_classes((IsRpdDeveloperOrReadOnly,))
+# def new_ordinal_numbers_for_modules_in_ap(request):
+#     ap = request.data.get('ap')
+#     new_ordinal_number = request.data.get('new_ordinal_number')
+#     try:
+#         DisciplineSection.new_ordinal_number(descipline_section, new_ordinal_number)
+#         return Response(status=200)
+#     except:
+#         return Response(status=400)
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def academic_plan_all_ids_by_year(request, year):
+    academic_plan_all_ids = AcademicPlan.objects.filter(academic_plan_in_field_of_study__year=year)\
+        .values_list('id', flat=True).distinct()
+    return Response({"academic_plan_ids": academic_plan_all_ids})
+

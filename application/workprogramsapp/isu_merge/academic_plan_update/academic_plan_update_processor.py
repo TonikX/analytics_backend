@@ -2,6 +2,8 @@ import copy
 
 from django.conf import settings
 from django.utils import timezone
+from sentry_sdk import capture_exception
+
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_aspect import AcademicPlanUpdateAspect
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_utils import AcademicPlanUpdateUtils
 from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
@@ -533,5 +535,7 @@ class AcademicPlanUpdateProcessor:
                     academic_plan_update_configuration.updated_date_time = timezone.now()
                     academic_plan_update_configuration.save()
             except Exception as e:
+                capture_exception(e)
                 print(e)
+
 

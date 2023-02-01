@@ -100,6 +100,7 @@ export type CertificationState = MainInfoState
     [CertificationFields.GIA_BASE]: Id,
     [CertificationFields.EDITORS]: any,
     [CertificationFields.PERMISSIONS_INFO]: PermissionsInfoState,
+    [CertificationFields.EDITORS]: Array<UserType>;
 }
 
 export type CommentType = {

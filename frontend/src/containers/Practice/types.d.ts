@@ -81,6 +81,8 @@ export type PracticeState = GeneralInfoState
     [PracticeFields.PREREQUISITES]: PrerequisiteType[]
     [PracticeFields.COMPETENCES]: Competence[];
     [PracticeFields.OUTCOMES]: ResultsType[];
+    [PracticeFields.EDITORS]: Array<UserType>;
+    [PracticeFields.PLANS]: any;
 }
 
 interface Competence {

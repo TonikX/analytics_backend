@@ -112,6 +112,7 @@ class PracticeSerializer(serializers.ModelSerializer):
                                                                       many=True)
         self.fields['competences'] = SerializerMethodField()
         self.fields['editors'] = userProfileSerializer(many=True)
+        self.fields['practice_in_change_block'] = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True)
         return super().to_representation(value)
 
     def get_competences(self, instance):

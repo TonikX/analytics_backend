@@ -23,6 +23,9 @@ export default (theme: Theme) => createStyles({
     display: 'flex',
     alignItems: 'center',
   },
+  semesterError: {
+    color: theme.palette.secondary.main,
+  },
   tableWrap: {
     height: 'calc(100% - 60px)',
     maxheight: 'calc(100% - 60px)',
