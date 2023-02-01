@@ -1384,6 +1384,7 @@ class IsuObjectsSendLogger(models.Model):
         choices=ObjTypeChoices,
         default=1, verbose_name="Тип объекта"
     )
+    ap_id = models.IntegerField(verbose_name="ИД УП", blank=True, null=True, )
     obj_id = models.IntegerField(verbose_name="ИД объекта")
     generated_json = JSONField(verbose_name="Сгенерированный JSON объекта")
     error_status = models.IntegerField(verbose_name="номер ошибки")

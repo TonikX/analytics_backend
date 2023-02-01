@@ -17,6 +17,7 @@ from workprogramsapp.isu_merge.academic_plan_headers import process_headers
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_excel_creator import AcademicPlanExcelCreator
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_processor import AcademicPlanUpdateProcessor
 from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
+from workprogramsapp.isu_merge.filterset import HistoryFilter
 from workprogramsapp.isu_merge.post_to_isu.ap_to_isu import ap_isu_generate_dict
 from workprogramsapp.isu_merge.serializers import IsuHistoryListViewSerializer
 from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan, \
@@ -837,6 +838,7 @@ class IsuHistoryListView(ListAPIView):
     queryset = IsuObjectsSendLogger.objects.all()
     serializer_class = IsuHistoryListViewSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    filterset_fields = ["error_status",'date_of_sending', 'obj_id', "obj_type", "date_of_sending"]
+    #filterset_fields = ["error_status",'date_of_sending', 'obj_id', "obj_type", "date_of_sending"]
+    filterset_class =HistoryFilter
     search_fields = ["error_status", "obj_id", "obj_type", "date_of_sending"]
     permission_classes = [IsAdminUser]

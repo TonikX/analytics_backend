@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from sentry_sdk import capture_exception
 
 from analytics_project import settings
@@ -27,9 +28,12 @@ def recursion_ap_to_isu(modules, lines_of_plan, block, ap, father_id=None):
                                                                 academic_plan=ap)
             id_created = isu_module.isu_id
         except DisciplineBlockModuleInIsu.DoesNotExist:
-            id_created = post_module_to_isu(token=TOKEN, module=module, block=block, parent_id=father_id)
-            DisciplineBlockModuleInIsu.objects.create(module=module, isu_father_id=father_id,
-                                                      academic_plan=ap, isu_id=id_created)
+            id_created = post_module_to_isu(token=TOKEN, module=module, block=block, parent_id=father_id, ap_id=ap.id)
+            try:
+                DisciplineBlockModuleInIsu.objects.create(module=module, isu_father_id=father_id,
+                                                          academic_plan=ap, isu_id=id_created)
+            except IntegrityError:
+                id_created = None
 
         if module.childs.all().exists():
             recursion_ap_to_isu(module.childs.all(), lines_of_plan, block, ap, id_created)
@@ -54,17 +58,17 @@ def recursion_ap_to_isu(modules, lines_of_plan, block, ap, father_id=None):
                 if not disc_id:
                     if program_type == "wp":
                         wp_obj = changeblock.work_program.all()[0]
-                        disc_id = post_wp_to_isu(token=TOKEN, wp=wp_obj)
+                        disc_id = post_wp_to_isu(token=TOKEN, wp=wp_obj, ap_id=ap.id)
                         wp_obj.discipline_code = str(disc_id)
                         wp_obj.save()
                     elif program_type == "gia":
                         gia_obj = changeblock.gia.all()[0]
-                        disc_id = post_gia_to_isu(token=TOKEN, gia=gia_obj)
+                        disc_id = post_gia_to_isu(token=TOKEN, gia=gia_obj, ap_id=ap.id)
                         gia_obj.discipline_code = disc_id
                         gia_obj.save()
                     elif program_type == "prac":
                         prac_obj = changeblock.practice.all()[0]
-                        disc_id = post_practice_to_isu(token=TOKEN, practice=prac_obj)
+                        disc_id = post_practice_to_isu(token=TOKEN, practice=prac_obj, ap_id=ap.id)
                         prac_obj.discipline_code = disc_id
                         prac_obj.save()
                     else:
@@ -92,12 +96,12 @@ def ap_isu_generate_dict(ap):
     )
     isu_logger.get_access_token(add_headers={"scope": "service.edu-complex-isu"})
     TOKEN = isu_logger.token
-    #print(TOKEN)
+    # print(TOKEN)
     ap_dict = {"main_plan_id": ap.ap_isu_id, "lines_of_plans": []}
     for block in DisciplineBlock.objects.filter(academic_plan=ap).order_by("name"):
         recursion_ap_to_isu(modules=DisciplineBlockModule.objects.filter(descipline_block=block),
                             lines_of_plan=ap_dict["lines_of_plans"], block=block, ap=ap)
-    _,  code, json_dict, = post_ap_to_isu(TOKEN, ap_dict, ap)
+    _, code, json_dict, = post_ap_to_isu(TOKEN, ap_dict, ap)
     if code == 0:
         return ap_dict
     else:
