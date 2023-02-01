@@ -18,12 +18,20 @@ def generate_contents(type_id, order=None, volume=None, ):
     }
 
 
-def generate_response(url, headers, body, obj_name, obj_id):
+def generate_response(url, headers, body, obj_name, obj_id, ap_id=None):
     # print(body)
     response = requests.post(url, headers=headers, data=json.dumps(body, ensure_ascii=False).encode('utf-8'))
     # print(response.text)
-    IsuObjectsSendLogger.objects.create(obj_id=obj_id, obj_type=obj_name, generated_json=body,
-                                        error_status=response.json()["error_code"], returned_data=response.json())
+    try:
+        IsuObjectsSendLogger.objects.create(obj_id=obj_id, obj_type=obj_name, generated_json=body,
+                                            error_status=response.json()["error_code"], returned_data=response.json(),
+                                            ap_id=ap_id)
+    except:
+        IsuObjectsSendLogger.objects.create(obj_id=obj_id, obj_type=obj_name, generated_json=body, error_status=1001,
+                                            returned_data={"prod_error": "как вытягивать ошибки с прода я не знаю"},
+                                            ap_id=ap_id)
+        return None, 1001, {"prod_error": "как вытягивать ошибки с прода я не знаю"}
+
     if response.json()["error_code"] == 0:
         try:
             return response.json()["result"][0]["id"], response.json()["error_code"], response.json()
@@ -33,7 +41,7 @@ def generate_response(url, headers, body, obj_name, obj_id):
         return None, response.json()["error_code"], response.json()
 
 
-def post_gia_to_isu(token, gia):
+def post_gia_to_isu(token, gia, ap_id):
     """
     from gia_practice_app.GIA.models import *
     gia = GIA.objects.get(id=134)
@@ -76,10 +84,10 @@ def post_gia_to_isu(token, gia):
         order_dict = {"order": i + 1,
                       "work_types": [generate_contents(type_id=5), generate_contents(type_id=4, volume=el * 36)]}
         practice_dict["contents"].append(order_dict)
-    return generate_response(url, headers, body, "gia", gia.id)[0]
+    return generate_response(url, headers, body, "gia", gia.id, ap_id)[0]
 
 
-def post_practice_to_isu(token, practice):
+def post_practice_to_isu(token, practice, ap_id):
     """
     from gia_practice_app.Practice.models import *
     prac = Practice.objects.get(id=422)
@@ -128,10 +136,10 @@ def post_practice_to_isu(token, practice):
                 order_dict["work_types"].append(generate_contents(type_id=certification_types[type_os]))
             order_dict["work_types"].append(generate_contents(type_id=4, volume=ze[i] * 36))
             practice_dict["contents"].append(order_dict)
-    return generate_response(url, headers, body, "practice", practice.id)[0]
+    return generate_response(url, headers, body, "practice", practice.id, ap_id)[0]
 
 
-def post_wp_to_isu(token, wp):
+def post_wp_to_isu(token, wp, ap_id):
     """
 
     from workprogramsapp.models import *
@@ -217,10 +225,10 @@ def post_wp_to_isu(token, wp):
             order_dict = {"order": cerf.semester,
                           "work_types": [generate_contents(type_id=certification_types[cerf.type])]}
             wp_dict["contents"].append(order_dict)
-    return generate_response(url, headers, body, "wp", wp.id)[0]
+    return generate_response(url, headers, body, "wp", wp.id, ap_id)[0]
 
 
-def post_module_to_isu(token, module, parent_id, block):
+def post_module_to_isu(token, module, parent_id, block, ap_id):
     """
     from workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import *
     from workprogramsapp.models import *
@@ -257,7 +265,7 @@ def post_module_to_isu(token, module, parent_id, block):
     if module.selection_parametr:
         module_dict["params"] = [int(el) for el in module.selection_parametr.split(", ")]
     module_dict["rpd_module_id"] = module.id
-    return generate_response(url, headers, body, "module", module.id)[0]
+    return generate_response(url, headers, body, "module", module.id, ap_id)[0]
 
 
 def generate_wp_in_lower_module_for_ap_isu(disc_id, changeblock, module, isu_id_lower_module):
@@ -279,4 +287,4 @@ def generate_wp_in_lower_module_for_ap_isu(disc_id, changeblock, module, isu_id_
 def post_ap_to_isu(token, ap_dict, ap):
     url = settings.ISU_URL_UPDATERS + "/constructor_rpd_isu/v1/study_plans/"
     headers = {'Content-Type': "application/json", 'Authorization': "Bearer " + token}
-    return generate_response(url, headers, ap_dict, "ap", ap.id)
+    return generate_response(url, headers, ap_dict, "ap", ap.id, ap.id)

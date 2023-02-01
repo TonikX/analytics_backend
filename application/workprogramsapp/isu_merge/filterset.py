@@ -11,5 +11,6 @@ class HistoryFilter(django_filters.FilterSet):
             'error_status': ['gt', 'exact'],
             'obj_id': ['exact'],
             'obj_type': ['exact'],
+            'ap_id': ['exact'],
 
         }
