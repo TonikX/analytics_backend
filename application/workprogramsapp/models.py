@@ -1388,4 +1388,4 @@ class IsuObjectsSendLogger(models.Model):
     generated_json = JSONField(verbose_name="Сгенерированный JSON объекта")
     error_status = models.IntegerField(verbose_name="номер ошибки")
     returned_data = JSONField(verbose_name="Вернувшийся ответ")
-    date_of_sending = models.DateField(default=timezone.now)
+    date_of_sending = models.DateTimeField(default=timezone.now)
