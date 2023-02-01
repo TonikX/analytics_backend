@@ -748,6 +748,8 @@ class DisciplineBlockModule(CloneMixin, models.Model):
 
     only_for_struct_units = models.BooleanField(verbose_name="Доавбление только для тех же структрных подразеделений",
                                                 blank=True, null=True, default=False)
+    orderings_for_ups = JSONField(blank=True, null=True, verbose_name="Данные для сортировки в учебных планах")
+    orderings_for_modules = JSONField(blank=True, null=True, verbose_name="Данные для сортировки в модулях")
 
 
     class Meta:
