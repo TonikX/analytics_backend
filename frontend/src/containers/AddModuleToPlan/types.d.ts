@@ -19,7 +19,8 @@ export interface AddModuleToPlanActions {
 
     setSelectedPlans: ActionCreatorWithPayload,
     setSelectedModules: ActionCreatorWithPayload,
-    setSelectedBlock: ActionCreatorWithPayload
+    setSelectedBlock: ActionCreatorWithPayload,
+    setSelectAll: ActionCreatorWithPayload,
 
     addModuleToPlan: ActionCreatorWithoutPayload
 }
@@ -39,4 +40,5 @@ export interface addModuleToPlanState {
     selectedModules: number[];
     selectedPlans: number[];
     selectedBlock: string,
+    selectAll: boolean
 }

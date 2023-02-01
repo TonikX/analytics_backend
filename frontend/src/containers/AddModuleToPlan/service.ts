@@ -28,11 +28,12 @@ class AddModuleToPlanService extends AnalyticsService {
         return this.get(`/api/academicplan/short?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
-    addModuleToPlan(modules: number[], academicPlans: number[], blockName: string) {
+    addModuleToPlan(modules: number[], academicPlans: number[], blockName: string, year: number) {
         return this.post(`/api/disciplineblockmodule/insert_to_block_with_ap`, {
             modules,
             discipline_block_name: blockName,
-            aps: academicPlans
+            aps: academicPlans,
+            year_for_all_ap: year
         });
     }
 }

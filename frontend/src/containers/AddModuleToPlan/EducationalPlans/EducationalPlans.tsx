@@ -53,14 +53,9 @@ export const EducationalPlans = () => {
     };
 
     const handleSelectAll = (_event: React.ChangeEvent<HTMLInputElement>) => {
-        // Уже все выбрано, надо снять выделение
-        if (selectAll) {
-            dispatch(actions.setSelectedPlans([]));
-        } else {
-            const selectedArray = educationalPlans.map(it => it.id);
-            dispatch(actions.setSelectedPlans(selectedArray));
-        }
-        setSelectAll(!selectAll);
+        const newValue = !selectAll;
+        setSelectAll(newValue);
+        dispatch(actions.setSelectAll(newValue));
     };
 
      return (
@@ -72,7 +67,7 @@ export const EducationalPlans = () => {
                 <Search handleChangeSearchQuery={handleSearch}/>
                 <FormControlLabel
                     control={<Checkbox checked={selectAll} onChange={handleSelectAll}/>}
-                    label="Выбрать все"
+                    label="Выбрать все для 2023 года"
                 />
             </div>
             <Scrollbars>
@@ -102,7 +97,7 @@ export const EducationalPlans = () => {
                                             {info}
                                         </TableCell>
                                         <TableCell>
-                                            <Checkbox checked={selectedPlans.includes(educationalPlan.id)}
+                                            <Checkbox checked={selectAll || selectedPlans.includes(educationalPlan.id)}
                                                       onChange={(event) => selectPlan(event, educationalPlan.id)}/>
                                         </TableCell>
                                     </TableRow>

@@ -11,7 +11,7 @@ import {Modules} from "./Modules";
 import {EducationalPlans} from "./EducationalPlans";
 import {BlockSelector} from "./BlockSelector";
 import actions from "./actions";
-import {getSelectedBlock, getSelectedModules, getSelectedPlans} from "./getters";
+import {getSelectAll, getSelectedBlock, getSelectedModules, getSelectedPlans} from "./getters";
 
 export const AddModuleToPlan = () => {
         const dispatch = useDispatch();
@@ -22,8 +22,9 @@ export const AddModuleToPlan = () => {
         const selectedModules = useSelector(getSelectedModules);
         const selectedPlans = useSelector(getSelectedPlans);
         const selectedBlock = useSelector(getSelectedBlock);
+        const selectAll = useSelector(getSelectAll);
 
-        const disabled = selectedModules.length === 0 || selectedPlans.length === 0 || !selectedBlock;
+        const disabled = selectedModules.length === 0 || (selectedPlans.length === 0 && !selectAll) || !selectedBlock;
 
         const openDialog = () => {
             setOpen(true);

@@ -10,7 +10,7 @@ import {
     getCurrentModulePage,
     getCurrentPlansPage,
     getModuleSearchQuery,
-    getPlansSearchQuery, getSelectedBlock, getSelectedModules, getSelectedPlans,
+    getPlansSearchQuery, getSelectAll, getSelectedBlock, getSelectedModules, getSelectedPlans,
     getSortingMode
 } from "./getters";
 
@@ -58,14 +58,20 @@ const addModuleToPlan = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState();
+        const selectAllAp = getSelectAll(state);
         const selectedModules = getSelectedModules(state);
-        const selectedPlans = getSelectedPlans(state);
+        const selectedPlans = selectAllAp ? [] : getSelectedPlans(state);
         const selectedBlock = getSelectedBlock(state);
+        const year = selectAllAp ? 2023 : 0;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_MODULES_TO_PLAN}));
 
-        service.addModuleToPlan(selectedModules, selectedPlans, selectedBlock)
+        service.addModuleToPlan(selectedModules, selectedPlans, selectedBlock, year)
             .then(() => {
+                dispatch(addModuleToPlanActions.setSelectAll(false));
+                dispatch(addModuleToPlanActions.setSelectedBlock(''));
+                dispatch(addModuleToPlanActions.setSelectedModules([]));
+                dispatch(addModuleToPlanActions.setSelectedPlans([]));
                 dispatch(actions.fetchingSuccess(['Модули успешно добавлены']));
             })
             .catch(() => {

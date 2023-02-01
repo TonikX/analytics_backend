@@ -17,6 +17,7 @@ const changePlansCurrentPage = createAction('CHANGE_PLANS_CURRENT_PAGE');
 const setSelectedPlans = createAction('SET_SELECTED_PLANS');
 const setSelectedModules = createAction('SET_SELECTED_MODULES');
 const setSelectedBlock = createAction('SET_SELECTED_BLOCK');
+const setSelectAll = createAction('SET_SELECT_ALL');
 
 const addModuleToPlan = createAction('ADD_MODULE_TO_PLAN');
 
@@ -37,6 +38,7 @@ const actions: AddModuleToPlanActions = {
     setSelectedPlans,
     setSelectedModules,
     setSelectedBlock,
+    setSelectAll,
 
     addModuleToPlan
 };

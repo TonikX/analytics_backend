@@ -20,3 +20,4 @@ export const getPlansSearchQuery = (state: rootState): string => get(getStateDat
 export const getSelectedBlock = (state: rootState): string => get(getStateData(state), "selectedBlock", "");
 export const getSelectedPlans = (state: rootState): Array<any> => get(getStateData(state), "selectedPlans", []);
 export const getSelectedModules = (state: rootState): Array<any> => get(getStateData(state), "selectedModules", []);
+export const getSelectAll = (state: rootState): boolean => get(getStateData(state), "selectAll", false);

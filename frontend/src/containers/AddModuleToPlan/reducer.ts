@@ -19,7 +19,8 @@ export const initialState: addModuleToPlanState = {
 
     selectedBlock: '',
     selectedModules: [],
-    selectedPlans: []
+    selectedPlans: [],
+    selectAll: false
 };
 
 const setTrainingModulesList = (state: addModuleToPlanState, {payload}: any): addModuleToPlanState => ({
@@ -77,6 +78,11 @@ const setSelectedModules = (state: addModuleToPlanState, {payload}: any): addMod
     selectedModules: payload
 });
 
+const setSelectAll = (state: addModuleToPlanState, {payload}: any): addModuleToPlanState => ({
+    ...state,
+    selectAll: payload
+});
+
 const setSelectedBlock = (state: addModuleToPlanState, {payload}: any): addModuleToPlanState => ({
     ...state,
     selectedBlock: payload
@@ -93,6 +99,7 @@ export const reducer = createReducer(initialState, {
     [actions.changePlansAllCount.type]: changePlansAllCount,
     [actions.changePlansCurrentPage.type]: changePlansCurrentPage,
     [actions.setPlansSearchQuery.type]: setPlansSearchQuery,
+    [actions.setSelectAll.type]: setSelectAll,
 
     [actions.setSelectedBlock.type]: setSelectedBlock,
     [actions.setSelectedModules.type]: setSelectedModules,
