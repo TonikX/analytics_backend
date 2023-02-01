@@ -7,6 +7,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     marginTop: {
         marginTop: '20px'
     },
+    marginBottom: {
+        marginBottom: '20px'
+    },
     textItem: {
         marginBottom: '10px'
     },
@@ -16,8 +19,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     content: {
         display: 'flex',
-        gap: '20px',
-        height: 'calc(100% - 62px)'
+        gap: '60px',
+        height: 'calc(100% - 130px)'
     },
     contentLeft: {
         flexGrow: 1,
@@ -30,10 +33,14 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         justifyContent: 'space-between',
         marginTop: '20px'
     },
-    selectModule: {
-        // background: 'red'
-    },
     tableWrap: {
         height: 'auto'
+    },
+    table: {
+        height: 'calc(100% - 30px)'
+    },
+    plansControls: {
+        display: 'flex',
+        gap: '20px'
     },
 }));
