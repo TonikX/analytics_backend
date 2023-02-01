@@ -698,8 +698,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
 
 class DisciplineBlockSerializer(serializers.ModelSerializer):
-    #modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
-    modules_in_discipline_block = serializers.SerializerMethodField()
+    modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
 
     def to_representation(self, value):
         self.fields["laboriousness"] = serializers.SerializerMethodField()
@@ -711,25 +710,6 @@ class DisciplineBlockSerializer(serializers.ModelSerializer):
             sum_ze += recursion_module(module)
 
         return sum_ze
-
-    def get_modules_in_discipline_block(self, obj):
-        #dbm = DisciplineBlockModule.objects.filter(id = 126053)[0]
-        #for module in DisciplineBlockModule.objects.filter(descipline_block=obj).order_by('orderings_for_ups__number'):
-        # print('111', dbm.orderings_for_ups)
-        # ap_index = list(filter(lambda x: x['up_id'] == 6804, dbm.orderings_for_ups))
-        # print(ap_index)
-        sum_ze=0
-        # dbm.orderings_for_ups = list(filter(lambda x: x['up_id'] == 6804, dbm.orderings_for_ups))
-        # print(dbm.orderinggit pulls_for_ups)
-        dbms = DisciplineBlockModule.objects.filter(descipline_block=obj)
-        if dbms.exists():
-            for module in dbms:
-                print(module.orderings_for_ups)
-                module.orderings_for_ups = list(filter(lambda x: x['up_id'] == 7295, module.orderings_for_ups))
-                print('dddd', module.orderings_for_ups)
-        print('dddd', dbms.order_by('orderings_for_ups__0__number').values())
-        modules_in_discipline_block = DisciplineBlockModuleSerializer(dbms.order_by('-id').values(), many=True)
-        return modules_in_discipline_block
 
     class Meta:
         model = DisciplineBlock
