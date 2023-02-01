@@ -274,7 +274,7 @@ class InsertModuleInBlockAP(APIView):
     def post(self, request):
         request_data = request.data
         counter = 0
-        if request_data['year_for_all_ap']:
+        if 'year_for_all_ap' in request_data:
             ap_ids = AcademicPlan.objects.filter(academic_plan_in_field_of_study__year=request_data['year_for_all_ap'])\
                 .values_list('id', flat=True).distinct()
         else:
