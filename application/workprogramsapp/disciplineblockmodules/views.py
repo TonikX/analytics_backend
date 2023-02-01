@@ -247,7 +247,8 @@ class InsertModuleInBlockAP(APIView):
                             items=openapi.Items(type=openapi.TYPE_INTEGER),
                             type=openapi.TYPE_ARRAY)
 
-    @swagger_auto_schema(request_body=openapi.Schema(
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=['version'],
         properties={
@@ -256,6 +257,9 @@ class InsertModuleInBlockAP(APIView):
             'discipline_block_name': openapi.Schema(type=openapi.TYPE_STRING),
             'aps': openapi.Schema(type=openapi.TYPE_ARRAY,
                                   items=openapi.Items(type=openapi.TYPE_INTEGER)),
+            'year_for_all_ap': openapi.Parameter('year_for_all_ap', openapi.IN_QUERY,
+                              description="year_for_all_ap",
+                              type=openapi.TYPE_INTEGER)
         },
     ),
         responses={201: openapi.Response(description="count of created data", schema=openapi.Schema(
@@ -270,7 +274,12 @@ class InsertModuleInBlockAP(APIView):
     def post(self, request):
         request_data = request.data
         counter = 0
-        for ap in AcademicPlan.objects.filter(id__in=request_data["aps"]):
+        if request_data['year_for_all_ap']:
+            ap_ids = AcademicPlan.objects.filter(academic_plan_in_field_of_study__year=request_data['year_for_all_ap'])\
+                .values_list('id', flat=True).distinct()
+        else:
+            ap_ids = request_data["aps"]
+        for ap in AcademicPlan.objects.filter(id__in=ap_ids):
             block = DisciplineBlock.objects.get(name=request_data["discipline_block_name"], academic_plan=ap.id)
             for module_id in request_data['modules']:
                 DisciplineBlockModule.objects.get(id=module_id).descipline_block.add(block)
