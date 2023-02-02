@@ -115,6 +115,7 @@ export type EducationalPlanType = {
   [EducationalPlanFields.ID_RATING]: string;
   [EducationalPlanFields.RATING]: string;
   [EducationalPlanFields.LABORIOUSNESS]: number;
+  [EducationalPlanFields.HAS_BEEN_SENT_TO_ISU]: boolean;
   [EducationalPlanFields.DISCIPLINE_BLOCKS]: Array<DisciplineBlockType>;
 };
 

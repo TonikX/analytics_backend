@@ -771,11 +771,18 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     const canDownload = get(detailPlan, 'academic_plan_in_field_of_study[0].year', 0) >= 2023;
     const {tab} = this.state
     const validationErrors = this.getValidationErrors()
+    const hasBeenSentToIsu = detailPlan[EducationalPlanFields.HAS_BEEN_SENT_TO_ISU]
 
     return (
       <Paper className={classes.root}>
         <div className={classes.headerWrap}>
           <StatusPoint {...statusInfo} />
+          <div style={{marginRight: 'auto'}}>
+            <StatusPoint
+              statusText={hasBeenSentToIsu ? 'Отправлен в ИСУ' : 'Не отправлен в ису'}
+              backgroundColor={hasBeenSentToIsu? '#2abb00' : '#f30707'}
+            />
+          </div>
           <div className={classes.headerButtons}>
             {canDownload && <Button onClick={this.downloadPlan} className={classes.buttonH32}>
               Скачать учебный план

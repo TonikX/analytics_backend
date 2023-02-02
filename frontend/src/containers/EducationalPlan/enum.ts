@@ -72,6 +72,7 @@ export enum EducationalPlanFields {
   CAN_EDIT = 'can_edit',
   ID_RATING = 'id_rating',
   RATING = 'rating',
+  HAS_BEEN_SENT_TO_ISU = 'was_send_to_isu',
 
   TITLE = 'title',
   ACADEMIC_PLAN_IN_FIELD_OF_STUDY = 'academic_plan_in_field_of_study',

@@ -664,7 +664,7 @@ const approvePlan = createLogic({
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
-                dispatch(actions.fetchingFailed(err));
+                dispatch(actions.fetchingFailed(['При отправке УП в ИСУ, возникли ошибки']));
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.APPROVE_PLAN}));
