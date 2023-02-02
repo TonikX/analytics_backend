@@ -33,7 +33,9 @@ def recursion_ap_to_isu(modules, lines_of_plan, block, ap, father_id=None):
                 DisciplineBlockModuleInIsu.objects.create(module=module, isu_father_id=father_id,
                                                           academic_plan=ap, isu_id=id_created)
             except IntegrityError:
-                id_created = None
+                lines_of_plan.append({"error_module": module.id})
+                break
+                #id_created = None
 
         if module.childs.all().exists():
             recursion_ap_to_isu(module.childs.all(), lines_of_plan, block, ap, id_created)
