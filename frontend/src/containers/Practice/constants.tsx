@@ -61,6 +61,14 @@ export const PRACTICE_TITLES = [
         label: 'Производственная практика'
     },
     {
+        value: "ped",
+        label: "Педагогическая"
+    },
+    {
+        value: "prod-proj-constr",
+        label: "Производственная, проектно-конструкторская"
+    },
+    {
         value: "org-admin",
         label: "Производственная, организационно-управленческая практика"
     },

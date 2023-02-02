@@ -108,5 +108,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     group: {
         marginRight: '10px',
         marginBottom: '10px',
+    },
+    row: {
+        display: 'flex',
+        gap: '10px'
     }
 }));
