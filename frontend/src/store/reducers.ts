@@ -48,6 +48,9 @@ import {entityToEntityState} from "../containers/EntitityToEntitity/types";
 import {GENERAL_PATH as professionsPath, reducer as professionsReducer} from "../containers/Professions/reducer";
 import {professionsState} from "../containers/Professions/types";
 
+import {GENERAL_PATH as addModuleToPlanPath, reducer as addModuleToPlanReducer} from "../containers/AddModuleToPlan/reducer";
+import {addModuleToPlanState} from "../containers/AddModuleToPlan/types";
+
 import {GENERAL_PATH as rolesPath, reducer as rolesReducer} from "../containers/Roles/reducer";
 import {rolesState} from "../containers/Roles/types";
 
@@ -164,7 +167,8 @@ export interface rootState {
     [practicePath]: practicePageState,
     [finalCertificationPath]: finalCertificationPageState,
     [finalCertificationListPath]: finalCertificationListPageState,
-    [academicPlanUpdatePath]: academicPlanUpdateState
+    [academicPlanUpdatePath]: academicPlanUpdateState,
+    [addModuleToPlanPath]: addModuleToPlanState,
 }
 
 export default combineReducers({
@@ -209,4 +213,5 @@ export default combineReducers({
     [practicePath]: practiceReducer,
     [finalCertificationPath]: finalCertificationReducer,
     [finalCertificationListPath]: finalCertificationListReducer,
+    [addModuleToPlanPath]: addModuleToPlanReducer,
 });
