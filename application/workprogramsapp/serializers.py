@@ -699,6 +699,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
 class DisciplineBlockSerializer(serializers.ModelSerializer):
     modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
+    #modules_in_discipline_block = serializers.SerializerMethodField()
 
     def to_representation(self, value):
         self.fields["laboriousness"] = serializers.SerializerMethodField()
