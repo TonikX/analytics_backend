@@ -15,7 +15,8 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     PrerequisitesOfWorkProgram, Certification, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool, \
-    AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, AcademicPlanUpdateConfiguration
+    AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, AcademicPlanUpdateConfiguration, \
+    IsuObjectsSendLogger
 from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer, \
     ShortUniversityPartnerSerializer
 
@@ -699,7 +700,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
 class DisciplineBlockSerializer(serializers.ModelSerializer):
     modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
-    #modules_in_discipline_block = serializers.SerializerMethodField()
+    # modules_in_discipline_block = serializers.SerializerMethodField()
 
     def to_representation(self, value):
         self.fields["laboriousness"] = serializers.SerializerMethodField()
@@ -766,6 +767,10 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
             data["can_validate"] = False
         data["discipline_blocks_in_academic_plan"] = sorted(data["discipline_blocks_in_academic_plan"],
                                                             key=lambda x: x["name"])
+        if IsuObjectsSendLogger.objects.filter(ap_id=instance.id).exists():
+            data["was_send_to_isu"] = True
+        else:
+            data["was_send_to_isu"] = False
         return data
 
     class Meta:
