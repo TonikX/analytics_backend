@@ -818,6 +818,7 @@ class UpdateAcademicPlansHeadersView(APIView):
 
         return Response(data={"plans_created": plans_created}, status=200)
 
+
 class SendAcademicPlansLinesToIsu(APIView):
     """
         {
@@ -829,9 +830,13 @@ class SendAcademicPlansLinesToIsu(APIView):
     def post(self, request):
         request_data = request.data
         ap = AcademicPlan.objects.get(id=request_data["ap_id"])
-        plans_created = ap_isu_generate_dict(ap)
+        code, plans_created = ap_isu_generate_dict(ap)
+        if code == 0:
+            status_response = 200
+        else:
+            status_response = 500
 
-        return Response(data={"plans_created": plans_created}, status=200)
+        return Response(data={"plans_created": plans_created}, status=status_response)
 
 
 class IsuHistoryListView(ListAPIView):
