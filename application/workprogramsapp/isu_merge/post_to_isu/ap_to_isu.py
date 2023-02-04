@@ -105,6 +105,6 @@ def ap_isu_generate_dict(ap):
                             lines_of_plan=ap_dict["lines_of_plans"], block=block, ap=ap)
     _, code, json_dict, = post_ap_to_isu(TOKEN, ap_dict, ap)
     if code == 0:
-        return ap_dict
+        return code, ap_dict
     else:
-        return json_dict
+        return code, json_dict
