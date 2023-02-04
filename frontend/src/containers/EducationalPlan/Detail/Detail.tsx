@@ -555,7 +555,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   approvePlan = () => {
-    this.props.actions.approvePlan();
+    this.props.actions.approvePlanISU();
   }
 
   sendToRework = () => {

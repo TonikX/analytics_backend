@@ -655,22 +655,37 @@ const approvePlan = createLogic({
   type: planActions.approvePlan.type,
   latest: true,
   process({getState, action}: any, dispatch, done) {
+    const planId = getEducationalPlanDetailId(getState())
+
+    service.approvePlan(planId)
+      .then((res) => {
+        dispatch(planActions.getEducationalDetail(planId));
+        dispatch(actions.fetchingSuccess(["План успешно отправлен в ИСУ"]));
+      })
+      .finally(() => {
+        dispatch(actions.fetchingFalse({destination: fetchingTypes.APPROVE_PLAN}));
+        return done();
+      });
+    }
+  });
+
+const approvePlanISU = createLogic({
+  type: planActions.approvePlanISU.type,
+  latest: true,
+  process({getState, action}: any, dispatch, done) {
     dispatch(actions.fetchingTrue({destination: fetchingTypes.APPROVE_PLAN}));
     const planId = getEducationalPlanDetailId(getState())
 
     service.approvePlanIsu(planId)
       .then(() => {
-        service.approvePlan(planId)
-          .then((res) => {
-            dispatch(planActions.getEducationalDetail(planId));
-            dispatch(actions.fetchingSuccess());
-          })
+        dispatch(planActions.approvePlan(planId));
+        dispatch(actions.fetchingSuccess(["План успешно отправлен в ИСУ"]));
       })
       .catch((err) => {
-        dispatch(actions.fetchingFailed([err?.[0]?.error_message]));
+        dispatch(actions.fetchingFalse({destination: fetchingTypes.APPROVE_PLAN}));
+        dispatch(actions.fetchingFailed([err?.[0]?.error_message || 'Произошла ошибка при отправке в ИСУ']));
       })
       .then(() => {
-        dispatch(actions.fetchingFalse({destination: fetchingTypes.APPROVE_PLAN}));
         return done();
       });
     }
@@ -785,5 +800,6 @@ export default [
   educationalPlanDisconnectModule,
   sendPlanToValidate,
   approvePlan,
+  approvePlanISU,
   sendPlanToRework,
 ];

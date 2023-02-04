@@ -66,10 +66,12 @@ const educationalPlanDisconnectModule = createAction('EDUCATIONAL_PLAN_DISCONNEC
 const setNewPlanIdForRedirect = createAction('SET_NEW_PLAN_ID_FOR_REDIRECT');
 
 const sendPlanToValidate = createAction('SEND_PLAN_TO_VALIDATE');
+const approvePlanISU = createAction('APPROVE_PLAN_ISU');
 const approvePlan = createAction('APPROVE_PLAN');
 const sendPlanToRework = createAction('SEND_PLAN_TO_REWORK');
 
 const actions: EducationalPlanActions = {
+  approvePlanISU,
   approvePlan,
   sendPlanToRework,
   sendPlanToValidate,
