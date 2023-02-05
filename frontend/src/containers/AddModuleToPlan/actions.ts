@@ -19,6 +19,7 @@ const setSelectedModules = createAction('SET_SELECTED_MODULES');
 const setSelectedBlock = createAction('SET_SELECTED_BLOCK');
 const setSelectAll = createAction('SET_SELECT_ALL');
 
+const setQualification = createAction('SET_QUALIFICATION');
 const addModuleToPlan = createAction('ADD_MODULE_TO_PLAN');
 
 const actions: AddModuleToPlanActions = {
@@ -40,6 +41,7 @@ const actions: AddModuleToPlanActions = {
     setSelectedBlock,
     setSelectAll,
 
+    setQualification,
     addModuleToPlan
 };
 

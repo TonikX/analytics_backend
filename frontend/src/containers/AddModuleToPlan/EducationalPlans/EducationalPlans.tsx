@@ -14,11 +14,20 @@ import {useStyles} from "../AddModuleToPlan.styles";
 import actions from "../actions";
 import {useDispatch, useSelector} from "react-redux";
 import {rootState} from "../../../store/reducers";
-import {getCurrentPlansPage, getEducationalPlans, getPlansAllCount, getSelectedPlans} from "../getters";
+import {
+    getCurrentPlansPage,
+    getEducationalPlans,
+    getPlansAllCount,
+    getQualification,
+    getSelectedPlans
+} from "../getters";
 import {EducationalPlanListType} from "../../EducationalPlan/types";
 import {EducationalPlanFields} from "../../EducationalPlan/enum";
 import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
 import get from "lodash/get";
+import Select from "@material-ui/core/Select/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import {Qualifications} from "../enum";
 
 export const EducationalPlans = () => {
     const classes = useStyles();
@@ -30,6 +39,18 @@ export const EducationalPlans = () => {
     const currentPage = useSelector((state: rootState) => getCurrentPlansPage(state));
     const plansAllCount = useSelector((state: rootState) => getPlansAllCount(state));
     const selectedPlans = useSelector((state: rootState) => getSelectedPlans(state));
+    const qualification = useSelector((state: rootState) => getQualification(state));
+
+    const EDUCATION_LEVELS = [{
+        label: 'Все уровни',
+        value: Qualifications.ALL_LEVELS
+    }, {
+        label: 'Бакалавриат',
+        value: Qualifications.BACHELOR
+    }, {
+        label: 'Магистратура',
+        value: Qualifications.MASTER
+    }];
 
     useEffect(() => {
         dispatch(actions.getEducationalPlan());
@@ -37,7 +58,7 @@ export const EducationalPlans = () => {
 
     const handleSearch = (value: string) => {
         dispatch(actions.setPlansSearchQuery(value));
-        dispatch(actions.setSelectedPlans([]));
+        dispatch(actions.changePlansCurrentPage(1));
         dispatch(actions.getEducationalPlan());
     };
 
@@ -58,18 +79,13 @@ export const EducationalPlans = () => {
         dispatch(actions.setSelectAll(newValue));
     };
 
-     return (
+    const handleQualificationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = event.target.value;
+        dispatch(actions.setQualification(value));
+    };
+
+    const opContent = selectAll ? <Typography>Вы выбрали все учебные планы для 2023 года</Typography> : (
         <>
-            <Typography variant="h6" className={classes.textItem}>
-                Выберите учебные планы
-            </Typography>
-            <div className={cn(classes.marginBottom, classes.plansControls)}>
-                <Search handleChangeSearchQuery={handleSearch}/>
-                <FormControlLabel
-                    control={<Checkbox checked={selectAll} onChange={handleSelectAll}/>}
-                    label="Выбрать все для 2023 года"
-                />
-            </div>
             <Scrollbars>
                 <div className={classes.tableWrap}>
                     <Table stickyHeader size='small' className={classes.table}>
@@ -97,7 +113,7 @@ export const EducationalPlans = () => {
                                             {info}
                                         </TableCell>
                                         <TableCell>
-                                            <Checkbox checked={selectAll || selectedPlans.includes(educationalPlan.id)}
+                                            <Checkbox checked={selectedPlans.includes(educationalPlan.id)}
                                                       onChange={(event) => selectPlan(event, educationalPlan.id)}/>
                                         </TableCell>
                                     </TableRow>
@@ -118,6 +134,36 @@ export const EducationalPlans = () => {
                     onChangeRowsPerPage={() => {}}
                 />
             </div>
+        </>
+    );
+
+    return (
+        <>
+            <Typography variant="h6" className={classes.textItem}>
+                Выберите учебные планы
+            </Typography>
+            <div className={cn(classes.marginBottom, classes.plansControls)}>
+                <Search handleChangeSearchQuery={handleSearch}/>
+                <FormControlLabel
+                    className={classes.selectAll}
+                    control={<Checkbox checked={selectAll} onChange={handleSelectAll}/>}
+                    label="Выбрать все для 2023 года"
+                />
+                <Select
+                    variant="outlined"
+                    // @ts-ignore
+                    onChange={handleQualificationChange}
+                    value={qualification}
+                    className={classes.planSelect}
+                >
+                    {EDUCATION_LEVELS.map((item, index) =>
+                        <MenuItem value={item.value} key={`qualification-${index}`}>
+                            {item.label}
+                        </MenuItem>
+                    )}}
+                </Select>
+            </div>
+            {opContent}
         </>
     )
 };

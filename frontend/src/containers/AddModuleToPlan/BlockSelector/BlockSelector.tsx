@@ -3,6 +3,7 @@ import {Select} from "@material-ui/core";
 import React from "react";
 import {useStyles} from "../AddModuleToPlan.styles";
 import {useDispatch, useSelector} from "react-redux";
+import cn from 'classnames';
 import {getSelectedBlock} from "../getters";
 import actions from "../actions";
 
@@ -22,7 +23,7 @@ export const BlockSelector = () => {
 
     return (
         <Select
-            className={classes.marginBottom}
+            className={cn(classes.marginBottom, classes.marginTop)}
             value={value}
             // @ts-ignore
             onChange={onChange}
