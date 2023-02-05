@@ -9,6 +9,7 @@ import {UserType} from "../../layout/types";
 
 export interface EducationalPlanActions {
   approvePlan: any;
+  approvePlanISU: any;
   sendPlanToRework: any;
   sendPlanToValidate: any;
   setNewPlanIdForRedirect: any;

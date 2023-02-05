@@ -181,9 +181,16 @@ class EducationalPlanService extends AnalyticsService{
         });
     }
 
-    approvePlan(planId: any){
+    approvePlanIsu(planId: any){
         return this.post(`/api/isu_v2/academic-plans/send_to_isu`, {
             ap_id: planId
+        });
+    }
+
+
+    approvePlan(planId: any){
+        return this.post(`/api/academicplan_check/${planId}`, {
+            new_status: PlanStatuses.APPROVED
         });
     }
 }
