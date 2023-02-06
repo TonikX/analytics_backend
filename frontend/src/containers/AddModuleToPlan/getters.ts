@@ -3,6 +3,7 @@ import get from "lodash/get";
 import {GENERAL_PATH} from "./reducer";
 import {addModuleToPlanState} from "./types";
 import {SortingType, Types} from "../../components/SortingButton/types";
+import {Qualifications} from "./enum";
 
 export const getStateData = (state: rootState): addModuleToPlanState => get(state, GENERAL_PATH);
 
@@ -21,3 +22,4 @@ export const getSelectedBlock = (state: rootState): string => get(getStateData(s
 export const getSelectedPlans = (state: rootState): Array<any> => get(getStateData(state), "selectedPlans", []);
 export const getSelectedModules = (state: rootState): Array<any> => get(getStateData(state), "selectedModules", []);
 export const getSelectAll = (state: rootState): boolean => get(getStateData(state), "selectAll", false);
+export const getQualification = (state: rootState): Qualifications => get(getStateData(state), "qualification", Qualifications.ALL_LEVELS);

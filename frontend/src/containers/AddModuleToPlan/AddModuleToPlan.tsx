@@ -10,6 +10,7 @@ import DialogActions from "@material-ui/core/DialogActions/DialogActions";
 import {Modules} from "./Modules";
 import {EducationalPlans} from "./EducationalPlans";
 import {BlockSelector} from "./BlockSelector";
+import {SelectedPlans} from "./SelectedPlans";
 import actions from "./actions";
 import {getSelectAll, getSelectedBlock, getSelectedModules, getSelectedPlans} from "./getters";
 
@@ -51,11 +52,19 @@ export const AddModuleToPlan = () => {
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.addModulesModal}>
-                    <div>
-                        <Typography variant="h6">
-                            Выберите блок для добавления
-                        </Typography>
-                        <BlockSelector/>
+                    <div className={classes.upperContent}>
+                        <div className={classes.upperContentLeft}>
+                            <Typography variant="h6">
+                                Выберите блок для добавления
+                            </Typography>
+                            <BlockSelector/>
+                        </div>
+                        <div className={classes.upperContentRight}>
+                            <Typography variant="h6">
+                                Выбранные планы
+                            </Typography>
+                            <SelectedPlans/>
+                        </div>
                     </div>
                     <div className={classes.content}>
                         <div className={classes.contentLeft}>
