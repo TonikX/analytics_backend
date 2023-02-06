@@ -1,6 +1,7 @@
 import AnalyticsService from "../../service/analytics-service";
 import {SortingType, Types} from "../../components/SortingButton/types";
 import {getSortingSymbol} from "../../common/utils";
+import {Qualifications} from "./enum";
 
 class AddModuleToPlanService extends AnalyticsService {
     getTrainingModules(currentPage: number, search: string, sortingField: string, sortingMode: SortingType, filters: any){
@@ -22,10 +23,10 @@ class AddModuleToPlanService extends AnalyticsService {
         return this.get(`/api/disciplineblockmodule/list?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}&${filtersString}`);
     }
 
-    getEducationalPlan(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
+    getEducationalPlan(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType, qualification: Qualifications){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
-        return this.get(`/api/academicplan/short?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+        return this.get(`/api/academicplan/short?page=${currentPage}&academic_plan_in_field_of_study__qualification=${qualification}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
     }
 
     addModuleToPlan(modules: number[], academicPlans: number[], blockName: string, year: number) {

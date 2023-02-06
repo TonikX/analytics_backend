@@ -10,7 +10,7 @@ import {
     getCurrentModulePage,
     getCurrentPlansPage,
     getModuleSearchQuery,
-    getPlansSearchQuery, getSelectAll, getSelectedBlock, getSelectedModules, getSelectedPlans,
+    getPlansSearchQuery, getQualification, getSelectAll, getSelectedBlock, getSelectedModules, getSelectedPlans,
     getSortingMode
 } from "./getters";
 
@@ -60,7 +60,7 @@ const addModuleToPlan = createLogic({
         const state = getState();
         const selectAllAp = getSelectAll(state);
         const selectedModules = getSelectedModules(state);
-        const selectedPlans = selectAllAp ? [] : getSelectedPlans(state);
+        const selectedPlans = selectAllAp ? [] : getSelectedPlans(state).map(it => it.id);
         const selectedBlock = getSelectedBlock(state);
         const year = selectAllAp ? 2023 : 0;
 
@@ -92,10 +92,11 @@ const getEducationalPlansList = createLogic({
         const currentPage = getCurrentPlansPage(state);
         const searchQuery = getPlansSearchQuery(state);
         const sortingMode = getSortingMode(state);
+        const qualification = getQualification(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_PLANS}));
 
-        service.getEducationalPlan(currentPage, searchQuery, 'id', sortingMode)
+        service.getEducationalPlan(currentPage, searchQuery, 'id', sortingMode, qualification)
             .then((res) => {
                 const results = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));

@@ -8,5 +8,5 @@ export enum fetchingTypes {
 export enum Qualifications {
     BACHELOR = 'bachelor',
     MASTER = 'master',
-    ALL_LEVELS = 'all',
+    ALL_LEVELS = '',
 }

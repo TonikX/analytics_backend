@@ -22,4 +22,4 @@ export const getSelectedBlock = (state: rootState): string => get(getStateData(s
 export const getSelectedPlans = (state: rootState): Array<any> => get(getStateData(state), "selectedPlans", []);
 export const getSelectedModules = (state: rootState): Array<any> => get(getStateData(state), "selectedModules", []);
 export const getSelectAll = (state: rootState): boolean => get(getStateData(state), "selectAll", false);
-export const getQualification = (state: rootState): string => get(getStateData(state), "qualification", Qualifications.ALL_LEVELS);
+export const getQualification = (state: rootState): Qualifications => get(getStateData(state), "qualification", Qualifications.ALL_LEVELS);

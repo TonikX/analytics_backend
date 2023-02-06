@@ -7,14 +7,20 @@ import {rootState} from "../../../store/reducers";
 import {getSelectedPlans} from "../getters";
 import actions from "../actions";
 import {useStyles} from "../AddModuleToPlan.styles";
+import {EducationalPlanShort} from "../types";
+import {EducationalPlanFields} from "../../EducationalPlan/enum";
 
 export const SelectedPlans = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const selectedPlans = useSelector((state: rootState) => getSelectedPlans(state));
-    const removePlan = (item: number) => {
-        const newPlans = selectedPlans.filter((it => it !== item));
+    const removePlan = (id: number) => {
+        const newPlans = selectedPlans.filter((it => it.id !== id));
         dispatch(actions.setSelectedPlans(newPlans))
+    };
+
+    const getLabel = (item: EducationalPlanShort) => {
+        return `${item[EducationalPlanFields.TITLE].slice(0, 3)} ${item[EducationalPlanFields.YEAR]} ${item[EducationalPlanFields.NUMBER]}`
     };
 
     if (!selectedPlans.length) {
@@ -22,7 +28,7 @@ export const SelectedPlans = () => {
     }
     return (
         <div className={cn(classes.marginTop, classes.chip)}>
-            {selectedPlans.map((item, index) => <Chip onDelete={() => removePlan(item)} key={index} label={item}/>)}
+            {selectedPlans.map((item, index) => <Chip onDelete={() => removePlan(item.id)} key={index} label={getLabel(item)}/>)}
         </div>
     )
 };

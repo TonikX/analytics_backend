@@ -2,6 +2,8 @@ import {ActionCreatorWithoutPayload, ActionCreatorWithPayload} from "@reduxjs/to
 import {TrainingModuleType} from "../EducationalPlan/TrainingModules/types";
 import {SortingType} from "../../components/SortingButton/types";
 import {EducationalPlanListType} from "../EducationalPlan/types";
+import {EducationalPlanFields} from "../EducationalPlan/enum";
+import {Qualifications} from "./enum";
 
 export interface AddModuleToPlanActions {
     getTrainingModulesList: ActionCreatorWithoutPayload;
@@ -26,6 +28,13 @@ export interface AddModuleToPlanActions {
     addModuleToPlan: ActionCreatorWithoutPayload
 }
 
+export interface EducationalPlanShort {
+    [EducationalPlanFields.YEAR]: string;
+    [EducationalPlanFields.TITLE]: string;
+    [EducationalPlanFields.NUMBER]: number;
+    [EducationalPlanFields.ID]: number;
+}
+
 export interface addModuleToPlanState {
     trainingModulesList: TrainingModuleType[];
     currentModulesPage: number;
@@ -39,7 +48,7 @@ export interface addModuleToPlanState {
     plansSearchQuery: string;
 
     selectedModules: number[];
-    selectedPlans: number[];
+    selectedPlans: EducationalPlanShort[];
     selectedBlock: string,
     selectAll: boolean
 
