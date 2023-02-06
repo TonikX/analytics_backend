@@ -35,6 +35,7 @@ export const Modules = () => {
     const handleSearch = (value: string) => {
         dispatch(actions.setModulesSearchQuery(value));
         dispatch(actions.setSelectedModules([]));
+        dispatch(actions.changeModulesCurrentPage(1));
         dispatch(actions.getTrainingModulesList());
     };
 

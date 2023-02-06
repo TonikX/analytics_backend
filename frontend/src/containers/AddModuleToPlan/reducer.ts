@@ -2,6 +2,7 @@ import {addModuleToPlanState} from "./types";
 import createReducer from "../../store/createReducer";
 import actions from "./actions";
 import {Types} from "../../components/SortingButton/types";
+import {Qualifications} from "./enum";
 
 export const GENERAL_PATH = 'ADD_MODULE_TO_PLAN';
 
@@ -20,7 +21,9 @@ export const initialState: addModuleToPlanState = {
     selectedBlock: '',
     selectedModules: [],
     selectedPlans: [],
-    selectAll: false
+    selectAll: false,
+
+    qualification: Qualifications.ALL_LEVELS,
 };
 
 const setTrainingModulesList = (state: addModuleToPlanState, {payload}: any): addModuleToPlanState => ({
@@ -88,6 +91,11 @@ const setSelectedBlock = (state: addModuleToPlanState, {payload}: any): addModul
     selectedBlock: payload
 });
 
+const setQualification = (state: addModuleToPlanState, {payload}: any): addModuleToPlanState => ({
+    ...state,
+    qualification: payload
+});
+
 export const reducer = createReducer(initialState, {
     [actions.setTrainingModulesList.type]: setTrainingModulesList,
     [actions.changeModulesCurrentPage.type]: changeModulesCurrentPage,
@@ -104,4 +112,6 @@ export const reducer = createReducer(initialState, {
     [actions.setSelectedBlock.type]: setSelectedBlock,
     [actions.setSelectedModules.type]: setSelectedModules,
     [actions.setSelectedPlans.type]: setSelectedPlans,
+
+    [actions.setQualification.type]: setQualification,
 });
