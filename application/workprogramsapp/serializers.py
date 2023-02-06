@@ -798,7 +798,7 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
             data["can_validate"] = False
         data["discipline_blocks_in_academic_plan"] = sorted(data["discipline_blocks_in_academic_plan"],
                                                             key=lambda x: x["name"])
-        if IsuObjectsSendLogger.objects.filter(ap_id=instance.id).exists():
+        if IsuObjectsSendLogger.objects.filter(error_status=0, ap_id=instance.id).exists():
             data["was_send_to_isu"] = True
         else:
             data["was_send_to_isu"] = False
