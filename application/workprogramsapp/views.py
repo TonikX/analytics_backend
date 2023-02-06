@@ -1957,7 +1957,7 @@ class AcademicPlanListAPIView(generics.ListAPIView):
 class AcademicPlanListShortAPIView(generics.ListAPIView):
     serializer_class = AcademicPlanShortSerializer
     queryset = AcademicPlan.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['academic_plan_in_field_of_study__qualification',
                      'academic_plan_in_field_of_study__title',
                      'academic_plan_in_field_of_study__year',
@@ -1967,6 +1967,7 @@ class AcademicPlanListShortAPIView(generics.ListAPIView):
                        'academic_plan_in_field_of_study__title',
                        'academic_plan_in_field_of_study__year',
                        'academic_plan_in_field_of_study__field_of_study__title']
+    filterset_fields = ['academic_plan_in_field_of_study__qualification']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
