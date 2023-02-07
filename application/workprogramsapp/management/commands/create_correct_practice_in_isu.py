@@ -48,7 +48,7 @@ class Command(BaseCommand):
                     new_lines.append(el)
                     wp.discipline_code = str(new_id)
                     wp.save()
-                    print(el)
+                    print(el, ", ")
             except WorkProgram.DoesNotExist:
                 pass
         filename = os.path.join(dirname, 'files/NEW_ISU_IDS.json')
