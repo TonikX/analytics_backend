@@ -758,7 +758,6 @@ class DisciplineBlockModule(CloneMixin, models.Model):
 
     isu_ids_by_fathers = JSONField(blank=True, null=True, verbose_name="id модуля в ису по отцам")
 
-
     class Meta:
         ordering = ['order']
 
@@ -810,6 +809,39 @@ class DisciplineBlockModule(CloneMixin, models.Model):
             return changeblocks_in_module | WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=module)
         return changeblocks_in_module
+
+    @staticmethod
+    def new_ordinal_number(block, old_ordinal_number, new_ordinal_number):
+        '''
+        :param new_ordinal_number: если равен -1, то значит запрос на удаление элемента из списка,
+                                   любое другое значение - запрос на изменение порядка в списке.
+        '''
+        modules = DisciplineBlockModule.objects.filter(descipline_block=block).order_by(
+            'orderings_for_ups__0__number')
+        if new_ordinal_number == -1:
+            for module in modules:
+                for ap_index in module.orderings_for_ups:
+                    if ap_index['up_id'] == block.academic_plan.id and ap_index['number'] > old_ordinal_number:
+                        ap_index['number'] = ap_index['number'] - 1
+
+        elif int(old_ordinal_number) > int(new_ordinal_number):
+            for module in modules:
+                for ap_index in module.orderings_for_ups:
+                    print(ap_index)
+                    if int(ap_index['up_id']) == block.academic_plan.id and int(ap_index['number']) == old_ordinal_number:
+                        ap_index['number'] = new_ordinal_number
+                    elif int(ap_index['up_id']) == block.academic_plan.id and int(ap_index['number']) >= new_ordinal_number:
+                        ap_index['number'] = int(ap_index['number']) + 1
+                module.save()
+
+        else:
+            for module in modules:
+                for ap_index in module.orderings_for_ups:
+                    if int(ap_index['up_id']) == block.academic_plan.id and int(ap_index['number']) == old_ordinal_number:
+                        ap_index['number'] = new_ordinal_number
+                    elif int(ap_index['up_id']) == block.academic_plan.id and int(ap_index['number']) >= old_ordinal_number:
+                        ap_index['number'] = int(ap_index['number']) - 1
+                module.save()
 
 
 class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):

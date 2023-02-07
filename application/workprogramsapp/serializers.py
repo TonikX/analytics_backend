@@ -728,7 +728,7 @@ class DisciplineBlockSerializer(serializers.ModelSerializer):
             except:
                 for index, module in enumerate(dbms):
                     module_for_save = DisciplineBlockModule.objects.get(id=module.id)
-                    if module_for_save.orderings_for_ups is not None and module_for_save.orderings_for_ups != '{}':
+                    if module_for_save.orderings_for_ups is not None:
                         if str(obj.academic_plan.id) not in str(module.orderings_for_ups):
                             module_for_save.orderings_for_ups.append(
                                 {"up_id": obj.academic_plan.id, "number": index + 1})
