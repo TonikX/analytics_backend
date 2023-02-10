@@ -116,7 +116,14 @@ class GeneralCharacteristicsListAPIView(generics.ListAPIView):
     serializer_class = GeneralCharacteristicsSerializer
     queryset = GeneralCharacteristics.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['educational_program', 'area_of_activity']
+    search_fields = ['educational_program__title',
+                     'educational_program__year',
+                     'educational_program__qualification',
+                     'educational_program__title',
+                     'educational_program__year',
+                     'educational_program__field_of_study__title',
+                     'educational_program__field_of_study__number',
+                     ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
