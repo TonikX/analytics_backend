@@ -1,0 +1,722 @@
+[
+  {
+    "ID": 1311,
+    "MAIN_PLAN": 18366,
+    "DISC_ID": 5621,
+    "MODULE_ID": 7724,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 1944,
+    "MAIN_PLAN": 18382,
+    "DISC_ID": 48,
+    "MODULE_ID": 7925,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 3354,
+    "MAIN_PLAN": 18405,
+    "DISC_ID": 21770,
+    "MODULE_ID": 8233,
+    "SEMESTER_START": "1",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 3355,
+    "MAIN_PLAN": 18405,
+    "DISC_ID": 21769,
+    "MODULE_ID": 8233,
+    "SEMESTER_START": "1",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 6160,
+    "MAIN_PLAN": 18344,
+    "DISC_ID": 5542,
+    "MODULE_ID": 8932,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 6161,
+    "MAIN_PLAN": 18344,
+    "DISC_ID": 5621,
+    "MODULE_ID": 8932,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 6162,
+    "MAIN_PLAN": 18344,
+    "DISC_ID": 21135,
+    "MODULE_ID": 8935,
+    "SEMESTER_START": "1",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 6223,
+    "MAIN_PLAN": 18344,
+    "DISC_ID": 23,
+    "MODULE_ID": 8964,
+    "SEMESTER_START": "8",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 6225,
+    "MAIN_PLAN": 18344,
+    "DISC_ID": 25,
+    "MODULE_ID": 8968,
+    "SEMESTER_START": "8",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 5036,
+    "MAIN_PLAN": 22797,
+    "DISC_ID": 14294,
+    "MODULE_ID": 8673,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 5514,
+    "MAIN_PLAN": 18452,
+    "DISC_ID": 124231,
+    "MODULE_ID": 7685,
+    "SEMESTER_START": "1",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 5515,
+    "MAIN_PLAN": 18452,
+    "DISC_ID": 124232,
+    "MODULE_ID": 7685,
+    "SEMESTER_START": "3",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 5516,
+    "MAIN_PLAN": 18452,
+    "DISC_ID": 124233,
+    "MODULE_ID": 7685,
+    "SEMESTER_START": "4",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 7227,
+    "MAIN_PLAN": 18426,
+    "DISC_ID": 26,
+    "MODULE_ID": 9198,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 7228,
+    "MAIN_PLAN": 18426,
+    "DISC_ID": 27,
+    "MODULE_ID": 9199,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 7229,
+    "MAIN_PLAN": 18426,
+    "DISC_ID": 28,
+    "MODULE_ID": 9200,
+    "SEMESTER_START": "4",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 9792,
+    "MAIN_PLAN": 18451,
+    "DISC_ID": 64,
+    "MODULE_ID": 10061,
+    "SEMESTER_START": "2",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 9793,
+    "MAIN_PLAN": 18451,
+    "DISC_ID": 65,
+    "MODULE_ID": 10062,
+    "SEMESTER_START": "4",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 9794,
+    "MAIN_PLAN": 18451,
+    "DISC_ID": 66,
+    "MODULE_ID": 10063,
+    "SEMESTER_START": "4",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 9117,
+    "MAIN_PLAN": 18380,
+    "DISC_ID": 21832,
+    "MODULE_ID": 9880,
+    "SEMESTER_START": "1",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 10845,
+    "MAIN_PLAN": 18390,
+    "DISC_ID": 42,
+    "MODULE_ID": 10291,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 10847,
+    "MAIN_PLAN": 18390,
+    "DISC_ID": 44,
+    "MODULE_ID": 10293,
+    "SEMESTER_START": "3",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 10848,
+    "MAIN_PLAN": 18390,
+    "DISC_ID": 47,
+    "MODULE_ID": 10294,
+    "SEMESTER_START": "4",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 10990,
+    "MAIN_PLAN": 18387,
+    "DISC_ID": 42,
+    "MODULE_ID": 10339,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 10992,
+    "MAIN_PLAN": 18387,
+    "DISC_ID": 44,
+    "MODULE_ID": 10341,
+    "SEMESTER_START": "3",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 10993,
+    "MAIN_PLAN": 18387,
+    "DISC_ID": 47,
+    "MODULE_ID": 10342,
+    "SEMESTER_START": "4",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 13028,
+    "MAIN_PLAN": 18355,
+    "DISC_ID": 17967,
+    "MODULE_ID": 10874,
+    "SEMESTER_START": "6",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 13111,
+    "MAIN_PLAN": 18356,
+    "DISC_ID": 17967,
+    "MODULE_ID": 10901,
+    "SEMESTER_START": "6",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 12625,
+    "MAIN_PLAN": 18354,
+    "DISC_ID": 17967,
+    "MODULE_ID": 10785,
+    "SEMESTER_START": "6",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 11825,
+    "MAIN_PLAN": 18417,
+    "DISC_ID": 43,
+    "MODULE_ID": 10582,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 11827,
+    "MAIN_PLAN": 18417,
+    "DISC_ID": 45,
+    "MODULE_ID": 10584,
+    "SEMESTER_START": "3",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 11828,
+    "MAIN_PLAN": 18417,
+    "DISC_ID": 46,
+    "MODULE_ID": 10585,
+    "SEMESTER_START": "4",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 12352,
+    "MAIN_PLAN": 18357,
+    "DISC_ID": 17967,
+    "MODULE_ID": 10712,
+    "SEMESTER_START": "6",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 12476,
+    "MAIN_PLAN": 18357,
+    "DISC_ID": 17967,
+    "MODULE_ID": 10752,
+    "SEMESTER_START": "6",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 12785,
+    "MAIN_PLAN": 18354,
+    "DISC_ID": 17967,
+    "MODULE_ID": 10816,
+    "SEMESTER_START": "6",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 12868,
+    "MAIN_PLAN": 18355,
+    "DISC_ID": 17967,
+    "MODULE_ID": 10843,
+    "SEMESTER_START": "6",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 13354,
+    "MAIN_PLAN": 18358,
+    "DISC_ID": 17967,
+    "MODULE_ID": 10959,
+    "SEMESTER_START": "6",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 13271,
+    "MAIN_PLAN": 18356,
+    "DISC_ID": 17967,
+    "MODULE_ID": 10932,
+    "SEMESTER_START": "6",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 13514,
+    "MAIN_PLAN": 18358,
+    "DISC_ID": 17967,
+    "MODULE_ID": 10990,
+    "SEMESTER_START": "6",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 13597,
+    "MAIN_PLAN": 18359,
+    "DISC_ID": 17967,
+    "MODULE_ID": 11017,
+    "SEMESTER_START": "6",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 13691,
+    "MAIN_PLAN": 18359,
+    "DISC_ID": 17967,
+    "MODULE_ID": 11042,
+    "SEMESTER_START": "6",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 16150,
+    "MAIN_PLAN": 18407,
+    "DISC_ID": 21770,
+    "MODULE_ID": 11666,
+    "SEMESTER_START": "1",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 16151,
+    "MAIN_PLAN": 18407,
+    "DISC_ID": 21769,
+    "MODULE_ID": 11666,
+    "SEMESTER_START": "1",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 15255,
+    "MAIN_PLAN": 18425,
+    "DISC_ID": 51,
+    "MODULE_ID": 11523,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 15256,
+    "MAIN_PLAN": 18425,
+    "DISC_ID": 52,
+    "MODULE_ID": 11524,
+    "SEMESTER_START": "3",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 15257,
+    "MAIN_PLAN": 18425,
+    "DISC_ID": 53,
+    "MODULE_ID": 11525,
+    "SEMESTER_START": "4",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 16345,
+    "MAIN_PLAN": 18408,
+    "DISC_ID": 21770,
+    "MODULE_ID": 11704,
+    "SEMESTER_START": "1",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 16346,
+    "MAIN_PLAN": 18408,
+    "DISC_ID": 21769,
+    "MODULE_ID": 11704,
+    "SEMESTER_START": "1",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 16710,
+    "MAIN_PLAN": 18385,
+    "DISC_ID": 30,
+    "MODULE_ID": 11796,
+    "SEMESTER_START": "1,2,3",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 16711,
+    "MAIN_PLAN": 18385,
+    "DISC_ID": 29,
+    "MODULE_ID": 11796,
+    "SEMESTER_START": "1,2,3",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 16718,
+    "MAIN_PLAN": 18385,
+    "DISC_ID": 37,
+    "MODULE_ID": 11800,
+    "SEMESTER_START": "4",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 16719,
+    "MAIN_PLAN": 18385,
+    "DISC_ID": 38,
+    "MODULE_ID": 11800,
+    "SEMESTER_START": "4",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 18339,
+    "MAIN_PLAN": 18428,
+    "DISC_ID": 17343,
+    "MODULE_ID": 12219,
+    "SEMESTER_START": "3",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 18345,
+    "MAIN_PLAN": 18428,
+    "DISC_ID": 20,
+    "MODULE_ID": 12223,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 18346,
+    "MAIN_PLAN": 18428,
+    "DISC_ID": 21,
+    "MODULE_ID": 12224,
+    "SEMESTER_START": "4",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 17594,
+    "MAIN_PLAN": 18397,
+    "DISC_ID": 38,
+    "MODULE_ID": 12033,
+    "SEMESTER_START": "3",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 17697,
+    "MAIN_PLAN": 18341,
+    "DISC_ID": 5542,
+    "MODULE_ID": 12023,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 17698,
+    "MAIN_PLAN": 18341,
+    "DISC_ID": 5621,
+    "MODULE_ID": 12023,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 17759,
+    "MAIN_PLAN": 18341,
+    "DISC_ID": 13,
+    "MODULE_ID": 12056,
+    "SEMESTER_START": "8",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 17891,
+    "MAIN_PLAN": 18399,
+    "DISC_ID": 17343,
+    "MODULE_ID": 12090,
+    "SEMESTER_START": "3",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 17896,
+    "MAIN_PLAN": 18399,
+    "DISC_ID": 16,
+    "MODULE_ID": 12093,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 17897,
+    "MAIN_PLAN": 18399,
+    "DISC_ID": 17,
+    "MODULE_ID": 12094,
+    "SEMESTER_START": "4",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 17898,
+    "MAIN_PLAN": 18399,
+    "DISC_ID": 18,
+    "MODULE_ID": 12095,
+    "SEMESTER_START": "4",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 18122,
+    "MAIN_PLAN": 18345,
+    "DISC_ID": 5542,
+    "MODULE_ID": 12148,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 18123,
+    "MAIN_PLAN": 18345,
+    "DISC_ID": 5621,
+    "MODULE_ID": 12148,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 18188,
+    "MAIN_PLAN": 18345,
+    "DISC_ID": 10,
+    "MODULE_ID": 12181,
+    "SEMESTER_START": "8",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 19138,
+    "MAIN_PLAN": 18427,
+    "DISC_ID": 39,
+    "MODULE_ID": 12465,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 19139,
+    "MAIN_PLAN": 18427,
+    "DISC_ID": 40,
+    "MODULE_ID": 12466,
+    "SEMESTER_START": "3",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 19140,
+    "MAIN_PLAN": 18427,
+    "DISC_ID": 41,
+    "MODULE_ID": 12467,
+    "SEMESTER_START": "4",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 25793,
+    "MAIN_PLAN": 18434,
+    "DISC_ID": 21832,
+    "MODULE_ID": 8412,
+    "SEMESTER_START": "1",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 25794,
+    "MAIN_PLAN": 18434,
+    "DISC_ID": 21834,
+    "MODULE_ID": 8412,
+    "SEMESTER_START": "2",
+    "REQUIRED": 1,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  },
+  {
+    "ID": 25796,
+    "MAIN_PLAN": 18434,
+    "DISC_ID": 16438,
+    "MODULE_ID": 8413,
+    "SEMESTER_START": "1",
+    "REQUIRED": 0,
+    "CHOICE_FLOW": 0,
+    "REPLACEABLE": 0
+  }
+]
