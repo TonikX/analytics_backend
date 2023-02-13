@@ -349,7 +349,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
       case 7:
         return <CompetenceTable
           tableData={get(educationalProgramCharacteristic, 'group_of_general_prof_competences', [])}
-          competenceTableType={CompetenceTableType.SUPRA_PROFESSIONAL_COMPETENCES}
+          competenceTableType={CompetenceTableType.GENERAL_PROFESSIONAL_COMPETENCES}
         />;
       case 8:
         return <CompetenceTable
