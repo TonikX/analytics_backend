@@ -164,7 +164,7 @@ export const QUALIFICATIONS = [
 export const PRACTICE_KINDS  = [
     {
         value: PracticeKinds.EDUCATIONAL,
-        label: 'Учебная',
+        label: 'Образовательная',
     },
     {
         value: PracticeKinds.PRODUCTION,

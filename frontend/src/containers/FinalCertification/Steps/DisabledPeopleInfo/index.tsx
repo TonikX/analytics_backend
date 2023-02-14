@@ -1,4 +1,5 @@
 import React from "react";
+import cn from 'classnames';
 import {CertificationSteps, TemplateTextCertificationFields} from "../../enum";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -22,7 +23,7 @@ class DisabledPeopleInfo extends React.Component<DisabledPeopleInfoProps> {
                     {CertificationSteps.DISABLED_PEOPLE}
                 </Typography>
                 <div className={classes.singleColumn}>
-                    <Typography className={classes.generalProvisionsText} align="justify">
+                    <Typography className={cn(classes.generalProvisionsText, classes.preWrap)} align="justify">
                         {templateText[TemplateTextCertificationFields.GIA_OVZ]}
                     </Typography>
                 </div>

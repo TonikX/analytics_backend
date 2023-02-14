@@ -45,7 +45,7 @@ class Prerequisites extends React.Component<PrerequisitesProps> {
         const isCanEdit = permissionsInfo[PermissionsInfoFields.CAN_EDIT];
 
         return (
-            <div className={classes.content}>
+            <div>
                 <Typography variant='h5'>
                     {PracticeSteps.PREREQUISITES}
                 </Typography>

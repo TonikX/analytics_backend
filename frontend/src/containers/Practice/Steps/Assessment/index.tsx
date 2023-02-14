@@ -19,7 +19,7 @@ class Assessment extends React.Component<AssessmentProps> {
         const {classes} = this.props;
 
         return (
-            <div className={classes.content}>
+            <div>
                 <Typography variant='h5'>
                     {PracticeSteps.EVALUATION_METHODS}
                 </Typography>
