@@ -107,4 +107,7 @@ export default () => createStyles({
     editorTitleRow: {
         marginTop: '30px'
     },
+    preWrap: {
+        whiteSpace: 'pre-wrap'
+    }
 });
