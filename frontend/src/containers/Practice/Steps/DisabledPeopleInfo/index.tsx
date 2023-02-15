@@ -1,4 +1,5 @@
 import React from "react";
+import cn from 'classnames';
 import {PracticeSteps, TemplateTextPracticeFields} from "../../enum";
 import connect from "./connect";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -19,12 +20,12 @@ class GeneralProvisions extends React.Component<GeneralProvisionsProps> {
         const {classes, templateText} = this.props;
 
         return (
-            <div className={classes.content}>
+            <div>
                 <Typography variant='h5'>
                     {PracticeSteps.OVZ}
                 </Typography>
                 <div className={classes.singleColumn}>
-                    <Typography className={classes.generalProvisionsText} align="justify">
+                    <Typography className={cn(classes.generalProvisionsText, classes.preWrap)} align="justify">
                         {templateText[TemplateTextPracticeFields.OVZ]}
                     </Typography>
                 </div>

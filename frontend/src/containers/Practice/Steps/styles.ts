@@ -123,4 +123,7 @@ export default (theme: Theme) => createStyles({
     editorTitleRow: {
         marginTop: '30px'
     },
+    preWrap: {
+        whiteSpace: 'pre-wrap'
+    }
 });

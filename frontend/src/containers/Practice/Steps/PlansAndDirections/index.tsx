@@ -25,7 +25,7 @@ class PlansAndDirections extends React.Component<GeneralInfoProps> {
     const {classes, fields} = this.props;
 
     return (
-      <div className={classes.content}>
+      <div>
         <Typography className={classes.h1} variant='h5'>
           {PracticeSteps.PLANS}
         </Typography>
