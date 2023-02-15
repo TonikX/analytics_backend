@@ -292,7 +292,7 @@ class AcademicPlanUpdateProcessor:
         old_work_program_change_in_discipline_block_module = None
         old_work_program_in_field_of_study = None
 
-        work_program_change_in_discipline_block_module_not_for_del =[]
+        work_program_change_in_discipline_block_module_not_for_del = []
 
         if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
@@ -343,11 +343,11 @@ class AcademicPlanUpdateProcessor:
             #     work_program=work_program_object
             # )[0])
             old_work_program_change_in_discipline_block_module = \
-            WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                discipline_block_module=discipline_block_module_object,
-                change_type=option,
-                work_program=work_program_object
-            )[0]
+                WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                    discipline_block_module=discipline_block_module_object,
+                    change_type=option,
+                    work_program=work_program_object
+                )[0]
             work_program_change_in_discipline_block_module = copy \
                 .deepcopy(old_work_program_change_in_discipline_block_module)
             if WorkProgramInFieldOfStudy.objects.filter(
@@ -469,16 +469,14 @@ class AcademicPlanUpdateProcessor:
             .exclude(work_program__id__in=new_disciplines_ids).delete()
 
     @staticmethod
-    def __del_old_wpcbms_by_module__(discipline_block_module_object, work_program_change_in_discipline_block_modules_not_for_del):
+    def __del_old_wpcbms_by_module__(discipline_block_module_object,
+                                     work_program_change_in_discipline_block_modules_not_for_del):
         wcbms = WorkProgramChangeInDisciplineBlockModule. \
-            objects.filter(discipline_block_module=discipline_block_module_object, work_program=None)\
-            .exclude(discipline_block_module=discipline_block_module_object,
-                           id__in=work_program_change_in_discipline_block_modules_not_for_del) \
-            .delete()
-        # wcbms = WorkProgramChangeInDisciplineBlockModule. \
-        #     objects.filter(discipline_block_module=discipline_block_module_object,
-        #                    id__not__in=work_program_change_in_discipline_block_modules_not_for_del) \
-        #     .delete()
+            objects.filter(discipline_block_module=discipline_block_module_object, work_program=None).delete()
+        wcbms = WorkProgramChangeInDisciplineBlockModule. \
+            objects.filter(discipline_block_module=discipline_block_module_object).exclude \
+            (discipline_block_module=discipline_block_module_object,
+             id__in=work_program_change_in_discipline_block_modules_not_for_del).delete()
 
     def update_academic_plans(self):
         academic_plans_ids = AcademicPlanUpdateConfiguration.objects.filter(updates_enabled=True).values_list(
@@ -516,7 +514,7 @@ class AcademicPlanUpdateProcessor:
 
                             block_modules_to_del_ids.append(discipline_block_module_object.id)
                             disciplines_for_del_in_module = []
-                            work_program_change_in_discipline_block_modules_not_for_del =[]
+                            work_program_change_in_discipline_block_modules_not_for_del = []
                             for isu_academic_plan_discipline_json in module['disciplines']:
                                 work_program_object = self.__process_discipline__(
                                     isu_academic_plan_json,
@@ -526,11 +524,11 @@ class AcademicPlanUpdateProcessor:
                                 work_program_in_field_of_study_object, \
                                 work_program_change_in_discipline_block_module_object = \
                                     self.__process_linked_data__(
-                                    discipline_block_module_object,
-                                    work_program_object,
-                                    isu_academic_plan_discipline_json,
-                                    isu_academic_plan_json
-                                )
+                                        discipline_block_module_object,
+                                        work_program_object,
+                                        isu_academic_plan_discipline_json,
+                                        isu_academic_plan_json
+                                    )
                                 print('___')
                                 print(work_program_in_field_of_study_object)
                                 self.__process_work_program_id_str_up_for_isu__(
