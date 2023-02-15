@@ -292,8 +292,6 @@ class AcademicPlanUpdateProcessor:
         old_work_program_change_in_discipline_block_module = None
         old_work_program_in_field_of_study = None
 
-        work_program_change_in_discipline_block_module_not_for_del = []
-
         if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
@@ -336,12 +334,6 @@ class AcademicPlanUpdateProcessor:
                 change_type=option,
                 work_program=work_program_object
         ).exists():
-            # print(work_program_object)
-            # print(WorkProgramChangeInDisciplineBlockModule.objects.filter(
-            #     discipline_block_module=discipline_block_module_object,
-            #     change_type=option,
-            #     work_program=work_program_object
-            # )[0])
             old_work_program_change_in_discipline_block_module = \
                 WorkProgramChangeInDisciplineBlockModule.objects.filter(
                     discipline_block_module=discipline_block_module_object,
@@ -394,10 +386,6 @@ class AcademicPlanUpdateProcessor:
                     work_program=work_program_object
                 )
                 work_program_in_field_of_study.save()
-        print(old_work_program_change_in_discipline_block_module)
-        print(old_work_program_in_field_of_study)
-        print(work_program_change_in_discipline_block_module)
-        print(work_program_in_field_of_study)
         return old_work_program_change_in_discipline_block_module, \
                old_work_program_in_field_of_study, \
                work_program_change_in_discipline_block_module, \
@@ -557,4 +545,4 @@ class AcademicPlanUpdateProcessor:
                     academic_plan_update_configuration.save()
             except Exception as e:
                 capture_exception(e)
-                print(e)
+
