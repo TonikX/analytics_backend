@@ -171,5 +171,13 @@ export default (theme: Theme) => createStyles({
     padding: '10px',
     width: 'fit-content',
     display: 'flex',
+  },
+  dragItemBackground: {
+    backgroundColor: '#fff',
+  },
+  tableHeader: {
+    position: 'fixed',
+    width: 'Calc(100% - 100px)',
+    marginTop: '-23px'
   }
 });
