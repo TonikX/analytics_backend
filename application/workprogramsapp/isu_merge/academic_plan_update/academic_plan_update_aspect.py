@@ -202,7 +202,7 @@ class AcademicPlanUpdateAspect:
                 updated_work_program_in_field_of_study_object
             )
 
-            return updated_work_program_in_field_of_study_object
+            return updated_work_program_in_field_of_study_object, updated_work_program_change_in_discipline_block_module_object
 
         return wrapper
 
