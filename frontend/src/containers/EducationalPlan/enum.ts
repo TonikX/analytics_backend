@@ -47,6 +47,7 @@ export enum fetchingTypes {
   PLAN_TRAJECTORY_SELECT_OPTIONAL_WP = 'PLAN_TRAJECTORY_SELECT_OPTIONAL_WP',
   CONNECT_MODULES = 'CONNECT_MODULES',
   DISCONNECT_MODULE = 'DISCONNECT_MODULE',
+  CHANGE_MODULE_POSITION = 'CHANGE_MODULE_POSITION',
 }
 
 export enum EducationalPlanFields {
@@ -72,7 +73,6 @@ export enum EducationalPlanFields {
   CAN_EDIT = 'can_edit',
   ID_RATING = 'id_rating',
   RATING = 'rating',
-  HAS_BEEN_SENT_TO_ISU = 'was_send_to_isu',
 
   TITLE = 'title',
   ACADEMIC_PLAN_IN_FIELD_OF_STUDY = 'academic_plan_in_field_of_study',

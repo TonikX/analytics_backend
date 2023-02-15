@@ -9,7 +9,6 @@ import {UserType} from "../../layout/types";
 
 export interface EducationalPlanActions {
   approvePlan: any;
-  approvePlanISU: any;
   sendPlanToRework: any;
   sendPlanToValidate: any;
   setNewPlanIdForRedirect: any;
@@ -62,6 +61,7 @@ export interface EducationalPlanActions {
   planTrajectorySelectOptionalWp: any;
   planTrajectorySelectElectives: any;
   planTrajectorySelectSpecialization: any;
+  changeModulePosition: any;
 }
 
 export interface educationalPlanState {
@@ -116,7 +116,6 @@ export type EducationalPlanType = {
   [EducationalPlanFields.ID_RATING]: string;
   [EducationalPlanFields.RATING]: string;
   [EducationalPlanFields.LABORIOUSNESS]: number;
-  [EducationalPlanFields.HAS_BEEN_SENT_TO_ISU]: boolean;
   [EducationalPlanFields.DISCIPLINE_BLOCKS]: Array<DisciplineBlockType>;
 };
 
