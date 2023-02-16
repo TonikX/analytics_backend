@@ -156,6 +156,7 @@ export default (theme: Theme) => createStyles({
   moduleNameWrap: {
     display: 'flex',
     alignItems: 'center',
+    flexWrap: 'wrap'
   },
   moduleName: {
     color: theme.palette.primary.main,

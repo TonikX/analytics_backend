@@ -46,6 +46,7 @@ import {
   EducationalPlanFields,
   DownloadFileModalFields
 } from "../enum";
+import {FavoriteType} from "../../Profile/Folders/enum";
 import {getUserFullName} from "../../../common/utils";
 import {DirectionFields} from "../../Direction/enum";
 
@@ -68,7 +69,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import UserSelector from "../../Profile/UserSelector/UserSelector";
 
-const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}} />);
+const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}}/>);
 
 const SortableItem = SortableElement((props:any) => {
   const {classes, detailPlan, canEdit, blockId, handleDisconnectModule, module} = props;
@@ -76,11 +77,11 @@ const SortableItem = SortableElement((props:any) => {
   const renderModule = (module:any, level:number):any => {
     const selectionRule = selectRulesArray.find(type => type.value === module?.selection_rule)?.label
     const selectionParameter = module?.selection_parametr
-
+    console.log('module?.childs', module?.childs)
     return (
       <>
         <TableRow tabIndex={0}>
-          <TableCell style={{ height: '40px', width: '100%'}} className={classes.moduleNameWrap}>
+          <TableCell style={{minHeight: '40px', width: '100%'}} className={classes.moduleNameWrap}>
             <Typography className={classes.moduleName} style={{ paddingLeft: level * 5 }}>
               {level === 0 ? <DragHandle /> : null}
 
@@ -112,7 +113,7 @@ const SortableItem = SortableElement((props:any) => {
           </TableCell>
         </TableRow>
         {module?.change_blocks_of_work_programs_in_modules?.length ? <RenderBlockOfWP detailPlan={detailPlan} classes={classes} blockOfWorkPrograms={module?.change_blocks_of_work_programs_in_modules} level={level}/> : null}
-        {module?.childs?.length ? renderModule(module?.childs?.[0], level + 1) : null}
+        {module?.childs?.map((module: any) => renderModule(module, level + 1))}
       </>
     )
   }
@@ -138,7 +139,6 @@ const SortableList = SortableContainer((props:any) => {
                       blockId={blockId}
                       handleDisconnectModule={handleDisconnectModule}
                       detailPlan={detailPlan}
-                      
         />
       ))}
     </div>
@@ -147,20 +147,9 @@ const SortableList = SortableContainer((props:any) => {
 
 
 const RenderBlockOfWP = (props:any) => {
-  const dispatch = useDispatch();
   const {classes, detailPlan, blockOfWorkPrograms, level} = props
   const qualification = get(detailPlan, 'academic_plan_in_field_of_study[0].qualification', '');
   const maxSem = qualification === BACHELOR_QUALIFICATION ? 8 : 4;
-
-
-  const handleDownloadFile = (workProgramId: number) => () => {
-    dispatch(actions.openDownloadModal({
-      [DownloadFileModalFields.ACADEMIC_PLAN_ID]: detailPlan[EducationalPlanFields.ID],
-      [DownloadFileModalFields.ID]: workProgramId,
-    }));
-
-    dispatch(actions.getDirectionsDependedOnWorkProgram(workProgramId));
-  }
 
   return (
     <>
@@ -196,10 +185,10 @@ const RenderBlockOfWP = (props:any) => {
                   {title}
                 </div>
               </TableCell>
-              <TableCell style={{width: '190px', minWidth: '190px'}}>
+              <TableCell style={{minWidth: '125px'}}>
                 {creditUnits}
               </TableCell>
-              <TableCell className={semError ? classes.error : undefined} style={{minWidth: '120px'}}>
+              <TableCell className={semError ? classes.error : undefined} style={{minWidth: '90px'}}>
                 {semError ? (
                   <Tooltip title='Обучение по этой дисциплине выходит за рамки обучения (длительность дисциплины больше допустимой в данном семестре)'>
                     <div style={{ width: '30px' }}>
@@ -208,7 +197,7 @@ const RenderBlockOfWP = (props:any) => {
                   </Tooltip>
                 ) : semesterStart}
               </TableCell>
-              <TableCell style={{minWidth: '120px'}}>
+              <TableCell style={{minWidth: '90px'}}>
                 {type === OPTIONALLY ? '-' : '+'}
               </TableCell>
               <TableCell />
@@ -263,6 +252,19 @@ const RenderBlockOfWP = (props:any) => {
   )
 }
 
+
+const handleDownloadFile = (workProgramId: number) => () => {
+  const detailPlan:any  = useSelector((state:any) => getEducationalPlanDetail(state));
+  const dispatch = useDispatch();
+
+  dispatch(actions.openDownloadModal({
+    [DownloadFileModalFields.ACADEMIC_PLAN_ID]: detailPlan[EducationalPlanFields.ID],
+    [DownloadFileModalFields.ID]: workProgramId,
+  }));
+
+  dispatch(actions.getDirectionsDependedOnWorkProgram(workProgramId));
+}
+
 const getStatus = (statusCode: string) => {
   switch (statusCode) {
     case 'WK':
@@ -294,8 +296,8 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     tab: "1",
   }
 
-  onSortEnd = (blockId: number) => ({oldIndex, newIndex}: {oldIndex: number, newIndex: number}) => {
-    this.props.actions.changeModulePosition({oldIndex: oldIndex + 1, newIndex: newIndex + 1, blockId});
+  onSortEnd = (blockId:any) => ({oldIndex, newIndex}:any) => {
+    this.props.actions.changeModulePosition({oldIndex, newIndex, blockId});
   };
 
   componentDidMount() {
@@ -311,6 +313,13 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   getPlanId = () => get(this, 'props.match.params.id');
+
+  handleClickBlockDelete = (id: number, length: number) => () => {
+    this.setState({
+      deleteBlockConfirmId: id,
+      deletedWorkProgramsLength: length
+    });
+  }
 
   handleConfirmBlockDeleteDialog = () => {
     const {deleteBlockConfirmId} = this.state;
@@ -347,6 +356,22 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     });
   }
 
+  handleClickDeleteModule = (id: number) => () => {
+    this.setState({
+      deleteModuleConfirmId: id
+    });
+  }
+
+  showSelectSpecializationConfirmModal = (title: string, id: number, blockId: number) => () => {
+    this.setState({
+      selectSpecializationData: {
+        blockId,
+        title,
+        id
+      }
+    });
+  }
+
   closeSelectSpecializationConfirmModal = () => {
     this.setState({
       selectSpecializationData: {
@@ -361,6 +386,20 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     this.props.actions.openDialog(plan);
   }
 
+  handleOpenDetailModal = (block: BlocksOfWorkProgramsType|{}, moduleId: number) => () => {
+    this.props.actions.openDetailDialog({
+      ...block,
+      moduleId
+    });
+  }
+
+  handleOpenCreateModuleModal = (module: ModuleType|{}, blockId: number) => () => {
+    this.props.actions.openCreateModuleDialog({
+      ...module,
+      blockId
+    });
+  }
+
   handleOpenAddModuleModal = (blockId: number) => () => {
     this.props.trainingModulesActions.openDialog({
       data: {
@@ -368,6 +407,25 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
       },
       dialog: fields.ADD_TRAINING_MODULE_DIALOG
     });
+  }
+
+  goToPracticePage = (id: number) => () => {
+    // @ts-ignore
+    const {history} = this.props;
+
+    history.push(appRouter.getPracticeLink(id));
+  }
+
+  saveOptionalProgram = (moduleId: number, workProgram: number) => {
+    this.props.actions.planTrajectorySelectOptionalWp({
+      moduleId,
+      workProgram,
+      planId: this.getPlanId()
+    });
+  }
+
+  saveElectivesProgram = (moduleId: number, workPrograms: any) => {
+    this.props.actions.planTrajectorySelectElectives({workPrograms, moduleId, planId: this.getPlanId()});
   }
 
   handleConnectModules = (modules: Array<number>, fatherId: number) => {
@@ -404,9 +462,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
               <TableHead className={classes.header}>
                 <TableRow>
                   <TableCell style={{ width: '74%'}}> Название </TableCell>
-                  <TableCell style={{ width: '7%', minWidth: '190px'}}> Зачетные единицы </TableCell>
-                  <TableCell style={{ width: '7%', minWidth: '120px'}}> Семестр начала </TableCell>
-                  <TableCell style={{ width: '7%', minWidth: '120px'}}> Обязательность </TableCell>
+                  <TableCell style={{ width: '7%', minWidth: '125px'}}> Зачетные единицы </TableCell>
+                  <TableCell style={{ width: '7%', minWidth: '90px'}}> Семестр начала </TableCell>
+                  <TableCell style={{ width: '7%', minWidth: '90px'}}> Обязательность </TableCell>
                   <TableCell style={{ width: '3%'}}/>
                 </TableRow>
               </TableHead>
@@ -686,12 +744,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     const {tab} = this.state
     return (
       <Paper className={classes.root}>
-        <DetailHeader
-          classes={classes}
-          trajectoryRoute={trajectoryRoute}
-          tab={tab}
-          onChangeTab={(e: any, value: any) => this.setState({tab: value})}
-        />
+        <DetailHeader classes={classes} trajectoryRoute={trajectoryRoute} tab={tab} onChangeTab={(e, value) => this.setState({tab: value})}/>
         {tab === '1' ? this.renderMain() : this.renderEducationPlan()}
       </Paper>
     );
