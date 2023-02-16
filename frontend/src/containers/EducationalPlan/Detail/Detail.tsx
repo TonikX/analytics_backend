@@ -744,7 +744,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     const {tab} = this.state
     return (
       <Paper className={classes.root}>
-        <DetailHeader classes={classes} trajectoryRoute={trajectoryRoute} tab={tab} onChangeTab={(e, value) => this.setState({tab: value})}/>
+        <DetailHeader classes={classes} trajectoryRoute={trajectoryRoute} tab={tab} onChangeTab={(e: any, value: any) => this.setState({tab: value})}/>
         {tab === '1' ? this.renderMain() : this.renderEducationPlan()}
       </Paper>
     );
