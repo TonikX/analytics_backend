@@ -295,7 +295,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   onSortEnd = (blockId: number) => ({oldIndex, newIndex}: {oldIndex: number, newIndex: number}) => {
-    this.props.actions.changeModulePosition({oldIndex, newIndex, blockId});
+    this.props.actions.changeModulePosition({oldIndex: oldIndex + 1, newIndex: newIndex + 1, blockId});
   };
 
   componentDidMount() {
