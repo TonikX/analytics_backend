@@ -830,7 +830,8 @@ class DisciplineBlockModule(CloneMixin, models.Model):
                     print(ap_index)
                     if int(ap_index['up_id']) == block.academic_plan.id and int(ap_index['number']) == old_ordinal_number:
                         ap_index['number'] = new_ordinal_number
-                    elif int(ap_index['up_id']) == block.academic_plan.id and int(ap_index['number']) >= new_ordinal_number:
+                    elif int(ap_index['up_id']) == block.academic_plan.id and new_ordinal_number <= int(
+                            ap_index['number']) <= old_ordinal_number:
                         ap_index['number'] = int(ap_index['number']) + 1
                 module.save()
 
@@ -839,7 +840,8 @@ class DisciplineBlockModule(CloneMixin, models.Model):
                 for ap_index in module.orderings_for_ups:
                     if int(ap_index['up_id']) == block.academic_plan.id and int(ap_index['number']) == old_ordinal_number:
                         ap_index['number'] = new_ordinal_number
-                    elif int(ap_index['up_id']) == block.academic_plan.id and int(ap_index['number']) >= old_ordinal_number:
+                    elif int(ap_index['up_id']) == block.academic_plan.id and old_ordinal_number < int(
+                            ap_index['number']) <= new_ordinal_number:
                         ap_index['number'] = int(ap_index['number']) - 1
                 module.save()
 
