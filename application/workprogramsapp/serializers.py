@@ -933,7 +933,7 @@ class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
         if include_self:
             r.append(instance)
         for c in DisciplineBlockModule.objects.filter(childs=instance):
-            _r = self.get_all_children(c, include_self=True)
+            _r = self.get_blocks_for_all_children(c, include_self=True)
             if 0 < len(_r):
                 r.extend(_r)
         return r
