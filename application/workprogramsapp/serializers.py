@@ -915,11 +915,28 @@ class DisciplineBlockForWPinFSSerializer(serializers.ModelSerializer):
 
 
 class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
-    descipline_block = DisciplineBlockForWPinFSSerializer(read_only=True, many=True)
+    # descipline_block = DisciplineBlockForWPinFSSerializer(read_only=True, many=True)
+    descipline_block = serializers.SerializerMethodField()
 
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'name', 'descipline_block']
+
+    def get_descipline_block(self, instance):
+        serializers = DisciplineBlockForWPinFSSerializer(DisciplineBlock.objects.filter
+                                                         (modules_in_discipline_block__in=self.get_blocks_for_all_children(instance))
+                                                         , many=True)
+        return serializers.data
+
+    def get_blocks_for_all_children(self, instance, include_self=True):
+        r = []
+        if include_self:
+            r.append(instance)
+        for c in DisciplineBlockModule.objects.filter(childs=instance):
+            _r = self.get_all_children(c, include_self=True)
+            if 0 < len(_r):
+                r.extend(_r)
+        return r
 
 
 class WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
