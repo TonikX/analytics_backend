@@ -128,23 +128,23 @@ def CopyContentOfWorkProgram(request):
                 for elem in eva_clone_list:
                     if (eva.id == elem['id']):
                         clone_outcomes.evaluation_tool.add(EvaluationTool.objects.get(pk=elem['clone_id']))
-        for cerf in СertificationEvaluationTool.objects.filter(work_program=old_wp):
+        """for cerf in СertificationEvaluationTool.objects.filter(work_program=old_wp):
             cerf.make_clone(attrs={'work_program': new_wp})
         for cerf in СertificationEvaluationTool.objects.filter(work_program=new_wp):
             if cerf.name == "No name":
-                cerf.delete()
+                cerf.delete()"""
         new_wp.editors.add(*old_wp.editors.all())
         new_wp.bibliographic_reference.add(*old_wp.bibliographic_reference.all())
 
-        new_wp.hoursFirstSemester = old_wp.hoursFirstSemester
-        new_wp.hoursSecondSemester = old_wp.hoursSecondSemester
+        #new_wp.hoursFirstSemester = old_wp.hoursFirstSemester
+        #new_wp.hoursSecondSemester = old_wp.hoursSecondSemester
         new_wp.description = old_wp.description
         new_wp.video = old_wp.video
-        new_wp.credit_units = old_wp.credit_units
-        new_wp.semester_hour = old_wp.semester_hour
+        #new_wp.credit_units = old_wp.credit_units
+        #new_wp.semester_hour = old_wp.semester_hour
         new_wp.owner = old_wp.owner
         #new_wp.work_status = old_wp.work_status
-        new_wp.hours = old_wp.hours
+        #new_wp.hours = old_wp.hours
         new_wp.extra_points = old_wp.extra_points
 
         # old_wp.delete()

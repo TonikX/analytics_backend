@@ -13,17 +13,17 @@ from .models import (
     СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
     OnlineCourse, WorkProgramIdStrUpForIsu, GeneralizedLaborFunctions,
     AcademicPlanUpdateConfiguration,
-    AcademicPlanUpdateLog
+    AcademicPlanUpdateLog, GiaInFieldOfStudy, PracticeInFieldOfStudy, DisciplineBlockModuleInIsu
 )
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, \
     SkillsOfRole, \
     Role, ProfessionalStandard, KindsOfActivity
 from .notifications.emails.models import SentMail
-from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments, EmailReset
+from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments, EmailReset, \
+    AcademicPlanUpdateNotification
 
-
-from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
+from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit, UniversityPartner
 
 from .educational_program.pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
     PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
@@ -36,7 +36,8 @@ from .educational_program.general_prof_competencies.models import GroupOfGeneral
 from .individualization.models import ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .feedback.models import FeedbackRecord
 from .educational_program.educational_standart.models import EducationalStandard, TasksForEducationalStandard
-#from ckeditor_uploader.widgets import CKEditorUploadingWidget
+
+# from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 admin.site.register(GroupOfPkCompetencesInGeneralCharacteristic)
 admin.site.register(PkCompetencesInGroupOfGeneralCharacteristic)
@@ -72,11 +73,16 @@ admin.site.register(RouteComposition)
 admin.site.register(Route)
 admin.site.register(Certification)
 admin.site.register(BibliographicReference)
-admin.site.register(AcademicPlan)
+
+# class AcademicPlanAdminHandler(admin.ModelAdmin):
+#     list_display = ("__str__", 'id', 'ap_isu_id', 'year')
+#     search_fields = ['id', 'ap_isu_id', 'year']
+# admin.site.register(AcademicPlan, AcademicPlanAdminHandler)
+
 admin.site.register(DisciplineBlock)
 admin.site.register(ImplementationAcademicPlan)
 admin.site.register(DisciplineBlockModule)
-admin.site.register(WorkProgramChangeInDisciplineBlockModule)
+# admin.site.register(WorkProgramChangeInDisciplineBlockModule)
 
 admin.site.register(EducationalProgram)
 admin.site.register(GeneralCharacteristics)
@@ -97,7 +103,7 @@ admin.site.register(BarsWorkProgramsAssociate)
 admin.site.register(HistoryOfSendingToBars)
 admin.site.register(BarsEPAssociate)
 admin.site.register(IndividualImplementationAcademicPlan)
-admin.site.register(WorkProgramInWorkProgramChangeInDisciplineBlockModule)
+
 admin.site.register(DisciplineBlockModuleInDisciplineBlock)
 
 admin.site.register(StructuralUnit)
@@ -119,10 +125,66 @@ admin.site.register(GeneralizedLaborFunctions)
 admin.site.register(EducationalStandard)
 admin.site.register(TasksForEducationalStandard)
 
+
 class LogAdmin(admin.ModelAdmin):
     list_display = ("__str__", "updated_date_time")
     search_fields = ['object_type', 'old_value', 'new_value']
 
+
 admin.site.register(AcademicPlanUpdateLog, LogAdmin)
 admin.site.register(EmailReset)
 admin.site.register(ExpertsOnStructuralUnit)
+
+
+class ImplementationAcademicPlanInLine(admin.StackedInline):
+    model = ImplementationAcademicPlan
+    extra = 1
+
+
+@admin.register(AcademicPlan)
+class AcademicPlanAdmin(admin.ModelAdmin):
+    list_display = ("__str__", 'id', 'ap_isu_id', 'year')
+    search_fields = ['id', 'ap_isu_id', 'year']
+    inlines = [ImplementationAcademicPlanInLine]
+    save_on_top = True
+    save_as = True
+
+
+admin.site.register(WorkProgramInWorkProgramChangeInDisciplineBlockModule)
+
+
+class WorkProgramInFieldOfStudyInLine(admin.StackedInline):
+    model = WorkProgramInFieldOfStudy
+    extra = 1
+
+
+class GiaInFieldOfStudyInLine(admin.StackedInline):
+    model = GiaInFieldOfStudy
+    extra = 1
+
+
+class PracticeInFieldOfStudyInLine(admin.StackedInline):
+    model = PracticeInFieldOfStudy
+    extra = 1
+
+
+@admin.register(WorkProgramChangeInDisciplineBlockModule)
+class AcademicPlanAdmin(admin.ModelAdmin):
+    # list_display = ("__str__", 'id', 'ap_isu_id', 'year')
+    # search_fields = ['id', 'ap_isu_id', 'year']
+    inlines = [WorkProgramInFieldOfStudyInLine, GiaInFieldOfStudyInLine, PracticeInFieldOfStudyInLine]
+    save_on_top = True
+    save_as = True
+
+
+admin.site.register(PracticeInFieldOfStudy)
+admin.site.register(UniversityPartner)
+admin.site.register(AcademicPlanUpdateNotification)
+
+
+@admin.register(DisciplineBlockModuleInIsu)
+class ModuleIsuAdmin(admin.ModelAdmin):
+    list_display = ('id', 'isu_id', 'isu_father_id', 'academic_plan', 'module')
+    search_fields = ['id', 'isu_id', 'isu_father_id', 'academic_plan__id', 'module__id']
+    save_on_top = True
+    save_as = True

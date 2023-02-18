@@ -13,7 +13,7 @@ import {FULL_DATE_FORMAT} from "../../common/utils";
 
 import styles from './DatePicker.styles';
 
-const DatePickerComponent = ({label, format, onChange, classes, value, noMargin, views}: DatePickerProps) => {
+const DatePickerComponent = ({label, format, onChange, classes, value, noMargin, views, minDate, maxDate}: DatePickerProps) => {
     const handleChange = (date: MaterialUiPickersDate) => {
         onChange(date);
     };
@@ -34,6 +34,8 @@ const DatePickerComponent = ({label, format, onChange, classes, value, noMargin,
             label={label}
             views={views ? views : ["date"]}
             className={classNames(classes.datePicker, {[classes.marginBottom30]: !noMargin})}
+            minDate={minDate}
+            maxDate={maxDate}
         />
     );
 }

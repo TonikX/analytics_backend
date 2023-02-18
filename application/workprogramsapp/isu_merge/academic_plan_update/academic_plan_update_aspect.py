@@ -21,13 +21,15 @@ class AcademicPlanUpdateAspect:
     def field_of_study_changes_aspect(func):
         def wrapper(*args, **kwargs):
             isu_academic_plan_json = args[0]
-
+            print(isu_academic_plan_json)
             if FieldOfStudy.objects.filter(
                     number=isu_academic_plan_json['direction_code'],
+                    title=isu_academic_plan_json['direction_name'],
                     qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json)
             ).exists():
                 old_field_of_study_object = FieldOfStudy.objects.get(
                     number=isu_academic_plan_json['direction_code'],
+                    title=isu_academic_plan_json['direction_name'],
                     qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json)
                 )
             else:
@@ -115,7 +117,7 @@ class AcademicPlanUpdateAspect:
     def discipline_block_module_changes_aspect(func):
         def wrapper(*args, **kwargs):
             isu_academic_plan_block_module_json, discipline_block_object, isu_academic_plan_json = args
-            print(isu_academic_plan_block_module_json)
+            # print(isu_academic_plan_block_module_json)
             if DisciplineBlockModule.objects.filter(
                     name=isu_academic_plan_block_module_json['module_name'],
                     module_isu_id=isu_academic_plan_block_module_json['module_id '],
@@ -128,7 +130,7 @@ class AcademicPlanUpdateAspect:
                 )
             else:
                 old_discipline_block_module_object = None
-            print('old_discipline_block_module_object',  old_discipline_block_module_object)
+            # print('old_discipline_block_module_object',  old_discipline_block_module_object)
             updated_discipline_block_module_object = func(
                 copy.deepcopy(old_discipline_block_module_object), *args, **kwargs
             )
@@ -200,7 +202,7 @@ class AcademicPlanUpdateAspect:
                 updated_work_program_in_field_of_study_object
             )
 
-            return updated_work_program_in_field_of_study_object
+            return updated_work_program_in_field_of_study_object, updated_work_program_change_in_discipline_block_module_object
 
         return wrapper
 

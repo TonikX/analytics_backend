@@ -26,7 +26,8 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
             [TrainingModuleFields.ID]: null,
             [TrainingModuleFields.NAME]: '',
             [TrainingModuleFields.DESCRIPTION]: '',
-            [TrainingModuleFields.TYPE]: '',
+            // [TrainingModuleFields.TYPE]: '',
+            father: undefined,
         },
     };
 
@@ -40,6 +41,7 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
                     [TrainingModuleFields.NAME]: get(trainingModule, TrainingModuleFields.NAME, ''),
                     [TrainingModuleFields.DESCRIPTION]: get(trainingModule, TrainingModuleFields.DESCRIPTION, ''),
                     [TrainingModuleFields.TYPE]: get(trainingModule, TrainingModuleFields.TYPE, ''),
+                    father: get(trainingModule, 'father', undefined),
                 }
             });
         }
@@ -83,7 +85,7 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
         const {isOpen, classes} = this.props;
         const {trainingModule} = this.state;
 
-        const disableButton = trainingModule[TrainingModuleFields.NAME].length === 0 || trainingModule[TrainingModuleFields.TYPE].length === 0;
+        const disableButton = trainingModule[TrainingModuleFields.NAME].length === 0;
         const isEditMode = trainingModule[TrainingModuleFields.ID];
 
         return (
@@ -106,12 +108,12 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
                                    shrink: true,
                                }}
                     />
-                    <SimpleSelector label="Тип *"
-                                    value={trainingModule[TrainingModuleFields.TYPE]}
-                                    onChange={this.handleChangeType}
-                                    metaList={typesListArray}
-                                    wrapClass={classes.selectorWrap}
-                    />
+                    {/*<SimpleSelector label="Тип *"*/}
+                    {/*                value={trainingModule[TrainingModuleFields.TYPE]}*/}
+                    {/*                onChange={this.handleChangeType}*/}
+                    {/*                metaList={typesListArray}*/}
+                    {/*                wrapClass={classes.selectorWrap}*/}
+                    {/*/>*/}
                     <TextField label="Описание"
                                onChange={this.saveField(TrainingModuleFields.DESCRIPTION)}
                                variant="outlined"

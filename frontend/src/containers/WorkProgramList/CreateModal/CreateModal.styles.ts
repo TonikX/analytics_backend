@@ -2,17 +2,27 @@ import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
     input: {
-        width: '550px',
+        width: '100%',
         marginBottom: '30px',
     },
     specializationSelector: {
-        width: '550px',
-    },
-    lastInput: {
-        width: '550px',
+        width: '100%',
     },
     selector: {
-        width: '550px'
+        width: '100%'
+    },
+    languageSelector: {
+        width: '100%',
+        marginBottom: 30,
+    },
+    radioGroup: {
+        flexDirection: 'row',
+        marginBottom: 20,
+    },
+    headerCell: {
+        border: '1px solid rgba(224, 224, 224, 1)',
+        textAlign: 'center',
+        fontWeight: 'bold'
     },
     actions: {
         padding: '15px 24px 20px'
@@ -26,9 +36,12 @@ export default (theme: Theme) => createStyles({
     },
     datePicker: {
         width: '100%',
-        marginBottom: '30px',
+        marginBottom: '20px',
     },
     marginBottom20: {
         marginBottom: '20px',
+    },
+    marginTop20: {
+        marginTop: '20px',
     }
 });

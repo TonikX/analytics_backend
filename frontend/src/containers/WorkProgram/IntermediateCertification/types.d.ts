@@ -13,4 +13,5 @@ export interface IntermediateCertificationProps extends WithStyles<typeof styles
     hasExam: boolean;
     workProgramId: number;
     location: any; //todo: change type
+    inChangeBlock: Array[];
 }

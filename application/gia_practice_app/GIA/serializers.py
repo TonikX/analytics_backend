@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
+from dataprocessing.serializers import userProfileSerializer
 from gia_practice_app.GIA.models import CriteriaVKR, GIABaseTemplate, GIA
 from gia_practice_app.logic import get_permissions_gia_practice
 from workprogramsapp.expertise.models import Expertise, UserExpertise
@@ -39,14 +40,19 @@ class GIASerializer(serializers.ModelSerializer):
     gia_in_change_block = SerializerMethodField()
     permissions_info = SerializerMethodField()
 
-
     def create(self, validated_data):
         request = self.context.get('request')
-        editors=validated_data.pop('editors', None)
-        gia=GIA.objects.create(**validated_data)
-        gia.editors.set(editors)
+        editors = validated_data.pop('editors', None)
+        gia = GIA.objects.create(**validated_data)
+        print(gia)
+
         if editors:
+            gia.editors.set(editors)
             gia.editors.add(request.user)
+
+        if not gia.gia_base:
+            gia.gia_base = GIABaseTemplate.objects.create()
+            gia.save()
         return gia
 
     def get_permissions_info(self, instance):
@@ -60,7 +66,7 @@ class GIASerializer(serializers.ModelSerializer):
         except UserExpertise.DoesNotExist:
             user_exp = None
 
-        return get_permissions_gia_practice(instance,exp,user_exp,request)
+        return get_permissions_gia_practice(instance, exp, user_exp, request)
 
     def get_gia_in_change_block(self, instance):
         return WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(
@@ -79,6 +85,8 @@ class GIASerializer(serializers.ModelSerializer):
         self.fields['report_quality_marks'] = CriteriaVKRSerializer(required=False)
         self.fields['presentation_quality_marks'] = CriteriaVKRSerializer(required=False)
         self.fields['answers_quality_marks'] = CriteriaVKRSerializer(required=False)
+        self.fields['editors'] = userProfileSerializer(many=True)
+        self.fields['gia_in_change_block'] = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True)
         return super().to_representation(value)
 
     class Meta:

@@ -40,7 +40,7 @@ import SaveIcon from "@material-ui/icons/SaveOutlined";
 import Tooltip from "@material-ui/core/Tooltip";
 
 import AddWorkProgramModal from "./AddWorkProgramModal";
-import {typeOfWorkProgramInPlan, OPTIONALLY as optionalTypeOfWorkProgram} from '../../data';
+import {OPTIONALLY as optionalTypeOfWorkProgram, typeOfWorkProgramInPlan} from '../../data';
 
 import {BlocksOfWorkProgramsFields, ModuleFields} from '../../enum';
 import {WorkProgramGeneralType} from "../../../WorkProgram/types";
@@ -48,6 +48,8 @@ import {WorkProgramGeneralFields} from "../../../WorkProgram/enum";
 
 import AddCompetenceModal from "../../../../components/AddCompetenceModal";
 import AddIndicatorsModal from "../../../../components/AddIndicatorsModal";
+import AddPracticeModal from "../../../Practice/components/AddPracticeModal";
+import AddGiaModal from "../../../FinalCertification/components/AddGiaModal";
 import AddResultsModal from "./AddResultsModal";
 
 import connect from './CreateModal.connect';
@@ -67,14 +69,19 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [BlocksOfWorkProgramsFields.ID]: null,
             [BlocksOfWorkProgramsFields.TYPE]: '',
             [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: [],
-            [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [BlocksOfWorkProgramsFields.SEMESTER_START]: [],
+            [BlocksOfWorkProgramsFields.SEMESTER_DURATION]: '',
         },
+        gia: [],
+        practice: [],
         showWorkProgramSelector: false,
         showAddWorkProgramButton: true,
         isAddWorkProgramModalOpen: false,
         isAddCompetenceModalOpen: false,
         isAddResultsModalOpen: false,
         isAddIndicatorsModalOpen: false,
+        isAddGiaModalOpen: false,
+        isAddPracticeModalOpen: false,
         expandedWorkProgram: null,
     };
 
@@ -87,7 +94,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         if (!shallowEqual(blockOfWorkPrograms, prevProps.blockOfWorkPrograms)){
             const workProgram = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.WORK_PROGRAMS) || [];
-            const semesterHours = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.SEMESTER_UNIT);
+            const gia = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.GIA) || [];
+            const practice = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.PRACTICE) || [];
 
             const mappedWorkProgram = workProgram.map((program: WorkProgramGeneralType) => {
                 const date = moment(program[WorkProgramGeneralFields.APPROVAL_DATE]).isValid() ?
@@ -105,18 +113,19 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 };
             });
 
-            const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
             this.setState({
                 blockOfWorkPrograms: {
                     [BlocksOfWorkProgramsFields.ID]: get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.ID),
                     [BlocksOfWorkProgramsFields.TYPE]: get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.TYPE, ''),
-                    [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: mappedSemesterHours,
+                    [BlocksOfWorkProgramsFields.SEMESTER_START]: get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.SEMESTER_START, ''),
+                    [BlocksOfWorkProgramsFields.SEMESTER_DURATION]: get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.SEMESTER_DURATION, ''),
                     [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: mappedWorkProgram,
                 },
                 module: {
                     [ModuleFields.ID]: get(blockOfWorkPrograms, 'moduleId'),
                 },
+                gia,
+                practice,
             });
         }
     }
@@ -125,8 +134,24 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         this.setState({isAddWorkProgramModalOpen: true});
     }
 
+    handleOpenAddGiaModal = () => {
+        this.setState({isAddGiaModalOpen: true});
+    }
+
+    handleOpenAddPracticeModal = () => {
+        this.setState({isAddPracticeModalOpen: true});
+    }
+
     handleCloseAddWorkProgramModal = () => {
         this.setState({isAddWorkProgramModalOpen: false});
+    }
+
+    handleCloseAddGiaModal = () => {
+        this.setState({isAddGiaModalOpen: false});
+    }
+
+    handleCloseAddPracticeModal = () => {
+        this.setState({isAddPracticeModalOpen: false});
     }
 
     handleOpenAddCompetenceModal = (workProgramId: number) => () => {
@@ -162,6 +187,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     handleClose = () => {
         const {planId, moduleId} = this.props;
+        const {blockOfWorkPrograms, gia, practice} = this.state
+
+        const rpdLength = get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0)
+
+        if (rpdLength === 0 && gia.length === 0 && practice.length === 0) {
+            this.props.actions.deleteBlockOfWorkPrograms(blockOfWorkPrograms?.[BlocksOfWorkProgramsFields.ID])
+        }
 
         this.props.actions.closeDetailDialog();
         
@@ -169,7 +201,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             this.props.actions.getEducationalDetail(planId);
         } else {
             //@ts-ignore
-            this.props.moduleActions.getTrainingModule({id: moduleId});
+            this.props.moduleActions.getTrainingModule(moduleId);
         }
     }
 
@@ -232,6 +264,52 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 [BlocksOfWorkProgramsFields.WORK_PROGRAMS]: newWorkPrograms
             }
         });
+    }
+
+    savePracticeList = (value: string, label: string) => {
+        const {blockOfWorkPrograms, practice} = this.state
+        if (value === '') return;
+
+        this.props.actions.changeBlockOfWorkPrograms({
+            ...blockOfWorkPrograms,
+            practice: [
+              ...practice.map((item: any) => item.id),
+              value
+            ]
+        });
+
+        this.setState({
+            practice: [
+                ...practice,
+                {
+                    id: value,
+                    title: label.split('(')?.[0]
+                }
+            ]
+        })
+    }
+
+    saveGiaList = (value: string, label: string) => {
+        const {blockOfWorkPrograms, gia} = this.state
+
+        if (value === '') return;
+        this.props.actions.changeBlockOfWorkPrograms({
+            ...blockOfWorkPrograms,
+            gia: [
+                ...gia.map((item: any) => item.id),
+                value
+            ]
+        });
+
+        this.setState({
+            gia: [
+                ...gia,
+                {
+                    id: value,
+                    title: label.split('(')?.[0]
+                }
+            ]
+        })
     }
 
     saveCompetence = (competence: any) => {
@@ -465,25 +543,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         this.props.actions.deleteWorkProgramFromZun(id);
     }
 
-    handleChangeHours = (index: number) => (e: React.ChangeEvent) => {
-        const {blockOfWorkPrograms} = this.state;
-        const hours = blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_UNIT];
-
-        hours[index] = get(e, 'target.value', 0);
-
-        this.props.actions.changeBlockOfWorkPrograms({
-            [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: hours.toString(),
-            [BlocksOfWorkProgramsFields.ID]: blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID],
-        });
-
-        this.setState({
-            blockOfWorkPrograms: {
-                ...blockOfWorkPrograms,
-                [BlocksOfWorkProgramsFields.SEMESTER_UNIT]: hours
-            }
-        });
-    }
-
     handleChangeExpandedWorkProgram = (wpId: number) => () => {
         const {expandedWorkProgram} = this.state;
 
@@ -502,14 +561,109 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
-    render() {
-        const {isOpen, classes, disableZUN} = this.props;
-        const {blockOfWorkPrograms, showAddWorkProgramButton, isAddWorkProgramModalOpen,
-            isAddCompetenceModalOpen, isAddIndicatorsModalOpen, expandedWorkProgram, isAddResultsModalOpen
-        } = this.state;
+    changeSelectedStartSemester = (item: number) => () => {
+        const { blockOfWorkPrograms } = this.state
+        const startSemester: Array<number> = blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_START]
+        const newStartSemester = startSemester.includes(item) ?
+            startSemester.filter(startItem => item === startItem) :
+            [...startSemester, item]
 
-        const canAddMoreWorkProgram = get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0) === 0 ||
-            blockOfWorkPrograms[BlocksOfWorkProgramsFields.TYPE] === optionalTypeOfWorkProgram;
+        this.props.actions.changeBlockOfWorkPrograms({
+            [BlocksOfWorkProgramsFields.SEMESTER_START]: newStartSemester,
+            [BlocksOfWorkProgramsFields.ID]: blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID],
+        });
+
+        this.setState({
+            blockOfWorkPrograms: {
+                ...blockOfWorkPrograms,
+                [BlocksOfWorkProgramsFields.SEMESTER_START]: newStartSemester,
+            }
+        })
+    }
+
+    changeDuration = (e: any) => {
+        const { blockOfWorkPrograms } = this.state
+
+        this.props.actions.changeBlockOfWorkPrograms({
+            [BlocksOfWorkProgramsFields.SEMESTER_DURATION]: e.target.value,
+            [BlocksOfWorkProgramsFields.ID]: blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID],
+        });
+    }
+
+    changeStateDuration = (e: any) => {
+        const { blockOfWorkPrograms } = this.state
+
+        this.setState({
+            blockOfWorkPrograms: {
+                ...blockOfWorkPrograms,
+                [BlocksOfWorkProgramsFields.SEMESTER_DURATION]: e.target.value,
+            }
+        })
+    }
+
+    handleRemoveGia = () => {
+        const {blockOfWorkPrograms} = this.state
+
+        this.props.actions.changeBlockOfWorkPrograms({
+            ...blockOfWorkPrograms,
+            gia: []
+        });
+
+        this.setState({
+            gia: []
+        })
+    }
+
+    handleRemovePractice = () => {
+        const {blockOfWorkPrograms} = this.state
+
+        this.props.actions.changeBlockOfWorkPrograms({
+            ...blockOfWorkPrograms,
+            practice: []
+        });
+
+        this.setState({
+            practice: []
+        })
+    }
+
+    renderGia = () => {
+        const {classes} = this.props
+        const {gia} = this.state
+        return (
+          <div>
+              {gia.map((item: any) => (
+                <Typography className={classes.workProgramItem}>
+                    {item.title} <DeleteIcon onClick={this.handleRemoveGia}/>
+                </Typography>
+              ))}
+          </div>
+        )
+    }
+
+    renderPractice = () => {
+        const {classes} = this.props
+        const {practice} = this.state
+        return (
+          <div>
+              {practice.map((item: any) => (
+                <Typography className={classes.workProgramItem}>
+                    {item.title} <DeleteIcon onClick={this.handleRemovePractice}/>
+                </Typography>
+              ))}
+          </div>
+        )
+    }
+
+    render() {
+        const {isOpen, classes, disableZUN, canAddGia, canAddPractice, canAddWp} = this.props;
+        const {blockOfWorkPrograms, showAddWorkProgramButton, isAddWorkProgramModalOpen,
+            isAddCompetenceModalOpen, isAddIndicatorsModalOpen, expandedWorkProgram, isAddResultsModalOpen,
+          isAddGiaModalOpen, isAddPracticeModalOpen, gia, practice,
+        } = this.state;
+        const wpLength = get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0)
+
+        const startSemester: Array<number> = this.state.blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_START]
 
         const isEditMode = Boolean(blockOfWorkPrograms[BlocksOfWorkProgramsFields.ID]);
 
@@ -572,32 +726,58 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 </Select>
                             </FormControl>
 
+                            {/*<TextField label="Длительность изучения"*/}
+                            {/*           onBlur={this.changeDuration}*/}
+                            {/*           onChange={this.changeStateDuration}*/}
+                            {/*           variant="outlined"*/}
+                            {/*           className={classes.smallInput}*/}
+                            {/*           fullWidth*/}
+                            {/*           value={blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_DURATION]}*/}
+                            {/*           InputLabelProps={{*/}
+                            {/*               shrink: true,*/}
+                            {/*           }}*/}
+                            {/*           type="number"*/}
+                            {/*/>*/}
+
                             <div className={classes.semesterBlock}>
-                                <Typography className={classes.label}> Количество зачетных единиц в семестрах </Typography>
+                                <Typography className={classes.label}> Выберите семеcтры, в которых может начаться дисциплина </Typography>
                                 <div className={classes.semesterList}>
-                                    {blockOfWorkPrograms[BlocksOfWorkProgramsFields.SEMESTER_UNIT].map((item, index) =>
-                                        <TextField className={classes.semesterField}
-                                                   label={`${index + 1} семестр`}
-                                                   variant='outlined'
-                                                   defaultValue={item}
-                                                   onBlur={this.handleChangeHours(index)}
-                                                   type="number"
-                                                   key={'semester' + index}
-                                        />
+                                    {Array(8).fill(0).map((item, index) =>
+                                        <Button
+                                            key={'start-semester' + index}
+                                            variant={startSemester.includes(index + 1) ? 'contained' : "outlined"}
+                                            onClick={this.changeSelectedStartSemester(index + 1)}
+                                        >
+                                            {index + 1}
+                                        </Button>
                                     )}
                                 </div>
                             </div>
 
 
-                            <div className={classes.addWorkProgramButtonWrap}>
-                                {showAddWorkProgramButton && canAddMoreWorkProgram &&
+                            {/*<div className={classes.addWorkProgramButtonWrap}>*/}
+                                {showAddWorkProgramButton && canAddWp && wpLength === 0 && gia.length === 0 && practice.length === 0 &&
                                 <Button size="small"
                                         onClick={this.handleOpenAddWorkProgramModal}
                                         className={classes.addWorkProgramButton}
                                         variant="text"
-                                ><AddIcon/> Добавить рабочую программу</Button>
-                                }
-                            </div>
+                                ><AddIcon/> Добавить дисциплину</Button>
+                                } <br/>
+                                {showAddWorkProgramButton && canAddGia && gia.length === 0 && !wpLength && practice.length === 0 &&
+                                <Button size="small"
+                                        onClick={this.handleOpenAddGiaModal}
+                                        className={classes.addWorkProgramButton}
+                                        variant="text"
+                                ><AddIcon/> Добавить ГИА</Button>
+                                } <br/>
+                                {showAddWorkProgramButton && canAddPractice && practice.length === 0 && gia.length === 0 && !wpLength &&
+                                <Button size="small"
+                                        onClick={this.handleOpenAddPracticeModal}
+                                        className={classes.addWorkProgramButton}
+                                        variant="text"
+                                ><AddIcon/> Добавить практику</Button>
+                                } <br/>
+                            {/*</div>*/}
                         </div>
 
                         <Scrollbars>
@@ -608,6 +788,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             Настройка связей рабочих программ, компетенций, индикаторов и результатов
                                         </Typography>
                                     }
+                                    {this.renderGia()}
+                                    {this.renderPractice()}
                                     {blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((workProgram: any, wpIndex) =>
                                         <ExpansionPanel expanded={disableZUN ? false : expandedWorkProgram === wpIndex}
                                                         onChange={this.handleChangeExpandedWorkProgram(wpIndex)}
@@ -723,15 +905,15 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             </ExpansionPanelDetails>
                                         </ExpansionPanel>
                                     )}
-                                    {get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0) === 0 ?
-                                        <Typography> Рабочих программ пока не добавлено</Typography>
+                                    {get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0) === 0 && gia.length === 0 && practice.length === 0 ?
+                                        <Typography> Рабочих программ, ГИА или практик пока не добавлено</Typography>
                                         : <></>
                                     }
                                 </div>
                             </div>
                         </Scrollbars>
                     </DialogContent>
-                    <DialogActions className={classes.actions}>
+                    <DialogActions className={classes.actions}>`
                         <Button onClick={this.handleClose}
                                 variant="text">
                             Закрыть
@@ -741,6 +923,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 <AddWorkProgramModal closeDialog={this.handleCloseAddWorkProgramModal}
                                      isOpen={isAddWorkProgramModalOpen}
                                      saveDialog={this.saveWorkProgramList}
+                />
+                <AddPracticeModal closeDialog={this.handleCloseAddPracticeModal}
+                                  isOpen={isAddPracticeModalOpen}
+                                  saveDialog={this.savePracticeList}
+                />
+                <AddGiaModal closeDialog={this.handleCloseAddGiaModal}
+                             isOpen={isAddGiaModalOpen}
+                             saveDialog={this.saveGiaList}
                 />
                 <AddCompetenceModal closeDialog={this.handleCloseAddCompetenceModal}
                                     isOpen={Boolean(isAddCompetenceModalOpen)}

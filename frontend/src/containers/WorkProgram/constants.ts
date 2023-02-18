@@ -154,7 +154,7 @@ export const steps = {
         link: (id: number) => appRouter.getWorkProgramResultsLink(id)
     },
     [StepsEnum.PLANS]: {
-        label: 'Связанные с рпд учебные планы и направления',
+        label: 'Связанные с рпд модули, учебные планы и направления',
         link: (id: number) => appRouter.getWorkProgramPlansLink(id)
     },
     [StepsEnum.COMPETENCES]: {

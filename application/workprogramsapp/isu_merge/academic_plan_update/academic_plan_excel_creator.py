@@ -1,18 +1,18 @@
 import mimetypes
+import time
 
 import pandas as pd
-import time
+from django.conf import settings
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_utils import AcademicPlanUpdateUtils
 from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
-from workprogramsapp.models import AcademicPlanUpdateConfiguration
 
 
 class AcademicPlanExcelCreator:
     def __init__(self):
         self.isu_service = IsuService(
                     IsuUser(
-                        'rpd-constructor',
-                        'oVrLzGwN8giUEPpBDs82c8OLuzgx2b9L'
+                        settings.ISU["ISU_CLIENT_ID"],
+                        settings.ISU["ISU_CLIENT_SECRET"]
                     )
                 )
         self.excel_file_path = '../application/upload/isu_merge/input_add'

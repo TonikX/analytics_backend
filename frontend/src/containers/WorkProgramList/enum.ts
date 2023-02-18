@@ -10,6 +10,7 @@ export enum fields {
     SORTING_FIELD = 'SORTING_FIELD',
     SORTING_MODE = 'SORTING_MODE',
     FILTERING = 'FILTERING',
+    WORK_PROGRAM_ID_FOR_REDIRECT = 'WORK_PROGRAM_ID_FOR_REDIRECT',
 }
 
 export enum fetchingTypes {
@@ -28,5 +29,6 @@ export enum filterFields{
     ARCHIVE = 'ARCHIVE',
     PREREQUISITE = 'PREREQUISITE',
     OUTCOMES = 'OUTCOMES',
-    EDU_PROGRAM = 'EDU_PROGRAM'
+    EDU_PROGRAM = 'EDU_PROGRAM',
+    STATUS = 'STATUS'
 }

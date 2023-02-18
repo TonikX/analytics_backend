@@ -50,9 +50,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         evaluationTool: {
             [IntermediateCertificationFields.ID]: null,
             [IntermediateCertificationFields.DESCRIPTION]: '',
-            [IntermediateCertificationFields.MIN]: '',
+            [IntermediateCertificationFields.MIN]: undefined,
             [IntermediateCertificationFields.NAME]: '',
-            [IntermediateCertificationFields.MAX]: '',
+            [IntermediateCertificationFields.MAX]: undefined,
             [IntermediateCertificationFields.TYPE]: '',
             [IntermediateCertificationFields.SEMESTER]: '1',
         }
@@ -68,8 +68,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     [IntermediateCertificationFields.ID]: get(evaluationTool, IntermediateCertificationFields.ID, null),
                     [IntermediateCertificationFields.NAME]: get(evaluationTool, IntermediateCertificationFields.NAME, ''),
                     [IntermediateCertificationFields.DESCRIPTION]: get(evaluationTool, IntermediateCertificationFields.DESCRIPTION, ''),
-                    [IntermediateCertificationFields.MIN]: get(evaluationTool, IntermediateCertificationFields.MIN, ''),
-                    [IntermediateCertificationFields.MAX]: get(evaluationTool, IntermediateCertificationFields.MAX, ''),
+                    [IntermediateCertificationFields.MIN]: get(evaluationTool, IntermediateCertificationFields.MIN, undefined),
+                    [IntermediateCertificationFields.MAX]: get(evaluationTool, IntermediateCertificationFields.MAX, undefined),
                     [IntermediateCertificationFields.TYPE]: get(evaluationTool, IntermediateCertificationFields.TYPE, ''),
                     [IntermediateCertificationFields.SEMESTER]: get(evaluationTool, IntermediateCertificationFields.SEMESTER, '1'),
                 }
@@ -133,13 +133,25 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
+    saveMinMaxField = (field: string) => (e: React.ChangeEvent) => {
+        const {evaluationTool} = this.state;
+        const value = get(e, 'target.value')
+
+        this.setState({
+            evaluationTool: {
+                ...evaluationTool,
+                [field]: value.length > 0 ? value : undefined
+            }
+        })
+    }
+
     hasError = (field: string) => {
         const { showErrors, evaluationTool } = this.state;
         return showErrors && get(evaluationTool, [field, 'length'], 0) === 0
     }
 
     render() {
-        const {classes, semesterCount} = this.props;
+        const {classes} = this.props;
         const {evaluationTool, isOpen} = this.state;
 
         const isEditMode = Boolean(evaluationTool[IntermediateCertificationFields.ID]);
@@ -216,7 +228,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                         </FormControl>
                                         <div className={classNames(classes.row, classes.marginBottom30)}>
                                             <TextField label="Минимальное значение"
-                                                       onChange={this.saveField(IntermediateCertificationFields.MIN)}
+                                                       onChange={this.saveMinMaxField(IntermediateCertificationFields.MIN)}
                                                        variant="outlined"
                                                        className={classes.numberInput}
                                                        fullWidth
@@ -227,7 +239,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                        value={evaluationTool[IntermediateCertificationFields.MIN]}
                                             />
                                             <TextField label="Максимальное значение"
-                                                       onChange={this.saveField(IntermediateCertificationFields.MAX)}
+                                                       onChange={this.saveMinMaxField(IntermediateCertificationFields.MAX)}
                                                        variant="outlined"
                                                        fullWidth
                                                        InputLabelProps={{

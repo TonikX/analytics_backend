@@ -7,7 +7,7 @@ import moduleActions from './TrainingModules/actions';
 
 import Service from './service';
 
-import {BlocksOfWorkProgramsFields, fetchingTypes} from "./enum";
+import {BlocksOfWorkProgramsFields, EducationalPlanFields, fetchingTypes} from "./enum";
 import {
     getCurrentPage,
     getEducationalPlanDetailId,
@@ -18,6 +18,7 @@ import {
 } from "./getters";
 import {getTrainingModuleId} from "./TrainingModules/getters";
 import {getEducationalProgramCharacteristicId} from "../EducationalProgram/getters";
+import trainingModuleActions from "./TrainingModules/actions";
 
 const service = new Service();
 
@@ -121,7 +122,8 @@ const createNewEducationalPlan = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_EDUCATIONAL_PLAN}));
 
         service.createEducationalPlan(educationalPlan)
-            .then((res) => {
+            .then((res: any) => {
+                dispatch(planActions.setNewPlanIdForRedirect(res.data?.id));
                 dispatch(planActions.getEducationalPlans());
                 dispatch(actions.fetchingSuccess());
                 dispatch(planActions.closeDialog());
@@ -147,6 +149,31 @@ const changeEducationalPlan = createLogic({
         service.updateEducationalPlan(educationalPlan)
             .then((res) => {
                 dispatch(planActions.getEducationalPlans());
+                dispatch(actions.fetchingSuccess());
+                dispatch(planActions.closeDialog());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_EDUCATIONAL_PLAN}));
+                return done();
+            });
+    }
+});
+
+const changeEditorsEducationalPlan = createLogic({
+    type: planActions.changeEditorsEducationalPlan.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const educationalPlan = action.payload;
+        const id = getEducationalPlanDetailId(getState())
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_EDUCATIONAL_PLAN}));
+
+        service.updatePatchEducationalPlan(educationalPlan)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(id));
                 dispatch(actions.fetchingSuccess());
                 dispatch(planActions.closeDialog());
             })
@@ -225,7 +252,8 @@ const deleteBlockOfWorkPrograms = createLogic({
                 }
 
                 if (moduleId){
-                    dispatch(moduleActions.getTrainingModule({id: moduleId}));
+                    //@ts-ignore
+                    dispatch(moduleActions.getTrainingModule(moduleId));
                 }
 
                 dispatch(actions.fetchingSuccess());
@@ -358,6 +386,78 @@ const deleteModule = createLogic({
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_MODULE}));
+                return done();
+            });
+    }
+});
+
+const changeModulePosition = createLogic({
+    type: planActions.changeModulePosition.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {blockId, oldIndex, newIndex} = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_MODULE_POSITION}));
+
+        service.changeModulePosition(blockId, oldIndex, newIndex)
+            .then((res) => {
+                const planId = getEducationalPlanDetailId(getState());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_MODULE_POSITION}));
+                return done();
+            });
+    }
+});
+
+const educationalPlanConnectModules = createLogic({
+    type: planActions.educationalPlanConnectModules.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {modules, blockId} = action.payload;
+        const planId = getEducationalPlanDetailId(getState());
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CONNECT_MODULES}));
+
+        service.educationalPlanConnectModules(modules, blockId)
+            .then((res) => {
+                dispatch(trainingModuleActions.closeDialog());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CONNECT_MODULES}));
+                return done();
+            });
+    }
+});
+
+const educationalPlanDisconnectModule = createLogic({
+    type: planActions.educationalPlanDisconnectModule.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {module, blockId} = action.payload;
+        const planId = getEducationalPlanDetailId(getState());
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CONNECT_MODULES}));
+
+        service.educationalPlanDisconnectModule(module, blockId)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CONNECT_MODULES}));
                 return done();
             });
     }
@@ -552,6 +652,73 @@ const planTrajectorySelectSpecialization = createLogic({
     }
 });
 
+const sendPlanToValidate = createLogic({
+    type: planActions.sendPlanToValidate.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SEND_PLAN_TO_CHECK}));
+        const planId = getEducationalPlanDetailId(getState())
+
+        service.sendPlanToValidate(planId)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SEND_PLAN_TO_CHECK}));
+                return done();
+            });
+    }
+});
+
+const approvePlan = createLogic({
+    type: planActions.approvePlan.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.APPROVE_PLAN}));
+        const planId = getEducationalPlanDetailId(getState())
+
+        service.approvePlan(planId)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.APPROVE_PLAN}));
+                return done();
+            });
+    }
+});
+
+const sendPlanToRework = createLogic({
+    type: planActions.sendPlanToRework.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SEND_PLAN_TO_REWORK}));
+        const planId = getEducationalPlanDetailId(getState())
+
+        service.sendPlanToRework(planId)
+            .then((res) => {
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SEND_PLAN_TO_REWORK}));
+                return done();
+            });
+    }
+});
+
 const transformDetailPlanData = createLogic({
     type: planActions.openDetailDialog.type,
     latest: true,
@@ -620,6 +787,7 @@ export default [
     getEducationalPlans,
     deleteEducationalPlan,
     createNewEducationalPlan,
+    changeEditorsEducationalPlan,
     changeEducationalPlan,
     getEducationalPlanDetail,
     createBlockOfWorkPrograms,
@@ -634,4 +802,10 @@ export default [
     planTrajectorySelectOptionalWp,
     planTrajectorySelectElectives,
     planTrajectorySelectSpecialization,
+    educationalPlanConnectModules,
+    educationalPlanDisconnectModule,
+    sendPlanToValidate,
+    approvePlan,
+    sendPlanToRework,
+    changeModulePosition
 ];

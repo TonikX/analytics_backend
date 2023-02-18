@@ -18,9 +18,12 @@ const changeAllCount = createAction('WORK_PROGRAM_CHANGE_ALL_COUNT');
 const changeSorting = createAction('WORK_PROGRAM_CHANGE_SORTING');
 const changeFiltering = createAction('WORK_PROGRAMS_CHANGE_FILTERING');
 
+const setWorkProgramIdForRedirect = createAction('WORK_PROGRAM_ID_FOR_REDIRECT');
+
 const pageDown = createAction('WORK_PROGRAM_LIST_PAGE_DOWN');
 
 const actions: WorkProgramListActions = {
+    setWorkProgramIdForRedirect,
     pageDown,
     changeFiltering,
     getWorkProgramList,

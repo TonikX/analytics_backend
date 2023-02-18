@@ -58,7 +58,7 @@ export const RussianCertificationFields = {
     [CertificationFields.ID]: 'ID',
     [CertificationFields.DISCIPLINE_CODE]: 'Код дисциплины',
     [CertificationFields.TITLE]: 'Название',
-    [CertificationFields.YEAR]: 'Год проведения',
+    [CertificationFields.YEAR]: 'Год заполнения программы',
     [CertificationFields.AUTHORS]: 'Авторский состав',
     [CertificationFields.OP_LEADER]: 'Руководитель образовательной программы',
     [CertificationFields.STRUCTURAL_UNIT]: 'Структурное подразделение',
@@ -88,6 +88,10 @@ export const RussianCertificationFields = {
     [CertificationFields.GIA_BASE]: 'текст шаблона',
     [CertificationFields.EDITORS]: 'Редакторы',
     [CertificationFields.PERMISSIONS_INFO]: 'Информация о правах',
+    [CertificationFields.SEMESTER_COUNT]: 'Длительность в семестрах',
+    [CertificationFields.QUALIFICATION]: 'Уровень образовательной программы',
+    [CertificationFields.ZE_V_SEM]: 'Зачетные единицы',
+    [CertificationFields.EVALUATION_TOOLS]: 'Аттестационное оценочное средство',
 }
 export const fieldToStep = new Map(Object.entries({
     [CertificationFields.ID]: CertificationSteps.MAIN,

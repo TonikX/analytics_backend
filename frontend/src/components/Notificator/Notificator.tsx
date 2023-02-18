@@ -20,7 +20,7 @@ class Notificator extends React.Component<NotificatorProps>{
                 if (typeof error === "string"){
                     this.props.enqueueSnackbar(error, {
                         variant: 'error',
-                        autoHideDuration: 3000,
+                        autoHideDuration: 10000,
                     });
                 }
             })
@@ -31,7 +31,7 @@ class Notificator extends React.Component<NotificatorProps>{
                 if (typeof message === "string") {
                     this.props.enqueueSnackbar(message, {
                         variant: 'success',
-                        autoHideDuration: 3000,
+                        autoHideDuration: 10000,
                     });
                 }
             })

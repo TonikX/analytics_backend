@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 
 from workprogramsapp.expertise.models import Expertise, ExpertiseComments
+from workprogramsapp.models import AcademicPlan
 
 
 class UserNotification(models.Model):
@@ -33,7 +34,7 @@ class AcademicPlanUpdateNotification(UserNotification):
     """
     Нотификации об обновлениях в учебном плане
     """
-    expertise = models.ForeignKey(Expertise, on_delete=models.CASCADE, blank=True, null=True)
+    academic_plan = models.ForeignKey(AcademicPlan, on_delete=models.CASCADE, blank=True, null=True)
 
 
 class NotificationComments(UserNotification):

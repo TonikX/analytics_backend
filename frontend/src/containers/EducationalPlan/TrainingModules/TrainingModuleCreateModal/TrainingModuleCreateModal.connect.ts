@@ -5,11 +5,12 @@ import actions from "../actions";
 
 import {isOpenDialog, getDialogData} from '../getters';
 import {rootState} from "../../../../store/reducers";
+import {fields} from "../enum";
 
 const mapStateToProps = (state: rootState) => {
     return {
-        isOpen: isOpenDialog(state),
-        trainingModule: getDialogData(state),
+        isOpen: isOpenDialog(state, fields.CREATE_TRAINING_MODULE_DIALOG),
+        trainingModule: getDialogData(state, fields.CREATE_TRAINING_MODULE_DIALOG),
     };
 };
 

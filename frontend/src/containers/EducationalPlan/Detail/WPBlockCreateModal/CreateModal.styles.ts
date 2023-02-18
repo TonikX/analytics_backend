@@ -48,7 +48,8 @@ export default (theme: Theme) => createStyles({
         flex: 1,
     },
     semesterBlock: {
-        maxWidth: '600px'
+        maxWidth: '600px',
+        margin: '30px 0px',
     },
     //@ts-ignore
     root: {
@@ -60,7 +61,8 @@ export default (theme: Theme) => createStyles({
     },
     semesterList: {
         display: 'flex',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        gap: 10,
     },
     workProgramBlock: {
         marginBottom: 30
@@ -90,6 +92,9 @@ export default (theme: Theme) => createStyles({
         width: '290px',
         //@ts-ignore
         zIndex: '10001 !important'
+    },
+    smallInput: {
+        width: '290px'
     },
     actions: {
         padding: '15px 24px 20px'

@@ -28,9 +28,11 @@ const mapStateToProps = (state:rootState) => {
         offerta: getWorkProgramField(state, WorkProgramGeneralFields.OFFERTA),
         semesterCount: getWorkProgramField(state, WorkProgramGeneralFields.SEMESTER_COUNT),
         implementationFormat: getWorkProgramField(state, WorkProgramGeneralFields.IMPLEMENTATION_FORMAT),
+        moodleLink: getWorkProgramField(state, WorkProgramGeneralFields.MOODLE_LINK),
 
         isCanEdit: isCanEdit(state),
         structuralUnitsList: getStructuralUnitsForSelector(state),
+        changeBlock: getWorkProgramField(state, WorkProgramGeneralFields.WORK_PROGRAM_IN_CHANGE_BLOCK),
 
         fetchingCode: isFetchingComponentByKey(state, WorkProgramGeneralFields.CODE),
         fetchingTitle: isFetchingComponentByKey(state, WorkProgramGeneralFields.TITLE),
@@ -38,6 +40,7 @@ const mapStateToProps = (state:rootState) => {
         fetchingAuthors: isFetchingComponentByKey(state, WorkProgramGeneralFields.AUTHORS),
         fetchingVideoLink: isFetchingComponentByKey(state, WorkProgramGeneralFields.VIDEO_LINK),
         fetchingDescription: isFetchingComponentByKey(state, WorkProgramGeneralFields.DESCRIPTION),
+        fetchingMoodleLink: isFetchingComponentByKey(state, WorkProgramGeneralFields.MOODLE_LINK),
         canAddEditors: isCanEdit(state) || getUserGroups(state)?.includes(EXPERTISE_MASTER),
     };
 };

@@ -27,17 +27,15 @@ from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgr
 from .notifications.models import UserNotification
 # Права доступа
 from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, \
-    IsOwnerOrDodWorkerOrReadOnly
+    IsOwnerOrDodWorkerOrReadOnly, IsAcademicPlanDeveloper, IsBlockModuleEditor
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, \
-    DisciplineBlockModuleCreateSerializer, \
     WorkProgramInFieldOfStudySerializer, ZunSerializer, WorkProgramInFieldOfStudyCreateSerializer, ZunCreateSerializer, \
     ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
-    DisciplineBlockModuleDetailSerializer, DisciplineBlockModuleForModuleListDetailSerializer, \
-    WorkProgramArchiveUpdateSerializer
+    WorkProgramArchiveUpdateSerializer, EvaluationToolListSerializer
 from .serializers import BibliographicReferenceSerializer, \
     WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
@@ -70,14 +68,16 @@ class WorkProgramsListApi(generics.ListAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['discipline_code', 'title', 'editors__last_name', 'editors__first_name' ]
+    search_fields = ['discipline_code', 'title', 'editors__last_name', 'editors__first_name', 'id']
     filterset_fields = ['language',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__title',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__number',
-                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile', 'qualification',
+                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile',
+                        'qualification',
                         'prerequisites', 'outcomes', 'structural_unit__title',
                         'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__title',
-                        'editors__last_name', 'editors__first_name', 'work_status'
+                        'editors__last_name', 'editors__first_name', 'work_status',
+                        'expertise_with_rpd__expertise_status'
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -95,8 +95,8 @@ class WorkProgramsListApi(generics.ListAPIView):
         if self.request.GET.get('filter') == 'my':
             queryset = WorkProgram.objects.filter(editors=self.request.user)
         elif self.request.GET.get('filter') == 'iamexpert':
-            queryset = WorkProgram.objects.filter(expertise_with_rpd__expertse_users_in_rpd__expert = self.request.user,
-                                                  expertise_with_rpd__expertse_users_in_rpd__stuff_status = 'EX')
+            queryset = WorkProgram.objects.filter(expertise_with_rpd__expertse_users_in_rpd__expert=self.request.user,
+                                                  expertise_with_rpd__expertse_users_in_rpd__stuff_status='EX')
         else:
             queryset = WorkProgram.objects.filter()
         return queryset
@@ -147,14 +147,17 @@ class ZunManyViewSet(viewsets.ModelViewSet):
             "zun": {
               "indicator_in_zun": 16,
               "items": []
-                }
+                },
+              "knowledge",
+              "skills",
+              "attainments"
             }
         """
 
         for wp_in_fs in request.data['wpa_in_fss']:
             serializer = self.get_serializer(data=request.data['zun'])
             serializer.is_valid(raise_exception=True)
-            serializer.save(wp_in_fs = WorkProgramInFieldOfStudy.objects.get(id = wp_in_fs))
+            serializer.save(wp_in_fs=WorkProgramInFieldOfStudy.objects.get(id=wp_in_fs))
         return Response(status=status.HTTP_201_CREATED)
 
 
@@ -462,12 +465,20 @@ class PrerequisitesOfWorkProgramUpdateView(generics.UpdateAPIView):
 # Блок эндпоинтов рабочей программы
 
 class WorkProgramCreateAPIView(generics.CreateAPIView):
+    """
+    API для создание рабочей програмы
+    Поле evaluation_tools принимает двумерный массив с id-типами оценочных средств. Индекс каждого подмасива - номер
+    семестра
+
+    Пример:
+    "evaluation_tools": [[1,4],[1]]
+    """
     serializer_class = WorkProgramCreateSerializer
     queryset = WorkProgram.objects.all()
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user, editors = [self.request.user])
+        serializer.save(owner=self.request.user, editors=[self.request.user])
 
 
 class WorkProgramDestroyView(generics.DestroyAPIView):
@@ -481,39 +492,38 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
     serializer_class = WorkProgramCreateSerializer
     permission_classes = [IsOwnerOrReadOnly]
 
-
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        #print(request.data['id'])
+        # print(request.data['id'])
         try:
-            if request.data['implementation_format']=='online':
-                DisciplineSection.objects.filter(work_program = serializer.data['id'])
-                for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
+            if request.data['implementation_format'] == 'online':
+                DisciplineSection.objects.filter(work_program=serializer.data['id'])
+                for section in DisciplineSection.objects.filter(work_program=serializer.data['id']):
                     section.consultations = section.lecture_classes + section.laboratory + \
                                             section.practical_lessons
-                    #section.contact_work = 0
+                    # section.contact_work = 0
                     section.lecture_classes = 0
                     section.laboratory = 0
                     section.practical_lessons = 0
-                    #section.SRO = 0
+                    # section.SRO = 0
                     section.save()
-            elif request.data['implementation_format']=='mixed' or request.data['implementation_format']=='offline':
-                DisciplineSection.objects.filter(work_program = serializer.data['id'])
-                for section in DisciplineSection.objects.filter(work_program = serializer.data['id']):
-                    #section.contact_work = (section.consultations/21*11)
-                    section.lecture_classes = (section.consultations/3)
-                    section.laboratory = (section.consultations/3)
-                    section.practical_lessons = (section.consultations/3)
-                    #section.SRO = (section.consultations/8*2)
+            elif request.data['implementation_format'] == 'mixed' or request.data['implementation_format'] == 'offline':
+                DisciplineSection.objects.filter(work_program=serializer.data['id'])
+                for section in DisciplineSection.objects.filter(work_program=serializer.data['id']):
+                    # section.contact_work = (section.consultations/21*11)
+                    section.lecture_classes = (section.consultations / 3)
+                    section.laboratory = (section.consultations / 3)
+                    section.practical_lessons = (section.consultations / 3)
+                    # section.SRO = (section.consultations/8*2)
                     section.consultations = 0
                     section.save()
         except:
             pass
-        response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id = serializer.data['id']))
+        response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id=serializer.data['id']))
         return Response(response_serializer.data)
 
 
@@ -547,7 +557,6 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
     serializer_class = WorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
-
     def get(self, request, **kwargs):
         queryset = WorkProgram.objects.filter(pk=self.kwargs['pk'])
         serializer = WorkProgramSerializer(queryset, many=True)
@@ -566,9 +575,11 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 newdata.update({"can_see_comments": False})
 
             if (Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK" or
-                Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "RE") and (WorkProgram.objects.get(
-                pk=self.kwargs['pk']).owner == request.user or WorkProgram.objects.filter(pk=self.kwargs['pk'],
-                                                                                          editors__in=[request.user])):
+                Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "RE") and (
+                    WorkProgram.objects.get(
+                        pk=self.kwargs['pk']).owner == request.user or WorkProgram.objects.filter(pk=self.kwargs['pk'],
+                                                                                                  editors__in=[
+                                                                                                      request.user])):
                 newdata.update({"can_edit": True})
             else:
                 newdata.update({"can_edit": False})
@@ -616,7 +627,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             newdata.update({"can_comment": False})
             newdata.update({"can_approve": False})
         if (request.user.is_expertise_master == True or WorkProgram.objects.filter(
-                    pk=self.kwargs['pk'], editors__in=[request.user])) and queryset[0].work_status == "w":
+                pk=self.kwargs['pk'], editors__in=[request.user])) and queryset[0].work_status == "w":
             newdata.update({"can_archive": True})
         else:
             newdata.update({"can_archive": False})
@@ -639,15 +650,17 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         except:
 
             newdata.update({"rating": False})
-        competences = Competence.objects.filter(indicator_in_competencse__zun__wp_in_fs__work_program__id = self.kwargs['pk']).distinct()
+        competences = Competence.objects.filter(
+            indicator_in_competencse__zun__wp_in_fs__work_program__id=self.kwargs['pk']).distinct()
         competences_dict = []
         for competence in competences:
-            zuns = Zun.objects.filter(wp_in_fs__work_program__id = self.kwargs['pk'], indicator_in_zun__competence__id = competence.id)
+            zuns = Zun.objects.filter(wp_in_fs__work_program__id=self.kwargs['pk'],
+                                      indicator_in_zun__competence__id=competence.id)
             zuns_array = []
             for zun in zuns:
                 try:
-                    indicator = Indicator.objects.get(competence = competence.id,
-                                                          zun__id = zun.id)
+                    indicator = Indicator.objects.get(competence=competence.id,
+                                                      zun__id=zun.id)
                     indicator = IndicatorSerializer(indicator).data
                 except:
                     indicator = None
@@ -655,19 +668,20 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 # for indicator in indicators:
                 #     indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number})
                 items_array = []
-                items = Items.objects.filter(item_in_outcomes__item_in_wp__id = zun.id,
-                                             item_in_outcomes__item_in_wp__wp_in_fs__work_program__id = self.kwargs['pk'],
-                                             item_in_outcomes__item_in_wp__indicator_in_zun__competence__id = competence.id)
+                items = Items.objects.filter(item_in_outcomes__item_in_wp__id=zun.id,
+                                             item_in_outcomes__item_in_wp__wp_in_fs__work_program__id=self.kwargs['pk'],
+                                             item_in_outcomes__item_in_wp__indicator_in_zun__competence__id=competence.id)
                 for item in items:
-                    items_array.append({"id": item .id, "name": item .name})
-                #serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
+                    items_array.append({"id": item.id, "name": item.name})
+                # serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
                 queryset = ImplementationAcademicPlan.objects.filter(
-                    academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id = zun.id)
+                    academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id)
                 serializer = ImplementationAcademicPlanSerializer(queryset, many=True)
                 zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
                                    "attainments": zun.attainments, "indicator": indicator,
                                    "items": items_array, "educational_program": serializer.data,
-                                   "wp_in_fs": WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id)).data["id"]})
+                                   "wp_in_fs": WorkProgramInFieldOfStudySerializerForCb(
+                                       WorkProgramInFieldOfStudy.objects.get(zun_in_wp=zun.id)).data["id"]})
             competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
                                      "zuns": zuns_array})
         newdata.update({"competences": competences_dict})
@@ -769,7 +783,7 @@ class EvaluationToolListAPI(generics.ListCreateAPIView):
     API endpoint that represents a list of Evaluation Tools.
     """
     queryset = EvaluationTool.objects.all()
-    serializer_class = EvaluationToolCreateSerializer
+    serializer_class = EvaluationToolListSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -840,13 +854,14 @@ class ZunListAPI(generics.ListCreateAPIView):
             else:
                 wp_in_fs = WorkProgramInFieldOfStudy()
                 wp_in_fs.work_program_change_in_discipline_block_module = \
-                WorkProgramChangeInDisciplineBlockModule.objects.filter(id=int(new_zun.get('wp_changeblock')))[0]
+                    WorkProgramChangeInDisciplineBlockModule.objects.filter(id=int(new_zun.get('wp_changeblock')))[0]
                 wp_in_fs.work_program = WorkProgram.objects.filter(id=int(new_zun.get('work_program')))[0]
                 wp_in_fs.save()
             # wp_for_response_serializer =[]
             wp_cb = \
-            WorkProgramChangeInDisciplineBlockModule.objects.filter(zuns_for_cb__id=int(new_zun.get('wp_changeblock')))[
-                0]
+                WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                    zuns_for_cb__id=int(new_zun.get('wp_changeblock')))[
+                    0]
             # wp_for_response_serializer.append(WorkProgramChangeInDisciplineBlockModule.objects.filter(id = int(new_zun.get('wp_changeblock')))[0])
             new_zun = {"wp_in_fs": zun.get('wp_changeblock'),
                        "indicator_in_zun": Indicator.objects.filter(id=int(new_zun.get('indicator_in_zun')))[0].id,
@@ -1012,25 +1027,25 @@ def NewRealtionsForWorkProgramsInFieldOfStudyAPI(request):
 #
 #         place.delete()
 
-    #self.message_user(request, "%s is merged with other places, now you can give it a canonical name." % main)
+# self.message_user(request, "%s is merged with other places, now you can give it a canonical name." % main)
 
 
-#class MyMergedModelInstance(MergedModelInstance):
-    # """
-    #     Custom way to handle Issue #11: Ignore models with managed = False
-    #     Also, ignore auditlog models.
-    # """
-    # def _handle_o2m_related_field(self, related_field: Field, alias_object: Model):
-    #     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
-    #         return super()._handle_o2m_related_field(related_field, alias_object)
-    #
-    # def _handle_m2m_related_field(self, related_field: Field, alias_object: Model):
-    #     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
-    #         return super()._handle_m2m_related_field(related_field, alias_object)
-    #
-    # def _handle_o2o_related_field(self, related_field: Field, alias_object: Model):
-    #     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
-    #         return super()._handle_o2o_related_field(related_field, alias_object)
+# class MyMergedModelInstance(MergedModelInstance):
+# """
+#     Custom way to handle Issue #11: Ignore models with managed = False
+#     Also, ignore auditlog models.
+# """
+# def _handle_o2m_related_field(self, related_field: Field, alias_object: Model):
+#     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
+#         return super()._handle_o2m_related_field(related_field, alias_object)
+#
+# def _handle_m2m_related_field(self, related_field: Field, alias_object: Model):
+#     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
+#         return super()._handle_m2m_related_field(related_field, alias_object)
+#
+# def _handle_o2o_related_field(self, related_field: Field, alias_object: Model):
+#     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
+#         return super()._handle_o2o_related_field(related_field, alias_object)
 
 @transaction.atomic()
 def merge(primary_object, alias_objects):
@@ -1038,6 +1053,7 @@ def merge(primary_object, alias_objects):
     #     alias_objects = [alias_objects]
     MergedModelInstance.create(primary_object, alias_objects, keep_old=False)
     return primary_object
+
 
 from django.apps import apps
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -1145,16 +1161,16 @@ def merge_model_instances(primary_object, alias_objects):
             alias_object.delete()
             deleted_objects_count += 1
 
+
 @api_view(['GET', 'POST'])
 def ChangeItemsView(request):
     try:
-        item = Items.objects.filter(id = request.data.get('old_item_id'))[0]
-        other_item = Items.objects.filter(name = item.name).exclude(id = item.id)
+        item = Items.objects.filter(id=request.data.get('old_item_id'))[0]
+        other_item = Items.objects.filter(name=item.name).exclude(id=item.id)
         merge(item, other_item)
     except:
         return Response(status=400)
     return Response(status=200)
-
 
 
 class FileUploadWorkProgramOutcomesAPIView(APIView):
@@ -1283,8 +1299,6 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
             return Response(status=400)
 
 
-
-
 class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
     serializer_class = EvaluationToolForWorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
@@ -1313,15 +1327,15 @@ class WorkProgramInFieldOfStudyForWorkProgramList(generics.ListAPIView):
         Вывод учебных планов для одной рабочей программы по id
         """
         queryset = WorkProgramInFieldOfStudy.objects.filter(
-            work_program__id = self.kwargs['workprogram_id'],
-            #work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study = self.kwargs['ap_id']
-            ).distinct()
+            work_program__id=self.kwargs['workprogram_id'],
+            # work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study = self.kwargs['ap_id']
+        ).distinct()
         serializer = WorkProgramInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
         return Response(serializer.data)
         try:
             queryset = WorkProgramInFieldOfStudy.objects.filter(
                 work_program__id
-                = self.kwargs['workprogram_id']).distinct()
+                =self.kwargs['workprogram_id']).distinct()
             serializer = WorkProgramInFieldOfStudySerializer(queryset, many=True)
             return Response(serializer.data)
         except:
@@ -1337,14 +1351,15 @@ class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
         Вывод учебных планов для одной рабочей программы по id
         """
         queryset = WorkProgramInFieldOfStudy.objects.filter(
-            work_program__id = self.kwargs['workprogram_id'],
-            work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program = self.kwargs['gh_id']).distinct()
+            work_program__id=self.kwargs['workprogram_id'],
+            work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program=
+            self.kwargs['gh_id']).distinct()
         serializer = WorkProgramInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
         return Response(serializer.data)
         try:
             queryset = WorkProgramInFieldOfStudy.objects.filter(
                 work_program__id
-                = self.kwargs['workprogram_id']).distinct()
+                =self.kwargs['workprogram_id']).distinct()
             serializer = WorkProgramInFieldOfStudySerializer(queryset, many=True)
             return Response(serializer.data)
         except:
@@ -1522,19 +1537,19 @@ def handle_uploaded_csv(file, filename):
         for chunk in file.chunks():
             destination.write(chunk)
     in_df = pandas.read_excel(path)
-    sys_df = pandas.DataFrame({'EP_ID':[], 'SUBJECT_CODE':[], 'CYCLE':[], 'MODULE_ID':[], 'COMPONENT':[],
-                               'ISU_SUBJECT_ID':[], 'SUBJECT':[], 'IMPLEMENTOR_ID':[], 'IMPLEMENTOR':[],
-                               'SUBFIELDCODE':[], 'MAJOR_NAME':[], 'OP_ID':[], 'SUBFIELDNAME':[],
-                               'FACULTY_ID':[], 'FACULTY':[], 'OGNP_ID':[],'OGNP':[], 'YEAR':[], 'DEGREE':[],
-                               'SEMESTER':[], 'LANGUAGE':[], 'CREDITS':[], 'LECTURE':[], 'PRACTICE':[], 'LAB':[],
-                               'EXAM':[], 'PASS':[], 'DIFF':[], 'CP':[], 'SRS':[], 'ISOPTION':[], 'SEM_INFO':[],
-                               'DIS_CODE':[], 'VERSION':[]})
+    sys_df = pandas.DataFrame({'EP_ID': [], 'SUBJECT_CODE': [], 'CYCLE': [], 'MODULE_ID': [], 'COMPONENT': [],
+                               'ISU_SUBJECT_ID': [], 'SUBJECT': [], 'IMPLEMENTOR_ID': [], 'IMPLEMENTOR': [],
+                               'SUBFIELDCODE': [], 'MAJOR_NAME': [], 'OP_ID': [], 'SUBFIELDNAME': [],
+                               'FACULTY_ID': [], 'FACULTY': [], 'OGNP_ID': [], 'OGNP': [], 'YEAR': [], 'DEGREE': [],
+                               'SEMESTER': [], 'LANGUAGE': [], 'CREDITS': [], 'LECTURE': [], 'PRACTICE': [], 'LAB': [],
+                               'EXAM': [], 'PASS': [], 'DIFF': [], 'CP': [], 'SRS': [], 'ISOPTION': [], 'SEM_INFO': [],
+                               'DIS_CODE': [], 'VERSION': []})
 
     # df.to_excel("discipline_code/discipline_bank_updated5.xlsx", index=False)
     # sys_df = pandas.read_excel('discipline_code/discipline_bank_updated5.xlsx')
     print('IPv4_code generating')
     processed_data, db = IPv4_code_ver2.generate_df_w_unique_code(in_df, sys_df)
-    now = datetime.datetime.now().isoformat("-").split(".")[0].replace(":","-")
+    now = datetime.datetime.now().isoformat("-").split(".")[0].replace(":", "-")
     db.to_excel("discipline_code/discipline_bank_updated_{}.xlsx".format(now), index=False)
     print(processed_data.head())
     return processed_data
@@ -1554,7 +1569,8 @@ class FileUploadAPIView(APIView):
         data = handle_uploaded_csv(request.FILES['file'], str(request.FILES['file']))
         print(len(data['SUBJECT'].drop_duplicates().to_list()))
         # импортируем json с порядком модулей
-        with open('workprogramsapp/modules-order.json', 'r',               #with open('/application/workprogramsapp/modules-order.json', 'r',
+        with open('workprogramsapp/modules-order.json', 'r',
+                  # with open('/application/workprogramsapp/modules-order.json', 'r',
                   encoding='utf-8') as fh:  # открываем файл на чтение
             order = json.load(fh)
 
@@ -1567,7 +1583,7 @@ class FileUploadAPIView(APIView):
         fs_count, wp_count, ap_count = 0, 0, 0
         for i in list(data.index.values):
             try:
-                #print('clone', clone)
+                # print('clone', clone)
                 print('---Новая строка---')
                 if data['DEGREE'][i].strip() == 'Академический бакалавр':
                     qualification = 'bachelor'
@@ -1580,7 +1596,7 @@ class FileUploadAPIView(APIView):
                 credit_units = [0 for i in range(0, 12)]
                 units = data.loc[
                     (data['SUBFIELDNAME'] == data['SUBFIELDNAME'][i]) & (data['CYCLE'] == data['CYCLE'][i]) & (
-                                data['COMPONENT'] == data['COMPONENT'][i]) & (data['SUBJECT'] == data['SUBJECT'][i])
+                            data['COMPONENT'] == data['COMPONENT'][i]) & (data['SUBJECT'] == data['SUBJECT'][i])
                     & (data['YEAR'] == data['YEAR'][i])
                     ]
                 print(units.index.values)
@@ -1614,7 +1630,7 @@ class FileUploadAPIView(APIView):
                 print(data['SUBJECT'][i].strip(), data['DIS_CODE'][i])
                 regex = r'^[0-9]{2}\.' + str(data['DIS_CODE'][i])[3] + '.'
                 print(regex)
-                #TODO: ОГНП НЕКОРРЕКТНО СООТНОСЯТСЯ
+                # TODO: ОГНП НЕКОРРЕКТНО СООТНОСЯТСЯ
                 wp_list = WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
                                                      zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
                                                      data['COMPONENT'][i].strip(),
@@ -1624,25 +1640,26 @@ class FileUploadAPIView(APIView):
                                                          map(str, credit_units)),
                                                      discipline_code__iregex=regex).distinct()
                 print('Найдена РПД: ', wp_list)
-                #print(WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip()))
+                # print(WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip()))
                 if wp_list.exists():
                     wp_obj = WorkProgram.objects.get(pk=wp_list[0].id)
                     if not wp_obj.old_discipline_code:
-                        wp_obj.old_discipline_code=wp_obj.discipline_code
+                        wp_obj.old_discipline_code = wp_obj.discipline_code
                         wp_obj.discipline_code = data['DIS_CODE'][i]
                         wp_obj.save()
                         print("Я взял старую РПД!!!")
                     elif data['DIS_CODE'][i] != wp_obj.discipline_code:
-                        print('мы ее нашли', WorkProgram.objects.filter(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip()).distinct())
+                        print('мы ее нашли', WorkProgram.objects.filter(discipline_code=data['DIS_CODE'][i],
+                                                                        title=data['SUBJECT'][i].strip()).distinct())
                         try:
-                            wp_obj = WorkProgram.objects.filter(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip())[0]
+                            wp_obj = WorkProgram.objects.filter(discipline_code=data['DIS_CODE'][i],
+                                                                title=data['SUBJECT'][i].strip())[0]
                         except:
                             print("Я СКЛОНИРОВАЛ!!!")
                             clone = True
                             wp_obj = WorkProgram.clone_programm(wp_obj.id)
                             wp_obj.discipline_code = data['DIS_CODE'][i]
                             wp_obj.save()
-
 
                     """   # если да, то получаем объект
                     #
@@ -1697,8 +1714,8 @@ class FileUploadAPIView(APIView):
                 #     wp_obj.lab_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
                 #     wp_obj.srs_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
                 # if ',' not in wp_obj.lecture_hours and '.' not in wp_obj.lecture_hours:
-                #print('1', len(list(wp_obj.lecture_hours)))
-                #print('2', not wp_obj.lecture_hours)
+                # print('1', len(list(wp_obj.lecture_hours)))
+                # print('2', not wp_obj.lecture_hours)
                 if not wp_obj.lecture_hours:
                     print('попытка создать массивыдля данных о семестрах')
                     wp_obj.lecture_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
@@ -1750,10 +1767,12 @@ class FileUploadAPIView(APIView):
                     wp_obj.language = "de"
 
                 try:
-                    struct_unit=StructuralUnit.objects.get(title=data['IMPLEMENTOR'][i].strip(), isu_id=data['IMPLEMENTOR_ID'][i])
+                    struct_unit = StructuralUnit.objects.get(title=data['IMPLEMENTOR'][i].strip(),
+                                                             isu_id=data['IMPLEMENTOR_ID'][i])
                 except:
-                    struct_unit=StructuralUnit.objects.create(title=data['IMPLEMENTOR'][i].strip(), isu_id=data['IMPLEMENTOR_ID'][i])
-                wp_obj.structural_unit_id=struct_unit.id
+                    struct_unit = StructuralUnit.objects.create(title=data['IMPLEMENTOR'][i].strip(),
+                                                                isu_id=data['IMPLEMENTOR_ID'][i])
+                wp_obj.structural_unit_id = struct_unit.id
                 wp_obj.save()
                 print('Рабочая программа дисциплины: ', wp_obj)
 
@@ -1775,7 +1794,7 @@ class FileUploadAPIView(APIView):
                     ap_obj = AcademicPlan.objects.get(qualification=qualification, year=data['YEAR'][i],
                                                       educational_profile=data['SUBFIELDNAME'][i].strip())
                     # EP_ID - учебный план
-                    ap_obj.ap_isu_id=int(data['EP_ID'][i])
+                    ap_obj.ap_isu_id = int(data['EP_ID'][i])
                     ap_obj.save()
                     print('старый', ap_obj)
 
@@ -1797,9 +1816,9 @@ class FileUploadAPIView(APIView):
 
                 if ImplementationAcademicPlan.objects.filter(academic_plan=ap_obj, field_of_study=fs_obj,
                                                              year=data['YEAR'][i]).exists():
-                    iap_obj=ImplementationAcademicPlan.objects.get(academic_plan=ap_obj, field_of_study=fs_obj,
-                                                              year=data['YEAR'][i])
-                    iap_obj.op_isu_id=int(data['OP_ID'][i])
+                    iap_obj = ImplementationAcademicPlan.objects.get(academic_plan=ap_obj, field_of_study=fs_obj,
+                                                                     year=data['YEAR'][i])
+                    iap_obj.op_isu_id = int(data['OP_ID'][i])
                     iap_obj.save()
                     # OP_ID - образовательная программа
                     print('ImplementationAcademicPlan exist')
@@ -1834,9 +1853,12 @@ class FileUploadAPIView(APIView):
                 print('Модуль в блоке: ', mdb)
 
                 if (data['ISOPTION'][i] == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                        discipline_block_module=mdb, change_type=data['ISOPTION'][i], subject_code = data['SUBJECT_CODE'][i]).exists()):
+                        discipline_block_module=mdb, change_type=data['ISOPTION'][i],
+                        subject_code=data['SUBJECT_CODE'][i]).exists()):
                     wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
-                                                                                       change_type=data['ISOPTION'][i], subject_code = data['SUBJECT_CODE'][i]
+                                                                                       change_type=data['ISOPTION'][i],
+                                                                                       subject_code=
+                                                                                       data['SUBJECT_CODE'][i]
                                                                                        )
                     if WorkProgramInFieldOfStudy.objects.filter(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
@@ -1863,16 +1885,14 @@ class FileUploadAPIView(APIView):
                     wpchangemdb.subject_code = data['SUBJECT_CODE'][i]
                     wpchangemdb.save()
 
-
                     if WorkProgramInFieldOfStudy.objects.filter(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
                         wpinfs = WorkProgramInFieldOfStudy.objects.get(
                             work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
                     else:
 
-
                         wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
-                                                               work_program=wp_obj)
+                                                           work_program=wp_obj)
                         wpinfs.save()
                 try:
                     if WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
@@ -1880,7 +1900,7 @@ class FileUploadAPIView(APIView):
                                                   data['COMPONENT'][i].strip(),
                                                   # zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
                                                   # data['ISOPTION'][i],
-                                                  zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module= mdb,
+                                                  zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module=mdb,
                                                   ).count() > 1:
                         # wp_obj2 = WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
                         #                                     zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
@@ -1893,7 +1913,7 @@ class FileUploadAPIView(APIView):
                         # wpinfs.work_program = wp_obj2
                         # wpinfs.save()
                         if clone:
-                            print ('УДАЛЯЕТСЯ СКЛОНИРОВАННАЯ рпд')
+                            print('УДАЛЯЕТСЯ СКЛОНИРОВАННАЯ рпд')
                             wp_obj.delete()
                             wpchangemdb.delete()
                 except:
@@ -1921,30 +1941,34 @@ class FileUploadAPIView(APIView):
 class AcademicPlanListAPIView(generics.ListAPIView):
     serializer_class = AcademicPlanSerializerForList
     queryset = AcademicPlan.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['academic_plan_in_field_of_study__qualification',
                      'academic_plan_in_field_of_study__title',
                      'academic_plan_in_field_of_study__year',
-                     'academic_plan_in_field_of_study__field_of_study__title']
+                     'academic_plan_in_field_of_study__field_of_study__title',
+                     'academic_plan_in_field_of_study__field_of_study__number']
     ordering_fields = ['academic_plan_in_field_of_study__qualification',
                        'academic_plan_in_field_of_study__title',
                        'academic_plan_in_field_of_study__year',
                        'academic_plan_in_field_of_study__field_of_study__title']
+    filterset_fields = ['academic_plan_in_field_of_study__qualification']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
 class AcademicPlanListShortAPIView(generics.ListAPIView):
     serializer_class = AcademicPlanShortSerializer
     queryset = AcademicPlan.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['academic_plan_in_field_of_study__qualification',
                      'academic_plan_in_field_of_study__title',
                      'academic_plan_in_field_of_study__year',
-                     'academic_plan_in_field_of_study__field_of_study__title']
+                     'academic_plan_in_field_of_study__field_of_study__title',
+                     'academic_plan_in_field_of_study__field_of_study__number']
     ordering_fields = ['academic_plan_in_field_of_study__qualification',
                        'academic_plan_in_field_of_study__title',
                        'academic_plan_in_field_of_study__year',
                        'academic_plan_in_field_of_study__field_of_study__title']
+    filterset_fields = ['academic_plan_in_field_of_study__qualification']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -1954,7 +1978,12 @@ class AcademicPlanCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+
+        academic_plan = serializer.save(author=self.request.user)
+        DisciplineBlock.objects.create(name="Блок 1. Модули (дисциплины)", academic_plan=academic_plan)
+        DisciplineBlock.objects.create(name="Блок 2. Практика", academic_plan=academic_plan)
+        DisciplineBlock.objects.create(name="Блок 3. ГИА", academic_plan=academic_plan)
+        DisciplineBlock.objects.create(name="Блок 4. Факультативные модули (дисциплины)", academic_plan=academic_plan)
         AcademicPlan.clone_descipline_blocks(self, serializer)
 
 
@@ -1967,7 +1996,7 @@ class AcademicPlanDestroyView(generics.DestroyAPIView):
 class AcademicPlanUpdateView(generics.UpdateAPIView):
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlanSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsRpdDeveloperOrReadOnly, IsAcademicPlanDeveloper]
 
 
 class AcademicPlanDetailsView(generics.RetrieveAPIView):
@@ -2043,7 +2072,7 @@ class ImplementationAcademicPlanUpdateView(generics.UpdateAPIView):
 class ImplementationAcademicPlanDetailsView(generics.RetrieveAPIView):
     queryset = ImplementationAcademicPlan.objects.all()
     serializer_class = ImplementationAcademicPlanSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsRpdDeveloperOrReadOnly, IsAcademicPlanDeveloper]
 
 
 class WorkProgramChangeInDisciplineBlockModuleListAPIView(generics.ListAPIView):
@@ -2075,27 +2104,6 @@ class WorkProgramChangeInDisciplineBlockModuleDetailsView(generics.RetrieveAPIVi
 class WorkProgramChangeInDisciplineBlockModuleUpdateView(generics.UpdateAPIView):
     queryset = WorkProgramChangeInDisciplineBlockModule.objects.all()
     serializer_class = WorkProgramChangeInDisciplineBlockModuleUpdateSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
-    serializer_class = DisciplineBlockModuleCreateSerializer
-    queryset = DisciplineBlockModule.objects.all()
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(editor=self.request.user)
-
-
-class DisciplineBlockModuleDestroyView(generics.DestroyAPIView):
-    queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
-    queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -2143,63 +2151,8 @@ class ZunUpdateView(generics.UpdateAPIView):
 # Конец блока ендпоинтов рабочей программы
 
 
-class DisciplineBlockModuleShortListView(generics.ListAPIView):
-    queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleCreateSerializer
-    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
-    filterset_fields = ['change_blocks_of_work_programs_in_modules__work_program__prerequisites',
-                        'change_blocks_of_work_programs_in_modules__work_program__outcomes',
-                        'change_blocks_of_work_programs_in_modules__work_program__structural_unit__title',
-                        'descipline_block__academic_plan__academic_plan_in_field_of_study__qualification']
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class DisciplineBlockModuleDetailListView(generics.ListAPIView):
-    queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['name', 'descipline_block__name']
-
-
-class DisciplineBlockModuleDetailListForUserView(generics.ListAPIView):
-    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['name', 'descipline_block__name', 'descipline_block__academic_plan__educational_profile']
-
-    def get_queryset(self):
-        return DisciplineBlockModule.objects.filter(editors=self.request.user)
-
-
-class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
-    queryset = DisciplineBlockModule.objects.all()
-    serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
-
-    def get(self, request, **kwargs):
-        queryset = DisciplineBlockModule.objects.filter(pk=self.kwargs['pk'])
-        serializer = DisciplineBlockModuleForModuleListDetailSerializer(queryset, many=True)
-
-        if len(serializer.data) == 0:
-            return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
-
-        newdata = dict(serializer.data[0])
-        try:
-            newdata.update({"rating": DisciplineBlockModuleInFolder.objects.get(block_module=self.kwargs['pk'],
-                                                                      folder__owner=self.request.user).module_rating})
-            newdata.update({"id_rating": DisciplineBlockModuleInFolder.objects.get(block_module=self.kwargs['pk'],
-                                                                         folder__owner=self.request.user).id})
-        except:
-            newdata.update({"rating": False})
-
-        newdata['can_edit'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'], self.request.user)
-        newdata = OrderedDict(newdata)
-
-        return Response(newdata, status=status.HTTP_200_OK)
-
-
 @api_view(['POST'])
-@permission_classes((IsAdminUser, ))
+@permission_classes((IsAdminUser,))
 def CloneWorkProgramm(request):
     """
     Апи для клонирования рабочей программы
@@ -2216,22 +2169,6 @@ def CloneWorkProgramm(request):
     return Response(status=200, data=serializer.data)
 
 
-@api_view(['POST'])
-def InsertModule(request):
-    """
-    Апи для вставки модуля в другой блок
-    old_module_id - айди модуля блока дисциплины, который копируется для вставки в другой блок
-    block_id - айди блока в который производиться вставка копии
-    """
-    module_id = request.data.get('old_module_id')
-    block_id = request.data.get('block_id')
-    cloned_module = DisciplineBlockModule.clone_module(module_id)
-    cloned_module.descipline_block = DisciplineBlock.objects.get(pk=block_id)
-    cloned_module.save()
-    serializer = DisciplineBlockModuleDetailSerializer(cloned_module)
-    return Response(status=200, data=serializer.data)
-
-
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def UserGroups(request):
@@ -2241,8 +2178,8 @@ def UserGroups(request):
     if UserExpertise.objects.filter(expert=request.user) or \
             UserStructuralUnit.objects.filter(user=request.user, status__in=["leader", "deputy"]):
         groups_names.append("expertise_member")
-    notification_nums=UserNotification.objects.filter(user=request.user, status="unread").count()
-    return Response({"groups": groups_names, "notification_nums":notification_nums})
+    notification_nums = UserNotification.objects.filter(user=request.user, status="unread").count()
+    return Response({"groups": groups_names, "notification_nums": notification_nums})
 
 
 @api_view(['POST'])
@@ -2259,6 +2196,7 @@ def DisciplinesByNumber(request):
     except:
         return Response(status=400)
 
+
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def TimeoutTest(request):
@@ -2268,7 +2206,7 @@ def TimeoutTest(request):
         print("It took {} sec".format(timer))
         time.sleep(30)
         if timer < 7200:
-            timer +=30
+            timer += 30
         else:
             break
     return Response(status=200)
@@ -2284,7 +2222,7 @@ class WorkProgramArchiveUpdateView(generics.UpdateAPIView):
         instance = self.get_object()
         try:
             exp = Expertise.objects.get(work_program=instance)
-            exp.expertise_status="AR"
+            exp.expertise_status = "AR"
             exp.save()
         except Expertise.DoesNotExist:
             pass

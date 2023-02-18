@@ -21,6 +21,19 @@ const sendPracticeToRework = createAction('SEND_PRACTICE_TO_REWORK');
 const getComments = createAction('GET_COMMENTS_PRACTICE');
 const setComments = createAction('SET_COMMENTS_PRACTICE');
 const sendComment = createAction('SEND_COMMENT_PRACTICE');
+const openDialog = createAction('OPEN_DIALOG');
+const closeDialog = createAction('CLOSE_DIALOG');
+const addPrerequisite = createAction('PRACTICE_ADD_PREREQUISITE');
+const changePrerequisite = createAction('PRACTICE_CHANGE_PREREQUISITE');
+const deletePrerequisite = createAction('PRACTICE_DELETE_PREREQUISITE');
+const getResults = createAction('PRACTICE_GET_RESULTS');
+const deleteZUN = createAction('PRACTICE_DELETE_ZUN');
+const saveZUN = createAction('PRACTICE_SAVE_ZUN');
+const deleteResult = createAction('PRACTICE_DELETE_RESULT');
+const changeResult = createAction('PRACTICE_CHANGE_RESULT');
+const addResult = createAction('PRACTICE_ADD_RESULT');
+const getCompetencesDependedOnPractice = createAction('GET_COMPETENCES_DEPENDENT_ON_PRACTICE');
+const setCompetencesDependedOnPractice = createAction('SET_COMPETENCES_DEPENDENT_ON_PRACTICE');
 
 export const actions: PracticeActions = {
     getPractice,
@@ -42,6 +55,19 @@ export const actions: PracticeActions = {
     getComments,
     setComments,
     sendComment,
-}
+    openDialog,
+    closeDialog,
+    deletePrerequisite,
+    addPrerequisite,
+    changePrerequisite,
+    getResults,
+    deleteZUN,
+    saveZUN,
+    deleteResult,
+    changeResult,
+    addResult,
+    getCompetencesDependedOnPractice,
+    setCompetencesDependedOnPractice
+};
 
 export default actions;

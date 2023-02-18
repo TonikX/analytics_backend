@@ -51,7 +51,7 @@ import ReportsIcon from "./icons/reports.svg";
 import ReportsSelectedIcon from "./icons/reports-selected.svg";
 
 import {
-    isUserCanSeeCharacteristic,
+    isUserCanSeeCharacteristic, isUserCanSeeEducationalModules,
     isUserCanSeeProfessions,
     isUserInExpertiseGroup,
     isUserRpdDev
@@ -410,12 +410,12 @@ export default (groups: Array<string>) => {
             icon: EducationPlanIcon,
             selectedIcon: EducationPlanSelectedIcon,
         },
-        {
+        ...isUserCanSeeEducationalModules(groups) ? [{
             title: 'Образовательные модули',
             link: appRouter.getTrainingModulesRoute(),
             icon: EducationPlanIcon,
             selectedIcon: EducationPlanSelectedIcon,
-        },
+        }] : [],
         {
             title: 'Образовательные программы',
             link: appRouter.getEducationPlanInDirectionRoute(),

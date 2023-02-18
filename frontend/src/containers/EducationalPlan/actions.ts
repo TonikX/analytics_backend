@@ -12,6 +12,7 @@ const setIsTrajectoryRoute = createAction('SET_EDUCATIONAL_PLAN_IS_TRAJECTORY_RO
 
 const createNewEducationalPlan = createAction('CREATE_NEW_EDUCATIONAL_PLAN');
 const changeEducationalPlan = createAction('CHANGE_EDUCATIONAL_PLAN');
+const changeEditorsEducationalPlan = createAction('CHANGE_PATCH_EDUCATIONAL_PLAN');
 const deleteEducationalPlan = createAction('DELETE_EDUCATIONAL_PLAN');
 
 const openDialog = createAction('OPEN_EDUCATIONAL_PLAN_DIALOG');
@@ -60,48 +61,66 @@ const planTrajectorySelectOptionalWp = createAction('EDUCATIONAL_PLAN_TRAJECTORY
 const planTrajectorySelectElectives = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SELECT_ELECTIVES');
 const planTrajectorySelectSpecialization = createAction('EDUCATIONAL_PLAN_TRAJECTORY_SPECIALIZATION');
 
+const educationalPlanConnectModules = createAction('EDUCATIONAL_PLAN_CONNECT_MODULES');
+const educationalPlanDisconnectModule = createAction('EDUCATIONAL_PLAN_DISCONNECT_MODULE');
+const setNewPlanIdForRedirect = createAction('SET_NEW_PLAN_ID_FOR_REDIRECT');
+
+const sendPlanToValidate = createAction('SEND_PLAN_TO_VALIDATE');
+const approvePlan = createAction('APPROVE_PLAN');
+const sendPlanToRework = createAction('SEND_PLAN_TO_REWORK');
+
+const changeModulePosition = createAction('CHANGE_MODULE_POSITION');
+
 const actions: EducationalPlanActions = {
-    planTrajectorySelectSpecialization,
-    planTrajectorySelectOptionalWp,
-    planTrajectorySelectElectives,
-    openAddModuleDialog,
-    closeAddModuleDialog,
-    pageDown,
-    deleteWorkProgramFromZun,
-    deleteCompetenceBlock,
-    saveCompetenceBlock,
-    createModule,
-    openDownloadModal,
-    closeDownloadModal,
-    getCompetenceDirectionsDependedOnWorkProgram,
-    getDirectionsDependedOnWorkProgram,
-    setDirectionsDependedOnWorkProgram,
-    openCreateModuleDialog: openModuleDialog,
-    closeCreateModuleDialog: closeModuleDialog,
-    changeModule,
-    deleteModule,
-    addModule,
-    createBlockOfWorkPrograms,
-    changeBlockOfWorkPrograms,
-    deleteBlockOfWorkPrograms,
-    openDetailDialog,
-    closeDetailDialog,
-    getEducationalDetail,
-    setEducationalDetail,
-    setIsTrajectoryRoute,
-    getEducationalPlans,
-    setEducationalPlans,
-    createNewEducationalPlan,
-    changeEducationalPlan,
-    deleteEducationalPlan,
-    openDialog,
-    closeDialog,
-    changeSearchQuery,
-    changeCurrentPage,
-    changeAllCount,
-    changeSorting,
-    planTrajectorySetUserData,
-    planTrajectorySetDirection,
+  approvePlan,
+  sendPlanToRework,
+  sendPlanToValidate,
+  changeEditorsEducationalPlan,
+  setNewPlanIdForRedirect,
+  educationalPlanConnectModules,
+  educationalPlanDisconnectModule,
+  planTrajectorySelectSpecialization,
+  planTrajectorySelectOptionalWp,
+  planTrajectorySelectElectives,
+  openAddModuleDialog,
+  closeAddModuleDialog,
+  pageDown,
+  deleteWorkProgramFromZun,
+  deleteCompetenceBlock,
+  saveCompetenceBlock,
+  createModule,
+  openDownloadModal,
+  closeDownloadModal,
+  getCompetenceDirectionsDependedOnWorkProgram,
+  getDirectionsDependedOnWorkProgram,
+  setDirectionsDependedOnWorkProgram,
+  openCreateModuleDialog: openModuleDialog,
+  closeCreateModuleDialog: closeModuleDialog,
+  changeModule,
+  deleteModule,
+  addModule,
+  createBlockOfWorkPrograms,
+  changeBlockOfWorkPrograms,
+  deleteBlockOfWorkPrograms,
+  openDetailDialog,
+  closeDetailDialog,
+  getEducationalDetail,
+  setEducationalDetail,
+  setIsTrajectoryRoute,
+  getEducationalPlans,
+  setEducationalPlans,
+  createNewEducationalPlan,
+  changeEducationalPlan,
+  deleteEducationalPlan,
+  openDialog,
+  closeDialog,
+  changeSearchQuery,
+  changeCurrentPage,
+  changeAllCount,
+  changeSorting,
+  planTrajectorySetUserData,
+  planTrajectorySetDirection,
+  changeModulePosition
 }
 
 export default actions;

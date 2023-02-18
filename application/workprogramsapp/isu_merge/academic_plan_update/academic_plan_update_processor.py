@@ -1,6 +1,8 @@
 import copy
 
+from django.conf import settings
 from django.utils import timezone
+from sentry_sdk import capture_exception
 
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_aspect import AcademicPlanUpdateAspect
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_utils import AcademicPlanUpdateUtils
@@ -16,8 +18,8 @@ class AcademicPlanUpdateProcessor:
     def __init__(self):
         self.isu_service = IsuService(
             IsuUser(
-                'rpd-constructor',
-                'oVrLzGwN8giUEPpBDs82c8OLuzgx2b9L'
+                settings.ISU["ISU_CLIENT_ID"],
+                settings.ISU["ISU_CLIENT_SECRET"]
             )
         )
 
@@ -28,8 +30,8 @@ class AcademicPlanUpdateProcessor:
     @staticmethod
     def __del_disciplines_ids_by_academic_plan__(academic_plan_id, new_disciplines_ids):
         wcbms = WorkProgramChangeInDisciplineBlockModule. \
-            objects.filter(discipline_block_module__descipline_block__academic_plan__ap_isu_id=academic_plan_id)\
-            .exclude(work_program__discipline_code__in = new_disciplines_ids).delete()
+            objects.filter(discipline_block_module__descipline_block__academic_plan__ap_isu_id=academic_plan_id) \
+            .exclude(work_program__discipline_code__in=new_disciplines_ids).delete()
 
     @staticmethod
     def __get_disciplines_ids_by_academic_plan__(academic_plan_id):
@@ -46,8 +48,10 @@ class AcademicPlanUpdateProcessor:
         old_disciplines_ids = self.__get_disciplines_ids_by_academic_plan__(old_academic_plan.ap_isu_id)
         new_disciplines_ids = AcademicPlanUpdateUtils.get_disciplines_ids_from_academic_plan_json(
             isu_academic_plan_json)
+        # print(old_disciplines_ids)
 
-        to_del = set(map(int, [float(i[0]) for i in old_disciplines_ids])) - set(map(int, new_disciplines_ids))
+        to_del = set(map(int, [float(i[0]) for i in [i for i in old_disciplines_ids if i != '']])) - set(
+            map(int, new_disciplines_ids))
 
         self.__del_disciplines_ids_by_academic_plan__(old_academic_plan.ap_isu_id, new_disciplines_ids)
         # for wp in to_del:
@@ -96,9 +100,9 @@ class AcademicPlanUpdateProcessor:
             all_ze_indexes_in_rpd = 0
             # todo was  lecture_hours_v2 = [0, 0, 0, 0], with 10752 index out of range
             lecture_hours_v2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            #print(lecture_hours_v2)
+            ## print(lecture_hours_v2)
             for i in hours:
-                #print(hours)
+                ## print(hours)
                 if ze[all_ze_indexes_in_rpd] >= 1.0:
                     lecture_hours_v2[sem] = i
                     sem += 1
@@ -109,18 +113,19 @@ class AcademicPlanUpdateProcessor:
         def structural_unit(isu_academic_plan_discipline_json):
             if StructuralUnit.objects.filter(title=str(isu_academic_plan_discipline_json['discipline_doer'].strip())):
                 st_unit = \
-                StructuralUnit.objects.filter(title=isu_academic_plan_discipline_json['discipline_doer'].strip())[0]
+                    StructuralUnit.objects.filter(title=isu_academic_plan_discipline_json['discipline_doer'].strip())[0]
                 st_unit.isu_id = int(isu_academic_plan_discipline_json['discipline_doer_id'])
-                print('Структурное подразделение записалось')
+                # print('Структурное подразделение записалось')
                 st_unit.save()
             else:
-                print(isu_academic_plan_discipline_json['discipline_doer'].strip())
-                print(isu_academic_plan_discipline_json['discipline_doer_id'])
+                # print(isu_academic_plan_discipline_json['discipline_doer'].strip())
+                # print(isu_academic_plan_discipline_json['discipline_doer_id'])
                 StructuralUnit.objects.create(title=isu_academic_plan_discipline_json['discipline_doer'].strip(),
                                               isu_id=int(isu_academic_plan_discipline_json['discipline_doer_id']))
                 st_unit = StructuralUnit.objects.get(title=isu_academic_plan_discipline_json['discipline_doer'].strip(),
-                                                     isu_id=int(isu_academic_plan_discipline_json['discipline_doer_id']))
-                print('Структурное подразделение выбралось')
+                                                     isu_id=int(
+                                                         isu_academic_plan_discipline_json['discipline_doer_id']))
+                # print('Структурное подразделение выбралось')
             return st_unit
 
         def semesters(ze):
@@ -213,7 +218,7 @@ class AcademicPlanUpdateProcessor:
             implementation_academic_plan_object.save()
         if AcademicPlan.objects.filter(ap_isu_id=int(isu_academic_plan_json['id'])).exists():
             academic_plan_object = AcademicPlan.objects.get(ap_isu_id=int(isu_academic_plan_json['id']))
-            #ToDo: Тут сделать удалитель привязок
+            # ToDo: Тут сделать удалитель привязок
             implementation_academic_plan_object.academic_plan = academic_plan_object
             implementation_academic_plan_object.save()
         else:
@@ -241,16 +246,16 @@ class AcademicPlanUpdateProcessor:
     def __del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json, discipline_block_object):
 
         bm = DisciplineBlockModule.objects.filter(
-            descipline_block = discipline_block_object,\
-            descipline_block__academic_plan__ap_isu_id = isu_academic_plan_json['id'])\
-            .exclude(id__in = block_modules_to_del_ids).delete()
+            descipline_block=discipline_block_object, \
+            descipline_block__academic_plan__ap_isu_id=isu_academic_plan_json['id']) \
+            .exclude(id__in=block_modules_to_del_ids).delete()
 
     @staticmethod
     def __del_block__(block_to_del_ids, isu_academic_plan_json):
 
         b = DisciplineBlock.objects.filter(
-            academic_plan__ap_isu_id = isu_academic_plan_json['id'])\
-            .exclude(id__in = block_to_del_ids).delete()
+            academic_plan__ap_isu_id=isu_academic_plan_json['id']) \
+            .exclude(id__in=block_to_del_ids).delete()
 
     @staticmethod
     @AcademicPlanUpdateAspect.discipline_block_module_changes_aspect
@@ -261,7 +266,7 @@ class AcademicPlanUpdateProcessor:
         if discipline_block_module_object is not None:
             return discipline_block_module_object
         else:
-            print('модуль', isu_academic_plan_block_module_json)
+            # print('модуль', isu_academic_plan_block_module_json)
             discipline_block_module_object = DisciplineBlockModule(
                 name=isu_academic_plan_block_module_json['module_name'],
                 module_isu_id=isu_academic_plan_block_module_json['module_id '],
@@ -270,7 +275,7 @@ class AcademicPlanUpdateProcessor:
             discipline_block_module_object.save()
             discipline_block_module_object.descipline_block.add(discipline_block_object)
             discipline_block_module_object.save()
-        print(isu_academic_plan_block_module_json)
+        # print(isu_academic_plan_block_module_json)
         return discipline_block_module_object
 
     @staticmethod
@@ -303,6 +308,7 @@ class AcademicPlanUpdateProcessor:
                     isu_academic_plan_discipline_json['discipline_name']
                 )
             )
+
             work_program_change_in_discipline_block_module = copy.deepcopy(
                 old_work_program_change_in_discipline_block_module)
             work_program_change_in_discipline_block_module.save()
@@ -328,17 +334,12 @@ class AcademicPlanUpdateProcessor:
                 change_type=option,
                 work_program=work_program_object
         ).exists():
-            print(work_program_object)
-            print(WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                discipline_block_module=discipline_block_module_object,
-                change_type=option,
-                work_program=work_program_object
-            )[0])
-            old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                discipline_block_module=discipline_block_module_object,
-                change_type=option,
-                work_program=work_program_object
-            )[0]
+            old_work_program_change_in_discipline_block_module = \
+                WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                    discipline_block_module=discipline_block_module_object,
+                    change_type=option,
+                    work_program=work_program_object
+                )[0]
             work_program_change_in_discipline_block_module = copy \
                 .deepcopy(old_work_program_change_in_discipline_block_module)
             if WorkProgramInFieldOfStudy.objects.filter(
@@ -359,8 +360,9 @@ class AcademicPlanUpdateProcessor:
                 work_program_in_field_of_study.save()
         else:
             work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule()
-            work_program_change_in_discipline_block_module.credit_units = AcademicPlanUpdateUtils.ze_to_format(AcademicPlanUpdateUtils.get_ze(
-                isu_academic_plan_discipline_json))
+            work_program_change_in_discipline_block_module.credit_units = AcademicPlanUpdateUtils.ze_to_format(
+                AcademicPlanUpdateUtils.get_ze(
+                    isu_academic_plan_discipline_json))
             work_program_change_in_discipline_block_module.change_type = option
             work_program_change_in_discipline_block_module.discipline_block_module = discipline_block_module_object
             work_program_change_in_discipline_block_module.subject_code = AcademicPlanUpdateUtils.num_to_int(
@@ -447,85 +449,100 @@ class AcademicPlanUpdateProcessor:
                 zun.save()
         return work_program_id_str_up_for_isu_object
 
-
     @staticmethod
     def __del_work_program_in_field_of_study__(discipline_block_module, new_disciplines_ids):
         wcbms = WorkProgramInFieldOfStudy. \
-            objects.filter(work_program_change_in_discipline_block_module__discipline_block_module=discipline_block_module)\
-            .exclude(work_program__id__in = new_disciplines_ids).delete()
-
+            objects.filter(
+            work_program_change_in_discipline_block_module__discipline_block_module=discipline_block_module) \
+            .exclude(work_program__id__in=new_disciplines_ids).delete()
 
     @staticmethod
-    def __del_old_wpcbms_by_module__(discipline_block_module_object):
+    def __del_old_wpcbms_by_module__(discipline_block_module_object,
+                                     work_program_change_in_discipline_block_modules_not_for_del):
         wcbms = WorkProgramChangeInDisciplineBlockModule. \
-            objects.filter(discipline_block_module=discipline_block_module_object, work_program=None)\
-            .delete()
-
+            objects.filter(discipline_block_module=discipline_block_module_object, work_program=None).delete()
+        wcbms = WorkProgramChangeInDisciplineBlockModule. \
+            objects.filter(discipline_block_module=discipline_block_module_object).exclude \
+            (discipline_block_module=discipline_block_module_object,
+             id__in=work_program_change_in_discipline_block_modules_not_for_del).delete()
 
     def update_academic_plans(self):
         academic_plans_ids = AcademicPlanUpdateConfiguration.objects.filter(updates_enabled=True).values_list(
             'academic_plan_id', flat=True)
 
         for plan_id in academic_plans_ids:
-            plan_id = str(plan_id)
+            try:
+                plan_id = str(plan_id)
 
-            old_academic_plan = self.__get_old_academic_plan_by_id__(plan_id)
-            isu_academic_plan_json = self.isu_service.get_academic_plan(plan_id)
-            # isu_academic_plan_json = json.loads(json.dumps(test_plan['result']))
-            if isu_academic_plan_json is not None:
-                self.__update_disciplines__(old_academic_plan, isu_academic_plan_json)
+                old_academic_plan = self.__get_old_academic_plan_by_id__(plan_id)
+                isu_academic_plan_json = self.isu_service.get_academic_plan(plan_id)
+                # isu_academic_plan_json = json.loads(json.dumps(test_plan['result']))
+                if isu_academic_plan_json is not None:
+                    self.__update_disciplines__(old_academic_plan, isu_academic_plan_json)
 
-                field_of_study = self.__process_field_of_study__(isu_academic_plan_json)
+                    field_of_study = self.__process_field_of_study__(isu_academic_plan_json)
 
-                academic_plan = self.__process_academic_plan__(isu_academic_plan_json, field_of_study)
-                block_to_del_ids = []
-                for block in isu_academic_plan_json['disciplines_blocks']:
-                    discipline_block_object = self.__process_discipline_block__(
-                        block,
-                        academic_plan,
-                        isu_academic_plan_json
-                    )
-                    block_to_del_ids.append(discipline_block_object.id)
-                    block_modules_to_del_ids = []
-                    for module in block['discipline_modules']:
-                        discipline_block_module_object = self \
-                            .__process_block_module__(
-                            module,
-                            discipline_block_object,
+                    academic_plan = self.__process_academic_plan__(isu_academic_plan_json, field_of_study)
+                    block_to_del_ids = []
+                    for block in isu_academic_plan_json['disciplines_blocks']:
+                        discipline_block_object = self.__process_discipline_block__(
+                            block,
+                            academic_plan,
                             isu_academic_plan_json
                         )
-
-                        block_modules_to_del_ids.append(discipline_block_module_object.id)
-                        disciplines_for_del_in_module = []
-                        for isu_academic_plan_discipline_json in module['disciplines']:
-                            work_program_object = self.__process_discipline__(
-                                isu_academic_plan_json,
-                                isu_academic_plan_discipline_json,
-                                discipline_block_module_object
-                            )
-                            work_program_in_field_of_study_object = self.__process_linked_data__(
-                                discipline_block_module_object,
-                                work_program_object,
-                                isu_academic_plan_discipline_json,
+                        block_to_del_ids.append(discipline_block_object.id)
+                        block_modules_to_del_ids = []
+                        for module in block['discipline_modules']:
+                            discipline_block_module_object = self \
+                                .__process_block_module__(
+                                module,
+                                discipline_block_object,
                                 isu_academic_plan_json
                             )
-                            self.__process_work_program_id_str_up_for_isu__(
-                                work_program_in_field_of_study_object,
-                                isu_academic_plan_json,
-                                isu_academic_plan_discipline_json
-                            )
-                            disciplines_for_del_in_module.append(work_program_object.id)
-                        self.__del_work_program_in_field_of_study__(discipline_block_module_object, disciplines_for_del_in_module)
-                        self.__del_old_wpcbms_by_module__(discipline_block_module_object)
-                    print(block_modules_to_del_ids)
-                    self.__del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json,
-                                               discipline_block_object)
 
-                print(block_to_del_ids)
-                self.__del_block__(block_to_del_ids, isu_academic_plan_json,
-                                           )
+                            block_modules_to_del_ids.append(discipline_block_module_object.id)
+                            disciplines_for_del_in_module = []
+                            work_program_change_in_discipline_block_modules_not_for_del = []
+                            for isu_academic_plan_discipline_json in module['disciplines']:
+                                work_program_object = self.__process_discipline__(
+                                    isu_academic_plan_json,
+                                    isu_academic_plan_discipline_json,
+                                    discipline_block_module_object
+                                )
+                                work_program_in_field_of_study_object, \
+                                work_program_change_in_discipline_block_module_object = \
+                                    self.__process_linked_data__(
+                                        discipline_block_module_object,
+                                        work_program_object,
+                                        isu_academic_plan_discipline_json,
+                                        isu_academic_plan_json
+                                    )
+                                print('___')
+                                print(work_program_in_field_of_study_object)
+                                self.__process_work_program_id_str_up_for_isu__(
+                                    work_program_in_field_of_study_object,
+                                    isu_academic_plan_json,
+                                    isu_academic_plan_discipline_json
+                                )
+                                work_program_change_in_discipline_block_modules_not_for_del.append(
+                                    work_program_change_in_discipline_block_module_object.id)
+                                disciplines_for_del_in_module.append(work_program_object.id)
+                            self.__del_work_program_in_field_of_study__(discipline_block_module_object,
+                                                                        disciplines_for_del_in_module)
+                            self.__del_old_wpcbms_by_module__(discipline_block_module_object,
+                                                              work_program_change_in_discipline_block_modules_not_for_del)
+                        # print(block_modules_to_del_ids)
+                        self.__del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json,
+                                                   discipline_block_object)
 
-                academic_plan_update_configuration = AcademicPlanUpdateConfiguration.objects \
-                    .get(academic_plan_id=plan_id)
-                academic_plan_update_configuration.updated_date_time = timezone.now()
-                academic_plan_update_configuration.save()
+                    # print(block_to_del_ids)
+                    self.__del_block__(block_to_del_ids, isu_academic_plan_json,
+                                       )
+
+                    academic_plan_update_configuration = AcademicPlanUpdateConfiguration.objects \
+                        .get(academic_plan_id=plan_id)
+                    academic_plan_update_configuration.updated_date_time = timezone.now()
+                    academic_plan_update_configuration.save()
+            except Exception as e:
+                capture_exception(e)
+

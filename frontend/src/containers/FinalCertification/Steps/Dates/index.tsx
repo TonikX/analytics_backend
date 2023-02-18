@@ -9,6 +9,8 @@ import {CertificationActions, CertificationState, TemplateTextState} from "../..
 import Input from "../../components/Input";
 import ReadonlyRow from "./ReadonlyRow";
 import Scrollbars from "react-custom-scrollbars";
+import QuestionIcon from "@material-ui/icons/HelpOutline";
+import Tooltip from "@material-ui/core/Tooltip/Tooltip";
 
 interface DatesProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
@@ -33,7 +35,9 @@ class Dates extends React.Component<DatesProps> {
                     <Typography variant='h5'>
                         {CertificationSteps.DATES}
                     </Typography>
-
+                    <Typography>
+                        Предварительная защита ВКР является формой промежуточной аттестации по преддипломной практике.
+                    </Typography>
                     <div className={classes.singleColumn}>
                         <ReadonlyRow
                             label='Выбор и согласование темы и руководителя ВКР (заполнение заявления в ИСУ)'
@@ -43,7 +47,13 @@ class Dates extends React.Component<DatesProps> {
                         <Input fieldName={CertificationFields.FILLING_AND_APPROVAL_TIME}/>
                         <Input fieldName={CertificationFields.WORK_ON_VKR_CONTENT_TIME}/>
                         <Input fieldName={CertificationFields.PRE_DEFENCE_TIME}/>
-                        <Input fieldName={CertificationFields.ANTI_PLAGIARISM_ANALYSIS_TIME}/>
+                        <div className={classes.inputWrapperRelative}>
+                            <Input fieldName={CertificationFields.ANTI_PLAGIARISM_ANALYSIS_TIME}/>
+                            <Tooltip
+                                title="Заполняется при наличии особенностей проверки в системе Антиплагиат на ОП (процент оригинальности/заимстований отличный от ЛНА, особенности организации и пр.)">
+                                <QuestionIcon color="secondary" className={classes.tooltipIconAbsolute}/>
+                            </Tooltip>
+                        </div>
                         <ReadonlyRow label='Загрузка итоговой работы в ИСУ'
                                      value={templateText[TemplateTextCertificationFields.UPLOAD_TO_ISU_TIME]}/>
                         <ReadonlyRow label='Предоставление отзыва руководителем ВКР'

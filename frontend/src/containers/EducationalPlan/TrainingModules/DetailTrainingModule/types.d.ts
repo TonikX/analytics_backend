@@ -4,7 +4,7 @@ import {mapDispatchToProps, mapStateToProps} from "./DetailTrainingModule.connec
 import styles from "./DetailTrainingModule.styles";
 
 export interface DetailTrainingModuleProps extends WithStyles<typeof styles>, RouteComponentProps, PropsFromRedux, ActionsFromRedux{
-
+  module: any;
 }
 
 export type PropsFromRedux = ReturnType<mapStateToProps>;

@@ -23,7 +23,20 @@ export enum PracticeFields {
     PRACTICE_BASE = 'practice_base',
     BIBLIOGRAPHIC_REFERENCE = "bibliographic_reference",
     EDITORS = 'editors',
+    PLANS = 'practice_in_change_block',
     PERMISSIONS_INFO = 'permissions_info',
+    SEMESTER_COUNT = 'number_of_semesters',
+    ZE_V_SEM = 'ze_v_sem',
+    EVALUATION_TOOLS = 'evaluation_tools_v_sem',
+    PRAC_ISU_ID = 'prac_isu_id',
+    PREREQUISITES = 'prerequisites',
+    COMPETENCES = 'competences',
+    OUTCOMES = 'outcomes',
+}
+
+export enum DialogType {
+    RESULTS = 'results',
+    PREREQUISITES = 'prerequisites',
 }
 
 export enum ExpertiseStatus {
@@ -61,11 +74,15 @@ export enum CommentFields {
 export enum PracticeSteps {
     GENERAL = 'Главное',
     GENERAL_PROVISIONS = 'Общие положения',
+    PREREQUISITES = 'Пререквизиты',
     STRUCTURE = 'Содержание и структура практики',
     REPORTING_MATERIALS = 'Отчетные материалы',
     OVZ = 'Проведение РПП для лиц с ОВЗ',
     EVALUATION_METHODS = 'Оценочные средства',
+    RESULTS = 'Результаты',
     REFERENCES = 'Источники',
+    PLANS = 'Связанные с рпд модули и учебные планы',
+    COMPETENCES = 'Компетенции',
 }
 
 export const PracticeStepsRussianList = Object.entries(PracticeSteps).map(([, value]) => value);
@@ -111,6 +128,7 @@ export enum PracticeTypes {
     TEH_PROJ_TECH_INTET = 'teh-proj-tech-intet',
     TECH_PROJ_TECH = 'tech-proj-tech',
     SENIOR_INTER = 'senior-inter',
+    SENIOR_INTER_ENG = 'senior-inter-eng',
     EXPL = 'expl',
     INTER = 'inter',
 }
@@ -143,4 +161,14 @@ export enum fetchingTypes {
     CREATE_EXPERTISE = 'CREATE_EXPERTISE',
     CHANGE_EXPERTISE_STATE = 'CHANGE_EXPERTISE_STATE',
     GET_COMMENTS = 'GET_COMMENTS',
+    CHANGE_PREREQUISITES = 'CHANGE_PREREQUISITES',
+    DELETE_PREREQUISITES = 'DELETE_PREREQUISITES',
+    ADD_PREREQUISITES = 'ADD_PREREQUISITES',
+    DELETE_RESULT = 'DELETE_RESULT',
+    CHANGE_RESULT = 'CHANGE_RESULT',
+    ADD_RESULT = 'ADD_RESULT',
+    GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_PRACTICE = 'GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_PRACTICE',
+    UPDATE_ZUN = 'UPDATE_ZUN',
+    DELETE_ZUN = 'DELETE_ZUN',
+    SAVE_ZUN = 'SAVE_ZUN'
 }

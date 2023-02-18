@@ -77,6 +77,8 @@ const createNewWorkProgram = createLogic({
 
         service.createWorkProgram(course)
             .then((res) => {
+                // @ts-ignore
+                dispatch(workProgramActions.setWorkProgramIdForRedirect(res?.data?.id));
                 dispatch(workProgramActions.getWorkProgramList());
                 dispatch(actions.fetchingSuccess());
                 dispatch(workProgramActions.closeDialog());

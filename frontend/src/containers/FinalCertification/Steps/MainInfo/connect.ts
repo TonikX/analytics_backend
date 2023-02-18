@@ -11,6 +11,8 @@ const mapStateToProps = (state: rootState) => {
     return {
         fields: getCertification(state),
         structuralUnitsList: getStructuralUnitsForSelector(state),
+        canAddEditors: true,
+        isCanEdit: true
     }
 };
 

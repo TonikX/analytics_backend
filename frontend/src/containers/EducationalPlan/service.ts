@@ -4,11 +4,12 @@ import {
     DownloadFileModalFields,
     EducationalPlanBlockFields,
     EducationalPlanFields,
-    ModuleFields
+    ModuleFields, PlanStatuses
 } from "./enum";
 import {SortingType, Types} from "../../components/SortingButton/types";
 
 import appConfigService from '../../config/app-config-service';
+import {REQUIRED} from "./data";
 
 class EducationalPlanService extends AnalyticsService{
     getEducationalPlan(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
@@ -93,6 +94,8 @@ class EducationalPlanService extends AnalyticsService{
         return this.post(`/api/workprogramchangeindisciplineblockmodule/create`, {
             //@ts-ignore
             'discipline_block_module': parseInt(moduleId),
+            change_type: REQUIRED,
+            semester_start: [1]
         });
     }
 
@@ -129,6 +132,25 @@ class EducationalPlanService extends AnalyticsService{
         return this.delete(`/api/disciplineblockmodule/delete/${id}`);
     }
 
+    changeModulePosition(blockId:number, oldIndex:number, newIndex:number){
+        return this.post('/api/new_ordinal_numbers_for_modules_in_ap', {
+            block: blockId,
+            new_ordinal_number: newIndex,
+            old_ordinal_number: oldIndex,
+        });
+    }
+
+    educationalPlanConnectModules(modules: any, blockId: any){
+        return this.post(`/api/disciplineblockmodule/insert_to_block`, {
+            descipline_block: blockId,
+            module: modules,
+        });
+    }
+
+    educationalPlanDisconnectModule(module: any, blockId: any){
+        return this.delete(`/api/disciplineblockmodule/insert_to_block?module=${module}&descipline_block=${blockId}`);
+    }
+
     getDownloadFileLink(dialogData: any){
         return (`${appConfigService.getApiBasePath()}/api/export/docx/${dialogData[DownloadFileModalFields.ID]}/${dialogData[DownloadFileModalFields.DIRECTION_ID]}/${dialogData[DownloadFileModalFields.ACADEMIC_PLAN_ID]}/${dialogData[DownloadFileModalFields.YEAR]}`);
     }
@@ -145,6 +167,32 @@ class EducationalPlanService extends AnalyticsService{
         formData.append(EducationalPlanFields.EDUCATION_FORM, competence[EducationalPlanFields.EDUCATION_FORM]);
 
         return this.put(`/api/academicplan/update/${id}`, formData);
+    }
+
+    updatePatchEducationalPlan(plan: any){
+        const id = plan[EducationalPlanFields.ID];
+
+        return this.patch(`/api/implementationacademicplan/update/${id}`, plan);
+    }
+
+    getPlanDownloadLink(planId: any){
+        return (`${appConfigService.getApiBasePath()}/api/export/academic_plan/${planId}`);
+    }
+
+    sendPlanToValidate(planId: any){
+        return this.post(`/api/academicplan_check/${planId}`, {});
+    }
+
+    sendPlanToRework(planId: any){
+        return this.post(`/api/academicplan_check/${planId}`, {
+            new_status: PlanStatuses.IN_WORK
+        });
+    }
+
+    approvePlan(planId: any){
+        return this.post(`/api/academicplan_check/${planId}`, {
+            new_status: PlanStatuses.APPROVED
+        });
     }
 }
 

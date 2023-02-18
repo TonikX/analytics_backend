@@ -1,6 +1,6 @@
 import {practicePageState} from "./types";
 import createReducer from "../../store/createReducer";
-import {PermissionsInfoFields, PracticeFields, TemplateTextPracticeFields} from "./enum";
+import {DialogType, PermissionsInfoFields, PracticeFields, TemplateTextPracticeFields} from "./enum";
 import actions from "./actions";
 
 export const GENERAL_PATH = 'practice';
@@ -19,6 +19,9 @@ export const initialState: practicePageState = {
         [PracticeFields.YEAR]: 0,
         [PracticeFields.AUTHORS]: '',
         [PracticeFields.OP_LEADER]: '',
+        [PracticeFields.SEMESTER_COUNT]: 1,
+        [PracticeFields.ZE_V_SEM]: '',
+        [PracticeFields.EVALUATION_TOOLS]: [[1]],
         [PracticeFields.LANGUAGE]: '',
         [PracticeFields.QUALIFICATION]: '',
         [PracticeFields.KIND_OF_PRACTICE]: '',
@@ -44,7 +47,12 @@ export const initialState: practicePageState = {
             [PermissionsInfoFields.CAN_APPROVE]: null,
             [PermissionsInfoFields.YOUR_APPROVE_STATUS]: null,
             [PermissionsInfoFields.USER_EXPERTISE_ID]: null,
-        }
+        },
+        [PracticeFields.PRAC_ISU_ID]: null,
+        [PracticeFields.PREREQUISITES]: [],
+        [PracticeFields.COMPETENCES]: [],
+        [PracticeFields.OUTCOMES]: [],
+        [PracticeFields.PLANS]: [],
     },
     templateText: {
         [TemplateTextPracticeFields.ID]: 1,
@@ -55,7 +63,48 @@ export const initialState: practicePageState = {
         [TemplateTextPracticeFields.EVALUATION_TOOLS_CURRENT_CONTROL]: '',
     },
     comments: [],
-}
+    dialog: {
+        [DialogType.RESULTS]: {
+            isOpen: false,
+            //@ts-ignore
+            dialogData: {}
+        },
+        [DialogType.PREREQUISITES]: {
+            isOpen: false,
+            //@ts-ignore
+            dialogData: {}
+        }
+    },
+    dependentDirections: []
+};
+
+const openDialog = (state: practicePageState, {payload}: any): practicePageState => ({
+    ...state,
+    dialog: {
+        ...state.dialog,
+        [payload.dialogType]: {
+            isOpen: true,
+            dialogData: payload.data,
+        }
+    }
+});
+
+const closeDialog =  (state: practicePageState, {payload}: any): practicePageState => ({
+    ...state,
+    dialog: {
+        ...state.dialog,
+        [payload.dialogType]: {
+            isOpen: false,
+        }
+    }
+});
+
+const setCompetencesDependedOnPractice = (state: practicePageState, {payload}: any) => {
+    return {
+        ...state,
+        dependentDirections: payload
+    }
+};
 
 const setPractice = (state: practicePageState, {payload}: any): practicePageState => ({
     ...state,
@@ -170,4 +219,7 @@ export const reducer = createReducer(initialState, {
     [actions.showErroredField.type]: showErroredField,
     [actions.hideErroredField.type]: hideErroredField,
     [actions.setComments.type]: setComments,
+    [actions.openDialog.type]: openDialog,
+    [actions.closeDialog.type]: closeDialog,
+    [actions.setCompetencesDependedOnPractice]: setCompetencesDependedOnPractice,
 });

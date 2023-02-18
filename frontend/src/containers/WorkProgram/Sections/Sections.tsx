@@ -28,7 +28,6 @@ import {fields, ImplementationFormatsEnum, workProgramSectionFields} from "../en
 
 import connect from './Sections.connect';
 import styles from './Sections.styles';
-import {SectionType} from "../types";
 
 class Sections extends React.PureComponent<SectionsProps> {
   scrollBar: any = null;
@@ -100,36 +99,26 @@ class Sections extends React.PureComponent<SectionsProps> {
   };
 
   updateValues = (totalTotalHours: number) => {
-    const {sections, implementationFormat} = this.props;
+    const {sections} = this.props;
     let totalHoursWithoutCPO = 0;
-    const canEditConsultation = implementationFormat === ImplementationFormatsEnum.ONLINE
 
     sections.forEach((section) => {
-      totalHoursWithoutCPO += parseFloat(this.calculateContactWork(section));
+      totalHoursWithoutCPO += parseFloat(String(this.calculateContactWork(section)));
     });
 
-    totalHoursWithoutCPO = parseFloat(totalHoursWithoutCPO.toFixed(2));
-
+    const totalContactWork = parseFloat(String(totalHoursWithoutCPO)); // общая контактная работа
     const totalHours = this.state.totalHours || totalTotalHours;
-    const cpoValueTotal = totalHours - totalHoursWithoutCPO;
-    const cpoValue = (cpoValueTotal / sections.length).toFixed(2);
-    const cpoLastValue: any = (cpoValueTotal - (parseFloat(cpoValue) * (sections.length - 1))).toFixed(2);
 
     sections.forEach((section, index) => {
       const contactWork = section[workProgramSectionFields.CONTACT_WORK];
+      const sro = (contactWork / totalContactWork * (totalHours - totalContactWork)).toFixed(2)
       //@ts-ignore
-      const totalHours = (parseFloat(cpoValue) + parseFloat(contactWork)).toFixed(2);
-      //@ts-ignore
-      const totalHoursLast = (parseFloat(cpoLastValue) + parseFloat(contactWork)).toFixed(2);
+      const newSectionHours = (parseFloat(sro) + parseFloat(contactWork)).toFixed(2);
 
       this.props.actions.saveSection({
         ...section,
-        [workProgramSectionFields.SPO]: index === sections.length - 1 ?
-          cpoLastValue :
-          cpoValue,
-        [workProgramSectionFields.TOTAL_HOURS]: index === sections.length - 1 ?
-          totalHoursLast :
-          totalHours
+        [workProgramSectionFields.SPO]: sro,
+        [workProgramSectionFields.TOTAL_HOURS]: newSectionHours,
       });
     })
   }
@@ -137,13 +126,13 @@ class Sections extends React.PureComponent<SectionsProps> {
   calculateContactWork = (section: any) => {
     const { implementationFormat } = this.props
 
-    const totalContactWorkHours = ((
-      (parseFloat(section[workProgramSectionFields.LECTURE_CLASSES]) || 0) +
-      (parseFloat(section[workProgramSectionFields.PRACTICAL_LESSONS]) || 0) +
-      (parseFloat(section[workProgramSectionFields.LABORATORY]) || 0)
-      * 1.1).toFixed(2))
+    const totalContactWorkHours = (
+        (parseFloat(section[workProgramSectionFields.LECTURE_CLASSES]) || 0) +
+        (parseFloat(section[workProgramSectionFields.PRACTICAL_LESSONS]) || 0) +
+        (parseFloat(section[workProgramSectionFields.LABORATORY]) || 0))
+      * 1.1
 
-    const totalConsultationsWorkHours = ((parseFloat(section[workProgramSectionFields.CONSULTATIONS]) || 0) * 1.1).toFixed(2)
+    const totalConsultationsWorkHours = ((parseFloat(section[workProgramSectionFields.CONSULTATIONS]) || 0) * 1.1)
 
     return implementationFormat === ImplementationFormatsEnum.ONLINE ? totalConsultationsWorkHours : totalContactWorkHours
   }
@@ -160,7 +149,7 @@ class Sections extends React.PureComponent<SectionsProps> {
   }
 
   render() {
-    const {classes, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours, semesterCount, implementationFormat} = this.props;
+    const {classes, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours, semesterCount, implementationFormat, contactHours, consultationHours} = this.props;
     const {createNewSectionMode} = this.state;
 
     const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
@@ -219,10 +208,10 @@ class Sections extends React.PureComponent<SectionsProps> {
                   />
 
                   {createNewSectionMode &&
-                  <TableRow>
-                    <TableCell style={{border: '1px solid rgba(224, 224, 224, 1'}}/>
-                    <EditedRow section={this.getNewSection()} removeNewSection={this.removeNewSection}/>
-                  </TableRow>
+                      <TableRow>
+                          <TableCell style={{border: '1px solid rgba(224, 224, 224, 1'}}/>
+                          <EditedRow section={this.getNewSection()} removeNewSection={this.removeNewSection}/>
+                      </TableRow>
                   }
 
                   <TableRow>
@@ -283,11 +272,11 @@ class Sections extends React.PureComponent<SectionsProps> {
                       }
                     </TableCell>
                     {isCanEdit &&
-                    <Tooltip title={parseInt(totalHours) <= 0 ? "Всего часов должно быть > 0" : "Пересчитать столбец СРО и всего часов основываясь на введеных значениях"}>
-                      <TableCell className={classes.headerCell}>
-                        <Button onClick={() => parseInt(totalHours) > 0 && this.updateValues(parseFloat(totalHours))}>Пересчитать</Button>
-                      </TableCell>
-                    </Tooltip>
+                        <Tooltip title={parseInt(totalHours) <= 0 ? "Всего часов должно быть > 0" : "Пересчитать столбец СРО и всего часов основываясь на введеных значениях"}>
+                            <TableCell className={classes.headerCell}>
+                                <Button onClick={() => parseInt(totalHours) > 0 && this.updateValues(parseFloat(totalHours))}>Пересчитать</Button>
+                            </TableCell>
+                        </Tooltip>
                     }
                   </TableRow>
                 </Table>
@@ -301,11 +290,11 @@ class Sections extends React.PureComponent<SectionsProps> {
                         </Typography>
                       </div>
                       : parseFloat(currentTotalHours) !== parseFloat(totalHours) &&
-                      <div className={classes.totalHourError}>
-                        <Typography>
-                          "Всего часов" {totalHours} не равно сумме часов по разделам {currentTotalHours}. У вас лишние часы, нужно убрать часов - {(parseFloat(currentTotalHours) - parseFloat(totalHours)).toFixed(2)}, либо измените "всего часов"
-                        </Typography>
-                      </div>
+                        <div className={classes.totalHourError}>
+                            <Typography>
+                                "Всего часов" {totalHours} не равно сумме часов по разделам {currentTotalHours}. У вас лишние часы, нужно убрать часов - {(parseFloat(currentTotalHours) - parseFloat(totalHours)).toFixed(2)}, либо измените "всего часов"
+                            </Typography>
+                        </div>
                     }
                   </>
                   :
@@ -359,6 +348,14 @@ class Sections extends React.PureComponent<SectionsProps> {
                   </TableRow>
                   <TableRow>
                     <TableCell className={classes.headerCell}>
+                      Консультации
+                    </TableCell>
+                    {semesterColumns.map((item: any, index: number) =>
+                      <TableCell className={classes.cell}>{consultationHours[index] || "0.00" }</TableCell>
+                    )}
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className={classes.headerCell}>
                       Практические занятия
                     </TableCell>
                     {semesterColumns.map((item: any, index: number) =>
@@ -373,6 +370,14 @@ class Sections extends React.PureComponent<SectionsProps> {
                       <TableCell className={classes.cell}>{srsHours[index]}</TableCell>
                     )}
                   </TableRow>
+                  <TableRow>
+                    <TableCell className={classes.headerCell}>
+                      Контактная работа
+                    </TableCell>
+                    {semesterColumns.map((item: any, index: number) =>
+                      <TableCell className={classes.cell}>{contactHours[index]}</TableCell>
+                    )}
+                  </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
@@ -380,13 +385,13 @@ class Sections extends React.PureComponent<SectionsProps> {
         }
 
         {!createNewSectionMode && isCanEdit
-        && <div className={classes.iconWrapper}>
-          <Button color="secondary"
-                  onClick={this.handleCreateNewSection}
-          >
-            <AddIcon/> Добавить раздел
-          </Button>
-        </div>
+          && <div className={classes.iconWrapper}>
+                <Button color="secondary"
+                        onClick={this.handleCreateNewSection}
+                >
+                    <AddIcon/> Добавить раздел
+                </Button>
+            </div>
         }
       </div>
     );
@@ -399,9 +404,9 @@ const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "poin
 const SortableItem = SortableElement(({section, removeNewSection, isCanEdit}) =>
   <TableRow>
     {isCanEdit &&
-    <TableCell style={{backgroundColor: '#fff', border: '1px solid rgba(224, 224, 224, 1)'}}>
-      <DragHandle/>
-    </TableCell>
+        <TableCell style={{backgroundColor: '#fff', border: '1px solid rgba(224, 224, 224, 1)'}}>
+            <DragHandle/>
+        </TableCell>
     }
     <EditedRow section={section} removeNewSection={removeNewSection} />
   </TableRow>

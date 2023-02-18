@@ -52,6 +52,16 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
         this.props.actions.getEducationalPlans();
     }
 
+    componentDidUpdate(prevProps: Readonly<EducationalPlanProps>, prevState: Readonly<{}>, snapshot?: any) {
+        // @ts-ignore
+        const {newPlanIdForRedirect, history} = this.props;
+        if (prevProps.newPlanIdForRedirect !== this.props.newPlanIdForRedirect && this.props.newPlanIdForRedirect) {
+            this.props.actions.setNewPlanIdForRedirect(null);
+            // @ts-ignore
+            history.push(appRouter.getPlanDetailLink(newPlanIdForRedirect));
+        }
+    }
+
     componentWillUnmount() {
         this.props.actions.pageDown();
     }
@@ -221,7 +231,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
                                                     }}
                                                 >
                                                     <MenuItem className={classes.menuLinkItem}>
-                                                        <Link to={appRouter.getPlanDetailLink(plan[EducationalPlanFields.ID])}>
+                                                        <Link to={appRouter.getPlanDetailLink(plan[EducationalPlanFields.ID])} target="_blank">
                                                             <EyeIcon className={classes.menuIcon}/>
                                                             Смотреть детально
                                                         </Link>

@@ -33,6 +33,8 @@ export enum fields {
 export enum WorkProgramGeneralFields {
     ID = 'id',
     TITLE = 'title',
+    TITLE_EN = 'title_en',
+    DISCIPLINE_CODE = 'discipline_code',
     CODE = 'discipline_code',
     QUALIFICATION = 'qualification',
     IMPLEMENTATION_FORMAT = 'implementation_format',
@@ -45,6 +47,7 @@ export enum WorkProgramGeneralFields {
     VIDEO_LINK = 'video',
     SEMESTER_COUNT = 'number_of_semesters',
     DESCRIPTION = 'description',
+    MOODLE_LINK = 'moodle_link',
     ZUN = 'zuns_for_wp',
     CAN_COMMENT = 'can_comment',
     CAN_ADD_TO_FOLDER = 'can_add_to_folder',
@@ -59,6 +62,15 @@ export enum WorkProgramGeneralFields {
     EDITORS = 'editors',
     BARS = 'bars',
     OFFERTA = 'is_oferta',
+    LAB_HOURS = 'lab_hours_v2',
+    SRS_HOURS = 'srs_hours_v2',
+    HOURS = 'hours',
+    PRACTICE_HOURS = 'practice_hours_v2',
+    LECTURE_HOURS = 'lecture_hours_v2',
+    ZE_V_SEM = 'ze_v_sem',
+    EVALUATION_TOOLS = 'evaluation_tools',
+    WORK_PROGRAM_IN_CHANGE_BLOCK = 'work_program_in_change_block',
+    CONSULTATIONS = 'consultation_v2',
 }
 
 export enum workProgramSectionFields {

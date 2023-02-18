@@ -8,23 +8,19 @@ class User(AbstractUser):
     Модель для пользователей
     '''
 
-    # role = models.CharField("Роль", max_length=15, default='student')
-    # tel = models.CharField("Телефон", max_length=15, blank=True, null=True)
     patronymic = models.CharField(max_length=1024, blank=True, null=True)
     isu_number = models.CharField(max_length=1024, blank=True, null=True)
     is_rpd_developer = models.BooleanField(default=False, blank=True, null=True)
     is_expertise_master = models.BooleanField(default=False, blank=True, null=True)
-
     do_email_notifications = models.BooleanField(default=False, blank=True, null=True)
     expertise_status_notification = models.BooleanField(default=False, blank=True, null=True)
     expertise_comments_notification = models.BooleanField(default=False, blank=True, null=True)
-    # def __str__(self):
-    #     return self.first_name + ' ' + self.last_name
+    structural_unit = models.ManyToManyField("workprogramsapp.StructuralUnit", through="workprogramsapp.UserStructuralUnit", blank=True, null=True )
 
     REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
 
     def __str__(self):
-        return self.username
+        return self.username + '/ ' + self.first_name + ' ' + self.last_name
 
 
 class Domain(models.Model):
@@ -57,11 +53,6 @@ class Items(models.Model):
     def __str__(self):
         return self.name
 
-    #
-    # def get_related(self):
-    #     qs = SkillsOfProfession.objects.select_related('cod_person_2')
-    #     return qs.filter(cod_person_1=self)
-
 
 class Relation(models.Model):
     '''
@@ -92,5 +83,3 @@ class Relation(models.Model):
 
     def __str__(self):
         return self.item1.name
-
-

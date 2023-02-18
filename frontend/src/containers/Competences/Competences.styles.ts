@@ -10,6 +10,12 @@ export default (theme: Theme) => createStyles({
         display: 'flex',
         flexDirection: 'column'
     },
+    link: {
+        '& a': {
+            textDecoration: 'none',
+            color: theme.palette.primary.main
+        }
+    },
     title: {
         fontSize: '24px',
         marginBottom: '20px',

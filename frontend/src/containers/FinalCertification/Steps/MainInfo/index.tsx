@@ -9,15 +9,41 @@ import Input from "../../components/Input";
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 import {StructuralUnitsActions} from "../../../StructuralUnits/types";
 import StructuralUnit from "../../components/StructuralUnit";
+import Select from "../../../FinalCertification/components/Select";
+
+import Dialog from '@material-ui/core/Dialog';
+import Button from '@material-ui/core/Button';
+import UserSelector from "../../../EmailWidget/UserSelector";
+import AddIcon from "@material-ui/icons/Add";
+import Chip from "@material-ui/core/Chip";
+import {getUserFullName} from "../../../../common/utils";
+import {UserFields} from "../../../../layout/enum";
+import {UserType} from "../../../../layout/types";
 
 interface MainInfoProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
     fields: CertificationState;
     structuralUnitsList: SelectorListType;
     structuralUnitActions: StructuralUnitsActions;
+    canAddEditors: boolean,
+    isCanEdit: boolean
 }
 
+export const GIA_TITLES = [
+    {
+        value: 'preparation',
+        label: 'Подготовка к защите и защита ВКР',
+    },
+    {
+        value: 'preparation-en',
+        label: 'Подготовка к защите и защита ВКР / Preparation for Thesis Defense and Thesis Defense',
+    }
+];
+
 class MainInfo extends React.Component<MainInfoProps> {
+    state = {
+        addEditorsMode: false
+    }
 
     componentDidMount() {
         this.props.structuralUnitActions.getStructuralUnits();
@@ -32,9 +58,38 @@ class MainInfo extends React.Component<MainInfoProps> {
         this.props.actions.saveField({field: CertificationFields.STRUCTURAL_UNIT, value})
     }
 
-    render() {
+    deleteEditor = (userId: number) => () => {
+        const {editors} = this.props.fields;
+    
+        this.props.actions.saveField({
+          field: CertificationFields.EDITORS,
+          value: editors.reduce((editors: Array<number>, user: UserType) => {
+            if (user[UserFields.ID] !== userId) {
+              editors.push(user[UserFields.ID]);
+            }
+            return editors;
+          }, [])
+        });
+      }
 
-        const {classes} = this.props;
+    handleAddUser = (user: {value: number; label: string}) => {
+        const {editors} = this.props.fields;
+        this.props.actions.saveField({
+          field: CertificationFields.EDITORS,
+          value: [
+            ...editors.map((user:UserType) => user[UserFields.ID]),
+            user.value
+          ]
+        });
+    
+        this.setState({
+          addEditorsMode: false
+        });
+      }
+
+    render() {
+        const {classes, canAddEditors, isCanEdit, fields} = this.props;
+        const {addEditorsMode} = this.state;
 
         return (
             <div className={classes.content}>
@@ -44,7 +99,8 @@ class MainInfo extends React.Component<MainInfoProps> {
                 <div className={classes.columns}>
                     <div className={classes.leftColumn}>
                         <Input fieldName={CertificationFields.DISCIPLINE_CODE}/>
-                        <Input fieldName={CertificationFields.TITLE}/>
+                        <Select fieldName={CertificationFields.TITLE}
+                                metaList={GIA_TITLES}/>
                         <Input fieldName={CertificationFields.YEAR}/>
                     </div>
                     <div className={classes.rightColumn}>
@@ -53,6 +109,47 @@ class MainInfo extends React.Component<MainInfoProps> {
                         <StructuralUnit/>
                     </div>
                 </div>
+
+                <Typography className={classes.editorTitle}>
+                    Редакторы:
+                </Typography>
+
+                <div className={classes.editorsList}>
+                    {fields.editors && fields.editors.map && fields.editors.map((editor: UserType) =>
+                    <Chip label={getUserFullName(editor)}
+                            onDelete={isCanEdit ? this.deleteEditor(editor[UserFields.ID]) : undefined}
+                            className={classes.editorItem}
+                    />
+                    )}
+                </div>
+
+                {addEditorsMode ?
+                    <Dialog open
+                            fullWidth
+                            maxWidth="sm"
+                            classes={{
+                            paper: classes.dialog
+                            }}
+                            onClose={() => this.setState({addEditorsMode: false})}
+                    >
+                    <UserSelector handleChange={this.handleAddUser}
+                                    selectorLabel="Выберите редактора"
+                                    label="Выберите редактора"
+                                    noMargin
+                    />
+                    </Dialog>
+                    :
+                    canAddEditors
+                    ?
+                    <Button onClick={() => this.setState({addEditorsMode: true})}
+                            variant="text"
+                            className={classes.addEditorButton}
+                    >
+                        <AddIcon/> Добавить редактора
+                    </Button>
+                    :
+                    <></>
+                }
             </div>
         );
     }

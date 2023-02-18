@@ -13,9 +13,10 @@ class WorkProgramListService extends AnalyticsService{
         const archive = filters[filterFields.ARCHIVE] ? `work_status=a` : 'work_status=w';
         const prerequisites = filters[filterFields.PREREQUISITE] ? `prerequisites=${filters[filterFields.PREREQUISITE]}` : ''
         const outcomes = filters[filterFields.OUTCOMES] ? `outcomes=${filters[filterFields.OUTCOMES]}` : ''
+        const status = filters[filterFields.STATUS] && filters[filterFields.STATUS] !== 'WK' ? `expertise_with_rpd__expertise_status=${filters[filterFields.STATUS]}` : ''
         const eduProgram = `work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__title=${filters[filterFields.EDU_PROGRAM]}`
 
-        return this.get(`/api/workprograms?page=${currentPage}&${onlyMy}&${archive}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&${numberOp}&${nameOp}&${language}&${qualification}&${prerequisites}&${outcomes}&${eduProgram}`);
+        return this.get(`/api/workprograms?page=${currentPage}&${onlyMy}&${archive}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&${numberOp}&${nameOp}&${language}&${qualification}&${prerequisites}&${outcomes}&${eduProgram}&${status}`);
     }
 
     deleteWorkProgram(id: number){

@@ -3,16 +3,30 @@ import AnalyticsService from "../../../service/analytics-service";
 import {SortingType} from "../../../components/SortingButton/types";
 import {ChangeTrainingModulePayload, CreateTrainingModulePayload} from "./types";
 import {TrainingModuleFields} from "./enum";
+import {ReactText} from "react";
+import {IntermediateCertificationFields} from "../../WorkProgram/enum";
 
 class TrainingModulesService extends AnalyticsService{
-    getTrainingModules(currentPage: number, search: string, sortingField: string, sortingMode: SortingType, showOnlyMy: boolean){
+    getTrainingModules(currentPage: number, search: string, sortingField: string, sortingMode: SortingType, showOnlyMy: boolean, filters: any){
         const sortingSymbol = getSortingSymbol(sortingMode);
+        let filtersString = `id=${filters.id}&module_isu_id__icontains=${filters.isuId}&name__icontains=${filters.name}&descipline_block__name__icontains=${filters.disciplineName}`
 
+        filtersString += `&filter_non_struct=${filters.availableForAll}`
+
+        if (filters.moduleId) {
+            filtersString += `&id_module_for_filter_struct=${filters.moduleId}`
+        }
+        if (filters.moduleId) {
+            filtersString += `&without_me=${filters.moduleId}`
+        }
+        if (filters.opId) {
+            filtersString += `&allowed_to_add_ap_id=${filters.opId}`
+        }
         if (showOnlyMy) {
-            return this.get(`/api/disciplineblockmodule/detail/list/for_this_user?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}`);
+            filtersString += `&for_user=true`
         }
 
-        return this.get(`/api/disciplineblockmodule/detail/list?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}`);
+        return this.get(`/api/disciplineblockmodule/list?page=${currentPage}&ordering=${sortingSymbol}${sortingField}&search=${search}&${filtersString}`);
     }
 
     getTrainingModule(id: number){
@@ -30,6 +44,46 @@ class TrainingModulesService extends AnalyticsService{
     changeTrainingModule(payload: ChangeTrainingModulePayload){
         return this.patch(`/api/disciplineblockmodule/update/${payload.data[TrainingModuleFields.ID]}`, payload.data);
     }
+
+    removeFatherFromModule(id: number){
+        return this.patch(`/api/disciplineblockmodule/update/${id}`, {
+            father: null
+        });
+    }
+
+    changeTrainingModuleEducationalPrograms(modules: number[], moduleId: number){
+        return this.patch(`/api/disciplineblockmodule/update/${moduleId}`, {
+            educational_programs_to_access: modules
+        });
+    }
+
+    addFatherToModule(modules: number[], moduleId: number){
+        return this.patch(`/api/disciplineblockmodule/update/${moduleId}`, {
+            childs: modules
+        });
+    }
+
+    deleteIntermediateCertification(id: ReactText){
+        return this.delete(`/api/certification_tools/${id}`);
+    }
+
+    getIntermediateCertification(id: ReactText){
+        return this.get(`/api/certification_tools/${id}`);
+    }
+
+    changeIntermediateCertification(evaluationTool: any){
+        const id = evaluationTool[IntermediateCertificationFields.ID];
+
+        return this.patch(`/api/certification_tools/${id}`, evaluationTool);
+    }
+
+    addIntermediateCertification(evaluationTool: any, moduleId: ReactText){
+        return this.post(`/api/certification_tools/`, {
+            ...evaluationTool,
+            discipline_block_module: moduleId
+        });
+    }
+
 }
 
 export default TrainingModulesService;

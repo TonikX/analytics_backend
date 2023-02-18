@@ -213,7 +213,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
             case 8:
                 return <div className={classes.subItem}>
                     <Typography className={classes.subTitle}>
-                        Связанные с рпд учебные планы и направления
+                        Связанные с рпд модули, учебные планы и направления
                     </Typography>
 
                     <PlansAndDirections />

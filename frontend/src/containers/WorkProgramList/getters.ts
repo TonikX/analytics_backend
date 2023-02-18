@@ -14,11 +14,13 @@ import {WorkProgramGeneralFields} from "../WorkProgram/enum";
 
 const getStateData = (state: rootState): workProgramListState => get(state, GENERAL_PATH);
 export const getWorkProgramList = (state: rootState): Array<WorkProgramGeneralType> => get(getStateData(state), fields.WORK_PROGRAM_LIST, []);
+export const getWorkProgramIdForRedirect = (state: rootState): number|null =>
+    get(getStateData(state), fields.WORK_PROGRAM_ID_FOR_REDIRECT, null);
 
 export const getWorkProgramsListForSelector = (state: rootState): SelectorListType =>
     getWorkProgramList(state).map((workProgram: WorkProgramGeneralType) => ({
         value: workProgram[WorkProgramGeneralFields.ID],
-        label: `${workProgram[WorkProgramGeneralFields.TITLE]} (${workProgram[WorkProgramGeneralFields.ID]})`,
+        label: `${workProgram[WorkProgramGeneralFields.TITLE]} (КОП ИД: ${workProgram[WorkProgramGeneralFields.ID]}, ИСУ ИД: ${workProgram[WorkProgramGeneralFields.DISCIPLINE_CODE]})`,
     }))
 
 export const getWorkProgramDialog = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_DIALOG, {});
@@ -37,3 +39,4 @@ export const getSortingMode = (state: rootState) => get(getSorting(state), field
 export const getFilters = (state: rootState): FiltersType => get(getStateData(state), fields.FILTERING)
 export const getShowOnlyMy = (state: rootState): FiltersType => get(getFilters(state), filterFields.ONLY_MY)
 export const getShowArchive = (state: rootState): FiltersType => get(getFilters(state), filterFields.ARCHIVE)
+export const getStatus = (state: rootState): FiltersType => get(getFilters(state), filterFields.STATUS)

@@ -23,6 +23,10 @@ export type MainInfoState = {
     [CertificationFields.AUTHORS]: string;
     [CertificationFields.OP_LEADER]: string,
     [CertificationFields.STRUCTURAL_UNIT]: StructuralUnitType | null,
+    [CertificationFields.SEMESTER_COUNT]: number,
+    [CertificationFields.QUALIFICATION]: string,
+    [CertificationFields.ZE_V_SEM]: string,
+    [CertificationFields.EVALUATION_TOOLS]: number[][],
 }
 
 export type GeneralProvisionsState = {
@@ -96,6 +100,7 @@ export type CertificationState = MainInfoState
     [CertificationFields.GIA_BASE]: Id,
     [CertificationFields.EDITORS]: any,
     [CertificationFields.PERMISSIONS_INFO]: PermissionsInfoState,
+    [CertificationFields.EDITORS]: Array<UserType>;
 }
 
 export type CommentType = {

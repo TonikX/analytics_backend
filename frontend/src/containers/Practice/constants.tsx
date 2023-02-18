@@ -14,7 +14,11 @@ import ReportingMaterials from "./Steps/ReportingMaterials";
 import DisabledPeopleInfo from "./Steps/DisabledPeopleInfo";
 import Assessment from "./Steps/Assessment";
 import Literature from "./Steps/Literature";
+import Prerequisites from "./Steps/Prerequisites";
+import PlansAndDirections from "./Steps/PlansAndDirections";
 import React from "react";
+import Competences from "./Steps/Competences";
+import Results from "./Steps/Results";
 
 export const LANGUAGES = [
     {
@@ -36,6 +40,97 @@ export const LANGUAGES = [
     {
         value: Languages.RUSSIAN_ENGLISH,
         label: 'Русский/Английский',
+    },
+];
+
+export const PRACTICE_TITLES = [
+    {
+        value: "intro",
+        label: 'Учебная, ознакомительная практика'
+    },
+    {
+        value: "senior",
+        label: 'Производственная, преддипломная практика'
+    },
+    {
+        value: "sci-research",
+        label: 'Производственная, научно-исследовательская практика'
+    },
+    {
+        value: "prod",
+        label: 'Производственная практика'
+    },
+    {
+        value: "ped",
+        label: "Педагогическая"
+    },
+    {
+        value: "prod-proj-constr",
+        label: "Производственная, проектно-конструкторская"
+    },
+    {
+        value: "org-admin",
+        label: "Производственная, организационно-управленческая практика"
+    },
+    {
+        value: "tech",
+        label: 'Производственная, технологическая практика'
+    },
+    {
+        value: "prod-tech",
+        label: 'Производственная, производственно-технологическая практика'
+    },
+    {
+        value: "ind-tech",
+        label: 'Производственная, технологическая (проектно-технологическая) практика'
+    },
+    {
+        value: "sci-research-internship",
+        label: "Производственная, научно-исследовательская / Research Internship"
+    },
+    {
+        value: "study-tech",
+        label: 'Учебная, учебно-технологическая практика'
+    },
+    {
+        value: "proj-tech",
+        label: 'Производственная проектно-технологическая практика',
+    },
+    {
+        value: "prod-senior",
+        label: 'Производственная, преддипломная практика / Pre-graduation Internship',
+    },
+    {
+        value: "research-internship-en",
+        label: 'Научно-исследовательская работа / Research Internship',
+    },
+    {
+        value: "research-internship",
+        label: 'Научно-исследовательская работа',
+    },
+    {
+        value: "prod-prof-internship",
+        label: 'Производственная, профессиональные стажировки',
+    },
+    {
+        value: "prod-prof-internship-en",
+        label: 'Производственная, профессиональные стажировки / Industrial, Professional Internship',
+    },
+    {
+        value: "sci-intro",
+        label: 'Научно-исследовательская, ознакомительная практика',
+    },
+    {
+        value: "study-project",
+        label: 'Учебная, проектная практика',
+    },
+    {
+        value: "prod-proj",
+        label: 'Производственная, проектная практика',
+    },
+    {
+        value: "study-project-2",
+        label: 'Проектная работа',
     },
 ];
 
@@ -149,7 +244,11 @@ export const PRACTICE_TYPES = [
     },
     {
         value: PracticeTypes.SENIOR_INTER,
-        label: 'преддипломная, преддипломная / Senior internship',
+        label: 'преддипломная',
+    },
+    {
+        value: PracticeTypes.SENIOR_INTER_ENG,
+        label: 'преддипломная / Senior internship',
     },
     {
         value: PracticeTypes.EXPL,
@@ -172,9 +271,9 @@ export const PRACTICE_WAYS = [
     },
     {
         value: PracticeWays.STATIONARY_EXTERNAL,
-        label: 'Стационарно/выездная'
+        label: 'Стационарная или выездная'
     },
-]
+];
 
 export const PRACTICE_FORMATS = [
     {
@@ -185,7 +284,7 @@ export const PRACTICE_FORMATS = [
         value: PracticeFormats.DISPERSED,
         label: 'Рассредоточенная',
     },
-]
+];
 
 export const RussianPracticeFields = {
     [PracticeFields.ID]: 'ID',
@@ -213,6 +312,14 @@ export const RussianPracticeFields = {
     [PracticeFields.BIBLIOGRAPHIC_REFERENCE]: 'Источники',
     [PracticeFields.EDITORS]: 'Редакторы',
     [PracticeFields.PERMISSIONS_INFO]: 'Информация о правах',
+    [PracticeFields.SEMESTER_COUNT]: 'Длительность в семестрах',
+    [PracticeFields.ZE_V_SEM]: 'Зачетные единицы',
+    [PracticeFields.EVALUATION_TOOLS]: 'Аттестационное оценочное средство',
+    [PracticeFields.PRAC_ISU_ID]: 'ID практики в ИСУ',
+    [PracticeFields.PREREQUISITES]: 'Пререквизиты',
+    [PracticeFields.COMPETENCES]: 'Компетенции',
+    [PracticeFields.OUTCOMES]: 'Результаты',
+    [PracticeFields.PLANS]: 'Учебные планы и направления',
 };
 
 export const fieldToStep = new Map(Object.entries({
@@ -253,6 +360,10 @@ export const STEPS = [
         component: <GeneralProvisions/>,
     },
     {
+        name: PracticeSteps.PREREQUISITES,
+        component: <Prerequisites/>,
+    },
+    {
         name: PracticeSteps.STRUCTURE,
         component: <Structure/>,
     },
@@ -269,7 +380,19 @@ export const STEPS = [
         component: <Assessment/>,
     },
     {
+        name: PracticeSteps.RESULTS,
+        component: <Results/>,
+    },
+    {
         name: PracticeSteps.REFERENCES,
         component: <Literature/>,
+    },
+    {
+        name: PracticeSteps.PLANS,
+        component: <PlansAndDirections/>,
+    },
+    {
+        name: PracticeSteps.COMPETENCES,
+        component: <Competences/>,
     },
 ];

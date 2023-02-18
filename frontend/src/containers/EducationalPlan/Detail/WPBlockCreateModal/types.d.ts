@@ -17,4 +17,7 @@ export interface CreateModalProps extends WithStyles<typeof styles> {
     blockOfWorkPrograms: BlocksOfWorkProgramsType;
     disableZUN: boolean;
     moduleId?: number;
+    canAddGia?: number;
+    canAddPractice?: number;
+    canAddWp?: number;
 }

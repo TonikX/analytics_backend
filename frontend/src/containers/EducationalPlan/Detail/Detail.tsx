@@ -1,8 +1,9 @@
 import React from 'react';
 import get from 'lodash/get';
 import {appRouter} from "../../../service/router-service";
-import {withRouter, Link} from "react-router-dom";
-import classNames from "classnames";
+import {withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 
 // @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
@@ -14,506 +15,740 @@ import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
 import Tooltip from "@material-ui/core/Tooltip";
+import {SortableContainer, SortableElement, SortableHandle} from 'react-sortable-hoc';
 
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
-import FileIcon from '@material-ui/icons/DescriptionOutlined';
 import AttachIcon from '@material-ui/icons/AttachFileOutlined';
+import WarningIcon from '@material-ui/icons/WarningRounded';
 
-import LikeButton from "../../../components/LikeButton/LikeButton";
 import ConfirmDialog from "../../../components/ConfirmDialog";
 
 import WPBlockCreateModal from "./WPBlockCreateModal";
 import ChangePlanModal from '../CreateModal';
 import ModuleModal from "./ModuleModal";
 import DownloadFileModal from "./DownloadFileModal";
-import AddModuleModal from "./AddModuleModal";
+import AddTrainingModuleModal from "../TrainingModules/AddTrainingModuleModal";
+
+import DetailHeader from './DetailHeader/DetailHeader';
+import actions from "../actions";
 
 import {BlocksOfWorkProgramsType, EducationalPlanType, ModuleType} from '../types';
 import {EducationalPlanDetailProps} from './types';
 
 import {
-    EducationalPlanBlockFields,
-    ModuleFields,
-    BlocksOfWorkProgramsFields,
-    EducationalPlanFields,
-    DownloadFileModalFields
+  getEducationalPlanDetail,
+} from '../getters';
+import {
+  EducationalPlanBlockFields,
+  ModuleFields,
+  BlocksOfWorkProgramsFields,
+  EducationalPlanFields,
+  DownloadFileModalFields
 } from "../enum";
 import {FavoriteType} from "../../Profile/Folders/enum";
 import {getUserFullName} from "../../../common/utils";
 import {DirectionFields} from "../../Direction/enum";
-import OptionalWorkProgramBlock from "./OptionalWorkProgramsBlock";
 
 import {WorkProgramGeneralFields} from "../../WorkProgram/enum";
-import {specializationObject} from "../../WorkProgram/constants";
+import {BACHELOR_QUALIFICATION, specializationObject} from "../../WorkProgram/constants";
 
-import {FACULTATIV, OPTIONALLY, SET_SPECIALIZATION, typeOfWorkProgramInPlan} from "../data";
+import {OPTIONALLY} from "../data";
 
 import connect from './Detail.connect';
 import styles from './Detail.styles';
-import FacultativeBlockModule from "./FacultativeBlockModule";
+import {fields, TrainingModuleFields} from "../TrainingModules/enum";
+import FileIcon from '@material-ui/icons/DescriptionOutlined';
+import classNames from "classnames";
+import {selectRulesArray, typesListArray} from "../TrainingModules/constants";
+import {UserType} from "../../../layout/types";
+import Chip from "@material-ui/core/Chip";
 import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
+import Dialog from "@material-ui/core/Dialog";
+import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+import UserSelector from "../../Profile/UserSelector/UserSelector";
 
-class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
-    state = {
-        deleteBlockConfirmId: null,
-        deleteModuleConfirmId: null,
-        selectSpecializationData: {
-            blockId: null,
-            id: null,
-            title: null
-        },
-        deletedWorkProgramsLength: 0,
-    }
+const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}}/>);
 
-    componentDidMount() {
-        const planId = this.getPlanId();
+const SortableItem = SortableElement((props:any) => {
+  const {classes, detailPlan, canEdit, blockId, handleDisconnectModule, module} = props;
 
-        this.props.actions.setIsTrajectoryRoute(this.props.trajectoryRoute);
+  const renderModule = (module:any, level:number):any => {
+    const selectionRule = selectRulesArray.find(type => type.value === module?.selection_rule)?.label
+    const selectionParameter = module?.selection_parametr
+    console.log('module?.childs', module?.childs)
+    return (
+      <>
+        <TableRow tabIndex={0}>
+          <TableCell style={{minHeight: '40px', width: '100%'}} className={classes.moduleNameWrap}>
+            <Typography className={classes.moduleName} style={{ paddingLeft: level * 5 }}>
+              {level === 0 ? <DragHandle /> : null}
 
-        this.props.actions.getEducationalDetail(planId);
-    }
+              {'*'.repeat(level)}
+              <Link to={appRouter.getTrainingModuleDetailLink(module.id)} target="_blank" className={classes.link}>
+                {module.name}
+              </Link>:
+              
+            </Typography>
+            <Typography>
+              {module.laboriousness ? <>&nbsp;<b>Трудоемкость:</b> {module.laboriousness}</> : ''}
+              {selectionRule ? <>&nbsp;<b>Правило выбора:</b> {selectionRule}</> : ''}
+              {selectionParameter ? <>&nbsp;<b>Параметр выбора:</b> {selectionParameter}</> : ''}
+            </Typography>
+          </TableCell>
+          <TableCell style={{ width: '7%'}} />
+          <TableCell style={{ width: '7%'}} />
+          <TableCell style={{ width: '7%'}} />
+          <TableCell style={{ width: '3%'}}>
+            {level === 0 && canEdit ? (
+              <Tooltip title="Удалить модуль">
+                <DeleteIcon className={classes.marginRight10}
+                            color="primary"
+                            onClick={handleDisconnectModule(module[ModuleFields.ID], blockId)}
+                            style={{cursor: "pointer"}}
+                />
+              </Tooltip>
+            ) : ''}
+          </TableCell>
+        </TableRow>
+        {module?.change_blocks_of_work_programs_in_modules?.length ? <RenderBlockOfWP detailPlan={detailPlan} classes={classes} blockOfWorkPrograms={module?.change_blocks_of_work_programs_in_modules} level={level}/> : null}
+        {module?.childs?.map((module: any) => renderModule(module, level + 1))}
+      </>
+    )
+  }
 
-    getPlanId = () => get(this, 'props.match.params.id');
+  return (
+    <Table stickyHeader size='small' className={classes.dragItemBackground}>
+      {renderModule(module, 0)}
+    </Table>
+  )
+});
 
-    handleClickBlockDelete = (id: number, length: number) => () => {
-        this.setState({
-            deleteBlockConfirmId: id,
-            deletedWorkProgramsLength: length
-        });
-    }
+const SortableList = SortableContainer((props:any) => {
+  const {modules, detailPlan, classes, canEdit, blockId, handleDisconnectModule } = props;
+  
+  return (
+    <div>
+      {modules.map((value: any, index: number) => (
+        <SortableItem key={`item-${value.name}`} 
+                      index={index}
+                      module={value}
+                      classes={classes}
+                      canEdit={canEdit}
+                      blockId={blockId}
+                      handleDisconnectModule={handleDisconnectModule}
+                      detailPlan={detailPlan}
+        />
+      ))}
+    </div>
+  );
+});
 
-    handleConfirmBlockDeleteDialog = () => {
-        const {deleteBlockConfirmId} = this.state;
 
-        this.props.actions.deleteBlockOfWorkPrograms(deleteBlockConfirmId);
-        this.closeConfirmDeleteDialog();
-    }
+const RenderBlockOfWP = (props:any) => {
+  const {classes, detailPlan, blockOfWorkPrograms, level} = props
+  const qualification = get(detailPlan, 'academic_plan_in_field_of_study[0].qualification', '');
+  const maxSem = qualification === BACHELOR_QUALIFICATION ? 8 : 4;
 
-    handleConfirmSelectSpecialization = () => {
-        const {selectSpecializationData} = this.state;
+  return (
+    <>
+      {blockOfWorkPrograms?.map((blockOfWorkProgram: any) => {
+        const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
+        const gia = blockOfWorkProgram?.gia || [];
+        const practice = blockOfWorkProgram?.practice || [];
+        const semesterStart = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START]?.join(', ');
+        const semesterStartArray = blockOfWorkProgram?.[BlocksOfWorkProgramsFields.SEMESTER_START];
+        const type = blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE]
+        const duration = blockOfWorkProgram?.work_program?.[0]?.number_of_semesters;
+        const semError = semesterStartArray?.some((item: any) => {
+          return (duration + item) > (maxSem + 1)
+        })
 
-        this.props.actions.planTrajectorySelectSpecialization({
-            id: selectSpecializationData.id,
-            blockId: selectSpecializationData.blockId,
-            planId: this.getPlanId()
-        });
+        const renderRow = (title: any, itemsArray: Array<any>) => {
+          const allCreditUnits = itemsArray?.[0]?.ze_v_sem;
+          const creditUnitsArray = allCreditUnits?.split(', ')
+          // @ts-ignore
+          const indexFirstNumber1 = creditUnitsArray?.findIndex((item: number) => +item !== 0)
+          const withoutZero1 = creditUnitsArray?.slice(indexFirstNumber1, creditUnitsArray.length)
+          const withoutZero1Reverse = withoutZero1?.reverse()
+          // @ts-ignore
+          const indexFirstNumber2 = withoutZero1Reverse?.findIndex((item: number) => +item !== 0)
+          const withoutZero2 = withoutZero1?.slice(indexFirstNumber2, withoutZero1.length)
 
-        this.closeSelectSpecializationConfirmModal();
-    }
+          const creditUnits = withoutZero2?.reverse()?.join(' ')
 
-    handleConfirmModuleDeleteDialog = () => {
-        const {deleteModuleConfirmId} = this.state;
-
-        this.props.actions.deleteModule(deleteModuleConfirmId);
-
-        this.closeConfirmDeleteDialog();
-    }
-
-    closeConfirmDeleteDialog = () => {
-        this.setState({
-            deleteBlockConfirmId: null,
-            deleteModuleConfirmId: null,
-            deletedWorkProgramsLength: 0,
-        });
-    }
-
-    handleClickDeleteModule = (id: number) => () => {
-        this.setState({
-            deleteModuleConfirmId: id
-        });
-    }
-
-    showSelectSpecializationConfirmModal = (title: string, id: number, blockId: number) => () => {
-        this.setState({
-            selectSpecializationData: {
-                blockId,
-                title,
-                id
-            }
-        });
-    }
-
-    closeSelectSpecializationConfirmModal = () => {
-        this.setState({
-            selectSpecializationData: {
-                blockId: null,
-                id: null,
-                title: null
-            }
-        });
-    }
-
-    handleClickEdit = (plan: EducationalPlanType) => () => {
-        this.props.actions.openDialog(plan);
-    }
-
-    handleOpenDetailModal = (block: BlocksOfWorkProgramsType|{}, moduleId: number) => () => {
-        this.props.actions.openDetailDialog({
-            ...block,
-            moduleId
-        });
-    }
-
-    handleCreateBlockOfWorkPrograms = (moduleId: number) => () => {
-        this.props.actions.createBlockOfWorkPrograms(moduleId);
-    }
-
-    handleOpenCreateModuleModal = (module: ModuleType|{}, blockId: number) => () => {
-        this.props.actions.openCreateModuleDialog({
-            ...module,
-            blockId
-        });
-    }
-
-    handleOpenAddModuleModal = (blockId: number) => () => {
-        this.props.actions.openAddModuleDialog({
-            blockId
-        });
-    }
-
-    handleChangePlan = () => {
-        const {detailPlan} = this.props;
-
-        this.props.actions.openDialog(detailPlan);
-    }
-
-    handleDownloadFile = (workProgramId: number) => () => {
-        const {detailPlan} = this.props;
-
-        this.props.actions.openDownloadModal({
-            [DownloadFileModalFields.ACADEMIC_PLAN_ID]: detailPlan[EducationalPlanFields.ID],
-            [DownloadFileModalFields.ID]: workProgramId,
-        });
-
-        this.props.actions.getDirectionsDependedOnWorkProgram(workProgramId);
-    }
-
-    handleClickLike = () => {
-        const {detailPlan, trajectoryRoute} = this.props;
-
-        if (detailPlan[EducationalPlanFields.ID_RATING]){
-            this.props.foldersActions.removeFromFolder({
-                id: detailPlan[EducationalPlanFields.ID_RATING],
-                callback: this.props.actions.getEducationalDetail,
-                type: trajectoryRoute ? FavoriteType.TRAJECTORY_PLAN : FavoriteType.ACADEMIC_PLAN,
-                relationId: this.getPlanId()
-            });
-        } else {
-            this.props.foldersActions.openAddToFolderDialog({
-                relationId: this.getPlanId(),
-                type: trajectoryRoute ? FavoriteType.TRAJECTORY_PLAN : FavoriteType.ACADEMIC_PLAN,
-                callback: this.props.actions.getEducationalDetail
-            });
+          return (
+            <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
+              <TableCell>
+                <div style={{ paddingLeft: (level + 1) * 5 }}>
+                  {title}
+                </div>
+              </TableCell>
+              <TableCell style={{minWidth: '125px'}}>
+                {creditUnits}
+              </TableCell>
+              <TableCell className={semError ? classes.error : undefined} style={{minWidth: '90px'}}>
+                {semError ? (
+                  <Tooltip title='Обучение по этой дисциплине выходит за рамки обучения (длительность дисциплины больше допустимой в данном семестре)'>
+                    <div style={{ width: '30px' }}>
+                      {semesterStart}
+                    </div>
+                  </Tooltip>
+                ) : semesterStart}
+              </TableCell>
+              <TableCell style={{minWidth: '90px'}}>
+                {type === OPTIONALLY ? '-' : '+'}
+              </TableCell>
+              <TableCell />
+            </TableRow>
+          )
         }
-    }
-
-    saveOptionalProgram = (moduleId: number, workProgram: number) => {
-        this.props.actions.planTrajectorySelectOptionalWp({
-            moduleId,
-            workProgram,
-            planId: this.getPlanId()
-        });
-    }
-
-    saveElectivesProgram = (moduleId: number, workPrograms: any) => {
-        this.props.actions.planTrajectorySelectElectives({workPrograms, moduleId, planId: this.getPlanId()});
-    }
-
-    getStatus = (statusCode: string) => {
-        switch (statusCode) {
-            case 'WK':
-                return 'В работе';
-            case 'EX':
-                return 'На экспертизе';
-            case 'AC':
-                return 'Одобрено';
-            case 'AR':
-                return 'Архив';
-            case 'RE':
-                return 'На доработке';
-            default:
-                return '';
-        }
-    };
-
-    render() {
-        const {classes, blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
-        const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
-        const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
 
         return (
-            <Paper className={classes.root}>
-                <div className={classes.title}>
-                    <Typography>
-                        Учебный план: {get(detailPlan, 'academic_plan_in_field_of_study[0].title', '')}&nbsp;
-                        {get(detailPlan, 'academic_plan_in_field_of_study[0].field_of_study', []).map((item: any) =>
-                            <>
-                                ({specializationObject[get(item, 'qualification', '')]} / {get(item, 'title', '')} ({get(item, 'number', '')}))&nbsp;
-                            </>
-                        )}
-                        - {get(detailPlan, 'academic_plan_in_field_of_study[0].year', '')}
-                    </Typography>
+          <>
+            {Boolean(workPrograms?.length) && renderRow(workPrograms.map((workProgram: any) =>
+              <div className={classes.displayFlex}>
+                <Link className={classes.link}
+                      to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.ID])}
+                      target="_blank"
+                >
+                  {workProgram[WorkProgramGeneralFields.TITLE]}
+                </Link>
+                <div className={classes.wpStatus}>{getStatus(workProgram.wp_status)}</div>
+                <Tooltip
+                  title={'Скачать рабочую программу'}>
+                  <FileIcon
+                    className={classNames(classes.marginRight10, classes.button)}
+                    onClick={handleDownloadFile(workProgram[WorkProgramGeneralFields.ID])}
+                  />
+                </Tooltip>
+              </div>
+            ), workPrograms)}
+            {Boolean(gia?.length) && renderRow(gia.map((gia: any) =>
+              <div className={classes.displayFlex}>
+                <Link className={classes.link}
+                      to={appRouter.getFinalCertificationLink(gia[WorkProgramGeneralFields.ID])}
+                      target="_blank"
+                >
+                  {gia[WorkProgramGeneralFields.TITLE]} (ГИА)
+                </Link>
+              </div>
+            ), gia)}
+            {Boolean(practice?.length) && renderRow(practice.map((practice: any) =>
+              <div className={classes.displayFlex}>
+                <Link className={classes.link}
+                      to={appRouter.getPracticeLink(practice[WorkProgramGeneralFields.ID])}
+                      target="_blank"
+                >
+                  {practice[WorkProgramGeneralFields.TITLE]} (практика)
+                </Link>
+              </div>
+            ), practice)}
+          </>
+        )
+      })}
+    </>
+  )
+}
 
-                    {/*{canEdit &&*/}
-                    {/*    <Tooltip title="Изменить учебный план">*/}
-                    {/*        <EditIcon className={classes.titleIcon} color="primary" onClick={this.handleChangePlan}/>*/}
-                    {/*    </Tooltip>*/}
-                    {/*}*/}
-                    <Tooltip title={(
-                        <>
-                            1. Пропущен обязательный блок <br/>
-                            2. Пропущен обязательный модуль в блоке <br/>
-                            3. Отсутствуют дисциплины в модуле <br/>
-                            4. Количество з.е. не достигает рекомендованного минимума <br/>
-                            5. Недостаточное количество дисциплин в модуле <br/>
-                            6. Недостаточное количество з. е. в модуле <br/>
-                        </>
-                    )}>
-                        <Button variant="contained" style={{marginLeft: 'auto'}} color="primary">Валидация</Button>
-                    </Tooltip>
-                    <div className={classes.likeIcon}>
-                        <LikeButton onClick={this.handleClickLike}
-                                    isLiked={Boolean(detailPlan[EducationalPlanFields.ID_RATING])}
-                        />
-                    </div>
-                </div>
 
-                {trajectoryRoute && <Typography className={classes.trajectoryOwner}>
-                    <b>Направление:</b> {direction[DirectionFields.EDUCATIONAL_PROFILE]} {direction[DirectionFields.NUMBER]} {direction[DirectionFields.FACULTY]}
-                </Typography>}
-                {trajectoryRoute && <Typography className={classes.trajectoryOwner}>
-                    <b>Владелец траектории:</b> {getUserFullName(user)}
-                </Typography>}
+const handleDownloadFile = (workProgramId: number) => () => {
+  const detailPlan:any  = useSelector((state:any) => getEducationalPlanDetail(state));
+  const dispatch = useDispatch();
 
-                <Scrollbars>
-                    <div className={classes.tableWrap}>
-                        <Table stickyHeader size='small'>
-                            <TableHead className={classes.header}>
-                                <TableRow>
-                                    <TableCell rowSpan={2}>
-                                        Название
-                                    </TableCell>
-                                    <TableCell colSpan={10} className={classes.headerTextHoursCount}>
-                                        Количество зачетных единиц в семестрах
-                                    </TableCell>
-                                    <TableCell rowSpan={2}> Тип </TableCell>
-                                    {canEdit && <TableCell rowSpan={2}/>}
-                                </TableRow>
+  dispatch(actions.openDownloadModal({
+    [DownloadFileModalFields.ACADEMIC_PLAN_ID]: detailPlan[EducationalPlanFields.ID],
+    [DownloadFileModalFields.ID]: workProgramId,
+  }));
 
-                                <TableRow>
-                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">1</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">2</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">3</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">4</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">5</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">6</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">7</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">8</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">9</TableCell>
-                                    <TableCell className={classes.hourCell} style={{top: '22px'}} align="center">10</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {blocks.map(block => {
-                                    return (
-                                        <>
-                                            <TableRow className={classes.blockRow} key={'block' + block[EducationalPlanBlockFields.ID]}>
-                                                <TableCell colSpan={13}>
-                                                    <div className={classes.rowBlock}>
-                                                        {block[EducationalPlanBlockFields.NAME]}
-                                                        {canEdit &&
-                                                            <Tooltip title="Создать модуль в данном блоке">
-                                                                <AddCircleIcon className={classes.smallAddIcon}
-                                                                               onClick={this.handleOpenCreateModuleModal({}, block[EducationalPlanBlockFields.ID])}
-                                                                />
-                                                            </Tooltip>
-                                                        }
-                                                        {canEdit &&
-                                                            <Tooltip title="Добавить модуль в данный блок">
-                                                                <AttachIcon className={classes.smallAddIcon}
-                                                                               onClick={this.handleOpenAddModuleModal(block[EducationalPlanBlockFields.ID])}
-                                                                />
-                                                            </Tooltip>
-                                                        }
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                            {block[EducationalPlanBlockFields.MODULES].map(module => {
-                                                const showSelectSpecializationButton = get(module, [ModuleFields.BLOCKS_OF_WORK_PROGRAMS, 0, BlocksOfWorkProgramsFields.TYPE]) === SET_SPECIALIZATION && trajectoryRoute;
-                                                return (
-                                                    <>
-                                                        <TableRow key={'module' + module[ModuleFields.ID]}>
-                                                            <TableCell colSpan={12}>
-                                                                <div className={classes.rowModule}>
-                                                                    {module[ModuleFields.NAME]}
-                                                                    {canEdit &&
-                                                                        <Tooltip title="Создать блок рабочих программ">
-                                                                            <AddCircleIcon className={classes.smallAddIcon}
-                                                                                           color="primary"
-                                                                                           onClick={this.handleCreateBlockOfWorkPrograms(module[ModuleFields.ID])}
-                                                                            />
-                                                                        </Tooltip>
-                                                                    }
-                                                                    {showSelectSpecializationButton &&
-                                                                        <Button
-                                                                          variant="outlined"
-                                                                          onClick={this.showSelectSpecializationConfirmModal(module[ModuleFields.NAME], module[ModuleFields.ID], block[EducationalPlanBlockFields.ID])}
-                                                                          style={{marginLeft: '5px'}}
-                                                                        >
-                                                                          Выбрать специализацию
-                                                                        </Button>
-                                                                    }
-                                                                </div>
-                                                            </TableCell>
-                                                            {canEdit &&
-                                                                <TableCell className={classes.actions}>
-                                                                    <Tooltip title="Удалить модуль">
-                                                                        <DeleteIcon className={classes.marginRight10}
-                                                                                    color="primary"
-                                                                                    onClick={this.handleClickDeleteModule(module[ModuleFields.ID])}
-                                                                        />
-                                                                    </Tooltip>
+  dispatch(actions.getDirectionsDependedOnWorkProgram(workProgramId));
+}
 
-                                                                    <Tooltip title="Изменить модуль">
-                                                                        <EditIcon color="primary"
-                                                                                  onClick={this.handleOpenCreateModuleModal(module, block[EducationalPlanBlockFields.ID])}/>
-                                                                    </Tooltip>
-                                                                </TableCell>
-                                                            }
-                                                        </TableRow>
+const getStatus = (statusCode: string) => {
+  switch (statusCode) {
+    case 'WK':
+      return 'В работе';
+    case 'EX':
+      return 'На экспертизе';
+    case 'AC':
+      return 'Одобрено';
+    case 'AR':
+      return 'Архив';
+    case 'RE':
+      return 'На доработке';
+    default:
+      return '';
+  }
+};
 
-                                                        {get(module, [ModuleFields.BLOCKS_OF_WORK_PROGRAMS, 0, BlocksOfWorkProgramsFields.TYPE]) === FACULTATIV && trajectoryRoute ?
-                                                            <FacultativeBlockModule blocks={module}
-                                                                                    saveWorkPrograms={this.saveElectivesProgram}
-                                                                                    handleDownloadFile={this.handleDownloadFile}
-                                                            />
-                                                            :
-                                                            <>
-                                                                {module[ModuleFields.BLOCKS_OF_WORK_PROGRAMS].map((blockOfWorkProgram, index) => {
-                                                                    const blockType = blockOfWorkProgram[BlocksOfWorkProgramsFields.TYPE];
-                                                                    const moduleId = module[ModuleFields.ID];
-                                                                    const workPrograms = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
+class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
+  state = {
+    deleteBlockConfirmId: null,
+    deleteModuleConfirmId: null,
+    selectSpecializationData: {
+      blockId: null,
+      id: null,
+      title: null
+    },
+    deletedWorkProgramsLength: 0,
+    addEditorsMode: false,
+    tab: "1",
+  }
 
-                                                                    if (trajectoryRoute && workPrograms?.length > 1 && blockType === OPTIONALLY) {
-                                                                        return <OptionalWorkProgramBlock
-                                                                            module={blockOfWorkProgram}
-                                                                            key={`blockOfWorkProgram-${index}-${moduleId}`}
-                                                                            handleDownloadFile={this.handleDownloadFile}
-                                                                            isMultiSelect={false}
-                                                                            saveWorkPrograms={this.saveOptionalProgram}
-                                                                        />;
-                                                                    }
+  onSortEnd = (blockId:any) => ({oldIndex, newIndex}:any) => {
+    this.props.actions.changeModulePosition({oldIndex, newIndex, blockId});
+  };
 
-                                                                    const semesterHours = get(blockOfWorkProgram, BlocksOfWorkProgramsFields.SEMESTER_UNIT);
+  componentDidMount() {
+    const planId = this.getPlanId();
 
-                                                                    const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                                                                    const semesterHour = mappedSemesterHours.slice(0, 10);
+    this.props.actions.setIsTrajectoryRoute(this.props.trajectoryRoute);
 
-                                                                    return <TableRow
-                                                                        key={`blockOfWorkProgram-${index}-${moduleId}`}>
-                                                                        <TableCell>
-                                                                            {workPrograms && workPrograms.map && workPrograms.map(workProgram =>
-                                                                                <div className={classes.displayFlex}
-                                                                                     key={'wp' + workProgram[WorkProgramGeneralFields.ID]}>
-                                                                                    <div className={classes.displayFlex}>
-                                                                                        <Link to={appRouter.getWorkProgramLink(workProgram[WorkProgramGeneralFields.ID])}
-                                                                                              className={classes.workProgramLink}
-                                                                                              target="_blank"
-                                                                                        >
-                                                                                            {workProgram[WorkProgramGeneralFields.TITLE]}
-                                                                                        </Link>
-                                                                                    </div>
-                                                                                    <div className={classes.wpStatus}>{this.getStatus(workProgram.wp_status)}</div>
-                                                                                    <Tooltip
-                                                                                        title={'Скачать рабочую программу'}>
-                                                                                        <FileIcon
-                                                                                            className={classNames(classes.marginRight10, classes.button)}
-                                                                                            onClick={this.handleDownloadFile(workProgram[WorkProgramGeneralFields.ID])}
-                                                                                        />
-                                                                                    </Tooltip>
-                                                                                </div>
-                                                                            )}
-                                                                        </TableCell>
-                                                                        {semesterHour.map((semesterHour: string, index: number) =>
-                                                                            <TableCell key={'hour' + index}
-                                                                                       align="center"
-                                                                                       className={classes.hourCell}> {semesterHour} </TableCell>
-                                                                        )}
-                                                                        <TableCell>
-                                                                            {get(typeOfWorkProgramInPlan.find(item =>
-                                                                                item.value === blockType
-                                                                            ), 'label', '')}
-                                                                        </TableCell>
+    this.props.actions.getEducationalDetail(planId);
+  }
 
-                                                                        {canEdit &&
-                                                                        <TableCell className={classes.actions}>
-                                                                          <Tooltip
-                                                                            title={`Удалить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                                                                            <DeleteIcon
-                                                                              className={classes.marginRight10}
-                                                                              onClick={this.handleClickBlockDelete(blockOfWorkProgram[BlocksOfWorkProgramsFields.ID], get(workPrograms, 'length', 0))}
-                                                                            />
-                                                                          </Tooltip>
-                                                                          <Tooltip
-                                                                            title={`Изменить ${get(workPrograms, 'length', 0) > 1 ? 'комплект рабочих программ' : 'рабочую программу'}`}>
-                                                                            <EditIcon
-                                                                              onClick={this.handleOpenDetailModal(blockOfWorkProgram, module[ModuleFields.ID])}/>
-                                                                          </Tooltip>
-                                                                        </TableCell>
-                                                                        }
-                                                                    </TableRow>;
-                                                                })}
-                                                            </>
-                                                        }
-                                                    </>
-                                                )
-                                            })}
-                                        </>
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
-                    </div>
-                </Scrollbars>
+  componentWillUnmount() {
+    this.props.actions.pageDown();
+  }
 
-                {!trajectoryRoute &&
+  getPlanId = () => get(this, 'props.match.params.id');
+
+  handleClickBlockDelete = (id: number, length: number) => () => {
+    this.setState({
+      deleteBlockConfirmId: id,
+      deletedWorkProgramsLength: length
+    });
+  }
+
+  handleConfirmBlockDeleteDialog = () => {
+    const {deleteBlockConfirmId} = this.state;
+
+    this.props.actions.deleteBlockOfWorkPrograms(deleteBlockConfirmId);
+    this.closeConfirmDeleteDialog();
+  }
+
+  handleConfirmSelectSpecialization = () => {
+    const {selectSpecializationData} = this.state;
+
+    this.props.actions.planTrajectorySelectSpecialization({
+      id: selectSpecializationData.id,
+      blockId: selectSpecializationData.blockId,
+      planId: this.getPlanId()
+    });
+
+    this.closeSelectSpecializationConfirmModal();
+  }
+
+  handleConfirmModuleDeleteDialog = () => {
+    const {deleteModuleConfirmId} = this.state;
+
+    this.props.actions.deleteModule(deleteModuleConfirmId);
+
+    this.closeConfirmDeleteDialog();
+  }
+
+  closeConfirmDeleteDialog = () => {
+    this.setState({
+      deleteBlockConfirmId: null,
+      deleteModuleConfirmId: null,
+      deletedWorkProgramsLength: 0,
+    });
+  }
+
+  handleClickDeleteModule = (id: number) => () => {
+    this.setState({
+      deleteModuleConfirmId: id
+    });
+  }
+
+  showSelectSpecializationConfirmModal = (title: string, id: number, blockId: number) => () => {
+    this.setState({
+      selectSpecializationData: {
+        blockId,
+        title,
+        id
+      }
+    });
+  }
+
+  closeSelectSpecializationConfirmModal = () => {
+    this.setState({
+      selectSpecializationData: {
+        blockId: null,
+        id: null,
+        title: null
+      }
+    });
+  }
+
+  handleClickEdit = (plan: EducationalPlanType) => () => {
+    this.props.actions.openDialog(plan);
+  }
+
+  handleOpenDetailModal = (block: BlocksOfWorkProgramsType|{}, moduleId: number) => () => {
+    this.props.actions.openDetailDialog({
+      ...block,
+      moduleId
+    });
+  }
+
+  handleOpenCreateModuleModal = (module: ModuleType|{}, blockId: number) => () => {
+    this.props.actions.openCreateModuleDialog({
+      ...module,
+      blockId
+    });
+  }
+
+  handleOpenAddModuleModal = (blockId: number) => () => {
+    this.props.trainingModulesActions.openDialog({
+      data: {
+        moduleId: blockId,
+      },
+      dialog: fields.ADD_TRAINING_MODULE_DIALOG
+    });
+  }
+
+  goToPracticePage = (id: number) => () => {
+    // @ts-ignore
+    const {history} = this.props;
+
+    history.push(appRouter.getPracticeLink(id));
+  }
+
+  saveOptionalProgram = (moduleId: number, workProgram: number) => {
+    this.props.actions.planTrajectorySelectOptionalWp({
+      moduleId,
+      workProgram,
+      planId: this.getPlanId()
+    });
+  }
+
+  saveElectivesProgram = (moduleId: number, workPrograms: any) => {
+    this.props.actions.planTrajectorySelectElectives({workPrograms, moduleId, planId: this.getPlanId()});
+  }
+
+  handleConnectModules = (modules: Array<number>, fatherId: number) => {
+    this.props.actions.educationalPlanConnectModules({
+      modules,
+      blockId: fatherId,
+    })
+  }
+
+  handleDisconnectModule = (module: number, blockId: number) => () => {
+    this.props.actions.educationalPlanDisconnectModule({
+      module,
+      blockId,
+    })
+  }
+
+  renderEducationPlan = () => {
+    const {classes, blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
+    const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
+    const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
+
+    return (
+      <>
+        {trajectoryRoute && <Typography className={classes.trajectoryOwner}>
+            <b>Направление:</b> {direction[DirectionFields.EDUCATIONAL_PROFILE]} {direction[DirectionFields.NUMBER]} {direction[DirectionFields.FACULTY]}
+        </Typography>}
+        {trajectoryRoute && <Typography className={classes.trajectoryOwner}>
+            <b>Владелец траектории:</b> {getUserFullName(user)}
+        </Typography>}
+
+        <Scrollbars>
+          <div className={classes.tableWrap}>
+            <Table stickyHeader size='small' className={classes.tableHeader}>
+              <TableHead className={classes.header}>
+                <TableRow>
+                  <TableCell style={{ width: '74%'}}> Название </TableCell>
+                  <TableCell style={{ width: '7%', minWidth: '125px'}}> Зачетные единицы </TableCell>
+                  <TableCell style={{ width: '7%', minWidth: '90px'}}> Семестр начала </TableCell>
+                  <TableCell style={{ width: '7%', minWidth: '90px'}}> Обязательность </TableCell>
+                  <TableCell style={{ width: '3%'}}/>
+                </TableRow>
+              </TableHead>
+            </Table>
+                {blocks.map(block => {
+                  return (
                     <>
-                      <WPBlockCreateModal />
-                      <ChangePlanModal />
-                      <ModuleModal />
-                      <AddModuleModal />
+                      <Table stickyHeader size='small'>
+                        <TableRow className={classes.blockRow} key={'block' + block[EducationalPlanBlockFields.ID]}>
+                          <TableCell colSpan={5}>
+                            <div className={classes.rowBlock}>
+                              {block[EducationalPlanBlockFields.NAME]}
+                              {canEdit &&
+                                  <Tooltip title="Добавить модуль в данный блок">
+                                      <AttachIcon className={classes.smallAddIcon}
+                                                  onClick={this.handleOpenAddModuleModal(block[EducationalPlanBlockFields.ID])}
+                                      />
+                                  </Tooltip>
+                              }
+                              <b>трудоемкость</b>&nbsp;{block[EducationalPlanBlockFields.LABORIOUSNESS]}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      </Table>
+                      
+                      <SortableList 
+                        classes={classes} 
+                        modules={block.modules_in_discipline_block}
+                        canEdit={canEdit}
+                        blockId={block?.id}
+                        handleDisconnectModule={this.handleDisconnectModule}
+                        detailPlan={detailPlan}
+                        useDragHandle
+                        onSortEnd={this.onSortEnd(block?.id)}
+                      />
                     </>
-                }
-                <DownloadFileModal />
+                  )
+                })}
+              
+          </div>
+        </Scrollbars>
 
-                <ConfirmDialog onConfirm={this.handleConfirmModuleDeleteDialog}
-                               onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены, что хотите удалить модуль?'}
-                               isOpen={Boolean(deleteModuleConfirmId)}
-                               dialogTitle={'Удалить модуль'}
-                               confirmButtonText={'Удалить'}
-                />
-                <ConfirmDialog onConfirm={this.handleConfirmBlockDeleteDialog}
-                               onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={`Вы точно уверены, что хотите ${deletedWorkProgramsLength > 1 ? 'комлект рабочих программ' : 'рабочую программу'}?`}
-                               isOpen={Boolean(deleteBlockConfirmId)}
-                               dialogTitle={`Удалить ${deletedWorkProgramsLength > 1 ? 'комлект рабочих программ' : 'рабочую программу'}`}
-                               confirmButtonText={'Удалить'}
-                />
-                <ConfirmDialog onConfirm={this.handleConfirmSelectSpecialization}
-                               onDismiss={this.closeSelectSpecializationConfirmModal}
-                               confirmText={`Вы точно уверены, что хотите выбрать специализацию ${selectSpecializationData.title}?`}
-                               isOpen={Boolean(selectSpecializationData.id)}
-                               dialogTitle={'Выбрать специализацию'}
-                               confirmButtonText={'Выбрать специализацию'}
-                />
-            </Paper>
-        );
-    }
+        {!trajectoryRoute &&
+            <>
+                <WPBlockCreateModal />
+                <ChangePlanModal />
+                <ModuleModal />
+                <AddTrainingModuleModal onSave={this.handleConnectModules} />
+            </>
+        }
+        <DownloadFileModal />
+
+        <ConfirmDialog onConfirm={this.handleConfirmModuleDeleteDialog}
+                       onDismiss={this.closeConfirmDeleteDialog}
+                       confirmText={'Вы точно уверены, что хотите удалить модуль?'}
+                       isOpen={Boolean(deleteModuleConfirmId)}
+                       dialogTitle={'Удалить модуль'}
+                       confirmButtonText={'Удалить'}
+        />
+        <ConfirmDialog onConfirm={this.handleConfirmBlockDeleteDialog}
+                       onDismiss={this.closeConfirmDeleteDialog}
+                       confirmText={`Вы точно уверены, что хотите ${deletedWorkProgramsLength > 1 ? 'комлект рабочих программ' : 'рабочую программу'}?`}
+                       isOpen={Boolean(deleteBlockConfirmId)}
+                       dialogTitle={`Удалить ${deletedWorkProgramsLength > 1 ? 'комлект рабочих программ' : 'рабочую программу'}`}
+                       confirmButtonText={'Удалить'}
+        />
+        <ConfirmDialog onConfirm={this.handleConfirmSelectSpecialization}
+                       onDismiss={this.closeSelectSpecializationConfirmModal}
+                       confirmText={`Вы точно уверены, что хотите выбрать специализацию ${selectSpecializationData.title}?`}
+                       isOpen={Boolean(selectSpecializationData.id)}
+                       dialogTitle={'Выбрать специализацию'}
+                       confirmButtonText={'Выбрать специализацию'}
+        />
+      </>
+    );
+  }
+
+  handleDeletingEditor = (userId: number) => () =>  {
+    const {detailPlan} = this.props;
+    const plan = get(detailPlan, 'academic_plan_in_field_of_study[0]', {})
+    const editors = plan?.[EducationalPlanFields.EDITORS]
+    const newEditorIds = editors?.map((editor: UserType) => editor.id)
+      .filter((editorId: number) => editorId !== userId);
+
+    this.props.actions.changeEditorsEducationalPlan({
+      [EducationalPlanFields.ID]: plan[EducationalPlanFields.ID],
+      [EducationalPlanFields.EDITORS]: newEditorIds,
+    });
+  }
+
+  handleAddingEditor = (userId: number) => {
+    const {detailPlan} = this.props;
+
+    const plan = get(detailPlan, 'academic_plan_in_field_of_study[0]', {})
+    const editors = plan?.[EducationalPlanFields.EDITORS]
+    const newEditorIds = editors.map((editor: UserType) => editor.id).concat(userId);
+
+    this.props.actions.changeEditorsEducationalPlan({
+      [EducationalPlanFields.ID]: plan?.[EducationalPlanFields.ID],
+      [EducationalPlanFields.EDITORS]: newEditorIds,
+    });
+
+    this.setState({
+      addEditorsMode: false
+    });
+  }
+
+
+  renderMain = () => {
+    const {classes, detailPlan, canValidate} = this.props;
+
+    //@ts-ignore
+    const isuId = detailPlan?.ap_isu_id
+
+    const plan = get(detailPlan, 'academic_plan_in_field_of_study[0]', {})
+    const editors = plan?.[EducationalPlanFields.EDITORS]
+
+    const {addEditorsMode} = this.state;
+    const canEdit = detailPlan?.[EducationalPlanFields.CAN_EDIT];
+
+    const newPlan = get(detailPlan, 'academic_plan_in_field_of_study[0].year', 0) >= 2023;
+    const type = newPlan ? plan?.[EducationalPlanFields.PLAN_TYPE] :
+      plan?.[EducationalPlanFields.PLAN_TYPE] === 'base' ? 'Базовый' : 'Индивидуальный'
+
+    return (
+      <>
+        <div className={classes.editors}>
+          <Typography className={classes.editorsTitle}>
+            Редакторы:
+          </Typography>
+
+          {editors?.map((editor: UserType) =>
+            <Chip
+              key={editor.id}
+              label={getUserFullName(editor)}
+              onDelete={canEdit ? this.handleDeletingEditor(editor.id) : undefined}
+              className={classes.editorsItem}
+            />
+          )}
+          {editors?.length === 0 && <Typography>ни одного редактора не добавлено</Typography>}
+
+          {canEdit && (
+            <Button
+              onClick={() => this.setState({addEditorsMode: true})}
+              variant="outlined"
+              className={classes.editorsAdd}
+              size="small"
+            >
+              <AddIcon/> Добавить редактора
+            </Button>
+          )}
+        </div>
+
+        <Typography className={classes.trajectoryOwner}>
+          <b>Направление:</b> {plan?.[EducationalPlanFields.FIELD_OF_STUDY]?.[0]?.title}
+        </Typography>
+
+        <Typography className={classes.trajectoryOwner}>
+          <b>ОП:</b> {plan?.[EducationalPlanFields.TITLE]}
+        </Typography>
+
+        {plan?.[EducationalPlanFields.NUMBER] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>Номер:</b> {plan?.[EducationalPlanFields.NUMBER]}
+          </Typography>
+        ) : null }
+
+        {plan?.[EducationalPlanFields.YEAR] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>Год набора:</b> {plan?.[EducationalPlanFields.YEAR]}
+          </Typography>
+        ) : null }
+
+        {plan?.[EducationalPlanFields.QUALIFICATION] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>Квалификация:</b> {specializationObject[plan?.[EducationalPlanFields.QUALIFICATION]]}
+          </Typography>
+        ) : null }
+
+        {plan?.[EducationalPlanFields.TRAINING_PERIOD] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>Срок обучения в годах:</b> {plan?.[EducationalPlanFields.TRAINING_PERIOD]}
+          </Typography>
+        ) : null }
+
+        {plan?.[EducationalPlanFields.TOTAL_INTENSITY] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>Количество зачетных единиц:</b> {plan?.[EducationalPlanFields.TOTAL_INTENSITY]}
+          </Typography>
+        ) : null }
+
+        {detailPlan?.[EducationalPlanFields.LABORIOUSNESS] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>Общая трудоемкость:</b> {detailPlan?.[EducationalPlanFields.LABORIOUSNESS]}
+          </Typography>
+        ) : null }
+
+        {plan?.[EducationalPlanFields.PLAN_TYPE] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>Тип плана:</b> {type}
+          </Typography>
+        ) : null }
+
+        {plan?.[EducationalPlanFields.STRUCTURAL_UNIT] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>Структурное подразделение:</b> {plan?.[EducationalPlanFields?.STRUCTURAL_UNIT]?.title}
+          </Typography>
+        ) : null }
+
+        {plan?.[EducationalPlanFields.UNIVERSITY_PARTNER] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>ВУЗ партнер:</b> {plan?.[EducationalPlanFields.UNIVERSITY_PARTNER]?.map((item: any) => item.title)?.join(', ')}
+          </Typography>
+        ) : null }
+
+        {plan?.[EducationalPlanFields.MILITARY_DEPARTMENT] ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>Военная кафедра:</b> {plan?.[EducationalPlanFields.MILITARY_DEPARTMENT] ? 'есть' : 'нету'}
+          </Typography>
+        ) : null }
+
+        {isuId ? (
+          <Typography className={classes.trajectoryOwner}>
+            <b>ИСУ ИД:</b> {isuId}
+          </Typography>
+        ) : null }
+
+        {!canEdit && !canValidate && (
+          <Typography className={classes.notifyBlock}>
+            <WarningIcon style={{marginRight: 3}}/> Если Вам необходим доступ к редактированию учебного плана, обратитесь в офис сопровождения образовательных программ. (Osop@itmo.ru)
+          </Typography>
+        )}
+
+        {addEditorsMode && (
+          <Dialog
+            open
+            fullWidth
+            maxWidth="sm"
+            classes={{
+              paper: classes.dialog,
+            }}
+            onClose={() => this.setState({addEditorsMode: false})}
+          >
+            <UserSelector
+              handleChange={this.handleAddingEditor}
+              selectorLabel="Выберите редактора"
+              label="Выберите редактора"
+              noMargin
+            />
+          </Dialog>
+        )}
+      </>
+    )
+  }
+
+  checkSemestersDuration = () => {
+    const {detailPlan} = this.props;
+    const qualification = get(detailPlan, 'academic_plan_in_field_of_study[0].qualification', '');
+    const maxSem = qualification === BACHELOR_QUALIFICATION ? 8 : 4;
+
+    return detailPlan?.discipline_blocks_in_academic_plan?.some((item: any) => {
+      return item?.modules_in_discipline_block?.some((item: any) => {
+        return item?.change_blocks_of_work_programs_in_modules.some((item: any) => {
+          const semesterStart = item?.semester_start;
+          const duration = item?.work_program?.[0]?.number_of_semesters;
+          return semesterStart?.some((item: any) => {
+            return (duration + item) > (maxSem + 1)
+          })
+        })
+      })
+    })
+  }
+
+  render() {
+    const {classes, trajectoryRoute} = this.props;
+    // @ts-ignore
+    const {tab} = this.state
+    return (
+      <Paper className={classes.root}>
+        <DetailHeader classes={classes} trajectoryRoute={trajectoryRoute} tab={tab} onChangeTab={(e: any, value: any) => this.setState({tab: value})}/>
+        {tab === '1' ? this.renderMain() : this.renderEducationPlan()}
+      </Paper>
+    );
+  }
 }
 
 // @ts-ignore

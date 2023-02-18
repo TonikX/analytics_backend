@@ -35,9 +35,6 @@ import {UserFields} from "../../../layout/enum";
 import connect from './FirstStep.connect';
 import styles from './FirstStep.styles';
 import FormLabel from "@material-ui/core/FormLabel";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 
 class FirstStep extends React.Component<FirstStepProps> {
   state = {
@@ -47,6 +44,7 @@ class FirstStep extends React.Component<FirstStepProps> {
     [WorkProgramGeneralFields.AUTHORS]: '',
     [WorkProgramGeneralFields.DESCRIPTION]: '',
     [WorkProgramGeneralFields.VIDEO_LINK]: '',
+    [WorkProgramGeneralFields.MOODLE_LINK]: '',
     [WorkProgramGeneralFields.QUALIFICATION]: '',
     [WorkProgramGeneralFields.EXTRA_POINTS]: '',
     [WorkProgramGeneralFields.LANGUAGE]: '',
@@ -67,6 +65,7 @@ class FirstStep extends React.Component<FirstStepProps> {
       [WorkProgramGeneralFields.AUTHORS]: this.props.authors,
       [WorkProgramGeneralFields.DESCRIPTION]: this.props.description,
       [WorkProgramGeneralFields.VIDEO_LINK]: this.props.video,
+      [WorkProgramGeneralFields.MOODLE_LINK]: this.props.moodleLink,
       [WorkProgramGeneralFields.QUALIFICATION]: this.props.qualification,
       [WorkProgramGeneralFields.LANGUAGE]: this.props.language,
       [WorkProgramGeneralFields.SEMESTER_COUNT]: this.props.semesterCount,
@@ -86,6 +85,7 @@ class FirstStep extends React.Component<FirstStepProps> {
         [WorkProgramGeneralFields.AUTHORS]: this.props.authors,
         [WorkProgramGeneralFields.DESCRIPTION]: this.props.description,
         [WorkProgramGeneralFields.VIDEO_LINK]: this.props.video,
+        [WorkProgramGeneralFields.MOODLE_LINK]: this.props.moodleLink,
         [WorkProgramGeneralFields.QUALIFICATION]: this.props.qualification,
         [WorkProgramGeneralFields.LANGUAGE]: this.props.language,
         [WorkProgramGeneralFields.SEMESTER_COUNT]: this.props.semesterCount,
@@ -124,6 +124,12 @@ class FirstStep extends React.Component<FirstStepProps> {
   changeVideo = (e: React.ChangeEvent) => {
     this.setState({
       [WorkProgramGeneralFields.VIDEO_LINK]: get(e, 'target.value')
+    });
+  }
+
+  changeMoodleLink = (e: React.ChangeEvent) => {
+    this.setState({
+      [WorkProgramGeneralFields.MOODLE_LINK]: get(e, 'target.value')
     });
   }
 
@@ -242,10 +248,14 @@ class FirstStep extends React.Component<FirstStepProps> {
   render() {
     const {
       classes, fetchingTitle, fetchingCode, fetchingAuthors, fetchingDate, fetchingVideoLink, fetchingDescription,
-      isCanEdit, editors, structuralUnit, structuralUnitsList, canAddEditors
+      fetchingMoodleLink, isCanEdit, editors, structuralUnit, structuralUnitsList, canAddEditors
     } = this.props;
     const {state} = this;
     const {addEditorsMode} = state;
+    const changeBlock = this.props.changeBlock || [];
+    const disabled = changeBlock.some((item) => {
+      return item.discipline_block_module.descipline_block.length > 0
+    });
 
     return (
       <div className={classes.container}>
@@ -258,7 +268,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                          value={state[WorkProgramGeneralFields.CODE]}
                          onBlur={this.saveField(WorkProgramGeneralFields.CODE)}
                          onChange={this.changeCode}
-                         disabled={fetchingCode || !isCanEdit}
+                         disabled
                          InputLabelProps={{
                            shrink: true,
                          }}
@@ -277,7 +287,8 @@ class FirstStep extends React.Component<FirstStepProps> {
                          className={classes.input}
                          onBlur={this.saveField(WorkProgramGeneralFields.TITLE)}
                          onChange={this.changeTitle}
-                         disabled={fetchingTitle || !isCanEdit}
+                         // disabled={fetchingTitle || !isCanEdit}
+                         disabled={disabled}
               />
               :
               <Typography className={classes.textItem}> <b>Название
@@ -311,6 +322,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                             value={structuralUnit?.id}
                             valueLabel={structuralUnit?.title}
                             className={classes.marginBottom20}
+                            disabled={disabled}
             />
             :
             <Typography className={classes.textItem}>
@@ -332,8 +344,37 @@ class FirstStep extends React.Component<FirstStepProps> {
                          }}
               />
               :
-              <Typography className={classes.textItem}> <b>Видео: </b>< a
-                href={WorkProgramGeneralFields.VIDEO_LINK}> Видео </a></Typography>
+              <Typography className={classes.textItem}>
+                <b>Видео: </b>
+                {state[WorkProgramGeneralFields.VIDEO_LINK]?.length > 0 ?
+                  <a href={state[WorkProgramGeneralFields.VIDEO_LINK]}> Видео </a>
+                  : null
+                }
+              </Typography>
+            }
+          </InputsLoader>
+
+          <InputsLoader loading={fetchingMoodleLink}>
+            {isCanEdit ?
+              <TextField variant="outlined"
+                         label="Ссылка в Moodle"
+                         value={state[WorkProgramGeneralFields.MOODLE_LINK]}
+                         className={classes.input}
+                         onBlur={this.saveField(WorkProgramGeneralFields.MOODLE_LINK)}
+                         onChange={this.changeMoodleLink}
+                         disabled={fetchingMoodleLink || !isCanEdit}
+                         InputLabelProps={{
+                           shrink: true,
+                         }}
+              />
+              :
+              <Typography className={classes.textItem}>
+                <b>Ссылка в Moodle: </b>
+                {state[WorkProgramGeneralFields.MOODLE_LINK]?.length > 0 ?
+                  <a href={state[WorkProgramGeneralFields.MOODLE_LINK]}> Moodle </a>
+                  : null
+                }
+              </Typography>
             }
           </InputsLoader>
 
@@ -368,6 +409,7 @@ class FirstStep extends React.Component<FirstStepProps> {
                     control={<Radio checked={state[WorkProgramGeneralFields.SEMESTER_COUNT] === item} />}
                     label={item}
                     key={item}
+                    disabled={disabled}
                   />
                 ))}
               </RadioGroup>
@@ -459,7 +501,7 @@ class FirstStep extends React.Component<FirstStepProps> {
             />
           </InputsLoader>
 
-          <SpecializationSelector/>
+          <SpecializationSelector />
 
           <SimpleSelector label="Язык реализации"
                           metaList={languageArray}

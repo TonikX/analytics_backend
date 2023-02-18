@@ -76,6 +76,9 @@ export default React.memo(() => {
             <TableCell className={classes.header}>
               Учебный план
             </TableCell>
+            <TableCell className={classes.header}>
+              ЗУН
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -135,7 +138,7 @@ export default React.memo(() => {
                     </div>
                   ))}
                 </TableCell>
-                <TableCell className={classes.cell}>
+                <TableCell>
                   {get(zun, 'educational_program', []).map((educationalProgram: any) =>
                       get(educationalProgram, 'field_of_study', []).map((fieldOfStudy: any) => (
                         <div key={fieldOfStudy.id}>
@@ -143,6 +146,9 @@ export default React.memo(() => {
                         </div>
                       ))
                   )}
+                </TableCell>
+                <TableCell className={classes.cell}>
+                  {[get(zun, 'knowledge'), get(zun, 'skills'), get(zun, 'attainments')].filter(item => Boolean(item)).join(' / ')}
                 </TableCell>
               </TableRow>
             ))

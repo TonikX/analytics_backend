@@ -13,7 +13,7 @@ def current_year():
 
 
 def max_value_current_year(value):
-    return MaxValueValidator(current_year())(value)
+    return MaxValueValidator(current_year())(value)+3
 
 
 class TasksForEducationalStandard(models.Model):

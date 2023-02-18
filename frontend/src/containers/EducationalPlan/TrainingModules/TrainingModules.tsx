@@ -23,7 +23,7 @@ import Search from "../../../components/Search";
 import {SortingType} from "../../../components/SortingButton/types";
 import TableSettingsMenu from "../../../components/TableSettingsMenu/TableSettingsMenu";
 import CustomizeExpansionPanel from "../../../components/CustomizeExpansionPanel";
-import { parseJwt } from "../../../common/utils";
+import {getUserFullName, parseJwt} from "../../../common/utils";
 
 import {DirectionFields} from "../../Direction/enum";
 import {DirectionType} from "../../Direction/types";
@@ -34,7 +34,7 @@ import {appRouter} from "../../../service/router-service";
 import UserService from "../../../service/user-service";
 
 import {TrainingModulesProps, TrainingModuleType} from './types';
-import {TrainingModuleFields} from "./enum";
+import {fields, TrainingModuleFields} from "./enum";
 import {typesListObject} from './constants';
 
 import connect from './TrainingModules.connect';
@@ -42,6 +42,7 @@ import styles from './TrainingModules.styles';
 
 import Filters from "./Filters";
 import Switch from "@material-ui/core/Switch";
+import {withRouter} from "react-router-dom";
 
 const userService = UserService.factory();
 
@@ -53,6 +54,24 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
 
     componentDidMount() {
         this.props.actions.getTrainingModulesList();
+    }
+
+    componentWillUnmount() {
+        this.props.actions.trainingModulesPageDown();
+    }
+
+    componentDidUpdate(prevProps: TrainingModulesProps) {
+        if (prevProps.trainingModuleIdForRedirect !== this.props.trainingModuleIdForRedirect && this.props.trainingModuleIdForRedirect) {
+            this.goToTrainingModule()
+        }
+    }
+
+    goToTrainingModule = () => {
+        // @ts-ignore
+        const {history, trainingModuleIdForRedirect} = this.props;
+
+        this.props.actions.setTrainingModuleIdForRedirect(null)
+        history.push(appRouter.getTrainingModuleDetailLink(trainingModuleIdForRedirect));
     }
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
@@ -102,12 +121,18 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
     }
 
     handleClickEdit = (trainingModule: TrainingModuleType) => () => {
-        this.props.actions.openDialog({data: trainingModule});
+        this.props.actions.openDialog({
+            data: trainingModule,
+            dialog: fields.CREATE_TRAINING_MODULE_DIALOG,
+        });
         this.handleCloseMenu()
     }
 
     handleClickCreate = () => {
-        this.props.actions.openDialog({data: {}});
+        this.props.actions.openDialog({
+            data: {},
+            dialog: fields.CREATE_TRAINING_MODULE_DIALOG
+        });
     }
 
     handleOpenMenu = (id: number) => (event: SyntheticEvent): void => {
@@ -193,22 +218,19 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        Описание
-                                        <SortingButton changeMode={this.changeSorting(TrainingModuleFields.DESCRIPTION)}
-                                                       mode={sortingField === TrainingModuleFields.DESCRIPTION ? sortingMode : ''}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
                                         Тип
                                         <SortingButton changeMode={this.changeSorting(TrainingModuleFields.TYPE)}
                                                        mode={sortingField === TrainingModuleFields.TYPE ? sortingMode : ''}
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        Направленность ОП (УП)
+                                        КОП ИД
                                     </TableCell>
                                     <TableCell>
-                                        Направления подготовки
+                                        ИСУ ИД
+                                    </TableCell>
+                                    <TableCell>
+                                        Редакторы
                                     </TableCell>
 
                                     {canEdit && <TableCell />}
@@ -227,20 +249,16 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                                 {trainingModule[TrainingModuleFields.NAME]}
                                             </TableCell>
                                             <TableCell>
-                                                {trainingModule[TrainingModuleFields.DESCRIPTION]}
-                                            </TableCell>
-                                            <TableCell>
                                                 {type}
                                             </TableCell>
                                             <TableCell>
-                                                {profile}
+                                                {trainingModule[TrainingModuleFields.ID]}
                                             </TableCell>
                                             <TableCell>
-                                                {/*
-                                                // @ts-ignore*/}
-                                                {plans.map((item: {[TrainingModuleFields.FIELD_OF_STUDY]: DirectionType}) =>
-                                                    <>{item[TrainingModuleFields.FIELD_OF_STUDY][DirectionFields.NUMBER]} {item[TrainingModuleFields.FIELD_OF_STUDY][DirectionFields.FACULTY]}</>
-                                                )}
+                                                {trainingModule[TrainingModuleFields.ISU_ID]}
+                                            </TableCell>
+                                            <TableCell>
+                                                {trainingModule[TrainingModuleFields.EDITORS].map((editor) => getUserFullName(editor)).join(', ')}
                                             </TableCell>
                                             {canEdit &&
                                                 <TableCell>
@@ -310,4 +328,5 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
     }
 }
 
-export default connect(withStyles(styles)(TrainingModules));
+//@ts-ignore
+export default connect(withStyles(styles)(withRouter(TrainingModules)));

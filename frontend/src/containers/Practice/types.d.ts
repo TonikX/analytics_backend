@@ -1,5 +1,5 @@
 import {
-    CommentFields,
+    CommentFields, DialogType,
     ExpertiseStatus,
     PermissionsInfoFields,
     PracticeFields,
@@ -11,6 +11,9 @@ import styles from "./Practice.styles";
 import {RouteComponentProps} from "react-router-dom";
 import {LiteratureType} from "../Literature/types";
 import {UserType} from "../../layout/types";
+import {Zun} from "../EducationalProgram/Characteristic/CompetenceMatrix/types";
+import {PrerequisiteType, ResultsType} from "../WorkProgram/types";
+import {DirectionType} from "../Direction/types";
 
 export type Id = number;
 
@@ -69,8 +72,24 @@ export type PracticeState = GeneralInfoState
     & {
     [PracticeFields.ID]: Id,
     [PracticeFields.PRACTICE_BASE]: Id,
+    [PracticeFields.SEMESTER_COUNT]: number,
     [PracticeFields.EDITORS]: any,
     [PracticeFields.PERMISSIONS_INFO]: PermissionsInfoState,
+    [PracticeFields.ZE_V_SEM]: string,
+    [PracticeFields.EVALUATION_TOOLS]: number[][]
+    [PracticeFields.PRAC_ISU_ID]: number | null
+    [PracticeFields.PREREQUISITES]: PrerequisiteType[]
+    [PracticeFields.COMPETENCES]: Competence[];
+    [PracticeFields.OUTCOMES]: ResultsType[];
+    [PracticeFields.EDITORS]: Array<UserType>;
+    [PracticeFields.PLANS]: any;
+}
+
+interface Competence {
+    id: number;
+    number: string;
+    name: string;
+    zuns: Zun[]
 }
 
 export type PermissionsInfoState = {
@@ -94,14 +113,28 @@ export interface practicePageState {
     practice: PracticeState;
     templateText: TemplateTextState;
     comments: Array<CommentType>;
+    dialog: {
+        [DialogType.PREREQUISITES]: {
+            isOpen: boolean,
+            dialogData: PrerequisiteType
+        },
+        [DialogType.RESULTS]: {
+            isOpen: boolean,
+            dialogData: PrerequisiteType
+        }
+    };
+    dependentDirections: Array<DirectionType>
 }
 
 export interface MinimalPracticeState {
     [PracticeFields.TITLE]: string,
     [PracticeFields.YEAR]: number,
-    [PracticeFields.OP_LEADER]: string,
-    [PracticeFields.AUTHORS]: string,
+    [PracticeFields.SEMESTER_COUNT]: number,
     [PracticeFields.FORM_OF_CERTIFICATION_TOOLS]: string,
+    [PracticeFields.QUALIFICATION]: string,
+    [PracticeFields.ZE_V_SEM]: string;
+    [PracticeFields.STRUCTURAL_UNIT]: string;
+    [PracticeFields.EVALUATION_TOOLS]: number[][];
 }
 
 export type CommentType = {
@@ -133,6 +166,24 @@ export interface PracticeActions {
     getComments: any;
     setComments: any;
     sendComment: any;
+
+    openDialog: any;
+    closeDialog: any;
+
+    deletePrerequisite: any;
+    addPrerequisite: any;
+    changePrerequisite: any;
+
+    getResults: any;
+    deleteZUN: any;
+    saveZUN: any;
+
+    deleteResult: any;
+    changeResult: any;
+    addResult: any;
+
+    getCompetencesDependedOnPractice: any;
+    setCompetencesDependedOnPractice: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {

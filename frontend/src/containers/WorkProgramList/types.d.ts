@@ -4,8 +4,10 @@ import styles from "./WorkProgram.styles";
 import {WorkProgramActions, WorkProgramGeneralType} from '../WorkProgram/types';
 import {SortingType} from "../../components/SortingButton/types";
 import {getShowArchive} from "./getters";
+import {WorkProgramStatusEnum} from "../WorkProgram/enum";
 
 export interface WorkProgramListActions {
+    setWorkProgramIdForRedirect: any;
     pageDown: any;
     changeSearchQuery: any;
     getWorkProgramList: any;
@@ -30,6 +32,7 @@ export interface workProgramListState {
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
+    [fields.WORK_PROGRAM_ID_FOR_REDIRECT]: number|null;
     [fields.WORK_PROGRAM_LIST]: Array<WorkProgramGeneralType>;
     [fields.WORK_PROGRAM_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;
@@ -55,5 +58,7 @@ export interface WorkProgramListProps extends WithStyles<typeof styles> {
     sortingField: string;
     showOnlyMy: boolean;
     showArchive: boolean;
+    workProgramIdForRedirect: number|null;
     sortingMode: SortingType;
+    status: WorkProgramStatusEnum|null;
 }

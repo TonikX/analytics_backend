@@ -8,11 +8,13 @@ from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsOwnerOrDodWo
 
 
 class GIASet(viewsets.ModelViewSet):
+    my_tags = ["Gia and Practice"]
     queryset = GIA.objects.all()
     serializer_class = GIASerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
-    search_fields = ["discipline_code", "title"]
+    search_fields = ["discipline_code", "title", "id", 'editors__first_name', 'editors__last_name']
+
     def get_serializer_class(self):
         if self.action == 'list':
             return GIAPrimitiveSerializer
@@ -20,6 +22,7 @@ class GIASet(viewsets.ModelViewSet):
 
 
 class GIABaseTemplateSet(viewsets.ModelViewSet):
+    my_tags = ["Gia and Practice"]
     queryset = GIABaseTemplate.objects.all()
     serializer_class = GIABaseTemplateSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
@@ -27,6 +30,7 @@ class GIABaseTemplateSet(viewsets.ModelViewSet):
 
 
 class CriteriaVKRSet(viewsets.ModelViewSet):
+    my_tags = ["Gia and Practice"]
     queryset = CriteriaVKR.objects.all()
     serializer_class = CriteriaVKRSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)

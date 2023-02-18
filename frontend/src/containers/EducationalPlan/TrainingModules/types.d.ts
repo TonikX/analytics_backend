@@ -9,20 +9,30 @@ import {DirectionType} from "../../Direction/types";
 
 import styles from "./TrainingModules.styles";
 import {UserType} from '../../../layout/types';
+import {EvaluationToolType, IntermediateCertificationType} from "../../WorkProgram/types";
 
 export interface TrainingModulesActions {
     getTrainingModulesList: ActionCreatorWithoutPayload;
     setTrainingModulesList: ActionCreatorWithPayload;
     getTrainingModule: ActionCreatorWithPayload<GetTrainingModulePayload>;
     setTrainingModule: ActionCreatorWithPayload;
+    updateTrainingModuleFilters: ActionCreatorWithPayload;
 
     changeSearchQuery: ActionCreatorWithPayload;
     changeCurrentPage: ActionCreatorWithPayload;
     changeAllCount: ActionCreatorWithPayload;
     changeSorting: ActionCreatorWithPayload;
+    changeTrainingModuleEducationalPrograms: ActionCreatorWithPayload;
+
+    deleteIntermediateCertification: ActionCreatorWithPayload;
+    addIntermediateCertification: ActionCreatorWithPayload;
+    changeIntermediateCertification: ActionCreatorWithPayload;
+    getIntermediateCertification: ActionCreatorWithPayload;
 
     openDialog: ActionCreatorWithPayload<OpenDialogPayload>;
     closeDialog: ActionCreatorWithoutPayload;
+    resetFilters: ActionCreatorWithoutPayload;
+    trainingModulesPageDown: ActionCreatorWithoutPayload;
 
     createTrainingModule: ActionCreatorWithPayload<CreateTrainingModulePayload>;
     changeTrainingModule: ActionCreatorWithPayload<ChangeTrainingModulePayload>;
@@ -30,12 +40,16 @@ export interface TrainingModulesActions {
     changeFiltering: ActionCreatorWithPayload;
 
     showOnlyMy: ActionCreatorWithPayload<boolean>;
+    removeFatherFromModule: ActionCreatorWithPayload<number>;
+    updateChildModules: ActionCreatorWithPayload;
 
     changeEditorList: ActionCreatorWithPayload;
+    setTrainingModuleIdForRedirect: ActionCreatorWithPayload;
 }
 
 export type OpenDialogPayload = {
     data: TrainingModuleType|{};
+    dialog: fields.CREATE_TRAINING_MODULE_DIALOG | fields.EVALUATION_MODULE_DIALOG | fields.ADD_TRAINING_MODULE_DIALOG | fields.ADD_EDUCATIONAL_PROGRAM_DIALOG
 }
 
 export type CreateTrainingModulePayload = {
@@ -60,14 +74,40 @@ export interface trainingModulesState {
         [fields.SORTING_FIELD]: string,
         [fields.SORTING_MODE]: SortingType;
     };
+    [fields.FILTERS]: {
+        [fields.FILTER_ID]: string,
+        [fields.FILTER_MODULE_ISU_ID]: string,
+        [fields.FILTER_MODULE_DISCIPLINE_NAME]: string,
+        [fields.FILTER_MODULE_NAME]: string,
+        [fields.FILTER_MODULE_AVAILABLE_FOR_ALL]: boolean,
+    },
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
-    [fields.TRAINING_MODULE_DIALOG]: {
-        [fields.IS_OPEN_TRAINING_MODULE_DIALOG]: boolean;
-        [fields.TRAINING_MODULE_DIALOG_DATA]: TrainingModuleType|{};
+    [fields.CREATE_TRAINING_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: boolean;
+        [fields.DIALOG_DATA]: TrainingModuleType|{};
     };
+    [fields.EVALUATION_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: boolean,
+        [fields.DIALOG_DATA]: IntermediateCertificationType|{};
+    },
+    [fields.EVALUATION_DESCRIPTION_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: boolean,
+        [fields.DIALOG_DATA]: string
+    },
+    [fields.ADD_EDUCATIONAL_PROGRAM_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: boolean,
+    },
+    [fields.ADD_TRAINING_MODULE_DIALOG]: {
+        [fields.IS_OPEN_DIALOG]: boolean,
+        [fields.DIALOG_DATA]: {
+            trainingModules: Array<number>,
+            moduleId: number
+        }
+    },
     [fields.SHOW_ONLY_MY]: boolean;
+    [fields.TRAINIG_MODULE_ID_FOR_REDIRECT]: number|null;
 }
 
 export interface TrainingModulesProps extends WithStyles<typeof styles>, PropsFromRedux, ActionsFromRedux{}
@@ -80,6 +120,7 @@ export type TrainingModuleType = {
     [TrainingModuleFields.NAME]: string;
     [TrainingModuleFields.DESCRIPTION]: string;
     [TrainingModuleFields.TYPE]: string;
+    [TrainingModuleFields.ISU_ID]: string;
     [TrainingModuleFields.DISCIPLINE]: {
         [TrainingModuleFields.ACADEMIC_PLAN]: {
             [TrainingModuleFields.EDUCATIONAL_PROFILE]: string;
@@ -88,4 +129,5 @@ export type TrainingModuleType = {
     };
     [TrainingModuleFields.EDITORS]: Array<UserType>;
     [TrainingModuleFields.CAN_EDIT]: boolean;
+    [TrainingModuleFields.CERTIFICATION_EVALUATION_LIST]?: IntermediateCertificationType[];
 }

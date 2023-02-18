@@ -5,6 +5,8 @@ from django.db import transaction
 from django.db.models import Count
 # Сериализаторы
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg2 import openapi
+from drf_yasg2.utils import swagger_auto_schema
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
@@ -15,7 +17,7 @@ from rest_framework.response import Response
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
     EducationalProgramSerializer, \
     GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
-    GeneralLaborFunctionsSerializer, KindsOfActivitySerializer, EmployerSerializer, \
+    GeneralLaborFunctionsSerializer, KindsOfActivitySerializerForEd, EmployerSerializer, \
     WorkProgramCompetenceIndicatorSerializer, ObjectsOfActivitySerializer
 from .competence_handler import competence_dict_generator
 from .general_prof_competencies.models import IndicatorInGeneralProfCompetenceInGeneralCharacteristic, \
@@ -34,6 +36,7 @@ from .pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, 
     PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
 from .pk_comptencies.serializers import GroupOfPkCompetencesInGeneralCharacteristicSerializer, \
     PkCompetencesInGroupOfGeneralCharacteristicSerializer
+from .process_modules_for_matrix import recursion_module_matrix
 
 from .serializers import ProfessionalStandardSerializer
 
@@ -43,14 +46,15 @@ from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
     ImplementationAcademicPlan, Competence, Indicator, WorkProgramInFieldOfStudy, Zun, GeneralizedLaborFunctions, \
     KindsOfActivity, EmployerRepresentative, DisciplineBlockModule, DisciplineBlock, \
-    WorkProgramChangeInDisciplineBlockModule, ObjectsOfActivity
+    WorkProgramChangeInDisciplineBlockModule, ObjectsOfActivity, AcademicPlan
 from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 
-
 # Блок реализации АПИ для КПУД интерфейсов
+from ..notifications.emails.send_mail import mail_sender
+
 
 class EducationalProgramListAPIView(generics.ListAPIView):
     serializer_class = EducationalProgramSerializer
@@ -113,7 +117,14 @@ class GeneralCharacteristicsListAPIView(generics.ListAPIView):
     serializer_class = GeneralCharacteristicsSerializer
     queryset = GeneralCharacteristics.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['educational_program', 'area_of_activity']
+    search_fields = ['educational_program__title',
+                     'educational_program__year',
+                     'educational_program__qualification',
+                     'educational_program__title',
+                     'educational_program__year',
+                     'educational_program__field_of_study__title',
+                     'educational_program__field_of_study__number',
+                     ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -197,7 +208,7 @@ class KindsOfActivitySet(viewsets.ModelViewSet):
     CRUD для сфер деятельности
     """
     queryset = KindsOfActivity.objects.all()
-    serializer_class = KindsOfActivitySerializer
+    serializer_class = KindsOfActivitySerializerForEd
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -297,13 +308,16 @@ def GetCompetenceMatrix(request, gen_pk):
         many=True).data
     general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__educational_standard=gen_characteristic.educational_standard, competence__isnull=False).distinct(), many=True).data
+            group_of_pk__educational_standard=gen_characteristic.educational_standard,
+            competence__isnull=False).distinct(), many=True).data
     key_competences = KeyCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=KeyCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__educational_standard=gen_characteristic.educational_standard, competence__isnull=False).distinct(), many=True).data
+            group_of_pk__educational_standard=gen_characteristic.educational_standard,
+            competence__isnull=False).distinct(), many=True).data
     over_prof_competences = OverProfCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=OverProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__educational_standard=gen_characteristic.educational_standard, competence__isnull=False).distinct(), many=True).data
+            group_of_pk__educational_standard=gen_characteristic.educational_standard,
+            competence__isnull=False).distinct(), many=True).data
     competence_matrix = {"pk_competences": pk_competences, "general_prof_competences": general_prof_competences,
                          "key_competences": key_competences, "over_prof_competences": over_prof_competences, }
     matrix_list = []
@@ -315,26 +329,8 @@ def GetCompetenceMatrix(request, gen_pk):
             block_dict = {"name": block.name, "modules_in_discipline_block": []}
             # academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
             for block_module in DisciplineBlockModule.objects.filter(descipline_block=block):
-                block_module_dict = {"name": block_module.name, "type": block_module.type,
-                                     "change_blocks_of_work_programs_in_modules": []}
-                # block_dict["modules_in_discipline_block"].append(block_module_dict)
-                for change_block in WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                        discipline_block_module=block_module):
-                    change_block_dict = {"change_type": change_block.change_type,
-                                         "credit_units": change_block.credit_units, "work_program": []}
-                    # block_module_dict["change_blocks_of_work_programs_in_modules"].append(change_block_dict)
-                    for work_program in WorkProgram.objects.filter(work_program_in_change_block=change_block):
-                        if work_program.id not in unique_wp:
-
-                            serializer = WorkProgramCompetenceIndicatorSerializer(work_program)
-                            change_block_dict["work_program"].append(serializer.data)
-                            unique_wp.append(work_program.id)
-                        else:
-                            pass
-                            # print(work_program)
-                    if change_block_dict["work_program"]:
-                        block_module_dict["change_blocks_of_work_programs_in_modules"].append(change_block_dict)
-                if block_module_dict["change_blocks_of_work_programs_in_modules"]:
+                block_module_dict = recursion_module_matrix(block_module, unique_wp)
+                if block_module_dict["change_blocks_of_work_programs_in_modules"] or block_module_dict["childs"]:
                     block_dict["modules_in_discipline_block"].append(block_module_dict)
             if block_dict["modules_in_discipline_block"]:
                 academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
@@ -342,7 +338,8 @@ def GetCompetenceMatrix(request, gen_pk):
         newlist = sorted(list_to_sort, key=lambda d: d['name'])
         academic_plan_matrix_dict["discipline_blocks_in_academic_plan"] = newlist
     competence_matrix["wp_matrix"] = matrix_list
-    competence_matrix["educational_program"] = ImplementationAcademicPlanSerializer(gen_characteristic.educational_program.all(), many = True).data
+    competence_matrix["educational_program"] = ImplementationAcademicPlanSerializer(
+        gen_characteristic.educational_program.all(), many=True).data
     # print(matrix_list)
     return Response(competence_matrix)
 
@@ -356,3 +353,75 @@ def GetCompetenceMatrix(request, gen_pk):
 #         return Response({'message': 'you have new notifications', 'status': True}, status=200)
 #     else:
 #         return Response({'message': 'you have not new notifications', 'status': False}, status=400)
+
+
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=None,
+        properties={
+            'new_status': openapi.Schema(type=openapi.TYPE_STRING,
+                                         description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
+        }
+    ),
+    operation_description='Метод для изменения статусов учебного плана')
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+@transaction.atomic
+def academ_plan_check(request, ap_id):
+    ap = AcademicPlan.objects.get(id=ap_id)
+    if ap is not None:
+        if ap.on_check == "on_check" and bool(request.user.groups.filter(name="expertise_master")):
+            if request.data['new_status'] == 'in_work':
+                ap.on_check = "in_work"
+                ap.save()
+            elif request.data['new_status'] == 'verified':
+                ap.on_check = "verified"
+                ap.save()
+            return Response({'message': 'status changed', 'status': True}, status=200)
+        mail_sender(topic=f'Учебный план с КОП ИД {ap.id} и ИСУ ИД {ap.ap_isu_id} готов к проверке',
+                    text=f'Учебный план с КОП ИД {ap.id} и ИСУ ИД {ap.ap_isu_id} готов к проверке',
+                    emails=['osop@itmo.ru'], users=[])
+        ap.on_check = "on_check"
+        ap.save()
+        return Response({'message': 'email sent', 'status': True}, status=200)
+    else:
+        return Response({'message': 'academic plan was sent', 'status': False}, status=400)
+
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=None,
+        properties={
+            'block': openapi.Schema(
+                type=openapi.TYPE_INTEGER, description="id объекта discipline_blocks_in_academic_plan в учебном плане"),
+            'new_ordinal_number': openapi.Schema(
+                type=openapi.TYPE_INTEGER, description="Новый порядковый номер модуля (modules_in_discipline_block)"),
+            'old_ordinal_number': openapi.Schema(
+                type=openapi.TYPE_INTEGER, description="Старый порядковый номер модуля (modules_in_discipline_block)")
+        }
+    ),
+    operation_description='Метод для изменения порядкового номера модуля в блоке учебного плана. '
+                          'Для удаления элемента из списка new_ordinal_number равен = -1. '
+                          'Любое другое значение - запрос на изменение порядка в списке.')
+@api_view(['POST'])
+@permission_classes((IsRpdDeveloperOrReadOnly,))
+def new_ordinal_numbers_for_modules_in_ap(request):
+    try:
+        DisciplineBlockModule.new_ordinal_number(
+            DisciplineBlock.objects.get(id=int(request.data.get('block'))),
+            int(request.data.get('old_ordinal_number')),
+            int(request.data.get('new_ordinal_number')))
+        return Response(status=200)
+    except:
+        return Response(status=400)
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def academic_plan_all_ids_by_year(request, year):
+    academic_plan_all_ids = AcademicPlan.objects.filter(academic_plan_in_field_of_study__year=year) \
+        .values_list('id', flat=True).distinct()
+    return Response({"academic_plan_ids": academic_plan_all_ids})

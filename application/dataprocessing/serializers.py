@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
 from workprogramsapp.models import WorkProgram
+from workprogramsapp.workprogram_additions.models import StructuralUnit
 from .models import User, Items, Domain, Relation
 from rest_framework.settings import api_settings
 import copy
@@ -21,11 +22,35 @@ class userProfileSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'isu_number')
 
 
+class ShortStructuralUnitSerializer(serializers.ModelSerializer):
+    """
+    Cериализатор подразделения разработчика РПД
+    """
+
+    class Meta:
+        model = StructuralUnit
+        fields = "__all__"
+
+
 class UserBaseSerializer(serializers.ModelSerializer):
     """Сериализатор для работы с акканутами"""
 
     # user = serializers.StringRelatedField(read_only=True)
     email_confirm_status = serializers.SerializerMethodField('is_named_bar')
+
+    def to_representation(self, value):
+        self.fields['structural_unit'] = ShortStructuralUnitSerializer(many=True)
+
+        return super().to_representation(value)
+
+    def update(self, instance, validated_data):
+        user = super(UserBaseSerializer, self).update(instance, validated_data)
+        units = self._kwargs["context"]["request"].data.get('structural_unit')
+        if units:
+            user.structural_unit.clear()
+            user.structural_unit.add(*units)
+            user.save()
+        return user
 
     def is_named_bar(self, object):
         try:
@@ -37,7 +62,8 @@ class UserBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'do_email_notifications',
-                  'expertise_status_notification', 'expertise_comments_notification', 'isu_number', 'email_confirm_status')
+                  'expertise_status_notification', 'expertise_comments_notification', 'isu_number',
+                  'email_confirm_status', 'structural_unit')
 
 
 class DomainDetailSerializer(serializers.ModelSerializer):
@@ -50,20 +76,20 @@ class DomainDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Domain
-        fields = ('id', 'name','items', 'user')
+        fields = ('id', 'name', 'items', 'user')
         extra_kwargs = {
             'user': {'required': False}
         }
         # read_only_fields = ('user',)
 
 
-
 class DomainSerializer(serializers.ModelSerializer):
     """Сериализатор для предметной области"""
     user = serializers.PrimaryKeyRelatedField(required=False, many=True, queryset=User.objects.all())
+
     class Meta:
         model = Domain
-        fields = ('id', 'name','user')
+        fields = ('id', 'name', 'user')
         extra_kwargs = {
             'user': {'required': False}
         }
