@@ -26,8 +26,6 @@ import EducationPlanInDirectionSelector
   from "../../EduationPlanInDirection/EducationPlanInDirectionSelector/EducationPlanInDirectionSelector";
 import {CompetenceTableType, EducationProgramCharacteristicFields, EducationProgramFields} from "../enum";
 import {getUserFullName, YEAR_DATE_FORMAT} from "../../../common/utils";
-import DatePickerComponent from "../../../components/DatePicker/DatePicker";
-import QualificationSelector from "../../../components/QualificationSelector/QualificationSelector";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
@@ -38,7 +36,6 @@ import {CompetenceType} from "../../Competences/types";
 import {CompetenceFields} from "../../Competences/enum";
 import {IndicatorType} from "../../Indicators/types";
 import {IndicatorsFields} from "../../Indicators/enum";
-import {UserFields} from "../../../layout/enum";
 import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
 import {ProfessionalCompetences} from "./ProfessionalCompetences/ProfessionalCompetences";
 import ForsitesProfessionalCompetences from "./ForsitesProfessionalCompetences";
@@ -162,7 +159,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             const indicators = get(item, 'indicator_in_competencse', []);
 
             if (indicators.length === 0) {
-              return <TableRow>
+              return <TableRow key={'competence' + index}>
                 <TableCell>
                   {item[CompetenceFields.NUMBER]}
                 </TableCell>
@@ -174,7 +171,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             }
 
             return indicators.map((indicator: IndicatorType, index: number) =>
-              <TableRow>
+              <TableRow key={'indicators' + index}>
                 {index === 0 &&
                   <TableCell rowSpan={indicators.length}>
                     {item[CompetenceFields.NUMBER]}
@@ -221,8 +218,8 @@ class Characteristic extends React.Component<CharacteristicProps> {
           </TableRow>
         </TableHead>
         <TableBody>
-          {competences.map((item: any, index: number) =>
-            <TableRow>
+          {competences.map((item: any) =>
+            <TableRow key={item.competence[CompetenceFields.ID]}>
               <TableCell style={{width: '25%'}}>
                 {item.competence[CompetenceFields.NUMBER]} {item.competence[CompetenceFields.TITLE]}
               </TableCell>
@@ -250,7 +247,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
   deleteEducationalProgram = (id: number) => () => {
     const { educationalProgramCharacteristic } = this.props
 
-    if (get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])) {
+    if (get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, []).length === 1) {
       this.props.mainActions.fetchingFailed(['Нельзя удалить единственную ОП'])
       return
     }
@@ -284,16 +281,19 @@ class Characteristic extends React.Component<CharacteristicProps> {
           </Typography>
           <br/>
           {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, []).map((item: any) => (
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap' }}>
               <Chip
                 label={getEducationalProgramFullNameForSelect(item)}
-                onDelete={this.deleteEducationalProgram(item.id)} style={{marginRight: 10}}
+                onDelete={this.deleteEducationalProgram(item.id)}
+                classes={{
+                  label: classes.chipLabel,
+                }}
+                className={classes.chip}
               />
               <Link style={{ color: '#1d51a3', textDecoration: 'none', marginRight: '10px',  display: 'flex', alignItems: 'center' }} to={appRouter.getPlanDetailLink(get(item, 'academic_plan.id', ''))}>
                 <LinkIcon style={{ cursor: 'pointer', marginRight: '5px' }} /> <Typography> Перейти в учебный план </Typography>
               </Link>
             </div>
-
           ))}
           <br />
           {addNewOP ? <>
