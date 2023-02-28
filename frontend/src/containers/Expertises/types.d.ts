@@ -4,6 +4,7 @@ import styles from "./Expertises.styles";
 import {SortingType} from "../../components/SortingButton/types";
 import {WorkProgramGeneralType, WorkProgramStatusType} from "../WorkProgram/types";
 import {UserType} from "../../layout/types";
+import {CommentFields} from "./enum";
 
 export interface ExpertisesActions {
     getComments: any;
@@ -46,7 +47,7 @@ export interface expertisesState {
     [fields.EXPERTISE]: ExpertiseType|{};
     [fields.SELECTED_STATUS]: WorkProgramStatusType|'';
     [fields.SELECTED_QUALIFICATION]: string;
-    [fields.COMMENTS]: Array<any>;
+    [fields.COMMENTS]: Array<CommentType>;
 }
 
 export interface ExpertisesProps extends WithStyles<typeof styles> {
@@ -74,4 +75,13 @@ export type ExpertiseType = {
 
 export type ExpertUserInRPDType = {
     [ExpertisesFields.EXPERT]: UserType
+}
+
+export type CommentType = {
+    [CommentFields.DATE]: string;
+    [CommentFields.TEXT]: string;
+    [CommentFields.ID]: number;
+    [CommentFields.USER_EXPERTISE]: {
+        [CommentFields.EXPERT]: UserType
+    };
 }
