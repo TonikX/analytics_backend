@@ -6,6 +6,11 @@ import {WorkProgramGeneralType, WorkProgramStatusType} from "../WorkProgram/type
 import {UserType} from "../../layout/types";
 
 export interface ExpertisesActions {
+    getComments: any;
+    setComments: any;
+    createComment: any;
+    updateUnreadCommentStatus: any;
+
     changeSelectedStatus: any;
     changeSelectedQualification: any;
     changeSearchQuery: any;
@@ -41,6 +46,7 @@ export interface expertisesState {
     [fields.EXPERTISE]: ExpertiseType|{};
     [fields.SELECTED_STATUS]: WorkProgramStatusType|'';
     [fields.SELECTED_QUALIFICATION]: string;
+    [fields.COMMENTS]: Array<any>;
 }
 
 export interface ExpertisesProps extends WithStyles<typeof styles> {

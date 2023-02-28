@@ -88,7 +88,7 @@ const addExpertToExpertise = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_EXPERT_TO_EXPERTISE}));
 
         service.addExpertToExpertise(id, userId)
-            .then((res) => {
+            .then(() => {
                 dispatch(expertisesActions.getExpertise(id));
                 dispatch(expertisesActions.closeAddExpertModal());
                 dispatch(actions.fetchingSuccess());
@@ -114,7 +114,7 @@ const removeExpertFromExpertise = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.REMOVE_EXPERT_FROM_EXPERTISE}));
 
         service.removeExpertFromExpertise(id, userId)
-            .then((res) => {
+            .then(() => {
                 dispatch(expertisesActions.getExpertise(id));
                 dispatch(actions.fetchingSuccess());
             })
@@ -138,7 +138,7 @@ const approveExpertise = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.APPROVE_EXPERTISE}));
 
         service.approveExpertise(id)
-            .then((res) => {
+            .then(() => {
                 dispatch(expertisesActions.getExpertise(id));
                 dispatch(actions.fetchingSuccess());
             })
@@ -162,7 +162,7 @@ const sendExpertiseForRework = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SEND_WP_FOR_REWORK}));
 
         service.sendForRework(id)
-            .then((res) => {
+            .then(() => {
                 dispatch(expertisesActions.getExpertise(id));
                 dispatch(actions.fetchingSuccess());
             })
@@ -176,6 +176,71 @@ const sendExpertiseForRework = createLogic({
     }
 });
 
+const getComments = createLogic({
+    type: expertisesActions.getComments.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {id, currentStep} = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COMMENTS}));
+
+        service.getComments(id, currentStep)
+          .then((res) => {
+              dispatch(expertisesActions.setComments(get(res, 'data.results')));
+              dispatch(actions.fetchingSuccess());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_COMMENTS}));
+              return done();
+          });
+    }
+});
+
+const createComment = createLogic({
+    type: expertisesActions.createComment.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {currentStep, comment, id} = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CREATE_COMMENT}));
+
+        service.createComment(id, currentStep, comment)
+          .then(() => {
+              dispatch(expertisesActions.getComments({id, currentStep}));
+              dispatch(actions.fetchingSuccess());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.CREATE_COMMENT}));
+              return done();
+          });
+    }
+});
+
+const updateUnreadCommentStatus = createLogic({
+    type: expertisesActions.updateUnreadCommentStatus.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {block, id, callback} = action.payload
+
+        service.updateUnreadCommentStatus(id, block)
+          .then(() => {
+              callback?.();
+              dispatch(actions.fetchingSuccess());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              return done();
+          });
+    }
+});
 
 export default [
     getExpertisesList,
@@ -184,4 +249,7 @@ export default [
     removeExpertFromExpertise,
     approveExpertise,
     sendExpertiseForRework,
+    getComments,
+    createComment,
+    updateUnreadCommentStatus,
 ];

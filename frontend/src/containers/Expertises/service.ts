@@ -38,6 +38,25 @@ class ExpertisesService extends AnalyticsService{
             expertise_status: 'RE',
         });
     }
+
+    getComments(expertiseId: number, step: string){
+        return this.get(`/api/expertise/comments/${expertiseId}?block=${step}`);
+    }
+
+    updateUnreadCommentStatus(wp: number, block: string){
+        return this.post(`/api/experise/comment/statusupdate`, {
+            block,
+            wp
+        });
+    }
+
+    createComment(expertiseId: number, step: string, comment: string){
+        return this.post(`/api/expertise/comments/create`, {
+            user_expertise: expertiseId,
+            comment_block: step,
+            comment_text: comment,
+        });
+    }
 }
 
 export default ExpertisesService;
