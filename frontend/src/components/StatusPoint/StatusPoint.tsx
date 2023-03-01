@@ -5,14 +5,14 @@ import {useStyles} from './StatusPoint.styles';
 
 type Props = {
   backgroundColor: string;
-  status: string;
+  status?: string;
   statusText: string;
   disabledStyle?: boolean;
   onClick?: (status: string) => void;
 }
 
 export const StatusPoint: React.FC<Props> = ({
-  status,
+  status = '',
   statusText,
   backgroundColor,
   onClick,

@@ -61,6 +61,7 @@ export interface EducationalPlanActions {
   planTrajectorySelectOptionalWp: any;
   planTrajectorySelectElectives: any;
   planTrajectorySelectSpecialization: any;
+  changeModulePosition: any;
 }
 
 export interface educationalPlanState {

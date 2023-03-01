@@ -1,6 +1,16 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
+    chipLabel: {
+        overflow: 'auto',
+        whiteSpace: 'normal',
+    },
+    chip: {
+        height: 'auto',
+        marginRight: 10,
+        maxWidth: '500px',
+        padding: '5px'
+    },
     opSelector: {
         marginBottom: '5px'
     },

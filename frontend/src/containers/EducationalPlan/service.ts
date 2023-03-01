@@ -132,6 +132,14 @@ class EducationalPlanService extends AnalyticsService{
         return this.delete(`/api/disciplineblockmodule/delete/${id}`);
     }
 
+    changeModulePosition(blockId:number, oldIndex:number, newIndex:number){
+        return this.post('/api/new_ordinal_numbers_for_modules_in_ap', {
+            block: blockId,
+            new_ordinal_number: newIndex,
+            old_ordinal_number: oldIndex,
+        });
+    }
+
     educationalPlanConnectModules(modules: any, blockId: any){
         return this.post(`/api/disciplineblockmodule/insert_to_block`, {
             descipline_block: blockId,

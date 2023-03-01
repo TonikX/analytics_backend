@@ -23,6 +23,7 @@ export enum PracticeFields {
     PRACTICE_BASE = 'practice_base',
     BIBLIOGRAPHIC_REFERENCE = "bibliographic_reference",
     EDITORS = 'editors',
+    PLANS = 'practice_in_change_block',
     PERMISSIONS_INFO = 'permissions_info',
     SEMESTER_COUNT = 'number_of_semesters',
     ZE_V_SEM = 'ze_v_sem',
@@ -80,6 +81,7 @@ export enum PracticeSteps {
     EVALUATION_METHODS = 'Оценочные средства',
     RESULTS = 'Результаты',
     REFERENCES = 'Источники',
+    PLANS = 'Связанные с рпд модули и учебные планы',
     COMPETENCES = 'Компетенции',
 }
 

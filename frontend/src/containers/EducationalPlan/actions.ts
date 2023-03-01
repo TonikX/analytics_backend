@@ -69,6 +69,8 @@ const sendPlanToValidate = createAction('SEND_PLAN_TO_VALIDATE');
 const approvePlan = createAction('APPROVE_PLAN');
 const sendPlanToRework = createAction('SEND_PLAN_TO_REWORK');
 
+const changeModulePosition = createAction('CHANGE_MODULE_POSITION');
+
 const actions: EducationalPlanActions = {
   approvePlan,
   sendPlanToRework,
@@ -118,6 +120,7 @@ const actions: EducationalPlanActions = {
   changeSorting,
   planTrajectorySetUserData,
   planTrajectorySetDirection,
+  changeModulePosition
 }
 
 export default actions;

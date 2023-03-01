@@ -24,6 +24,9 @@ export default (theme: Theme) => createStyles({
             width: '100px !important'
         }
     },
+    root: {
+        height: '100%'
+    },
     columns: {
         display: "flex",
     },
@@ -120,4 +123,7 @@ export default (theme: Theme) => createStyles({
     editorTitleRow: {
         marginTop: '30px'
     },
+    preWrap: {
+        whiteSpace: 'pre-wrap'
+    }
 });

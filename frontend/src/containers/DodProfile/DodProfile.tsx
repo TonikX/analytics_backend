@@ -25,6 +25,7 @@ import {useStyles} from "./DodProfile.styles";
 import {getAllCount, getCurrentPage, getTableMode, getUserGroups, getUserName, getWorkProgramList} from "./getters";
 import {rootState} from "../../store/reducers";
 import {appRouter} from "../../service/router-service";
+import {AddModuleToPlan} from "../AddModuleToPlan";
 
 export default () => {
     const dispatch = useDispatch()
@@ -62,7 +63,10 @@ export default () => {
                     {userGroups.map((item: any, key: number) => <Chip key={key} label={item} className={classes.group} />)}
                 </div>
             </div>
-            <EmailWidget/>
+            <div className={classes.row}>
+                <EmailWidget/>
+                <AddModuleToPlan/>
+            </div>
             <MergeWorkProgramsBlock className={classes.copyRpdContainer}/>
             <div className={classes.mainContainer}>
                 <div className={classes.dodProfileContainer}>

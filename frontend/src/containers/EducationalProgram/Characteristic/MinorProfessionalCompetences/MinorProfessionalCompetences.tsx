@@ -26,6 +26,8 @@ import AddIndicatorsModal from "../../../../components/AddIndicatorsModal";
 
 import useStyles from './MinorProfessionalCompetences.style';
 import useStylesReusable  from '../CompetencesTable/CompetencesTable.style';
+import {appRouter} from "../../../../service/router-service";
+import {Link} from "react-router-dom";
 
 export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableData}) => {
   const dispatch = useDispatch();
@@ -170,10 +172,16 @@ export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({ta
             return (
               <>
                 {groupRow}
-                {competences.map((competenceItem: any, index: number) => (
+                {competences.map((competenceItem: any) => (
                   <TableRow key={`competence-${get(competenceItem, 'competence.id')}`}>
                     <TableCell className={classes.competenceCell}>
-                      {get(competenceItem, 'competence.number')} {get(competenceItem, 'competence.name')}
+                      <Link
+                        to={appRouter.getCompetenceIndicatorsRouteLink(get(competenceItem, 'competence.id'))}
+                        target="_blank"
+                        className={classes.link}
+                      >
+                        {get(competenceItem, 'competence.number')} {get(competenceItem, 'competence.name')}
+                      </Link>
                       <Tooltip title="Удалить компетенцию">
                         <DeleteIcon className={classes.deleteIcon} onClick={deleteCompetence(competenceItem.id)} />
                       </Tooltip>

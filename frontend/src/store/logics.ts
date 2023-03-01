@@ -41,6 +41,7 @@ import EmailWidgetLogic from  '../containers/EmailWidget/logics';
 import FinalCertificationLogic from '../containers/FinalCertification/logics';
 import FinalCertificationListLogic from '../containers/FinalCertification/CertificationList/logics'
 import AcademicPlanUpdate from '../containers/AcademicPlanUpdate/logics';
+import AddModuleToPlan from '../containers/AddModuleToPlan/logics';
 
 export default [
     ...EducationalStandardsLogic,
@@ -85,5 +86,6 @@ export default [
     ...PracticeLogic,
     ...FinalCertificationLogic,
     ...FinalCertificationListLogic,
-    ...AcademicPlanUpdate
+    ...AcademicPlanUpdate,
+    ...AddModuleToPlan,
 ];

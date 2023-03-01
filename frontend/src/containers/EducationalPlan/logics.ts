@@ -391,6 +391,30 @@ const deleteModule = createLogic({
     }
 });
 
+const changeModulePosition = createLogic({
+    type: planActions.changeModulePosition.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const {blockId, oldIndex, newIndex} = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.CHANGE_MODULE_POSITION}));
+
+        service.changeModulePosition(blockId, oldIndex, newIndex)
+            .then((res) => {
+                const planId = getEducationalPlanDetailId(getState());
+                dispatch(planActions.getEducationalDetail(planId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.CHANGE_MODULE_POSITION}));
+                return done();
+            });
+    }
+});
+
 const educationalPlanConnectModules = createLogic({
     type: planActions.educationalPlanConnectModules.type,
     latest: true,
@@ -783,4 +807,5 @@ export default [
     sendPlanToValidate,
     approvePlan,
     sendPlanToRework,
+    changeModulePosition
 ];
