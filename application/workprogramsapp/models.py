@@ -578,6 +578,8 @@ class ProfessionalStandard(models.Model):
     code_of_prof_area = models.CharField(max_length=512, verbose_name="Код обощенной трудовой функции",
                                          blank=True, null=True)
 
+    registration_number = models.IntegerField(verbose_name="Регистрационный номер", blank=True, null=True)
+
     # generalized_labor_functions = models.ManyToManyField(GeneralizedLaborFunctions,
     #                                                      verbose_name="обобщенные трудовые функции", blank=True)
 

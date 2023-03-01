@@ -10,8 +10,10 @@ from drf_yasg2.utils import swagger_auto_schema
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
+import pandas as pd
 
 # Сериализаторы
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
@@ -378,3 +380,21 @@ def academ_plan_check(request, ap_id):
         return Response({'message': 'email sent', 'status': True}, status=200)
     else:
         return Response({'message': 'academic plan was sent', 'status': False}, status=400)
+
+
+@permission_classes((IsAdminUser,))
+class UploadProfStandards(CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        file = request.FILES["standards"]
+        standards = pd.read_csv(file, delimiter=';', encoding="utf-8")
+        for i, row in standards.iterrows():
+            print(str(row["Номер (регистрационный)"]), str(row["Код ПС"]).split(".")[0], str(row["Код ПС"]),
+                  row["Наименование области проф. деятельности"], row["Название стандарта"])
+            ProfessionalStandard.objects.create(registration_number=int(row["Номер (регистрационный)"]),
+                                                title=row["Название стандарта"],
+                                                name_of_prof_area=row["Наименование области проф. деятельности"],
+                                                code=str(row["Код ПС"]).split(".")[0],
+                                                code_of_prof_area=str(row["Код ПС"]))
+
+        return Response("standards")
