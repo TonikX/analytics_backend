@@ -151,8 +151,8 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
             set_of_units = module_for_filter.get_structural_units()
             queryset = queryset.filter(
                 editors__user_for_structural_unit__structural_unit__id__in=set_of_units,
-                #only_for_struct_units=True).exclude(
-                #id=module_for_filter.id
+                # only_for_struct_units=True).exclude(
+                # id=module_for_filter.id
             )
 
         if filter_non_struct == "true":
@@ -247,17 +247,21 @@ class InsertModuleInBlockAP(APIView):
                             items=openapi.Items(type=openapi.TYPE_INTEGER),
                             type=openapi.TYPE_ARRAY)
 
-    @swagger_auto_schema(request_body=openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=['version'],
-        properties={
-            'modules': openapi.Schema(type=openapi.TYPE_ARRAY,
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['version'],
+            properties={
+                'modules': openapi.Schema(type=openapi.TYPE_ARRAY,
+                                          items=openapi.Items(type=openapi.TYPE_INTEGER)),
+                'discipline_block_name': openapi.Schema(type=openapi.TYPE_STRING),
+                'aps': openapi.Schema(type=openapi.TYPE_ARRAY,
                                       items=openapi.Items(type=openapi.TYPE_INTEGER)),
-            'discipline_block_name': openapi.Schema(type=openapi.TYPE_STRING),
-            'aps': openapi.Schema(type=openapi.TYPE_ARRAY,
-                                  items=openapi.Items(type=openapi.TYPE_INTEGER)),
-        },
-    ),
+                'year_for_all_ap': openapi.Parameter('year_for_all_ap', openapi.IN_QUERY,
+                                                     description="year_for_all_ap",
+                                                     type=openapi.TYPE_INTEGER)
+            },
+        ),
         responses={201: openapi.Response(description="count of created data", schema=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -270,7 +274,12 @@ class InsertModuleInBlockAP(APIView):
     def post(self, request):
         request_data = request.data
         counter = 0
-        for ap in AcademicPlan.objects.filter(id__in=request_data["aps"]):
+        if 'year_for_all_ap' in request_data and request_data['year_for_all_ap'] != 0:
+            ap_ids = AcademicPlan.objects.filter(academic_plan_in_field_of_study__year=request_data['year_for_all_ap']) \
+                .values_list('id', flat=True).distinct()
+        else:
+            ap_ids = request_data["aps"]
+        for ap in AcademicPlan.objects.filter(id__in=ap_ids):
             block = DisciplineBlock.objects.get(name=request_data["discipline_block_name"], academic_plan=ap.id)
             for module_id in request_data['modules']:
                 DisciplineBlockModule.objects.get(id=module_id).descipline_block.add(block)
@@ -346,16 +355,17 @@ class CopyModulesToAnotherAPView(APIView):
         properties={
 
             'ap_from': openapi.Schema(type=openapi.TYPE_INTEGER),
-            'ap_to':openapi.Schema(type=openapi.TYPE_INTEGER),
+            'ap_to': openapi.Schema(type=openapi.TYPE_INTEGER),
         },
     ),
-        responses={201: openapi.Response(description="created info",)})
+        responses={201: openapi.Response(description="created info", )})
     @transaction.atomic
     def post(self, request):
         request_data = request.data
         counter = 0
         for block_to in DisciplineBlock.objects.filter(academic_plan__id=request_data["ap_to"]):
-            modules_from = DisciplineBlockModule.objects.filter(descipline_block__name=block_to.name, descipline_block__academic_plan=request_data["ap_from"])
+            modules_from = DisciplineBlockModule.objects.filter(descipline_block__name=block_to.name,
+                                                                descipline_block__academic_plan=request_data["ap_from"])
             [module.descipline_block.add(block_to) for module in modules_from]
 
-        return Response(status=status.HTTP_201_CREATED,)
+        return Response(status=status.HTTP_201_CREATED, )

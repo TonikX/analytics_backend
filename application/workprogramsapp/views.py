@@ -1350,20 +1350,30 @@ class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
         """
         Вывод учебных планов для одной рабочей программы по id
         """
+
         queryset = WorkProgramInFieldOfStudy.objects.filter(
-            work_program__id=self.kwargs['workprogram_id'],
-            work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program=
-            self.kwargs['gh_id']).distinct()
+            work_program__id=int(self.kwargs['workprogram_id']),
+        ).distinct()
+
+        modules = DisciplineBlockModule.objects.none()
+        for module in queryset:
+            modules = modules | DisciplineBlockModule.objects.filter(id__in=self.get_blocks_for_all_children(
+                module.work_program_change_in_discipline_block_module.discipline_block_module,
+            ))
+
         serializer = WorkProgramInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
         return Response(serializer.data)
-        try:
-            queryset = WorkProgramInFieldOfStudy.objects.filter(
-                work_program__id
-                =self.kwargs['workprogram_id']).distinct()
-            serializer = WorkProgramInFieldOfStudySerializer(queryset, many=True)
-            return Response(serializer.data)
-        except:
-            return Response(status=400)
+
+    def get_blocks_for_all_children(self, instance, include_self=True):
+        r = []
+        if include_self:
+            r.append(instance.id)
+        for c in DisciplineBlockModule.objects.filter \
+                    (childs=instance):
+            _r = self.get_blocks_for_all_children(c, include_self=True)
+            if 0 < len(_r):
+                r.extend(_r)
+        return r
 
 
 # Блок эндпоинтов для обрабоки файлов
@@ -1941,22 +1951,7 @@ class FileUploadAPIView(APIView):
 class AcademicPlanListAPIView(generics.ListAPIView):
     serializer_class = AcademicPlanSerializerForList
     queryset = AcademicPlan.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['academic_plan_in_field_of_study__qualification',
-                     'academic_plan_in_field_of_study__title',
-                     'academic_plan_in_field_of_study__year',
-                     'academic_plan_in_field_of_study__field_of_study__title']
-    ordering_fields = ['academic_plan_in_field_of_study__qualification',
-                       'academic_plan_in_field_of_study__title',
-                       'academic_plan_in_field_of_study__year',
-                       'academic_plan_in_field_of_study__field_of_study__title']
-    permission_classes = [IsRpdDeveloperOrReadOnly]
-
-
-class AcademicPlanListShortAPIView(generics.ListAPIView):
-    serializer_class = AcademicPlanShortSerializer
-    queryset = AcademicPlan.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['academic_plan_in_field_of_study__qualification',
                      'academic_plan_in_field_of_study__title',
                      'academic_plan_in_field_of_study__year',
@@ -1966,6 +1961,24 @@ class AcademicPlanListShortAPIView(generics.ListAPIView):
                        'academic_plan_in_field_of_study__title',
                        'academic_plan_in_field_of_study__year',
                        'academic_plan_in_field_of_study__field_of_study__title']
+    filterset_fields = ['academic_plan_in_field_of_study__qualification']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+
+class AcademicPlanListShortAPIView(generics.ListAPIView):
+    serializer_class = AcademicPlanShortSerializer
+    queryset = AcademicPlan.objects.all()
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ['academic_plan_in_field_of_study__qualification',
+                     'academic_plan_in_field_of_study__title',
+                     'academic_plan_in_field_of_study__year',
+                     'academic_plan_in_field_of_study__field_of_study__title',
+                     'academic_plan_in_field_of_study__field_of_study__number']
+    ordering_fields = ['academic_plan_in_field_of_study__qualification',
+                       'academic_plan_in_field_of_study__title',
+                       'academic_plan_in_field_of_study__year',
+                       'academic_plan_in_field_of_study__field_of_study__title']
+    filterset_fields = ['academic_plan_in_field_of_study__qualification']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -1975,7 +1988,6 @@ class AcademicPlanCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def perform_create(self, serializer):
-
         academic_plan = serializer.save(author=self.request.user)
         DisciplineBlock.objects.create(name="Блок 1. Модули (дисциплины)", academic_plan=academic_plan)
         DisciplineBlock.objects.create(name="Блок 2. Практика", academic_plan=academic_plan)

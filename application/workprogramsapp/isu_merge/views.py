@@ -24,6 +24,7 @@ from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkP
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
     WorkProgramInFieldOfStudy, Zun, AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, \
     AcademicPlanUpdateConfiguration, IsuObjectsSendLogger
+from workprogramsapp.permissions import IsExpertiseMasterStrict
 from workprogramsapp.serializers import AcademicPlanUpdateLogSerializer, AcademicPlanUpdateConfigurationSerializer, \
     AcademicPlanUpdateSchedulerConfigurationSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
@@ -825,7 +826,7 @@ class SendAcademicPlansLinesToIsu(APIView):
         "ap_id": INT
         }
         """
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsExpertiseMasterStrict]
 
     def post(self, request):
         request_data = request.data

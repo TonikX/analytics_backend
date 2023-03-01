@@ -5,7 +5,7 @@ from rest_framework.routers import DefaultRouter
 from workprogramsapp.educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
     EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView, UploadCompetences, \
     GeneralizedLaborFunctionsSet, KindsOfActivitySet, EmployerSet, GetCompetenceMatrix, ObjectsOfActivitySet, \
-    academ_plan_check, UploadProfStandards
+    academ_plan_check, UploadProfStandards, new_ordinal_numbers_for_modules_in_ap
 from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, \
     GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
@@ -51,6 +51,8 @@ urlpatterns = [
 
     # --Проф. Стандарты
     path('api/competence/upload_prof_standard_from_csv', UploadProfStandards.as_view()),
+
+    path('api/new_ordinal_numbers_for_modules_in_ap', new_ordinal_numbers_for_modules_in_ap),
 
     url(r'^', include(router.urls)),
     url(r'^', include('workprogramsapp.educational_program.key_competences.urls')),

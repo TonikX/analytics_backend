@@ -120,7 +120,14 @@ class GeneralCharacteristicsListAPIView(generics.ListAPIView):
     serializer_class = GeneralCharacteristicsSerializer
     queryset = GeneralCharacteristics.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['educational_program', 'area_of_activity']
+    search_fields = ['educational_program__title',
+                     'educational_program__year',
+                     'educational_program__qualification',
+                     'educational_program__title',
+                     'educational_program__year',
+                     'educational_program__field_of_study__title',
+                     'educational_program__field_of_study__number',
+                     ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -304,13 +311,16 @@ def GetCompetenceMatrix(request, gen_pk):
         many=True).data
     general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__educational_standard=gen_characteristic.educational_standard, competence__isnull=False).distinct(), many=True).data
+            group_of_pk__educational_standard=gen_characteristic.educational_standard,
+            competence__isnull=False).distinct(), many=True).data
     key_competences = KeyCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=KeyCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__educational_standard=gen_characteristic.educational_standard, competence__isnull=False).distinct(), many=True).data
+            group_of_pk__educational_standard=gen_characteristic.educational_standard,
+            competence__isnull=False).distinct(), many=True).data
     over_prof_competences = OverProfCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=OverProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__educational_standard=gen_characteristic.educational_standard, competence__isnull=False).distinct(), many=True).data
+            group_of_pk__educational_standard=gen_characteristic.educational_standard,
+            competence__isnull=False).distinct(), many=True).data
     competence_matrix = {"pk_competences": pk_competences, "general_prof_competences": general_prof_competences,
                          "key_competences": key_competences, "over_prof_competences": over_prof_competences, }
     matrix_list = []
@@ -331,7 +341,8 @@ def GetCompetenceMatrix(request, gen_pk):
         newlist = sorted(list_to_sort, key=lambda d: d['name'])
         academic_plan_matrix_dict["discipline_blocks_in_academic_plan"] = newlist
     competence_matrix["wp_matrix"] = matrix_list
-    competence_matrix["educational_program"] = ImplementationAcademicPlanSerializer(gen_characteristic.educational_program.all(), many = True).data
+    competence_matrix["educational_program"] = ImplementationAcademicPlanSerializer(
+        gen_characteristic.educational_program.all(), many=True).data
     # print(matrix_list)
     return Response(competence_matrix)
 
@@ -354,8 +365,8 @@ def GetCompetenceMatrix(request, gen_pk):
         required=None,
         properties={
             'new_status': openapi.Schema(type=openapi.TYPE_STRING,
-                                  description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
-    }
+                                         description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
+        }
     ),
     operation_description='Метод для изменения статусов учебного плана')
 @api_view(['POST'])
@@ -380,6 +391,43 @@ def academ_plan_check(request, ap_id):
         return Response({'message': 'email sent', 'status': True}, status=200)
     else:
         return Response({'message': 'academic plan was sent', 'status': False}, status=400)
+
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=None,
+        properties={
+            'block': openapi.Schema(
+                type=openapi.TYPE_INTEGER, description="id объекта discipline_blocks_in_academic_plan в учебном плане"),
+            'new_ordinal_number': openapi.Schema(
+                type=openapi.TYPE_INTEGER, description="Новый порядковый номер модуля (modules_in_discipline_block)"),
+            'old_ordinal_number': openapi.Schema(
+                type=openapi.TYPE_INTEGER, description="Старый порядковый номер модуля (modules_in_discipline_block)")
+        }
+    ),
+    operation_description='Метод для изменения порядкового номера модуля в блоке учебного плана. '
+                          'Для удаления элемента из списка new_ordinal_number равен = -1. '
+                          'Любое другое значение - запрос на изменение порядка в списке.')
+@api_view(['POST'])
+@permission_classes((IsRpdDeveloperOrReadOnly,))
+def new_ordinal_numbers_for_modules_in_ap(request):
+    try:
+        DisciplineBlockModule.new_ordinal_number(
+            DisciplineBlock.objects.get(id=int(request.data.get('block'))),
+            int(request.data.get('old_ordinal_number')),
+            int(request.data.get('new_ordinal_number')))
+        return Response(status=200)
+    except:
+        return Response(status=400)
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def academic_plan_all_ids_by_year(request, year):
+    academic_plan_all_ids = AcademicPlan.objects.filter(academic_plan_in_field_of_study__year=year) \
+        .values_list('id', flat=True).distinct()
+    return Response({"academic_plan_ids": academic_plan_all_ids})
 
 
 @permission_classes((IsAdminUser,))

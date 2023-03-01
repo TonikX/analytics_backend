@@ -3,7 +3,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .educational_program.views import DepartmentCreateAPIView, DepartmentListAPIView, DepartmentDetailsView, \
-    DepartmentDestroyView, DepartmentUpdateView
+    DepartmentDestroyView, DepartmentUpdateView, academic_plan_all_ids_by_year
 from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView, UserExpertiseListView, \
     ExpertiseCommentsView, ChangeUserExpertiseView, \
     ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById, \
@@ -197,6 +197,7 @@ urlpatterns = [
     path('api/academicplan/detail/<int:pk>', AcademicPlanDetailsView.as_view()),
     path('api/academicplan/delete/<int:pk>', AcademicPlanDestroyView.as_view()),
     path('api/academicplan/update/<int:pk>', AcademicPlanUpdateView.as_view()),
+    path('api/academicplan/all_ids/<int:year>', academic_plan_all_ids_by_year),
 
     # Учебные планы и направления
     path('api/implementationacademicplan', ImplementationAcademicPlanListAPIView.as_view()),

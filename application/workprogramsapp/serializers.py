@@ -15,7 +15,8 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     PrerequisitesOfWorkProgram, Certification, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool, \
-    AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, AcademicPlanUpdateConfiguration
+    AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, AcademicPlanUpdateConfiguration, \
+    IsuObjectsSendLogger
 from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer, \
     ShortUniversityPartnerSerializer
 
@@ -698,7 +699,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
 
 class DisciplineBlockSerializer(serializers.ModelSerializer):
-    modules_in_discipline_block = DisciplineBlockModuleSerializer(many=True)
+    modules_in_discipline_block = serializers.SerializerMethodField()
 
     def to_representation(self, value):
         self.fields["laboriousness"] = serializers.SerializerMethodField()
@@ -710,6 +711,38 @@ class DisciplineBlockSerializer(serializers.ModelSerializer):
             sum_ze += recursion_module(module)
 
         return sum_ze
+
+    def get_modules_in_discipline_block(self, obj):
+        dbms = DisciplineBlockModule.objects.filter(descipline_block=obj)
+        if dbms.exists():
+            try:
+                for module in dbms:
+                    if str(obj.academic_plan.id) in str(module.orderings_for_ups):
+                        module.orderings_for_ups = list(
+                            filter(lambda x: x['up_id'] == obj.academic_plan, module.orderings_for_ups))
+
+                    else:
+                        raise
+                dbms = dbms.order_by('orderings_for_ups__0__number')
+
+            except:
+                for index, module in enumerate(dbms):
+                    module_for_save = DisciplineBlockModule.objects.get(id=module.id)
+                    if module_for_save.orderings_for_ups is not None:
+                        if str(obj.academic_plan.id) not in str(module.orderings_for_ups):
+                            module_for_save.orderings_for_ups.append(
+                                {"up_id": obj.academic_plan.id, "number": index + 1})
+                        else:
+                            for ap_index in module_for_save.orderings_for_ups:
+                                if ap_index['up_id'] == obj.academic_plan.id:
+                                    ap_index['number'] = index + 1
+                    else:
+                        module_for_save.orderings_for_ups = []
+                        module_for_save.orderings_for_ups.append({"up_id": obj.academic_plan.id, "number": index + 1})
+                    module_for_save.save()
+                dbms = dbms.order_by('orderings_for_ups__0__number')
+        modules_in_discipline_block = DisciplineBlockModuleSerializer(dbms, many=True)
+        return modules_in_discipline_block.data
 
     class Meta:
         model = DisciplineBlock
@@ -765,6 +798,10 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
             data["can_validate"] = False
         data["discipline_blocks_in_academic_plan"] = sorted(data["discipline_blocks_in_academic_plan"],
                                                             key=lambda x: x["name"])
+        if IsuObjectsSendLogger.objects.filter(error_status=0, obj_type='ap', ap_id=instance.id).exists():
+            data["was_send_to_isu"] = True
+        else:
+            data["was_send_to_isu"] = False
         return data
 
     class Meta:
@@ -878,11 +915,28 @@ class DisciplineBlockForWPinFSSerializer(serializers.ModelSerializer):
 
 
 class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
-    descipline_block = DisciplineBlockForWPinFSSerializer(read_only=True, many=True)
+    # descipline_block = DisciplineBlockForWPinFSSerializer(read_only=True, many=True)
+    descipline_block = serializers.SerializerMethodField()
 
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'name', 'descipline_block']
+
+    def get_descipline_block(self, instance):
+        serializers = DisciplineBlockForWPinFSSerializer(DisciplineBlock.objects.filter
+                                                         (modules_in_discipline_block__in=self.get_blocks_for_all_children(instance))
+                                                         , many=True)
+        return serializers.data
+
+    def get_blocks_for_all_children(self, instance, include_self=True):
+        r = []
+        if include_self:
+            r.append(instance)
+        for c in DisciplineBlockModule.objects.filter(childs=instance):
+            _r = self.get_blocks_for_all_children(c, include_self=True)
+            if 0 < len(_r):
+                r.extend(_r)
+        return r
 
 
 class WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
