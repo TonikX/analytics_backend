@@ -7,6 +7,7 @@ from gia_practice_app.Practice.models import PracticeTemplate, Practice, Prerequ
     ZunPractice
 from gia_practice_app.logic import get_permissions_gia_practice
 from workprogramsapp.expertise.models import Expertise, UserExpertise
+from workprogramsapp.expertise.serializers import ShortExpertiseSerializer
 from workprogramsapp.models import WorkProgramChangeInDisciplineBlockModule, Competence, Zun, Indicator, \
     ImplementationAcademicPlan, PracticeInFieldOfStudy
 from workprogramsapp.serializers import WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer, \
@@ -113,6 +114,7 @@ class PracticeSerializer(serializers.ModelSerializer):
         self.fields['competences'] = SerializerMethodField()
         self.fields['editors'] = userProfileSerializer(many=True)
         self.fields['practice_in_change_block'] = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True)
+        self.fields['expertise_with_practice'] = ShortExpertiseSerializer(many=True,)
         return super().to_representation(value)
 
     def get_competences(self, instance):
