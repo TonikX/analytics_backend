@@ -10,8 +10,10 @@ from drf_yasg2.utils import swagger_auto_schema
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
+import pandas as pd
 
 # Сериализаторы
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
@@ -51,6 +53,7 @@ from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
+
 
 # Блок реализации АПИ для КПУД интерфейсов
 from ..notifications.emails.send_mail import mail_sender
@@ -425,3 +428,21 @@ def academic_plan_all_ids_by_year(request, year):
     academic_plan_all_ids = AcademicPlan.objects.filter(academic_plan_in_field_of_study__year=year) \
         .values_list('id', flat=True).distinct()
     return Response({"academic_plan_ids": academic_plan_all_ids})
+
+
+@permission_classes((IsAdminUser,))
+class UploadProfStandards(CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        file = request.FILES["standards"]
+        standards = pd.read_csv(file, delimiter=';', encoding="utf-8")
+        for i, row in standards.iterrows():
+            print(str(row["Номер (регистрационный)"]), str(row["Код ПС"]).split(".")[0], str(row["Код ПС"]),
+                  row["Наименование области проф. деятельности"], row["Название стандарта"])
+            ProfessionalStandard.objects.create(registration_number=int(row["Номер (регистрационный)"]),
+                                                title=row["Название стандарта"],
+                                                name_of_prof_area=row["Наименование области проф. деятельности"],
+                                                code=str(row["Код ПС"]).split(".")[0],
+                                                code_of_prof_area=str(row["Код ПС"]))
+
+        return Response("standards")
