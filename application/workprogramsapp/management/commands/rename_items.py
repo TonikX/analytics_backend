@@ -11,6 +11,9 @@ class Command(BaseCommand):
         normal_items = pd.read_csv(csv_path)
 
         for i in range(len(normal_items)):
-            item = Items.objects.get(id=normal_items["id"][i])
-            item.name = normal_items["name"][i]
-            item.save()
+            try:
+                item = Items.objects.get(id=normal_items["id"][i])
+                item.name = normal_items["name"][i]
+                item.save()
+            except:
+                pass
