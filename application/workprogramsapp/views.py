@@ -1330,16 +1330,26 @@ class WorkProgramInFieldOfStudyForWorkProgramList(generics.ListAPIView):
             work_program__id=self.kwargs['workprogram_id'],
             # work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study = self.kwargs['ap_id']
         ).distinct()
+
+        modules = DisciplineBlockModule.objects.none()
+        for module in queryset:
+            modules = modules | DisciplineBlockModule.objects.filter(id__in=self.get_blocks_for_all_children(
+                module.work_program_change_in_discipline_block_module.discipline_block_module,
+            ))
+
         serializer = WorkProgramInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
         return Response(serializer.data)
-        try:
-            queryset = WorkProgramInFieldOfStudy.objects.filter(
-                work_program__id
-                =self.kwargs['workprogram_id']).distinct()
-            serializer = WorkProgramInFieldOfStudySerializer(queryset, many=True)
-            return Response(serializer.data)
-        except:
-            return Response(status=400)
+
+    def get_blocks_for_all_children(self, instance, include_self=True):
+        r = []
+        if include_self:
+            r.append(instance.id)
+        for c in DisciplineBlockModule.objects.filter \
+                    (childs=instance):
+            _r = self.get_blocks_for_all_children(c, include_self=True)
+            if 0 < len(_r):
+                r.extend(_r)
+        return r
 
 
 class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
@@ -1366,6 +1376,7 @@ class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
 
     def get_blocks_for_all_children(self, instance, include_self=True):
         r = []
+
         if include_self:
             r.append(instance.id)
         for c in DisciplineBlockModule.objects.filter \
@@ -1373,6 +1384,10 @@ class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
             _r = self.get_blocks_for_all_children(c, include_self=True)
             if 0 < len(_r):
                 r.extend(_r)
+            # try:
+            #     WorkProgramInFieldOfStudy.objects.filter(
+            #         work_program__id=int(self.kwargs['workprogram_id']),
+            #     )
         return r
 
 
