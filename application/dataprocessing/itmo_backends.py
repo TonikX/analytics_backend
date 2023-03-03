@@ -77,9 +77,15 @@ class AuthenticateByCodeISU(ListAPIView):
                     first_name=isu_profile['given_name'],
                     last_name=isu_profile['family_name'],
                     isu_number=isu_profile['isu'],
-                    is_active=True,
-                    patronymic=isu_profile['patronymic']
+                    is_active=True
                 )
+
+                try:
+                    user.patronymic = isu_profile['patronymic']
+                except:
+                    pass
+
+                user.save()
 
                 groups = ["student"]
                 for group in groups:
