@@ -379,6 +379,13 @@ class Characteristic extends React.Component<CharacteristicProps> {
   render() {
     const {classes, educationalProgramCharacteristic} = this.props;
     const {activeStep} = this.state;
+    const names = get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])
+      .reduce((items: any, item:any) => {
+        if(!items.includes('"' + item.title + '"')) {
+          items.push('"' + item.title + '"')
+        }
+        return items
+      }, [])
 
     return (
       <Paper className={classes.root}>
@@ -404,11 +411,8 @@ class Characteristic extends React.Component<CharacteristicProps> {
           <Typography className={classes.title}>
             <div style={{ display: 'flex', width: '100%' }}>
               <div>
-                Характеристика образовательных программ {' '}
-                {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])
-                  .map((item: any) => '"' + item.title + '"')
-                  .join(', ')
-                }
+                Характеристика образовательн{names.length === 1 ? 'ой' : 'ых'} программ{names.length === 1 ? 'ы' : ''} {' '}
+                {names.join(',')}
               </div>
               <div style={{ marginLeft: 'auto'}}>
                 {[6, 7, 8].includes(activeStep) &&
