@@ -18,6 +18,8 @@ const getCompetences = createLogic({
     process({getState, action}: any, dispatch, done) {
         const state = getState();
 
+        const competenceType = action.payload;
+
         const currentPage = getCurrentPage(state);
         const searchQuery = getSearchQuery(state);
         const sortingField = getSortingField(state);
@@ -25,7 +27,7 @@ const getCompetences = createLogic({
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COMPETENCES}));
 
-        service.getCompetences(currentPage, searchQuery, sortingField, sortingMode)
+        service.getCompetences(currentPage, searchQuery, sortingField, sortingMode, competenceType)
             .then((res) => {
                 const courses = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));

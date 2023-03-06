@@ -30,7 +30,7 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
   };
 
   componentDidMount() {
-    this.props.competenceActions.getCompetences();
+    this.props.competenceActions.getCompetences(this.props.competenceType);
   }
 
   handleClose = () => {
