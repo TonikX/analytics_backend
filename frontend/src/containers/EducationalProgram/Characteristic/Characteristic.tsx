@@ -488,8 +488,8 @@ class Characteristic extends React.Component<CharacteristicProps> {
             wrapClass={classes.wrapSelector}
           />
 
-          {/*{this.renderRealizationTypeSelect()}*/}
-          {/*<br/>*/}
+          {this.renderRealizationTypeSelect()}
+          <br/>
           {this.renderTypeOP()}
         </>
       case 1:
@@ -543,16 +543,16 @@ class Characteristic extends React.Component<CharacteristicProps> {
         return <ForsitesProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_foresight', [])} />;
       case 11:
         return <MinorProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_minor', [])} />;
+      // case 12:
+      //   return <div className={classes.editorWrap}>
+      //     <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
+      //     <CKEditor
+      //       value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PPS, '')}
+      //       onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.PPS)}
+      //       toolbarContainerId="toolbar-container"
+      //     />
+      //   </div>
       case 12:
-        return <div className={classes.editorWrap}>
-          <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
-          <CKEditor
-            value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PPS, '')}
-            onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.PPS)}
-            toolbarContainerId="toolbar-container"
-          />
-        </div>
-      case 13:
         return <CompetenceMatrix/>
     }
   }
