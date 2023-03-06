@@ -130,7 +130,7 @@ export interface EducationalProgramProps extends WithStyles<typeof styles> {
 export interface CharacteristicProps extends WithStyles<typeof characterisicStyles> {
     actions: EducationalProgramActions;
     mainActions: any;
-    educationalProgramCharacteristic: EducationalProgramCharacteristicType;
+    educationalProgramCharacteristic: any;
 }
 
 export type CharacteristicCreateGroupActionType = {
