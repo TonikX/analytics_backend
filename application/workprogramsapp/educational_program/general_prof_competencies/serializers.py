@@ -58,7 +58,7 @@ class CreateIndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer(se
 class GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """Сериализатор просмотра общепрофессиональных компетенций"""
     indicator_of_competence_in_group_of_general_prof_competences = IndicatorInGeneralProfCompetenceInGeneralCharacteristicSerializer(
- many=True)
+        many=True)
     competence = CompetenceSerializer()
 
     class Meta:
@@ -68,6 +68,13 @@ class GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(serializers
 
 class CreateGeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """Сериализатор создания и изменения общепрофессиональных компетенций"""
+
+    def create(self, validated_data):
+        pk = GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.create(**validated_data)
+        for indicator in Indicator.objects.filter(competence=pk.competence):
+            IndicatorInGeneralProfCompetenceInGeneralCharacteristic.objects.create(competence_in_group_of_pk=pk,
+                                                                                   indicator=indicator)
+        return pk
 
     class Meta:
         model = GeneralProfCompetencesInGroupOfGeneralCharacteristic
