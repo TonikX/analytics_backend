@@ -468,7 +468,11 @@ class GeneralCharacteristics(models.Model):
                                                  blank=True, null=True)
     area_of_activity = models.ManyToManyField('ProfessionalStandard',
                                               verbose_name='Проф. Стандарт/Область профессиональной деятельности',
-                                              blank=True, null=True)
+                                              blank=True, null=True, related_name="area_in_characteristic")
+    additional_area_of_activity = models.ManyToManyField('ProfessionalStandard',
+                                                         verbose_name='Дополнительные Области профессиональной деятельности',
+                                                         blank=True, null=True,
+                                                         related_name="add_area_in_characteristic")
     objects_of_activity = models.ManyToManyField(ObjectsOfActivity,
                                                  verbose_name="Объекты проф. деятельности выпускников", blank=True,
                                                  null=True)

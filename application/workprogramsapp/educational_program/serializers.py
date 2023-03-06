@@ -115,6 +115,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     group_of_pk_competences_prof = SerializerMethodField()
     group_of_pk_competences_foresight = SerializerMethodField()
     group_of_pk_competences_minor = SerializerMethodField()
+    group_of_pk_competences_additional_qualification = SerializerMethodField()
 
     def get_group_of_pk_competences_prof(self, instance):
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
@@ -132,6 +133,12 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
             instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic=instance,
                                                                                 type_of_pk_competence="min"),
+            many=True).data
+
+    def get_group_of_pk_competences_additional_qualification(self, instance):
+        return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
+            instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(general_characteristic=instance,
+                                                                                type_of_pk_competence="add_qual"),
             many=True).data
 
     def get_group_of_general_prof_competences(self, instance):
@@ -162,6 +169,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         self.fields['tasks_for_prof_standards'] = TasksForEducationalStandardSerializer(many=True, required=False)
         self.fields['structural_unit_implementer'] = ShortStructuralUnitSerializer(many=False, required=False)
         self.fields['area_of_activity'] = ProfessionalStandardSerializer(many=True)
+        self.fields['additional_area_of_activity'] = ProfessionalStandardSerializer(many=True)
         self.fields['kinds_of_activity'] = KindsOfActivitySerializerForEd(many=True)
         self.fields['objects_of_activity'] = ObjectsOfActivitySerializer(many=True)
         self.fields['educational_program'] = ImplementationAcademicPlanSerializer(many=True)
@@ -173,7 +181,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GeneralCharacteristics
-        fields = ['id', 'area_of_activity', 'educational_program',
+        fields = ['id', 'area_of_activity', 'additional_area_of_activity', 'educational_program',
                   'group_of_over_prof_competences', 'group_of_key_competences', 'group_of_general_prof_competences',
                   'objects_of_activity', 'kinds_of_activity', 'tasks_of_activity', 'annotation',
 
@@ -182,6 +190,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
                   'is_collaboration_foreign', 'collaboration_foreign', 'realization_format',
                   'structural_unit_implementer',
                   'group_of_pk_competences_prof', 'group_of_pk_competences_foresight', 'group_of_pk_competences_minor',
+                  'group_of_pk_competences_additional_qualification',
                   'employers_in_characteristic', 'ep_supervisor', 'directors_position', 'dean_of_the_faculty',
                   'cluster_name']
         extra_kwargs = {"employers_in_characteristic": {"required": False}}

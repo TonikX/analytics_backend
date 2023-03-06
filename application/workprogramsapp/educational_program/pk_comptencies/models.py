@@ -13,6 +13,7 @@ class GroupOfPkCompetencesInGeneralCharacteristic(models.Model):
         ('prof', 'on prof standard base'),
         ('fore', 'foresights'),
         ('min', 'minor'),
+        ('add_qual', 'additional qualification'),
     )
 
     name = models.CharField(max_length=512, verbose_name="трудовая функция")
