@@ -524,6 +524,11 @@ class GeneralCharacteristics(models.Model):
                                             blank=True, null=True)
     cluster_name = models.CharField(max_length=512, verbose_name="Имя подразделения, кластера, института", blank=True,
                                     null=True)
+    science_type = models.BooleanField(blank=True, null=True, verbose_name="Научная ОП?")
+    industrial_type = models.BooleanField(blank=True, null=True, verbose_name="Индустриальная ОП?")
+    corporate_type = models.BooleanField(blank=True, null=True, verbose_name="Корпоративная ОП?")
+    enterprise_type = models.BooleanField(blank=True, null=True, verbose_name="Предпринемательская ОП?")
+    target_master_type = models.BooleanField(blank=True, null=True, verbose_name="Магистратура перспективных направлений?")
 
     def __str__(self):
         return str(self.educational_program)
