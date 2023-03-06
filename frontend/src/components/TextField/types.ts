@@ -3,6 +3,6 @@ import styles from "./TextField.styles";
 
 export interface TextFieldProps extends WithStyles<typeof styles> {
     onChange: Function;
-    label: string;
+    label?: string;
     noMargin?: boolean;
 }
