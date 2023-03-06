@@ -334,7 +334,20 @@ class Characteristic extends React.Component<CharacteristicProps> {
           />
         </div>
       case 2:
-        return <AreaOfActivity characteristic={educationalProgramCharacteristic} />
+        return (
+          <>
+            <AreaOfActivity
+              characteristic={educationalProgramCharacteristic}
+              tableTitle="Области профессиональной деятельности"
+              tableType={EducationProgramCharacteristicFields.AREA_OF_ACTIVITY}
+            />
+            <AreaOfActivity
+              characteristic={educationalProgramCharacteristic}
+              tableTitle="Дополнительные области профессиональной деятельности"
+              tableType={EducationProgramCharacteristicFields.ADDITIONAL_AREA_OF_ACTIVITY}
+            />
+          </>
+        )
       case 3:
         return <KindsOfActivity characteristic={educationalProgramCharacteristic} />
       case 4:
