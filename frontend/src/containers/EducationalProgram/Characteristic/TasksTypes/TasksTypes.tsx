@@ -33,7 +33,6 @@ export default ({ characteristic }: any) => {
   const [selectedObject, setSelectedObject] = useState()
 
   const handleSave = useCallback(() => {
-    debugger
     const allActivities = characteristic[EducationProgramCharacteristicFields.TASKS_OF_ACTIVITY].map((item: any) => item.id)
     dispatch(actions.changeEducationalProgramCharacteristic({
       id: characteristic.id,

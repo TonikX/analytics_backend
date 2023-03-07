@@ -104,6 +104,13 @@ class PkCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSer
 class CreatePkCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """Сериализатор создания и изменения профессиональных компетенций"""
 
+    def create(self, validated_data):
+        pk = PkCompetencesInGroupOfGeneralCharacteristic.objects.create(**validated_data)
+        for indicator in Indicator.objects.filter(competence=pk.competence):
+            IndicatorInPkCompetenceInGeneralCharacteristic.objects.create(competence_in_group_of_pk=pk,
+                                                                          indicator=indicator)
+        return pk
+
     class Meta:
         model = PkCompetencesInGroupOfGeneralCharacteristic
         fields = "__all__"

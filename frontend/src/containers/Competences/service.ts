@@ -4,10 +4,10 @@ import {SortingType, Types} from "../../components/SortingButton/types";
 import {IndicatorsFields} from "../Indicators/enum";
 
 class CompetenceService extends AnalyticsService{
-    getCompetences(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType){
+    getCompetences(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType, competenceType: string){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
 
-        return this.get(`/api/competences?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
+        return this.get(`/api/competences?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&type=${competenceType}`);
     }
 
     deleteCompetence(id: number){

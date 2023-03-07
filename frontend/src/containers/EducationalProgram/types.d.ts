@@ -91,8 +91,20 @@ export interface educationalProgramState {
 export type EducationalProgramCharacteristicType = {
     [EducationProgramCharacteristicFields.ID]: number,
     [EducationProgramCharacteristicFields.YEAR]: ReactText,
+    [EducationProgramCharacteristicFields.LANGUAGE]: string,
     [EducationProgramCharacteristicFields.DIRECTION]: DirectionType,
     [EducationProgramCharacteristicFields.EDUCATION_PLAN]: EducationalPlanType,
+    [EducationProgramCharacteristicFields.IS_ONLY_IN_UNIVERSITY]: boolean,
+    [EducationProgramCharacteristicFields.IS_GLOBAL_EDUCATIONAL_PROGRAM]: boolean,
+    [EducationProgramCharacteristicFields.IS_ONLINE_FORMAT]: boolean,
+    [EducationProgramCharacteristicFields.COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT]: string,
+    [EducationProgramCharacteristicFields.IS_COLLABORATION_FOREIGN]: boolean,
+    [EducationProgramCharacteristicFields.COLLABORATION_FOREIGN]: string,
+    [EducationProgramCharacteristicFields.SCIENCE_TYPE]: boolean,
+    [EducationProgramCharacteristicFields.INDUSTRIAL_TYPE]: boolean,
+    [EducationProgramCharacteristicFields.CORPORATE_TYPE]: boolean,
+    [EducationProgramCharacteristicFields.ENTERPRISE_TYPE]: boolean,
+    [EducationProgramCharacteristicFields.TARGET_MASTER_TYPE]: boolean,
 };
 
 export type EducationalProgramType = {
@@ -118,7 +130,7 @@ export interface EducationalProgramProps extends WithStyles<typeof styles> {
 export interface CharacteristicProps extends WithStyles<typeof characterisicStyles> {
     actions: EducationalProgramActions;
     mainActions: any;
-    educationalProgramCharacteristic: EducationProgramCharacteristicFields;
+    educationalProgramCharacteristic: any;
 }
 
 export type CharacteristicCreateGroupActionType = {

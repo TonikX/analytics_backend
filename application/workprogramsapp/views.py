@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataprocessing.models import Items
+from .educational_program.search_filters import CompetenceFilter
 from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
@@ -184,7 +185,8 @@ class CompetenceCreateView(generics.CreateAPIView):
 class CompetencesListView(generics.ListAPIView):
     serializer_class = CompetenceSerializer
     queryset = Competence.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filterset_class = CompetenceFilter
     search_fields = ['name', 'number']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 

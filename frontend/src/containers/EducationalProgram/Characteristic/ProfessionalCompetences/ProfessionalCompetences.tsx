@@ -335,6 +335,7 @@ export const ProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableDa
             <AddCompetenceModal closeDialog={() => changeCompetenceOpenModal({isOpen: false, groupId: 0})}
                                 isOpen={competenceModalData.isOpen}
                                 saveDialog={saveCompetence}
+                                competenceType="ПК"
             />
             <AddIndicatorsModal closeDialog={() => changeIndicatorOpenModal({isOpen: false, competenceId: 0, competenceIdRelation: 0})}
                                 isOpen={indicatorModalData.isOpen}

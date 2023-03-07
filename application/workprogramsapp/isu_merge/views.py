@@ -19,6 +19,7 @@ from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_process
 from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
 from workprogramsapp.isu_merge.filterset import HistoryFilter
 from workprogramsapp.isu_merge.post_to_isu.ap_to_isu import ap_isu_generate_dict
+from workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import post_wp_to_isu
 from workprogramsapp.isu_merge.serializers import IsuHistoryListViewSerializer
 from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan, \
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
@@ -848,3 +849,35 @@ class IsuHistoryListView(ListAPIView):
     filterset_class =HistoryFilter
     search_fields = ["error_status", "obj_id", "obj_type", "date_of_sending"]
     permission_classes = [IsAdminUser]
+
+
+class SendWorkProgramToISU(APIView):
+    """
+        {
+        "wp_id": INT
+        }
+        """
+    permission_classes = [IsExpertiseMasterStrict]
+
+    def post(self, request):
+        wp_id=request.data.get("wp_id")
+        wp = WorkProgram.objects.get(id=wp_id)
+        if wp.discipline_code:
+            return  Response(data={"error": "У РПД уже есть свой ID"}, status=500)
+        isu_logger = IsuService(
+            IsuUser(
+                settings.ISU["ISU_CLIENT_ID"],
+                settings.ISU["ISU_CLIENT_SECRET"]
+            )
+        )
+        isu_logger.get_access_token(add_headers={"scope": "service.edu-complex-isu"})
+        token = isu_logger.token
+        created_id = post_wp_to_isu(token, wp, -1)
+        if created_id:
+            status_response = 200
+            wp.discipline_code=str(created_id)
+            wp.save()
+            return Response(data={"wp_created_id": created_id}, status=status_response)
+        else:
+            status_response = 500
+            return Response(data={"error": "error when creating wp"}, status=status_response)

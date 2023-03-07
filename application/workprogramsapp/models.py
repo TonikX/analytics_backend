@@ -468,7 +468,11 @@ class GeneralCharacteristics(models.Model):
                                                  blank=True, null=True)
     area_of_activity = models.ManyToManyField('ProfessionalStandard',
                                               verbose_name='Проф. Стандарт/Область профессиональной деятельности',
-                                              blank=True, null=True)
+                                              blank=True, null=True, related_name="area_in_characteristic")
+    additional_area_of_activity = models.ManyToManyField('ProfessionalStandard',
+                                                         verbose_name='Дополнительные Области профессиональной деятельности',
+                                                         blank=True, null=True,
+                                                         related_name="add_area_in_characteristic")
     objects_of_activity = models.ManyToManyField(ObjectsOfActivity,
                                                  verbose_name="Объекты проф. деятельности выпускников", blank=True,
                                                  null=True)
@@ -520,6 +524,11 @@ class GeneralCharacteristics(models.Model):
                                             blank=True, null=True)
     cluster_name = models.CharField(max_length=512, verbose_name="Имя подразделения, кластера, института", blank=True,
                                     null=True)
+    science_type = models.BooleanField(blank=True, null=True, verbose_name="Научная ОП?")
+    industrial_type = models.BooleanField(blank=True, null=True, verbose_name="Индустриальная ОП?")
+    corporate_type = models.BooleanField(blank=True, null=True, verbose_name="Корпоративная ОП?")
+    enterprise_type = models.BooleanField(blank=True, null=True, verbose_name="Предпринемательская ОП?")
+    target_master_type = models.BooleanField(blank=True, null=True, verbose_name="Магистратура перспективных направлений?")
 
     def __str__(self):
         return str(self.educational_program)

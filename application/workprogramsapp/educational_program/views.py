@@ -437,12 +437,13 @@ class UploadProfStandards(CreateAPIView):
         file = request.FILES["standards"]
         standards = pd.read_csv(file, delimiter=';', encoding="utf-8")
         for i, row in standards.iterrows():
-            print(str(row["Номер (регистрационный)"]), str(row["Код ПС"]).split(".")[0], str(row["Код ПС"]),
-                  row["Наименование области проф. деятельности"], row["Название стандарта"])
-            ProfessionalStandard.objects.create(registration_number=int(row["Номер (регистрационный)"]),
-                                                title=row["Название стандарта"],
-                                                name_of_prof_area=row["Наименование области проф. деятельности"],
-                                                code=str(row["Код ПС"]).split(".")[0],
-                                                code_of_prof_area=str(row["Код ПС"]))
+            if pd.isnull(row["Номер (регистрационный)"]):
+                break
+            else:
+                ProfessionalStandard.objects.create(registration_number=int(row["Номер (регистрационный)"]),
+                                                    title=row["Название стандарта"],
+                                                    name_of_prof_area=row["Наименование области проф. деятельности"],
+                                                    code=str(row["Код ПС"]).split(".")[0],
+                                                    code_of_prof_area=str(row["Код ПС"]))
 
         return Response("standards")

@@ -9,5 +9,6 @@ export interface AddCompetenceModalProps extends WithStyles<typeof styles> {
     closeDialog: Function;
     saveDialog: Function;
     competenceActions: CompetenceActions;
-    competenceList: SelectorListType
+    competenceList: SelectorListType;
+    competenceType?: 'ПК'
 }

@@ -72,6 +72,7 @@ export enum EducationProgramCharacteristicFields {
     OBJECTS_OF_ACTIVITY = 'objects_of_activity',
     TASKS_OF_ACTIVITY = 'tasks_for_prof_standards',
     AREA_OF_ACTIVITY = 'area_of_activity',
+    ADDITIONAL_AREA_OF_ACTIVITY = 'additional_area_of_activity',
     PPS = 'pps',
     ANNOTATION = 'annotation',
     EDUCATIONAL_STANDART = 'educational_standard',
@@ -92,6 +93,18 @@ export enum EducationProgramFields {
     DEAN = 'dean_of_the_faculty',
     PROFESSIONAL_STANDARD = 'dean_of_the_faculty',
     EDUCATIONAL_STANDARD = 'educational_standard',
+    LANGUAGE = 'language',
+    IS_ONLY_IN_UNIVERSITY = 'is_only_in_university',
+    IS_GLOBAL_EDUCATIONAL_PROGRAM = 'is_global_educational_program',
+    IS_ONLINE_FORMAT = 'is_online_format',
+    COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT = 'collaboration_russian_in_online_format',
+    IS_COLLABORATION_FOREIGN = 'is_collaboration_foreign',
+    COLLABORATION_FOREIGN = 'collaboration_foreign',
+    SCIENCE_TYPE = 'science_type',
+    INDUSTRIAL_TYPE = 'industrial_type',
+    CORPORATE_TYPE = 'corporate_type',
+    ENTERPRISE_TYPE = 'enterprise_type',
+    TARGET_MASTER_TYPE = 'target_master_type',
 }
 
 export enum CompetenceTableType {

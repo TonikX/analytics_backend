@@ -28,6 +28,17 @@ import {appRouter} from '../../../../service/router-service';
 
 const EMPTY = '\u00A0';
 
+type Node = [DisciplineModule, number];
+const preOrder = (node: DisciplineModule, level = 0) => {
+    let arr = [] as Node[];
+    arr.push([node, level]);
+    if (!node.childs) return [];
+    node.childs.forEach((child) => {
+        arr = arr.concat(preOrder(child, level + 1))
+    });
+    return arr;
+};
+
 const CompetencesCell = ({competences}: CompetencesHeaderProps) => {
     const classes = useStyles();
     return (
@@ -61,6 +72,17 @@ const CompetencesRow = (
             <CompetencesCell competences={overProfCompetences}/>
             <CompetencesCell competences={generalProfCompetences}/>
             <CompetencesCell competences={profCompetences}/>
+        </>
+    )
+};
+
+const EmptyRow = () => {
+    return (
+        <>
+            <TableCell>{EMPTY}</TableCell>
+            <TableCell>{EMPTY}</TableCell>
+            <TableCell>{EMPTY}</TableCell>
+            <TableCell>{EMPTY}</TableCell>
         </>
     )
 };
@@ -158,6 +180,69 @@ const ContentByAcademicPlan = (
         </div>
     };
 
+    const getChildContent = (block: DisciplineModule) => {
+        if (!block.childs) {
+            return <>
+               <TableRow>
+                    <TableCell>{block.name}</TableCell>
+                    <EmptyRow/>
+                </TableRow>
+            </>;
+        }
+
+        const arr = preOrder(block);
+
+        return (
+            <>
+                {arr.map(([item, level]) => {
+                    const stars = new Array(level).fill('⦁').join('');
+                    return getSingleContent(item, stars);
+                })}
+            </>
+        );
+    };
+
+    const getSingleContent = (moduleBlock: DisciplineModule, stars = '') => {
+        const shouldHighlight = !Boolean(stars);
+        return (
+            <>
+                <TableRow
+                     selected={shouldHighlight} className={classes.sectionRow}
+                >
+                    <TableCell>{`${stars} ${moduleBlock.name}`}</TableCell>
+                    {
+                        shouldHighlight ? <CompetencesRow
+                            overProfCompetences={overProfCompetences}
+                            keyCompetences={keyCompetences}
+                            profCompetences={profCompetences}
+                            generalProfCompetences={generalProfCompetences}
+                        /> : <EmptyRow/>
+                    }
+                </TableRow>
+                {moduleBlock.change_blocks_of_work_programs_in_modules.map((block: WorkProgramChangeInDisciplineBlockModule) =>
+                    block.work_program.map((wp: ModuleWorkProgram, elIndex: number) =>
+                        <TableRow key={`wp-${elIndex}`}>
+                            <TableCell className={classes.rowWithPadding}>
+                                <Link
+                                    target="_blank"
+                                    to={appRouter.getWorkProgramLink(wp.id)}
+                                >
+                                    {wp.title}
+                                </Link>
+                            </TableCell>
+                            <TableCell
+                                className={classes.noPaddingCells}>{getCompetencesContent(wp, 'key')}</TableCell>
+                            <TableCell
+                                className={classes.noPaddingCells}>{getCompetencesContent(wp, 'over-prof')}</TableCell>
+                            <TableCell
+                                className={classes.noPaddingCells}>{getCompetencesContent(wp, 'general-prof')}</TableCell>
+                            <TableCell
+                                className={classes.noPaddingCells}>{getCompetencesContent(wp, 'prof')}</TableCell>
+                        </TableRow>))}
+            </>
+        )
+    };
+
     return <>
         {academicPlan.discipline_blocks_in_academic_plan.map((item, itemIndex) =>
             <React.Fragment key={itemIndex}>
@@ -168,38 +253,9 @@ const ContentByAcademicPlan = (
                 {/*Модули учебного плана*/}
                 {item.modules_in_discipline_block.map((moduleBlock: DisciplineModule, blockIndex: number) =>
                     <React.Fragment key={blockIndex}>
-                        <TableRow
-                            key={`row-${blockIndex}`} selected={true} className={classes.sectionRow}
-                        >
-                            <TableCell>{moduleBlock.name}</TableCell>
-                            <CompetencesRow
-                                overProfCompetences={overProfCompetences}
-                                keyCompetences={keyCompetences}
-                                profCompetences={profCompetences}
-                                generalProfCompetences={generalProfCompetences}
-                            />
-                        </TableRow>
-                        {/*Дисциплины*/}
-                        {moduleBlock.change_blocks_of_work_programs_in_modules.map((block: WorkProgramChangeInDisciplineBlockModule) =>
-                            block.work_program.map((wp: ModuleWorkProgram, elIndex: number) =>
-                                <TableRow key={`wp-${elIndex}`}>
-                                    <TableCell className={classes.rowWithPadding}>
-                                        <Link
-                                            target="_blank"
-                                            to={appRouter.getWorkProgramLink(wp.id)}
-                                        >
-                                            {wp.title}
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell
-                                        className={classes.noPaddingCells}>{getCompetencesContent(wp, 'key')}</TableCell>
-                                    <TableCell
-                                        className={classes.noPaddingCells}>{getCompetencesContent(wp, 'over-prof')}</TableCell>
-                                    <TableCell
-                                        className={classes.noPaddingCells}>{getCompetencesContent(wp, 'general-prof')}</TableCell>
-                                    <TableCell
-                                        className={classes.noPaddingCells}>{getCompetencesContent(wp, 'prof')}</TableCell>
-                                </TableRow>))}
+                        {
+                            moduleBlock.childs ? getChildContent(moduleBlock) : getSingleContent(moduleBlock)
+                        }
                     </React.Fragment>)}
             </React.Fragment>)}
     </>

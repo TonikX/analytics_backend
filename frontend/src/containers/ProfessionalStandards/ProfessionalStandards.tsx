@@ -37,187 +37,186 @@ import {appRouter} from "../../service/router-service";
 import {withRouter} from "react-router-dom";
 
 class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> {
-    state = {
-        deleteConfirmId: null
-    }
+  state = {
+    deleteConfirmId: null
+  }
 
-    componentDidMount() {
-        this.props.actions.getProfessionalStandards();
-    }
+  componentDidMount() {
+    this.props.actions.getProfessionalStandards();
+  }
 
-    handleClickDelete = (id: number) => () => {
-        this.setState({
-            deleteConfirmId: id
-        });
-    }
+  handleClickDelete = (id: number) => () => {
+    this.setState({
+      deleteConfirmId: id
+    });
+  }
 
-    handleConfirmDeleteDialog = () => {
-        const {deleteConfirmId} = this.state;
+  handleConfirmDeleteDialog = () => {
+    const {deleteConfirmId} = this.state;
 
-        this.props.actions.deleteProfessionalStandard(deleteConfirmId);
-        this.closeConfirmDeleteDialog();
-    }
+    this.props.actions.deleteProfessionalStandard(deleteConfirmId);
+    this.closeConfirmDeleteDialog();
+  }
 
-    closeConfirmDeleteDialog = () => {
-        this.setState({
-            deleteConfirmId: null
-        });
-    }
+  closeConfirmDeleteDialog = () => {
+    this.setState({
+      deleteConfirmId: null
+    });
+  }
 
-    handleClickEdit = (professionalStandard: ProfessionalStandardsType) => () => {
-        this.props.actions.openDialog(professionalStandard);
-    }
+  handleClickEdit = (professionalStandard: ProfessionalStandardsType) => () => {
+    this.props.actions.openDialog(professionalStandard);
+  }
 
-    handleCreate = () => {
-        this.props.actions.openDialog();
-    }
+  handleCreate = () => {
+    this.props.actions.openDialog();
+  }
 
-    handleChangeSearchQuery = (event: React.ChangeEvent) => {
-        this.changeSearch(get(event, 'target.value', ''));
-    }
+  handleChangeSearchQuery = (event: React.ChangeEvent) => {
+    this.changeSearch(get(event, 'target.value', ''));
+  }
 
-    changeSearch = debounce((value: string): void => {
-        this.props.actions.changeSearchQuery(value);
-        this.props.actions.changeCurrentPage(1);
-        this.props.actions.getProfessionalStandards();
-    }, 300);
+  changeSearch = debounce((value: string): void => {
+    this.props.actions.changeSearchQuery(value);
+    this.props.actions.changeCurrentPage(1);
+    this.props.actions.getProfessionalStandards();
+  }, 300);
 
-    handleChangePage = (event: any, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
-        this.props.actions.getProfessionalStandards();
-    }
+  handleChangePage = (event: any, page: number) => {
+    this.props.actions.changeCurrentPage(page);
+    this.props.actions.getProfessionalStandards();
+  }
 
-    changeSorting = (field: string) => (mode: SortingType) => {
-        this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getProfessionalStandards();
-    }
+  changeSorting = (field: string) => (mode: SortingType) => {
+    this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
+    this.props.actions.getProfessionalStandards();
+  }
 
-    changeRoute = (id: any) => () => {
-        //@ts-ignore
-        this.props.history.push(appRouter.getProfessionalStandardRoute(id))
-    }
+  changeRoute = (id: any) => () => {
+    //@ts-ignore
+    this.props.history.push(appRouter.getProfessionalStandardRoute(id))
+  }
 
-    render() {
-        const {classes, professionalStandards, allCount, currentPage, sortingField, sortingMode} = this.props;
-        const {deleteConfirmId} = this.state;
+  render() {
+    const {classes, professionalStandards, allCount, currentPage, sortingField, sortingMode} = this.props;
+    const {deleteConfirmId} = this.state;
 
-        return (
-            <Paper className={classes.root}>
-                <Typography className={classes.title}>
-                    Профессиональные стандарты
+    return (
+      <Paper className={classes.root}>
+        <Typography className={classes.title}>
+          Профессиональные стандарты
 
-                    <TextField placeholder="Поиск"
-                               variant="outlined"
-                               InputProps={{
-                                   classes: {
-                                       root: classes.searchInput
-                                   },
-                                   startAdornment: <SearchOutlined/>,
-                               }}
-                               onChange={this.handleChangeSearchQuery}
-                    />
-                </Typography>
+          <TextField placeholder="Поиск"
+                     variant="outlined"
+                     InputProps={{
+                       classes: {
+                         root: classes.searchInput
+                       },
+                       startAdornment: <SearchOutlined/>,
+                     }}
+                     onChange={this.handleChangeSearchQuery}
+          />
+        </Typography>
 
-                <div className={classes.tableWrap}>
-                    <div className={classNames(classes.row, classes.header)}>
-                        <Typography className={classNames(classes.marginRight, classes.numberCell)}>
-                            Номер
-                            <SortingButton changeMode={this.changeSorting(ProfessionalStandardFields.NUMBER)}
-                                           mode={sortingField === ProfessionalStandardFields.NUMBER ? sortingMode : ''}
-                            />
-                        </Typography>
-                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Название стандарта
-                            <SortingButton changeMode={this.changeSorting(ProfessionalStandardFields.TITLE)}
-                                           mode={sortingField === ProfessionalStandardFields.TITLE ? sortingMode : ''}
-                            />
-                        </Typography>
+        <div className={classes.tableWrap}>
+          <div className={classNames(classes.row, classes.header)}>
+            <Typography className={classNames(classes.marginRight, classes.numberCell)}>
+              Номер
+              <SortingButton changeMode={this.changeSorting(ProfessionalStandardFields.NUMBER)}
+                             mode={sortingField === ProfessionalStandardFields.NUMBER ? sortingMode : ''}
+              />
+            </Typography>
+            <Typography className={classes.profCell}>
+              Наименование области проф. деятельности
+              <SortingButton changeMode={this.changeSorting(ProfessionalStandardFields.NAME)}
+                             mode={sortingField === ProfessionalStandardFields.NAME ? sortingMode : ''}
+              />
+            </Typography>
+            <Typography className={classNames(classes.marginRight, classes.codeCell)}>
+              Код ПС
+              <SortingButton changeMode={this.changeSorting(ProfessionalStandardFields.CODE)}
+                             mode={sortingField === ProfessionalStandardFields.CODE ? sortingMode : ''}
+              />
+            </Typography>
+            <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+              Название стандарта
+              <SortingButton changeMode={this.changeSorting(ProfessionalStandardFields.TITLE)}
+                             mode={sortingField === ProfessionalStandardFields.TITLE ? sortingMode : ''}
+              />
+            </Typography>
+          </div>
 
+          <div className={classes.list}>
+            <Scrollbars>
+              {professionalStandards.map(professionalStandard =>
+                <div className={classes.row} key={professionalStandard[ProfessionalStandardFields.ID]}>
+                  <Typography className={classNames(classes.marginRight, classes.numberCell)} >
+                    {professionalStandard[ProfessionalStandardFields.NUMBER]}
+                  </Typography>
+                  <Typography className={classes.profCell}>
+                    {professionalStandard[ProfessionalStandardFields.NAME]}
+                  </Typography>
+                  <Typography className={classNames(classes.marginRight, classes.codeCell)}>
+                    {professionalStandard[ProfessionalStandardFields.CODE]}
+                  </Typography>
+                  <Typography
+                    className={classNames(classes.marginRight, classes.titleCell, classes.pointerCell)}
+                    onClick={this.changeRoute(professionalStandard[ProfessionalStandardFields.ID])}
+                  >
+                    {professionalStandard[ProfessionalStandardFields.TITLE]}
+                  </Typography>
 
-                        <Typography className={classNames(classes.marginRight, classes.codeCell)}>
-                            Код ПС
-                            <SortingButton changeMode={this.changeSorting(ProfessionalStandardFields.CODE)}
-                                           mode={sortingField === ProfessionalStandardFields.CODE ? sortingMode : ''}
-                            />
-                        </Typography>
-                        <Typography className={classes.profCell}>
-                            Наименование области проф. деятельности
-                            <SortingButton changeMode={this.changeSorting(ProfessionalStandardFields.NAME)}
-                                           mode={sortingField === ProfessionalStandardFields.NAME ? sortingMode : ''}
-                            />
-                        </Typography>
-                    </div>
-
-                    <div className={classes.list}>
-                        <Scrollbars>
-                            {professionalStandards.map(professionalStandard =>
-                                <div className={classes.row} key={professionalStandard[ProfessionalStandardFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.numberCell)} >
-                                        {professionalStandard[ProfessionalStandardFields.NUMBER]}
-                                    </Typography>
-                                    <Typography
-                                        className={classNames(classes.marginRight, classes.titleCell, classes.pointerCell)}
-                                        onClick={this.changeRoute(professionalStandard[ProfessionalStandardFields.ID])}
-                                    >
-                                        {professionalStandard[ProfessionalStandardFields.TITLE]}
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.codeCell)}>
-                                        {professionalStandard[ProfessionalStandardFields.CODE]}
-                                    </Typography>
-                                    <Typography className={classes.profCell}>
-                                        {professionalStandard[ProfessionalStandardFields.NAME]}
-                                    </Typography>
-                                    <div className={classes.actions}>
-                                        <IconButton>
-                                            <Link style={{textDecoration: 'none', height: '23px', color: 'rgba(0, 0, 0, 0.54)'}}
-                                                  to={appRouter.getProfessionalStandardRoute(professionalStandard[ProfessionalStandardFields.ID])}
-                                            >
-                                                <EyeIcon />
-                                            </Link>
-                                        </IconButton>
-                                        <IconButton
-                                            onClick={this.handleClickDelete(professionalStandard[ProfessionalStandardFields.ID])}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        <IconButton onClick={this.handleClickEdit(professionalStandard)}>
-                                            <EditIcon/>
-                                        </IconButton>
-                                    </div>
-                                </div>
-                            )}
-                        </Scrollbars>
-                    </div>
+                  <div className={classes.actions}>
+                    <IconButton>
+                      <Link style={{textDecoration: 'none', height: '23px', color: 'rgba(0, 0, 0, 0.54)'}}
+                            to={appRouter.getProfessionalStandardRoute(professionalStandard[ProfessionalStandardFields.ID])}
+                      >
+                        <EyeIcon />
+                      </Link>
+                    </IconButton>
+                    <IconButton
+                      onClick={this.handleClickDelete(professionalStandard[ProfessionalStandardFields.ID])}>
+                      <DeleteIcon />
+                    </IconButton>
+                    <IconButton onClick={this.handleClickEdit(professionalStandard)}>
+                      <EditIcon/>
+                    </IconButton>
+                  </div>
                 </div>
+              )}
+            </Scrollbars>
+          </div>
+        </div>
 
-                <div className={classes.footer}>
-                    <Pagination count={Math.ceil(allCount / 10)}
-                                page={currentPage}
-                                onChange={this.handleChangePage}
-                                color="primary"
-                    />
+        <div className={classes.footer}>
+          <Pagination count={Math.ceil(allCount / 10) }
+                      page={currentPage}
+                      onChange={this.handleChangePage}
+                      color="primary"
+          />
 
-                    <Fab color="secondary"
+          {/* <Fab color="secondary"
                          classes={{
                              root: classes.addIcon
                          }}
                          onClick={this.handleCreate}
                     >
                         <AddIcon/>
-                    </Fab>
-                </div>
+                    </Fab> */}
+        </div>
 
-                <ProfessionalStandardCreateModal/>
+        <ProfessionalStandardCreateModal/>
 
-                <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
-                               onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены, что хотите удалить профессиональный стандарт?'}
-                               isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить профессиоанльный стандарт'}
-                               confirmButtonText={'Удалить'}
-                />
-            </Paper>
-        );
-    }
+        <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
+                       onDismiss={this.closeConfirmDeleteDialog}
+                       confirmText={'Вы точно уверены, что хотите удалить профессиональный стандарт?'}
+                       isOpen={Boolean(deleteConfirmId)}
+                       dialogTitle={'Удалить профессиоанльный стандарт'}
+                       confirmButtonText={'Удалить'}
+        />
+      </Paper>
+    );
+  }
 }
 
 // @ts-ignore

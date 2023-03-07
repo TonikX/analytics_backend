@@ -23,18 +23,23 @@ import useStyles from './AreaOfActivity.styles'
 import QuestionIcon from "@material-ui/icons/HelpOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 
-export default ({ characteristic }: any) => {
+type Props = {
+  tableTitle: string;
+  characteristic: any;
+  tableType: EducationProgramCharacteristicFields.AREA_OF_ACTIVITY | EducationProgramCharacteristicFields.ADDITIONAL_AREA_OF_ACTIVITY
+}
+export default ({ characteristic, tableType, tableTitle }: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [openAddProfStandardModal, setOpenAddProfStandardModal] = useState(false)
   const [profStandard, setProfStandard] = useState()
 
   const handleAddNewItem = useCallback((item: any) => {
-    const allActivities = characteristic?.[EducationProgramCharacteristicFields.AREA_OF_ACTIVITY].map((item: any) => item.id)
+    const allActivities = characteristic?.[tableType].map((item: any) => item.id)
     dispatch(actions.changeEducationalProgramCharacteristic({
       id: characteristic.id,
       payload: {
-        [EducationProgramCharacteristicFields.AREA_OF_ACTIVITY]: [
+        [tableType]: [
           ...allActivities,
           profStandard,
         ]
@@ -47,8 +52,8 @@ export default ({ characteristic }: any) => {
     dispatch(actions.changeEducationalProgramCharacteristic({
       id: characteristic.id,
       payload: {
-        [EducationProgramCharacteristicFields.AREA_OF_ACTIVITY]:
-          characteristic?.[EducationProgramCharacteristicFields.AREA_OF_ACTIVITY]
+        [tableType]:
+          characteristic?.[tableType]
             .map((item: any) => item.id)
             .filter((item: any) => item !== id)
       }
@@ -58,7 +63,7 @@ export default ({ characteristic }: any) => {
   return (
     <>
       <Typography className={classes.label}>
-        Области профессиональной деятельности
+        {tableTitle}
 
         <Tooltip title={(
           <div className={classes.tooltip}>
@@ -94,7 +99,7 @@ export default ({ characteristic }: any) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {characteristic?.[EducationProgramCharacteristicFields.AREA_OF_ACTIVITY]?.map((item: any, index: number) => (
+          {characteristic?.[tableType]?.map((item: any, index: number) => (
             <TableRow>
               <TableCell>
                 {index + 1}
