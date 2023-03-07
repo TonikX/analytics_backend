@@ -47,6 +47,9 @@ export enum fetchingTypes {
     SAVE_ZUN = 'SAVE_ZUN',
     DELETE_ZUN = 'DELETE_ZUN',
     GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM = 'GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM',
+    ADD_NEW_REPRESENTATIVE = 'ADD_NEW_REPRESENTATIVE',
+    UPDATE_REPRESENTATIVE = 'UPDATE_REPRESENTATIVE',
+    DELETE_REPRESENTATIVE = 'DELETE_REPRESENTATIVE',
 }
 
 export enum EducationProgramCharacteristicFields {
@@ -76,6 +79,7 @@ export enum EducationProgramCharacteristicFields {
     PPS = 'pps',
     ANNOTATION = 'annotation',
     EDUCATIONAL_STANDART = 'educational_standard',
+    EMPLOYERS_LIST = 'employers_in_characteristic',
 }
 
 export enum EducationProgramFields {

@@ -16,6 +16,9 @@ import {characterisicStyles} from './Сharacteristic/Сharacteristic.styles';
 import styles from "./WorkProgram.styles";
 
 export interface EducationalProgramActions {
+    addNewRepresentative: any;
+    updateRepresentative: any;
+    deleteRepresentative: any;
     createTaskType: any,
     getTasksTypes: any,
     setTasksTypes: any,
@@ -105,6 +108,7 @@ export type EducationalProgramCharacteristicType = {
     [EducationProgramCharacteristicFields.CORPORATE_TYPE]: boolean,
     [EducationProgramCharacteristicFields.ENTERPRISE_TYPE]: boolean,
     [EducationProgramCharacteristicFields.TARGET_MASTER_TYPE]: boolean,
+    [EducationProgramCharacteristicFields.DEAN_POSITION]: string,
 };
 
 export type EducationalProgramType = {

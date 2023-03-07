@@ -45,6 +45,7 @@ import KindsOfActivity from "./KindsOfActivity";
 import ObjectsOfActivity from "./ObjectsOfActivity";
 import TasksTypes from "./TasksTypes";
 import CompetenceMatrix from "./CompetenceMatrix";
+import {RepresentativesOrganizations} from "./RepresentativesOrganizations";
 import InputLabel from '@material-ui/core/InputLabel'
 import {getEducationalProgramFullNameForSelect} from "../../EduationPlanInDirection/getters";
 import EducationalStandardSelector from "../../EducationalStandards/EducationalStandardSelector";
@@ -381,6 +382,24 @@ class Characteristic extends React.Component<CharacteristicProps> {
     )
   }
 
+  renderRepresentativesOrganizations = () => {
+    return (
+      <Table>
+        <TableHead>
+          <TableCell>
+            Имя организации
+          </TableCell>
+          <TableCell>
+            ФИО представителя
+          </TableCell>
+          <TableCell>
+            Позиция представителя
+          </TableCell>
+        </TableHead>
+      </Table>
+    )
+  }
+
   renderTypeOP = () => {
     const {classes, educationalProgramCharacteristic} = this.props
     return (
@@ -413,22 +432,22 @@ class Characteristic extends React.Component<CharacteristicProps> {
           />
           <Typography>Индустриальная ОП</Typography>
         </div>
-        <div className={classes.opTypeBlockItem}>
-          <Checkbox
-            checked={educationalProgramCharacteristic?.[EducationProgramFields.ENTERPRISE_TYPE]}
-            onChange={this.handleChangeOPType(EducationProgramFields.ENTERPRISE_TYPE)}
-            className={classes.checkbox}
-          />
-          <Typography>Предпринимательская ОП</Typography>
-        </div>
-        <div className={classes.opTypeBlockItem}>
-          <Checkbox
-            checked={educationalProgramCharacteristic?.[EducationProgramFields.TARGET_MASTER_TYPE]}
-            onChange={this.handleChangeOPType(EducationProgramFields.TARGET_MASTER_TYPE)}
-            className={classes.checkbox}
-          />
-          <Typography>Магистратура перспективных направлений</Typography>
-        </div>
+        {/*<div className={classes.opTypeBlockItem}>*/}
+        {/*  <Checkbox*/}
+        {/*    checked={educationalProgramCharacteristic?.[EducationProgramFields.ENTERPRISE_TYPE]}*/}
+        {/*    onChange={this.handleChangeOPType(EducationProgramFields.ENTERPRISE_TYPE)}*/}
+        {/*    className={classes.checkbox}*/}
+        {/*  />*/}
+        {/*  <Typography>Предпринимательская ОП</Typography>*/}
+        {/*</div>*/}
+        {/*<div className={classes.opTypeBlockItem}>*/}
+        {/*  <Checkbox*/}
+        {/*    checked={educationalProgramCharacteristic?.[EducationProgramFields.TARGET_MASTER_TYPE]}*/}
+        {/*    onChange={this.handleChangeOPType(EducationProgramFields.TARGET_MASTER_TYPE)}*/}
+        {/*    className={classes.checkbox}*/}
+        {/*  />*/}
+        {/*  <Typography>Магистратура перспективных направлений</Typography>*/}
+        {/*</div>*/}
       </>
     )
   }
@@ -492,21 +511,24 @@ class Characteristic extends React.Component<CharacteristicProps> {
           <SimpleSelector
             label="Язык реализации"
             onChange={this.handleChangeLanguage}
-            value={educationalProgramCharacteristic?.[EducationProgramFields.LANGUAGE]}
+            value={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.LANGUAGE]}
             metaList={languageArray}
             wrapClass={classes.wrapSelector}
           />
-          {educationalProgramCharacteristic?.[EducationProgramFields.ID] ? (
+          {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.ID] ? (
             <TextField
               label="Должность декана"
               onChange={this.handleChangeDeanPost}
-              defaultValue={educationalProgramCharacteristic?.[EducationProgramFields.DEAN_POSITION]}
+              defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.DEAN_POSITION]}
             />
           ) : null}
 
           {this.renderRealizationTypeSelect()}
           <br/>
           {this.renderTypeOP()}
+          <RepresentativesOrganizations
+            list={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.EMPLOYERS_LIST]}
+          />
         </>
       case 1:
         return <div className={classes.editorWrap}>

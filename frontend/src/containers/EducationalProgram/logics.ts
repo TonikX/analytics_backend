@@ -773,6 +773,75 @@ const getCompetenceDirectionsDependedOnWorkProgram = createLogic({
     }
 });
 
+const addNewRepresentative = createLogic({
+    type: educationalPlanActions.addNewRepresentative.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_NEW_REPRESENTATIVE}));
+
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        service.addNewRepresentative(characteristicId, action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.ADD_NEW_REPRESENTATIVE}));
+                return done();
+            });
+    }
+});
+
+const deleteRepresentative = createLogic({
+    type: educationalPlanActions.deleteRepresentative.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_REPRESENTATIVE}));
+
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        service.deleteRepresentative(action.payload)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_REPRESENTATIVE}));
+                return done();
+            });
+    }
+});
+
+const updateRepresentative = createLogic({
+    type: educationalPlanActions.updateRepresentative.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_REPRESENTATIVE}));
+
+        const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+        service.updateRepresentative(action.payload.id, action.payload.data)
+            .then((res) => {
+                dispatch(educationalPlanActions.getEducationalProgramCharacteristic(characteristicId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_REPRESENTATIVE}));
+                return done();
+            });
+    }
+});
+
 export default [
     getEducationalProgramList,
     deleteEducationalProgram,
@@ -818,4 +887,8 @@ export default [
     deleteZun,
 
     getCompetenceDirectionsDependedOnWorkProgram,
+
+    addNewRepresentative,
+    deleteRepresentative,
+    updateRepresentative,
 ];
