@@ -561,7 +561,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
 
     def get(self, request, **kwargs):
         queryset = WorkProgram.objects.filter(pk=self.kwargs['pk'])
-        serializer = WorkProgramSerializer(queryset, many=True)
+        serializer = WorkProgramSerializer(queryset, many=True, context={'request': request})
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
         newdata = dict(serializer.data[0])
