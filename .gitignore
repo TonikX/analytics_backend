@@ -15,6 +15,8 @@ frontend/.env.production
 **/discipline_code/*
 **/upload/*
 **/certificates/*
+/frontend/.env.production
+
 
 
 rpd-env/bin/activate
