@@ -135,6 +135,15 @@ class Characteristic extends React.Component<CharacteristicProps> {
     })
   }
 
+  handleChangeDeanPost = (value: string) => {
+    this.props.actions.changeEducationalProgram({
+      id: this.getEducationalProgramId(),
+      payload: {
+        [EducationProgramFields.DEAN_POSITION]: value
+      }
+    })
+  }
+
   handleChangeSKEEditorField = (field: string) => (event: any) => {
     const data: string = event.editor.getData()
     this.props.actions.changeEducationalProgramCharacteristic({
@@ -487,6 +496,13 @@ class Characteristic extends React.Component<CharacteristicProps> {
             metaList={languageArray}
             wrapClass={classes.wrapSelector}
           />
+          {educationalProgramCharacteristic?.[EducationProgramFields.ID] ? (
+            <TextField
+              label="Должность декана"
+              onChange={this.handleChangeDeanPost}
+              defaultValue={educationalProgramCharacteristic?.[EducationProgramFields.DEAN_POSITION]}
+            />
+          ) : null}
 
           {this.renderRealizationTypeSelect()}
           <br/>

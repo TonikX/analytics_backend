@@ -91,6 +91,7 @@ export enum EducationProgramFields {
     EP_SUPERVISOR = 'ep_supervisor',
     EDUCATIONAL_PROGRAM = 'educational_program',
     DEAN = 'dean_of_the_faculty',
+    DEAN_POSITION = 'directors_position',
     PROFESSIONAL_STANDARD = 'dean_of_the_faculty',
     EDUCATIONAL_STANDARD = 'educational_standard',
     LANGUAGE = 'language',
