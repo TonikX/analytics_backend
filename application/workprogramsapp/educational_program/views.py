@@ -156,6 +156,10 @@ class GeneralCharacteristicsDetailsView(generics.RetrieveAPIView):
     serializer_class = GeneralCharacteristicsSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = GeneralCharacteristicsSerializer(instance, context={'request': request})
+        return Response(serializer.data)
 
 class DepartmentListAPIView(generics.ListAPIView):
     serializer_class = DepartmentSerializer
