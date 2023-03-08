@@ -327,7 +327,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 
   renderRealizationTypeSelect = () => {
-    const {classes, educationalProgramCharacteristic} = this.props
+    const {classes, educationalProgramCharacteristic, canEdit} = this.props
     return (
       <>
         <Typography>
@@ -339,6 +339,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_ONLY_IN_UNIVERSITY]}
             onChange={this.handleChangeRealizationType(EducationProgramCharacteristicFields.IS_ONLY_IN_UNIVERSITY)}
             className={classes.checkbox}
+            disabled={!canEdit}
           />
           <Typography>Только в университете ИТМО</Typography>
         </div>
@@ -347,6 +348,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_GLOBAL_EDUCATIONAL_PROGRAM]}
             onChange={this.handleChangeRealizationType(EducationProgramCharacteristicFields.IS_GLOBAL_EDUCATIONAL_PROGRAM)}
             className={classes.checkbox}
+            disabled={!canEdit}
           />
           <Typography>Имеет статус международной образовательной программы (МОП)</Typography>
         </div>
@@ -355,6 +357,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_ONLINE_FORMAT]}
             onChange={this.handleChangeRealizationType(EducationProgramCharacteristicFields.IS_ONLINE_FORMAT)}
             className={classes.checkbox}
+            disabled={!canEdit}
           />
           <Typography  className={classes.realizationBlockItemTitle}>В сетевой форме</Typography> <br/>
         </div>
@@ -365,6 +368,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
               noMargin
               onChange={this.handleChangeTextRealizationType(EducationProgramCharacteristicFields.COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT)}
               defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT]}
+              disabled={!canEdit}
             />
           </div>
         ) : null}
@@ -373,6 +377,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_COLLABORATION_FOREIGN]}
             onChange={this.handleChangeRealizationType(EducationProgramCharacteristicFields.IS_COLLABORATION_FOREIGN)}
             className={classes.checkbox}
+            disabled={!canEdit}
           />
           <Typography className={classes.realizationBlockItemTitle}>В форме совместной образовательной программы</Typography>
         </div>
@@ -381,6 +386,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             <Typography className={classes.realizationAdditionalBlockItemTitle}>Совместно с иностранным(-и) партнером(-ами)</Typography>
             <TextField
               noMargin
+              disabled={!canEdit}
               onChange={this.handleChangeTextRealizationType(EducationProgramCharacteristicFields.COLLABORATION_FOREIGN)}
               defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.COLLABORATION_FOREIGN]}
             />
@@ -390,26 +396,8 @@ class Characteristic extends React.Component<CharacteristicProps> {
     )
   }
 
-  renderRepresentativesOrganizations = () => {
-    return (
-      <Table>
-        <TableHead>
-          <TableCell>
-            Имя организации
-          </TableCell>
-          <TableCell>
-            ФИО представителя
-          </TableCell>
-          <TableCell>
-            Позиция представителя
-          </TableCell>
-        </TableHead>
-      </Table>
-    )
-  }
-
   renderTypeOP = () => {
-    const {classes, educationalProgramCharacteristic} = this.props
+    const {classes, educationalProgramCharacteristic, canEdit} = this.props
     return (
       <>
         <Typography>
@@ -421,6 +409,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.SCIENCE_TYPE]}
             onChange={this.handleChangeOPType(EducationProgramCharacteristicFields.SCIENCE_TYPE)}
             className={classes.checkbox}
+            disabled={!canEdit}
           />
           <Typography>Научная</Typography>
         </div>
@@ -429,6 +418,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.CORPORATE_TYPE]}
             onChange={this.handleChangeOPType(EducationProgramCharacteristicFields.CORPORATE_TYPE)}
             className={classes.checkbox}
+            disabled={!canEdit}
           />
           <Typography> Корпоративная ОП</Typography>
         </div>
@@ -437,6 +427,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.INDUSTRIAL_TYPE]}
             onChange={this.handleChangeOPType(EducationProgramCharacteristicFields.INDUSTRIAL_TYPE)}
             className={classes.checkbox}
+            disabled={!canEdit}
           />
           <Typography>Индустриальная ОП</Typography>
         </div>
@@ -461,7 +452,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 
   renderContent = () => {
-    const {educationalProgramCharacteristic, classes} = this.props;
+    const {educationalProgramCharacteristic, classes, canEdit} = this.props;
     const {activeStep, addNewOP} = this.state;
     const educationalProgramId = get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, '0', 'id'], '')
 
@@ -477,7 +468,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap' }}>
               <Chip
                 label={getEducationalProgramFullNameForSelect(item)}
-                onDelete={this.deleteEducationalProgram(item.id)}
+                onDelete={canEdit ? this.deleteEducationalProgram(item.id) : undefined}
                 classes={{
                   label: classes.chipLabel,
                 }}
@@ -489,7 +480,8 @@ class Characteristic extends React.Component<CharacteristicProps> {
             </div>
           ))}
           <br />
-          {addNewOP ? <>
+          {canEdit ? (
+            addNewOP ? <>
               <EducationPlanInDirectionSelector
                 value={educationalProgramId}
                 handleChange={this.handleChangePlan}
@@ -498,23 +490,26 @@ class Characteristic extends React.Component<CharacteristicProps> {
               <Button variant="outlined" size="small" onClick={() => this.setState({ addNewOP: false })}>Отменить</Button>
             </>:
             <Button variant="outlined" size="small" onClick={() => this.setState({ addNewOP: true })}>Добавить образовательную программу</Button>
-          }
+          ) : null}
           <br /><br /><br />
           <UserSelector selectorLabel="Руководитель"
                         value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.EP_SUPERVISOR, 'id'], '').toString()}
                         label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.EP_SUPERVISOR], ''))}
                         handleChange={this.handleChangeHead}
+                        disabled={!canEdit}
           />
           <UserSelector selectorLabel="Декан"
                         value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.DEAN, 'id'], '').toString()}
                         label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.DEAN], ''))}
                         handleChange={this.handleChangeDean}
+                        disabled={!canEdit}
           />
           <EducationalStandardSelector
             label="Образовательный стандарт"
             onChange={this.handleChangeEducationalStandard}
             value={get(educationalProgramCharacteristic, [EducationProgramFields.EDUCATIONAL_STANDARD, 'id'], '').toString()}
             valueLabel={get(educationalProgramCharacteristic, [EducationProgramFields.EDUCATIONAL_STANDARD, 'name'], '')}
+            disabled={!canEdit}
           />
           <SimpleSelector
             label="Язык реализации"
@@ -522,12 +517,14 @@ class Characteristic extends React.Component<CharacteristicProps> {
             value={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.LANGUAGE]}
             metaList={languageArray}
             wrapClass={classes.wrapSelector}
+            disabled={!canEdit}
           />
           {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.ID] ? (
             <TextField
               label="Должность декана"
               onChange={this.handleChangeDeanPost}
               defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.DEAN_POSITION]}
+              disabled={!canEdit}
             />
           ) : null}
 
@@ -541,11 +538,18 @@ class Characteristic extends React.Component<CharacteristicProps> {
       case 1:
         return <div className={classes.editorWrap}>
           <InputLabel className={classes.label}>Аннотация</InputLabel>
-          <CKEditor
-            value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
-            onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
-            toolbarContainerId="toolbar-container"
-          />
+          {canEdit ? (
+            <CKEditor
+              value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
+              onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
+              toolbarContainerId="toolbar-container"
+              readOnly={!canEdit}
+            />
+          ) : (
+            <Typography>
+              {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
+            </Typography>
+          )}
         </div>
       case 2:
         return (

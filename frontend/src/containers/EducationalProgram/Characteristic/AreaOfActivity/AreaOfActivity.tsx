@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -22,6 +22,7 @@ import {EducationProgramCharacteristicFields} from "../../enum";
 import useStyles from './AreaOfActivity.styles'
 import QuestionIcon from "@material-ui/icons/HelpOutline";
 import Tooltip from "@material-ui/core/Tooltip";
+import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 
 type Props = {
   tableTitle: string;
@@ -33,6 +34,7 @@ export default ({ characteristic, tableType, tableTitle }: Props) => {
   const dispatch = useDispatch()
   const [openAddProfStandardModal, setOpenAddProfStandardModal] = useState(false)
   const [profStandard, setProfStandard] = useState()
+  const canEdit = useSelector((state: any) => getEducationalProgramCharacteristicCanEdit(state))
 
   const handleAddNewItem = useCallback((item: any) => {
     const allActivities = characteristic?.[tableType].map((item: any) => item.id)
@@ -95,7 +97,7 @@ export default ({ characteristic, tableType, tableTitle }: Props) => {
             <TableCell>
               Наименование профессионального стандарта из данной области
             </TableCell>
-            <TableCell />
+            {canEdit ? <TableCell /> : null}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -113,24 +115,28 @@ export default ({ characteristic, tableType, tableTitle }: Props) => {
               <TableCell>
                 {item?.title}
               </TableCell>
-              <TableCell>
-                <IconButton onClick={() => handleRemoveItem(item?.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
+              {canEdit ? (
+                <TableCell>
+                  <IconButton onClick={() => handleRemoveItem(item?.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              ) : null}
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <div style={{display: 'flex'}}>
-        <Button
-          variant="outlined"
-          style={{marginLeft: 'auto', marginTop: '20px'}}
-          onClick={() => setOpenAddProfStandardModal(true)}
-        >
-          Добавить
-        </Button>
-      </div>
+      {canEdit ? (
+        <div style={{display: 'flex'}}>
+          <Button
+            variant="outlined"
+            style={{marginLeft: 'auto', marginTop: '20px'}}
+            onClick={() => setOpenAddProfStandardModal(true)}
+          >
+            Добавить
+          </Button>
+        </div>
+      ) : null}
       <Dialog
         open={openAddProfStandardModal}
         fullWidth

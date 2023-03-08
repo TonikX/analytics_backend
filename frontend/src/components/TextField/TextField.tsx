@@ -10,7 +10,7 @@ import {TextFieldProps} from './types';
 
 import styles from './TextField.styles';
 
-const TextFieldComponent = ({label, noMargin, onChange, classes, defaultValue}: TextFieldProps) => {
+const TextFieldComponent = ({label, noMargin, onChange, classes, defaultValue, disabled}: TextFieldProps) => {
   const debounceChange = debounce((value: string): void => {
     onChange(value)
   }, 500)
@@ -29,6 +29,7 @@ const TextFieldComponent = ({label, noMargin, onChange, classes, defaultValue}: 
                }}
                onChange={handleChange}
                defaultValue={defaultValue}
+               disabled={disabled}
     />
   );
 }

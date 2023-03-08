@@ -8,14 +8,17 @@ import useStyles from "./RepresentativesOrganizations.style";
 import useStylesReusable from "../CompetencesTable/CompetencesTable.style";
 import Button from "@material-ui/core/Button";
 import {AddRepresentativesOrganizations} from "../AddRepresentativesOrganizations/AddRepresentativesOrganizations";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import actions from "../../actions";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import Tooltip from "@material-ui/core/Tooltip";
+import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 
 export const RepresentativesOrganizations = ({ list }: any) => {
+  const canEdit = useSelector((state: any) => getEducationalProgramCharacteristicCanEdit(state))
+
   const [openAddRepresentativeOrganization, setOpenAddRepresentativeOrganization] = useState<any>(false)
   const classes = {
     ...useStylesReusable(),
@@ -55,7 +58,7 @@ export const RepresentativesOrganizations = ({ list }: any) => {
               <TableCell>
                 ФИО представителя
               </TableCell>
-              <TableCell />
+              {canEdit ? <TableCell /> : null}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -70,30 +73,34 @@ export const RepresentativesOrganizations = ({ list }: any) => {
                 <TableCell>
                   {item.fio_employer}
                 </TableCell>
-                <TableCell className={classes.actions}>
-                  <Tooltip title="Изменить">
-                    <IconButton onClick={() => setOpenAddRepresentativeOrganization(item)}>
-                      <EditIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Удалить">
-                    <IconButton onClick={deleteRepresentativeOrganization(item.id)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </TableCell>
+                {canEdit ? (
+                  <TableCell className={classes.actions}>
+                    <Tooltip title="Изменить">
+                      <IconButton onClick={() => setOpenAddRepresentativeOrganization(item)}>
+                        <EditIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Удалить">
+                      <IconButton onClick={deleteRepresentativeOrganization(item.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                ) : null}
               </TableRow>
             ))}
           </TableBody>
         </Table>
 
-        <Button className={classes.addButton}
+        {canEdit ? (
+          <Button className={classes.addButton}
                 onClick={() => setOpenAddRepresentativeOrganization(true)}
                 variant="outlined"
                 size="small"
-        >
-          Добавить нового представителя
-        </Button>
+          >
+            Добавить нового представителя
+          </Button>
+        ) : null}
 
         {openAddRepresentativeOrganization ? (
           <AddRepresentativesOrganizations

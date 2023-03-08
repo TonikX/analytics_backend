@@ -6,4 +6,5 @@ export interface TextFieldProps extends WithStyles<typeof styles> {
   label?: string;
   noMargin?: boolean;
   defaultValue?: string;
+  disabled?: boolean;
 }
