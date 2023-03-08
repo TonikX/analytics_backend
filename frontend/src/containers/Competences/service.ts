@@ -6,8 +6,9 @@ import {IndicatorsFields} from "../Indicators/enum";
 class CompetenceService extends AnalyticsService{
     getCompetences(currentPage: number, searchQuery: string, sortingField: string, sortingMode: SortingType, competenceType: string){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
+        const type = competenceType ? `&type=${competenceType}` : ''
 
-        return this.get(`/api/competences?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}&type=${competenceType}`);
+        return this.get(`/api/competences?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}${type}`);
     }
 
     deleteCompetence(id: number){
