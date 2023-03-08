@@ -41,6 +41,7 @@ const preOrder = (node: DisciplineModule, level = 0) => {
 
 const CompetencesCell = ({competences}: CompetencesHeaderProps) => {
     const classes = useStyles();
+    const extractOnlyNumber = (str: string) => str.replace(/\D/g, '');
     return (
         <TableCell variant="head" className={classes.competenceTableHeading}>
             <div className={classes.competenceHeader}>
@@ -53,7 +54,7 @@ const CompetencesCell = ({competences}: CompetencesHeaderProps) => {
                                     className={classes.competenceCell}
                                     arrow
                                 >
-                                    <div className={classes.competenceHeaderCell} key={index}>{el.number}</div>
+                                    <div className={classes.competenceHeaderCell} key={index}>{extractOnlyNumber(el.number)}</div>
                                 </Tooltip>)
                         }
                     )
