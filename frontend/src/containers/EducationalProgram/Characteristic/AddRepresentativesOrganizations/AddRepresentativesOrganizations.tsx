@@ -49,7 +49,7 @@ export const AddRepresentativesOrganizations = ({
           defaultValue={organization}
         />
         <TextField
-          label="Позиция работодателя"
+          label="Позиция представителя"
           onChange={setPosition}
           defaultValue={position}
         />

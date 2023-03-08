@@ -122,7 +122,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
     this.props.actions.changeEducationalProgram({
       id: this.getEducationalProgramId(),
       payload: {
-        [EducationProgramFields.LANGUAGE]: value
+        [EducationProgramCharacteristicFields.LANGUAGE]: value
       }
     })
   }
@@ -131,7 +131,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
     this.props.actions.changeEducationalProgram({
       id: this.getEducationalProgramId(),
       payload: {
-        [EducationProgramFields.DEAN]: value
+        [EducationProgramCharacteristicFields.DEAN]: value
       }
     })
   }
@@ -140,7 +140,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
     this.props.actions.changeEducationalProgram({
       id: this.getEducationalProgramId(),
       payload: {
-        [EducationProgramFields.DEAN_POSITION]: value
+        [EducationProgramCharacteristicFields.DEAN_POSITION]: value
       }
     })
   }
@@ -336,46 +336,54 @@ class Characteristic extends React.Component<CharacteristicProps> {
         <br/>
         <div className={classes.realizationBlockItem}>
           <Checkbox
-            checked={educationalProgramCharacteristic?.[EducationProgramFields.IS_ONLY_IN_UNIVERSITY]}
-            onChange={this.handleChangeRealizationType(EducationProgramFields.IS_ONLY_IN_UNIVERSITY)}
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_ONLY_IN_UNIVERSITY]}
+            onChange={this.handleChangeRealizationType(EducationProgramCharacteristicFields.IS_ONLY_IN_UNIVERSITY)}
             className={classes.checkbox}
           />
           <Typography>Только в университете ИТМО</Typography>
         </div>
         <div className={classes.realizationBlockItem}>
           <Checkbox
-            checked={educationalProgramCharacteristic?.[EducationProgramFields.IS_GLOBAL_EDUCATIONAL_PROGRAM]}
-            onChange={this.handleChangeRealizationType(EducationProgramFields.IS_GLOBAL_EDUCATIONAL_PROGRAM)}
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_GLOBAL_EDUCATIONAL_PROGRAM]}
+            onChange={this.handleChangeRealizationType(EducationProgramCharacteristicFields.IS_GLOBAL_EDUCATIONAL_PROGRAM)}
             className={classes.checkbox}
           />
           <Typography>Имеет статус международной образовательной программы (МОП)</Typography>
         </div>
         <div className={classes.realizationBlockItem}>
           <Checkbox
-            checked={educationalProgramCharacteristic?.[EducationProgramFields.IS_ONLINE_FORMAT]}
-            onChange={this.handleChangeRealizationType(EducationProgramFields.IS_ONLINE_FORMAT)}
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_ONLINE_FORMAT]}
+            onChange={this.handleChangeRealizationType(EducationProgramCharacteristicFields.IS_ONLINE_FORMAT)}
             className={classes.checkbox}
           />
           <Typography  className={classes.realizationBlockItemTitle}>В сетевой форме</Typography> <br/>
         </div>
-        {educationalProgramCharacteristic?.[EducationProgramFields.IS_ONLINE_FORMAT] ? (
+        {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_ONLINE_FORMAT] ? (
           <div className={classes.realizationBlockItem}>
             <Typography className={classes.realizationAdditionalBlockItemTitle}>Совместно с российским(-и) партнером(-ами)</Typography>
-            <TextField noMargin onChange={this.handleChangeTextRealizationType(EducationProgramFields.COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT)}/>
+            <TextField
+              noMargin
+              onChange={this.handleChangeTextRealizationType(EducationProgramCharacteristicFields.COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT)}
+              defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT]}
+            />
           </div>
         ) : null}
         <div className={classes.realizationBlockItem}>
           <Checkbox
-            checked={educationalProgramCharacteristic?.[EducationProgramFields.IS_COLLABORATION_FOREIGN]}
-            onChange={this.handleChangeRealizationType(EducationProgramFields.IS_COLLABORATION_FOREIGN)}
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_COLLABORATION_FOREIGN]}
+            onChange={this.handleChangeRealizationType(EducationProgramCharacteristicFields.IS_COLLABORATION_FOREIGN)}
             className={classes.checkbox}
           />
-          <Typography  className={classes.realizationBlockItemTitle}>В форме совместной образовательной программы</Typography>
+          <Typography className={classes.realizationBlockItemTitle}>В форме совместной образовательной программы</Typography>
         </div>
-        {educationalProgramCharacteristic?.[EducationProgramFields.IS_COLLABORATION_FOREIGN] ? (
+        {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_COLLABORATION_FOREIGN] ? (
           <div className={classes.realizationBlockItem}>
             <Typography className={classes.realizationAdditionalBlockItemTitle}>Совместно с иностранным(-и) партнером(-ами)</Typography>
-            <TextField noMargin onChange={this.handleChangeTextRealizationType(EducationProgramFields.COLLABORATION_FOREIGN)}/>
+            <TextField
+              noMargin
+              onChange={this.handleChangeTextRealizationType(EducationProgramCharacteristicFields.COLLABORATION_FOREIGN)}
+              defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.COLLABORATION_FOREIGN]}
+            />
           </div>
         ) : null}
       </>
@@ -410,24 +418,24 @@ class Characteristic extends React.Component<CharacteristicProps> {
         <br/>
         <div className={classes.opTypeBlockItem}>
           <Checkbox
-            checked={educationalProgramCharacteristic?.[EducationProgramFields.SCIENCE_TYPE]}
-            onChange={this.handleChangeOPType(EducationProgramFields.SCIENCE_TYPE)}
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.SCIENCE_TYPE]}
+            onChange={this.handleChangeOPType(EducationProgramCharacteristicFields.SCIENCE_TYPE)}
             className={classes.checkbox}
           />
           <Typography>Научная</Typography>
         </div>
         <div className={classes.opTypeBlockItem}>
           <Checkbox
-            checked={educationalProgramCharacteristic?.[EducationProgramFields.CORPORATE_TYPE]}
-            onChange={this.handleChangeOPType(EducationProgramFields.CORPORATE_TYPE)}
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.CORPORATE_TYPE]}
+            onChange={this.handleChangeOPType(EducationProgramCharacteristicFields.CORPORATE_TYPE)}
             className={classes.checkbox}
           />
           <Typography> Корпоративная ОП</Typography>
         </div>
         <div className={classes.opTypeBlockItem}>
           <Checkbox
-            checked={educationalProgramCharacteristic?.[EducationProgramFields.INDUSTRIAL_TYPE]}
-            onChange={this.handleChangeOPType(EducationProgramFields.INDUSTRIAL_TYPE)}
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.INDUSTRIAL_TYPE]}
+            onChange={this.handleChangeOPType(EducationProgramCharacteristicFields.INDUSTRIAL_TYPE)}
             className={classes.checkbox}
           />
           <Typography>Индустриальная ОП</Typography>
@@ -508,20 +516,20 @@ class Characteristic extends React.Component<CharacteristicProps> {
             value={get(educationalProgramCharacteristic, [EducationProgramFields.EDUCATIONAL_STANDARD, 'id'], '').toString()}
             valueLabel={get(educationalProgramCharacteristic, [EducationProgramFields.EDUCATIONAL_STANDARD, 'name'], '')}
           />
-          {/*/!*<SimpleSelector*/}
-          {/*  label="Язык реализации"*/}
-          {/*  onChange={this.handleChangeLanguage}*/}
-          {/*  value={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.LANGUAGE]}*/}
-          {/*  metaList={languageArray}*/}
-          {/*  wrapClass={classes.wrapSelector}*/}
-          {/*/>*!/*/}
-          {/*{educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.ID] ? (*/}
-          {/*  <TextField*/}
-          {/*    label="Должность декана"*/}
-          {/*    onChange={this.handleChangeDeanPost}*/}
-          {/*    defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.DEAN_POSITION]}*/}
-          {/*  />*/}
-          {/*) : null}*/}
+          <SimpleSelector
+            label="Язык реализации"
+            onChange={this.handleChangeLanguage}
+            value={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.LANGUAGE]}
+            metaList={languageArray}
+            wrapClass={classes.wrapSelector}
+          />
+          {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.ID] ? (
+            <TextField
+              label="Должность декана"
+              onChange={this.handleChangeDeanPost}
+              defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.DEAN_POSITION]}
+            />
+          ) : null}
 
           {this.renderRealizationTypeSelect()}
           <br/>

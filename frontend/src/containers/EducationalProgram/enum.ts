@@ -82,6 +82,18 @@ export enum EducationProgramCharacteristicFields {
     ANNOTATION = 'annotation',
     EDUCATIONAL_STANDART = 'educational_standard',
     EMPLOYERS_LIST = 'employers_in_characteristic',
+    DEAN_POSITION = 'directors_position',
+    IS_ONLY_IN_UNIVERSITY = 'is_only_in_university',
+    IS_GLOBAL_EDUCATIONAL_PROGRAM = 'is_global_educational_program',
+    IS_ONLINE_FORMAT = 'is_online_format',
+    COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT = 'collaboration_russian_in_online_format',
+    IS_COLLABORATION_FOREIGN = 'is_collaboration_foreign',
+    COLLABORATION_FOREIGN = 'collaboration_foreign',
+    SCIENCE_TYPE = 'science_type',
+    INDUSTRIAL_TYPE = 'industrial_type',
+    CORPORATE_TYPE = 'corporate_type',
+    ENTERPRISE_TYPE = 'enterprise_type',
+    TARGET_MASTER_TYPE = 'target_master_type',
 }
 
 export enum EducationProgramFields {
@@ -97,21 +109,8 @@ export enum EducationProgramFields {
     EP_SUPERVISOR = 'ep_supervisor',
     EDUCATIONAL_PROGRAM = 'educational_program',
     DEAN = 'dean_of_the_faculty',
-    DEAN_POSITION = 'directors_position',
     PROFESSIONAL_STANDARD = 'dean_of_the_faculty',
     EDUCATIONAL_STANDARD = 'educational_standard',
-    LANGUAGE = 'language',
-    IS_ONLY_IN_UNIVERSITY = 'is_only_in_university',
-    IS_GLOBAL_EDUCATIONAL_PROGRAM = 'is_global_educational_program',
-    IS_ONLINE_FORMAT = 'is_online_format',
-    COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT = 'collaboration_russian_in_online_format',
-    IS_COLLABORATION_FOREIGN = 'is_collaboration_foreign',
-    COLLABORATION_FOREIGN = 'collaboration_foreign',
-    SCIENCE_TYPE = 'science_type',
-    INDUSTRIAL_TYPE = 'industrial_type',
-    CORPORATE_TYPE = 'corporate_type',
-    ENTERPRISE_TYPE = 'enterprise_type',
-    TARGET_MASTER_TYPE = 'target_master_type',
 }
 
 export enum CompetenceTableType {

@@ -50,10 +50,10 @@ export const RepresentativesOrganizations = ({ list }: any) => {
                 Наименование организации
               </TableCell>
               <TableCell>
-                Позиция работодателя
+                Позиция представителя
               </TableCell>
               <TableCell>
-                ФИО работодателя
+                ФИО представителя
               </TableCell>
               <TableCell />
             </TableRow>
