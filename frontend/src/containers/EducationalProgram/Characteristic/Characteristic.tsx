@@ -492,18 +492,6 @@ class Characteristic extends React.Component<CharacteristicProps> {
             <Button variant="outlined" size="small" onClick={() => this.setState({ addNewOP: true })}>Добавить образовательную программу</Button>
           ) : null}
           <br /><br /><br />
-          <UserSelector selectorLabel="Руководитель"
-                        value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.EP_SUPERVISOR, 'id'], '').toString()}
-                        label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.EP_SUPERVISOR], ''))}
-                        handleChange={this.handleChangeHead}
-                        disabled={!canEdit}
-          />
-          <UserSelector selectorLabel="Декан"
-                        value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.DEAN, 'id'], '').toString()}
-                        label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.DEAN], ''))}
-                        handleChange={this.handleChangeDean}
-                        disabled={!canEdit}
-          />
           <EducationalStandardSelector
             label="Образовательный стандарт"
             onChange={this.handleChangeEducationalStandard}
@@ -518,6 +506,18 @@ class Characteristic extends React.Component<CharacteristicProps> {
             metaList={languageArray}
             wrapClass={classes.wrapSelector}
             disabled={!canEdit}
+          />
+          <UserSelector selectorLabel="Руководитель"
+                        value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.EP_SUPERVISOR, 'id'], '').toString()}
+                        label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.EP_SUPERVISOR], ''))}
+                        handleChange={this.handleChangeHead}
+                        disabled={!canEdit}
+          />
+          <UserSelector selectorLabel="Декан"
+                        value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.DEAN, 'id'], '').toString()}
+                        label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.DEAN], ''))}
+                        handleChange={this.handleChangeDean}
+                        disabled={!canEdit}
           />
           {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.ID] ? (
             <TextField
