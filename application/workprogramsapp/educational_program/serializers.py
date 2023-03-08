@@ -165,7 +165,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         except GroupOfGeneralProfCompetencesInEducationalStandard.DoesNotExist:
             return None
 
-    def to_representation(self, value):
+    def to_representation(self, instance):
         self.fields['tasks_for_prof_standards'] = TasksForEducationalStandardSerializer(many=True, required=False)
         self.fields['structural_unit_implementer'] = ShortStructuralUnitSerializer(many=False, required=False)
         self.fields['area_of_activity'] = ProfessionalStandardSerializer(many=True)
@@ -177,7 +177,16 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         self.fields['employers_in_characteristic'] = EmployerSerializer(many=True, required=False)
         self.fields['ep_supervisor'] = userProfileSerializer(required=False)
         self.fields['dean_of_the_faculty'] = userProfileSerializer(required=False)
-        return super().to_representation(value)
+
+        data = super().to_representation(instance)
+
+        editors = []
+        for ep in instance.educational_program.all():
+            for editor in ep.editors.all():
+                editors.append(editor)
+        data["can_edit"] = bool(self.context['request'].user in editors)
+
+        return data
 
     class Meta:
         model = GeneralCharacteristics

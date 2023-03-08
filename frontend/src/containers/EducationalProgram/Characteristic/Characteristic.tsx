@@ -508,20 +508,20 @@ class Characteristic extends React.Component<CharacteristicProps> {
             value={get(educationalProgramCharacteristic, [EducationProgramFields.EDUCATIONAL_STANDARD, 'id'], '').toString()}
             valueLabel={get(educationalProgramCharacteristic, [EducationProgramFields.EDUCATIONAL_STANDARD, 'name'], '')}
           />
-          <SimpleSelector
-            label="Язык реализации"
-            onChange={this.handleChangeLanguage}
-            value={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.LANGUAGE]}
-            metaList={languageArray}
-            wrapClass={classes.wrapSelector}
-          />
-          {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.ID] ? (
-            <TextField
-              label="Должность декана"
-              onChange={this.handleChangeDeanPost}
-              defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.DEAN_POSITION]}
-            />
-          ) : null}
+          {/*/!*<SimpleSelector*/}
+          {/*  label="Язык реализации"*/}
+          {/*  onChange={this.handleChangeLanguage}*/}
+          {/*  value={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.LANGUAGE]}*/}
+          {/*  metaList={languageArray}*/}
+          {/*  wrapClass={classes.wrapSelector}*/}
+          {/*/>*!/*/}
+          {/*{educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.ID] ? (*/}
+          {/*  <TextField*/}
+          {/*    label="Должность декана"*/}
+          {/*    onChange={this.handleChangeDeanPost}*/}
+          {/*    defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.DEAN_POSITION]}*/}
+          {/*  />*/}
+          {/*) : null}*/}
 
           {this.renderRealizationTypeSelect()}
           <br/>
