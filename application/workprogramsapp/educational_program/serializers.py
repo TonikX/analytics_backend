@@ -202,7 +202,8 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
                   'group_of_pk_competences_additional_qualification',
                   'employers_in_characteristic', 'ep_supervisor', 'directors_position', 'dean_of_the_faculty',
                   'cluster_name',
-                  'science_type', 'industrial_type', 'corporate_type', 'enterprise_type', 'target_master_type']
+                  'science_type', 'industrial_type', 'corporate_type', 'enterprise_type', 'target_master_type',
+                  'dean_of_the_faculty_directors_position']
         extra_kwargs = {"employers_in_characteristic": {"required": False}}
 
 
