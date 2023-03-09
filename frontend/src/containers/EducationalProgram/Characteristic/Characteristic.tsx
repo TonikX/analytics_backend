@@ -145,6 +145,15 @@ class Characteristic extends React.Component<CharacteristicProps> {
     })
   }
 
+  handleChangeDirectorPost = (value: string) => {
+    this.props.actions.changeEducationalProgram({
+      id: this.getEducationalProgramId(),
+      payload: {
+        [EducationProgramCharacteristicFields.DIRECTOR_POSITION]: value
+      }
+    })
+  }
+
   handleChangeSKEEditorField = (field: string) => (event: any) => {
     const data: string = event.editor.getData()
     this.props.actions.changeEducationalProgramCharacteristic({
@@ -527,10 +536,24 @@ class Characteristic extends React.Component<CharacteristicProps> {
               disabled={!canEdit}
             />
           ) : null}
+          {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.ID] ? (
+            <TextField
+              label="Должность руководителя"
+              onChange={this.handleChangeDirectorPost}
+              defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.DIRECTOR_POSITION]}
+              disabled={!canEdit}
+            />
+          ) : null}
 
           {this.renderRealizationTypeSelect()}
           <br/>
           {this.renderTypeOP()}
+          <br/>
+
+          <Typography>
+            Представители работодателей
+          </Typography>
+          <br/>
           <RepresentativesOrganizations
             list={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.EMPLOYERS_LIST]}
           />
