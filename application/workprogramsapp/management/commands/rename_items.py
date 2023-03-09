@@ -1,7 +1,7 @@
 import pandas as pd
 from django.core.management import BaseCommand
 
-from dataprocessing.models import Items
+from dataprocessing.models import Items, Domain
 
 
 class Command(BaseCommand):
@@ -13,7 +13,7 @@ class Command(BaseCommand):
         for i in range(len(normal_items)):
             try:
                 item = Items.objects.get(id=normal_items["id"][i])
-                item.name = normal_items["name"][i]
+                item.domain = Domain.objects.get(id=normal_items["domain_id"][i])
                 item.save()
             except:
                 pass
