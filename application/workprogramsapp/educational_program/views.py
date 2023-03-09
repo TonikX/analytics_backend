@@ -200,9 +200,7 @@ class ProfessionalStandardSet(viewsets.ModelViewSet):
     permission_classes = [IsRpdDeveloperOrReadOnly]
     filterset_fields = ['title',
                         ]
-    search_fields = ['title',
-                     'code'
-                     ]
+    search_fields = ['title', 'code']
 
 
 class GeneralizedLaborFunctionsSet(viewsets.ModelViewSet):
@@ -213,6 +211,7 @@ class GeneralizedLaborFunctionsSet(viewsets.ModelViewSet):
     serializer_class = GeneralLaborFunctionsSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    search_fields = ['name', 'code']
 
 
 class KindsOfActivitySet(viewsets.ModelViewSet):
@@ -223,6 +222,7 @@ class KindsOfActivitySet(viewsets.ModelViewSet):
     serializer_class = KindsOfActivitySerializerForEd
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    search_fields = ['name']
 
 
 class ObjectsOfActivitySet(viewsets.ModelViewSet):
