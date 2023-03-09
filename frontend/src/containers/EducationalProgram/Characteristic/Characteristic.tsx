@@ -522,6 +522,15 @@ class Characteristic extends React.Component<CharacteristicProps> {
                         handleChange={this.handleChangeHead}
                         disabled={!canEdit}
           />
+
+          {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.ID] ? (
+            <TextField
+              label="Должность руководителя"
+              onChange={this.handleChangeDirectorPost}
+              defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.DIRECTOR_POSITION]}
+              disabled={!canEdit}
+            />
+          ) : null}
           <UserSelector selectorLabel="Декан"
                         value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.DEAN, 'id'], '').toString()}
                         label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.DEAN], ''))}
@@ -533,14 +542,6 @@ class Characteristic extends React.Component<CharacteristicProps> {
               label="Должность декана"
               onChange={this.handleChangeDeanPost}
               defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.DEAN_POSITION]}
-              disabled={!canEdit}
-            />
-          ) : null}
-          {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.ID] ? (
-            <TextField
-              label="Должность руководителя"
-              onChange={this.handleChangeDirectorPost}
-              defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.DIRECTOR_POSITION]}
               disabled={!canEdit}
             />
           ) : null}
