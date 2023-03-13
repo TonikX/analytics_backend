@@ -54,6 +54,7 @@ export enum fetchingTypes {
 
 export enum EducationProgramCharacteristicFields {
     ID = 'id',
+    REALIZATION_FORMAT = 'realization_format',
 
     LANGUAGE = 'language',
     DIRECTION = 'area_of_activity',
