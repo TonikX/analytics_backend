@@ -525,7 +525,8 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
                     section.save()
         except:
             pass
-        response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id=serializer.data['id']))
+        response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id=serializer.data['id'])
+                                                    , context={'request': request})
         return Response(response_serializer.data)
 
 
@@ -551,7 +552,7 @@ class WorkProgramEditorsUpdateView(generics.UpdateAPIView):
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
-        return Response(WorkProgramSerializer(instance).data)
+        return Response(WorkProgramSerializer(instance, context={'request': request}).data)
 
 
 class WorkProgramDetailsView(generics.RetrieveAPIView):
