@@ -67,6 +67,10 @@ const createObjectOfActivity = createAction('CREATE_OBJECT_OF_ACTIVITY');
 const getObjectsOfActivity = createAction('GET_OBJECTS_OF_ACTIVITY');
 const setObjectsOfActivity = createAction('SET_OBJECTS_OF_ACTIVITY');
 
+const addNewRepresentative = createAction('ADD_NEW_REPRESENTATIVE');
+const updateRepresentative = createAction('UPDATE_REPRESENTATIVE');
+const deleteRepresentative = createAction('DELETE_REPRESENTATIVE');
+
 const createTaskType = createAction('CREATE_TASK_TYPE');
 const getTasksTypes = createAction('GET_TASKS_TYPES');
 const setTasksTypes = createAction('SET_TASKS_TYPES');
@@ -79,6 +83,10 @@ const getDirectionsDependedOnWorkProgram = createAction('GET_DIRECTIONS_DEPENDED
 const setDirectionsDependedOnWorkProgram = createAction('SET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM_WITH_GH');
 
 const actions: EducationalProgramActions = {
+    addNewRepresentative,
+    updateRepresentative,
+    deleteRepresentative,
+
     createTaskType,
     getTasksTypes,
     setTasksTypes,

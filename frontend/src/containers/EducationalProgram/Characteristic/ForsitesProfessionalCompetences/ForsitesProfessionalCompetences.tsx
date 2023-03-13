@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import get from 'lodash/get';
 
 import Table from "@material-ui/core/Table";
@@ -29,6 +29,7 @@ import useStyles from './ForsitesProfessionalCompetences.style';
 import useStylesReusable  from '../CompetencesTable/CompetencesTable.style';
 import {Link} from "react-router-dom";
 import {appRouter} from "../../../../service/router-service";
+import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 
 export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableData}) => {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = (
     ...useStylesReusable(),
     ...useStyles()
   };
+  const canEdit = useSelector((state: any) => getEducationalProgramCharacteristicCanEdit(state))
 
   const competenceTableType = CompetenceTableType.PROFESSIONAL_COMPETENCES;
 
@@ -150,20 +152,21 @@ export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = (
                                     onClickCancel={() => changeEditGroupTitle({isEdit: false, groupId: 0})}
                                     onValueClick={() => changeEditGroupTitle({isEdit: true, groupId: item.id})}
                                     fullWidth
+                                    disabled={!canEdit}
                       />
                     </div>
 
-                    <Tooltip title="Удалить группу">
+                    {canEdit ? <Tooltip title="Удалить группу">
                       <IconButton onClick={deleteGroup(item.id)}>
                         <DeleteIcon/>
                       </IconButton>
-                    </Tooltip>
+                    </Tooltip> : null}
                   </div>
                 </TableCell>
               </TableRow>
             );
 
-            const addCompetenceRow = (
+            const addCompetenceRow = canEdit ? (
               <TableRow>
                 <TableCell colSpan={4}>
                   <Button color="primary"
@@ -175,7 +178,7 @@ export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = (
                   </Button>
                 </TableCell>
               </TableRow>
-            );
+            ) : null;
 
             if (competences.length === 0) {
               return (
@@ -199,22 +202,22 @@ export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = (
                       >
                         {get(competenceItem, 'competence.number')} {get(competenceItem, 'competence.name')}
                       </Link>
-                      <Tooltip title="Удалить компетенцию">
+                      {canEdit ? <Tooltip title="Удалить компетенцию">
                         <DeleteIcon className={classes.deleteIcon} onClick={deleteCompetence(competenceItem.id)} />
-                      </Tooltip>
+                      </Tooltip> : null}
                       <br/>
                     </TableCell>
                     <TableCell>
                       {get(competenceItem, 'indicator_of_competence_in_group_of_pk_competences').map((indicatorItem: any) => (
                         <>
                           {get(indicatorItem, 'indicator.number')} {get(indicatorItem, 'indicator.name')}
-                          <Tooltip title="Удалить индикатор" onClick={deleteIndicator(indicatorItem.id)}>
+                          {canEdit ? <Tooltip title="Удалить индикатор" onClick={deleteIndicator(indicatorItem.id)}>
                             <DeleteIcon className={classes.deleteIcon}/>
-                          </Tooltip>
+                          </Tooltip> : null}
                           <br/>
                         </>
                       ))}
-                      <Button color="primary"
+                      {canEdit ? <Button color="primary"
                               variant="text"
                               size="small"
                               className={classes.addSmallButton}
@@ -225,29 +228,31 @@ export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = (
                               })}
                       >
                         <AddIcon/> Добавить индикатор
-                      </Button>
+                      </Button> : null}
                     </TableCell>
                     <TableCell className={classes.standardCell}>
                       {competenceItem.kinds_of_activity ?
                         <>
                           {get(competenceItem, 'kinds_of_activity.name')}
-                          <Tooltip title="Удалить объект профессиональной деятельности" onClick={deleteKindOfActivity(competenceItem.id)}>
+                          {canEdit ? <Tooltip title="Удалить объект профессиональной деятельности" onClick={deleteKindOfActivity(competenceItem.id)}>
                             <DeleteIcon className={classes.deleteIcon}/>
-                          </Tooltip>
+                          </Tooltip> : null}
                         </>
                         :
-                        <Button color="primary"
-                                variant="text"
-                                size="small"
-                                className={classes.addSmallButton}
-                                onClick={() => changeKindOfActivityModalData({
-                                  isOpen: true,
-                                  competenceId: get(competenceItem, 'competence.id'),
-                                  competenceIdRelation: competenceItem.id,
-                                })}
-                        >
-                          <AddIcon/> Добавить сферу деятельности
-                        </Button>
+                        canEdit ?
+                          <Button color="primary"
+                                  variant="text"
+                                  size="small"
+                                  className={classes.addSmallButton}
+                                  onClick={() => changeKindOfActivityModalData({
+                                    isOpen: true,
+                                    competenceId: get(competenceItem, 'competence.id'),
+                                    competenceIdRelation: competenceItem.id,
+                                  })}
+                          >
+                            <AddIcon/> Добавить сферу деятельности
+                          </Button>
+                          : null
                       }
                     </TableCell>
                   </TableRow>
@@ -259,18 +264,19 @@ export const ForsitesProfessionalCompetences: React.FC<CompetenceTableProps> = (
         </TableBody>
       </Table>
 
-      <Button className={classes.addButton}
+      {canEdit ? <Button className={classes.addButton}
               onClick={createNewGroup}
               variant="outlined"
               size="small"
       >
         Добавить новую категорию
-      </Button>
+      </Button> : null}
 
 
       <AddCompetenceModal closeDialog={() => changeCompetenceOpenModal({isOpen: false, groupId: 0})}
                           isOpen={competenceModalData.isOpen}
                           saveDialog={saveCompetence}
+                          competenceType="ПК"
       />
       <AddIndicatorsModal closeDialog={() => changeIndicatorOpenModal({isOpen: false, competenceId: 0, competenceIdRelation: 0})}
                           isOpen={indicatorModalData.isOpen}

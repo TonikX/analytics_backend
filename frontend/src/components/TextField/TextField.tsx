@@ -1,4 +1,5 @@
 import React from 'react';
+import debounce from 'lodash/debounce';
 import get from "lodash/get";
 import classNames from 'classnames';
 
@@ -9,22 +10,28 @@ import {TextFieldProps} from './types';
 
 import styles from './TextField.styles';
 
-const TextFieldComponent = ({label, noMargin, onChange, classes}: TextFieldProps) => {
-    const handleChange = (e: React.ChangeEvent) => {
-        onChange(get(e, 'target.value', ''));
-    };
+const TextFieldComponent = ({label, noMargin, onChange, classes, defaultValue, disabled}: TextFieldProps) => {
+  const debounceChange = debounce((value: string): void => {
+    onChange(value)
+  }, 500)
 
-    return (
-        <TextField label={label}
-                   variant="outlined"
-                   className={classNames({[classes.marginBottom30]: !noMargin})}
-                   fullWidth
-                   InputLabelProps={{
-                       shrink: true,
-                   }}
-                   onChange={handleChange}
-        />
-    );
+  const handleChange = (e: React.ChangeEvent) => {
+    debounceChange(get(e, 'target.value', ''));
+  };
+
+  return (
+    <TextField label={label}
+               variant="outlined"
+               className={classNames({[classes.marginBottom30]: !noMargin})}
+               fullWidth
+               InputLabelProps={{
+                   shrink: true,
+               }}
+               onChange={handleChange}
+               defaultValue={defaultValue}
+               disabled={disabled}
+    />
+  );
 }
 
 export default withStyles(styles)(TextFieldComponent);

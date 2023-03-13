@@ -16,6 +16,8 @@ const getStateData = (state: rootState): educationalProgramState => get(state, G
 export const getEducationalProgramCharacteristic = (state: rootState): EducationalProgramCharacteristicType|{} => get(getStateData(state), fields.EDUCATION_PROGRAM_CHARACTERISTIC, {});
 export const getEducationalProgramId = (state: rootState): number => get(getEducationalProgramCharacteristic(state), 'educational_program.id', 0);
 export const getEducationalProgramCharacteristicId = (state: rootState): number => get(getEducationalProgramCharacteristic(state), 'id', 0);
+export const getEducationalProgramCharacteristicCanEdit= (state: rootState): boolean =>
+  get(getEducationalProgramCharacteristic(state), 'can_edit', false);
 
 export const getSupraProfessionalCompetencies = (state: rootState): EducationalProgramCharacteristicType|{} =>
     get(getEducationalProgramCharacteristic(state), fields.EDUCATION_PROGRAM_CHARACTERISTIC, {})

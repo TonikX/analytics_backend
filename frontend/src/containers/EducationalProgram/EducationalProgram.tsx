@@ -170,7 +170,7 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                                 {educationalProgram.map((educationalProgram: any) =>
                                     <TableRow key={educationalProgram[EducationProgramFields.ID]}>
                                         <TableCell>
-                                            {educationalProgram?.educational_program?.[0]?.title}
+                                            {educationalProgram?.educational_program?.map((item: any) => item?.title).join(', ')}
                                         </TableCell>
                                         <TableCell>
                                             {specializationObject[educationalProgram?.educational_program?.[0]?.qualification]}
@@ -179,8 +179,9 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                                             {educationalProgram?.educational_program?.[0]?.year}
                                         </TableCell>
                                         <TableCell>
-                                            {educationalProgram?.educational_program?.[0]?.field_of_study?.[0]?.title}&nbsp;
-                                            ({educationalProgram?.educational_program?.[0]?.field_of_study?.[0]?.number})
+                                            {educationalProgram?.educational_program?.map((item: any) => (
+                                              item?.field_of_study?.[0]?.title + ' ' + item?.field_of_study?.[0]?.number
+                                            )).join(', ')}
                                         </TableCell>
                                         <TableCell>
                                             <TableSettingsMenu menuItems={[

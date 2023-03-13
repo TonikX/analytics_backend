@@ -522,6 +522,8 @@ class GeneralCharacteristics(models.Model):
     dean_of_the_faculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                             verbose_name="Декан факультета", related_name="dean_of_the_faculty_in_gh",
                                             blank=True, null=True)
+    dean_of_the_faculty_directors_position = models.CharField(max_length=512, verbose_name="должность Декана", blank=True,
+                                          null=True)
     cluster_name = models.CharField(max_length=512, verbose_name="Имя подразделения, кластера, института", blank=True,
                                     null=True)
     science_type = models.BooleanField(blank=True, null=True, verbose_name="Научная ОП?")

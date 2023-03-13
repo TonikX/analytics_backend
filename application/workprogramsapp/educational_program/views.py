@@ -7,7 +7,7 @@ from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg2 import openapi
 from drf_yasg2.utils import swagger_auto_schema
-from rest_framework import filters
+from rest_framework import filters, mixins
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import CreateAPIView
@@ -16,6 +16,8 @@ from rest_framework.response import Response
 import pandas as pd
 
 # Сериализаторы
+from rest_framework.viewsets import GenericViewSet
+
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
     EducationalProgramSerializer, \
     GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
@@ -154,6 +156,10 @@ class GeneralCharacteristicsDetailsView(generics.RetrieveAPIView):
     serializer_class = GeneralCharacteristicsSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = GeneralCharacteristicsSerializer(instance, context={'request': request})
+        return Response(serializer.data)
 
 class DepartmentListAPIView(generics.ListAPIView):
     serializer_class = DepartmentSerializer
@@ -194,6 +200,7 @@ class ProfessionalStandardSet(viewsets.ModelViewSet):
     permission_classes = [IsRpdDeveloperOrReadOnly]
     filterset_fields = ['title',
                         ]
+    search_fields = ['title', 'code']
 
 
 class GeneralizedLaborFunctionsSet(viewsets.ModelViewSet):
@@ -204,6 +211,7 @@ class GeneralizedLaborFunctionsSet(viewsets.ModelViewSet):
     serializer_class = GeneralLaborFunctionsSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    search_fields = ['name', 'code']
 
 
 class KindsOfActivitySet(viewsets.ModelViewSet):
@@ -214,6 +222,7 @@ class KindsOfActivitySet(viewsets.ModelViewSet):
     serializer_class = KindsOfActivitySerializerForEd
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    search_fields = ['name']
 
 
 class ObjectsOfActivitySet(viewsets.ModelViewSet):
@@ -226,7 +235,10 @@ class ObjectsOfActivitySet(viewsets.ModelViewSet):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class EmployerSet(viewsets.ModelViewSet):
+class EmployerSet(mixins.CreateModelMixin,
+                   mixins.UpdateModelMixin,
+                   mixins.DestroyModelMixin,
+                   GenericViewSet):
     """
     CRUD представителей работодателей
     """
