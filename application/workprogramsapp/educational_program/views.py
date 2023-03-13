@@ -314,6 +314,8 @@ def UploadCompetences(request):
 @permission_classes((IsAuthenticated,))
 def GetCompetenceMatrix(request, gen_pk):
     unique_wp = []  # Уникальные РПД в нескольких УП
+    unique_practice = []  # Уникальные Практики в нескольких УП
+    unique_gia = []  # Уникальные ГИА в нескольких УП
     gen_characteristic = GeneralCharacteristics.objects.get(pk=gen_pk)
     academic_plans = gen_characteristic.educational_program.all()
     pk_competences = PkCompetencesInGroupOfGeneralCharacteristicSerializer(
@@ -343,7 +345,7 @@ def GetCompetenceMatrix(request, gen_pk):
             block_dict = {"name": block.name, "modules_in_discipline_block": []}
             # academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
             for block_module in DisciplineBlockModule.objects.filter(descipline_block=block):
-                block_module_dict = recursion_module_matrix(block_module, unique_wp)
+                block_module_dict = recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice)
                 if block_module_dict["change_blocks_of_work_programs_in_modules"] or block_module_dict["childs"]:
                     block_dict["modules_in_discipline_block"].append(block_module_dict)
             if block_dict["modules_in_discipline_block"]:

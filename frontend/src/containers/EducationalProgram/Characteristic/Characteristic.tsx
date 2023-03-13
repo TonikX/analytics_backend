@@ -127,6 +127,15 @@ class Characteristic extends React.Component<CharacteristicProps> {
     })
   }
 
+  handleChangeRealizationFormat = (value: number) => {
+    this.props.actions.changeEducationalProgram({
+      id: this.getEducationalProgramId(),
+      payload: {
+        [EducationProgramCharacteristicFields.REALIZATION_FORMAT]: value
+      }
+    })
+  }
+
   handleChangeDean = (value: string) => {
     this.props.actions.changeEducationalProgram({
       id: this.getEducationalProgramId(),
@@ -546,6 +555,17 @@ class Characteristic extends React.Component<CharacteristicProps> {
             />
           ) : null}
 
+          <SimpleSelector
+            label="Формат реализации"
+            onChange={this.handleChangeRealizationFormat}
+            value={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.REALIZATION_FORMAT]}
+            metaList={[
+              {value: 'online', label: 'Онлайн'},
+              {value: 'offline', label: 'Офлайн'},
+            ]}
+            wrapClass={classes.formatRealizationWrapSelector}
+            disabled={!canEdit}
+          />
           {this.renderRealizationTypeSelect()}
           <br/>
           {this.renderTypeOP()}
