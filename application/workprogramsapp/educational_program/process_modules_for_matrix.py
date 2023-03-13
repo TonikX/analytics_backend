@@ -1,4 +1,5 @@
 from gia_practice_app.GIA.models import GIA
+from gia_practice_app.GIA.serializers import GIAPrimitiveSerializer, GIASmallSerializer
 from gia_practice_app.Practice.models import Practice
 from gia_practice_app.Practice.serializers import PracticeCompetenceSerializer
 from workprogramsapp.educational_program.serializers import WorkProgramCompetenceIndicatorSerializer
@@ -34,7 +35,15 @@ def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice
             else:
                 pass
                 # print(work_program)
+        for gia in GIA.objects.filter(gia_in_change_block=change_block):
+            if gia.id not in unique_gia:
+                serializer = GIASmallSerializer(gia)
+                change_block_dict['gia'].append(serializer.data)
+                unique_gia.append(gia.id)
+            else:
+                pass
+                # print(work_program)
 
-        if change_block_dict["work_program"] or change_block_dict["practice"]:
+        if change_block_dict["work_program"] or change_block_dict["practice"] or change_block_dict["gia"]:
             block_module_dict["change_blocks_of_work_programs_in_modules"].append(change_block_dict)
     return block_module_dict

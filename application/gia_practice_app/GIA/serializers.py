@@ -100,3 +100,9 @@ class GIAPrimitiveSerializer(serializers.ModelSerializer):
     class Meta:
         model = GIA
         fields = "__all__"
+
+
+class GIASmallSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GIA
+        fields = ['id', 'title']
