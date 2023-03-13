@@ -54,8 +54,7 @@ from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, D
 from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
-
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsEducationPlanDeveloper
 
 # Блок реализации АПИ для КПУД интерфейсов
 from ..notifications.emails.send_mail import mail_sender
@@ -142,13 +141,13 @@ class GeneralCharacteristicsCreateAPIView(generics.CreateAPIView):
 class GeneralCharacteristicsDestroyView(generics.DestroyAPIView):
     queryset = GeneralCharacteristics.objects.all()
     serializer_class = GeneralCharacteristicsSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsEducationPlanDeveloper]
 
 
 class GeneralCharacteristicsUpdateView(generics.UpdateAPIView):
     queryset = GeneralCharacteristics.objects.all()
     serializer_class = GeneralCharacteristicsSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsEducationPlanDeveloper]
 
 
 class GeneralCharacteristicsDetailsView(generics.RetrieveAPIView):
@@ -196,9 +195,9 @@ class DepartmentDetailsView(generics.RetrieveAPIView):
 class ProfessionalStandardSet(viewsets.ModelViewSet):
     queryset = ProfessionalStandard.objects.all()
     serializer_class = ProfessionalStandardSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
     permission_classes = [IsRpdDeveloperOrReadOnly]
-    filterset_fields = ['title',
+    filterset_fields = ['title', 'code_of_prof_area'
                         ]
     search_fields = ['title', 'code']
 

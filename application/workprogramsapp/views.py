@@ -1368,7 +1368,7 @@ class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
             work_program__id=int(self.kwargs['workprogram_id']),
         ).distinct()
 
-        modules = DisciplineBlockModule.objects.none()
+        modules = WorkProgramInFieldOfStudy.objects.none()
         for module in queryset:
             modules = modules | DisciplineBlockModule.objects.filter(id__in=self.get_blocks_for_all_children(
                 module.work_program_change_in_discipline_block_module.discipline_block_module,
