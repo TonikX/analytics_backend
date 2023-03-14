@@ -9,4 +9,4 @@ class CompetenceFilter(django_filters.FilterSet):
 
     class Meta:
         model = Competence
-        fields = {'type' , 'number'}
+        fields = {'type', 'number'}
