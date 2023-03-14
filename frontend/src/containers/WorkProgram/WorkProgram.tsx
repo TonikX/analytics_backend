@@ -229,6 +229,10 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         this.props.actions.sendWorkProgramToExpertise();
     }
 
+    handleSendToIsu = () => {
+        this.props.actions.sendWorkProgramToIsu();
+    }
+
     handleSendToArchive = () => {
         this.closeArchiveWPModal();
         this.props.actions.sendWorkProgramToArchive();
@@ -279,7 +283,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
     render() {
         const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
-            workProgramRating, canAddToFolder, validateErrors, notificationsRead} = this.props;
+            workProgramRating, canAddToFolder, validateErrors, notificationsRead, canSendToIsu} = this.props;
         const {activeStep, isOpenComments} = this.state;
 
         return (
@@ -316,6 +320,13 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                                 <Button onClick={this.handleSendToRework}>Отправить РПД на доработку</Button>
                                 <Button color="primary" onClick={this.handleApproveExpertise}>Принять РПД</Button>
                             </ButtonGroup>
+                        }
+
+                        
+                        {canSendToIsu &&
+                            <Button onClick={this.handleSendToIsu}>
+                                отправить в ИСУ
+                            </Button>
                         }
 
                         {canAddToFolder &&
