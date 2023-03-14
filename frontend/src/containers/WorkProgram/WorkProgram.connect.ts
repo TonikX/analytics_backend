@@ -8,6 +8,7 @@ import {
     isCanApprove,
     isCanArchive,
     isCanComment,
+    isCanSendToIsu,
     isCanEdit,
     isCanAddToFolder, getWorkProgramNotificationsUnread,
 } from './getters';
@@ -32,6 +33,7 @@ const mapStateToProps = (state:rootState) => {
         canSendToArchive: isCanArchive(state),
         canAddToFolder: isCanAddToFolder(state),
         canApprove: isCanApprove(state),
+        canSendToIsu: isCanSendToIsu(state),
         canSendToExpertise: isCanEdit(state),
         canComment: isCanComment(state),
         folders: getFolders(state),

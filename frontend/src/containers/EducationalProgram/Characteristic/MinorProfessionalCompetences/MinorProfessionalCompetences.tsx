@@ -115,7 +115,7 @@ export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({ta
               Код и наименование индикатора достижения компетенции
             </TableCell>
             <TableCell className={classes.standardCell}>
-              Наименование сферы профессиональной деятельности
+              Наименование трудовой функции
             </TableCell>
           </TableRow>
         </TableHead>
