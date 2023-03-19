@@ -106,9 +106,7 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
 
     const userExpertiseStatus = permissionsInfo[PermissionsInfoFields.YOUR_APPROVE_STATUS];
 
-    const showSendToExpertise = expertiseStatus === ExpertiseStatus.WORK
-      || expertiseStatus === ExpertiseStatus.REWORK
-      || expertiseStatus === null;
+    const showSendToExpertise = permissionsInfo[PermissionsInfoFields.CAN_EDIT];
 
     const userExpertiseId =
       this.props.certification[CertificationFields.PERMISSIONS_INFO][PermissionsInfoFields.USER_EXPERTISE_ID];
