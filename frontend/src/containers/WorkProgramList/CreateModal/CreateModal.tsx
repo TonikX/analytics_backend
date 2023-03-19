@@ -54,6 +54,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
         workProgram: {
             ...DEFAULT_WP_STATE,
+            [WorkProgramGeneralFields.EVALUATION_TOOLS]: [[1]],
         },
     };
 
@@ -62,6 +63,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         this.setState({
             workProgram: {
                 ...DEFAULT_WP_STATE,
+                [WorkProgramGeneralFields.EVALUATION_TOOLS]: [[1]],
             }
         });
     };
@@ -115,6 +117,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         this.setState({
             workProgram: {
                 ...DEFAULT_WP_STATE,
+                [WorkProgramGeneralFields.EVALUATION_TOOLS]: [[1]],
             }
         });
     };
@@ -256,7 +259,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const {title_en, ...rest} = workProgram;
         const disableButton = !Object.values(rest).every(Boolean);
-
+        console.log('workProgramworkProgram', workProgram)
         return (
             <Dialog
                 open={isOpen}
