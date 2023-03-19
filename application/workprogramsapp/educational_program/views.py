@@ -54,8 +54,7 @@ from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, D
 from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
-
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsEducationPlanDeveloper
 
 # Блок реализации АПИ для КПУД интерфейсов
 from ..notifications.emails.send_mail import mail_sender
@@ -142,13 +141,13 @@ class GeneralCharacteristicsCreateAPIView(generics.CreateAPIView):
 class GeneralCharacteristicsDestroyView(generics.DestroyAPIView):
     queryset = GeneralCharacteristics.objects.all()
     serializer_class = GeneralCharacteristicsSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsEducationPlanDeveloper]
 
 
 class GeneralCharacteristicsUpdateView(generics.UpdateAPIView):
     queryset = GeneralCharacteristics.objects.all()
     serializer_class = GeneralCharacteristicsSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsEducationPlanDeveloper]
 
 
 class GeneralCharacteristicsDetailsView(generics.RetrieveAPIView):
@@ -196,9 +195,9 @@ class DepartmentDetailsView(generics.RetrieveAPIView):
 class ProfessionalStandardSet(viewsets.ModelViewSet):
     queryset = ProfessionalStandard.objects.all()
     serializer_class = ProfessionalStandardSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
     permission_classes = [IsRpdDeveloperOrReadOnly]
-    filterset_fields = ['title',
+    filterset_fields = ['title', 'code_of_prof_area'
                         ]
     search_fields = ['title', 'code']
 
@@ -315,6 +314,8 @@ def UploadCompetences(request):
 @permission_classes((IsAuthenticated,))
 def GetCompetenceMatrix(request, gen_pk):
     unique_wp = []  # Уникальные РПД в нескольких УП
+    unique_practice = []  # Уникальные Практики в нескольких УП
+    unique_gia = []  # Уникальные ГИА в нескольких УП
     gen_characteristic = GeneralCharacteristics.objects.get(pk=gen_pk)
     academic_plans = gen_characteristic.educational_program.all()
     pk_competences = PkCompetencesInGroupOfGeneralCharacteristicSerializer(
@@ -344,7 +345,7 @@ def GetCompetenceMatrix(request, gen_pk):
             block_dict = {"name": block.name, "modules_in_discipline_block": []}
             # academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
             for block_module in DisciplineBlockModule.objects.filter(descipline_block=block):
-                block_module_dict = recursion_module_matrix(block_module, unique_wp)
+                block_module_dict = recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice)
                 if block_module_dict["change_blocks_of_work_programs_in_modules"] or block_module_dict["childs"]:
                     block_dict["modules_in_discipline_block"].append(block_module_dict)
             if block_dict["modules_in_discipline_block"]:

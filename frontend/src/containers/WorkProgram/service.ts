@@ -42,6 +42,12 @@ class WorkProgramService extends AnalyticsService{
         });
     }
 
+    sendToIsu(id: string){
+        return this.post(`/api/isu_v2/academic-plans/send_wp_to_isu/`, {
+            wp_id: id
+        });
+    }
+
     sendToArchive(id: string){
         return this.patch(`/api/workprogram/update_status/${id}`, {
             'work_status': 'a'
