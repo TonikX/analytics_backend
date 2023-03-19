@@ -29,6 +29,12 @@ export default ({onChange, value, isReset, label, className, disabled, valueLabe
     return resetMenu
   }, [])
 
+  useEffect(() => {
+    return () => {
+      dispatch(actions.changeSearchQuery(''))
+    }
+  }, [])
+
   return (
     <SearchSelector
       label={label}
