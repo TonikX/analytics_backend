@@ -96,10 +96,6 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
     })
   }
 
-  handleSendToExpertize = () => {
-    this.props.actions.sendGiaToExpertise();
-  }
-
   render() {
     const {classes, isError, permissionsInfo} = this.props;
     const {activeStep} = this.state;
