@@ -9,7 +9,7 @@ export default (theme: Theme) => createStyles({
         fontSize: '14px'
     },
     content: {
-        width: '70vw',
+        width: '100%',
         alignSelf: 'stretch',
         marginLeft: '10px',
     },
@@ -110,7 +110,7 @@ export default (theme: Theme) => createStyles({
     },
     rightButton: {
         marginTop: '10px',
-        width: '100%',
+        marginRight: '20px'
     },
     rightButtons: {
         margin: '35px 0 0 30px',

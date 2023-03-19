@@ -93,8 +93,8 @@ class Expertise extends React.Component<ExpertiseProps> {
 
                     {canApproveWP &&
                         <ButtonGroup className={classes.buttonGroup} variant="contained">
-                            <Button onClick={this.handleSendToRework}>Отправить РПД на доработку</Button>
-                            <Button color="primary" onClick={this.handleApproveExpertise}>Принять РПД</Button>
+                            <Button onClick={this.handleSendToRework}>Отправить на доработку</Button>
+                            <Button color="primary" onClick={this.handleApproveExpertise}>Принять</Button>
                         </ButtonGroup>
                     }
                 </div>

@@ -95,7 +95,7 @@ class Download extends React.Component<DownloadProps> {
             <div className={classes.input}>
                 <Button variant='outlined'
                         onClick={this.handleDownload(fields)}>
-                    Скачать рабочую программу
+                    Скачать ГИА
                 </Button>
             </div>
         );
