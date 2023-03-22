@@ -39,7 +39,7 @@ ALLOWED_HOSTS = ['localhost', '62.109.28.95', 'op.itmo.ru', "127.0.0.1"]
 
 # Application definition
 
-APPEND_SLASH  =  False
+# APPEND_SLASH  =  False
 
 INSTALLED_APPS = [
     'django.contrib.admin',
