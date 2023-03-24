@@ -1,4 +1,5 @@
 # Библиотеки для сариализации
+from django.contrib.auth.models import Group
 from rest_framework import serializers
 # --Работа с образовательной программой
 from rest_framework.fields import BooleanField, SerializerMethodField
@@ -184,6 +185,8 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         for ep in instance.educational_program.all():
             for editor in ep.editors.all():
                 editors.append(editor)
+                group = Group.objects.get(name="education_plan_developer")
+                editor.groups.add(group)
         data["can_edit"] = bool(self.context['request'].user in editors)
 
         return data
