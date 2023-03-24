@@ -7,14 +7,27 @@
 
 ```
 DEBUG=True
-DATABASE_URL=postgres://postgres:ПАРОЛЬ@db:5432/analytics_db
+DATABASE_URL=postgres://**ЛОГИН:ПАРОЛЬ**@db:5432/analytics_db
 SECRET_KEY=СЕКРЕТНЫЙ_КЛЮЧ_ДЖАНГО
 ISU_CLIENT_ID=''
 ISU_CLIENT_SECRET=''
 ISU_REDIRECT_URI=''
-
 BARS_LOGIN=''
 BARS_PASSWORD=''
+ISU_FINISH_URI_WITH_PROTOCOL=''
+BARS_URL=''
+EMAIL_HOST_USER=''
+EMAIL_HOST=''
+EMAIL_PORT=''
+EMAIL_USE_TLS=True
+EMAIL_USE_SSL=False
+EMAIL_HOST_PASSWORD=''
+URL_FRONT=localhost
+EMAIL_ENABLE=True
+SENTRY_URL=""
+AP_FILE_ROUTE="/application/static-backend/export_template/academic_plan_template_2023.xlsx"
+ISU_URL_UPDATERS=''
+
 ```
 В папке /application/onlinecourse создать файл .env. Пример:
 ```
@@ -38,8 +51,8 @@ docker-compose up
 
 ```
 PORTS = "внешний порт:5432"
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=ПАРОЛЬ
+POSTGRES_USER=**ЛОГИН**
+POSTGRES_PASSWORD=**ПАРОЛЬ**
 POSTGRES_DB=analytics_db
 ```
 
