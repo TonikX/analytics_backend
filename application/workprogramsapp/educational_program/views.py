@@ -338,6 +338,7 @@ def GetCompetenceMatrix(request, gen_pk):
     competence_matrix = {"pk_competences": pk_competences, "general_prof_competences": general_prof_competences,
                          "key_competences": key_competences, "over_prof_competences": over_prof_competences, }
     matrix_list = []
+    first_ap_iter=True
     for ap in academic_plans:
         academic_plan = ap.academic_plan
         academic_plan_matrix_dict = {"academic_plan": ap.title, "discipline_blocks_in_academic_plan": []}
@@ -346,7 +347,7 @@ def GetCompetenceMatrix(request, gen_pk):
             block_dict = {"name": block.name, "modules_in_discipline_block": []}
             # academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
             for block_module in DisciplineBlockModule.objects.filter(descipline_block=block):
-                block_module_dict = recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice)
+                block_module_dict = recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice, first_ap_iter)
                 if block_module_dict["change_blocks_of_work_programs_in_modules"] or block_module_dict["childs"]:
                     block_dict["modules_in_discipline_block"].append(block_module_dict)
             if block_dict["modules_in_discipline_block"]:
@@ -354,6 +355,7 @@ def GetCompetenceMatrix(request, gen_pk):
         list_to_sort = academic_plan_matrix_dict["discipline_blocks_in_academic_plan"]
         newlist = sorted(list_to_sort, key=lambda d: d['name'])
         academic_plan_matrix_dict["discipline_blocks_in_academic_plan"] = newlist
+        first_ap_iter=False
     competence_matrix["wp_matrix"] = matrix_list
     competence_matrix["educational_program"] = ImplementationAcademicPlanSerializer(
         gen_characteristic.educational_program.all(), many=True).data

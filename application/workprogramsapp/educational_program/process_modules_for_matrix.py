@@ -6,7 +6,7 @@ from workprogramsapp.educational_program.serializers import WorkProgramCompetenc
 from workprogramsapp.models import WorkProgramChangeInDisciplineBlockModule, WorkProgram
 
 
-def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice):
+def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice, first_ap_iter):
     block_module_dict = {"name": block_module.name, "type": block_module.type,
                          "change_blocks_of_work_programs_in_modules": [], "childs": []}
     # block_dict["modules_in_discipline_block"].append(block_module_dict)
@@ -19,7 +19,7 @@ def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice
                              "credit_units": change_block.credit_units, "work_program": [], "practice": [], 'gia': []}
         # block_module_dict["change_blocks_of_work_programs_in_modules"].append(change_block_dict)
         for work_program in WorkProgram.objects.filter(work_program_in_change_block=change_block):
-            if work_program.id not in unique_wp:
+            if (work_program.id not in unique_wp) or first_ap_iter:
 
                 serializer = WorkProgramCompetenceIndicatorSerializer(work_program)
                 change_block_dict['work_program'].append(serializer.data)
@@ -28,7 +28,7 @@ def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice
                 pass
                 # print(work_program)
         for practice in Practice.objects.filter(practice_in_change_block=change_block):
-            if practice.id not in unique_practice:
+            if (practice.id not in unique_practice) or first_ap_iter:
                 serializer = PracticeCompetenceSerializer(practice)
                 change_block_dict['practice'].append(serializer.data)
                 unique_practice.append(practice.id)
@@ -36,7 +36,7 @@ def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice
                 pass
                 # print(work_program)
         for gia in GIA.objects.filter(gia_in_change_block=change_block):
-            if gia.id not in unique_gia:
+            if (gia.id not in unique_gia) or first_ap_iter:
                 serializer = GIASmallSerializer(gia)
                 change_block_dict['gia'].append(serializer.data)
                 unique_gia.append(gia.id)
