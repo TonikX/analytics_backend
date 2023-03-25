@@ -340,7 +340,8 @@ def GetCompetenceMatrix(request, gen_pk):
     matrix_list = []
     for ap in academic_plans:
         academic_plan = ap.academic_plan
-        academic_plan_matrix_dict = {"academic_plan": ap.title, "discipline_blocks_in_academic_plan": []}
+        academic_plan_matrix_dict = {"academic_plan": ap.title, "ap_id":ap.id, "ap_isu_id":ap.ap_isu_id,
+                                     "discipline_blocks_in_academic_plan": []}
         matrix_list.append(academic_plan_matrix_dict)
         for block in DisciplineBlock.objects.filter(academic_plan=academic_plan):
             block_dict = {"name": block.name, "modules_in_discipline_block": []}
