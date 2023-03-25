@@ -6,7 +6,7 @@ from .views import FileUploadAPIView, FileUploadOldVersionAPIView, AcademicPlanU
     AcademicPlanUpdateLogsView, AcademicPlanUpdateSchedulerConfigurationView, AcademicPlanUpdateConfigurationView, \
     AcademicPlanUpdateConfigurationUpdateView, AcademicPlanUpdateConfigurationCreateAPIView, \
     AcademicPlanUpdateSchedulerConfigurationUpdateView, UpdateAcademicPlansView, UpdateAcademicPlansHeadersView, \
-    SendAcademicPlansLinesToIsu, IsuHistoryListView, SendWorkProgramToISU
+    SendAcademicPlansLinesToIsu, IsuHistoryListView, SendWorkProgramToISU, SendPracticeToISU, SendGIAToISU
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_scheduler import AcademicPlanUpdateScheduler
 from .v_2.isu_change_parser import ChangeParser
 
@@ -28,6 +28,8 @@ urlpatterns = [
     path('api/isu_v2/academic-plans/send_to_isu', SendAcademicPlansLinesToIsu.as_view()),
     path('api/isu_v2/academic-plans/send_to_isu/history', IsuHistoryListView.as_view()),
     path('api/isu_v2/academic-plans/send_wp_to_isu/', SendWorkProgramToISU.as_view()),
+    path('api/isu_v2/academic-plans/send_practice_to_isu/', SendPracticeToISU.as_view()),
+    path('api/isu_v2/academic-plans/send_gia_to_isu/', SendGIAToISU.as_view()),
 ]
 
 sd = AcademicPlanUpdateScheduler()

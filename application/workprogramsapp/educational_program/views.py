@@ -320,7 +320,8 @@ def GetCompetenceMatrix(request, gen_pk):
     academic_plans = gen_characteristic.educational_program.all()
     pk_competences = PkCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__general_characteristic_id=gen_pk, competence__isnull=False).distinct(),
+            group_of_pk__general_characteristic_id=gen_pk, competence__isnull=False).order_by(
+            "competence").distinct("competence"),
         many=True).data
     general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
