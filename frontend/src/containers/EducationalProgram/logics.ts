@@ -152,8 +152,12 @@ const saveZun = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
 
         const competenceMatrixId = getEducationalProgramCharacteristicId(getState());
-
-        service.saveZUN(action.payload)
+        const {indicator, workprogram_id} = action.payload;
+        service.saveZUN({
+            gh_id: competenceMatrixId,
+            indicator,
+            workprogram_id
+        })
             .then(() => {
                 dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
                 dispatch(actions.fetchingSuccess());
