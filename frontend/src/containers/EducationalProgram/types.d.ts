@@ -9,13 +9,13 @@ import {EducationalPlanType} from "../EducationalPlan/types";
 import {DirectionType} from "../Direction/types";
 import {UserType} from "../../layout/types";
 
-import {CompetenceTableType, EducationProgramFields, fields} from './enum';
-import {EducationProgramCharacteristicFields} from './enum';
+import {CompetenceTableType, EducationProgramFields, fields, EducationProgramCharacteristicFields, CharacteristicStatuses} from './enum';
 
 import {characterisicStyles} from './Сharacteristic/Сharacteristic.styles';
 import styles from "./WorkProgram.styles";
 
 export interface EducationalProgramActions {
+    sendToCheck: any;
     addNewRepresentative: any;
     updateRepresentative: any;
     deleteRepresentative: any;
@@ -93,6 +93,7 @@ export interface educationalProgramState {
 
 export type EducationalProgramCharacteristicType = {
     [EducationProgramCharacteristicFields.ID]: number,
+    [EducationProgramCharacteristicFields.STATUS]: CharacteristicStatuses,
     [EducationProgramCharacteristicFields.YEAR]: ReactText,
     [EducationProgramCharacteristicFields.LANGUAGE]: string,
     [EducationProgramCharacteristicFields.DIRECTION]: DirectionType,
@@ -136,6 +137,7 @@ export interface CharacteristicProps extends WithStyles<typeof characterisicStyl
     mainActions: any;
     educationalProgramCharacteristic: any;
     canEdit: boolean;
+    statusInfo: any;
 }
 
 export type CharacteristicCreateGroupActionType = {

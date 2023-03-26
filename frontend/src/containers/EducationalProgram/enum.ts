@@ -20,6 +20,7 @@ export enum fields {
 export enum fetchingTypes {
     GET_EDUCATION_PROGRAM_LIST = 'GET_EDUCATION_PROGRAM_LIST',
     DELETE_EDUCATION_PROGRAM = 'DELETE_EDUCATION_PROGRAM',
+    SEND_TO_CHECK = 'SEND_TO_CHECK',
     UPDATE_EDUCATION_PROGRAM = 'UPDATE_EDUCATION_PROGRAM',
     CREATE_EDUCATION_PROGRAM = 'CREATE_EDUCATION_PROGRAM',
     GET_COMPETENCE_MATRIX = 'GET_COMPETENCE_MATRIX',
@@ -54,6 +55,7 @@ export enum fetchingTypes {
 
 export enum EducationProgramCharacteristicFields {
     ID = 'id',
+    STATUS = 'on_check',
     REALIZATION_FORMAT = 'realization_format',
 
     LANGUAGE = 'language',
@@ -120,4 +122,22 @@ export enum CompetenceTableType {
     SUPRA_PROFESSIONAL_COMPETENCES = 'SUPRA_PROFESSIONAL_COMPETENCES',
     GENERAL_PROFESSIONAL_COMPETENCES = 'GENERAL_PROFESSIONAL_COMPETENCES',
     PROFESSIONAL_COMPETENCES = 'PROFESSIONAL_COMPETENCES',
+}
+
+
+export enum CharacteristicStatuses {
+    IN_WORK = 'in_work',
+    ON_CHECK = 'on_check',
+    APPROVED = 'verified',
+}
+
+export const CharacteristicStatusesNames = {
+    [CharacteristicStatuses.IN_WORK]: 'В работе',
+    [CharacteristicStatuses.ON_CHECK]: 'На проверке',
+    [CharacteristicStatuses.APPROVED]: 'Принят',
+}
+export const CharacteristicStatusesColors = {
+    [CharacteristicStatuses.IN_WORK]: '#009aff',
+    [CharacteristicStatuses.ON_CHECK]: '#C000FF',
+    [CharacteristicStatuses.APPROVED]: '#2abb00',
 }
