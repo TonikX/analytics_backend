@@ -114,6 +114,7 @@ interface WorkProgramChangeInDisciplineBlockModule {
     change_type: typeof CHANGE_TYPE;
     credit_units: string;
     work_program: ModuleWorkProgram[]
+    practice?: ModuleWorkProgram[];
 }
 
 interface AcademicPlan {
