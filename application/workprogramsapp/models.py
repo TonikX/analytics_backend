@@ -463,6 +463,12 @@ class GeneralCharacteristics(models.Model):
         ('offline', 'offline'),
     )
 
+    check_status = (
+        ('in_work', 'in_work'),
+        ('on_check', 'on_check'),
+        ('verified', 'verified'),
+    )
+
     educational_program = models.ManyToManyField('ImplementationAcademicPlan', verbose_name='Образовательная программа',
                                                  related_name="general_characteristics_in_educational_program",
                                                  blank=True, null=True)
@@ -531,6 +537,8 @@ class GeneralCharacteristics(models.Model):
     corporate_type = models.BooleanField(blank=True, null=True, verbose_name="Корпоративная ОП?")
     enterprise_type = models.BooleanField(blank=True, null=True, verbose_name="Предпринемательская ОП?")
     target_master_type = models.BooleanField(blank=True, null=True, verbose_name="Магистратура перспективных направлений?")
+    on_check = models.CharField(max_length=1024, verbose_name="Статус проверки", choices=check_status,
+                                default="in_work")
 
     def __str__(self):
         return str(self.educational_program)
