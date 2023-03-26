@@ -194,12 +194,13 @@ class Service extends AnalyticsService{
     return this.get(`/api/general_characteristic/competence_matrix/${id}`);
   }
 
-  saveZUN({indicator, plans, results}: any){
+  saveZUN({indicator, workprogram_id, gh_id}: any){
     return this.post(`/api/zun/many_create/`,{
-      wpa_in_fss: plans,
+      workprogram_id,
+      gh_id,
       zun: {
         indicator_in_zun: indicator,
-        items: results
+        items: []
       }
     });
   }

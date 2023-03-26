@@ -147,7 +147,7 @@ const ContentByAcademicPlan = (
             if (intersect(sourceCompetence)) {
                 const indicators = ownCompetences.find(it => it.id === sourceCompetence.id)?.zuns.map(it => {
                     return {
-                        label: `${it.indicator.number}`,
+                        label: `${it.indicator.number} ${it.indicator.name}`,
                         value: it.id,
                     }
                 }) || [];
@@ -298,6 +298,11 @@ export default () => {
         return null;
     }
 
+    const resetDialog = () => {
+        setIndicators([]);
+        setIsOpen(false);
+    };
+
     const attachIndicator = (props: AttachIndicatorProps) => {
         setWorkProgramId(props.workProgramId);
         setDefaultCompetence(props.competence);
@@ -349,7 +354,7 @@ export default () => {
 
             <IndicatorsDialog
                 isOpen={isOpen}
-                handleClose={() => setIsOpen(false)}
+                handleClose={resetDialog}
                 addedIndicators={indicators}
                 defaultCompetence={defaultCompetence}
                 workProgramId={workProgramId}
