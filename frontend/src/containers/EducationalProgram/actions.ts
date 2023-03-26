@@ -82,7 +82,11 @@ const getCompetenceDirectionsDependedOnWorkProgram = createAction('GET_COMPETENC
 const getDirectionsDependedOnWorkProgram = createAction('GET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM_WITH_GH');
 const setDirectionsDependedOnWorkProgram = createAction('SET_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM_WITH_GH');
 
+const sendToCheck = createAction('SEND_TO_CHECK');
+
 const actions: EducationalProgramActions = {
+    sendToCheck,
+
     addNewRepresentative,
     updateRepresentative,
     deleteRepresentative,

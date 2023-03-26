@@ -19,6 +19,18 @@ class Service extends AnalyticsService{
     return this.get(`/api/general_characteristic?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
   }
 
+  sendToCheck(id: number){
+    return this.post(`/api/gh_check/${id}`, {
+      new_status: 'on_check'
+    });
+  }
+
+  sendToWork(id: number){
+    return this.post(`/api/gh_check/${id}`, {
+      new_status: 'on_work'
+    });
+  }
+
   deleteEducationProgram(id: number){
     return this.delete(`/api/EducationalProgram/delete/${id}`);
   }
@@ -110,7 +122,7 @@ class Service extends AnalyticsService{
     });
   }
 
-  characteristicDeleteProfessionalStandardLaborFunction({competenceId, type, laborFunction}: any){
+  characteristicDeleteProfessionalStandardLaborFunction({competenceId, type}: any){
     return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
       generalized_labor_functions: null
     });

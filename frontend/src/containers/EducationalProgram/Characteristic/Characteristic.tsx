@@ -53,6 +53,7 @@ import {languageArray} from "../../WorkProgram/constants";
 import SimpleSelector from "../../../components/SimpleSelector";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "../../../components/TextField";
+import {StatusPoint} from "../../../components/StatusPoint";
 
 class Characteristic extends React.Component<CharacteristicProps> {
   state = {
@@ -651,8 +652,10 @@ class Characteristic extends React.Component<CharacteristicProps> {
     }
   }
 
+  sendToCheck = () => this.props.actions.sendToCheck()
+
   render() {
-    const {classes, educationalProgramCharacteristic} = this.props;
+    const {classes, educationalProgramCharacteristic, canEdit, statusInfo} = this.props;
     const {activeStep} = this.state;
     const names = get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])
       .reduce((items: any, item:any) => {
@@ -663,60 +666,68 @@ class Characteristic extends React.Component<CharacteristicProps> {
       }, [])
 
     return (
-      <Paper className={classes.root}>
-        <Stepper activeStep={activeStep}
-                 orientation="vertical"
-                 nonLinear
-                 className={classes.stepper}
-        >
-          {steps.map((value, index) => {
-            return (
-              <Step key={index}>
-                <StepButton onClick={this.handleStep(index)}
-                            completed={false}
-                            style={{textAlign: 'left'}}
-                >
-                  {value}
-                </StepButton>
-              </Step>
-            );
-          })}
-        </Stepper>
-        <div className={classes.content}>
-          <Typography className={classes.title}>
-            <div style={{ display: 'flex', width: '100%' }}>
-              <div>
-                Характеристика образовательн{names.length === 1 ? 'ой' : 'ых'} программ{names.length === 1 ? 'ы' : ''} {' '}
-                {names.join(',')}
-              </div>
-              <div style={{ marginLeft: 'auto'}}>
-                {[6, 7, 8].includes(activeStep) &&
-                  <Tooltip title="Данный вид компетенций подгружается из связного образовательного стандарта">
-                    <Button variant="contained" style={{marginLeft: 'auto', marginRight: 10, height: '36px'}}
-                            color="primary">
-                      <Link
-                        style={{color: '#fff', textDecoration: 'none'}}
-                        to={appRouter.getEducationalStandardRoute(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATIONAL_STANDART, 'id'], ''))}
-                      >
-                        Образовательный стандарт
-                      </Link>
-                    </Button>
-                  </Tooltip>
-                }
-                <Tooltip title={(
-                  <>
-                    1. Ошибка в матрице компетенций: Компетенция не покрывается ни одной дисциплиной
-                  </>
-                )}>
-                  <Button variant="contained" color="primary" style={{height: '36px'}}>Валидация</Button>
-                </Tooltip>
-              </div>
-            </div>
-          </Typography>
-
-          {this.renderContent()}
+      <div className={classes.wrap}>
+        <div className={classes.paperHeader}>
+          <StatusPoint {...statusInfo} />
+          {canEdit ? (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.sendToCheck}
+              className={classes.sendToCheckButton}
+            >
+              Отправить на проверку
+            </Button>
+          ) : null}
         </div>
-      </Paper>
+        <Paper className={classes.root}>
+          <Stepper activeStep={activeStep}
+                   orientation="vertical"
+                   nonLinear
+                   className={classes.stepper}
+          >
+            {steps.map((value, index) => {
+              return (
+                <Step key={index}>
+                  <StepButton onClick={this.handleStep(index)}
+                              completed={false}
+                              style={{textAlign: 'left'}}
+                  >
+                    {value}
+                  </StepButton>
+                </Step>
+              );
+            })}
+          </Stepper>
+          <div className={classes.content}>
+            <Typography className={classes.title}>
+              <div style={{ display: 'flex', width: '100%' }}>
+                <div>
+                  Характеристика образовательн{names.length === 1 ? 'ой' : 'ых'} программ{names.length === 1 ? 'ы' : ''} {' '}
+                  {names.join(',')}
+                </div>
+                <div style={{ marginLeft: 'auto'}}>
+                  {[6, 7, 8].includes(activeStep) &&
+                    <Tooltip title="Данный вид компетенций подгружается из связного образовательного стандарта">
+                      <Button variant="contained" style={{marginLeft: 'auto', marginRight: 10, height: '36px'}}
+                              color="primary">
+                        <Link
+                          style={{color: '#fff', textDecoration: 'none'}}
+                          to={appRouter.getEducationalStandardRoute(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATIONAL_STANDART, 'id'], ''))}
+                        >
+                          Образовательный стандарт
+                        </Link>
+                      </Button>
+                    </Tooltip>
+                  }
+                </div>
+              </div>
+            </Typography>
+
+            {this.renderContent()}
+          </div>
+        </Paper>
+      </div>
     );
   }
 }
