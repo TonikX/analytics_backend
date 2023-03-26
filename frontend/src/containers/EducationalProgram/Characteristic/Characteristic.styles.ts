@@ -89,7 +89,6 @@ export default (theme: Theme) => createStyles({
   paperHeader: {
     display: 'flex',
     justifyContent: 'space-between',
-    padding: 10,
     padding: '10px 0px',
   },
   sendToCheckButton: {
