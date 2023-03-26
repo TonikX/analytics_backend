@@ -320,7 +320,8 @@ def GetCompetenceMatrix(request, gen_pk):
     academic_plans = gen_characteristic.educational_program.all()
     pk_competences = PkCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__general_characteristic_id=gen_pk, competence__isnull=False).distinct(),
+            group_of_pk__general_characteristic_id=gen_pk, competence__isnull=False).order_by(
+            "competence").distinct("competence"),
         many=True).data
     general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
@@ -339,7 +340,8 @@ def GetCompetenceMatrix(request, gen_pk):
     matrix_list = []
     for ap in academic_plans:
         academic_plan = ap.academic_plan
-        academic_plan_matrix_dict = {"academic_plan": ap.title, "discipline_blocks_in_academic_plan": []}
+        academic_plan_matrix_dict = {"academic_plan": ap.title, "ap_id":ap.id, "ap_isu_id":ap.ap_isu_id,
+                                     "discipline_blocks_in_academic_plan": []}
         matrix_list.append(academic_plan_matrix_dict)
         for block in DisciplineBlock.objects.filter(academic_plan=academic_plan):
             block_dict = {"name": block.name, "modules_in_discipline_block": []}
@@ -460,3 +462,38 @@ class UploadProfStandards(CreateAPIView):
                                                     code_of_prof_area=str(row["Код ПС"]))
 
         return Response("standards")
+
+
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=None,
+        properties={
+            'new_status': openapi.Schema(type=openapi.TYPE_STRING,
+                                         description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
+        }
+    ),
+    operation_description='Метод для изменения статусов общей характеристики')
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+@transaction.atomic
+def gh_check(request, gh_id):
+    gh = GeneralCharacteristics.objects.get(id=gh_id)
+    if gh is not None:
+        if gh.on_check == "on_check" and bool(request.user.groups.filter(name="expertise_master")):
+            if request.data['new_status'] == 'in_work':
+                gh.on_check = "in_work"
+                gh.save()
+            elif request.data['new_status'] == 'verified':
+                gh.on_check = "verified"
+                gh.save()
+            return Response({'message': 'status changed', 'status': True}, status=200)
+        mail_sender(topic=f'Общая характеристика с КОП ИД {gh.id} готова к проверке',
+                    text=f'Общая характеристика с КОП ИД {gh.id} готова к проверке',
+                    emails=['osop@itmo.ru'], users=[])
+        gh.on_check = "on_check"
+        gh.save()
+        return Response({'message': 'email sent', 'status': True}, status=200)
+    else:
+        return Response({'message': 'academic plan was sent', 'status': False}, status=400)

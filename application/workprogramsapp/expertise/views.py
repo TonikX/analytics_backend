@@ -1,3 +1,4 @@
+from django_filters import BooleanFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from rest_framework.decorators import api_view, permission_classes
