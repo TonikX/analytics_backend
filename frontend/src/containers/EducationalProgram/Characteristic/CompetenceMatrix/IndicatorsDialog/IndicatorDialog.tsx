@@ -6,11 +6,10 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Chip from '@material-ui/core/Chip'
 import CompetenceSelector from '../../../../Competences/CompetenceSelector'
 import IndicatorSelector from '../../../../Competences/Indicators/IndicatorSelector'
-import PlanSelector from '../WorkProgramPlansSelector'
 import {useStyles} from './IndicatorDialog.styles'
 import actions from '../../../actions'
 import {useDispatch} from 'react-redux'
-
+import Tooltip from "@material-ui/core/Tooltip/Tooltip";
 interface IndicatorsProps {
     workProgramId: number;
     isOpen: boolean;
@@ -31,12 +30,11 @@ interface IndicatorsProps {
     onDeleteZun: (id: number) => void;
 }
 
-export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, workProgramId, addedIndicators, onDeleteZun}: IndicatorsProps) => {
+export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, workProgramId, addedIndicators, onDeleteZun}: IndicatorsProps) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [competence, setCompetence] = useState<{ value: number; label: string }>({value: 0, label: ''});
     const [indicator, setIndicator] = useState<{ value: number; label: string }>({value: 0, label: ''});
-    const [plans, setPlans] = useState<Array<{ value: number; label: string }>>([]);
 
     const addIndicator = (value: number, label: string) => {
         setIndicator({
@@ -45,27 +43,10 @@ export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndi
         })
     };
 
-    const removePlan = useCallback((value: number) => {
-        setPlans(plans.filter(plan => plan.value !== value))
-    }, [plans]);
-
     const removeIndicator = (value: number) => {
         onDeleteZun(value);
         dispatch(actions.deleteZun(value));
     };
-
-    const addPlan = useCallback((value: number, label: string) => {
-        if (plans.find(item => item.value === value)) return;
-        if (value) {
-            setPlans([
-                ...plans,
-                {
-                    value,
-                    label
-                }
-            ])
-        }
-    }, [plans]);
 
     const addCompetence = (value: number, label: string) => {
         setCompetence({
@@ -77,15 +58,15 @@ export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndi
     const saveZun = useCallback(() => {
         dispatch(actions.saveZun({
             indicator: indicator.value,
-            results: [],
-            plans: plans.map(item => item.value),
+            workprogram_id: workProgramId
         }));
         handleClose()
-    }, [indicator, competence, plans]);
+    }, [indicator, competence]);
 
-    const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0 || plans.length === 0),
-        [indicator, competence, plans]
+    const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0),
+        [indicator, competence]
     );
+
 
     useEffect(() => {
         setIndicator({value: 0, label: ''})
@@ -131,21 +112,10 @@ export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndi
             />
             <div className={classes.chipsList}>
                 {addedIndicators.map(item => (
+                    <Tooltip title={item.label}>
                     <Chip key={`indicator-${item.value}`} className={classes.chip} onDelete={() => removeIndicator(item.value)}
-                          label={item.label}/>
-                ))}
-            </div>
-            <PlanSelector
-                label="Учебный план и образовательная программа"
-                onChange={addPlan}
-                valueLabel=""
-                value={0}
-                workProgramId={workProgramId}
-            />
-            <div className={classes.chipsList}>
-                {plans.map(plan => (
-                    <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)}
-                          label={plan.label}/>
+                          label={`${item.label.slice(0, 30)}...`}/>
+                    </Tooltip>
                 ))}
             </div>
             <DialogActions className={classes.actions}>
