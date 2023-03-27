@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState, useMemo} from 'react'
-import {Dialog} from '@material-ui/core'
+import {Dialog, Select} from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -10,6 +10,8 @@ import {useStyles} from './IndicatorDialog.styles'
 import actions from '../../../actions'
 import {useDispatch} from 'react-redux'
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
+import MenuItem from "@material-ui/core/MenuItem";
+
 interface IndicatorsProps {
     workProgramId: number;
     isOpen: boolean;
@@ -35,12 +37,17 @@ export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, workP
     const dispatch = useDispatch();
     const [competence, setCompetence] = useState<{ value: number; label: string }>({value: 0, label: ''});
     const [indicator, setIndicator] = useState<{ value: number; label: string }>({value: 0, label: ''});
-
+    const [onlyCurrentGh, setOnlyCurrentGh] = useState(true);
     const addIndicator = (value: number, label: string) => {
         setIndicator({
             value,
             label
         })
+    };
+
+    const close = () => {
+        handleClose();
+        setOnlyCurrentGh(true);
     };
 
     const removeIndicator = (value: number) => {
@@ -58,10 +65,11 @@ export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, workP
     const saveZun = useCallback(() => {
         dispatch(actions.saveZun({
             indicator: indicator.value,
-            workprogram_id: workProgramId
+            workprogram_id: workProgramId,
+            onlyCurrentGh: onlyCurrentGh,
         }));
-        handleClose()
-    }, [indicator, competence]);
+        close()
+    }, [indicator, competence, onlyCurrentGh]);
 
     const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0),
         [indicator, competence]
@@ -83,6 +91,17 @@ export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, workP
             setIndicator(defaultIndicator)
         }
     }, [defaultIndicator]);
+
+    const selectOptions = [
+        {
+            label: 'Связать индикатор только с этой ОХ',
+            value: true
+        },
+        {
+            label: 'Связать индикатор со всеми ОХ',
+            value: false
+        },
+    ];
 
     return (
         <Dialog
@@ -106,7 +125,6 @@ export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, workP
                 onChange={addIndicator}
                 value={0}
                 label="Индикатор"
-                className={classes.marginBottom10}
                 competenceId={competence.value}
                 disabled={competence.value === 0 || Boolean(defaultIndicator)}
             />
@@ -118,8 +136,21 @@ export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, workP
                     </Tooltip>
                 ))}
             </div>
+            <Select
+                value={onlyCurrentGh}
+                // @ts-ignore
+                onChange={(event) => setOnlyCurrentGh(event.target.value)}
+                variant="outlined"
+                fullWidth
+            >
+                {selectOptions.map((item: {label: string; value: any}, index) =>
+                    <MenuItem value={item.value} key={`block-${index}`}>
+                        {item.label}
+                    </MenuItem>
+                )}
+            </Select>
             <DialogActions className={classes.actions}>
-                <Button onClick={handleClose}
+                <Button onClick={close}
                         variant="text">
                     Отмена
                 </Button>
