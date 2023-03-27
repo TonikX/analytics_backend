@@ -175,23 +175,42 @@ const saveZun = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
 
         const competenceMatrixId = getEducationalProgramCharacteristicId(getState());
-        const {indicator, workprogram_id} = action.payload;
-        service.saveZUN({
+        const {indicator, workprogram_id, onlyCurrentGh} = action.payload;
+
+        if (onlyCurrentGh) {
+          service.saveZUN({
             gh_id: competenceMatrixId,
             indicator,
-            workprogram_id
-        })
-            .then(() => {
+            workprogram_id,
+          })
+              .then(() => {
                 dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
                 dispatch(actions.fetchingSuccess());
-            })
-            .catch((err) => {
+              })
+              .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
-            })
-            .then(() => {
+              })
+              .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.SAVE_ZUN}));
                 return done();
-            });
+              });
+        } else {
+          service.saveZunAllGh({
+            indicator,
+            workprogram_id
+          })
+              .then(() => {
+                dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
+                dispatch(actions.fetchingSuccess());
+              })
+              .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+              })
+              .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SAVE_ZUN}));
+                return done();
+              });
+        }
     }
 });
 
