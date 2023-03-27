@@ -200,6 +200,43 @@ class ZunManyViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_201_CREATED)
 
 
+class ZunManyForAllGhViewSet(viewsets.ModelViewSet):
+    model = Zun
+    queryset = Zun.objects.all()
+    serializer_class = ZunForManyCreateSerializer
+    http_method_names = ['post', 'delete', 'patch']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    # @swagger_auto_schema(
+    #     request_body=openapi.Schema(
+    #         type=openapi.TYPE_OBJECT,
+    #         required=None,
+    #         properties={
+    #             'new_status': openapi.Schema(type=openapi.TYPE_STRING,
+    #                                          description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
+    #         }
+    #     ),
+    #     operation_description='Метод для изменения статусов учебного плана')
+    def create(self, request, *args, **kwargs):
+        """
+        Example:
+            {
+            "workprogram_id": 1 - ссылка на РПД
+            "zun": {
+              "indicator_in_zun": 85,
+              "items": []
+                }
+            }
+        """
+        wp_in_fss = WorkProgramInFieldOfStudy.objects.filter(work_program__id=int(request.data.get('workprogram_id'))).distinct()
+        for wp_in_fs in wp_in_fss:
+            serializer = self.get_serializer(data=request.data['zun'])
+            serializer.is_valid(raise_exception=True)
+            serializer.save(wp_in_fs=wp_in_fs)
+        return Response(status=status.HTTP_201_CREATED)
+
+
+
 class CompetenceCreateView(generics.CreateAPIView):
     serializer_class = CompetenceSerializer
     queryset = Competence.objects.all()
