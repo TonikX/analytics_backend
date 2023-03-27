@@ -6,6 +6,7 @@ import workProgramActions from '../actions'
 import Service from '../service'
 
 import {fetchingTypes} from "../enum"
+import {getWorkProgramId} from "../getters";
 
 const service = new Service();
 
@@ -14,10 +15,11 @@ const saveZUN = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         const state = getState()
+        const workProgramId = getWorkProgramId(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
 
-        service.saveZUN(action.payload)
+        service.saveZUN(action.payload, workProgramId)
             .then((res) => {
                 dispatch(workProgramActions.getWorkProgram());
                 dispatch(actions.fetchingSuccess());
