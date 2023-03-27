@@ -107,10 +107,10 @@ export default ({ characteristic, tableType, tableTitle }: Props) => {
                 {index + 1}
               </TableCell>
               <TableCell>
-                {item?.code_of_prof_area} {item?.name_of_prof_area}
+                {item?.code} {item?.name_of_prof_area}
               </TableCell>
               <TableCell>
-                {item?.code}
+                {item?.code_of_prof_area}
               </TableCell>
               <TableCell>
                 {item?.title}
