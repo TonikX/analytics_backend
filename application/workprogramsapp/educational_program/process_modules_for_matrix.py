@@ -91,9 +91,8 @@ def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice
                              "credit_units": change_block.credit_units, "work_program": [], "practice": [], 'gia': []}
         # block_module_dict["change_blocks_of_work_programs_in_modules"].append(change_block_dict)
         for work_program in WorkProgram.objects.filter(work_program_in_change_block=change_block):
-            if (work_program.id not in unique_wp) or first_ap_iter:
-                wp_in_fs = WorkProgramInFieldOfStudy.objects.get(work_program=work_program,
-                                                                 work_program_change_in_discipline_block_module=change_block)
+            if work_program.id not in unique_wp:
+
                 change_block_dict['work_program'].append(
                     {"id": work_program.id, "title": work_program.title, "competences": get_competences_wp(wp_in_fs)})
                 unique_wp.append(work_program.id)
