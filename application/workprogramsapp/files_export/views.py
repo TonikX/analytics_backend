@@ -21,6 +21,7 @@ from rest_framework.views import APIView
 
 from dataprocessing.serializers import FileUploadSerializer
 from .academic_plan_export import process_excel
+from .competence_matrix_export import process_excel_competence_matrix
 from .general_characteristic_export import generate_context
 from .plan_logic import plans_processor
 from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy, WorkProgram, \
@@ -499,6 +500,27 @@ class GeneralCharacteristicGenerateDocx(generics.ListAPIView):
 
         tpl.save(response)
 
+        return response
+
+
+class CompetenceMatrixGenerateExcel(generics.ListAPIView):
+    """Возвращает матрицу компетенций в формате excel в браузере"""
+    queryset = WorkProgram.objects.all()
+    serializer = WorkProgramSerializer
+    #permission_classes = [IsAuthenticated, ]
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        gen_characteristic = GeneralCharacteristics.objects.get(pk=kwargs['pk'])
+        filename = gen_characteristic.educational_program.all()[0].title + " " + str(
+            gen_characteristic.educational_program.all()[0].year)
+        wb_obj = process_excel_competence_matrix(gen_characteristic)
+        response = HttpResponse(content=save_virtual_workbook(wb_obj),
+                                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response['Content-Disposition'] = 'inline; filename="%s"' % str(filename)
+
+
+        # wb_obj.save(response)
         return response
 
 
