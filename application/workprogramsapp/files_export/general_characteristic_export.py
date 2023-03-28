@@ -273,14 +273,18 @@ def generate_context(gh):
                     f"ПК-{pk_code_inc}.{indicator_num_counter} {indicator_in_group.indicator.name}")
     try:
         # Руководитель ОП
-        context["ep_supervisor"] = f"{gh.ep_supervisor.first_name} {gh.ep_supervisor.last_name}"
+        patronymic = gh.ep_supervisor.patronymic if gh.ep_supervisor.patronymic else ""
+        context["ep_supervisor"] = f"{gh.ep_supervisor.first_name} {gh.ep_supervisor.last_name} " \
+                                   f"{patronymic}"
         context["director_position"] = gh.directors_position
     except AttributeError:
         pass
     try:
         # Руководитель подразделения
+        patronymic = gh.dean_of_the_faculty.patronymic if gh.dean_of_the_faculty.patronymic else ""
         context["dean_position"] = gh.dean_of_the_faculty_directors_position
-        context["dean"] = f"{gh.dean_of_the_faculty.first_name} {gh.dean_of_the_faculty.last_name}"
+        context["dean"] = f"{gh.dean_of_the_faculty.first_name} {gh.dean_of_the_faculty.last_name} " \
+                          f"{patronymic}"
     except AttributeError:
         pass
 
@@ -291,37 +295,3 @@ def generate_context(gh):
     return context
 
 
-def test():
-    tpl = DocxTemplate(
-        "C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\oh_template.docx")
-    some_dict = {"op_name": "123", "directions": [{"code": "code", "name": "name"}], "qualification": "qualification",
-                 "language": "language", "realization_form": "realization_form", "type_op": None, "format": "format ",
-                 "year": 2025}
-    context = generate_context(GeneralCharacteristics.objects.get(id=7))
-    tpl.render(context)
-    tpl.save(str("filename.docx"))
-
-
-def test2():
-    tpl = DocxTemplate(
-        "C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\test_comp3.docx")
-    some_dict = \
-        {"key_competences":
-            [
-                {
-                    "category": "a",
-                    "competences": [{"codename": "1abc", "indicators": ["i1", "i11"]},
-                                    {"codename": "2def", "indicators": ["i2", "i22"]}]
-                },
-                {
-                    "category": "b",
-                    "competences": [{"codename": "b", "indicators": ["b2", "b3"]},
-                                    {"codename": "bb", "indicators": ["b22", "b33"]}]
-                }
-
-            ]
-        }
-    # context = generate_context(id_gh=7)
-    tpl.render(some_dict)
-    print(tpl)
-    tpl.save(str("filename2.docx"))
