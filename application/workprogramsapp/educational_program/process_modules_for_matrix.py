@@ -45,7 +45,7 @@ def get_competences_practice(practice_in_fs):
                                    PracticeInFieldOfStudy.objects.get(zun_in_practice=zun.id)).data["id"]})
         competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
                                  "zuns": zuns_array})
-        return {"competences": competences_dict}
+    return {"competences": competences_dict}
 
 
 def get_competences_wp(wp_in_fs):
@@ -77,13 +77,14 @@ def get_competences_wp(wp_in_fs):
     return {"competences": competences_dict}
 
 
-def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice):
+def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice, first_ap_iter):
     block_module_dict = {"name": block_module.name, "type": block_module.type,
                          "change_blocks_of_work_programs_in_modules": [], "childs": []}
     # block_dict["modules_in_discipline_block"].append(block_module_dict)
     if block_module.childs.all().exists():
         for child in block_module.childs.all():
-            block_module_dict["childs"].append(recursion_module_matrix(child, unique_wp, unique_gia, unique_practice))
+            block_module_dict["childs"].append(
+                recursion_module_matrix(child, unique_wp, unique_gia, unique_practice, first_ap_iter))
     for change_block in WorkProgramChangeInDisciplineBlockModule.objects.filter(
             discipline_block_module=block_module):
         change_block_dict = {"change_type": change_block.change_type,
@@ -91,8 +92,6 @@ def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice
         # block_module_dict["change_blocks_of_work_programs_in_modules"].append(change_block_dict)
         for work_program in WorkProgram.objects.filter(work_program_in_change_block=change_block):
             if work_program.id not in unique_wp:
-                wp_in_fs = WorkProgramInFieldOfStudy.objects.get(work_program=work_program,
-                                                                 work_program_change_in_discipline_block_module=change_block)
 
                 change_block_dict['work_program'].append(
                     {"id": work_program.id, "title": work_program.title, "competences": get_competences_wp(wp_in_fs)})
@@ -101,7 +100,7 @@ def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice
                 pass
                 # print(work_program)
         for practice in Practice.objects.filter(practice_in_change_block=change_block):
-            if practice.id not in unique_practice:
+            if (practice.id not in unique_practice) or first_ap_iter:
                 practice_in_fs = PracticeInFieldOfStudy.objects.get(practice=practice,
                                                                     work_program_change_in_discipline_block_module=change_block)
                 change_block_dict['practice'].append(
@@ -112,7 +111,7 @@ def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice
                 pass
                 # print(work_program)
         for gia in GIA.objects.filter(gia_in_change_block=change_block):
-            if gia.id not in unique_gia:
+            if (gia.id not in unique_gia) or first_ap_iter:
                 serializer = GIASmallSerializer(gia)
                 change_block_dict['gia'].append(serializer.data)
                 unique_gia.append(gia.id)
