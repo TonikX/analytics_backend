@@ -182,12 +182,15 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
 
         editors = []
-        for ep in instance.educational_program.all():
-            for editor in ep.editors.all():
-                editors.append(editor)
-                group = Group.objects.get(name="education_plan_developer")
-                editor.groups.add(group)
-        data["can_edit"] = bool(self.context['request'].user in editors)
+        if instance.on_check == 'on_check' or instance.on_check == 'verified':
+            data["can_edit"] = False
+        else:
+            for ep in instance.educational_program.all():
+                for editor in ep.editors.all():
+                    editors.append(editor)
+                    group = Group.objects.get(name="education_plan_developer")
+                    editor.groups.add(group)
+            data["can_edit"] = bool(self.context['request'].user in editors)
 
         return data
 
@@ -206,7 +209,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
                   'employers_in_characteristic', 'ep_supervisor', 'directors_position', 'dean_of_the_faculty',
                   'cluster_name',
                   'science_type', 'industrial_type', 'corporate_type', 'enterprise_type', 'target_master_type',
-                  'dean_of_the_faculty_directors_position']
+                  'dean_of_the_faculty_directors_position', 'on_check']
         extra_kwargs = {"employers_in_characteristic": {"required": False}}
 
 

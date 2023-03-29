@@ -19,6 +19,18 @@ class Service extends AnalyticsService{
     return this.get(`/api/general_characteristic?page=${currentPage}&search=${searchQuery}&ordering=${sortingSymbol}${sortingField}`);
   }
 
+  sendToCheck(id: number){
+    return this.post(`/api/gh_check/${id}`, {
+      new_status: 'on_check'
+    });
+  }
+
+  sendToWork(id: number){
+    return this.post(`/api/gh_check/${id}`, {
+      new_status: 'on_work'
+    });
+  }
+
   deleteEducationProgram(id: number){
     return this.delete(`/api/EducationalProgram/delete/${id}`);
   }
@@ -110,7 +122,7 @@ class Service extends AnalyticsService{
     });
   }
 
-  characteristicDeleteProfessionalStandardLaborFunction({competenceId, type, laborFunction}: any){
+  characteristicDeleteProfessionalStandardLaborFunction({competenceId, type}: any){
     return this.patch(`/api/general_ch/${this.getCompetenceTableUrl(type)}/competence/${competenceId}/`, {
       generalized_labor_functions: null
     });
@@ -182,12 +194,23 @@ class Service extends AnalyticsService{
     return this.get(`/api/general_characteristic/competence_matrix/${id}`);
   }
 
-  saveZUN({indicator, plans, results}: any){
+  saveZUN({indicator, workprogram_id, gh_id}: any){
     return this.post(`/api/zun/many_create/`,{
-      wpa_in_fss: plans,
+      workprogram_id,
+      gh_id,
       zun: {
         indicator_in_zun: indicator,
-        items: results
+        items: []
+      }
+    });
+  }
+
+  saveZunAllGh({indicator, workprogram_id}: any){
+    return this.post(`/api/zun/many_create_for_all_gh/`,{
+      workprogram_id,
+      zun: {
+        indicator_in_zun: indicator,
+        items: []
       }
     });
   }

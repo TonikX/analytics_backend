@@ -101,7 +101,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     handleClose()
   }, [indicator, competence, results, plans, knowledge, skills, attainments])
 
-  const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0 || results.length === 0 || plans.length === 0),
+  const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0 || results.length === 0),
     [indicator, competence, results, plans]
   )
 
@@ -130,7 +130,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
         paper: classes.dialog
       }}
     >
-      <DialogTitle className={classes.title}> {isEditMode ? 'Редактировать' : 'Добавить'} индикатор</DialogTitle>
+      <DialogTitle className={classes.title}> {isEditMode ? 'Редактирование' : 'Добавление'} индикатора ко всем связным ОХ</DialogTitle>
       <CompetenceSelector
         onChange={addCompetence}
         value={competence.value}
@@ -158,18 +158,18 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
           <Chip key={`result-${result.value}`} className={classes.chip} onDelete={() => removeResult(result.value)} label={result.label} />
         ))}
       </div>
-      <PlanSelector
-        label="Учебный план и образовательная программа"
-        onChange={addPlan}
-        valueLabel=""
-        value={0}
-        workProgramId={workProgramId}
-      />
-      <div className={classes.chipsList}>
-        {plans.map(plan => (
-          <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)} label={plan.label} />
-        ))}
-      </div>
+      {/*<PlanSelector*/}
+      {/*  label="Учебный план и образовательная программа"*/}
+      {/*  onChange={addPlan}*/}
+      {/*  valueLabel=""*/}
+      {/*  value={0}*/}
+      {/*  workProgramId={workProgramId}*/}
+      {/*/>*/}
+      {/*<div className={classes.chipsList}>*/}
+      {/*  {plans.map(plan => (*/}
+      {/*    <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)} label={plan.label} />*/}
+      {/*  ))}*/}
+      {/*</div>*/}
       <TextField
         label="Знания"
         onChange={(e) => changeKnowledge(e.currentTarget.value)}

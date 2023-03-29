@@ -1,6 +1,10 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 export default (theme: Theme) => createStyles({
+  wrap: {
+    padding: '0px 30px 30px',
+    boxSizing: 'border-box'
+  },
   chipLabel: {
     overflow: 'auto',
     whiteSpace: 'normal',
@@ -81,6 +85,15 @@ export default (theme: Theme) => createStyles({
       width: '100px !important'
     },
     marginTop: '30px',
+  },
+  paperHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '10px 0px',
+  },
+  sendToCheckButton: {
+    height: '36px',
+    width: '250px'
   },
   formatRealizationWrapSelector: {
     width: '100%',

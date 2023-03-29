@@ -104,6 +104,9 @@ const ContentByAcademicPlan = (
         workProgram: ModuleWorkProgram,
         type: 'key' | 'prof' | 'over-prof' | 'general-prof'
     ) => {
+        // Хак для практик, у которых приходит null
+        if (!workProgram.competences) return null;
+
         const ownCompetences = workProgram.competences.competences;
 
         let sourceCompetences: Competence[] = [];
@@ -147,7 +150,7 @@ const ContentByAcademicPlan = (
             if (intersect(sourceCompetence)) {
                 const indicators = ownCompetences.find(it => it.id === sourceCompetence.id)?.zuns.map(it => {
                     return {
-                        label: `${it.indicator.number}`,
+                        label: `${it.indicator.number} ${it.indicator.name}`,
                         value: it.id,
                     }
                 }) || [];
@@ -181,10 +184,10 @@ const ContentByAcademicPlan = (
         </div>
     };
 
-    const getChildContent = (block: DisciplineModule) => {
+    const getChildContent = (block: DisciplineModule, name: string) => {
         if (!block.childs) {
             return <>
-               <TableRow>
+                <TableRow>
                     <TableCell>{block.name}</TableCell>
                     <EmptyRow/>
                 </TableRow>
@@ -197,18 +200,18 @@ const ContentByAcademicPlan = (
             <>
                 {arr.map(([item, level]) => {
                     const stars = new Array(level).fill('⦁').join('');
-                    return getSingleContent(item, stars);
+                    return getSingleContent(item, name, stars);
                 })}
             </>
         );
     };
 
-    const getSingleContent = (moduleBlock: DisciplineModule, stars = '') => {
+    const getSingleContent = (moduleBlock: DisciplineModule, name: string, stars = '') => {
         const shouldHighlight = !Boolean(stars);
         return (
             <>
                 <TableRow
-                     selected={shouldHighlight} className={classes.sectionRow}
+                    selected={shouldHighlight} className={classes.sectionRow}
                 >
                     <TableCell>{`${stars} ${moduleBlock.name}`}</TableCell>
                     {
@@ -220,8 +223,11 @@ const ContentByAcademicPlan = (
                         /> : <EmptyRow/>
                     }
                 </TableRow>
-                {moduleBlock.change_blocks_of_work_programs_in_modules.map((block: WorkProgramChangeInDisciplineBlockModule) =>
-                    block.work_program.map((wp: ModuleWorkProgram, elIndex: number) =>
+                {moduleBlock.change_blocks_of_work_programs_in_modules.map((block: WorkProgramChangeInDisciplineBlockModule) => {
+                    // Хак для новых практик
+                    const targetBlock = (name === "Практика" && !block.work_program.length ? block.practice : block.work_program) || [];
+
+                    return targetBlock.map((wp: ModuleWorkProgram, elIndex: number) =>
                         <TableRow key={`wp-${elIndex}`}>
                             <TableCell className={classes.rowWithPadding}>
                                 <Link
@@ -239,7 +245,8 @@ const ContentByAcademicPlan = (
                                 className={classes.noPaddingCells}>{getCompetencesContent(wp, 'general-prof')}</TableCell>
                             <TableCell
                                 className={classes.noPaddingCells}>{getCompetencesContent(wp, 'prof')}</TableCell>
-                        </TableRow>))}
+                        </TableRow>);
+                })}
             </>
         )
     };
@@ -255,7 +262,7 @@ const ContentByAcademicPlan = (
                 {item.modules_in_discipline_block.map((moduleBlock: DisciplineModule, blockIndex: number) =>
                     <React.Fragment key={blockIndex}>
                         {
-                            moduleBlock.childs ? getChildContent(moduleBlock) : getSingleContent(moduleBlock)
+                            moduleBlock.childs ? getChildContent(moduleBlock, moduleBlock.name) : getSingleContent(moduleBlock, moduleBlock.name)
                         }
                     </React.Fragment>)}
             </React.Fragment>)}
@@ -297,6 +304,11 @@ export default () => {
     if (isEmpty(matrix)) {
         return null;
     }
+
+    const resetDialog = () => {
+        setIndicators([]);
+        setIsOpen(false);
+    };
 
     const attachIndicator = (props: AttachIndicatorProps) => {
         setWorkProgramId(props.workProgramId);
@@ -349,7 +361,7 @@ export default () => {
 
             <IndicatorsDialog
                 isOpen={isOpen}
-                handleClose={() => setIsOpen(false)}
+                handleClose={resetDialog}
                 addedIndicators={indicators}
                 defaultCompetence={defaultCompetence}
                 workProgramId={workProgramId}

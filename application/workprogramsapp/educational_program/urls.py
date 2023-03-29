@@ -5,7 +5,7 @@ from rest_framework.routers import DefaultRouter
 from workprogramsapp.educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
     EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView, UploadCompetences, \
     GeneralizedLaborFunctionsSet, KindsOfActivitySet, EmployerSet, GetCompetenceMatrix, ObjectsOfActivitySet, \
-    academ_plan_check, UploadProfStandards, new_ordinal_numbers_for_modules_in_ap
+    academ_plan_check, UploadProfStandards, new_ordinal_numbers_for_modules_in_ap, gh_check
 from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, \
     GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
@@ -32,6 +32,8 @@ urlpatterns = [
     path('api/general_characteristic/detail_with_educational_program/<int:pk>',
          GeneralCharacteristicsDetailsWithEducationalProgramView.as_view()),
 
+    path('api/gh_check/<int:gh_id>', gh_check),
+
     # --Образовательная программа
     path('api/EducationalProgram', EducationalProgramListAPIView.as_view()),
     path('api/EducationalProgram/create', EducationalProgramCreateAPIView.as_view()),
@@ -41,13 +43,14 @@ urlpatterns = [
     path('api/EducationalProgram/byprofessions', EducationalProgramRankingByProfession),
     path('api/EducationalProgram/byprofessionsscience', EducationalProgramRankingByProfessionScientific),
 
+    path('api/academicplan_check/<int:ap_id>', academ_plan_check),
+
+
     # --Компетенции
     path('api/competence/upload_comptence_from_csv', UploadCompetences),
 
     # --Матрица компетенций
     path('api/general_characteristic/competence_matrix/<int:gen_pk>', GetCompetenceMatrix),
-
-    path('api/academicplan_check/<int:ap_id>', academ_plan_check),
 
     # --Проф. Стандарты
     path('api/competence/upload_prof_standard_from_csv', UploadProfStandards.as_view()),
