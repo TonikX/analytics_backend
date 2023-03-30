@@ -21,9 +21,10 @@ from rest_framework.views import APIView
 
 from dataprocessing.serializers import FileUploadSerializer
 from .academic_plan_export import process_excel
+from .general_characteristic_export import generate_context
 from .plan_logic import plans_processor
 from ..models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, FieldOfStudy, WorkProgram, \
-    ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule
+    ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, GeneralCharacteristics
 from ..serializers import WorkProgramSerializer
 from rest_framework import generics
 import re
@@ -476,6 +477,28 @@ class AcademicPlanGenerateXlsx(generics.ListAPIView):
 
 
         # wb_obj.save(response)
+        return response
+
+
+class GeneralCharacteristicGenerateDocx(generics.ListAPIView):
+    """Возвращает ОХ в формате docx в браузере"""
+    queryset = WorkProgram.objects.all()
+    serializer = WorkProgramSerializer
+    # permission_classes = [IsAuthenticated, ]
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        gh = GeneralCharacteristics.objects.get(id=kwargs['pk'])
+        # tpl = DocxTemplate( "C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\oh_template.docx")
+        tpl = DocxTemplate("/application/static-backend/export_template/oh_template_2023.docx")
+        context = generate_context(gh)
+        tpl.render(context)
+        filename = f"ОХ_{context['year']}_{context['op_name']}.docx"
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = 'inline; filename="%s"' % str(filename)
+
+        tpl.save(response)
+
         return response
 
 

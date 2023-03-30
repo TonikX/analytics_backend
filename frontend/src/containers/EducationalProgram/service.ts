@@ -205,6 +205,16 @@ class Service extends AnalyticsService{
     });
   }
 
+  saveZunAllGh({indicator, workprogram_id}: any){
+    return this.post(`/api/zun/many_create_for_all_gh/`,{
+      workprogram_id,
+      zun: {
+        indicator_in_zun: indicator,
+        items: []
+      }
+    });
+  }
+
   deleteZUN(compentenceId: number){
     return this.delete(`/api/zun/many_create/${compentenceId}/`);
   }
