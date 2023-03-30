@@ -55,12 +55,32 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
             borderLeft: '0 !important'
         },
     },
+    selected: {
+        '& td': {
+            padding: '0 !important',
+        },
+    },
+    moduleName: {
+        padding: '0 10px !important',
+    },
     competenceCell: {
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         cursor: 'pointer',
+    },
+    noPaddingCell: {
+        padding: '0 !important',
+    },
+    headerCell: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        cursor: 'pointer',
+        padding: '10px',
+        border: '1px solid rgba(224, 224, 224, 1)',
     },
     intersection: {
         textAlign: 'center',
