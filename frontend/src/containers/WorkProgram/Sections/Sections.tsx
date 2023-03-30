@@ -68,31 +68,13 @@ class Sections extends React.PureComponent<SectionsProps> {
   }
 
   getTotalHours = (field: string) => {
-    const {sections, implementationFormat} = this.props;
-    const canEditConsultation = implementationFormat === ImplementationFormatsEnum.ONLINE
+    const {sections} = this.props;
 
     let count = 0;
 
-    if (field === workProgramSectionFields.TOTAL_HOURS && canEditConsultation) {
-      sections.forEach((section) => {
-        //@ts-ignore
-        count += parseFloat(section[workProgramSectionFields.CONSULTATIONS] || 0)
-      })
-      return count
-    }
-
     sections.forEach(section => {
-      if (canEditConsultation) {
-        if (field === workProgramSectionFields.CONSULTATIONS) {
-          // @ts-ignore
-          count += Boolean(section[field]) ? parseFloat(section[field]) : 0;
-        }
-      } else {
-        if (field !== workProgramSectionFields.CONSULTATIONS) {
-          // @ts-ignore
-          count += Boolean(section[field]) ? parseFloat(section[field]) : 0;
-        }
-      }
+        // @ts-ignore
+        count += Boolean(section[field]) ? parseFloat(section[field]) : 0;
     })
 
     return count;
@@ -103,13 +85,13 @@ class Sections extends React.PureComponent<SectionsProps> {
     let totalHoursWithoutCPO = 0;
 
     sections.forEach((section) => {
-      totalHoursWithoutCPO += parseFloat(String(this.calculateContactWork(section)));
+      totalHoursWithoutCPO += parseFloat(String(this.calculateContactWork(section) ));
     });
 
     const totalContactWork = parseFloat(String(totalHoursWithoutCPO)); // общая контактная работа
     const totalHours = this.state.totalHours || totalTotalHours;
 
-    sections.forEach((section, index) => {
+    sections.forEach((section) => {
       const contactWork = section[workProgramSectionFields.CONTACT_WORK];
       const sro = (contactWork / totalContactWork * (totalHours - totalContactWork)).toFixed(2)
       //@ts-ignore
@@ -134,7 +116,10 @@ class Sections extends React.PureComponent<SectionsProps> {
 
     const totalConsultationsWorkHours = ((parseFloat(section[workProgramSectionFields.CONSULTATIONS]) || 0) * 1.1)
 
-    return implementationFormat === ImplementationFormatsEnum.ONLINE ? totalConsultationsWorkHours : totalContactWorkHours
+    if (implementationFormat === ImplementationFormatsEnum.ONLINE) return totalConsultationsWorkHours
+    if (implementationFormat === ImplementationFormatsEnum.OFFLINE) return totalContactWorkHours
+
+    return totalConsultationsWorkHours + totalContactWorkHours
   }
 
   handleChangeTotalHours = (e: React.ChangeEvent) => {
@@ -162,17 +147,20 @@ class Sections extends React.PureComponent<SectionsProps> {
 
     const semesterColumns = new Array(semesterCount).fill(0)
 
-    const totalContactWorkHours = ((
+    const totalContactWorkHoursOffline = ((
         parseFloat(totalLectureClassesHours) +
         parseFloat(totalLaboratoryClassesHours) +
         parseFloat(totalPracticalClassesHours))
-      * 1.1).toFixed(2);
+      * 1.1);
 
     const totalConsultationsWorkHours = (
       parseFloat(totalConsultationsHours)
-      * 1.1).toFixed(2);
+      * 1.1);
 
-    const finalContactWorkHours = implementationFormat === ImplementationFormatsEnum.ONLINE ? totalConsultationsWorkHours : totalContactWorkHours
+    const finalContactWorkHours =
+      implementationFormat === ImplementationFormatsEnum.ONLINE ? totalConsultationsWorkHours.toFixed(2) :
+      implementationFormat === ImplementationFormatsEnum.OFFLINE ? totalContactWorkHoursOffline.toFixed(2)
+        : (totalContactWorkHoursOffline + totalConsultationsWorkHours).toFixed(2)
 
     return (
       <div className={classes.secondStep}>
