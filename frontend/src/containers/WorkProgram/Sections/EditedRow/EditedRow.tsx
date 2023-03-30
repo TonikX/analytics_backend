@@ -98,6 +98,16 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     calculateContactWork = () => {
         const {section} = this.state;
         const canEditConsultation = this.canEditConsultation()
+        const isMixed = this.isMixed()
+
+        if (isMixed) {
+            return ((
+              (parseFloat(section[workProgramSectionFields.LECTURE_CLASSES]) || 0) +
+              (parseFloat(section[workProgramSectionFields.PRACTICAL_LESSONS]) || 0) +
+              (parseFloat(section[workProgramSectionFields.LABORATORY]) || 0) +
+              (parseFloat(section[workProgramSectionFields.CONSULTATIONS]) || 0)
+            ) * 1.1).toFixed(2);
+        }
 
         if (canEditConsultation) {
             return ((
@@ -113,11 +123,14 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     }
 
     canEditConsultation = () => this.props.implementationFormat !== ImplementationFormatsEnum.OFFLINE
+    canEditOfflineHours = () => this.props.implementationFormat !== ImplementationFormatsEnum.ONLINE
+    isMixed = () => this.props.implementationFormat === ImplementationFormatsEnum.MIXED
 
     render() {
         const {classes, isCanEdit} = this.props;
         const {isEditMode, section} = this.state;
         const canEditConsultation = this.canEditConsultation()
+        const canEditOfflineHours = this.canEditOfflineHours()
 
         const contactWork = this.calculateContactWork();
 
@@ -149,7 +162,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                                    className={classes.smallInput}
                                    type="number"
                                    onChange={this.handleChangeField(workProgramSectionFields.LECTURE_CLASSES)}
-                                   disabled={canEditConsultation}
+                                   disabled={!canEditOfflineHours}
                         />
                         :
                         <>{section.lecture_classes}</>
@@ -163,7 +176,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                                    className={classes.smallInput}
                                    type="number"
                                    onChange={this.handleChangeField(workProgramSectionFields.LABORATORY)}
-                                   disabled={canEditConsultation}
+                                   disabled={!canEditOfflineHours}
                         />
                         :
                         <>{section.laboratory}</>
@@ -177,7 +190,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                                    className={classes.smallInput}
                                    type="number"
                                    onChange={this.handleChangeField(workProgramSectionFields.PRACTICAL_LESSONS)}
-                                   disabled={canEditConsultation}
+                                   disabled={!canEditOfflineHours}
                         />
                         :
                         <>{section.practical_lessons}</>

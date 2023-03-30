@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import get from 'lodash/get';
+import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import {useDispatch, useSelector} from "react-redux";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -43,7 +44,7 @@ const CompetencesCell = ({competences}: CompetencesHeaderProps) => {
     const classes = useStyles();
     const extractOnlyNumber = (str: string) => str.replace(/\D/g, '');
     return (
-        <TableCell variant="head" className={classes.competenceTableHeading}>
+        <TableCell variant="head" className={classes.noPaddingCell}>
             <div className={classes.competenceHeader}>
                 {
                     competences.map((el, index) => {
@@ -51,7 +52,7 @@ const CompetencesCell = ({competences}: CompetencesHeaderProps) => {
                                 <Tooltip
                                     key={index}
                                     title={el.name}
-                                    className={classes.competenceCell}
+                                    className={classes.headerCell}
                                     arrow
                                 >
                                     <div className={classes.competenceHeaderCell} key={index}>{extractOnlyNumber(el.number)}</div>
@@ -211,9 +212,11 @@ const ContentByAcademicPlan = (
         return (
             <>
                 <TableRow
-                    selected={shouldHighlight} className={classes.sectionRow}
+                    selected={shouldHighlight} className={cn(classes.sectionRow, shouldHighlight ? classes.selected : '')}
                 >
-                    <TableCell>{`${stars} ${moduleBlock.name}`}</TableCell>
+                    <TableCell>
+                        <div className={shouldHighlight ? classes.moduleName : ''}>{`${stars} ${moduleBlock.name}`}</div>
+                    </TableCell>
                     {
                         shouldHighlight ? <CompetencesRow
                             overProfCompetences={overProfCompetences}
