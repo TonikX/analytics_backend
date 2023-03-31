@@ -8,7 +8,7 @@ import MomentUtils from '@date-io/moment';
 import {SnackbarProvider} from 'notistack';
 import "moment/locale/ru";
 
-import {MuiThemeProvider} from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
 import withStyles from '@mui/material/styles/withStyles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 
@@ -93,7 +93,7 @@ class Layout extends React.Component {
         return (
             <MuiPickersUtilsProvider utils={MomentUtils}>
                 <SnackbarProvider maxSnack={3}>
-                    <MuiThemeProvider theme={theme}>
+                    <ThemeProvider theme={theme}>
                         <AbsoluteLoader isFetching={fetching} />
                         <Notificator errors={errors} successMessages={successMessages} />
                         <Header handleOpenMenu={this.handleOpenMenu}
@@ -119,7 +119,7 @@ class Layout extends React.Component {
                         </div>
 
                         {isAuth && <AddToFolderModal />}
-                    </MuiThemeProvider>
+                    </ThemeProvider>
                 </SnackbarProvider>
             </MuiPickersUtilsProvider>
         );

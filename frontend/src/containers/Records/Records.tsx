@@ -4,7 +4,8 @@ import Typography from "@mui/material/Typography";
 import {appRouter} from "../../service/router-service";
 import styles from './Records.styles';
 import {
-    Button, ExpansionPanelDetails,
+    Button,
+    // ExpansionPanelDetails,
     FormControl,
     FormControlLabel,
     InputLabel, MenuItem,
@@ -418,62 +419,62 @@ class Records extends Component<RecordsProops> {
                             >
                                 <Typography>{SU.title} </Typography>
                             </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <>
-                                    <div className={classes.tableWrap} style={{width: "100%"}}>
-                                        <Table>
-                                            <TableHead className={classes.header}>
-                                                <TableRow>
-                                                    <TableCell style={{width: "25%"}}>
-                                                        Код
-                                                    </TableCell>
-                                                    <TableCell style={{width: "50%"}}>
-                                                        Название
-                                                    </TableCell>
-                                                    <TableCell style={{width: "25%"}}>
-                                                        Авторский состав
-                                                    </TableCell>
-                                                    <TableCell/>
-                                                </TableRow>
-                                            </TableHead>
+                            {/*<ExpansionPanelDetails>*/}
+                            {/*    <>*/}
+                            {/*        <div className={classes.tableWrap} style={{width: "100%"}}>*/}
+                            {/*            <Table>*/}
+                            {/*                <TableHead className={classes.header}>*/}
+                            {/*                    <TableRow>*/}
+                            {/*                        <TableCell style={{width: "25%"}}>*/}
+                            {/*                            Код*/}
+                            {/*                        </TableCell>*/}
+                            {/*                        <TableCell style={{width: "50%"}}>*/}
+                            {/*                            Название*/}
+                            {/*                        </TableCell>*/}
+                            {/*                        <TableCell style={{width: "25%"}}>*/}
+                            {/*                            Авторский состав*/}
+                            {/*                        </TableCell>*/}
+                            {/*                        <TableCell/>*/}
+                            {/*                    </TableRow>*/}
+                            {/*                </TableHead>*/}
 
-                                            <TableBody>
-                                                {SU.work_programs.slice(this.state.page * this.state.rowsPerPage,
-                                                    this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((workProgram: any) =>
-                                                    <TableRow key={workProgram.id}>
-                                                        <TableCell>
-                                                            {workProgram.discipline_code}
-                                                        </TableCell>
-                                                        <TableCell className={classes.link}>
-                                                            <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>
-                                                                {workProgram.title}
-                                                            </Link>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {workProgram.editors.map((editors: any) =>
-                                                                <>{editors.first_name} {editors.last_name}; </>
-                                                            )}
-                                                        </TableCell>
+                            {/*                <TableBody>*/}
+                            {/*                    {SU.work_programs.slice(this.state.page * this.state.rowsPerPage,*/}
+                            {/*                        this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((workProgram: any) =>*/}
+                            {/*                        <TableRow key={workProgram.id}>*/}
+                            {/*                            <TableCell>*/}
+                            {/*                                {workProgram.discipline_code}*/}
+                            {/*                            </TableCell>*/}
+                            {/*                            <TableCell className={classes.link}>*/}
+                            {/*                                <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>*/}
+                            {/*                                    {workProgram.title}*/}
+                            {/*                                </Link>*/}
+                            {/*                            </TableCell>*/}
+                            {/*                            <TableCell>*/}
+                            {/*                                {workProgram.editors.map((editors: any) =>*/}
+                            {/*                                    <>{editors.first_name} {editors.last_name}; </>*/}
+                            {/*                                )}*/}
+                            {/*                            </TableCell>*/}
 
-                                                    </TableRow>
-                                                )}
-                                            </TableBody>
+                            {/*                        </TableRow>*/}
+                            {/*                    )}*/}
+                            {/*                </TableBody>*/}
 
-                                        </Table>
-                                        <div className={classes.footer}>
-                                            <TablePagination count={SU.work_programs.length}
-                                                             component="div"
-                                                             page={this.state.page}
-                                                             rowsPerPageOptions={[]}
-                                                             onChangePage={this.handleChangePage}
-                                                             rowsPerPage={this.state.rowsPerPage}
-                                                             onChangeRowsPerPage={() => {
-                                                             }}
-                                            />
-                                        </div>
-                                    </div>
-                                </>
-                            </ExpansionPanelDetails>
+                            {/*            </Table>*/}
+                            {/*            <div className={classes.footer}>*/}
+                            {/*                <TablePagination count={SU.work_programs.length}*/}
+                            {/*                                 component="div"*/}
+                            {/*                                 page={this.state.page}*/}
+                            {/*                                 rowsPerPageOptions={[]}*/}
+                            {/*                                 onChangePage={this.handleChangePage}*/}
+                            {/*                                 rowsPerPage={this.state.rowsPerPage}*/}
+                            {/*                                 onChangeRowsPerPage={() => {*/}
+                            {/*                                 }}*/}
+                            {/*                />*/}
+                            {/*            </div>*/}
+                            {/*        </div>*/}
+                            {/*    </>*/}
+                            {/*</ExpansionPanelDetails>*/}
                         </ExpansionPanel>
                     )}
                 </div>
