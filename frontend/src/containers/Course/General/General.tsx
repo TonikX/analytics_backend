@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import { Scrollbars } from 'react-custom-scrollbars'
+import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useStyles } from './General.styles'
 
 import { getCourse } from '../getters'
