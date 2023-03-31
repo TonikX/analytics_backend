@@ -1,13 +1,13 @@
-import TableCell from "@material-ui/core/TableCell/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import TextField from "@material-ui/core/TextField/TextField";
+import TableCell from "@mui/material/TableCell/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TextField from "@mui/material/TextField/TextField";
 import {EVALUATION_TOOLS, workProgramSectionFields} from "./enum";
 import React from "react";
 
 import {useStyles} from './EditableRow.styles';
 import {EditableRowProps} from "../types";
-import {Select} from "@material-ui/core";
-import MenuItem from "@material-ui/core/MenuItem";
+import {Select} from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
 import {ImplementationFormatsEnum} from "../../../WorkProgram/enum";
 
 function EditableRow(props: EditableRowProps) {

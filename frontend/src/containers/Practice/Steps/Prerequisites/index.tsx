@@ -1,20 +1,20 @@
 import React from "react";
 import {DialogType, PermissionsInfoFields, PracticeSteps} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import withStyles from "@mui/material/styles/withStyles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {Typography, WithStyles} from "@mui/material";
 import {PermissionsInfoState, PracticeActions, PracticeState} from "../../types";
 
 import classNames from "classnames";
 import Scrollbars from "react-custom-scrollbars";
 import {PrerequisiteFields} from "../../../WorkProgram/enum";
 import {TrainingEntitiesFields} from "../../../TrainingEntities/enum";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/EditOutlined";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import CreateModal from "./CreateModal";
 import {PrerequisiteType} from "../../../WorkProgram/types";
 

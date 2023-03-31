@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import {WorkProgramActions} from '../types';
 import {ResultsType} from "../types";
 

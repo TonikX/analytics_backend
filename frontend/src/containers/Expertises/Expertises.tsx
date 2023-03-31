@@ -5,15 +5,15 @@ import get from "lodash/get";
 import moment from "moment";
 import {Link} from "react-router-dom";
 
-import Paper from '@material-ui/core/Paper';
-import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Paper from '@mui/material/Paper';
+import Typography from "@mui/material/Typography";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import withStyles from '@mui/material/styles/withStyles';
 import EyeIcon from "@material-ui/icons/VisibilityOutlined";
-import TableBody from "@material-ui/core/TableBody";
+import TableBody from "@mui/material/TableBody";
 
 import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";

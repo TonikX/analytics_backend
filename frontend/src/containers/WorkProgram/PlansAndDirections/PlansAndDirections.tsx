@@ -2,12 +2,12 @@ import React from 'react';
 import Scrollbars from "react-custom-scrollbars";
 import {Link} from "react-router-dom";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
+import withStyles from '@mui/material/styles/withStyles';
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
 import DownloadIcon from "@material-ui/icons/CloudDownloadOutlined";
 
 import {PlansAndDirectionsProps} from './types';

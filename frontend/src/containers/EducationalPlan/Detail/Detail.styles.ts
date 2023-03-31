@@ -1,4 +1,4 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {createStyles, Theme} from "@mui/material";
 
 export default (theme: Theme) => createStyles({
   tableWrap: {

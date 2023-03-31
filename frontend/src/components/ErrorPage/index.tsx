@@ -1,10 +1,10 @@
 import React from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
+import withStyles from "@mui/material/styles/withStyles";
 import {Link, RouteComponentProps, withRouter} from "react-router-dom";
 import styles from "./styles";
-import {WithStyles} from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
+import {WithStyles} from "@mui/material";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 import {appRouter} from "../../service/router-service";
 
 export interface ErrorPageProps extends WithStyles<typeof styles>, RouteComponentProps {

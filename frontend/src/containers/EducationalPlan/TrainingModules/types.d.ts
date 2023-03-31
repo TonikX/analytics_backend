@@ -1,5 +1,5 @@
 import {ActionCreatorWithoutPayload, ActionCreatorWithPayload} from "@reduxjs/toolkit";
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 
 import {SortingType} from "../../../components/SortingButton/types";
 

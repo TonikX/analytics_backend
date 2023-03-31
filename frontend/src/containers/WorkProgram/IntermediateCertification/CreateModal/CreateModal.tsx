@@ -5,28 +5,28 @@ import classNames from 'classnames';
 
 import {CreateModalProps} from './types';
 
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import withStyles from '@material-ui/core/styles/withStyles';
-import TextField from "@material-ui/core/TextField";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import withStyles from '@mui/material/styles/withStyles';
+import TextField from "@mui/material/TextField";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import QuestionIcon from "@material-ui/icons/HelpOutline";
-import Typography from "@material-ui/core/Typography";
-import AppBar from "@material-ui/core/AppBar";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
+import Typography from "@mui/material/Typography";
+import AppBar from "@mui/material/AppBar";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
 import {AutoSizer} from "react-virtualized";
-import FormLabel from "@material-ui/core/FormLabel";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Radio from "@material-ui/core/Radio";
-import Tooltip from "@material-ui/core/Tooltip";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup";
+import Radio from "@mui/material/Radio";
+import Tooltip from "@mui/material/Tooltip";
 
 import CKEditor from "../../../../components/CKEditor";
 
@@ -38,7 +38,7 @@ import {IntermediateCertificationTypes} from "../../constants";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-import Slider from "@material-ui/core/Slider";
+import Slider from "@mui/material/Slider";
 
 
 class CreateModal extends React.PureComponent<CreateModalProps> {

@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import {EducationalPlanActions, ModuleType} from '../../types';
 
 import styles from "./ModuleModal.styles";

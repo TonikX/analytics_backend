@@ -1,9 +1,9 @@
 import React from 'react';
 
-import TableCell from "@material-ui/core/TableCell";
-import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
+import TableCell from "@mui/material/TableCell";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import withStyles from '@mui/material/styles/withStyles';
 
 import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import EditIcon from '@material-ui/icons/EditOutlined';

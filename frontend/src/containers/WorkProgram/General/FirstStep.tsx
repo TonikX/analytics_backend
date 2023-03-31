@@ -3,21 +3,21 @@ import get from 'lodash/get';
 import classNames from 'classnames';
 import moment, {Moment} from "moment";
 
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import TextField from '@material-ui/core/TextField';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import TextField from '@mui/material/TextField';
+import withStyles from '@mui/material/styles/withStyles';
 import {DatePicker} from "@material-ui/pickers";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
 import DateIcon from "@material-ui/icons/DateRange";
 import AddIcon from "@material-ui/icons/Add";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
-import Chip from "@material-ui/core/Chip";
-import Switch from "@material-ui/core/Switch";
-import FormControl from "@material-ui/core/FormControl";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import Chip from "@mui/material/Chip";
+import Switch from "@mui/material/Switch";
+import FormControl from "@mui/material/FormControl";
 
 import InputsLoader from '../../../components/InputsLoader';
 import SimpleSelector from '../../../components/SimpleSelector';
@@ -34,7 +34,7 @@ import {UserFields} from "../../../layout/enum";
 
 import connect from './FirstStep.connect';
 import styles from './FirstStep.styles';
-import FormLabel from "@material-ui/core/FormLabel";
+import FormLabel from "@mui/material/FormLabel";
 
 class FirstStep extends React.Component<FirstStepProps> {
   state = {

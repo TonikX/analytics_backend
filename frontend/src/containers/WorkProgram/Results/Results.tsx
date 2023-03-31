@@ -3,15 +3,15 @@ import Scrollbars from "react-custom-scrollbars";
 
 import classNames from "classnames";
 
-import Typography from "@material-ui/core/Typography";
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from "@material-ui/core/Button";
+import Typography from "@mui/material/Typography";
+import withStyles from '@mui/material/styles/withStyles';
+import Button from "@mui/material/Button";
 
 import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
-import Chip from "@material-ui/core/Chip";
+import Chip from "@mui/material/Chip";
 
 import {ResultsProps} from './types';
 import {EvaluationToolFields, fields, ResultsFields} from "../enum";

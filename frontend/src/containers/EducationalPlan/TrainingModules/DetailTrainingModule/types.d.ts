@@ -1,5 +1,5 @@
 import {RouteComponentProps} from "react-router-dom";
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import {mapDispatchToProps, mapStateToProps} from "./DetailTrainingModule.connect";
 import styles from "./DetailTrainingModule.styles";
 

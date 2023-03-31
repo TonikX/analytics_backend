@@ -1,23 +1,23 @@
 import React from "react";
-import Paper from '@material-ui/core/Paper';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Paper from '@mui/material/Paper';
+import withStyles from '@mui/material/styles/withStyles';
 import {Link, withRouter} from "react-router-dom";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 import styles from "./Practice.styles";
 import connect from './Practice.connect';
 import {PracticeProps} from "./types";
 import get from "lodash/get";
 import {ExpertiseStatus, PermissionsInfoFields, PracticeFields} from "./enum";
-import Step from "@material-ui/core/Step";
-import StepButton from "@material-ui/core/StepButton";
-import Stepper from "@material-ui/core/Stepper";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
+import Stepper from "@mui/material/Stepper";
 import ErrorPage from "../../components/ErrorPage";
 import Download from "./components/Download";
 import {STEPS} from "./constants";
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 import SendToExpertise from "./components/SendToExpertise";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import Comments from "../../components/Comments";
 import {appRouter} from "../../service/router-service";
 

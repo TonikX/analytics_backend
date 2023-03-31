@@ -5,14 +5,14 @@ import {Link} from "react-router-dom";
 // @ts-ignore
 import ReactStars from "react-rating-stars-component";
 
-import withStyles from "@material-ui/core/styles/withStyles";
-import Typography from "@material-ui/core/Typography";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Box from "@material-ui/core/Box";
+import withStyles from "@mui/material/styles/withStyles";
+import Typography from "@mui/material/Typography";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import AddIcon from "@material-ui/icons/Add";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import AddFolderModal from "./AddFolderModal";
 
 import LikeButton from "../../../components/LikeButton";

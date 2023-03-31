@@ -1,17 +1,17 @@
 import React from "react";
 import {PracticeSteps} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import withStyles from "@mui/material/styles/withStyles";
 import styles from './PlansAndDirections.styles';
-import {Typography, WithStyles} from "@material-ui/core";
+import {Typography, WithStyles} from "@mui/material";
 import {PracticeActions, PracticeState} from "../../types";
 import Scrollbars from "react-custom-scrollbars";
 import {Link} from "react-router-dom";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell/TableCell";
-import TableBody from "@material-ui/core/TableBody";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell/TableCell";
+import TableBody from "@mui/material/TableBody";
 
 import {appRouter} from '../../../../service/router-service';
 

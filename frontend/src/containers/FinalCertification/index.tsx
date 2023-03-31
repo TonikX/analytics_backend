@@ -1,14 +1,14 @@
 import React from "react";
-import {Paper, WithStyles} from "@material-ui/core";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {Paper, WithStyles} from "@mui/material";
+import withStyles from "@mui/material/styles/withStyles";
 import styles from "./styles";
 import {Link, RouteComponentProps, withRouter} from "react-router-dom";
 import {CertificationActions, CertificationState, PermissionsInfoState} from "./types";
 import connect from "./connect";
 import get from "lodash/get";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepButton from "@material-ui/core/StepButton";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
 import {CertificationFields} from "./enum";
 import ErrorPage from "../../components/ErrorPage";
 import Download from "./components/Download";
@@ -17,10 +17,10 @@ import {STEPS} from "./constants";
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 import {ExpertiseStatus, PermissionsInfoFields} from "./enum";
 import {CommentType} from "./types";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import {appRouter} from "../../service/router-service";
 import Comments from "../../components/Comments/Comments";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 export interface FinalCertificationProps extends WithStyles<typeof styles>, RouteComponentProps {
   actions: CertificationActions,

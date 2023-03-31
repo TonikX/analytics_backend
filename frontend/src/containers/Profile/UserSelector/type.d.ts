@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import {SelectorListType} from "../../../components/SearchSelector/types";
 import {GeneralActions} from "../../../layout/types";
 import styles from './UserSelector.styles';

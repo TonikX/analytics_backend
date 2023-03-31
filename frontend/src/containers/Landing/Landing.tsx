@@ -2,20 +2,20 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import cs from 'classnames'
 
-import AppBar from '@material-ui/core/AppBar'
+import AppBar from '@mui/material/AppBar'
 import { useStyles } from './Landing.styles'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import TelegramIcon from '@material-ui/icons/Telegram'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import Tooltip from '@material-ui/core/Tooltip'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import Drawer from '@material-ui/core/Drawer'
-import Divider from '@material-ui/core/Divider'
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import List from '@material-ui/core/List';
+import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
+import Drawer from '@mui/material/Drawer'
+import Divider from '@mui/material/Divider'
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import List from '@mui/material/List';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 

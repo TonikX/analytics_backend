@@ -4,10 +4,10 @@ import {Redirect} from "react-router";
 import PropTypes from "prop-types";
 import get from "lodash/get";
 
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Typography  from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography  from '@mui/material/Typography';
+import withStyles from '@mui/material/styles/withStyles';
 
 import {appRouter} from '../../service/router-service';
 import UserService from "../../service/user-service";

@@ -3,12 +3,12 @@ import { useHistory } from "react-router-dom";
 import get from "lodash/get";
 import classNames from "classnames";
 
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Typography from "@material-ui/core/Typography";
-import Tooltip from "@material-ui/core/Tooltip";
-import Checkbox from "@material-ui/core/Checkbox";
-import Button from "@material-ui/core/Button";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
+import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
 import FileIcon from "@material-ui/icons/DescriptionOutlined";
 
 import { appRouter } from "../../../../service/router-service";

@@ -5,7 +5,7 @@ import cn from 'classnames';
 
 import { getPlatforms, getIntitutions, getFilters, getFieldsOfStudyTitles, getFieldsOfStudyNumbers } from '../getters'
 
-import Button from '@material-ui/core/Button'
+import Button from '@mui/material/Button'
 import SearchSelector from '../../../components/SearchSelector'
 
 import { filterFields, InstitutionFields, PlatformFields, FieldOfStudyFields } from '../enum'

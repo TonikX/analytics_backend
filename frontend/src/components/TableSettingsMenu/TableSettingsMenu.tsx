@@ -3,10 +3,10 @@ import isFunction from "lodash/isFunction";
 
 import {Link} from "react-router-dom";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import withStyles from '@mui/material/styles/withStyles';
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import SettingsIcon from "@material-ui/icons/MoreVert";
 
 import {TableSettingsMenuProps} from './types';

@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import styles from './styles'
 import {CertificationState} from "../types";
 import {SortingType} from "../../../components/SortingButton/types";

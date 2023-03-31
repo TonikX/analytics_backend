@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 import { useStyles } from './Content.styles'
-import Typography from '@material-ui/core/Typography'
+import Typography from '@mui/material/Typography'
 
 import { getCourse } from '../getters'
 

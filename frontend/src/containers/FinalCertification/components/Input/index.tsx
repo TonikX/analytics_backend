@@ -1,16 +1,16 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import styles from "./styles";
 import {CertificationActions, CertificationState, Validation} from "../../types";
 import {CertificationFields} from "../../enum";
 import React from "react";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
-import TextField from "@material-ui/core/TextField";
+import withStyles from "@mui/material/styles/withStyles";
+import TextField from "@mui/material/TextField";
 import get from "lodash/get";
 import {validate} from "../../validation";
 import InputsLoader from "../../../../components/InputsLoader";
 import {RussianCertificationFields} from "../../constants";
-import InputLabel from "@material-ui/core/InputLabel";
+import InputLabel from "@mui/material/InputLabel";
 
 interface InputProps extends WithStyles<typeof styles> {
     actions: CertificationActions;

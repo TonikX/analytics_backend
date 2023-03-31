@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import {BlocksOfWorkProgramsType, EducationalPlanActions} from '../../types';
 import {WorkProgramListActions} from "../../../WorkProgramList/types";
 

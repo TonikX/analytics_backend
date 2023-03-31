@@ -1,12 +1,12 @@
 import React from 'react';
 import Scrollbars from "react-custom-scrollbars";
 
-import Typography from "@material-ui/core/Typography";
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from "@material-ui/core/Button";
+import Typography from "@mui/material/Typography";
+import withStyles from '@mui/material/styles/withStyles';
+import Button from "@mui/material/Button";
 
 import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 
 import {LiteratureProps} from './types';
@@ -18,7 +18,7 @@ import {literatureFields} from "../../../Literature/enum";
 import {LiteratureType} from "../../../Literature/types";
 import {PracticeFields, PracticeSteps} from "../../enum";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 
 class Literature extends React.PureComponent<LiteratureProps> {
 

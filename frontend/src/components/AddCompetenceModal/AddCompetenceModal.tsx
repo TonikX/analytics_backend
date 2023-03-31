@@ -3,22 +3,22 @@ import get from 'lodash/get';
 
 import {AddCompetenceModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import withStyles from '@mui/material/styles/withStyles';
 
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
 
 import connect from './AddCompetenceModal.connect';
 import styles from './AddCompetenceModal.styles';
 import AddIcon from "@material-ui/icons/Add";
-import TextField from "@material-ui/core/TextField";
+import TextField from "@mui/material/TextField";
 import {CompetenceFields} from "../../containers/Competences/enum";
 import CompetencesService from "../../containers/Competences/service";
 

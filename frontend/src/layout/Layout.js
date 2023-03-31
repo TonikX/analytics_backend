@@ -8,8 +8,8 @@ import MomentUtils from '@date-io/moment';
 import {SnackbarProvider} from 'notistack';
 import "moment/locale/ru";
 
-import {MuiThemeProvider} from '@material-ui/core/styles';
-import withStyles from '@material-ui/core/styles/withStyles';
+import {MuiThemeProvider} from '@mui/material/styles';
+import withStyles from '@mui/material/styles/withStyles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 
 import UserService from '../service/user-service';

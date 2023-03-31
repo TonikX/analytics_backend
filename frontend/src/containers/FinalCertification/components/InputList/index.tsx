@@ -1,15 +1,15 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import styles from "./styles";
 import {CertificationActions, CertificationState} from "../../types";
 import {CertificationFields} from "../../enum";
 import React from "react";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
-import TextField from "@material-ui/core/TextField";
+import withStyles from "@mui/material/styles/withStyles";
+import TextField from "@mui/material/TextField";
 import get from "lodash/get";
 import {RussianCertificationFields} from "../../constants";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 
 interface InputListProps extends WithStyles<typeof styles> {

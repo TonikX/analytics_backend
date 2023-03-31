@@ -1,15 +1,15 @@
-import {FormHelperText, Select as MuiSelect, WithStyles} from "@material-ui/core";
+import {FormHelperText, Select as MuiSelect, WithStyles} from "@mui/material";
 import styles from "./styles";
 import {CertificationActions, Validation} from "../../types";
 import {CertificationFields} from "../../enum";
 import React, {ReactText} from "react";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import withStyles from "@mui/material/styles/withStyles";
 import InputsLoader from "../../../../components/InputsLoader";
 import {validate} from "../../validation";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
 import get from "lodash/get";
 import {RussianCertificationFields} from "../../constants";
 

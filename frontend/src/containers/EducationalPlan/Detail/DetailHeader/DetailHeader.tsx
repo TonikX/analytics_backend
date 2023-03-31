@@ -14,12 +14,12 @@ import {
   EducationalPlanFields,
 } from "../../enum";
 
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import LikeButton from '../../../../components/LikeButton';
-import Tooltip from "@material-ui/core/Tooltip";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
+import Tooltip from "@mui/material/Tooltip";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
 
 import { StatusPoint } from '../../../../components/StatusPoint';
 import Service from '../../service';

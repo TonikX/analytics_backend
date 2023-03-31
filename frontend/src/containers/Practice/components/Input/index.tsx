@@ -1,16 +1,16 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import styles from "./styles";
 import {PracticeActions, PracticeState, Validation} from "../../types";
 import {PracticeFields} from "../../enum";
 import React from "react";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
-import TextField from "@material-ui/core/TextField";
+import withStyles from "@mui/material/styles/withStyles";
+import TextField from "@mui/material/TextField";
 import get from "lodash/get";
 import {validate} from "../../validation";
 import InputsLoader from "../../../../components/InputsLoader";
 import {RussianPracticeFields} from "../../constants";
-import InputLabel from "@material-ui/core/InputLabel";
+import InputLabel from "@mui/material/InputLabel";
 
 interface InputProps extends WithStyles<typeof styles> {
     actions: PracticeActions;

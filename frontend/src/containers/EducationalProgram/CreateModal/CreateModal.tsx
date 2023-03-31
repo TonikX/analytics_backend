@@ -4,12 +4,12 @@ import {Moment} from "moment";
 
 import {CreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import withStyles from '@mui/material/styles/withStyles';
 
 import DatePickerComponent from "../../../components/DatePicker";
 import EducationPlanInDirectionSelector from "../../EduationPlanInDirection/EducationPlanInDirectionSelector";
@@ -24,7 +24,7 @@ import styles from './CreateModal.styles';
 import QualificationSelector from "../../../components/QualificationSelector";
 import UserSelector from "../../Profile/UserSelector";
 import {filterFields} from "../../EduationPlanInDirection/enum";
-import Chip from "@material-ui/core/Chip";
+import Chip from "@mui/material/Chip";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {

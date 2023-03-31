@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import {LiteratureActions} from '../types';
 
 import styles from "./LiteratureCreateModal.styles";

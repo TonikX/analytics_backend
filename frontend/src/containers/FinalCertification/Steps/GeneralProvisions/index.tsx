@@ -2,13 +2,13 @@ import React from "react";
 import cn from "classnames";
 import {CertificationFields, CertificationSteps, TemplateTextCertificationFields} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import withStyles from "@mui/material/styles/withStyles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {Typography, WithStyles} from "@mui/material";
 import {TemplateTextState} from "../../types";
 import InputList from "../../components/InputList";
 import QuestionIcon from "@material-ui/icons/HelpOutline";
-import Tooltip from "@material-ui/core/Tooltip/Tooltip";
+import Tooltip from "@mui/material/Tooltip/Tooltip";
 
 interface GeneralProvisionsProps extends WithStyles<typeof styles> {
     templateText: TemplateTextState,

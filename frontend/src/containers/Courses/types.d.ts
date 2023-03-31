@@ -1,5 +1,5 @@
 import {fields} from './enum';
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import styles from "./WorkProgram.styles";
 import {CourseFields, PlatformFields, InstitutionFields, filterFields, FieldOfStudyFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";

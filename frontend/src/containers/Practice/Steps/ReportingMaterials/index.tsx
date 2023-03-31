@@ -1,13 +1,13 @@
 import React from "react";
 import {PracticeFields, PracticeSteps, TemplateTextPracticeFields} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import withStyles from "@mui/material/styles/withStyles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {Typography, WithStyles} from "@mui/material";
 import {PracticeActions, PracticeState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 import {RussianPracticeFields} from "../../constants";
 
 interface ReportingMaterialsProps extends WithStyles<typeof styles> {

@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import {PracticeListActions} from "../../PracticeList/types";
 
 import styles from "../CreateModal.styles";

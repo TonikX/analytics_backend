@@ -7,7 +7,7 @@ import {
     WorkProgramGeneralFields,
     WorkProgramStatusEnum
 } from './enum';
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import styles from "./WorkProgram.styles";
 import {CourseType} from "../Courses/types";
 import {TrainingEntitityType} from "../TrainingEntities/types";

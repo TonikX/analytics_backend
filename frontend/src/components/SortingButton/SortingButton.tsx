@@ -1,11 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import withStyles from '@mui/material/styles/withStyles';
 
 import ArrowUp from "@material-ui/icons/ArrowDropUp";
 import ArrowDown from "@material-ui/icons/ArrowDropDown";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
 
 import styles from './SortingButton.styles';
 

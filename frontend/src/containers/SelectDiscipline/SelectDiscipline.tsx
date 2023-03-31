@@ -7,15 +7,15 @@ import {List, AutoSizer, CellMeasurer, CellMeasurerCache} from 'react-virtualize
 import Scrollbars from "react-custom-scrollbars";
 
 import className from "classnames";
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '@material-ui/core/Button';
-import Slider from '@material-ui/core/Slider';
-import IconButton from "@material-ui/core/IconButton";
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Button from '@mui/material/Button';
+import Slider from '@mui/material/Slider';
+import IconButton from "@mui/material/IconButton";
 import CheckCircleOutline from "@material-ui/icons/CheckCircleOutline";
 import CancelOutlined from "@material-ui/icons/CancelOutlined";
-import withStyles from '@material-ui/core/styles/withStyles';
+import withStyles from '@mui/material/styles/withStyles';
 
 import TextField from '../../components/TextField';
 

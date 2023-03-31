@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import styles from "./Expertis.styles";
 import {ExpertisesActions, ExpertiseType} from '../types';
 import {GeneralActions} from '../../../layout/types'

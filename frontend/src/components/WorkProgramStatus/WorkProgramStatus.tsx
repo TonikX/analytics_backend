@@ -2,8 +2,8 @@ import React from 'react';
 
 import classNames from "classnames";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import Typography from "@material-ui/core/Typography";
+import withStyles from '@mui/material/styles/withStyles';
+import Typography from "@mui/material/Typography";
 
 import {
     simpleWorkProgramStatusesRussian,

@@ -2,10 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import Scrollbars from "react-custom-scrollbars";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import withStyles from '@mui/material/styles/withStyles';
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 import {CommentsProps} from './types';
 

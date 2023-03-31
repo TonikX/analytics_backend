@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-import DialogContent from '@material-ui/core/DialogContent';
-import TextField from "@material-ui/core/TextField";
-import Fab from "@material-ui/core/Fab";
+import DialogContent from '@mui/material/DialogContent';
+import TextField from "@mui/material/TextField";
+import Fab from "@mui/material/Fab";
 import AddIcon from "@material-ui/icons/Add";
 
 import { useStyles } from './FirstStep.styles'

@@ -4,12 +4,12 @@ import {Link} from "react-router-dom";
 import {withRouter, RouteComponentProps} from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars";
 
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import withStyles from '@material-ui/core/styles/withStyles';
-import {WithStyles} from "@material-ui/core";
-import MenuItem from "@material-ui/core/MenuItem";
-import Divider from "@material-ui/core/Divider";
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import withStyles from '@mui/material/styles/withStyles';
+import {WithStyles} from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import Divider from "@mui/material/Divider";
 
 import getMenuList, {getMockMenu} from "./MenuList";
 

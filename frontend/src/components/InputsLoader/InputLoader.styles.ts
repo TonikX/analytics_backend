@@ -1,5 +1,5 @@
-import {createStyles} from '@material-ui/core';
-import {Theme} from '@material-ui/core/styles/createMuiTheme';
+import {createStyles} from '@mui/material';
+import {Theme} from '@mui/material/styles/createMuiTheme';
 
 export default (theme: Theme) => createStyles({
     loaderWrap: {

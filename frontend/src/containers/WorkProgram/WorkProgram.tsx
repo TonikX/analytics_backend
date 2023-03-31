@@ -3,19 +3,19 @@ import get from 'lodash/get';
 import {withRouter} from "react-router-dom";
 
 import {Link} from "react-router-dom";
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import CopyIcon from "@material-ui/icons/FileCopyOutlined";
 import CommentIcon from "@material-ui/icons/CommentOutlined";
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Fab from '@material-ui/core/Fab';
-import withStyles from '@material-ui/core/styles/withStyles';
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import Tooltip from "@material-ui/core/Tooltip";
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepButton from '@material-ui/core/StepButton';
-import Grow from '@material-ui/core/Grow';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import Fab from '@mui/material/Fab';
+import withStyles from '@mui/material/styles/withStyles';
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Tooltip from "@mui/material/Tooltip";
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepButton from '@mui/material/StepButton';
+import Grow from '@mui/material/Grow';
 
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 

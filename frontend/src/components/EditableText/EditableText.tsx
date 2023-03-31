@@ -6,10 +6,10 @@ import get from 'lodash/get';
 import shallowEqual from 'recompose/shallowEqual';
 import classNames from "classnames";
 
-import withStyles, {WithStyles} from '@material-ui/core/styles/withStyles';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import withStyles, {WithStyles} from '@mui/material/styles/withStyles';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 import EditIcon from "@material-ui/icons/EditOutlined";
 
 import ConfirmReject from '../ConfirmReject';

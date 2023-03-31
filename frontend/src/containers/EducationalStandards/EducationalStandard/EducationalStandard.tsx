@@ -2,16 +2,16 @@ import React, { useEffect, useState, useMemo } from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-import Paper from '@material-ui/core/Paper'
-import Stepper from '@material-ui/core/Stepper'
-import Step from '@material-ui/core/Step'
-import StepButton from '@material-ui/core/StepButton'
+import Paper from '@mui/material/Paper'
+import Stepper from '@mui/material/Stepper'
+import Step from '@mui/material/Step'
+import StepButton from '@mui/material/StepButton'
 
 import actions from '../actions'
 import { getEducationalStandard } from '../getters'
 
 import useStyles from './EducationalStandard.styles'
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
 import TasksTable from "./TasksTable";
 import {CompetenceTableType, EducationalStandardFields} from "../enum";

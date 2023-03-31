@@ -4,7 +4,7 @@ import CKEditor from 'ckeditor4-react'
 
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import {CKEditorProps} from './types';
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 
 export const CKEditorComponent: React.FC<CKEditorProps> = 
     ({ value, onChange, useFormulas, onFocus, readOnly = false, onBlur, toolbarIcons, 

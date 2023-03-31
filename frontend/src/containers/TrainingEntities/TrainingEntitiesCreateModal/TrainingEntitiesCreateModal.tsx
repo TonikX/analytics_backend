@@ -4,13 +4,13 @@ import get from "lodash/get";
 
 import {TrainingEntitiesCreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import TextField from "@mui/material/TextField";
+import withStyles from '@mui/material/styles/withStyles';
 
 import SearchSelector from "../../../components/SearchSelector/SearchSelector";
 import {SubjectAreaFields} from "../../SubjectArea/enum";
@@ -20,7 +20,7 @@ import connect from './TrainingEntitiesCreateModal.connect';
 import styles from './TrainingEntitiesCreateModal.styles';
 import {Link} from "react-router-dom";
 import {appRouter} from "../../../service/router-service";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 
 
 class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCreateModalProps> {

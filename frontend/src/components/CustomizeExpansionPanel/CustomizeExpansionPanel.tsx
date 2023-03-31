@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Typography from "@material-ui/core/Typography";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Typography from "@mui/material/Typography";
+import ExpansionPanelDetails from "@mui/material/ExpansionPanelDetails";
+import ExpansionPanel from "@mui/material/ExpansionPanel";
+import ExpansionPanelSummary from "@mui/material/ExpansionPanelSummary";
 
 import { CustomizeExpansionPanelProps } from './types'
 import { useStyles } from "./CustomizeExpansionPanel.styles";

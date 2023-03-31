@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import {SelectorListType} from "../../../components/SearchSelector/types";
 import {EducationalPlanInDirectionActions} from "../types";
 import styles from './EducationPlanInDirectionSelector.styles';

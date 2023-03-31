@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import {EvaluationToolType, WorkProgramActions} from '../../types';
 
 import styles from "./CreateModal.styles";

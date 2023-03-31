@@ -2,18 +2,18 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Typography from "@material-ui/core/Typography";
-import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
+import TablePagination from '@mui/material/TablePagination';
+import Typography from "@mui/material/Typography";
+import Tooltip from '@mui/material/Tooltip';
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
 import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
 import { CoursesTable } from './CoursesTable/CoursesTable'
 import { Filters } from './Filters/Filters'
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import withStyles from '@mui/material/styles/withStyles';
 
 import {CoursesProps} from './types';
 

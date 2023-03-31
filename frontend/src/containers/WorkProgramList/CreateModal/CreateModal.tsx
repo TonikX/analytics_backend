@@ -3,16 +3,16 @@ import get from "lodash/get";
 
 import {CreateModalProps, HoursSection} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import TextField from "@mui/material/TextField";
+import withStyles from '@mui/material/styles/withStyles';
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
 
 import {ImplementationFormatsEnum, WorkProgramGeneralFields} from "../../WorkProgram/enum";
 import {implementationFormats, languageArray, specialization} from "../../WorkProgram/constants";
@@ -20,17 +20,17 @@ import {implementationFormats, languageArray, specialization} from "../../WorkPr
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import moment from "moment";
-import FormLabel from "@material-ui/core/FormLabel";
-import RadioGroup from "@material-ui/core/RadioGroup/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
-import Radio from "@material-ui/core/Radio/Radio";
-import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel/FormControlLabel";
+import Radio from "@mui/material/Radio/Radio";
+import FormControl from "@mui/material/FormControl";
 import SearchSelector from "../../../components/SearchSelector/SearchSelector";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell/TableCell";
 import EditedRow from "./EditableRow/EditableRow";
-import {Table} from "@material-ui/core";
+import {Table} from "@mui/material";
 
 const DEFAULT_WP_STATE = {
     [WorkProgramGeneralFields.TITLE]: '',

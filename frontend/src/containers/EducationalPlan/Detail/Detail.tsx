@@ -8,14 +8,14 @@ import { useDispatch, useSelector } from 'react-redux';
 // @ts-ignore
 import Scrollbars from "react-custom-scrollbars";
 
-import Paper from '@material-ui/core/Paper';
-import Typography from "@material-ui/core/Typography";
-import withStyles from '@material-ui/core/styles/withStyles';
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Tooltip from "@material-ui/core/Tooltip";
+import Paper from '@mui/material/Paper';
+import Typography from "@mui/material/Typography";
+import withStyles from '@mui/material/styles/withStyles';
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Tooltip from "@mui/material/Tooltip";
 import {SortableContainer, SortableElement, SortableHandle} from 'react-sortable-hoc';
 
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
@@ -62,10 +62,10 @@ import FileIcon from '@material-ui/icons/DescriptionOutlined';
 import classNames from "classnames";
 import {selectRulesArray, typesListArray} from "../TrainingModules/constants";
 import {UserType} from "../../../layout/types";
-import Chip from "@material-ui/core/Chip";
-import Button from "@material-ui/core/Button";
+import Chip from "@mui/material/Chip";
+import Button from "@mui/material/Button";
 import AddIcon from "@material-ui/icons/Add";
-import Dialog from "@material-ui/core/Dialog";
+import Dialog from "@mui/material/Dialog";
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import UserSelector from "../../Profile/UserSelector/UserSelector";
 

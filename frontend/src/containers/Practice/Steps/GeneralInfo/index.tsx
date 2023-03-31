@@ -1,17 +1,17 @@
 import React from "react";
 import {PracticeFields, PracticeSteps} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import withStyles from "@mui/material/styles/withStyles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {Typography, WithStyles} from "@mui/material";
 import {PracticeActions, PracticeState} from "../../types";
 import Input from "../../components/Input";
 
-import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button';
+import Dialog from '@mui/material/Dialog';
+import Button from '@mui/material/Button';
 import UserSelector from "../../../EmailWidget/UserSelector";
 import AddIcon from "@material-ui/icons/Add";
-import Chip from "@material-ui/core/Chip";
+import Chip from "@mui/material/Chip";
 import {getUserFullName} from "../../../../common/utils";
 import {UserFields} from "../../../../layout/enum";
 
@@ -28,12 +28,12 @@ import {
   QUALIFICATIONS,
 } from "../../constants";
 import StructuralUnit from "../../components/StructuralUnit";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import TableContainer from "@material-ui/core/TableContainer";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell/TableCell";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
 import {UserType} from "../../../../layout/types";
 
 interface GeneralInfoProps extends WithStyles<typeof styles> {

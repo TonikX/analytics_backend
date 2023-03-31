@@ -4,15 +4,15 @@ import get from "lodash/get";
 
 import {TrainingEntitiesCreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import withStyles from '@mui/material/styles/withStyles';
 
 import SearchSelector from "../../../components/SearchSelector/SearchSelector";
 import {SubjectAreaFields} from "../../SubjectArea/enum";
@@ -22,8 +22,8 @@ import {relations} from '../constants';
 
 import connect from './TrainingEntitiesCreateModal.connect';
 import styles from './TrainingEntitiesCreateModal.styles';
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
 
 class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCreateModalProps> {
     state = {

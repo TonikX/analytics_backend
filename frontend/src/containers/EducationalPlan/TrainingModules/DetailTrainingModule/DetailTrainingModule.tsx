@@ -4,27 +4,27 @@ import {withRouter} from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars";
 import {Link} from "react-router-dom";
 
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import {BlocksOfWorkProgramsFields, ModuleFields} from "../../enum";
 import {DetailTrainingModuleProps} from './types';
 
 import connect from './DetailTrainingModule.connect';
 import WPBlockCreateModal from "../../Detail/WPBlockCreateModal";
-import TextField from "@material-ui/core/TextField";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Button from "@material-ui/core/Button";
-import withStyles from '@material-ui/core/styles/withStyles';
-import TableBody from "@material-ui/core/TableBody";
-import Tooltip from "@material-ui/core/Tooltip";
+import TextField from "@mui/material/TextField";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Button from "@mui/material/Button";
+import withStyles from '@mui/material/styles/withStyles';
+import TableBody from "@mui/material/TableBody";
+import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
-import Paper from "@material-ui/core/Paper";
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
+import Paper from "@mui/material/Paper";
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
 
 import ConfirmDialog from "../../../../components/ConfirmDialog/ConfirmDialog";
 
@@ -36,15 +36,15 @@ import {BlocksOfWorkProgramsType} from "../../types";
 import styles from './DetailTrainingModule.styles';
 import LikeButton from "../../../../components/LikeButton/LikeButton";
 import {FavoriteType} from "../../../Profile/Folders/enum";
-import Chip from "@material-ui/core/Chip";
+import Chip from "@mui/material/Chip";
 import {getUserFullName} from "../../../../common/utils";
 import AddIcon from "@material-ui/icons/Add";
 import {UserType} from "../../../../layout/types";
 import UserSelector from "../../../Profile/UserSelector/UserSelector";
-import Dialog from "@material-ui/core/Dialog";
+import Dialog from "@mui/material/Dialog";
 import {fields, StepsEnum, TrainingModuleFields} from "../enum";
 import {selectRulesArray, steps} from "../constants";
-import StepButton from "@material-ui/core/StepButton";
+import StepButton from "@mui/material/StepButton";
 import TrainingModuleCreateModal from "../TrainingModuleCreateModal/TrainingModuleCreateModal";
 import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
 import EvaluationTools from '../EvaluationTools'
@@ -52,7 +52,7 @@ import AddEducationalProgramModal from "../AddEducationalProgramModal/AddEducati
 import AddTrainingModuleModal from "../AddTrainingModuleModal/AddTrainingModuleModal";
 import {TrainingModuleType} from "../types";
 import {BACHELOR_QUALIFICATION, specializationObject} from "../../../WorkProgram/constants";
-import {Checkbox, FormControlLabel} from "@material-ui/core";
+import {Checkbox, FormControlLabel} from "@mui/material";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {

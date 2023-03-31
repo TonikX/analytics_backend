@@ -5,20 +5,20 @@ import classNames from 'classnames';
 
 import Scrollbars from "react-custom-scrollbars";
 
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
+import TablePagination from '@mui/material/TablePagination';
+import Typography from "@mui/material/Typography";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import IconButton from "@material-ui/core/IconButton";
+import withStyles from '@mui/material/styles/withStyles';
+import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 import CreateIcon from "@material-ui/icons/NoteAddOutlined";

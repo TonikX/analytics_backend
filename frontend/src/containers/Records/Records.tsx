@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {appRouter} from "../../service/router-service";
 import styles from './Records.styles';
 import {
@@ -12,20 +12,20 @@ import {
     Radio,
     RadioGroup,
     TableCell
-} from "@material-ui/core";
-import Select from '@material-ui/core/Select';
+} from "@mui/material";
+import Select from '@mui/material/Select';
 import {RecordsProops} from "./types";
 import connect from "./Records.connect";
-import withStyles from "@material-ui/core/styles/withStyles";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import TablePagination from "@material-ui/core/TablePagination";
-import FormLabel from "@material-ui/core/FormLabel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import withStyles from "@mui/material/styles/withStyles";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
+import TablePagination from "@mui/material/TablePagination";
+import FormLabel from "@mui/material/FormLabel";
+import ExpansionPanelSummary from "@mui/material/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanel from '@mui/material/ExpansionPanel';
 import SearchSelector from "../../components/SearchSelector";
 
 

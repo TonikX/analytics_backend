@@ -4,17 +4,17 @@ import classNames from 'classnames';
 import {SortableContainer, SortableElement, SortableHandle} from "react-sortable-hoc";
 import Scrollbars from "react-custom-scrollbars";
 
-import Typography from "@material-ui/core/Typography";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Typography from "@mui/material/Typography";
+import withStyles from '@mui/material/styles/withStyles';
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 
 import AddIcon from "@material-ui/icons/Add";
 import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 import DescriptionIcon from '@material-ui/icons/DescriptionOutlined';
 
 import {TopicsProps} from './types';

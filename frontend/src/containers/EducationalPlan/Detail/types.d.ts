@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import styles from './Detail.styles';
 import {EducationalPlanActions, EducationalPlanType, DisciplineBlockType} from "../types";
 import {FolderActions} from "../../Profile/Folders/types";

@@ -1,13 +1,13 @@
 import React from "react";
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import styles from "./styles";
 import {CertificationActions, CertificationState, Validation} from "../../types";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
-import Button from "@material-ui/core/Button";
+import withStyles from "@mui/material/styles/withStyles";
+import Button from "@mui/material/Button";
 import {fieldToStep, STEPS} from "../../constants";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 interface SendToExpertiseProps extends WithStyles<typeof styles> {
     actions: CertificationActions;

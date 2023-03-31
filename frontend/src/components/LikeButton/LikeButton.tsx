@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import withStyles from '@mui/material/styles/withStyles';
 
 import Liked from "@material-ui/icons/Favorite";
 import NotLiked from "@material-ui/icons/FavoriteBorder";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 import ConfirmDialog from "../ConfirmDialog";
 import {LikeButtonProps} from './types';

@@ -2,8 +2,8 @@ import React from 'react'
 
 import {useStyles} from './ProfessionItem.styles'
 
-import Typography from '@material-ui/core/Typography';
-import IconButton from "@material-ui/core/IconButton";
+import Typography from '@mui/material/Typography';
+import IconButton from "@mui/material/IconButton";
 import CheckCircleOutline from "@material-ui/icons/CheckCircleOutline";
 import CancelOutlined from "@material-ui/icons/CancelOutlined";
 

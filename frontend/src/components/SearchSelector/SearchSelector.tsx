@@ -5,13 +5,13 @@ import Scrollbars from "react-custom-scrollbars";
 
 import {AutoSizer} from 'react-virtualized';
 
-import Fade from '@material-ui/core/Fade';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import withStyles from '@material-ui/core/styles/withStyles';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from "@material-ui/core/MenuItem";
+import Fade from '@mui/material/Fade';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import withStyles from '@mui/material/styles/withStyles';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import TextField from '@mui/material/TextField';
+import MenuItem from "@mui/material/MenuItem";
 
 import {SearchSelectorProps, SelectorItemType} from './types';
 

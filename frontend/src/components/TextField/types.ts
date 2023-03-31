@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import styles from "./TextField.styles";
 
 export interface TextFieldProps extends WithStyles<typeof styles> {

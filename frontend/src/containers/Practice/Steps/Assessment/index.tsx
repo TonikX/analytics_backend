@@ -1,9 +1,9 @@
 import React from "react";
 import {PracticeFields, PracticeSteps} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import withStyles from "@mui/material/styles/withStyles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {Typography, WithStyles} from "@mui/material";
 import {PracticeActions, PracticeState} from "../../types";
 import Input from "../../components/Input";
 

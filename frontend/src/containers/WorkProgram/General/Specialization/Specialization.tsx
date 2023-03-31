@@ -3,11 +3,11 @@ import get from "lodash/get";
 
 import {AutoSizer} from "react-virtualized";
 
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from '@material-ui/core/InputLabel';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from '@mui/material/InputLabel';
+import withStyles from '@mui/material/styles/withStyles';
 
 import InputsLoader from "../../../../components/InputsLoader/InputsLoader";
 

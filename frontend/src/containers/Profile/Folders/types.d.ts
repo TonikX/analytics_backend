@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import {fields, FoldersFields} from './enum';
 import styles from "./Folders.styles";
 import {WorkProgramGeneralType} from "../../WorkProgram/types";

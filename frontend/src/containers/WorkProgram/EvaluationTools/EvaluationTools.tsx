@@ -5,23 +5,23 @@ import {AutoSizer} from 'react-virtualized';
 
 import classNames from "classnames";
 
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from "@material-ui/core/Button";
-import Chip from '@material-ui/core/Chip';
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import withStyles from '@mui/material/styles/withStyles';
+import Button from "@mui/material/Button";
+import Chip from '@mui/material/Chip';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 import AddIcon from "@material-ui/icons/Add";
 import SettingsIcon from "@material-ui/icons/MoreVert";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import EyeIcon from '@material-ui/icons/VisibilityOutlined';
 import CheckIcon from "@material-ui/icons/CheckOutlined";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 import {appRouter} from '../../../service/router-service'
 

@@ -5,11 +5,11 @@ import PropTypes from "prop-types";
 import get from 'lodash/get';
 import {withRouter} from 'react-router-dom';
 
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Typography  from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Tooltip from "@material-ui/core/Tooltip";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography  from '@mui/material/Typography';
+import withStyles from '@mui/material/styles/withStyles';
+import Tooltip from "@mui/material/Tooltip";
 
 import {appRouter} from '../../service/router-service';
 

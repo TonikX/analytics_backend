@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import {ProfessionalStandardsActions} from "../../containers/ProfessionalStandards/types";
 
 import styles from "./AddProfStandardsModal.styles";

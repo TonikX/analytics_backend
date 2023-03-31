@@ -1,12 +1,12 @@
 import React from 'react';
 import {withRouter} from "react-router-dom";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from "@material-ui/core/Button";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import withStyles from '@mui/material/styles/withStyles';
+import Button from "@mui/material/Button";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
 
 import {ExpertiseProps} from "./types";
 import SearchSelector from "../../../../components/SearchSelector/SearchSelector";

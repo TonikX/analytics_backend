@@ -7,22 +7,22 @@ import Scrollbars from "react-custom-scrollbars";
 
 import {AddLiteratureModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import Typography from "@material-ui/core/Typography";
-import TablePagination from "@material-ui/core/TablePagination";
-import Slide from '@material-ui/core/Slide';
-import TextField from "@material-ui/core/TextField";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Typography from "@mui/material/Typography";
+import TablePagination from "@mui/material/TablePagination";
+import Slide from '@mui/material/Slide';
+import TextField from "@mui/material/TextField";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import withStyles from '@mui/material/styles/withStyles';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from "@material-ui/icons/Add";
 

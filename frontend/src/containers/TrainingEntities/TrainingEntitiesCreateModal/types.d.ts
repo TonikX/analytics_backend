@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import {TrainingEntitiesActions} from '../types';
 
 import styles from "./TrainingEntitiesCreateModal.styles";

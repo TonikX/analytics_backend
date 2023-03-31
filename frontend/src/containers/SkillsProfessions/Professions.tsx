@@ -5,14 +5,14 @@ import get from "lodash/get";
 import debounce from "lodash/debounce";
 import classNames from 'classnames';
 
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Typography from "@material-ui/core/Typography";
-import Chip from "@material-ui/core/Chip";
+import Paper from '@mui/material/Paper';
+import TablePagination from '@mui/material/TablePagination';
+import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
-import TextField from "@material-ui/core/TextField";
+import TextField from "@mui/material/TextField";
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import withStyles from '@mui/material/styles/withStyles';
 
 import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";

@@ -3,32 +3,32 @@ import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import {withRouter} from 'react-router-dom'
 import Scrollbars from "react-custom-scrollbars";
-import Switch from "@material-ui/core/Switch";
+import Switch from "@mui/material/Switch";
 import AddIcon from "@material-ui/icons/Add";
-import TextField from '@material-ui/core/TextField';
-import Fab from "@material-ui/core/Fab";
-import Paper from '@material-ui/core/Paper';
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import TablePagination from '@material-ui/core/TablePagination';
+import TextField from '@mui/material/TextField';
+import Fab from "@mui/material/Fab";
+import Paper from '@mui/material/Paper';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import TablePagination from '@mui/material/TablePagination';
 
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import withStyles from '@mui/material/styles/withStyles';
 import {
     Select,
     FormControl,
     InputLabel,
     MenuItem
-} from "@material-ui/core";
+} from "@mui/material";
 import {
     KeyboardTimePicker
 } from '@material-ui/pickers';
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import Button from "@material-ui/core/Button";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import Button from "@mui/material/Button";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";
 
 

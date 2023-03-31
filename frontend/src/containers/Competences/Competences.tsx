@@ -7,15 +7,15 @@ import Scrollbars from "react-custom-scrollbars";
 
 import classNames from 'classnames';
 
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
+import Fab from "@mui/material/Fab";
+import Typography from "@mui/material/Typography";
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import withStyles from '@mui/material/styles/withStyles';
 
 import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import SearchOutlined from "@material-ui/icons/SearchOutlined";

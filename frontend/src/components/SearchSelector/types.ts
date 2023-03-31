@@ -1,7 +1,7 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from "@mui/material";
 import styles from "./SearchSelector.styles";
 import {ReactText} from "react";
-import {PopperPlacementType} from "@material-ui/core/Popper/Popper";
+import {PopperPlacementType} from "@mui/material/Popper/Popper";
 
 export interface SearchSelectorProps extends WithStyles<typeof styles> {
     changeSearchText: Function;

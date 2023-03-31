@@ -2,10 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import Scrollbars from "react-custom-scrollbars";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import withStyles from '@mui/material/styles/withStyles';
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 import {CommentsProps} from './types';
 
@@ -13,9 +13,9 @@ import styles from './Comments.styles';
 import get from "lodash/get";
 import {CommentFields} from "./enum";
 import {FULL_DATE_FORMAT, getUserFullName} from "../../common/utils";
-import Grow from "@material-ui/core/Grow";
-import Paper from "@material-ui/core/Paper";
-import Fab from "@material-ui/core/Fab";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Fab from "@mui/material/Fab";
 import CommentIcon from "@material-ui/icons/CommentOutlined";
 
 class Comments extends React.Component<CommentsProps> {

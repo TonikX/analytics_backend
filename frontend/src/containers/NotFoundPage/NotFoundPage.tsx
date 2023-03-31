@@ -1,9 +1,9 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import withStyles from '@mui/material/styles/withStyles';
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 import {NotFoundProps} from './types';
 

@@ -2,19 +2,19 @@ import React, {SyntheticEvent} from 'react';
 import Scrollbars from "react-custom-scrollbars";
 import get from 'lodash/get';
 
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import withStyles from '@material-ui/core/styles/withStyles';
-import TableBody from "@material-ui/core/TableBody";
+import Paper from '@mui/material/Paper';
+import TablePagination from '@mui/material/TablePagination';
+import Typography from "@mui/material/Typography";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import withStyles from '@mui/material/styles/withStyles';
+import TableBody from "@mui/material/TableBody";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import AddIcon from "@material-ui/icons/Add";
-import Fab from "@material-ui/core/Fab";
+import Fab from "@mui/material/Fab";
 import EyeIcon from "@material-ui/icons/VisibilityOutlined";
 
 import ConfirmDialog from "../../../components/ConfirmDialog/ConfirmDialog";
@@ -41,7 +41,7 @@ import connect from './TrainingModules.connect';
 import styles from './TrainingModules.styles';
 
 import Filters from "./Filters";
-import Switch from "@material-ui/core/Switch";
+import Switch from "@mui/material/Switch";
 import {withRouter} from "react-router-dom";
 
 const userService = UserService.factory();

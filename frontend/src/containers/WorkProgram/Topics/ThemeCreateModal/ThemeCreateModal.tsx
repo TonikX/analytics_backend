@@ -4,18 +4,18 @@ import {shallowEqual} from "recompose";
 
 import {ThemeCreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import InputLabel from "@material-ui/core/InputLabel";
-import TextField from "@material-ui/core/TextField";
-import FormControl from "@material-ui/core/FormControl";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import TextField from "@mui/material/TextField";
+import FormControl from "@mui/material/FormControl";
+import withStyles from '@mui/material/styles/withStyles';
 
 import SearchSelector from '../../../../components/SearchSelector';
 
@@ -24,7 +24,7 @@ import {workProgramTopicFields, fields} from '../../enum';
 
 import connect from './ThemeCreateModal.connect';
 import styles from './ThemeCreateModal.styles';
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 
 class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
     state = {
