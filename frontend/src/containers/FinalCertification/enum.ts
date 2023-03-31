@@ -34,7 +34,8 @@ export enum CertificationFields {
     SEMESTER_COUNT = 'semester_count',
     QUALIFICATION = 'qualification',
     ZE_V_SEM = 'ze_v_sem',
-    EVALUATION_TOOLS = 'evaluation_tools_v_sem'
+    EVALUATION_TOOLS = 'evaluation_tools_v_sem',
+    CAN_SEND_TO_ISU = 'can_send_to_isu',
 }
 
 export enum TemplateTextCertificationFields {
@@ -92,6 +93,7 @@ export enum fetchingTypes {
     GET_CERTIFICATION_LIST = 'GET_CERTIFICATION_LIST',
     CREATE_EXPERTISE = 'CREATE_EXPERTISE',
     CHANGE_EXPERTISE_STATE = 'CHANGE_EXPERTISE_STATE',
+    SEND_TO_ISU = 'SEND_TO_ISU',
 }
 
 export enum PermissionsInfoFields {

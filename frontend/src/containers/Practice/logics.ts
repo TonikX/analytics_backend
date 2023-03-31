@@ -207,6 +207,30 @@ const sendComment = createLogic({
     }
 });
 
+const sendToIsu = createLogic({
+    type: PracticeActions.sendToIsu.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const practiceId = getId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SEND_TO_ISU}));
+
+        service.sendToIsu(practiceId)
+            .then((res) => {
+                dispatch(PracticeActions.getPractice(practiceId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SEND_TO_ISU}));
+                return done();
+            });
+    }
+});
+
 const addPrerequisite = createLogic({
     type: PracticeActions.addPrerequisite.type,
     latest: true,
@@ -447,5 +471,5 @@ export default [
     getPractice, saveField, getTemplateText, createExpertise, approvePractice, sendPracticeToRework,
     getComments, sendComment, addPrerequisite, changePrerequisite, deletePrerequisite,
     addResult, deleteResult, changeResult, getCompetenceDirectionsDependedOnPractice,
-    deleteZUN, saveZUN
+    deleteZUN, saveZUN, sendToIsu
 ];
