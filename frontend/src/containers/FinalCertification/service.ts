@@ -59,6 +59,12 @@ class CertificationService extends AnalyticsService {
             comment_text: comment,
         });
     }
+
+    sendToIsu(id: number) {
+        return this.post(`api/isu_v2/academic-plans/send_gia_to_isu/`, {
+            gia_id: id,
+        });
+    }
 }
 
 export default CertificationService;

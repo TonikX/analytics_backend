@@ -83,6 +83,7 @@ export type PracticeState = GeneralInfoState
     [PracticeFields.OUTCOMES]: ResultsType[];
     [PracticeFields.EDITORS]: Array<UserType>;
     [PracticeFields.PLANS]: any;
+    [PracticeFields.CAN_SEND_TO_ISU]: boolean;
 }
 
 interface Competence {
@@ -184,6 +185,8 @@ export interface PracticeActions {
 
     getCompetencesDependedOnPractice: any;
     setCompetencesDependedOnPractice: any;
+
+    sendToIsu: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {

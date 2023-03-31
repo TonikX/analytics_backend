@@ -101,6 +101,7 @@ export type CertificationState = MainInfoState
     [CertificationFields.EDITORS]: any,
     [CertificationFields.PERMISSIONS_INFO]: PermissionsInfoState,
     [CertificationFields.EDITORS]: Array<UserType>;
+    [CertificationFields.CAN_SEND_TO_ISU]: boolean;
 }
 
 export type CommentType = {
@@ -157,4 +158,5 @@ export interface CertificationActions {
     getComments: any;
     setComments: any;
     sendComment: any;
+    sendToIsu: any;
 }

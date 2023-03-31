@@ -193,6 +193,31 @@ const getComments = createLogic({
     }
 });
 
+const sendToIsu = createLogic({
+    type: CertificationActions.sendToIsu.type,
+    latest: true,
+
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const certificationId = getId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SEND_TO_ISU}));
+
+        service.sendToIsu(certificationId)
+            .then((res) => {
+                dispatch(CertificationActions.getCertification(certificationId));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SEND_TO_ISU}));
+                return done();
+            });
+    }
+});
+
 const sendComment = createLogic({
     type: CertificationActions.sendComment.type,
     latest: true,
@@ -212,4 +237,4 @@ const sendComment = createLogic({
 });
 
 
-export default [getCertification, saveField, saveMarkCriteria, getTemplateText, createExpertise, approveCertification, sendCertificationToRework, getComments, sendComment];
+export default [getCertification, saveField, saveMarkCriteria, getTemplateText, createExpertise, approveCertification, sendCertificationToRework, getComments, sendComment, sendToIsu];
