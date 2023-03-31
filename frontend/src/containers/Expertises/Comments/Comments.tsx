@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import get from "lodash/get";
 
 import withStyles from '@mui/material/styles/withStyles';

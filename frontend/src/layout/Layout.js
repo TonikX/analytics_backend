@@ -25,7 +25,7 @@ import theme from './themeMaterialUi';
 import connect from './Layout.connect';
 import styles from './Layout.styles';
 
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 const userService = UserService.factory();
 

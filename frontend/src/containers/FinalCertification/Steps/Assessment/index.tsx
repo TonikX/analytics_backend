@@ -12,7 +12,7 @@ import {FormControl, MenuItem, TextField, Typography, WithStyles} from "@mui/mat
 import {CertificationActions, CertificationMark, CertificationState, TemplateTextState} from "../../types";
 import get from "lodash/get";
 import {markTypesRussian} from "../../constants";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 interface AssessmentProps extends WithStyles<typeof styles> {
     actions: CertificationActions;

@@ -4,7 +4,7 @@ import React from 'react';
 import matchSorter from 'match-sorter';
 import {Link} from "react-router-dom";
 import {List, AutoSizer, CellMeasurer, CellMeasurerCache} from 'react-virtualized';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import className from "classnames";
 import Paper from '@mui/material/Paper';

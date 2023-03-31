@@ -2,7 +2,7 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 // @ts-ignore
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';

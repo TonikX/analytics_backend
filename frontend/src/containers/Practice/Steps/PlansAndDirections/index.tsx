@@ -5,7 +5,7 @@ import withStyles from "@mui/material/styles/withStyles";
 import styles from './PlansAndDirections.styles';
 import {Typography, WithStyles} from "@mui/material";
 import {PracticeActions, PracticeState} from "../../types";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import {Link} from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";

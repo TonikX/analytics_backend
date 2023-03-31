@@ -8,7 +8,7 @@ import {Typography, WithStyles} from "@mui/material";
 import {CertificationActions, CertificationState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
 import ReadonlyRow from "./ReadonlyRow";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import QuestionIcon from "@mui/icons-material/HelpOutline";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
 

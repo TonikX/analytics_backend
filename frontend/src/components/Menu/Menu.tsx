@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Link} from "react-router-dom";
 import {withRouter, RouteComponentProps} from "react-router-dom";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';

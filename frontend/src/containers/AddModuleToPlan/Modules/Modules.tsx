@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import Typography from "@mui/material/Typography";
 import Search from "../../../components/Search/Search";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";

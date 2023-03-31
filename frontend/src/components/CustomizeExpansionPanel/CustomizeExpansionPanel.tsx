@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import { CustomizeExpansionPanelProps } from './types'
 import { useStyles } from "./CustomizeExpansionPanel.styles";
 
-// TODO react 17 проверить по всему проекту закоменченные ExpansionPanelDetails
+// TODO react 17 проверить по всему проекту закоменченные ExpansionPanelDetails и поменять на Accordion
 export default ({label, details}: CustomizeExpansionPanelProps) => {
     const [ openPanel, changeOpenPanel ] = useState(false)
     const classes = useStyles();

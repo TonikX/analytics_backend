@@ -1,5 +1,5 @@
 import * as React from "react";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import {Link} from 'react-router-dom';
 import {Typography} from "@mui/material";
 import TableCell from "@mui/material/TableCell";

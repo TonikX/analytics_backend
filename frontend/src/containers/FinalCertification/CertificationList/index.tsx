@@ -8,7 +8,7 @@ import {CertificationListProps} from "./types";
 import {appRouter} from "../../../service/router-service";
 import {Link} from "react-router-dom";
 import {CertificationFields} from "../enum";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import {Table} from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";

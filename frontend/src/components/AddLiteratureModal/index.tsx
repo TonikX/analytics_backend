@@ -3,7 +3,7 @@ import get from "lodash/get";
 
 import {shallowEqual} from "recompose";
 
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import {AddLiteratureModalProps} from './types';
 

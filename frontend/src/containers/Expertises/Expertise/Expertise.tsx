@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {withRouter, Link} from "react-router-dom";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import get from "lodash/get";
 
 import Paper from '@mui/material/Paper';

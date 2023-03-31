@@ -1,5 +1,5 @@
 import React, {SyntheticEvent} from 'react';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import get from 'lodash/get';
 
 import Paper from '@mui/material/Paper';

@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 import {SortableContainer, SortableElement, SortableHandle} from "react-sortable-hoc";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import Typography from "@mui/material/Typography";
 import withStyles from '@mui/material/styles/withStyles';

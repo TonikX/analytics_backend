@@ -13,7 +13,7 @@ import {Checkbox, FormControlLabel, FormGroup, FormLabel, Typography, WithStyles
 import {CertificationActions, CertificationState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
 import {shallowEqual} from "recompose";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 interface FeaturesProps extends WithStyles<typeof styles> {
     actions: CertificationActions;

@@ -2,7 +2,7 @@ import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import moment from 'moment';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import {Link, withRouter} from "react-router-dom";
 

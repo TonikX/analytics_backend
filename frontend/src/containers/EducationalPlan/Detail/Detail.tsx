@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
 // @ts-ignore
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import Paper from '@mui/material/Paper';
 import Typography from "@mui/material/Typography";

@@ -1,5 +1,5 @@
 import React from 'react';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import Typography from "@mui/material/Typography";
 import withStyles from '@mui/material/styles/withStyles';

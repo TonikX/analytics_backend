@@ -7,7 +7,7 @@ import {Typography, WithStyles} from "@mui/material";
 import {PermissionsInfoState, PracticeActions, PracticeState} from "../../types";
 
 import classNames from "classnames";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import {PrerequisiteFields} from "../../../WorkProgram/enum";
 import {TrainingEntitiesFields} from "../../../TrainingEntities/enum";
 import IconButton from "@mui/material/IconButton";
