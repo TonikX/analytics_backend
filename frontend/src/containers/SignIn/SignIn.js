@@ -1,5 +1,5 @@
 import React from 'react';
-import {Redirect} from "react-router";
+import { Navigate } from 'react-router-dom';
 import {Link} from 'react-router-dom';
 import PropTypes from "prop-types";
 import get from 'lodash/get';
@@ -59,7 +59,7 @@ class SignIn extends React.PureComponent{
     render() {
         const {classes, disableButton, auth} = this.props;
 
-        if (auth) return <Redirect to={appRouter.getEducationPlanRoute()} />;
+        if (auth) return <Navigate to={appRouter.getEducationPlanRoute()} />;
 
         return(
             <div className={classes.root}

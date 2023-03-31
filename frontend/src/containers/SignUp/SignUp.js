@@ -1,6 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {Redirect} from "react-router";
+import {Link, Navigate} from 'react-router-dom';
 import PropTypes from "prop-types";
 import get from "lodash/get";
 
@@ -52,7 +51,7 @@ class SignUp extends React.PureComponent{
 
         const isAuth = userService.isAuth() && auth;
 
-        if (isAuth) return <Redirect to={appRouter.getEducationPlanRoute()} />;
+        if (isAuth) return <Navigate to={appRouter.getEducationPlanRoute()} />;
 
         return(
             <div className={classes.root}>
