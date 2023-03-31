@@ -91,7 +91,7 @@ class Select extends React.Component<SelectProps> {
     render() {
         const {fields, classes, metaList, fieldName, getLoading} = this.props;
         const {errorMessage} = this.state;
-
+        //ts-ignore
         const label = RussianCertificationFields[fieldName];
         const value = fields[fieldName];
 
