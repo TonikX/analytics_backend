@@ -51,7 +51,11 @@ class Download extends React.Component<DownloadProps> {
     multilineToList = (str: string) => {
         if (!str || str.length === 0) return [];
         return str.split(/\r?\n/g);
-    }
+    };
+
+    sendToIsu = () => {
+        this.props.actions.sendToIsu();
+    };
 
     handleDownload = (fields: CertificationState) => async () => {
 
@@ -90,9 +94,15 @@ class Download extends React.Component<DownloadProps> {
 
     render() {
         const {classes, fields} = this.props;
+        const canSendToIsu = fields.can_send_to_isu;
 
         return (
             <div className={classes.input}>
+                {
+                    canSendToIsu && <Button variant='outlined' className={classes.marginRight} onClick={this.sendToIsu}>
+                        Отправить в ИСУ
+                    </Button>
+                }
                 <Button variant='outlined'
                         onClick={this.handleDownload(fields)}>
                     Скачать ГИА
