@@ -30,7 +30,7 @@ import {literatureFields} from './enum';
 
 import connect from './Literature.connect';
 import styles from './Literature.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 
 class Literature extends React.Component<LiteratureProps> {
     state = {

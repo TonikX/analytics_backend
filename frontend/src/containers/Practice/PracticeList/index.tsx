@@ -22,7 +22,7 @@ import TextField from "@mui/material/TextField";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import get from "lodash/get";
 import debounce from "lodash/debounce";
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 import classNames from "classnames";
 import ArrowDown from "@mui/icons-material/ArrowDropDown";
 import {RussianPracticeFields} from "../constants";

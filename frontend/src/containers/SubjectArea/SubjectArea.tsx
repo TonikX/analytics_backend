@@ -29,7 +29,7 @@ import {SubjectAreaFields} from './enum';
 
 import connect from './SubjectArea.connect';
 import styles from './SubjectArea.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 
 class SubjectArea extends React.Component<SubjectAreaProps> {
     state = {

@@ -33,7 +33,7 @@ import {StructuralUnitsProps} from "./types";
 
 import connect from './StructuralUnits.connect';
 import styles from './StructuralUnits.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 
 class StructuralUnits extends React.Component<StructuralUnitsProps> {
     state = {

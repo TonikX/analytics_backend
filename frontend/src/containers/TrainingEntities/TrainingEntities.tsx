@@ -30,7 +30,7 @@ import {TrainingEntitiesFields} from './enum';
 import connect from './TrainingEntities.connect';
 import styles from './TrainingEntities.styles';
 import {SubjectAreaFields} from "../SubjectArea/enum";
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 
 class TrainingEntities extends React.Component<TrainingEntitiesProps> {
     state = {

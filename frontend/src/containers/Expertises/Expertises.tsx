@@ -34,7 +34,7 @@ import {appRouter} from "../../service/router-service";
 
 import connect from './Expertises.connect';
 import styles from './Expertises.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 import {UserType} from "../../layout/types";
 import {PracticeFields} from "../Practice/enum";
 import {CertificationFields} from "../FinalCertification/enum";

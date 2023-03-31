@@ -32,7 +32,7 @@ import {relations} from './constants';
 
 import connect from './EntitityToEntitity.connect';
 import styles from './EntitityToEntitity.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 
 class EntitityToEntitity extends React.Component<EntityToEntityProps> {
     state = {

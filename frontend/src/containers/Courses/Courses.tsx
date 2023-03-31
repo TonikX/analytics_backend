@@ -19,7 +19,7 @@ import {CoursesProps} from './types';
 
 import connect from './Courses.connect';
 import styles from './Courses.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 
 class OnlineCourses extends React.Component<CoursesProps> {
   componentDidMount() {      

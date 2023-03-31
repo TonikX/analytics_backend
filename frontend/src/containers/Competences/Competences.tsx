@@ -33,7 +33,7 @@ import {CompetenceFields} from './enum';
 
 import connect from './Competences.connect';
 import styles from './Competences.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 
 class Competences extends React.Component<CompetenceProps> {
     state = {

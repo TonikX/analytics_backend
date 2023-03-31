@@ -32,7 +32,7 @@ import {EducationalStandardsProps} from "./types";
 
 import connect from './EducationalStandards.connect';
 import styles from './EducationalStandards.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 import {appRouter} from "../../service/router-service";
 import {withRouter} from "react-router-dom";
 

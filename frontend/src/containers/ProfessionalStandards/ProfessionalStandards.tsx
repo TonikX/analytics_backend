@@ -31,7 +31,7 @@ import {ProfessionalStandardsProps} from "./types";
 
 import connect from './ProfessionalStandards.connect';
 import styles from './ProfessionalStandarts.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 import {Link} from "react-router-dom";
 import {appRouter} from "../../service/router-service";
 import {withRouter} from "react-router-dom";

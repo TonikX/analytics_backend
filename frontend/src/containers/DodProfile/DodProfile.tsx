@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import Paper from "@mui/material/Paper";
-import Pagination from '@material-ui/lab/Pagination';
+import Pagination from '@mui/lab/Pagination';
 import {specializationObject} from "../WorkProgram/constants";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";

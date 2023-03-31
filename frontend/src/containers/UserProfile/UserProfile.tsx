@@ -4,7 +4,7 @@ import {useHistory, Link} from 'react-router-dom';
 import get from 'lodash/get';
 import moment from 'moment';
 
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';

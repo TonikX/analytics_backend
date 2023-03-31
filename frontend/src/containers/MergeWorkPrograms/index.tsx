@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import debounce from 'lodash/debounce';
-import {Autocomplete} from "@material-ui/lab";
+import {Autocomplete} from "@mui/lab";
 import {FormControl, Button, Modal, Box, Typography, TextField} from '@mui/material';
 import {useStyles} from './MergeWorkProgramsBlock.styles';
 import actions from './actions';
