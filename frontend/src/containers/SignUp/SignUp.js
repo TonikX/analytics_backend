@@ -1,5 +1,6 @@
 import React from 'react';
-import {Link, Navigate} from 'react-router-dom';
+import {Navigate} from 'react-router';
+import {Link} from 'react-router-dom';
 import PropTypes from "prop-types";
 import get from "lodash/get";
 

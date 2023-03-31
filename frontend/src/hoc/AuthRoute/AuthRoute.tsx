@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Navigate, Route } from "react-router";
+import {Route} from 'react-router-dom';
+import {Navigate} from 'react-router';
 import {appRouter} from '../../service/router-service';
 import {userService} from "../../service/user-service";
 
