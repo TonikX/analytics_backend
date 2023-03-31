@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import TextField from "@mui/material/TextField";
 
 import withStyles from '@mui/material/styles/withStyles';

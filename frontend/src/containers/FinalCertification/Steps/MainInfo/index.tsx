@@ -14,7 +14,7 @@ import Select from "../../../FinalCertification/components/Select";
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import UserSelector from "../../../EmailWidget/UserSelector";
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 import Chip from "@mui/material/Chip";
 import {getUserFullName} from "../../../../common/utils";
 import {UserFields} from "../../../../layout/enum";

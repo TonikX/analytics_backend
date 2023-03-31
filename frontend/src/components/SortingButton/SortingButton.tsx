@@ -3,8 +3,8 @@ import classNames from 'classnames';
 
 import withStyles from '@mui/material/styles/withStyles';
 
-import ArrowUp from "@material-ui/icons/ArrowDropUp";
-import ArrowDown from "@material-ui/icons/ArrowDropDown";
+import ArrowUp from "@mui/icons-material/ArrowDropUp";
+import ArrowDown from "@mui/icons-material/ArrowDropDown";
 import IconButton from "@mui/material/IconButton";
 
 import styles from './SortingButton.styles';

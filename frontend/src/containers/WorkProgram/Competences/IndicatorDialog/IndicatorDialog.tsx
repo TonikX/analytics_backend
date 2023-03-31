@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
 import Chip from '@mui/material/Chip'
 import TextField from '@mui/material/TextField'
-import InfoIcon from "@material-ui/icons/InfoOutlined";
+import InfoIcon from "@mui/icons-material/InfoOutlined";
 import CompetenceSelector from '../../../Competences/CompetenceSelector'
 import IndicatorSelector from '../../../Competences/Indicators/IndicatorSelector'
 import ResultsSelector from '../../Results/ResultsSeletor'

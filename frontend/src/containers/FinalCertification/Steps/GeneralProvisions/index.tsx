@@ -7,7 +7,7 @@ import styles from "../styles";
 import {Typography, WithStyles} from "@mui/material";
 import {TemplateTextState} from "../../types";
 import InputList from "../../components/InputList";
-import QuestionIcon from "@material-ui/icons/HelpOutline";
+import QuestionIcon from "@mui/icons-material/HelpOutline";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
 
 interface GeneralProvisionsProps extends WithStyles<typeof styles> {

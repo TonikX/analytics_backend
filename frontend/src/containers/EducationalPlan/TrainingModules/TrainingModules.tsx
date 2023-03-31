@@ -11,11 +11,11 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import withStyles from '@mui/material/styles/withStyles';
 import TableBody from "@mui/material/TableBody";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import AddIcon from "@material-ui/icons/Add";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
-import EyeIcon from "@material-ui/icons/VisibilityOutlined";
+import EyeIcon from "@mui/icons-material/VisibilityOutlined";
 
 import ConfirmDialog from "../../../components/ConfirmDialog/ConfirmDialog";
 import SortingButton from "../../../components/SortingButton";

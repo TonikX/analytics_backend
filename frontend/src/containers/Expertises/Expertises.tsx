@@ -12,7 +12,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import withStyles from '@mui/material/styles/withStyles';
-import EyeIcon from "@material-ui/icons/VisibilityOutlined";
+import EyeIcon from "@mui/icons-material/VisibilityOutlined";
 import TableBody from "@mui/material/TableBody";
 
 import SortingButton from "../../components/SortingButton";

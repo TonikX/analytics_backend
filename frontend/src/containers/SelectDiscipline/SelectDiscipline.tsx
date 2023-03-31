@@ -13,8 +13,8 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
 import IconButton from "@mui/material/IconButton";
-import CheckCircleOutline from "@material-ui/icons/CheckCircleOutline";
-import CancelOutlined from "@material-ui/icons/CancelOutlined";
+import CheckCircleOutline from "@mui/icons-material/CheckCircleOutline";
+import CancelOutlined from "@mui/icons-material/CancelOutlined";
 import withStyles from '@mui/material/styles/withStyles';
 
 import TextField from '../../components/TextField';

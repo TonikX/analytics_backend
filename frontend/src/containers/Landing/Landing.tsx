@@ -5,8 +5,8 @@ import cs from 'classnames'
 import AppBar from '@mui/material/AppBar'
 import { useStyles } from './Landing.styles'
 import IconButton from '@mui/material/IconButton'
-import TelegramIcon from '@material-ui/icons/Telegram'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import TelegramIcon from '@mui/icons-material/Telegram'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
@@ -16,10 +16,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/material/List';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
-import MenuIcon from '@material-ui/icons/Menu'
+import MenuIcon from '@mui/icons-material/Menu'
 // @ts-ignore
 import screenshotImage from './img/screen.PNG'
 // @ts-ignore

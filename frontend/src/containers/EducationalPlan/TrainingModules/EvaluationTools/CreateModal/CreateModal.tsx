@@ -12,7 +12,7 @@ import withStyles from '@mui/material/styles/withStyles';
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
+import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 import AppBar from "@mui/material/AppBar";
@@ -23,7 +23,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import {AutoSizer} from "react-virtualized";
 import FormLabel from "@mui/material/FormLabel";
-import QuestionIcon from "@material-ui/icons/HelpOutline";
+import QuestionIcon from "@mui/icons-material/HelpOutline";
 import Tooltip from "@mui/material/Tooltip";
 import CKEditor from '../../../../../components/CKEditor'
 

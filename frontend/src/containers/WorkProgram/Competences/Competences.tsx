@@ -9,7 +9,7 @@ import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import AddIcon from '@material-ui/icons/Add'
+import AddIcon from '@mui/icons-material/Add'
 
 import { rootState } from '../../../store/reducers'
 

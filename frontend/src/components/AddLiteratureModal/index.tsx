@@ -23,10 +23,10 @@ import withStyles from '@mui/material/styles/withStyles';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import AddIcon from "@material-ui/icons/Add";
+import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from "@mui/icons-material/Add";
 
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import {literatureEbscoFields, literatureFields} from "../../containers/Literature/enum";
 import {LiteratureEbscoType, LiteratureType} from "../../containers/Literature/types";

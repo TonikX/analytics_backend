@@ -11,8 +11,8 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
-import SearchIcon from "@material-ui/icons/Search";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
+import SearchIcon from "@mui/icons-material/Search";
 
 import {TableSearchButtonProps} from './types';
 

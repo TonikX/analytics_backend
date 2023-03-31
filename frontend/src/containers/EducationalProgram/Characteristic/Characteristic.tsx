@@ -15,7 +15,7 @@ import Chip from "@mui/material/Chip";
 import {CharacteristicProps,} from '../types';
 import {steps} from './constants';
 import {appRouter} from "../../../service/router-service";
-import LinkIcon from "@material-ui/icons/Link";
+import LinkIcon from "@mui/icons-material/Link";
 import Tooltip from "@mui/material/Tooltip";
 
 import connect from './Characteristic.connect';

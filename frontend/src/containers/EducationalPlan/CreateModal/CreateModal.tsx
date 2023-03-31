@@ -14,7 +14,7 @@ import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import withStyles from '@mui/material/styles/withStyles';
 import MenuItem from "@mui/material/MenuItem";
-import DateIcon from "@material-ui/icons/DateRange";
+import DateIcon from "@mui/icons-material/DateRange";
 import IconButton from "@mui/material/IconButton";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";

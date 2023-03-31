@@ -4,8 +4,8 @@ import {withRouter} from "react-router-dom";
 
 import {Link} from "react-router-dom";
 import Typography from '@mui/material/Typography';
-import CopyIcon from "@material-ui/icons/FileCopyOutlined";
-import CommentIcon from "@material-ui/icons/CommentOutlined";
+import CopyIcon from "@mui/icons-material/FileCopyOutlined";
+import CommentIcon from "@mui/icons-material/CommentOutlined";
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Fab from '@mui/material/Fab';
@@ -17,7 +17,7 @@ import Step from '@mui/material/Step';
 import StepButton from '@mui/material/StepButton';
 import Grow from '@mui/material/Grow';
 
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 import LikeButton from "../../components/LikeButton";

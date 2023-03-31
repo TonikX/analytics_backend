@@ -13,13 +13,13 @@ import Chip from '@mui/material/Chip';
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-import AddIcon from "@material-ui/icons/Add";
-import SettingsIcon from "@material-ui/icons/MoreVert";
+import AddIcon from "@mui/icons-material/Add";
+import SettingsIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import EyeIcon from '@material-ui/icons/VisibilityOutlined';
-import CheckIcon from "@material-ui/icons/CheckOutlined";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import EyeIcon from '@mui/icons-material/VisibilityOutlined';
+import CheckIcon from "@mui/icons-material/CheckOutlined";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 

@@ -9,7 +9,7 @@ import withStyles from '@mui/material/styles/withStyles';
 import Slide from "@mui/material/Slide";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
+import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar";
 import {DescriptionModalProps} from './types';

@@ -14,9 +14,9 @@ import withStyles from '@mui/material/styles/withStyles';
 import Button from "@mui/material/Button";
 import ButtonGroup from '@mui/material/ButtonGroup';
 import TableBody from '@mui/material/TableBody';
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import IconButton from "@mui/material/IconButton";
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 
 import WorkProgramStatus from "../../../components/WorkProgramStatus/WorkProgramStatus";
 import AddExpertModal from './AddExpertModal';

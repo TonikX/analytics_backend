@@ -5,9 +5,9 @@ import Typography from "@mui/material/Typography";
 import withStyles from '@mui/material/styles/withStyles';
 import Button from "@mui/material/Button";
 
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 import {LiteratureProps} from './types';
 
@@ -17,7 +17,7 @@ import AddLiteratureModal from "../../../../components/AddLiteratureModal";
 import {literatureFields} from "../../../Literature/enum";
 import {LiteratureType} from "../../../Literature/types";
 import {PracticeFields, PracticeSteps} from "../../enum";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Tooltip from "@mui/material/Tooltip";
 
 class Literature extends React.PureComponent<LiteratureProps> {

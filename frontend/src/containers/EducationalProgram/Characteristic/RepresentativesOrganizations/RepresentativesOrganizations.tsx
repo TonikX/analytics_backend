@@ -11,8 +11,8 @@ import {AddRepresentativesOrganizations} from "../AddRepresentativesOrganization
 import {useDispatch, useSelector} from "react-redux";
 import actions from "../../actions";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 

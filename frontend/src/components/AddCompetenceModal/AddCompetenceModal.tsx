@@ -17,7 +17,7 @@ import FormControl from '@mui/material/FormControl';
 
 import connect from './AddCompetenceModal.connect';
 import styles from './AddCompetenceModal.styles';
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 import TextField from "@mui/material/TextField";
 import {CompetenceFields} from "../../containers/Competences/enum";
 import CompetencesService from "../../containers/Competences/service";

@@ -17,7 +17,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Tooltip from "@mui/material/Tooltip";
 import withStyles from '@mui/material/styles/withStyles';
 
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 import SearchSelector from '../../../../components/SearchSelector';
 

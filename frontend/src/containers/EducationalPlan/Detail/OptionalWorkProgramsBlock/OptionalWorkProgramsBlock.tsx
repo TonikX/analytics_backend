@@ -10,7 +10,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Radio from "@mui/material/Radio";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
-import FileIcon from "@material-ui/icons/DescriptionOutlined";
+import FileIcon from "@mui/icons-material/DescriptionOutlined";
 
 import { appRouter } from "../../../../service/router-service";
 import { WorkProgramGeneralFields } from "../../../WorkProgram/enum";

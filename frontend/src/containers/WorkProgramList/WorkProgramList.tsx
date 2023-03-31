@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -23,12 +23,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Switch from "@mui/material/Switch";
 import Pagination from '@material-ui/lab/Pagination';
 
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import SettingsIcon from "@material-ui/icons/MoreVert";
-import CopyIcon from "@material-ui/icons/FileCopyOutlined";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import SettingsIcon from "@mui/icons-material/MoreVert";
+import CopyIcon from "@mui/icons-material/FileCopyOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";

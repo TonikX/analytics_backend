@@ -7,14 +7,14 @@ import Typography from "@mui/material/Typography";
 import {useParams} from 'react-router-dom'
 import {useStyles} from "./ProfessionalStandard.styles"
 import IconButton from "@mui/material/IconButton";
-import EditIcon from "@material-ui/icons/EditOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
 import {ProfessionalStandardsType} from "../types";
 import ProfessionalStandardLaborFunctionsCreateModal from "./ProfessionalStandardLaborFunctionsCreateModal";
 import ProfessionalStandardCreateModal from "../CreateModal";
 import classNames from "classnames";
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 export default () => {
   const dispatch = useDispatch()

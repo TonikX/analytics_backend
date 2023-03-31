@@ -19,12 +19,12 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
-import EyeIcon from "@material-ui/icons/VisibilityOutlined";
-import SettingsIcon from "@material-ui/icons/MoreVert";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
+import EyeIcon from "@mui/icons-material/VisibilityOutlined";
+import SettingsIcon from "@mui/icons-material/MoreVert";
 
 import CreateModal from "./CreateModal";
 import ConfirmDialog from "../../components/ConfirmDialog";

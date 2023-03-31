@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import Typography from "@mui/material/Typography";
 import Tooltip from '@mui/material/Tooltip';
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
 import { CoursesTable } from './CoursesTable/CoursesTable'

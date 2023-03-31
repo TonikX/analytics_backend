@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 
 import withStyles from '@mui/material/styles/withStyles';
 
-import Liked from "@material-ui/icons/Favorite";
-import NotLiked from "@material-ui/icons/FavoriteBorder";
+import Liked from "@mui/icons-material/Favorite";
+import NotLiked from "@mui/icons-material/FavoriteBorder";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 

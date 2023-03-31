@@ -5,10 +5,10 @@ import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import withStyles from '@mui/material/styles/withStyles';
 
-import DeleteIcon from '@material-ui/icons/DeleteOutlined';
-import EditIcon from '@material-ui/icons/EditOutlined';
-import CancelIcon from '@material-ui/icons/CloseOutlined';
-import SuccessIcon from '@material-ui/icons/CheckOutlined';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from '@mui/icons-material/EditOutlined';
+import CancelIcon from '@mui/icons-material/CloseOutlined';
+import SuccessIcon from '@mui/icons-material/CheckOutlined';
 
 import {EditedRowProps, EditedRowState} from './types';
 

@@ -1,8 +1,8 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Box, Button, Typography, TextField} from "@mui/material";
-import VerifiedIcon from '@material-ui/icons/CheckCircle';
-import NotVerifiedIcon from '@material-ui/icons/Close';
+import VerifiedIcon from '@mui/icons-material/CheckCircle';
+import NotVerifiedIcon from '@mui/icons-material/Close';
 import get from "lodash/get";
 import {getUserData} from "../../layout/getters";
 import {isValidEmail} from "../../common/utils";
@@ -14,7 +14,7 @@ import Tooltip from "@mui/material/Tooltip/Tooltip";
 import Chip from "@mui/material/Chip";
 import StructuralUnitsSelector from "../StructuralUnits/StructuralUnitsSelector";
 import structuralUnitActions from "../StructuralUnits/actions";
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 import Dialog from "@mui/material/Dialog";
 
 export default () => {

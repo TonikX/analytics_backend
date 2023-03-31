@@ -8,7 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 import actions from '../../actions'
 import useStyles from './TasksTable.style';

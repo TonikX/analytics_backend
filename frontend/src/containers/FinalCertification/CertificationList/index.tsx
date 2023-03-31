@@ -16,14 +16,14 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import get from "lodash/get";
 import debounce from "lodash/debounce";
 import Pagination from "@material-ui/lab/Pagination";
-import ArrowDown from "@material-ui/icons/ArrowDropDown";
+import ArrowDown from "@mui/icons-material/ArrowDropDown";
 import classNames from "classnames";
 import Fab from "@mui/material/Fab";
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 import CreateModal from "./CreateModal";
 import {RussianCertificationFields} from "../constants";
 

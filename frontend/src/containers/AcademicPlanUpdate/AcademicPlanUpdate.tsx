@@ -4,7 +4,7 @@ import get from 'lodash/get';
 import {withRouter} from 'react-router-dom'
 import Scrollbars from "react-custom-scrollbars";
 import Switch from "@mui/material/Switch";
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 import TextField from '@mui/material/TextField';
 import Fab from "@mui/material/Fab";
 import Paper from '@mui/material/Paper';
@@ -29,7 +29,7 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Button from "@mui/material/Button";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 
 import SortingButton from "../../components/SortingButton";

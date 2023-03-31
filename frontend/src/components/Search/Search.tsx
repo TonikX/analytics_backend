@@ -5,7 +5,7 @@ import get from "lodash/get";
 
 import withStyles from '@mui/material/styles/withStyles';
 import TextField from "@mui/material/TextField";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import {SearchProps} from './types';
 

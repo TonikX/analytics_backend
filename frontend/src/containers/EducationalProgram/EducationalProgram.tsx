@@ -17,10 +17,10 @@ import TableBody from "@mui/material/TableBody";
 
 import withStyles from '@mui/material/styles/withStyles';
 
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EyeIcon from '@material-ui/icons/VisibilityOutlined';
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EyeIcon from '@mui/icons-material/VisibilityOutlined';
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";

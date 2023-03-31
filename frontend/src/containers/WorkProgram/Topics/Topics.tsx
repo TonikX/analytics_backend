@@ -6,16 +6,16 @@ import Scrollbars from "react-custom-scrollbars";
 
 import Typography from "@mui/material/Typography";
 import withStyles from '@mui/material/styles/withStyles';
-import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import Button from "@mui/material/Button";
 
-import AddIcon from "@material-ui/icons/Add";
-import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
+import AddIcon from "@mui/icons-material/Add";
+import AddCircleIcon from "@mui/icons-material/AddCircleOutline";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
 import Tooltip from "@mui/material/Tooltip";
-import DescriptionIcon from '@material-ui/icons/DescriptionOutlined';
+import DescriptionIcon from '@mui/icons-material/DescriptionOutlined';
 
 import {TopicsProps} from './types';
 import {fields, workProgramSectionFields, workProgramTopicFields} from "../enum";

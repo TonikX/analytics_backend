@@ -10,8 +10,8 @@ import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import AddIcon from "@material-ui/icons/Add";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import AddFolderModal from "./AddFolderModal";
 

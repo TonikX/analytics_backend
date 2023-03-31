@@ -10,7 +10,7 @@ import withStyles, {WithStyles} from '@mui/material/styles/withStyles';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
-import EditIcon from "@material-ui/icons/EditOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
 
 import ConfirmReject from '../ConfirmReject';
 

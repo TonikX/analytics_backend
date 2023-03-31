@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
 import ExpansionPanelDetails from "@mui/material/ExpansionPanelDetails";
 import ExpansionPanel from "@mui/material/ExpansionPanel";

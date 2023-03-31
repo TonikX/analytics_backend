@@ -13,7 +13,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import Checkbox from "@mui/material/Checkbox";
 
-import FilterIcon from "@material-ui/icons/FilterList";
+import FilterIcon from "@mui/icons-material/FilterList";
 
 import {TableFilterProps} from './types';
 

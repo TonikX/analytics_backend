@@ -19,10 +19,10 @@ import MenuItem from "@mui/material/MenuItem";
 
 import withStyles from '@mui/material/styles/withStyles';
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
-import CreateIcon from "@material-ui/icons/NoteAddOutlined";
-import SettingsIcon from "@material-ui/icons/MoreVert";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
+import CreateIcon from "@mui/icons-material/NoteAddOutlined";
+import SettingsIcon from "@mui/icons-material/MoreVert";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";

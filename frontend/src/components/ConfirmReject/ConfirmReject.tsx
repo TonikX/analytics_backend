@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Done from '@material-ui/icons/Done';
-import Close from '@material-ui/icons/Close';
+import Done from '@mui/icons-material/Done';
+import Close from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 
 import {isStringValueValid} from '../../common/utils';

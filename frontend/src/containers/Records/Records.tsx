@@ -24,7 +24,7 @@ import TableBody from "@mui/material/TableBody";
 import TablePagination from "@mui/material/TablePagination";
 import FormLabel from "@mui/material/FormLabel";
 import ExpansionPanelSummary from "@mui/material/ExpansionPanelSummary";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpansionPanel from '@mui/material/ExpansionPanel';
 import SearchSelector from "../../components/SearchSelector";
 

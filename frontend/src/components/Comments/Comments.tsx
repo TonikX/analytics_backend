@@ -16,7 +16,7 @@ import {FULL_DATE_FORMAT, getUserFullName} from "../../common/utils";
 import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import Fab from "@mui/material/Fab";
-import CommentIcon from "@material-ui/icons/CommentOutlined";
+import CommentIcon from "@mui/icons-material/CommentOutlined";
 
 class Comments extends React.Component<CommentsProps> {
     state = {

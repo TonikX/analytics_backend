@@ -9,7 +9,7 @@ import {CertificationActions, CertificationState, TemplateTextState} from "../..
 import Input from "../../components/Input";
 import ReadonlyRow from "./ReadonlyRow";
 import Scrollbars from "react-custom-scrollbars";
-import QuestionIcon from "@material-ui/icons/HelpOutline";
+import QuestionIcon from "@mui/icons-material/HelpOutline";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
 
 interface DatesProps extends WithStyles<typeof styles> {

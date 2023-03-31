@@ -10,7 +10,7 @@ import get from "lodash/get";
 import {RussianCertificationFields} from "../../constants";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 interface InputListProps extends WithStyles<typeof styles> {
     actions: CertificationActions;

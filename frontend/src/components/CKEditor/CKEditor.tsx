@@ -2,7 +2,7 @@ import React from 'react';
 //@ts-ignore
 import CKEditor from 'ckeditor4-react'
 
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import {CKEditorProps} from './types';
 import Tooltip from "@mui/material/Tooltip";
 

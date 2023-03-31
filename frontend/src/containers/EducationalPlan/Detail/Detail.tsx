@@ -18,9 +18,9 @@ import TableCell from "@mui/material/TableCell";
 import Tooltip from "@mui/material/Tooltip";
 import {SortableContainer, SortableElement, SortableHandle} from 'react-sortable-hoc';
 
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import AttachIcon from '@material-ui/icons/AttachFileOutlined';
-import WarningIcon from '@material-ui/icons/WarningRounded';
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import AttachIcon from '@mui/icons-material/AttachFileOutlined';
+import WarningIcon from '@mui/icons-material/WarningRounded';
 
 import ConfirmDialog from "../../../components/ConfirmDialog";
 
@@ -58,15 +58,15 @@ import {OPTIONALLY} from "../data";
 import connect from './Detail.connect';
 import styles from './Detail.styles';
 import {fields, TrainingModuleFields} from "../TrainingModules/enum";
-import FileIcon from '@material-ui/icons/DescriptionOutlined';
+import FileIcon from '@mui/icons-material/DescriptionOutlined';
 import classNames from "classnames";
 import {selectRulesArray, typesListArray} from "../TrainingModules/constants";
 import {UserType} from "../../../layout/types";
 import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 import Dialog from "@mui/material/Dialog";
-import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import UserSelector from "../../Profile/UserSelector/UserSelector";
 
 const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}}/>);

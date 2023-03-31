@@ -5,9 +5,9 @@ import Typography from "@mui/material/Typography";
 import withStyles from '@mui/material/styles/withStyles';
 import Button from "@mui/material/Button";
 
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 import {FourthStepProps} from './types';
 import {fields} from "../enum";

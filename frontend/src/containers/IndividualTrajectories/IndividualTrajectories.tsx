@@ -20,8 +20,8 @@ import Switch from "@mui/material/Switch";
 import withStyles from '@mui/material/styles/withStyles';
 
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
 import ConfirmDialog from "../../components/ConfirmDialog";

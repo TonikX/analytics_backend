@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import IconButton from "@mui/material/IconButton";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
@@ -21,7 +21,7 @@ import actions from '../../actions';
 import {EducationProgramCharacteristicFields} from "../../enum";
 
 import useStyles from './ObjectsOfActivity.styles'
-import QuestionIcon from "@material-ui/icons/HelpOutline";
+import QuestionIcon from "@mui/icons-material/HelpOutline";
 import Tooltip from "@mui/material/Tooltip";
 import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 

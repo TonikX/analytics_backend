@@ -11,8 +11,8 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 import AddCompetenceModal from "../../../../components/AddCompetenceModal";
 import AddIndicatorsModal from "../../../../components/AddIndicatorsModal";

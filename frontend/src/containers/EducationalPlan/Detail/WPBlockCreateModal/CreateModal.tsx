@@ -22,7 +22,7 @@ import Select from "@mui/material/Select";
 import Slide from "@mui/material/Slide";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
+import CloseIcon from "@mui/icons-material/Close";
 import AppBar from "@mui/material/AppBar";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -32,11 +32,11 @@ import TableBody from "@mui/material/TableBody";
 import ExpansionPanel from '@mui/material/ExpansionPanel';
 import ExpansionPanelDetails from '@mui/material/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@mui/material/ExpansionPanelSummary';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import SaveIcon from "@material-ui/icons/SaveOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/SaveOutlined";
 import Tooltip from "@mui/material/Tooltip";
 
 import AddWorkProgramModal from "./AddWorkProgramModal";

@@ -6,7 +6,7 @@ import styles from "../styles";
 import {Typography, WithStyles} from "@mui/material";
 import {PracticeActions, PracticeState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Tooltip from "@mui/material/Tooltip";
 import {RussianPracticeFields} from "../../constants";
 
