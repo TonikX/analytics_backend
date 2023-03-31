@@ -1,5 +1,5 @@
  import React from "react";
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 import AuthRoute from './hoc/AuthRoute'
 
@@ -78,7 +78,7 @@ const routerService = RouterService.factory();
 export default () => (
     <Router>
         <Layout>
-            <Switch>
+            <Routes>
             <AuthRoute path={routerService.getCoursesRoute()}>
                 <Courses />
             </AuthRoute>
@@ -424,7 +424,7 @@ export default () => (
                 <Route exact>
                     <NotFoundPage/>
                 </Route>
-            </Switch>
+            </Routes>
         </Layout>
     </Router>
 );

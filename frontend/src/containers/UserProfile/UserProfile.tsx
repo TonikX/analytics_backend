@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux'
-import {useHistory, Link} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 import get from 'lodash/get';
 import moment from 'moment';
 
@@ -35,7 +35,7 @@ export default () => {
     const classes = useStyles();
     const userData = useSelector(getUserData);
     const dispatch = useDispatch();
-    const history = useHistory();
+    const history = useNavigate();
 
     useEffect(() => {
         dispatch(userProfileActions.changeCurrentPage(1));
