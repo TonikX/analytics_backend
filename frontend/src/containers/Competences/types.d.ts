@@ -15,6 +15,7 @@ export interface CompetenceActions {
     getIndicators: any;
     setIndicators: any;
     changeSearchQuery: any;
+    changeCodeQuery: any;
     getCompetences: any;
     setCompetences: any;
     createNewCompetence: any;
@@ -35,6 +36,7 @@ export interface competenceState {
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.SEARCH_QUERY]: string;
+    [fields.SEARCH_CODE]: string;
     [fields.COMPETENCE_LIST]: Array<CompetenceType>;
     [fields.COMPETENCE_DIALOG]: {
         [fields.IS_OPEN_DIALOG]: boolean;

@@ -16,4 +16,18 @@ export default (theme: Theme) => createStyles({
         marginBottom: '30px',
         width: '100%'
     },
+    searchRow: {
+        display: 'flex',
+        marginTop: '20px',
+    },
+    searchInputCode: {
+        maxWidth: '110px',
+        marginRight: '20px'
+    },
+    searchInputText: {
+        flex: 1,
+    },
+    searchButton: {
+        marginLeft: '20px'
+    }
 });

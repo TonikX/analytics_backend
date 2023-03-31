@@ -10,7 +10,10 @@ import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import SearchSelector from "../SearchSelector/SearchSelector";
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 import connect from './AddCompetenceModal.connect';
 import styles from './AddCompetenceModal.styles';
@@ -18,11 +21,10 @@ import AddIcon from "@material-ui/icons/Add";
 import TextField from "@material-ui/core/TextField";
 import {CompetenceFields} from "../../containers/Competences/enum";
 import CompetencesService from "../../containers/Competences/service";
-import classNames from "classnames";
 
 const Service = new CompetencesService()
 
-class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
+class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps, any> {
   state = {
     competence: null,
     createCompetence: false,
@@ -35,6 +37,9 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
 
   handleClose = () => {
     this.props.closeDialog();
+    this.props.competenceActions.changeCodeQuery('');
+    this.props.competenceActions.changeSearchQuery('');
+    this.props.competenceActions.getCompetences(this.props.competenceType);
   }
 
   handleSave = async () => {
@@ -58,9 +63,12 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
     this.setState({competence: competence})
   }
 
-  handleChangeSearchText = (searchText: string) => {
-    this.props.competenceActions.changeSearchQuery(searchText);
-    this.props.competenceActions.getCompetences();
+  handleChangeCodeText = (event: any) => {
+    this.props.competenceActions.changeCodeQuery(event.target.value);
+  }
+
+  handleChangeValueText = (event: any) => {
+    this.props.competenceActions.changeSearchQuery(event.target.value);
   }
 
   changeNewCompetence = (field: string) => (e: any) => {
@@ -72,12 +80,23 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
     })
   }
 
-  render() {
-    const {isOpen, classes, competenceList, } = this.props;
-    const { createCompetence, newCompetence } = this.state
+  selectCompetence = (label:string) => (event: any) => {
+    this.setState({
+      competence: {value: Number(event.currentTarget.value), label: label} 
+    })
+  }
 
-    // @ts-ignore
-    const disableButton = createCompetence ? !(newCompetence[CompetenceFields.TITLE] && newCompetence[CompetenceFields.NUMBER])
+  handleSearch = () => {
+    this.props.competenceActions.getCompetences(this.props.competenceType)
+  }
+
+  render() {
+    const {isOpen, classes, competenceList} = this.props;
+    const {createCompetence, newCompetence} = this.state;
+
+    const disableButton = createCompetence
+      //@ts-ignore
+      ? !(newCompetence[CompetenceFields.TITLE] && newCompetence[CompetenceFields.NUMBER])
       : get(this, 'state.competence.value', null) === null;
 
     return (
@@ -91,7 +110,7 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <DialogTitle style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
           Добавить компетенцию
           {createCompetence ? (
             <Button color="primary"
@@ -103,13 +122,40 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
             </Button>
           ) : (
             <Button color="primary"
-            variant="text"
-            size="small"
-            onClick={() => this.setState({ createCompetence: true })}
+              variant="text"
+              size="small"
+              onClick={() => this.setState({ createCompetence: true })}
             >
               <AddIcon/> Создать компетенцию
             </Button>
           )}
+
+          <div className={classes.searchRow}>
+            <TextField label="Код"
+                       onChange={this.handleChangeCodeText}
+                       variant="outlined"
+                       fullWidth
+                       className={classes.searchInputCode}
+                       InputLabelProps={{
+                         shrink: true,
+                       }}
+            />
+            <TextField label="Название"
+                       onChange={this.handleChangeValueText}
+                       variant="outlined"
+                       fullWidth
+                       InputLabelProps={{
+                         shrink: true,
+                       }}
+                       className={classes.searchInputText}
+            />
+            <Button onClick={this.handleSearch}
+                    variant="contained"
+                    className={classes.searchButton}
+                    color="primary">
+              Поиск
+            </Button>
+          </div>
         </DialogTitle>
 
         <DialogContent>
@@ -119,8 +165,9 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
                          onChange={this.changeNewCompetence(CompetenceFields.NUMBER)}
                          variant="outlined"
                          fullWidth
-                // @ts-ignore
+                         //@ts-ignore
                          value={newCompetence[CompetenceFields.NUMBER]}
+                         className={classes.marginBottom30}
                          InputLabelProps={{
                            shrink: true,
                          }}
@@ -128,9 +175,9 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
               <TextField label="Название компетенции *"
                          onChange={this.changeNewCompetence(CompetenceFields.TITLE)}
                          variant="outlined"
-                         className={classNames(classes.marginBottom30)}
+                         className={classes.marginBottom30}
                          fullWidth
-                         // @ts-ignore
+                         //@ts-ignore
                          value={newCompetence[CompetenceFields.TITLE]}
                          InputLabelProps={{
                            shrink: true,
@@ -138,24 +185,36 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps> {
               />
             </>
           ) : (
-            <SearchSelector label="Компетенция * "
-                            changeSearchText={this.handleChangeSearchText}
-                            list={competenceList}
-                            changeItem={this.save}
-                            value={''}
-                            valueLabel={''}
-            />
+            <FormControl>
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="row-radio-buttons-group"
+              >
+                {competenceList.map((competence) =>
+                  <FormControlLabel
+                    key={competence.value}
+                    value={competence.value}
+                    //@ts-ignore
+                    control={<Radio checked={this.state.competence?.value === competence.value} />}
+                    label={competence.label}
+                    onChange={this.selectCompetence(competence.label)}
+                  />
+                )}
+              </RadioGroup>
+            </FormControl>
           )}
         </DialogContent>
+
         <DialogActions className={classes.actions}>
-          <Button onClick={this.handleClose}
-                  variant="text">
+          <Button onClick={this.handleClose} variant="text">
             Отмена
           </Button>
           <Button onClick={this.handleSave}
                   variant="contained"
+                  color="primary"
                   disabled={disableButton}
-                  color="primary">
+          >
             Сохранить
           </Button>
         </DialogActions>
