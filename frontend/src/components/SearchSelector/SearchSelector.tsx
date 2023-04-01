@@ -3,7 +3,7 @@ import get from 'lodash/get';
 import debounce from "lodash/debounce";
 import Scrollbars from "react-custom-scrollbars-2";
 
-import {AutoSizer} from 'react-virtualized';
+import {AutoSizer} from 'react-virtualized-reactv17';
 
 import Fade from '@mui/material/Fade';
 import Paper from '@mui/material/Paper';

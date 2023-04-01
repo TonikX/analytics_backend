@@ -1,7 +1,7 @@
 import React from 'react';
 import get from "lodash/get";
 
-import {AutoSizer} from "react-virtualized";
+import {AutoSizer} from "react-virtualized-reactv17";
 
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";

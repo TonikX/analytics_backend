@@ -3,7 +3,7 @@ import React from 'react';
 // @ts-ignore
 import matchSorter from 'match-sorter';
 import {Link} from "react-router-dom";
-import {List, AutoSizer, CellMeasurer, CellMeasurerCache} from 'react-virtualized';
+import {List, AutoSizer, CellMeasurer, CellMeasurerCache} from 'react-virtualized-reactv17';
 import Scrollbars from "react-custom-scrollbars-2";
 
 import className from "classnames";

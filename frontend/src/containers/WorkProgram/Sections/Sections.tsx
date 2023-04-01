@@ -1,7 +1,7 @@
 import React from 'react';
 import get from 'lodash/get';
 import Scrollbars from "react-custom-scrollbars-2";
-import {AutoSizer} from 'react-virtualized';
+import {AutoSizer} from 'react-virtualized-reactv17';
 import classNames from "classnames";
 
 import {SortableContainer, SortableElement, SortableHandle} from 'react-sortable-hoc';
