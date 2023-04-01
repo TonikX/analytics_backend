@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 
 import {ModuleModalProps} from './types';
@@ -31,7 +31,7 @@ class ModuleModal extends React.Component<ModuleModalProps> {
     componentDidUpdate(prevProps: Readonly<ModuleModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {module} = this.props;
 
-        if (!shallowEqual(module, prevProps.module)){
+        if (!shallowEqualObjects(module, prevProps.module)){
             this.setState({
                 module: {
                     [ModuleFields.ID]: get(module, ModuleFields.ID),

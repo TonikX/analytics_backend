@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 
 import {LiteratureCreateModalProps} from './types';
@@ -29,7 +29,7 @@ class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalPro
     componentDidUpdate(prevProps: Readonly<LiteratureCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {literature} = this.props;
 
-        if (!shallowEqual(literature, prevProps.literature)){
+        if (!shallowEqualObjects(literature, prevProps.literature)){
             this.setState({
                 literature: {
                     [literatureFields.ID]: get(literature, literatureFields.ID),

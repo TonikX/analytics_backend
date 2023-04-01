@@ -1,5 +1,5 @@
 import React, {ReactText} from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 
 import {TrainingEntitiesCreateModalProps} from './types';
@@ -42,7 +42,7 @@ class TrainingEntitiesCreateModal extends React.PureComponent<TrainingEntitiesCr
     componentDidUpdate(prevProps: Readonly<TrainingEntitiesCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {trainingEntity} = this.props;
 
-        if (!shallowEqual(trainingEntity, prevProps.trainingEntity)){
+        if (!shallowEqualObjects(trainingEntity, prevProps.trainingEntity)){
             this.setState({
                 trainingEntity: {
                     [EntityToEntityFields.ID]: get(trainingEntity, EntityToEntityFields.ID),

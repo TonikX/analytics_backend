@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 
 import {SubjectAreaCreateModalProps} from './types';
@@ -28,7 +28,7 @@ class SubjectAreaCreateModal extends React.PureComponent<SubjectAreaCreateModalP
     componentDidUpdate(prevProps: Readonly<SubjectAreaCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {subjectArea} = this.props;
 
-        if (!shallowEqual(subjectArea, prevProps.subjectArea)){
+        if (!shallowEqualObjects(subjectArea, prevProps.subjectArea)){
             this.setState({
                 subjectArea: {
                     [SubjectAreaFields.ID]: get(subjectArea, SubjectAreaFields.ID),

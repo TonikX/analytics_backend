@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 
 import {StructuralUnitsCreateModalProps} from './types';
@@ -28,7 +28,7 @@ class CreateModal extends React.PureComponent<StructuralUnitsCreateModalProps> {
     componentDidUpdate(prevProps: Readonly<StructuralUnitsCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {structuralUnit} = this.props;
 
-        if (!shallowEqual(structuralUnit, prevProps.structuralUnit)){
+        if (!shallowEqualObjects(structuralUnit, prevProps.structuralUnit)){
             this.setState({
                 structuralUnit: {
                     [structuralUnitFields.ID]: get(structuralUnit, structuralUnitFields.ID),

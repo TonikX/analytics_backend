@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import isFunction from 'lodash/isFunction';
 import get from 'lodash/get';
 
-import shallowEqual from 'recompose/shallowEqual';
+import {shallowEqualObjects} from 'shallow-equal';
 import classNames from "classnames";
 
 import withStyles, {WithStyles} from '@mui/material/styles/withStyles';
@@ -56,7 +56,7 @@ class EditableText extends Component<EditableTextProps, EditableTexState> {
         return nextProps.value !== this.props.value
             || nextProps.isEditMode !== this.props.isEditMode
             || nextState.value !== this.state.value
-            || !shallowEqual(nextProps.classes, this.props.classes);
+            || !shallowEqualObjects(nextProps.classes, this.props.classes);
     }
 
     handleOnClick = (event: React.MouseEvent<HTMLElement>): void => {

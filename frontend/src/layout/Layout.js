@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import className from 'classnames';
-import shallowEqual from "recompose/shallowEqual";
+import {shallowEqualObjects} from "shallow-equal";
 
 import MomentUtils from '@date-io/moment';
 import {SnackbarProvider} from 'notistack';
@@ -46,9 +46,9 @@ class Layout extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        return !shallowEqual(this.props.errors, nextProps.errors)
-            || !shallowEqual(this.props.children, nextProps.children)
-            || !shallowEqual(this.props.location, nextProps.location)
+        return !shallowEqualObjects(this.props.errors, nextProps.errors)
+            || !shallowEqualObjects(this.props.children, nextProps.children)
+            || !shallowEqualObjects(this.props.location, nextProps.location)
             || this.props.fetching !== nextProps.fetching
             || this.props.auth !== nextProps.auth
             || this.props.mockMenu !== nextProps.mockMenu

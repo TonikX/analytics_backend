@@ -1,5 +1,5 @@
 import React, {ReactText} from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 
 import {RolesCreateModalProps} from './types';
@@ -41,7 +41,7 @@ class CreateModal extends React.PureComponent<RolesCreateModalProps> {
     componentDidUpdate(prevProps: Readonly<RolesCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {skill} = this.props;
 
-        if (!shallowEqual(skill, prevProps.skill)){
+        if (!shallowEqualObjects(skill, prevProps.skill)){
             this.setState({
                 skill: {
                     [RolesFields.ID]: get(skill, RolesFields.ID),

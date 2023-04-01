@@ -1,6 +1,6 @@
 import React from 'react';
 import get from "lodash/get";
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import classNames from 'classnames';
 
 import {CreateModalProps} from './types';
@@ -51,7 +51,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {    editor = nu
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {evaluationTool} = this.props;
 
-        if (!shallowEqual(this.props, prevProps)){
+        if (!shallowEqualObjects(this.props, prevProps)){
             this.setState({
                 isOpen: this.props.isOpen,
                 evaluationTool: {

@@ -1,6 +1,6 @@
 import React, {ReactText} from 'react';
 import get from "lodash/get";
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 
 import {ThemeCreateModalProps} from './types';
 
@@ -46,7 +46,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
     componentDidUpdate(prevProps: Readonly<ThemeCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {topic} = this.props;
 
-        if (!shallowEqual(topic, prevProps.topic)){
+        if (!shallowEqualObjects(topic, prevProps.topic)){
             this.setState({
                 topic: {
                     [workProgramTopicFields.DESCRIPTION]: get(topic, workProgramTopicFields.DESCRIPTION, ''),

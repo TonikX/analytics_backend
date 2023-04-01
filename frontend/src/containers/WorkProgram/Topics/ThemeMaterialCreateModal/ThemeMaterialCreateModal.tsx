@@ -1,6 +1,6 @@
 import React from 'react';
 import get from "lodash/get";
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 
 import {ThemeCreateModalProps} from './types';
 
@@ -28,7 +28,7 @@ class ThemeMaterialCreateModal extends React.PureComponent<ThemeCreateModalProps
     componentDidUpdate(prevProps: Readonly<ThemeCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {data} = this.props;
 
-        if (!shallowEqual(data, prevProps.data)){
+        if (!shallowEqualObjects(data, prevProps.data)){
             this.setState({
                 ...data
             });

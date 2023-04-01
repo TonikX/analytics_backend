@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 import {Moment} from "moment";
 
@@ -40,7 +40,7 @@ class DownloadFileModal extends React.PureComponent<DownloadFileModalProps> {
     componentDidUpdate(prevProps: Readonly<DownloadFileModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {dialogData} = this.state;
 
-        if (!shallowEqual(this.props.downloadDialogData, prevProps.downloadDialogData)){
+        if (!shallowEqualObjects(this.props.downloadDialogData, prevProps.downloadDialogData)){
             this.setState({
                 dialogData: {
                     ...dialogData,

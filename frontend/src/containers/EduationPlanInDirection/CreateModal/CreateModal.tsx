@@ -1,5 +1,5 @@
 import React, {ReactText} from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 
 import {CreateModalProps} from './types';
@@ -46,7 +46,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {educationalPlansInDirection} = this.props;
 
-        if (!shallowEqual(educationalPlansInDirection, prevProps.educationalPlansInDirection)){
+        if (!shallowEqualObjects(educationalPlansInDirection, prevProps.educationalPlansInDirection)){
             this.setState({
                 educationalPlansInDirection: {
                     [EducationPlanInDirectionFields.ID]: get(educationalPlansInDirection, EducationPlanInDirectionFields.ID),

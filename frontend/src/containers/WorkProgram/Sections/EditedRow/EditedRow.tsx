@@ -16,7 +16,7 @@ import {ImplementationFormatsEnum, workProgramSectionFields} from '../../enum';
 
 import connect from './EditedRow.connect';
 import styles from './EditedRow.styles';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 
 class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     constructor(props: EditedRowProps) {
@@ -31,7 +31,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     componentDidUpdate(prevProps: Readonly<EditedRowProps>, prevState: Readonly<EditedRowState>, snapshot?: any) {
         const { section } = this.props
 
-        if (!shallowEqual(prevProps.section, this.props.section)){
+        if (!shallowEqualObjects(prevProps.section, this.props.section)){
             this.setState({
                 section: section,
             })

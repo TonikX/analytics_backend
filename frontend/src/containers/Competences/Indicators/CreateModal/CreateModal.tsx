@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 import classNames from "classnames";
 
@@ -31,7 +31,7 @@ class CreateModal extends React.PureComponent<IndicatorCreateModalProps> {
     componentDidUpdate(prevProps: Readonly<IndicatorCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {indicator} = this.props;
 
-        if (!shallowEqual(indicator, prevProps.indicator)){
+        if (!shallowEqualObjects(indicator, prevProps.indicator)){
             this.setState({
                 indicator: {
                     [IndicatorsFields.ID]: get(indicator, IndicatorsFields.ID),

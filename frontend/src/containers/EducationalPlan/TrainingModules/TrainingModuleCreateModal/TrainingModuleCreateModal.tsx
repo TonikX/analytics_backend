@@ -1,5 +1,5 @@
 import React, {ReactText} from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 
 import Dialog from '@mui/material/Dialog';
@@ -34,7 +34,7 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
     componentDidUpdate(prevProps: Readonly<TrainingModuleCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {trainingModule} = this.props;
 
-        if (!shallowEqual(trainingModule, prevProps.trainingModule)){
+        if (!shallowEqualObjects(trainingModule, prevProps.trainingModule)){
             this.setState({
                 trainingModule: {
                     [TrainingModuleFields.ID]: get(trainingModule, TrainingModuleFields.ID),

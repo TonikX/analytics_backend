@@ -12,7 +12,7 @@ import styles from "../styles";
 import {Checkbox, FormControlLabel, FormGroup, FormLabel, Typography, WithStyles} from "@mui/material";
 import {CertificationActions, CertificationState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import Scrollbars from "react-custom-scrollbars-2";
 
 interface FeaturesProps extends WithStyles<typeof styles> {
@@ -62,7 +62,7 @@ class Features extends React.Component<FeaturesProps> {
     componentDidUpdate(prevProps: Readonly<FeaturesProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {fields} = this.props;
 
-        if (shallowEqual(fields, prevProps.fields)) {
+        if (shallowEqualObjects(fields, prevProps.fields)) {
             return;
         }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 import classNames from "classnames";
 
@@ -33,7 +33,7 @@ class CreateModal extends React.PureComponent<EducationalStandardCreateModalProp
     componentDidUpdate(prevProps: Readonly<EducationalStandardCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {educationalStandard} = this.props;
 
-        if (!shallowEqual(educationalStandard, prevProps.educationalStandard)){
+        if (!shallowEqualObjects(educationalStandard, prevProps.educationalStandard)){
             this.setState({
                 educationalStandard: {
                     [EducationalStandardFields.ID]: get(educationalStandard, EducationalStandardFields.ID),

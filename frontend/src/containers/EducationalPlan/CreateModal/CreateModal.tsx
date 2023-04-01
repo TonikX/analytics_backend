@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 import classNames from "classnames";
 import moment, {Moment} from 'moment';
@@ -49,7 +49,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {educationalPlan} = this.props;
 
-        if (!shallowEqual(educationalPlan, prevProps.educationalPlan)){
+        if (!shallowEqualObjects(educationalPlan, prevProps.educationalPlan)){
             this.setState({
                 educationalPlan: {
                     [EducationalPlanFields.ID]: get(educationalPlan, EducationalPlanFields.ID),

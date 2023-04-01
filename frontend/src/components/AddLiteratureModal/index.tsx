@@ -1,7 +1,7 @@
 import React, {ChangeEvent} from 'react';
 import get from "lodash/get";
 
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 
 import Scrollbars from "react-custom-scrollbars-2";
 
@@ -58,7 +58,7 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
     componentDidUpdate(prevProps: Readonly<AddLiteratureModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {selectedItems} = this.props;
 
-        if (!shallowEqual(selectedItems, prevProps.selectedItems)){
+        if (!shallowEqualObjects(selectedItems, prevProps.selectedItems)){
             this.setState({
                 selectedLiterature: selectedItems
             });

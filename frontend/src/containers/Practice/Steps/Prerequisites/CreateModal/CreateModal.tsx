@@ -1,6 +1,6 @@
 import React, {ReactText} from 'react';
 import get from "lodash/get";
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 
 import {CreateModalProps} from './types';
 
@@ -44,7 +44,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {prerequisite} = this.props;
 
-        if (!shallowEqual(prerequisite, prevProps.prerequisite)){
+        if (!shallowEqualObjects(prerequisite, prevProps.prerequisite)){
             const subjectAreaId = get(prerequisite, [PrerequisiteFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], null);
 
             this.props.trainingEntitiesActions.changeSubjectId(subjectAreaId);

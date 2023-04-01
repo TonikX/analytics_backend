@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 import classNames from "classnames";
 import moment from "moment";
@@ -92,7 +92,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {blockOfWorkPrograms} = this.props;
 
-        if (!shallowEqual(blockOfWorkPrograms, prevProps.blockOfWorkPrograms)){
+        if (!shallowEqualObjects(blockOfWorkPrograms, prevProps.blockOfWorkPrograms)){
             const workProgram = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.WORK_PROGRAMS) || [];
             const gia = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.GIA) || [];
             const practice = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.PRACTICE) || [];
