@@ -1,7 +1,7 @@
 import React from "react";
 import Paper from '@mui/material/Paper';
 import withStyles from '@mui/material/styles/withStyles';
-import {Link, withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
 import ButtonGroup from "@mui/material/ButtonGroup";
 
 import styles from "./Practice.styles";
@@ -195,4 +195,4 @@ class Practice extends React.Component<PracticeProps> {
   }
 }
 
-export default connect(withStyles(styles)(withRouter(Practice)));
+export default connect(withStyles(styles)(Practice));

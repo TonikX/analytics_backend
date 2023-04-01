@@ -14,7 +14,6 @@ import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import {MinimalPracticeState} from "../../types";
 import {PracticeFields} from "../../enum";
-import {withRouter} from "react-router-dom";
 import {appRouter} from "../../../../service/router-service";
 import MenuItem from "@mui/material/MenuItem";
 import {Select, Table} from "@mui/material";
@@ -33,6 +32,7 @@ import TableCell from "@mui/material/TableCell/TableCell";
 import {HoursSection} from "./types";
 import EditedRow from "./EditableRow/EditableRow";
 import {PRACTICE_TITLES} from "../../constants";
+import {withRouter} from '../../../../hoc/WithRouter'
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -54,9 +54,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     handleSave = () => {
         const {minimalPracticeState} = this.state;
         minimalPracticeState[PracticeFields.FORM_OF_CERTIFICATION_TOOLS] = 'Защита отчёта';
-        const history = this.props.history;
         const callback = (id: number) => {
-            history.push(appRouter.getPracticeLink(id));
+            this.props.navigate(appRouter.getPracticeLink(id));
         };
         this.props.actions.createPractice({
             state: {

@@ -2,7 +2,7 @@ import React from "react";
 import {Paper, WithStyles} from "@mui/material";
 import withStyles from "@mui/material/styles/withStyles";
 import styles from "./styles";
-import {Link, RouteComponentProps, withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {CertificationActions, CertificationState, PermissionsInfoState} from "./types";
 import connect from "./connect";
 import get from "lodash/get";
@@ -22,7 +22,7 @@ import {appRouter} from "../../service/router-service";
 import Comments from "../../components/Comments/Comments";
 import ButtonGroup from "@mui/material/ButtonGroup";
 
-export interface FinalCertificationProps extends WithStyles<typeof styles>, RouteComponentProps {
+export interface FinalCertificationProps extends WithStyles<typeof styles> {
   actions: CertificationActions,
   certification: CertificationState,
   isError: boolean,
@@ -208,4 +208,4 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
   }
 }
 
-export default connect(withStyles(styles)(withRouter(FinalCertification)));
+export default connect(withStyles(styles)(FinalCertification));

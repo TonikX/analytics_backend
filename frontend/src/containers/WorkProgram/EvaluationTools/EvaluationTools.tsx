@@ -36,7 +36,7 @@ import { types } from './constants'
 
 import connect from './EvaluationTools.connect';
 import styles from './EvaluationTools.styles';
-import {withRouter} from "react-router-dom";
+import {withRouter} from "../../../hoc/WithRouter";
 import {subSections} from "../constants";
 
 class EvaluationTools extends React.PureComponent<SixthStepProps> {
@@ -80,7 +80,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
 
     handleClickShowDescription = (id: any) => () => {
         //@ts-ignore
-        this.props.history.push(appRouter.getWorkProgramEvaluationToolLink(this.props.workProgramId, id))
+        this.props.navigate(appRouter.getWorkProgramEvaluationToolLink(this.props.workProgramId, id))
         // this.props.actions.openDialog({dialogType: fields.SHOW_EVALUATION_TOOLS_DESCRIPTION, data: description});
         this.handleCloseItemMenu();
     };

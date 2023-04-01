@@ -1,6 +1,6 @@
 import React from 'react';
 import get from 'lodash/get';
-import {withRouter} from "react-router-dom";
+import {withRouter} from "../../hoc/WithRouter";
 
 import {Link} from "react-router-dom";
 import Typography from '@mui/material/Typography';
@@ -278,7 +278,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
 
     openStep = (link: string) => {
         //@ts-ignore
-        this.props.history.push(link)
+        this.props.navigate(link)
     }
 
     render() {

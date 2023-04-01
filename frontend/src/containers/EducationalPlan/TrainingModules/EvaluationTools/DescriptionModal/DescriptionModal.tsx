@@ -14,8 +14,6 @@ import AppBar from "@mui/material/AppBar";
 import {DescriptionModalProps} from './types';
 import {IntermediateCertificationFields} from '../../../../WorkProgram/enum';
 import CKEditor from '../../../../../components/CKEditor';
-import {withRouter} from "react-router-dom";
-import {appRouter} from "../../../../../service/router-service";
 import {fields} from '../../enum';
 
 import connect from './DescriptionModal.connect';
@@ -77,4 +75,4 @@ class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
     }
 }
 //@ts-ignore
-export default connect(withStyles(styles)(withRouter(DescriptionModal)));
+export default connect(withStyles(styles)(DescriptionModal));

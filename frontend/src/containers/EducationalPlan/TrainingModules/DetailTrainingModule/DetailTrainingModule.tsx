@@ -1,6 +1,5 @@
 import React, {ReactText} from 'react';
 import get from 'lodash/get';
-import {withRouter} from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars-2";
 import {Link} from "react-router-dom";
 
@@ -724,4 +723,4 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 }
 
-export default connect(withStyles(styles)(withRouter(DetailTrainingModule)));
+export default connect(withStyles(styles)(DetailTrainingModule));

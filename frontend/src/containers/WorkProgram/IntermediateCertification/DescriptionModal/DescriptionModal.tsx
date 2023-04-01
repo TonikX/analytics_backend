@@ -23,7 +23,7 @@ import {
 import connect from './DescriptionModal.connect';
 import styles from './DescriptionModal.styles';
 import {appRouter} from "../../../../service/router-service";
-import {withRouter} from "react-router-dom";
+import {withRouter} from "../../../../hoc/WithRouter";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     //@ts-ignore
@@ -32,7 +32,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
     handleClose = () => {
-        this.props.history.push(appRouter.getWorkProgramIntermediateCertificationLink(this.props.workProgramId))
+        this.props.navigate(appRouter.getWorkProgramIntermediateCertificationLink(this.props.workProgramId))
         this.props.actions.closeDialog(fields.SHOW_INTERMEDIATE_CERTIFICATION_DESCRIPTION);
     }
 

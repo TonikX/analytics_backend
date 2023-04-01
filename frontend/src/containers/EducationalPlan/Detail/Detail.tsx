@@ -1,7 +1,6 @@
 import React from 'react';
 import get from 'lodash/get';
 import {appRouter} from "../../../service/router-service";
-import {withRouter} from "react-router-dom";
 import {Link} from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -409,13 +408,6 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     });
   }
 
-  goToPracticePage = (id: number) => () => {
-    // @ts-ignore
-    const {history} = this.props;
-
-    history.push(appRouter.getPracticeLink(id));
-  }
-
   saveOptionalProgram = (moduleId: number, workProgram: number) => {
     this.props.actions.planTrajectorySelectOptionalWp({
       moduleId,
@@ -752,4 +744,4 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 }
 
 // @ts-ignore
-export default connect(withStyles(styles)(withRouter(EducationalPlan)));
+export default connect(withStyles(styles)(EducationalPlan));

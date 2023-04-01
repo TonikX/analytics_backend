@@ -2,7 +2,7 @@ import React, {SyntheticEvent} from 'react';
 import get from 'lodash/get';
 import Scrollbars from "react-custom-scrollbars-2";
 import {AutoSizer} from 'react-virtualized';
-import {withRouter} from "react-router-dom";
+import {withRouter} from "../../../hoc/WithRouter";
 
 import classNames from "classnames";
 
@@ -76,7 +76,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
 
     handleClickShowDescription = (id: any) => () => {
         //@ts-ignore
-        this.props.history.push(appRouter.getWorkProgramIntermediateCertificationToolLink(this.props.workProgramId, id))
+        this.props.navigate(appRouter.getWorkProgramIntermediateCertificationToolLink(this.props.workProgramId, id))
         // this.props.actions.openDialog({dialogType: fields.SHOW_INTERMEDIATE_CERTIFICATION_DESCRIPTION, data: description});
         this.handleCloseItemMenu();
     };

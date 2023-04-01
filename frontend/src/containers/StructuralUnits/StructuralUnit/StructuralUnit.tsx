@@ -3,7 +3,6 @@ import get from 'lodash/get';
 
 import Scrollbars from "react-custom-scrollbars-2";
 import classNames from 'classnames';
-import {withRouter} from "react-router-dom";
 
 import Paper from '@mui/material/Paper';
 import Fab from "@mui/material/Fab";
@@ -141,4 +140,4 @@ class StructuralUnit extends React.Component<any> {
     }
 }
 
-export default withRouter(connect(withStyles(styles)(StructuralUnit)));
+export default connect(withStyles(styles)(StructuralUnit));

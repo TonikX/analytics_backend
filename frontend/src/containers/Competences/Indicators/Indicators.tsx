@@ -1,6 +1,5 @@
 import React from 'react';
 import get from 'lodash/get';
-import {withRouter} from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars-2";
 import classNames from 'classnames';
 
@@ -142,4 +141,4 @@ class Indicators extends React.Component<any> {
     }
 }
 
-export default withRouter(connect(withStyles(styles)(Indicators)));
+export default connect(withStyles(styles)(Indicators));

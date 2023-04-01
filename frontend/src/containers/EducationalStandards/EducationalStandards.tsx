@@ -34,7 +34,7 @@ import connect from './EducationalStandards.connect';
 import styles from './EducationalStandards.styles';
 import Pagination from "@mui/lab/Pagination";
 import {appRouter} from "../../service/router-service";
-import {withRouter} from "react-router-dom";
+import {withRouter} from "../../hoc/WithRouter";
 
 class EducationalStandards extends React.Component<EducationalStandardsProps> {
     state = {
@@ -94,7 +94,7 @@ class EducationalStandards extends React.Component<EducationalStandardsProps> {
 
     changeRoute = (id: any) => () => {
         //@ts-ignore
-        this.props.history.push(appRouter.getEducationalStandardIDRoute(id))
+        this.props.navigate(appRouter.getEducationalStandardIDRoute(id))
     }
 
     render() {

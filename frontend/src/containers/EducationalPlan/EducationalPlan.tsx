@@ -1,7 +1,7 @@
 import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
-import {Link, withRouter} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 import Scrollbars from "react-custom-scrollbars-2";
 
@@ -41,6 +41,7 @@ import connect from './EducationalPlan.connect';
 import styles from './EducationalPlan.styles';
 import {DirectionFields} from "../Direction/enum";
 import {DirectionType} from "../Direction/types";
+import {withRouter} from "../../hoc/WithRouter";
 
 class EducationalPlan extends React.Component<EducationalPlanProps> {
     state = {
@@ -54,11 +55,11 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
 
     componentDidUpdate(prevProps: Readonly<EducationalPlanProps>, prevState: Readonly<{}>, snapshot?: any) {
         // @ts-ignore
-        const {newPlanIdForRedirect, history} = this.props;
+        const {newPlanIdForRedirect, navigate} = this.props;
         if (prevProps.newPlanIdForRedirect !== this.props.newPlanIdForRedirect && this.props.newPlanIdForRedirect) {
             this.props.actions.setNewPlanIdForRedirect(null);
             // @ts-ignore
-            history.push(appRouter.getPlanDetailLink(newPlanIdForRedirect));
+            navigate(appRouter.getPlanDetailLink(newPlanIdForRedirect));
         }
     }
 
@@ -93,9 +94,9 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
 
     goToDetailView = (id: number) => () => {
         // @ts-ignore
-        let {history} = this.props;
+        let {navigate} = this.props;
 
-        history.push(appRouter.getPlanDetailLink(id));
+        navigate(appRouter.getPlanDetailLink(id));
     }
 
     handleCreate = () => {

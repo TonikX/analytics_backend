@@ -42,7 +42,7 @@ import styles from './TrainingModules.styles';
 
 import Filters from "./Filters";
 import Switch from "@mui/material/Switch";
-import {withRouter} from "react-router-dom";
+import {withRouter} from "../../../hoc/WithRouter";
 
 const userService = UserService.factory();
 
@@ -68,10 +68,10 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
 
     goToTrainingModule = () => {
         // @ts-ignore
-        const {history, trainingModuleIdForRedirect} = this.props;
+        const {navigate, trainingModuleIdForRedirect} = this.props;
 
         this.props.actions.setTrainingModuleIdForRedirect(null)
-        history.push(appRouter.getTrainingModuleDetailLink(trainingModuleIdForRedirect));
+        navigate(appRouter.getTrainingModuleDetailLink(trainingModuleIdForRedirect));
     }
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {

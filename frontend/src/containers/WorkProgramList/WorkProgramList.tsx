@@ -4,7 +4,8 @@ import get from 'lodash/get';
 import moment from 'moment';
 import Scrollbars from "react-custom-scrollbars-2";
 
-import {Link, withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
+import {withRouter} from '../../hoc/WithRouter'
 
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
@@ -73,9 +74,9 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
 
     navigateToWorkProgram = () => {
         // @ts-ignore
-        const {history, workProgramIdForRedirect} = this.props;
+        const {navigate, workProgramIdForRedirect} = this.props;
         this.props.actions.setWorkProgramIdForRedirect(null);
-        history.push(appRouter.getWorkProgramLink(workProgramIdForRedirect!));
+        navigate(appRouter.getWorkProgramLink(workProgramIdForRedirect!));
     }
 
     handleClickDelete = (id: number) => () => {

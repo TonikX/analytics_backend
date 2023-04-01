@@ -14,7 +14,7 @@ import withStyles from '@mui/material/styles/withStyles';
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import {CertificationFields} from "../../enum";
-import {withRouter} from "react-router-dom";
+import {withRouter} from "../../../../hoc/WithRouter";
 import {appRouter} from "../../../../service/router-service";
 import {Select, Table} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
@@ -52,9 +52,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     handleSave = () => {
         const {state} = this.state;
-        const history = this.props.history;
         const callback = (id: number) => {
-            history.push(appRouter.getFinalCertificationLink(id));
+            this.props.navigate(appRouter.getFinalCertificationLink(id));
         };
         this.props.actions.createCertification({
             state: {

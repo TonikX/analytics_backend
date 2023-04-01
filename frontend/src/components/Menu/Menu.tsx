@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Link} from "react-router-dom";
-import {withRouter, RouteComponentProps} from "react-router-dom";
+import {withRouter} from "../../hoc/WithRouter";
 import Scrollbars from "react-custom-scrollbars-2";
 
 import Drawer from '@mui/material/Drawer';
@@ -15,7 +15,7 @@ import getMenuList, {getMockMenu} from "./MenuList";
 
 import styles from './Menu.styles';
 
-interface MenuProps extends WithStyles<typeof styles>, RouteComponentProps {
+interface MenuProps extends WithStyles<typeof styles> {
     isOpen: boolean;
     userGroups: Array<string>;
     mockMenu: Array<number>;

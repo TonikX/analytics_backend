@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {withRouter, Link} from "react-router-dom";
+import {Link} from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars-2";
 import get from "lodash/get";
 
@@ -146,4 +146,4 @@ class Expertise extends React.Component<ExpertiseProps> {
 }
 
 //@ts-ignore
-export default connect(withStyles(styles)(withRouter(Expertise)));
+export default connect(withStyles(styles)(Expertise));

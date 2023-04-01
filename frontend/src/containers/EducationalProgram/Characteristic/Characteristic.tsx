@@ -1,5 +1,4 @@
 import React from 'react';
-import {withRouter} from "react-router-dom";
 import get from 'lodash/get';
 import {Link} from "react-router-dom";
 
@@ -732,4 +731,4 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 }
 
-export default withRouter(connect(withStyles(styles)(Characteristic)));
+export default connect(withStyles(styles)(Characteristic));

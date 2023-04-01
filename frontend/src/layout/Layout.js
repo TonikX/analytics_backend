@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from "prop-types";
 import className from 'classnames';
 import shallowEqual from "recompose/shallowEqual";
-import {withRouter} from "react-router-dom";
 
 import MomentUtils from '@date-io/moment';
 import {SnackbarProvider} from 'notistack';
@@ -20,6 +19,7 @@ import AbsoluteLoader from '../components/AbsoluteLoader';
 import Notificator from '../components/Notificator';
 import AddToFolderModal from "../containers/Profile/Folders/AddToFolderModal/AddToFolderModal";
 
+import {withRouter} from '../hoc/WithRouter'
 import theme from './themeMaterialUi';
 
 import connect from './Layout.connect';

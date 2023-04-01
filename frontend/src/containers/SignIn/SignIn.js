@@ -1,9 +1,8 @@
 import React from 'react';
-import {Navigate} from 'react-router';
-import {Link} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
 import PropTypes from "prop-types";
 import get from 'lodash/get';
-import {withRouter} from 'react-router-dom';
+import {withRouter} from '../../hoc/WithRouter';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';

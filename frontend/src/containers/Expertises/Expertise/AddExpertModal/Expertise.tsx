@@ -1,5 +1,4 @@
 import React from 'react';
-import {withRouter} from "react-router-dom";
 
 import withStyles from '@mui/material/styles/withStyles';
 import Button from "@mui/material/Button";
@@ -86,4 +85,4 @@ class Expertise extends React.Component<ExpertiseProps> {
 }
 
 //@ts-ignore
-export default connect(withStyles(styles)(withRouter(Expertise)));
+export default connect(withStyles(styles)(Expertise));

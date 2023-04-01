@@ -1,7 +1,6 @@
 import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
-import {withRouter} from 'react-router-dom'
 import Scrollbars from "react-custom-scrollbars-2";
 import Switch from "@mui/material/Switch";
 import AddIcon from "@mui/icons-material/Add";
@@ -391,4 +390,4 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
 }
 
 // @ts-ignore
-export default connect(withStyles(styles)(withRouter(AcademicPlanUpdate)));
+export default connect(withStyles(styles)(AcademicPlanUpdate));

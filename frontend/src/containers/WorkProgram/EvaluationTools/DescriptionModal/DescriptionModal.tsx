@@ -19,7 +19,7 @@ import CKEditor from '../../../../components/CKEditor';
 import {
     fields,
 } from '../../enum';
-import {withRouter} from "react-router-dom";
+import {withRouter} from "../../../../hoc/WithRouter";
 import {appRouter} from "../../../../service/router-service";
 
 import connect from './DescriptionModal.connect';
@@ -33,7 +33,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
 
     handleClose = () => {
-        this.props.history.push(appRouter.getWorkProgramEvaluationToolsLink(this.props.workProgramId))
+        this.props.navigate(appRouter.getWorkProgramEvaluationToolsLink(this.props.workProgramId))
         this.props.actions.closeDialog(fields.SHOW_EVALUATION_TOOLS_DESCRIPTION);
     }
 
