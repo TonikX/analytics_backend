@@ -5,7 +5,7 @@ import {SortableContainer, SortableElement, SortableHandle} from "react-sortable
 import Scrollbars from "react-custom-scrollbars-2";
 
 import Typography from "@mui/material/Typography";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import Button from "@mui/material/Button";
 

@@ -18,7 +18,7 @@ import Slide from '@mui/material/Slide';
 import TextField from "@mui/material/TextField";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';

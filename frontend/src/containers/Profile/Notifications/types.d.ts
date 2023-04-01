@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import {fields, NotificationsFields} from './enum';
 import styles from "./Notifications.styles";
 import {WorkProgramGeneralType} from "../../WorkProgram/types";

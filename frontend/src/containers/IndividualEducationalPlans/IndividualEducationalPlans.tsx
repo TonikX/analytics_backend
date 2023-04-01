@@ -16,7 +16,7 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";

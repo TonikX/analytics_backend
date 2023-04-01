@@ -167,7 +167,7 @@ export const EducationalPlans = () => {
                         <MenuItem value={item.value} key={`qualification-${index}`}>
                             {item.label}
                         </MenuItem>
-                    )}}
+                    )}
                 </Select>
             </div>
             {opContent}

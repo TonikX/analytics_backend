@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import {CoursesActions} from '../types';
 
 import styles from "./CourseCreateModal.styles";

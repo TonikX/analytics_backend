@@ -7,7 +7,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from '@mui/material/InputLabel';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import InputsLoader from "../../../../components/InputsLoader/InputsLoader";
 

@@ -7,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import SearchSelector from "../../../../../components/SearchSelector/SearchSelector";
 

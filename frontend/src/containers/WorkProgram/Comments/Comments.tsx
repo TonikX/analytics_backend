@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import Scrollbars from "react-custom-scrollbars-2";
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";

@@ -9,7 +9,7 @@ import Scrollbars from "react-custom-scrollbars-2";
 
 import Paper from '@mui/material/Paper';
 import Typography from "@mui/material/Typography";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";

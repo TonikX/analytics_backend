@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import SearchSelector from "../../../components/SearchSelector/SearchSelector";
 import {SubjectAreaFields} from "../../SubjectArea/enum";

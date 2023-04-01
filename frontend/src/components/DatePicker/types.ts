@@ -1,5 +1,5 @@
 import {DatePickerView} from "@material-ui/pickers";
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./DatePicker.styles";
 
 export interface DatePickerProps extends WithStyles<typeof styles> {

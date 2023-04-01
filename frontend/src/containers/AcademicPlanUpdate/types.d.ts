@@ -1,5 +1,5 @@
 import {AcademicPlanUpdateLogFields, fields, SchedulerConfigurationFields, UpdatedAcademicPlanFields} from './enum';
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./WorkProgram.styles";
 import {SortingType} from "../../components/SortingButton/types";
 import {DirectionType} from "../Direction/types";

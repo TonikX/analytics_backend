@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import IconButton from "@mui/material/IconButton";
 import Popper from "@mui/material/Popper";
 import Fade from "@mui/material/Fade";

@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 
 import styles from "./AddEducationalProgramModal.styles";
 import {mapDispatchToProps, mapStateToProps} from "./AddEducationalProgramModal.connect";

@@ -9,7 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import TextField from "@mui/material/TextField";
 
 import {RolesFields} from '../enum';

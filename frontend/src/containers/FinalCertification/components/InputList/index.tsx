@@ -1,10 +1,10 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./styles";
 import {CertificationActions, CertificationState} from "../../types";
 import {CertificationFields} from "../../enum";
 import React from "react";
 import connect from "./connect";
-import withStyles from "@mui/material/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import TextField from "@mui/material/TextField";
 import get from "lodash/get";
 import {RussianCertificationFields} from "../../constants";

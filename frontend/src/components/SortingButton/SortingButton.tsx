@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import ArrowUp from "@mui/icons-material/ArrowDropUp";
 import ArrowDown from "@mui/icons-material/ArrowDropDown";

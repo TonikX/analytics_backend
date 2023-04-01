@@ -17,7 +17,7 @@ import {
 import Select from '@mui/material/Select';
 import {RecordsProops} from "./types";
 import connect from "./Records.connect";
-import withStyles from "@mui/material/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -411,71 +411,72 @@ class Records extends Component<RecordsProops> {
                 {this.state.isVisible && this.state.value == 5 &&
                 <div>
                     {RPD_IN_SU.filter((SU: any) => SU.work_programs.length > 0).map((SU: any) =>
-                        <ExpansionPanel expanded={this.state.expandend === SU.id}
-                                        onChange={this.handleChangePanel(SU.id)} style={{width: "100%"}}>
-                            <ExpansionPanelSummary
-                                className={classes.accordionSummary}
-                                expandIcon={<ExpandMoreIcon/>}
-                            >
-                                <Typography>{SU.title} </Typography>
-                            </ExpansionPanelSummary>
-                            {/*<ExpansionPanelDetails>*/}
-                            {/*    <>*/}
-                            {/*        <div className={classes.tableWrap} style={{width: "100%"}}>*/}
-                            {/*            <Table>*/}
-                            {/*                <TableHead className={classes.header}>*/}
-                            {/*                    <TableRow>*/}
-                            {/*                        <TableCell style={{width: "25%"}}>*/}
-                            {/*                            Код*/}
-                            {/*                        </TableCell>*/}
-                            {/*                        <TableCell style={{width: "50%"}}>*/}
-                            {/*                            Название*/}
-                            {/*                        </TableCell>*/}
-                            {/*                        <TableCell style={{width: "25%"}}>*/}
-                            {/*                            Авторский состав*/}
-                            {/*                        </TableCell>*/}
-                            {/*                        <TableCell/>*/}
-                            {/*                    </TableRow>*/}
-                            {/*                </TableHead>*/}
-
-                            {/*                <TableBody>*/}
-                            {/*                    {SU.work_programs.slice(this.state.page * this.state.rowsPerPage,*/}
-                            {/*                        this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((workProgram: any) =>*/}
-                            {/*                        <TableRow key={workProgram.id}>*/}
-                            {/*                            <TableCell>*/}
-                            {/*                                {workProgram.discipline_code}*/}
-                            {/*                            </TableCell>*/}
-                            {/*                            <TableCell className={classes.link}>*/}
-                            {/*                                <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>*/}
-                            {/*                                    {workProgram.title}*/}
-                            {/*                                </Link>*/}
-                            {/*                            </TableCell>*/}
-                            {/*                            <TableCell>*/}
-                            {/*                                {workProgram.editors.map((editors: any) =>*/}
-                            {/*                                    <>{editors.first_name} {editors.last_name}; </>*/}
-                            {/*                                )}*/}
-                            {/*                            </TableCell>*/}
-
-                            {/*                        </TableRow>*/}
-                            {/*                    )}*/}
-                            {/*                </TableBody>*/}
-
-                            {/*            </Table>*/}
-                            {/*            <div className={classes.footer}>*/}
-                            {/*                <TablePagination count={SU.work_programs.length}*/}
-                            {/*                                 component="div"*/}
-                            {/*                                 page={this.state.page}*/}
-                            {/*                                 rowsPerPageOptions={[]}*/}
-                            {/*                                 onChangePage={this.handleChangePage}*/}
-                            {/*                                 rowsPerPage={this.state.rowsPerPage}*/}
-                            {/*                                 onChangeRowsPerPage={() => {*/}
-                            {/*                                 }}*/}
-                            {/*                />*/}
-                            {/*            </div>*/}
-                            {/*        </div>*/}
-                            {/*    </>*/}
-                            {/*</ExpansionPanelDetails>*/}
-                        </ExpansionPanel>
+                      <></>
+                        // <ExpansionPanel expanded={this.state.expandend === SU.id}
+                        //                 onChange={this.handleChangePanel(SU.id)} style={{width: "100%"}}>
+                        //     <ExpansionPanelSummary
+                        //         className={classes.accordionSummary}
+                        //         expandIcon={<ExpandMoreIcon/>}
+                        //     >
+                        //         <Typography>{SU.title} </Typography>
+                        //     </ExpansionPanelSummary>
+                        //     <ExpansionPanelDetails>
+                        //         <>
+                        //             <div className={classes.tableWrap} style={{width: "100%"}}>
+                        //                 <Table>
+                        //                     <TableHead className={classes.header}>
+                        //                         <TableRow>
+                        //                             <TableCell style={{width: "25%"}}>
+                        //                                 Код
+                        //                             </TableCell>
+                        //                             <TableCell style={{width: "50%"}}>
+                        //                                 Название
+                        //                             </TableCell>
+                        //                             <TableCell style={{width: "25%"}}>
+                        //                                 Авторский состав
+                        //                             </TableCell>
+                        //                             <TableCell/>
+                        //                         </TableRow>
+                        //                     </TableHead>
+                        //
+                        //                     <TableBody>
+                        //                         {SU.work_programs.slice(this.state.page * this.state.rowsPerPage,
+                        //                             this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((workProgram: any) =>
+                        //                             <TableRow key={workProgram.id}>
+                        //                                 <TableCell>
+                        //                                     {workProgram.discipline_code}
+                        //                                 </TableCell>
+                        //                                 <TableCell className={classes.link}>
+                        //                                     <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>
+                        //                                         {workProgram.title}
+                        //                                     </Link>
+                        //                                 </TableCell>
+                        //                                 <TableCell>
+                        //                                     {workProgram.editors.map((editors: any) =>
+                        //                                         <>{editors.first_name} {editors.last_name}; </>
+                        //                                     )}
+                        //                                 </TableCell>
+                        //
+                        //                             </TableRow>
+                        //                         )}
+                        //                     </TableBody>
+                        //
+                        //                 </Table>
+                        //                 <div className={classes.footer}>
+                        //                     <TablePagination count={SU.work_programs.length}
+                        //                                      component="div"
+                        //                                      page={this.state.page}
+                        //                                      rowsPerPageOptions={[]}
+                        //                                      onChangePage={this.handleChangePage}
+                        //                                      rowsPerPage={this.state.rowsPerPage}
+                        //                                      onChangeRowsPerPage={() => {
+                        //                                      }}
+                        //                     />
+                        //                 </div>
+                        //             </div>
+                        //         </>
+                        //     </ExpansionPanelDetails>
+                        // </ExpansionPanel>
                     )}
                 </div>
                 }

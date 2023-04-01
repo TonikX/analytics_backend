@@ -13,7 +13,7 @@ import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
 import { CoursesTable } from './CoursesTable/CoursesTable'
 import { Filters } from './Filters/Filters'
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import {CoursesProps} from './types';
 

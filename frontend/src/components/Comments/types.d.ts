@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./Comments.styles";
 import {CommentFields} from "../../containers/WorkProgram/enum";
 import {UserType} from "../../layout/types";

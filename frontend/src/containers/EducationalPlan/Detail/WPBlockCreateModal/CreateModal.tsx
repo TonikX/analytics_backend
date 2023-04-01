@@ -16,7 +16,7 @@ import TextField from "@mui/material/TextField";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import Slide from "@mui/material/Slide";

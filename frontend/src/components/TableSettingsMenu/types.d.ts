@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./TableSettingsMenu.styles";
 
 export interface TableSettingsMenuProps extends WithStyles<typeof styles> {

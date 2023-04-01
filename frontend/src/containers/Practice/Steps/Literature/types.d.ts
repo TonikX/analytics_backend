@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 
 import styles from "./styles";
 import {PracticeActions} from "../../types";

@@ -6,7 +6,7 @@ import moment, {Moment} from "moment";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TextField from '@mui/material/TextField';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import {DatePicker} from "@material-ui/pickers";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";

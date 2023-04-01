@@ -7,7 +7,7 @@ import classNames from "classnames";
 
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import Button from "@mui/material/Button";
 import Chip from '@mui/material/Chip';
 import Menu from "@mui/material/Menu";

@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import {RolesActions} from '../types';
 
 import styles from "./CreateModal.styles";

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import cn from 'classnames'
-import withStyles from '@mui/material/styles/withStyles'
+import {withStyles} from '@mui/styles'
 
 import {EvaluationCertificationTotalListProps} from "./types"
 

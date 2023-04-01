@@ -2,7 +2,7 @@ import React from 'react';
 import Scrollbars from "react-custom-scrollbars-2";
 import {Link} from "react-router-dom";
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";

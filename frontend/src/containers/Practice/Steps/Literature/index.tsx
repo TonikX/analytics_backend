@@ -2,7 +2,7 @@ import React from 'react';
 import Scrollbars from "react-custom-scrollbars-2";
 
 import Typography from "@mui/material/Typography";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import Button from "@mui/material/Button";
 
 import AddIcon from "@mui/icons-material/Add";

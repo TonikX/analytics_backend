@@ -1,5 +1,5 @@
 import {SimpleStatFields, fields} from './enum'
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./Records.styles";
 export interface StatisticsActions {
     GetSimpleStat: any;

@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import {BlocksOfWorkProgramsType, EducationalPlanActions} from '../../types';
 import {WorkProgramListActions} from "../../../WorkProgramList/types";
 

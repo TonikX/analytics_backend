@@ -1,6 +1,6 @@
 import {WorkProgramActions} from '../types';
 import {SectionType} from '../types';
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./Sections.styles";
 import {ImplementationFormatsEnum} from "../enum";
 

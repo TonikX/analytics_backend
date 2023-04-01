@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import {WorkProgramListActions} from '../types';
 
 import styles from "./CreateModal.styles";

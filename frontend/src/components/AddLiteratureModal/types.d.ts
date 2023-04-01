@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import LiteratureActions from '../../containers/Literature/actions';
 
 import styles from "./styles";

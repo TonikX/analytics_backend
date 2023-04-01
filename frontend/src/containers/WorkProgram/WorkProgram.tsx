@@ -9,7 +9,7 @@ import CommentIcon from "@mui/icons-material/CommentOutlined";
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Fab from '@mui/material/Fab';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Tooltip from "@mui/material/Tooltip";
 import Stepper from '@mui/material/Stepper';

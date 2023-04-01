@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./SortingButton.styles";
 
 export type SortingType = Types.ASC | Types.DESC | '';

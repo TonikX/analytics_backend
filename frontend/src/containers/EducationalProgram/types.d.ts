@@ -1,7 +1,7 @@
 import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
 import {ReactText} from "react";
 
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 
 import {SortingType} from "../../components/SortingButton/types";
 import {EducationalPlanInDirectionType} from "../EduationPlanInDirection/types";
@@ -132,7 +132,7 @@ export interface EducationalProgramProps extends WithStyles<typeof styles> {
     sortingMode: SortingType;
 }
 
-export interface CharacteristicProps extends WithStyles<typeof characterisicStyles> {
+export interface CharacteristicProps extends withStyles<typeof characterisicStyles> {
     actions: EducationalProgramActions;
     mainActions: any;
     educationalProgramCharacteristic: any;

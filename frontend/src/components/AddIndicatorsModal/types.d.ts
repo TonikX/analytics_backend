@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import {IndicatorProgramActions} from "../../containers/Indicators/types";
 
 import styles from "../../containers/EducationalPlan/Detail/WPBlockCreateModal/CreateModal.styles";

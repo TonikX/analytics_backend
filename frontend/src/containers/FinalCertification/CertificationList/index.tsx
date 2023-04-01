@@ -1,6 +1,6 @@
 import React from "react";
 import Paper from '@mui/material/Paper';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import styles from "./styles";
 import connect from './connect';

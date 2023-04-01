@@ -6,7 +6,7 @@ import get from 'lodash/get';
 import {shallowEqualObjects} from 'shallow-equal';
 import classNames from "classnames";
 
-import withStyles, {WithStyles} from '@mui/material/styles/withStyles';
+import {WithStyles, withStyles} from '@mui/styles';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -18,7 +18,7 @@ import {isStringValueValid} from '../../common/utils';
 
 import styles from './EditableText.styles';
 
-interface EditableTextProps extends WithStyles {
+interface EditableTextProps extends WithStyles<typeof styles> {
     value: string;
     height?: number;
     isEditMode: boolean;

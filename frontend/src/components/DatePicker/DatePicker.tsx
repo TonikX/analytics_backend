@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import {DatePicker} from "@material-ui/pickers";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import IconButton from "@mui/material/IconButton";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import DateIcon from "@mui/icons-material/DateRange";
 
 import {DatePickerProps} from './types';

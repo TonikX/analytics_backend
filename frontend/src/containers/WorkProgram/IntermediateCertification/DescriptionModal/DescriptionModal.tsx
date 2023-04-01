@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import InputLabel from "@mui/material/InputLabel";
 import Button from '@mui/material/Button';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import Slide from "@mui/material/Slide";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";

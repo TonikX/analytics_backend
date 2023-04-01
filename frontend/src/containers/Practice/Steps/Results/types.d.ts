@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import {ResultsType} from "../types";
 
 import styles from "./Results.styles";

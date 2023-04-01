@@ -9,7 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import FormControlLabel from "@mui/material/FormControlLabel";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";

@@ -1,10 +1,10 @@
-import {FormHelperText, Select as MuiSelect, WithStyles} from "@mui/material";
+import {FormHelperText, Select as MuiSelect, withStyles} from "@mui/material";
 import styles from "./styles";
 import {CertificationActions, Validation} from "../../types";
 import {CertificationFields} from "../../enum";
 import React, {ReactText} from "react";
 import connect from "./connect";
-import withStyles from "@mui/material/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import InputsLoader from "../../../../components/InputsLoader";
 import {validate} from "../../validation";
 import InputLabel from "@mui/material/InputLabel";

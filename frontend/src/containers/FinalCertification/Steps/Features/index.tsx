@@ -7,9 +7,9 @@ import {
 } from "../../enum";
 import get from "lodash/get";
 import connect from "./connect";
-import withStyles from "@mui/material/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Checkbox, FormControlLabel, FormGroup, FormLabel, Typography, WithStyles} from "@mui/material";
+import {Checkbox, FormControlLabel, FormGroup, FormLabel, Typography, withStyles} from "@mui/material";
 import {CertificationActions, CertificationState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
 import {shallowEqualObjects} from "shallow-equal";

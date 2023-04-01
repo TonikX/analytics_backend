@@ -8,7 +8,7 @@ import {SnackbarProvider} from 'notistack';
 import "moment/locale/ru";
 
 import {ThemeProvider} from '@mui/material/styles';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 
 import UserService from '../service/user-service';

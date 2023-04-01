@@ -3,7 +3,7 @@ import React from 'react';
 import TableCell from "@mui/material/TableCell";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/EditOutlined';

@@ -2,7 +2,7 @@ import React from 'react';
 import get from "lodash/get";
 import classNames from "classnames";
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";

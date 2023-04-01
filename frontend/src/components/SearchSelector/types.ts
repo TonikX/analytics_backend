@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./SearchSelector.styles";
 import {ReactText} from "react";
 import {PopperPlacementType} from "@mui/material/Popper/Popper";

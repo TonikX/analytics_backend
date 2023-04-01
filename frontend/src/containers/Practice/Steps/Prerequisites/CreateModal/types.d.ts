@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import {PrerequisiteType} from '../../types';
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 

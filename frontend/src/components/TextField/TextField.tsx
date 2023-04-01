@@ -3,7 +3,7 @@ import debounce from 'lodash/debounce';
 import get from "lodash/get";
 import classNames from 'classnames';
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import TextField from "@mui/material/TextField";
 
 import {TextFieldProps} from './types';

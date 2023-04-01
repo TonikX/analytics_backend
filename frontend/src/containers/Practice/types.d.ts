@@ -6,7 +6,7 @@ import {
     StructuralUnitFields,
     TemplateTextPracticeFields
 } from "./enum";
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./Practice.styles";
 import {RouteComponentProps} from "react-router-dom";
 import {LiteratureType} from "../Literature/types";

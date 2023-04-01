@@ -3,7 +3,7 @@ import isFunction from "lodash/isFunction";
 
 import {Link} from "react-router-dom";
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";

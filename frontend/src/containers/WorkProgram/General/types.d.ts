@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import {WorkProgramActions} from '../types';
 import {StructuralUnitsActions, StructuralUnitType} from '../../StructuralUnits/types';
 import styles from './FirstStep.styles';

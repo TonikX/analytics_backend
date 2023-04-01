@@ -3,7 +3,7 @@ import React from 'react';
 import debounce from "lodash/debounce";
 import get from "lodash/get";
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import TextField from "@mui/material/TextField";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
 

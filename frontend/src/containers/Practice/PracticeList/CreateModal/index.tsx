@@ -8,7 +8,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
@@ -165,7 +165,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 <MenuItem value={item.label} key={`practice-title-${index}`}>
                                     {item.label}
                                 </MenuItem>
-                            )}}
+                            )}
                         </Select>
                     </div>
                     <div className={classes.marginTop20}>

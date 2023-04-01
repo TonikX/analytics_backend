@@ -15,7 +15,7 @@ import Slider from '@mui/material/Slider';
 import IconButton from "@mui/material/IconButton";
 import CheckCircleOutline from "@mui/icons-material/CheckCircleOutline";
 import CancelOutlined from "@mui/icons-material/CancelOutlined";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import TextField from '../../components/TextField';
 

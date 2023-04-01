@@ -7,7 +7,7 @@ import {withRouter} from '../../hoc/WithRouter';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography  from '@mui/material/Typography';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import Tooltip from "@mui/material/Tooltip";
 
 import {appRouter} from '../../service/router-service';

@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import TablePagination from '@mui/material/TablePagination';
 import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";

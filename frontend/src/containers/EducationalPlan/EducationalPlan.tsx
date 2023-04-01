@@ -11,7 +11,7 @@ import TablePagination from '@mui/material/TablePagination';
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import Menu from "@mui/material/Menu";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";

@@ -12,7 +12,7 @@ import TablePagination from '@mui/material/TablePagination';
 
 import Typography from "@mui/material/Typography";
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import {
     Select,
     FormControl,

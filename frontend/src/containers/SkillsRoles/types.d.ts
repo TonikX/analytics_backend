@@ -1,5 +1,5 @@
 import {fields} from './enum';
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./Roles.styles";
 import {SortingType} from "../../components/SortingButton/types";
 

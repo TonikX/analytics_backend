@@ -17,7 +17,7 @@ import TableBody from "@mui/material/TableBody";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";

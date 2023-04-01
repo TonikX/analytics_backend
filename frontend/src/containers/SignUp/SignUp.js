@@ -6,7 +6,7 @@ import get from "lodash/get";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography  from '@mui/material/Typography';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import {appRouter} from '../../service/router-service';
 import UserService from "../../service/user-service";

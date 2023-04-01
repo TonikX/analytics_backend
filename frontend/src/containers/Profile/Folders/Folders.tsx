@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 // @ts-ignore
 import ReactStars from "react-rating-stars-component";
 
-import withStyles from "@mui/material/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import Liked from "@mui/icons-material/Favorite";
 import NotLiked from "@mui/icons-material/FavoriteBorder";

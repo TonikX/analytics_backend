@@ -1,11 +1,11 @@
 import createReport from 'docx-templates';
 
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./styles";
 import {PracticeActions, PracticeState} from "../../types";
 import React from "react";
 import connect from "./connect";
-import withStyles from "@mui/material/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import Button from "@mui/material/Button";
 
 

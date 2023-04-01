@@ -1,6 +1,6 @@
 import {WorkProgramGeneralFields} from '../WorkProgram/enum';
 import {WorkProgramGeneralType} from "../WorkProgram/types";
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "../DodProfile/DodProfile.styles";
 
 export interface userProfileState {

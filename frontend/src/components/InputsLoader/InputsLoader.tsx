@@ -1,8 +1,7 @@
 import React from 'react';
 
 import CircularProgress from '@mui/material/CircularProgress';
-import withStyles from '@mui/material/styles/withStyles';
-import {WithStyles} from "@mui/material";
+import {withStyles, WithStyles} from '@mui/styles';
 
 import styles from "./InputLoader.styles";
 

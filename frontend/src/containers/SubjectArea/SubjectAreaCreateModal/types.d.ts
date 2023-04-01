@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import {SubjectAreaActions} from '../types';
 
 import styles from "./SubjectAreaCreateModal.styles";

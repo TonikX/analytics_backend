@@ -18,7 +18,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import AddIcon from '@mui/icons-material/Add';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 import EditedRow from "./EditedRow";

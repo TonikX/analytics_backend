@@ -12,7 +12,7 @@ import Chip from "@mui/material/Chip";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import TextField from "@mui/material/TextField";
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";

@@ -6,8 +6,7 @@ import Scrollbars from "react-custom-scrollbars-2";
 
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import withStyles from '@mui/material/styles/withStyles';
-import {WithStyles} from "@mui/material";
+import {withStyles, WithStyles} from '@mui/styles';
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 

@@ -1,10 +1,10 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./styles";
 import {CertificationActions, CertificationState, Validation} from "../../types";
 import {CertificationFields} from "../../enum";
 import React from "react";
 import connect from "./connect";
-import withStyles from "@mui/material/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import {validate} from "../../validation";
 import {RussianCertificationFields} from "../../constants";
 import SearchSelector from "../../../../components/SearchSelector/SearchSelector";

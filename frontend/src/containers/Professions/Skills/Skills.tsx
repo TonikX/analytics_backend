@@ -9,7 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
 
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import AddIcon from "@mui/icons-material/Add";
 import IconButton from "@mui/material/IconButton";

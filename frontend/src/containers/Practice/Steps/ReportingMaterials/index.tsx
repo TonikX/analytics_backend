@@ -1,9 +1,9 @@
 import React from "react";
 import {PracticeFields, PracticeSteps, TemplateTextPracticeFields} from "../../enum";
 import connect from "./connect";
-import withStyles from "@mui/material/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@mui/material";
+import {Typography, withStyles} from "@mui/material";
 import {PracticeActions, PracticeState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";

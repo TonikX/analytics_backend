@@ -8,7 +8,7 @@ import {AutoSizer} from 'react-virtualized-reactv17';
 import Fade from '@mui/material/Fade';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import TextField from '@mui/material/TextField';
 import MenuItem from "@mui/material/MenuItem";

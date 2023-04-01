@@ -1,9 +1,9 @@
 import React from "react";
 import {CertificationFields, CertificationSteps} from "../../enum";
 import connect from "./connect";
-import withStyles from "@mui/material/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@mui/material";
+import {Typography, withStyles} from "@mui/material";
 import {CertificationActions, CertificationState} from "../../types";
 import Input from "../../components/Input";
 import {SelectorListType} from "../../../../components/SearchSelector/types";

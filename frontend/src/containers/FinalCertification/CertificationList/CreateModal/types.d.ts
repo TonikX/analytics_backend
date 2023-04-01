@@ -1,4 +1,4 @@
-import {WithStyles} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import styles from "./CreateModal.styles";
 import {RouteComponentProps} from "react-router-dom";
 import {CertificationListActions} from "../types";

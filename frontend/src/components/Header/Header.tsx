@@ -2,7 +2,7 @@ import React, {SyntheticEvent} from 'react';
 import {Link} from "react-router-dom";
 import {withRouter} from "../../hoc/WithRouter";
 
-import {WithStyles} from "@mui/material";
+import {withStyles, WithStyles} from '@mui/styles';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -17,7 +17,6 @@ import TrajectoryIcon from '@mui/icons-material/SchoolOutlined';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Tooltip from "@mui/material/Tooltip";
-import withStyles from '@mui/material/styles/withStyles';
 
 import UserService from "../../service/user-service";
 import {appRouter} from "../../service/router-service";

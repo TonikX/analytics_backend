@@ -12,7 +12,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
-import withStyles from '@mui/material/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import MenuItem from "@mui/material/MenuItem";
 import DateIcon from "@mui/icons-material/DateRange";
 import IconButton from "@mui/material/IconButton";

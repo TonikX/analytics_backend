@@ -2,9 +2,9 @@ import React from "react";
 import cn from 'classnames';
 import {CertificationSteps, TemplateTextCertificationFields} from "../../enum";
 import connect from "./connect";
-import withStyles from "@mui/material/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@mui/material";
+import {Typography, withStyles} from "@mui/material";
 import {TemplateTextState} from "../../types";
 
 interface DisabledPeopleInfoProps extends WithStyles<typeof styles> {
