@@ -3,7 +3,7 @@ import {PracticeFields, PracticeSteps} from "../../enum";
 import connect from "./connect";
 import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, withStyles} from "@mui/material";
+import {withStyles} from '@mui/styles'; import {Typography} from "@mui/material";
 import {PracticeActions, PracticeState} from "../../types";
 import Input from "../../components/Input";
 

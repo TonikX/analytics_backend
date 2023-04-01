@@ -1,4 +1,4 @@
-import {createStyles, makeStyles} from '@mui/material';
+import {createStyles, makeStyles} from '@mui/styles';
 import {PRIMARY} from '../../layout/themeMaterialUi';
 
 export const useStyles = makeStyles(() => createStyles({

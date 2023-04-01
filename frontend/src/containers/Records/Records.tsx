@@ -17,7 +17,7 @@ import {
 import Select from '@mui/material/Select';
 import {RecordsProops} from "./types";
 import connect from "./Records.connect";
-import {WithStyles} from "@mui/styles";
+import {withStyles} from "@mui/styles";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";

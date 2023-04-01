@@ -3,7 +3,7 @@ import {CertificationFields, CertificationSteps} from "../../enum";
 import connect from "./connect";
 import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, withStyles} from "@mui/material";
+import {withStyles} from '@mui/styles'; import {Typography} from "@mui/material";
 import {CertificationActions, CertificationState} from "../../types";
 import Input from "../../components/Input";
 import {SelectorListType} from "../../../../components/SearchSelector/types";

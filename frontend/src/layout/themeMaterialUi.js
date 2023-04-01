@@ -1,4 +1,4 @@
-import {createMuiTheme} from '@mui/material/styles';
+import {createTheme} from '@mui/material/styles';
 import { ruRU } from '@mui/material/locale';
 
 export const PRIMARY = '#1d51a3';
@@ -10,7 +10,7 @@ export const SECONDARY_HOVERED = '#bf1338';
 export const ERROR = '#d00000';
 export const TEXT_COLOR = '#333';
 
-const muiTheme = createMuiTheme({
+const muiTheme = createTheme({
     fontWeight: 200,
     typography: {
         useNextVariants: true,

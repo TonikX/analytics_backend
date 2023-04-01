@@ -1,4 +1,5 @@
-import {FormHelperText, Select as MuiSelect, withStyles} from "@mui/material";
+import {FormHelperText, Select as MuiSelect} from "@mui/material";
+import {withStyles} from "@mui/styles";
 import styles from "./styles";
 import {PracticeActions, Validation} from "../../types";
 import {PracticeFields} from "../../enum";

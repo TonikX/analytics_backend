@@ -3,7 +3,7 @@ import {DialogType, PermissionsInfoFields, PracticeSteps} from "../../enum";
 import connect from "./connect";
 import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, withStyles} from "@mui/material";
+import {withStyles} from '@mui/styles'; import {Typography} from "@mui/material";
 import {PermissionsInfoState, PracticeActions, PracticeState} from "../../types";
 
 import classNames from "classnames";

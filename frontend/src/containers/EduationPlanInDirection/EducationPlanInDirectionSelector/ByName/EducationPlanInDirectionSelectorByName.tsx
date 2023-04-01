@@ -1,7 +1,7 @@
-import React, {ReactText} from 'react';
+import React from 'react';
 import classNames from "classnames";
 
-import {WithStyles} from "@mui/styles";
+import {withStyles} from "@mui/styles";
 
 import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
 

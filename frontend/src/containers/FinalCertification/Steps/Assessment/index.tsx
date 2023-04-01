@@ -6,9 +6,9 @@ import {
     TemplateTextCertificationFields
 } from "../../enum";
 import connect from "./connect";
-import {WithStyles} from "@mui/styles";
+import {WithStyles, withStyles} from "@mui/styles";
 import styles from "../styles";
-import {FormControl, MenuItem, TextField, Typography, withStyles} from "@mui/material";
+import {FormControl, MenuItem, TextField, Typography} from "@mui/material";
 import {CertificationActions, CertificationMark, CertificationState, TemplateTextState} from "../../types";
 import get from "lodash/get";
 import {markTypesRussian} from "../../constants";

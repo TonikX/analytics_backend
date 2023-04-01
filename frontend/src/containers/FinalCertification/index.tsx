@@ -1,6 +1,6 @@
 import React from "react";
-import {Paper, withStyles} from "@mui/material";
-import {WithStyles} from "@mui/styles";
+import {Paper} from "@mui/material";
+import {WithStyles, withStyles} from "@mui/styles";
 import styles from "./styles";
 import {Link} from "react-router-dom";
 import {CertificationActions, CertificationState, PermissionsInfoState} from "./types";

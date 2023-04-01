@@ -1,7 +1,7 @@
 import React from "react";
-import {FormLabel, Typography, withStyles} from "@mui/material";
+import {FormLabel, Typography} from "@mui/material";
 import styles from "../../styles";
-import {WithStyles} from "@mui/styles";
+import {WithStyles, withStyles} from "@mui/styles";
 
 export interface ReadonlyProps extends WithStyles<typeof styles> {
     label: string,

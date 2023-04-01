@@ -3,7 +3,7 @@ import {PracticeFields, PracticeSteps, TemplateTextPracticeFields} from "../../e
 import connect from "./connect";
 import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, withStyles} from "@mui/material";
+import {withStyles} from '@mui/styles'; import {Typography} from "@mui/material";
 import {PracticeActions, PracticeState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";

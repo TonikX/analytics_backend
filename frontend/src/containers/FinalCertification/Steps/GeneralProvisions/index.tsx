@@ -4,7 +4,7 @@ import {CertificationFields, CertificationSteps, TemplateTextCertificationFields
 import connect from "./connect";
 import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, withStyles} from "@mui/material";
+import {withStyles} from '@mui/styles'; import {Typography} from "@mui/material";
 import {TemplateTextState} from "../../types";
 import InputList from "../../components/InputList";
 import QuestionIcon from "@mui/icons-material/HelpOutline";
