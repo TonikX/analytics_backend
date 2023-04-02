@@ -14,6 +14,7 @@ urlpatterns = [
     path('', include('workprogramsapp.urls')),
     url(r'^', include('onlinecourse.urls')),
     url(r'^', include('records.urls')),
+    url(r'^', include('selection_of_keywords_for_rpd.urls')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('auth/', include('djoser.urls.jwt')),
