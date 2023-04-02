@@ -136,7 +136,6 @@ export default () => (
               <Route path={routerService.getLiteratureRoute()} element={<AuthRoute><Literature /></AuthRoute>} />
               <Route path={routerService.getSubjectAreaRoute()} element={<AuthRoute><SubjectArea /></AuthRoute>} />
               <Route path={routerService.getTrainingEntitiesRoute()} element={<AuthRoute><Prerequisites /></AuthRoute>} />
-              <Route path={routerService.getCompetenceIndicatorsRoute()} element={<AuthRoute><Indicators /></AuthRoute>} />
               <Route path={routerService.getCompetencesRoute()} element={<AuthRoute><Competences /></AuthRoute>} />
               <Route path={routerService.getDirectionRoute()} element={<AuthRoute><Direction /></AuthRoute>} />
               <Route path={routerService.getRecordsRoute()} element={<AuthRoute><Records /></AuthRoute>} />
