@@ -25,7 +25,8 @@ export const useStyles = makeStyles(() => createStyles({
         }
     },
     title: {
-        fontSize: '24px',
+        fontSize: '24px !important',
+        lineHeight: '39px !important',
     },
     userTitle: {
         fontSize: '16px',

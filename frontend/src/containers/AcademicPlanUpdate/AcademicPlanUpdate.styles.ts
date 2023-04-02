@@ -1,6 +1,6 @@
-import {createStyles, Theme} from "@mui/material";
+import {createStyles} from "@mui/material";
 
-export default (theme: Theme) => createStyles({
+export default () => createStyles({
     tableWrap: {
         height: 'calc(100% - 60px)',
         maxheight: 'calc(100% - 60px)',
@@ -33,7 +33,8 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between',
     },
     title: {
-        fontSize: '24px',
+        fontSize: '24px !important',
+        lineHeight: '39px !important',
     },
     actions: {
         display: 'flex',

@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import {TrainingEntitiesActions} from '../types';
 
 import styles from "./TrainingEntitiesCreateModal.styles";

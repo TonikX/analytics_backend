@@ -15,7 +15,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
 
     },
     title: {
-        fontSize: '24px',
+        fontSize: '24px !important',
+        lineHeight: '39px !important',
         marginBottom: '20px',
         display: 'flex',
     },

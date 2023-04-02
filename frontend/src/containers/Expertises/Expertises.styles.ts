@@ -16,7 +16,8 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between',
     },
     title: {
-        fontSize: '24px',
+        fontSize: '24px !important',
+        lineHeight: '39px !important',
     },
     titleCell: {
         width: '40%',

@@ -16,7 +16,8 @@ export default (theme: Theme) => createStyles({
         flexWrap: 'wrap'
     },
     title: {
-        fontSize: '24px',
+        fontSize: '24px !important',
+        lineHeight: '39px !important',
     },
     tableWrap: {
         height: 'calc(100% - 60px)',
