@@ -80,7 +80,7 @@ class CreateModal extends React.PureComponent<StructuralUnitsCreateModalProps> {
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'}  структурное подразделение </DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextField label="Название *"
                                onChange={this.saveField(structuralUnitFields.TITLE)}
                                variant="outlined"
