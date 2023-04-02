@@ -25,14 +25,14 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     width: '490px',
     justifyContent: 'space-between',
-    [theme.breakpoints.down(880)]: {
+    "@media (max-width: 880px)": {
       width: '100%',
     }
   },
   btn: {
     width: '23%',
     marginBottom: '20px',
-    [theme.breakpoints.down(880)]: {
+    "@media (max-width: 880px)": {
       width: '40%',
     }
   },

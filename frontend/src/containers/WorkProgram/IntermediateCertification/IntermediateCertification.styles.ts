@@ -20,7 +20,7 @@ export default (theme: Theme) => createStyles({
         marginLeft: 'auto'
     },
     row: {
-        [theme.breakpoints.down('md')]: {
+        "@media (max-width: 900px)": {
             minWidth: '600px',
         },
         display: 'flex',
@@ -33,7 +33,7 @@ export default (theme: Theme) => createStyles({
         }
     },
     list: {
-        [theme.breakpoints.down('md')]: {
+        "@media (max-width: 900px)": {
             minWidth: '600px',
         },
         height: '100%',
@@ -61,7 +61,7 @@ export default (theme: Theme) => createStyles({
         padding: '0px 20px'
     },
     title: {
-        [theme.breakpoints.down('md')]: {
+        "@media (max-width: 900px)": {
             width: '20%',
         },
         width: '30%',
@@ -69,7 +69,7 @@ export default (theme: Theme) => createStyles({
         overflowWrap: 'anywhere',
     },
     type: {
-        [theme.breakpoints.down('md')]: {
+        "@media (max-width: 900px)": {
             width: '15%',
         },
         width: '30%',

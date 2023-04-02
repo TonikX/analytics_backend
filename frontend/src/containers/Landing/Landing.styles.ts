@@ -15,13 +15,13 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    [theme.breakpoints.down('sm')]: {
+    "@media (max-width: 600px)": {
       justifyContent: 'flex-start',
     }
   },
   menuButton: {
     display: 'none',
-    [theme.breakpoints.down('sm')]: {
+    "@media (max-width: 600px)": {
       display: 'block'
     }
   },
@@ -35,7 +35,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   headerLeft: {
     display: 'flex',
     alignItems: 'center',
-    [theme.breakpoints.down('sm')]: {
+    "@media (max-width: 600px)": {
       display: 'none'
     }
   },
@@ -63,7 +63,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     outline: 'none',
     '-webkit-tap-highlight-color': 'transparent',
     marginRight: '10px',
-    [theme.breakpoints.down(480)]: {
+    "@media (max-width: 480px)": {
       marginRight: '0px'
     }
   },
@@ -71,7 +71,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     width: 'fit-content',
     display: 'flex',
     alignItems: 'center',
-    [theme.breakpoints.down('md')]: {
+    "@media (max-width: 900px)": {
       width: '100%',
     },
     justifyContent: 'flex-end'
@@ -87,7 +87,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     fontWeight: 'bold',
     color: '#fff',
     marginBottom: '30px',
-    [theme.breakpoints.down('sm')]: {
+    "@media (max-width: 600px)": {
       fontSize: '30px'
     }
   },
@@ -95,7 +95,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     fontSize: '20px',
     color: '#fff',
     marginBottom: '30px',
-    [theme.breakpoints.down('sm')]: {
+    "@media (max-width: 600px)": {
       fontSize: '15px'
     }
   },
@@ -105,7 +105,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     justifyContent: 'space-between',
     margin: '0 auto',
     flexWrap: 'wrap',
-    [theme.breakpoints.down(420)]: {
+    "@media (max-width: 420px)": {
       justifyContent: 'center'
     }
   },
@@ -138,7 +138,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     '&:hover': {
       background: '#163ea4'
     },
-    [theme.breakpoints.down(480)]: {
+    "@media (max-width: 480px)": {
       display: 'none'
     }
   },
@@ -149,12 +149,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     border: 'none',
     outline: 'none',
     '-webkit-tap-highlight-color': 'transparent',
-    [theme.breakpoints.down(480)]: {
+    "@media (max-width: 480px)": {
       display: 'block'
     }
   },
   signInLink: {
-    [theme.breakpoints.down(480)]: {
+    "@media (max-width: 480px)": {
       display: 'none'
     }
   },
@@ -193,7 +193,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     '& p':{
       fontSize: '30px',
       whiteSpace: 'nowrap',
-      [theme.breakpoints.down(720)]: {
+      "@media (max-width: 720px)": {
         fontSize: '20px',
         padding: '10px'
       }
@@ -214,7 +214,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   processesListContent: {
     width: '40%',
     minWidth: '304px',
-    [theme.breakpoints.down(760)]: {
+    "@media (max-width: 760px)": {
       width: '100%'
     }
   },
@@ -229,7 +229,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   videoWrapper: {
     width: '100%',
     height: '503px',
-    [theme.breakpoints.down('md')]: {
+    "@media (max-width: 900px)": {
       height: '353px',
     }
   },
@@ -240,10 +240,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     overflow: 'hidden',
     flex: 'none',
     minWidth: '420px',
-    [theme.breakpoints.down('md')]: {
+    "@media (max-width: 900px)": {
       width: '55%',
     },
-    [theme.breakpoints.down(760)]: {
+    "@media (max-width: 760px)": {
       width: '100%',
       order: 2,
       minWidth: 'auto',
@@ -283,7 +283,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   teamList: {
     display: 'flex',
     justifyContent: 'space-between',
-    [theme.breakpoints.down(480)]: {
+    "@media (max-width: 480px)": {
       flexDirection: 'column',
       alignItems: 'center'
     }
@@ -339,10 +339,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   footerText: {
     color: '#dfdfdf',
-    [theme.breakpoints.down(480)]: {
+    "@media (max-width: 480px)": {
       fontSize: '12px'
     },
-    [theme.breakpoints.down(350)]: {
+    "@media (max-width: 350px)": {
       fontSize: '10px'
     }
   },
@@ -353,10 +353,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   mailWrap: {
     display: 'flex',
     alignItems: 'center',
-    [theme.breakpoints.down(480)]: {
+    "@media (max-width: 480px)": {
       fontSize: '12px'
     },
-    [theme.breakpoints.down(350)]: {
+    "@media (max-width: 350px)": {
       fontSize: '10px'
     }
   }

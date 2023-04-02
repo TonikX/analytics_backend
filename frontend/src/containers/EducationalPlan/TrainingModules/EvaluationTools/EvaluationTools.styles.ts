@@ -13,7 +13,7 @@ export default (theme: Theme) => createStyles({
         marginBottom: '20px',
     },
     list: {
-        [theme.breakpoints.down('md')]: {
+        "@media (max-width: 900px)": {
             minWidth: '700px',
         },
         height: '100%',
@@ -26,7 +26,7 @@ export default (theme: Theme) => createStyles({
         borderBottom: '1px solid #ccc',
     },
     row: {
-        [theme.breakpoints.down('md')]: {
+        "@media (max-width: 900px)": {
             minWidth: '700px',
         },
         display: 'flex',
@@ -57,14 +57,14 @@ export default (theme: Theme) => createStyles({
         padding: '0px 20px'
     },
     title: {
-        [theme.breakpoints.down('md')]: {
+        "@media (max-width: 900px)": {
             width: '20%',
         },
         width: '30%',
         flex: 'none'
     },
     type: {
-        [theme.breakpoints.down('md')]: {
+        "@media (max-width: 900px)": {
             width: '15%',
         },
         width: '20%',

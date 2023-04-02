@@ -8,7 +8,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         gridColumnGap: '20px',
         gridRowGap: '20px',
         padding: '20px',
-        [theme.breakpoints.down('md')]: {
+        "@media (max-width: 900px)": {
             gridTemplateColumns: '1fr 1fr 1fr',
         }
     },
