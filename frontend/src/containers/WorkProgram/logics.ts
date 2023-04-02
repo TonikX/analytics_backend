@@ -24,6 +24,8 @@ import commentsLogics from './logics/comments.logics';
 import zunsLogics from './logics/zuns.logics';
 
 import {appRouter} from "../../service/router-service";
+import {getUserData} from "../../layout/getters";
+import {useSelector} from "react-redux";
 
 const service = new Service();
 
@@ -266,6 +268,30 @@ const approveWorkProgram = createLogic({
     }
 });
 
+const getRecommendedPrerequisites = createLogic({
+    type: workProgramActions.getRecommendedPrerequisites.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const userData = getUserData(state);
+        const {id} = userData;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_RECOMMENDED_PREREQUISITES}));
+        service.getRecommendedPrerequisites(id)
+            .then((data) => {
+                dispatch(workProgramActions.setRecommendedPrerequisites(data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_RECOMMENDED_PREREQUISITES}));
+                return done();
+            });
+    }
+});
+
 export default [
     ...sectionLogics,
     ...topicLogics,
@@ -285,4 +311,5 @@ export default [
     sendToIsu,
     approveWorkProgram,
     sendWorkProgramToArchive,
+    getRecommendedPrerequisites,
 ];

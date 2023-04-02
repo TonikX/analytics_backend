@@ -356,6 +356,10 @@ class WorkProgramService extends AnalyticsService{
     getDownloadFileLink({ wpId, directionId, planId, year }: any) {
         return `${appConfigService.getApiBasePath()}/api/export/docx/${wpId}/${directionId}/${planId}/${year}`
     }
+
+    getRecommendedPrerequisites(userId: number) {
+        return this.get(`/api/recommendation_of_prerequisites/${userId}`);
+    }
 }
 
 export default WorkProgramService;
