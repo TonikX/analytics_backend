@@ -79,337 +79,156 @@ export default () => (
     <Router>
         <Layout>
             <Routes>
-            {/*<AuthRoute path={routerService.getCoursesRoute()}>*/}
-            {/*    <Courses />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getCourseRoute()}>*/}
-            {/*    <Course />*/}
-            {/*</AuthRoute>*/}
+              <Route path={routerService.getCoursesRoute()} element={<AuthRoute><Courses /></AuthRoute>} />
+              <Route path={routerService.getCourseRoute()} element={<AuthRoute><Course /></AuthRoute>} />
+              <Route path={routerService.getOverviewRoute()} element={<AuthRoute><Overview /></AuthRoute>} />
+              <Route path={routerService.getSelectDisciplineRoute()} element={<AuthRoute><SelectDiscipline /></AuthRoute>} />
+              <Route path={routerService.getProfessionalStandardRoute(':id')} element={<AuthRoute><ProfessionalStandard /></AuthRoute>} />
+              <Route path={routerService.getProfessionalStandardsRoute()} element={<AuthRoute><ProfessionalStandards /></AuthRoute>} />
+              <Route path={routerService.getEducationalStandardRoute(':id')} element={<AuthRoute><EducationalStandard /></AuthRoute>} />
+              <Route path={routerService.getEducationalStandardsRoute()} element={<AuthRoute><EducationalStandards /></AuthRoute>} />
+              <Route path={routerService.getStructuralUnitRoute()} element={<AuthRoute><StructuralUnit /></AuthRoute>} />
+              <Route path={routerService.getStructuralUnitsRoute()} element={<AuthRoute><StructuralUnits /></AuthRoute>} />
+              <Route path={routerService.getIndividualTrajectoriesRoute()} element={<AuthRoute><IndividualTrajectories /></AuthRoute>} />
+              <Route path={routerService.getIndividualEducationalPlansRoute()} element={<AuthRoute><IndividualEducationalPlans /></AuthRoute>} />
+              <Route path={routerService.getNotificationsRoute()} element={<AuthRoute><Notifications /></AuthRoute>} />
+              <Route path={routerService.getUserProfile()} element={<AuthRoute><UserProfile /></AuthRoute>} />
+              <Route path={routerService.getSelectEducationalProgramRoute()} element={<AuthRoute><SelectEducationalProgram /></AuthRoute>} />
+              <Route path={routerService.getFoldersRoute()} element={<AuthRoute><Folders /></AuthRoute>} />
+              <Route path={routerService.getCoursesRoute()} element={<AuthRoute><Courses /></AuthRoute>} />
+              <Route path={routerService.getCourseRoute()} element={<AuthRoute><Course /></AuthRoute>} />
+              <Route path={routerService.getLiteratureRoute()} element={<AuthRoute><Literature /></AuthRoute>} />
+              <Route path={routerService.getSubjectAreaRoute()} element={<AuthRoute><SubjectArea /></AuthRoute>} />
+              <Route path={routerService.getTrainingEntitiesRoute()} element={<AuthRoute><Prerequisites /></AuthRoute>} />
+              <Route path={routerService.getCompetenceIndicatorsRoute()} element={<AuthRoute><Indicators /></AuthRoute>} />
+              <Route path={routerService.getCompetencesRoute()} element={<AuthRoute><Competences /></AuthRoute>} />
+              <Route path={routerService.getDirectionRoute()} element={<AuthRoute><Direction /></AuthRoute>} />
+              <Route path={routerService.getRecordsRoute()} element={<AuthRoute><Records /></AuthRoute>} />
+              <Route path={routerService.getEntityToEntityRoute()} element={<AuthRoute><EntitityToEntitity /></AuthRoute>} />
+              <Route path={routerService.getProfessionsRoute()} element={<AuthRoute><Professions /></AuthRoute>} />
+              <Route path={routerService.getRolesRoute()} element={<AuthRoute><Roles /></AuthRoute>} />
+              <Route path={routerService.getSkillsRolesRoute()} element={<AuthRoute><SkillsRoles /></AuthRoute>} />
+              <Route path={routerService.getSkillsProfessionsRoute()} element={<AuthRoute><SkillsProfessions /></AuthRoute>} />
+              <Route path={routerService.getSkillsProfessionsRoute()} element={<AuthRoute><SkillsProfessions /></AuthRoute>} />
+              <Route path={routerService.getEducationalProgramCharacteristic()} element={<AuthRoute><EducationalProgramCharacteristic /></AuthRoute>} />
+              <Route path={routerService.getEducationalProgram()} element={<AuthRoute><EducationalProgram /></AuthRoute>} />
+              <Route path={routerService.getEducationPlanInDirectionRoute()} element={<AuthRoute><EducationPlanInDirection /></AuthRoute>} />
+              <Route path={routerService.getWorkProgramListRoute()} element={<AuthRoute><WorkProgramList /></AuthRoute>} />
+              <Route path={routerService.getWorkProgramRoute()} element={<AuthRoute><WorkProgram /></AuthRoute>} />
+              <Route path={routerService.getExpertiseRoute()} element={<AuthRoute><Expertise /></AuthRoute>} />
+              <Route path={routerService.getExpertisesRoute()} element={<AuthRoute><Expertises /></AuthRoute>} />
+              <Route path={routerService.getEducationPlanRoute()} element={<AuthRoute><EducationalPlan /></AuthRoute>} />
+              <Route path={routerService.getTrainingModuleDetailRoute()} element={<AuthRoute><TrainingModuleDetail /></AuthRoute>} />
+              <Route path={routerService.getSelectDisciplineRoute()} element={<AuthRoute><SelectDiscipline /></AuthRoute>} />
+              <Route path={routerService.getProfessionalStandardIDRoute(':id')} element={<AuthRoute><ProfessionalStandard /></AuthRoute>} />
+              <Route path={routerService.getProfessionalStandardsRoute()} element={<AuthRoute><ProfessionalStandards /></AuthRoute>} />
+              <Route path={routerService.getEducationalStandardsRoute()} element={<AuthRoute><EducationalStandards /></AuthRoute>} />
+              <Route path={routerService.getStructuralUnitRoute()} element={<AuthRoute><StructuralUnit /></AuthRoute>} />
+              <Route path={routerService.getStructuralUnitsRoute()} element={<AuthRoute><StructuralUnits /></AuthRoute>} />
+              <Route path={routerService.getIndividualTrajectoriesRoute()} element={<AuthRoute><IndividualTrajectories /></AuthRoute>} />
+              <Route path={routerService.getIndividualEducationalPlansRoute()} element={<AuthRoute><IndividualEducationalPlans /></AuthRoute>} />
+              <Route path={routerService.getNotificationsRoute()} element={<AuthRoute><Notifications /></AuthRoute>} />
+              <Route path={routerService.getUserProfile()} element={<AuthRoute><UserProfile /></AuthRoute>} />
+              <Route path={routerService.getUserSettings()} element={<AuthRoute><UserSettings /></AuthRoute>} />
+              <Route path={routerService.getSelectEducationalProgramRoute()} element={<AuthRoute><SelectEducationalProgram /></AuthRoute>} />
+              <Route path={routerService.getFoldersRoute()} element={<AuthRoute><Folders /></AuthRoute>} />
+              <Route path={routerService.getCoursesRoute()} element={<AuthRoute><Courses /></AuthRoute>} />
+              <Route path={routerService.getLiteratureRoute()} element={<AuthRoute><Literature /></AuthRoute>} />
+              <Route path={routerService.getSubjectAreaRoute()} element={<AuthRoute><SubjectArea /></AuthRoute>} />
+              <Route path={routerService.getTrainingEntitiesRoute()} element={<AuthRoute><Prerequisites /></AuthRoute>} />
+              <Route path={routerService.getCompetenceIndicatorsRoute()} element={<AuthRoute><Indicators /></AuthRoute>} />
+              <Route path={routerService.getCompetencesRoute()} element={<AuthRoute><Competences /></AuthRoute>} />
+              <Route path={routerService.getDirectionRoute()} element={<AuthRoute><Direction /></AuthRoute>} />
+              <Route path={routerService.getRecordsRoute()} element={<AuthRoute><Records /></AuthRoute>} />
+              <Route path={routerService.getEntityToEntityRoute()} element={<AuthRoute><EntitityToEntitity /></AuthRoute>} />
+              <Route path={routerService.getProfessionsRoute()} element={<AuthRoute><Professions /></AuthRoute>} />
+              <Route path={routerService.getRolesRoute()} element={<AuthRoute><Roles /></AuthRoute>} />
+              <Route path={routerService.getSkillsRolesRoute()} element={<AuthRoute><SkillsRoles /></AuthRoute>} />
+              <Route path={routerService.getSkillsProfessionsRoute()} element={<AuthRoute><SkillsProfessions /></AuthRoute>} />
+              <Route path={routerService.getEducationalProgramCharacteristic()} element={<AuthRoute><EducationalProgramCharacteristic /></AuthRoute>} />
+              <Route path={routerService.getEducationalProgram()} element={<AuthRoute><EducationalProgram /></AuthRoute>} />
+              <Route path={routerService.getEducationPlanInDirectionRoute()} element={<AuthRoute><EducationPlanInDirection /></AuthRoute>} />
+              <Route path={routerService.getWorkProgramListRoute()} element={<AuthRoute><WorkProgramList /></AuthRoute>} />
+              <Route path={routerService.getWorkProgramRoute()} element={<AuthRoute><WorkProgram /></AuthRoute>} />
+              <Route path={routerService.getAcademicPlanUpdateRoute()} element={<AuthRoute><AcademicPlanUpdate /></AuthRoute>} />
+              <Route path={routerService.getExpertiseRoute()} element={<AuthRoute><Expertise /></AuthRoute>} />
+              <Route path={routerService.getExpertisesRoute()} element={<AuthRoute><Expertises /></AuthRoute>} />
+              <Route path={routerService.getEducationPlanRoute()} element={<AuthRoute><EducationalPlan /></AuthRoute>} />
+              <Route path={routerService.getTrainingModuleDetailRoute()} element={<AuthRoute><TrainingModuleDetail /></AuthRoute>} />
+              <Route path={routerService.getTrainingModulesRoute()} element={<AuthRoute><TrainingModules /></AuthRoute>} />
+              <Route path={routerService.getDodProfileRoute()} element={<AuthRoute><DodProfile /></AuthRoute>} />
+              <Route path={routerService.getPracticeListRoute()} element={<AuthRoute><PracticeList /></AuthRoute>} />
+              <Route path={routerService.getPracticeRoute()} element={<AuthRoute><Practice /></AuthRoute>} />
+              <Route path={routerService.getFinalCertificationRoute()} element={<AuthRoute><FinalCertification /></AuthRoute>} />
+              <Route path={routerService.getFinalCertificationListRoute()} element={<AuthRoute><FinalCertificationList /></AuthRoute>} />
 
-            {/*<AuthRoute path={routerService.getTrajectoryPlanDetailRoute()}*/}
-            {/*           children={() => (*/}
-            {/*               <Route*/}
-            {/*                   render={({match}) => (*/}
-            {/*                       <EducationPlanDetail match={match} trajectoryRoute />*/}
-            {/*                   )}*/}
-            {/*               />*/}
-            {/*           )}*/}
-            {/*/>*/}
 
-            {/*<Route path={routerService.getSignInRoute()}>*/}
-            {/*    <SignIn />*/}
-            {/*</Route>*/}
-            {/*<Route path={routerService.getSignUpRoute()}>*/}
-            {/*    <SignUp />*/}
-            {/*</Route>*/}
-            {/*<AuthRoute path='/overview'>*/}
-            {/*    <Overview />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getSelectDisciplineRoute()}>*/}
-            {/*    <SelectDiscipline />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getProfessionalStandardRoute(':id')}>*/}
-            {/*    <ProfessionalStandard />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getProfessionalStandardsRoute()}>*/}
-            {/*    <ProfessionalStandards />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getEducationalStandardRoute(':id')}>*/}
-            {/*    <EducationalStandard />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getEducationalStandardsRoute()}>*/}
-            {/*    <EducationalStandards />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getStructuralUnitRoute()}>*/}
-            {/*    <StructuralUnit />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getStructuralUnitsRoute()}>*/}
-            {/*    <StructuralUnits />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getIndividualTrajectoriesRoute()}>*/}
-            {/*    <IndividualTrajectories />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getIndividualEducationalPlansRoute()}>*/}
-            {/*    <IndividualEducationalPlans />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getNotificationsRoute()}>*/}
-            {/*    <Notifications />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getUserProfile()}>*/}
-            {/*    <UserProfile />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getSelectEducationalProgramRoute()}>*/}
-            {/*    <SelectEducationalProgram />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getFoldersRoute()}>*/}
-            {/*    <Folders />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getCoursesRoute()}>*/}
-            {/*    <Courses />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getCourseRoute()}>*/}
-            {/*    <Course />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getLiteratureRoute()}>*/}
-            {/*    <Literature />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getSubjectAreaRoute()}>*/}
-            {/*    <SubjectArea />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getTrainingEntitiesRoute()}>*/}
-            {/*    <Prerequisites />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getCompetenceIndicatorsRoute()}>*/}
-            {/*    <Indicators />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getCompetencesRoute()}>*/}
-            {/*    <Competences />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getDirectionRoute()}>*/}
-            {/*    <Direction />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getRecordsRoute()}>*/}
-            {/*  <Records />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getEntityToEntityRoute()}>*/}
-            {/*    <EntitityToEntitity />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getProfessionSkillsRoute()}*/}
-            {/*           children={() => (*/}
-            {/*               <Route*/}
-            {/*                   render={({match}) => (*/}
-            {/*                       <ProfessionSkills match={match}/>*/}
-            {/*                   )}*/}
-            {/*               />*/}
-            {/*           )}*/}
-            {/*/>*/}
-            {/*<AuthRoute path={routerService.getProfessionsRoute()}>*/}
-            {/*    <Professions />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getRolesSkillsRoute()}*/}
-            {/*           children={() => (*/}
-            {/*           <Route*/}
-            {/*               render={({match}) => (*/}
-            {/*                    <RolesSkills match={match} />*/}
-            {/*               )}*/}
-            {/*           />*/}
-            {/*    )}*/}
-            {/*/>*/}
-            {/*<AuthRoute path={routerService.getRolesRoute()}>*/}
-            {/*    <Roles />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getSkillsRolesRoute()}>*/}
-            {/*    <SkillsRoles />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getSkillsProfessionsRoute()}>*/}
-            {/*    <SkillsProfessions />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getEducationalProgramCharacteristic()}>*/}
-            {/*    <EducationalProgramCharacteristic />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getEducationalProgram()}>*/}
-            {/*    <EducationalProgram />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getEducationPlanDetailRoute()}*/}
-            {/*           children={() => (*/}
-            {/*               <Route*/}
-            {/*                   render={({match}) => (*/}
-            {/*                       <EducationPlanDetail match={match}/>*/}
-            {/*                   )}*/}
-            {/*               />*/}
-            {/*           )}*/}
-            {/*/>*/}
-            {/*<AuthRoute path={routerService.getEducationPlanInDirectionRoute()}>*/}
-            {/*    <EducationPlanInDirection />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getWorkProgramListRoute()}>*/}
-            {/*    <WorkProgramList />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getWorkProgramRoute()}>*/}
-            {/*    <WorkProgram />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getExpertiseRoute()}>*/}
-            {/*    <Expertise />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getExpertisesRoute()}>*/}
-            {/*    <Expertises />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getEducationPlanRoute()}>*/}
-            {/*    <EducationalPlan />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getTrainingModuleDetailRoute()}>*/}
-            {/*    <TrainingModuleDetail />*/}
-            {/*</AuthRoute>*/}
-            {/*<AuthRoute path={routerService.getTrainingModulesRoute()}>*/}
-            {/*    <TrainingModules />*/}
-            {/*</AuthRoute>*/}
-            {/*    <AuthRoute path='/overview'>*/}
-            {/*        <Overview/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getSelectDisciplineRoute()}>*/}
-            {/*        <SelectDiscipline/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getProfessionalStandardIDRoute(':id')}>*/}
-            {/*        <ProfessionalStandard/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getProfessionalStandardsRoute()}>*/}
-            {/*        <ProfessionalStandards/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getEducationalStandardsRoute()}>*/}
-            {/*        <EducationalStandards/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getStructuralUnitRoute()}>*/}
-            {/*        <StructuralUnit/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getStructuralUnitsRoute()}>*/}
-            {/*        <StructuralUnits/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getIndividualTrajectoriesRoute()}>*/}
-            {/*        <IndividualTrajectories/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getIndividualEducationalPlansRoute()}>*/}
-            {/*        <IndividualEducationalPlans/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getNotificationsRoute()}>*/}
-            {/*        <Notifications/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getUserProfile()}>*/}
-            {/*        <UserProfile/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getUserSettings()}>*/}
-            {/*        <UserSettings/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getSelectEducationalProgramRoute()}>*/}
-            {/*        <SelectEducationalProgram/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getFoldersRoute()}>*/}
-            {/*        <Folders/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getCoursesRoute()}>*/}
-            {/*        <Courses/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getCourseRoute()}>*/}
-            {/*        <Course/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getLiteratureRoute()}>*/}
-            {/*        <Literature/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getSubjectAreaRoute()}>*/}
-            {/*        <SubjectArea/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getTrainingEntitiesRoute()}>*/}
-            {/*        <Prerequisites/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getCompetenceIndicatorsRoute()}>*/}
-            {/*        <Indicators/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getCompetencesRoute()}>*/}
-            {/*        <Competences/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getDirectionRoute()}>*/}
-            {/*        <Direction/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getRecordsRoute()}>*/}
-            {/*        <Records/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getEntityToEntityRoute()}>*/}
-            {/*        <EntitityToEntitity/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getProfessionSkillsRoute()}*/}
-            {/*               children={() => (*/}
-            {/*                   <Route*/}
-            {/*                       render={({match}) => (*/}
-            {/*                           <ProfessionSkills match={match}/>*/}
-            {/*                       )}*/}
-            {/*                   />*/}
-            {/*               )}*/}
-            {/*    />*/}
-            {/*    <AuthRoute path={routerService.getProfessionsRoute()}>*/}
-            {/*        <Professions/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getRolesSkillsRoute()}*/}
-            {/*               children={() => (*/}
-            {/*                   <Route*/}
-            {/*                       render={({match}) => (*/}
-            {/*                           <RolesSkills match={match}/>*/}
-            {/*                       )}*/}
-            {/*                   />*/}
-            {/*               )}*/}
-            {/*    />*/}
-            {/*    <AuthRoute path={routerService.getRolesRoute()}>*/}
-            {/*        <Roles/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getSkillsRolesRoute()}>*/}
-            {/*        <SkillsRoles/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getSkillsProfessionsRoute()}>*/}
-            {/*        <SkillsProfessions/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getEducationalProgramCharacteristic()}>*/}
-            {/*        <EducationalProgramCharacteristic/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getEducationalProgram()}>*/}
-            {/*        <EducationalProgram/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getEducationPlanDetailRoute()}*/}
-            {/*               children={() => (*/}
-            {/*                   <Route*/}
-            {/*                       render={({match}) => (*/}
-            {/*                           <EducationPlanDetail match={match}/>*/}
-            {/*                       )}*/}
-            {/*                   />*/}
-            {/*               )}*/}
-            {/*    />*/}
-            {/*    <AuthRoute path={routerService.getEducationPlanInDirectionRoute()}>*/}
-            {/*        <EducationPlanInDirection/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getWorkProgramListRoute()}>*/}
-            {/*        <WorkProgramList/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getWorkProgramRoute()}>*/}
-            {/*        <WorkProgram/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getAcademicPlanUpdateRoute()}>*/}
-            {/*         <AcademicPlanUpdate/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getExpertiseRoute()}>*/}
-            {/*        <Expertise/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getExpertisesRoute()}>*/}
-            {/*        <Expertises/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getEducationPlanRoute()}>*/}
-            {/*        <EducationalPlan/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getTrainingModuleDetailRoute()}>*/}
-            {/*        <TrainingModuleDetail/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getTrainingModulesRoute()}>*/}
-            {/*        <TrainingModules/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getDodProfileRoute()}>*/}
-            {/*        <DodProfile/>*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getPracticeListRoute()}>*/}
-            {/*        <PracticeList />*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getPracticeRoute()}>*/}
-            {/*        <Practice />*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getFinalCertificationRoute()}>*/}
-            {/*        <FinalCertification />*/}
-            {/*    </AuthRoute>*/}
-            {/*    <AuthRoute path={routerService.getFinalCertificationListRoute()}>*/}
-            {/*        <FinalCertificationList />*/}
-            {/*    </AuthRoute>*/}
+              {/*<Route path={routerService.getCourseRoute()} element={<AuthRoute>*/}
+              {/*  /!*<EducationPlanDetail match={match} trajectoryRoute /> // TODO match + откомментировать ?? *!/*/}
+              {/*  <EducationPlanDetail trajectoryRoute />*/}
+              {/*</AuthRoute>} />*/}
+              {/*    <AuthRoute path={routerService.getEducationPlanDetailRoute()}*/}
+              {/*               children={() => (*/}
+              {/*                   <Route*/}
+              {/*                       render={({match}) => (*/}
+              {/*                           <EducationPlanDetail match={match}/>*/}
+              {/*                       )}*/}
+              {/*                   />*/}
+              {/*               )}*/}
+              {/*    />*/}
+              {/*    <AuthRoute path={routerService.getProfessionSkillsRoute()}*/}
+              {/*               children={() => (*/}
+              {/*                   <Route*/}
+              {/*                       render={({match}) => (*/}
+              {/*                           <ProfessionSkills match={match}/>*/}
+              {/*                       )}*/}
+              {/*                   />*/}
+              {/*               )}*/}
+              {/*    />*/}
+              {/*<AuthRoute path={routerService.getEducationPlanDetailRoute()}*/}
+              {/*           children={() => (*/}
+              {/*               <Route*/}
+              {/*                   render={({match}) => (*/}
+              {/*                       <EducationPlanDetail match={match}/>*/}
+              {/*                   )}*/}
+              {/*               />*/}
+              {/*           )}*/}
+              {/*/>*/}
+              {/*<AuthRoute path={routerService.getProfessionSkillsRoute()}*/}
+              {/*           children={() => (*/}
+              {/*               <Route*/}
+              {/*                   render={({match}) => (*/}
+              {/*                       <ProfessionSkills match={match}/>*/}
+              {/*                   )}*/}
+              {/*               />*/}
+              {/*           )}*/}
+              {/*/>*/}
 
+              {/*<AuthRoute path={routerService.getRolesSkillsRoute()}*/}
+              {/*           children={() => (*/}
+              {/*           <Route*/}
+              {/*               render={({match}) => (*/}
+              {/*                    <RolesSkills match={match} />*/}
+              {/*               )}*/}
+              {/*           />*/}
+              {/*    )}*/}
+              {/*/>*/}
+              {/*    <AuthRoute path={routerService.getRolesSkillsRoute()}*/}
+              {/*               children={() => (*/}
+              {/*                   <Route*/}
+              {/*                       render={({match}) => (*/}
+              {/*                           <RolesSkills match={match}/>*/}
+              {/*                       )}*/}
+              {/*                   />*/}
+              {/*               )}*/}
+              {/*    />*/}
+              {/*<Route exact element={<NotFoundPage/>} />*/}
               <Route path={routerService.getEmailConfirmFail()} element={<EmailFailPage/>} />
               <Route path={routerService.getEmailConfirmSuccess()} element={<EmailSuccessPage/>} />
               <Route path={routerService.getForbiddenPage()} element={<ForbiddenPage/>} />
-              <Route path="/" element={<Landing/>} />
-              {/*<Route exact element={<NotFoundPage/>} />*/}
               <Route path={routerService.getSignInRoute()} element={<SignIn/>} />
               <Route path={routerService.getSignUpRoute()} element={<SignUp/>} />
+              <Route path="/" element={<Landing/>} />
             </Routes>
         </Layout>
     </Router>
