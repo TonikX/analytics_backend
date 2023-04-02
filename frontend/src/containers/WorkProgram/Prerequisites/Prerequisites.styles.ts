@@ -8,7 +8,6 @@ export default (theme: Theme) => createStyles({
     },
     addIcon: {
         marginTop: '10px',
-        marginLeft: 'auto',
         flex: 'none',
         marginBottom: '20px',
     },
@@ -38,5 +37,11 @@ export default (theme: Theme) => createStyles({
         color: '#fff',
         display: 'flex',
         padding: '10px'
+    },
+    buttonsWrapper: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        gap: '10px'
     }
 });

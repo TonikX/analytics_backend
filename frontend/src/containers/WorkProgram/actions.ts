@@ -68,6 +68,11 @@ const updateZUN = createAction('WORK_PROGRAM_UPDATE_ZUN');
 
 const pageDown = createAction('WORK_PROGRAM_PAGE_DOWN');
 
+const getRecommendedPrerequisites = createAction('GET_RECOMMENDED_PREREQUISITES');
+const getRecommendedOutcomes = createAction('GET_RECOMMENDED_OUTCOMES');
+
+const setRecommendedPrerequisites = createAction('SET_RECOMMENDED_PREREQUISITES');
+
 const actions: WorkProgramActions = {
     saveZUN,
     deleteZUN,
@@ -135,6 +140,10 @@ const actions: WorkProgramActions = {
 
     deleteLiterature,
     addLiterature,
-}
+
+    getRecommendedOutcomes,
+    getRecommendedPrerequisites,
+    setRecommendedPrerequisites,
+};
 
 export default actions;

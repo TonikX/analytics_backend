@@ -81,4 +81,8 @@ export const getPlanQualifications = (state: rootState) => {
         return plans.map((p: any) => get(p, path, ''));
     }
     return [];
-}
+};
+
+export const getRecommendations = (state: rootState) => {
+    return get(getStateData(state), fields.RECOMMENDATIONS, []);
+};

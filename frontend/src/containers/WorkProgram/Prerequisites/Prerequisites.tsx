@@ -17,6 +17,7 @@ import {fields, PrerequisiteFields} from "../enum";
 import {TrainingEntitiesFields} from "../../TrainingEntities/enum";
 
 import CreateModal from "./CreateModal";
+import RecommendationModal from "./RecommendationModal";
 import {PrerequisiteType} from "../types";
 
 import connect from './Prerequisites.connect';
@@ -25,6 +26,10 @@ import styles from './Prerequisites.styles';
 class Prerequisites extends React.PureComponent<SixthStepProps> {
     handleCreateNew = () => {
         this.props.actions.openDialog({dialogType: fields.ADD_NEW_PREREQUISITES, data: {}});
+    };
+
+    getRecommendations = () => {
+        this.props.actions.openDialog({dialogType: fields.GET_RECOMMENDATIONS, data: {}});
     };
 
     handleClickDelete = (id: number) => () => {
@@ -37,7 +42,7 @@ class Prerequisites extends React.PureComponent<SixthStepProps> {
 
     render() {
         const {classes, prerequisitesList, isCanEdit} = this.props;
-        
+
         return (
             <div className={classes.root}>
                 <div className={classNames(classes.header, classes.item)}>
@@ -81,15 +86,25 @@ class Prerequisites extends React.PureComponent<SixthStepProps> {
                 </Scrollbars>
 
                 {isCanEdit &&
-                    <Button color="secondary"
-                         className={classes.addIcon}
-                         onClick={this.handleCreateNew}
-                    >
-                        <AddIcon/> Добавить пререквизит
-                    </Button>
+                    <div className={classes.buttonsWrapper}>
+                        <Button color="secondary"
+                                className={classes.addIcon}
+                                onClick={this.handleCreateNew}
+                        >
+                            <AddIcon/> Добавить пререквизит
+                        </Button>
+                        <Button variant="outlined"
+                                color="primary"
+                                className={classes.addIcon}
+                                onClick={this.getRecommendations}
+                        >
+                            Получить рекомендации
+                        </Button>
+                    </div>
                 }
 
                 {isCanEdit && <CreateModal />}
+                {isCanEdit && <RecommendationModal />}
             </div>
         );
     }

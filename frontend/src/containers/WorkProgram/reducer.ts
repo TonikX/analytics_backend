@@ -88,6 +88,11 @@ const closeDialog = (state: workProgramState, {payload}: any): workProgramState 
     }
 });
 
+const setRecommendedPrerequisites = (state: workProgramState, {payload}: any): workProgramState => ({
+    ...state,
+    [fields.RECOMMENDATIONS]: payload.data.results
+});
+
 const pageDown = (): workProgramState => initialState;
 
 export const reducer = createReducer(initialState, {
@@ -105,4 +110,6 @@ export const reducer = createReducer(initialState, {
     [actions.setWorkProgramEvaluationTool.type]: setWorkProgramEvaluationTool,
     [actions.setIntermediateCertification.type]: setIntermediateCertification,
     [actions.pageDown.type]: pageDown,
+
+    [actions.setRecommendedPrerequisites.type]: setRecommendedPrerequisites,
 });

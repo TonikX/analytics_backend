@@ -13,6 +13,7 @@ import {CourseType} from "../Courses/types";
 import {TrainingEntitityType} from "../TrainingEntities/types";
 import {FolderActions, FolderType} from "../Profile/Folders/types";
 import {CommentType} from "../../components/Comments/types";
+import {RecommendationItem} from "./Prerequisites/RecommendationModal/types";
 
 
 export interface WorkProgramActions {
@@ -81,6 +82,10 @@ export interface WorkProgramActions {
     addTopicMaterial: any;
     updateTopicMaterial: any;
     deleteTopicMaterial: any;
+
+    getRecommendedPrerequisites: any;
+    getRecommendedOutcomes: any;
+    setRecommendedPrerequisites: any;
 }
 
 export interface workProgramState {
@@ -92,6 +97,7 @@ export interface workProgramState {
     [fields.WORK_PROGRAM_RESULTS]: Array<any>;
     [fields.DIALOGS]: {};
     [fields.WORK_PROGRAM_COMMENTS]: Array<any>; //todo: change type
+    [fields.RECOMMENDATIONS]: RecommendationItem[];
 }
 
 export type WorkProgramGeneralType = {

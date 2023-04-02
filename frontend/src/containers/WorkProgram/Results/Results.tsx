@@ -18,6 +18,7 @@ import {EvaluationToolFields, fields, ResultsFields} from "../enum";
 import {TrainingEntitiesFields} from "../../TrainingEntities/enum";
 
 import CreateModal from "./CreateModal";
+import RecommendationModal from "./RecommendationModal";
 import {ResultsType} from "../types";
 
 import connect from './Results.connect';
@@ -26,6 +27,10 @@ import styles from './Results.styles';
 class Results extends React.PureComponent<ResultsProps> {
     handleCreateNew = () => {
         this.props.actions.openDialog({dialogType: fields.ADD_NEW_RESULT, data: {}});
+    };
+
+    getRecommendations = () => {
+        this.props.actions.openDialog({dialogType: fields.GET_RECOMMENDATIONS, data: {}});
     };
 
     handleClickDelete = (id: number) => () => {
@@ -38,7 +43,7 @@ class Results extends React.PureComponent<ResultsProps> {
 
     render() {
         const {classes, resultsList, isCanEdit} = this.props;
-        
+
         return (
             <div className={classes.root}>
                 <div className={classNames(classes.header, classes.item)}>
@@ -94,15 +99,25 @@ class Results extends React.PureComponent<ResultsProps> {
                 </Scrollbars>
 
                 {isCanEdit &&
-                    <Button color="secondary"
-                         className={classes.addIcon}
-                         onClick={this.handleCreateNew}
-                    >
-                        <AddIcon/> Добавить результат
-                    </Button>
+                   <div className={classes.buttonsWrapper}>
+                       <Button color="secondary"
+                               className={classes.addIcon}
+                               onClick={this.handleCreateNew}
+                       >
+                           <AddIcon/> Добавить результат
+                       </Button>
+                       <Button variant="outlined"
+                               color="primary"
+                               className={classes.addIcon}
+                               onClick={this.getRecommendations}
+                       >
+                           Получить рекомендации
+                       </Button>
+                   </div>
                 }
 
                 {isCanEdit && <CreateModal />}
+                {isCanEdit && <RecommendationModal />}
             </div>
         );
     }
