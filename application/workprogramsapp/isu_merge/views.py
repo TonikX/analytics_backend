@@ -898,7 +898,7 @@ class SendPracticeToISU(APIView):
         practice_id = request.data.get("practice_id")
         practice = Practice.objects.get(id=practice_id)
         if practice.discipline_code:
-            return Response(data={"error": "У РПД уже есть свой ID"}, status=500)
+            return Response(data={"error": "У Практики уже есть свой ID"}, status=500)
         isu_logger = IsuService(
             IsuUser(
                 settings.ISU["ISU_CLIENT_ID"],
@@ -930,7 +930,9 @@ class SendGIAToISU(APIView):
         gia_id = request.data.get("gia_id")
         gia = GIA.objects.get(id=gia_id)
         if gia.discipline_code:
-            return Response(data={"error": "У РПД уже есть свой ID"}, status=500)
+            return Response(data={"error": "У ГИА уже есть свой ID"}, status=500)
+        if not gia.structural_unit:
+            return Response(data={"error": "У ГИА нету структурного подразделения"}, status=500)
         isu_logger = IsuService(
             IsuUser(
                 settings.ISU["ISU_CLIENT_ID"],

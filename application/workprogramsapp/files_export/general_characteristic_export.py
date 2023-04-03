@@ -44,11 +44,12 @@ def generate_context(gh):
                "ep_supervisor": "",
                "dean_position": "",
                "dean": "",
-               "employers":[]}
+               "employers": []}
 
-    #gh = GeneralCharacteristics.objects.get(id=id_gh)
+    # gh = GeneralCharacteristics.objects.get(id=id_gh)
 
     pk_code_inc = 0  # Переменная для генерации кодов для ПК
+    pk_dict = {}  # Словарь сопоставления айди компетенции и номера
     try:
         # Имя ОП
         context["op_name"] = gh.educational_program.all()[0].title
@@ -211,9 +212,14 @@ def generate_context(gh):
 
         for competence_in_group in PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
                 group_of_pk=group):
-            pk_code_inc += 1
+            if not pk_dict.get(competence_in_group.competence.id):
+                pk_code_inc += 1
+                pk_dict[competence_in_group.competence.id] = pk_code_inc
+                temp_pk_code = pk_code_inc
+            else:
+                temp_pk_code = pk_dict[competence_in_group.competence.id]
             competence_dict = {
-                "codename": f"ПК-{pk_code_inc} {competence_in_group.competence.name}",
+                "codename": f"ПК-{temp_pk_code} {competence_in_group.competence.name}",
                 "indicators": [],
                 "profstandard": f"{competence_in_group.professional_standard.code} "
                                 f"{competence_in_group.professional_standard.title}",
@@ -224,7 +230,7 @@ def generate_context(gh):
                     competence_in_group_of_pk=competence_in_group):
                 indicator_num_counter += 1
                 competence_dict["indicators"].append(
-                    f"ПК-{pk_code_inc}.{indicator_num_counter} {indicator_in_group.indicator.name}")
+                    f"ПК-{temp_pk_code}.{indicator_num_counter} {indicator_in_group.indicator.name}")
             for func in competence_in_group.generalized_labor_functions.all():
                 competence_dict["labor_functions"].append(f"{func.code} {func.name}")
 
@@ -237,9 +243,14 @@ def generate_context(gh):
 
         for competence_in_group in PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
                 group_of_pk=group):
-            pk_code_inc += 1
+            if not pk_dict.get(competence_in_group.competence.id):
+                pk_code_inc += 1
+                pk_dict[competence_in_group.competence.id] = pk_code_inc
+                temp_pk_code = pk_code_inc
+            else:
+                temp_pk_code = pk_dict[competence_in_group.competence.id]
             competence_dict = {
-                "codename": f"ПК-{pk_code_inc} {competence_in_group.competence.name}",
+                "codename": f"ПК-{temp_pk_code} {competence_in_group.competence.name}",
                 "indicators": [],
                 "sphere": competence_in_group.kinds_of_activity.name}
             group_dict["competences"].append(competence_dict)
@@ -248,7 +259,7 @@ def generate_context(gh):
                     competence_in_group_of_pk=competence_in_group):
                 indicator_num_counter += 1
                 competence_dict["indicators"].append(
-                    f"ПК-{pk_code_inc}.{indicator_num_counter} {indicator_in_group.indicator.name}")
+                    f"ПК-{temp_pk_code}.{indicator_num_counter} {indicator_in_group.indicator.name}")
 
     # Проф компетенции (на основе майноров)
     for group in GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(
@@ -259,9 +270,14 @@ def generate_context(gh):
 
         for competence_in_group in PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
                 group_of_pk=group):
-            pk_code_inc += 1
+            if not pk_dict.get(competence_in_group.competence.id):
+                pk_code_inc += 1
+                pk_dict[competence_in_group.competence.id] = pk_code_inc
+                temp_pk_code = pk_code_inc
+            else:
+                temp_pk_code = pk_dict[competence_in_group.competence.id]
             competence_dict = {
-                "codename": f"ПК-{pk_code_inc} {competence_in_group.competence.name}",
+                "codename": f"ПК-{temp_pk_code} {competence_in_group.competence.name}",
                 "indicators": [],
                 "sphere": competence_in_group.kinds_of_activity_for_miner}
             group_dict["competences"].append(competence_dict)
@@ -270,11 +286,11 @@ def generate_context(gh):
                     competence_in_group_of_pk=competence_in_group):
                 indicator_num_counter += 1
                 competence_dict["indicators"].append(
-                    f"ПК-{pk_code_inc}.{indicator_num_counter} {indicator_in_group.indicator.name}")
+                    f"ПК-{temp_pk_code}.{indicator_num_counter} {indicator_in_group.indicator.name}")
     try:
         # Руководитель ОП
         patronymic = gh.ep_supervisor.patronymic if gh.ep_supervisor.patronymic else ""
-        context["ep_supervisor"] = f"{gh.ep_supervisor.first_name} {gh.ep_supervisor.last_name} " \
+        context["ep_supervisor"] = f"{gh.ep_supervisor.last_name} {gh.ep_supervisor.first_name}  " \
                                    f"{patronymic}"
         context["director_position"] = gh.directors_position
     except AttributeError:
@@ -283,7 +299,7 @@ def generate_context(gh):
         # Руководитель подразделения
         patronymic = gh.dean_of_the_faculty.patronymic if gh.dean_of_the_faculty.patronymic else ""
         context["dean_position"] = gh.dean_of_the_faculty_directors_position
-        context["dean"] = f"{gh.dean_of_the_faculty.first_name} {gh.dean_of_the_faculty.last_name} " \
+        context["dean"] = f"{gh.dean_of_the_faculty.last_name} {gh.dean_of_the_faculty.first_name} " \
                           f"{patronymic}"
     except AttributeError:
         pass
@@ -293,5 +309,3 @@ def generate_context(gh):
         context["employers"].append({"pos": emp.employer_position, "name": emp.fio_employer})
 
     return context
-
-
