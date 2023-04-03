@@ -17,7 +17,7 @@ import TableBody from '@mui/material/TableBody';
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
-
+import {withRouter, withRouterData} from "../../../hoc/WithRouter";
 import WorkProgramStatus from "../../../components/WorkProgramStatus/WorkProgramStatus";
 import AddExpertModal from './AddExpertModal';
 
@@ -28,9 +28,9 @@ import connect from './Expertise.connect';
 import styles from './Expertise.styles';
 import {getLink, getLinkLabel} from "../utils";
 
-class Expertise extends React.Component<ExpertiseProps> {
+class Expertise extends React.Component<ExpertiseProps & withRouterData> {
     componentDidMount() {
-        const expertiseId = get(this, 'props.match.params.id');
+        const expertiseId = get(this, 'props.params.id');
 
         this.props.actions.getExpertise(expertiseId);
     }
@@ -146,4 +146,4 @@ class Expertise extends React.Component<ExpertiseProps> {
 }
 
 //@ts-ignore
-export default connect(withStyles(styles)(Expertise));
+export default connect(withStyles(styles)(withRouter(Expertise)));

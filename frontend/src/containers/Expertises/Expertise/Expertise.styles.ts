@@ -13,14 +13,14 @@ export default (theme: Theme) => createStyles({
     titleWrap: {
         marginBottom: '10px',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     buttonGroup: {
         marginLeft: 'auto'
     },
     title: {
-        fontSize: '24px',
-        marginRight: '20px',
+        fontSize: '24px !important',
+        marginRight: '10px !important',
         '& a': {
             textDecoration: 'none',
             color: theme.palette.primary.main
@@ -35,7 +35,9 @@ export default (theme: Theme) => createStyles({
     },
     header: {
         '& th': {
-            height: '41px'
+            height: '41px',
+            background: theme.palette.primary.main,
+            color: '#fff',
         }
     },
     deleteCell: {

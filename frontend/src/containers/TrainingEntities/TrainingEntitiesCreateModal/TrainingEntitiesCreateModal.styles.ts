@@ -7,7 +7,7 @@ export default (theme: Theme) => createStyles({
     marginBottom: '30px !important',
   },
   dialogContent: {
-    padding: '20px 24px !important',
+    padding: '10px 24px 20px 24px !important',
   },
   lastInput: {
     width: '550px',

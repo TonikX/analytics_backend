@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import {FolderActions, FolderType} from '../types';
 
 import styles from "./AddToFolderModal.styles";

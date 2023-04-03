@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import {fields, FoldersFields} from './enum';
 import styles from "./Folders.styles";
 import {WorkProgramGeneralType} from "../../WorkProgram/types";

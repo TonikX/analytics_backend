@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import styles from "./EvaluationCertificationTotalList.styles";
 import {EvaluationToolType} from "../types";
 

@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import {ProfessionalStandardsActions} from "../../containers/ProfessionalStandards/types";
 
 import styles from "./AddProfStandardsModal.styles";

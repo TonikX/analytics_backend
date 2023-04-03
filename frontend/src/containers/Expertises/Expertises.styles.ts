@@ -56,8 +56,15 @@ export default (theme: Theme) => createStyles({
         marginTop: '10px'
     },
     header: {
-        background: theme.palette.primary.main,
-        color: '#fff'
+        display: 'flex',
+        '& th': {
+            background: theme.palette.primary.main,
+            color: '#fff !important',
+        }
+    },
+    headerCell: {
+        display: 'flex',
+        alignItems: 'center'
     },
     marginRight: {
         marginRight: 20

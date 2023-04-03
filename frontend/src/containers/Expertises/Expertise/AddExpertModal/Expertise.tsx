@@ -56,7 +56,7 @@ class Expertise extends React.Component<ExpertiseProps> {
                 >
                     <DialogTitle> Добавить эксперта </DialogTitle>
 
-                    <DialogContent>
+                    <DialogContent className={classes.dialogContent}>
                         <SearchSelector label="Эксперт * "
                                         changeSearchText={this.handleChangeSearchText}
                                         list={usersList}

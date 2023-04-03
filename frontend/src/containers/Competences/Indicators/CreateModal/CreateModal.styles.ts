@@ -8,7 +8,7 @@ export default () => createStyles({
         width: '550px',
     },
     dialogContent: {
-        padding: '20px 24px !important',
+        padding: '10px 24px 20px 24px !important',
     },
     selector: {
         width: '550px'

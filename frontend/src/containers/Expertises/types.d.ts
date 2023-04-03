@@ -1,5 +1,5 @@
 import {ExpertisesFields, fields} from './enum';
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import styles from "./Expertises.styles";
 import {SortingType} from "../../components/SortingButton/types";
 import {WorkProgramGeneralType, WorkProgramStatusType} from "../WorkProgram/types";

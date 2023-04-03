@@ -119,15 +119,19 @@ class Expertises extends React.Component<ExpertisesProps> {
                             <TableHead className={classes.header}>
                                 <TableRow>
                                     <TableCell>
-                                        Рабочая программа
-                                        <SortingButton changeMode={this.changeSorting(ExpertisesFields.WORK_PROGRAM)}
-                                                       mode={sortingField === ExpertisesFields.WORK_PROGRAM ? sortingMode : ''}
-                                        />
+                                        <div className={classes.headerCell}>
+                                            Рабочая программа
+                                            <SortingButton changeMode={this.changeSorting(ExpertisesFields.WORK_PROGRAM)}
+                                                           mode={sortingField === ExpertisesFields.WORK_PROGRAM ? sortingMode : ''}
+                                            />
+                                        </div>
                                     </TableCell>
                                     <TableCell className={classes.qualificationCell}>
-                                        Уровень
-                                        <TableFilter items={specializationObject}
-                                                     handleSelect={this.handleSelectQualification}/>
+                                        <div className={classes.headerCell}>
+                                            Уровень
+                                            <TableFilter items={specializationObject}
+                                                         handleSelect={this.handleSelectQualification}/>
+                                        </div>
                                     </TableCell>
                                     <TableCell>
                                         Эксперты
@@ -136,11 +140,13 @@ class Expertises extends React.Component<ExpertisesProps> {
                                         Редакторы
                                     </TableCell>
                                     <TableCell>
-                                        Дата изменения
-                                        <SortingButton
-                                            changeMode={this.changeSorting(ExpertisesFields.DATE_OF_LAST_CHANGE)}
-                                            mode={sortingField === ExpertisesFields.DATE_OF_LAST_CHANGE ? sortingMode : ''}
-                                        />
+                                        <div className={classes.headerCell}>
+                                            Дата изменения
+                                            <SortingButton
+                                                changeMode={this.changeSorting(ExpertisesFields.DATE_OF_LAST_CHANGE)}
+                                                mode={sortingField === ExpertisesFields.DATE_OF_LAST_CHANGE ? sortingMode : ''}
+                                            />
+                                        </div>
                                     </TableCell>
 
                                     <TableCell/>

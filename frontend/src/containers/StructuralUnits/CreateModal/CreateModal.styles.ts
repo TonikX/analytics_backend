@@ -14,7 +14,7 @@ export default () => createStyles({
     padding: '15px 24px 20px'
   },
   dialogContent: {
-    padding: '20px 24px !important',
+    padding: '10px 24px 20px 24px !important',
   },
   dialog: {
     padding: 20,

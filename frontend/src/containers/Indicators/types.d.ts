@@ -1,5 +1,5 @@
 import {fields} from './enum';
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import styles from "./WorkProgram.styles";
 import {IndicatorsFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";

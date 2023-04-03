@@ -1,5 +1,5 @@
-import {withStyles} from '@mui/styles';
-import {PrerequisiteType, ResultsType, WorkProgramActions} from '../../types';
+import {WithStyles} from '@mui/styles';
+import {ResultsType, WorkProgramActions} from '../../types';
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 
 import styles from "./CreateModal.styles";

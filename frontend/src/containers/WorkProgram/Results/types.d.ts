@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import {WorkProgramActions} from '../types';
 import {ResultsType} from "../types";
 

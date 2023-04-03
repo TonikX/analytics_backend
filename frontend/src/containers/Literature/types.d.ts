@@ -1,5 +1,5 @@
 import {fields, literatureEbscoFields} from './enum';
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import styles from "./WorkProgram.styles";
 import {literatureFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";

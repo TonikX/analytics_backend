@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import styles from "./Expertis.styles";
 import {ExpertisesActions, ExpertiseType} from '../types';
 import {GeneralActions} from '../../../layout/types'
