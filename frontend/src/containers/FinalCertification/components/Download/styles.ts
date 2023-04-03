@@ -1,4 +1,4 @@
-import {createStyles} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default () => createStyles({
     input: {
