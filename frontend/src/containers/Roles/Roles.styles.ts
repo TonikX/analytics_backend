@@ -12,8 +12,8 @@ export default (theme: Theme) => createStyles({
         flexDirection: 'column'
     },
     title: {
-        fontSize: '24px',
-        marginBottom: '20px',
+        fontSize: '24px !important',
+        marginBottom: '20px !important',
         display: 'flex',
         justifyContent: 'space-between',
     },

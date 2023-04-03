@@ -5,7 +5,6 @@ import Scrollbars from "react-custom-scrollbars-2";
 import classNames from 'classnames';
 
 import Paper from '@mui/material/Paper';
-import TablePagination from '@mui/material/TablePagination';
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
 
@@ -25,9 +24,11 @@ import {SkillsProps, SkillType} from '../types';
 import {RolesFields} from '../enum';
 
 import {levels} from '../constants';
+import {withRouter} from '../../../hoc/WithRouter'
 
 import connect from './Skills.connect';
 import styles from './Skills.styles';
+import Pagination from "@mui/lab/Pagination";
 
 class Skills extends React.Component<SkillsProps> {
     state = {
@@ -39,7 +40,7 @@ class Skills extends React.Component<SkillsProps> {
         this.props.actions.getRole(this.getRoleId());
     }
 
-    getRoleId = () => get(this, 'props.match.params.id', 0);
+    getRoleId = () => get(this, 'props.params.id', 0);
 
     handleClickDelete = (id: number) => () => {
         this.setState({
@@ -142,14 +143,11 @@ class Skills extends React.Component<SkillsProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                      //@ts-ignore
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"
@@ -176,4 +174,4 @@ class Skills extends React.Component<SkillsProps> {
     }
 }
 
-export default connect(withStyles(styles)(Skills));
+export default connect(withStyles(styles)(withRouter(Skills)));

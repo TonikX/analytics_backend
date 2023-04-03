@@ -6,13 +6,13 @@ import Scrollbars from "react-custom-scrollbars-2";
 import classNames from 'classnames';
 
 import Paper from '@mui/material/Paper';
-import TablePagination from '@mui/material/TablePagination';
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
 
 import {withStyles} from '@mui/styles';
 
 import AddIcon from "@mui/icons-material/Add";
+import Pagination from "@mui/lab/Pagination";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/EditOutlined";
@@ -67,8 +67,8 @@ class Roles extends React.Component<RolesProps> {
         this.props.actions.openDialog();
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: React.ChangeEvent, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getRolesList();
     }
 
@@ -125,14 +125,11 @@ class Roles extends React.Component<RolesProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                //@ts-ignore
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"
@@ -159,4 +156,5 @@ class Roles extends React.Component<RolesProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(Roles));

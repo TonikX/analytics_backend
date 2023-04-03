@@ -80,7 +80,7 @@ class CreateModal extends React.PureComponent<RolesCreateModalProps> {
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} роль </DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextField label="Название *"
                                onChange={this.saveField(RolesFields.TITLE)}
                                value={role[RolesFields.TITLE]}

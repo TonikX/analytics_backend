@@ -134,8 +134,7 @@ class CreateModal extends React.PureComponent<RolesCreateModalProps> {
                                     value={skill[RolesFields.LEVEL]}
                         >
                             {Object.keys(levels).map(key =>
-
-                                <FormControlLabel value={key} control={<Radio checked={skill[RolesFields.LEVEL] === key} />} label={levels[key]} />
+                                <FormControlLabel key={key} value={key} control={<Radio checked={skill[RolesFields.LEVEL] === key} />} label={levels[key]} />
                             )}
                         </RadioGroup>
                     </FormControl>

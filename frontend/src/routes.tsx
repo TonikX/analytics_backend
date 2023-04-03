@@ -160,7 +160,7 @@ export default () => (
               <Route path={routerService.getPracticeRoute()} element={<AuthRoute><Practice /></AuthRoute>} />
               <Route path={routerService.getFinalCertificationRoute()} element={<AuthRoute><FinalCertification /></AuthRoute>} />
               <Route path={routerService.getFinalCertificationListRoute()} element={<AuthRoute><FinalCertificationList /></AuthRoute>} />
-
+              <Route path={routerService.getRolesSkillsRoute()} element={<AuthRoute><RolesSkills /></AuthRoute>} />
 
               {/*<Route path={routerService.getCourseRoute()} element={<AuthRoute>*/}
               {/*  /!*<EducationPlanDetail match={match} trajectoryRoute /> // TODO match + откомментировать ?? *!/*/}
@@ -203,15 +203,6 @@ export default () => (
               {/*           )}*/}
               {/*/>*/}
 
-              {/*<AuthRoute path={routerService.getRolesSkillsRoute()}*/}
-              {/*           children={() => (*/}
-              {/*           <Route*/}
-              {/*               render={({match}) => (*/}
-              {/*                    <RolesSkills match={match} />*/}
-              {/*               )}*/}
-              {/*           />*/}
-              {/*    )}*/}
-              {/*/>*/}
               {/*    <AuthRoute path={routerService.getRolesSkillsRoute()}*/}
               {/*               children={() => (*/}
               {/*                   <Route*/}

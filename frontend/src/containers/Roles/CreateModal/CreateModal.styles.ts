@@ -1,7 +1,6 @@
-import {Theme} from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 
-export default (theme: Theme) => createStyles({
+export default () => createStyles({
     input: {
         width: '550px',
     },
@@ -10,6 +9,9 @@ export default (theme: Theme) => createStyles({
     },
     actions: {
         padding: '15px 24px 20px'
+    },
+    dialogContent: {
+        padding: '10px 24px 20px 24px !important',
     },
     dialog: {
         padding: 20,
