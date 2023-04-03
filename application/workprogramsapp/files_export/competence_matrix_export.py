@@ -137,7 +137,7 @@ def recursion_module_matrix(ws, level, modules, unique_dict, competence_dict, de
 
 
 def process_excel_competence_matrix(gen_characteristic):
-    # wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\competence_matrix_template.xlsx")
+    #wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\competence_matrix_template.xlsx")
     wb_obj = openpyxl.load_workbook("/application/static-backend/export_template/competence_matrix_template_2023.xlsx")
 
     unique_dict = \
@@ -172,11 +172,24 @@ def process_excel_competence_matrix(gen_characteristic):
 def fill_competences(ws, column_start, competence_queryset, competence_dict, name_comp, string_comp):
     level = 2
 
-    # Формируем данные
+    # Генерация номеров для профессионапльных компетенций
     if not name_comp == "pk_competences":
         competences_list = [comp.competence.number for comp in competence_queryset]
     else:
-        competences_list = [f"ПК-{i + 1}" for i, comp in enumerate(competence_queryset)]
+        pk_dict = {} #Словарь для поиска одинаковыз компетенций
+        competences_list = []
+        pk_code_inc = 0
+        for pk_type in ["prof", "fore", "min"]:
+            for comp in competence_queryset.filter(group_of_pk__type_of_pk_competence=pk_type):
+                if not pk_dict.get(comp.competence.id):
+                    pk_code_inc += 1
+                    pk_dict[comp.competence.id] = pk_code_inc
+                    temp_pk_code = pk_code_inc
+                else:
+                    temp_pk_code = pk_dict[comp.competence.id]
+                competences_list.append(f"ПК-{temp_pk_code}")
+
+    # Формируем данные
     competence_dict[name_comp]["start"] = column_start
     competence_dict[name_comp]["list_num"] = competences_list
     column_end = column_start + len(competences_list) - 1
