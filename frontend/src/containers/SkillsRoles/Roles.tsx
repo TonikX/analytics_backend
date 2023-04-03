@@ -6,12 +6,11 @@ import debounce from "lodash/debounce";
 import classNames from 'classnames';
 
 import Paper from '@mui/material/Paper';
-import TablePagination from '@mui/material/TablePagination';
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import TextField from "@mui/material/TextField";
-
+import Pagination from "@mui/lab/Pagination";
 import {withStyles} from '@mui/styles';
 
 import SortingButton from "../../components/SortingButton";
@@ -29,7 +28,7 @@ class Roles extends React.Component<RolesProps> {
     }
 
     handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getRolesList();
     }
 
@@ -102,14 +101,11 @@ class Roles extends React.Component<RolesProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                      //@ts-ignore
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
                 </div>
             </Paper>
