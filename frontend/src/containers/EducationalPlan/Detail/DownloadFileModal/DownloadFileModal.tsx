@@ -151,7 +151,6 @@ class DownloadFileModal extends React.PureComponent<DownloadFileModalProps> {
                             input={
                                 <OutlinedInput
                                     notched
-                                    labelWidth={100}
                                     name="course"
                                     id="section-label"
                                 />

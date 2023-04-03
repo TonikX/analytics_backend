@@ -33,7 +33,6 @@ const Selector = ({classes, value, onChange, noMargin}: QualificationSelectorPro
                 input={
                     <OutlinedInput
                         notched
-                        labelWidth={100}
                         id="section-label"
                     />
                 }

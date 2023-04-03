@@ -85,7 +85,6 @@ class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
                             input={
                                 <OutlinedInput
                                     notched
-                                    labelWidth={100}
                                     id="section-label"
                                 />
                             }

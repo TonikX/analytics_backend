@@ -196,7 +196,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         }
 
         this.props.actions.closeDetailDialog();
-        
+
         if (planId){
             this.props.actions.getEducationalDetail(planId);
         } else {
@@ -708,7 +708,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                     input={
                                         <OutlinedInput
                                             notched
-                                            labelWidth={100}
                                             id="section-label"
                                         />
                                     }

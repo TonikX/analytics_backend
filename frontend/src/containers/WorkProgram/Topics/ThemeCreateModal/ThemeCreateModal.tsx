@@ -129,7 +129,6 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                             input={
                                 <OutlinedInput
                                     notched
-                                    labelWidth={100}
                                     name="course"
                                     id="section-label"
                                 />

@@ -34,7 +34,6 @@ const Selector = ({classes, label, value, onChange, noMargin, wrapClass, metaLis
                 input={
                     <OutlinedInput
                         notched
-                        labelWidth={100}
                         id="section-label"
                     />
                 }

@@ -88,7 +88,6 @@ class AddToFolderModal extends React.PureComponent<AddToFolderModalProps> {
                             input={
                                 <OutlinedInput
                                     notched
-                                    labelWidth={100}
                                     id="section-label"
                                 />
                             }

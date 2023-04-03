@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import {CompetenceActions} from "../../containers/Competences/types";
 
 import styles from "./AddCompetenceModal.styles";

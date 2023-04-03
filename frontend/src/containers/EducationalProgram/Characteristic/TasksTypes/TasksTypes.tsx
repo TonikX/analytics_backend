@@ -139,7 +139,6 @@ export default ({ characteristic }: any) => {
             input={
               <OutlinedInput
                 notched
-                labelWidth={100}
                 id="selected-object"
               />
             }

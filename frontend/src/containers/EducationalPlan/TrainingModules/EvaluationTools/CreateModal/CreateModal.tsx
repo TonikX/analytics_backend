@@ -202,7 +202,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {    editor = nu
                                             input={
                                                 <OutlinedInput
                                                   notched
-                                                  labelWidth={100}
                                                   name="course"
                                                   id="section-label"
                                                 />

@@ -186,7 +186,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             input={
                                 <OutlinedInput
                                     notched
-                                    labelWidth={100}
                                     name="year"
                                 />
                             }

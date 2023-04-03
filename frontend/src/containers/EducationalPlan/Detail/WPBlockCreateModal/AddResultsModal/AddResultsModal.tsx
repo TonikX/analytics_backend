@@ -85,7 +85,6 @@ class AddResultsModal extends React.PureComponent<AddResultsModalProps> {
                             input={
                                 <OutlinedInput
                                     notched
-                                    labelWidth={100}
                                     id="section-label"
                                 />
                             }
