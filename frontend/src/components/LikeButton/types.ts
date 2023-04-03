@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import styles from "./LikeButton.styles";
 
 export interface LikeButtonProps extends WithStyles<typeof styles> {

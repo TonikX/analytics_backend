@@ -195,13 +195,10 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
                     </DialogContent>
                     <DialogActions className={classes.actions}>
                         {source !== literatureSource.EBSCO && <TablePagination count={allCount}
-                                         component="div"
                                          page={currentPage - 1}
                                          rowsPerPageOptions={[]}
-                                         onChangePage={this.handleChangePage}
-                            //@ts-ignore
+                                         onPageChange={this.handleChangePage}
                                          rowsPerPage={10}
-                                         onChangeRowsPerPage={()=>{}}
                         />}
                         <div>
                             <Button onClick={handleClose}

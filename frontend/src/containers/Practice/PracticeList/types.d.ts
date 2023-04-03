@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import styles from './PracticeList.styles'
 import {PracticeState} from "../types";
 import {SortingType} from "../../../components/SortingButton/types";

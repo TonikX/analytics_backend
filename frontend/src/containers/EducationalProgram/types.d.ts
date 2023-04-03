@@ -1,7 +1,7 @@
 import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
 import {ReactText} from "react";
 
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 
 import {SortingType} from "../../components/SortingButton/types";
 import {EducationalPlanInDirectionType} from "../EduationPlanInDirection/types";

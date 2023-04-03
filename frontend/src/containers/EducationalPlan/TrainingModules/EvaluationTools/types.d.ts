@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import {IntermediateCertificationType} from "../../../WorkProgram/types";
 import styles from "./EvaluationTools.styles";
 

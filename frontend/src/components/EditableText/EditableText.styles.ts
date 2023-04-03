@@ -1,4 +1,4 @@
-import {Theme} from "@mui/material/styles/createMuiTheme";
+import {Theme} from "@mui/material/styles/createTheme";
 import createStyles from '@mui/material/styles/createStyles';
 
 export default (theme: Theme) => createStyles({

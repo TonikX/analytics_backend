@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import styles from "./QualificationSelector.styles";
 
 export interface QualificationSelectorProps extends WithStyles<typeof styles> {

@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import {SelectorListType} from "../../../components/SearchSelector/types";
 import {EducationalPlanInDirectionActions} from "../types";
 import styles from './EducationPlanInDirectionSelector.styles';

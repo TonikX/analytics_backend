@@ -3,7 +3,7 @@ import {
     ActionCreatorWithPayload,
 } from '@reduxjs/toolkit';
 
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import styles from "./SelectDiscipline.styles";
 import {fields, qualificationEnum, workProgramFields, wpTypeEnum} from "./enum";
 

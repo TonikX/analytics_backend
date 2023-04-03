@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import styles from './Detail.styles';
 import {EducationalPlanActions, EducationalPlanType, DisciplineBlockType} from "../types";
 import {FolderActions} from "../../Profile/Folders/types";

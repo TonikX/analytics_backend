@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import styles from "./WorkProgramStatus.styles";
 
 export interface WorkProgramStatusProps extends WithStyles<typeof styles> {

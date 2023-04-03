@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import {EvaluationToolType, WorkProgramActions} from '../../types';
 
 import styles from "./DescriptionModal.styles";

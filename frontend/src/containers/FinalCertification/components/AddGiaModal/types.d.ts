@@ -1,4 +1,4 @@
-import {withStyles} from '@mui/styles';
+import {WithStyles} from '@mui/styles';
 import {CertificationListActions} from "../../CertificationList/types";
 
 import styles from "../CreateModal.styles";
