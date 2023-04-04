@@ -1,6 +1,7 @@
 import React from 'react';
 import get from 'lodash/get';
 import Scrollbars from "react-custom-scrollbars-2";
+// @ts-ignore
 import {AutoSizer} from 'react-virtualized-reactv17';
 import classNames from "classnames";
 
@@ -168,7 +169,7 @@ class Sections extends React.PureComponent<SectionsProps> {
       <div className={classes.secondStep}>
         <TableContainer className={classes.table}>
           <AutoSizer disableHeight>
-            {({ width, height }) => (
+            {({ width, height }: any) => (
               <Scrollbars style={{width, height}}  ref={(el) => {this.scrollBar = el}} autoHeight autoHeightMax={Number.MAX_VALUE}>
                 <Table>
                   <TableHead>

@@ -1,6 +1,7 @@
 import React from 'react';
 import get from "lodash/get";
 
+// @ts-ignore
 import {AutoSizer} from "react-virtualized-reactv17";
 
 import Select from "@mui/material/Select";

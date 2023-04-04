@@ -1,6 +1,7 @@
 import React, {SyntheticEvent} from 'react';
 import get from 'lodash/get';
 import Scrollbars from "react-custom-scrollbars-2";
+// @ts-ignore
 import {AutoSizer} from 'react-virtualized-reactv17';
 
 import classNames from "classnames";

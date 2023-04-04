@@ -5,6 +5,7 @@ import matchSorter from 'match-sorter';
 
 import {useStyles} from './ProfessionsSelectList.styles'
 
+// @ts-ignore
 import {List, AutoSizer, CellMeasurer, CellMeasurerCache} from 'react-virtualized-reactv17';
 import Scrollbars from "react-custom-scrollbars-2";
 import TextField from '../../../components/TextField';
