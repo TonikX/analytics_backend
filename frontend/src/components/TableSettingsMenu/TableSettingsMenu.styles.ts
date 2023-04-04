@@ -1,7 +1,7 @@
-import {Theme} from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
+import {makeStyles} from "@mui/styles";
 
-export default (theme: Theme) => createStyles({
+export const useStyles = makeStyles(() => createStyles({
     // @ts-ignore
     popper: {
         // @ts-ignore
@@ -22,4 +22,4 @@ export default (theme: Theme) => createStyles({
             fill: 'rgba(0, 0, 0, 0.54)'
         },
     }
-});
+}));

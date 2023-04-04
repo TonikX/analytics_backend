@@ -17,6 +17,7 @@ export default (theme: Theme) => createStyles({
     padding: 0
   },
   menuItem: {
+    // @ts-ignore
     whiteSpace: 'normal !important',
     transition: 'all 0.2s',
     margin: '5px 2px',

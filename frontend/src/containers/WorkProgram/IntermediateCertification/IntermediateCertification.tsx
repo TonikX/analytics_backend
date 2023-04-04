@@ -108,7 +108,7 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
                     <EvaluationCertificationTotalList />
                 </div>
                 <AutoSizer disableHeight>
-                    {({ width, height }) => (
+                    {({ width, height }: any) => (
                 <Scrollbars style={{width, height}} autoHeight autoHeightMax={Number.MAX_VALUE}>
                 <div className={classNames(classes.header, classes.row)}>
                     <Typography className={classes.title}>

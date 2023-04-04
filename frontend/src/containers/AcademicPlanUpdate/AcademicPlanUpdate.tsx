@@ -7,8 +7,6 @@ import AddIcon from "@mui/icons-material/Add";
 import TextField from '@mui/material/TextField';
 import Fab from "@mui/material/Fab";
 import Paper from '@mui/material/Paper';
-import FormControlLabel from "@mui/material/FormControlLabel";
-
 
 import Typography from "@mui/material/Typography";
 
@@ -137,8 +135,9 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
     };
 
     render() {
+        //@ts-ignore
+        const {classes} = this.props;
         const {
-            classes,
             schedulerConfiguration,
             academicPlanUpdateLogs,
             updatedAcademicPlans,
@@ -151,7 +150,7 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
             updatedPlansSortingField,
             updatedPlansSortingMode
         } = this.props;
-        console.log(schedulerConfiguration[SchedulerConfigurationFields.EXECUTION_HOURS])
+
         return (
             <Paper className={classes.root}>
                 <div className={classes.titleWrap}>
@@ -182,7 +181,6 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
                                             vertical: "top",
                                             horizontal: "left"
                                         },
-                                        getContentAnchorEl: null
                                     }}>
                                 <MenuItem value="1">1 день</MenuItem>
                                 <MenuItem value="3">3 дня</MenuItem>

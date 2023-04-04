@@ -1,7 +1,4 @@
-import {WithStyles} from '@mui/styles';
-import styles from "./TableSettingsMenu.styles";
-
-export interface TableSettingsMenuProps extends WithStyles<typeof styles> {
+export interface TableSettingsMenuProps {
     handleCloseMenu: Function;
     handleOpenMenu: Function;
     anchorEl: any;

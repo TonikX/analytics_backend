@@ -10,6 +10,7 @@ import {competenceState, CompetenceType} from './types';
 import {SelectorListType} from "../../components/SearchSelector/types";
 import {IndicatorType} from "../Indicators/types";
 import {IndicatorsFields} from "../Indicators/enum";
+import {SortingType, Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): competenceState => get(state, GENERAL_PATH);
 export const getCompetences = (state: rootState): Array<CompetenceType> => get(getStateData(state), fields.COMPETENCE_LIST, []);
@@ -40,4 +41,4 @@ export const getSearchCodeQuery = (state: rootState) => get(getStateData(state),
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
-export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+export const getSortingMode = (state: rootState): SortingType => get(getSorting(state), fields.SORTING_MODE, Types.ASC);

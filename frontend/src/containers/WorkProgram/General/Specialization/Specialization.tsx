@@ -39,7 +39,7 @@ class Specialization extends React.PureComponent<SpecializationProps> {
                 <InputLabel className={classes.label}> Уровень образовательной программы </InputLabel>
                 <InputsLoader loading={isFetching}>
                     <AutoSizer style={{width: '100%', height: '80px'}}>
-                        {({width}) => (
+                        {({width}: any) => (
                             <FormControl
                                 style={{width: width}}>
                                 <Select

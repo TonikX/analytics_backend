@@ -3,6 +3,7 @@ import get from 'lodash/get';
 import debounce from "lodash/debounce";
 import Scrollbars from "react-custom-scrollbars-2";
 
+// @ts-ignore
 import {AutoSizer} from 'react-virtualized-reactv17';
 
 import Fade from '@mui/material/Fade';
@@ -117,7 +118,7 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
                                helperText={errorMessage}
                     />
                     <AutoSizer style={{width: '100%'}}>
-                        {({width}) => (
+                        {({width}: any) => (
                             <Popper open={open}
                                     anchorEl={anchorEl}
                                     transition

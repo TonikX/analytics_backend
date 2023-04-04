@@ -11,7 +11,6 @@ import {TrainingModuleType} from "../../EducationalPlan/TrainingModules/types";
 import {TrainingModuleFields} from "../../EducationalPlan/TrainingModules/enum";
 import {getUserFullName} from "../../../common/utils";
 import {Checkbox} from "@mui/material";
-import TablePagination from "@mui/material/TablePagination";
 import {useStyles} from "../AddModuleToPlan.styles";
 import actions from "../actions";
 import {useDispatch, useSelector} from "react-redux";
@@ -97,9 +96,9 @@ export const Modules = () => {
                 </div>
             </Scrollbars>
             <div>
-                <Pagination count={allCount}
+                <Pagination count={trainingModules.length}
                             page={currentPage}
-                            onChange={this.handleChangePage}
+                            onChange={handleChangePage}
                             color="primary"
                 />
             </div>

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import get from 'lodash/get';
 import {appRouter} from "../../../service/router-service";

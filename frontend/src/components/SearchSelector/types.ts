@@ -1,7 +1,6 @@
 import {WithStyles} from '@mui/styles';
 import styles from "./SearchSelector.styles";
 import {ReactText} from "react";
-import {PopperPlacementType} from "@mui/material/Popper/Popper";
 
 export interface SearchSelectorProps extends WithStyles<typeof styles> {
     changeSearchText: Function;
@@ -13,7 +12,7 @@ export interface SearchSelectorProps extends WithStyles<typeof styles> {
     className?: string;
     disabled?: boolean;
     isReset?: boolean;
-    popperPlacement?: PopperPlacementType;
+    popperPlacement?: any; // возможно в новой версии нету этого
     errorMessage?: string;
 }
 

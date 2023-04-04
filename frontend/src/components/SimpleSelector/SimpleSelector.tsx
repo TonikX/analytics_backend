@@ -15,7 +15,7 @@ import styles from './SimpleSelector.styles';
 import {FormHelperText} from "@mui/material";
 
 const Selector = ({classes, label, value, onChange, noMargin, wrapClass, metaList, errorMessage, disabled}: QualificationSelectorProps) => {
-    const handleChange = (e: React.ChangeEvent<any>) => {
+    const handleChange = (e: any) => {
         onChange(get(e, 'target.value'))
     }
 

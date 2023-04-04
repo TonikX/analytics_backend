@@ -8,7 +8,6 @@ import {CreateModalProps} from './types';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
-import FormControlLabel from "@mui/material/FormControlLabel";
 import {withStyles} from '@mui/styles';
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
@@ -112,7 +111,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
-    changeSemesterCount = (e: React.ChangeEvent<{}>, value: number | number[]) => {
+    changeSemesterCount = (e: any, value: number | number[]) => {
         const {evaluationTool} = this.state;
 
         this.setState({
@@ -136,12 +135,12 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     saveMinMaxField = (field: string) => (e: React.ChangeEvent) => {
         const {evaluationTool} = this.state;
-        const value = get(e, 'target.value')
+        const value = get(e, 'target.value', '')
 
         this.setState({
             evaluationTool: {
                 ...evaluationTool,
-                [field]: value.length > 0 ? value : undefined
+                [field]: value?.length > 0 ? value : undefined
             }
         })
     }
@@ -184,7 +183,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         <>
                           <div className={classes.leftSide}>
                             <AutoSizer style={{width: '100%'}}>
-                                {({width}) => (
+                                {({width}: any) => (
                                     <>
                                         <TextField label="Название оценочного средства *"
                                                    onChange={this.saveField(IntermediateCertificationFields.NAME)}

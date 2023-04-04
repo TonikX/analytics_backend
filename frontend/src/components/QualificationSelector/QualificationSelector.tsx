@@ -15,7 +15,7 @@ import {QualificationSelectorProps} from './types';
 import styles from './QualificationSelector.styles';
 
 const Selector = ({classes, value, onChange, noMargin}: QualificationSelectorProps) => {
-    const handleChange = (e: React.ChangeEvent<any>) => {
+    const handleChange = (e: any) => {
         onChange(get(e, 'target.value'))
     }
 
