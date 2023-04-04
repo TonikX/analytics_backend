@@ -31,8 +31,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
-
     handleClose = () => {
+        //@ts-ignore
         this.props.navigate(appRouter.getWorkProgramEvaluationToolsLink(this.props.workProgramId))
         this.props.actions.closeDialog(fields.SHOW_EVALUATION_TOOLS_DESCRIPTION);
     }

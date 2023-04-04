@@ -62,7 +62,7 @@ class Header extends React.PureComponent<HeaderProps>{
     userService.logout();
     this.handleClose();
     this.props.logout();
-
+//@ts-ignore
     this.props.navigate(appRouter.getSignInRoute());
   };
 

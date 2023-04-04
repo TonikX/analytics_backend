@@ -12,4 +12,5 @@ const AuthRoute = ({children}: any) => {
     return children;
 };
 
+//@ts-ignore
 export default connect()(AuthRoute);

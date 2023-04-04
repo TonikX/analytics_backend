@@ -67,7 +67,10 @@ class Literature extends React.PureComponent<FourthStepProps> {
                     </div>
                 }
 
-                {isCanEdit && <LiteratureAddModal />}
+                {isCanEdit ?
+                    //@ts-ignore
+                    <LiteratureAddModal />
+                : null}
             </div>
         );
     }

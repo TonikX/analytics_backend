@@ -7,11 +7,6 @@ import styles from "./LiteratureModal.styles";
 
 export interface LiteratureModalProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
-    literatureActions: LiteratureActions;
     isOpen: boolean;
     selectedItems: Array<LiteratureType>;
-    literatureList: Array<LiteratureType>;
-    topic: Topic;
-    currentPage: number;
-    allCount: number;
 }

@@ -134,7 +134,7 @@ class FirstStep extends React.Component<FirstStepProps> {
   }
 
   changeSemesterCount = (e: React.ChangeEvent) => {
-    const value = get(e, 'target.value')
+    const value = get(e, 'target.value', '') as string
     this.setState({
       [WorkProgramGeneralFields.SEMESTER_COUNT]: parseInt(value)
     });

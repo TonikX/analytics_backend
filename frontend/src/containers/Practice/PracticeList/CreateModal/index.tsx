@@ -55,6 +55,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {minimalPracticeState} = this.state;
         minimalPracticeState[PracticeFields.FORM_OF_CERTIFICATION_TOOLS] = 'Защита отчёта';
         const callback = (id: number) => {
+            //@ts-ignore
             this.props.navigate(appRouter.getPracticeLink(id));
         };
         this.props.actions.createPractice({

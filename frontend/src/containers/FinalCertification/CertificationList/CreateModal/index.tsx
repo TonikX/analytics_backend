@@ -53,6 +53,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     handleSave = () => {
         const {state} = this.state;
         const callback = (id: number) => {
+          //@ts-ignore
             this.props.navigate(appRouter.getFinalCertificationLink(id));
         };
         this.props.actions.createCertification({
