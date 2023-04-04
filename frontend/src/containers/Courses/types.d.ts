@@ -95,4 +95,5 @@ export interface CoursesProps extends WithStyles<typeof styles> {
     sortingMode: SortingType;
     platforms: Array<PlatformType> | [];
     institutions: Array<InstitutionType> | [];
+    classes: any;
 }

@@ -181,7 +181,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     render() {
-        const {classes, sections, semesterCount} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {sections, semesterCount} = this.props;
         const {evaluationTool, isOpen} = this.state;
 
         const isEditMode = Boolean(evaluationTool[EvaluationToolFields.ID]);

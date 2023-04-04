@@ -40,7 +40,9 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
   }
 
   render() {
-    const {classes, plans} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {plans} = this.props;
 
     return (
       <div className={classes.root}>

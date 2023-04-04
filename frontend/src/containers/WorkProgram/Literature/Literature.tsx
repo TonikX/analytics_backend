@@ -30,7 +30,9 @@ class Literature extends React.PureComponent<FourthStepProps> {
     };
 
     render() {
-        const {classes, literatureList, isCanEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {literatureList, isCanEdit} = this.props;
 
         return (
             <div className={classes.root}>

@@ -117,7 +117,9 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
     };
 
     render() {
-        const {classes, educationalPlansInDirection, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {educationalPlansInDirection, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
         const {deleteConfirmId, anchorsEl} = this.state;
 
         return (

@@ -345,7 +345,9 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 
   renderRealizationTypeSelect = () => {
-    const {classes, educationalProgramCharacteristic, canEdit} = this.props
+    //@ts-ignore
+    const {classes} = this.props;
+    const {educationalProgramCharacteristic, canEdit} = this.props
     return (
       <>
         <Typography>
@@ -415,7 +417,9 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 
   renderTypeOP = () => {
-    const {classes, educationalProgramCharacteristic, canEdit} = this.props
+    //@ts-ignore
+    const {classes} = this.props;
+    const {educationalProgramCharacteristic, canEdit} = this.props
     return (
       <>
         <Typography>
@@ -654,7 +658,9 @@ class Characteristic extends React.Component<CharacteristicProps> {
   sendToCheck = () => this.props.actions.sendToCheck()
 
   render() {
-    const {classes, educationalProgramCharacteristic, canEdit, statusInfo} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {educationalProgramCharacteristic, canEdit, statusInfo} = this.props;
     const {activeStep} = this.state;
     const names = get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])
       .reduce((items: any, item:any) => {

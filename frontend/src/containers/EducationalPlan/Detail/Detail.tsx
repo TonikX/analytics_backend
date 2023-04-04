@@ -71,7 +71,7 @@ import UserSelector from "../../Profile/UserSelector/UserSelector";
 const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}}/>);
 
 const SortableItem = SortableElement((props:any) => {
-  const {classes, detailPlan, canEdit, blockId, handleDisconnectModule, module} = props;
+  const {detailPlan, canEdit, blockId, handleDisconnectModule, module} = props;
 
   const renderModule = (module:any, level:number):any => {
     const selectionRule = selectRulesArray.find(type => type.value === module?.selection_rule)?.label
@@ -146,7 +146,9 @@ const SortableList = SortableContainer((props:any) => {
 
 
 const RenderBlockOfWP = (props:any) => {
-  const {classes, detailPlan, blockOfWorkPrograms, level} = props
+  //@ts-ignore
+  const {classes} = props;
+  const {detailPlan, blockOfWorkPrograms, level} = props
   const qualification = get(detailPlan, 'academic_plan_in_field_of_study[0].qualification', '');
   const maxSem = qualification === BACHELOR_QUALIFICATION ? 8 : 4;
 
@@ -435,7 +437,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   renderEducationPlan = () => {
-    const {classes, blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
     const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
     const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
 
@@ -566,7 +570,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
 
   renderMain = () => {
-    const {classes, detailPlan, canValidate} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {detailPlan, canValidate} = this.props;
 
     //@ts-ignore
     const isuId = detailPlan?.ap_isu_id
@@ -731,7 +737,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   render() {
-    const {classes, trajectoryRoute} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {trajectoryRoute} = this.props;
     // @ts-ignore
     const {tab} = this.state
     return (

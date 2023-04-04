@@ -44,7 +44,9 @@ class SignUp extends React.PureComponent{
     };
 
     render() {
-        const {classes, disableButton, isPasswordError, auth,
+        //@ts-ignore
+        const {classes} = this.props;
+        const {disableButton, isPasswordError, auth,
             username, firstName, lastName, password, passwordRepeat } = this.props;
         const {passwordFieldIsFocused} = this.state;
         const showPasswordError = isPasswordError && !passwordFieldIsFocused;

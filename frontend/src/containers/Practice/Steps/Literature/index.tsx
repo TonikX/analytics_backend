@@ -50,7 +50,9 @@ class Literature extends React.PureComponent<LiteratureProps> {
     }
 
     render() {
-        const {classes, literatureList} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {literatureList} = this.props;
 
         const {isModalOpen} = this.state;
 

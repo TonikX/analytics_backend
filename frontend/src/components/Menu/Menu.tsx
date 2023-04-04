@@ -21,7 +21,9 @@ interface MenuProps extends WithStyles<typeof styles>, withRouterData{
 
 class Menu extends React.PureComponent<MenuProps>{
   render() {
-    const {classes, isOpen, userGroups, mockMenu} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {isOpen, userGroups, mockMenu} = this.props;
     const {pathname} = this.props.location;
     const menuListMock = mockMenu.length !== 0 ? getMockMenu(mockMenu) : [];
     const menuList = getMenuList(userGroups);

@@ -60,6 +60,9 @@
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"
   },
+  "resolutions": {
+    "@types/react": "^17.0.38"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",

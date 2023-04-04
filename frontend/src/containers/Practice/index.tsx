@@ -82,7 +82,9 @@ class Practice extends React.Component<PracticeProps> {
   }
 
   render() {
-    const {classes, isError, permissionsInfo} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {isError, permissionsInfo} = this.props;
     const {activeStep} = this.state;
 
     const workProgramStatus = permissionsInfo[PermissionsInfoFields.EXPERTISE_STATUS] ?? ExpertiseStatus.WORK;

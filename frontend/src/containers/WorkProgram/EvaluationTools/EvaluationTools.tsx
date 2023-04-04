@@ -105,7 +105,9 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
     }
 
     render() {
-        const {classes, evaluationToolsList, isCanEdit, extraPoints} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {evaluationToolsList, isCanEdit, extraPoints} = this.props;
         const {anchorsEl} = this.state;
 
         return (

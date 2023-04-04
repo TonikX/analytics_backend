@@ -64,7 +64,9 @@ class PracticeList extends React.Component<PracticeListProps> {
 
 
     render() {
-        const {classes, practiceList, sortingField, practiceCount, currentPage} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {practiceList, sortingField, practiceCount, currentPage} = this.props;
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>

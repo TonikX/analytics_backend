@@ -37,7 +37,9 @@ class Results extends React.PureComponent<ResultsProps> {
     };
 
     render() {
-        const {classes, resultsList, permissionsInfo} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {resultsList, permissionsInfo} = this.props;
         const isCanEdit = permissionsInfo[PermissionsInfoFields.CAN_EDIT];
         return (
             <div className={classes.root}>

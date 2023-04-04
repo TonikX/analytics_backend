@@ -93,7 +93,9 @@ class Download extends React.Component<DownloadProps> {
     }
 
     render() {
-        const {classes, fields} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {fields} = this.props;
         const canSendToIsu = fields.can_send_to_isu;
 
         return (

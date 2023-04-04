@@ -94,7 +94,9 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
   }
 
   render() {
-    const {classes, fields, canAddEditors, isCanEdit} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {fields, canAddEditors, isCanEdit} = this.props;
     const semesterCount = fields[PracticeFields.SEMESTER_COUNT] || 0;
     const semesterColumns = new Array(semesterCount).fill(0);
     const ze = fields[PracticeFields.ZE_V_SEM] || "";

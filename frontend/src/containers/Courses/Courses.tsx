@@ -4,7 +4,6 @@ import get from 'lodash/get';
 
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
-import TablePagination from '@mui/material/TablePagination';
 import Typography from "@mui/material/Typography";
 import Tooltip from '@mui/material/Tooltip';
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
@@ -50,7 +49,9 @@ class OnlineCourses extends React.Component<CoursesProps> {
   }
 
   render() {
-    const {classes, courses, allCount, currentPage, sortingField, sortingMode } = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {courses, allCount, currentPage, sortingField, sortingMode } = this.props;
 
     return (
       <Paper className={classes.root}>
@@ -114,4 +115,5 @@ class OnlineCourses extends React.Component<CoursesProps> {
   }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(OnlineCourses));

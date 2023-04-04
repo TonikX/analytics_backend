@@ -36,7 +36,9 @@ class Prerequisites extends React.PureComponent<SixthStepProps> {
     };
 
     render() {
-        const {classes, prerequisitesList, isCanEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {prerequisitesList, isCanEdit} = this.props;
         
         return (
             <div className={classes.root}>

@@ -94,7 +94,9 @@ class IntermediateCertification extends React.PureComponent<IntermediateCertific
     };
 
     render() {
-        const {classes, intermediateCertificationList, isCanEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {intermediateCertificationList, isCanEdit} = this.props;
         const {anchorsEl} = this.state;
         const disabled = this.props.inChangeBlock.length > 0;
 

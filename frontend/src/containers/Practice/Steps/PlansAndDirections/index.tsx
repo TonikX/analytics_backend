@@ -22,7 +22,9 @@ interface GeneralInfoProps extends WithStyles<typeof styles> {
 
 class PlansAndDirections extends React.Component<GeneralInfoProps> {
   render() {
-    const {classes, fields} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {fields} = this.props;
 
     return (
       <div>

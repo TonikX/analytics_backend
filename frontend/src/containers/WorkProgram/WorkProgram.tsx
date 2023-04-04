@@ -122,7 +122,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         this.props.actions.cloneWorkProgram(this.getWorkProgramId());
     }
 
-    getWorkProgramId = () => get(this, 'props.match.params.id');
+    getWorkProgramId = () => get(this, 'props.match.params.id') as number;
 
     renderContent = () => {
         const {classes} = this.props;
@@ -276,13 +276,15 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         }
     }
 
-    openStep = (link: string) => {
+    openStep = (link: any) => {
         //@ts-ignore
         this.props.navigate(link)
     }
 
     render() {
-        const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
+        //@ts-ignore
+        const {classes} = this.props;
+        const {workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
             workProgramRating, canAddToFolder, validateErrors, notificationsRead, canSendToIsu} = this.props;
         const {activeStep, isOpenComments} = this.state;
 
@@ -345,8 +347,9 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         {Object.values(steps).map(({ label, link }, index) => {
                             return (
                                 <Step key={index} onClick={() => this.openStep(link(this.getWorkProgramId()))}>
-                                    <StepButton completed={false}
-                                                style={{textAlign: 'left',}}
+                                    <StepButton
+                                      // completed={false}
+                                        style={{textAlign: 'left',}}
                                     >
                                         {notificationsRead[index] && <Tooltip title="Есть непрочитанные комментарии"><CommentIcon className={classes.commentIcon} /></Tooltip>} {label}
                                     </StepButton>

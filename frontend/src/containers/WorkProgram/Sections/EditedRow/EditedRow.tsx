@@ -127,7 +127,9 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     isMixed = () => this.props.implementationFormat === ImplementationFormatsEnum.MIXED
 
     render() {
-        const {classes, isCanEdit} = this.props;
+      //@ts-ignore
+      const {classes} = this.props;
+        const {isCanEdit} = this.props;
         const {isEditMode, section} = this.state;
         const canEditConsultation = this.canEditConsultation()
         const canEditOfflineHours = this.canEditOfflineHours()

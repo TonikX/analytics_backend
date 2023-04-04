@@ -195,7 +195,10 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   renderBlockOfWP = (blockOfWorkPrograms: any, level: number) => {
-    const {classes, canEdit} = this.props
+
+    //@ts-ignore
+    const {classes} = this.props;
+    const {canEdit} = this.props
 
       return (
         <>
@@ -318,7 +321,10 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   renderModule = (item: any, level: number, allChild: any, fatherId: number): any => {
-    const {classes, canEdit} = this.props
+
+    //@ts-ignore
+    const {classes} = this.props;
+    const {canEdit} = this.props
     const blockOfWorkPrograms = item?.change_blocks_of_work_programs_in_modules
 
     return(
@@ -408,7 +414,9 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   renderModules = () => {
-    const {classes, module, canEdit} = this.props
+    //@ts-ignore
+    const {classes} = this.props;
+    const {module, canEdit} = this.props
     return (
       <>
         <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
@@ -572,7 +580,9 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   renderPlans = () => {
-    const {classes, module, canEdit} = this.props
+    //@ts-ignore
+    const {classes} = this.props;
+    const {module, canEdit} = this.props
 
     return (
       <>

@@ -64,7 +64,9 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
 
 
     render() {
-        const {classes, certificationList, sortingField, certificationCount, currentPage} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {certificationList, sortingField, certificationCount, currentPage} = this.props;
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>

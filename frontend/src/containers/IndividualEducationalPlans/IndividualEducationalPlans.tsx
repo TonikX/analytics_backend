@@ -85,7 +85,9 @@ class IndividualEducationalPlans extends React.Component<IndividualEducationalPl
     }
 
     render() {
-        const {classes, IndividualEducationalPlans, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {IndividualEducationalPlans, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (

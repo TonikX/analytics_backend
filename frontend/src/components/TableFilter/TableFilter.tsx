@@ -62,7 +62,9 @@ class TableFilter extends React.Component<TableFilterProps>{
     }
 
     render() {
-        const {classes, items} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {items} = this.props;
         const {anchorEl, selectedItems, enableFilter} = this.state;
 
         const isOpenSearchPopper = Boolean(anchorEl);

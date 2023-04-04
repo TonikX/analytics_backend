@@ -56,7 +56,9 @@ class Comments extends React.Component<CommentsProps> {
     }
 
     render() {
-        const {classes, comments} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {comments} = this.props;
         const {commentText} = this.state;
 
         return (

@@ -67,7 +67,9 @@ class Header extends React.PureComponent<HeaderProps>{
   };
 
   render() {
-    const {classes, openGeneralMenu, isAuth, notificationsCount, isDodProfile} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {openGeneralMenu, isAuth, notificationsCount, isDodProfile} = this.props;
     const {anchorEl} = this.state;
     const isOpenAvatarMenu = Boolean(anchorEl);
 

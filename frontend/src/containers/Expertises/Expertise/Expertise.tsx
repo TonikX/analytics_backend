@@ -53,7 +53,9 @@ class Expertise extends React.Component<ExpertiseProps & withRouterData> {
 
     render() {
         let canApproveWP
-        const {classes, expertise} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {expertise} = this.props;
 
         const experts = get(expertise, ExpertisesFields.EXPERTS_USERS_IN_RPD, [])
             .filter((item: any) => get(item, "stuff_status") === 'AU' || get(item, "stuff_status") === 'EX');

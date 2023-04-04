@@ -93,7 +93,9 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
     }
 
     render(): any {
-        const {classes, label, list, value, disabled, className, popperPlacement, errorMessage} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {label, list, value, disabled, className, popperPlacement, errorMessage} = this.props;
         const {anchorEl, searchText} = this.state;
         const open = Boolean(anchorEl);
 

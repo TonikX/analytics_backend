@@ -100,7 +100,9 @@ class EntitityToEntitity extends React.Component<EntityToEntityProps> {
   }
 
   render() {
-    const {classes, trainingEntities, allCount, currentPage, sortingField, sortingMode} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {trainingEntities, allCount, currentPage, sortingField, sortingMode} = this.props;
     const {deleteConfirmId} = this.state;
 
     return (

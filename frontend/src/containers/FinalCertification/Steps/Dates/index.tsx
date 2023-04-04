@@ -27,7 +27,9 @@ class Dates extends React.Component<DatesProps> {
 
     render() {
 
-        const {classes, templateText} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {templateText} = this.props;
 
         return (
             <div className={classes.content}>

@@ -88,7 +88,9 @@ class MainInfo extends React.Component<MainInfoProps> {
       }
 
     render() {
-        const {classes, canAddEditors, isCanEdit, fields} = this.props;
+      //@ts-ignore
+      const {classes} = this.props;
+        const {canAddEditors, isCanEdit, fields} = this.props;
         const {addEditorsMode} = this.state;
 
         return (

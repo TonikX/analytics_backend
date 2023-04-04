@@ -48,7 +48,9 @@ class Roles extends React.Component<RolesProps> {
     }, 300);
 
     render() {
-        const {classes, rolesList, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {rolesList, allCount, currentPage, sortingField, sortingMode} = this.props;
 
         return (
             <Paper className={classes.root}>

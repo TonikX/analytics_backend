@@ -85,7 +85,9 @@ class StructuralUnit extends React.Component<StructuralUnitProps> {
 
 
     render() {
-        const {classes, structuralUnitsList, fields} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {structuralUnitsList, fields} = this.props;
         const {errorMessage} = this.state;
 
         return (

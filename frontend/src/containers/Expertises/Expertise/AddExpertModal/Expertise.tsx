@@ -41,7 +41,9 @@ class Expertise extends React.Component<ExpertiseProps> {
     }
 
     render() {
-        const {classes, isOpen, usersList} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {isOpen, usersList} = this.props;
         const {id} = this.state;
 
         return (

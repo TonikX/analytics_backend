@@ -88,7 +88,9 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
     }
 
     render() {
-        const {classes, subjectArea, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {subjectArea, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (

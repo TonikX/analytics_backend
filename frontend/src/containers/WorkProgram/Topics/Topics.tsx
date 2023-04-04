@@ -87,7 +87,9 @@ class Topics extends React.PureComponent<TopicsProps, any> {
     };
 
     render() {
-        const {classes, sections, isCanEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {sections, isCanEdit} = this.props;
         const {showMaterial} = this.state;
 
         return (

@@ -27,7 +27,9 @@ class Specialization extends React.PureComponent<SpecializationProps> {
     };
 
     render() {
-        const {classes, isFetching, value, isCanEdit, disabled} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {isFetching, value, isCanEdit, disabled} = this.props;
 
         if (!value) return <></>;
 

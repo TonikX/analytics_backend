@@ -7,6 +7,7 @@ import styles from "./InputLoader.styles";
 
 interface InputsLoaderProps extends WithStyles<typeof styles>{
     loading: boolean;
+    children: any;
 }
 
 class InputsLoader extends React.PureComponent<InputsLoaderProps>{

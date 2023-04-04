@@ -97,7 +97,9 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
   }
 
   render() {
-    const {classes, professionalStandards, allCount, currentPage, sortingField, sortingMode} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {professionalStandards, allCount, currentPage, sortingField, sortingMode} = this.props;
     const {deleteConfirmId} = this.state;
 
     return (

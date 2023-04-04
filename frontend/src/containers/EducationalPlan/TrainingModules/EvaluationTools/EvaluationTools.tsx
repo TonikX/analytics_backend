@@ -69,7 +69,9 @@ class EvaluationTools extends React.PureComponent<Props> {
     };
 
     render() {
-        const {classes, evaluationToolsList, isCanEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {evaluationToolsList, isCanEdit} = this.props;
         const {anchorsEl} = this.state;
 
         return (

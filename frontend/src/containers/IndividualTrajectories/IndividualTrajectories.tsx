@@ -99,7 +99,9 @@ class IndividualTrajectories extends React.Component<IndividualTrajectoriesProps
     }
 
     render() {
-        const {classes, individualTrajectories, allCount, currentPage, sortingField, sortingMode, canEdit, showOnlyMy} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {individualTrajectories, allCount, currentPage, sortingField, sortingMode, canEdit, showOnlyMy} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (

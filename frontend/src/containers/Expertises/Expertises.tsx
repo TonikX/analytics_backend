@@ -93,7 +93,9 @@ class Expertises extends React.Component<ExpertisesProps> {
     }
 
     render() {
-        const {classes, expertisesList, allCount, currentPage, sortingField, sortingMode, selectedStatus} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {expertisesList, allCount, currentPage, sortingField, sortingMode, selectedStatus} = this.props;
 
         return (
             <Paper className={classes.root}>

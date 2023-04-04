@@ -93,7 +93,9 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
     }
 
     render() {
-        const {classes, educationalProgram, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {educationalProgram, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (

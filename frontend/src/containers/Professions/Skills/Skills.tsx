@@ -92,7 +92,9 @@ class Skills extends React.Component<SkillsProps> {
     }
 
     render() {
-        const {classes, skillList, allCount, currentPage, sortingField, sortingMode, profession} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {skillList, allCount, currentPage, sortingField, sortingMode, profession} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (

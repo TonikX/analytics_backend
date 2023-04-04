@@ -98,7 +98,9 @@ class EducationalStandards extends React.Component<EducationalStandardsProps> {
     }
 
     render() {
-        const {classes, educationalStandards, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {educationalStandards, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (

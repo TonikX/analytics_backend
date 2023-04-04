@@ -92,7 +92,9 @@ class StructuralUnits extends React.Component<StructuralUnitsProps> {
     }
 
     render() {
-        const {classes, structuralUnits, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {structuralUnits, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (

@@ -185,7 +185,9 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
     }
 
     render() {
-        const {classes, trainingModules, allCount, currentPage, sortingField, sortingMode, canEdit, showOnlyMy} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {trainingModules, allCount, currentPage, sortingField, sortingMode, canEdit, showOnlyMy} = this.props;
         const {deleteConfirmId, anchorsEl} = this.state;
 
         return (

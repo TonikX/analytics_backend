@@ -16,8 +16,10 @@ interface GeneralProvisionsProps extends WithStyles<typeof styles> {
 class GeneralProvisions extends React.Component<GeneralProvisionsProps> {
 
     render() {
+      //@ts-ignore
+      const {classes} = this.props;
 
-        const {classes, templateText} = this.props;
+        const {templateText} = this.props;
 
         return (
             <div>

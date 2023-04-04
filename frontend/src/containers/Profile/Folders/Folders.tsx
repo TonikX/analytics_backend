@@ -167,7 +167,9 @@ class Folders extends React.PureComponent<FoldersProps> {
     }
 
     render() {
-        const {classes, folders} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {folders} = this.props;
         const {currentTab, openConfirmDialogId} = this.state;
 
         return (

@@ -227,7 +227,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         const {workProgram} = this.state;
 
         if (field === WorkProgramGeneralFields.SEMESTER_COUNT) {
-            this.recalculateHours(get(e, 'target.value'));
+            this.recalculateHours(get(e, 'target.value', ''));
         } else {
             this.setState({
                 workProgram: {
@@ -410,4 +410,5 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(CreateModal));

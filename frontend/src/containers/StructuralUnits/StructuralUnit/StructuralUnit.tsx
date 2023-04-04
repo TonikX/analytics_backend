@@ -73,7 +73,9 @@ class StructuralUnit extends React.Component<any> {
   }
 
   render() {
-    const {classes, structuralUnit} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {structuralUnit} = this.props;
     const {deleteConfirmId} = this.state;
 
     return (

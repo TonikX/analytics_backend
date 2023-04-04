@@ -37,7 +37,9 @@ class Results extends React.PureComponent<ResultsProps> {
     };
 
     render() {
-        const {classes, resultsList, isCanEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {resultsList, isCanEdit} = this.props;
         
         return (
             <div className={classes.root}>

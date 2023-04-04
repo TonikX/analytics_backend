@@ -215,7 +215,7 @@ export default () => (
               {/*<Route exact element={<NotFoundPage/>} />*/}
               <Route path={routerService.getEmailConfirmFail()} element={<EmailFailPage/>} />
               <Route path={routerService.getEmailConfirmSuccess()} element={<EmailSuccessPage/>} />
-              <Route path={routerService.getForbiddenPage()} element={<ForbiddenPage/>} />
+              {/*<Route path={routerService.getForbiddenPage()} element={<ForbiddenPage/>} />*/}
               <Route path={routerService.getSignInRoute()} element={<SignIn/>} />
               <Route path={routerService.getSignUpRoute()} element={<SignUp/>} />
               <Route path="/" element={<Landing/>} />

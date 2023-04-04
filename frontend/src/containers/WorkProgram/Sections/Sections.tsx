@@ -134,7 +134,9 @@ class Sections extends React.PureComponent<SectionsProps> {
   }
 
   render() {
-    const {classes, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours, semesterCount, implementationFormat, contactHours, consultationHours} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours, semesterCount, implementationFormat, contactHours, consultationHours} = this.props;
     const {createNewSectionMode} = this.state;
 
     const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);

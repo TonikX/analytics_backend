@@ -89,7 +89,9 @@ class Literature extends React.Component<LiteratureProps> {
     }
 
     render() {
-        const {classes, literature, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {literature, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (

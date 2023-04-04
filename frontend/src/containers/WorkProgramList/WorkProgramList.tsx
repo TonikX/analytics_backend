@@ -173,7 +173,9 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
     }
 
     render() {
-        const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode, showOnlyMy, showArchive, status} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {workProgramList, allCount, currentPage, sortingField, sortingMode, showOnlyMy, showArchive, status} = this.props;
         const {deleteConfirmId, duplicateConfirmId, anchorsEl} = this.state;
 
         return (

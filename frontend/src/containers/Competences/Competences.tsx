@@ -92,7 +92,9 @@ class Competences extends React.Component<CompetenceProps> {
     }
 
     render() {
-        const {classes, competences, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {competences, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         // @ts-ignore

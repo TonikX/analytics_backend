@@ -1,7 +1,4 @@
-import {WithStyles} from '@mui/styles';
-import styles from "./WorkProgramStatus.styles";
-
-export interface WorkProgramStatusProps extends WithStyles<typeof styles> {
+export interface WorkProgramStatusProps {
     status: string;
     onClick?: Function;
     disabledStyle?: boolean;

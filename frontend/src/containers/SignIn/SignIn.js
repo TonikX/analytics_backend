@@ -56,7 +56,9 @@ class SignIn extends React.PureComponent{
     }
 
     render() {
-        const {classes, disableButton, auth} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {disableButton, auth} = this.props;
 
         if (auth) return <Navigate to={appRouter.getEducationPlanRoute()} />;
 

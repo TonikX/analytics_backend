@@ -89,7 +89,9 @@ class Indicators extends React.Component<IndicatorProps> {
     }
 
     render() {
-        const {classes, indicators, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {indicators, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (

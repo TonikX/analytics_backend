@@ -53,8 +53,10 @@ class Assessment extends React.Component<AssessmentProps> {
     }
 
     render() {
+        //@ts-ignore
+        const {classes} = this.props;
 
-        const {classes, fields, templateText} = this.props;
+        const {fields, templateText} = this.props;
         const {activeField} = this.state;
 
         const professionalProblems = templateText[TemplateTextCertificationFields.PROFESSIONAL_PROBLEMS_MARKS];

@@ -11,7 +11,9 @@ export interface ReadonlyProps extends WithStyles<typeof styles> {
 class ReadonlyRow extends React.Component<ReadonlyProps> {
 
     render() {
-        const {classes, label, value} = this.props;
+      //@ts-ignore
+      const {classes} = this.props;
+        const {label, value} = this.props;
         return (
             <div className={classes.datesReadonlyRow}>
                 <FormLabel component="legend" className={classes.datesReadOnlyLabel}>

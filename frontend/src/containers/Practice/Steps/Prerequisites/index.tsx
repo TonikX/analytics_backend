@@ -41,7 +41,9 @@ class Prerequisites extends React.Component<PrerequisitesProps> {
 
     render() {
 
-        const {classes, permissionsInfo, prerequisitesList} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {permissionsInfo, prerequisitesList} = this.props;
         const isCanEdit = permissionsInfo[PermissionsInfoFields.CAN_EDIT];
 
         return (

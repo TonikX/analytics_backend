@@ -21,7 +21,7 @@ function EditableRow(props: EditableRowProps) {
         }, semesterNum);
     };
 
-    const handleEvaluationToolsChange = (e: React.ChangeEvent<any>) => {
+    const handleEvaluationToolsChange = (e: any) => {
         updateRow({
             ...section,
             //@ts-ignore
@@ -83,7 +83,13 @@ function EditableRow(props: EditableRowProps) {
                 />
             </TableCell>
             <TableCell className={classes.centerCell}>
-                <Select value={section[workProgramSectionFields.EVALUATION_TOOLS]} placeholder="Оценочное средство" onChange={handleEvaluationToolsChange} fullWidth multiple>
+                <Select
+                  value={section[workProgramSectionFields.EVALUATION_TOOLS]}
+                  placeholder="Оценочное средство"
+                  onChange={handleEvaluationToolsChange}
+                  fullWidth
+                  multiple
+                >
                     {EVALUATION_TOOLS.map(item =>
                         <MenuItem value={item.value} key={`group-${item.value}`}>
                             {item.label}

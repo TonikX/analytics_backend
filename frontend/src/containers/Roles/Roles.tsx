@@ -78,7 +78,9 @@ class Roles extends React.Component<RolesProps> {
     }
 
     render() {
-        const {classes, rolesList, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {rolesList, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (

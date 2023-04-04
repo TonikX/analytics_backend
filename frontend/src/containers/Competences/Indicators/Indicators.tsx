@@ -74,7 +74,9 @@ class Indicators extends React.Component<any> {
   }
 
   render() {
-    const {classes, indicators, competence} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {indicators, competence} = this.props;
     const {deleteConfirmId} = this.state;
 
     return (

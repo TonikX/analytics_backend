@@ -18,7 +18,9 @@ class Structure extends React.Component<StructureProps> {
 
     render() {
 
-        const {classes, templateText} = this.props;
+      //@ts-ignore
+      const {classes} = this.props;
+        const {templateText} = this.props;
 
         return (
             <div>

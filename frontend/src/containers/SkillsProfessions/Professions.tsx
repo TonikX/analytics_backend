@@ -49,7 +49,9 @@ class Professions extends React.Component<ProfessionsProps> {
     }, 300);
 
     render() {
-        const {classes, professionsList, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {professionsList, allCount, currentPage, sortingField, sortingMode} = this.props;
 
         return (
             <Paper className={classes.root}>

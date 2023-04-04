@@ -61,4 +61,5 @@ export interface WorkProgramListProps extends WithStyles<typeof styles> {
     workProgramIdForRedirect: number|null;
     sortingMode: SortingType;
     status: WorkProgramStatusEnum|null;
+    classes: any;
 }

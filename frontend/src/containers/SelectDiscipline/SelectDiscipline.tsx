@@ -128,7 +128,9 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
     getSearchedKeywords = () => matchSorter(this.props.allKeywords, this.state.searchQuery, {threshold: matchSorter.rankings.CONTAINS});
 
     render() {
-        const {classes, qualification, semester, allKeywords, selectedKeywords, workPrograms} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {qualification, semester, allKeywords, selectedKeywords, workPrograms} = this.props;
         const {scrollTop} = this.state;
         const searchedKeywords = this.getSearchedKeywords();
 
