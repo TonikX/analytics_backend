@@ -293,4 +293,5 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(EducationPlanInDirection));

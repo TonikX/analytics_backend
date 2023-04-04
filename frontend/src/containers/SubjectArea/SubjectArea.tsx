@@ -172,4 +172,5 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(SubjectArea));

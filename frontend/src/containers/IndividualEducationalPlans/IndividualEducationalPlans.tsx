@@ -208,4 +208,5 @@ class IndividualEducationalPlans extends React.Component<IndividualEducationalPl
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(IndividualEducationalPlans));

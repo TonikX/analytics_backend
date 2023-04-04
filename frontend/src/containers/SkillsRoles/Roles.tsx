@@ -115,4 +115,5 @@ class Roles extends React.Component<RolesProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Roles));

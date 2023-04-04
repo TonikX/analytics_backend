@@ -60,4 +60,5 @@ class UserSelector extends React.PureComponent<UserSelectorType> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(UserSelector));

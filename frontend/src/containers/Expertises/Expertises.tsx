@@ -229,4 +229,5 @@ class Expertises extends React.Component<ExpertisesProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Expertises));

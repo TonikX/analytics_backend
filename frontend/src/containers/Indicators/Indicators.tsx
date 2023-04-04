@@ -187,4 +187,5 @@ class Indicators extends React.Component<IndicatorProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Indicators));

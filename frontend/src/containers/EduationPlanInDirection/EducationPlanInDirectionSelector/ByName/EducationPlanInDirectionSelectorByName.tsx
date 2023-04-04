@@ -40,4 +40,5 @@ class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlan
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(EducationPlanInDirectionSelector));

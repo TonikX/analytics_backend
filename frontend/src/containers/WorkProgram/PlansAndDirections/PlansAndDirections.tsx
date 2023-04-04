@@ -146,4 +146,5 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
   }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(PlansAndDirections));

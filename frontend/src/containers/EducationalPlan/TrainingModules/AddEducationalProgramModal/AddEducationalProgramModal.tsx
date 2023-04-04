@@ -189,4 +189,5 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(AddEducationalProgramModal));

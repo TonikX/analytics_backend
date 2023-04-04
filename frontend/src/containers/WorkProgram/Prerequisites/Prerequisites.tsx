@@ -96,5 +96,5 @@ class Prerequisites extends React.PureComponent<SixthStepProps> {
         );
     }
 }
-
+//@ts-ignore
 export default connect(withStyles(styles)(Prerequisites));

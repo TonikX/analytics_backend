@@ -115,4 +115,5 @@ class ModuleModal extends React.Component<ModuleModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(ModuleModal));

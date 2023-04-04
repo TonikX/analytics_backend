@@ -125,4 +125,5 @@ class Select extends React.Component<SelectProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Select));

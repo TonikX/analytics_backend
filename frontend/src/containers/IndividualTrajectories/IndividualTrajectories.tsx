@@ -242,4 +242,5 @@ class IndividualTrajectories extends React.Component<IndividualTrajectoriesProps
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(IndividualTrajectories));

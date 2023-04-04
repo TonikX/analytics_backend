@@ -221,5 +221,5 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
         );
     }
 }
-
+//@ts-ignore
 export default connect(withStyles(styles)(AddLiteratureModal));

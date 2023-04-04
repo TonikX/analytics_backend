@@ -109,4 +109,5 @@ class SubjectAreaCreateModal extends React.PureComponent<SubjectAreaCreateModalP
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(SubjectAreaCreateModal));

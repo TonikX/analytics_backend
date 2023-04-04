@@ -733,4 +733,5 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(DetailTrainingModule));

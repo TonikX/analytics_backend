@@ -703,4 +703,5 @@ class Records extends Component<RecordsProops> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Records));

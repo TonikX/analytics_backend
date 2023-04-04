@@ -176,4 +176,5 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(ThemeCreateModal));

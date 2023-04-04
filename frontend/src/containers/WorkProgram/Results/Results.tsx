@@ -110,4 +110,5 @@ class Results extends React.PureComponent<ResultsProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Results));

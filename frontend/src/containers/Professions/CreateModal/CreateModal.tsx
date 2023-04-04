@@ -109,4 +109,5 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CreateModal));

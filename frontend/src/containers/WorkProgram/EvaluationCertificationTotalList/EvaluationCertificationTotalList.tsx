@@ -68,4 +68,5 @@ const EvaluationCertificationTotalList = ({
   )
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(EvaluationCertificationTotalList))

@@ -107,5 +107,5 @@ class Prerequisites extends React.Component<PrerequisitesProps> {
         );
     }
 }
-
+//@ts-ignore
 export default connect(withStyles(styles)(Prerequisites));

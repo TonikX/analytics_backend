@@ -227,4 +227,5 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(EducationalProgram));

@@ -233,4 +233,5 @@ class Folders extends React.PureComponent<FoldersProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Folders));

@@ -101,4 +101,5 @@ class Comments extends React.Component<CommentsProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Comments));

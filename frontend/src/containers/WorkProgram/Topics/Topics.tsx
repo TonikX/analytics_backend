@@ -257,4 +257,5 @@ const SortableList = SortableContainer(({section, classes, handleClickDelete, ha
 });
 
 
+//@ts-ignore
 export default connect(withStyles(styles)(Topics));

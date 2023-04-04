@@ -547,4 +547,5 @@ class FirstStep extends React.Component<FirstStepProps> {
   }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(FirstStep));

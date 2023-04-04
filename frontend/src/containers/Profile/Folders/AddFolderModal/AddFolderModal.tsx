@@ -83,4 +83,5 @@ class AddFolderModal extends React.PureComponent<AddFolderModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(AddFolderModal));

@@ -225,4 +225,5 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(AddTrainingModuleModal));

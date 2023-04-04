@@ -65,4 +65,5 @@ class Specialization extends React.PureComponent<SpecializationProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Specialization));

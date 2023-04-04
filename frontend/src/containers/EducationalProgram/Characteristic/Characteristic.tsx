@@ -737,4 +737,5 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Characteristic));

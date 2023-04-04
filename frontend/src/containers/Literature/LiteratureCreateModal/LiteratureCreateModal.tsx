@@ -113,4 +113,5 @@ class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalPro
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(LiteratureCreateModal));

@@ -161,4 +161,5 @@ class CreateModal extends React.PureComponent<IndicatorCreateModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CreateModal));

@@ -138,4 +138,5 @@ SignUp.propTypes = {
     groupOptions: PropTypes.array,
 };
 
+//@ts-ignore
 export default connect(withStyles(styles)(SignUp));

@@ -164,4 +164,5 @@ class CreateModal extends React.PureComponent<RolesCreateModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CreateModal));

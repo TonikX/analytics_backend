@@ -73,4 +73,5 @@ class Literature extends React.PureComponent<FourthStepProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Literature));

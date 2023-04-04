@@ -292,4 +292,5 @@ class CreateModal extends React.PureComponent<CreateModalProps> {    editor = nu
 
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CreateModal));

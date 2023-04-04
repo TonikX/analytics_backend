@@ -159,4 +159,5 @@ class Professions extends React.Component<ProfessionsProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Professions));

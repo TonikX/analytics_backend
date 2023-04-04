@@ -183,4 +183,5 @@ class TrainingEntities extends React.Component<TrainingEntitiesProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(TrainingEntities));

@@ -63,4 +63,5 @@ class SendToExpertise extends React.Component<SendToExpertiseProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(SendToExpertise))

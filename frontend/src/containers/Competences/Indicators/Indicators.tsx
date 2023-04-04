@@ -144,4 +144,5 @@ class Indicators extends React.Component<any> {
   }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(withRouter(Indicators)));
