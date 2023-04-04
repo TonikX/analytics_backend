@@ -82,8 +82,8 @@ class Skills extends React.Component<SkillsProps> {
         this.props.actions.getSkills(this.getRoleId());
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getSkills(this.getRoleId());
     }
 
@@ -145,7 +145,7 @@ class Skills extends React.Component<SkillsProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <Pagination count={Math.ceil(allCount / 10)}
+                    <Pagination count={allCount}
                                 page={currentPage}
                                 //@ts-ignore
                                 onChange={this.handleChangePage}

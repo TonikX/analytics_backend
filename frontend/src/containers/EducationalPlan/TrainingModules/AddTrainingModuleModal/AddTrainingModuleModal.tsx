@@ -21,6 +21,7 @@ import {TrainingModuleCreateModalProps} from './types';
 import connect from './AddTrainingModuleModal.connect';
 import styles from './AddTrainingModuleModal.styles';
 import Switch from "@mui/material/Switch";
+import Pagination from "@mui/lab/Pagination";
 
 class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateModalProps, { selectedTrainingModules: TrainingModuleType[]}> {
     state = {
@@ -95,8 +96,8 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
         })
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getTrainingModulesList();
     }
 
@@ -196,15 +197,10 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                                 })}
                             </>
                         </Scrollbars>
-
-                        <TablePagination
-                            component="div"
-                            count={allCount}
-                            page={currentPage - 1}
-                            rowsPerPageOptions={[]}
-                            onChangePage={this.handleChangePage}
-                            rowsPerPage={10}
-                            onChangeRowsPerPage={()=>{}}
+                        <Pagination count={allCount}
+                                    page={currentPage}
+                                    onChange={this.handleChangePage}
+                                    color="primary"
                         />
                     </div>
                 </DialogContent>

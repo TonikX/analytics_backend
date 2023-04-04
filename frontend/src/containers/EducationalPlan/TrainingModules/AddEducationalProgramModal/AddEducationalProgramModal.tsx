@@ -21,6 +21,7 @@ import {filterFields} from "../../../EduationPlanInDirection/enum";
 import StructuralUnitsSelector from "../../../StructuralUnits/StructuralUnitsSelector/StructuralUnitsSelector";
 import {specialization} from "../../../WorkProgram/constants";
 import {EducationalPlanInDirectionType} from "../../../EduationPlanInDirection/types";
+import Pagination from "@mui/lab/Pagination";
 
 class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreateModalProps, { selectedItems: EducationalPlanInDirectionType[]}> {
     state = {
@@ -68,8 +69,8 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
         })
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.educationalProgramActions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.educationalProgramActions.changeCurrentPage(page);
         this.props.educationalProgramActions.getEducationalPlansInDirection();
     }
 
@@ -160,15 +161,10 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
                                 })}
                             </>
                         </Scrollbars>
-
-                        <TablePagination
-                            component="div"
-                            count={allCount}
-                            page={currentPage - 1}
-                            rowsPerPageOptions={[]}
-                            onChangePage={this.handleChangePage}
-                            rowsPerPage={10}
-                            onChangeRowsPerPage={()=>{}}
+                        <Pagination count={allCount}
+                                    page={currentPage}
+                                    onChange={this.handleChangePage}
+                                    color="primary"
                         />
                     </div>
                 </DialogContent>

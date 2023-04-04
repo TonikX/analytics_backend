@@ -71,8 +71,8 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
         this.props.literatureActions.getLiterature({ source: this.state.source });
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.literatureActions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.literatureActions.changeCurrentPage(page);
         this.props.literatureActions.getLiterature({ source: this.state.source });
     }
 

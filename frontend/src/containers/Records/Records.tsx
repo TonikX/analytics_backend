@@ -28,6 +28,7 @@ import FormLabel from "@mui/material/FormLabel";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // import ExpansionPanel from '@mui/material/ExpansionPanel';
 import SearchSelector from "../../components/SearchSelector";
+import Pagination from "@mui/lab/Pagination";
 
 
 class Records extends Component<RecordsProops> {
@@ -375,16 +376,11 @@ class Records extends Component<RecordsProops> {
                     </div>
 
                     <div className={classes.footer}>
-                        <TablePagination count={RPD_WITHOUT_SU["length"]}
-                                         component="div"
-                                         page={this.state.page}
-                                         rowsPerPageOptions={[]}
-                                         onChangePage={this.handleChangePage}
-                                         rowsPerPage={this.state.rowsPerPage}
-                                         onChangeRowsPerPage={() => {
-                                         }}
+                        <Pagination count={Math.ceil(RPD_WITHOUT_SU["length"] / 10)}
+                                    page={this.state.page}
+                                    onChange={this.handleChangePage}
+                                    color="primary"
                         />
-
                     </div>
                 </>}
                 {this.state.value == 5 &&
@@ -611,16 +607,11 @@ class Records extends Component<RecordsProops> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={RPD_IN_SEMESTER.length}
-                                     component="div"
-                                     page={this.state.page}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     rowsPerPage={this.state.rowsPerPage}
-                                     onChangeRowsPerPage={() => {
-                                     }}
+                    <Pagination count={RPD_IN_SEMESTER.length}
+                                page={this.state.page}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
-
                 </div>
                 </>
                 }
@@ -690,11 +681,10 @@ class Records extends Component<RecordsProops> {
                     </div>
 
                     <div className={classes.footer}>
-                        <TablePagination count={RPD_IN_AP.length}
-                                         component="div"
-                                         page={this.state.page}
-                                         onChangePage={this.handleChangePage}
-                                         rowsPerPage={this.state.rowsPerPage}
+                        <Pagination count={RPD_IN_AP.length}
+                                    page={this.state.page}
+                                    onChange={this.handleChangePage}
+                                    color="primary"
                         />
                     </div>
                 </>}

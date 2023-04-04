@@ -28,6 +28,7 @@ import {levels} from '../constants';
 
 import connect from './Skills.connect';
 import styles from './Skills.styles';
+import Pagination from "@mui/lab/Pagination";
 
 class Skills extends React.Component<SkillsProps> {
     state = {
@@ -81,8 +82,8 @@ class Skills extends React.Component<SkillsProps> {
         this.props.actions.getSkills(this.getProfessionId());
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getSkills(this.getProfessionId());
     }
 
@@ -144,16 +145,11 @@ class Skills extends React.Component<SkillsProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={allCount}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
-
                     <Fab color="secondary"
                          classes={{
                              root: classes.addIcon

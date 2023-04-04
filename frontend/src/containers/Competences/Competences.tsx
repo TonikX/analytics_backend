@@ -162,7 +162,7 @@ class Competences extends React.Component<CompetenceProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <Pagination count={Math.ceil(allCount / 10)}
+                    <Pagination count={allCount}
                                 page={currentPage}
                                 onChange={this.handleChangePage}
                                 color="primary"

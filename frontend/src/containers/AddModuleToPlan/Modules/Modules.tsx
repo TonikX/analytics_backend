@@ -17,6 +17,7 @@ import actions from "../actions";
 import {useDispatch, useSelector} from "react-redux";
 import {rootState} from "../../../store/reducers";
 import {getCurrentModulePage, getModulesAllCount, getSelectedModules, getTrainingModulesList} from "../getters";
+import Pagination from "@mui/lab/Pagination";
 
 export const Modules = () => {
     const classes = useStyles();
@@ -45,8 +46,8 @@ export const Modules = () => {
         dispatch(actions.setSelectedModules(newArray));
     };
 
-    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        dispatch(actions.changeModulesCurrentPage(page + 1));
+    const handleChangePage = (event: any, page: number) => {
+        dispatch(actions.changeModulesCurrentPage(page));
         dispatch(actions.getTrainingModulesList());
     };
 
@@ -96,14 +97,10 @@ export const Modules = () => {
                 </div>
             </Scrollbars>
             <div>
-                <TablePagination
-                    count={Math.ceil(modulesAllCount / 10)}
-                    component="div"
-                    page={currentPage - 1}
-                    rowsPerPageOptions={[]}
-                    onChangePage={handleChangePage}
-                    rowsPerPage={10}
-                    onChangeRowsPerPage={() => {}}
+                <Pagination count={allCount}
+                            page={currentPage}
+                            onChange={this.handleChangePage}
+                            color="primary"
                 />
             </div>
         </>

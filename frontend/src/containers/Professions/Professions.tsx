@@ -68,8 +68,8 @@ class Professions extends React.Component<ProfessionsProps> {
         this.props.actions.openDialog();
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getProfessionsList();
     }
 
@@ -128,7 +128,7 @@ class Professions extends React.Component<ProfessionsProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <Pagination count={Math.ceil(allCount / 10)}
+                    <Pagination count={allCount}
                                 page={currentPage}
                                 //@ts-ignore
                                 onChange={this.handleChangePage}

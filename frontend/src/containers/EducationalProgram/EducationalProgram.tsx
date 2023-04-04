@@ -43,6 +43,7 @@ import TableSettingsMenu from "../../components/TableSettingsMenu";
 
 import connect from './EducationalProgram.connect';
 import styles from './EducationalProgram.styles';
+import Pagination from "@mui/lab/Pagination";
 
 class EducationalProgram extends React.Component<EducationalProgramProps> {
     state = {
@@ -91,8 +92,8 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
         this.props.actions.getEducationalProgramList();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getEducationalProgramList();
     }
 
@@ -211,16 +212,11 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                 </Scrollbars>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={allCount}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
-
                     {canAddNew &&
                         <Fab color="secondary"
                              classes={{

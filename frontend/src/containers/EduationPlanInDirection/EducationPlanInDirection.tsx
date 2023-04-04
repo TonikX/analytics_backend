@@ -40,6 +40,7 @@ import Filters from "./Filters";
 
 import connect from './EducationPlanInDirection.connect';
 import styles from './EducationPlanInDirection.styles';
+import Pagination from "@mui/lab/Pagination";
 
 
 class EducationPlanInDirection extends React.Component<EducationalPlanInDirectionProps> {
@@ -89,8 +90,8 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
         this.props.actions.getEducationalPlansInDirection();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getEducationalPlansInDirection();
     }
 
@@ -257,14 +258,10 @@ class EducationPlanInDirection extends React.Component<EducationalPlanInDirectio
                 </Scrollbars>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={allCount}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     {/*{canEdit &&*/}

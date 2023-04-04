@@ -27,7 +27,7 @@ class Roles extends React.Component<RolesProps> {
         this.props.actions.getRolesList();
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
+    handleChangePage = (event: any, page: number) => {
         this.props.actions.changeCurrentPage(page);
         this.props.actions.getRolesList();
     }
@@ -103,7 +103,7 @@ class Roles extends React.Component<RolesProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <Pagination count={Math.ceil(allCount / 10)}
+                    <Pagination count={allCount}
                                 page={currentPage}
                       //@ts-ignore
                                 onChange={this.handleChangePage}

@@ -158,7 +158,7 @@ const MyWorkProgramsList = () => {
                     </Table>
                     <div className={classes.footer}>
                         <Pagination
-                            count={Math.ceil(allCount / 10)}
+                            count={allCount}
                             page={currentPage}
                             onChange={handleChangePage}
                             color="primary"

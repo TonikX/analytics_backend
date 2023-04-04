@@ -42,6 +42,7 @@ import styles from './AcademicPlanUpdate.styles';
 import {AcademicPlanUpdateLogFields, SchedulerConfigurationFields, UpdatedAcademicPlanFields} from "./enum";
 import CreateModal from "./CreateModal/CreateModal";
 import {WorkProgramGeneralFields} from "../WorkProgram/enum";
+import Pagination from "@mui/lab/Pagination";
 
 class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
     state = {
@@ -87,10 +88,10 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
 
     handleChangePage = (event: any, page: number) => {
         if(this.state.isUpdatedPlansShown){
-            this.props.actions.updatedPlansChangeCurrentPage(page + 1);
+            this.props.actions.updatedPlansChangeCurrentPage(page);
             this.props.actions.getUpdatedAcademicPlans()
         }else {
-            this.props.actions.logsChangeCurrentPage(page + 1);
+            this.props.actions.logsChangeCurrentPage(page);
             this.props.actions.getAcademicPlanUpdateLogs();
         }
     }
@@ -351,26 +352,17 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
 
                 <div className={classes.footer}>
                     {this.state.isUpdatedPlansShown ?
-                        <TablePagination count={updatedPlansAllCount}
-                                         component="div"
-                                         page={updatedPlansCurrentPage - 1}
-                                         rowsPerPageOptions={[]}
-                                         onChangePage={this.handleChangePage}
-                            //@ts-ignore
-                                         rowsPerPage={10}
-                                         onChangeRowsPerPage={()=>{}}
-                        />
+                      <Pagination count={updatedPlansAllCount}
+                                  page={updatedPlansCurrentPage - 1}
+                                  onChange={this.handleChangePage}
+                                  color="primary"
+                      />
                         :
-                        <TablePagination count={logsAllCount}
-                                         component="div"
-                                         page={logsCurrentPage - 1}
-                                         rowsPerPageOptions={[]}
-                                         onChangePage={this.handleChangePage}
-                            //@ts-ignore
-                                         rowsPerPage={10}
-                                         onChangeRowsPerPage={()=>{}}
-                        />
-
+                      <Pagination count={logsAllCount}
+                                  page={logsCurrentPage - 1}
+                                  onChange={this.handleChangePage}
+                                  color="primary"
+                      />
                     }
                     {this.state.isUpdatedPlansShown &&
                         <Fab color="secondary"

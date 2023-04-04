@@ -113,7 +113,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
     this.props.actions.getEducationalPlans();
   }, 300);
 
-  handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
+  handleChangePage = (event: any, page: number) => {
     this.props.actions.changeCurrentPage(page);
     this.props.actions.getEducationalPlans();
   }
@@ -265,7 +265,7 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
         </Scrollbars>
 
         <div className={classes.footer}>
-          <Pagination count={Math.ceil(allCount / 10)}
+          <Pagination count={allCount}
                       page={currentPage}
                       onChange={this.handleChangePage}
                       color="primary"

@@ -29,6 +29,7 @@ import Select from "@mui/material/Select/Select";
 import MenuItem from "@mui/material/MenuItem";
 import {Qualifications} from "../enum";
 import {EducationalPlanShort} from "../types";
+import Pagination from "@mui/lab/Pagination";
 
 export const EducationalPlans = () => {
     const classes = useStyles();
@@ -75,8 +76,8 @@ export const EducationalPlans = () => {
         dispatch(actions.setSelectedPlans(newArray));
     };
 
-    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        dispatch(actions.changePlansCurrentPage(page + 1));
+    const handleChangePage = (event: any, page: number) => {
+        dispatch(actions.changePlansCurrentPage(page));
         dispatch(actions.getEducationalPlan());
     };
 
@@ -131,14 +132,10 @@ export const EducationalPlans = () => {
                 </div>
             </Scrollbars>
             <div>
-                <TablePagination
-                    count={Math.ceil(plansAllCount / 10)}
-                    component="div"
-                    page={currentPage - 1}
-                    rowsPerPageOptions={[]}
-                    onChangePage={handleChangePage}
-                    rowsPerPage={10}
-                    onChangeRowsPerPage={() => {}}
+                <Pagination count={Math.ceil(plansAllCount / 10)}
+                            page={currentPage - 1}
+                            onChange={handleChangePage}
+                            color="primary"
                 />
             </div>
         </>

@@ -31,6 +31,7 @@ import {CompetenceFields} from "../Competences/enum";
 
 import connect from './Indicators.connect';
 import styles from './Indicators.styles';
+import Pagination from "@mui/lab/Pagination";
 
 class Indicators extends React.Component<IndicatorProps> {
     state = {
@@ -78,8 +79,8 @@ class Indicators extends React.Component<IndicatorProps> {
         this.props.actions.getIndicators();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getIndicators();
     }
 
@@ -153,14 +154,10 @@ class Indicators extends React.Component<IndicatorProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={allCount}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"

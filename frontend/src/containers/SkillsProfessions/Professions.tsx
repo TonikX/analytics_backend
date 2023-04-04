@@ -22,14 +22,15 @@ import {ProfessionsFields} from './enum';
 
 import connect from './Professions.connect';
 import styles from './Professions.styles';
+import Pagination from "@mui/lab/Pagination";
 
 class Professions extends React.Component<ProfessionsProps> {
     componentDidMount() {
         this.props.actions.getProfessionsList();
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getProfessionsList();
     }
 
@@ -104,14 +105,10 @@ class Professions extends React.Component<ProfessionsProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={allCount}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
                 </div>
             </Paper>

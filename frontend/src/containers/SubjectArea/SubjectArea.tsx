@@ -142,7 +142,7 @@ class SubjectArea extends React.Component<SubjectAreaProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <Pagination count={Math.ceil(allCount / 10)}
+                    <Pagination count={allCount}
                                 page={currentPage}
                                 onChange={this.handleChangePage}
                                 color="primary"

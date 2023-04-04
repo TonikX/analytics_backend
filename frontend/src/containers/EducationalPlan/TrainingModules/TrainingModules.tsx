@@ -43,6 +43,7 @@ import styles from './TrainingModules.styles';
 import Filters from "./Filters";
 import Switch from "@mui/material/Switch";
 import {withRouter} from "../../../hoc/WithRouter";
+import Pagination from "@mui/lab/Pagination";
 
 const userService = UserService.factory();
 
@@ -74,8 +75,8 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
         navigate(appRouter.getTrainingModuleDetailLink(trainingModuleIdForRedirect));
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getTrainingModulesList();
     }
 
@@ -292,13 +293,10 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
 
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={allCount}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
                     {canEdit &&
                         <Fab color="secondary"
