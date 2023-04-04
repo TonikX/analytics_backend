@@ -6,7 +6,7 @@ import debounce from "lodash/debounce";
 import classNames from 'classnames';
 
 import Paper from '@mui/material/Paper';
-import TablePagination from '@mui/material/TablePagination';
+
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
