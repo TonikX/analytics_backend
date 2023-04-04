@@ -80,7 +80,7 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} профессию </DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextField label="Название *"
                                onChange={this.saveField(ProfessionsFields.TITLE)}
                                value={profession[ProfessionsFields.TITLE]}

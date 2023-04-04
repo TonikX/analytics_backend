@@ -145,7 +145,7 @@ class Skills extends React.Component<SkillsProps> {
                 <div className={classes.footer}>
                     <Pagination count={Math.ceil(allCount / 10)}
                                 page={currentPage}
-                      //@ts-ignore
+                                //@ts-ignore
                                 onChange={this.handleChangePage}
                                 color="primary"
                     />

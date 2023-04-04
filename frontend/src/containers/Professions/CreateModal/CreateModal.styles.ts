@@ -14,4 +14,7 @@ export default (theme: Theme) => createStyles({
     dialog: {
         padding: 20,
     },
+    dialogContent: {
+        padding: '10px 24px 20px 24px !important',
+    },
 });

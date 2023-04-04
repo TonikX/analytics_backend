@@ -30,6 +30,7 @@ import {appRouter} from "../../service/router-service";
 
 import connect from './Professions.connect';
 import styles from './Professions.styles';
+import Pagination from "@mui/lab/Pagination";
 
 class Professions extends React.Component<ProfessionsProps> {
     state = {
@@ -125,14 +126,11 @@ class Professions extends React.Component<ProfessionsProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                //@ts-ignore
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"
