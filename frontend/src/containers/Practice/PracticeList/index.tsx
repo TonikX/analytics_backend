@@ -168,4 +168,5 @@ class PracticeList extends React.Component<PracticeListProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(PracticeList));

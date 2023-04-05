@@ -181,9 +181,7 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
             {Object.values(this.stepNameList).map((label, index) => {
               return (
                 <Step key={index} onClick={this.handleOpenStep(index)}>
-                  <StepButton completed={false}
-                              style={{textAlign: 'left',}}
-                  >
+                  <StepButton style={{textAlign: 'left',}}>
                     {label}
                   </StepButton>
                 </Step>
@@ -209,5 +207,5 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
     )
   }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(FinalCertification));

@@ -127,4 +127,5 @@ class Download extends React.Component<DownloadProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(Download));

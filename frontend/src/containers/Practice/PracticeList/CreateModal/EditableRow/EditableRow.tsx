@@ -1,4 +1,4 @@
-import TableCell from "@mui/material/TableCell/TableCell";
+ import TableCell from "@mui/material/TableCell/TableCell";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField/TextField";
 import {EVALUATION_TOOLS} from "./enum";
@@ -21,7 +21,7 @@ function EditableRow(props: EditableRowProps) {
         }, semesterNum);
     };
 
-    const handleEvaluationToolsChange = (e: React.ChangeEvent<any>) => {
+    const handleEvaluationToolsChange = (e: any) => {
         updateRow({
             ...section,
             //@ts-ignore

@@ -34,4 +34,5 @@ class DisabledPeopleInfo extends React.Component<DisabledPeopleInfoProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(DisabledPeopleInfo));

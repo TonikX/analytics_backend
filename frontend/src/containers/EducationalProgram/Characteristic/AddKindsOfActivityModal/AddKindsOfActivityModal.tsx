@@ -12,7 +12,7 @@ import useStyles from "./AddKindsOfActivityModal.styles";
 export default ({
   isOpen, closeDialog, saveDialog
 }: any) => {
-  const [selectedObject, setSelectedObject] = useState()
+  const [selectedObject, setSelectedObject] = useState<number|undefined>()
   const classes = useStyles();
 
   const handleSave = () => {

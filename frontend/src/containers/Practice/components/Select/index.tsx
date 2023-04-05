@@ -72,7 +72,7 @@ class Select extends React.Component<SelectProps> {
         });
     }
 
-    saveSelect = (e: React.ChangeEvent<any>) => {
+    saveSelect = (e: any) => {
         const field = this.props.fieldName;
         const value = get(e, 'target.value')
         const error = validate(field, value);
@@ -93,6 +93,7 @@ class Select extends React.Component<SelectProps> {
         const {fields, classes, metaList, fieldName, getLoading} = this.props;
         const {errorMessage} = this.state;
 
+        // @ts-ignore
         const label = RussianPracticeFields[fieldName];
         const value = fields[fieldName];
 

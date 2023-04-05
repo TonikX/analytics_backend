@@ -72,5 +72,5 @@ class Dates extends React.Component<DatesProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(Dates));

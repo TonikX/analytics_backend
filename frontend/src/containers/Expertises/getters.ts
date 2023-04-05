@@ -16,7 +16,7 @@ export const getExpertisesList = (state: rootState): Array<ExpertiseType> => get
 export const getExpertise = (state: rootState): ExpertiseType|{} => get(getStateData(state), fields.EXPERTISE, {});
 export const getSelectedStatus = (state: rootState): WorkProgramStatusType|'' => get(getStateData(state), fields.SELECTED_STATUS, '');
 export const getSelectedQualification = (state: rootState): string => get(getStateData(state), fields.SELECTED_QUALIFICATION, '');
-export const getExpertiseId = (state: rootState): number => get(getExpertise(state), ExpertisesFields.ID);
+export const getExpertiseId = (state: rootState): number => get(getExpertise(state), ExpertisesFields.ID, 0);
 
 export const getIsOpenAddExpertModal = (state: rootState): any => get(getStateData(state), fields.IS_OPEN_ADD_EXPERT_MODAL, false);
 

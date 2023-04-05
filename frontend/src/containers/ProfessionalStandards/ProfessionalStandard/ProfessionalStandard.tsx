@@ -103,6 +103,8 @@ export default () => {
             laborFunction={editedItem}
           />
         )}
+        {/*
+// @ts-ignore */}
         <ProfessionalStandardCreateModal />
       </div>
     </div>

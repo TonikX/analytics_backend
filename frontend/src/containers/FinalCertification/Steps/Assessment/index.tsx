@@ -153,5 +153,5 @@ class Assessment extends React.Component<AssessmentProps> {
             ;
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(Assessment));

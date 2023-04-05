@@ -71,7 +71,7 @@ class Select extends React.Component<SelectProps> {
         });
     }
 
-    saveSelect = (e: React.ChangeEvent<any>) => {
+    saveSelect = (e: any) => {
         const field = this.props.fieldName;
         const value = get(e, 'target.value')
         const error = validate(field, value);
@@ -123,5 +123,5 @@ class Select extends React.Component<SelectProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(Select));

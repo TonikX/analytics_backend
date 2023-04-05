@@ -166,6 +166,8 @@ class StructuralUnits extends React.Component<StructuralUnitsProps> {
                     </Fab>
                 </div>
 
+                {/*
+// @ts-ignore */}
                 <StructuralUnitCreateModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}

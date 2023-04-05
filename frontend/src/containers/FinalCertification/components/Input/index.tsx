@@ -130,5 +130,5 @@ class Input extends React.Component<InputProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(Input));

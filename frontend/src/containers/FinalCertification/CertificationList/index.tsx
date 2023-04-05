@@ -166,5 +166,5 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
         )
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(FinalCertificationList));

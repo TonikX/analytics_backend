@@ -31,7 +31,7 @@ export default ({ characteristic }: any) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [openModal, setOpenModal] = useState(false)
-  const [selectedObject, setSelectedObject] = useState()
+  const [selectedObject, setSelectedObject] = useState<string|undefined>()
   const canEdit = useSelector((state: any) => getEducationalProgramCharacteristicCanEdit(state))
 
   const handleSave = useCallback(() => {
@@ -75,7 +75,6 @@ export default ({ characteristic }: any) => {
             Использование в конструкторе ОП: В <a href="op.itmo.ru" target="_blank">op.itmo.ru</a> типы профессиональных задач, к которым готовятся выпускники хранятся в описании образовательных стандартов. Их описание доступно тут: <a href="https://op.itmo.ru/educational-standards" target="_blank"> op.itmo.ru/educational-standards </a>
           </div>
         )}
-          interactive
           leaveDelay={1000}
         >
           <QuestionIcon color="primary"/>

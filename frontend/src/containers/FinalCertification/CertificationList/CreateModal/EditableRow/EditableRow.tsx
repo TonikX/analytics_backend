@@ -21,7 +21,7 @@ function EditableRow(props: EditableRowProps) {
         }, semesterNum);
     };
 
-    const handleEvaluationToolsChange = (e: React.ChangeEvent<any>) => {
+    const handleEvaluationToolsChange = (e: any) => {
         updateRow({
             ...section,
             //@ts-ignore

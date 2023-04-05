@@ -111,4 +111,5 @@ class Literature extends React.PureComponent<LiteratureProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(Literature));

@@ -175,5 +175,5 @@ class Skills extends React.Component<SkillsProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(withRouter(Skills)));

@@ -40,4 +40,5 @@ class Structure extends React.Component<StructureProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(Structure));

@@ -181,5 +181,5 @@ class DownloadFileModal extends React.PureComponent<DownloadFileModalProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(DownloadFileModal));

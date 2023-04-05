@@ -86,7 +86,7 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
         this.props.changeItem(value, label);
     }
 
-    getLabelForValue = (value: ReactText) => {
+    getLabelForValue = (value?: ReactText) => {
         const {list} = this.props;
         const findElement = list.find(el => el.value === value);
 

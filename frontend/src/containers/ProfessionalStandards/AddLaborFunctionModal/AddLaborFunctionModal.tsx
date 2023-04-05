@@ -12,7 +12,7 @@ import useStyles from "./AddLaborFunctionModal.styles";
 export default ({
   isOpen, closeDialog, saveDialog
 }: any) => {
-  const [laborFunction, setLaborFunction] = useState()
+  const [laborFunction, setLaborFunction] = useState<number|undefined>()
   const classes = useStyles();
 
   const handleSave = () => {
@@ -37,7 +37,7 @@ export default ({
       <DialogTitle>Добавить трудовую функцию</DialogTitle>
       <DialogContent>
         <LaborFunctionSelector
-          onChange={setLaborFunction}
+          onChange={(value, label) => setLaborFunction(value)}
           label="Трудовая функция"
           value={laborFunction}
         />

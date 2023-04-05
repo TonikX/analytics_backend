@@ -56,4 +56,5 @@ class Structure extends React.Component<ReportingMaterialsProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(Structure));

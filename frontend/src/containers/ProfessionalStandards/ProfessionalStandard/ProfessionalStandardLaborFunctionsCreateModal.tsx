@@ -81,7 +81,6 @@ export default ({ isOpen, handleCloseModal, laborFunction }: any,) => {
                                     vertical: "top",
                                     horizontal: "left"
                                 },
-                                getContentAnchorEl: null
                             }}
                     >
                         <MenuItem value="3">3</MenuItem>

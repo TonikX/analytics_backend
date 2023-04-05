@@ -8,7 +8,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import TextField from "@mui/material/TextField";
 import {withStyles} from '@mui/styles';
 
 import connect from './CreateModal.connect';
@@ -260,5 +259,5 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(withRouter(CreateModal)));

@@ -43,7 +43,9 @@ class AddPracticeModal extends React.PureComponent<Props> {
     }
 
     render() {
-        const {isOpen, classes, list} = this.props;
+        // @ts-ignore
+        const {classes} = this.props;
+        const {isOpen, list} = this.props;
 
         const disableButton = this.state.id === null;
 

@@ -157,4 +157,5 @@ class MainInfo extends React.Component<MainInfoProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(MainInfo));

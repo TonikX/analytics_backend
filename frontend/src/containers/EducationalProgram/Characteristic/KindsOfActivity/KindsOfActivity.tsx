@@ -29,8 +29,8 @@ export default ({ characteristic }: any) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [openModal, setOpenModal] = useState(false)
-  const [selectedObject, setSelectedObject] = useState()
-  const [newObject, setNewObject] = useState()
+  const [selectedObject, setSelectedObject] = useState<number|undefined>()
+  const [newObject, setNewObject] = useState<string|undefined>()
   const canEdit = useSelector((state: any) => getEducationalProgramCharacteristicCanEdit(state))
 
   const handleSave = useCallback(() => {
@@ -76,7 +76,6 @@ export default ({ characteristic }: any) => {
             В системе имеется общий словарь сфер деятельности. Пользователь может выбрать из существующих или создать свою.
           </div>
         )}
-          interactive
           leaveDelay={1000}
         >
           <QuestionIcon color="primary"/>

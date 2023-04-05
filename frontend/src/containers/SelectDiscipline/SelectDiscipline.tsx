@@ -48,7 +48,7 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
         }
     }
 
-    handleChangeSemester = (e: React.ChangeEvent<{}>, value: number | number[]) => {
+    handleChangeSemester = (e: any, value: number | number[]) => {
         this.props.actions.selectSemester(value);
     }
 
@@ -150,14 +150,14 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
                         <Typography>Уровень образования: </Typography>
                         <ButtonGroup>
                             <Button onClick={this.handleChangeQualification(qualificationEnum.BACHELOR)}
-                                    color={qualification === qualificationEnum.BACHELOR ? 'primary' : 'default'}
+                                    color={qualification === qualificationEnum.BACHELOR ? 'primary' : 'info'}
                                     variant="contained"
                                     className={className({[classes.whiteButton]: qualification !== qualificationEnum.BACHELOR})}
                             >
                                 Бакалавр
                             </Button>
                             <Button onClick={this.handleChangeQualification(qualificationEnum.MASTER)}
-                                    color={qualification === qualificationEnum.MASTER ? 'primary' : 'default'}
+                                    color={qualification === qualificationEnum.MASTER ? 'primary' : 'info'}
                                     variant="contained"
                                     className={className({[classes.whiteButton]: qualification !== qualificationEnum.MASTER})}
                             >
@@ -287,5 +287,5 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(SelectDiscipline));

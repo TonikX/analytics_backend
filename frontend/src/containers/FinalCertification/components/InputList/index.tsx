@@ -131,5 +131,5 @@ class InputList extends React.Component<InputListProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(InputList));

@@ -29,8 +29,8 @@ export default ({ characteristic }: any) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [openModal, setOpenModal] = useState(false)
-  const [selectedObject, setSelectedObject] = useState()
-  const [newObject, setNewObject] = useState()
+  const [selectedObject, setSelectedObject] = useState<number>()
+  const [newObject, setNewObject] = useState<string|undefined>()
   const canEdit = useSelector((state: any) => getEducationalProgramCharacteristicCanEdit(state))
 
   const handleSave = useCallback(() => {
@@ -128,7 +128,7 @@ export default ({ characteristic }: any) => {
           Выберите существующий объект профессиональной деятельности или введите название нового
         </Typography>
         <ObjectOfActivitySelector
-          onChange={setSelectedObject}
+          onChange={(value) => setSelectedObject(value)}
           label="Выберите объект профессиональной деятельности"
           value={selectedObject}
           className={classes.marginBottom30}

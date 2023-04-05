@@ -216,4 +216,5 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
   }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(GeneralInfo));

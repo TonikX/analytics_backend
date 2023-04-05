@@ -152,4 +152,5 @@ class Features extends React.Component<FeaturesProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(Features));

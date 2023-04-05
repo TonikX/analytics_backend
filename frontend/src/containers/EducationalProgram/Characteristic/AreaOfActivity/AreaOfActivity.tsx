@@ -33,7 +33,7 @@ export default ({ characteristic, tableType, tableTitle }: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [openAddProfStandardModal, setOpenAddProfStandardModal] = useState(false)
-  const [profStandard, setProfStandard] = useState()
+  const [profStandard, setProfStandard] = useState<number|undefined>()
   const canEdit = useSelector((state: any) => getEducationalProgramCharacteristicCanEdit(state))
 
   const handleAddNewItem = useCallback((item: any) => {
@@ -76,7 +76,6 @@ export default ({ characteristic, tableType, tableTitle }: Props) => {
             </b>
           </div>
         )}
-          interactive
           leaveDelay={1000}
         >
           <QuestionIcon color="primary" />

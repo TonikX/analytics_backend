@@ -41,4 +41,5 @@ class GeneralProvisions extends React.Component<GeneralProvisionsProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(GeneralProvisions));

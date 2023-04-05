@@ -179,6 +179,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
   getEducationalProgramCharacteristicId = () => get(this.props.educationalProgramCharacteristic, EducationProgramCharacteristicFields.ID, '');
 
   returnCompetences = (competences: Array<CompetenceType>) => {
+    // @ts-ignore
     const {classes} = this.props;
     return <>
       <Table stickyHeader size='small'>
@@ -239,6 +240,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 
   returnProfessionalCompetences = (competences: Array<CompetenceType>) => {
+    // @ts-ignore
     const {classes} = this.props;
     return <>
       <Table stickyHeader size='small'>
@@ -474,7 +476,9 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 
   renderContent = () => {
-    const {educationalProgramCharacteristic, classes, canEdit} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {educationalProgramCharacteristic, canEdit} = this.props;
     const {activeStep, addNewOP} = this.state;
     const educationalProgramId = get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, '0', 'id'], '')
 
@@ -695,7 +699,6 @@ class Characteristic extends React.Component<CharacteristicProps> {
               return (
                 <Step key={index}>
                   <StepButton onClick={this.handleStep(index)}
-                              completed={false}
                               style={{textAlign: 'left'}}
                   >
                     {value}

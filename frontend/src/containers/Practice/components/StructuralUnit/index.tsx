@@ -104,4 +104,5 @@ class StructuralUnit extends React.Component<StructuralUnitProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(StructuralUnit));

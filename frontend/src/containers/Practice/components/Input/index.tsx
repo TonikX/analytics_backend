@@ -103,10 +103,13 @@ class Input extends React.Component<InputProps> {
         const {fieldName, classes, multiline, rows, getLoading, label, disabled} = this.props;
         const {errorMessage} = this.state;
 
+        // @ts-ignore
+        const labelText = label ?? RussianPracticeFields[fieldName]
+
         return (
             <div className={classes.input}>
                 <InputLabel error={!!errorMessage} shrink>
-                    {label ?? RussianPracticeFields[fieldName]}
+                    {labelText}
                 </InputLabel>
                 <InputsLoader loading={getLoading(fieldName)}>
                     <TextField
@@ -131,4 +134,5 @@ class Input extends React.Component<InputProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(Input));

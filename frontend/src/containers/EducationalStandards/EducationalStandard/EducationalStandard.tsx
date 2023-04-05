@@ -12,7 +12,7 @@ import { getEducationalStandard } from '../getters'
 
 import useStyles from './EducationalStandard.styles'
 import Typography from "@mui/material/Typography";
-import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
+import {CompetenceTable} from "./CompetencesTable";
 import TasksTable from "./TasksTable";
 import {CompetenceTableType, EducationalStandardFields} from "../enum";
 
@@ -77,7 +77,6 @@ export default () => {
         {steps.map((value, index) => (
           <Step key={index}>
             <StepButton onClick={() => setActiveStep(index)}
-                        completed={false}
                         style={{textAlign: 'left'}}
             >
               {value}

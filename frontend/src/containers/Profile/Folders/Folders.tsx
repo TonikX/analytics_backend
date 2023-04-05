@@ -188,8 +188,9 @@ class Folders extends React.PureComponent<FoldersProps> {
                                 <Tab value={index}
                                      label={<div>{folder[FoldersFields.NAME]} <DeleteIcon className={classes.deleteIcon} onClick={this.deleteFolder(folder[FoldersFields.ID])}/> </div>}
                                      classes={{
-                                         wrapper: classes.tab
+                                         wrapped: classes.tab
                                      }}
+                                     wrapped
                                 />
                             )}
                         </Tabs>
