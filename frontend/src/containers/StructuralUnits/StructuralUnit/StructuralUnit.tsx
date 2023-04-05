@@ -37,7 +37,7 @@ class StructuralUnit extends React.Component<any> {
     this.props.actions.getStructuralUnit(this.getStructuralUnitId());
   }
 
-  getStructuralUnitId = () => parseInt(get(this, 'props.params.id', 0));
+  getStructuralUnitId = () => parseInt(get(this, 'props.params.id', '0'));
 
   handleClickDelete = (id: number) => () => {
     this.setState({

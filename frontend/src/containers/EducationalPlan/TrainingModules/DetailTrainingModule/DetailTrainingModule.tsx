@@ -672,10 +672,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           >
             {Object.keys(steps).map((key) => (
               <Step key={key} onClick={() => this.setState({activeStep: parseInt(key)})}>
-                <StepButton completed={false}
-                            style={{textAlign: 'left',}}
-                            key={key}
-                >{/*
+                <StepButton style={{textAlign: 'left',}} key={key}>{/*
                                                 // @ts-ignore*/}
                   {steps[parseInt(key)]}
                 </StepButton>

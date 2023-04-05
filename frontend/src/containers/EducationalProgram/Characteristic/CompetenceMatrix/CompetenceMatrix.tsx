@@ -315,6 +315,7 @@ export default () => {
 
     const attachIndicator = (props: AttachIndicatorProps) => {
         setWorkProgramId(props.workProgramId);
+        // @ts-ignore
         setDefaultCompetence(props.competence);
         setIsOpen(true);
     };

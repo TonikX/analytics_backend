@@ -62,7 +62,7 @@ const WorkProgramSelect = ({type, onChange}: WorkProgramSelectProps) => {
                 onChange={handleChange}
                 onInputChange={changeSearch}
                 getOptionLabel={option => option.label}
-                getOptionSelected={(option, value) => option.id === value.id}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
                 renderInput={(params) => <TextField {...params} label={labelText}/>}
             />
         </FormControl>
