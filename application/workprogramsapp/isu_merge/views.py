@@ -864,9 +864,14 @@ class SendWorkProgramToISU(APIView):
 
     def post(self, request):
         wp_id = request.data.get("wp_id")
-        wp = WorkProgram.objects.get(id=wp_id)
+        try:
+            wp = WorkProgram.objects.get(id=wp_id)
+        except WorkProgram.DoesNotExist:
+            return Response(data={"error": "Такой РПД не существует"}, status=404)
         if wp.discipline_code:
             return Response(data={"error": "У РПД уже есть свой ID"}, status=500)
+        if not wp.structural_unit:
+            return Response(data={"error": "У РПД нету структурного подразделения"}, status=500)
         isu_logger = IsuService(
             IsuUser(
                 settings.ISU["ISU_CLIENT_ID"],
@@ -896,9 +901,14 @@ class SendPracticeToISU(APIView):
 
     def post(self, request):
         practice_id = request.data.get("practice_id")
-        practice = Practice.objects.get(id=practice_id)
+        try:
+            practice = Practice.objects.get(id=practice_id)
+        except Practice.DoesNotExist:
+            return Response(data={"error": "Такой практики не существует"}, status=404)
         if practice.discipline_code:
             return Response(data={"error": "У Практики уже есть свой ID"}, status=500)
+        if not practice.structural_unit:
+            return Response(data={"error": "У практики нету структурного подразделения"}, status=500)
         isu_logger = IsuService(
             IsuUser(
                 settings.ISU["ISU_CLIENT_ID"],
@@ -928,7 +938,10 @@ class SendGIAToISU(APIView):
 
     def post(self, request):
         gia_id = request.data.get("gia_id")
-        gia = GIA.objects.get(id=gia_id)
+        try:
+            gia = GIA.objects.get(id=gia_id)
+        except GIA.DoesNotExist:
+            return Response(data={"error": "Такой ГИА не существует"}, status=404)
         if gia.discipline_code:
             return Response(data={"error": "У ГИА уже есть свой ID"}, status=500)
         if not gia.structural_unit:
